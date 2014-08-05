@@ -1,5 +1,6 @@
 PyScripts
 ===========
 
-RU: Набор скриптов Python.
+RU: РќР°Р±РѕСЂ СЃРєСЂРёРїС‚РѕРІ Python.
+
 EN: A set of Python scripts.
