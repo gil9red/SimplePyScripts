@@ -1,4 +1,4 @@
-HelloPython
+DecodingPhoneNumberForCLI
 ===========
 
-Hello World on Python
+Decoding the phone number for CLI.
