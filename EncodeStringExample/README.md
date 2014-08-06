@@ -1,4 +1,4 @@
-HelloPython
+EncodeStringExample
 ===========
 
-Hello World on Python
+Output a user-defined string in different encodings.
