@@ -1,4 +1,4 @@
-HelloPython
+﻿CreateNoteXmlNoteManagers
 ===========
 
-Hello World on Python
+Cкрипт генерирует xml-файл программы NotesManager.
