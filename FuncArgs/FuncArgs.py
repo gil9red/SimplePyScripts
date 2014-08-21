@@ -26,6 +26,14 @@ def say_hello(word="World", spl="!"):
     print("Hello, " + word + spl)
 
 
+def my_min(a, b):
+    return min(a, b)
+def my_max(a, b):
+    return max(a, b)
+def binary_operation(a, b, func):
+    return func(a, b)
+
+
 if __name__ == '__main__':
     print(my_sum(1, 2, 3, 4))
     my_print(a=2, b=3, c="Foo")
@@ -35,3 +43,15 @@ if __name__ == '__main__':
     say_hello("Py")
     say_hello(spl="?")
     say_hello(spl="?!", word="man")
+
+    print()
+    
+    a = 2
+    b = 4
+    print("1: %d" % binary_operation(a, b, my_min))
+    print("2: %d" % binary_operation(a, b, my_max))
+    print("3: %d" % binary_operation(a, b, min))
+    print("4: %d" % binary_operation(a, b, max))
+    print("5: %d" % binary_operation(a, b, (lambda a, b: a * b)))
+    print("6: %d" % binary_operation(a, b, (lambda a, b: a ** b)))
+    
