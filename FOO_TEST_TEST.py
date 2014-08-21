@@ -1,4 +1,6 @@
-from collections import Counter
+# -*- coding: utf-8 -*-
+from numpy.core.fromnumeric import size
+from pip._vendor.requests.api import head
 
 __author__ = 'ipetrash'
 
@@ -203,3 +205,35 @@ __author__ = 'ipetrash'
 
 
 # TODO: наложение "водяного знака" на изображение
+import os
+from PIL import Image, ImageDraw, ImageFont
+
+# from PIL import Image, ImageDraw
+# text = "Hello, PIL!!!"
+# color = (0, 0, 120)
+# img = Image.new('RGB', (100, 50), color)
+# imgDrawer = ImageDraw.Draw(img)
+# imgDrawer.text((10, 20), text)
+# img.save("pil-basic-example.png")
+
+path = r"C:\Users\ipetrash\Desktop\pic.png"
+# path = input("Input path: ")
+path = os.path.normpath(path)
+if os.path.exists(path):
+    print("File: %s" % path)
+
+    image = Image.open(path)
+    width, height = image.size
+    # image.show()
+
+    drawer = ImageDraw.Draw(image)
+    font = ImageFont.truetype("arial.ttf", 25)
+    text = "Hello World!"
+    width_text, height_text = font.getsize(text)
+    for i in range(0, width, width_text * 2):
+        for j in range(0, height, height_text * 2):
+            drawer.text((i, j), text, font=font, fill=(0x00, 0xff, 0x00))
+
+    image.show()
+    input("")
+    # image.save(path)
