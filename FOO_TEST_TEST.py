@@ -204,36 +204,66 @@ __author__ = 'ipetrash'
 #         print(num)
 
 
-# TODO: наложение "водяного знака" на изображение
-import os
-from PIL import Image, ImageDraw, ImageFont
+# Overlay "watermark" image / Наложение "водяного знака" на изображение
+# import os
+# from PIL import Image, ImageDraw, ImageFont
+#
+# # from PIL import Image, ImageDraw
+# # text = "Hello, PIL!!!"
+# # color = (0, 0, 120)
+# # img = Image.new('RGB', (100, 50), color)
+# # imgDrawer = ImageDraw.Draw(img)
+# # imgDrawer.text((10, 20), text)
+# # img.save("pil-basic-example.png")
+#
+# path = r"C:\Users\ipetrash\Desktop\pic.png"
+# # path = input("Input path: ")
+# path = os.path.normpath(path)
+# if os.path.exists(path):
+#     print("File: %s" % path)
+#
+#     image = Image.open(path)
+#     width, height = image.size
+#     # image.show()
+#
+#     drawer = ImageDraw.Draw(image)
+#     font = ImageFont.truetype("arial.ttf", 25)
+#     text = "Hello World!"
+#     width_text, height_text = font.getsize(text)
+#     for i in range(0, width, width_text * 2):
+#         for j in range(0, height, height_text * 2):
+#             drawer.text((i, j), text, font=font, fill=(0x00, 0xff, 0x00))
+#
+#     image.show()
+#     input("")
+#     # image.save(path)
 
-# from PIL import Image, ImageDraw
-# text = "Hello, PIL!!!"
-# color = (0, 0, 120)
-# img = Image.new('RGB', (100, 50), color)
-# imgDrawer = ImageDraw.Draw(img)
-# imgDrawer.text((10, 20), text)
-# img.save("pil-basic-example.png")
 
-path = r"C:\Users\ipetrash\Desktop\pic.png"
-# path = input("Input path: ")
-path = os.path.normpath(path)
-if os.path.exists(path):
-    print("File: %s" % path)
+# Guess the number / Угадай число
+import random
+max = int(input("Input max: "))
+print("Random number (x): from %d to %d" % (1, max))
+number = random.randrange(1, max + 1)
+user_choice = -1
+range_min = range_max = "?"
 
-    image = Image.open(path)
-    width, height = image.size
-    # image.show()
+while True:
+    print("\n%s < x < %s" % (range_min, range_max))
+    user_choice = int(input("Input number: "))
+    if number > user_choice:
+        if range_min == "?":
+            range_min = user_choice
+        if user_choice > range_min:
+            range_min = user_choice
+        print("x > %d" % user_choice)
 
-    drawer = ImageDraw.Draw(image)
-    font = ImageFont.truetype("arial.ttf", 25)
-    text = "Hello World!"
-    width_text, height_text = font.getsize(text)
-    for i in range(0, width, width_text * 2):
-        for j in range(0, height, height_text * 2):
-            drawer.text((i, j), text, font=font, fill=(0x00, 0xff, 0x00))
+    elif number < user_choice:
+        if range_max == "?":
+            range_max = user_choice
+        if user_choice < range_max:
+            range_max = user_choice
+        print("x < %d" % user_choice)
 
-    image.show()
-    input("")
-    # image.save(path)
+    elif number == user_choice:
+        print("Congratulations! You guessed it!")
+        break
