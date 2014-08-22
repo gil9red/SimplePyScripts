@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from numpy.core.fromnumeric import size
-from pip._vendor.requests.api import head
 
 __author__ = 'ipetrash'
 
@@ -204,7 +202,7 @@ __author__ = 'ipetrash'
 #         print(num)
 
 
-# Overlay "watermark" image / Наложение "водяного знака" на изображение
+# # Overlay "watermark" image / Наложение "водяного знака" на изображение
 # import os
 # from PIL import Image, ImageDraw, ImageFont
 #
@@ -239,31 +237,55 @@ __author__ = 'ipetrash'
 #     # image.save(path)
 
 
-# Guess the number / Угадай число
-import random
-max = int(input("Input max: "))
-print("Random number (x): from %d to %d" % (1, max))
-number = random.randrange(1, max + 1)
-user_choice = -1
-range_min = range_max = "?"
+# # Guess the number / Угадай число
+# import random
+# max = int(input("Input max: "))
+# print("Random number (x): from %d to %d" % (1, max))
+# number = random.randrange(1, max + 1)
+# user_choice = -1
+# range_min = range_max = "?"
+#
+# while True:
+#     print("\n%s < x < %s" % (range_min, range_max))
+#     user_choice = int(input("Input number: "))
+#     if number > user_choice:
+#         if range_min == "?":
+#             range_min = user_choice
+#         if user_choice > range_min:
+#             range_min = user_choice
+#         print("x > %d" % user_choice)
+#
+#     elif number < user_choice:
+#         if range_max == "?":
+#             range_max = user_choice
+#         if user_choice < range_max:
+#             range_max = user_choice
+#         print("x < %d" % user_choice)
+#
+#     elif number == user_choice:
+#         print("Congratulations! You guessed it!")
+#         break
 
-while True:
-    print("\n%s < x < %s" % (range_min, range_max))
-    user_choice = int(input("Input number: "))
-    if number > user_choice:
-        if range_min == "?":
-            range_min = user_choice
-        if user_choice > range_min:
-            range_min = user_choice
-        print("x > %d" % user_choice)
 
-    elif number < user_choice:
-        if range_max == "?":
-            range_max = user_choice
-        if user_choice < range_max:
-            range_max = user_choice
-        print("x < %d" % user_choice)
+# TODO: serialization / сериализация
+# Example of using pickle module
+import pickle
+data = {
+    'foo': [1, 2, 3],
+    'bar': ('Hello', 'world!'),
+    'baz': True,
+    "fiz": {
+        1: "first",
+        6: "six",
+        "seven": 7,
+    },
+}
 
-    elif number == user_choice:
-        print("Congratulations! You guessed it!")
-        break
+# write the serialized data in the jar
+with open('data.pkl', 'wb') as jar:
+    pickle.dump(data, jar)
+
+# open and read from a file
+with open('data.pkl', 'rb') as pkl_file:
+    data = pickle.load(pkl_file)  # stored in the variable
+    print(data)
