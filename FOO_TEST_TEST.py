@@ -267,7 +267,6 @@ __author__ = 'ipetrash'
 #         break
 
 
-
 # Serialization / Сериализация
 # Example of using pickle module
 # https://docs.python.org/3.4/library/pickle.html
@@ -322,9 +321,11 @@ class Monster:
         self.abilities = ["Eater"]
 
     def __str__(self):
-        return ("Name: '{}' lv {}, health: {}, power: {}, abilities: {}"
-                .format(self.name, self.level, self.health, self.power, self.abilities))
+        return ("Name: '{}' lv {}, health: {}, power: {}, abilities: {}: {}"
+                .format(self.name, self.level, self.health, self.power, self.abilities, hex(id(self))))
 
+    def say(self):
+        print("I'm %s" % self.name)
 
 zombi = Monster(name="Zombi", health=100, power=10, level=2)
 zombi.abilities.append("Undead")
@@ -356,3 +357,14 @@ with open('monster.pkl', 'rb') as f:
     print(z)
     print(g)
     print(o)
+
+
+# Serialize: object -> string
+temp_1 = pickle.dumps(zombi)
+print()
+print(temp_1)
+
+# Serialize: string ->object
+temp_2 = pickle.loads(temp_1)  # create new object
+print(temp_2)
+temp_2.say()
