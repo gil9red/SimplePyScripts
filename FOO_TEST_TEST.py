@@ -327,6 +327,7 @@ class Monster:
     def say(self):
         print("I'm %s" % self.name)
 
+		
 zombi = Monster(name="Zombi", health=100, power=10, level=2)
 zombi.abilities.append("Undead")
 zombi.abilities.append("Insensitivity to pain")
