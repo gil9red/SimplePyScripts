@@ -14,3 +14,8 @@ if __name__ == '__main__':
     print("  base32: %s" % base64.b32encode(text.encode()).decode())
     print("  base64: %s" % base64.b64encode(text.encode()).decode())
     print("  base85: %s" % base64.b85encode(text.encode()).decode())
+    
+    print()
+    print(base64.b64decode("VFJBQ0sx").decode("utf8"))
+    print(base64.b64decode("MTEyMg==").decode("utf8"))
+    print(base64.b64decode("MzIx").decode("utf8"))
