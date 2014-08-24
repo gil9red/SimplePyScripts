@@ -6,22 +6,6 @@ __author__ = 'ipetrash'
 # print('{one} * {one} {two}'.format(one="45", two="Bugaga"))
 
 
-# import base64
-# print(base64.b64decode("VFJBQ0sx").decode("utf8"))
-# print(base64.b64decode("MTEyMg==").decode("utf8"))
-# print(base64.b64decode("MzIx").decode("utf8"))
-
-
-# import datetime as dt
-# import time
-#
-# while True:
-#     cur_time = dt.datetime.now().time()
-#     print("Current time is: %s" % cur_time.strftime("%H:%M:%S"), end='\r')
-#     # print("Current time is: %s" % cur_time, end='\r')
-#     time.sleep(0.5)  # every 0.5 second (500 millisecond)
-
-
 # import zipfile
 # import os
 # file_name = input("Path to zip: ")
@@ -31,35 +15,6 @@ __author__ = 'ipetrash'
 # with zipfile.ZipFile(file_name, mode='r') as zf:
 #     for file_info in zf.filelist:
 #         print(file_info.filename)
-
-
-# import hashlib
-# print("Algorithms guaranteed (all platforms):")
-# print(hashlib.algorithms_guaranteed)
-# print(sorted(set([x.lower()
-#                   for x in hashlib.algorithms_guaranteed])),
-#       end='\n\n')
-#
-# print("Algorithms available:")
-# print(hashlib.algorithms_available)
-# print(sorted(set([x.lower()
-#                   for x in hashlib.algorithms_available])),
-#       end='\n\n')
-#
-# md5 = hashlib.md5()
-# # or: md5 = hashlib.new("md5")
-# text = "Привет мир!".encode()
-# md5.update(text)
-# print(md5.hexdigest(), end='\n\n')
-#
-# sha1 = hashlib.new("sha1")
-# # sha1 = hashlib.sha1()
-# sha1.update(text)
-# print(sha1.hexdigest(), end='\n\n')
-#
-# import binascii
-# dk = hashlib.pbkdf2_hmac('sha256', b'password', b'salt', 100000)
-# print(binascii.hexlify(dk))
 
 
 # import random
