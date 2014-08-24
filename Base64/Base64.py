@@ -1,21 +1,29 @@
 __author__ = 'ipetrash'
 
 import base64
-import sys
 
 if __name__ == '__main__':
-    text = input("Text: ")
-    if not text:
-        print("Empty text!")
-        sys.exit(1)
+    text = "Hello py! Привет py!"
+    print("Text: {}".format(text))
 
-    print("Result:")
-    print("  base16: %s" % base64.b16encode(text.encode()).decode())
-    print("  base32: %s" % base64.b32encode(text.encode()).decode())
-    print("  base64: %s" % base64.b64encode(text.encode()).decode())
-    print("  base85: %s" % base64.b85encode(text.encode()).decode())
-    
+    b16 = base64.b16encode(text.encode())
+    b32 = base64.b32encode(text.encode())
+    b64 = base64.b64encode(text.encode())
+    b85 = base64.b85encode(text.encode())
+
+    print("encode(base16): '%s'" % b16)
+    print("encode(base32): '%s'" % b32)
+    print("encode(base64): '%s'" % b64)
+    print("encode(base85): '%s'" % b85)
+
     print()
-    print(base64.b64decode("VFJBQ0sx").decode("utf8"))
-    print(base64.b64decode("MTEyMg==").decode("utf8"))
-    print(base64.b64decode("MzIx").decode("utf8"))
+    print("decode(base16): '%s'" % base64.b16decode(b16))
+    print("decode(base32): '%s'" % base64.b32decode(b32))
+    print("decode(base64): '%s'" % base64.b64decode(b64))
+    print("decode(base85): '%s'" % base64.b85decode(b85))
+
+    print()
+    print("decode(base16) utf-8: '%s'" % base64.b16decode(b16).decode("utf-8"))
+    print("decode(base32) utf-8: '%s'" % base64.b32decode(b32).decode("utf-8"))
+    print("decode(base64) utf-8: '%s'" % base64.b64decode(b64).decode("utf-8"))
+    print("decode(base85) utf-8: '%s'" % base64.b85decode(b85).decode("utf-8"))
