@@ -6,34 +6,6 @@ __author__ = 'ipetrash'
 # print('{one} * {one} {two}'.format(one="45", two="Bugaga"))
 
 
-# import zipfile
-# import os
-# file_name = input("Path to zip: ")
-# if not os.path.exists(file_name):
-#     print("File {} not exist!".format(file_name))
-#
-# with zipfile.ZipFile(file_name, mode='r') as zf:
-#     for file_info in zf.filelist:
-#         print(file_info.filename)
-
-
-# import random
-# direction = ["up", 'down', 'left', 'right']
-# for i in range(10):
-#     print("Directions: %s, random direction = %s" % (direction, random.choice(direction)))
-#
-# print(random.random())  # rand float number
-# print(random.randrange(5))  # rand int number
-# print(random.randrange(0, 10))  # rand int number
-# print(random.uniform(1, 10))  # rand float number
-#
-# print("Directions: %s" % direction)
-# random.shuffle(direction)  # shuffle list
-# print("Shuffle directions: %s" % direction)
-#
-# print(random.sample(direction, 2))  # select two element
-
-
 # import re
 # import os
 # # file_name = input("File name: ")
@@ -67,20 +39,6 @@ __author__ = 'ipetrash'
 # word_count = Counter(words)
 # for word, c in word_count.items():
 #     print("Word: '{}', count: {}".format(word, c))
-
-
-# # Напишите программу, которая выводит на экран числа от 1 до 100. При этом вместо чисел, кратных трем, программа
-# # должна выводить слово «Fizz», а вместо чисел, кратных пяти — слово «Buzz». Если число кратно и 3, и 5, то программа
-# # должна выводить слово «FizzBuzz»
-# for num in range(1, 100 + 1):
-#     if num % 15 is 0:
-#         print("FizzBuzz")
-#     elif num % 3 is 0:
-#         print("Fizz")
-#     elif num % 5 is 0:
-#         print("Buzz")
-#     else:
-#         print(num)
 
 
 # # Overlay "watermark" image / Наложение "водяного знака" на изображение
