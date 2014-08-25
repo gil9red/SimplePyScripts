@@ -198,26 +198,48 @@ __author__ = 'ipetrash'
 # # b.new_var = 1  # AttributeError: 'Foo' object has no attribute 'new_var'
 
 
-## Example of using pipe module
-# https://github.com/JulienPalard/Pipe
-# ru: http://habrahabr.ru/post/117679/
-import pipe
+# ## Example of using pipe module
+# # https://github.com/JulienPalard/Pipe
+# # ru: http://habrahabr.ru/post/117679/
+# import pipe
+#
+# if __name__ == '__main__':
+#     print((i for i in range(10)) | pipe.as_list)  # tuple to list
+#     print([i for i in range(10)] | pipe.as_tuple)   # list to tuple
+#     print(((1,1), ('a', 2), (3, 'd')) | pipe.as_dict)  # tuple to dict
+#
+#     print()
+#     # list of even numbers
+#     l = (i for i in range(10)) | pipe.where(lambda x: x % 2 is 0) | pipe.as_list
+#     c = l | pipe.count  # count elements
+#     print("List: {}, count: {}".format(l, c))
+#     print()
+#
+#     # custom pipe:
+#     @pipe.Pipe
+#     def custom_add(x):
+#         return sum(x)
+#
+#     print([1,2,3,4] | custom_add)  # = 10
 
-if __name__ == '__main__':
-    print((i for i in range(10)) | pipe.as_list)  # tuple to list
-    print([i for i in range(10)] | pipe.as_tuple)   # list to tuple
-    print(((1,1), ('a', 2), (3, 'd')) | pipe.as_dict)  # tuple to dict
 
-    print()
-    # list of even numbers
-    l = (i for i in range(10)) | pipe.where(lambda x: x % 2 is 0) | pipe.as_list
-    c = l | pipe.count  # count elements
-    print("List: {}, count: {}".format(l, c))
-    print()
+## An example of the use of descriptors in python
+# ru: http://habrahabr.ru/post/122082/
+class Body:
+    def __init__(self):
+        pass
+    def __get__(self, instance, owner):
+        print("%s: %s" % (self.__class__, "get"))
 
-    # custom pipe:
-    @pipe.Pipe
-    def custom_add(x):
-        return sum(x)
+    def __set__(self, instance, value):
+        print("%s: %s = %s" % (self.__class__, "set", value))
 
-    print([1,2,3,4] | custom_add)  # = 10
+class Man:
+    def __init__(self):
+        self.name = "?"
+
+    body = Body()
+
+m = Man()
+m.body
+m.body = "Ass"
