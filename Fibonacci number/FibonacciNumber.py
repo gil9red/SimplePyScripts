@@ -8,17 +8,16 @@ def fibo_1(n):
 
 
 def fibo_2(n):
-    a = 0
-    b = 1
+    a, b = 0, 1
     print(a, b, end=' ')
     for i in range(2, n + 1):
-        c = a + b
-        a, b = b, c
-        print(c, end=' ')
+        a, b = b, a + b
+        print(b, end=' ')
 
 
 if __name__ == '__main__':
     # Fibo / Фибоначчи
     n = 10
     fibo_1(n)
+    print()
     fibo_2(n)
