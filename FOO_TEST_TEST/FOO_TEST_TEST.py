@@ -171,28 +171,53 @@ __author__ = 'ipetrash'
 # print("Column names: {0}".format(names))
 
 
-# __slots__:
-# This class variable can be assigned a string, iterable, or sequence of strings with variable names used by
-# instances. If defined in a new-style class, __slots__ reserves space for the declared variables and prevents the
-# automatic creation of __dict__ and __weakref__ for each instance. (Added in Python version 2.2)
-class Foo:
-    __slots__ = ["fus", "ro", "dah"]
-    dovakin = True
+# # __slots__:
+# # This class variable can be assigned a string, iterable, or sequence of strings with variable names used by
+# # instances. If defined in a new-style class, __slots__ reserves space for the declared variables and prevents the
+# # automatic creation of __dict__ and __weakref__ for each instance. (Added in Python version 2.2)
+# class Foo:
+#     __slots__ = ["fus", "ro", "dah"]
+#     dovakin = True
+#
+# f = Foo()
+# f.fus = 1
+# f.ro = 2
+# # f.dah = 2
+# print(f.dovakin)
+# print(f.fus)
+# print(f.ro)
+# print(f.dah)  # AttributeError: dah -- dah is not determined
+# # f.new_var = 1  # AttributeError: 'Foo' object has no attribute 'new_var'
+#
+# class Bar:
+#     __slots__ = []
+#     name = "Dova"
+#
+# b = Bar()
+# print(b.name)
+# # b.new_var = 1  # AttributeError: 'Foo' object has no attribute 'new_var'
 
-f = Foo()
-f.fus = 1
-f.ro = 2
-# f.dah = 2
-print(f.dovakin)
-print(f.fus)
-print(f.ro)
-print(f.dah)  # AttributeError: dah -- dah is not determined
-# f.new_var = 1  # AttributeError: 'Foo' object has no attribute 'new_var'
 
-class Bar:
-    __slots__ = []
-    name = "Dova"
+## Example of using pipe module
+# https://github.com/JulienPalard/Pipe
+# ru: http://habrahabr.ru/post/117679/
+import pipe
 
-b = Bar()
-print(b.name)
-# b.new_var = 1  # AttributeError: 'Foo' object has no attribute 'new_var'
+if __name__ == '__main__':
+    print((i for i in range(10)) | pipe.as_list)  # tuple to list
+    print([i for i in range(10)] | pipe.as_tuple)   # list to tuple
+    print(((1,1), ('a', 2), (3, 'd')) | pipe.as_dict)  # tuple to dict
+
+    print()
+    # list of even numbers
+    l = (i for i in range(10)) | pipe.where(lambda x: x % 2 is 0) | pipe.as_list
+    c = l | pipe.count  # count elements
+    print("List: {}, count: {}".format(l, c))
+    print()
+
+    # custom pipe:
+    @pipe.Pipe
+    def custom_add(x):
+        return sum(x)
+
+    print([1,2,3,4] | custom_add)  # = 10
