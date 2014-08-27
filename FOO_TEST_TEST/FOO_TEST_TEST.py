@@ -3,9 +3,6 @@
 __author__ = 'ipetrash'
 
 
-# print('{one} * {one} {two}'.format(one="45", two="Bugaga"))
-
-
 # import re
 # import os
 # # file_name = input("File name: ")
