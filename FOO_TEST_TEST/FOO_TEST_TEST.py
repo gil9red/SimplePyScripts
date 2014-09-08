@@ -349,27 +349,38 @@ __author__ = 'ipetrash'
 # http://habrahabr.ru/post/140581/
 
 
-from tkinter import *
+# from tkinter import *
+#
+# tk=Tk()
+#
+# text=StringVar()
+# name=StringVar()
+# name.set('HabrUser')
+# text.set('')
+# tk.title('MegaChat')
+# tk.geometry('400x300')
+#
+# log = Text(tk)
+# nick = Entry(tk, textvariable=name)
+# msg = Entry(tk, textvariable=text)
+# msg.pack(side='bottom', fill='x', expand='true')
+# nick.pack(side='bottom', fill='x', expand='true')
+# log.pack(side='top', fill='both',expand='true')
+#
+# def loopproc():
+#     print ('Hello '+ name.get() + '!')
+#     tk.after(1000,loopproc)
+#
+# tk.after(1000,loopproc)
+# tk.mainloop()
 
-tk=Tk()
 
-text=StringVar()
-name=StringVar()
-name.set('HabrUser')
-text.set('')
-tk.title('MegaChat')
-tk.geometry('400x300')
-
-log = Text(tk)
-nick = Entry(tk, textvariable=name)
-msg = Entry(tk, textvariable=text)
-msg.pack(side='bottom', fill='x', expand='true')
-nick.pack(side='bottom', fill='x', expand='true')
-log.pack(side='top', fill='both',expand='true')
-
-def loopproc():
-    print ('Hello '+ name.get() + '!')
-    tk.after(1000,loopproc)
-
-tk.after(1000,loopproc)
-tk.mainloop()
+## Получение списка запущенных процессов
+import psutil
+for proc in psutil.process_iter():
+    try:
+        pinfo = proc.as_dict(attrs=['pid', 'name'])
+    except psutil.NoSuchProcess:
+        pass
+    else:
+        print(pinfo)
