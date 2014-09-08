@@ -375,8 +375,10 @@ __author__ = 'ipetrash'
 # tk.mainloop()
 
 
-## Получение списка запущенных процессов
+### Больше примеров по ссылкам: http://pythonhosted.org/psutil/ и https://github.com/giampaolo/psutil
 import psutil
+
+## Получение списка запущенных процессов
 for proc in psutil.process_iter():
     try:
         pinfo = proc.as_dict(attrs=['pid', 'name'])
