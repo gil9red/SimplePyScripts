@@ -193,7 +193,7 @@ with urllib.request.urlopen("http://api.wipmania.com") as f:
     print("My IP: {}".format(ip))
     
     
-## Модуль Grap 
+## Модуль Grab
 ## http://habrahabr.ru/post/127584/
 #Что такое grab?
 #Это библиотека для парсинга сайтов. Её основные функции:
