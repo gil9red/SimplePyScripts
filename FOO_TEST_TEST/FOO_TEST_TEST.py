@@ -197,7 +197,7 @@ with urllib.request.urlopen("http://api.wipmania.com") as f:
 ## Документация: http://docs.grablib.org/
 ## Сайт: http://grablib.org/
 ## Репозиторий: https://github.com/lorien/grab
-## Статья: http://habrahabr.ru/post/127584/
+## Статья: http://habrahabr.ru/post/127584/ и http://habrahabr.ru/post/139435/
 #Что такое grab?
 #Это библиотека для парсинга сайтов. Её основные функции:
 #    Подготовка сетевого запроса (cookies, http-заголовки, POST/GET данные)
