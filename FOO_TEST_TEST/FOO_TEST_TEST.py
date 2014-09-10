@@ -184,13 +184,13 @@ __author__ = 'ipetrash'
 #         print(pinfo)
 
 
-## Пример того как можно узнать свой ip, используя запрос на сайт.
-import urllib.request
-with urllib.request.urlopen("http://api.wipmania.com") as f:
-    context = f.read().decode()
-    data = context.split("<br>")
-    ip = data[0]
-    print("My IP: {}".format(ip))
+### Пример того как можно узнать свой ip, используя запрос на сайт.
+#import urllib.request
+#with urllib.request.urlopen("http://api.wipmania.com") as f:
+#    context = f.read().decode()
+#    data = context.split("<br>")
+#    ip = data[0]
+#    print("My IP: {}".format(ip))
     
     
 ## Модуль Grab
@@ -206,3 +206,10 @@ with urllib.request.urlopen("http://api.wipmania.com") as f:
 #   Работа с DOM-деревом ответа (если это HTML-документ)
 #    Работа с формами (заполнение, автозаполнение)
 #    Отладка: логирование процесса в консоль, сетевых запросов и ответов в файлы
+
+
+## Написать скрипт, который скачает цитаты Конфуция.
+# Цитаты можно сгруппировать алфавитно -- по первой букве в цитате.
+# Возможно вывести все цитаты, или те, которые начинаются с определенной буквы.
+# Возможно выводить только те цитаты, удовлетворяющие шаблону поиска.
+## http://ru.wikiquote.org/wiki/Конфуций
