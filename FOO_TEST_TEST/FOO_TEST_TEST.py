@@ -213,3 +213,14 @@ __author__ = 'ipetrash'
 # Возможно вывести все цитаты, или те, которые начинаются с определенной буквы.
 # Возможно выводить только те цитаты, удовлетворяющие шаблону поиска.
 ## http://ru.wikiquote.org/wiki/Конфуций
+
+from grab import Grab
+
+g = Grab()
+# http://ru.wikiquote.org/wiki/Конфуций
+url = "http://ru.wikiquote.org/wiki/%D0%9A%D0%BE%D0%BD%D1%84%D1%83%D1%86%D0%B8%D0%B9"
+g.go(url)
+select = g.doc.select('//table[@class="toccolours"]/tr//a')
+for el in select:
+    if el.text() != "#":
+        print("{}: {}".format(el.text(), el.attr("href")))
