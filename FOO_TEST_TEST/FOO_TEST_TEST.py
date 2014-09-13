@@ -221,6 +221,18 @@ g = Grab()
 url = "http://ru.wikiquote.org/wiki/%D0%9A%D0%BE%D0%BD%D1%84%D1%83%D1%86%D0%B8%D0%B9"
 g.go(url)
 select = g.doc.select('//table[@class="toccolours"]/tr//a')
+# словарь у которого ключем будет первая буква алфавита,
+# а значением id, по которому можно определить цитаты,
+# которые начинаются на эту букву
+s_id_dict = dict()
 for el in select:
     if el.text() != "#":
-        print("{}: {}".format(el.text(), el.attr("href")))
+        s = el.text()
+
+        # без первого символа '#', потому что ссылки, для обозначения цитат,
+        # описываются без '#' в коде-html
+        id = el.attr("href")[1:]
+        s_id_dict[s] = id
+
+for s, id in s_id_dict.items():
+    print("{}: '{}'".format(s, id))
