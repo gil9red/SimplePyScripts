@@ -201,3 +201,6 @@ __author__ = 'ipetrash'
 #         pass
 #     else:
 #         print(pinfo)
+
+
+# TODO: добавить пример использования Qt с помощью модуля PySide.
