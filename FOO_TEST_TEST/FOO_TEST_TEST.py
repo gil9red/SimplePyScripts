@@ -183,10 +183,4 @@ __author__ = 'ipetrash'
 #         print(pinfo)
 
 
-### Пример того как можно узнать свой ip, используя запрос на сайт.
-#import urllib.request
-#with urllib.request.urlopen("http://api.wipmania.com") as f:
-#    context = f.read().decode()
-#    data = context.split("<br>")
-#    ip = data[0]
-#    print("My IP: {}".format(ip))
+# TODO: добавить пример того как можно узнать аппаратно IP.
