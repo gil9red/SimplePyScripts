@@ -201,16 +201,3 @@ __author__ = 'ipetrash'
 #         pass
 #     else:
 #         print(pinfo)
-
-
-from PySide.QtGui import *
-import sys
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-
-    label = QLabel()
-    label.setText("Hello, <b>PySize</b>!")
-    label.show()
-
-    sys.exit(app.exec_())
