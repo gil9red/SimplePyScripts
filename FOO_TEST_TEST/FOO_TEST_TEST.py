@@ -205,3 +205,11 @@ __author__ = 'ipetrash'
 
 # TODO: добавить пример работы с модулем json
 # import json
+
+
+# # TODO: добавление примеров:
+# http://jenyay.net/Matplotlib/Date
+# http://jenyay.net/Matplotlib/Text
+# http://jenyay.net/Matplotlib/Xkcd
+# http://jenyay.net/Matplotlib/Locators
+# http://jenyay.net/Matplotlib/LogAxes
