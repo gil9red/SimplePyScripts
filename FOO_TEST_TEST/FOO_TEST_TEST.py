@@ -201,3 +201,7 @@ __author__ = 'ipetrash'
 #         pass
 #     else:
 #         print(pinfo)
+
+
+# TODO: добавить пример работы с модулем json
+# import json
