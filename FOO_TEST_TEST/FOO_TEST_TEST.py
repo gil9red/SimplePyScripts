@@ -280,3 +280,6 @@ class TestStatisticalFunctions(unittest.TestCase):
             average(20, 30, 70)
 
 unittest.main() # Calling from the command line invokes all tests
+
+
+# TODO: https://docs.python.org/3/tutorial/stdlib2.html
