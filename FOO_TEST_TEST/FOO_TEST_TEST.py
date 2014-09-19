@@ -283,3 +283,6 @@ __author__ = 'ipetrash'
 #
 #
 # # TODO: https://docs.python.org/3/tutorial/stdlib2.html
+
+
+# TODO: придумать простое приложение и реализовтаь его с помощью TDD (используя unit-тесты)
