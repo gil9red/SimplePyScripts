@@ -1,16 +1,7 @@
 __author__ = 'ipetrash'
 
 
-# TODO: сделать https://github.com/gil9red/DownloadByPornSite с гуем
-# интерфейс позволяет серферить по тому сайту и простым нажатием на кнопку
-# скачивать с сайта видео
-#
-# TODO: сделать интерфейс, который принимает ссылки на страницы с видео,
-# добавляет их в список, а после показывает прогресс скачивания видео
-
-
 from PySide.QtGui import *
-# from PySide.QtCore import *
 import urllib.request
 import re
 import os
@@ -40,7 +31,10 @@ class Window(QWidget):
 
     def slot_download(self):
         url = self.le_url.text()
-        dir = r"C:\Users\Илья\Downloads\Trahun"
+        # Скачивать будем в документы пользователя в папку Trahun
+        dir = QDesktopServices.storageLocation(QDesktopServices.DocumentsLocation)
+        dir = os.path.join(dir, "Trahun")
+        dir = os.path.normpath(dir)
         with urllib.request.urlopen(url) as f:  # Open url
             data = f.read()  # Download context url
             data = data.decode("utf-8")  # Bytes to str
