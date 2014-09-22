@@ -307,27 +307,3 @@ __author__ = 'ipetrash'
 #
 #
 # # TODO: https://gist.github.com/gil9red/021dee2d0be2d15cc04b
-
-
-from grab import Grab
-g = Grab()
-# Переходим на страницу регистрации
-g.go('http://grouple.ru/internal/auth/login')
-# Заполняем формы логина и пароля
-g.set_input('j_username', '***')
-g.set_input('j_password', '///')
-# Выполняем
-g.submit()
-
-print(g.doc.select('//a[@href="/private/index"]').text())
-g.go('http://grouple.ru/private/bookmarks')
-print(g.doc.select('//div[@class="leftContent"]/h1').text())
-
-bookmarks_watching = g.doc.select('//table[@class="cTable bookmarks_WATCHING "]//tr[@class="bookmark-row"]')
-print("В процессе: {}".format(bookmarks_watching.count()))
-
-bookmarks_planed = g.doc.select('//table[@class="cTable bookmarks_PLANED "]//tr[@class="bookmark-row"]')
-print("В планах: {}".format(bookmarks_planed.count()))
-
-bookmarks_completed = g.doc.select('//table[@class="cTable bookmarks_COMPLETED "]//tr[@class="bookmark-row"]')
-print("Готово: {}".format(bookmarks_completed.count()))
