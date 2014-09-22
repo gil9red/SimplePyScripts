@@ -288,22 +288,46 @@ __author__ = 'ipetrash'
 # TODO: придумать простое приложение и реализовтаь его с помощью TDD (используя unit-тесты)
 
 
-# Инвертирование цвета картинки
-from PIL import Image
-import PIL.ImageOps
+# # Инвертирование цвета картинки
+# from PIL import Image
+# import PIL.ImageOps
+#
+# image_file = r"TowerOfGod_s2_ch100_p02_SIU.png_res.jpg"
+# image = Image.open(image_file)
+# if image.mode == 'RGBA':
+#     r, g, b, a = image.split()
+#     rgb_image = Image.merge('RGB', (r, g, b))
+#     inverted_image = PIL.ImageOps.invert(rgb_image)
+#     r2, g2, b2 = inverted_image.split()
+#     final_transparent_image = Image.merge('RGBA', (r2, g2, b2, a))
+#     final_transparent_image.save('new_file.png')
+# else:
+#     inverted_image = PIL.ImageOps.invert(image)
+#     inverted_image.save('new_name.png')
+#
+#
+# # TODO: https://gist.github.com/gil9red/021dee2d0be2d15cc04b
 
-image_file = r"TowerOfGod_s2_ch100_p02_SIU.png_res.jpg"
-image = Image.open(image_file)
-if image.mode == 'RGBA':
-    r, g, b, a = image.split()
-    rgb_image = Image.merge('RGB', (r, g, b))
-    inverted_image = PIL.ImageOps.invert(rgb_image)
-    r2, g2, b2 = inverted_image.split()
-    final_transparent_image = Image.merge('RGBA', (r2, g2, b2, a))
-    final_transparent_image.save('new_file.png')
-else:
-    inverted_image = PIL.ImageOps.invert(image)
-    inverted_image.save('new_name.png')
-    
-    
-# TODO: https://gist.github.com/gil9red/021dee2d0be2d15cc04b
+
+from grab import Grab
+g = Grab()
+# Переходим на страницу регистрации
+g.go('http://grouple.ru/internal/auth/login')
+# Заполняем формы логина и пароля
+g.set_input('j_username', '***')
+g.set_input('j_password', '///')
+# Выполняем
+g.submit()
+
+print(g.doc.select('//a[@href="/private/index"]').text())
+g.go('http://grouple.ru/private/bookmarks')
+print(g.doc.select('//div[@class="leftContent"]/h1').text())
+
+bookmarks_watching = g.doc.select('//table[@class="cTable bookmarks_WATCHING "]//tr[@class="bookmark-row"]')
+print("В процессе: {}".format(bookmarks_watching.count()))
+
+bookmarks_planed = g.doc.select('//table[@class="cTable bookmarks_PLANED "]//tr[@class="bookmark-row"]')
+print("В планах: {}".format(bookmarks_planed.count()))
+
+bookmarks_completed = g.doc.select('//table[@class="cTable bookmarks_COMPLETED "]//tr[@class="bookmark-row"]')
+print("Готово: {}".format(bookmarks_completed.count()))
