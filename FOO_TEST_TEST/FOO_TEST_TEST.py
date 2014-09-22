@@ -304,3 +304,6 @@ if image.mode == 'RGBA':
 else:
     inverted_image = PIL.ImageOps.invert(image)
     inverted_image.save('new_name.png')
+    
+    
+# TODO: https://gist.github.com/gil9red/021dee2d0be2d15cc04b
