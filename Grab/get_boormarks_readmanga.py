@@ -7,19 +7,7 @@ __author__ = 'ipetrash'
 
 
 from grab import Grab
-
-
-def get_list_bookmarks(bookmarks):
-    """Функция возвращает список кортежей, в котором первым элементом
-    является название манги, а вторым ссылка на нее.
-    """
-
-    l = []
-    for bm in bookmarks:
-        a_href = bm.select("td/a").attr('href')
-        a_name = bm.select("td/a/text()").text()
-        l.append((a_name, a_href))
-    return l
+import re
 
 
 if __name__ == '__main__':
@@ -51,26 +39,37 @@ if __name__ == '__main__':
 
     print("\nПользователь: {}".format(user))
 
-    print("\nЗакладки:")
+    # Запрос на получение всех закладок
+    TEMPLATE_BOOKMARKS = ('//div[@class="bookmarks-lists"]/table[starts-with(@class, "cTable bookmarks_")]'
+                          '//tr[@class="bookmark-row"]')
+    # Общее количество заметок
+    print("\nЗакладки({}):".format(g.doc.select(TEMPLATE_BOOKMARKS).count()))
 
-    # Шаблон xpath для получения группы закладок
-    TEMPLATE_BOOKMARKS = ('//div[@class="bookmarks-lists"]/table[@class="cTable bookmarks_{} "]//'
-                          'tr[@class="bookmark-row"]')
+    # Запрос на получение всех типов закладок
+    TEMPLATE_TYPE_BOOKMARK = '//div[@class="bookmarks-lists"]/table[starts-with(@class, "cTable bookmarks_")]'
+    type_bookmarks = g.doc.select(TEMPLATE_TYPE_BOOKMARK)
 
-    # Получение закладок "В процессе"
-    watching = g.doc.select(TEMPLATE_BOOKMARKS.format("WATCHING"))
-    print(" В процессе: {}".format(watching.count()))
-    for name, href in get_list_bookmarks(watching):
-        print('  "{}": {}'.format(name, href))
+    # Регулярка для вытаскивания из имени закладки нужное
+    # Например, из "Пока бросил (1)" будет вытащено: "Пока бросил"
+    regexp_bookmark = re.compile("(.+) \(.+\)")
 
-    # Получение закладок "В планах"
-    planed = g.doc.select(TEMPLATE_BOOKMARKS.format("PLANED"))
-    print("\n В планах: {}".format(planed.count()))
-    for name, href in get_list_bookmarks(planed):
-        print('  "{}": {}'.format(name, href))
+    # Перебор всех типов закладок
+    for tb in type_bookmarks:
+        bookmark = tb.select("tr/th")[1].text()  # Имя закладки с "мусором"
 
-    # Получение закладок "Готово"
-    completed = g.doc.select(TEMPLATE_BOOKMARKS.format("COMPLETED"))
-    print("\n Готово: {}".format(completed.count()))
-    for name, href in get_list_bookmarks(completed):
-        print('  "{}": {}'.format(name, href))
+        # В полученной имени закладки, согласно шаблону регулярного выражения,
+        # вытаскивается первая группа:
+        # Например, из "Пока бросил (1)" будет вытащено: "Пока бросил"
+        bookmark = regexp_bookmark.search(bookmark).group(1)
+        print('  Закладка "{}":'.format(bookmark))
+
+        # Получение всех закладок данного типа
+        group_bookmarks = tb.select('tr[@class="bookmark-row"]')
+
+        # Перебор всех закладок данного типа
+        for bm in group_bookmarks:
+            href = bm.select("td/a").attr('href')  # Ссылка на мангу
+            name = bm.select("td/a/text()").text()  # Название манги
+            print('    "{}": {}'.format(name, href))
+
+        print()
