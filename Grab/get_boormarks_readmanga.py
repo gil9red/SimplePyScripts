@@ -16,9 +16,9 @@ def get_list_bookmarks(bookmarks):
 
     l = []
     for bm in bookmarks:
-        href = bm.select("td/a").attr('href')
-        name = bm.select("td/a/text()").text()
-        l.append((name, href))
+        a_href = bm.select("td/a").attr('href')
+        a_name = bm.select("td/a/text()").text()
+        l.append((a_name, a_href))
     return l
 
 
@@ -54,7 +54,8 @@ if __name__ == '__main__':
     print("\nЗакладки:")
 
     # Шаблон xpath для получения группы закладок
-    TEMPLATE_BOOKMARKS = '//div[@class="bookmarks-lists"]/table[@class="cTable bookmarks_{} "]//tr[@class="bookmark-row"]'
+    TEMPLATE_BOOKMARKS = ('//div[@class="bookmarks-lists"]/table[@class="cTable bookmarks_{} "]//'
+                          'tr[@class="bookmark-row"]')
 
     # Получение закладок "В процессе"
     watching = g.doc.select(TEMPLATE_BOOKMARKS.format("WATCHING"))
