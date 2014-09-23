@@ -27,8 +27,8 @@ class MyThread(Thread):
         self.log = log
 
     def run(self):
-        for i, quote in enumerate(get_confucius_quotes()):
-            self.log.append('{}. "{}"\n'.format(i + 1, quote))
+        for i, quote in enumerate(get_confucius_quotes(), 1):
+            self.log.append('{}. "{}"\n'.format(i, quote))
             time.sleep(0.1)  # задержка каждые 100 миллисекунд
 
 
