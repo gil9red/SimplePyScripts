@@ -40,11 +40,11 @@ if __name__ == '__main__':
     print("\nРепозитории({}):".format(len(list_repo)))
 
     # Перебор всех репозиториев
-    for elem in list_repo:
-        url = "https://github.com" + elem.attr('href')
+    for i, repo in enumerate(list_repo, 1):
+        url = "https://github.com" + repo.attr('href')
         grab_repo = Grab()
         grab_repo.go(url)  # переход на страницу репозитория
 
         # получение количества коммитов данного репозитория
         count = grab_repo.doc.select('//span[@class="num text-emphasized"]').text()
-        print('"{}" ({} commits): {}'.format(elem.text(), count, url))
+        print('{}. "{}" ({} commits): {}'.format(i, repo.text(), count, url))
