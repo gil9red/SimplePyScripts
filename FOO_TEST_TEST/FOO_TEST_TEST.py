@@ -307,3 +307,6 @@ __author__ = 'ipetrash'
 #
 #
 # # TODO: https://gist.github.com/gil9red/021dee2d0be2d15cc04b
+
+# TODO: в https://github.com/gil9red/SimplePyScripts/tree/master/Grab добавить скрипт, 
+# который будет собирать информацию о пользователе
