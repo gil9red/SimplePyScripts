@@ -307,26 +307,3 @@ __author__ = 'ipetrash'
 #
 #
 # # TODO: https://gist.github.com/gil9red/021dee2d0be2d15cc04b
-
-
-# TODO: в https://github.com/gil9red/SimplePyScripts/tree/master/Grab добавить скрипт, 
-# который будет собирать информацию о пользователе
-from grab import Grab
-
-if __name__ == '__main__':
-    login = "gil9red"
-    password = "****"
-
-    g = Grab()
-    g.go("https://github.com/login")
-    g.set_input("login", login)
-    g.set_input("password", password)
-    g.submit()
-
-    url = "https://github.com/" + login
-    g.go(url)
-    
-    # print(g.doc.select('//span[@class="vcard-fullname" @itemprop="name"').text())
-
-
-# TODO: с помощью grab закачать на файлообменник rghost.ru выбранный файл, и вернуть ссылку на него.
