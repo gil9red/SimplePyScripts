@@ -310,3 +310,19 @@ __author__ = 'ipetrash'
 
 # TODO: в https://github.com/gil9red/SimplePyScripts/tree/master/Grab добавить скрипт, 
 # который будет собирать информацию о пользователе
+from grab import Grab
+
+if __name__ == '__main__':
+    login = "gil9red"
+    password = "****"
+
+    g = Grab()
+    g.go("https://github.com/login")
+    g.set_input("login", login)
+    g.set_input("password", password)
+    g.submit()
+
+    url = "https://github.com/" + login
+    g.go(url)
+    
+    # print(g.doc.select('//span[@class="vcard-fullname" @itemprop="name"').text())
