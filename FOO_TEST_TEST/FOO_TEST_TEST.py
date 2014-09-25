@@ -307,3 +307,8 @@ __author__ = 'ipetrash'
 #
 #
 # # TODO: https://gist.github.com/gil9red/021dee2d0be2d15cc04b
+
+
+# TODO: получение списка доступных кодировок
+from encodings.aliases import aliases
+print aliases.keys()
