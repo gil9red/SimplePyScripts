@@ -315,3 +315,19 @@ __author__ = 'ipetrash'
 #     print(e)
 
 
+if __name__ == '__main__':
+    from grab import Grab
+
+    def log(mess):
+        from datetime import datetime
+        now = datetime.today().strftime("%d/%m/%y %H:%M")
+        print("{}: {}".format(now, mess))
+
+    g = Grab()
+    g.go("http://www.zikov.ru/")
+
+    last_mess = g.doc.select('//h2[@class="contentheading"]').text()
+    if last_mess != "Седьмая глава":
+        log("Появилось новое сообщение от Зыкова!")
+    else:
+        log("Ничего не поменялось.")
