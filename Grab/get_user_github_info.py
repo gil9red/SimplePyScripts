@@ -3,12 +3,16 @@
 выводит информацию о пользователе.
 """
 
+
 # TODO: добавить больше информации о пользователе.
+# URL: <li class="vcard-detail" itemprop="url">
+
 
 __author__ = 'ipetrash'
 
 
 from grab import Grab
+
 
 if __name__ == '__main__':
     login = input("Логин: ")
