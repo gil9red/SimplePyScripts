@@ -310,9 +310,7 @@ __author__ = 'ipetrash'
 
 
 # # TODO: получение списка доступных кодировок
-# from encodings.aliases import aliases
-# for e in sorted(aliases.keys()):
-#     print(e)
+
 
 
 if __name__ == '__main__':
