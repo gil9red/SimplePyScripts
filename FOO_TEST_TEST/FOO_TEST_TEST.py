@@ -342,3 +342,8 @@ if __name__ == '__main__':
 
 # TODO: Excel
 # "Интеграция MS Excel и Python": http://habrahabr.ru/post/232291/
+
+
+# TODO: tornado
+# "Современный Торнадо: распределённый хостинг картинок в 30 строк кода":
+# http://habrahabr.ru/post/230607/
