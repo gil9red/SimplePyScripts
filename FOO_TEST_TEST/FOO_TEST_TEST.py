@@ -358,6 +358,11 @@ __author__ = 'ipetrash'
 
 
 # TODO: Используя сервис https://www.gitignore.io с помощью скриптов получать gitignore файлы.
+from grab import Grab
+g = Grab()
+lang = "python"
+g.go("https://www.gitignore.io/api/" + lang)
+print(g.response.body)
 
 
 # TODO: Работа с буфером обмена: pyperclip
