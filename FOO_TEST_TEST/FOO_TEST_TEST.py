@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from idlelib.PyShell import extended_linecache_checkcache
 
+
 __author__ = 'ipetrash'
 
 
