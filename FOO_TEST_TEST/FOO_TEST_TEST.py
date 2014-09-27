@@ -362,3 +362,7 @@ if __name__ == '__main__':
 
 # TODO: Работа с буфером обмена: pyperclip
 # http://stackoverflow.com/questions/11063458/python-script-to-copy-text-to-clipboard
+
+
+# TODO: brutforce Instagram 
+# http://habrahabr.ru/post/215829/
