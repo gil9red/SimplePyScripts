@@ -358,3 +358,7 @@ if __name__ == '__main__':
 
 
 # TODO: Используя сервис https://www.gitignore.io с помощью скриптов получать gitignore файлы.
+
+
+# TODO: Работа с буфером обмена: pyperclip
+# http://stackoverflow.com/questions/11063458/python-script-to-copy-text-to-clipboard
