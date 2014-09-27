@@ -355,3 +355,6 @@ if __name__ == '__main__':
 
 # TODO: Webmoney API
 # http://habrahabr.ru/post/222411/
+
+
+# TODO: Используя сервис https://www.gitignore.io с помощью скриптов получать gitignore файлы.
