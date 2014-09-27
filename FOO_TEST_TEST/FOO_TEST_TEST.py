@@ -351,6 +351,7 @@ __author__ = 'ipetrash'
 
 # TODO: визуализация связей в вк:
 # http://habrahabr.ru/post/221251/
+# https://github.com/stleon/vk_friends
 
 
 # TODO: Webmoney API
