@@ -338,3 +338,7 @@ if __name__ == '__main__':
 
 # TODO: Flask
 # "Мега-Учебник Flask, Часть 1: Привет, Мир!": http://habrahabr.ru/post/193242/
+
+
+# TODO: Excel
+# "Интеграция MS Excel и Python": http://habrahabr.ru/post/232291/
