@@ -377,6 +377,9 @@ __author__ = 'ipetrash'
 # http://habrahabr.ru/post/212837/
 
 
+# TODO: отправка смс: http://habrahabr.ru/post/211667/
+
+
 # TODO: Работа с буфером обмена: pyperclip
 # http://stackoverflow.com/questions/11063458/python-script-to-copy-text-to-clipboard
 
