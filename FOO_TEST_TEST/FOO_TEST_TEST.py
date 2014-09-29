@@ -380,6 +380,9 @@ __author__ = 'ipetrash'
 # TODO: отправка смс: http://habrahabr.ru/post/211667/
 
 
+# TODO: способы скачивания файлов: http://habrahabr.ru/post/210238/
+
+
 # TODO: Работа с буфером обмена: pyperclip
 # http://stackoverflow.com/questions/11063458/python-script-to-copy-text-to-clipboard
 
