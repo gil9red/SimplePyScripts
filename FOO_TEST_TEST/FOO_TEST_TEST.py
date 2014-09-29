@@ -383,6 +383,11 @@ __author__ = 'ipetrash'
 # TODO: способы скачивания файлов: http://habrahabr.ru/post/210238/
 
 
+# TODO: "Экспорт Избранного на Хабре в PDF": http://habrahabr.ru/post/208802/
+# Оригинал: https://github.com/vrtx64/fav2pdf
+# Форк: https://github.com/icoz/fav2pdf
+
+
 # TODO: Работа с буфером обмена: pyperclip
 # http://stackoverflow.com/questions/11063458/python-script-to-copy-text-to-clipboard
 
