@@ -338,6 +338,7 @@ __author__ = 'ipetrash'
 
 # TODO: Flask
 # "Мега-Учебник Flask, Часть 1: Привет, Мир!": http://habrahabr.ru/post/193242/
+# http://ru.wikibooks.org/wiki/Flask
 
 
 # TODO: Excel
