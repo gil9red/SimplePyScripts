@@ -206,6 +206,7 @@ __author__ = 'ipetrash'
 
 
 # TODO: добавить пример работы с модулем json
+# https://docs.python.org/3.4/library/json.html
 # import json
 
 
