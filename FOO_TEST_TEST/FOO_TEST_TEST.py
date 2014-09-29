@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from idlelib.PyShell import extended_linecache_checkcache
 
 
 __author__ = 'ipetrash'
@@ -368,6 +367,9 @@ __author__ = 'ipetrash'
 
 
 # TODO: Основы создания 2D персонажа в Godot
+# https://github.com/okamstudio/godot/
+# "Игровой движок Godot отдали в общественное пользование": http://habrahabr.ru/post/212109/ 
+#
 # "Часть 1: компилирование игрового движка, создание проекта и анимация покоя героя":
 # http://habrahabr.ru/post/212583/
 #
