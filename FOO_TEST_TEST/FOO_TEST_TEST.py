@@ -392,5 +392,10 @@ __author__ = 'ipetrash'
 # http://stackoverflow.com/questions/11063458/python-script-to-copy-text-to-clipboard
 
 
+# TODO: "Открытие вкладки в браузере": http://habrahabr.ru/post/207988/
+# import webbrowser
+# webbrowser.open_new_tab('http://habrahabr.ru/') # Вернет True и откроет вкладку
+
+
 # TODO: brutforce Instagram 
 # http://habrahabr.ru/post/215829/
