@@ -360,11 +360,19 @@ __author__ = 'ipetrash'
 
 
 # TODO: Используя сервис https://www.gitignore.io с помощью скриптов получать gitignore файлы.
-from grab import Grab
-g = Grab()
-lang = "python"
-g.go("https://www.gitignore.io/api/" + lang)
-print(g.response.body)
+# from grab import Grab
+# g = Grab()
+# lang = "python"
+# g.go("https://www.gitignore.io/api/" + lang)
+# print(g.response.body)
+
+
+# TODO: Основы создания 2D персонажа в Godot
+# "Часть 1: компилирование игрового движка, создание проекта и анимация покоя героя":
+# http://habrahabr.ru/post/212583/
+#
+# "Часть 2: компилирование шаблонов, немного о GDScript, движение и анимация героя":
+# http://habrahabr.ru/post/212837/
 
 
 # TODO: Работа с буфером обмена: pyperclip
