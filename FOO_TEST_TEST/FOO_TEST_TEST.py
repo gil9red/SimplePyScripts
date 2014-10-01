@@ -193,21 +193,19 @@ __author__ = 'ipetrash'
 
 
 # # TODO: datetime
-# >>> # dates are easily constructed and formatted
-# >>> from datetime import date
-# >>> now = date.today()
-# >>> now
-# datetime.date(2003, 12, 2)
-# >>> now.strftime("%m-%d-%y. %d %b %Y is a %A on the %d day of %B.")
-# '12-02-03. 02 Dec 2003 is a Tuesday on the 02 day of December.'
+# # dates are easily constructed and formatted
+# from datetime import date
+# now = date.today()
+# # now
+# now.strftime("%m-%d-%y. %d %b %Y is a %A on the %d day of %B.")
+# #'12-02-03. 02 Dec 2003 is a Tuesday on the 02 day of December.'
 #
-# >>> # dates support calendar arithmetic
-# >>> birthday = date(1964, 7, 31)
-# >>> age = now - birthday
-# >>> age.days
-# 14368
-#
-#
+# # dates support calendar arithmetic
+# birthday = date(1964, 7, 31)
+# age = now - birthday
+# print(age.days)
+
+
 # # Data Compression (модуль zlib)
 # >>> import zlib
 # >>> s = b'witch which has which witches wrist watch'
@@ -220,8 +218,8 @@ __author__ = 'ipetrash'
 # b'witch which has which witches wrist watch'
 # >>> zlib.crc32(s)
 # 226805979
-#
-#
+
+
 # # Performance Measurement (модуль timeit)
 # >>> from timeit import Timer
 # >>> Timer('t=a; a=b; b=t', 'a=1; b=2').timeit()
