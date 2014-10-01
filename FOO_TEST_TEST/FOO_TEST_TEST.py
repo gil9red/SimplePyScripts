@@ -305,10 +305,6 @@ __author__ = 'ipetrash'
 #         log("Ничего не поменялось.")
         
         
-# TODO: написать скрипт, который будет парсить страницу пользователя https://www.linkedin.com выводя его контакты
-# и контакты его контактов и т.п. с указанием глубины поиска.
-
-
 # TODO: Flask
 # "Мега-Учебник Flask, Часть 1: Привет, Мир!": http://habrahabr.ru/post/193242/
 # http://ru.wikibooks.org/wiki/Flask
@@ -323,7 +319,7 @@ __author__ = 'ipetrash'
 # http://habrahabr.ru/post/230607/
 
 
-# TODO: визуализация связей в вк:
+# TODO: визуализация связей в вк и linkedin:
 # http://habrahabr.ru/post/221251/
 # https://github.com/stleon/vk_friends
 
