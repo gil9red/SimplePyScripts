@@ -371,5 +371,9 @@ __author__ = 'ipetrash'
 # webbrowser.open_new_tab('http://habrahabr.ru/') # Вернет True и откроет вкладку
 
 
+# TODO: скачать ранобе "Непутевый ученик в школе магии" и сконвертировать в формат, который
+# сможет открыть книгочиталка.
+
+
 # TODO: brutforce Instagram 
 # http://habrahabr.ru/post/215829/
