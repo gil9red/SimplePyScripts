@@ -341,9 +341,6 @@ __author__ = 'ipetrash'
 # http://habrahabr.ru/post/212837/
 
 
-# TODO: отправка смс: http://habrahabr.ru/post/211667/
-
-
 # TODO: способы скачивания файлов: http://habrahabr.ru/post/210238/
 
 
