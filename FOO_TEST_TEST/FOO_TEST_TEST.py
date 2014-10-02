@@ -330,14 +330,6 @@ __author__ = 'ipetrash'
 # http://habrahabr.ru/post/222411/
 
 
-# TODO: Используя сервис https://www.gitignore.io с помощью скриптов получать gitignore файлы.
-# from grab import Grab
-# g = Grab()
-# lang = "python"
-# g.go("https://www.gitignore.io/api/" + lang)
-# print(g.response.body)
-
-
 # TODO: Основы создания 2D персонажа в Godot
 # https://github.com/okamstudio/godot/
 # "Игровой движок Godot отдали в общественное пользование": http://habrahabr.ru/post/212109/ 
