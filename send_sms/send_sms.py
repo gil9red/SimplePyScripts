@@ -12,7 +12,7 @@ if __name__ == '__main__':
 
     api_id = "435fd045-bbf1-aa14-fd75-4e965b077490"
     to = "79123267932"
-    mess = "Хадсону стало плохо! =("
+    mess = "Хадсону стало плохо! =(\nПокорми его, fuck!"
     mess = urllib.request.quote(mess)
     url = "http://sms.ru/sms/send?api_id={}&to={}&text={}"
     url = url.format(api_id, to, mess)
