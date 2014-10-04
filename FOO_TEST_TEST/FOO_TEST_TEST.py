@@ -39,20 +39,6 @@ __author__ = 'ipetrash'
 #                 print()
 
 
-# 
-# """Пример подсчета количества слов в выбранном тексте."""
-#
-# import re
-#
-# text = "Предоставляет методы для управления дата и значения времени, связанных с файлом 11 11."
-#
-# words = re.findall(r"\b\w+\b", text)
-# print("Words: {}\nCount: {}".format(words, len(words)))
-# word_count = Counter(words)
-# for word, c in word_count.items():
-#     print("Word: '{}', count: {}".format(word, c))
-
-
 # # Overlay "watermark" image / Наложение "водяного знака" на изображение
 # import os
 # from PIL import Image, ImageDraw, ImageFont
