@@ -154,22 +154,15 @@ __author__ = 'ipetrash'
 # print_arr(field)
 
 
-# ### Больше примеров по ссылкам: http://pythonhosted.org/psutil/ и https://github.com/giampaolo/psutil
-# import psutil
-#
-# ## Получение списка запущенных процессов
-# for proc in psutil.process_iter():
-#     try:
-#         pinfo = proc.as_dict(attrs=['pid', 'name'])
-#     except psutil.NoSuchProcess:
-#         pass
-#     else:
-#         print(pinfo)
-
-
 # TODO: добавить пример работы с модулем json
 # https://docs.python.org/3.4/library/json.html
 # import json
+
+
+# TODO: больше примеров по модулю psutil.
+# Ссылки:
+#   http://pythonhosted.org/psutil/
+#   https://github.com/giampaolo/psutil
 
 
 # # TODO: добавление примеров:
