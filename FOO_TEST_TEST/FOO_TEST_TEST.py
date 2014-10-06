@@ -17,6 +17,20 @@ __author__ = 'ipetrash'
 #     return value
 
 
+# TODO: код цезаря
+alp = [chr(c) for c in range(ord('a'), ord('z') + 1)]
+text = "Hello World!"
+ind = 2
+new_t = ''
+for c in text.lower():
+    if c in alp:
+        new_i = (alp.index(c) + ind) % len(alp)
+        new_t += alp[new_i]
+    else:
+        new_t += c
+print(new_t)
+
+
 # import re
 # import os
 # # file_name = input("File name: ")
