@@ -19,9 +19,16 @@ if __name__ == '__main__':
     g = Grab()
     g.go(url)
 
+    # Получение основного контекста, содержащий аннотацию и ссылки на тома
     content_text = g.doc.select('//div[@id="mw-content-text"]')
+
+    # Получение названия ранобе
     name = g.doc.select('//h1[@id="firstHeading"]').text()
+
+    # Получение и объединение параграфов в единый текст
     annotation = '\n'.join(r.text() for r in content_text.select('p/i'))
+
+    # Получение списка томов
     list_volume = content_text.select('ul/li/a')
 
     print("Название: '{}'".format(name))
