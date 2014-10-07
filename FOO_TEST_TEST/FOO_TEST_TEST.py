@@ -314,15 +314,6 @@ __author__ = 'ipetrash'
 # http://stackoverflow.com/questions/11063458/python-script-to-copy-text-to-clipboard
 
 
-# TODO: скачать ранобе "Непутевый ученик в школе магии" и сконвертировать в формат, который
-# сможет открыть книгочиталка.
-# http://www.baka-tsuki.org/project/index.php?title=Mahouka_Koukou_no_Rettousei_~Russian_Version~
-# http://ruranobe.ru/r/mknr/v1#index
-# Реализовать скрипт в стиле Unix: программа должна делать только одну функцию и делать ее хорошо,
-# т.е. один скрипт скачивает главы, и сохраняет их в html на диске, разделяя их на тома (каждый том,
-# отдельная папка), а второй скрипт конвертирует эти главы в формат книгочиталки (например, fb2)
-
-
 # TODO: https://docs.python.org/3/library/collections.html#collections.namedtuple
 # >>> # Basic example
 # >>> Point = namedtuple('Point', ['x', 'y'])
