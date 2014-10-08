@@ -35,10 +35,27 @@ if __name__ == '__main__':
     print("\nАннотации:\n'{}'".format(annotation))
     print("\nТома ({}):".format(len(list_volume)))
     for n, volume in enumerate(list_volume, 1):
-        # Относительная ссылка на том
-        href = volume.attr('href')
-
         # Соединение адреса к главной странице ранобе и относительной ссылки к тому
-        url_volume = urljoin(url, href)
+        url_volume = urljoin(url, volume.attr('href'))
 
-        print("{}. '{}' {}".format(n, volume.text(), url_volume))
+        # Переходим на страницу тома
+        g.go(url_volume)
+
+        # Относительная ссылка к обложки тома
+        relative_url_cover = g.doc.select('//td[@id="cover"]/a').attr('href')
+
+        # Соединение адреса к главной странице ранобе и относительной ссылки к обложки тома
+        url_cover_volume = urljoin(url, relative_url_cover)
+
+        print("{}. '{}'\n    {}\n    {}".format(n, volume.text(),
+                                                url_volume,
+                                                url_cover_volume))
+
+        # Получаем список строк с двумя столбцами
+        list_info = g.doc.select('//table[@id="release-info"]/tr')
+        for info in list_info:
+            # Получение списка столбцов
+            td = info.select('td')
+            print("    {}: '{}'".format(td[0].text(), td[1].text()))
+
+        print()
