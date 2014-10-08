@@ -23,10 +23,6 @@ __author__ = 'ipetrash'
 # http://1stat.ru/
 
 
-# TODO: распарсить http://snowgate.info/zones_list_dns.html и вывести список пар:
-# домен : страна
-
-
 # import re
 # import os
 # # file_name = input("File name: ")
