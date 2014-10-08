@@ -19,7 +19,8 @@ __author__ = 'ipetrash'
 
 # TODO: скачать базу доменов в зоне ru
 # ru: https://partner.r01.ru/zones/ru_domains.gz или https://partner.r01.ru/ru_domains.gz
-# рф: https://partner.r01.ru/rf_domains.gz 
+# рф: https://partner.r01.ru/rf_domains.gz
+# http://1stat.ru/
 
 
 # import re
