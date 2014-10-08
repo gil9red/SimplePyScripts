@@ -1,16 +1,33 @@
 __author__ = 'ipetrash'
-# TODO: Приветствие зависит от времени выполнения скрипта
+
 
 import argparse
 
 
 def main(namespace):
     args = namespace.parse_args()
+    args.user = "Илья"
+    if args.user:
+        from datetime import datetime, time
 
-    if args.user is not None:
-        print("Hello, %s!" % args.user)
+        welcome = "Привет"
+
+        current = datetime.now().time()
+        if time(6) <= current < time(12):
+            welcome = "Доброе утро"
+
+        elif time(12) <= current < time(18):
+            welcome = "Добрый день"
+
+        elif time(18) <= current < time(23, 59, 59):
+            welcome = "Добрый вечер"
+
+        elif time(0) <= current < time(6):
+            welcome = "Доброй ночи"
+
+        print("{}, {}!".format(welcome, args.user))
     else:
-        print("Hello, Py!")
+        print("Привет, Python!")
 
 
 def create_parser():
@@ -19,5 +36,5 @@ def create_parser():
     return parser
 
 if __name__ == '__main__':
-    namespace = create_parser()
-    main(namespace)
+    parser = create_parser()
+    main(parser)
