@@ -18,7 +18,7 @@ __author__ = 'ipetrash'
 
 
 # TODO: скачать базу доменов в зоне ru
-# http://ugoo.ru/ugoo.out/https/partner.r01.ru/zones/ru_domains.gz
+# https/partner.r01.ru/zones/ru_domains.gz
 
 
 # import re
