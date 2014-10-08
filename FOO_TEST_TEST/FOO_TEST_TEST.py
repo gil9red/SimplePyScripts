@@ -17,6 +17,10 @@ __author__ = 'ipetrash'
 #     return value
 
 
+# TODO: скачать базу доменов в зоне ru
+# http://ugoo.ru/ugoo.out/https/partner.r01.ru/zones/ru_domains.gz
+
+
 # import re
 # import os
 # # file_name = input("File name: ")
