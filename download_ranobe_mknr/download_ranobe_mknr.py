@@ -54,11 +54,22 @@ if __name__ == '__main__':
         # Получаем список строк с двумя столбцами, каждая строка содержит
         # некоторую информацию о томе: названия на нескольких языка, серия,
         # автор, иллюстратор и т.п.
-        # TODO: раскидать значения по переменным
         list_info = g.doc.select('//table[@id="release-info"]/tr')
-        for info in list_info:
-            # Получение списка столбцов
-            td = info.select('td')
-            print("    {}: '{}'".format(td[0].text(), td[1].text()))
+        volume_name = list_info[2].select('td')[1].text()
+        series = list_info[3].select('td')[1].text()
+        author = list_info[4].select('td')[1].text()
+        illustrator = list_info[5].select('td')[1].text()
+        volume_isbn = list_info[6].select('td')[1].text()
+
+        print("    Название:    {}".format(volume_name))
+        print("    Серия:       {}".format(series))
+        print("    Автор:       {}".format(author))
+        print("    Иллюстратор: {}".format(illustrator))
+        print("    ISBN:        {}".format(volume_isbn))
+
+        # for info in list_info:
+        #     # Получение списка столбцов
+        #     td = info.select('td')
+        #     print("    {}: '{}'".format(td[0].text(), td[1].text()))
 
         print()
