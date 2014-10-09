@@ -54,18 +54,18 @@ if __name__ == '__main__':
         # Получаем список строк с двумя столбцами, каждая строка содержит
         # некоторую информацию о томе: названия на нескольких языка, серия,
         # автор, иллюстратор и т.п.
-        list_info = g.doc.select('//table[@id="release-info"]/tr')
-        volume_name = list_info[2].select('td')[1].text()
-        series = list_info[3].select('td')[1].text()
-        author = list_info[4].select('td')[1].text()
-        illustrator = list_info[5].select('td')[1].text()
-        volume_isbn = list_info[6].select('td')[1].text()
+        list_info = g.doc.select('//table[@id="release-info"]/tr/td[2]')
+        volume_name = list_info[2].text()
+        series = list_info[3].text()
+        author = list_info[4].text()
+        illustrator = list_info[5].text()
+        volume_ISBN = list_info[6].text()
 
         print("    Название:    {}".format(volume_name))
         print("    Серия:       {}".format(series))
         print("    Автор:       {}".format(author))
         print("    Иллюстратор: {}".format(illustrator))
-        print("    ISBN:        {}".format(volume_isbn))
+        print("    ISBN:        {}".format(volume_ISBN))
 
         # for info in list_info:
         #     # Получение списка столбцов
