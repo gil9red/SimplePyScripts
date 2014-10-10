@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 if __name__ == '__main__':
+    # Конкурент: http://smsified.com/
     # Статья: http://habrahabr.ru/post/211667/
     # API: http://sms.ru/?panel=api&subpanel=method&show=sms/send
 
