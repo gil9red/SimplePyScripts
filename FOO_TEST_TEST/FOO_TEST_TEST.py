@@ -4,9 +4,6 @@
 __author__ = 'ipetrash'
 
 
-# TODO: способы скачивания файлов: http://habrahabr.ru/post/210238/
-
-
 # TODO: побольше примеров форматирования строк.
 # https://docs.python.org/3/library/string.html#string-formatting
 # print('{one} * {one} {two}'.format(one="45", two="Bugaga"))
