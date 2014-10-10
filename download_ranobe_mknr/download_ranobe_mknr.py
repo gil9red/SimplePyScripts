@@ -41,10 +41,21 @@ if __name__ == '__main__':
         # Переходим на страницу тома
         g.go(url_volume)
 
+        if g.response.code != 200:
+            print("Страница: {}, код возврата: {}".format(url_volume, g.response.code))
+            continue
+
+        # Получение списка глав из оглавления
+        # TODO: если нет содержания -- пропускать том
+        contents = g.doc.select('//div[@id="index"]/*/li/a')
+        if not contents:
+            print("Нет содержания: {}".format(url_volume))
+            continue
+
         # Относительная ссылка к обложки тома
         relative_url_cover = g.doc.select('//td[@id="cover"]/a').attr('href')
 
-        # Соединение адреса к главной странице ранобе и относительной ссылки к обложки тома
+        # Соединение адреса к главной странице ранобе и относительной ссылки к обложке тома
         url_cover_volume = urljoin(url, relative_url_cover)
 
         print("{}. '{}'\n    {}\n    {}".format(n, volume.text(),
@@ -67,9 +78,17 @@ if __name__ == '__main__':
         print("    Иллюстратор: {}".format(illustrator))
         print("    ISBN:        {}".format(volume_ISBN))
 
-        # for info in list_info:
-        #     # Получение списка столбцов
-        #     td = info.select('td')
-        #     print("    {}: '{}'".format(td[0].text(), td[1].text()))
+        print("    Содержание:")
+        for i, ch in enumerate(contents, 1):
+            # Адрес к главе тома
+            url_chapter = urljoin(url, ch.attr("href"))
+
+            # Проверка на существование страницы с главой
+            grab_chapter = Grab()
+            grab_chapter.go(url_chapter)
+            if grab_chapter.response.code == 200:
+                print("        {}. '{}': {}".format(i, ch.text(), url_chapter))
+            else:
+                print("Нет главы: {}".format(url_chapter))
 
         print()
