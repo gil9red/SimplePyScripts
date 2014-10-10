@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# TODO: способы скачивания файлов: http://habrahabr.ru/post/210238/
+
+
 # TODO: побольше примеров форматирования строк.
 # https://docs.python.org/3/library/string.html#string-formatting
 # print('{one} * {one} {two}'.format(one="45", two="Bugaga"))
@@ -306,9 +309,6 @@ __author__ = 'ipetrash'
 #
 # "Часть 2: компилирование шаблонов, немного о GDScript, движение и анимация героя":
 # http://habrahabr.ru/post/212837/
-
-
-# TODO: способы скачивания файлов: http://habrahabr.ru/post/210238/
 
 
 # TODO: "Экспорт Избранного на Хабре в PDF": http://habrahabr.ru/post/208802/
