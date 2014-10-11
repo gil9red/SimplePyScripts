@@ -9,14 +9,6 @@ __author__ = 'ipetrash'
 # print('{one} * {one} {two}'.format(one="45", two="Bugaga"))
 
 
-# def my_func(value):
-#     print()
-#     print(isinstance(value, str))
-#     print(isinstance(value, int))
-#     print(isinstance(value, bool))
-#     return value
-
-
 # import re
 # import os
 # # file_name = input("File name: ")
