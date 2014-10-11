@@ -4,11 +4,6 @@
 __author__ = 'ipetrash'
 
 
-# TODO: побольше примеров форматирования строк.
-# https://docs.python.org/3/library/string.html#string-formatting
-# print('{one} * {one} {two}'.format(one="45", two="Bugaga"))
-
-
 # import re
 # import os
 # # file_name = input("File name: ")
@@ -41,7 +36,7 @@ __author__ = 'ipetrash'
 # # img = Image.new('RGB', (100, 50), color)
 # # imgDrawer = ImageDraw.Draw(img)
 # # imgDrawer.text((10, 20), text)
-# # img.save("pil-basic-example.png")
+# # img.save("pil_example-basic-example.png")
 #
 # path = r"C:\Users\ipetrash\Desktop\pic.png"
 # # path = input("Input path: ")
@@ -151,10 +146,10 @@ __author__ = 'ipetrash'
 # import json
 
 
-# TODO: больше примеров по модулю psutil.
+# TODO: больше примеров по модулю psutil_example.
 # Ссылки:
-#   http://pythonhosted.org/psutil/
-#   https://github.com/giampaolo/psutil
+#   http://pythonhosted.org/psutil_example/
+#   https://github.com/giampaolo/psutil_example
 
 
 # # TODO: добавление примеров:
@@ -179,28 +174,6 @@ __author__ = 'ipetrash'
 # print(age.days)
 
 
-# # Data Compression (модуль zlib)
-# >>> import zlib
-# >>> s = b'witch which has which witches wrist watch'
-# >>> len(s)
-# 41
-# >>> t = zlib.compress(s)
-# >>> len(t)
-# 37
-# >>> zlib.decompress(t)
-# b'witch which has which witches wrist watch'
-# >>> zlib.crc32(s)
-# 226805979
-
-
-# # Performance Measurement (модуль timeit)
-# >>> from timeit import Timer
-# >>> Timer('t=a; a=b; b=t', 'a=1; b=2').timeit()
-# 0.57535828626024577
-# >>> Timer('a,b = b,a', 'a=1; b=2').timeit()
-# 0.54962537085770791
-#
-#
 # ## Quality Control
 # # doctest
 # def average(values):
@@ -228,36 +201,18 @@ __author__ = 'ipetrash'
 #             average(20, 30, 70)
 #
 # unittest.main() # Calling from the command line invokes all tests
-#
-#
-# # TODO: https://docs.python.org/3/tutorial/stdlib2.html
+
+
+# TODO: https://docs.python.org/3/tutorial/stdlib2.html
 
 
 # TODO: придумать простое приложение и реализовтаь его с помощью TDD (используя unit-тесты)
 
 
-# # TODO: https://gist.github.com/gil9red/021dee2d0be2d15cc04b
+# TODO: https://gist.github.com/gil9red/021dee2d0be2d15cc04b
 
 
-# # TODO: получение списка доступных кодировок
-
-
-# if __name__ == '__main__':
-#     from grab import Grab
-#
-#     def log(mess):
-#         from datetime import datetime
-#         now = datetime.today().strftime("%d/%m/%y %H:%M")
-#         print("{}: {}".format(now, mess))
-#
-#     g = Grab()
-#     g.go("http://www.zikov.ru/")
-#
-#     last_mess = g.doc.select('//h2[@class="contentheading"]').text()
-#     if last_mess != "Седьмая глава":
-#         log("Появилось новое сообщение от Зыкова!")
-#     else:
-#         log("Ничего не поменялось.")
+# TODO: получение списка доступных кодировок
         
         
 # TODO: Flask
@@ -301,21 +256,6 @@ __author__ = 'ipetrash'
 
 # TODO: Работа с буфером обмена: pyperclip
 # http://stackoverflow.com/questions/11063458/python-script-to-copy-text-to-clipboard
-
-
-# TODO: https://docs.python.org/3/library/collections.html#collections.namedtuple
-# >>> # Basic example
-# >>> Point = namedtuple('Point', ['x', 'y'])
-# >>> p = Point(11, y=22)     # instantiate with positional or keyword arguments
-# >>> p[0] + p[1]             # indexable like the plain tuple (11, 22)
-# 33
-# >>> x, y = p                # unpack like a regular tuple
-# >>> x, y
-# (11, 22)
-# >>> p.x + p.y               # fields also accessible by name
-# 33
-# >>> p                       # readable __repr__ with a name=value style
-# Point(x=11, y=22)
 
 
 # TODO: brutforce Instagram 
