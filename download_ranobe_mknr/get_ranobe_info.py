@@ -14,6 +14,11 @@ def ranobe_info():
     g.setup(hammer_mode=True)
     g.go(url)
 
+    # Если не удачно, выходим
+    if g.response.code != 200:
+        print("Не найден {}.".format(url))
+        return
+
     # Получение основного контекста, содержащий аннотацию и ссылки на тома
     content_text = g.doc.select('//div[@id="mw-content-text"]')
 

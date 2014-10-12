@@ -45,14 +45,24 @@ if __name__ == '__main__':
 
         volume_info = get_volume_info.volume_info(url_volume, url)
         if volume_info:
-            print("    Название:    {}".format(volume_info["name"]))
-            print("    Серия:       {}".format(volume_info["series"]))
-            print("    Автор:       {}".format(volume_info["author"]))
-            print("    Иллюстратор: {}".format(volume_info["illustrator"]))
-            print("    ISBN:        {}".format(volume_info["ISBN"]))
+            print("  Адрес тома: {}".format(url_volume))
+            print("  ALL: {}".format(volume_info))
+            print("    Название:    {}".format(volume_info.get("name")))
+            print("    Серия:       {}".format(volume_info.get("series")))
+            print("    Автор:       {}".format(volume_info.get("author")))
+            print("    Иллюстратор: {}".format(volume_info.get("illustrator")))
+            print("    ISBN:        {}".format(volume_info.get("ISBN")))
+            print("    Обложка:     {}".format(volume_info.get("url_cover")))
             print("    Содержание:")
-            for i, ch in enumerate(volume_info["chapters"], 1):
-                print("        {}. '{}'".format(i, ch))
+            print("        Начальные иллюстрации: {}".format(volume_info.get("i")))
+            print("        Вступление: {}".format(volume_info.get("p1")))
+            print("        Пролог: {}".format(volume_info.get("p2")))
+            print("        Главы:")
+            for i, ch in enumerate(volume_info.get("chapters"), 1):
+                print("            {}. '{}'".format(i, ch))
+            print("        Эпилог: {}".format(volume_info.get("e")))
+            print("        Послесловие: {}".format(volume_info.get("a")))
+            print("        Запоздавший шедевр: {}".format(volume_info.get("a2")))
         else:
             print("Неудача с томом: {}".format(url_volume))
 
