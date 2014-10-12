@@ -4,6 +4,23 @@
 __author__ = 'ipetrash'
 
 
+# TODO: пример таймера
+# from PySide.QtCore import *
+# import sys
+#
+# app = QCoreApplication(sys.argv)
+#
+# def say():
+#     print("say!")
+#
+# t = QTimer()
+# t.setInterval(1000)
+# t.timeout.connect(say)
+# t.start()
+#
+# sys.exit(app.exec_())
+
+
 # import re
 # import os
 # # file_name = input("File name: ")
