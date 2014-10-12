@@ -230,8 +230,8 @@ __author__ = 'ipetrash'
 
 
 # TODO: получение списка доступных кодировок
-        
-        
+
+
 # TODO: Flask
 # "Мега-Учебник Flask, Часть 1: Привет, Мир!": http://habrahabr.ru/post/193242/
 # http://ru.wikibooks.org/wiki/Flask
@@ -257,7 +257,7 @@ __author__ = 'ipetrash'
 
 # TODO: Основы создания 2D персонажа в Godot
 # https://github.com/okamstudio/godot/
-# "Игровой движок Godot отдали в общественное пользование": http://habrahabr.ru/post/212109/ 
+# "Игровой движок Godot отдали в общественное пользование": http://habrahabr.ru/post/212109/
 #
 # "Часть 1: компилирование игрового движка, создание проекта и анимация покоя героя":
 # http://habrahabr.ru/post/212583/
@@ -275,5 +275,5 @@ __author__ = 'ipetrash'
 # http://stackoverflow.com/questions/11063458/python-script-to-copy-text-to-clipboard
 
 
-# TODO: brutforce Instagram 
+# TODO: brutforce Instagram
 # http://habrahabr.ru/post/215829/
