@@ -11,6 +11,7 @@ def ranobe_info():
     url = 'http://ruranobe.ru/r/mknr'
 
     g = Grab()
+    g.setup(hammer_mode=True)
     g.go(url)
 
     # Получение основного контекста, содержащий аннотацию и ссылки на тома
