@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-def split_words_in_capitalize(text):
+# def split_words_in_capitalize(text):
 #     """Функция разделяем слитные слова, на пересечении разных регистров или при встрече с цифрой и оформляет строку
 #        в виде предложения: первый символ заглавный, остальные строчные.
 #        Пример: CardsPickedSinceCleaningCard -> Cards picked since cleaning card
