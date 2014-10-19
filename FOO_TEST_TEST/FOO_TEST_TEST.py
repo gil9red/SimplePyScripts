@@ -140,25 +140,6 @@ __author__ = 'ipetrash'
 # https://ru.wikipedia.org/wiki/%D0%96%D0%B8%D0%B7%D0%BD%D1%8C_%28%D0%B8%D0%B3%D1%80%D0%B0%29#.D0.9F.D1.80.D0.B0.D0.B2.D0.B8.D0.BB.D0.B0
 # http://habrahabr.ru/post/140581/
 # http://habrahabr.ru/company/mailru/blog/228379/
-#
-# def print_arr(arr):
-#     size = len(arr)
-#     for i in range(size):
-#         for j in range(size):
-#             print(" {} ".format(arr[i][j]), end='')
-#         print()
-#
-# def create_arr(size):
-#     arr = []
-#     for i in range(size):
-#         arr.append([])
-#         for j in range(size):
-#             arr[i].append(0)
-#     return arr
-#
-# SIZE = 5
-# field = create_arr(SIZE)
-# print_arr(field)
 
 
 # TODO: добавить пример работы с модулем json
