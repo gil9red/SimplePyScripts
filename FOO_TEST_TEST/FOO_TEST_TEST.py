@@ -4,6 +4,25 @@
 __author__ = 'ipetrash'
 
 
+# TODO: pretty xml
+# from xml.dom.minidom import parseString
+#
+# def pretty_xml(xml, ind=' ' * 2):
+#     """Функция принимает строку xml и выводит xml с отступами."""
+#
+#     return parseString(xml).toprettyxml(indent=ind)
+#
+#
+# from lxml import etree
+#
+# def pretty_xml(xml_str):
+#     """Функция принимает строку xml и выводит xml с отступами."""
+#
+#     root = etree.fromstring(xml_str)
+#     return etree.tostring(root, pretty_print=True)
+
+
+
 # def split_words_in_capitalize(text):
 #     """Функция разделяем слитные слова, на пересечении разных регистров или при встрече с цифрой и оформляет строку
 #        в виде предложения: первый символ заглавный, остальные строчные.
