@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# TODO: получение курса валют 1 USD -> ? RUB: http://news.yandex.ru/quotes/1.html
+
+
 # TODO: pretty xml
 # from xml.dom.minidom import parseString
 #
