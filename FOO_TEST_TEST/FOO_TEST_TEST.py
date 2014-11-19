@@ -4,6 +4,35 @@
 __author__ = 'ipetrash'
 
 
+# TODO: добавить
+# def mils2mm(mils):
+#     """Функция конвертирует mils (1/1000 дюйма) в mm (миллиметры)."""
+# 
+#     mm = (mils / 1000) * 25.4
+#     return round(mm, 2)
+#     # return mm
+#     # return int(mm)
+# 
+# 
+# def mm2mils(mm):
+#     """Функция конвертирует mm (миллиметры) в mils (1/1000 дюйма)."""
+# 
+#     mils = (mm * 1000) / 25.4
+#     return round(mils, 2)
+#     # return mils
+#     # return int(mils)
+# 
+# 
+# print("Horizontal Offset Limits: {} mm - {} mm".format(mils2mm(280), mils2mm(3025)))
+# print("Vertical Offset Limits: {} mm - {} mm".format(mils2mm(135), mils2mm(860)))
+# print()
+# print("Horizontal Offset Limits: {} mils - {} mils".format(mm2mils(7.11), mm2mils(76.83)))
+# print("Vertical Offset Limits: {} mils - {} mils".format(mm2mils(3.43), mm2mils(21.84)))
+
+
+# TODO: получение курса валют 1 USD -> ? RUB: http://news.yandex.ru/quotes/1.html
+
+
 __author__ = 'ipetrash'
 
 """Модуль для возвращения информации о ранобе."""
