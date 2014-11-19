@@ -33,11 +33,6 @@ __author__ = 'ipetrash'
 # TODO: получение курса валют 1 USD -> ? RUB: http://news.yandex.ru/quotes/1.html
 
 
-__author__ = 'ipetrash'
-
-"""Модуль для возвращения информации о ранобе."""
-
-
 # def get_ranobe_info_from_ruranobe(url):
 #     """Функция возвращает словарь, содержащий информацию о ранобе."""
 #
