@@ -4,12 +4,6 @@
 __author__ = 'ipetrash'
 
 
-# TODO: Игра Змейка:
-# https://code.google.com/p/speedprogramming/
-# https://code.google.com/p/speedprogramming/downloads/detail?name=speedprogramming_src.zip&can=2&q=
-# https://www.youtube.com/watch?v=GiZGEFBGgKU
-
-
 # TODO: получение курса валют 1 USD -> ? RUB: http://news.yandex.ru/quotes/1.html
 
 
