@@ -4,92 +4,13 @@
 __author__ = 'ipetrash'
 
 
-# TODO: добавить
-# def mils2mm(mils):
-#     """Функция конвертирует mils (1/1000 дюйма) в mm (миллиметры)."""
-# 
-#     mm = (mils / 1000) * 25.4
-#     return round(mm, 2)
-#     # return mm
-#     # return int(mm)
-# 
-# 
-# def mm2mils(mm):
-#     """Функция конвертирует mm (миллиметры) в mils (1/1000 дюйма)."""
-# 
-#     mils = (mm * 1000) / 25.4
-#     return round(mils, 2)
-#     # return mils
-#     # return int(mils)
-# 
-# 
-# print("Horizontal Offset Limits: {} mm - {} mm".format(mils2mm(280), mils2mm(3025)))
-# print("Vertical Offset Limits: {} mm - {} mm".format(mils2mm(135), mils2mm(860)))
-# print()
-# print("Horizontal Offset Limits: {} mils - {} mils".format(mm2mils(7.11), mm2mils(76.83)))
-# print("Vertical Offset Limits: {} mils - {} mils".format(mm2mils(3.43), mm2mils(21.84)))
+# TODO: Игра Змейка:
+# https://code.google.com/p/speedprogramming/
+# https://code.google.com/p/speedprogramming/downloads/detail?name=speedprogramming_src.zip&can=2&q=
+# https://www.youtube.com/watch?v=GiZGEFBGgKU
 
 
 # TODO: получение курса валют 1 USD -> ? RUB: http://news.yandex.ru/quotes/1.html
-
-
-# def get_ranobe_info_from_ruranobe(url):
-#     """Функция возвращает словарь, содержащий информацию о ранобе."""
-#
-#     from grab import Grab
-#
-#     g = Grab()
-#     g.setup(hammer_mode=True)
-#     g.go(url)
-#
-#     # Если не удачно, выходим
-#     if g.response.code != 200:
-#         print("Не найден {}.".format(url))
-#         return
-#
-#     # Получение основного контекста, содержащий аннотацию и ссылки на тома
-#     content_text = g.doc.select('//div[@id="mw-content-text"]')
-#
-#     # Получение названия ранобе
-#     name_ranobe = g.doc.select('//h1[@id="firstHeading"]').text()
-#
-#     # Получение и объединение параграфов в единый текст
-#     annotation = '\n'.join(r.text() for r in content_text.select('p/i'))
-#
-#     # Получение списка томов
-#     list_volumes = content_text.select('ul/li/a')
-#
-#     info = {
-#         "name": name_ranobe,
-#         "annotation": annotation,
-#         "list_volumes": list_volumes,
-#         "url": url,
-#     }
-#     return info
-#
-# ranobe_info = get_ranobe_info_from_ruranobe('http://ruranobe.ru/r/sao')
-# print(ranobe_info['annotation'])
-# for i, volume in enumerate(ranobe_info['list_volumes'], 1):
-#     print('{}. "{}"'.format(i, volume.text()))
-
-
-# TODO: pretty xml
-# from xml.dom.minidom import parseString
-#
-# def pretty_xml(xml, ind=' ' * 2):
-#     """Функция принимает строку xml и выводит xml с отступами."""
-#
-#     return parseString(xml).toprettyxml(indent=ind)
-#
-#
-# from lxml import etree
-#
-# def pretty_xml(xml_str):
-#     """Функция принимает строку xml и выводит xml с отступами."""
-#
-#     root = etree.fromstring(xml_str)
-#     return etree.tostring(root, pretty_print=True)
-
 
 
 # def split_words_in_capitalize(text):
