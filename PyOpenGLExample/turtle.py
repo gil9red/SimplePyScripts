@@ -13,6 +13,9 @@ program a path. In essence this is very similar to using polar coordinates relat
 to the last set point. Meaning you define the angle and the length over which a line
 should be drawn. First an example will be given containing the full source, next will
 will only focus on the display function since the same primitives will be used.
+
+
+http://www.de-brauwer.be/wiki/wikka.php?wakka=PyOpenGLTurtle
 """
 
 curX = 0.0
