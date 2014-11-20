@@ -11,6 +11,8 @@ Generating squares
 This example will generate 25 squares each in a randomly chosen grayvalue.
 The grayvalue is chosen out of 25 different possiblities. Every redraw of the
 window will create a new set of squares.
+
+http://www.de-brauwer.be/wiki/wikka.php?wakka=PyOpenGLSquares
 """
 
 
