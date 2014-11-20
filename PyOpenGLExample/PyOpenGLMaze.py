@@ -41,10 +41,10 @@ class MazeCell:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.wallNorth = True
-        self.wallEast = True
-        self.wallSouth = True
-        self.wallWest = True
+        self.wall_north = True
+        self.wall_east = True
+        self.wall_south = True
+        self.wall_west = True
         self.visited = False
 
 
@@ -61,70 +61,71 @@ class Maze:
         for i in range(0, dimx * dimy):
             self.cells.append(MazeCell(i % dimx, i // dimx))
 
-        cellList = []
+        cell_list = []
         cell = self.cells[random.randint(0, (dimx * dimy) - 1)]
-        cellList.append(cell)
+        cell_list.append(cell)
 
-        while len(cellList) != 0:
+        while len(cell_list) != 0:
             # Take the current cell
-            cell = cellList.pop()
+            cell = cell_list.pop()
             cell.visited = True
 
             # If a cell is not connected, see if we can connected it to the path
-            if cell.wallNorth and cell.wallEast and cell.wallSouth and cell.wallNorth:
+            if cell.wall_north and cell.wall_east and cell.wall_south and cell.wall_north:
                 if cell.x > 0 and self.cells[(cell.x - 1) + (cell.y + 0) * dimx].visited:
-                    cell.wallWest = False
-                    self.cells[(cell.x - 1) + (cell.y + 0) * dimx].wallEast = False
+                    cell.wall_west = False
+                    self.cells[(cell.x - 1) + (cell.y + 0) * dimx].wall_east = False
                 elif cell.x < (dimx - 2) and self.cells[(cell.x + 1) + (cell.y + 0) * dimx].visited:
-                    cell.wallEast = False
-                    self.cells[(cell.x + 1) + (cell.y + 0) * dimx].wallWest = False
+                    cell.wall_east = False
+                    self.cells[(cell.x + 1) + (cell.y + 0) * dimx].wall_west = False
                 elif cell.y > 0 and self.cells[(cell.x + 0) + (cell.y - 1) * dimx].visited:
-                    cell.wallSouth = False
-                    self.cells[(cell.x + 0) + (cell.y - 1) * dimx].wallNorth = False
+                    cell.wall_south = False
+                    self.cells[(cell.x + 0) + (cell.y - 1) * dimx].wall_north = False
                 elif cell.y < (dimy - 2) and self.cells[(cell.x + 0) + (cell.y + 1) * dimx].visited:
-                    cell.wallNorth = False
-                    self.cells[(cell.x + 0) + (cell.y + 1) * dimx].wallSouth = False
+                    cell.wall_north = False
+                    self.cells[(cell.x + 0) + (cell.y + 1) * dimx].wall_south = False
 
 
             # Append neighbors if they are not yet in the path.
             num = 0
             if cell.x > 0 and not self.cells[(cell.x - 1) + (cell.y + 0) * dimx].visited:
-                cellList.append(self.cells[(cell.x - 1) + (cell.y + 0) * dimx])
+                cell_list.append(self.cells[(cell.x - 1) + (cell.y + 0) * dimx])
                 num += 1
             if cell.x < (dimx - 1) and not self.cells[(cell.x + 1) + (cell.y + 0) * dimx].visited:
-                cellList.append(self.cells[(cell.x + 1) + (cell.y + 0) * dimx])
+                cell_list.append(self.cells[(cell.x + 1) + (cell.y + 0) * dimx])
                 num += 1
             if cell.y < (dimy - 1) and not self.cells[(cell.x + 0) + (cell.y + 1) * dimx].visited:
-                cellList.append(self.cells[(cell.x + 0) + (cell.y + 1) * dimx])
+                cell_list.append(self.cells[(cell.x + 0) + (cell.y + 1) * dimx])
                 num += 1
             if cell.y > 0 and not self.cells[(cell.x + 0) + (cell.y - 1) * dimx].visited:
-                cellList.append(self.cells[(cell.x + 0) + (cell.y - 1) * dimx])
+                cell_list.append(self.cells[(cell.x + 0) + (cell.y - 1) * dimx])
                 num += 1
 
             # We added num items to the queue, we should make a connection with one of those
             if num > 0:
                 # Get one of the last num elements
-                conn = cellList.pop(-random.randint(1, num))
+                conn = cell_list.pop(-random.randint(1, num))
                 conn.visited = True
 
                 # Remove the wall
                 if cell.x == conn.x:
                     if cell.y == conn.y + 1:
-                        cell.wallSouth = False
-                        conn.wallNorth = False
+                        cell.wall_south = False
+                        conn.wall_north = False
                     else:
-                        cell.wallNorth = False
-                        conn.wallSouth = False
+                        cell.wall_north = False
+                        conn.wall_south = False
+
                 elif cell.y == conn.y:
                     if cell.x == conn.x + 1:
-                        cell.wallWest = False
-                        conn.wallEast = False
+                        cell.wall_west = False
+                        conn.wall_east = False
                     else:
-                        cell.wallEast = False
-                        conn.wallWest = False
+                        cell.wall_east = False
+                        conn.wall_west = False
 
                 # Push it back on the list since this is our next node 
-                cellList.append(conn)
+                cell_list.append(conn)
 
     def draw(self):
         """ Draws the field """
@@ -132,25 +133,30 @@ class Maze:
         for i in range(0, self.numx * self.numy):
             x = i % self.numx
             y = i / self.numx
-            if self.cells[i].wallNorth:
+
+            if self.cells[i].wall_north:
                 glVertex2f(x * WIDTH / self.numx, (y + 1) * HEIGHT / self.numy)
                 glVertex2f((x + 1) * WIDTH / self.numx, (y + 1) * HEIGHT / self.numy)
-            if self.cells[i].wallEast:
+
+            if self.cells[i].wall_east:
                 glVertex2f((x + 1) * WIDTH / self.numx, (y + 1) * HEIGHT / self.numy)
                 glVertex2f((x + 1) * WIDTH / self.numx, y * HEIGHT / self.numy)
-            if self.cells[i].wallSouth:
+
+            if self.cells[i].wall_south:
                 glVertex2f(x * WIDTH / self.numx, y * HEIGHT / self.numy)
                 glVertex2f((x + 1) * WIDTH / self.numx, y * HEIGHT / self.numy)
-            if self.cells[i].wallWest:
+
+            if self.cells[i].wall_west:
                 glVertex2f(x * WIDTH / self.numx, (y + 1) * HEIGHT / self.numy)
                 glVertex2f(x * WIDTH / self.numx, y * HEIGHT / self.numy)
+
         glEnd()
 
 
 maze = Maze(MAZECOLS, MAZEROWS)
 
 
-def initFun():
+def init_fun():
     glClearColor(1.0, 1.0, 1.0, 0.0)
     glColor3f(0.0, 0.0, 0.0)
     glMatrixMode(GL_PROJECTION)
@@ -159,7 +165,7 @@ def initFun():
     gluOrtho2D(-1.0, WIDTH, -1.0, HEIGHT)
 
 
-def displayFun():
+def display_fun():
     glClear(GL_COLOR_BUFFER_BIT)
     maze.draw()
     glFlush()
@@ -170,6 +176,6 @@ if __name__ == '__main__':
     glutInitWindowSize(WIDTH, HEIGHT)
     glutCreateWindow(b"Maze")
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
-    glutDisplayFunc(displayFun)
-    initFun()
+    glutDisplayFunc(display_fun)
+    init_fun()
     glutMainLoop()
