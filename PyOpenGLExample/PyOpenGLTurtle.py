@@ -223,16 +223,23 @@ def turtle_10():
     glFlush()
 
 
-def displayFun():
-    turtle_1()
-
-
 if __name__ == '__main__':
     glutInit()
     glutInitWindowSize(400, 400)
-    glutCreateWindow(b"Turtle1")
+    glutCreateWindow(b"Turtle")
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
-    glutDisplayFunc(displayFun)
+
+    glutDisplayFunc(turtle_1)
+    # glutDisplayFunc(turtle_2)
+    # glutDisplayFunc(turtle_3)
+    # glutDisplayFunc(turtle_4)
+    # glutDisplayFunc(turtle_5)
+    # glutDisplayFunc(turtle_6)
+    # glutDisplayFunc(turtle_7)
+    # glutDisplayFunc(turtle_8)
+    # glutDisplayFunc(turtle_9)
+    # glutDisplayFunc(turtle_10)
+
     glutReshapeFunc(reshapeFun)
     initFun()
     glutMainLoop()
