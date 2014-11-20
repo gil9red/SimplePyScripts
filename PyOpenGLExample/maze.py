@@ -85,7 +85,6 @@ class Maze:
                     cell.wall_north = False
                     self.cells[(cell.x + 0) + (cell.y + 1) * dimx].wall_south = False
 
-
             # Append neighbors if they are not yet in the path.
             num = 0
             if cell.x > 0 and not self.cells[(cell.x - 1) + (cell.y + 0) * dimx].visited:
