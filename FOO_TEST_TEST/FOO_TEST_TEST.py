@@ -8,16 +8,17 @@ __author__ = 'ipetrash'
 from urllib.parse import quote_plus
 
 url_pattern = 'https://www.google.ru/search?q='
-search = 'манга токийский гуль'
+search_text = 'почта'
+search_text = quote_plus('+'.join(search_text.split(' ')))
 
-url = url_pattern + quote_plus('+'.join(search.split(' ')))
+url = url_pattern + search_text
 
 
 from grab import Grab
 g = Grab()
 g.go(url)
 print(g.response.url)
-content = g.doc.select('//h3[@class="r"]/a')
+content = g.doc.select('//li[@class="g"]/div/h3/a')
 for c in content:
     print(c.text())
 
