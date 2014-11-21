@@ -4,6 +4,24 @@
 __author__ = 'ipetrash'
 
 
+# TODO: поиск по гуглу
+from urllib.parse import quote_plus
+
+url_pattern = 'https://www.google.ru/search?q='
+search = 'манга токийский гуль'
+
+url = url_pattern + quote_plus('+'.join(search.split(' ')))
+
+
+from grab import Grab
+g = Grab()
+g.go(url)
+print(g.response.url)
+content = g.doc.select('//h3[@class="r"]/a')
+for c in content:
+    print(c.text())
+
+
 # TODO: получение курса валют 1 USD -> ? RUB: http://news.yandex.ru/quotes/1.html
 
 
