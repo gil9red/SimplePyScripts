@@ -4,25 +4,6 @@
 __author__ = 'ipetrash'
 
 
-# TODO: поиск по гуглу
-from urllib.parse import quote_plus
-
-url_pattern = 'https://www.google.ru/search?q='
-search_text = 'почта'
-search_text = quote_plus('+'.join(search_text.split(' ')))
-
-url = url_pattern + search_text
-
-
-from grab import Grab
-g = Grab()
-g.go(url)
-print(g.response.url)
-content = g.doc.select('//li[@class="g"]/div/h3/a')
-for c in content:
-    print(c.text())
-
-
 # TODO: получение курса валют 1 USD -> ? RUB: http://news.yandex.ru/quotes/1.html
 
 
