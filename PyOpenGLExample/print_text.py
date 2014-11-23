@@ -1,20 +1,10 @@
-# url = http://www.cs.smith.edu/~emendelo/classes/fall12/csc240/code/glPrint.py
-
-
-# import time
-# import random
-# import ctypes
+# url: http://www.cs.smith.edu/~emendelo/classes/fall12/csc240/code/glPrint.py
 
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 
 
-
-
-
-# Number of the glut window.
-window = 0
 width = 0
 height = 0
 
@@ -39,7 +29,6 @@ def glSetup(w, h):
     glLoadIdentity()
     glSetupCam()
     glMatrixMode(GL_MODELVIEW)
-    glSetupWorld()
 
 
 def glResize(w, h):
@@ -47,7 +36,6 @@ def glResize(w, h):
     width = w
     height = h
 
-    aspectRation = float(width) / float(height)
     glViewport(0, 0, width, height)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
@@ -55,27 +43,12 @@ def glResize(w, h):
     glMatrixMode(GL_MODELVIEW)
 
 
-# curtime = time.time() - .1
-
-
 def glSetupCam():
     gluPerspective(45.0, float(width) / float(height), 0.1, 100.0)
     gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0)
 
 
-def glSetupWorld():
-    # create and initialize objects here
-    pass
-
-
 def glDraw():
-    # global curtime
-    # lasttime = curtime
-    # curtime = time.time();
-    # dt = curtime - lasttime
-    # use dt to scale speeds expressed in seconds
-    # e.g. x = speedX * dt
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
 
@@ -98,7 +71,6 @@ def glut_print(x, y, font, text, r, g, b, a):
     if glIsEnabled(GL_BLEND):
         blending = True
 
-    #glEnable(GL_BLEND)
     glColor3f(1, 1, 1)
     glRasterPos2f(x, y)
     for ch in text:
@@ -108,43 +80,28 @@ def glut_print(x, y, font, text, r, g, b, a):
         glDisable(GL_BLEND)
 
 
-ESCAPE = '\033'
-
-
 def keyPressed(*args):
+    ESCAPE = b'\x1b'
     if args[0] == ESCAPE:
         sys.exit()
 
 
-def main():
-    global window
-    glutInit(sys.argv)
+if __name__ == '__main__':
+    glutInit()
 
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
     glutInitWindowSize(200, 200)
-    # glutInitWindowSize(640, 480)
-    # glutInitWindowPosition(0, 0)
 
-    window = glutCreateWindow(b"CSC240 Stub")
+    glutCreateWindow(b"CSC240 Stub")
 
-    #register calbacks
+    # register calbacks
     glutDisplayFunc(glDraw)
     glutIdleFunc(glDraw)
     glutReshapeFunc(glResize)
     glutKeyboardFunc(keyPressed)
 
-
-    # Uncomment this line to get full screen.
-    #glutFullScreen()
-
-
     #setup things up
     glSetup(640, 480)
 
-
     #start rendering
     glutMainLoop()
-
-
-if (__name__ == '__main__'):
-    main()
