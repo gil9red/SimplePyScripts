@@ -15,8 +15,10 @@ from grab import Grab
 
 
 if __name__ == '__main__':
-    login = input("Логин: ")
-    password = input("Пароль: ")
+    login = 'gil9red'
+    password = '921874silverdemon'
+    # login = input("Логин: ")
+    # password = input("Пароль: ")
 
     g = Grab()
 
@@ -54,3 +56,24 @@ if __name__ == '__main__':
     print("homeLocation:", homeLocation)
     print("email:", email)
     print('{} {} ({})'.format(join_label, join_title_time, join_datetime))
+
+    # Получение списка репозиториев
+    print('...Перехожу на вкладку репозиториев...')
+    g.go("https://github.com/" + login + '?tab=repositories')
+
+    print("...Получаю список репозиториев...")
+    list_source_repo = g.doc.select('//li[@class="repo-list-item public source"]')
+
+    print("\nРепозитории:")
+    print("Sources({}):".format(len(list_source_repo)))
+    for i, repo in enumerate(list_source_repo, 1):
+        name = repo.select('*[@class="repo-list-name"]/a')
+
+        href = 'https://github.com' + name.attr('href')
+        print('  {}. {}: {}'.format(i, name.text(), href))
+
+        description = repo.select('*[@class="repo-list-description"]')
+        if description.count():
+            print('      "{}"'.format(description.text()))
+
+        print()
