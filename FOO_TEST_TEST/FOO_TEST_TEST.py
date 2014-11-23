@@ -4,6 +4,25 @@
 __author__ = 'ipetrash'
 
 
+# TODO: добавить
+# rows = 5
+# cols = 3
+# massive = []
+# for r in range(rows):
+#     massive.append([])
+#
+#     for c in range(cols):
+#         massive[r].append(0)
+#
+# print(massive)
+
+rows = 5
+cols = 3
+massive = [[0 for c in range(cols)] for r in range(rows)]
+
+print(massive)
+
+
 # TODO: получение курса валют 1 USD -> ? RUB: http://news.yandex.ru/quotes/1.html
 
 
