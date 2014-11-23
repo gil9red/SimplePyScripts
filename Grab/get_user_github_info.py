@@ -43,6 +43,7 @@ if __name__ == '__main__':
     print("...Получаю информацию с страницы пользователя...")
     fullname = g.doc.select('//span[@itemprop="name"]').text()
     username = g.doc.select('//span[@itemprop="additionalName"]').text()
+    avatar = g.doc.select('//*[@class="vcard-avatar tooltipped tooltipped-s"]/*[@class="avatar"]').attr('src')
     organization = g.doc.select('//li[@itemprop="worksFor"]').text()
     homeLocation = g.doc.select('//li[@itemprop="homeLocation"]').text()
     email = g.doc.select('//a[@class="email"]').text()
@@ -52,13 +53,14 @@ if __name__ == '__main__':
 
     print("\nfullname:", fullname)
     print("username:", username)
+    print("avatar:", avatar)
     print("organization:", organization)
     print("homeLocation:", homeLocation)
     print("email:", email)
     print('{} {} ({})'.format(join_label, join_title_time, join_datetime))
 
     # Получение списка репозиториев
-    print('...Перехожу на вкладку репозиториев...')
+    print('\n...Перехожу на вкладку репозиториев...')
     g.go("https://github.com/" + login + '?tab=repositories')
 
     print("...Получаю список репозиториев...")
