@@ -76,4 +76,8 @@ if __name__ == '__main__':
         if description.count():
             print('      "{}"'.format(description.text()))
 
+        stats = repo.select('*[@class="repo-list-stats"]').text().split(' ')
+        lang, stars, forks = stats
+        print('      lang: {}, stars: {}, forks: {}'.format(lang, stars, forks))
+
         print()
