@@ -15,10 +15,8 @@ from grab import Grab
 
 
 if __name__ == '__main__':
-    login = 'gil9red'
-    password = '921874silverdemon'
-    # login = input("Логин: ")
-    # password = input("Пароль: ")
+    login = input("Логин: ")
+    password = input("Пароль: ")
 
     g = Grab()
 
