@@ -167,6 +167,9 @@ __author__ = 'ipetrash'
 
 
 # TODO: https://docs.python.org/3/tutorial/stdlib2.html
+# import textwrap
+# text = 'Придумать простое приложение и реализовать его с помощью TDD (используя unit-тесты)'
+# print(textwrap.fill(text, width=45))
 
 
 # TODO: придумать простое приложение и реализовтаь его с помощью TDD (используя unit-тесты)
