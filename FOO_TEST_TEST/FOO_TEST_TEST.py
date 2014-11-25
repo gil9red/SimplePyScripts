@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 # TODO: получение курса валют 1 USD -> ? RUB: http://news.yandex.ru/quotes/1.html
 
 
-def split_words_in_capitalize(text):
+def separate_conjoint_words(text):
     """Функция разделяем слитные слова, на пересечении разных регистров или при встрече с цифрой и оформляет строку
        в виде предложения: первый символ заглавный, остальные строчные.
        Пример: CardsPickedSinceCleaningCard -> Cards picked since cleaning card
