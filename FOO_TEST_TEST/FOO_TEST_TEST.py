@@ -7,29 +7,6 @@ __author__ = 'ipetrash'
 # TODO: получение курса валют 1 USD -> ? RUB: http://news.yandex.ru/quotes/1.html
 
 
-def separate_conjoint_words(text):
-    """Функция разделяем слитные слова, на пересечении разных регистров или при встрече с цифрой и оформляет строку
-       в виде предложения: первый символ заглавный, остальные строчные.
-       Пример: CardsPickedSinceCleaningCard -> Cards picked since cleaning card
-               TotalPickedInputHopper6      -> Total picked input hopper 6
-    """
-    if not text:
-        return text
-
-    res = ''
-    for c in text:
-        res += " " + c if c.isupper() or c.isdigit() else c
-
-    # Удаление пробелов с краев
-    res = res.strip()
-
-    # Первый символ в верхний регистр, остальные в нижний
-    return res.capitalize()
-
-print(split_words_in_capitalize("helloWorld!"))
-print(split_words_in_capitalize("DogLike1234"))
-
-
 # import re
 # import os
 # # file_name = input("File name: ")
