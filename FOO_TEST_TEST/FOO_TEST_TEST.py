@@ -12,7 +12,7 @@ __author__ = 'ipetrash'
 # # file_name = input("File name: ")
 # file_name = "D:\hosts.txt"
 # if os.path.exists(file_name):
-#     with open(file_name) as file:
+# with open(file_name) as file:
 #         for row in file:
 #             m = re.search(r"(\d{1,3}).(\d{1,3}).(\d{1,3}).(\d{1,3})(/(\d{1,3}))?", row)
 #             if m:
@@ -100,7 +100,19 @@ __author__ = 'ipetrash'
 
 # TODO: добавить пример работы с модулем json
 # https://docs.python.org/3.4/library/json.html
-# import json
+import json
+
+# Compact encoding:
+print(json.dumps([1, 2, 3, {'4': 5, '6': 7}]))
+
+# Custom separators:
+print(json.dumps([1, 2, 3, {'4': 5, '6': 7}], separators=(',', ':')))
+
+# Pretty print:
+print(json.dumps([1, 2, 3, {'4': 5, '6': 7}], indent=4))
+
+# Sort key:
+print(json.dumps(["z", "b", "d", {'b': 5, 'a': 7, 'c': 2}], sort_keys=True, indent=4))
 
 
 # TODO: больше примеров по модулю psutil_example.
