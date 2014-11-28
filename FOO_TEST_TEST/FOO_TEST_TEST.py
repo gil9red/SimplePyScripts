@@ -189,3 +189,45 @@ __author__ = 'ipetrash'
 
 # TODO: brutforce Instagram
 # http://habrahabr.ru/post/215829/
+
+
+# TODO: добавить
+Комплексные числа (complex)
+
+В Python встроены также и комплексные числа:
+
+  >>> x = complex ( 1 , 2 )
+ >>> print ( x )
+ ( 1 + 2 j )
+ >>> y = complex ( 3 , 4 )
+ >>> print ( y )
+ ( 3 + 4 j )
+ >>> z = x + y
+ >>> print ( x )
+ ( 1 + 2 j )
+ >>> print ( z )
+ ( 4 + 6 j )
+ >>> z = x * y
+ >>> print ( z )
+ ( - 5 + 10 j )
+ >>> z = x / y
+ >>> print ( z )
+ ( 0.44 + 0.08 j )
+ >>> print ( x . conjugate ()) # Сопряжённое число
+ ( 1 - 2 j )
+ >>> print ( x . imag ) # Мнимая часть
+ 2.0
+ >>> print ( x . real ) # Действительная часть
+ 1.0
+ >>> print ( x > y ) # Комплексные числа нельзя сравнить
+ Traceback ( most recent call last ):
+   File "" , line 1 , in
+ TypeError : unorderable types : complex () > complex ()
+ >>> print ( x == y ) # Но можно проверить на равенство
+ False
+ >>> abs ( 3 + 4 j ) # Модуль комплексного числа
+ 5.0
+ >>> pow ( 3 + 4 j , 2 ) # Возведение в степень
+ ( - 7 + 24 j )
+
+Также для работы с комплексными числами используется также модуль cmath . 
