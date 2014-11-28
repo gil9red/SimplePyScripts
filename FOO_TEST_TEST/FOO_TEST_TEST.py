@@ -13,7 +13,7 @@ __author__ = 'ipetrash'
 # file_name = "D:\hosts.txt"
 # if os.path.exists(file_name):
 # with open(file_name) as file:
-#         for row in file:
+# for row in file:
 #             m = re.search(r"(\d{1,3}).(\d{1,3}).(\d{1,3}).(\d{1,3})(/(\d{1,3}))?", row)
 #             if m:
 #                 ip = m.group(0)
@@ -192,42 +192,26 @@ __author__ = 'ipetrash'
 
 
 # TODO: добавить
-Комплексные числа (complex)
+# Комплексные числа (complex)
+# В Python встроены также и комплексные числа:
 
-В Python встроены также и комплексные числа:
+x = complex(1, 2)
+print(x)
+y = complex(3, 4)
+print(y)
+z = x + y
+print(x)
+print(z)
+z = x * y
+print(z)
+z = x / y
+print(z)
+print(x.conjugate())  # Сопряжённое число
+print(x.imag)  # Мнимая часть
+print(x.real)  # Действительная часть
+# print ( x > y ) # Комплексные числа нельзя сравнить
+print(x == y)  # Но можно проверить на равенство
+# abs ( 3 + 4 j ) # Модуль комплексного числа
+# pow ( 3 + 4 j , 2 ) # Возведение в степень
 
-  >>> x = complex ( 1 , 2 )
- >>> print ( x )
- ( 1 + 2 j )
- >>> y = complex ( 3 , 4 )
- >>> print ( y )
- ( 3 + 4 j )
- >>> z = x + y
- >>> print ( x )
- ( 1 + 2 j )
- >>> print ( z )
- ( 4 + 6 j )
- >>> z = x * y
- >>> print ( z )
- ( - 5 + 10 j )
- >>> z = x / y
- >>> print ( z )
- ( 0.44 + 0.08 j )
- >>> print ( x . conjugate ()) # Сопряжённое число
- ( 1 - 2 j )
- >>> print ( x . imag ) # Мнимая часть
- 2.0
- >>> print ( x . real ) # Действительная часть
- 1.0
- >>> print ( x > y ) # Комплексные числа нельзя сравнить
- Traceback ( most recent call last ):
-   File "" , line 1 , in
- TypeError : unorderable types : complex () > complex ()
- >>> print ( x == y ) # Но можно проверить на равенство
- False
- >>> abs ( 3 + 4 j ) # Модуль комплексного числа
- 5.0
- >>> pow ( 3 + 4 j , 2 ) # Возведение в степень
- ( - 7 + 24 j )
-
-Также для работы с комплексными числами используется также модуль cmath . 
+# Также для работы с комплексными числами используется также модуль cmath .
