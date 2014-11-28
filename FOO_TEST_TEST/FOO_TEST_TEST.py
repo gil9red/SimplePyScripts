@@ -98,12 +98,6 @@ __author__ = 'ipetrash'
 # print("Column names: {0}".format(names))
 
 
-# TODO: больше примеров по модулю psutil_example.
-# Ссылки:
-#   http://pythonhosted.org/psutil_example/
-#   https://github.com/giampaolo/psutil_example
-
-
 # # TODO: добавление примеров:
 # http://jenyay.net/Matplotlib/Date
 # http://jenyay.net/Matplotlib/Text
