@@ -1,6 +1,5 @@
 __author__ = 'ipetrash'
 
-
 if __name__ == '__main__':
     # TODO: доделать
     # Комплексные числа (complex)
@@ -8,13 +7,17 @@ if __name__ == '__main__':
 
     x = complex(1, 2)
     print(x)
+
     y = complex(3, 4)
     print(y)
+
     z = x + y
     print(x)
     print(z)
+
     z = x * y
     print(z)
+
     z = x / y
     print(z)
     print(x.conjugate())  # Сопряжённое число
