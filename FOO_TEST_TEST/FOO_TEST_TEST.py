@@ -106,6 +106,12 @@ __author__ = 'ipetrash'
 # http://jenyay.net/Matplotlib/LogAxes
 
 
+# TODO: Сумма чисел
+
+
+# TODO: Среднее значение суммы чисел
+
+
 # ## Quality Control
 # # doctest
 # def average(values):
