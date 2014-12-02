@@ -107,9 +107,14 @@ __author__ = 'ipetrash'
 
 
 # TODO: Сумма чисел
+# l = [1, 2, 3, 4]
+# print(sum(l))
 
 
 # TODO: Среднее значение суммы чисел
+# l = [1, 2, 3, 4]
+# print(sum(l))
+# print(sum(l) / len(l))
 
 
 # ## Quality Control
