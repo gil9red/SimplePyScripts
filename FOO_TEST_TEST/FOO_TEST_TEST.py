@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# TODO: отправка почты
+
+
 # TODO: получение курса валют 1 USD -> ? RUB: http://news.yandex.ru/quotes/1.html
 
 
