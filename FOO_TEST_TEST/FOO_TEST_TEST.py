@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 # TODO: отправка почты
+# TODO: больше примеров
 # http://www.tutorialspoint.com/python/python_sending_email.htm
 # https://docs.python.org/3.4/library/email-examples.html
 #
@@ -19,6 +20,7 @@ __author__ = 'ipetrash'
 # mail_sender = 'from@mail.com'
 # mail_passwd = '******'
 #
+## TODO: указание сервера и порта
 # server = smtplib.SMTP('smtp.mail.ru', 587)
 # server.ehlo()
 # server.starttls()
@@ -36,39 +38,40 @@ __author__ = 'ipetrash'
 #     print('error sending mail')
 #
 # server.quit()
-
-
-# Import smtplib for the actual sending function
-import smtplib
-
-# Import the email modules we'll need
-from email.mime.text import MIMEText
-
-# Mail Sign In
-mail_sender = 'from@mail.com'
-mail_passwd = '******'
-
-text = 'Example!\nFirst!\nSecond!'
-
-# Create a text/plain message
-msg = MIMEText(text)
-msg['Subject'] = 'Header!'
-msg['From'] = mail_sender
-msg['To'] = mail_sender
-
-# Send the message on SMTP server.
-s = smtplib.SMTP('smtp.mail.ru', 587)
-s.ehlo()
-s.starttls()
-s.login(mail_sender, mail_passwd)
-
-try:
-    s.send_message(msg)
-    print('email sent')
-except:
-    print('error sending mail')
-
-s.quit()
+#
+#
+# # Import smtplib for the actual sending function
+# import smtplib
+#
+# # Import the email modules we'll need
+# from email.mime.text import MIMEText
+#
+# # Mail Sign In
+# mail_sender = 'from@mail.com'
+# mail_passwd = '******'
+#
+# text = 'Example!\nFirst!\nSecond!'
+#
+# # Create a text/plain message
+# msg = MIMEText(text)
+# msg['Subject'] = 'Header!'
+# msg['From'] = mail_sender
+# msg['To'] = mail_sender
+#
+# # TODO: указание сервера и порта
+# # Send the message on SMTP server.
+# s = smtplib.SMTP('smtp.mail.ru', 587)
+# s.ehlo()
+# s.starttls()
+# s.login(mail_sender, mail_passwd)
+#
+# try:
+#     s.send_message(msg)
+#     print('email sent')
+# except:
+#     print('error sending mail')
+#
+# s.quit()
 
 
 # TODO: получение курса валют 1 USD -> ? RUB: http://news.yandex.ru/quotes/1.html
