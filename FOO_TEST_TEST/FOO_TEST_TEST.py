@@ -64,61 +64,6 @@ __author__ = 'ipetrash'
 #     # image.save(path)
 
 
-# # https://docs.python.org/3.4/library/sqlite3.html
-# import sqlite3
-# conn = sqlite3.connect('example.db')
-#
-# c = conn.cursor()
-#
-# # Create table
-# c.execute('''CREATE TABLE stocks
-#              (date text, trans text, symbol text, qty real, price real)''')
-#
-# # Insert a row of data
-# c.execute("INSERT INTO stocks VALUES ('2006-01-05','BUY','RHAT',100,35.14)")
-#
-# # Save (commit) the changes
-# conn.commit()
-#
-# # We can also close the connection if we are done with it.
-# # Just be sure any changes have been committed or they will be lost.
-# conn.close()
-#
-#
-# import sqlite3
-# # https://docs.python.org/3.4/library/sqlite3.html
-# path = r"C:\Users\ipetrash\Desktop\teller\kmaksimov_NDC.sdb"
-# conn = sqlite3.connect(path)
-# # result = tuple(row for row in conn .cursor().execute("SELECT * FROM BNA_Demoninations"))
-# # for s in result:
-# #     print(s)
-#
-# # cursor = conn .cursor()
-# # for row in cursor.execute("SELECT * FROM BNA_Demoninations"):
-# #     print(row)
-#
-# c = conn.cursor()
-# result = tuple(row for row in c.execute("SELECT * FROM BNA_Demoninations"))
-# print(result)
-# print(sorted(result, key=lambda x: x[1]))  # sorting by the second value
-#
-# # Way to get a list of column names
-# print()
-# # 1
-# print("Column names: {0}".format(c.description))
-#
-# # 2
-# result = tuple(row for row in c.execute("PRAGMA table_info('BNA_Demoninations')"))
-# print("Column names: {0}".format(result))
-#
-# # 3
-# conn.row_factory = sqlite3.Row
-# c = conn.execute('select * from BNA_Demoninations')
-# row = c.fetchone()  # instead of cursor.description
-# names = row.keys()
-# print("Column names: {0}".format(names))
-
-
 # # TODO: добавление примеров:
 # http://jenyay.net/Matplotlib/Date
 # http://jenyay.net/Matplotlib/Text
