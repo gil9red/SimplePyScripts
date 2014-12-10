@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-# TODO: получение курса валют 1 USD -> ? RUB: http://news.yandex.ru/quotes/1.html
+# TODO: добавить примеры чтения и записи в файл
 
 
 # import re
