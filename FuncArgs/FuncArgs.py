@@ -3,6 +3,10 @@
 __author__ = 'ipetrash'
 
 
+# TODO: переименовать в function_example
+# TODO: добавить примеры создания лямбда-функций
+
+
 def my_sum(*args):
     s = 0
     for arg in args:
