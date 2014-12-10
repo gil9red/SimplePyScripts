@@ -1,10 +1,4 @@
-# coding=utf-8
-
 __author__ = 'ipetrash'
-
-
-# TODO: переименовать в function_example
-# TODO: добавить примеры создания лямбда-функций
 
 
 def my_sum(*args):
@@ -32,8 +26,12 @@ def say_hello(word="World", spl="!"):
 
 def my_min(a, b):
     return min(a, b)
+
+
 def my_max(a, b):
     return max(a, b)
+
+
 def binary_operation(a, b, func):
     return func(a, b)
 
@@ -42,20 +40,32 @@ if __name__ == '__main__':
     print(my_sum(1, 2, 3, 4))
     my_print(a=2, b=3, c="Foo")
     print(sql_insert("Users", login="TestUser", pas=123))
-    print(sql_insert("Users", login="Vasya", pas=0123, sex="male"))
+    print(sql_insert("Users", login="Vasya", pas=123, sex="male"))
     say_hello()
     say_hello("Py")
     say_hello(spl="?")
     say_hello(spl="?!", word="man")
 
     print()
-    
+
     a = 2
     b = 4
     print("1: %d" % binary_operation(a, b, my_min))
     print("2: %d" % binary_operation(a, b, my_max))
     print("3: %d" % binary_operation(a, b, min))
     print("4: %d" % binary_operation(a, b, max))
-    print("5: %d" % binary_operation(a, b, (lambda a, b: a * b)))
-    print("6: %d" % binary_operation(a, b, (lambda a, b: a ** b)))
-    
+    print("5: %d" % binary_operation(a, b, lambda a, b: a * b))
+    print("6: %d" % binary_operation(a, b, lambda a, b: a ** b))
+
+    print()
+
+    lambda_sum = lambda a, b: a + b
+    print(lambda_sum(1, 1))
+    print(lambda_sum(1.1, 1.9))
+    print(lambda_sum('a', 'bc'))
+    print(lambda_sum([1, 2], [3, 4]))
+
+    print()
+
+    print((lambda a, b: a ** b)(2, 3))
+    print((lambda a, b: a / b)(4, 2))
