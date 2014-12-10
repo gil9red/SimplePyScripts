@@ -7,6 +7,9 @@ __author__ = 'ipetrash'
 # TODO: добавить примеры чтения и записи в файл
 
 
+# TODO: воспроизведение музыкальных файлов
+
+
 # import re
 # import os
 # # file_name = input("File name: ")
