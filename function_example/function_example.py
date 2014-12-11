@@ -36,6 +36,8 @@ def binary_operation(a, b, func):
     return func(a, b)
 
 
+# http://pythonworld.ru/tipy-dannyx-v-python/vse-o-funkciyax-i-ix-argumentax.html
+
 if __name__ == '__main__':
     print(my_sum(1, 2, 3, 4))
     my_print(a=2, b=3, c="Foo")
