@@ -4,10 +4,41 @@
 __author__ = 'ipetrash'
 
 
-# TODO: добавить примеры чтения и записи в файл
+# # TODO: добавить примеры чтения и записи в файл
+# # https://docs.python.org/3.4/tutorial/inputoutput.html#reading-and-writing-files
+# # http://pythonworld.ru/tipy-dannyx-v-python/fajly-rabota-s-fajlami.html
+#
+# # Открыть файл в режиме записи
+# with open('foo.txt', mode='w') as f:
+#     f.write('123\n')
+#     f.write('one two\n')
+#     f.write('one two\n')
+#     f.write('раз два')
+#
+# # Открыть файл в режиме чтения
+# with open('foo.txt', mode='r') as f:
+#     print(f.read())
+#
+# print()
+#
+# # Открыть файл в режиме чтения и построчно считать файл
+# with open('foo.txt', mode='r') as f:
+#     for r in f:
+#         print(r, end='')
 
 
 # TODO: воспроизведение музыкальных файлов
+# # Window only
+# # https://docs.python.org/3/library/winsound.html
+# import winsound
+# # Play Windows exit sound.
+# winsound.PlaySound("SystemExit", winsound.SND_ALIAS)
+#
+# # Probably play Windows default sound, if any is registered (because
+# # "*" probably isn't the registered name of any sound).
+# winsound.PlaySound("*", winsound.SND_ALIAS)
+#
+# winsound.PlaySound('Gorillaz-Clint_Eastwood.wav', winsound.SND_FILENAME)
 
 
 # import re
