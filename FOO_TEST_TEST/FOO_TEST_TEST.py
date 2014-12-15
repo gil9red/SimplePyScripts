@@ -22,6 +22,66 @@ __author__ = 'ipetrash'
 # https://docs.python.org/3.4/library/pprint.html
 
 
+# __author__ = 'ipetrash'
+#
+# # Суть задачи в том, чтобы из англо-латинского словаря сделать латино-английский.
+# #
+# # Примеры тестов:
+# #  Входные данные
+# #  3
+# #  apple - malum, pomum, popula
+# #  fruit - baca, bacca, popum
+# #  punishment - malum, multa
+# #
+# #  Выходные данные
+# #  7
+# #  baca - fruit
+# #  bacca - fruit
+# #  malum - apple, punishment
+# #  multa - punishment
+# #  pomum - apple
+# #  popula - apple
+# #  popum - fruit
+#
+#
+# if __name__ == '__main__':
+#     la_en = {}
+#
+#     # Открываем для чтения
+#     with open('input.txt', mode='r') as f:
+#         # Первая строка -- количество записей
+#         count = int(f.readline())
+#
+#         # Получаем count строк
+#         for i in range(count):
+#             # Получим строку вида: baca - fruit
+#             row = f.readline().strip()
+#
+#             # Разделим строку на две части
+#             en, la_words = row.split(' - ')
+#
+#             # Из правой части (латинские слова) разделяем на список
+#             # и добавляем в словарь, в котором ключом является латинское
+#             # слово, а значением -- список английский слов
+#             for la in la_words.split(', '):
+#                 # Если слово la уже есть в словаре, то добавляем английское слово
+#                 # в список в правой части, иначе создаем список
+#                 if la in la_en:
+#                     la_en[la].append(en)
+#                 else:
+#                     la_en[la] = [en]
+#
+#     # Открываем для записи
+#     with open('output.txt', mode='w') as f:
+#         # Первая строка -- количество записей
+#         count = len(la_en)
+#         f.write(str(count) + '\n')
+#
+#         # Перебираем список отсортированных латинский слов
+#         for la in sorted(la_en.keys()):
+#             f.write('{} - {}\n'.format(la, ', '.join(la_en[la])))
+
+
 # import re
 # import os
 # # file_name = input("File name: ")
