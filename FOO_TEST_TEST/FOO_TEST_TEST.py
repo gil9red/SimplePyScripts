@@ -4,6 +4,10 @@
 __author__ = 'ipetrash'
 
 
+# TODO: больше примеров работы с модулями py
+# http://pythonworld.ru/karta-sajta
+
+
 # TODO: воспроизведение музыкальных файлов
 # # Window only
 # # https://docs.python.org/3/library/winsound.html
