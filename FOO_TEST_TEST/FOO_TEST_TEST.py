@@ -43,6 +43,13 @@ __author__ = 'ipetrash'
 # # TODO: больше примеров
 #
 # import copy
+#
+# a = [2, 3, [3.5, 3.6, [3.61, 3.62]], 4, 5]
+# print(a, type(a), hex(id(a)), sep=', ')
+#
+# b = copy.deepcopy(a)
+# print(b, type(b), hex(id(b)), sep=', ')
+#
 # c = [2, 3, 4, 5]
 # print(c, type(c), hex(id(c)), sep=', ')
 #
