@@ -24,6 +24,22 @@ __author__ = 'ipetrash'
 
 # TODO: pretty-print
 # https://docs.python.org/3.4/library/pprint.html
+# import pprint
+#
+# # stuff = ['spam', 'eggs', 'lumberjack', 'knights', 'ni']
+# # stuff.insert(0, stuff[:])
+# # pp = pprint.PrettyPrinter(indent=4)
+# # pp.pprint(stuff)
+# #
+# # pp = pprint.PrettyPrinter(width=41, compact=True)
+# # pp.pprint(stuff)
+#
+# # tup = ('spam', ('eggs', ('lumberjack', ('knights', ('ni', ('dead', ('parrot', ('fresh fruit',))))))))
+# # pp = pprint.PrettyPrinter(depth=3)
+# # pp.pprint(tup)
+
+
+# TODO: https://docs.python.org/3.4/library/copy.html
 
 
 # __author__ = 'ipetrash'
@@ -49,7 +65,7 @@ __author__ = 'ipetrash'
 #
 #
 # if __name__ == '__main__':
-#     la_en = {}
+# la_en = {}
 #
 #     # Открываем для чтения
 #     with open('input.txt', mode='r') as f:
