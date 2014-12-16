@@ -39,7 +39,15 @@ __author__ = 'ipetrash'
 # # pp.pprint(tup)
 
 
-# TODO: https://docs.python.org/3.4/library/copy.html
+# # TODO: https://docs.python.org/3.4/library/copy.html
+# # TODO: больше примеров
+#
+# import copy
+# c = [2, 3, 4, 5]
+# print(c, type(c), hex(id(c)), sep=', ')
+#
+# d = copy.copy(c)
+# print(d, type(d), hex(id(d)), sep=', ')
 
 
 # __author__ = 'ipetrash'
