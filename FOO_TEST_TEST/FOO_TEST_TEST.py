@@ -39,24 +39,6 @@ __author__ = 'ipetrash'
 # # pp.pprint(tup)
 
 
-# # TODO: https://docs.python.org/3.4/library/copy.html
-# # TODO: больше примеров
-#
-# import copy
-#
-# a = [2, 3, [3.5, 3.6, [3.61, 3.62]], 4, 5]
-# print(a, type(a), hex(id(a)), sep=', ')
-#
-# b = copy.deepcopy(a)
-# print(b, type(b), hex(id(b)), sep=', ')
-#
-# c = [2, 3, 4, 5]
-# print(c, type(c), hex(id(c)), sep=', ')
-#
-# d = copy.copy(c)
-# print(d, type(d), hex(id(d)), sep=', ')
-
-
 # __author__ = 'ipetrash'
 #
 # # Суть задачи в том, чтобы из англо-латинского словаря сделать латино-английский.
