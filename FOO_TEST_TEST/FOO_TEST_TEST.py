@@ -11,7 +11,7 @@ __author__ = 'ipetrash'
 #     # http://gabrielecirulli.github.io/2048/ -> https://github.com/gabrielecirulli/2048/
 #
 #     import re
-#     pattern = r'http://([a-z0-9-]+).github.io/(.+)/'
+#     pattern = r'http://(.+).github.io/(.+)/'
 #     search = re.search(pattern, url)
 #
 #     user = search.group(1)
