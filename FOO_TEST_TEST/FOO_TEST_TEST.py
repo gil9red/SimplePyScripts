@@ -4,6 +4,27 @@
 __author__ = 'ipetrash'
 
 
+# # TODO: добавить в примеры работы с регулярными выражениями
+#
+# def convert_url_githubio_to_repo(url):
+#     # Функция конвертирует путь из проекта github.io в репозиторий проекта github.com
+#     # http://gabrielecirulli.github.io/2048/ -> https://github.com/gabrielecirulli/2048/
+#
+#     import re
+#     pattern = r'http://([a-z0-9-]+).github.io/(.+)/'
+#     search = re.search(pattern, url)
+#
+#     user = search.group(1)
+#     repo = search.group(2)
+#     return 'https://github.com/{}/{}/'.format(user, repo)
+#
+#
+# url = 'http://gabrielecirulli.github.io/2048/'
+# url_repo = convert_url_githubio_to_repo(url)
+# print(url)
+# print(url_repo)
+
+
 # TODO: больше примеров работы с модулями py
 # http://pythonworld.ru/karta-sajta
 
