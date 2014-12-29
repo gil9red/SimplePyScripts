@@ -4,6 +4,66 @@
 __author__ = 'ipetrash'
 
 
+# TODO: сделать парсер для получения значения тегов
+# http://www.emvlab.org/tlvutils/?data=5F2A0206435F360102
+# https://ru.wikipedia.org/wiki/X.690
+
+# TODO: представить результат в json-формате
+
+data_hex = '130B5465737420557365722031'
+print(data_hex)
+
+id_hex_ber = data_hex[0:2]
+print("id: " + id_hex_ber)
+
+id_bin_ber = bin(int(id_hex_ber, 16))[2:].zfill(8)
+print("id bin: " + id_bin_ber)
+
+id_hex_int = int(id_hex_ber, 16)
+# print(hex(id_hex_int))
+
+
+def split_id_ber(id_hex_int):
+    def bit_value(num, pos):
+        return str((num & (1 << pos)) >> pos)
+
+    def bit_values(num, begin, end):
+        return ''.join([bit_value(num, i) for i in range(begin, end-1, -1)])
+
+    b5_b1 = bit_values(id_hex_int, 4, 0)
+    b6 = bit_value(id_hex_int, 5)
+    b8_b7 = bit_values(id_hex_int, 7, 6)
+
+    return (
+        b8_b7,  # Class
+        b6,  # Type
+        b5_b1  # Tag
+    )
+
+
+id_class_ber, id_type_ber, id_tag_bin_ber = split_id_ber(id_hex_int)
+print("id_class: " + id_class_ber, end=" -> ")
+if id_class_ber == '00':
+    print("Универсальный")
+elif id_class_ber == '01':
+    print("Прикладной")
+elif id_class_ber == '10':
+    print("Контекстно-зависимый")
+elif id_class_ber == '11':
+    print("Частный")
+
+print("id_type: " + id_type_ber, end=" -> ")
+if id_type_ber == '0':
+    print("Простой")
+else:
+    print("Составной")
+
+print("id_tag: " + id_tag_bin_ber, end=" -> ")
+id_tag_dec_ber = int(id_tag_bin_ber, 2)
+id_tag_hex_ber = hex(id_tag_dec_ber)
+print(str(id_tag_dec_ber) + " -> " + id_tag_hex_ber)
+
+
 # TODO: ascii -> hex and hex -> ascii
 # def ascii2hex(s, prefix_hex='0x'):
 #     """
@@ -50,10 +110,6 @@ __author__ = 'ipetrash'
 # import binascii
 # my_str = 'RUASCIIEN'
 # print(binascii.b2a_hex(my_str.encode('ascii')))
-
-
-# TODO: сделать парсер для получения значения тегов
-# http://www.emvlab.org/tlvutils/?data=5F2A0206435F360102
 
 
 # # TODO: добавить в примеры работы с регулярными выражениями
