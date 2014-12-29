@@ -4,6 +4,50 @@
 __author__ = 'ipetrash'
 
 
+# TODO: ascii -> hex and hex -> ascii
+
+def ascii2hex(s, prefix_hex='0x'):
+    """
+    ASCII -> HEX
+    RU -> 0x5255
+    """
+
+    ascii_str = s.encode('ascii')
+
+    hex_str = ''
+
+    for c in ascii_str:
+        hex_str += str(hex(c)).lstrip('0x')
+
+    return prefix_hex + hex_str
+
+
+def hex_str2ascii(hex_str):
+    """
+    HEX -> ASCII
+    0x5255 -> RU
+    """
+
+    hex_str = hex_str.lstrip('0x')
+
+    ascii_str = ''
+    for i in range(len(hex_str)):
+        if i % 2:
+            hex_num = int(hex_str[i - 1] + hex_str[i], base=16)
+            ascii_str += chr(hex_num)
+
+    return ascii_str
+
+
+my_str = 'RUASCIIEN'
+
+hex_str = ascii2hex(my_str)
+ascii_str = hex_str2ascii(hex_str)
+
+print('{} -> {}'.format(my_str, hex_str))
+print('{} -> {}'.format(hex_str, ascii_str))
+
+
 # TODO: сделать парсер для получения значения тегов
 # http://www.emvlab.org/tlvutils/?data=5F2A0206435F360102
 
