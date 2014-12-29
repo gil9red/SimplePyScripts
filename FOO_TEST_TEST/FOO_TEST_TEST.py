@@ -4,6 +4,10 @@
 __author__ = 'ipetrash'
 
 
+# TODO: сделать парсер для получения значения тегов
+# http://www.emvlab.org/tlvutils/?data=5F2A0206435F360102
+
+
 # # TODO: добавить в примеры работы с регулярными выражениями
 #
 # def convert_url_githubio_to_repo(url):
