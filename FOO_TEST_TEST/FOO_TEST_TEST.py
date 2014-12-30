@@ -8,27 +8,34 @@ __author__ = 'ipetrash'
 # http://www.emvlab.org/tlvutils/?data=5F2A0206435F360102
 # https://ru.wikipedia.org/wiki/X.690
 
-data_hex = '130B5465737420557365722031'
-print(data_hex)
+def get_id_class_ber_desk(id_class_ber):
+    if id_class_ber == '00':
+        return "Universal"
+    elif id_class_ber == '01':
+        return "Application"
+    elif id_class_ber == '10':
+        return "Context-specific"
+    elif id_class_ber == '11':
+        return "Private"
 
-id_hex_ber = data_hex[0:2]
-print("id: " + id_hex_ber)
-
-id_bin_ber = bin(int(id_hex_ber, 16))[2:].zfill(8)
-print("id bin: " + id_bin_ber)
-
-id_hex_int = int(id_hex_ber, 16)
+def get_id_type_ber_desk(id_type_ber):
+    if id_type_ber == '0':
+        return "Primitive"
+    elif id_type_ber == '1':
+        return "Constructed"
+    else:
+        raise Exception('id_type_ber может быть равным или 0, или 1.')
 
 def split_id_ber(id_hex_int):
     def bit_value(num, pos):
         return str((num & (1 << pos)) >> pos)
 
     def bit_values(num, begin, end):
-        return ''.join([bit_value(num, i) for i in range(begin, end-1, -1)])
+        return ''.join([bit_value(num, i - 1) for i in range(begin, end - 1, -1)])
 
-    b5_b1 = bit_values(id_hex_int, 4, 0)
-    b6 = bit_value(id_hex_int, 5)
-    b8_b7 = bit_values(id_hex_int, 7, 6)
+    b5_b1 = bit_values(id_hex_int, 5, 1)
+    b6 = bit_value(id_hex_int, 6)
+    b8_b7 = bit_values(id_hex_int, 8, 7)
 
     return (
         b8_b7,  # Class
@@ -37,58 +44,57 @@ def split_id_ber(id_hex_int):
     )
 
 
-id_class_ber, id_type_ber, id_tag_bin_ber = split_id_ber(id_hex_int)
-print("id_class: " + id_class_ber, end=" -> ")
-id_class_desk_ber = ''
-if id_class_ber == '00':
-    id_class_desk_ber = "Universal"
-elif id_class_ber == '01':
-    id_class_desk_ber = "Application"
-elif id_class_ber == '10':
-    id_class_desk_ber = "Context-specific"
-elif id_class_ber == '11':
-    id_class_desk_ber = "Private"
-print(id_class_desk_ber)
+if __name__ == '__main__':
+    data_hex = '130B5465737420557365722031'
+    print(data_hex)
 
-print("id_type: " + id_type_ber, end=" -> ")
-id_type_desk_ber = ''
-if id_type_ber == '0':
-    id_type_desk_ber = "Primitive"
-else:
-    id_type_desk_ber = "Constructed"
-print(id_type_desk_ber)
+    id_hex_ber = data_hex[0:2]
+    print("id: " + id_hex_ber)
 
-print("id_tag: " + id_tag_bin_ber, end=" -> ")
-id_tag_dec_ber = int(id_tag_bin_ber, 2)
-id_tag_hex_ber = hex(id_tag_dec_ber)
-print(str(id_tag_dec_ber) + " -> " + id_tag_hex_ber)
+    id_bin_ber = bin(int(id_hex_ber, 16))[2:].zfill(8)
+    print("id bin: " + id_bin_ber)
+
+    id_hex_int = int(id_hex_ber, 16)
 
 
-obj = {
-    'data_tlv': data_hex,
-    'id': {
-        'hex': id_hex_ber,
-        'bin': id_bin_ber,
-        'dec': id_hex_int,
-        'class': {
-            'value': id_class_ber,
-            'desk': id_class_desk_ber
+    id_class_ber, id_type_ber, id_tag_bin_ber = split_id_ber(id_hex_int)
+    print("id_class: " + id_class_ber, end=" -> ")
+    id_class_desk_ber = get_id_class_ber_desk(id_class_ber)
+
+    print("id_type: " + id_type_ber, end=" -> ")
+    id_type_desk_ber = get_id_type_ber_desk(id_type_ber)
+
+    print("id_tag: " + id_tag_bin_ber, end=" -> ")
+    id_tag_dec_ber = int(id_tag_bin_ber, 2)
+    id_tag_hex_ber = hex(id_tag_dec_ber)
+    print(str(id_tag_dec_ber) + " -> " + id_tag_hex_ber)
+
+
+    obj = {
+        'data_tlv': data_hex,
+        'id': {
+            'hex': id_hex_ber,
+            'bin': id_bin_ber,
+            'dec': id_hex_int,
+            'class': {
+                'value': id_class_ber,
+                'desk': id_class_desk_ber
+            },
+            'type': {
+                'value': id_type_ber,
+                'desk': id_type_desk_ber
+            },
+            'tag': {
+                'bin': id_tag_bin_ber,
+                'dec': id_tag_dec_ber,
+                'hex': id_tag_hex_ber
+            }
         },
-        'type': {
-            'value': id_type_ber,
-            'desk': id_type_desk_ber
-        },
-        'tag': {
-            'bin': id_tag_bin_ber,
-            'dec': id_tag_dec_ber,
-            'hex': id_tag_hex_ber
-        }
-    },
-}
+    }
 
-import json
-str_json_obj = json.dumps(obj, sort_keys=True, indent=4)
-print(str_json_obj)
+    import json
+    str_json_obj = json.dumps(obj, sort_keys=True, indent=4)
+    print(str_json_obj)
 
 
 # TODO: ascii -> hex and hex -> ascii
