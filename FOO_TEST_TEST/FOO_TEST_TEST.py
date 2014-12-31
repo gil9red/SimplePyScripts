@@ -1,6 +1,35 @@
 __author__ = 'ipetrash'
 
 
+# TODO: service parse.com
+# https://parse.com
+# https://parse.com/docs/api_libraries
+# https://github.com/dgrtwo/ParsePy
+# http://habrahabr.ru/post/246989/
+
+
+# import requests
+#
+# url = 'http://www.prog.org.ru/index.php'
+# login = '*****'
+# psw = '******'
+#
+# r = requests.get(url, auth=(login, psw))
+# # print(r.status_code)
+# # print(r.headers['content-type'])
+# # print(r.encoding)
+# print(r.text)
+# # print(r.json())
+#
+# print('\n\n')
+#
+# from grab import Grab
+# g = Grab()
+# g.setup(post={'login': login, 'password': psw})
+# g.go(url)
+# print(g.response.body)
+
+
 # # http://pythonworld.ru/moduli/modul-calendar.html
 # # https://docs.python.org/3/library/calendar.html
 # import calendar
