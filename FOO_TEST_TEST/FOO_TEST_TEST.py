@@ -1,6 +1,13 @@
 __author__ = 'ipetrash'
 
 
+# TODO: нарисовать какой-нибудь фрактал
+# https://ru.wikipedia.org/wiki/Фрактал
+# https://ru.wikipedia.org/wiki/Множество_Мандельброта
+# https://ru.wikipedia.org/wiki/Кривая_Коха
+# http://algolist.manual.ru/graphics/fracart.php
+
+
 # TODO: service pastebin.com
 # http://pastebin.com/
 # http://pastebin.com/api
