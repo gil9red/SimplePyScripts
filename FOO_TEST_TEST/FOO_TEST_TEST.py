@@ -1,6 +1,12 @@
 __author__ = 'ipetrash'
 
 
+# TODO: service pastebin.com
+# http://pastebin.com/
+# http://pastebin.com/api
+# https://pypi.python.org/pypi/Pastebin/1.1.1
+
+
 # TODO: service parse.com
 # https://parse.com
 # https://parse.com/docs/api_libraries
