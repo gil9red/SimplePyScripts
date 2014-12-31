@@ -1,149 +1,155 @@
-# -*- coding: utf-8 -*-
-
-
 __author__ = 'ipetrash'
 
 
-# TODO: сделать парсер для получения значения тегов
-# http://www.emvlab.org/tlvutils/?data=5F2A0206435F360102
-# https://ru.wikipedia.org/wiki/X.690
+# # http://pythonworld.ru/moduli/modul-calendar.html
+# # https://docs.python.org/3/library/calendar.html
+# import calendar
+# a = calendar.LocaleHTMLCalendar(locale='Russian_Russia')
+#
+# with open('calendar.html', 'w', encoding='utf-8') as g:
+#     g.write(a.formatyear(2014, width=4))
 
 
-def get_id_class_ber_desk(id_class_ber):
-    if id_class_ber == '00':
-        return "Universal"
-    elif id_class_ber == '01':
-        return "Application"
-    elif id_class_ber == '10':
-        return "Context-specific"
-    elif id_class_ber == '11':
-        return "Private"
-
-
-def get_id_type_ber_desk(id_type_ber):
-    if id_type_ber == '0':
-        return "Primitive"
-    elif id_type_ber == '1':
-        return "Constructed"
-    else:
-        raise Exception('id_type_ber может быть равным или 0, или 1.')
-
-
-# url: https://en.wikipedia.org/wiki/X.690, table "Universal Class Tags"
-UNIVERSAL_CLASS_TAGS = {
-    '0': 'EOC (End-of-Content)',
-    '1': 'BOOLEAN',
-    '2': 'INTEGER',
-    '3': 'BIT STRING',
-    '4': 'OCTET STRING',
-    '5': 'NULL',
-    '6': 'OBJECT IDENTIFIER',
-    '7': 'Object Descriptor',
-    '8': 'EXTERNAL',
-    '9': 'REAL (float)',
-    'A': 'ENUMERATED',
-    'B': 'EMBEDDED PDV',
-    'C': 'UTF8String',
-    'D': 'RELATIVE-OID',
-    'E': '(reserved)',
-    'F': '(reserved)',
-    '10': 'SEQUENCE and SEQUENCE OF',
-    '11': 'SET and SET OF',
-    '12': 'NumericString',
-    '13': 'PrintableString',
-    '14': 'T61String',
-    '15': 'VideotexString',
-    '16': 'IA5String',
-    '17': 'UTCTime',
-    '18': 'GeneralizedTime',
-    '19': 'GraphicString',
-    '1A': 'VisibleString',
-    '1B': 'GeneralString',
-    '1C': 'UniversalString',
-    '1D': 'CHARACTER STRING',
-    '1E': 'BMPString',
-    '1F': '(use long-form)',
-}
-
-
-def get_id_tag_ber_desk(id_tag_hex_ber):
-    # Удаляем пробелы с краев, удаляем префикс '0x, переводим в верхний регистр
-    tag_hex = id_tag_hex_ber.strip().lstrip('0x').upper()
-    return UNIVERSAL_CLASS_TAGS.get(tag_hex)
-
-
-def split_id_ber(id_hex_int):
-    def bit_value(num, pos):
-        return str((num & (1 << pos)) >> pos)
-
-    def bit_values(num, begin, end):
-        return ''.join([bit_value(num, i - 1) for i in range(begin, end - 1, -1)])
-
-    b5_b1 = bit_values(id_hex_int, 5, 1)
-    b6 = bit_value(id_hex_int, 6)
-    b8_b7 = bit_values(id_hex_int, 8, 7)
-
-    return (
-        b8_b7,  # Class
-        b6,  # Type
-        b5_b1  # Tag
-    )
-
-
-if __name__ == '__main__':
-    data_hex = '130B5465737420557365722031'
-    # print(data_hex)
-
-    id_hex_ber = data_hex[0:2]
-    # print("id: " + id_hex_ber)
-
-    id_bin_ber = bin(int(id_hex_ber, 16))[2:].zfill(8)
-    # print("id bin: " + id_bin_ber)
-
-    id_hex_int = int(id_hex_ber, 16)
-
-
-    id_class_ber, id_type_ber, id_tag_bin_ber = split_id_ber(id_hex_int)
-    # print("id_class: " + id_class_ber, end=" -> ")
-    id_class_desk_ber = get_id_class_ber_desk(id_class_ber)
-
-    # print("id_type: " + id_type_ber, end=" -> ")
-    id_type_desk_ber = get_id_type_ber_desk(id_type_ber)
-
-    # print("id_tag: " + id_tag_bin_ber, end=" -> ")
-    id_tag_dec_ber = int(id_tag_bin_ber, 2)
-    id_tag_hex_ber = hex(id_tag_dec_ber)
-    # print(str(id_tag_dec_ber) + " -> " + id_tag_hex_ber)
-
-    id_tag_desk_ber = get_id_tag_ber_desk(id_tag_hex_ber)
-
-
-    obj = {
-        'data_tlv': data_hex,
-        'id': {
-            'hex': id_hex_ber,
-            'bin': id_bin_ber,
-            'dec': id_hex_int,
-            'class': {
-                'value': id_class_ber,
-                'desk': id_class_desk_ber,
-            },
-            'type': {
-                'value': id_type_ber,
-                'desk': id_type_desk_ber,
-            },
-            'tag': {
-                'bin': id_tag_bin_ber,
-                'dec': id_tag_dec_ber,
-                'hex': id_tag_hex_ber,
-                'desc': id_tag_desk_ber,
-            },
-        },
-    }
-
-    import json
-    str_json_obj = json.dumps(obj, sort_keys=True, indent=4)
-    print(str_json_obj)
+# # TODO: сделать парсер для получения значения тегов
+# # http://www.emvlab.org/tlvutils/?data=5F2A0206435F360102
+# # https://ru.wikipedia.org/wiki/X.690
+#
+#
+# def get_id_class_ber_desk(id_class_ber):
+#     if id_class_ber == '00':
+#         return "Universal"
+#     elif id_class_ber == '01':
+#         return "Application"
+#     elif id_class_ber == '10':
+#         return "Context-specific"
+#     elif id_class_ber == '11':
+#         return "Private"
+#
+#
+# def get_id_type_ber_desk(id_type_ber):
+#     if id_type_ber == '0':
+#         return "Primitive"
+#     elif id_type_ber == '1':
+#         return "Constructed"
+#     else:
+#         raise Exception('id_type_ber может быть равным или 0, или 1.')
+#
+#
+# # url: https://en.wikipedia.org/wiki/X.690, table "Universal Class Tags"
+# UNIVERSAL_CLASS_TAGS = {
+#     '0': 'EOC (End-of-Content)',
+#     '1': 'BOOLEAN',
+#     '2': 'INTEGER',
+#     '3': 'BIT STRING',
+#     '4': 'OCTET STRING',
+#     '5': 'NULL',
+#     '6': 'OBJECT IDENTIFIER',
+#     '7': 'Object Descriptor',
+#     '8': 'EXTERNAL',
+#     '9': 'REAL (float)',
+#     'A': 'ENUMERATED',
+#     'B': 'EMBEDDED PDV',
+#     'C': 'UTF8String',
+#     'D': 'RELATIVE-OID',
+#     'E': '(reserved)',
+#     'F': '(reserved)',
+#     '10': 'SEQUENCE and SEQUENCE OF',
+#     '11': 'SET and SET OF',
+#     '12': 'NumericString',
+#     '13': 'PrintableString',
+#     '14': 'T61String',
+#     '15': 'VideotexString',
+#     '16': 'IA5String',
+#     '17': 'UTCTime',
+#     '18': 'GeneralizedTime',
+#     '19': 'GraphicString',
+#     '1A': 'VisibleString',
+#     '1B': 'GeneralString',
+#     '1C': 'UniversalString',
+#     '1D': 'CHARACTER STRING',
+#     '1E': 'BMPString',
+#     '1F': '(use long-form)',
+# }
+#
+#
+# def get_id_tag_ber_desk(id_tag_hex_ber):
+#     # Удаляем пробелы с краев, удаляем префикс '0x, переводим в верхний регистр
+#     tag_hex = id_tag_hex_ber.strip().lstrip('0x').upper()
+#     return UNIVERSAL_CLASS_TAGS.get(tag_hex)
+#
+#
+# def split_id_ber(id_hex_int):
+#     def bit_value(num, pos):
+#         return str((num & (1 << pos)) >> pos)
+#
+#     def bit_values(num, begin, end):
+#         return ''.join([bit_value(num, i - 1) for i in range(begin, end - 1, -1)])
+#
+#     b5_b1 = bit_values(id_hex_int, 5, 1)
+#     b6 = bit_value(id_hex_int, 6)
+#     b8_b7 = bit_values(id_hex_int, 8, 7)
+#
+#     return (
+#         b8_b7,  # Class
+#         b6,  # Type
+#         b5_b1  # Tag
+#     )
+#
+#
+# if __name__ == '__main__':
+#     data_hex = '130B5465737420557365722031'
+#     # print(data_hex)
+#
+#     id_hex_ber = data_hex[0:2]
+#     # print("id: " + id_hex_ber)
+#
+#     id_bin_ber = bin(int(id_hex_ber, 16))[2:].zfill(8)
+#     # print("id bin: " + id_bin_ber)
+#
+#     id_hex_int = int(id_hex_ber, 16)
+#
+#
+#     id_class_ber, id_type_ber, id_tag_bin_ber = split_id_ber(id_hex_int)
+#     # print("id_class: " + id_class_ber, end=" -> ")
+#     id_class_desk_ber = get_id_class_ber_desk(id_class_ber)
+#
+#     # print("id_type: " + id_type_ber, end=" -> ")
+#     id_type_desk_ber = get_id_type_ber_desk(id_type_ber)
+#
+#     # print("id_tag: " + id_tag_bin_ber, end=" -> ")
+#     id_tag_dec_ber = int(id_tag_bin_ber, 2)
+#     id_tag_hex_ber = hex(id_tag_dec_ber)
+#     # print(str(id_tag_dec_ber) + " -> " + id_tag_hex_ber)
+#
+#     id_tag_desk_ber = get_id_tag_ber_desk(id_tag_hex_ber)
+#
+#
+#     obj = {
+#         'data_tlv': data_hex,
+#         'id': {
+#             'hex': id_hex_ber,
+#             'bin': id_bin_ber,
+#             'dec': id_hex_int,
+#             'class': {
+#                 'value': id_class_ber,
+#                 'desk': id_class_desk_ber,
+#             },
+#             'type': {
+#                 'value': id_type_ber,
+#                 'desk': id_type_desk_ber,
+#             },
+#             'tag': {
+#                 'bin': id_tag_bin_ber,
+#                 'dec': id_tag_dec_ber,
+#                 'hex': id_tag_hex_ber,
+#                 'desc': id_tag_desk_ber,
+#             },
+#         },
+#     }
+#
+#     import json
+#     str_json_obj = json.dumps(obj, sort_keys=True, indent=4)
+#     print(str_json_obj)
 
 
 # TODO: ascii -> hex and hex -> ascii
