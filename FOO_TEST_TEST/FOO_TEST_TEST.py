@@ -5,30 +5,56 @@ __author__ = 'ipetrash'
 # TODO: vk.com api
 # http://habrahabr.ru/sandbox/84639/
 # https://github.com/python273/vk_api
+# https://github.com/dimka665/vk
+# https://pypi.python.org/pypi/vk/1.5
+
 import vk_api
+import sys
 
-def main():
-    """ Пример получения последнего сообщения со стены """
+if __name__ == '__main__':
+    """ Пример работы с vk.com"""
 
-    login, password = 'login', 'psw'
+    login, password = 'login', '******'
 
     try:
         vk = vk_api.VkApi(login, password)  # Авторизируемся
     except vk_api.AuthorizationError as error_msg:
         print(error_msg)  # В случае ошибки выведем сообщение
-        return  # и выйдем
+        sys.exit()
 
-    values = {
-        'count': 1  # Получаем только один пост
-    }
-    response = vk.method('wall.get', values)  # Используем метод wall.get
+    # values = {
+    #     'count': 1  # Получаем только один пост
+    # }
+    # response = vk.method('wall.get', values)  # Используем метод wall.get
+    #
+    # if response['items']:
+    #     # Печатаем текст последнего поста со стены
+    #     print(response['items'][0]['text'])
 
-    if response['items']:
-        # Печатаем текст последнего поста со стены
-        print(response['items'][0]['text'])
+    # Получение аудизаписей текущего пользователя (чей логин был введен)
+    audio = vk.method('audio.get')
 
-if __name__ == '__main__':
-    main()
+    # # Получение аудизаписей пользователя c id=10
+    # audio = vk.method('audio.get', {'owner_id': '10'})
+
+    print('Count: {}'.format(audio['count']))
+    for i, a in enumerate(audio['items'], 1):
+        print(i, a['title'])
+
+
+
+# import vk
+#
+# # vkapi = vk.API(app_id='app_id', user_login='+login', user_password='password')
+# # or
+# vkapi = vk.API(access_token='access_token')
+# print(vkapi.getServerTime())
+# profiles = vkapi.users.get(user_id=1)
+# print(profiles[0]['last_name'])
+# # vkapi.wall.post(message="Hello, world")
+
+
+
 
 
 # TODO: нарисовать какой-нибудь фрактал
