@@ -5,6 +5,30 @@ __author__ = 'ipetrash'
 # TODO: vk.com api
 # http://habrahabr.ru/sandbox/84639/
 # https://github.com/python273/vk_api
+import vk_api
+
+def main():
+    """ Пример получения последнего сообщения со стены """
+
+    login, password = 'login', 'psw'
+
+    try:
+        vk = vk_api.VkApi(login, password)  # Авторизируемся
+    except vk_api.AuthorizationError as error_msg:
+        print(error_msg)  # В случае ошибки выведем сообщение
+        return  # и выйдем
+
+    values = {
+        'count': 1  # Получаем только один пост
+    }
+    response = vk.method('wall.get', values)  # Используем метод wall.get
+
+    if response['items']:
+        # Печатаем текст последнего поста со стены
+        print(response['items'][0]['text'])
+
+if __name__ == '__main__':
+    main()
 
 
 # TODO: нарисовать какой-нибудь фрактал
