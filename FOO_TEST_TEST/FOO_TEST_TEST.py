@@ -1,6 +1,12 @@
 __author__ = 'ipetrash'
 
 
+
+# TODO: vk.com api
+# http://habrahabr.ru/sandbox/84639/
+# https://github.com/python273/vk_api
+
+
 # TODO: нарисовать какой-нибудь фрактал
 # https://ru.wikipedia.org/wiki/Фрактал
 # https://ru.wikipedia.org/wiki/Множество_Мандельброта
