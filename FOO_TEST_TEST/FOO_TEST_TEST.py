@@ -1,6 +1,9 @@
 __author__ = 'ipetrash'
 
 
+# TODO: пример работы с requests
+
+
 # http://habrahabr.ru/sandbox/84639/
 # https://github.com/dimka665/vk
 # https://pypi.python.org/pypi/vk/1.5
