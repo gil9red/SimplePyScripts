@@ -13,8 +13,6 @@ __author__ = 'ipetrash'
 
 
 if __name__ == '__main__':
-    """ Пример работы с vk.com"""
-
     login, password = 'login', '******'
 
     try:
