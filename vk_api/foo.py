@@ -6,10 +6,7 @@ import sys
 __author__ = 'ipetrash'
 
 
-# http://habrahabr.ru/sandbox/84639/
 # https://github.com/python273/vk_api
-# https://github.com/dimka665/vk
-# https://pypi.python.org/pypi/vk/1.5
 # https://vk.com/dev/methods
 
 
