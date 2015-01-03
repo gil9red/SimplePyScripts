@@ -1,6 +1,10 @@
 __author__ = 'ipetrash'
 
 
+# http://habrahabr.ru/sandbox/84639/
+# https://github.com/dimka665/vk
+# https://pypi.python.org/pypi/vk/1.5
+#
 # import vk
 #
 # # vkapi = vk.API(app_id='app_id', user_login='+login', user_password='password')
