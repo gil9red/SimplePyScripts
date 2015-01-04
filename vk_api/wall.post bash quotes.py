@@ -4,6 +4,7 @@ import requests
 from grab import Grab
 import time
 import urllib.parse
+from datetime import datetime
 
 __author__ = 'ipetrash'
 
@@ -57,9 +58,10 @@ if __name__ == '__main__':
         # Если не указывать owner_id, сообщения себе на стену поместится
         rs = vk.method('wall.post', {
             'owner_id': owner_id,
-            'message': quote_text,
-            'attachments': quote_href,
+            'message': quote_href + '\n\n' + quote_text,
         })
-        print(rs, quote_href)
+
+        cur_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print('{}: post_id: {}, quote: {}'.format(cur_date, rs['post_id'], quote_href))
 
         time.sleep(60 * 60)  # Задержка в 1 час
