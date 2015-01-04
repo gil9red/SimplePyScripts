@@ -17,7 +17,8 @@ __author__ = 'ipetrash'
 # Скачивание аудиозаписей пользователя
 
 
-LOGIN, PASSWORD = '', ''
+LOGIN = ''
+PASSWORD = ''
 DOWNLOAD_DIR = 'downloads'
 
 
