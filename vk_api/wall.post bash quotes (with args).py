@@ -1,3 +1,4 @@
+import argparse
 import vk_api
 import sys
 import requests
@@ -39,12 +40,27 @@ def bash_quote():
     return quote_text, quote_href
 
 
+def create_parser():
+    parser = argparse.ArgumentParser(description="The script receives a quote from the site bash.im "
+                                                 "and puts it on the wall by vk.com")
+    parser.add_argument("login", help="Login from which the message will be sent.")
+    parser.add_argument("psw", help="User password.")
+    parser.add_argument("owner_id", help="ID on who will get the message.")
+    return parser
+
+
 if __name__ == '__main__':
-    # Логин и пароль к аккаунту и id человека, на стену которого будем постить сообщения
-    login, psw, owner_id = 'USER_LOGIN', 'USER_PASSWORD', 'OWNER_ID'
+    parser = create_parser()
+
+    # Если не указаны параметры, выводим справку и выходим
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit()
+
+    args = parser.parse_args()
 
     try:
-        vk = vk_api.VkApi(login, psw)  # Авторизируемся
+        vk = vk_api.VkApi(args.login, args.psw)  # Авторизируемся
     except vk_api.AuthorizationError as error_msg:
         print(error_msg)  # В случае ошибки выведем сообщение
         sys.exit()
@@ -56,7 +72,7 @@ if __name__ == '__main__':
         # Добавление сообщения на стену пользователя id равным OWNER_ID
         # Если не указывать owner_id, сообщения себе на стену поместится
         rs = vk.method('wall.post', {
-            'owner_id': owner_id,
+            'owner_id': args.owner_id,
             'message': quote_text,
             'attachments': quote_href,
         })
