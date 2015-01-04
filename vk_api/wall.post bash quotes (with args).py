@@ -1,4 +1,5 @@
 import argparse
+from datetime import datetime
 import vk_api
 import sys
 import requests
@@ -46,6 +47,8 @@ def create_parser():
     parser.add_argument("login", help="Login from which the message will be sent.")
     parser.add_argument("psw", help="User password.")
     parser.add_argument("owner_id", help="ID on who will get the message.")
+    parser.add_argument("-timeout", type=int, default=3600, help="The frequency of sending messages in seconds."
+                                                                 "\nDefault 3600 sec.")
     return parser
 
 
@@ -73,9 +76,10 @@ if __name__ == '__main__':
         # Если не указывать owner_id, сообщения себе на стену поместится
         rs = vk.method('wall.post', {
             'owner_id': args.owner_id,
-            'message': quote_text,
-            'attachments': quote_href,
+            'message': quote_href + '\n\n' + quote_text,
         })
-        print(rs, quote_href)
 
-        time.sleep(60 * 60)  # Задержка в 1 час
+        cur_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print('{}: post_id: {}, quote: {}'.format(cur_date, rs['post_id'], quote_href))
+
+        time.sleep(args.timeout)  # Задержка в 1 час
