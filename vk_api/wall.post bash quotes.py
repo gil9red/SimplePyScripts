@@ -40,24 +40,34 @@ def bash_quote():
     return quote_text, quote_href
 
 
-if __name__ == '__main__':
-    # Логин и пароль к аккаунту и id человека, на стену которого будем постить сообщения
-    login, psw, owner_id = 'USER_LOGIN', 'USER_PASSWORD', 'OWNER_ID'
-
+def vk_auth(login, password):
     try:
-        vk = vk_api.VkApi(login, psw)  # Авторизируемся
+        vk = vk_api.VkApi(login, password)  # Авторизируемся
     except vk_api.AuthorizationError as error_msg:
         print(error_msg)  # В случае ошибки выведем сообщение
         sys.exit()
+
+    return vk
+
+
+# Логин, пароль к аккаунту и id человека, на стену которого будем постить сообщения
+LOGIN = ''
+PASSWORD = ''
+OWNER_ID = ''
+
+
+if __name__ == '__main__':
+    # Авторизируемся
+    vk = vk_auth(LOGIN, PASSWORD)
 
     while True:
         # Получаем текст цитаты и ее адрес
         quote_text, quote_href = bash_quote()
 
-        # Добавление сообщения на стену пользователя id равным OWNER_ID
+        # Добавление сообщения на стену пользователя (owner_id это id пользователя)
         # Если не указывать owner_id, сообщения себе на стену поместится
         rs = vk.method('wall.post', {
-            'owner_id': owner_id,
+            'owner_id': OWNER_ID,
             'message': quote_href + '\n\n' + quote_text,
         })
 

@@ -52,6 +52,16 @@ def create_parser():
     return parser
 
 
+def vk_auth(login, password):
+    try:
+        vk = vk_api.VkApi(login, password)  # Авторизируемся
+    except vk_api.AuthorizationError as error_msg:
+        print(error_msg)  # В случае ошибки выведем сообщение
+        sys.exit()
+
+    return vk
+
+
 if __name__ == '__main__':
     parser = create_parser()
 
@@ -62,11 +72,8 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    try:
-        vk = vk_api.VkApi(args.login, args.psw)  # Авторизируемся
-    except vk_api.AuthorizationError as error_msg:
-        print(error_msg)  # В случае ошибки выведем сообщение
-        sys.exit()
+    # Авторизируемся
+    vk = vk_auth(args.login, args.psw)
 
     while True:
         # Получаем текст цитаты и ее адрес
