@@ -4,6 +4,22 @@ __author__ = 'ipetrash'
 # TODO: пример работы с requests
 
 
+# # TODO: пример работы с networkx
+# # http://networkx.github.io/
+# # http://networkx.github.io/documentation/latest/gallery.html
+# # http://networkx.github.io/documentation/latest/reference/index.html
+# # http://habrahabr.ru/post/125898/
+# # http://habrahabr.ru/post/129344/
+#
+# import networkx as nx
+# G = nx.Graph()
+# G.add_edge('A', 'B', weight=4)
+# G.add_edge('B', 'D', weight=2)
+# G.add_edge('A', 'C', weight=3)
+# G.add_edge('C', 'D', weight=4)
+# print(nx.shortest_path(G, 'A', 'D', weight='weight'))
+
+
 # http://habrahabr.ru/sandbox/84639/
 # https://github.com/dimka665/vk
 # https://pypi.python.org/pypi/vk/1.5
