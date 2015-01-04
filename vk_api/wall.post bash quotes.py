@@ -1,13 +1,16 @@
+import argparse
 import vk_api
 import sys
 import requests
 from grab import Grab
 import time
+import urllib.parse
 
 __author__ = 'ipetrash'
 
 
 # Скрипт получает цитату с сайта bash.im и помещает ее на стену пользователя vk.com
+# The script receives a quote from the site bash.im and puts it on the wall by vk.com
 
 
 def unescape(s):
@@ -31,18 +34,33 @@ def bash_quote():
     quote_text = unescape(quote_text)
     quote_text = quote_text.replace('<br>', '\n').strip()
 
-    quote_href = 'http://bash.im' + quote.select('div/a[@class="id"]').attr('href')
+    quote_href = quote.select('div/a[@class="id"]').attr('href')
+    quote_href = urllib.parse.urljoin('http://bash.im/', quote_href)
 
     return quote_text, quote_href
 
 
-if __name__ == '__main__':
-    """ Пример работы с vk.com"""
+def create_parser():
+    parser = argparse.ArgumentParser(description="The script receives a quote from the site bash.im "
+                                                 "and puts it on the wall by vk.com")
+    parser.add_argument("login", help="Login from which the message will be sent.")
+    parser.add_argument("psw", help="User password.")
+    parser.add_argument("owner_id", help="ID on who will get the message.")
+    return parser
 
-    login, password = 'login', '******'
+
+if __name__ == '__main__':
+    parser = create_parser()
+
+    # Если не указаны параметры, выводим справку и выходим
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit()
+
+    args = parser.parse_args()
 
     try:
-        vk = vk_api.VkApi(login, password)  # Авторизируемся
+        vk = vk_api.VkApi(args.login, args.psw)  # Авторизируемся
     except vk_api.AuthorizationError as error_msg:
         print(error_msg)  # В случае ошибки выведем сообщение
         sys.exit()
@@ -51,10 +69,10 @@ if __name__ == '__main__':
         # Получаем текст цитаты и ее адрес
         quote_text, quote_href = bash_quote()
 
-        # Добавление сообщения на стену пользователя ******* c id=OWNER_ID
+        # Добавление сообщения на стену пользователя id равным OWNER_ID
         # Если не указывать owner_id, сообщения себе на стену поместится
         rs = vk.method('wall.post', {
-            'owner_id': '170968205',
+            'owner_id': args.owner_id,
             'message': quote_text,
             'attachments': quote_href,
         })
