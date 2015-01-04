@@ -82,4 +82,4 @@ if __name__ == '__main__':
         cur_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         print('{}: post_id: {}, quote: {}'.format(cur_date, rs['post_id'], quote_href))
 
-        time.sleep(args.timeout)  # Задержка в 1 час
+        time.sleep(args.timeout)  # Задержка в timeout секундах
