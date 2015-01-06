@@ -7,6 +7,10 @@ import vk_api
 __author__ = 'ipetrash'
 
 
+# Скрипт выполняет поиск в вк по заданным критериям и после фильтрует тех,
+# у кого личка открыта и у которых дата последнего посещения меньше 7 дней
+
+
 # https://github.com/python273/vk_api
 # https://vk.com/dev/methods
 # http://vk.com/dev/users.search
