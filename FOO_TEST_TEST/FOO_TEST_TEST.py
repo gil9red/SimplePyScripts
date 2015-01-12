@@ -4,6 +4,15 @@ __author__ = 'ipetrash'
 # TODO: пример работы с requests
 
 
+## TODO: lived time
+# import datetime
+# my_bd = datetime.datetime(day=18, month=8, year=1992)
+## my_bd = datetime.datetime(day=28, month=1, year=1993)
+# my_life = datetime.datetime.today() - my_bd
+#
+# print('lived time: days = {} <=> seconds = {}'.format(my_life.days, my_life.days * 24 * 60 * 60))
+
+
 # # TODO: пример работы с networkx
 # # http://networkx.github.io/
 # # http://networkx.github.io/documentation/latest/gallery.html
