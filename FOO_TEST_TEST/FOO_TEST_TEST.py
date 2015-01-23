@@ -1,6 +1,8 @@
 __author__ = 'ipetrash'
 
 
+# -*- coding: utf-8 -*-
+#
 # __author__ = 'ipetrash'
 # 
 # 
