@@ -1,6 +1,8 @@
-import vk_api
 import sys
-# import requests
+import time
+import datetime
+
+import vk_api
 
 
 __author__ = 'ipetrash'
@@ -10,16 +12,55 @@ __author__ = 'ipetrash'
 # https://vk.com/dev/methods
 
 
-if __name__ == '__main__':
-    """ Пример работы с vk.com"""
-
-    login, password = 'login', '******'
-
+def vk_auth(login, password):
     try:
         vk = vk_api.VkApi(login, password)  # Авторизируемся
     except vk_api.AuthorizationError as error_msg:
         print(error_msg)  # В случае ошибки выведем сообщение
         sys.exit()
+
+    return vk
+
+
+LOGIN = ''
+PASSWORD = ''
+
+
+if __name__ == '__main__':
+    # Авторизируемся
+    vk = vk_auth(LOGIN, PASSWORD)
+
+
+
+    # # Написание сообщения пользователю с id=170968205 на стену:
+    # rs = vk.method('wall.post', {'owner_id': '170968205', 'message': message})
+    # print(rs)
+
+
+
+    # # Написание сообщения пользователю с id=170968205 в диалог:
+    # rs = vk.method('messages.send', {'user_id': '170968205', 'message': paste_url})
+    # print(rs)
+
+
+
+    # rs = vk.method('friends.get')
+    # # rs = vk.method('friends.get', {'user_id': '59628698'})
+    #
+    # print("Всего друзей: {}".format(rs['count']))
+    #
+    # friends = [str(i) for i in rs['items']]
+    #
+    # rq_params = {
+    #     'user_ids': ','.join(friends),
+    #     'fields': 'relation'
+    # }
+    #
+    # rs = vk.method('users.get', rq_params)
+    # # print(rs)
+    #
+    # for i, f in enumerate(rs, 1):
+    #     print(i, f)
 
 
     # ## Получение инфы о пользователе
@@ -34,6 +75,21 @@ if __name__ == '__main__':
     # print(rs)
 
 
+    # rs = vk.method('utils.getServerTime')
+    # print(rs)
+
+
+    # # # Получение инфы о пользователе
+    # rs = vk.method('users.get', {'user_ids': 'arthur_iskuzhin'})
+    # print(rs)
+
+
+    # # # Получение инфы о пользователе или приложении по короткому имение
+    # rs = vk.method('utils.resolveScreenName', {'screen_name': 'arthur_iskuzhin'})
+    # print(rs)
+
+
+
     ## Печатаем текст последнего поста со стены
     # values = {
     #     'count': 1  # Получаем только один пост
@@ -45,33 +101,15 @@ if __name__ == '__main__':
     #     print(response['items'][0]['text'])
 
 
-    # # Получение аудизаписей текущего пользователя (чей логин был введен)
-    # audio = vk.method('audio.get')
+    # # Получение статуса
+    # # http://vk.com/dev/status.get
+    # rs = vk.method('status.get')
+    # print(rs)
     #
-    # # # Получение аудизаписей пользователя c id=170968205
-    # # audio = vk.method('audio.get', {'owner_id': '170968205'})
-    #
-    # # Первая аудизапись пользователя
-    # audio = audio['items'][0]
-    # # print(audio)
-    # artist = audio['artist']
-    # title = audio['title']
-    # url = audio['url']
-    #
-    # audio_file_name = '%s - %s.mp3' % (artist, title)
-    #
-    # # Попытаемся скачать аудизапись
-    # r = requests.get(url, stream=True)
-    # if r.status_code == 200:
-    #     with open(audio_file_name, 'wb') as f:
-    #         for chunk in r.iter_content(1024):
-    #             f.write(chunk)
-
-
-    # Вывод списка всех аудизаписей
-    # print('Count: {}'.format(audio['count']))
-    # for i, a in enumerate(audio['items'], 1):
-    #     print(i, a)
+    # # Установка статуса
+    # # http://vk.com/dev/status.set
+    # rs = vk.method('status.set', {'text': '*Задумал злобный план*'})
+    # print(rs)
 
 
     # ## Написание сообщения на стену
@@ -85,8 +123,16 @@ if __name__ == '__main__':
 
 
     # rs = vk.method('wall.post', {
-    #     'owner_id': '4033640',
-    #     'message': 'Щенята!',
-    #     'attachments': 'http://doghusky.ru/wp-content/uploads/2012/02/Siberian-Husky-Puppy-Photo_002-600x375.jpg',
+    #     'owner_id': '123810316',
+    #     'message': 'vk_api!',
+    #     # 'attachments': 'http://doghusky.ru/wp-content/uploads/2012/02/Siberian-Husky-Puppy-Photo_002-600x375.jpg',
+    # })
+    # print(rs)
+
+
+    # rs = vk.method('wall.post', {
+    #     # 'owner_id': '4033640',
+    #     # 'message': 'Щенята!',
+    #     'attachments': 'http://bash.im/quote/144613',
     # })
     # print(rs)
