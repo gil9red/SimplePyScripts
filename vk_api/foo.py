@@ -32,6 +32,8 @@ if __name__ == '__main__':
 
 
 
+    from operator import itemgetter
+
     def vk_bdate_to_bdate_this_year(bdate):
         # bdate может быть в формате: %d.%m.%Y или %d.%m
         parts = bdate.split('.')
@@ -40,12 +42,18 @@ if __name__ == '__main__':
 
 
     # Получим и выведем списк друзей с указанными днями рождения
-    rs = vk.method('friends.get', {'fields': 'bdate'})
+    rs = vk.method('friends.get', {
+        # 'user_id': '4033640',
+        'fields': 'bdate',
+    })
 
-    for i, friend in enumerate(rs.get('items'), 1):
-        id_user = friend.get('id')
-        first_name = friend.get('first_name')
-        last_name = friend.get('last_name')
+    # Список друзей у которых день рождения еще не наступил в этом году
+    # Список представляет собой кортежи, у которых первым индексом будет
+    # объект friend, а вторым индексом сколько дней осталось до его дня
+    # рождения
+    filtered_friends = []
+
+    for friend in rs.get('items'):
         bdate = friend.get('bdate')
         if bdate:
             # Дата дня рождения в текущем году
@@ -56,8 +64,29 @@ if __name__ == '__main__':
             remained_days = remained_days.days
 
             if remained_days > 0:
-                print(str(i) + ". " + "id" + str(id_user) + "  " + first_name + " " + last_name
-                      + " до дня рождения осталось: " + str(remained_days) + " дней")
+                filtered_friends.append(
+                    (friend, remained_days)
+                )
+
+    # Отсортируем список друзей по тому сколько осталось дней до их дня рождения
+    sorted_by_bdate_list = sorted(filtered_friends, key=itemgetter(1))
+
+    # Тоже самое, но медленее работает:
+    # sorted_by_bdate_list = sorted(filtered_users, key=lambda x: x[1])
+
+    for i, user in enumerate(sorted_by_bdate_list, 1):
+        friend, remained_days = user
+
+        id_user = friend.get('id')
+        first_name = friend.get('first_name')
+        last_name = friend.get('last_name')
+
+        print("{}. {} (id{}) до дня рождения осталось {} дней".format(
+            i,
+            first_name + " " + last_name,
+            id_user,
+            remained_days,
+        ))
 
 
 
