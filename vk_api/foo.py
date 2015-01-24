@@ -32,6 +32,35 @@ if __name__ == '__main__':
 
 
 
+    def vk_bdate_to_bdate_this_year(bdate):
+        # bdate может быть в формате: %d.%m.%Y или %d.%m
+        parts = bdate.split('.')
+        d, m, y = int(parts[0]), int(parts[1]), datetime.datetime.today().year
+        return datetime.date(y, m, d)
+
+
+    # Получим и выведем списк друзей с указанными днями рождения
+    rs = vk.method('friends.get', {'fields': 'bdate'})
+
+    for i, friend in enumerate(rs.get('items'), 1):
+        id_user = friend.get('id')
+        first_name = friend.get('first_name')
+        last_name = friend.get('last_name')
+        bdate = friend.get('bdate')
+        if bdate:
+            # Дата дня рождения в текущем году
+            birthday_this_year = vk_bdate_to_bdate_this_year(bdate)
+
+            # Сколько осталось дней до дня рождения
+            remained_days = birthday_this_year - datetime.datetime.today().date()
+            remained_days = remained_days.days
+
+            if remained_days > 0:
+                print(str(i) + ". " + "id" + str(id_user) + "  " + first_name + " " + last_name
+                      + " до дня рождения осталось: " + str(remained_days) + " дней")
+
+
+
     # # Написание сообщения пользователю с id=170968205 на стену:
     # rs = vk.method('wall.post', {'owner_id': '170968205', 'message': message})
     # print(rs)
