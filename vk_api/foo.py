@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import sys
 import time
 import datetime
@@ -42,15 +44,14 @@ if __name__ == '__main__':
 
 
     # Получим и выведем списк друзей с указанными днями рождения
+    # Если не указывать user_id, то вернется список друзей текущего пользователя,
+    # того чьи логин и пароль использовались для авторизации
     rs = vk.method('friends.get', {
         # 'user_id': '4033640',
         'fields': 'bdate',
     })
 
     # Список друзей у которых день рождения еще не наступил в этом году
-    # Список представляет собой кортежи, у которых первым индексом будет
-    # объект friend, а вторым индексом сколько дней осталось до его дня
-    # рождения
     filtered_friends = []
 
     for friend in rs.get('items'):
@@ -64,22 +65,19 @@ if __name__ == '__main__':
             remained_days = remained_days.days
 
             if remained_days > 0:
-                filtered_friends.append(
-                    (friend, remained_days)
-                )
+                # Добавим в словарь пользователя сколько дней осталось до его дня рождения
+                friend['remained_days'] = remained_days
+                filtered_friends.append(friend)
 
     # Отсортируем список друзей по тому сколько осталось дней до их дня рождения
-    sorted_by_bdate_list = sorted(filtered_friends, key=itemgetter(1))
+    sorted_by_bdate_list = sorted(filtered_friends, key=itemgetter('remained_days'))
 
-    # Тоже самое, но медленее работает:
-    # sorted_by_bdate_list = sorted(filtered_users, key=lambda x: x[1])
-
-    for i, user in enumerate(sorted_by_bdate_list, 1):
-        friend, remained_days = user
-
+    # Выведем отсортированный список друзей
+    for i, friend in enumerate(sorted_by_bdate_list, 1):
         id_user = friend.get('id')
         first_name = friend.get('first_name')
         last_name = friend.get('last_name')
+        remained_days = friend.get('remained_days')
 
         print("{}. {} (id{}) до дня рождения осталось {} дней".format(
             i,
