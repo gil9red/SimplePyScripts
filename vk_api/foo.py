@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import time
-import datetime
+# import time
+# import datetime
 
 import vk_api
 
@@ -31,60 +31,6 @@ PASSWORD = ''
 if __name__ == '__main__':
     # Авторизируемся
     vk = vk_auth(LOGIN, PASSWORD)
-
-
-
-    from operator import itemgetter
-
-    def vk_bdate_to_bdate_this_year(bdate):
-        # bdate может быть в формате: %d.%m.%Y или %d.%m
-        parts = bdate.split('.')
-        d, m, y = int(parts[0]), int(parts[1]), datetime.datetime.today().year
-        return datetime.date(y, m, d)
-
-
-    # Получим и выведем списк друзей с указанными днями рождения
-    # Если не указывать user_id, то вернется список друзей текущего пользователя,
-    # того чьи логин и пароль использовались для авторизации
-    rs = vk.method('friends.get', {
-        # 'user_id': '4033640',
-        'fields': 'bdate',
-    })
-
-    # Список друзей у которых день рождения еще не наступил в этом году
-    filtered_friends = []
-
-    for friend in rs.get('items'):
-        bdate = friend.get('bdate')
-        if bdate:
-            # Дата дня рождения в текущем году
-            birthday_this_year = vk_bdate_to_bdate_this_year(bdate)
-
-            # Сколько осталось дней до дня рождения
-            remained_days = birthday_this_year - datetime.datetime.today().date()
-            remained_days = remained_days.days
-
-            if remained_days > 0:
-                # Добавим в словарь пользователя сколько дней осталось до его дня рождения
-                friend['remained_days'] = remained_days
-                filtered_friends.append(friend)
-
-    # Отсортируем список друзей по тому сколько осталось дней до их дня рождения
-    sorted_by_bdate_list = sorted(filtered_friends, key=itemgetter('remained_days'))
-
-    # Выведем отсортированный список друзей
-    for i, friend in enumerate(sorted_by_bdate_list, 1):
-        id_user = friend.get('id')
-        first_name = friend.get('first_name')
-        last_name = friend.get('last_name')
-        remained_days = friend.get('remained_days')
-
-        print("{}. {} (id{}) до дня рождения осталось {} дней".format(
-            i,
-            first_name + " " + last_name,
-            id_user,
-            remained_days,
-        ))
 
 
 
