@@ -34,6 +34,12 @@ if __name__ == '__main__':
 
 
 
+    # http://vk.com/dev/storage.get
+    # http://vk.com/dev/storage.set
+    # http://vk.com/dev/storage.getKeys
+
+
+
     # # Написание сообщения пользователю с id=170968205 на стену:
     # rs = vk.method('wall.post', {'owner_id': '170968205', 'message': message})
     # print(rs)
