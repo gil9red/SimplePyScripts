@@ -1,6 +1,61 @@
 __author__ = 'ipetrash'
 
 
+
+
+# TODO: сделать скрипт, разбирающий капчу
+# Капчу можно получить по url:
+# http://readmanga.me/internal/captcha?code=1423350123294
+# Можно и не передавать код, а просто юзать:
+# http://readmanga.me/internal/captcha
+
+
+
+
+# # TODO: переместить в папку PySide
+# ## Загрузка формы из файла ui
+#
+# # http://pyside.github.io/docs/pyside/index.html
+# # http://visitusers.org/index.php?title=PySide_Recipes
+#
+#
+# from PySide.QtGui import *
+# from PySide.QtCore import *
+# from PySide.QtSql import *
+# from PySide.QtUiTools import *
+#
+# import sys
+#
+#
+# app = QApplication(sys.argv)
+#
+# db = QSqlDatabase.addDatabase('QSQLITE')
+# db.setDatabaseName('sqlite_test.bd')
+# ok = db.open()
+#
+#
+# model = QSqlTableModel()
+# model.setTable('foo_table')
+# model.setEditStrategy(QSqlTableModel.OnFieldChange)
+# model.select()
+#
+#
+# # Load the UI from a Qt designer file.
+# loader = QUiLoader()
+# file = QFile("mainwindow.ui")
+# file.open(QFile.ReadOnly)
+# mw = loader.load(file)
+# file.close()
+#
+# mw.tableView.setModel(model)
+# # mw.tableView.hideColumn(0)  # don't show the ID
+#
+# mw.show()
+#
+# app.exec_()
+
+
+
 # def from_ghbdtn(text):
 #     """ Convert
 #       "b ,skb ghj,ktvs c ujcntdjq" -> "и были проблемы с гостевой"
