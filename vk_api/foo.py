@@ -33,6 +33,55 @@ if __name__ == '__main__':
     vk = vk_auth(LOGIN, PASSWORD)
 
 
+    ## Лайкаем все посты указанного пользователяЫ
+    # from time import sleep
+    #
+    # offset = 0
+    # step = 100
+    # max_post = 0
+    # like_count = 0
+    # sleep_timeout = 0.8
+    #
+    # while True:
+    #     try:
+    #         rs = vk.method(
+    #             'wall.get', {
+    #                 'owner_id': 666,
+    #                 'offset': offset,
+    #                 'count': step,
+    #                 'filter': 'owner'
+    #             }
+    #         )
+    #
+    #         max_post = rs['count']
+    #
+    #         for post in rs['items']:
+    #             post_id = post['id']
+    #             post_owner_id = post['owner_id']
+    #
+    #             sleep(sleep_timeout)
+    #
+    #             rs = vk.method(
+    #                 'likes.add', {
+    #                     'type': 'post',
+    #                     'owner_id': post_owner_id,
+    #                     'item_id': post_id
+    #                 }
+    #             )
+    #
+    #             like_count += 1
+    #             print('max_post: {}, like_count: {}, post_id: {}'.format(max_post, like_count, post_id))
+    #
+    #         offset += step
+    #         if offset >= max_post:
+    #             break
+    #
+    #     except vk_api.Captcha as e:
+    #         print('Error: "{}", sleep_timeout: {}'.format(e, sleep_timeout))
+    #         sleep_timeout += 0.2
+    #         sleep(60)
+
+
 
     # http://vk.com/dev/storage.get
     # http://vk.com/dev/storage.set
