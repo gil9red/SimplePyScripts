@@ -2,12 +2,100 @@ __author__ = 'ipetrash'
 
 
 
+# # TODO: пример работы с ini файлами
+# # https://docs.python.org/3/library/configparser.html
+#
+# import configparser
+#
+# ini = configparser.ConfigParser()
+# ini['Default'] = {
+#     'x': 10,
+#     'y': 15,
+#     'z': 3,
+# }
+#
+# ini['Additional'] = {}
+# additional = ini['Additional']
+# additional['top'] = str(True)
+# additional['text'] = "Hello World!"
+# additional['arrays'] = str([1, 2, 3, 4, 5])
+#
+# ini['Empty'] = {}
+#
+# with open('config.ini', 'w') as f:
+#     ini.write(f)
+#
+#
+# ini_read = configparser.ConfigParser()
+# ini_read.read('config.ini')
+# print(ini_read.sections())
+#
+# print(ini_read['Additional']['top'])
+# print(ini_read['Additional']['text'])
+# print(ini_read['Additional']['arrays'])
+# print(ini_read['Additional']['arrays'].replace('[', '').replace(']', '').split(', '))
+#
+# import sys
+# sys.exit()
 
-# TODO: сделать скрипт, разбирающий капчу
-# Капчу можно получить по url:
-# http://readmanga.me/internal/captcha?code=1423350123294
-# Можно и не передавать код, а просто юзать:
-# http://readmanga.me/internal/captcha
+
+
+# # Следующий пример строит график функции f(x) = x / sin(x):
+#
+# import math
+#
+# # !!! Импортируем один из пакетов Matplotlib
+# import pylab
+#
+# # !!! Импортируем пакет со вспомогательными функциями
+# from matplotlib import mlab
+#
+# if __name__ == '__main__':
+#     # Будем рисовать график этой функции
+#     def func(x):
+#         """
+#         sinc (x)
+#         """
+#         if x == 0:
+#             return 1.0
+#         return math.sin (x) / x
+#
+#     # Интервал изменения переменной по оси X
+#     xmin = -20.0
+#     xmax = 20.0
+#
+#     # Шаг между точками
+#     dx = 0.01
+#
+#     # !!! Создадим список координат по оси X на отрезке [-xmin; xmax], включая концы
+#     xlist = mlab.frange (xmin, xmax, dx)
+#
+#     # Вычислим значение функции в заданных точках
+#     ylist = [func (x) for x in xlist]
+#
+#     # !!! Нарисуем одномерный график
+#     pylab.plot (xlist, ylist)
+#
+#     # !!! Покажем окно с нарисованным графиком
+#     pylab.show()
+
+
+
+# left, right, up, down = 0, 0, 0, height
+#
+# # Перебор всех пикселей изображения
+# for y in range(height):
+#     for x in range(width):
+#         # Получаем пиксель
+#         pxl = im2.getpixel((x, y))
+#
+#         if pxl == black_pxl:
+#             up = max(up, y)
+#             down = min(down, y)
+#
+# print(left, right, up, down)
+
+
 
 
 
@@ -61,22 +149,22 @@ __author__ = 'ipetrash'
 #       "b ,skb ghj,ktvs c ujcntdjq" -> "и были проблемы с гостевой"
 #       "ghbdtn" -> "привет"
 #     """
-# 
+#
 #     en_keyboard = 'qwertyuiop[]asdfghjkl;\'\zxcvbnm,./`?'
 #     ru_keyboard = 'йцукенгшщзхъфывапролджэ\ячсмитьбю.ё,'
-# 
+#
 #     result = ''
-# 
+#
 #     for c in text:
 #         en_index = en_keyboard.find(c.lower())
 #         if en_index != -1:
 #             result += ru_keyboard[en_index]
 #         else:
 #             result += c
-# 
+#
 #     return result
-# 
-# 
+#
+#
 # text = ' b ,skb ghj,ktvs c ujcntdjq dhjlt ,s? gjcvjnhb '
 # print(text)
 # print(from_ghbdtn(text))
