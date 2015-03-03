@@ -33,7 +33,7 @@ if __name__ == '__main__':
     g.set_input('j_username', LOGIN)
     g.set_input('j_password', PASSWORD)
     g.submit()
-    print(g.response.url)
+
     if g.response.url == 'http://grouple.ru/internal/auth/login?login_error=1':
         print('Авторизация прошла неудачно :(')
 
