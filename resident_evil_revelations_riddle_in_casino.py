@@ -14,7 +14,7 @@ __author__ = 'ipetrash'
 
 
 def find_first_selection(a, b, c, max_sum):
-    """Функция вернет первый правильно вариант"""
+    """Функция вернет первый правильный вариант"""
 
     if max_sum == 0:
         return a, b, c
@@ -42,7 +42,7 @@ def find_first_selection(a, b, c, max_sum):
 
 
 def find_all_selection(a, b, c, max_sum, all_sel):
-    """Функция будет переборать все варианты"""
+    """Функция будет перебирать и запоминать все варианты"""
 
     if max_sum == 0:
         select = a, b, c
@@ -70,6 +70,7 @@ if __name__ == '__main__':
     print('{}*7 + {}*9 + {}*17 = 107'.format(*selection))
     print()
 
+    print('Все варианты:')
     all_selection = []
     find_all_selection(0, 0, 0, 107, all_selection)
     for i, sel in enumerate(all_selection, 1):
