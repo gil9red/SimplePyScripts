@@ -4,60 +4,130 @@
 __author__ = 'ipetrash'
 
 
+def parser_my_jira_time_logs(log):
+    """ Функция принимает список строк вида:
+    7417 10:00-12:00
+    7417 12:19-14:00
+    7417 14:37-15:30
+    7417 15:58-17:50
 
-def anonymization_quotes(quote_text):
-    """ Функция заменяет ники в цитатах на псевдонимы 'xxx', 'yyy' и т.п.
-    Шаблон определения "^(.+?):"
+    7415 15:58-15:59
 
-    Пример валидной цитаты: "BlackFox: Кто нибудь, хоть раз, физически ощущал как он седеет?..."
+    7456 14:28-15:59
+
+    То, что перед ' ' -- уникальный номер задания
+    Диапазон после ' ' -- отрезок времени вида: начало - конец
+
+    Далее функция подсчитает количество часов и минут для каждого задания
+    и выведет их
     """
 
+    # TODO: Защита от копипаста: строки могут повторяться и время подсчитается неправильно
+    # TODO: Если часы перевалят за 24, то начнется отсчет заного
+    # TODO: Для джиры дни и недели не астрономические: 1d = 8h и 1w = 5d
+
     import re
-    login_pattern = re.compile(r'^(.+?):')
+    pattern = re.compile(r'(.+) (\d\d:\d\d)-(\d\d:\d\d)')
 
-    # Словарь, в котором ключом является логин, а значением псевдоним
-    all_logins = {}
+    from datetime import datetime as dt
+    import time
+    from collections import defaultdict
 
-    # Счетчик логинов
-    count_logins = 0
+    jira_time = defaultdict(int)
 
-    # Сгенерируем список с псевдонимами. Список будет вида: ['aaa', 'bbb', ..., 'zzz', 'AAA', ... 'ZZZ']
-    import string
-    login_aliases = [c*3 for c in string.ascii_letters]
+    for line in log.split('\n'):
+        if line:
+            m = pattern.match(line.strip())
 
-    # Разбиваем цитату по строчно
-    for line in quote_text.split('\n'):
-        # Ищем логин
-        match = login_pattern.search(line)
+            jira = m.group(1)
+            t1 = m.group(2)
+            t2 = m.group(3)
+            delta = dt.strptime(t2, '%H:%M') - dt.strptime(t1, '%H:%M')
+            seconds = delta.seconds
 
-        # Если нашли
-        if match:
-            # Вытаскиваем только логин -- нам не нужно двоеточние после логина
-            login = match.group(1)
+            jira_time[jira] += seconds
 
-            # Если такого логина нет в словаре, добавляем в словарь логин и его псевдоним
-            if login not in all_logins:
-                all_logins[login] = login_aliases[count_logins]
-                count_logins += 1
+    for jira, secs in jira_time.items():
+        t = time.gmtime(secs)
+        h = t.tm_hour
+        m = t.tm_min
+        jira_time = None
+        if h:
+            jira_time = str(h) + 'h'
+        if m:
+            if jira_time:
+                jira_time += ' ' + str(m) + 'm'
+            else:
+                jira_time = str(m) + 'm'
 
-    quote = quote_text
-
-    # Проходим по словарю и делаем замену логина на псевдоним в строке цитаты
-    for login, alias in all_logins.items():
-        quote = quote.replace(login, alias)
-
-    return quote
+        print('%s: %s' % (jira, jira_time))
 
 
-quote = """Аня: Не хочу и комп занят
-Кирилл: вредный старший брат окупировал комп?
-Кирилл: у моей сестры таже проблема"""
+parser_my_jira_time_logs("""
+7417 10:00-12:00
+7417 12:19-14:00
+7417 14:37-15:30
+7417 15:58-17:50
 
-print(quote)
+7415 15:58-15:59
 
-quote = anonymization_quotes(quote)
-print()
-print(quote)
+7456 14:28-15:59
+""")
+
+
+# def anonymization_quotes(quote_text):
+#     """ Функция заменяет ники в цитатах на псевдонимы 'xxx', 'yyy' и т.п.
+#     Шаблон определения "^(.+?):"
+#
+#     Пример валидной цитаты: "BlackFox: Кто нибудь, хоть раз, физически ощущал как он седеет?..."
+#     """
+#
+#     import re
+#     login_pattern = re.compile(r'^(.+?):')
+#
+#     # Словарь, в котором ключом является логин, а значением псевдоним
+#     all_logins = {}
+#
+#     # Счетчик логинов
+#     count_logins = 0
+#
+#     # Сгенерируем список с псевдонимами. Список будет вида: ['aaa', 'bbb', ..., 'zzz', 'AAA', ... 'ZZZ']
+#     import string
+#     login_aliases = [c*3 for c in string.ascii_letters]
+#
+#     # Разбиваем цитату по строчно
+#     for line in quote_text.split('\n'):
+#         # Ищем логин
+#         match = login_pattern.search(line)
+#
+#         # Если нашли
+#         if match:
+#             # Вытаскиваем только логин -- нам не нужно двоеточние после логина
+#             login = match.group(1)
+#
+#             # Если такого логина нет в словаре, добавляем в словарь логин и его псевдоним
+#             if login not in all_logins:
+#                 all_logins[login] = login_aliases[count_logins]
+#                 count_logins += 1
+#
+#     quote = quote_text
+#
+#     # Проходим по словарю и делаем замену логина на псевдоним в строке цитаты
+#     for login, alias in all_logins.items():
+#         quote = quote.replace(login, alias)
+#
+#     return quote
+#
+#
+# quote = """Аня: Не хочу и комп занят
+# Кирилл: вредный старший брат окупировал комп?
+# Кирилл: у моей сестры таже проблема"""
+#
+# print(quote)
+#
+# quote = anonymization_quotes(quote)
+# print()
+# print(quote)
 
 
 
