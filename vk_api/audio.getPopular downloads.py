@@ -66,13 +66,14 @@ if __name__ == '__main__':
         # Авторизируемся
         vk = vk_api.VkApi(LOGIN, PASSWORD)
 
-        # Получение аудиозаписей текущего пользователя (чей логин был введен)
-        # Варианты значения genre_id: https://vk.com/dev/audio_genres
-        # genre_id = 7 -- это Metal
-        #            1 -- Rock
-        #            21 -- Alternative
+        # Варианты значений data:
+        #     only_eng	1 – возвращать только зарубежные аудиозаписи. 0 – возвращать все аудиозаписи. (по умолчанию)
+        #     genre_id	идентификатор жанра из списка жанров (https://vk.com/dev/audio_genres)
+        #     offset	смещение, необходимое для выборки определенного подмножества аудиозаписей.
+        #     count	количество возвращаемых аудиозаписей (максимальное значение 1000, по умолчанию 100).
+
         data = {
-            'genre_id': 7,
+            'genre_id': 7,  # Metal
             'count': 5
         }
         list_audio = vk.method('audio.getPopular', data)
