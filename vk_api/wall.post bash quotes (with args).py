@@ -53,8 +53,10 @@ def create_parser():
 
 
 def vk_auth(login, password):
+    vk = vk_api.VkApi(login, password)
+
     try:
-        vk = vk_api.VkApi(login, password)  # Авторизируемся
+        vk.authorization()  # Авторизируемся
     except vk_api.AuthorizationError as error_msg:
         print(error_msg)  # В случае ошибки выведем сообщение
         sys.exit()
