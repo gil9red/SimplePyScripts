@@ -2,6 +2,9 @@ import os
 import vk_api
 import sys
 import requests
+from mutagen.id3 import ID3
+from mutagen.id3._util import ID3NoHeaderError
+from mutagen.id3 import TIT2, TPE1
 
 
 __author__ = 'ipetrash'
@@ -17,23 +20,71 @@ __author__ = 'ipetrash'
 # Скачивание аудиозаписей пользователя
 
 
-LOGIN = ''
-PASSWORD = ''
-DOWNLOAD_DIR = 'downloads'
-
-
 # TODO: учитывать наличие разделения песен на альбомы
 # TODO: возможность выбирать диапазоны индексов скачиваемых песен
 
 
-def vk_auth(login, password):
+def make_pretty_id3(audio_file_name, performer, title_):
+    """Функция удаляет из тега фреймы (COMM, PRIV, ...), добавляет (а если есть переписывает)
+    фреймы TPE1 (имя группы) и TIT2 (название песни)
+
+    """
+
+    def get_id3_frame(id3, frame):
+        try:
+            return id3[frame]
+        except KeyError:
+            return None
+
+    audio = ID3()
+
     try:
-        vk = vk_api.VkApi(login, password)  # Авторизируемся
+        audio.load(audio_file_name)
+
+        album = get_id3_frame(audio, 'TALB')
+        genre = get_id3_frame(audio, 'TCON')
+        record_time = get_id3_frame(audio, 'TDRC')
+        picture = get_id3_frame(audio, 'APIC')
+
+        audio.delete()
+
+        audio.add(TPE1(3, performer))
+        audio.add(TIT2(3, title_))
+
+        if album is not None:
+            audio.add(album)
+
+        if genre is not None:
+            audio.add(genre)
+
+        if record_time is not None:
+            audio.add(record_time)
+
+        if picture is not None:
+            audio.add(picture)
+
+    except ID3NoHeaderError:
+        audio.add(TPE1(3, performer))
+        audio.add(TIT2(3, title_))
+
+    audio.save()
+
+
+def vk_auth(login, password):
+    vk = vk_api.VkApi(login, password)
+
+    try:
+        vk.authorization()  # Авторизируемся
     except vk_api.AuthorizationError as error_msg:
         print(error_msg)  # В случае ошибки выведем сообщение
         sys.exit()
 
     return vk
+
+
+LOGIN = ''
+PASSWORD = ''
+DOWNLOAD_DIR = 'downloads'
 
 
 def main():
@@ -92,6 +143,8 @@ def main():
             with open(download_path, 'wb') as f:
                 for chunk in r.iter_content(1024):
                     f.write(chunk)
+
+            make_pretty_id3(download_path, artist, title)
 
             print(' download finished...')
 
