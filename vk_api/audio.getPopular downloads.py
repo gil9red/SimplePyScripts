@@ -126,28 +126,36 @@ if __name__ == '__main__':
 
     add_artist_to_black_list('Rammstein')
 
+    vk = vk_api.VkApi(LOGIN, PASSWORD)
+
+    # Варианты значений data:
+    #     only_eng	1 – возвращать только зарубежные аудиозаписи. 0 – возвращать все аудиозаписи. (по умолчанию)
+    #     genre_id	идентификатор жанра из списка жанров (https://vk.com/dev/audio_genres)
+    #     offset	смещение, необходимое для выборки определенного подмножества аудиозаписей.
+    #     count	количество возвращаемых аудиозаписей (максимальное значение 1000, по умолчанию 100).
+    data = {
+        'genre_id': 7,  # Metal
+        'count': 100,
+    }
+
     try:
         vk = vk_api.VkApi(LOGIN, PASSWORD)
-        vk.authorization()
+        vk.authorization()  # Авторизируемся
 
-        # Варианты значений data:
-        #     only_eng	1 – возвращать только зарубежные аудиозаписи. 0 – возвращать все аудиозаписи. (по умолчанию)
-        #     genre_id	идентификатор жанра из списка жанров (https://vk.com/dev/audio_genres)
-        #     offset	смещение, необходимое для выборки определенного подмножества аудиозаписей.
-        #     count	количество возвращаемых аудиозаписей (максимальное значение 1000, по умолчанию 100).
-        data = {
-            'genre_id': 7,  # Metal
-            'count': 10,
-        }
         list_audio = vk.method('audio.getPopular', data)
 
-        # Если не существует пути, создадим его
-        if not os.path.exists(DOWNLOAD_DIR):
-            os.makedirs(DOWNLOAD_DIR)
+    except Exception as e:
+        print(e)
+        sys.exit()
 
-        filtered_audios = 0
+    # Если не существует пути, создадим его
+    if not os.path.exists(DOWNLOAD_DIR):
+        os.makedirs(DOWNLOAD_DIR)
 
-        for i, audio in enumerate(list_audio, 1):
+    filtered_audios = 0
+
+    for i, audio in enumerate(list_audio, 1):
+        try:
             url = audio['url']
             url, suffix = get_audio_url_info(url)
 
@@ -176,17 +184,13 @@ if __name__ == '__main__':
             make_pretty_id3(file_name, artist, title)
             print(' download finished...')
 
-        print()
-        print('Скачалось песен {0}'.format(len(list_audio) - filtered_audios))
-        print('Всего пропущено песен {0} ({1:.0f}%)'.format(filtered_audios, filtered_audios / len(list_audio) * 100))
+        except KeyboardInterrupt:
+            print('\n\nСкачивание прервано.')
+            sys.exit()
 
-    except DownloadFileError as e:
-        print(e)
+        except Exception as e:
+            print('audio id={}, error: {}'.format(audio['id'], e))
 
-    except vk_api.AuthorizationError as e:
-        print(e)
-        sys.exit()
-
-    except KeyboardInterrupt:
-        print('\n\nСкачивание прервано.')
-        sys.exit()
+    print()
+    print('Скачалось песен {0}'.format(len(list_audio) - filtered_audios))
+    print('Всего пропущено песен {0} ({1:.0f}%)'.format(filtered_audios, filtered_audios / len(list_audio) * 100))

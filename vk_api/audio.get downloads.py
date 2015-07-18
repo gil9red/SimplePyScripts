@@ -1,3 +1,10 @@
+# !/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+
+__author__ = 'ipetrash'
+
+
 import os
 import vk_api
 import sys
@@ -5,9 +12,6 @@ import requests
 from mutagen.id3 import ID3
 from mutagen.id3._util import ID3NoHeaderError
 from mutagen.id3 import TIT2, TPE1
-
-
-__author__ = 'ipetrash'
 
 
 # https://github.com/python273/vk_api
@@ -70,16 +74,20 @@ def make_pretty_id3(audio_file_name, performer, title_):
     audio.save()
 
 
-def vk_auth(login, password):
-    vk = vk_api.VkApi(login, password)
+class DownloadFileError(Exception):
+    pass
 
-    try:
-        vk.authorization()  # Авторизируемся
-    except vk_api.AuthorizationError as error_msg:
-        print(error_msg)  # В случае ошибки выведем сообщение
-        sys.exit()
 
-    return vk
+def download_file(url, audio_file_name):
+    # Попытаемся скачать аудиозапись
+    r = requests.get(url, stream=True)
+    if r.status_code == 200:
+        # Создаем файл и в него записываем файл с сервера
+        with open(audio_file_name, 'wb') as f:
+            for chunk in r.iter_content(1024):
+                f.write(chunk)
+    else:
+        raise DownloadFileError('Ошибка при скачивании "{}": {} - {}'.format(url, r.status_code, r.reason))
 
 
 LOGIN = ''
@@ -87,16 +95,22 @@ PASSWORD = ''
 DOWNLOAD_DIR = 'downloads'
 
 
-def main():
+if __name__ == '__main__':
     print('Авторизация...')
+    print()
 
-    # Авторизируемся
-    vk = vk_auth(LOGIN, PASSWORD)
+    try:
+        vk = vk_api.VkApi(LOGIN, PASSWORD)
+        vk.authorization()  # Авторизируемся
 
-    # Получение аудиозаписей текущего пользователя (чей логин был введен)
-    # Для получения аудиозаписей определенного пользователя нужно передавать
-    # его id, например: audio = vk.method('audio.get', {'owner_id': '170968205'})
-    audio = vk.method('audio.get')
+        # Получение аудиозаписей текущего пользователя (чей логин был введен)
+        # Для получения аудиозаписей определенного пользователя нужно передавать
+        # его id, например: audio = vk.method('audio.get', {'owner_id': '170968205'})
+        audio = vk.method('audio.get')
+
+    except Exception as e:
+        print(e)
+        sys.exit()
 
     # # Получаем альбомы пользователя
     # albums = vk.method('audio.getAlbums')['items']
@@ -115,47 +129,36 @@ def main():
     # Вывод списка всех аудиозаписей
     print('Всего песен: {}'.format(audio['count']))
 
-    for i, a in enumerate(audio['items'], 1):
-        artist = a['artist']
-        title = a['title']
-        url = a['url']
-        # duration = a['duration']
-        # album_id = a.get('album_id')
+    list_audio = audio['items']
 
-        audio_name = '{} - {}'.format(artist, title)
+    for i, audio in enumerate(list_audio, 1):
+        try:
+            artist = audio['artist'].strip().title()
+            title = audio['title'].strip().capitalize()
+            url = audio['url']
+            # duration = a['duration']
+            # album_id = a.get('album_id')
 
-        # Название файла аудиозаписи
-        audio_file_name = audio_name + '.mp3'
+            audio_name = '{} - {}'.format(artist, title)
 
-        # Замена символов, которых в названиях файлов запрещено
-        # TODO: бОльший контроль, индивидуальный для ОС
-        audio_file_name = audio_file_name.replace('"', '')
+            # Название файла аудиозаписи
+            audio_file_name = audio_name + '.mp3'
 
-        # Путь в который будет скачен файл
-        download_path = os.path.join(DOWNLOAD_DIR, audio_file_name)
+            # Замена символов, которых в названиях файлов запрещено
+            # TODO: бОльший контроль, индивидуальный для ОС
+            audio_file_name = audio_file_name.replace('"', '')
 
-        # Попытаемся скачать аудиозапись
-        r = requests.get(url, stream=True)
-        if r.status_code == 200:
+            # Путь в который будет скачен файл
+            download_path = os.path.join(DOWNLOAD_DIR, audio_file_name)
+
             print('{}. "{}"'.format(i, audio_name), end='')
-
-            # Создаем файл и в него записываем файл с сервера
-            with open(download_path, 'wb') as f:
-                for chunk in r.iter_content(1024):
-                    f.write(chunk)
-
+            download_file(url, download_path)
             make_pretty_id3(download_path, artist, title)
-
             print(' download finished...')
 
-        else:
-            print('Не получилось скачать "{}"...'.format(audio_name))
+        except KeyboardInterrupt:
+            print('\n\nСкачивание прервано.')
+            sys.exit()
 
-
-if __name__ == '__main__':
-    try:
-        main()
-
-    except KeyboardInterrupt:
-        print('\n\nСкачивание прервано.')
-        sys.exit()
+        except Exception as e:
+            print('audio id={}, error: {}'.format(audio['id'], e))
