@@ -5,30 +5,45 @@
 __author__ = 'ipetrash'
 
 
-class Student:
-    def __init__(self, name, group, age):
-        self.name = name
-        self.group = group
-        self.age = age
+def get_short_url(url):
+    """Функция возвращает короткую ссылку на url.
+    Для этого она использует сервис clck.ru
+
+    """
+
+    from urllib.request import urlopen
+
+    with urlopen('https://clck.ru/--?url=' + url) as rs:
+        return rs.read().decode()
 
 
-list_students = []
-list_students.append(Student('Вася', 'АВ-1', 16))
-list_students.append(Student('Саша', 'АВ-1', 20))
-list_students.append(Student('Петя', 'АВ-1', 16))
-list_students.append(Student('Аня', 'АВ-3', 19))
-list_students.append(Student('Анетта', 'АВ-2', 18))
-list_students.append(Student('Василий', 'АВ-2', 18))
+url = 'https://www.google.ru/search?q=short+url+python'
+print(get_short_url(url))
 
 
-list_students.sort(key=lambda x: len(x.name))
-# list_students.sort(key=lambda x: x.name)
-# list_students.sort(key=lambda x: x.age)
-# list_students.sort(key=lambda x: x.group)
-
-for student in list_students:
-    print('{}, {}, {}'.format(student.name, student.group, student.age))
-
+# class Student:
+#     def __init__(self, name, group, age):
+#         self.name = name
+#         self.group = group
+#         self.age = age
+#
+#
+# list_students = []
+# list_students.append(Student('Вася', 'АВ-1', 16))
+# list_students.append(Student('Саша', 'АВ-1', 20))
+# list_students.append(Student('Петя', 'АВ-1', 16))
+# list_students.append(Student('Аня', 'АВ-3', 19))
+# list_students.append(Student('Анетта', 'АВ-2', 18))
+# list_students.append(Student('Василий', 'АВ-2', 18))
+#
+#
+# list_students.sort(key=lambda x: len(x.name))
+# # list_students.sort(key=lambda x: x.name)
+# # list_students.sort(key=lambda x: x.age)
+# # list_students.sort(key=lambda x: x.group)
+#
+# for student in list_students:
+#     print('{}, {}, {}'.format(student.name, student.group, student.age))
 
 
 # # В институте биоинформатики по офису передвигается робот. Недавно студенты из группы программистов написали
