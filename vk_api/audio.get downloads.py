@@ -161,4 +161,4 @@ if __name__ == '__main__':
             sys.exit()
 
         except Exception as e:
-            print('audio id={}, error: {}'.format(audio['id'], e))
+            print('audio id={} owner_id={}, error: {}'.format(audio['id'], audio['owner_id'], e))
