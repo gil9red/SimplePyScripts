@@ -101,6 +101,26 @@ def download_file(url, audio_file_name):
         raise DownloadFileError('Ошибка при скачивании "{}": {} - {}'.format(url, r.status_code, r.reason))
 
 
+def file_name_clear(name):
+    """Функция удаляет и заменяет символы, которые в имени
+    файлов windows не могут быть
+
+    """
+
+    # TODO: Замена символов, которых в названиях файлов запрещено
+    # Windows: \/:*?"<>|
+
+    name = name.replace('\\', '-')
+    name = name.replace('/', '-')
+    name = name.replace(':', '.')
+    name = name.replace('*', '.')
+    name = name.replace('?', '')
+    name = name.replace('"', "'")
+    name = name.replace('<', '')
+    name = name.replace('>', '')
+    name = name.replace('|', '')
+    return name
+
 # Список исполнителей, песни которых не хотим качать
 _BLACK_LIST_ARTIST = []
 
@@ -115,44 +135,60 @@ def artist_in_black_list(artist):
     return artist.lower() in _BLACK_LIST_ARTIST
 
 
-LOGIN = ''
-PASSWORD = ''
-DOWNLOAD_DIR = 'popular downloads'
+VK_JENRE = {
+    1: 'Rock',
+    2: 'Pop',
+    3: 'Rap & Hip-Hop',
+    4: 'Easy Listening',
+    5: 'Dance & House',
+    6: 'Instrumental',
+    7: 'Metal',
+    21: 'Alternative',
+    8: 'Dubstep',
+    9: 'Jazz & Blues',
+    10: 'Drum & Bass',
+    11: 'Trance',
+    12: 'Chanson',
+    13: 'Ethnic',
+    14: 'Acoustic & Vocal',
+    15: 'Reggae',
+    16: 'Classical',
+    17: 'Indie Pop',
+    19: 'Speech',
+    22: 'Electropop & Disco',
+    18: 'Other',
+}
 
 
-if __name__ == '__main__':
-    print('Авторизация...')
-    print()
-
-    add_artist_to_black_list('Rammstein')
-
-    vk = vk_api.VkApi(LOGIN, PASSWORD)
-
+def popular_download(vk, genre_id, path_dir, count=1000):
     # Варианты значений data:
     #     only_eng	1 – возвращать только зарубежные аудиозаписи. 0 – возвращать все аудиозаписи. (по умолчанию)
     #     genre_id	идентификатор жанра из списка жанров (https://vk.com/dev/audio_genres)
     #     offset	смещение, необходимое для выборки определенного подмножества аудиозаписей.
     #     count	количество возвращаемых аудиозаписей (максимальное значение 1000, по умолчанию 100).
     data = {
-        'genre_id': 7,  # Metal
-        'count': 100,
+        'genre_id': genre_id,
+        'count': count,
     }
 
     try:
-        vk = vk_api.VkApi(LOGIN, PASSWORD)
-        vk.authorization()  # Авторизируемся
-
         list_audio = vk.method('audio.getPopular', data)
-
     except Exception as e:
-        print(e)
-        sys.exit()
+        raise e
 
     # Если не существует пути, создадим его
-    if not os.path.exists(DOWNLOAD_DIR):
-        os.makedirs(DOWNLOAD_DIR)
+    if not os.path.exists(path_dir):
+        os.makedirs(path_dir)
 
+    downloads_count = 0
     filtered_audios = 0
+    existing_audios = os.listdir(path_dir)
+
+    print('Выбранный жанр "{}" (id={})'.format(VK_JENRE[genre_id], genre_id))
+    print('Папка загрузки: "{}"'.format(os.path.abspath(path_dir)))
+    print('Всего получено песен из запроса {}'.format(len(list_audio)))
+    print()
+    print('Начинаю скачиваение:')
 
     for i, audio in enumerate(list_audio, 1):
         try:
@@ -166,22 +202,24 @@ if __name__ == '__main__':
             title = audio['title'].strip().capitalize()
 
             if artist_in_black_list(artist):
-                print('Исполнитель "{}" в черном списке, пропускаем песню "{}"'.format(artist, title))
                 filtered_audios += 1
-                continue
+                raise Exception('Исполнитель "{}" в черном списке, пропускаем песню'.format(artist))
 
             name = '{} - {}{}'.format(artist, title, suffix)
+            name = file_name_clear(name)
+
+            if name in existing_audios:
+                raise Exception('Пропускаем песню "{}" -- аудифайл уже существует'.format(name))
 
             print('{}. "{}"'.format(i, name), end='')
 
-            # TODO: Замена символов, которых в названиях файлов запрещено
-            # audio_file_name = audio_file_name.replace('"', '')
-
             # Путь в который будет скачен файл
-            file_name = os.path.join(DOWNLOAD_DIR, name)
+            file_name = os.path.join(path_dir, name)
 
             download_file(url, file_name)
             make_pretty_id3(file_name, artist, title)
+            downloads_count += 1
+            existing_audios.append(name)
             print(' download finished...')
 
         except KeyboardInterrupt:
@@ -189,8 +227,37 @@ if __name__ == '__main__':
             sys.exit()
 
         except Exception as e:
-            print('audio id={}, error: {}'.format(audio['id'], e))
+            print('  audio id={} owner_id={}, error: {}'.format(audio['id'], audio['owner_id'], e))
 
     print()
-    print('Скачалось песен {0}'.format(len(list_audio) - filtered_audios))
+    print('Скачалось песен {0}'.format(downloads_count))
     print('Всего пропущено песен {0} ({1:.0f}%)'.format(filtered_audios, filtered_audios / len(list_audio) * 100))
+    print('\n')
+
+
+LOGIN = ''
+PASSWORD = ''
+DOWNLOAD_DIR = 'popular downloads'
+
+
+if __name__ == '__main__':
+    print('Авторизация...')
+
+    # Надоел Rammstein
+    add_artist_to_black_list('Rammstein')
+
+    try:
+        vk = vk_api.VkApi(LOGIN, PASSWORD)
+        vk.authorization()  # Авторизируемся
+
+        # Закачиваем, например, на флешку:
+        DOWNLOAD_DIR = 'G:'
+
+        popular_download(vk, 7, os.path.join(DOWNLOAD_DIR, 'metal'))
+        popular_download(vk, 1, os.path.join(DOWNLOAD_DIR, 'rock'))
+        popular_download(vk, 21, os.path.join(DOWNLOAD_DIR, 'alternative'))
+        popular_download(vk, 8, os.path.join(DOWNLOAD_DIR, 'dubstep'))
+
+    except Exception as e:
+        print('Error: ', e)
+        sys.exit()
