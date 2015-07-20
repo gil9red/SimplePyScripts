@@ -5,20 +5,70 @@
 __author__ = 'ipetrash'
 
 
-def get_short_url(url):
-    """Функция возвращает короткую ссылку на url.
-    Для этого она использует сервис clck.ru
+# http://olx.ua/elektronika/telefony/mobilnye-telefony/
+# http://kiev.ko.olx.ua/obyavlenie/iphone-6-16-gb-IDeWHLc.html#66d81f54b6
 
-    """
+from grab import Grab
 
-    from urllib.request import urlopen
+# url = 'http://krivoyrog.dnp.olx.ua/obyavlenie/lg-p705-optimus-l7-IDeWHN0.html#66d81f54b6'
+url = 'http://krivoyrog.dnp.olx.ua/obyavlenie/prestigio-multiphone-4044-duo-black-IDeWGfv.html#66d81f54b6'
 
-    with urlopen('https://clck.ru/--?url=' + url) as rs:
-        return rs.read().decode()
+g = Grab()
+g.go(url)
+print(g.response.code)
+print(g.response.cookies)
+
+select = g.doc.select('//div[@id="offer_removed_by_user"]')
+if select.count():
+    print('Объявление удалено')
+else:
+    xpath = '//ul[@id="contact_methods"]/li[contains(@class, "link-phone")]/div/strong'
+    select = g.doc.select(xpath)
+    if select.count():
+        # ul[id="contact_methods"]/li class="full button big br3 cfff link-phone
+        # rel {'path':'phone', 'id':'eWGfv', 'id_raw': '220615810'}
+        # atClickTracking contact-a cpointer"
+        #
+        # Запросы: http://krivoyrog.dnp.olx.ua/ajax/misc/contact/phone/eWGfv
+        #          http://krivoyrog.dnp.olx.ua/ajax/misc/contact/phone/eWGfv/white/
+        print(select.text())
+
+        g.setup(
+            headers={
+                'Accept': '*/*',
+                'Accept-Encoding': 'gzip, deflate',
+                'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
+                'Connection': 'keep-alive',
+                'Cookie': 'PHPSESSID=5t9jl1m3p6a9j22cnovj2dusf5; mobile2=desktop; xtvrn=$540519$',
+                'Host': 'krivoyrog.dnp.olx.ua',
+                'Referer': 'http://krivoyrog.dnp.olx.ua/obyavlenie/prestigio-multiphone-4044-duo-black-IDeWGfv.html',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; rv:39.0) Gecko/20100101 Firefox/39.0',
+                'X-Requested-With': 'XMLHttpRequest',
+            }
+        )
+        g.go('http://krivoyrog.dnp.olx.ua/ajax/misc/contact/phone/eWGfv')
+        print(g.response.code, g.response.body)
+
+        g.go('http://krivoyrog.dnp.olx.ua/ajax/misc/contact/phone/eWGfv/white')
+        print(g.response.code, g.response.body)
+    else:
+        print('not found')
 
 
-url = 'https://www.google.ru/search?q=short+url+python'
-print(get_short_url(url))
+# def get_short_url(url):
+#     """Функция возвращает короткую ссылку на url.
+#     Для этого она использует сервис clck.ru
+#
+#     """
+#
+#     from urllib.request import urlopen
+#
+#     with urlopen('https://clck.ru/--?url=' + url) as rs:
+#         return rs.read().decode()
+#
+#
+# url = 'https://www.google.ru/search?q=short+url+python'
+# print(get_short_url(url))
 
 
 # class Student:
