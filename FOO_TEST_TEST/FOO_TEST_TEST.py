@@ -5,56 +5,6 @@
 __author__ = 'ipetrash'
 
 
-# http://olx.ua/elektronika/telefony/mobilnye-telefony/
-# http://kiev.ko.olx.ua/obyavlenie/iphone-6-16-gb-IDeWHLc.html#66d81f54b6
-
-from grab import Grab
-import re
-import json
-
-# url = 'http://krivoyrog.dnp.olx.ua/obyavlenie/lg-p705-optimus-l7-IDeWHN0.html#66d81f54b6'
-url = 'http://krivoyrog.dnp.olx.ua/obyavlenie/prestigio-multiphone-4044-duo-black-IDeWGfv.html#66d81f54b6'
-url = 'http://krivoyrog.dnp.olx.ua/obyavlenie/prodam-svoy-fly-iq4413-IDeuoEA.html#a0f6cea037'
-url = 'http://krivoyrog.dnp.olx.ua/obyavlenie/telefon-nokia-5110-IDb6q05.html#a0f6cea037'
-
-g = Grab()
-g.go(url)
-
-select = g.doc.select('//div[@id="offer_removed_by_user"]')
-if select.count():
-    print('Объявление удалено')
-else:
-    xpath = '//ul[@id="contact_methods"]/li[contains(@class, "link-phone")]'
-    select = g.doc.select(xpath)
-    if select.count():
-        # Вытаскиваем json текст из атрибута тега
-        m = re.search(r'(\{.+\})', select.attr('class'))
-        if m is None:
-            raise Exception('Не найденные данные о объявлении в //ul[@id="contact_methods"]/li@class')
-
-        # json не хочет парсить строки с одинарными кавычками
-        ad_data = m.group(1).replace("'", '"')
-        ad_data = json.loads(ad_data)
-        # print(ad_data)
-
-        # TODO: проверить path -- будет ли он меняться для других типов объявлений
-        # ul[id="contact_methods"]/li class="full button big br3 cfff link-phone
-        # rel {'path':'phone', 'id':'eWGfv', 'id_raw': '220615810'}
-        # atClickTracking contact-a cpointer"
-
-        # Создаем url GET запроса, возвращающего json с настоящим номером телефона
-        # Пример: http://krivoyrog.dnp.olx.ua/ajax/misc/contact/phone/eWGfv/white
-        split_url = g.response.url_details()
-        host = '{}://{}'.format(split_url.scheme, split_url.netloc)
-        url_phone = host + '/ajax/misc/contact/{path}/{id}/white'.format(**ad_data)
-        g.go(url_phone)
-        rs_data = json.loads(g.response.body)
-
-        print(url, 'phone = "{value}"'.format(**rs_data), sep='\n')
-    else:
-        print('not found')
-
-
 # def get_short_url(url):
 #     """Функция возвращает короткую ссылку на url.
 #     Для этого она использует сервис clck.ru
