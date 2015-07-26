@@ -73,6 +73,28 @@ except Exception as e:
 
 
 
+# # Пример вытаскивания адресов изображений манги
+#
+# url = 'http://readmanga.me/one__piece/vol60/591'
+#
+# from grab import Grab
+# import re
+#
+# g = Grab()
+# g.go(url)
+#
+# # Список картинок описан в переменной pictures
+# # Выковыриваем инициализацию переменной
+# m = re.search(r'var pictures = (.+?);', g.response.body)
+# url_images_str = m.group(1)
+#
+# # Выковыриваем ссылки на изображения
+# url_images = re.findall(r'https?.+?png', url_images_str)
+# for im in url_images:
+#     print(im)
+
+
+
 # def get_short_url(url):
 #     """Функция возвращает короткую ссылку на url.
 #     Для этого она использует сервис clck.ru
