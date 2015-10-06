@@ -6,72 +6,125 @@ __author__ = 'ipetrash'
 
 
 
+# s = """
+# - Robocop Versus The Terminator
+#   Mortal Kombat 3
+# - Dune - The Battle for Arrakis
+# - Comix Zone
+# @ Disney's Aladdin
+# - Earthworm Jim 1, 2
+# - Jungle Book, The
+# - Sonic The Hedgehog 1, 2, 3
+# - Lion King, The
+# @ Theme Park
+# - Tiny Toon Adventures - Acme All-Stars
+# @ Mickey Mania - Timeless Adventures of Mickey Mouse
+# @ Battletoads
+# - Prince of Persia
+#   Side Pocket
+# - Boogerman
+#   Flintstones, The
+# - Zero the Kamikaze Squirrel
+# @ Gargoyles
+#   Weaponlord
+# @ Vectorman
+# - Michael Jackson's Moonwalker
+#
+#   Ultimate Mortal Kombat 3
+# - Comix Zone
+# - Earthworm Jim 2
+# - Battletoads and Double Dragon
+# @ Disney's Aladdin
+# - Sonic The Hedgehog 2, 3
+# - Earthworm Jim
+# - Dune - The Battle for Arrakis
+# - Boogerman
+#   Lion King, The
+# - Golden Axe III
+# - Jungle Book, The
+# - Robocop Versus The Terminator
+# - Desert Strike - Return to the Gulf
+# - Prince of Persia
+#   Flintstones, The
+# - Vectorman
+# - Gargoyles
+# """
+#
+# l = set()
+#
+# for c in s.split('\n'):
+#     if c:
+#         l.add(c[2:])
+# print('\n'.join(l))
+# quit()
 
-# Список игр: https://gist.github.com/gil9red/2f80a34fb601cd685353
-
-from grab import Grab
-from urllib.parse import quote_plus
 
 
-class DontFindGame(Exception):
-    pass
-
-
-def find_game(game_name):
-    """Скрипт ищет игру в стиме, и если находит, возвращает
-    кортеж вида: {title}, {price}, {href}
-    Если не находит, выкидывает исключение DontFindGame
-
-    """
-
-    print(game_name)
-
-    # Сортировка: релевантная, категории: игры, платформа: Windows, поиск: <game>
-    steam_url = 'http://store.steampowered.com/search/?sort_by=_ASC&category1=998&os=win&term='
-    url = steam_url + quote_plus(game_name)
-    print(url)
-
-    g = Grab()
-    g.go(url)
-
-    # print(g.response.code)
-
-    select = g.doc.select('//a[contains(@class, "search_result_row")]')
-
-    # for a in select:
-    #     title = a.select('div[contains(@class, "search_name")]/span[@class="title"]').text()
-    #     price = a.select('div[contains(@class, "search_price")]').text()
-    #     print(a.attr('href'), title, price)
-
-    if select.count():
-        # По идеи, первая игра в списке -- наша
-        # TODO: доработать: сравнивать title нашей игры с найденными, пока не найдем
-        # TODO: перед сравнением удалить все символы кроме a-zA-Z0-9 и привести к одному регистру
-        # TODO: некоторые игры могут найтись даже при не совпадении, например
-        # "Ведьмак" найдет как "The Witcher", и это правильно
-        a = select[0]
-        title = a.select('div[contains(@class, "search_name")]/span[@class="title"]').text()
-        price = a.select('div[contains(@class, "search_price")]').text()
-        price = tuple(price.split())
-        return title, price, a.attr('href')
-    else:
-        raise DontFindGame('Не получилось найти игру "{}".'.format(game_name))
-
-
-game = 'Max Payne 3'
-game = 'Dragon Age: Origins'
-game = 'Final Fantasy XIII'
-# game = 'What The Fuck?!'
-
-try:
-    game_info = find_game(game)
-    print(game_info)
-
-except DontFindGame as e:
-    print(e)
-
-except Exception as e:
-    print('Error:', e)
+# # Список игр: https://gist.github.com/gil9red/2f80a34fb601cd685353
+#
+# from grab import Grab
+# from urllib.parse import quote_plus
+#
+#
+# class DontFindGame(Exception):
+#     pass
+#
+#
+# def find_game(game_name):
+#     """Скрипт ищет игру в стиме, и если находит, возвращает
+#     кортеж вида: {title}, {price}, {href}
+#     Если не находит, выкидывает исключение DontFindGame
+#
+#     """
+#
+#     print(game_name)
+#
+#     # Сортировка: релевантная, категории: игры, платформа: Windows, поиск: <game>
+#     steam_url = 'http://store.steampowered.com/search/?sort_by=_ASC&category1=998&os=win&term='
+#     url = steam_url + quote_plus(game_name)
+#     print(url)
+#
+#     g = Grab()
+#     g.go(url)
+#
+#     # print(g.response.code)
+#
+#     select = g.doc.select('//a[contains(@class, "search_result_row")]')
+#
+#     # for a in select:
+#     #     title = a.select('div[contains(@class, "search_name")]/span[@class="title"]').text()
+#     #     price = a.select('div[contains(@class, "search_price")]').text()
+#     #     print(a.attr('href'), title, price)
+#
+#     if select.count():
+#         # По идеи, первая игра в списке -- наша
+#         # TODO: доработать: сравнивать title нашей игры с найденными, пока не найдем
+#         # TODO: перед сравнением удалить все символы кроме a-zA-Z0-9 и привести к одному регистру
+#         # TODO: некоторые игры могут найтись даже при не совпадении, например
+#         # "Ведьмак" найдет как "The Witcher", и это правильно
+#         a = select[0]
+#         title = a.select('div[contains(@class, "search_name")]/span[@class="title"]').text()
+#         price = a.select('div[contains(@class, "search_price")]').text()
+#         price = tuple(price.split())
+#         return title, price, a.attr('href')
+#     else:
+#         raise DontFindGame('Не получилось найти игру "{}".'.format(game_name))
+#
+#
+# game = 'Max Payne 3'
+# game = 'Dragon Age: Origins'
+# game = 'Final Fantasy XIII'
+# # game = 'What The Fuck?!'
+#
+# try:
+#     game_info = find_game(game)
+#     print(game_info)
+#
+# except DontFindGame as e:
+#     print(e)
+#
+# except Exception as e:
+#     print('Error:', e)
 
 
 
