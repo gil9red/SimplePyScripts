@@ -15,7 +15,7 @@ import os
 
 
 def download_file(url, file_name):
-    # Попытаемся скачать аудиозапись
+    # Попытаемся скачать файл
     r = requests.get(url, stream=True)
     if r.status_code == 200:
         # Создаем файл и в него записываем файл с сервера
