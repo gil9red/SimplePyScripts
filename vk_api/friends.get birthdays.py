@@ -73,6 +73,9 @@ if __name__ == '__main__':
 
     # Отсортируем список друзей по тому сколько осталось дней до их дня рождения
     sorted_by_bdate_list = sorted(filtered_friends, key=itemgetter('remained_days'))
+    if not sorted_by_bdate_list:
+        print('В этом году у всех друзей уже были дни рождения.')
+        quit()
 
     # Выведем отсортированный список друзей
     for i, friend in enumerate(sorted_by_bdate_list, 1):
