@@ -32,6 +32,8 @@ if __name__ == '__main__':
         os.makedirs(dir_im)
     print(dir_im + ':')
 
+    total_image_size = 0
+
     with open(fb2_file_name, encoding='utf8') as fb2:
         tree = etree.XML(fb2.read().encode())
 
@@ -56,9 +58,17 @@ if __name__ == '__main__':
                     f.write(im_data)
 
                 im = Image.open(io.BytesIO(im_data))
-                print('    {}. {} {} format={} size={}'.format(i, im_id, sizeof_fmt(len(im_data)),
+                count_bytes = len(im_data)
+                total_image_size += count_bytes
+                print('    {}. {} {} format={} size={}'.format(i, im_id, sizeof_fmt(count_bytes),
                                                                im.format, im.size))
 
             except Exception as e:
                 import traceback
                 traceback.print_exc()
+
+    fb2_file_size = os.path.getsize(fb2_file_name)
+    print()
+    print('fb2 file size =', sizeof_fmt(fb2_file_size))
+    print('total image size = {} ({:.2f}%)'.format(sizeof_fmt(total_image_size),
+                                                   total_image_size / fb2_file_size * 100))
