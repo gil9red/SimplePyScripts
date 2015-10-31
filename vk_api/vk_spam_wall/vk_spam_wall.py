@@ -4,9 +4,9 @@
 __author__ = 'ipetrash'
 
 
-from datetime import datetime
 import json
 import lxml.html
+import logging
 import time
 from urllib.parse import urljoin
 from random import randint
@@ -14,6 +14,30 @@ import sys
 
 import requests
 import vk_api
+
+
+def get_logger(name, file='log.txt', encoding='utf8'):
+    log = logging.getLogger(name)
+    log.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s')
+
+    fh = logging.FileHandler(file, encoding=encoding)
+    fh.setLevel(logging.DEBUG)
+
+    ch = logging.StreamHandler(stream=sys.stdout)
+    ch.setLevel(logging.DEBUG)
+
+    fh.setFormatter(formatter)
+    ch.setFormatter(formatter)
+
+    log.addHandler(fh)
+    log.addHandler(ch)
+
+    return log
+
+
+logger = get_logger('vk_spam_wall')
 
 
 def bash_quote(url='http://bash.im/', count=1):
@@ -35,27 +59,34 @@ def vk_auth(login, password):
     vk = vk_api.VkApi(login, password)
 
     try:
-        # Авторизируемся
+        logger.debug('Авторизуюсь в vk.')
         vk.authorization()
-    except vk_api.AuthorizationError as error_msg:
-        print(error_msg)  # В случае ошибки выведем сообщение
+    except vk_api.AuthorizationError as e:
+        logger.error('При авторизации произошла ошибка: %s.', e)
         sys.exit()
+
+    logger.debug('Удачная авторизация.')
 
     return vk
 
 
 def wall_post(vk, owner_id, quote_href):
+    logger.debug('Размещаю сообщение на стену.')
+
     # Добавление сообщения на  стену пользователя (owner_id это id пользователя)
     # Если не указывать owner_id, сообщения себе на стену поместится
     rs = vk.method('wall.post', {
         'owner_id': int(owner_id) if owner_id else None,
         'attachments': quote_href,
     })
-    print('{}: post_id: {}, quote href: {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                                                   rs['post_id'], quote_href))
+
+    logger.debug('post_id: %s, quote href: %s.', rs['post_id'], quote_href)
 
 
 if __name__ == '__main__':
+    logger.debug('Начало работы.')
+    logger.debug('Читаю файл конфига.')
+
     config = json.load(open('config.json'))
 
     # Логин, пароль к аккаунту и id человека, на стену которого будем постить сообщения
@@ -63,6 +94,8 @@ if __name__ == '__main__':
     password = config['password']
     owner_id = config['owner_id']
     quote_count = config['quote_count']
+
+    logger.debug('Закончено чтение файла конфига.')
 
     # Авторизируемся
     vk = vk_auth(login, password)
@@ -75,7 +108,7 @@ if __name__ == '__main__':
 
                 # Ждем от 2 до 5 минут + 0 до 60 секунд
                 interval = randint(2, 5) * 60 + randint(0, 60)
-                print('До следующего постинга осталось {} секунд.'.format(interval))
+                logger.debug('До следующего постинга осталось %s секунд.', interval)
                 time.sleep(interval)
 
         except Exception as e:
@@ -83,7 +116,7 @@ if __name__ == '__main__':
 
         # Ждем от 24 часов до 28 часов
         interval = randint(24 * 3600, 28 * 3600)
-        print('\nСледующий раз пошлем через {} минут.\n'.format(interval))
+        logger.debug('Следующий раз пошлем через %s минут.', interval)
 
         # В следующий раз п пошлем
         time.sleep(interval)
