@@ -19,15 +19,17 @@ import vk_api
 def bash_quote(url='http://bash.im/', count=1):
     rs = requests.get(url)
     html = lxml.html.fromstring(rs.text)
-    quotes = html.xpath('//div[@class="quote"]')
+    quotes = html.xpath('//div[@class="quote"]//a[@class="id"]')
 
     hrefs = list()
-    while count:
-        quote = quotes.pop(0)
-        quote_href = quote.xpath('div/a[@class="id"]')[0].attrib['href']
-        quote_href = urljoin(rs.url, quote_href)
-        hrefs.append(quote_href)
-        count -= 1
+
+    for quote_href in quotes[:count]:
+        try:
+            quote_href = quote_href.attrib['href']
+            quote_href = urljoin(rs.url, quote_href)
+            hrefs.append(quote_href)
+        except Exception as e:
+            print('Что-то пошло не так :( -- "{}"'.format(e))
 
     return hrefs
 
