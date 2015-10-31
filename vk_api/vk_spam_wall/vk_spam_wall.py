@@ -24,12 +24,9 @@ def bash_quote(url='http://bash.im/', count=1):
     hrefs = list()
 
     for quote_href in quotes[:count]:
-        try:
-            quote_href = quote_href.attrib['href']
-            quote_href = urljoin(rs.url, quote_href)
-            hrefs.append(quote_href)
-        except Exception as e:
-            print('Что-то пошло не так :( -- "{}"'.format(e))
+        quote_href = quote_href.attrib['href']
+        quote_href = urljoin(rs.url, quote_href)
+        hrefs.append(quote_href)
 
     return hrefs
 
@@ -71,14 +68,18 @@ if __name__ == '__main__':
     vk = vk_auth(login, password)
 
     while True:
-        # Получаем 3 последние цитаты
-        for href in bash_quote(count=quote_count):
-            wall_post(vk, owner_id, href)
+        try:
+            # Получаем 3 последние цитаты
+            for href in bash_quote(count=quote_count):
+                wall_post(vk, owner_id, href)
 
-            # Ждем от 2 до 5 минут + 0 до 60 секунд
-            interval = randint(2, 5) * 60 + randint(0, 60)
-            print('До следующего постинга осталось {} секунд.'.format(interval))
-            time.sleep(interval)
+                # Ждем от 2 до 5 минут + 0 до 60 секунд
+                interval = randint(2, 5) * 60 + randint(0, 60)
+                print('До следующего постинга осталось {} секунд.'.format(interval))
+                time.sleep(interval)
+
+        except Exception as e:
+            print('Что-то пошло не так :( -- "{}"'.format(e))
 
         # Ждем от 24 часов до 28 часов
         interval = randint(24 * 3600, 28 * 3600)
