@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+from datetime import datetime, timedelta
 import json
 import lxml.html
 import logging
@@ -116,7 +117,8 @@ if __name__ == '__main__':
 
         # Ждем от 24 часов до 28 часов
         interval = randint(24 * 3600, 28 * 3600)
-        logger.debug('Следующий раз пошлем через %s минут.', interval)
+        d = datetime.now() + timedelta(seconds=interval)
+        logger.debug('Следующий раз пошлем через {} секунд (в {:%Y-%m-%d %H:%M:%S}).'.format(interval, d))
 
         # В следующий раз п пошлем
         time.sleep(interval)
