@@ -64,7 +64,7 @@ def vk_auth(login, password):
         vk.authorization()
     except vk_api.AuthorizationError as e:
         logger.error('При авторизации произошла ошибка: %s.', e)
-        sys.exit()
+        quit()
 
     logger.debug('Удачная авторизация.')
 
@@ -97,6 +97,10 @@ if __name__ == '__main__':
     quote_count = config['quote_count']
 
     logger.debug('Закончено чтение файла конфига.')
+
+    if not login or not password:
+        logger.error('Логин/пароль не указаны.')
+        quit()
 
     # Авторизируемся
     vk = vk_auth(login, password)
