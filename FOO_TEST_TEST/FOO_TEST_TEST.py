@@ -990,11 +990,6 @@ __author__ = 'ipetrash'
 # TODO: придумать простое приложение и реализовтаь его с помощью TDD (используя unit-тесты)
 
 
-# TODO: Flask
-# "Мега-Учебник Flask, Часть 1: Привет, Мир!": http://habrahabr.ru/post/193242/
-# http://ru.wikibooks.org/wiki/Flask
-
-
 # TODO: Excel
 # "Интеграция MS Excel и Python": http://habrahabr.ru/post/232291/
 
