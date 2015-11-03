@@ -111,10 +111,10 @@ if __name__ == '__main__':
 
     try:
         for href in bash_quote(count=quote_count):
-            schedule.clear()
+            # schedule.clear()
 
             logger.debug('Задача запланирована на %s.', str_at_time)
-            schedule.every().day.at(str_at_time).do(wall_post, vk=vk, owner_id=owner_id, quote_href=owner_id)
+            schedule.every().day.at(str_at_time).do(wall_post, vk=vk, owner_id=owner_id, quote_href=href)
 
             # Следующая задача выполнится чуть позже
             at_time = time.strptime(str_at_time, '%H:%M')
