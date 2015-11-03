@@ -107,7 +107,6 @@ if __name__ == '__main__':
 
     while True:
         try:
-            # Получаем 3 последние цитаты
             for href in bash_quote(count=quote_count):
                 wall_post(vk, owner_id, href)
 
