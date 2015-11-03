@@ -111,13 +111,15 @@ if __name__ == '__main__':
 
     try:
         for href in bash_quote(count=quote_count):
+            schedule.clear()
+
             logger.debug('Задача запланирована на %s.', str_at_time)
             schedule.every().day.at(str_at_time).do(wall_post, vk=vk, owner_id=owner_id, quote_href=owner_id)
 
             # Следующая задача выполнится чуть позже
             at_time = time.strptime(str_at_time, '%H:%M')
             at_time = timedelta(hours=at_time.tm_hour, minutes=at_time.tm_min)
-            at_time += timedelta(minutes=3)
+            at_time += timedelta(minutes=randint(2, 5), seconds=randint(0, 60))
             str_at_time = (datetime.min + at_time).strftime('%H:%M')
 
         while True:
