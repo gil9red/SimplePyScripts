@@ -1,7 +1,7 @@
 {
     "login": "",
     "password": "",
-    "owner_id": null,
-    "quote_count": 10,
+    "to": null,
+    "quote_count": 2,
     "at": "18:52"
 }

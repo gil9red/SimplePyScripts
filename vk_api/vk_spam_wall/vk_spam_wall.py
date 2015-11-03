@@ -77,7 +77,7 @@ def wall_post(vk, owner_id, quote_href):
     # Добавление сообщения на  стену пользователя (owner_id это id пользователя)
     # Если не указывать owner_id, сообщения себе на стену поместится
     rs = vk.method('wall.post', {
-        'owner_id': int(owner_id) if owner_id else None,
+        'owner_id': owner_id,
         'attachments': quote_href,
     })
 
@@ -93,7 +93,7 @@ if __name__ == '__main__':
     # Логин, пароль к аккаунту и id человека, на стену которого будем постить сообщения
     login = config['login']
     password = config['password']
-    owner_id = config['owner_id']
+    to = config['to']
     quote_count = config['quote_count']
 
     logger.debug('Закончено чтение файла конфига.')
@@ -104,6 +104,13 @@ if __name__ == '__main__':
 
     # Авторизируемся
     vk = vk_auth(login, password)
+
+    # Если определен, то узнаем id пользователя которого будем спамить, иначе шлем самим себе
+    if to:
+        rs = vk.method('users.get', dict(user_ids=to))[0]
+        owner_id = int(rs['id'])
+    else:
+        owner_id = None
 
     while True:
         try:
