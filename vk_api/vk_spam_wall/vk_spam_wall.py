@@ -96,7 +96,7 @@ if __name__ == '__main__':
     to = config['to']
     quote_count = config['quote_count']
 
-    logger.debug('Закончено чтение файла конфига.')
+    logger.debug('Закончено чтение файла конфига. Конфиг: %s.', config)
 
     if not login or not password:
         logger.error('Логин/пароль не указаны.')
