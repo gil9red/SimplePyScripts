@@ -2,6 +2,7 @@
     "login": "",
     "password": "",
     "to": null,
-    "quote_count": 2,
-    "at": "18:52"
+    "at": "16:10",
+    "quote_count": 5,
+    "logging_format": "[%(asctime)s] %(message)s"
 }
