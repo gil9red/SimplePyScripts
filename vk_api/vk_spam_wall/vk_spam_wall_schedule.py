@@ -94,9 +94,9 @@ if __name__ == '__main__':
     # Логин, пароль к аккаунту и id человека, на стену которого будем постить сообщения
     login = config['login']
     password = config['password']
-    owner_id = config['owner_id']
-    quote_count = config['quote_count']
+    to = config['to']
     at = config['at']
+    quote_count = config['quote_count']
 
     logger.debug('Закончено чтение файла конфига. Конфиг: %s.', config)
 
@@ -114,7 +114,7 @@ if __name__ == '__main__':
             # schedule.clear()
 
             logger.debug('Задача запланирована на %s.', str_at_time)
-            schedule.every().day.at(str_at_time).do(wall_post, vk=vk, owner_id=owner_id, quote_href=href)
+            schedule.every().day.at(str_at_time).do(wall_post, vk=vk, owner_id=to, quote_href=href)
 
             # Следующая задача выполнится чуть позже
             at_time = time.strptime(str_at_time, '%H:%M')
