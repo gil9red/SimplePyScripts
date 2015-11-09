@@ -99,8 +99,10 @@ if __name__ == '__main__':
                     factor = (self.cell_size / 2) / painter.fontMetrics().width(num)
                     if factor < 1 or factor > 1.25:
                         f = painter.font()
-                        f.setPointSizeF(f.pointSizeF() * factor)
-                        painter.setFont(f)
+                        point_size = f.pointSizeF() * factor
+                        if point_size > 0:
+                            f.setPointSizeF(point_size)
+                            painter.setFont(f)
 
                     x = i * self.cell_size
                     y = j * self.cell_size
