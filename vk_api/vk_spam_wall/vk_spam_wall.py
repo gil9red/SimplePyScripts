@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from datetime import datetime, timedelta
+from datetime import datetime
 import json
 import lxml.html
 import logging
@@ -12,16 +12,19 @@ import time
 from urllib.parse import urljoin
 from random import randint
 import sys
+import traceback
 
 import requests
 import vk_api
 
 
-def get_logger(name, file='log.txt', encoding='utf8'):
+def get_logger(name, file='log.txt', encoding='utf8', fmt=None):
+    fmt = '[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s' if fmt is None else fmt
+
     log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter('[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s')
+    formatter = logging.Formatter(fmt)
 
     fh = logging.FileHandler(file, encoding=encoding)
     fh.setLevel(logging.DEBUG)
@@ -36,9 +39,6 @@ def get_logger(name, file='log.txt', encoding='utf8'):
     log.addHandler(ch)
 
     return log
-
-
-logger = get_logger('vk_spam_wall')
 
 
 def bash_quote(url='http://bash.im/', count=1):
@@ -62,8 +62,8 @@ def vk_auth(login, password):
     try:
         logger.debug('Авторизуюсь в vk.')
         vk.authorization()
-    except vk_api.AuthorizationError as e:
-        logger.error('При авторизации произошла ошибка: %s.', e)
+    except Exception as e:
+        logger.error('При авторизации произошла ошибка: "%s".\n\n%s', e, traceback.format_exc())
         quit()
 
     logger.debug('Удачная авторизация.')
@@ -85,9 +85,6 @@ def wall_post(vk, owner_id, quote_href):
 
 
 if __name__ == '__main__':
-    logger.debug('Начало работы.')
-    logger.debug('Читаю файл конфига.')
-
     config = json.load(open('config.json'))
 
     # Логин, пароль к аккаунту и id человека, на стену которого будем постить сообщения
@@ -95,8 +92,11 @@ if __name__ == '__main__':
     password = config['password']
     to = config['to']
     quote_count = config['quote_count']
+    at = config['at']
 
-    logger.debug('Закончено чтение файла конфига. Конфиг: %s.', config)
+    logger = get_logger('vk_spam_wall', fmt=config['logging_format'])
+    logger.debug('Конфиг: %s.', config)
+    logger.debug('Начало работы.')
 
     if not login or not password:
         logger.error('Логин/пароль не указаны.')
@@ -112,8 +112,29 @@ if __name__ == '__main__':
     else:
         owner_id = None
 
+    at_time = datetime.strptime(at, '%H:%M').time()
+    # dt = datetime.combine(datetime.today(), at_time) + timedelta(minutes=70)
+    # at_time = dt.time()
+
     while True:
+        # Ждем наступления времени, указанного в at
+        while True:
+            # Убираем микросекунды, иначе совпадения вряд ли дождемся в этой жизни
+            now = datetime.today().time()
+            now = now.replace(now.hour, now.minute, microsecond=0)
+            if now == at_time:
+                break
+
+            time.sleep(0.5)
+
+        delay = randint(0, 60 * 4)
+        logger.debug('Время выполнения наступило. Жду %s секунд.', delay)
+
+        # Случайно ждем от 0 до 240 секунд
+        time.sleep(delay)
+
         try:
+            # Начинаем постить на стену
             for href in bash_quote(count=quote_count):
                 wall_post(vk, owner_id, href)
 
@@ -123,12 +144,4 @@ if __name__ == '__main__':
                 time.sleep(interval)
 
         except Exception as e:
-            print('Что-то пошло не так :( -- "{}"'.format(e))
-
-        # Ждем от 24 часов до 28 часов
-        interval = randint(24 * 3600, 28 * 3600)
-        d = datetime.now() + timedelta(seconds=interval)
-        logger.debug('Следующий раз пошлем через {} секунд (в {:%Y-%m-%d %H:%M:%S}).'.format(interval, d))
-
-        # В следующий раз п пошлем
-        time.sleep(interval)
+            logger.error('Произошла ошибка: "%s".\n\n%s', e, traceback.format_exc())
