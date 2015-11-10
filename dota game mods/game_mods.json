@@ -1,0 +1,217 @@
+{
+    "ap": {
+            "name": "All Pick",
+            "ru": "",
+            "en": "Each player is allowed to pick a hero from any tavern."
+    },
+    "ar": {
+            "name": "All Random",
+            "ru": "",
+            "en": "Each player is given a random hero from any tavern."
+    },
+    "rd": {
+            "name": "Random Draft",
+            "ru": "",
+            "en": "20 random heroes from any tavern are selected and players take turns picking from them."
+    },
+    "sd": {
+            "name": "Single Draft",
+            "ru": "",
+            "en": "Each player chooses from one of 3 individual random heroes."
+    },
+    "cd": {
+            "name": "Captains Draft",
+            "ru": "",
+            "en": "24 random heroes are selected. Then Blue and Pink take turns banning heroes, then picking heroes. Then the players on each team pick from their team's heroes."
+    },
+    "cm": {
+            "name": "Captains Mode",
+            "ru": "",
+            "en": "Blue and Pink take turns banning heroes, then take turns picking heroes. These heroes are then chosen by members of their team."
+    },
+    "em": {
+            "name": "Easy Mode",
+            "ru": "",
+            "en": "Towers are weaker, and players get extra gold and experience."
+    },
+    "dm": {
+            "name": "Death Match",
+            "ru": "",
+            "en": "When you die you are given a new hero. The game can end normally, or when one team reaches a certain amount of deaths. lives # can be used to set life limit, and -nd to remove respawn timer along with this mode."
+    },
+    "rs": {
+            "name": "Random Side",
+            "ru": "",
+            "en": "Places each team on a random side."
+    },
+    "du": {
+            "name": "Duplicate",
+            "ru": "",
+            "en": "More than one of each hero can be played."
+    },
+    "sp": {
+            "name": "Shuffle Players",
+            "ru": "",
+            "en": "Randomly switches around players from each team."
+    },
+    "xl": {
+            "name": "Extended League",
+            "ru": "",
+            "en": "Both Sides will take turns picking heroes. Each team captain can pick 4 heroes to remove from the pool."
+    },
+    "om": {
+            "name": "Only Mid",
+            "ru": "",
+            "en": "Only the middle lane is used."
+    },
+    "sc": {
+            "name": "Super Creeps",
+            "ru": "",
+            "en": "Powerful creeps will spawn every 10 minutes."
+    },
+    "lm": {
+            "name": "League Mode",
+            "ru": "",
+            "en": "Both Sides will take turns picking heroes."
+    },
+    "mm": {
+            "name": "Mirror Mode",
+            "ru": "",
+            "en": "After one minute, each team will have the same heroes."
+    },
+    "tr": {
+            "name": "Team Random",
+            "ru": "",
+            "en": "You will be given a random hero from your taverns."
+    },
+    "mr": {
+            "name": "Mode Random",
+            "ru": "",
+            "en": "Selects a random game mode."
+    },
+    "vr": {
+            "name": "Vote Random",
+            "ru": "foo",
+            "en": "You will be given a random hero from the voted groupset."
+    },
+    "rv": {
+            "name": "Reverse",
+            "ru": "foo",
+            "en": "You pick a hero for your opponent."
+    },
+    "oi": {
+            "name": "Observer Info",
+            "ru": "foo",
+            "en": "Disables extra information display for observers."
+    },
+    "sh": {
+            "name": "Same Hero",
+            "ru": "foo",
+            "en": "All players will be given the hero that Blue has."
+    },
+    "aa": {
+            "name": "All Agility",
+            "ru": "foo",
+            "en": "Only Agility heroes are used."
+    },
+    "ai": {
+            "name": "All Intelligence",
+            "ru": "foo",
+            "en": "Only Intelligence heroes are used."
+    },
+    "as": {
+            "name": "All Strength",
+            "ru": "foo",
+            "en": "Only Strength heroes are used."
+    },
+    "id": {
+            "name": "Item Drop",
+            "ru": "foo",
+            "en": "When you die, a random inventory slot will drop an item."
+    },
+    "np": {
+            "name": "No Powerups",
+            "ru": "foo",
+            "en": "No runes spawn."
+    },
+    "nt": {
+            "name": "No Top",
+            "ru": "foo",
+            "en": "The top lane is not used."
+    },
+    "nm": {
+            "name": "No Mid",
+            "ru": "foo",
+            "en": "The middle lane is not used."
+    },
+    "nb": {
+            "name": "No Bot",
+            "ru": "foo",
+            "en": "The bottom lane is not used."
+    },
+    "ns": {
+            "name": "No Swap",
+            "ru": "foo",
+            "en": "Swapping heroes is not allowed."
+    },
+    "nr": {
+            "name": "No Repick",
+            "ru": "foo",
+            "en": "Repicking heroes is not allowed."
+    },
+    "pm": {
+            "name": "Pooling Mode",
+            "ru": "foo",
+            "en": "All items can be used by other players."
+    },
+    "mi": {
+            "name": "Mini Heroes",
+            "ru": "foo",
+            "en": "All heroes are half normal size."
+    },
+    "fr": {
+            "name": "Fast Respawn",
+            "ru": "foo",
+            "en": "Reduces death times by 50%."
+    },
+    "mo": {
+            "name": "Melee Only",
+            "ru": "foo",
+            "en": "Only melee heroes are used."
+    },
+    "ro": {
+            "name": "Ranged Only",
+            "ru": "foo",
+            "en": "Only ranged heroes are used."
+    },
+    "er": {
+            "name": "Experimental Runes",
+            "ru": "foo",
+            "en": "Uses an experimental rune spawning system."
+    },
+    "so": {
+            "name": "Switch On",
+            "ru": "foo",
+            "en": "Allows use of the -switch command. Leavers items can be unlocked by -unlock command when this mode is activated."
+    },
+    "zm": {
+            "name": "Zoom mode",
+            "ru": "foo",
+            "en": "Observers will view the game from a zoomed out state."
+    },
+    "cp": {
+            "name": "Capture Point",
+            "ru": "foo",
+            "en": "Specific areas appear at 10 minute mark. Capturing them grants various bonus auras."
+    },
+    "wtf": {
+            "name": "Fun mode",
+            "ru": "foo",
+            "en": "Spells have no cooldown or manacost."
+    },
+    "ts": {
+            "name": "Terrain Snow",
+            "ru": "foo",
+            "en": "This transforms the current terrain into a snow terrain. This is a very experimental mechanism and is still very much a ‘Work in Progress’ in the visuals department."
+    }
+}
