@@ -24,6 +24,9 @@ types = {
 }
 
 
+duration = nframes = k = peak = None
+
+
 def format_time(x, pos=None):
     global duration, nframes, k
     progress = int(x / float(nframes) * duration * k)
@@ -48,6 +51,7 @@ def format_db(x, pos=None):
 
 def draw(file_name):
     wav = wave.open(file_name, mode="r")
+    global nframes, k, peak, duration
     (nchannels, sampwidth, framerate, nframes, comptype, compname) = wav.getparams()
 
     duration = nframes / framerate
@@ -76,5 +80,5 @@ def draw(file_name):
         axes.xaxis.set_major_formatter(ticker.NullFormatter())
 
     axes.xaxis.set_major_formatter(ticker.FuncFormatter(format_time))
-    plt.savefig("wave", dpi=DPI)
+    # plt.savefig("wave", dpi=DPI)
     plt.show()
