@@ -8,7 +8,7 @@ if __name__ == '__main__':
     import sys
 
     if len(sys.argv) > 1:
-        from PySide.QtCore import QCoreApplication
+        from PySide.QtCore import QCoreApplication, QEventLoop
         from PySide.phonon import Phonon
 
         app = QCoreApplication(sys.argv)
@@ -22,9 +22,10 @@ if __name__ == '__main__':
         audio.setCurrentSource(Phonon.MediaSource(file_name))
         audio.play()
 
-        audio.finished.connect(app.quit)
+        loop = QEventLoop()
+        audio.finished.connect(loop.quit)
+        loop.exec_()
 
-        quit(app.exec_())
     else:
         import os
         file_name = os.path.basename(sys.argv[0])
