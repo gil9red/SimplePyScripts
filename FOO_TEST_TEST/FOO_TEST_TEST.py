@@ -21,7 +21,7 @@ def rem(text):
     return '\n'.join(line_list)
 
 
-print(rem("""
+r = rem("""
 
     // Summary:
     //     The account selection transaction unit is used for building transactions
@@ -32,8 +32,24 @@ print(rem("""
     //     method is the main top-level method called by Customer Transaction Objects
     //     for performing account selection.
 
-"""))
+""")
+print(r)
 
+import goslate
+gs = goslate.Goslate()
+print('\n', gs.translate(r, 'ru'))
+
+# from translate import Translator
+# translator = Translator(to_lang="ru")
+# translation = translator.translate(r)
+# print(translation)
+
+
+# TODO: функцию перевода используя гугл-переводчик или даже скрипт, который будет запускаться в качестве
+# процесса, вывод, которого будем читать и парсить. Вывод и будет содержать перевод или ошибку в специальном
+# формате
+# import urllib.parse
+# urllib.parse.quote('grgr\nge\r')
 
 
 # http://habrahabr.ru/post/192102/
