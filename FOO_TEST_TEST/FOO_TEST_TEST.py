@@ -5,6 +5,36 @@
 __author__ = 'ipetrash'
 
 
+# Удаление // комментариев и пробелов с табуляцией
+def rem(text):
+    line_list = list()
+
+    for line in text.strip().split('\n'):
+        line = line.strip()
+
+        if line.startswith('//'):
+            line = line[2:]
+
+        line = line.strip()
+        line_list.append(line)
+
+    return '\n'.join(line_list)
+
+
+print(rem("""
+
+    // Summary:
+    //     The account selection transaction unit is used for building transactions
+    //     in which the customer must select or identify an account on which the transaction
+    //     is to be performed. Several different methods are supported for identifying
+    //     the account. The method to be used is configured through the AccountSelectionMethod
+    //     property: see help for that property for more details.  The SelectAccount
+    //     method is the main top-level method called by Customer Transaction Objects
+    //     for performing account selection.
+
+"""))
+
+
 
 # http://habrahabr.ru/post/192102/
 # http://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html
