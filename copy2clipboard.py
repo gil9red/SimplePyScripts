@@ -4,16 +4,21 @@
 __author__ = 'ipetrash'
 
 
-if __name__ == '__main__':
-    import sys
+import sys
 
+
+def to(text):
+    from PySide.QtGui import QApplication
+    app = QApplication(sys.argv)
+    app.clipboard().setText(text)
+
+
+if __name__ == '__main__':
     if len(sys.argv) > 1:
         text = ' '.join(sys.argv[1:])
         print('Text: "{}"'.format(text))
+        to(text)
 
-        from PySide.QtGui import QApplication
-        app = QApplication(sys.argv)
-        app.clipboard().setText(text)
     else:
         import os
         file_name = os.path.basename(sys.argv[0])
