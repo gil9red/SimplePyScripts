@@ -5,44 +5,71 @@
 __author__ = 'ipetrash'
 
 
-# Удаление // комментариев и пробелов с табуляцией
-def rem(text):
-    line_list = list()
+# TODO: поиск мультсериалов 16+
+# Пример сериала: 'http://onlinemultfilmy.ru/bratya-ventura/'
 
-    for line in text.strip().split('\n'):
-        line = line.strip()
+import time
+from grab import Grab
 
-        if line.startswith('//'):
-            line = line[2:]
+g = Grab()
 
-        line = line.strip()
-        line_list.append(line)
+# Перебор страниц с мультами
+for i in range(1, 82 + 1):
+    url_page = 'http://onlinemultfilmy.ru/multserialy/page/' + str(i)
+    print(url_page)
 
-    return '\n'.join(line_list)
+    # Загрузка страницы с мультами
+    g.go(url_page)
+
+    # Перебор и загрузка мультов на странице
+    for url in g.doc.select('//div[@class="cat-post"]/a'):
+        g.go(url.attr('href'))
+
+        if g.doc.select('//*[@class="age_icon age_icon_16"]').count():
+            print('    ', url.attr('title'), url.attr('href'))
+
+        # Чтобы сервер не посчитал это дос атакой
+        time.sleep(2)
 
 
-r = rem("""
-
-    // Summary:
-    //     The account selection transaction unit is used for building transactions
-    //     in which the customer must select or identify an account on which the transaction
-    //     is to be performed. Several different methods are supported for identifying
-    //     the account. The method to be used is configured through the AccountSelectionMethod
-    //     property: see help for that property for more details.  The SelectAccount
-    //     method is the main top-level method called by Customer Transaction Objects
-    //     for performing account selection.
-
-""")
-print(r)
-
-import goslate
-gs = goslate.Goslate()
-print('\n', gs.translate(r, 'ru'))
-
-# from translate import Translator
-# translator = Translator(to_lang="ru")
-# translation = translator.translate(r)
-# print(translation)
+# # Удаление // комментариев и пробелов с табуляцией
+# def rem(text):
+#     line_list = list()
+#
+#     for line in text.strip().split('\n'):
+#         line = line.strip()
+#
+#         if line.startswith('//'):
+#             line = line[2:]
+#
+#         line = line.strip()
+#         line_list.append(line)
+#
+#     return '\n'.join(line_list)
+#
+#
+# r = rem("""
+#
+#     // Summary:
+#     //     The account selection transaction unit is used for building transactions
+#     //     in which the customer must select or identify an account on which the transaction
+#     //     is to be performed. Several different methods are supported for identifying
+#     //     the account. The method to be used is configured through the AccountSelectionMethod
+#     //     property: see help for that property for more details.  The SelectAccount
+#     //     method is the main top-level method called by Customer Transaction Objects
+#     //     for performing account selection.
+#
+# """)
+# print(r)
+#
+# import goslate
+# gs = goslate.Goslate()
+# print('\n', gs.translate(r, 'ru'))
+#
+# # from translate import Translator
+# # translator = Translator(to_lang="ru")
+# # translation = translator.translate(r)
+# # print(translation)
 
 
 # TODO: функцию перевода используя гугл-переводчик или даже скрипт, который будет запускаться в качестве
