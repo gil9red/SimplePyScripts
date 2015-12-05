@@ -5,7 +5,7 @@
 __author__ = 'ipetrash'
 
 
-# TODO: поиск мультсериалов 16+
+# Поиск мультсериалов 16+
 # Пример сериала: 'http://onlinemultfilmy.ru/bratya-ventura/'
 
 import time
