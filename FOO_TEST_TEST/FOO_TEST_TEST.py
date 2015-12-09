@@ -62,6 +62,14 @@ for i in range(1, 82 + 1):
 # """)
 # print(r)
 #
+#
+# import re
+# r = r.replace('\n', ' ')
+# r = re.sub('[ ]{2,}', '', r)
+# import copy2clipboard
+# copy2clipboard.to(r)
+# print(r)
+#
 # import goslate
 # gs = goslate.Goslate()
 # print('\n', gs.translate(r, 'ru'))
