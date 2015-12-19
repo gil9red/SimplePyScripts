@@ -17,10 +17,9 @@ if __name__ == '__main__':
             while seconds_delay > 0:
                 print('\rDelay before hibernate: {} secs'.format(seconds_delay), end='')
                 time.sleep(1)
-
                 seconds_delay -= 1
 
-        print('\rGo to Hibernate' + ' ' * 30)
+        print('\nGo to Hibernate')
 
         import os
         os.system(r'%windir%\system32\rundll32.exe powrprof.dll,SetSuspendState Hibernate')
