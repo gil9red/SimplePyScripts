@@ -7,6 +7,7 @@ __author__ = 'ipetrash'
 
 # https://mail.python.org/pipermail/python-win32/2007-June/006174.html
 
+import copy
 import ctypes
 import sys
 
@@ -60,6 +61,7 @@ def process_list():
     Process32Next = ctypes.windll.kernel32.Process32Next
     CloseHandle = ctypes.windll.kernel32.CloseHandle
     hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0)
+
     pe32 = PROCESSENTRY32()
     pe32.dwSize = ctypes.sizeof(PROCESSENTRY32)
     if Process32First(hProcessSnap, ctypes.byref(pe32)) == win32con.FALSE:
@@ -67,15 +69,19 @@ def process_list():
         return
 
     while True:
-        yield pe32
+        yield copy.deepcopy(pe32)
 
         if Process32Next(hProcessSnap, ctypes.byref(pe32)) == win32con.FALSE:
             break
 
     CloseHandle(hProcessSnap)
 
-# TODO: сортировка
-# plist = process_list()
-# for process in sorted(plist, key=lambda x: x.szExeFile):
-for process in process_list():
+
+# for process in process_list():
+#     print(process)
+#
+for process in sorted(process_list(), key=lambda x: x.szExeFile):
     print(process)
+
+# for process in sorted(process_list(), key=lambda x: x.th32ProcessID):
+#     print(process)
