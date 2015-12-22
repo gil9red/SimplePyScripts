@@ -44,12 +44,55 @@ class MainWindow(QMainWindow):
         strange_games = QTreeWidgetItem(['Неопределенных игры'])
         strange_platform_games_dict = dict()
 
-        # TODO: в узлах показывать количество детей
+        # TODO: В узлах показывается количество детей, а не игр
         # TODO: добавить кнопку перечитывания дерева
         # TODO: добавить кнопку выбора удаления пустых узлов
         # TODO: логгирование вместо print
         # TODO: кнопку показа статистики: игры, платформы
         # TODO: показывать в заголовке сколько всего игр найдено и платформ
+
+        def delete_empty_nodes():
+            """Удаление пустых узлов."""
+
+            if finished_game_items is not None and finished_game_items.childCount() == 0:
+                finished_game_items.parent().removeChild(finished_game_items)
+
+            if not_finished_game_items is not None and not_finished_game_items.childCount() == 0:
+                not_finished_game_items.parent().removeChild(not_finished_game_items)
+
+            if finished_watched_items is not None and finished_watched_items.childCount() == 0:
+                finished_watched_items.parent().removeChild(finished_watched_items)
+
+            if not_finished_watched_items is not None and not_finished_watched_items.childCount() == 0:
+                not_finished_watched_items.parent().removeChild(not_finished_watched_items)
+
+        FINISHED_GAME_TITLE = 'Пройденные'
+        NOT_FINISHED_GAME_TITLE = 'Не закончено прохождение'
+        FINISHED_WATCHED_TITLE = 'Просмотренные'
+        NOT_FINISHED_WATCHED_TITLE = 'Не закончен просмотр'
+
+        def set_count_children_nodes(platform):
+            """Функция добавляет к названиям узлов количество их детей"""
+
+            def set_text(item, title, count=None):
+                item.setText(0, '{} ({})'.format(title, item.childCount() if count is None else count))
+
+            # TODO: какой-нибудь рекурсивный алгоритм справится изящнее
+            # TODO: refactoring
+            if platform_item is not None:
+                platform_game_count = finished_game_items.childCount()
+                set_text(finished_game_items, FINISHED_GAME_TITLE)
+
+                platform_game_count += not_finished_game_items.childCount()
+                set_text(not_finished_game_items, NOT_FINISHED_GAME_TITLE)
+
+                platform_game_count += finished_watched_items.childCount()
+                set_text(finished_watched_items, FINISHED_WATCHED_TITLE)
+
+                platform_game_count += not_finished_watched_items.childCount()
+                set_text(not_finished_watched_items, NOT_FINISHED_WATCHED_TITLE)
+
+                set_text(platform_item, platform, platform_game_count)
 
         with open(file_name, encoding='utf8') as f:
             for line in f:
@@ -59,31 +102,19 @@ class MainWindow(QMainWindow):
                     # TODO: рефакторинг
                     # Определим игровую платформу: ПК, консоли и т.п.
                     if (line[0] not in [' ', '-', '@'] and line[0] not in [' ', '-', '@']) and line.endswith(':'):
+                        set_count_children_nodes(platform)
+
                         # Имя платформы без двоеточия на конце
                         platform = line[0: len(line) - 1]
                         platform_item = QTreeWidgetItem([platform])
                         self.tree_games.addTopLevelItem(platform_item)
 
-                        # TODO: удаляем пустые узлы
-                        if finished_game_items is not None and finished_game_items.childCount() == 0:
-                            finished_game_items.parent().removeChild(finished_game_items)
+                        delete_empty_nodes()
 
-                        # TODO: удаляем пустые узлы
-                        if not_finished_game_items is not None and not_finished_game_items.childCount() == 0:
-                            not_finished_game_items.parent().removeChild(not_finished_game_items)
-
-                        # TODO: удаляем пустые узлы
-                        if finished_watched_items is not None and finished_watched_items.childCount() == 0:
-                            finished_watched_items.parent().removeChild(finished_watched_items)
-
-                        # TODO: удаляем пустые узлы
-                        if not_finished_watched_items is not None and not_finished_watched_items.childCount() == 0:
-                            not_finished_watched_items.parent().removeChild(not_finished_watched_items)
-
-                        finished_game_items = QTreeWidgetItem(['Пройденные'])
-                        not_finished_game_items = QTreeWidgetItem(['Не закончено прохождение'])
-                        finished_watched_items = QTreeWidgetItem(['Просмотренные'])
-                        not_finished_watched_items = QTreeWidgetItem(['Не закончен просмотр'])
+                        finished_game_items = QTreeWidgetItem([FINISHED_GAME_TITLE])
+                        not_finished_game_items = QTreeWidgetItem([NOT_FINISHED_GAME_TITLE])
+                        finished_watched_items = QTreeWidgetItem([FINISHED_WATCHED_TITLE])
+                        not_finished_watched_items = QTreeWidgetItem([NOT_FINISHED_WATCHED_TITLE])
 
                         platform_item.addChild(finished_game_items)
                         platform_item.addChild(not_finished_game_items)
@@ -153,21 +184,8 @@ class MainWindow(QMainWindow):
                             game_item.setText(0, line + ' / ' + platform)
                             strange_game_platform_item.addChild(game_item)
 
-            # TODO: удаляем пустые узлы
-            if finished_game_items is not None and finished_game_items.childCount() == 0:
-                finished_game_items.parent().removeChild(finished_game_items)
-
-            # TODO: удаляем пустые узлы
-            if not_finished_game_items is not None and not_finished_game_items.childCount() == 0:
-                not_finished_game_items.parent().removeChild(not_finished_game_items)
-
-            # TODO: удаляем пустые узлы
-            if finished_watched_items is not None and finished_watched_items.childCount() == 0:
-                finished_watched_items.parent().removeChild(finished_watched_items)
-
-            # TODO: удаляем пустые узлы
-            if not_finished_watched_items is not None and not_finished_watched_items.childCount() == 0:
-                not_finished_watched_items.parent().removeChild(not_finished_watched_items)
+            set_count_children_nodes(platform)
+            delete_empty_nodes()
 
         # Добавляем узел неопределенных игр
         if strange_games.childCount() > 0:
