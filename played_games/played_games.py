@@ -10,6 +10,32 @@ from PySide.QtGui import *
 from PySide.QtCore import *
 
 
+import logging
+
+
+def get_logger(name, file='log.txt', encoding='utf8'):
+    log = logging.getLogger(name)
+    log.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s')
+
+    if file is not None:
+        fh = logging.FileHandler(file, encoding=encoding)
+        fh.setLevel(logging.DEBUG)
+        fh.setFormatter(formatter)
+        log.addHandler(fh)
+
+    ch = logging.StreamHandler(stream=sys.stdout)
+    ch.setLevel(logging.DEBUG)
+    ch.setFormatter(formatter)
+    log.addHandler(ch)
+
+    return log
+
+
+DEFAULT_URL = 'https://gist.githubusercontent.com/gil9red/2f80a34fb601cd685353/raw/f0d8086ae9053f389db02aca6eecb4e53ab4d034/gistfile1.txt'
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -19,17 +45,42 @@ class MainWindow(QMainWindow):
         self.tree_games = QTreeWidget()
         self.tree_games.setHeaderLabel('Games')
 
-        self.setCentralWidget(self.tree_games)
+        self.line_edit_url = QLineEdit(DEFAULT_URL)
+        self.button_refresh_by_url = QPushButton('&Refresh')
+        self.button_refresh_by_url.clicked.connect(self.refresh_by_url)
 
-        self.load_tree()
+        layout = QHBoxLayout()
+        layout.addWidget(self.line_edit_url)
+        layout.addWidget(self.button_refresh_by_url)
+
+        main_layout = QVBoxLayout()
+        main_layout.addLayout(layout)
+        main_layout.addWidget(self.tree_games)
+
+        central_widget = QWidget()
+        central_widget.setLayout(main_layout)
+
+        self.setCentralWidget(central_widget)
+
+    def refresh_by_url(self):
+        from urllib.request import urlopen
+
+        # TODO: избавить от подвисания программы во время загрузки файла и его парсинга
+        # TODO: В отдельном потоке
+        # TODO: прогресс загрузки из сети файла (хотя бы в процентах)
+        with urlopen(self.line_edit_url.text()) as f:
+            self.load_tree(f.read().decode())
+
+        # TODO: кэширование
+        # from urllib.request import urlretrieve
+        # urlretrieve(self.line_edit_url.text(), 'gistfile1.txt')
 
         self.tree_games.expandAll()
 
-    def load_tree(self):
+    def load_tree(self, text):
         self.tree_games.clear()
 
-        # TODO: поддержать загрузки из файла и из url
-        file_name = 'gistfile1.txt'
+        # file_name = 'gistfile1.txt'
 
         # TODO: вынести парсер в отдельную функцию
         # platforms_game_dict = dict()
@@ -45,7 +96,6 @@ class MainWindow(QMainWindow):
         strange_platform_games_dict = dict()
 
         # TODO: В узлах показывается количество детей, а не игр
-        # TODO: добавить кнопку перечитывания дерева
         # TODO: добавить кнопку выбора удаления пустых узлов
         # TODO: логгирование вместо print
         # TODO: кнопку показа статистики: игры, платформы
@@ -94,98 +144,99 @@ class MainWindow(QMainWindow):
 
                 set_text(platform_item, platform, platform_game_count)
 
-        with open(file_name, encoding='utf8') as f:
-            for line in f:
-                line = line.rstrip()
+    # with open(file_name, encoding='utf8') as f:
+    #     for line in f:
+        for line in text.split('\n'):
+            line = line.rstrip()
 
-                if line:
-                    # TODO: рефакторинг
-                    # Определим игровую платформу: ПК, консоли и т.п.
-                    if (line[0] not in [' ', '-', '@'] and line[0] not in [' ', '-', '@']) and line.endswith(':'):
-                        set_count_children_nodes(platform)
+            if line:
+                # TODO: рефакторинг
+                # Определим игровую платформу: ПК, консоли и т.п.
+                if (line[0] not in [' ', '-', '@'] and line[0] not in [' ', '-', '@']) and line.endswith(':'):
+                    set_count_children_nodes(platform)
 
-                        # Имя платформы без двоеточия на конце
-                        platform = line[0: len(line) - 1]
-                        platform_item = QTreeWidgetItem([platform])
-                        self.tree_games.addTopLevelItem(platform_item)
+                    # Имя платформы без двоеточия на конце
+                    platform = line[0: len(line) - 1]
+                    platform_item = QTreeWidgetItem([platform])
+                    self.tree_games.addTopLevelItem(platform_item)
 
-                        delete_empty_nodes()
+                    delete_empty_nodes()
 
-                        finished_game_items = QTreeWidgetItem([FINISHED_GAME_TITLE])
-                        not_finished_game_items = QTreeWidgetItem([NOT_FINISHED_GAME_TITLE])
-                        finished_watched_items = QTreeWidgetItem([FINISHED_WATCHED_TITLE])
-                        not_finished_watched_items = QTreeWidgetItem([NOT_FINISHED_WATCHED_TITLE])
+                    finished_game_items = QTreeWidgetItem([FINISHED_GAME_TITLE])
+                    not_finished_game_items = QTreeWidgetItem([NOT_FINISHED_GAME_TITLE])
+                    finished_watched_items = QTreeWidgetItem([FINISHED_WATCHED_TITLE])
+                    not_finished_watched_items = QTreeWidgetItem([NOT_FINISHED_WATCHED_TITLE])
 
-                        platform_item.addChild(finished_game_items)
-                        platform_item.addChild(not_finished_game_items)
-                        platform_item.addChild(finished_watched_items)
-                        platform_item.addChild(not_finished_watched_items)
+                    platform_item.addChild(finished_game_items)
+                    platform_item.addChild(not_finished_game_items)
+                    platform_item.addChild(finished_watched_items)
+                    platform_item.addChild(not_finished_watched_items)
 
+                    continue
+
+                if platform:
+                    # Первые 2 символа -- тэг игры: пройденная, не пройденная, просмотренная
+                    attributes = line[0:2]
+
+                    # Проверим на неизвестные атрибуты
+                    unknown_attributes = str(attributes)
+                    for c in ' -@':
+                        unknown_attributes = unknown_attributes.replace(c, '')
+
+                    # Если строка не пуста, значит в ней есть неизвестные символы
+                    if unknown_attributes:
+                        # Добавляем к неопределенным играм узел платформы
+                        if platform not in strange_platform_games_dict:
+                            strange_game_platform_item = QTreeWidgetItem([platform])
+                            strange_platform_games_dict[platform] = strange_game_platform_item
+                            strange_games.addChild(strange_game_platform_item)
+                        else:
+                            strange_game_platform_item = strange_platform_games_dict[platform]
+
+                        print('!!! Обнаружен неизвестный атрибут !!!: ' + unknown_attributes + ', игра: '
+                              + line + ', платформа: ' + platform)
+                        game_item = QTreeWidgetItem([line])
+                        strange_game_platform_item.addChild(game_item)
                         continue
 
-                    if platform:
-                        # Первые 2 символа -- тэг игры: пройденная, не пройденная, просмотренная
-                        attributes = line[0:2]
+                    # TODO: рефакторинг
+                    is_finished_watched = attributes == '@ ' or attributes == ' @'
+                    is_not_finished_watched = attributes == '@-' or attributes == '-@'
 
-                        # Проверим на неизвестные атрибуты
-                        unknown_attributes = str(attributes)
-                        for c in ' -@':
-                            unknown_attributes = unknown_attributes.replace(c, '')
+                    is_finished_game = attributes == '  '
+                    is_not_finished_game = attributes == '- ' or attributes == ' -'
 
-                        # Если строка не пуста, значит в ней есть неизвестные символы
-                        if unknown_attributes:
-                            # Добавляем к неопределенным играм узел платформы
-                            if platform not in strange_platform_games_dict:
-                                strange_game_platform_item = QTreeWidgetItem([platform])
-                                strange_platform_games_dict[platform] = strange_game_platform_item
-                                strange_games.addChild(strange_game_platform_item)
-                            else:
-                                strange_game_platform_item = strange_platform_games_dict[platform]
+                    # TODO: rem
+                    game_name = line[2:]
+                    # platforms_game_dict[platform] = game_name
 
-                            print('!!! Обнаружен неизвестный атрибут !!!: ' + unknown_attributes + ', игра: '
-                                  + line + ', платформа: ' + platform)
-                            game_item = QTreeWidgetItem([line])
-                            strange_game_platform_item.addChild(game_item)
-                            continue
+                    game_item = QTreeWidgetItem([game_name])
+                    # platform_item.addChild(game_item)
 
-                        # TODO: рефакторинг
-                        is_finished_watched = attributes == '@ ' or attributes == ' @'
-                        is_not_finished_watched = attributes == '@-' or attributes == '-@'
+                    if is_finished_game:
+                        finished_game_items.addChild(game_item)
+                    elif is_not_finished_game:
+                        not_finished_game_items.addChild(game_item)
+                    elif is_finished_watched:
+                        finished_watched_items.addChild(game_item)
+                    elif is_not_finished_watched:
+                        not_finished_watched_items.addChild(game_item)
+                    else:
+                        print('!!! Неопределенная игра !!! ' + line + ', платформа: ' + platform)
 
-                        is_finished_game = attributes == '  '
-                        is_not_finished_game = attributes == '- ' or attributes == ' -'
-
-                        # TODO: rem
-                        game_name = line[2:]
-                        # platforms_game_dict[platform] = game_name
-
-                        game_item = QTreeWidgetItem([game_name])
-                        # platform_item.addChild(game_item)
-
-                        if is_finished_game:
-                            finished_game_items.addChild(game_item)
-                        elif is_not_finished_game:
-                            not_finished_game_items.addChild(game_item)
-                        elif is_finished_watched:
-                            finished_watched_items.addChild(game_item)
-                        elif is_not_finished_watched:
-                            not_finished_watched_items.addChild(game_item)
+                        # Добавляем к неопределенным играм узел платформы
+                        if platform not in strange_platform_games_dict:
+                            strange_game_platform_item = QTreeWidgetItem([platform])
+                            strange_platform_games_dict[platform] = strange_game_platform_item
+                            strange_games.addChild(strange_game_platform_item)
                         else:
-                            print('!!! Неопределенная игра !!! ' + line + ', платформа: ' + platform)
+                            strange_game_platform_item = strange_platform_games_dict[platform]
 
-                            # Добавляем к неопределенным играм узел платформы
-                            if platform not in strange_platform_games_dict:
-                                strange_game_platform_item = QTreeWidgetItem([platform])
-                                strange_platform_games_dict[platform] = strange_game_platform_item
-                                strange_games.addChild(strange_game_platform_item)
-                            else:
-                                strange_game_platform_item = strange_platform_games_dict[platform]
+                        game_item.setText(0, line + ' / ' + platform)
+                        strange_game_platform_item.addChild(game_item)
 
-                            game_item.setText(0, line + ' / ' + platform)
-                            strange_game_platform_item.addChild(game_item)
-
-            set_count_children_nodes(platform)
-            delete_empty_nodes()
+        set_count_children_nodes(platform)
+        delete_empty_nodes()
 
         # Добавляем узел неопределенных игр
         if strange_games.childCount() > 0:
@@ -201,5 +252,6 @@ if __name__ == '__main__':
 
     mw = MainWindow()
     mw.show()
+    mw.refresh_by_url()
 
     sys.exit(app.exec_())
