@@ -106,7 +106,7 @@ ENUM_OTHER = ENUM_OFFSET + 4
 ENUM_OTHER_PLATFORM = ENUM_OFFSET + 5
 ENUM_OTHER_GAME = ENUM_OFFSET + 6
 
-TEST_USING_FILE_GAMES = False
+TEST_USING_FILE_GAMES = True
 
 
 TREE_HEADER = 'Games'
@@ -126,7 +126,6 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Played Games')
 
         self.tree_games = QTreeWidget()
-        self.tree_games.setHeaderLabel(TREE_HEADER)
 
         self.line_edit_url = QLineEdit(DEFAULT_URL)
         self.button_refresh_by_url = QPushButton('&Refresh')
@@ -161,6 +160,9 @@ class MainWindow(QMainWindow):
         # self.statusBar().addWidget(PROGRESS_BAR)
 
         self.game_list = set()
+        self.filtered_game_list = set()
+
+        self.update_header_tree()
 
     # TODO: Скрывать категории, которые стали пустыми после фильтра
     def filter_games(self, filter_exp):
@@ -171,16 +173,21 @@ class MainWindow(QMainWindow):
             filter_exp += '*'
             logger.debug('Change filter_exp="{}".'.format(filter_exp))
 
-        filtered_game_list = set(self.tree_games.findItems(filter_exp, Qt.MatchRecursive | Qt.MatchWildcard))
-        logger.debug('Filter game finish. Games: {}.'.format(len(filtered_game_list)))
+        # Очищаем множество. Добавляем в него отфильтрованные игры. Удаляем элементы, не входящие в множество игры.
+        self.filtered_game_list.clear()
+        self.filtered_game_list.update(set(self.tree_games.findItems(filter_exp, Qt.MatchRecursive | Qt.MatchWildcard)))
+        self.filtered_game_list.intersection_update(self.game_list)
+        logger.debug('Filter game finish. Games: {}.'.format(len(self.filtered_game_list)))
 
         logger.debug('Tree update start.')
 
         # Если элемента нет в отфильтрованном списке, прячем его
         for item in self.game_list:
-            item.setHidden(True if item not in filtered_game_list else False)
+            item.setHidden(True if item not in self.filtered_game_list else False)
 
         logger.debug('Tree update finish.')
+
+        self.update_header_tree()
 
     # TODO: выполнить функцию в другом потоке
     # def download(self, url):
@@ -431,12 +438,20 @@ class MainWindow(QMainWindow):
         if strange_games is not None:
             strange_games.setText(0, '{} ({})'.format(OTHER_GAME_TITLE, count_other_game))
 
-        # Указываем в заголовке общее количество игр
-        self.tree_games.setHeaderLabel('{} ({})'.format(TREE_HEADER, len(self.game_list)))
-
         # Применяем фильтр к элементам
         self.filter_games(self.line_edit_filter.text())
 
+        self.update_header_tree()
+
+    def update_header_tree(self):
+        # Проверяем, что фильтр какие-нибудь игры отфильтровал
+        enabled_filter = len(self.game_list) != len(self.filtered_game_list)
+
+        # Указываем в заголовке общее количество игр и при фильтр, количество игр, оставшихся после фильтрации
+        self.tree_games.setHeaderLabel(
+            '{} ({})'.format(TREE_HEADER, len(self.game_list)) +
+            ('' if not enabled_filter else '. Filtered ' + str(len(self.filtered_game_list)))
+        )
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
