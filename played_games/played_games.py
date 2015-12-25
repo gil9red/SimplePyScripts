@@ -78,6 +78,16 @@ ENUM_OTHER_GAME = ENUM_OFFSET + 6
 TEST_USING_FILE_GAMES = True
 
 
+TREE_HEADER = 'Games'
+
+
+FINISHED_GAME_TITLE = 'Пройденные'
+NOT_FINISHED_GAME_TITLE = 'Не закончено прохождение'
+FINISHED_WATCHED_TITLE = 'Просмотренные'
+NOT_FINISHED_WATCHED_TITLE = 'Не закончен просмотр'
+OTHER_GAME_TITLE = 'Неопределенные игры'
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -85,7 +95,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Played Games')
 
         self.tree_games = QTreeWidget()
-        self.tree_games.setHeaderLabel('Games')
+        self.tree_games.setHeaderLabel(TREE_HEADER)
 
         self.line_edit_url = QLineEdit(DEFAULT_URL)
         self.button_refresh_by_url = QPushButton('&Refresh')
@@ -230,7 +240,7 @@ class MainWindow(QMainWindow):
         finished_watched_items = None
         not_finished_watched_items = None
 
-        strange_games = QTreeWidgetItem(['Неопределенных игры'], ENUM_OTHER)
+        strange_games = QTreeWidgetItem([OTHER_GAME_TITLE], ENUM_OTHER)
         strange_platform_games_dict = dict()
 
         # TODO: В узлах показывается количество детей, а не игр
@@ -252,11 +262,6 @@ class MainWindow(QMainWindow):
 
             if not_finished_watched_items is not None and not_finished_watched_items.childCount() == 0:
                 not_finished_watched_items.parent().removeChild(not_finished_watched_items)
-
-        FINISHED_GAME_TITLE = 'Пройденные'
-        NOT_FINISHED_GAME_TITLE = 'Не закончено прохождение'
-        FINISHED_WATCHED_TITLE = 'Просмотренные'
-        NOT_FINISHED_WATCHED_TITLE = 'Не закончен просмотр'
 
         def set_count_children_nodes(platform):
             """Функция добавляет к названиям узлов количество их детей"""
@@ -309,7 +314,6 @@ class MainWindow(QMainWindow):
                     platform_item.addChild(not_finished_game_items)
                     platform_item.addChild(finished_watched_items)
                     platform_item.addChild(not_finished_watched_items)
-
                     continue
 
                 if platform:
@@ -385,6 +389,18 @@ class MainWindow(QMainWindow):
             strange_games = None
 
         # print(platforms_game_dict)
+
+        # Указываем количество неопределенных игр в узле неопределенных игр и его детей-платформ
+        count_other_game = 0
+
+        for platform, platform_item in strange_platform_games_dict.items():
+            platform_item.setText(0, '{} ({})'.format(platform, platform_item.childCount()))
+            count_other_game += platform_item.childCount()
+
+        strange_games.setText(0, '{} ({})'.format(OTHER_GAME_TITLE, count_other_game))
+
+        # Указываем в заголовке общее количество игр
+        self.tree_games.setHeaderLabel('{} ({})'.format(TREE_HEADER, len(self.game_list)))
 
         # Применяем фильтр к элементам
         self.filter_games(self.line_edit_filter.text())
