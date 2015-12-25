@@ -42,6 +42,37 @@ DEFAULT_URL = 'https://gist.githubusercontent.com/gil9red/2f80a34fb601cd685353/r
 # # TODO: временно
 # PROGRESS_BAR = None
 
+# TODO: автоматизировать обновление файла gist
+
+# TODO: скрипт проверки необходимости обновления
+# from urllib.request import urlopen
+# from lxml import etree
+# from io import StringIO
+# from datetime import datetime
+#
+#
+# def need_update(local_last_update_datetime):
+#     url = 'https://gist.github.com/gil9red/2f80a34fb601cd685353/revisions?diff=unified'
+#
+#     with urlopen(url) as f:
+#         context = f.read().decode()
+#
+#     parser = etree.HTMLParser()
+#     tree = etree.parse(StringIO(context), parser)
+#
+#     last_datetime = tree.xpath('//*[@class="gist-revision"]//time/@datetime')[0]
+#     last_datetime = datetime.strptime(str(last_datetime), "%Y-%m-%dT%H:%M:%SZ")
+#     print('last_datetime = ' + str(last_datetime))
+#     print('local_last_update_datetime = ' + str(local_last_update_datetime))
+#
+#     return last_datetime > local_last_update_datetime
+#
+#
+# local_last_update_datetime = datetime(2015, 12, 23)
+# need = need_update(local_last_update_datetime)
+# print('need_update = ' + str(need))
+
+
 
 def reporthook(blocknum, blocksize, totalsize):
     readsofar = blocknum * blocksize
