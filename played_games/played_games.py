@@ -106,7 +106,7 @@ ENUM_OTHER = ENUM_OFFSET + 4
 ENUM_OTHER_PLATFORM = ENUM_OFFSET + 5
 ENUM_OTHER_GAME = ENUM_OFFSET + 6
 
-TEST_USING_FILE_GAMES = True
+TEST_USING_FILE_GAMES = False
 
 
 TREE_HEADER = 'Games'
@@ -428,7 +428,8 @@ class MainWindow(QMainWindow):
             platform_item.setText(0, '{} ({})'.format(platform, platform_item.childCount()))
             count_other_game += platform_item.childCount()
 
-        strange_games.setText(0, '{} ({})'.format(OTHER_GAME_TITLE, count_other_game))
+        if strange_games is not None:
+            strange_games.setText(0, '{} ({})'.format(OTHER_GAME_TITLE, count_other_game))
 
         # Указываем в заголовке общее количество игр
         self.tree_games.setHeaderLabel('{} ({})'.format(TREE_HEADER, len(self.game_list)))
