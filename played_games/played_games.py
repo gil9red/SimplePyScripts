@@ -67,6 +67,17 @@ def reporthook(blocknum, blocksize, totalsize):
     app.processEvents()
 
 
+ENUM_OFFSET = QTreeWidgetItem.UserType
+ENUM_PLATFORM = ENUM_OFFSET + 1
+ENUM_CATEGORY = ENUM_OFFSET + 2
+ENUM_GAME = ENUM_OFFSET + 3
+ENUM_OTHER = ENUM_OFFSET + 4
+ENUM_OTHER_PLATFORM = ENUM_OFFSET + 5
+ENUM_OTHER_GAME = ENUM_OFFSET + 6
+
+TEST_USING_FILE_GAMES = True
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -84,8 +95,16 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.line_edit_url)
         layout.addWidget(self.button_refresh_by_url)
 
+        self.line_edit_filter = QLineEdit('*')
+        self.line_edit_filter.textEdited.connect(self.filter_games)
+
+        filter_layout = QHBoxLayout()
+        filter_layout.addWidget(QLabel('Filter:'))
+        filter_layout.addWidget(self.line_edit_filter)
+
         main_layout = QVBoxLayout()
         main_layout.addLayout(layout)
+        main_layout.addLayout(filter_layout)
         main_layout.addWidget(self.tree_games)
 
         central_widget = QWidget()
@@ -99,6 +118,28 @@ class MainWindow(QMainWindow):
         # global PROGRESS_BAR
         # PROGRESS_BAR = QProgressBar()
         # self.statusBar().addWidget(PROGRESS_BAR)
+
+        self.game_list = set()
+
+    # TODO: Скрывать категории, которые стали пустыми после фильтра
+    def filter_games(self, filter_exp):
+        logger.debug('Filter game start. filter_exp="{}".'.format(filter_exp))
+
+        # Для возможности поиска просто по словам:
+        if not filter_exp.endswith('*'):
+            filter_exp += '*'
+            logger.debug('Change filter_exp="{}".'.format(filter_exp))
+
+        filtered_game_list = set(self.tree_games.findItems(filter_exp, Qt.MatchRecursive | Qt.MatchWildcard))
+        logger.debug('Filter game finish. Games: {}.'.format(len(filtered_game_list)))
+
+        logger.debug('Tree update start.')
+
+        # Если элемента нет в отфильтрованном списке, прячем его
+        for item in self.game_list:
+            item.setHidden(True if item not in filtered_game_list else False)
+
+        logger.debug('Tree update finish.')
 
     # TODO: выполнить функцию в другом потоке
     # def download(self, url):
@@ -128,24 +169,27 @@ class MainWindow(QMainWindow):
         # thread.start()
         # thread.join()
 
-        url = self.line_edit_url.text()
+        logger.debug('TEST_USING_FILE_GAMES=' + str(TEST_USING_FILE_GAMES))
 
-        # # TODO: для тестирования интерфейса
-        # content_file = open('gistfile1.txt', 'r').read()
+        if TEST_USING_FILE_GAMES:
+            # TODO: для тестирования интерфейса
+            content_file = open('gistfile1.txt', 'r', encoding='utf8').read()
+        else:
+            # PROGRESS_BAR.show()
+            # PROGRESS_BAR.setValue(-1)
 
-        # PROGRESS_BAR.show()
-        # PROGRESS_BAR.setValue(-1)
+            url = self.line_edit_url.text()
 
-        logger.debug('Download {} start.'.format(url))
-        local_filename, headers = urlretrieve(url, reporthook=reporthook)
-        logger.debug('Download finish:\nlocal_filename: {}\n\nHeaders:\n{}'.format(local_filename, headers))
+            logger.debug('Download {} start.'.format(url))
+            local_filename, headers = urlretrieve(url, reporthook=reporthook)
+            logger.debug('Download finish:\nlocal_filename: {}\n\nHeaders:\n{}'.format(local_filename, headers))
 
-        # # Через 3 секунды прячем прогресс бар
-        # QTimer.singleShot(5000, PROGRESS_BAR.hide)
+            # # Через 3 секунды прячем прогресс бар
+            # QTimer.singleShot(5000, PROGRESS_BAR.hide)
 
-        logger.debug('Read from file start: ' + local_filename)
-        with open(local_filename, encoding='utf-8') as f:
-            content_file = f.read()
+            logger.debug('Read from file start: ' + local_filename)
+            with open(local_filename, encoding='utf-8') as f:
+                content_file = f.read()
 
         logger.debug('Read from file finish.')
 
@@ -170,6 +214,8 @@ class MainWindow(QMainWindow):
         # self.tree_games.expandAll()
 
     def load_tree(self, text):
+        # TODO: сделать модель дерева
+        self.game_list.clear()
         self.tree_games.clear()
 
         # file_name = 'gistfile1.txt'
@@ -184,7 +230,7 @@ class MainWindow(QMainWindow):
         finished_watched_items = None
         not_finished_watched_items = None
 
-        strange_games = QTreeWidgetItem(['Неопределенных игры'])
+        strange_games = QTreeWidgetItem(['Неопределенных игры'], ENUM_OTHER)
         strange_platform_games_dict = dict()
 
         # TODO: В узлах показывается количество детей, а не игр
@@ -235,8 +281,6 @@ class MainWindow(QMainWindow):
 
                 set_text(platform_item, platform, platform_game_count)
 
-    # with open(file_name, encoding='utf8') as f:
-    #     for line in f:
         for line in text.split('\n'):
             # TODO: должно помочь от подвисания интерфейса
             app.processEvents()
@@ -251,15 +295,15 @@ class MainWindow(QMainWindow):
 
                     # Имя платформы без двоеточия на конце
                     platform = line[0: len(line) - 1]
-                    platform_item = QTreeWidgetItem([platform])
+                    platform_item = QTreeWidgetItem([platform], ENUM_PLATFORM)
                     self.tree_games.addTopLevelItem(platform_item)
 
                     delete_empty_nodes()
 
-                    finished_game_items = QTreeWidgetItem([FINISHED_GAME_TITLE])
-                    not_finished_game_items = QTreeWidgetItem([NOT_FINISHED_GAME_TITLE])
-                    finished_watched_items = QTreeWidgetItem([FINISHED_WATCHED_TITLE])
-                    not_finished_watched_items = QTreeWidgetItem([NOT_FINISHED_WATCHED_TITLE])
+                    finished_game_items = QTreeWidgetItem([FINISHED_GAME_TITLE], ENUM_CATEGORY)
+                    not_finished_game_items = QTreeWidgetItem([NOT_FINISHED_GAME_TITLE], ENUM_CATEGORY)
+                    finished_watched_items = QTreeWidgetItem([FINISHED_WATCHED_TITLE], ENUM_CATEGORY)
+                    not_finished_watched_items = QTreeWidgetItem([NOT_FINISHED_WATCHED_TITLE], ENUM_CATEGORY)
 
                     platform_item.addChild(finished_game_items)
                     platform_item.addChild(not_finished_game_items)
@@ -281,7 +325,7 @@ class MainWindow(QMainWindow):
                     if unknown_attributes:
                         # Добавляем к неопределенным играм узел платформы
                         if platform not in strange_platform_games_dict:
-                            strange_game_platform_item = QTreeWidgetItem([platform])
+                            strange_game_platform_item = QTreeWidgetItem([platform], ENUM_OTHER_PLATFORM)
                             strange_platform_games_dict[platform] = strange_game_platform_item
                             strange_games.addChild(strange_game_platform_item)
                         else:
@@ -289,8 +333,9 @@ class MainWindow(QMainWindow):
 
                         logger.warning('!!! Обнаружен неизвестный атрибут !!!: ' + unknown_attributes + ', игра: '
                                        + line + ', платформа: ' + platform)
-                        game_item = QTreeWidgetItem([line])
+                        game_item = QTreeWidgetItem([line], ENUM_GAME)
                         strange_game_platform_item.addChild(game_item)
+                        self.game_list.add(game_item)
                         continue
 
                     # TODO: рефакторинг
@@ -304,7 +349,8 @@ class MainWindow(QMainWindow):
                     game_name = line[2:]
                     # platforms_game_dict[platform] = game_name
 
-                    game_item = QTreeWidgetItem([game_name])
+                    game_item = QTreeWidgetItem([game_name], ENUM_GAME)
+                    self.game_list.add(game_item)
                     # platform_item.addChild(game_item)
 
                     if is_finished_game:
@@ -320,7 +366,7 @@ class MainWindow(QMainWindow):
 
                         # Добавляем к неопределенным играм узел платформы
                         if platform not in strange_platform_games_dict:
-                            strange_game_platform_item = QTreeWidgetItem([platform])
+                            strange_game_platform_item = QTreeWidgetItem([platform], ENUM_OTHER_PLATFORM)
                             strange_platform_games_dict[platform] = strange_game_platform_item
                             strange_games.addChild(strange_game_platform_item)
                         else:
@@ -339,6 +385,9 @@ class MainWindow(QMainWindow):
             strange_games = None
 
         # print(platforms_game_dict)
+
+        # Применяем фильтр к элементам
+        self.filter_games(self.line_edit_filter.text())
 
 
 if __name__ == '__main__':
