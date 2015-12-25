@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 import sys
 import os
+from urllib.request import urlretrieve
 
 from PySide.QtGui import *
 from PySide.QtCore import *
@@ -33,7 +34,37 @@ def get_logger(name, file='log.txt', encoding='utf8'):
     return log
 
 
+logger = get_logger('played_games')
+
+
 DEFAULT_URL = 'https://gist.githubusercontent.com/gil9red/2f80a34fb601cd685353/raw/f0d8086ae9053f389db02aca6eecb4e53ab4d034/gistfile1.txt'
+
+# # TODO: временно
+# PROGRESS_BAR = None
+
+
+def reporthook(blocknum, blocksize, totalsize):
+    readsofar = blocknum * blocksize
+    if totalsize > 0:
+        percent = readsofar * 1e2 / totalsize
+        if percent > 100:
+            percent = 100
+            readsofar = totalsize
+
+        s = "\r%5.1f%% %*d / %d" % (percent, len(str(totalsize)), readsofar, totalsize)
+        print(s, end='')
+        # PROGRESS_BAR.setValue(percent)
+
+        # near the end
+        if readsofar >= totalsize:
+            print()
+
+    # total size is unknown
+    else:
+        print("read {}".format(readsofar))
+
+    # TODO: не помогает
+    app.processEvents()
 
 
 class MainWindow(QMainWindow):
@@ -62,20 +93,81 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(central_widget)
 
+        # # TODO: временно
+        # # self.progress_bar = QProgressBar()
+        # # self.statusBar().addWidget(self.progress_bar)
+        # global PROGRESS_BAR
+        # PROGRESS_BAR = QProgressBar()
+        # self.statusBar().addWidget(PROGRESS_BAR)
+
+    # TODO: выполнить функцию в другом потоке
+    # def download(self, url):
+    #     logger.debug('Download {} start.'.format(url))
+    #     local_filename, headers = urlretrieve(url, reporthook=reporthook)
+    #     logger.debug('Download finish:\nlocal_filename: {}\n\nHeaders:\n{}'.format(local_filename, headers))
+    #
+    #     logger.debug('Read from file start: ' + local_filename)
+    #     with open(local_filename, encoding='utf-8') as f:
+    #         content_file = f.read()
+    #
+    #     logger.debug('Read from file finish.')
+    #
+    #     logger.debug('Load tree start.')
+    #     self.load_tree(content_file)
+    #     logger.debug('Load tree finish.')
+    #
+    #     self.tree_games.expandAll()
+
     def refresh_by_url(self):
-        from urllib.request import urlopen
+        # TODO: выполнить функцию в другом потоке
+        # TODO: после окончания рабоыт потока генерировать сигнал
+        # и в нем вернуть путь к файлу
+        # import threading
+        #
+        # thread = threading.Thread(target=self.download, args=(self.line_edit_url.text(),))
+        # thread.start()
+        # thread.join()
 
-        # TODO: избавить от подвисания программы во время загрузки файла и его парсинга
-        # TODO: В отдельном потоке
-        # TODO: прогресс загрузки из сети файла (хотя бы в процентах)
-        with urlopen(self.line_edit_url.text()) as f:
-            self.load_tree(f.read().decode())
+        url = self.line_edit_url.text()
 
+        # # TODO: для тестирования интерфейса
+        # content_file = open('gistfile1.txt', 'r').read()
+
+        # PROGRESS_BAR.show()
+        # PROGRESS_BAR.setValue(-1)
+
+        logger.debug('Download {} start.'.format(url))
+        local_filename, headers = urlretrieve(url, reporthook=reporthook)
+        logger.debug('Download finish:\nlocal_filename: {}\n\nHeaders:\n{}'.format(local_filename, headers))
+
+        # # Через 3 секунды прячем прогресс бар
+        # QTimer.singleShot(5000, PROGRESS_BAR.hide)
+
+        logger.debug('Read from file start: ' + local_filename)
+        with open(local_filename, encoding='utf-8') as f:
+            content_file = f.read()
+
+        logger.debug('Read from file finish.')
+
+        logger.debug('Load tree start.')
+        self.load_tree(content_file)
+        logger.debug('Load tree finish.')
+
+        self.tree_games.expandAll()
+
+        # from urllib.request import urlopen
+        #
+        # # TODO: избавить от подвисания программы во время загрузки файла и его парсинга
+        # # TODO: В отдельном потоке
+        # # TODO: прогресс загрузки из сети файла (хотя бы в процентах)
+        # with urlopen(self.line_edit_url.text()) as f:
+        #     self.load_tree(f.read().decode())
+        #
         # TODO: кэширование
         # from urllib.request import urlretrieve
         # urlretrieve(self.line_edit_url.text(), 'gistfile1.txt')
-
-        self.tree_games.expandAll()
+        #
+        # self.tree_games.expandAll()
 
     def load_tree(self, text):
         self.tree_games.clear()
@@ -97,7 +189,6 @@ class MainWindow(QMainWindow):
 
         # TODO: В узлах показывается количество детей, а не игр
         # TODO: добавить кнопку выбора удаления пустых узлов
-        # TODO: логгирование вместо print
         # TODO: кнопку показа статистики: игры, платформы
         # TODO: показывать в заголовке сколько всего игр найдено и платформ
 
@@ -147,6 +238,9 @@ class MainWindow(QMainWindow):
     # with open(file_name, encoding='utf8') as f:
     #     for line in f:
         for line in text.split('\n'):
+            # TODO: должно помочь от подвисания интерфейса
+            app.processEvents()
+
             line = line.rstrip()
 
             if line:
@@ -193,8 +287,8 @@ class MainWindow(QMainWindow):
                         else:
                             strange_game_platform_item = strange_platform_games_dict[platform]
 
-                        print('!!! Обнаружен неизвестный атрибут !!!: ' + unknown_attributes + ', игра: '
-                              + line + ', платформа: ' + platform)
+                        logger.warning('!!! Обнаружен неизвестный атрибут !!!: ' + unknown_attributes + ', игра: '
+                                       + line + ', платформа: ' + platform)
                         game_item = QTreeWidgetItem([line])
                         strange_game_platform_item.addChild(game_item)
                         continue
@@ -222,7 +316,7 @@ class MainWindow(QMainWindow):
                     elif is_not_finished_watched:
                         not_finished_watched_items.addChild(game_item)
                     else:
-                        print('!!! Неопределенная игра !!! ' + line + ', платформа: ' + platform)
+                        logger.warning('!!! Неопределенная игра !!! ' + line + ', платформа: ' + platform)
 
                         # Добавляем к неопределенным играм узел платформы
                         if platform not in strange_platform_games_dict:
