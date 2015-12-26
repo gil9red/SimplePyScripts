@@ -3,9 +3,14 @@
 
 __author__ = 'ipetrash'
 
+
 import sys
-import os
-from urllib.request import urlretrieve
+
+from urllib.request import urlopen, urlretrieve
+from urllib.parse import urljoin
+
+from lxml import etree
+from io import StringIO
 
 from PySide.QtGui import *
 from PySide.QtCore import *
@@ -37,7 +42,7 @@ def get_logger(name, file='log.txt', encoding='utf8'):
 logger = get_logger('played_games')
 
 
-DEFAULT_URL = 'https://gist.githubusercontent.com/gil9red/2f80a34fb601cd685353/raw/f0d8086ae9053f389db02aca6eecb4e53ab4d034/gistfile1.txt'
+DEFAULT_URL = 'https://gist.github.com/gil9red/2f80a34fb601cd685353'
 
 # # TODO: временно
 # PROGRESS_BAR = None
@@ -106,7 +111,7 @@ ENUM_OTHER = ENUM_OFFSET + 4
 ENUM_OTHER_PLATFORM = ENUM_OFFSET + 5
 ENUM_OTHER_GAME = ENUM_OFFSET + 6
 
-TEST_USING_FILE_GAMES = True
+TEST_USING_FILE_GAMES = False
 
 
 TREE_HEADER = 'Games'
@@ -227,6 +232,23 @@ class MainWindow(QMainWindow):
             # PROGRESS_BAR.setValue(-1)
 
             url = self.line_edit_url.text()
+
+            # Теперь нужно получить url файла с последней ревизией
+            logger.debug('Get url file last revision start.')
+
+            with urlopen(url) as f:
+                context = f.read().decode()
+
+                parser = etree.HTMLParser()
+                tree = etree.parse(StringIO(context), parser)
+
+                rel_url = tree.xpath('//*[@class="btn btn-sm "]/@href')[0]
+                logger.debug('Relative url = {}.'.format(rel_url))
+
+                url = urljoin(url, str(rel_url))
+                logger.debug('Full url = {}.'.format(url))
+
+            logger.debug('Get url file last revision finish.')
 
             logger.debug('Download {} start.'.format(url))
             local_filename, headers = urlretrieve(url, reporthook=reporthook)
