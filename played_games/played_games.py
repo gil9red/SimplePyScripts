@@ -78,7 +78,6 @@ DEFAULT_URL = 'https://gist.github.com/gil9red/2f80a34fb601cd685353'
 # print('need_update = ' + str(need))
 
 
-
 def reporthook(blocknum, blocksize, totalsize):
     readsofar = blocknum * blocksize
     if totalsize > 0:
@@ -164,12 +163,30 @@ class MainWindow(QMainWindow):
         # PROGRESS_BAR = QProgressBar()
         # self.statusBar().addWidget(PROGRESS_BAR)
 
+        # TODO: может, лучше на лету составлять список так же как и platform_list
+        self.category_list = set()
         self.game_list = set()
         self.filtered_game_list = set()
 
+        # Узел неопределенных игр
+        self.strange_games = None
+
         self.update_header_tree()
 
-    # TODO: Скрывать категории, которые стали пустыми после фильтра
+    @property
+    def platform_list(self):
+        root = self.tree_games.invisibleRootItem()
+        return [item for item in self.to_list_item(root) if item is not self.strange_games]
+
+    @staticmethod
+    def to_list_item(node):
+        if node is None:
+            # Чтобы не загромождать проверками на None или исключения. Если вернуть None, то в
+            # в циклах, использующих эту функцию будут исключения: "TypeError: 'NoneType' object is not iterable"
+            return list()
+
+        return [node.child(i) for i in range(node.childCount())]
+
     def filter_games(self, filter_exp):
         logger.debug('Filter game start. filter_exp="{}".'.format(filter_exp))
 
@@ -186,13 +203,58 @@ class MainWindow(QMainWindow):
 
         logger.debug('Tree update start.')
 
-        # Если элемента нет в отфильтрованном списке, прячем его
-        for item in self.game_list:
-            item.setHidden(True if item not in self.filtered_game_list else False)
+        # Прячем не прошедшие фильтрацию игры, а также категории и платформы, если их дети все спрятаны.
+        logger.debug('Hide game: {}.'.format(self.hide_games()))
+        logger.debug('Hide categories: {}.'.format(self.hide_nodes(self.category_list)))
+        logger.debug('Hide platform: {}.'.format(self.hide_nodes(self.platform_list)))
+
+        if self.strange_games is not None:
+            logger.debug('Hide strange category: {}.'.format(self.hide_nodes(self.to_list_item(self.strange_games))))
+            logger.debug('Hide strange: {}.'.format(self.hide_node(self.strange_games)))
 
         logger.debug('Tree update finish.')
 
         self.update_header_tree()
+
+    def hide_games(self):
+        count = 0
+
+        # Если элемента нет в отфильтрованном списке, прячем его
+        for item in self.game_list:
+            if item not in self.filtered_game_list:
+                item.setHidden(True)
+                count += 1
+            else:
+                item.setHidden(False)
+
+        return count
+
+    def hide_node(self, node):
+        """Функция скрывает те узлы, у которых всех дети скрыты, иначе -- показывает."""
+
+        if node is None:
+            return
+
+        def all_hidden(self, node):
+            for item in self.to_list_item(node):
+                if not item.isHidden():
+                    return False
+
+            return True
+
+        is_hide = all_hidden(self, node)
+        node.setHidden(is_hide)
+
+        return is_hide
+
+    def hide_nodes(self, nodes):
+        # Подсчитаем сколько будет скрыто категорий
+        count = 0
+        for node in nodes:
+            if self.hide_node(node):
+                count += 1
+
+        return count
 
     # TODO: выполнить функцию в другом потоке
     # def download(self, url):
@@ -285,8 +347,9 @@ class MainWindow(QMainWindow):
 
     def load_tree(self, text):
         # TODO: сделать модель дерева
-        self.game_list.clear()
         self.tree_games.clear()
+        self.game_list.clear()
+        self.filtered_game_list.clear()
 
         # file_name = 'gistfile1.txt'
 
@@ -300,7 +363,7 @@ class MainWindow(QMainWindow):
         finished_watched_items = None
         not_finished_watched_items = None
 
-        strange_games = QTreeWidgetItem([OTHER_GAME_TITLE], ENUM_OTHER)
+        self.strange_games = QTreeWidgetItem([OTHER_GAME_TITLE], ENUM_OTHER)
         strange_platform_games_dict = dict()
 
         # TODO: В узлах показывается количество детей, а не игр
@@ -308,20 +371,27 @@ class MainWindow(QMainWindow):
         # TODO: кнопку показа статистики: игры, платформы
         # TODO: показывать в заголовке сколько всего игр найдено и платформ
 
-        def delete_empty_nodes():
+        def delete_empty_category():
             """Удаление пустых узлов."""
 
+            if platform_item is None:
+                return
+
             if finished_game_items is not None and finished_game_items.childCount() == 0:
-                finished_game_items.parent().removeChild(finished_game_items)
+                platform_item.removeChild(finished_game_items)
 
             if not_finished_game_items is not None and not_finished_game_items.childCount() == 0:
-                not_finished_game_items.parent().removeChild(not_finished_game_items)
+                platform_item.removeChild(not_finished_game_items)
 
             if finished_watched_items is not None and finished_watched_items.childCount() == 0:
-                finished_watched_items.parent().removeChild(finished_watched_items)
+                platform_item.removeChild(finished_watched_items)
 
             if not_finished_watched_items is not None and not_finished_watched_items.childCount() == 0:
-                not_finished_watched_items.parent().removeChild(not_finished_watched_items)
+                platform_item.removeChild(not_finished_watched_items)
+
+            # Добавление в множества оставшихся после удаления элементов категории
+            for item in self.to_list_item(platform_item):
+                self.category_list.add(item)
 
         def set_count_children_nodes(platform):
             """Функция добавляет к названиям узлов количество их детей"""
@@ -357,13 +427,12 @@ class MainWindow(QMainWindow):
                 # Определим игровую платформу: ПК, консоли и т.п.
                 if (line[0] not in [' ', '-', '@'] and line[0] not in [' ', '-', '@']) and line.endswith(':'):
                     set_count_children_nodes(platform)
+                    delete_empty_category()
 
                     # Имя платформы без двоеточия на конце
                     platform = line[0: len(line) - 1]
                     platform_item = QTreeWidgetItem([platform], ENUM_PLATFORM)
                     self.tree_games.addTopLevelItem(platform_item)
-
-                    delete_empty_nodes()
 
                     finished_game_items = QTreeWidgetItem([FINISHED_GAME_TITLE], ENUM_CATEGORY)
                     not_finished_game_items = QTreeWidgetItem([NOT_FINISHED_GAME_TITLE], ENUM_CATEGORY)
@@ -391,7 +460,7 @@ class MainWindow(QMainWindow):
                         if platform not in strange_platform_games_dict:
                             strange_game_platform_item = QTreeWidgetItem([platform], ENUM_OTHER_PLATFORM)
                             strange_platform_games_dict[platform] = strange_game_platform_item
-                            strange_games.addChild(strange_game_platform_item)
+                            self.strange_games.addChild(strange_game_platform_item)
                         else:
                             strange_game_platform_item = strange_platform_games_dict[platform]
 
@@ -432,7 +501,7 @@ class MainWindow(QMainWindow):
                         if platform not in strange_platform_games_dict:
                             strange_game_platform_item = QTreeWidgetItem([platform], ENUM_OTHER_PLATFORM)
                             strange_platform_games_dict[platform] = strange_game_platform_item
-                            strange_games.addChild(strange_game_platform_item)
+                            self.strange_games.addChild(strange_game_platform_item)
                         else:
                             strange_game_platform_item = strange_platform_games_dict[platform]
 
@@ -440,13 +509,13 @@ class MainWindow(QMainWindow):
                         strange_game_platform_item.addChild(game_item)
 
         set_count_children_nodes(platform)
-        delete_empty_nodes()
+        delete_empty_category()
 
         # Добавляем узел неопределенных игр
-        if strange_games.childCount() > 0:
-            self.tree_games.addTopLevelItem(strange_games)
+        if self.strange_games.childCount() > 0:
+            self.tree_games.addTopLevelItem(self.strange_games)
         else:
-            strange_games = None
+            self.strange_games = None
 
         # print(platforms_game_dict)
 
@@ -457,8 +526,8 @@ class MainWindow(QMainWindow):
             platform_item.setText(0, '{} ({})'.format(platform, platform_item.childCount()))
             count_other_game += platform_item.childCount()
 
-        if strange_games is not None:
-            strange_games.setText(0, '{} ({})'.format(OTHER_GAME_TITLE, count_other_game))
+        if self.strange_games is not None:
+            self.strange_games.setText(0, '{} ({})'.format(OTHER_GAME_TITLE, count_other_game))
 
         # Применяем фильтр к элементам
         self.filter_games(self.line_edit_filter.text())
