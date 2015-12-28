@@ -110,11 +110,11 @@ ENUM_OTHER = ENUM_OFFSET + 4
 ENUM_OTHER_PLATFORM = ENUM_OFFSET + 5
 ENUM_OTHER_GAME = ENUM_OFFSET + 6
 
-TEST_USING_FILE_GAMES = False
+TEST_USING_FILE_GAMES = True
 
 
+WINDOW_TITLE = 'Played Games'
 TREE_HEADER = 'Games'
-
 
 FINISHED_GAME_TITLE = 'Пройденные'
 NOT_FINISHED_GAME_TITLE = 'Не закончено прохождение'
@@ -123,11 +123,14 @@ NOT_FINISHED_WATCHED_TITLE = 'Не закончен просмотр'
 OTHER_GAME_TITLE = 'Неопределенные игры'
 
 
+# TODO: добавить кнопку сортировки
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('Played Games')
+        self.setWindowTitle(WINDOW_TITLE)
 
         self.tree_games = QTreeWidget()
 
@@ -139,7 +142,8 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.line_edit_url)
         layout.addWidget(self.button_refresh_by_url)
 
-        self.line_edit_filter = QLineEdit('*')
+        self.line_edit_filter = QLineEdit()
+        self.line_edit_filter.setToolTip('WildCard Filter')
         self.line_edit_filter.textEdited.connect(self.filter_games)
 
         filter_layout = QHBoxLayout()
@@ -163,7 +167,7 @@ class MainWindow(QMainWindow):
         # PROGRESS_BAR = QProgressBar()
         # self.statusBar().addWidget(PROGRESS_BAR)
 
-        # TODO: может, лучше на лету составлять список так же как и platform_list
+        # TODO: может, лучше на лету составлять список так же как и platform_list, в getter'е
         self.category_list = set()
         self.game_list = set()
         self.filtered_game_list = set()
