@@ -308,6 +308,7 @@ class MainWindow(QMainWindow):
                 parser = etree.HTMLParser()
                 tree = etree.parse(StringIO(context), parser)
 
+                # Ищем первый файл с кнопкой Raw
                 rel_url = tree.xpath('//*[@class="btn btn-sm "]/@href')[0]
                 logger.debug('Relative url = {}.'.format(rel_url))
 
@@ -373,7 +374,6 @@ class MainWindow(QMainWindow):
         # TODO: В узлах показывается количество детей, а не игр
         # TODO: добавить кнопку выбора удаления пустых узлов
         # TODO: кнопку показа статистики: игры, платформы
-        # TODO: показывать в заголовке сколько всего игр найдено и платформ
 
         def delete_empty_category():
             """Удаление пустых узлов."""
@@ -537,6 +537,11 @@ class MainWindow(QMainWindow):
         self.filter_games(self.line_edit_filter.text())
 
         self.update_header_tree()
+
+        # Обновление заголовка окна
+        self.setWindowTitle('{}. Platforms: {}. Games: {}'.format(WINDOW_TITLE,
+                                                                  len(self.platform_list),
+                                                                  len(self.game_list)))
 
     def update_header_tree(self):
         # Проверяем, что фильтр какие-нибудь игры отфильтровал
