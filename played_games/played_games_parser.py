@@ -5,11 +5,13 @@ __author__ = 'ipetrash'
 
 
 from enum import Enum
-from collections import defaultdict
-
 
 from common import get_logger
 logger = get_logger('played_games_parser')
+
+
+# TODO: ОПТИМИЗАЦИЯ: Подсчет количества детей делать во время парсинга
+# TODO: Попытаться при разборе игры определить, что в ней написана последовательность серий игры
 
 
 class Parser:
@@ -26,13 +28,6 @@ class Parser:
         NOT_FINISHED_WATCHED = 3
         OTHER = 4
 
-        # @classmethod
-        # def fromstring(cls, str):
-        #     try:
-        #         return getattr(cls, str.upper())
-        #     except AttributeError:
-        #         return None
-
     class Game:
         """Класс игры. Содержит название игры и категорию, в которую игра входит."""
 
@@ -45,31 +40,61 @@ class Parser:
             return self.category.kind if self.category is not None else None
 
         def __str__(self):
-            return '"{}"'.format(self.name)
+            return 'Game "{}" ({})'.format(self.name, self.category_kind)
 
         def __repr__(self):
             return self.__str__()
 
-    # TODO: Сделать итериуремой! TypeError: 'Category' object is not iterable
     class Category:
-        """Класс категории. Содержит список игр, входящих в данную категорию."""
+        """Класс категории. Содержит список игр, входящих в данную категорию.
+        Итерируемый класс, в цикле возвращает игры.
 
-        def __init__(self, kind=None):
+        """
+
+        def __init__(self, kind=None, platform=None):
             self.kind = kind
-            self.game_list = set()
+            self.game_list = list()
+            self.platform = platform
+
+        @property
+        def count(self):
+            """Свойство возвращает количество игр в категории."""
+
+            return len(self.game_list)
 
         def add(self, name):
-            self.game_list.add(Parser.Game(name, self.kind))
+            self.game_list.append(Parser.Game(name, self))
+
+        def __iter__(self):
+            return self.game_list.__iter__()
+
+        def next(self):
+            return self.game_list.next()
+
+        def __str__(self):
+            return 'Category {} ({})'.format(self.kind, self.count)
+
+        def __repr__(self):
+            return self.__str__()
 
     class Platform:
-        """Класс платформы. Содержит название, словарь категорий платформы и список всех игр платформы."""
+        """Класс платформы. Содержит название, словарь категорий платформы и список
+        всех игр платформы.
+
+        """
 
         def __init__(self, name=None):
             self.name = name
             self.categories = dict()
-            # self.game_list = set()
 
-        # TODO: заполнять во время парсинга
+        @property
+        def count_games(self):
+            return len(self.game_list)
+
+        @property
+        def count_categories(self):
+            return len(self.categories)
+
         @property
         def game_list(self):
             games = set()
@@ -78,11 +103,11 @@ class Parser:
             for v in self.categories.values():
                 games.update(v.game_list)
 
-            return games
+            return frozenset(games)
 
         def get(self, kind_category):
             if kind_category not in self.categories:
-                category = Parser.Category(kind_category)
+                category = Parser.Category(kind_category, self)
                 self.categories[kind_category] = category
                 return category
 
@@ -101,17 +126,36 @@ class Parser:
             #
             # return None
 
+        def __str__(self):
+            return 'Platform {}. Games: {}. Categories: {}.'.format(self.name, self.count_games, self.count_categories)
+
+        def __repr__(self):
+            return self.__str__()
+
     class Other:
         """Класс неопределенных игр. Содержит словарь платформ."""
 
         def __init__(self):
             self.platforms = dict()
 
-        def add(self, name_platform, name_game):
+        @property
+        def count_games(self):
+            return sum([p.count_games for p in self.platforms.values()])
+
+        @property
+        def count_platforms(self):
+            return len(self.platforms)
+
+        def add_game(self, name_platform, name_game):
             # Получаем платформу, создаем категорию и добавляем в нее игру
             self.get(name_platform).get(Parser.CategoryEnum.OTHER).add(name_game)
 
         def get(self, name_platform):
+            """Функция возращает ссылку на объект Платформа. Если платформа с таким именем
+            не существует, она будет будет создана.
+
+            """
+
             if name_platform not in self.platforms:
                 platform = Parser.Platform(name_platform)
                 self.platforms[name_platform] = platform
@@ -119,11 +163,32 @@ class Parser:
 
             return self.platforms[name_platform]
 
+        def __str__(self):
+            return 'Other. Platforms: {}. Games: {}. '.format(self.count_platforms, self.count_categories)
+
+        def __repr__(self):
+            return self.__str__()
+
+    ALL_ATTRIBUTES_GAMES = ' -@'
+
     def __init__(self):
         self.platforms = dict()
         self.other = Parser.Other()
 
+    @property
+    def count_games(self):
+        return sum([p.count_games for p in p.platforms.values()])
+
+    @property
+    def count_platforms(self):
+        return len(self.platforms)
+
     def get(self, name_platform):
+        """Функция возращает ссылку на объект Платформа. Если платформа с таким именем
+        не существует, она будет будет создана.
+
+        """
+
         if name_platform not in self.platforms:
             platform = Parser.Platform(name_platform)
             self.platforms[name_platform] = platform
@@ -135,13 +200,17 @@ class Parser:
         self.platforms.clear()
         self.other.platforms.clear()
 
+        name_platform = None
+
+        # Проходим в текст построчно
         for line in text.split('\n'):
             line = line.rstrip()
             if not line:
                 continue
 
             # Определим игровую платформу: ПК, консоли и т.п.
-            if (line[0] not in [' ', '-', '@'] and line[0] not in [' ', '-', '@']) and line.endswith(':'):
+            if (line[0] not in Parser.ALL_ATTRIBUTES_GAMES and
+                        line[0] not in Parser.ALL_ATTRIBUTES_GAMES) and line.endswith(':'):
                 # Имя платформы без двоеточия на конце
                 name_platform = line[0: len(line) - 1]
                 platform_item = self.get(name_platform)
@@ -153,7 +222,7 @@ class Parser:
 
                 # Проверим на неизвестные атрибуты
                 unknown_attributes = str(attributes)
-                for c in ' -@':
+                for c in Parser.ALL_ATTRIBUTES_GAMES:
                     unknown_attributes = unknown_attributes.replace(c, '')
 
                 # Если строка не пуста, значит в ней есть неизвестные символы
@@ -161,7 +230,7 @@ class Parser:
                     # Добавляем, если нет, к неопределенным играм узел платформы или получаем платформу
                     logger.warning('Обнаружен неизвестный атрибут: {}, игра: {}, платформа: '.format(
                         unknown_attributes, line, name_platform))
-                    self.other.add(name_platform, line)
+                    self.other.add_game(name_platform, line)
                     continue
 
                 # TODO: рефакторинг
@@ -183,7 +252,27 @@ class Parser:
                     platform_item.get(Parser.CategoryEnum.NOT_FINISHED_WATCHED).add(game_name)
                 else:
                     logger.warning('Неопределенная игра {}, платформа: {}.'.format(line, name_platform))
-                    self.other.add(name_platform, game_name)
+                    self.other.add_game(name_platform, game_name)
+
+        # TODO: Сделать сортировку настраиваемой. Напрмиер, хранить два списка: обычный,
+        # который был заполнен при парсинге и производный от него -- отсортированный
+        # Сортировка игр
+        for platform in self.platforms.values():
+            for category in platform.categories.values():
+                category.game_list.sort(key=lambda x: x.name, reverse=False)
+
+        for platform in self.other.platforms.values():
+            for category in platform.categories.values():
+                category.game_list.sort(key=lambda x: x.name, reverse=False)
+
+    @property
+    def sorted_platforms(self, reverse=True):
+        """Возвращает отсортированный список кортежей (имя_платформы, платформа).
+        Сортируется по количеству игр в платформе.
+
+        """
+
+        return sorted(p.platforms.items(), key=lambda x: x[1].count_games, reverse=reverse)
 
 
 if __name__ == '__main__':
@@ -192,29 +281,27 @@ if __name__ == '__main__':
     p = Parser()
     p.parse(text)
 
-    # TODO: отсортировать платформы по количеству игр в них
+    indent = ' ' * 2
 
     print()
-    # TODO: количество считать во время парсига
-    print('Platforms ({}):'.format(sum([len(p.game_list) for p in p.platforms.values()])))
-    for k, v in p.platforms.items():
-        print('{}{}({}):'.format(' ' * 4, k, len(v.game_list)))
+    print('Games ({})'.format(p.count_games))
+    print('Platforms ({}):'.format(p.count_platforms))
+    for k, v in p.sorted_platforms:
+        print('{}{}({}):'.format(indent, k, v.count_games))
 
         for kind, category in v.categories.items():
-            print('{}{}({}):'.format(' ' * 4 * 2, kind, len(category.game_list)))
+            print('{}{}({}):'.format(indent * 2, kind, category.count))
 
-            for game in category.game_list:
-                print(' ' * 4 * 3, game)
+            for game in category:
+                print(indent * 3, game.name)
 
             print()
 
-        print()
-
     print()
-    # TODO: количество считать во время парсига
-    print('Other ({}):'.format(sum([len(p.game_list) for p in p.other.platforms.values()])))
+    print('Other ({}/{}):'.format(p.other.count_platforms, p.other.count_games))
     for k, v in p.other.platforms.items():
-        print('{}{}({}):'.format(' ' * 4, k, len(v.game_list)))
+        print('{}{}({}):'.format(indent, k, v.count_games))
 
-        for game in v.game_list:
-            print(' ' * 4 * 2 + str(game))
+        for category in v.categories.values():
+            for game in category:
+                print(indent * 2 + game.name)
