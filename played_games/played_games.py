@@ -126,6 +126,12 @@ OTHER_GAME_TITLE = 'Неопределенные игры'
 # TODO: добавить кнопку сортировки
 
 
+def played_games_parser(text):
+    """Функция парсит строку и возвращает словарь."""
+
+    pass
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
