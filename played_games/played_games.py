@@ -157,6 +157,7 @@ class MainWindow(QMainWindow):
         self.line_edit_filter = QLineEdit()
         self.line_edit_filter.setToolTip('WildCard Filter')
         # self.line_edit_filter.textEdited.connect(self.filter_games)
+        self.line_edit_filter.textEdited.connect(self.load_tree)
 
         filter_layout = QHBoxLayout()
         filter_layout.addWidget(QLabel('Filter:'))
@@ -180,6 +181,7 @@ class MainWindow(QMainWindow):
         # self.statusBar().addWidget(PROGRESS_BAR)
 
         self.parser = Parser()
+        self.parse_content = None
 
         self.update_header_tree()
 
@@ -337,14 +339,12 @@ class MainWindow(QMainWindow):
         logger.debug('Read from file finish.')
 
         logger.debug('Load tree start.')
-        self.load_tree(content_file)
+        self.parse_content = content_file
+        self.load_tree()
         logger.debug('Load tree finish.')
 
-        self.tree_games.expandAll()
-
-    def load_tree(self, text):
-        self.parser.parse(text)
-
+    def load_tree(self):
+        self.parser.parse(self.parse_content, self.line_edit_filter.text())
         self.tree_games.clear()
 
         indent = ' ' * 2
@@ -394,6 +394,8 @@ class MainWindow(QMainWindow):
 
         # # Применяем фильтр к элементам
         # self.filter_games(self.line_edit_filter.text())
+
+        self.tree_games.expandAll()
 
         self.update_header_tree()
 

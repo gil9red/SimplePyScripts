@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 from enum import Enum
+import fnmatch
 import time
 
 from common import get_logger
@@ -207,9 +208,27 @@ class Parser:
 
         return self.platforms[name_platform]
 
-    def parse(self, text):
+    @staticmethod
+    def delete_empty_platforms(platforms):
+        # Удаляем пустые платформы
+        platform_on_delete = list()
+        for k, v in platforms.items():
+            if v.count_games == 0:
+                platform_on_delete.append(k)
+
+        for name in platform_on_delete:
+            del platforms[name]
+
+    def parse(self, text, filter_exp=''):
         logger.debug('Start parsing')
         t = time.clock()
+
+        logger.debug('filter_exp="{}".'.format(filter_exp))
+
+        # Для возможности поиска просто по словам:
+        if not filter_exp.endswith('*'):
+            filter_exp += '*'
+            logger.debug('Change filter_exp="{}".'.format(filter_exp))
 
         self.platforms.clear()
         self.other.platforms.clear()
@@ -234,6 +253,13 @@ class Parser:
                 # Первые 2 символа -- тэг игры: пройденная, не пройденная, просмотренная
                 attributes = line[0:2]
 
+                # Третий символ и до конца строки -- имя игры
+                game_name = line[2:]
+
+                # Фильтруем игры
+                if not fnmatch.fnmatch(game_name, filter_exp):
+                    continue
+
                 # Проверим на неизвестные атрибуты
                 unknown_attributes = str(attributes)
                 for c in Parser.ALL_ATTRIBUTES_GAMES:
@@ -244,6 +270,7 @@ class Parser:
                     # Добавляем, если нет, к неопределенным играм узел платформы или получаем платформу
                     logger.warning('Обнаружен неизвестный атрибут: {}, игра: {}, платформа: '.format(
                         unknown_attributes, line, name_platform))
+
                     self.other.add_game(name_platform, line)
                     continue
 
@@ -253,8 +280,6 @@ class Parser:
 
                 is_finished_game = attributes == '  '
                 is_not_finished_game = attributes == '- ' or attributes == ' -'
-
-                game_name = line[2:]
 
                 if is_finished_game:
                     platform_item.get(Parser.CategoryEnum.FINISHED_GAME).add(game_name)
@@ -267,6 +292,10 @@ class Parser:
                 else:
                     logger.warning('Неопределенная игра {}, платформа: {}.'.format(line, name_platform))
                     self.other.add_game(name_platform, game_name)
+
+        Parser.delete_empty_platforms(self.platforms)
+        Parser.delete_empty_platforms(self.other.platforms)
+
 
         # # TODO: Сделать сортировку настраиваемой. Напрмиер, хранить два списка: обычный,
         # # который был заполнен при парсинге и производный от него -- отсортированный
