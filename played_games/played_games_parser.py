@@ -177,7 +177,7 @@ class Parser:
 
     @property
     def count_games(self):
-        return sum([p.count_games for p in p.platforms.values()])
+        return sum([p.count_games for p in self.platforms.values()])
 
     @property
     def count_platforms(self):
@@ -272,7 +272,7 @@ class Parser:
 
         """
 
-        return sorted(p.platforms.items(), key=lambda x: x[1].count_games, reverse=reverse)
+        return sorted(self.platforms.items(), key=lambda x: x[1].count_games, reverse=reverse)
 
 
 if __name__ == '__main__':
