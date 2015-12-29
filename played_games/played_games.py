@@ -24,6 +24,19 @@ logger = get_logger('played_games')
 
 DEFAULT_URL = 'https://gist.github.com/gil9red/2f80a34fb601cd685353'
 
+
+def add_tree_widget_item_platform(platform):
+    return QTreeWidgetItem(['{} ({}):'.format(platform.name, platform.count_games)])
+
+
+def add_tree_widget_item_category(category):
+    return QTreeWidgetItem(['{} ({}):'.format(ENUM_CATEGORY_TITLE_DICT[category.kind], category.count)])
+
+
+def add_tree_widget_item_game(game):
+    return QTreeWidgetItem([game.name])
+
+
 # # TODO: временно
 # PROGRESS_BAR = None
 
@@ -79,7 +92,7 @@ def reporthook(blocknum, blocksize, totalsize):
         print("read {}".format(readsofar))
 
     # TODO: не помогает
-    app.processEvents()
+    app.parser.processEvents()
 
 
 ENUM_OFFSET = QTreeWidgetItem.UserType
@@ -101,6 +114,16 @@ NOT_FINISHED_GAME_TITLE = 'Не закончено прохождение'
 FINISHED_WATCHED_TITLE = 'Просмотренные'
 NOT_FINISHED_WATCHED_TITLE = 'Не закончен просмотр'
 OTHER_GAME_TITLE = 'Неопределенные игры'
+
+
+from played_games_parser import Parser
+
+ENUM_CATEGORY_TITLE_DICT = {
+    Parser.CategoryEnum.FINISHED_GAME: FINISHED_GAME_TITLE,
+    Parser.CategoryEnum.NOT_FINISHED_GAME: NOT_FINISHED_GAME_TITLE,
+    Parser.CategoryEnum.FINISHED_WATCHED: FINISHED_WATCHED_TITLE,
+    Parser.CategoryEnum.NOT_FINISHED_WATCHED: NOT_FINISHED_WATCHED_TITLE,
+}
 
 
 # TODO: добавить кнопку сортировки
@@ -152,6 +175,8 @@ class MainWindow(QMainWindow):
         # global PROGRESS_BAR
         # PROGRESS_BAR = QProgressBar()
         # self.statusBar().addWidget(PROGRESS_BAR)
+
+        self.parser = Parser()
 
         # TODO: может, лучше на лету составлять список так же как и platform_list, в getter'е
         self.category_list = set()
@@ -337,207 +362,274 @@ class MainWindow(QMainWindow):
         # self.tree_games.expandAll()
 
     def load_tree(self, text):
-        # TODO: сделать модель дерева
+        self.parser.parse(text)
+
         self.tree_games.clear()
-        self.game_list.clear()
-        self.filtered_game_list.clear()
 
-        # file_name = 'gistfile1.txt'
+        indent = ' ' * 2
 
-        # TODO: вынести парсер в отдельную функцию
-        # platforms_game_dict = dict()
-        platform = None
+        print()
+        print('Games ({})'.format(self.parser.count_games))
+        print('Platforms ({}):'.format(self.parser.count_platforms))
+        for k, v in self.parser.sorted_platforms:
+            platform_item = add_tree_widget_item_platform(v)
+            self.tree_games.addTopLevelItem(platform_item)
 
-        platform_item = None
-        finished_game_items = None
-        not_finished_game_items = None
-        finished_watched_items = None
-        not_finished_watched_items = None
+            print('{}{}({}):'.format(indent, k, v.count_games))
 
-        self.strange_games = QTreeWidgetItem([OTHER_GAME_TITLE], ENUM_OTHER)
-        strange_platform_games_dict = dict()
+            for kind, category in v.categories.items():
+                print('{}{}({}):'.format(indent * 2, kind, category.count))
+                category_item = add_tree_widget_item_category(category)
+                platform_item.addChild(category_item)
 
-        # TODO: В узлах показывается количество детей, а не игр
-        # TODO: добавить кнопку выбора удаления пустых узлов
-        # TODO: кнопку показа статистики: игры, платформы
+                for game in category:
+                    game_item = add_tree_widget_item_game(game)
+                    platform_item.addChild(game_item)
+                    print(indent * 3, game.name)
 
-        def delete_empty_category():
-            """Удаление пустых узлов."""
+                print()
 
-            if platform_item is None:
-                return
+        if self.parser.other.count_games > 0:
+            other_item = QTreeWidgetItem(['{} ({}):'.format(OTHER_GAME_TITLE, self.parser.other.count_games)])
+            self.tree_games.addTopLevelItem(other_item)
 
-            if finished_game_items is not None and finished_game_items.childCount() == 0:
-                platform_item.removeChild(finished_game_items)
+            print()
+            print('Other ({}/{}):'.format(self.parser.other.count_platforms, self.parser.other.count_games))
+            for k, v in self.parser.other.platforms.items():
+                platform_item = add_tree_widget_item_platform(v)
+                other_item.addChild(platform_item)
+                print('{}{}({}):'.format(indent, k, v.count_games))
 
-            if not_finished_game_items is not None and not_finished_game_items.childCount() == 0:
-                platform_item.removeChild(not_finished_game_items)
+                for category in v.categories.values():
+                    for game in category:
+                        game_item = add_tree_widget_item_game(game)
+                        platform_item.addChild(game_item)
+                        print(indent * 2 + game.name)
 
-            if finished_watched_items is not None and finished_watched_items.childCount() == 0:
-                platform_item.removeChild(finished_watched_items)
-
-            if not_finished_watched_items is not None and not_finished_watched_items.childCount() == 0:
-                platform_item.removeChild(not_finished_watched_items)
-
-            # Добавление в множества оставшихся после удаления элементов категории
-            for item in self.to_list_item(platform_item):
-                self.category_list.add(item)
-
-        def set_count_children_nodes(platform):
-            """Функция добавляет к названиям узлов количество их детей"""
-
-            def set_text(item, title, count=None):
-                item.setText(0, '{} ({})'.format(title, item.childCount() if count is None else count))
-
-            # TODO: какой-нибудь рекурсивный алгоритм справится изящнее
-            # TODO: refactoring
-            if platform_item is not None:
-                platform_game_count = finished_game_items.childCount()
-                set_text(finished_game_items, FINISHED_GAME_TITLE)
-
-                platform_game_count += not_finished_game_items.childCount()
-                set_text(not_finished_game_items, NOT_FINISHED_GAME_TITLE)
-
-                platform_game_count += finished_watched_items.childCount()
-                set_text(finished_watched_items, FINISHED_WATCHED_TITLE)
-
-                platform_game_count += not_finished_watched_items.childCount()
-                set_text(not_finished_watched_items, NOT_FINISHED_WATCHED_TITLE)
-
-                set_text(platform_item, platform, platform_game_count)
-
-        for line in text.split('\n'):
-            # TODO: должно помочь от подвисания интерфейса
-            app.processEvents()
-
-            line = line.rstrip()
-
-            if line:
-                # TODO: рефакторинг
-                # Определим игровую платформу: ПК, консоли и т.п.
-                if (line[0] not in [' ', '-', '@'] and line[0] not in [' ', '-', '@']) and line.endswith(':'):
-                    set_count_children_nodes(platform)
-                    delete_empty_category()
-
-                    # Имя платформы без двоеточия на конце
-                    platform = line[0: len(line) - 1]
-                    platform_item = QTreeWidgetItem([platform], ENUM_PLATFORM)
-                    self.tree_games.addTopLevelItem(platform_item)
-
-                    finished_game_items = QTreeWidgetItem([FINISHED_GAME_TITLE], ENUM_CATEGORY)
-                    not_finished_game_items = QTreeWidgetItem([NOT_FINISHED_GAME_TITLE], ENUM_CATEGORY)
-                    finished_watched_items = QTreeWidgetItem([FINISHED_WATCHED_TITLE], ENUM_CATEGORY)
-                    not_finished_watched_items = QTreeWidgetItem([NOT_FINISHED_WATCHED_TITLE], ENUM_CATEGORY)
-
-                    platform_item.addChild(finished_game_items)
-                    platform_item.addChild(not_finished_game_items)
-                    platform_item.addChild(finished_watched_items)
-                    platform_item.addChild(not_finished_watched_items)
-                    continue
-
-                if platform:
-                    # Первые 2 символа -- тэг игры: пройденная, не пройденная, просмотренная
-                    attributes = line[0:2]
-
-                    # Проверим на неизвестные атрибуты
-                    unknown_attributes = str(attributes)
-                    for c in ' -@':
-                        unknown_attributes = unknown_attributes.replace(c, '')
-
-                    # Если строка не пуста, значит в ней есть неизвестные символы
-                    if unknown_attributes:
-                        # Добавляем к неопределенным играм узел платформы
-                        if platform not in strange_platform_games_dict:
-                            strange_game_platform_item = QTreeWidgetItem([platform], ENUM_OTHER_PLATFORM)
-                            strange_platform_games_dict[platform] = strange_game_platform_item
-                            self.strange_games.addChild(strange_game_platform_item)
-                        else:
-                            strange_game_platform_item = strange_platform_games_dict[platform]
-
-                        logger.warning('!!! Обнаружен неизвестный атрибут !!!: ' + unknown_attributes + ', игра: '
-                                       + line + ', платформа: ' + platform)
-                        game_item = QTreeWidgetItem([line], ENUM_GAME)
-                        strange_game_platform_item.addChild(game_item)
-                        self.game_list.add(game_item)
-                        continue
-
-                    # TODO: рефакторинг
-                    is_finished_watched = attributes == '@ ' or attributes == ' @'
-                    is_not_finished_watched = attributes == '@-' or attributes == '-@'
-
-                    is_finished_game = attributes == '  '
-                    is_not_finished_game = attributes == '- ' or attributes == ' -'
-
-                    # TODO: rem
-                    game_name = line[2:]
-                    # platforms_game_dict[platform] = game_name
-
-                    game_item = QTreeWidgetItem([game_name], ENUM_GAME)
-                    self.game_list.add(game_item)
-                    # platform_item.addChild(game_item)
-
-                    if is_finished_game:
-                        finished_game_items.addChild(game_item)
-                    elif is_not_finished_game:
-                        not_finished_game_items.addChild(game_item)
-                    elif is_finished_watched:
-                        finished_watched_items.addChild(game_item)
-                    elif is_not_finished_watched:
-                        not_finished_watched_items.addChild(game_item)
-                    else:
-                        logger.warning('!!! Неопределенная игра !!! ' + line + ', платформа: ' + platform)
-
-                        # Добавляем к неопределенным играм узел платформы
-                        if platform not in strange_platform_games_dict:
-                            strange_game_platform_item = QTreeWidgetItem([platform], ENUM_OTHER_PLATFORM)
-                            strange_platform_games_dict[platform] = strange_game_platform_item
-                            self.strange_games.addChild(strange_game_platform_item)
-                        else:
-                            strange_game_platform_item = strange_platform_games_dict[platform]
-
-                        game_item.setText(0, line + ' / ' + platform)
-                        strange_game_platform_item.addChild(game_item)
-
-        set_count_children_nodes(platform)
-        delete_empty_category()
-
-        # Добавляем узел неопределенных игр
-        if self.strange_games.childCount() > 0:
-            self.tree_games.addTopLevelItem(self.strange_games)
-        else:
-            self.strange_games = None
-
-        # print(platforms_game_dict)
-
-        # Указываем количество неопределенных игр в узле неопределенных игр и его детей-платформ
-        count_other_game = 0
-
-        for platform, platform_item in strange_platform_games_dict.items():
-            platform_item.setText(0, '{} ({})'.format(platform, platform_item.childCount()))
-            count_other_game += platform_item.childCount()
-
-        if self.strange_games is not None:
-            self.strange_games.setText(0, '{} ({})'.format(OTHER_GAME_TITLE, count_other_game))
-
-        # Применяем фильтр к элементам
-        self.filter_games(self.line_edit_filter.text())
+        # # Применяем фильтр к элементам
+        # self.filter_games(self.line_edit_filter.text())
 
         self.update_header_tree()
 
         # Обновление заголовка окна
         self.setWindowTitle('{}. Platforms: {}. Games: {}'.format(WINDOW_TITLE,
-                                                                  len(self.platform_list),
-                                                                  len(self.game_list)))
+                                                                  self.parser.count_platforms,
+                                                                  self.parser.count_games))
+
+        # # TODO: сделать модель дерева
+        # self.tree_games.clear()
+        # self.game_list.clear()
+        # self.filtered_game_list.clear()
+        #
+        # # file_name = 'gistfile1.txt'
+        #
+        # # TODO: вынести парсер в отдельную функцию
+        # # platforms_game_dict = dict()
+        # platform = None
+        #
+        # platform_item = None
+        # finished_game_items = None
+        # not_finished_game_items = None
+        # finished_watched_items = None
+        # not_finished_watched_items = None
+        #
+        # self.strange_games = QTreeWidgetItem([OTHER_GAME_TITLE], ENUM_OTHER)
+        # strange_platform_games_dict = dict()
+        #
+        # # TODO: В узлах показывается количество детей, а не игр
+        # # TODO: добавить кнопку выбора удаления пустых узлов
+        # # TODO: кнопку показа статистики: игры, платформы
+        #
+        # def delete_empty_category():
+        #     """Удаление пустых узлов."""
+        #
+        #     if platform_item is None:
+        #         return
+        #
+        #     if finished_game_items is not None and finished_game_items.childCount() == 0:
+        #         platform_item.removeChild(finished_game_items)
+        #
+        #     if not_finished_game_items is not None and not_finished_game_items.childCount() == 0:
+        #         platform_item.removeChild(not_finished_game_items)
+        #
+        #     if finished_watched_items is not None and finished_watched_items.childCount() == 0:
+        #         platform_item.removeChild(finished_watched_items)
+        #
+        #     if not_finished_watched_items is not None and not_finished_watched_items.childCount() == 0:
+        #         platform_item.removeChild(not_finished_watched_items)
+        #
+        #     # Добавление в множества оставшихся после удаления элементов категории
+        #     for item in self.to_list_item(platform_item):
+        #         self.category_list.add(item)
+        #
+        # def set_count_children_nodes(platform):
+        #     """Функция добавляет к названиям узлов количество их детей"""
+        #
+        #     def set_text(item, title, count=None):
+        #         item.setText(0, '{} ({})'.format(title, item.childCount() if count is None else count))
+        #
+        #     # TODO: какой-нибудь рекурсивный алгоритм справится изящнее
+        #     # TODO: refactoring
+        #     if platform_item is not None:
+        #         platform_game_count = finished_game_items.childCount()
+        #         set_text(finished_game_items, FINISHED_GAME_TITLE)
+        #
+        #         platform_game_count += not_finished_game_items.childCount()
+        #         set_text(not_finished_game_items, NOT_FINISHED_GAME_TITLE)
+        #
+        #         platform_game_count += finished_watched_items.childCount()
+        #         set_text(finished_watched_items, FINISHED_WATCHED_TITLE)
+        #
+        #         platform_game_count += not_finished_watched_items.childCount()
+        #         set_text(not_finished_watched_items, NOT_FINISHED_WATCHED_TITLE)
+        #
+        #         set_text(platform_item, platform, platform_game_count)
+        #
+        # for line in text.split('\n'):
+        #     # TODO: должно помочь от подвисания интерфейса
+        #     apself.parser.processEvents()
+        #
+        #     line = line.rstrip()
+        #
+        #     if line:
+        #         # TODO: рефакторинг
+        #         # Определим игровую платформу: ПК, консоли и т.п.
+        #         if (line[0] not in [' ', '-', '@'] and line[0] not in [' ', '-', '@']) and line.endswith(':'):
+        #             set_count_children_nodes(platform)
+        #             delete_empty_category()
+        #
+        #             # Имя платформы без двоеточия на конце
+        #             platform = line[0: len(line) - 1]
+        #             platform_item = QTreeWidgetItem([platform], ENUM_PLATFORM)
+        #             self.tree_games.addTopLevelItem(platform_item)
+        #
+        #             finished_game_items = QTreeWidgetItem([FINISHED_GAME_TITLE], ENUM_CATEGORY)
+        #             not_finished_game_items = QTreeWidgetItem([NOT_FINISHED_GAME_TITLE], ENUM_CATEGORY)
+        #             finished_watched_items = QTreeWidgetItem([FINISHED_WATCHED_TITLE], ENUM_CATEGORY)
+        #             not_finished_watched_items = QTreeWidgetItem([NOT_FINISHED_WATCHED_TITLE], ENUM_CATEGORY)
+        #
+        #             platform_item.addChild(finished_game_items)
+        #             platform_item.addChild(not_finished_game_items)
+        #             platform_item.addChild(finished_watched_items)
+        #             platform_item.addChild(not_finished_watched_items)
+        #             continue
+        #
+        #         if platform:
+        #             # Первые 2 символа -- тэг игры: пройденная, не пройденная, просмотренная
+        #             attributes = line[0:2]
+        #
+        #             # Проверим на неизвестные атрибуты
+        #             unknown_attributes = str(attributes)
+        #             for c in ' -@':
+        #                 unknown_attributes = unknown_attributes.replace(c, '')
+        #
+        #             # Если строка не пуста, значит в ней есть неизвестные символы
+        #             if unknown_attributes:
+        #                 # Добавляем к неопределенным играм узел платформы
+        #                 if platform not in strange_platform_games_dict:
+        #                     strange_game_platform_item = QTreeWidgetItem([platform], ENUM_OTHER_PLATFORM)
+        #                     strange_platform_games_dict[platform] = strange_game_platform_item
+        #                     self.strange_games.addChild(strange_game_platform_item)
+        #                 else:
+        #                     strange_game_platform_item = strange_platform_games_dict[platform]
+        #
+        #                 logger.warning('!!! Обнаружен неизвестный атрибут !!!: ' + unknown_attributes + ', игра: '
+        #                                + line + ', платформа: ' + platform)
+        #                 game_item = QTreeWidgetItem([line], ENUM_GAME)
+        #                 strange_game_platform_item.addChild(game_item)
+        #                 self.game_list.add(game_item)
+        #                 continue
+        #
+        #             # TODO: рефакторинг
+        #             is_finished_watched = attributes == '@ ' or attributes == ' @'
+        #             is_not_finished_watched = attributes == '@-' or attributes == '-@'
+        #
+        #             is_finished_game = attributes == '  '
+        #             is_not_finished_game = attributes == '- ' or attributes == ' -'
+        #
+        #             # TODO: rem
+        #             game_name = line[2:]
+        #             # platforms_game_dict[platform] = game_name
+        #
+        #             game_item = QTreeWidgetItem([game_name], ENUM_GAME)
+        #             self.game_list.add(game_item)
+        #             # platform_item.addChild(game_item)
+        #
+        #             if is_finished_game:
+        #                 finished_game_items.addChild(game_item)
+        #             elif is_not_finished_game:
+        #                 not_finished_game_items.addChild(game_item)
+        #             elif is_finished_watched:
+        #                 finished_watched_items.addChild(game_item)
+        #             elif is_not_finished_watched:
+        #                 not_finished_watched_items.addChild(game_item)
+        #             else:
+        #                 logger.warning('!!! Неопределенная игра !!! ' + line + ', платформа: ' + platform)
+        #
+        #                 # Добавляем к неопределенным играм узел платформы
+        #                 if platform not in strange_platform_games_dict:
+        #                     strange_game_platform_item = QTreeWidgetItem([platform], ENUM_OTHER_PLATFORM)
+        #                     strange_platform_games_dict[platform] = strange_game_platform_item
+        #                     self.strange_games.addChild(strange_game_platform_item)
+        #                 else:
+        #                     strange_game_platform_item = strange_platform_games_dict[platform]
+        #
+        #                 game_item.setText(0, line + ' / ' + platform)
+        #                 strange_game_platform_item.addChild(game_item)
+        #
+        # set_count_children_nodes(platform)
+        # delete_empty_category()
+        #
+        # # Добавляем узел неопределенных игр
+        # if self.strange_games.childCount() > 0:
+        #     self.tree_games.addTopLevelItem(self.strange_games)
+        # else:
+        #     self.strange_games = None
+        #
+        # # print(platforms_game_dict)
+        #
+        # # Указываем количество неопределенных игр в узле неопределенных игр и его детей-платформ
+        # count_other_game = 0
+        #
+        # for platform, platform_item in strange_platform_games_dict.items():
+        #     platform_item.setText(0, '{} ({})'.format(platform, platform_item.childCount()))
+        #     count_other_game += platform_item.childCount()
+        #
+        # if self.strange_games is not None:
+        #     self.strange_games.setText(0, '{} ({})'.format(OTHER_GAME_TITLE, count_other_game))
+        #
+        # # Применяем фильтр к элементам
+        # self.filter_games(self.line_edit_filter.text())
+        #
+        # self.update_header_tree()
+        #
+        # # Обновление заголовка окна
+        # self.setWindowTitle('{}. Platforms: {}. Games: {}'.format(WINDOW_TITLE,
+        #                                                           len(self.platform_list),
+        #                                                           len(self.game_list)))
+
+    # def update_header_tree(self):
+    #     # Проверяем, что фильтр какие-нибудь игры отфильтровал
+    #     enabled_filter = len(self.game_list) != len(self.filtered_game_list)
+    #
+    #     # Указываем в заголовке общее количество игр и при фильтр, количество игр, оставшихся после фильтрации
+    #     self.tree_games.setHeaderLabel(
+    #         '{} ({})'.format(TREE_HEADER, len(self.game_list)) +
+    #         ('' if not enabled_filter else '. Filtered ' + str(len(self.filtered_game_list)))
+    #     )
 
     def update_header_tree(self):
-        # Проверяем, что фильтр какие-нибудь игры отфильтровал
-        enabled_filter = len(self.game_list) != len(self.filtered_game_list)
+        # # Проверяем, что фильтр какие-нибудь игры отфильтровал
+        # enabled_filter = len(self.game_list) != len(self.filtered_game_list)
+        #
+        # # Указываем в заголовке общее количество игр и при фильтр, количество игр, оставшихся после фильтрации
+        # self.tree_games.setHeaderLabel(
+        #     '{} ({})'.format(TREE_HEADER, len(self.game_list)) +
+        #     ('' if not enabled_filter else '. Filtered ' + str(len(self.filtered_game_list)))
+        # )
 
         # Указываем в заголовке общее количество игр и при фильтр, количество игр, оставшихся после фильтрации
-        self.tree_games.setHeaderLabel(
-            '{} ({})'.format(TREE_HEADER, len(self.game_list)) +
-            ('' if not enabled_filter else '. Filtered ' + str(len(self.filtered_game_list)))
-        )
+        self.tree_games.setHeaderLabel('{} ({})'.format(TREE_HEADER, self.parser.count_games))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

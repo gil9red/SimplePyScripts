@@ -254,16 +254,16 @@ class Parser:
                     logger.warning('Неопределенная игра {}, платформа: {}.'.format(line, name_platform))
                     self.other.add_game(name_platform, game_name)
 
-        # TODO: Сделать сортировку настраиваемой. Напрмиер, хранить два списка: обычный,
-        # который был заполнен при парсинге и производный от него -- отсортированный
-        # Сортировка игр
-        for platform in self.platforms.values():
-            for category in platform.categories.values():
-                category.game_list.sort(key=lambda x: x.name, reverse=False)
-
-        for platform in self.other.platforms.values():
-            for category in platform.categories.values():
-                category.game_list.sort(key=lambda x: x.name, reverse=False)
+        # # TODO: Сделать сортировку настраиваемой. Напрмиер, хранить два списка: обычный,
+        # # который был заполнен при парсинге и производный от него -- отсортированный
+        # # Сортировка игр
+        # for platform in self.platforms.values():
+        #     for category in platform.categories.values():
+        #         category.game_list.sort(key=lambda x: x.name, reverse=False)
+        #
+        # for platform in self.other.platforms.values():
+        #     for category in platform.categories.values():
+        #         category.game_list.sort(key=lambda x: x.name, reverse=False)
 
     @property
     def sorted_platforms(self, reverse=True):
