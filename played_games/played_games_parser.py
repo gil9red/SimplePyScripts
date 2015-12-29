@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 from enum import Enum
+import time
 
 from common import get_logger
 logger = get_logger('played_games_parser')
@@ -176,8 +177,18 @@ class Parser:
         self.other = Parser.Other()
 
     @property
+    def games(self):
+        """Получение списка всех найденных игр."""
+
+        all_games = list()
+        for p in list(self.platforms.values()) + list(self.other.platforms.values()):
+            all_games.extend(p.game_list)
+
+        return all_games
+
+    @property
     def count_games(self):
-        return sum([p.count_games for p in self.platforms.values()])
+        return len(self.games)
 
     @property
     def count_platforms(self):
@@ -197,6 +208,9 @@ class Parser:
         return self.platforms[name_platform]
 
     def parse(self, text):
+        logger.debug('Start parsing')
+        t = time.clock()
+
         self.platforms.clear()
         self.other.platforms.clear()
 
@@ -264,6 +278,8 @@ class Parser:
         # for platform in self.other.platforms.values():
         #     for category in platform.categories.values():
         #         category.game_list.sort(key=lambda x: x.name, reverse=False)
+
+        logger.debug('Finish parsing. Elapsed time: {:.3f} ms.'.format(time.clock() - t))
 
     @property
     def sorted_platforms(self, reverse=True):
