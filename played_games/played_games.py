@@ -156,7 +156,6 @@ class MainWindow(QMainWindow):
 
         self.line_edit_filter = QLineEdit()
         self.line_edit_filter.setToolTip('WildCard Filter')
-        # self.line_edit_filter.textEdited.connect(self.filter_games)
         self.line_edit_filter.textEdited.connect(self.load_tree)
 
         filter_layout = QHBoxLayout()
@@ -184,89 +183,6 @@ class MainWindow(QMainWindow):
         self.parse_content = None
 
         self.update_header_tree()
-
-    # @property
-    # def platform_list(self):
-    #     root = self.tree_games.invisibleRootItem()
-    #     return [item for item in self.to_list_item(root) if item is not self.strange_games]
-    #
-    # @staticmethod
-    # def to_list_item(node):
-    #     if node is None:
-    #         # Чтобы не загромождать проверками на None или исключения. Если вернуть None, то в
-    #         # в циклах, использующих эту функцию будут исключения: "TypeError: 'NoneType' object is not iterable"
-    #         return list()
-    #
-    #     return [node.child(i) for i in range(node.childCount())]
-    #
-    # def filter_games(self, filter_exp):
-    #     logger.debug('Filter game start. filter_exp="{}".'.format(filter_exp))
-    #
-    #     # Для возможности поиска просто по словам:
-    #     if not filter_exp.endswith('*'):
-    #         filter_exp += '*'
-    #         logger.debug('Change filter_exp="{}".'.format(filter_exp))
-    #
-    #     # Очищаем множество. Добавляем в него отфильтрованные игры. Удаляем элементы, не входящие в множество игры.
-    #     self.filtered_game_list.clear()
-    #     self.filtered_game_list.update(set(self.tree_games.findItems(filter_exp, Qt.MatchRecursive | Qt.MatchWildcard)))
-    #     self.filtered_game_list.intersection_update(self.game_list)
-    #     logger.debug('Filter game finish. Games: {}.'.format(len(self.filtered_game_list)))
-    #
-    #     logger.debug('Tree update start.')
-    #
-    #     # Прячем не прошедшие фильтрацию игры, а также категории и платформы, если их дети все спрятаны.
-    #     logger.debug('Hide game: {}.'.format(self.hide_games()))
-    #     logger.debug('Hide categories: {}.'.format(self.hide_nodes(self.category_list)))
-    #     logger.debug('Hide platform: {}.'.format(self.hide_nodes(self.platform_list)))
-    #
-    #     if self.strange_games is not None:
-    #         logger.debug('Hide strange category: {}.'.format(self.hide_nodes(self.to_list_item(self.strange_games))))
-    #         logger.debug('Hide strange: {}.'.format(self.hide_node(self.strange_games)))
-    #
-    #     logger.debug('Tree update finish.')
-    #
-    #     self.update_header_tree()
-    #
-    # def hide_games(self):
-    #     count = 0
-    #
-    #     # Если элемента нет в отфильтрованном списке, прячем его
-    #     for item in self.game_list:
-    #         if item not in self.filtered_game_list:
-    #             item.setHidden(True)
-    #             count += 1
-    #         else:
-    #             item.setHidden(False)
-    #
-    #     return count
-    #
-    # def hide_node(self, node):
-    #     """Функция скрывает те узлы, у которых всех дети скрыты, иначе -- показывает."""
-    #
-    #     if node is None:
-    #         return
-    #
-    #     def all_hidden(self, node):
-    #         for item in self.to_list_item(node):
-    #             if not item.isHidden():
-    #                 return False
-    #
-    #         return True
-    #
-    #     is_hide = all_hidden(self, node)
-    #     node.setHidden(is_hide)
-    #
-    #     return is_hide
-    #
-    # def hide_nodes(self, nodes):
-    #     # Подсчитаем сколько будет скрыто категорий
-    #     count = 0
-    #     for node in nodes:
-    #         if self.hide_node(node):
-    #             count += 1
-    #
-    #     return count
 
     # TODO: выполнить функцию в другом потоке
     # def download(self, url):
@@ -338,65 +254,45 @@ class MainWindow(QMainWindow):
 
         logger.debug('Read from file finish.')
 
-        logger.debug('Load tree start.')
         self.parse_content = content_file
         self.load_tree()
-        logger.debug('Load tree finish.')
 
     def load_tree(self):
+        logger.debug('Start build tree.')
+
         self.parser.parse(self.parse_content, self.line_edit_filter.text())
         self.tree_games.clear()
 
-        indent = ' ' * 2
-
-        print()
-        print('Games ({})'.format(self.parser.count_games))
-        print('Platforms ({}):'.format(self.parser.count_platforms))
         for k, v in self.parser.sorted_platforms:
             platform_item = add_tree_widget_item_platform(v)
             self.tree_games.addTopLevelItem(platform_item)
-
-            print('{}{}({}):'.format(indent, k, v.count_games))
 
             for kind in SEQ_ADDED_CATEGORIES:
                 if kind not in v.categories:
                     continue
 
                 category = v.categories[kind]
-
-                print('{}{}({}):'.format(indent * 2, kind, category.count))
                 category_item = add_tree_widget_item_category(category)
                 platform_item.addChild(category_item)
 
                 for game in category:
                     game_item = add_tree_widget_item_game(game)
                     category_item.addChild(game_item)
-                    print(indent * 3, game.name)
-
-                print()
 
         if self.parser.other.count_games > 0:
             other_item = QTreeWidgetItem(['{} ({}):'.format(OTHER_GAME_TITLE, self.parser.other.count_games)])
             self.tree_games.addTopLevelItem(other_item)
 
-            print()
-            print('Other ({}/{}):'.format(self.parser.other.count_platforms, self.parser.other.count_games))
             for k, v in self.parser.other.platforms.items():
                 platform_item = add_tree_widget_item_platform(v)
                 other_item.addChild(platform_item)
-                print('{}{}({}):'.format(indent, k, v.count_games))
 
                 for category in v.categories.values():
                     for game in category:
                         game_item = add_tree_widget_item_game(game)
                         platform_item.addChild(game_item)
-                        print(indent * 2 + game.name)
-
-        # # Применяем фильтр к элементам
-        # self.filter_games(self.line_edit_filter.text())
 
         self.tree_games.expandAll()
-
         self.update_header_tree()
 
         # Обновление заголовка окна
