@@ -95,14 +95,6 @@ def reporthook(blocknum, blocksize, totalsize):
     app.parser.processEvents()
 
 
-# ENUM_OFFSET = QTreeWidgetItem.UserType
-# ENUM_PLATFORM = ENUM_OFFSET + 1
-# ENUM_CATEGORY = ENUM_OFFSET + 2
-# ENUM_GAME = ENUM_OFFSET + 3
-# ENUM_OTHER = ENUM_OFFSET + 4
-# ENUM_OTHER_PLATFORM = ENUM_OFFSET + 5
-# ENUM_OTHER_GAME = ENUM_OFFSET + 6
-
 TEST_USING_FILE_GAMES = True
 
 
@@ -131,11 +123,9 @@ SEQ_ADDED_CATEGORIES = [Parser.CategoryEnum.FINISHED_GAME,
 # TODO: добавить кнопку сортировки
 # TODO: сделать модель дерева
 # TODO: В узлах показывается количество детей, а не игр
-# TODO: добавить кнопку выбора удаления пустых узлов
 # TODO: кнопку показа статистики: игры, платформы
 # TODO: избавить от подвисания программы во время загрузки файла и его парсинга
-# TODO: В отдельном потоке
-# TODO: прогресс загрузки из сети файла (хотя бы в процентах)
+# TODO: показывать прогресс загрузки из сети файла (хотя бы в процентах)
 
 
 class MainWindow(QMainWindow):
@@ -301,17 +291,9 @@ class MainWindow(QMainWindow):
                                                                   self.parser.count_games))
 
     def update_header_tree(self):
-        # # Проверяем, что фильтр какие-нибудь игры отфильтровал
-        # enabled_filter = len(self.game_list) != len(self.filtered_game_list)
-        #
-        # # Указываем в заголовке общее количество игр и при фильтр, количество игр, оставшихся после фильтрации
-        # self.tree_games.setHeaderLabel(
-        #     '{} ({})'.format(TREE_HEADER, len(self.game_list)) +
-        #     ('' if not enabled_filter else '. Filtered ' + str(len(self.filtered_game_list)))
-        # )
-
         # Указываем в заголовке общее количество игр и при фильтр, количество игр, оставшихся после фильтрации
         self.tree_games.setHeaderLabel('{} ({})'.format(TREE_HEADER, self.parser.count_games))
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
