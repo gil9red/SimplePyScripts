@@ -172,7 +172,7 @@ class MainWindow(QMainWindow):
         self.parser = Parser()
         self.parse_content = None
 
-        self.update_header_tree()
+        self.update_header_tree_and_window_title()
 
     # TODO: выполнить функцию в другом потоке
     # def download(self, url):
@@ -283,16 +283,16 @@ class MainWindow(QMainWindow):
                         platform_item.addChild(game_item)
 
         self.tree_games.expandAll()
-        self.update_header_tree()
+        self.update_header_tree_and_window_title()
+
+    def update_header_tree_and_window_title(self):
+        # Указываем в заголовке общее количество игр и при фильтр, количество игр, оставшихся после фильтрации
+        self.tree_games.setHeaderLabel('{} ({})'.format(TREE_HEADER, self.parser.count_games))
 
         # Обновление заголовка окна
         self.setWindowTitle('{}. Platforms: {}. Games: {}'.format(WINDOW_TITLE,
                                                                   self.parser.count_platforms,
                                                                   self.parser.count_games))
-
-    def update_header_tree(self):
-        # Указываем в заголовке общее количество игр и при фильтр, количество игр, оставшихся после фильтрации
-        self.tree_games.setHeaderLabel('{} ({})'.format(TREE_HEADER, self.parser.count_games))
 
 
 if __name__ == '__main__':
