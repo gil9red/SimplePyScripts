@@ -155,7 +155,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.button_refresh_by_url)
 
         self.line_edit_filter = QLineEdit()
-        self.line_edit_filter.setToolTip('WildCard Filter')
+        self.line_edit_filter.setToolTip('Wildcard Filter')
         self.line_edit_filter.textEdited.connect(self.load_tree)
 
         filter_layout = QHBoxLayout()
