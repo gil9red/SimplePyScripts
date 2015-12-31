@@ -13,7 +13,48 @@ logger = get_logger('played_games_parser')
 
 
 # TODO: ОПТИМИЗАЦИЯ: Подсчет количества детей делать во время парсинга
-# TODO: Попытаться при разборе игры определить, что в ней написана последовательность серий игры
+# text = """
+#   Ведьмак 1, 2, 3
+#   Far Cry 1, 2
+#   The Elder Scrolls: Oblivion
+#   The Elder Scrolls: Skyrim
+#   Fallout 3
+# @ Невероятные Приключения Трояна 1-3
+# @ Невероятные Приключения Трояна 1  -   3
+# """
+
+import re
+parse_game_name_pattern = re.compile(r'(\d+(, ?\d+)+)|(\d+ *?- *?\d+)')
+
+
+def parse_game_name(game_name):
+    match = parse_game_name_pattern.search(game_name)
+    if match is not None:
+        seq_str = parse_game_name_pattern.search(game_name).group(0)
+        short_name = game_name.replace(seq_str, '').strip()
+
+        if ',' in seq_str:
+            seq = seq_str.replace(' ', '').split(',')
+            seq = tuple(map(int, seq))
+
+        elif '-' in seq_str:
+            seq = seq_str.replace(' ', '').split('-')
+            if len(seq) > 2:
+                logger.warning('Unknown seq str = "{}".'.format(seq_str))
+            else:
+                seq = tuple(map(int, seq))
+                seq = tuple(range(seq[0], seq[1] + 1))
+        else:
+            logger.warning('Unknown seq str = "{}".'.format(seq_str))
+
+        return ['{} {}'.format(short_name, num) for num in seq]
+
+    return [game_name]
+
+# for line in text.split('\n'):
+#     if line.strip():
+#         line = line[2:].strip()
+#         print(parse_game_name(line))
 
 
 class Parser:
@@ -219,7 +260,31 @@ class Parser:
         for name in platform_on_delete:
             del platforms[name]
 
-    def parse(self, text, filter_exp=''):
+    # TODO: правильно оформить docstring
+    def parse(self, text, filter_exp='', parse_game_name_on_sequence=True, sort_game=False, sort_reverse=False):
+        """Функция парсит строку игр.
+
+        text -- строка с играми
+        filter_exp -- wildcard выражение фильтрации игр
+        parse_game_name_on_sequence -- параметр определяет нужно ли в названиии
+        игры искать указание ее частей. Например,
+        "Resident Evil 4, 5, 6" станет:
+          Resident Evil 4
+          Resident Evil 5
+          Resident Evil 6
+
+        "Resident Evil 1-3" станет:
+          Resident Evil 1
+          Resident Evil 2
+          Resident Evil 3
+
+        sort_game -- сортировка игр
+        sort_reverse -- направление сортировки
+        """
+
+        # TODO: параметр для удаления номера серии "1"
+        # "Resident Evil 1" станет "Resident Evil"
+
         logger.debug('Start parsing')
         t = time.clock()
 
@@ -255,58 +320,59 @@ class Parser:
 
                 # Третий символ и до конца строки -- имя игры
                 game_name = line[2:]
+                game_name_list = parse_game_name(game_name) if parse_game_name_on_sequence else [game_name]
 
-                # Фильтруем игры
-                if not fnmatch.fnmatch(game_name, filter_exp):
-                    continue
+                for game_name in game_name_list:
+                    # Фильтруем игры
+                    if not fnmatch.fnmatch(game_name, filter_exp):
+                        continue
 
-                # Проверим на неизвестные атрибуты
-                unknown_attributes = str(attributes)
-                for c in Parser.ALL_ATTRIBUTES_GAMES:
-                    unknown_attributes = unknown_attributes.replace(c, '')
+                    # Проверим на неизвестные атрибуты
+                    unknown_attributes = str(attributes)
+                    for c in Parser.ALL_ATTRIBUTES_GAMES:
+                        unknown_attributes = unknown_attributes.replace(c, '')
 
-                # Если строка не пуста, значит в ней есть неизвестные символы
-                if unknown_attributes:
-                    # Добавляем, если нет, к неопределенным играм узел платформы или получаем платформу
-                    logger.warning('Обнаружен неизвестный атрибут: {}, игра: {}, платформа: '.format(
-                        unknown_attributes, line, name_platform))
+                    # Если строка не пуста, значит в ней есть неизвестные символы
+                    if unknown_attributes:
+                        # Добавляем, если нет, к неопределенным играм узел платформы или получаем платформу
+                        logger.warning('Обнаружен неизвестный атрибут: {}, игра: {}, платформа: '.format(
+                            unknown_attributes, line, name_platform))
 
-                    self.other.add_game(name_platform, line)
-                    continue
+                        self.other.add_game(name_platform, line)
+                        continue
 
-                # TODO: рефакторинг
-                is_finished_watched = attributes == '@ ' or attributes == ' @'
-                is_not_finished_watched = attributes == '@-' or attributes == '-@'
+                    # TODO: рефакторинг
+                    is_finished_watched = attributes == '@ ' or attributes == ' @'
+                    is_not_finished_watched = attributes == '@-' or attributes == '-@'
 
-                is_finished_game = attributes == '  '
-                is_not_finished_game = attributes == '- ' or attributes == ' -'
+                    is_finished_game = attributes == '  '
+                    is_not_finished_game = attributes == '- ' or attributes == ' -'
 
-                if is_finished_game:
-                    platform_item.get(Parser.CategoryEnum.FINISHED_GAME).add(game_name)
-                elif is_not_finished_game:
-                    platform_item.get(Parser.CategoryEnum.NOT_FINISHED_GAME).add(game_name)
-                elif is_finished_watched:
-                    platform_item.get(Parser.CategoryEnum.FINISHED_WATCHED).add(game_name)
-                elif is_not_finished_watched:
-                    platform_item.get(Parser.CategoryEnum.NOT_FINISHED_WATCHED).add(game_name)
-                else:
-                    logger.warning('Неопределенная игра {}, платформа: {}.'.format(line, name_platform))
-                    self.other.add_game(name_platform, game_name)
+                    if is_finished_game:
+                        platform_item.get(Parser.CategoryEnum.FINISHED_GAME).add(game_name)
+                    elif is_not_finished_game:
+                        platform_item.get(Parser.CategoryEnum.NOT_FINISHED_GAME).add(game_name)
+                    elif is_finished_watched:
+                        platform_item.get(Parser.CategoryEnum.FINISHED_WATCHED).add(game_name)
+                    elif is_not_finished_watched:
+                        platform_item.get(Parser.CategoryEnum.NOT_FINISHED_WATCHED).add(game_name)
+                    else:
+                        logger.warning('Неопределенная игра {}, платформа: {}.'.format(line, name_platform))
+                        self.other.add_game(name_platform, game_name)
 
         Parser.delete_empty_platforms(self.platforms)
         Parser.delete_empty_platforms(self.other.platforms)
 
+        if sort_game:
+            # который был заполнен при парсинге и производный от него -- отсортированный
+            # Сортировка игр
+            for platform in self.platforms.values():
+                for category in platform.categories.values():
+                    category.game_list.sort(key=lambda x: x.name, reverse=sort_reverse)
 
-        # # TODO: Сделать сортировку настраиваемой. Напрмиер, хранить два списка: обычный,
-        # # который был заполнен при парсинге и производный от него -- отсортированный
-        # # Сортировка игр
-        # for platform in self.platforms.values():
-        #     for category in platform.categories.values():
-        #         category.game_list.sort(key=lambda x: x.name, reverse=False)
-        #
-        # for platform in self.other.platforms.values():
-        #     for category in platform.categories.values():
-        #         category.game_list.sort(key=lambda x: x.name, reverse=False)
+            for platform in self.other.platforms.values():
+                for category in platform.categories.values():
+                    category.game_list.sort(key=lambda x: x.name, reverse=sort_reverse)
 
         logger.debug('Finish parsing. Elapsed time: {:.3f} ms.'.format(time.clock() - t))
 

@@ -13,7 +13,6 @@ from lxml import etree
 from io import StringIO
 
 from PySide.QtGui import *
-from PySide.QtCore import *
 
 
 from common import get_logger
@@ -250,7 +249,11 @@ class MainWindow(QMainWindow):
     def load_tree(self):
         logger.debug('Start build tree.')
 
-        self.parser.parse(self.parse_content, self.line_edit_filter.text())
+        self.parser.parse(self.parse_content,
+                          self.line_edit_filter.text(),
+                          parse_game_name_on_sequence=True,
+                          sort_game=False
+                          )
         self.tree_games.clear()
 
         for k, v in self.parser.sorted_platforms:
