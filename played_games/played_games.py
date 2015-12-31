@@ -4,15 +4,17 @@
 __author__ = 'ipetrash'
 
 
+from io import StringIO
+import json
 import sys
 
 from urllib.request import urlopen, urlretrieve
 from urllib.parse import urljoin
 
 from lxml import etree
-from io import StringIO
 
 from PySide.QtGui import *
+from PySide.QtCore import *
 
 
 from common import get_logger
@@ -91,15 +93,14 @@ def reporthook(blocknum, blocksize, totalsize):
         print("read {}".format(readsofar))
 
     # TODO: не помогает
-    app.parser.processEvents()
-
-
-TEST_USING_FILE_GAMES = True
+    app.processEvents()
 
 
 WINDOW_TITLE = 'Played Games'
 TREE_HEADER = 'Games'
 OTHER_GAME_TITLE = 'Неопределенные игры'
+
+CONFIG_FILE = 'config'
 
 
 from played_games_parser import Parser
@@ -119,7 +120,6 @@ SEQ_ADDED_CATEGORIES = [Parser.CategoryEnum.FINISHED_GAME,
                         Parser.CategoryEnum.NOT_FINISHED_WATCHED]
 
 
-# TODO: добавить кнопку сортировки
 # TODO: сделать модель дерева
 # TODO: кнопку показа статистики: игры, платформы
 # TODO: избавить от подвисания программы во время загрузки файла и его парсинга
@@ -138,28 +138,57 @@ class MainWindow(QMainWindow):
         self.button_refresh_by_url = QPushButton('&Refresh')
         self.button_refresh_by_url.clicked.connect(self.refresh_by_url)
 
-        # # TODO: немного грязный хак, используемый для настройки парсировки, без задания gui
-        # self.magic_window = QWidget()
-        # self.magic_window.setWindowTitle('Magic!')
+        self.dock_widget_settings = QDockWidget('Settings')
+        self.dock_widget_settings.setObjectName(self.dock_widget_settings.windowTitle())
+        layout = QFormLayout()
+        self.TEST_USING_FILE_GAMES = QCheckBox()
+        self.PARSE_GAME_NAME_ON_SEQUENCE = QCheckBox()
+        self.SORT_GAME = QCheckBox()
+        self.SORT_REVERSE = QCheckBox()
+
+        self.TEST_USING_FILE_GAMES.setChecked(True)
+        self.PARSE_GAME_NAME_ON_SEQUENCE.setChecked(True)
+        self.SORT_GAME.setChecked(False)
+        self.SORT_REVERSE.setChecked(False)
+
+        layout.addRow("TEST_USING_FILE_GAMES", self.TEST_USING_FILE_GAMES)
+        layout.addRow("PARSE_GAME_NAME_ON_SEQUENCE", self.PARSE_GAME_NAME_ON_SEQUENCE)
+        layout.addRow("SORT_GAME", self.SORT_GAME)
+        layout.addRow("SORT_REVERSE", self.SORT_REVERSE)
+        widget = QWidget()
+        widget.setLayout(layout)
+
+        self.dock_widget_settings.setWidget(widget)
+        self.dock_widget_settings.hide()
+        self.addDockWidget(Qt.RightDockWidgetArea, self.dock_widget_settings)
+
+        general_tool_bar = self.addToolBar('General')
+        general_tool_bar.setObjectName(general_tool_bar.windowTitle())
+        general_tool_bar.addAction(self.dock_widget_settings.toggleViewAction())
+
+        # tool_bar_gist_url = self.addToolBar('Gist Url')
+        # layout = QHBoxLayout()
+        # layout.addWidget(self.line_edit_url)
+        # layout.addWidget(self.button_refresh_by_url)
+        # widget = QWidget()
+        # widget.setLayout(layout)
+        # tool_bar_gist_url.addWidget(widget)
         #
-        # self.button_magic_window = QPushButton(self.magic_window.windowTitle())
-        # self.button_magic_window.clicked.connect(lambda x=None:
-        #                                          self.magic_window.move(self.x() + self.width() + 20, self.y()) or
-        #                                          self.magic_window.show())
-        # self.text_edit_magic_window = QPlainTextEdit()
-        # self.button_run_magic_window = QPushButton('Run Magic')
-        # layout = QVBoxLayout()
-        # layout.addWidget(self.text_edit_magic_window)
-        # layout.addWidget(self.button_run_magic_window)
-        # self.magic_window.setLayout(layout)
-        # self.button_run_magic_window.clicked.connect(lambda x=None:
-        #                                              print(self.text_edit_magic_window.toPlainText().encode()) or
-        #                                              eval(self.text_edit_magic_window.toPlainText()))
+        # tool_bar_filter = self.addToolBar('Filter')
+        # layout = QHBoxLayout()
+        # self.line_edit_filter = QLineEdit()
+        # self.line_edit_filter.setToolTip('Wildcard Filter')
+        # self.line_edit_filter.textEdited.connect(self.load_tree)
+        #
+        # layout.addWidget(QLabel('Filter:'))
+        # layout.addWidget(self.line_edit_filter)
+        # widget = QWidget()
+        # widget.setLayout(layout)
+        # tool_bar_filter.addWidget(widget)
 
         layout = QHBoxLayout()
         layout.addWidget(self.line_edit_url)
         layout.addWidget(self.button_refresh_by_url)
-        # layout.addWidget(self.button_magic_window)
 
         self.line_edit_filter = QLineEdit()
         self.line_edit_filter.setToolTip('Wildcard Filter')
@@ -191,6 +220,8 @@ class MainWindow(QMainWindow):
 
         self.update_header_tree_and_window_title()
 
+        self.read_settings()
+
     # TODO: выполнить функцию в другом потоке
     # def download(self, url):
     #     logger.debug('Download {} start.'.format(url))
@@ -219,9 +250,9 @@ class MainWindow(QMainWindow):
         # thread.start()
         # thread.join()
 
-        logger.debug('TEST_USING_FILE_GAMES=' + str(TEST_USING_FILE_GAMES))
+        logger.debug('TEST_USING_FILE_GAMES = {}.'.format(self.TEST_USING_FILE_GAMES.isChecked()))
 
-        if TEST_USING_FILE_GAMES:
+        if self.TEST_USING_FILE_GAMES.isChecked():
             # TODO: для тестирования интерфейса
             content_file = open('gistfile1.txt', 'r', encoding='utf8').read()
         else:
@@ -269,8 +300,9 @@ class MainWindow(QMainWindow):
 
         self.parser.parse(self.parse_content,
                           self.line_edit_filter.text(),
-                          parse_game_name_on_sequence=True,
-                          sort_game=False
+                          self.PARSE_GAME_NAME_ON_SEQUENCE.isChecked(),
+                          self.SORT_GAME.isChecked(),
+                          self.SORT_REVERSE.isChecked(),
                           )
         self.tree_games.clear()
 
@@ -314,6 +346,61 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('{}. Platforms: {}. Games: {}'.format(WINDOW_TITLE,
                                                                   self.parser.count_platforms,
                                                                   self.parser.count_games))
+
+    def read_settings(self):
+        logger.debug('Start read_settings. CONFIG_FILE={}.'.format(CONFIG_FILE))
+
+        try:
+            with open(CONFIG_FILE, encoding='utf-8') as f:
+                settings = json.load(f)
+
+                self.TEST_USING_FILE_GAMES.setChecked(settings['TEST_USING_FILE_GAMES'])
+                self.PARSE_GAME_NAME_ON_SEQUENCE.setChecked(settings['PARSE_GAME_NAME_ON_SEQUENCE'])
+                self.SORT_GAME.setChecked(settings['SORT_GAME'])
+                self.SORT_REVERSE.setChecked(settings['SORT_REVERSE'])
+
+                state = QByteArray.fromBase64(settings['MainWindow_State'])
+                self.restoreState(state)
+
+                geometry = QByteArray.fromBase64(settings['MainWindow_Geometry'])
+                self.restoreGeometry(geometry)
+
+        except Exception as e:
+            logger.warning(e)
+            logger.debug("Заполняю значения по умолчанию.")
+
+            self.TEST_USING_FILE_GAMES.setChecked(True)
+            self.PARSE_GAME_NAME_ON_SEQUENCE.setChecked(True)
+            self.SORT_GAME.setChecked(False)
+            self.SORT_REVERSE.setChecked(False)
+
+        logger.debug('Finish read_settings.')
+
+    def write_settings(self):
+        logger.debug('Start write_settings. CONFIG_FILE={}.'.format(CONFIG_FILE))
+        logger.debug('Build dict.')
+
+        settings = {
+            'TEST_USING_FILE_GAMES': self.TEST_USING_FILE_GAMES.isChecked(),
+            'PARSE_GAME_NAME_ON_SEQUENCE': self.PARSE_GAME_NAME_ON_SEQUENCE.isChecked(),
+            'SORT_GAME': self.SORT_GAME.isChecked(),
+            'SORT_REVERSE': self.SORT_REVERSE.isChecked(),
+
+            'MainWindow_State': str(self.saveState().toBase64()),
+            'MainWindow_Geometry': str(self.saveGeometry().toBase64()),
+        }
+
+        logger.debug('Write config.')
+
+        with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
+            str_json_obj = json.dumps(settings, sort_keys=True, indent=4)
+            f.write(str_json_obj)
+
+        logger.debug('Finish write_settings.')
+
+    def closeEvent(self, event):
+        self.write_settings()
+        quit()
 
 
 if __name__ == '__main__':
