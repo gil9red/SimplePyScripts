@@ -23,14 +23,15 @@ logger = get_logger('played_games_parser')
 # @ Невероятные Приключения Трояна 1  -   3
 # """
 
+# Регулярка вытаскивает выражения вида: 1, 2, 3 и 1-3
 import re
-parse_game_name_pattern = re.compile(r'(\d+(, ?\d+)+)|(\d+ *?- *?\d+)')
+PARSE_GAME_NAME_PATTERN = re.compile(r'(\d+(, ?\d+)+)|(\d+ *?- *?\d+)')
 
 
 def parse_game_name(game_name):
-    match = parse_game_name_pattern.search(game_name)
+    match = PARSE_GAME_NAME_PATTERN.search(game_name)
     if match is not None:
-        seq_str = parse_game_name_pattern.search(game_name).group(0)
+        seq_str = match.group(0)
         short_name = game_name.replace(seq_str, '').strip()
 
         if ',' in seq_str:
