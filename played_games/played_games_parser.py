@@ -262,7 +262,8 @@ class Parser:
             del platforms[name]
 
     # TODO: правильно оформить docstring
-    def parse(self, text, filter_exp='', parse_game_name_on_sequence=True, sort_game=False, sort_reverse=False):
+    def parse(self, text, filter_exp='', parse_game_name_on_sequence=True, sort_game=False, sort_reverse=False,
+              show_number_1_on_game=True):
         """Функция парсит строку игр.
 
         text -- строка с играми
@@ -281,10 +282,9 @@ class Parser:
 
         sort_game -- сортировка игр
         sort_reverse -- направление сортировки
+        show_number_1_on_game -- определяет показывать ли номер серии на первых сериях игры.
+        Пример: True -- "Resident Evil 1", False -- "Resident Evil"
         """
-
-        # TODO: параметр для удаления номера серии "1"
-        # "Resident Evil 1" станет "Resident Evil"
 
         logger.debug('Start parsing')
         t = time.clock()
@@ -324,6 +324,9 @@ class Parser:
                 game_name_list = parse_game_name(game_name) if parse_game_name_on_sequence else [game_name]
 
                 for game_name in game_name_list:
+                    if show_number_1_on_game and game_name.rstrip().endswith('1'):
+                        game_name = game_name[:len(game_name) - 1].rstrip()
+
                     # Фильтруем игры
                     if not fnmatch.fnmatch(game_name, filter_exp):
                         continue

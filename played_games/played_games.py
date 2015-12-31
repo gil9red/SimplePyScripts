@@ -124,6 +124,7 @@ SEQ_ADDED_CATEGORIES = [Parser.CategoryEnum.FINISHED_GAME,
 # TODO: кнопку показа статистики: игры, платформы
 # TODO: избавить от подвисания программы во время загрузки файла и его парсинга
 # TODO: показывать прогресс загрузки из сети файла (хотя бы в процентах)
+# TODO: обновлять дерево при смене настроек
 
 
 class MainWindow(QMainWindow):
@@ -145,16 +146,19 @@ class MainWindow(QMainWindow):
         self.PARSE_GAME_NAME_ON_SEQUENCE = QCheckBox()
         self.SORT_GAME = QCheckBox()
         self.SORT_REVERSE = QCheckBox()
+        self.SHOW_NUMBER_1_ON_GAME = QCheckBox()
 
         self.TEST_USING_FILE_GAMES.setChecked(True)
         self.PARSE_GAME_NAME_ON_SEQUENCE.setChecked(True)
         self.SORT_GAME.setChecked(False)
         self.SORT_REVERSE.setChecked(False)
+        self.SHOW_NUMBER_1_ON_GAME.setChecked(False)
 
         layout.addRow("TEST_USING_FILE_GAMES", self.TEST_USING_FILE_GAMES)
         layout.addRow("PARSE_GAME_NAME_ON_SEQUENCE", self.PARSE_GAME_NAME_ON_SEQUENCE)
         layout.addRow("SORT_GAME", self.SORT_GAME)
         layout.addRow("SORT_REVERSE", self.SORT_REVERSE)
+        layout.addRow("SHOW_NUMBER_1_ON_GAME", self.SHOW_NUMBER_1_ON_GAME)
         widget = QWidget()
         widget.setLayout(layout)
 
@@ -303,6 +307,7 @@ class MainWindow(QMainWindow):
                           self.PARSE_GAME_NAME_ON_SEQUENCE.isChecked(),
                           self.SORT_GAME.isChecked(),
                           self.SORT_REVERSE.isChecked(),
+                          self.SHOW_NUMBER_1_ON_GAME.isChecked(),
                           )
         self.tree_games.clear()
 
@@ -358,6 +363,7 @@ class MainWindow(QMainWindow):
                 self.PARSE_GAME_NAME_ON_SEQUENCE.setChecked(settings['PARSE_GAME_NAME_ON_SEQUENCE'])
                 self.SORT_GAME.setChecked(settings['SORT_GAME'])
                 self.SORT_REVERSE.setChecked(settings['SORT_REVERSE'])
+                self.SHOW_NUMBER_1_ON_GAME.setChecked(settings['SHOW_NUMBER_1_ON_GAME'])
 
                 state = QByteArray.fromBase64(settings['MainWindow_State'])
                 self.restoreState(state)
@@ -373,6 +379,7 @@ class MainWindow(QMainWindow):
             self.PARSE_GAME_NAME_ON_SEQUENCE.setChecked(True)
             self.SORT_GAME.setChecked(False)
             self.SORT_REVERSE.setChecked(False)
+            self.SHOW_NUMBER_1_ON_GAME.setChecked(False)
 
         logger.debug('Finish read_settings.')
 
@@ -385,6 +392,7 @@ class MainWindow(QMainWindow):
             'PARSE_GAME_NAME_ON_SEQUENCE': self.PARSE_GAME_NAME_ON_SEQUENCE.isChecked(),
             'SORT_GAME': self.SORT_GAME.isChecked(),
             'SORT_REVERSE': self.SORT_REVERSE.isChecked(),
+            'SHOW_NUMBER_1_ON_GAME': self.SHOW_NUMBER_1_ON_GAME.isChecked(),
 
             'MainWindow_State': str(self.saveState().toBase64()),
             'MainWindow_Geometry': str(self.saveGeometry().toBase64()),
