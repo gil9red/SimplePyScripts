@@ -139,9 +139,28 @@ class MainWindow(QMainWindow):
         self.button_refresh_by_url = QPushButton('&Refresh')
         self.button_refresh_by_url.clicked.connect(self.refresh_by_url)
 
+        # # TODO: немного грязный хак, используемый для настройки парсировки, без задания gui
+        # self.magic_window = QWidget()
+        # self.magic_window.setWindowTitle('Magic!')
+        #
+        # self.button_magic_window = QPushButton(self.magic_window.windowTitle())
+        # self.button_magic_window.clicked.connect(lambda x=None:
+        #                                          self.magic_window.move(self.x() + self.width() + 20, self.y()) or
+        #                                          self.magic_window.show())
+        # self.text_edit_magic_window = QPlainTextEdit()
+        # self.button_run_magic_window = QPushButton('Run Magic')
+        # layout = QVBoxLayout()
+        # layout.addWidget(self.text_edit_magic_window)
+        # layout.addWidget(self.button_run_magic_window)
+        # self.magic_window.setLayout(layout)
+        # self.button_run_magic_window.clicked.connect(lambda x=None:
+        #                                              print(self.text_edit_magic_window.toPlainText().encode()) or
+        #                                              eval(self.text_edit_magic_window.toPlainText()))
+
         layout = QHBoxLayout()
         layout.addWidget(self.line_edit_url)
         layout.addWidget(self.button_refresh_by_url)
+        # layout.addWidget(self.button_magic_window)
 
         self.line_edit_filter = QLineEdit()
         self.line_edit_filter.setToolTip('Wildcard Filter')
