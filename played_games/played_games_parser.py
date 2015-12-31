@@ -263,7 +263,7 @@ class Parser:
 
     # TODO: правильно оформить docstring
     def parse(self, text, filter_exp='', parse_game_name_on_sequence=True, sort_game=False, sort_reverse=False,
-              show_number_1_on_game=True):
+              dont_show_number_1_on_game=False):
         """Функция парсит строку игр.
 
         text -- строка с играми
@@ -282,7 +282,7 @@ class Parser:
 
         sort_game -- сортировка игр
         sort_reverse -- направление сортировки
-        show_number_1_on_game -- определяет показывать ли номер серии на первых сериях игры.
+        dont_show_number_1_on_game -- определяет показывать ли номер серии на первых сериях игры.
         Пример: True -- "Resident Evil 1", False -- "Resident Evil"
         """
 
@@ -324,7 +324,7 @@ class Parser:
                 game_name_list = parse_game_name(game_name) if parse_game_name_on_sequence else [game_name]
 
                 for game_name in game_name_list:
-                    if show_number_1_on_game and game_name.rstrip().endswith('1'):
+                    if dont_show_number_1_on_game and game_name.rstrip().endswith('1'):
                         game_name = game_name[:len(game_name) - 1].rstrip()
 
                     # Фильтруем игры

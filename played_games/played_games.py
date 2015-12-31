@@ -6,6 +6,7 @@ __author__ = 'ipetrash'
 
 from io import StringIO
 import json
+import time
 import sys
 
 from urllib.request import urlopen, urlretrieve
@@ -146,19 +147,25 @@ class MainWindow(QMainWindow):
         self.PARSE_GAME_NAME_ON_SEQUENCE = QCheckBox()
         self.SORT_GAME = QCheckBox()
         self.SORT_REVERSE = QCheckBox()
-        self.SHOW_NUMBER_1_ON_GAME = QCheckBox()
+        label_SORT_REVERSE = QLabel('SORT_REVERSE')
+        self.SORT_GAME.toggled.connect(self.SORT_REVERSE.setVisible)
+        self.SORT_GAME.toggled.connect(label_SORT_REVERSE.setVisible)
+        self.DONT_SHOW_NUMBER_1_ON_GAME = QCheckBox()
 
         self.TEST_USING_FILE_GAMES.setChecked(True)
         self.PARSE_GAME_NAME_ON_SEQUENCE.setChecked(True)
         self.SORT_GAME.setChecked(False)
         self.SORT_REVERSE.setChecked(False)
-        self.SHOW_NUMBER_1_ON_GAME.setChecked(False)
+        self.DONT_SHOW_NUMBER_1_ON_GAME.setChecked(False)
+
+        self.SORT_REVERSE.setVisible(self.SORT_GAME.isChecked())
+        label_SORT_REVERSE.setVisible(self.SORT_GAME.isChecked())
 
         layout.addRow("TEST_USING_FILE_GAMES", self.TEST_USING_FILE_GAMES)
         layout.addRow("PARSE_GAME_NAME_ON_SEQUENCE", self.PARSE_GAME_NAME_ON_SEQUENCE)
         layout.addRow("SORT_GAME", self.SORT_GAME)
-        layout.addRow("SORT_REVERSE", self.SORT_REVERSE)
-        layout.addRow("SHOW_NUMBER_1_ON_GAME", self.SHOW_NUMBER_1_ON_GAME)
+        layout.addRow(label_SORT_REVERSE, self.SORT_REVERSE)
+        layout.addRow("DONT_SHOW_NUMBER_1_ON_GAME", self.DONT_SHOW_NUMBER_1_ON_GAME)
         widget = QWidget()
         widget.setLayout(layout)
 
@@ -267,6 +274,7 @@ class MainWindow(QMainWindow):
 
             # Теперь нужно получить url файла с последней ревизией
             logger.debug('Get url file last revision start.')
+            t = time.clock()
 
             with urlopen(url) as f:
                 context = f.read().decode()
@@ -281,7 +289,7 @@ class MainWindow(QMainWindow):
                 url = urljoin(url, str(rel_url))
                 logger.debug('Full url = {}.'.format(url))
 
-            logger.debug('Get url file last revision finish.')
+            logger.debug('Get url file last revision finish. Elapsed time: {:.3f} ms.'.format(time.clock() - t))
 
             logger.debug('Download {} start.'.format(url))
             local_filename, headers = urlretrieve(url, reporthook=reporthook)
@@ -307,7 +315,7 @@ class MainWindow(QMainWindow):
                           self.PARSE_GAME_NAME_ON_SEQUENCE.isChecked(),
                           self.SORT_GAME.isChecked(),
                           self.SORT_REVERSE.isChecked(),
-                          self.SHOW_NUMBER_1_ON_GAME.isChecked(),
+                          self.DONT_SHOW_NUMBER_1_ON_GAME.isChecked(),
                           )
         self.tree_games.clear()
 
@@ -363,7 +371,7 @@ class MainWindow(QMainWindow):
                 self.PARSE_GAME_NAME_ON_SEQUENCE.setChecked(settings['PARSE_GAME_NAME_ON_SEQUENCE'])
                 self.SORT_GAME.setChecked(settings['SORT_GAME'])
                 self.SORT_REVERSE.setChecked(settings['SORT_REVERSE'])
-                self.SHOW_NUMBER_1_ON_GAME.setChecked(settings['SHOW_NUMBER_1_ON_GAME'])
+                self.DONT_SHOW_NUMBER_1_ON_GAME.setChecked(settings['DONT_SHOW_NUMBER_1_ON_GAME'])
 
                 state = QByteArray.fromBase64(settings['MainWindow_State'])
                 self.restoreState(state)
@@ -379,7 +387,7 @@ class MainWindow(QMainWindow):
             self.PARSE_GAME_NAME_ON_SEQUENCE.setChecked(True)
             self.SORT_GAME.setChecked(False)
             self.SORT_REVERSE.setChecked(False)
-            self.SHOW_NUMBER_1_ON_GAME.setChecked(False)
+            self.DONT_SHOW_NUMBER_1_ON_GAME.setChecked(False)
 
         logger.debug('Finish read_settings.')
 
@@ -392,7 +400,7 @@ class MainWindow(QMainWindow):
             'PARSE_GAME_NAME_ON_SEQUENCE': self.PARSE_GAME_NAME_ON_SEQUENCE.isChecked(),
             'SORT_GAME': self.SORT_GAME.isChecked(),
             'SORT_REVERSE': self.SORT_REVERSE.isChecked(),
-            'SHOW_NUMBER_1_ON_GAME': self.SHOW_NUMBER_1_ON_GAME.isChecked(),
+            'DONT_SHOW_NUMBER_1_ON_GAME': self.DONT_SHOW_NUMBER_1_ON_GAME.isChecked(),
 
             'MainWindow_State': str(self.saveState().toBase64()),
             'MainWindow_Geometry': str(self.saveGeometry().toBase64()),
