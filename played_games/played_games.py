@@ -265,7 +265,12 @@ class MainWindow(QMainWindow):
 
         if self.TEST_USING_FILE_GAMES.isChecked():
             # TODO: для тестирования интерфейса
-            content_file = open('gistfile1.txt', 'r', encoding='utf8').read()
+            test_file_name = 'gistfile1.txt'
+
+            logger.debug('Open and read {} start.'.format(test_file_name))
+            with open(test_file_name, 'r', encoding='utf8') as f:
+                content_file = f.read()
+            logger.debug('Finish open and read. Content file length = {}.'.format(len(content_file)))
         else:
             # PROGRESS_BAR.show()
             # PROGRESS_BAR.setValue(-1)
