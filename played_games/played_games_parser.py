@@ -12,17 +12,6 @@ from common import get_logger
 logger = get_logger('played_games_parser')
 
 
-# TODO: ОПТИМИЗАЦИЯ: Подсчет количества детей делать во время парсинга
-# text = """
-#   Ведьмак 1, 2, 3
-#   Far Cry 1, 2
-#   The Elder Scrolls: Oblivion
-#   The Elder Scrolls: Skyrim
-#   Fallout 3
-# @ Невероятные Приключения Трояна 1-3
-# @ Невероятные Приключения Трояна 1  -   3
-# """
-
 # Регулярка вытаскивает выражения вида: 1, 2, 3 и 1-3
 import re
 PARSE_GAME_NAME_PATTERN = re.compile(r'(\d+(, ?\d+)+)|(\d+ *?- *?\d+)')
@@ -261,29 +250,29 @@ class Parser:
         for name in platform_on_delete:
             del platforms[name]
 
-    # TODO: правильно оформить docstring
     def parse(self, text, filter_exp='', parse_game_name_on_sequence=True, sort_game=False, sort_reverse=False,
               dont_show_number_1_on_game=False):
         """Функция парсит строку игр.
 
-        text -- строка с играми
-        filter_exp -- wildcard выражение фильтрации игр
-        parse_game_name_on_sequence -- параметр определяет нужно ли в названиии
-        игры искать указание ее частей. Например,
-        "Resident Evil 4, 5, 6" станет:
-          Resident Evil 4
-          Resident Evil 5
-          Resident Evil 6
+        Args:
+            text (str): строка с играми
+            filter_exp (str): wildcard выражение фильтрации игр
+            parse_game_name_on_sequence (bool): параметр определяет нужно ли в названиии
+                игры искать указание ее частей. Например,
+                "Resident Evil 4, 5, 6" станет:
+                Resident Evil 4
+                Resident Evil 5
+                Resident Evil 6
 
-        "Resident Evil 1-3" станет:
-          Resident Evil 1
-          Resident Evil 2
-          Resident Evil 3
+                "Resident Evil 1-3" станет:
+                Resident Evil 1
+                Resident Evil 2
+                Resident Evil 3
 
-        sort_game -- сортировка игр
-        sort_reverse -- направление сортировки
-        dont_show_number_1_on_game -- определяет показывать ли номер серии на первых сериях игры.
-        Пример: True -- "Resident Evil 1", False -- "Resident Evil"
+            sort_game (bool): сортировка игр
+            sort_reverse (bool): направление сортировки
+            dont_show_number_1_on_game (bool): определяет показывать ли номер серии на первых сериях игры.
+                Пример: True -- "Resident Evil 1", False -- "Resident Evil"
         """
 
         logger.debug('Start parsing')
@@ -345,7 +334,6 @@ class Parser:
                         self.other.add_game(name_platform, line)
                         continue
 
-                    # TODO: рефакторинг
                     is_finished_watched = attributes == '@ ' or attributes == ' @'
                     is_not_finished_watched = attributes == '@-' or attributes == '-@'
 
