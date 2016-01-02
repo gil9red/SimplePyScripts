@@ -46,7 +46,7 @@ def find_all_selection(a, b, c, max_sum, all_sel):
 
     if max_sum == 0:
         select = a, b, c
-        if not select in all_sel:
+        if select not in all_sel:
             all_sel.append(select)
 
     if a == 10 and b == 10 and c == 10:
