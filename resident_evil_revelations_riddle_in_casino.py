@@ -3,7 +3,6 @@
 
 __author__ = 'ipetrash'
 
-
 """
 Загадка: есть 3 вида монеток весом 7, 9 и 17 грамм.
 Монеток каждого вида может быть не больше 10.
@@ -26,17 +25,17 @@ def find_first_selection(a, b, c, max_sum):
         return
 
     if a <= 10:
-        r = find_first_selection(a+1, b, c, max_sum - 7)
+        r = find_first_selection(a + 1, b, c, max_sum - 7)
         if isinstance(r, tuple):
             return r
 
     if b <= 10:
-        r = find_first_selection(a, b+1, c, max_sum - 9)
+        r = find_first_selection(a, b + 1, c, max_sum - 9)
         if isinstance(r, tuple):
             return r
 
     if c <= 10:
-        r = find_first_selection(a, b, c+1, max_sum - 17)
+        r = find_first_selection(a, b, c + 1, max_sum - 17)
         if isinstance(r, tuple):
             return r
 
@@ -56,13 +55,13 @@ def find_all_selection(a, b, c, max_sum, all_sel):
         return -1
 
     if a <= 10:
-        find_all_selection(a+1, b, c, max_sum - 7, all_sel)
+        find_all_selection(a + 1, b, c, max_sum - 7, all_sel)
 
     if b <= 10:
-        find_all_selection(a, b+1, c, max_sum - 9, all_sel)
+        find_all_selection(a, b + 1, c, max_sum - 9, all_sel)
 
     if c <= 10:
-        find_all_selection(a, b, c+1, max_sum - 17, all_sel)
+        find_all_selection(a, b, c + 1, max_sum - 17, all_sel)
 
 
 if __name__ == '__main__':
