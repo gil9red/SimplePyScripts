@@ -18,31 +18,38 @@ from PySide.QtCore import *
 
 class Widget(QWidget):
     class Timer(QTimer):
-        def __init__(self, widget, pos_center, image):
+        class Circle:
+            def __init__(self, pos_center):
+                self.pos_center = pos_center
+                self.radii = 1
+
+            def next(self):
+                self.radii += 1
+
+        def __init__(self, widget, image):
             super().__init__()
 
-            self.pos_center = pos_center
-            self.radii = 1
-            self.im = image
+            self.circle_list = list()
+
             self.widget = widget
 
-            self.setInterval(333)
+            self.setInterval(60)
             self.timeout.connect(self.tick)
 
-        def tick(self):
-            p = QPainter(self.im)
-            p.setCompositionMode(QPainter.CompositionMode_SourceOut)
-            p.setPen(Qt.NoPen)
-            p.setBrush(Qt.transparent)
-            p.drawEllipse(self.pos_center, self.radii, self.radii)
+            self.painter = QPainter(image)
+            self.painter.setCompositionMode(QPainter.CompositionMode_SourceOut)
+            self.painter.setPen(Qt.NoPen)
+            self.painter.setBrush(Qt.transparent)
 
-            self.radii += 1
+        def add(self, pos_center):
+            self.circle_list.append(Widget.Timer.Circle(pos_center))
+
+        def tick(self):
+            for circle in self.circle_list:
+                self.painter.drawEllipse(circle.pos_center, circle.radii, circle.radii)
+                circle.next()
 
             self.widget.update()
-
-        def run(self):
-            self.start()
-            return self
 
     def __init__(self):
         super().__init__()
@@ -52,14 +59,13 @@ class Widget(QWidget):
         self.im = QImage(self.width(), self.height(), QImage.Format_ARGB32)
         self.im.fill(Qt.black)
 
-        self.timers = list()
+        self.timer = Widget.Timer(self, self.im)
+        self.timer.start()
 
     def mouseReleaseEvent(self, event):
         super().mouseReleaseEvent(event)
 
-        self.timers.append(
-            Widget.Timer(self, event.posF(), self.im).run()
-        )
+        self.timer.add(event.posF())
 
     def paintEvent(self, event):
         super().paintEvent(event)
