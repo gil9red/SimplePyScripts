@@ -31,8 +31,9 @@ class Widget(QWidget):
 
         def tick(self):
             p = QPainter(self.im)
-            p.setCompositionMode(QPainter.CompositionMode_DestinationOut)
-            p.setBrush(Qt.white)
+            p.setCompositionMode(QPainter.CompositionMode_SourceOut)
+            p.setPen(Qt.NoPen)
+            p.setBrush(Qt.transparent)
             p.drawEllipse(self.pos_center, self.radii, self.radii)
 
             self.radii += 1
@@ -64,6 +65,9 @@ class Widget(QWidget):
         super().paintEvent(event)
 
         p = QPainter(self)
+        p.setBrush(Qt.yellow)
+        p.drawRect(40, 40, 80, 80)
+
         p.drawImage(0, 0, self.im)
 
 
