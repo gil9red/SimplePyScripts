@@ -37,7 +37,8 @@ class Widget(QWidget):
             self.timeout.connect(self.tick)
 
             self.painter = QPainter(image)
-            self.painter.setCompositionMode(QPainter.CompositionMode_SourceOut)
+            self.painter.setRenderHint(QPainter.Antialiasing)
+            self.painter.setCompositionMode(QPainter.CompositionMode_Clear)
             self.painter.setPen(Qt.NoPen)
             self.painter.setBrush(Qt.transparent)
 
@@ -54,10 +55,14 @@ class Widget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.resize(200, 200)
+        self.setWindowTitle('effect_of_vanishing_photos.py')
 
-        self.im = QImage(self.width(), self.height(), QImage.Format_ARGB32)
-        self.im.fill(Qt.black)
+        self.im = QImage('im.png')
+        self.resize(self.im.size())
+
+        # self.resize(200, 200)
+        # self.im = QImage(self.width(), self.height(), QImage.Format_ARGB32)
+        # self.im.fill(Qt.black)
 
         self.timer = Widget.Timer(self, self.im)
         self.timer.start()
@@ -71,11 +76,15 @@ class Widget(QWidget):
         super().paintEvent(event)
 
         p = QPainter(self)
-        p.setBrush(Qt.yellow)
-        p.drawRect(40, 40, 80, 80)
+        p.setBrush(Qt.white)
+        p.drawRect(self.rect())
 
+        p.setBrush(Qt.yellow)
+        p.drawRect(self.width() // 6, self.width() // 5, self.width() // 3, self.height() // 4)
         p.drawImage(0, 0, self.im)
 
+    def closeEvent(self, event):
+        quit()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
