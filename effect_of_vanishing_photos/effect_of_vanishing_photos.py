@@ -52,24 +52,6 @@ class Widget(QWidget):
         self.im.fill(Qt.black)
 
         self.timers = list()
-        # self.count = 255
-        # self.pos_center = None
-        # self.radii = 10
-        # self.timer = QTimer()
-        # self.timer.setInterval(333)
-        # self.timer.timeout.connect(self.tick)
-
-    # def tick(self):
-    #     p = QPainter(self.im)
-    #     p.setCompositionMode(QPainter.CompositionMode_DestinationOut)
-    #     # p.setBrush(QColor(0, 0, 0, self.count))
-    #     p.setBrush(Qt.white)
-    #     p.drawEllipse(self.pos_center, self.radii, self.radii)
-    #
-    #     self.count -= 1
-    #     self.radii += 1
-    #
-    #     self.update()
 
     def mouseReleaseEvent(self, event):
         super().mouseReleaseEvent(event)
@@ -78,32 +60,17 @@ class Widget(QWidget):
             Widget.Timer(self, event.posF(), self.im).run()
         )
 
-        # self.pos_center = event.posF()
-        # self.timer.start()
-
     def paintEvent(self, event):
         super().paintEvent(event)
-
-        # QColor.fromRgba(189, 149, 39, 155).rgba()
-        # QRgb value = qRgb(189, 149, 39); // 0xffbd9527
-        # image.setPixel(1, 1, value);
 
         p = QPainter(self)
         p.drawImage(0, 0, self.im)
 
 
-app = QApplication(sys.argv)
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
 
-w = Widget()
-w.show()
+    w = Widget()
+    w.show()
 
-app.exec_()
-
-
-# im = make_qrcode(text)
-#
-# b = io.BytesIO()
-# im.save(b, 'png')
-# data = b.getvalue()
-#
-# pixmap = QPixmap()
+    app.exec_()
