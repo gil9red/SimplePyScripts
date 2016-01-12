@@ -9,16 +9,29 @@ xpi файл -- плагин для FireFox, является zip архивом
 
 
 import os.path
-import sys
 from zipfile import ZipFile
 
 
-def do(zip_file_name):
+EXCLUDE = ['README.md', 'run.bat', 'xpi.bat']
+
+
+import argparse
+
+
+def create_parser():
+    parser = argparse.ArgumentParser(description='Remove unnecessary files from zip.',
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('zip_file_name', type=str)
+    parser.add_argument('--exclude', nargs='*', default=EXCLUDE)
+    parser.add_argument('--add_exclude', action='store_true')
+
+    return parser.parse_args()
+
+
+def do(zip_file_name, exclude):
     print('zip_file_name:', zip_file_name)
 
-    exclude = ['README.md', 'run.bat', 'xpi.bat']
-
-    print('Delete files:', exclude)
+    print('Delete files:', EXCLUDE)
 
     # Измененный zip
     out_zip_file_name = '_' + zip_file_name
@@ -51,14 +64,7 @@ def do(zip_file_name):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        zip_file_name = ' '.join(sys.argv[1:])
+    args = create_parser()
 
-        # # Оригинальный zip
-        # zip_file_name = '@closingduplicatetabs-0.0.2.xpi'
-
-        do(zip_file_name)
-
-    else:
-        file_name = os.path.basename(sys.argv[0])
-        print('usage: {} [-h] zip_file_name'.format(file_name))
+    exclude = EXCLUDE + args.exclude if args.add_exclude else args.exclude
+    do(args.zip_file_name, set(exclude))
