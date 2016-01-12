@@ -5,31 +5,74 @@
 __author__ = 'ipetrash'
 
 
-# Поиск мультсериалов 16+
-# Пример сериала: 'http://onlinemultfilmy.ru/bratya-ventura/'
+# Разбор примера шифрования с помощью справочника: https://ru.wikipedia.org/wiki/Криптосистема_с_открытым_ключом
+REFERENCE_GUIDE_NAME_NUM = {
+    'Королёв': '5643452',
+    'Орехов': '3572651',
+    'Рузаева': '4673956',
+    'Осипов': '3517289',
+    'Батурин': '7755628',
+    'Кирсанова': '1235267',
+    'Арсеньева': '8492746',
+}
 
-import time
-from grab import Grab
+# Обратный словарь -- ключом будет число, а значением имя
+REFERENCE_GUIDE_NUM_NAME = {v: k for k, v in REFERENCE_GUIDE_NAME_NUM.items()}
 
-g = Grab()
+MESS = 'коробка'
 
-# Перебор страниц с мультами
-for i in range(1, 82 + 1):
-    url_page = 'http://onlinemultfilmy.ru/multserialy/page/' + str(i)
-    print(url_page)
 
-    # Загрузка страницы с мультами
-    g.go(url_page)
+def encrypt(mess):
+    keys = REFERENCE_GUIDE_NAME_NUM.keys()
+    crypto_text_list = list()
 
-    # Перебор и загрузка мультов на странице
-    for url in g.doc.select('//div[@class="cat-post"]/a'):
-        g.go(url.attr('href'))
+    for c in mess.lower():
+        encrypt_key = sorted(filter(lambda x: x[0].lower() == c, keys))[0]
+        crypto_text_list.append(REFERENCE_GUIDE_NAME_NUM[encrypt_key])
 
-        if g.doc.select('//*[@class="age_icon age_icon_16"]').count():
-            print('    ', url.attr('title'), url.attr('href'))
+    return '@'.join(crypto_text_list)
 
-        # Чтобы сервер не посчитал это дос атакой
-        time.sleep(2)
+
+def decrypt(encrypt_mess):
+    crypto_num_list = encrypt_mess.split('@')
+    mess = ''
+
+    for num in crypto_num_list:
+        mess += REFERENCE_GUIDE_NUM_NAME[num][0].lower()
+
+    return mess
+
+encrypt_mess = encrypt(MESS)
+
+print('Encrypt: {} -> {}.'.format(MESS, encrypt_mess))
+print('Decrypt: {} -> {}'.format(encrypt_mess, decrypt(encrypt_mess)))
+
+
+# # Поиск мультсериалов 16+
+# # Пример сериала: 'http://onlinemultfilmy.ru/bratya-ventura/'
+#
+# import time
+# from grab import Grab
+#
+# g = Grab()
+#
+# # Перебор страниц с мультами
+# for i in range(1, 82 + 1):
+#     url_page = 'http://onlinemultfilmy.ru/multserialy/page/' + str(i)
+#     print(url_page)
+#
+#     # Загрузка страницы с мультами
+#     g.go(url_page)
+#
+#     # Перебор и загрузка мультов на странице
+#     for url in g.doc.select('//div[@class="cat-post"]/a'):
+#         g.go(url.attr('href'))
+#
+#         if g.doc.select('//*[@class="age_icon age_icon_16"]').count():
+#             print('    ', url.attr('title'), url.attr('href'))
+#
+#         # Чтобы сервер не посчитал это дос атакой
+#         time.sleep(2)
 
 
 # # Удаление // комментариев и пробелов с табуляцией
