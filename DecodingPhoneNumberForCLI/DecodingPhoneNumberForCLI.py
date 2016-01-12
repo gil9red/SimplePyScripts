@@ -1,4 +1,8 @@
-# coding=utf-8
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
 """
 EN: Decoding the phone number for CLI.
 RU: Декодирование телефонного номера для АОН (Автоматический определитель номера).
@@ -13,10 +17,6 @@ RU: Декодирование телефонного номера для АОН
 # идущий 2 или более подряд раз знак #
 #
 # Например, входящая строка 4434###552222311333661 соответствует номеру 4452136
-
-import argparse
-
-__author__ = 'ipetrash'
 
 
 def decoding_phone_number(string):
@@ -51,13 +51,7 @@ def decoding_phone_number(string):
     return result
 
 
-def create_parser():
-    parser = argparse.ArgumentParser(description="Decoding the phone number for CLI")
-    return parser
-
-
 if __name__ == '__main__':
-    create_parser().parse_args()
-
-    string = raw_input("Encoded telephone number = ")
+    string = '4434###552222311333661'
+    print('CLI = ' + string)
     print("Phone number = " + decoding_phone_number(string))
