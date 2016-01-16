@@ -77,6 +77,7 @@ def get_history(offset, count_step, user_id):
                 for photo in photo_list:
                     logger.debug('Photos: {}'.format(photo))
                     # TODO: в сообщения указывать отпрравителя и дату отправки
+                    # https://vk.com/dev/messages.getHistory and https://vk.com/dev/photo
                     # TODO: некоторые фотографии временно недоступны в данный момент, вк вместо их url
                     # присылает http://vk.com/images/x_null.gif, для каждого размера gif префикс перед _null
                     # отличается
