@@ -1,4 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 __author__ = 'ipetrash'
+
 
 import hashlib
 import sys
@@ -13,13 +17,13 @@ if __name__ == '__main__':
         print("Empty text!")
         sys.exit(1)
 
-    alg = input("Name algorithm: ")
-    if not alg in algorithms:  # search in list
+    alg_name = input("Name algorithm: ")
+    if alg_name not in algorithms:  # search in list
         print("Algorithm not found!")
         sys.exit(1)
 
-    hash = hashlib.new(alg)  # create hash function from name
-    hash.update(text.encode())  # set data in hash-function
+    alg = hashlib.new(alg_name)  # create hash function from name
+    alg.update(text.encode())  # set data in hash-function
     print("Result:")
-    print(" hex: %s" % hash.hexdigest())
-    print(" HEX: %s" % hash.hexdigest().upper())
+    print(" hex: %s" % alg.hexdigest())
+    print(" HEX: %s" % alg.hexdigest().upper())
