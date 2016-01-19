@@ -5,47 +5,130 @@
 __author__ = 'ipetrash'
 
 
-# Разбор примера шифрования с помощью справочника: https://ru.wikipedia.org/wiki/Криптосистема_с_открытым_ключом
-REFERENCE_GUIDE_NAME_NUM = {
-    'Королёв': '5643452',
-    'Орехов': '3572651',
-    'Рузаева': '4673956',
-    'Осипов': '3517289',
-    'Батурин': '7755628',
-    'Кирсанова': '1235267',
-    'Арсеньева': '8492746',
-}
-
-# Обратный словарь -- ключом будет число, а значением имя
-REFERENCE_GUIDE_NUM_NAME = {v: k for k, v in REFERENCE_GUIDE_NAME_NUM.items()}
-
-MESS = 'коробка'
+# concurrency.py
+from collections import deque
+from time import time, sleep as sys_sleep
 
 
-def encrypt(mess):
-    keys = REFERENCE_GUIDE_NAME_NUM.keys()
-    crypto_text_list = list()
-
-    for c in mess.lower():
-        encrypt_key = sorted(filter(lambda x: x[0].lower() == c, keys))[0]
-        crypto_text_list.append(REFERENCE_GUIDE_NAME_NUM[encrypt_key])
-
-    return '@'.join(crypto_text_list)
+# Взято: http://habrahabr.ru/post/243207/
 
 
-def decrypt(encrypt_mess):
-    crypto_num_list = encrypt_mess.split('@')
-    mess = ''
+class coroutine(object):
+    """Делает из функции сопрограмму на базе расширенного генератора."""
+    _current = None
 
-    for num in crypto_num_list:
-        mess += REFERENCE_GUIDE_NUM_NAME[num][0].lower()
+    def __init__(self, callable):
+        self._callable = callable
 
-    return mess
+    def __call__(self, *args, **kwargs):
+        corogen = self._callable(*args, **kwargs)
+        cls = self.__class__
+        if cls._current is None:
+            try:
+                cls._current = corogen
+                next(corogen)
+            finally:
+                cls._current = None
+        return corogen
 
-encrypt_mess = encrypt(MESS)
 
-print('Encrypt: {} -> {}.'.format(MESS, encrypt_mess))
-print('Decrypt: {} -> {}'.format(encrypt_mess, decrypt(encrypt_mess)))
+def sleep(timeout):
+    """Приостанавливает выполнение до получения события "таймаут истек"."""
+    corogen = coroutine._current
+    dispatcher.setup_timeout(corogen, timeout)
+    revent = yield
+    return revent
+
+
+class Dispatcher(object):
+    """Объект реализующий диспечер событий."""
+    def __init__(self):
+        self._pending = deque()
+        self._deadline = time() + 3600.0
+
+    def setup_timeout(self, corogen, timeout):
+        deadline = time() + timeout
+        self._deadline = min([self._deadline, deadline])
+        self._pending.append([corogen, deadline])
+        self._pending = deque(sorted(self._pending, key=lambda a: a[1]))
+
+    def run(self):
+        """Запускает цикл обработки событий."""
+        while len(self._pending) > 0:
+            timeout = self._deadline - time()
+            self._deadline = time() + 3600.0
+            if timeout > 0:
+                sys_sleep(timeout)
+            while len(self._pending) > 0:
+                if self._pending[0][1] <= time():
+                    corogen, _ = self._pending.popleft()
+                    try:
+                        coroutine._current = corogen
+                        corogen.send("timeout")
+                    except StopIteration:
+                        pass
+                    finally:
+                        coroutine._current = None
+                else:
+                    break
+
+dispatcher = Dispatcher()
+run = lambda: dispatcher.run()
+
+
+@coroutine
+def hello(name, timeout):
+    while True:
+        yield from sleep(timeout)
+        print("Привет, {}!".format(name))
+
+hello("Петров", 2.0)
+hello("Иванов", 3.0)
+hello("Мир", 5.0)
+run()
+
+
+# # Разбор примера шифрования с помощью справочника: https://ru.wikipedia.org/wiki/Криптосистема_с_открытым_ключом
+# REFERENCE_GUIDE_NAME_NUM = {
+#     'Королёв': '5643452',
+#     'Орехов': '3572651',
+#     'Рузаева': '4673956',
+#     'Осипов': '3517289',
+#     'Батурин': '7755628',
+#     'Кирсанова': '1235267',
+#     'Арсеньева': '8492746',
+# }
+#
+# # Обратный словарь -- ключом будет число, а значением имя
+# REFERENCE_GUIDE_NUM_NAME = {v: k for k, v in REFERENCE_GUIDE_NAME_NUM.items()}
+#
+# MESS = 'коробка'
+#
+#
+# def encrypt(mess):
+#     keys = REFERENCE_GUIDE_NAME_NUM.keys()
+#     crypto_text_list = list()
+#
+#     for c in mess.lower():
+#         encrypt_key = sorted(filter(lambda x: x[0].lower() == c, keys))[0]
+#         crypto_text_list.append(REFERENCE_GUIDE_NAME_NUM[encrypt_key])
+#
+#     return '@'.join(crypto_text_list)
+#
+#
+# def decrypt(encrypt_mess):
+#     crypto_num_list = encrypt_mess.split('@')
+#     mess = ''
+#
+#     for num in crypto_num_list:
+#         mess += REFERENCE_GUIDE_NUM_NAME[num][0].lower()
+#
+#     return mess
+#
+# encrypt_mess = encrypt(MESS)
+#
+# print('Encrypt: {} -> {}.'.format(MESS, encrypt_mess))
+# print('Decrypt: {} -> {}'.format(encrypt_mess, decrypt(encrypt_mess)))
 
 
 # # Поиск мультсериалов 16+
