@@ -103,7 +103,7 @@ if __name__ == '__main__':
                 for j, num in enumerate(row):
                     x = j * self.cell_size
 
-                    painter.setBrush(Qt.white if num == 16 else Qt.yellow)
+                    painter.setBrush(Qt.white if num == self.empty_value else Qt.yellow)
                     painter.drawRect(x, y, self.cell_size, self.cell_size)
 
                     text = str(num) if num != self.empty_value else ""
