@@ -18,9 +18,10 @@ if __name__ == '__main__':
             super().__init__()
 
             self.setWindowTitle('15-puzzle')
-            self.resize(100, 100)
 
-            self.cell_size = 20
+            self.cell_size = 40
+            self.resize(self.cell_size * 4, self.cell_size * 4)
+
             self.empty_value = 16
             self.matrix = None
 
