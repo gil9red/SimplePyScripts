@@ -36,6 +36,25 @@ def get_logger(name, file='log.txt', encoding='utf8'):
     return log
 
 
+def new_guid():
+    now = datetime.datetime.now().timetuple()
+    return int(time.mktime(now))
+
+
+def send_message(text, user_id):
+    values = {
+        'user_id': user_id,
+        'message': text,
+        'guid': new_guid(),
+    }
+
+    logger.debug('Execute vk method messages.send with values: {}'.format(values))
+    result = vk.method('messages.send', values=values)
+    logger.debug('Result: {}'.format(result))
+
+    return result
+
+
 logger = get_logger('selfie_send')
 
 
@@ -55,22 +74,7 @@ if __name__ == '__main__':
         vk = vk_api.VkApi(LOGIN, PASSWORD)
         vk.authorization()  # Авторизируемся
 
-        server_time = vk.method('utils.getServerTime')
-        server_time = datetime.datetime.fromtimestamp(server_time)
-
-        def new_guid():
-            now = datetime.datetime.now().timetuple()
-            return int(time.mktime(now))
-
-        values = {
-            'user_id': USER_ID,
-            'message': 'Hello! Привет!\nYahoo!',
-            'guid': new_guid(),
-        }
-
-        logger.debug('Execute vk method messages.send with values: {}'.format(values))
-        result = vk.method('messages.send', values=values)
-        logger.debug('Result: {}'.format(result))
+        send_message('Hello! Привет!\nYahoo!', USER_ID)
 
     except Exception as e:
         logger.error('{}\n{}'.format(e, traceback.format_exc()))
