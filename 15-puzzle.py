@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
         def refill(self):
             seq = list(range(1, 16))
-            # random.shuffle(seq)
+            random.shuffle(seq)
 
             # add empty cell
             seq.append(self.empty_value)
