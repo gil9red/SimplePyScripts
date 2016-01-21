@@ -151,6 +151,10 @@ if __name__ == '__main__':
             # Путь в который будет скачен файл
             download_path = os.path.join(DOWNLOAD_DIR, audio_file_name)
 
+            if os.path.exists(download_path):
+                print('File is exist: {}'.format(download_path))
+                continue
+
             print('{}. "{}"'.format(i, audio_name), end='')
             download_file(url, download_path)
             make_pretty_id3(download_path, artist, title)
