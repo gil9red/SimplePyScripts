@@ -24,17 +24,15 @@ def sizeof_fmt(num, suffix='B'):
     return "%.1f%s%s" % (num, 'Yi', suffix)
 
 
-if __name__ == '__main__':
-    fb2_file_name = 'Непутевый ученик в школе магии 1. Зачисление в школу (Часть 1).fb2'
-
-    dir_im = os.path.splitext(fb2_file_name)[0]
+def do(file_name, debug=True):
+    dir_im = os.path.splitext(file_name)[0]
     if not os.path.exists(dir_im):
         os.makedirs(dir_im)
-    print(dir_im + ':')
+    debug and print(dir_im + ':')
 
     total_image_size = 0
 
-    with open(fb2_file_name, encoding='utf8') as fb2:
+    with open(file_name, encoding='utf8') as fb2:
         tree = etree.XML(fb2.read().encode())
 
         binaries = tree.xpath("//*[local-name()='binary']")
@@ -60,15 +58,20 @@ if __name__ == '__main__':
                 im = Image.open(io.BytesIO(im_data))
                 count_bytes = len(im_data)
                 total_image_size += count_bytes
-                print('    {}. {} {} format={} size={}'.format(i, im_id, sizeof_fmt(count_bytes),
+                debug and print('    {}. {} {} format={} size={}'.format(i, im_id, sizeof_fmt(count_bytes),
                                                                im.format, im.size))
 
-            except Exception as e:
+            except:
                 import traceback
                 traceback.print_exc()
 
-    fb2_file_size = os.path.getsize(fb2_file_name)
-    print()
-    print('fb2 file size =', sizeof_fmt(fb2_file_size))
-    print('total image size = {} ({:.2f}%)'.format(sizeof_fmt(total_image_size),
-                                                   total_image_size / fb2_file_size * 100))
+    file_size = os.path.getsize(file_name)
+    debug and print()
+    debug and print('fb2 file size =', sizeof_fmt(file_size))
+    debug and print('total image size = {} ({:.2f}%)'.format(sizeof_fmt(total_image_size),
+                                                             total_image_size / file_size * 100))
+
+
+if __name__ == '__main__':
+    fb2_file_name = 'Непутевый ученик в школе магии 1. Зачисление в школу (Часть 1).fb2'
+    do(fb2_file_name)
