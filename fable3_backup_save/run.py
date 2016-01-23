@@ -10,5 +10,5 @@ import os
 while True:
     os.system('fable3_backup_save.py')
 
-    # Каждые 5 часов
-    time.sleep(60 * 60 * 5)
+    # Каждые 12 часов
+    time.sleep(60 * 60 * 12)
