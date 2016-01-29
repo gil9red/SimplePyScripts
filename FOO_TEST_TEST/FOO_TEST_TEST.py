@@ -5,87 +5,102 @@
 __author__ = 'ipetrash'
 
 
-# concurrency.py
-from collections import deque
-from time import time, sleep as sys_sleep
+# """У нас есть список сил и возможно комбинировать одновременно только две разные силы,
+# причем повторов быть не должно -- ('Огонь', 'Молния') и ('Молния', 'Огонь') -- повторы."""
+#
+# import itertools
+#
+# # Комбинации сил, максимум за раз могут две учавствовать, плюс возможны только разные
+# powers = ['Огонь', 'Молния', 'Лед', 'Воздух']
+#
+# # Все комбинации без повторов
+# # Если нужны комбинации с повторами, используется itertools.product(powers, repeat=2)
+# all_combo = itertools.combinations(powers, 2)
+# for i, combo in enumerate(all_combo, 1):
+#     print('{}. {} и {}'.format(i, *combo))
 
 
-# Взято: http://habrahabr.ru/post/243207/
-
-
-class coroutine(object):
-    """Делает из функции сопрограмму на базе расширенного генератора."""
-    _current = None
-
-    def __init__(self, callable):
-        self._callable = callable
-
-    def __call__(self, *args, **kwargs):
-        corogen = self._callable(*args, **kwargs)
-        cls = self.__class__
-        if cls._current is None:
-            try:
-                cls._current = corogen
-                next(corogen)
-            finally:
-                cls._current = None
-        return corogen
-
-
-def sleep(timeout):
-    """Приостанавливает выполнение до получения события "таймаут истек"."""
-    corogen = coroutine._current
-    dispatcher.setup_timeout(corogen, timeout)
-    revent = yield
-    return revent
-
-
-class Dispatcher(object):
-    """Объект реализующий диспечер событий."""
-    def __init__(self):
-        self._pending = deque()
-        self._deadline = time() + 3600.0
-
-    def setup_timeout(self, corogen, timeout):
-        deadline = time() + timeout
-        self._deadline = min([self._deadline, deadline])
-        self._pending.append([corogen, deadline])
-        self._pending = deque(sorted(self._pending, key=lambda a: a[1]))
-
-    def run(self):
-        """Запускает цикл обработки событий."""
-        while len(self._pending) > 0:
-            timeout = self._deadline - time()
-            self._deadline = time() + 3600.0
-            if timeout > 0:
-                sys_sleep(timeout)
-            while len(self._pending) > 0:
-                if self._pending[0][1] <= time():
-                    corogen, _ = self._pending.popleft()
-                    try:
-                        coroutine._current = corogen
-                        corogen.send("timeout")
-                    except StopIteration:
-                        pass
-                    finally:
-                        coroutine._current = None
-                else:
-                    break
-
-dispatcher = Dispatcher()
-run = lambda: dispatcher.run()
-
-
-@coroutine
-def hello(name, timeout):
-    while True:
-        yield from sleep(timeout)
-        print("Привет, {}!".format(name))
-
-hello("Петров", 2.0)
-hello("Иванов", 3.0)
-hello("Мир", 5.0)
-run()
+# # concurrency.py
+# from collections import deque
+# from time import time, sleep as sys_sleep
+#
+#
+# # Взято: http://habrahabr.ru/post/243207/
+#
+#
+# class coroutine(object):
+#     """Делает из функции сопрограмму на базе расширенного генератора."""
+#     _current = None
+#
+#     def __init__(self, callable):
+#         self._callable = callable
+#
+#     def __call__(self, *args, **kwargs):
+#         corogen = self._callable(*args, **kwargs)
+#         cls = self.__class__
+#         if cls._current is None:
+#             try:
+#                 cls._current = corogen
+#                 next(corogen)
+#             finally:
+#                 cls._current = None
+#         return corogen
+#
+#
+# def sleep(timeout):
+#     """Приостанавливает выполнение до получения события "таймаут истек"."""
+#     corogen = coroutine._current
+#     dispatcher.setup_timeout(corogen, timeout)
+#     revent = yield
+#     return revent
+#
+#
+# class Dispatcher(object):
+#     """Объект реализующий диспечер событий."""
+#     def __init__(self):
+#         self._pending = deque()
+#         self._deadline = time() + 3600.0
+#
+#     def setup_timeout(self, corogen, timeout):
+#         deadline = time() + timeout
+#         self._deadline = min([self._deadline, deadline])
+#         self._pending.append([corogen, deadline])
+#         self._pending = deque(sorted(self._pending, key=lambda a: a[1]))
+#
+#     def run(self):
+#         """Запускает цикл обработки событий."""
+#         while len(self._pending) > 0:
+#             timeout = self._deadline - time()
+#             self._deadline = time() + 3600.0
+#             if timeout > 0:
+#                 sys_sleep(timeout)
+#             while len(self._pending) > 0:
+#                 if self._pending[0][1] <= time():
+#                     corogen, _ = self._pending.popleft()
+#                     try:
+#                         coroutine._current = corogen
+#                         corogen.send("timeout")
+#                     except StopIteration:
+#                         pass
+#                     finally:
+#                         coroutine._current = None
+#                 else:
+#                     break
+#
+# dispatcher = Dispatcher()
+# run = lambda: dispatcher.run()
+#
+#
+# @coroutine
+# def hello(name, timeout):
+#     while True:
+#         yield from sleep(timeout)
+#         print("Привет, {}!".format(name))
+#
+# hello("Петров", 2.0)
+# hello("Иванов", 3.0)
+# hello("Мир", 5.0)
+# run()
 
 
 # # Разбор примера шифрования с помощью справочника: https://ru.wikipedia.org/wiki/Криптосистема_с_открытым_ключом
