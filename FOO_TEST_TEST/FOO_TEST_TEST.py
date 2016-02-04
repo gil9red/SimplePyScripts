@@ -5,6 +5,176 @@
 __author__ = 'ipetrash'
 
 
+import sys
+
+from PySide.QtGui import *
+from PySide.QtCore import *
+
+
+class FileSystemModel(QFileSystemModel):
+    def __init__(self):
+        super().__init__()
+
+
+app = QApplication(sys.argv)
+
+# model = FileSystemModel()
+# model.setRootPath("")
+# tree = QTreeView()
+# tree.setModel(model)
+#
+# # Demonstrating look and feel features
+# tree.setAnimated(False)
+# tree.setIndentation(20)
+# tree.setSortingEnabled(True)
+#
+# tree.setWindowTitle("Dir View")
+# tree.resize(640, 480)
+# tree.show()
+
+# import os.path
+
+import sys
+import logging
+
+
+def get_logger(name, file='log.txt', encoding='utf8'):
+    log = logging.getLogger(name)
+    log.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('%(message)s')
+
+    fh = logging.FileHandler(file, encoding=encoding)
+    fh.setLevel(logging.DEBUG)
+
+    ch = logging.StreamHandler(stream=sys.stdout)
+    ch.setLevel(logging.DEBUG)
+
+    fh.setFormatter(formatter)
+    ch.setFormatter(formatter)
+
+    log.addHandler(fh)
+    log.addHandler(ch)
+
+    return log
+
+logger = get_logger('dir_sizes')
+
+import time
+t = time.clock()
+
+# it = QDirIterator(r"C:\Users\ipetrash\Projects\SimplePyScripts",
+#                   '*.*',
+#                   QDir.AllEntries | QDir.NoDotAndDotDot,
+#                   QDirIterator.Subdirectories)
+
+
+def pretty_file_size(n_size):
+    i = 0
+    size = n_size
+
+    while size > 1023:
+        size /= 1024
+        i += 1
+
+    # return n_size, int(size), "BKMGT"[i]
+    return str(int(size)) + "BKMGT"[i]
+
+
+# def dir_size_bytes(dir_path):
+#     # it = QDirIterator(dir_path, '*.*', QDir.AllEntries | QDir.NoDotAndDotDot, QDirIterator.Subdirectories)
+#     it = QDirIterator(dir_path, '*.*', QDir.AllDirs | QDir.NoDotAndDotDot)
+#
+#     sizes = 0
+#
+#     while it.hasNext():
+#         file = QFileInfo(it.next())
+#
+#         size = 0
+#
+#         if file.isDir():
+#             size = dir_size_bytes(file.absoluteFilePath())
+#             sizes += size
+#         elif file.isFile():
+#             size = file.size()
+#             sizes += size
+#         else:
+#             sys.stderr.write(file.absoluteFilePath())
+#
+#         print(("DIR" if file.isDir() else "FILE") + ': ' + file.filePath(), pretty_file_size(size))
+#
+#     return sizes
+
+# def dir_size_bytes(dir_path, level=1):
+#     # print(dir_path)
+#
+#     it = QDirIterator(dir_path, '*.*', QDir.AllEntries | QDir.NoDotAndDotDot)
+#
+#     sizes = 0
+#
+#     while it.hasNext():
+#         file_name = it.next()
+#
+#         file = QFileInfo(file_name)
+#         # print(('DIR ' if file.isDir() else 'FILE ') + (' ' * 4 * level) + file_name)
+#         # if file.isFile():
+#         print(' ' * 4 * level + file_name[len(dir_path) + 1:], pretty_file_size(file.size()))
+#
+#         if file.isDir():
+#             dir_size_bytes(file_name, level + 1)
+#             # print()
+#
+#     return sizes
+
+def dir_size_bytes(dir_path, level=0, do_indent=True, size_less=1024*1024*1024):
+    it = QDirIterator(dir_path, '*.*', QDir.AllEntries | QDir.NoDotAndDotDot)
+
+    sizes = 0
+
+    while it.hasNext():
+        file_name = it.next()
+        file = QFileInfo(file_name)
+
+        if file.isDir():
+            size = dir_size_bytes(file_name, level + 1, do_indent)
+        else:
+            size = file.size()
+
+        sizes += size
+
+    if sizes > size_less:
+        logger.debug(
+            ((' ' * 4 * level) if do_indent else '') + dir_path + ' ' + pretty_file_size(sizes)
+        )
+
+    return sizes
+
+
+dir_name = r"C:\\"
+dir_size_bytes(dir_name, do_indent=False)
+
+# sizes = 0
+#
+# while it.hasNext():
+#     file = QFileInfo(it.next())
+#     print(("DIR" if file.isDir() else "FILE") + ': ' + file.filePath(), pretty_file_size(file.size()))
+#
+#     # if file.isFile():
+#     sizes += file.size()
+#
+#     # file = it.next()
+#     # print(file, os.path.isdir(file), os.path.isfile(file))
+#
+#     # file = it.next()
+#     # print(file)
+
+
+# print('sizes={}'.format(pretty_file_size(sizes)))
+logger.debug('\n{:.2f} sec'.format(time.clock() - t))
+
+# sys.exit(app.exec_())
+
+
 # """У нас есть список сил и возможно комбинировать одновременно только две разные силы,
 # причем повторов быть не должно -- ('Огонь', 'Молния') и ('Молния', 'Огонь') -- повторы."""
 #
