@@ -1,0 +1,12 @@
+<Animals>
+    <Animal name="animals"/>
+    <Animal name="animals">
+        <Animal name="dog"/>
+        <Animal name="cat">
+            <Animal name="Sharik"/>
+        </Animal>
+    </Animal>
+    <Animal name="animals">
+        <Animal name="dog"/>
+    </Animal>
+</Animals>
