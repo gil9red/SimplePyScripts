@@ -22,7 +22,20 @@ if __name__ == '__main__':
 
     button_direct = QPushButton()
 
-    layout.addWidget(button_direct)
+    # # TODO: добавить больше кодировок, и лучше не вручную
+    # cb_encoding = QComboBox()
+    # cb_encoding.addItem('UTF-8')
+    # cb_encoding.addItem('CP1251')
+    # cb_encoding.addItem('UTF-16LE')
+    # cb_encoding.addItem('UTF-16BE')
+    # cb_encoding.setCurrentIndex(0)
+    # cb_encoding.setFixedWidth(100)
+
+    button_layout = QHBoxLayout()
+    button_layout.addWidget(button_direct)
+    # button_layout.addWidget(cb_encoding)
+
+    layout.addLayout(button_layout)
 
     text_edit_input = QPlainTextEdit()
 
@@ -65,6 +78,19 @@ if __name__ == '__main__':
         last_detail_error_message = None
 
         try:
+            # codec_name = cb_encoding.currentText()
+            # text = text_edit_input.toPlainText().encode()
+            # text = base64.b64encode(text) if direct_encode_text else base64.b64decode(text)
+            # text_edit_output.setPlainText(
+            #     text.decode() if direct_encode_text else text.decode('utf-8').encode(codec_name).decode()
+            # )
+
+            # text = text_edit_input.toPlainText().encode() if not direct_encode_text else \
+            #     text_edit_input.toPlainText().encode(codec_name)
+            # print(text)
+            # text = base64.b64encode(text) if direct_encode_text else base64.b64decode(text)
+            # text_edit_output.setPlainText(text.decode() if not direct_encode_text else text.decode(codec_name))
+
             text = text_edit_input.toPlainText().encode()
             text = base64.b64encode(text) if direct_encode_text else base64.b64decode(text)
             text_edit_output.setPlainText(text.decode())
@@ -94,6 +120,7 @@ if __name__ == '__main__':
 
     button_direct.clicked.connect(change_convert_direct)
     text_edit_input.textChanged.connect(input_text_changed)
+    # cb_encoding.currentIndexChanged.connect(input_text_changed)
 
     splitter = QSplitter()
     splitter.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
