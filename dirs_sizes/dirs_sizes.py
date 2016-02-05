@@ -37,8 +37,10 @@ app = QApplication(sys.argv)
 
 # import os.path
 
-import sys
+
 import logging
+import os.path
+import sys
 
 
 def get_logger(name, file='log.txt', encoding='utf8'):
@@ -115,7 +117,7 @@ def dir_size_bytes(dir_path, files=0, dirs=0, level=0, do_indent=True, size_less
     if sizes > size_less:
         logger.debug(
             ((' ' * 4 * level) if do_indent else '')
-            + dir_path + ' ' + '{1} ({0} bytes)'.format(*pretty_file_size(sizes))
+            + os.path.normpath(dir_path) + ' ' + '{1} ({0} bytes)'.format(*pretty_file_size(sizes))
         )
 
     return sizes, files, dirs
@@ -123,7 +125,7 @@ def dir_size_bytes(dir_path, files=0, dirs=0, level=0, do_indent=True, size_less
 
 dir_name = r"C:\\"
 
-sizes, files, dirs = dir_size_bytes(dir_name, do_indent=False, size_less=0)
+sizes, files, dirs = dir_size_bytes(dir_name, do_indent=False, size_less=get_bytes('2GB'))
 
 logger.debug('\nsizes = {}, files = {}, dirs = {}'.format('{1} ({0} bytes)'.format(*pretty_file_size(sizes)), files, dirs))
 logger.debug('{:.2f} sec'.format(time.clock() - t))
