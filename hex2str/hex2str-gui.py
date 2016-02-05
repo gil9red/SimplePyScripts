@@ -4,6 +4,10 @@
 __author__ = 'ipetrash'
 
 
+# TODO: обоюдное выделеление текста в полях ввода
+# TODO: конвертирование в обе стороны
+
+
 if __name__ == '__main__':
     from os.path import split as path_split
     import traceback
@@ -23,6 +27,59 @@ if __name__ == '__main__':
 
     text_edit_input = QPlainTextEdit()
     text_edit_output = QPlainTextEdit()
+
+#     def selection_changed():
+#         """Обновляем выделение у текстовых редакторов"""
+#
+#         # text_edit_input -- hex значения
+#         # text_edit_output -- строковые значения, каждые два hex представляютсяодним символом
+#
+#
+# #         cursor.selectionEnd()
+# #
+# # QTextCursor::MoveAnchor	0	Moves the anchor to the same position as the cursor itself.
+# # QTextCursor::KeepAnchor	1	Keeps the anchor where it is.
+# #
+# # void QTextCursor::setPosition ( int pos, MoveMode m = MoveAnchor )
+# # bool QTextCursor::movePosition ( MoveOperation operation, MoveMode mode = MoveAnchor, int n = 1 )
+#
+#         if text_edit_input.hasFocus():
+#             cursor = QTextCursor(text_edit_input.textCursor())
+#             start, end = cursor.selectionStart(), cursor.selectionEnd()
+#             selection_len = len(cursor.selectedText())
+#
+#             print('start={} end={} len={}'.format(start, end, selection_len))
+#
+#             n = selection_len
+#             # if n % 2 == 1 and n > 1:
+#             #     n -= 1
+#             # elif n == 1:
+#             #     n = 2
+#             if n % 2 == 1:
+#                 n += 1
+#
+#             cursor.setPosition(start, QTextCursor.MoveAnchor)
+#             cursor.movePosition(QTextCursor.Right, QTextCursor.KeepAnchor, n)
+#             text_edit_input.setTextCursor(cursor)
+#
+#         # if text_edit_input.hasFocus():
+#         #     cursor = QTextCursor(text_edit_input.textCursor())
+#         #
+#         #     start, end = cursor.selectionStart(), cursor.selectionEnd()
+#         #
+#         #     cursor.setPosition(start // 2, QTextCursor.MoveAnchor)
+#         #     cursor.movePosition(QTextCursor.Right if end > start else QTextCursor.Left, QTextCursor.KeepAnchor, (max(end, start) - min(end, start)) / 2)
+#         #
+#         #     print(start, (max(end, start) - min(end, start)), (max(end, start) - min(end, start)) / 2)
+#         #
+#         #     text_edit_output.setTextCursor(cursor)
+#         #
+#         # elif text_edit_output.hasFocus():
+#         #     cursor = QTextCursor(text_edit_output.textCursor())
+#         #     text_edit_input.setTextCursor(cursor)
+#
+#     text_edit_input.selectionChanged.connect(selection_changed)
+#     text_edit_output.selectionChanged.connect(selection_changed)
 
     label_error = QLabel()
     label_error.setStyleSheet("QLabel { color : red; }")
@@ -74,6 +131,8 @@ if __name__ == '__main__':
             label_error.setText('Error: ' + last_error_message)
 
     text_edit_input.textChanged.connect(input_text_changed)
+
+    text_edit_input.setPlainText('504F53542068747470733A')
 
     splitter = QSplitter()
     splitter.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
