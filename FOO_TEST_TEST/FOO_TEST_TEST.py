@@ -122,9 +122,9 @@ def dir_size_bytes(dir_path, files=0, dirs=0, level=0, do_indent=True, size_less
     return sizes, files, dirs
 
 
-dir_name = r"C:\Users\ipetrash"
+dir_name = r"C:\\"
 
-sizes, files, dirs = dir_size_bytes(dir_name, do_indent=False, size_less=get_bytes('2,3 GB'))
+sizes, files, dirs = dir_size_bytes(dir_name, do_indent=False, size_less=get_bytes('1 GB'))
 
 logger.debug('\nsizes = {}, files = {}, dirs = {}'.format('{1} ({0} bytes)'.format(*pretty_file_size(sizes)), files, dirs))
 logger.debug('{:.2f} sec'.format(time.clock() - t))
