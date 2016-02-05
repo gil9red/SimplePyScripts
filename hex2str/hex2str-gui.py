@@ -28,6 +28,8 @@ if __name__ == '__main__':
     text_edit_input = QPlainTextEdit()
     text_edit_output = QPlainTextEdit()
 
+    last_select_start, last_select_end = None, None
+
 #     def selection_changed():
 #         """Обновляем выделение у текстовых редакторов"""
 #
@@ -43,24 +45,74 @@ if __name__ == '__main__':
 # # void QTextCursor::setPosition ( int pos, MoveMode m = MoveAnchor )
 # # bool QTextCursor::movePosition ( MoveOperation operation, MoveMode mode = MoveAnchor, int n = 1 )
 #
+#         global last_select_start, last_select_end
+#
 #         if text_edit_input.hasFocus():
 #             cursor = QTextCursor(text_edit_input.textCursor())
 #             start, end = cursor.selectionStart(), cursor.selectionEnd()
 #             selection_len = len(cursor.selectedText())
 #
-#             print('start={} end={} len={}'.format(start, end, selection_len))
+#             if selection_len == 0:
+#                 last_select_start, last_select_end = start, end
+#                 return
 #
-#             n = selection_len
-#             # if n % 2 == 1 and n > 1:
-#             #     n -= 1
-#             # elif n == 1:
-#             #     n = 2
-#             if n % 2 == 1:
-#                 n += 1
+#             if last_select_start == start and last_select_end == end:
+#                 return
 #
-#             cursor.setPosition(start, QTextCursor.MoveAnchor)
-#             cursor.movePosition(QTextCursor.Right, QTextCursor.KeepAnchor, n)
-#             text_edit_input.setTextCursor(cursor)
+#             print('start={} end={} len={}'.format(start, end, selection_len)
+#                   + ' | ' + 'last_start={} last_end={}'.format(last_select_start, last_select_end))
+#
+#             if last_select_end is not None and end >= last_select_end:
+#             # if True:
+#                 n = selection_len
+#                 # # if n % 2 == 1 and n > 1:
+#                 # #     n -= 1
+#                 # # elif n == 1:
+#                 # #     n = 2
+#
+#                 cursor.setPosition(start, QTextCursor.MoveAnchor)
+#
+#                 # if n % 2 == 1 and start < last_select_start and last_select_start is not None:
+#                 #     n += 1
+#                 #     cursor.movePosition(QTextCursor.Right, QTextCursor.KeepAnchor, n)
+#
+#                 # cursor.movePosition(QTextCursor.Left, QTextCursor.KeepAnchor, n)
+#
+#                 # if n % 2 == 1 and start < last_select_start and last_select_start is not None:
+#                 #     n += 1
+#                 if n % 2 == 1:
+#                     n += 1
+#
+#                 # print('r', selection_len, n)
+#
+#                 cursor.movePosition(QTextCursor.Right, QTextCursor.KeepAnchor, n)
+#                 text_edit_input.setTextCursor(cursor)
+#
+#             # elif last_select_start is not None and last_select_start < start:
+#             elif last_select_start is not None and start < last_select_start:
+#                 n = selection_len
+#                 # # if n % 2 == 1 and n > 1:
+#                 # #     n -= 1
+#                 # # elif n == 1:
+#                 # #     n = 2
+#
+#                 cursor.setPosition(end, QTextCursor.MoveAnchor)
+#
+#                 # if n % 2 == 1 and start < last_select_start and last_select_start is not None:
+#                 #     n += 1
+#                 #     cursor.movePosition(QTextCursor.Right, QTextCursor.KeepAnchor, n)
+#
+#                 # cursor.movePosition(QTextCursor.Left, QTextCursor.KeepAnchor, n)
+#
+#                 # # if n % 2 == 1 and start < last_select_start and last_select_start is not None:
+#                 # #     n += 1
+#                 # if n % 2 == 1:
+#                 #     n -= 1
+#
+#                 cursor.movePosition(QTextCursor.Left, QTextCursor.KeepAnchor, n)
+#                 text_edit_input.setTextCursor(cursor)
+#
+#             last_select_start, last_select_end = start, end
 #
 #         # if text_edit_input.hasFocus():
 #         #     cursor = QTextCursor(text_edit_input.textCursor())
