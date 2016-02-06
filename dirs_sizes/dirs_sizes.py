@@ -4,43 +4,13 @@
 __author__ = 'ipetrash'
 
 
-import sys
-
-from PySide.QtGui import *
-from PySide.QtCore import *
-
-
-class FileSystemModel(QFileSystemModel):
-    def __init__(self):
-        super().__init__()
-
-
-app = QApplication(sys.argv)
-
-
-# print('\n'.join(QDir(r'C:\Users\ipetrash').entryList()))
-# quit()
-
-# model = FileSystemModel()
-# model.setRootPath("")
-# tree = QTreeView()
-# tree.setModel(model)
-#
-# # Demonstrating look and feel features
-# tree.setAnimated(False)
-# tree.setIndentation(20)
-# tree.setSortingEnabled(True)
-#
-# tree.setWindowTitle("Dir View")
-# tree.resize(640, 480)
-# tree.show()
-
-# import os.path
-
-
 import logging
 import os.path
 import sys
+import time
+
+from PySide.QtGui import *
+from PySide.QtCore import *
 
 
 def get_logger(name, file='log.txt', encoding='utf8'):
@@ -63,10 +33,8 @@ def get_logger(name, file='log.txt', encoding='utf8'):
 
     return log
 
-logger = get_logger('dir_sizes')
 
-import time
-t = time.clock()
+logger = get_logger('dir_sizes')
 
 
 def get_bytes(text, units='BKMGTPE'):
@@ -123,11 +91,13 @@ def dir_size_bytes(dir_path, files=0, dirs=0, level=0, do_indent=True, size_less
     return sizes, files, dirs
 
 
-dir_name = r"C:\\"
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
 
-sizes, files, dirs = dir_size_bytes(dir_name, do_indent=False, size_less=get_bytes('2GB'))
+    dir_name = r"C:\\"
 
-logger.debug('\nsizes = {}, files = {}, dirs = {}'.format('{1} ({0} bytes)'.format(*pretty_file_size(sizes)), files, dirs))
-logger.debug('{:.2f} sec'.format(time.clock() - t))
+    t = time.clock()
+    sizes, files, dirs = dir_size_bytes(dir_name, do_indent=False, size_less=get_bytes('2GB'))
 
-# sys.exit(app.exec_())
+    logger.debug('\nsizes = {}, files = {}, dirs = {}'.format('{1} ({0} bytes)'.format(*pretty_file_size(sizes)), files, dirs))
+    logger.debug('{:.2f} sec'.format(time.clock() - t))
