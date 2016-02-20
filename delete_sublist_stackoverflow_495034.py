@@ -17,26 +17,18 @@ m = (1, 5, 3)
 
 def find_sublist(l, m):
     for i in range(len(l)):
-        has = False
-
         try:
-            for j in range(len(m)):
-                if l[i + j] == m[j]:
-                    has = True
-                else:
-                    has = False
-                    break
+            if tuple(l[i: i+len(m)]) == m:
+                yield i, i + len(m)
 
         except IndexError:
-            has = False
-
-        if has:
-            yield i, i + len(m)
+            pass
 
 
 def delete_sublist(l, m):
     for i, j in find_sublist(l, m):
         del l[i: j]
+
 
 print('Before: {}.'.format(l))
 delete_sublist(l, m)
