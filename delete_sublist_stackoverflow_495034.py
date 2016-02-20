@@ -18,7 +18,7 @@ m = (1, 5, 3)
 def find_sublist(l, m):
     for i in range(len(l)):
         try:
-            if tuple(l[i: i+len(m)]) == m:
+            if tuple(l[i: i + len(m)]) == tuple(m):
                 yield i, i + len(m)
 
         except IndexError:
