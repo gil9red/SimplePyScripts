@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 __author__ = 'ipetrash'
 
@@ -17,4 +16,4 @@ if __name__ == '__main__':
         if not c:
             break
 
-    print('Exit!')
+    print('Exit. Конец!')

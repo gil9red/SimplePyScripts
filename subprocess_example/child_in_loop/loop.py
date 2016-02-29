@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 __author__ = 'ipetrash'
 
@@ -7,6 +6,6 @@ __author__ = 'ipetrash'
 from subprocess import Popen, PIPE
 
 if __name__ == '__main__':
-    with Popen('python child.py', stdin=PIPE, stdout=PIPE, shell=True) as proc:
+    with Popen('python child.py', stdout=PIPE, universal_newlines=True) as proc:
         for line in proc.stdout:
-            print(line)
+            print(line, end='')
