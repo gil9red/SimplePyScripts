@@ -4,11 +4,9 @@
 __author__ = 'ipetrash'
 
 
-import subprocess
+from subprocess import Popen, PIPE
 
 if __name__ == '__main__':
-    ipconfig_res = subprocess.Popen("ipconfig", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    for line in ipconfig_res.stdout.readlines():
-        line = line.strip()
-        if line:
-            print(line.decode('cp866'))
+    ipconfig_res = Popen("ipconfig", universal_newlines=True, stdout=PIPE)
+    for line in ipconfig_res.stdout:
+        print(line, end='')
