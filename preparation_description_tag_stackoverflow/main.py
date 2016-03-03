@@ -32,18 +32,18 @@ tag_list = {('history', True, True, 'http://ru.stackoverflow.com/tags/history/in
 """
 
 
-# import glob
-#
-# import os
-# import re
-#
-# from lxml import etree
-#
-#
-# for tag in glob.glob('tags/*.tag'):
-#     print(tag)
-#
-#     parser = etree.XMLParser(remove_blank_text=True)
-#     tree = etree.parse(tag, parser)
-#     with open(tag, mode='wb') as f:
-#         f.write(etree.tostring(tree, pretty_print=True))
+import sys
+from PySide.QtGui import QApplication
+from mainwindow import MainWindow
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+
+    mw = MainWindow()
+    mw.read_settings()
+    mw.show()
+
+    mw.fill_tag_list()
+
+    sys.exit(app.exec_())
