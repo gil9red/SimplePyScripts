@@ -144,9 +144,9 @@ class MainWindow(QMainWindow, QObject):
 
         self.ui.list_view_tag_list.blockSignals(False)
 
+        # Делаем текущим первый тег и выводим информацию о нем
         if self.tag_list_model.rowCount():
-            item = self.tag_list_model.item(0)
-            index = item.index()
+            index = self.tag_list_model.item(0).index()
             self.fill_tag_info_from_index(index)
             self.ui.list_view_tag_list.setCurrentIndex(index)
 
