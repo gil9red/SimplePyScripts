@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Thu Mar  3 14:19:20 2016
+# Created: Mon Mar  7 06:33:43 2016
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -18,22 +18,18 @@ class Ui_MainWindow(object):
         self.verticalLayout_3 = QtGui.QVBoxLayout(self.centralwidget)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.formLayout = QtGui.QFormLayout()
+        self.formLayout.setFieldGrowthPolicy(QtGui.QFormLayout.AllNonFixedFieldsGrow)
         self.formLayout.setObjectName("formLayout")
         self.label = QtGui.QLabel(self.centralwidget)
         self.label.setObjectName("label")
         self.formLayout.setWidget(0, QtGui.QFormLayout.LabelRole, self.label)
         self.tag_list = QtGui.QComboBox(self.centralwidget)
+        self.tag_list.setEditable(False)
         self.tag_list.setObjectName("tag_list")
         self.formLayout.setWidget(0, QtGui.QFormLayout.FieldRole, self.tag_list)
-        self.label_name = QtGui.QLabel(self.centralwidget)
-        self.label_name.setObjectName("label_name")
-        self.formLayout.setWidget(1, QtGui.QFormLayout.LabelRole, self.label_name)
-        self.name = QtGui.QLabel(self.centralwidget)
-        self.name.setObjectName("name")
-        self.formLayout.setWidget(1, QtGui.QFormLayout.FieldRole, self.name)
         self.label_4 = QtGui.QLabel(self.centralwidget)
         self.label_4.setObjectName("label_4")
-        self.formLayout.setWidget(2, QtGui.QFormLayout.LabelRole, self.label_4)
+        self.formLayout.setWidget(1, QtGui.QFormLayout.LabelRole, self.label_4)
         self.url = QtGui.QLabel(self.centralwidget)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Ignored, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -44,7 +40,7 @@ class Ui_MainWindow(object):
         self.url.setOpenExternalLinks(True)
         self.url.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByMouse)
         self.url.setObjectName("url")
-        self.formLayout.setWidget(2, QtGui.QFormLayout.FieldRole, self.url)
+        self.formLayout.setWidget(1, QtGui.QFormLayout.FieldRole, self.url)
         self.verticalLayout_3.addLayout(self.formLayout)
         self.splitter = QtGui.QSplitter(self.centralwidget)
         self.splitter.setOrientation(QtCore.Qt.Vertical)
@@ -90,22 +86,17 @@ class Ui_MainWindow(object):
         self.toolBarGeneral = QtGui.QToolBar(MainWindow)
         self.toolBarGeneral.setObjectName("toolBarGeneral")
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBarGeneral)
-        self.action_reread_tag = QtGui.QAction(MainWindow)
-        self.action_reread_tag.setObjectName("action_reread_tag")
         self.action_save_tag = QtGui.QAction(MainWindow)
         self.action_save_tag.setObjectName("action_save_tag")
         self.menubar.addAction(self.menuDockWindow.menuAction())
         self.menubar.addAction(self.menuTools.menuAction())
         self.toolBarGeneral.addAction(self.action_save_tag)
-        self.toolBarGeneral.addAction(self.action_reread_tag)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         self.label.setText(QtGui.QApplication.translate("MainWindow", "Tag:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_name.setText(QtGui.QApplication.translate("MainWindow", "Name:", None, QtGui.QApplication.UnicodeUTF8))
-        self.name.setText(QtGui.QApplication.translate("MainWindow", "<tag_name>", None, QtGui.QApplication.UnicodeUTF8))
         self.label_4.setText(QtGui.QApplication.translate("MainWindow", "Url:", None, QtGui.QApplication.UnicodeUTF8))
         self.url.setText(QtGui.QApplication.translate("MainWindow", "<tag_url>", None, QtGui.QApplication.UnicodeUTF8))
         self.label_6.setText(QtGui.QApplication.translate("MainWindow", "Reference guide:", None, QtGui.QApplication.UnicodeUTF8))
@@ -113,6 +104,5 @@ class Ui_MainWindow(object):
         self.menuDockWindow.setTitle(QtGui.QApplication.translate("MainWindow", "Окна", None, QtGui.QApplication.UnicodeUTF8))
         self.menuTools.setTitle(QtGui.QApplication.translate("MainWindow", "Tools", None, QtGui.QApplication.UnicodeUTF8))
         self.toolBarGeneral.setWindowTitle(QtGui.QApplication.translate("MainWindow", "General", None, QtGui.QApplication.UnicodeUTF8))
-        self.action_reread_tag.setText(QtGui.QApplication.translate("MainWindow", "Reread Tag", None, QtGui.QApplication.UnicodeUTF8))
         self.action_save_tag.setText(QtGui.QApplication.translate("MainWindow", "Save Tag", None, QtGui.QApplication.UnicodeUTF8))
 

@@ -14,6 +14,9 @@
    <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
      <layout class="QFormLayout" name="formLayout">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
@@ -22,30 +25,20 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="tag_list"/>
+       <widget class="QComboBox" name="tag_list">
+        <property name="editable">
+         <bool>false</bool>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="label_name">
-        <property name="text">
-         <string>Name:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="name">
-        <property name="text">
-         <string>&lt;tag_name&gt;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
          <string>Url:</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="1" column="1">
        <widget class="QLabel" name="url">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
@@ -149,13 +142,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="action_save_tag"/>
-   <addaction name="action_reread_tag"/>
   </widget>
-  <action name="action_reread_tag">
-   <property name="text">
-    <string>Reread Tag</string>
-   </property>
-  </action>
   <action name="action_save_tag">
    <property name="text">
     <string>Save Tag</string>
