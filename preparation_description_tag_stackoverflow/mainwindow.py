@@ -38,33 +38,71 @@ class MainWindow(QMainWindow, QObject):
         for tool in self.findChildren(QToolBar):
             self.ui.menuTools.addAction(tool.toggleViewAction())
 
-        self.ui.tag_list.currentIndexChanged.connect(self.fill_tag_info)
         self.ui.action_save_tag.triggered.connect(self.save_tag)
 
         self.ui.ref_guide.textChanged.connect(self.ref_guide_text_changed)
         self.ui.description.textChanged.connect(self.description_text_changed)
 
-        # # TODO: заменить модель комбобокса нашим списком
+        # TODO: при изменении тега менять и окно с его содержимым -- plain_text_edit_tag_info
+        # TODO: заменить модель комбобокса нашим списком
         self.tags_dict = dict()
         self.modified_tags = set()
 
-        # TODO: комбобокс заменить списком / таблицей
+        # Словарь, ключом, которого id тега, а значением -- элемент списка
+        self.tag_id_item_dict = dict()
+
+        self.tag_list_model = QStandardItemModel()
+        self.modified_tags_model = QStandardItemModel()
+
+        self.ui.list_view_tag_list.setModel(self.tag_list_model)
+        self.ui.list_view_modified_tags.setModel(self.modified_tags_model)
+
+        # self.ui.tag_list.currentIndexChanged.connect(self.fill_tag_info_from_index)
+        self.ui.list_view_tag_list.clicked.connect(self.list_view_tag_list_clicked)
+        self.ui.list_view_modified_tags.clicked.connect(self.list_view_modified_tags_clicked)
+
+        # TODO: добавить кнопку для постинга изменений тега. Перед постингом нужно авторизоваться
+        # получить текущее состояние и сравнить с новым -- может кто-то что-то добавил и
+        # если оно было лучше, того, что я хочу добавить, получится не хорошо
+
+        # TODO: кнопка сохранения всех измененных тегов
 
         self.update_states()
 
     def update_states(self):
         self.ui.action_save_tag.setEnabled(False)
 
-        index = self.ui.tag_list.currentIndex()
-        if index < 0:
-            return
+        index = self.ui.list_view_tag_list.currentIndex()
+        tag_id = self.tag_id_from_index(index)
+        if tag_id is not None:
+            self.ui.action_save_tag.setEnabled(tag_id in self.modified_tags)
 
-        tag_id = self.ui.tag_list.itemData(index)
-        self.ui.action_save_tag.setEnabled(tag_id in self.modified_tags)
+    def list_view_tag_list_clicked(self, index):
+        item = self.tag_list_model.itemFromIndex(index)
+        if item is not None:
+            tag_id = item.data()
+            self.fill_tag_info_from_id(tag_id)
+        else:
+            logger.warn('Item from index; "%s" not found.', index)
+
+    def list_view_modified_tags_clicked(self, index):
+        item = self.modified_tags_model.itemFromIndex(index)
+        if item is not None:
+            tag_id = item.data()
+            tag_item = self.tag_id_item_dict[tag_id]
+            self.ui.list_view_tag_list.setCurrentIndex(tag_item.index())
+
+            self.fill_tag_info_from_id(tag_id)
+        else:
+            logger.warn('Item from index; "%s" not found.', index)
+
+    @staticmethod
+    def tag_title(tag):
+        return '#{}: {}'.format(tag['id'], ', '.join(tag['name']))
 
     def fill_tag_list(self):
-        self.ui.tag_list.clear()
         self.tags_dict.clear()
+        self.tag_list_model.clear()
 
         tag_file_list = [DIR + '/' + tag for tag in os.listdir(DIR) if tag.endswith('.tag')]
         for file_name in tag_file_list:
@@ -75,20 +113,39 @@ class MainWindow(QMainWindow, QObject):
 
                 self.tags_dict[data['id']] = data
 
-        self.ui.tag_list.blockSignals(True)
+        self.ui.list_view_tag_list.blockSignals(True)
 
-        print('Total tags:', len(self.tags_dict))
+        logger.debug('Total tags: %s.', len(self.tags_dict))
+        logger.debug('Fill list tags start.')
 
-        for id_tag, tag in sorted(self.tags_dict.items(), key=lambda x: int(x[0])):
-            name = '#{}: {}'.format(id_tag, ', '.join(tag['name']))
-            self.ui.tag_list.addItem(name, id_tag)
+        # При долгой загрузкк показываем прогресс диалог
+        progress = QProgressDialog("Adding tags...", "Abort", 0, len(self.tags_dict), self)
+        progress.setWindowModality(Qt.WindowModal)
+        progress.setWindowTitle('Progress dialog')
 
-            QApplication.processEvents()
+        tags = sorted(self.tags_dict.items(), key=lambda x: int(x[0]))
+        for i, (tag_id, tag) in enumerate(tags):
+            progress.setValue(i)
+            if progress.wasCanceled():
+                break
 
-        self.ui.tag_list.blockSignals(False)
+            name = self.tag_title(tag)
 
-        if self.ui.tag_list.count():
-            self.fill_tag_info(0)
+            item = QStandardItem(name)
+            item.setData(tag_id)
+            self.tag_list_model.appendRow(item)
+            self.tag_id_item_dict[tag_id] = item
+
+        progress.setValue(len(self.tags_dict))
+        logger.debug('Fill list tags finish.')
+
+        self.ui.list_view_tag_list.blockSignals(False)
+
+        if self.tag_list_model.rowCount():
+            item = self.tag_list_model.item(0)
+            index = item.index()
+            self.fill_tag_info_from_index(index)
+            self.ui.list_view_tag_list.setCurrentIndex(index)
 
         self.update_states()
 
@@ -111,12 +168,44 @@ class MainWindow(QMainWindow, QObject):
         else:
             self.modified_tags.add(tag_id)
 
+        # Если тег есть в списке измененных, меняем его цвет, иначе возвращаем черный цвет
+        item = self.tag_id_item_dict[tag_id]
+        item.setForeground(Qt.darkCyan if tag_id in self.modified_tags else Qt.black)
+
+        font = item.font()
+        font.setBold(tag_id in self.modified_tags)
+        item.setFont(font)
+
+        self.fill_list_modified_tags()
+
+    def fill_list_modified_tags(self):
+        # Обновление списка измененных тегов
+        self.modified_tags_model.clear()
+
+        for tag_id in sorted(self.modified_tags, key=int):
+            tag = self.tags_dict[tag_id]
+            item = QStandardItem(self.tag_title(tag))
+            item.setData(tag_id)
+
+            self.modified_tags_model.appendRow(item)
+
+    def tag_id_from_index(self, index):
+        if index.isValid():
+            item = self.tag_list_model.itemFromIndex(index)
+            if item is not None:
+                return item.data()
+            else:
+                logger.warn('Item from index: "%s" is None.', index)
+        else:
+            logger.warn('Index: "%s" is not valid.', index)
+
     def ref_guide_text_changed(self):
-        index = self.ui.tag_list.currentIndex()
-        if index < 0:
+        index = self.ui.list_view_tag_list.currentIndex()
+        if not index.isValid():
+            logger.warn('Index "%s" is not valid!', index)
             return
 
-        tag_id = self.ui.tag_list.itemData(index)
+        tag_id = self.tag_id_from_index(index)
         tag = self.tags_dict[tag_id]
         tag['ref_guide'] = self.ui.ref_guide.toPlainText()
 
@@ -124,24 +213,22 @@ class MainWindow(QMainWindow, QObject):
         self.update_states()
 
     def description_text_changed(self):
-        index = self.ui.tag_list.currentIndex()
-        if index < 0:
-            return
-
-        tag_id = self.ui.tag_list.itemData(index)
+        index = self.ui.list_view_tag_list.currentIndex()
+        tag_id = self.tag_id_from_index(index)
         tag = self.tags_dict[tag_id]
         tag['description'] = self.ui.description.toPlainText()
 
         self.check_modified_tag(tag_id)
         self.update_states()
 
-    def fill_tag_info(self, index):
-        if index < 0:
+    def fill_tag_info_from_id(self, tag_id):
+        if tag_id not in self.tags_dict:
+            logger.warn('Tag id: "%s" not found!', tag_id)
             return
 
-        tag_id = self.ui.tag_list.itemData(index)
         tag = self.tags_dict[tag_id]
-        print('fill_tag_info', tag, hex(id(tag)))
+        logger.debug('Fill tag info from tag id: "%s", tag: %s', tag_id, tag)
+        self.ui.plain_text_edit_tag_info.setPlainText(str(tag))
 
         url = 'http://ru.stackoverflow.com/tags/{}/info'.format(tag['name'][0])
         url = '<a href="{0}">{0}</a>'.format(url)
@@ -158,12 +245,13 @@ class MainWindow(QMainWindow, QObject):
 
         self.update_states()
 
-    def save_tag(self):
-        index = self.ui.tag_list.currentIndex()
-        if index < 0:
-            return
+    def fill_tag_info_from_index(self, index):
+        tag_id = self.tag_id_from_index(index)
+        self.fill_tag_info_from_id(tag_id)
 
-        tag_id = self.ui.tag_list.itemData(index)
+    def save_tag(self):
+        index = self.ui.list_view_tag_list.currentIndex()
+        tag_id = self.tag_id_from_index(index)
         tag = self.tags_dict[tag_id]
 
         file_name = DIR + '/{}.tag'.format(tag['id'])
@@ -181,6 +269,7 @@ class MainWindow(QMainWindow, QObject):
                 tag['user_changed'] = True
 
                 self.modified_tags.remove(tag_id)
+                self.fill_list_modified_tags()
 
                 pickle.dump(tag, f)
 
