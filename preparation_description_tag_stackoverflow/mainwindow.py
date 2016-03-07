@@ -73,6 +73,9 @@ class MainWindow(QMainWindow, QObject):
         self.ui.action_save_tag.setEnabled(False)
 
         index = self.ui.list_view_tag_list.currentIndex()
+        if not index.isValid():
+            return
+
         tag_id = self.tag_id_from_index(index)
         if tag_id is not None:
             self.ui.action_save_tag.setEnabled(tag_id in self.modified_tags)
