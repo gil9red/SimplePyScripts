@@ -127,7 +127,8 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="action_save_tag"/>
+   <addaction name="action_save"/>
+   <addaction name="action_save_all"/>
   </widget>
   <widget class="QDockWidget" name="dock_widget_tag_list">
    <property name="windowTitle">
@@ -186,9 +187,17 @@
     </layout>
    </widget>
   </widget>
-  <action name="action_save_tag">
+  <action name="action_save">
    <property name="text">
-    <string>Save Tag</string>
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="action_save_all">
+   <property name="text">
+    <string>Save All</string>
+   </property>
+   <property name="toolTip">
+    <string>Save All Tags</string>
    </property>
   </action>
  </widget>

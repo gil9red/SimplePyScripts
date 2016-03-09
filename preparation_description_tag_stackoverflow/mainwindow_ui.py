@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Tue Mar  8 02:41:26 2016
+# Created: Wed Mar  9 11:18:26 2016
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -115,11 +115,14 @@ class Ui_MainWindow(object):
         self.verticalLayout_6.addWidget(self.plain_text_edit_tag_info)
         self.dock_widget_tag_info.setWidget(self.dockWidgetContents_4)
         MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(2), self.dock_widget_tag_info)
-        self.action_save_tag = QtGui.QAction(MainWindow)
-        self.action_save_tag.setObjectName("action_save_tag")
+        self.action_save = QtGui.QAction(MainWindow)
+        self.action_save.setObjectName("action_save")
+        self.action_save_all = QtGui.QAction(MainWindow)
+        self.action_save_all.setObjectName("action_save_all")
         self.menubar.addAction(self.menuDockWindow.menuAction())
         self.menubar.addAction(self.menuTools.menuAction())
-        self.toolBarGeneral.addAction(self.action_save_tag)
+        self.toolBarGeneral.addAction(self.action_save)
+        self.toolBarGeneral.addAction(self.action_save_all)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -135,5 +138,7 @@ class Ui_MainWindow(object):
         self.dock_widget_tag_list.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Tag list", None, QtGui.QApplication.UnicodeUTF8))
         self.dock_widget_modified_tags.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Modified tags", None, QtGui.QApplication.UnicodeUTF8))
         self.dock_widget_tag_info.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Tag info", None, QtGui.QApplication.UnicodeUTF8))
-        self.action_save_tag.setText(QtGui.QApplication.translate("MainWindow", "Save Tag", None, QtGui.QApplication.UnicodeUTF8))
+        self.action_save.setText(QtGui.QApplication.translate("MainWindow", "Save", None, QtGui.QApplication.UnicodeUTF8))
+        self.action_save_all.setText(QtGui.QApplication.translate("MainWindow", "Save All", None, QtGui.QApplication.UnicodeUTF8))
+        self.action_save_all.setToolTip(QtGui.QApplication.translate("MainWindow", "Save All Tags", None, QtGui.QApplication.UnicodeUTF8))
 
