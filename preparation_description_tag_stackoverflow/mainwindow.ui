@@ -140,6 +140,13 @@
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QVBoxLayout" name="verticalLayout_4">
      <item>
+      <widget class="QCheckBox" name="check_box_only_empty">
+       <property name="text">
+        <string>Only empty tags</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QListView" name="list_view_tag_list">
        <property name="editTriggers">
         <set>QAbstractItemView::NoEditTriggers</set>

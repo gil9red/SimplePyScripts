@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Wed Mar  9 11:18:26 2016
+# Created: Thu Mar 10 11:02:45 2016
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -85,6 +85,9 @@ class Ui_MainWindow(object):
         self.dockWidgetContents.setObjectName("dockWidgetContents")
         self.verticalLayout_4 = QtGui.QVBoxLayout(self.dockWidgetContents)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.check_box_only_empty = QtGui.QCheckBox(self.dockWidgetContents)
+        self.check_box_only_empty.setObjectName("check_box_only_empty")
+        self.verticalLayout_4.addWidget(self.check_box_only_empty)
         self.list_view_tag_list = QtGui.QListView(self.dockWidgetContents)
         self.list_view_tag_list.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.list_view_tag_list.setObjectName("list_view_tag_list")
@@ -136,6 +139,7 @@ class Ui_MainWindow(object):
         self.menuTools.setTitle(QtGui.QApplication.translate("MainWindow", "Tools", None, QtGui.QApplication.UnicodeUTF8))
         self.toolBarGeneral.setWindowTitle(QtGui.QApplication.translate("MainWindow", "General", None, QtGui.QApplication.UnicodeUTF8))
         self.dock_widget_tag_list.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Tag list", None, QtGui.QApplication.UnicodeUTF8))
+        self.check_box_only_empty.setText(QtGui.QApplication.translate("MainWindow", "Only empty tags", None, QtGui.QApplication.UnicodeUTF8))
         self.dock_widget_modified_tags.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Modified tags", None, QtGui.QApplication.UnicodeUTF8))
         self.dock_widget_tag_info.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Tag info", None, QtGui.QApplication.UnicodeUTF8))
         self.action_save.setText(QtGui.QApplication.translate("MainWindow", "Save", None, QtGui.QApplication.UnicodeUTF8))
