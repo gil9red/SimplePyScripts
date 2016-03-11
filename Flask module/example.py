@@ -10,6 +10,11 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello():
+    return "Hello World!"
+
+
+@app.route('/network', methods=['GET'])
+def network():
     d = {
         'a': [1, 2, 3],
         'b': {
@@ -19,8 +24,8 @@ def hello():
         },
         'c': "CCC",
     }
-    return jsonify(**d)
-    # return "Hello World!"
+
+    return jsonify(d)
 
 if __name__ == "__main__":
     # Localhost
