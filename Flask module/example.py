@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from flask import Flask
+from flask import Flask, jsonify
 app = Flask(__name__)
 
 
@@ -12,9 +12,24 @@ app = Flask(__name__)
 def hello():
     return "Hello World!"
 
-if __name__ == "__main__":
-    # # Localhost
-    # app.run()
 
-    # Public IP
-    app.run(host='0.0.0.0')
+@app.route('/network', methods=['GET'])
+def network():
+    d = {
+        'a': [1, 2, 3],
+        'b': {
+            'b1': [1],
+            'b2': '2',
+            'b3': 3,
+        },
+        'c': "CCC",
+    }
+
+    return jsonify(d)
+
+if __name__ == "__main__":
+    # Localhost
+    app.run()
+
+    # # Public IP
+    # app.run(host='0.0.0.0')

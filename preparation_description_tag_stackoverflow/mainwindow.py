@@ -64,6 +64,8 @@ class MainWindow(QMainWindow, QObject):
         self.ui.list_view_tag_list.clicked.connect(self.list_view_tag_list_clicked)
         self.ui.list_view_modified_tags.clicked.connect(self.list_view_modified_tags_clicked)
 
+        self.ui.check_box_only_empty.clicked.connect(self.filter_list_tag_only_empty)
+
         # TODO: добавить кнопку для постинга изменений тега. Перед постингом нужно авторизоваться
         # получить текущее состояние и сравнить с новым -- может кто-то что-то добавил и
         # если оно было лучше, того, что я хочу добавить, получится не хорошо
@@ -83,6 +85,19 @@ class MainWindow(QMainWindow, QObject):
         tag_id = self.tag_id_from_index(index)
         if tag_id is not None:
             self.ui.action_save.setEnabled(tag_id in self.modified_tags)
+
+    def filter_list_tag_only_empty(self, has_filter=None):
+        if has_filter is None:
+            has_filter = self.ui.check_box_only_empty.isChecked()
+
+        tags = self.tags_dict
+
+        # Фильтр пустых тегов или измененных пользователем
+        if has_filter:
+            tags = dict(filter(lambda x: (not x[1]['description'] and not x[1]['ref_guide']) or 'user_changed' in x[1],
+                               self.tags_dict.items()))
+
+        self._fill_tag_list(tags)
 
     def list_view_tag_list_clicked(self, index):
         item = self.tag_list_model.itemFromIndex(index)
@@ -109,7 +124,6 @@ class MainWindow(QMainWindow, QObject):
 
     def fill_tag_list(self):
         self.tags_dict.clear()
-        self.tag_list_model.clear()
 
         tag_file_list = [DIR + '/' + tag for tag in os.listdir(DIR) if tag.endswith('.tag')]
         for file_name in tag_file_list:
@@ -120,17 +134,31 @@ class MainWindow(QMainWindow, QObject):
 
                 self.tags_dict[data['id']] = data
 
+        self.filter_list_tag_only_empty()
+        # self._fill_tag_list(self.tags_dict)
+
+        # Делаем текущим первый тег и выводим информацию о нем
+        if self.tag_list_model.rowCount():
+            index = self.tag_list_model.item(0).index()
+            self.fill_tag_info_from_index(index)
+            self.ui.list_view_tag_list.setCurrentIndex(index)
+
+        self.update_states()
+
+    def _fill_tag_list(self, tags_dict):
+        self.tag_list_model.clear()
+
         self.ui.list_view_tag_list.blockSignals(True)
 
-        logger.debug('Total tags: %s.', len(self.tags_dict))
+        logger.debug('Total tags: %s.', len(tags_dict))
         logger.debug('Fill list tags start.')
 
         # При долгой загрузкк показываем прогресс диалог
-        progress = QProgressDialog("Adding tags...", "Abort", 0, len(self.tags_dict), self)
+        progress = QProgressDialog("Adding tags...", "Abort", 0, len(tags_dict), self)
         progress.setWindowModality(Qt.WindowModal)
         progress.setWindowTitle('Progress dialog')
 
-        tags = sorted(self.tags_dict.items(), key=lambda x: int(x[0]))
+        tags = sorted(tags_dict.items(), key=lambda x: int(x[0]))
         for i, (tag_id, tag) in enumerate(tags):
             progress.setValue(i)
             if progress.wasCanceled():
@@ -143,18 +171,10 @@ class MainWindow(QMainWindow, QObject):
             self.tag_list_model.appendRow(item)
             self.tag_id_item_dict[tag_id] = item
 
-        progress.setValue(len(self.tags_dict))
+        progress.setValue(len(tags_dict))
         logger.debug('Fill list tags finish.')
 
         self.ui.list_view_tag_list.blockSignals(False)
-
-        # Делаем текущим первый тег и выводим информацию о нем
-        if self.tag_list_model.rowCount():
-            index = self.tag_list_model.item(0).index()
-            self.fill_tag_info_from_index(index)
-            self.ui.list_view_tag_list.setCurrentIndex(index)
-
-        self.update_states()
 
     @staticmethod
     def hash_tag(tag):
@@ -329,12 +349,14 @@ class MainWindow(QMainWindow, QObject):
         self.restoreState(config.value('MainWindow_State'))
         self.restoreGeometry(config.value('MainWindow_Geometry'))
         self.ui.splitter.restoreState(config.value('Splitter_State'))
+        self.ui.check_box_only_empty.setChecked(bool(config.value('Check_box_only_empty', False)))
 
     def write_settings(self):
         config = QSettings(CONFIG_FILE, QSettings.IniFormat)
         config.setValue('MainWindow_State', self.saveState())
         config.setValue('MainWindow_Geometry', self.saveGeometry())
         config.setValue('Splitter_State', self.ui.splitter.saveState())
+        config.setValue('Check_box_only_empty', self.ui.check_box_only_empty.isChecked())
 
     def closeEvent(self, event):
         self.write_settings()
