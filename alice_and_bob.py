@@ -9,44 +9,33 @@ __author__ = 'ipetrash'
 
 from random import randrange
 
-RESHKA = 0
-OREL = 1
-
 
 def alice():
-    curr = randrange(2)
-    last = randrange(2)
-    count = 2
-
-    if curr == RESHKA and last == OREL:
-        return 2
+    curr, last = None, None
+    count = 0
 
     while True:
-        curr = randrange(2)
-        if curr == RESHKA and last == OREL:
-            break
-
         last = curr
+        curr = randrange(2)
         count += 1
+
+        if curr == 0 and last == 1:
+            break
 
     return count
 
 
 def bob():
-    curr = randrange(2)
-    last = randrange(2)
-    count = 2
-
-    if curr == RESHKA and last == RESHKA:
-        return 2
+    curr, last = None, None
+    count = 0
 
     while True:
-        curr = randrange(2)
-        if curr == RESHKA and last == RESHKA:
-            break
-
         last = curr
+        curr = randrange(2)
         count += 1
+
+        if curr == 0 and last == 0:
+            break
 
     return count
 
