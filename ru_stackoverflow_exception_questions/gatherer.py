@@ -22,7 +22,7 @@ class Question:
 
     @property
     def url(self):
-        return 'http://ru.stackoverflow.com/questions/' + str(self.id)
+        return 'https://ru.stackoverflow.com/questions/' + str(self.id)
 
 
 def get_session_factory():
