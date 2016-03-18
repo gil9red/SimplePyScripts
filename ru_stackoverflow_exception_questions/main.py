@@ -46,7 +46,30 @@ PASSWORD = config['password']
 from gatherer import query
 
 
-if __name__ == '__main__':
-    # TODO: user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36 Gt/{32}'
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36 Gt/{32}'
 
+
+if __name__ == '__main__':
     print(query.count())
+    # print(query.all())
+    quit()
+
+    import sys
+
+    from PySide.QtGui import *
+    from PySide.QtCore import *
+    from PySide.QtNetwork import *
+    from PySide.QtWebKit import *
+
+    app = QApplication(sys.argv)
+
+    url = ''
+
+    request = QNetworkRequest()
+    request.setUrl(QUrl(url))
+    request.setRawHeader("User-Agent", USER_AGENT)
+
+    webkit = QWebView()
+    webkit.load(request)
+
+    sys.exit(app.exec_())

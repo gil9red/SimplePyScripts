@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 """Скрипт собирает вопросы с ru.stackoverflow, связанные с исключениями, но у которых нет метки "исключения"."""
 
 
-from sqlalchemy import create_engine, Table, Column, Integer, MetaData, DateTime, Boolean
+from sqlalchemy import create_engine, Table, Column, Integer, MetaData, DateTime, Boolean, literal
 from sqlalchemy.orm import mapper, sessionmaker
 
 
@@ -98,6 +98,12 @@ def search_questions(title, body):
     return questions
 
 
+def has_id(question_id):
+    has_id = session.query(Question).filter(Question.id == question_id).exists()
+    has_id = session.query(literal(True)).filter(has_id).scalar()
+    return True == has_id
+
+
 if __name__ == '__main__':
     questions = list()
     questions += search_questions('исключения', None)
@@ -108,6 +114,10 @@ if __name__ == '__main__':
     questions += search_questions(None, 'exception')
 
     for q in set(questions):
-        session.add(Question(q))
+        if not has_id(q):
+            logger.debug('Add question with id=%s.', q)
+            session.add(Question(q))
+        else:
+            logger.debug('Question with id=%s exist.', q)
 
     session.commit()
