@@ -50,6 +50,73 @@ USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10) AppleWebKit/537.36 (
 
 
 if __name__ == '__main__':
+
+
+# from PySide.QtCore import *
+# from PySide.QtGui import *
+# from PySide.QtWebKit import *
+# from PySide.QtNetwork import *
+#
+# # Чтобы не было проблем запуска компов с прокси:
+# QNetworkProxyFactory.setUseSystemConfiguration(True)
+#
+# QWebSettings.globalSettings().setAttribute(QWebSettings.DeveloperExtrasEnabled, True)
+#
+# self.view = QWebView()
+# self.setCentralWidget(self.view)
+#
+# self.view.show()
+#
+# self.view.load('https://ru.stackoverflow.com/users/login')
+#
+# # Ждем пока прогрузится страница
+# loop = QEventLoop()
+# self.view.loadFinished.connect(loop.quit)
+# loop.exec_()
+#
+# self.doc = self.view.page().mainFrame().documentElement()
+# self.doc.findFirst('#email').setAttribute("value", "ilya.petrash@inbox.ru")
+# self.doc.findFirst('#password').setAttribute("value", "FastFood!921874")
+# self.doc.findFirst('#submit-button').evaluateJavaScript('this.click()');
+#
+#
+# self.view.load('http://ru.stackoverflow.com/questions/137')
+#
+# # Ждем пока прогрузится страница
+# loop = QEventLoop()
+# self.view.loadFinished.connect(loop.quit)
+# loop.exec_()
+#
+# self.doc = self.view.page().mainFrame().documentElement()
+#
+# # Кликаем на "править"
+# href = self.doc.findFirst('.question .suggest-edit-post').attribute('href')
+# js = 'window.location.href = "{}";'.format(href)
+# print(href, js)
+# self.doc.evaluateJavaScript(js);
+#
+# # Ждем пока прогрузится страница
+# loop = QEventLoop()
+# self.view.loadFinished.connect(loop.quit)
+# loop.exec_()
+#
+# self.doc = self.view.page().mainFrame().documentElement()
+# js = '$(".tag-editor input")[0].value = "{}";'.format("исключения")
+# self.doc.evaluateJavaScript(js);
+#
+# # TODO: надо как то сэмулировать создание метки
+# #js = '$(".wmd-input.processed")[0].focus();'
+# #self.doc.evaluateJavaScript(js);
+#
+# # TODO: или вручную создать dom элементы, для описания метки
+# #print(self.doc.findFirst(".tag-editor span").isNull())
+#
+# # Добавление описания метки
+# js = '$("#edit-comment")[0].value = "{}";'.format('Добавлена метка: исключения')
+# self.doc.evaluateJavaScript(js);
+#
+
+    print(query.all()[0].url)
     print(query.count())
     # print(query.all())
     quit()

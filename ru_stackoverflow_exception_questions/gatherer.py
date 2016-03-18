@@ -20,6 +20,7 @@ class Question:
     def __repr__(self):
         return "<Question(#{}. Editable: {}. Editable_date: {})>".format(self.id, self.editable, self.editable_date)
 
+    @property
     def url(self):
         return 'http://ru.stackoverflow.com/questions/' + str(self.id)
 
