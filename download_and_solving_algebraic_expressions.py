@@ -10,7 +10,7 @@ rs = requests.get('https://cloclo18.datacloudmail.ru/weblink/view/emCb/gXFkchRJ2
 
 # Получение текста, разделение его построчно, пронумерование
 for i, line in enumerate(rs.text.split('\n'), 1):
-    # Если строка не пустая
+    # Если строка пустая
     if not line:
         continue
 
