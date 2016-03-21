@@ -43,6 +43,10 @@ from PySide.QtGui import *
 from PySide.QtCore import *
 
 
+# TODO: использовать машину состоний для упрощения алгоритма
+# TODO: вариант перехода к следующему слайду: effect_of_vanishing_photos/effect_of_vanishing_photos.py
+
+
 class SlideShowWidget(QWidget):
     def __init__(self):
         super().__init__()
@@ -87,6 +91,9 @@ class SlideShowWidget(QWidget):
 
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
+
+        painter.setBrush(Qt.black)
+        painter.drawRect(self.size())
         painter.drawPixmap(0, 0, self.resize_image)
 
 
