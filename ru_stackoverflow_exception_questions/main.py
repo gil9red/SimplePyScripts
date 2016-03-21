@@ -7,30 +7,8 @@ __author__ = 'ipetrash'
 """Скрипт добавляет метку 'исключения' для указанных вопросов."""
 
 
-def get_logger(name, file='log.txt', encoding='utf8'):
-    import logging
-    import sys
-
-    log = logging.getLogger(name)
-    log.setLevel(logging.DEBUG)
-
-    formatter = logging.Formatter('[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s')
-
-    fh = logging.FileHandler(file, encoding=encoding)
-    fh.setLevel(logging.DEBUG)
-
-    ch = logging.StreamHandler(stream=sys.stdout)
-    ch.setLevel(logging.DEBUG)
-
-    fh.setFormatter(formatter)
-    ch.setFormatter(formatter)
-
-    log.addHandler(fh)
-    log.addHandler(ch)
-    return log
-
-
-logger = get_logger('so_questions')
+import sys
+from PySide.QtGui import QApplication
 
 
 import json
@@ -43,10 +21,21 @@ PASSWORD = config['password']
 # import traceback
 
 
-from gatherer import query
+from gatherer import query, session
+
+from web_tag_editor import WebTagEditor, get_logger
+
+logger = get_logger('so_questions')
+
 
 if __name__ == '__main__':
-    print(query.all()[17].url)
-    print(query.count())
-    # print(query.all())
-    quit()
+    app = QApplication(sys.argv)
+
+    # TODO: удалять из базы измененный вопрос
+
+    # tag_editor = WebTagEditor(LOGIN, PASSWORD, query.all()[-1].url)
+    tag_editor = WebTagEditor(LOGIN, PASSWORD, 'https://ru.stackoverflow.com/questions/505049')
+    tag_editor.show()
+    tag_editor.go()
+
+    sys.exit(app.exec_())
