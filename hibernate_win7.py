@@ -22,6 +22,10 @@ if __name__ == '__main__':
         print('\nGo to Hibernate')
 
         import os
+        
+        # Следует заметить, что если у вас включен гибридный режим сна (Hibernate), то войдет он именно в этот режим. Отключить его можно запустив от имени администратора следующее:
+        # powercfg -hibernate off
+        
         # os.system('rundll32 powrprof.dll,SetSuspendState 0,1,0')
         os.system('shutdown /h /f')
         # os.system(r'%windir%\system32\rundll32.exe powrprof.dll,SetSuspendState Hibernate')
