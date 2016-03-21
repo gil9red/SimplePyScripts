@@ -22,7 +22,9 @@ if __name__ == '__main__':
         print('\nGo to Hibernate')
 
         import os
-        os.system(r'%windir%\system32\rundll32.exe powrprof.dll,SetSuspendState Hibernate')
+        # os.system('rundll32 powrprof.dll,SetSuspendState 0,1,0')
+        os.system('shutdown /h /f')
+        # os.system(r'%windir%\system32\rundll32.exe powrprof.dll,SetSuspendState Hibernate')
 
     except KeyboardInterrupt:
         print('\nInterrupt')
