@@ -16,42 +16,43 @@ from PySide.QtGui import *
 from PySide.QtCore import *
 
 
+class Timer(QTimer):
+    class Circle:
+        def __init__(self, pos_center):
+            self.pos_center = pos_center
+            self.radii = 1
+
+        def next(self):
+            self.radii += 1
+
+    def __init__(self, widget, image):
+        super().__init__()
+
+        self.circle_list = list()
+
+        self.widget = widget
+
+        self.setInterval(60)
+        self.timeout.connect(self.tick)
+
+        self.painter = QPainter(image)
+        self.painter.setRenderHint(QPainter.Antialiasing)
+        self.painter.setCompositionMode(QPainter.CompositionMode_Clear)
+        self.painter.setPen(Qt.NoPen)
+        self.painter.setBrush(Qt.transparent)
+
+    def add(self, pos_center):
+        self.circle_list.append(Timer.Circle(pos_center))
+
+    def tick(self):
+        for circle in self.circle_list:
+            self.painter.drawEllipse(circle.pos_center, circle.radii, circle.radii)
+            circle.next()
+
+        self.widget.update()
+
+
 class Widget(QWidget):
-    class Timer(QTimer):
-        class Circle:
-            def __init__(self, pos_center):
-                self.pos_center = pos_center
-                self.radii = 1
-
-            def next(self):
-                self.radii += 1
-
-        def __init__(self, widget, image):
-            super().__init__()
-
-            self.circle_list = list()
-
-            self.widget = widget
-
-            self.setInterval(60)
-            self.timeout.connect(self.tick)
-
-            self.painter = QPainter(image)
-            self.painter.setRenderHint(QPainter.Antialiasing)
-            self.painter.setCompositionMode(QPainter.CompositionMode_Clear)
-            self.painter.setPen(Qt.NoPen)
-            self.painter.setBrush(Qt.transparent)
-
-        def add(self, pos_center):
-            self.circle_list.append(Widget.Timer.Circle(pos_center))
-
-        def tick(self):
-            for circle in self.circle_list:
-                self.painter.drawEllipse(circle.pos_center, circle.radii, circle.radii)
-                circle.next()
-
-            self.widget.update()
-
     def __init__(self):
         super().__init__()
 
@@ -60,11 +61,7 @@ class Widget(QWidget):
         self.im = QImage('im.png')
         self.resize(self.im.size())
 
-        # self.resize(200, 200)
-        # self.im = QImage(self.width(), self.height(), QImage.Format_ARGB32)
-        # self.im.fill(Qt.black)
-
-        self.timer = Widget.Timer(self, self.im)
+        self.timer = Timer(self, self.im)
         self.timer.start()
 
     def mouseReleaseEvent(self, event):
@@ -85,6 +82,7 @@ class Widget(QWidget):
 
     def closeEvent(self, event):
         quit()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
