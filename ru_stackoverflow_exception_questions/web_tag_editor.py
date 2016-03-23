@@ -32,7 +32,7 @@ logger = get_logger('web_tag_editor')
 from datetime import datetime
 from urllib.parse import urljoin, quote
 
-from PySide.QtCore import QEventLoop
+from PySide.QtCore import QEventLoop, QTimer
 from PySide.QtWebKit import QWebPage, QWebView, QWebSettings
 from PySide.QtNetwork import QNetworkProxyFactory
 
@@ -134,6 +134,11 @@ class WebTagEditor(QWebView):
         }});
         """.format(quote_tags, int(datetime.now().timestamp() * 1000))
         self.evaluate_java_script(js)
+
+        # Ждем немного пока выполняется ajax-запрос
+        loop = QEventLoop()
+        QTimer.singleShot(3 * 1000, loop.quit)
+        loop.exec_()
 
         logger.debug('Клик на кнопку "Сохранить изменения".')
         self.doc.findFirst('#submit-button').evaluateJavaScript('this.click()')
