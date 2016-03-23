@@ -27,8 +27,8 @@ def hmac_sha256(key, msg):
 def get_authorization_header(application_id, secret, today_date, url):
     secret = base64.b64decode(secret)
 
-    message = "GET\n\n{}\n{}".format(today_date, urlsplit(url).path).encode()
-    signature = hmac_sha256(secret, message)
+    message = "GET\n\n" + today_date + "\n" + urlsplit(url).path
+    signature = hmac_sha256(secret, message.encode())
 
     return "UNIHMAC {}:{}".format(application_id, signature)
 
@@ -40,10 +40,7 @@ URL = 'https://test.api.unistream.com/v1/agents'
 TODAY_DATE = get_today_RFC1123_date()
 
 headers = {
-    'Authorization': get_authorization_header(APPLICATION_ID,
-                                              SECRET,
-                                              TODAY_DATE,
-                                              URL),
+    'Authorization': get_authorization_header(APPLICATION_ID, SECRET, TODAY_DATE, URL),
     'Date': TODAY_DATE,
 }
 
