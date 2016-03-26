@@ -4,6 +4,17 @@
 __author__ = 'ipetrash'
 
 
+import re
+
+
+def today_quotes(soup):
+    # Узнаем количество сегодняшних цитат
+    tag = soup.find(attrs=dict(id='stats'))
+
+    match = re.search('сегодня (\d+),', tag.text)
+    return int(match.group(1))
+
+
 from flask import Flask, render_template_string
 app = Flask(__name__)
 
@@ -11,36 +22,54 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 
+import requests
+from bs4 import BeautifulSoup
+
+
 @app.route("/")
 def index():
-    import requests
-    rs = requests.get('http://bash.im')
+    try:
+        rs = requests.get('http://bash.im')
+        soup = BeautifulSoup(rs.text, "lxml")
 
-    from bs4 import BeautifulSoup
-    soup = BeautifulSoup(rs.text, "lxml")
+        number = today_quotes(soup)
 
-    quotes = list()
+        quotes = list()
 
-    i = 0
-    for quote in soup.find_all(attrs={"class": "quote"}):
-        text = quote.find(attrs={"class": "text"})
-        if text is None:
-            continue
+        i = 0
+        for quote in soup.find_all(attrs={"class": "quote"})[:number]:
+            text = quote.find(attrs={"class": "text"})
+            if text is None:
+                continue
 
-        i += 1
-        print(i, text)
-        quotes.append(text)
+            i += 1
+            print(i, text)
+            quotes.append(text)
 
-    return render_template_string('''\
-    <html>
-    <head><title>Day last bash.im</title></head>
-    <body>
-    {% for item in item_list %}
-       {{ item }}<br><hr><br>
-    {% endfor %}
-    </body>
-    </html>''',
-    item_list=quotes)
+        return render_template_string('''\
+        <html>
+        <head><title>Day last bash.im</title></head>
+        <body>
+
+        {% if number %}
+            <h1>Сегодня новых цитат: {{number}}</h1>
+
+            {% for item in item_list %}
+                <br><hr><br>
+                {{ item }}
+            {% endfor %}
+
+            <br><hr><br>
+
+        {% else %}
+            <h1>Новых цитат нет</h1>
+        {% endif %}
+
+        </body>
+        </html>''', number=number, item_list=quotes)
+
+    except BaseException as e:
+        return 'Error: ' + str(e)
 
 
 if __name__ == "__main__":
