@@ -48,7 +48,7 @@ def index():
 
         return render_template_string('''\
         <html>
-        <head><title>Day last bash.im</title></head>
+        <head><title>Новые за день цитаты bash.im</title></head>
         <body>
 
         {% if number %}
