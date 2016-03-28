@@ -25,6 +25,8 @@ logging.basicConfig(level=logging.DEBUG)
 import requests
 from bs4 import BeautifulSoup
 
+import traceback
+
 
 @app.route("/")
 def index():
@@ -69,6 +71,7 @@ def index():
         </html>''', number=number, item_list=quotes)
 
     except BaseException as e:
+        print('Error: {}\n\n{}'.format(e, traceback.format_exc()))
         return 'Error: ' + str(e)
 
 
