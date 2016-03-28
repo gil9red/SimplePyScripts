@@ -37,12 +37,10 @@ def get_url_images(url):
                     'Используемое регулярное выражение: ', re_expr)
 
 
-def save_urls_to_zip(urls):
+def save_urls_to_zip(zip_file_name, urls):
     if not urls:
         print('Cписок изображений пустой.')
         return
-
-    zip_file_name = os.path.basename(url) + '.zip'
 
     # Создаем архив, у которого именем будет номер главы
     with ZipFile(zip_file_name, mode='w') as f:
@@ -74,7 +72,8 @@ if __name__ == '__main__':
         print('Urls:', urls)
         print('Всего картинок:', len(urls))
 
-        file_name = save_urls_to_zip(urls)
+        file_name = os.path.basename(url) + '.zip'
+        save_urls_to_zip(file_name, urls)
         print('Сохранено в архиве:', file_name)
 
     except Exception as e:
