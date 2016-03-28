@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from flask import Flask, render_template_string, request
+from flask import Flask, render_template_string, request, redirect
 app = Flask(__name__)
 
 import logging
@@ -19,19 +19,18 @@ dir = os.path.dirname(dir)
 import sys
 sys.path.append(dir)
 
-from download_volume_readmanga import get_url_images
+from download_volume_readmanga import get_url_images, save_urls_to_zip
 
 
-# TODO: добавить возможность скачать главы в архиве
+NOT_ARGS_HTML = """\
+<h1>К url нужно добавить параметр url: адрес главы.</h1>
+<h2>Например: <a href="{0}">{0}</a></h2>"""
 
 
 @app.route("/")
 def index():
     if not request.args:
-        return """\
-        <h1>К url нужно добавить параметр url -- адрес главы.</h1>
-        <h2>Например: <a href="{0}">{0}</a></h2>
-        """.format('http://127.0.0.1:5001/?url=http://readmanga.me/one__piece/vol60/591')
+        return NOT_ARGS_HTML.format('/?url=http://readmanga.me/one__piece/vol60/591')
 
     url = request.args.get('url')
     print('Url manga:', url)
@@ -45,6 +44,7 @@ def index():
     <body>
 
     <p>Манга: <a href="{{ url }}"> {{ url }} </a></h2></p>
+    <p><a href="/export?url={{ url }}">Скачать как zip архив</a></p>
     <br>
     <hr>
     <br>
@@ -57,6 +57,32 @@ def index():
     </body>
     </html>
     ''', url=url, images_urls=images_urls)
+
+
+@app.route("/export")
+def export():
+    if not request.args:
+        return NOT_ARGS_HTML.format('/export?url=http://readmanga.me/one__piece/vol60/591')
+
+    url = request.args.get('url')
+    print('Url manga:', url)
+
+    file_name = os.path.basename(url) + '.zip'
+    static_file_name = os.path.join('static', file_name)
+
+    # Если архива с главой нет, качаем ее
+    if not os.path.exists(static_file_name):
+        print('Архива "{}" нет, качаем и создаем.'.format(static_file_name))
+
+        images_urls = get_url_images(url)
+        print('Urls images:', images_urls)
+
+        save_urls_to_zip(static_file_name, images_urls)
+        print('Сохранено в архиве:', file_name)
+
+    # Перенаправляем к url с архивом
+    relative_url = render_template_string("{{ url_for('static', filename='%s') }}" % (file_name, ))
+    return redirect(relative_url)
 
 
 if __name__ == "__main__":
