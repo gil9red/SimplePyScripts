@@ -31,6 +31,9 @@ def index():
     number = int(request.args['number'])
     chain = int(request.args['chain'])
 
+    words = random_abusive.get_words(number, chain)
+    print('words:', words)
+
     return render_template_string('''\
     <html>
     <head><title>Рандомные матерные слова</title></head>
@@ -41,7 +44,7 @@ def index():
 
     </body>
     </html>
-    ''', words=random_abusive.get_words(number, chain))
+    ''', words=words)
 
 
 if __name__ == "__main__":
