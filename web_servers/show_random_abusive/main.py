@@ -10,7 +10,7 @@ app = Flask(__name__)
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
-# Добавление пути основной папки репозитория, чтобы импортировать модуль download_volume_readmanga
+# Добавление пути основной папки репозитория, чтобы импортировать модуль random_abusive
 import os
 dir = os.path.dirname(__file__)
 dir = os.path.dirname(dir)
