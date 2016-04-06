@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 __author__ = 'ipetrash'
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     # TODO: удалять из базы измененный вопрос
 
     # tag_editor = WebTagEditor(LOGIN, PASSWORD, query.all()[-1].url)
-    tag_editor = WebTagEditor(LOGIN, PASSWORD, 'https://ru.stackoverflow.com/questions/505049')
+    tag_editor = WebTagEditor(LOGIN, PASSWORD, 'https://ru.stackoverflow.com/questions/504080')
     tag_editor.show()
     tag_editor.go()
 
