@@ -11,10 +11,12 @@ __author__ = 'ipetrash'
 # OR:
 #     OpenSSL_example\p12_to_pem.py
 
+PEM_FILE_NAME = 'ipetrash.pem'
+
 
 if __name__ == '__main__':
     from job_report.utils import get_report_persons_info
-    report_dict = get_report_persons_info()
+    report_dict = get_report_persons_info(PEM_FILE_NAME)
 
     # Вывести всех сотрудников, отсортировав их по количестве переработанных часов
     from itertools import chain

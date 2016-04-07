@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 from datetime import datetime
 from collections import defaultdict
-from os.path import exists
+import os.path
 
 import requests
 requests.packages.urllib3.disable_warnings()
@@ -18,7 +18,6 @@ from job_report.report_person import ReportPerson
 
 URL = 'https://confluence.compassplus.ru/reports/index.jsp'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0'
-PEM_FILE_NAME = 'ipetrash.pem'
 
 LOGGING_DEBUG = False
 
@@ -28,12 +27,12 @@ if LOGGING_DEBUG:
     logging.basicConfig(level=logging.DEBUG)
 
 
-def get_report_context():
+def get_report_context(pem_file_name):
     headers = {
         'User-Agent': USER_AGENT
     }
 
-    rs = requests.get(URL, headers=headers, cert=PEM_FILE_NAME, verify=False)
+    rs = requests.get(URL, headers=headers, cert=pem_file_name, verify=False)
     if LOGGING_DEBUG:
         print('rs=', rs)
         print('rs.request.headers=', rs.request.headers)
@@ -53,7 +52,7 @@ def get_report_context():
         'User-Agent': USER_AGENT,
     }
 
-    rs = requests.post(URL, data=data, headers=headers, cert=PEM_FILE_NAME, verify=False)
+    rs = requests.post(URL, data=data, headers=headers, cert=pem_file_name, verify=False)
     if LOGGING_DEBUG:
         print('rs=', rs)
         print('rs.request.headers=', rs.request.headers)
@@ -62,16 +61,16 @@ def get_report_context():
     return rs.text
 
 
-def get_report_persons_info():
+def get_report_persons_info(pem_file_name):
     today = datetime.today().strftime('%d%m%y')
     report_file_name = 'report_{}.html'.format(today)
 
     # Если кэш-файл отчета не существует, загружаем новые данные и сохраняем в кэш-файл
-    if not exists(report_file_name):
+    if not os.path.exists(report_file_name):
         if LOGGING_DEBUG:
             print('{} not exist'.format(report_file_name))
 
-        context = get_report_context()
+        context = get_report_context(pem_file_name)
 
         with open(report_file_name, mode='w', encoding='utf-8') as f:
             f.write(context)
