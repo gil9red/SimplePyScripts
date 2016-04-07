@@ -4,6 +4,16 @@
 __author__ = 'ipetrash'
 
 
+import requests
+requests.packages.urllib3.disable_warnings()
+
+
+from datetime import datetime
+from bs4 import BeautifulSoup
+from collections import defaultdict
+from functools import total_ordering
+
+
 class ReportPerson:
     """Класс для описания сотрудника в отчете."""
 
@@ -15,25 +25,56 @@ class ReportPerson:
         self.absence_from_work = int(tags[1])
 
         # По календарю (смен / ч:мин)
-        # self.need_to_work_days = tags[2]
         # Для точного значения посещенных дней, может быть указано как "3 = 4- (1 О)", поэтому
         # отсекаем правую, от знака равно, сторону, удаляем пробелы и переводим в число
-        self.need_to_work_days = int(tags[2]) if '=' not in tags[2] else int(tags[2].split('=')[0].strip())
-        self.need_to_work_on_time = tags[3]
+        self.need_to_work_days = self.get_work_day(tags[2])
+        self.need_to_work_on_time = self.get_work_time(tags[3])
 
         # Фактически (смен / ч:мин)
-        self.worked_days = int(tags[4])
-        self.worked_time = tags[5]
+        self.worked_days = self.get_work_day(tags[4])
+        self.worked_time = self.get_work_time(tags[5])
 
         # Отклонение (смен / ч:мин)
-        self.deviation_of_day = int(tags[6])
-        self.deviation_of_time = tags[7]
+        self.deviation_of_day = self.get_work_day(tags[6])
+        self.deviation_of_time = self.get_work_time(tags[7])
+
+    @property
+    def full_name(self):
+        return self.second_name + ' ' + self.first_name + ' ' + self.middle_name
+
+    @staticmethod
+    def get_work_day(day_str):
+        return int(day_str) if '=' not in day_str else int(day_str.split('=')[0].strip())
+
+    @total_ordering
+    class Time:
+        """Простой класс для хранения даты работы."""
+
+        def __init__(self, time_str):
+            self._hours, self._minutes = map(int, time_str.split(':'))
+
+        @property
+        def total(self):
+            """Всего минут"""
+
+            return self._hours * 60 + self._minutes
+
+        def __repr__(self):
+            return "{:0>2}:{:0>2}".format(self._hours, self._minutes)
+
+        def __eq__(self, other):
+            return self.total == other.total
+
+        def __lt__(self, other):
+            return self.total < other.total
+
+    @staticmethod
+    def get_work_time(time_str):
+        return ReportPerson.Time(time_str)
 
     def __repr__(self):
-        return "{} {} {}. Невыходов на работу: {}. По календарю ({} смен / {} ч:мин). " \
-               "Фактически ({} смен / {} ч:мин) Отклонение ({} смен / {} ч:мин)".format(self.second_name,
-                                                                                        self.first_name,
-                                                                                        self.middle_name,
+        return "{}. Невыходов на работу: {}. По календарю ({} смен / {} ч:мин). " \
+               "Фактически ({} смен / {} ч:мин) Отклонение ({} смен / {} ч:мин)".format(self.full_name,
                                                                                         self.absence_from_work,
                                                                                         self.need_to_work_days,
                                                                                         self.need_to_work_on_time,
@@ -56,20 +97,13 @@ class ReportPerson:
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0'
 URL = 'https://confluence.compassplus.ru/reports/index.jsp'
-LOGGING_DEBUG = False
 PEM_FILE_NAME = 'ipetrash.pem'
+LOGGING_DEBUG = False
 
 
 if LOGGING_DEBUG:
     import logging
     logging.basicConfig(level=logging.DEBUG)
-
-
-import requests
-requests.packages.urllib3.disable_warnings()
-
-
-from datetime import datetime
 
 
 def get_report_context():
@@ -109,13 +143,11 @@ def get_report_context():
 def get_report_persons_info():
     context = get_report_context()
 
-    from bs4 import BeautifulSoup
     html = BeautifulSoup(context, 'lxml')
     report = html.select('#report tbody tr')
 
     current_dep = None
 
-    from collections import defaultdict
     report_dict = defaultdict(list)
 
     for row in report:
@@ -136,13 +168,19 @@ def get_report_persons_info():
 if __name__ == '__main__':
     report_dict = get_report_persons_info()
 
-    for k, v in sorted(report_dict.items(), key=lambda x: len(x[0])):
-        # found = list(filter(lambda x: x.second_name == 'Петраш', v))
+    # Вывести всех сотрудников, отсортировав их по количестве переработанных часов
+    from itertools import chain
+    person_list = chain(*report_dict.values())
+    for i, person in enumerate(sorted(person_list, key=lambda x: x.deviation_of_time, reverse=True), 1):
+        print('{}. {}'.format(i, person.full_name), person.deviation_of_time)
+
+    # for k, v in sorted(report_dict.items(), key=lambda x: len(x[0])):
+    #     print('{} ({}):'.format(k, len(v)))
+    #     for i, person in enumerate(v, 1):
+    #         print('    {}. {}'.format(i, person))
+    #
+    #     print()
+
+    # found = list(filter(lambda x: x.second_name == 'Петраш', v))
         # if found:
         #     print(found[0])
-
-        print('{} ({}):'.format(k, len(v)))
-        for i, person in enumerate(v, 1):
-            print('    {}. {}'.format(i, person))
-
-        print()
