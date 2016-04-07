@@ -170,17 +170,16 @@ if __name__ == '__main__':
 
     # Вывести всех сотрудников, отсортировав их по количестве переработанных часов
     from itertools import chain
-    person_list = chain(*report_dict.values())
+    person_list = list(chain(*report_dict.values()))
+
+    # Проверка того, что сортировка работает (в принципе, думаю можно удалить)
+    assert sorted(person_list, key=lambda x: x.deviation_of_time) == \
+           sorted(person_list, key=lambda x: x.deviation_of_time.total)
+
     for i, person in enumerate(sorted(person_list, key=lambda x: x.deviation_of_time, reverse=True), 1):
         print('{}. {}'.format(i, person.full_name), person.deviation_of_time)
 
-    # for k, v in sorted(report_dict.items(), key=lambda x: len(x[0])):
-    #     print('{} ({}):'.format(k, len(v)))
-    #     for i, person in enumerate(v, 1):
-    #         print('    {}. {}'.format(i, person))
-    #
-    #     print()
-
-    # found = list(filter(lambda x: x.second_name == 'Петраш', v))
-        # if found:
-        #     print(found[0])
+    print()
+    found = list(filter(lambda x: x.second_name == 'Петраш', person_list))
+    if found:
+        print(found[0].full_name, found[0].deviation_of_time)
