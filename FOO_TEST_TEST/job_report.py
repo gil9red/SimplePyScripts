@@ -12,6 +12,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from collections import defaultdict
 from functools import total_ordering
+import os.path
 
 
 class ReportPerson:
@@ -141,7 +142,24 @@ def get_report_context():
 
 
 def get_report_persons_info():
-    context = get_report_context()
+    today = datetime.today().strftime('%d%m%y')
+    report_file_name = 'report_{}.html'.format(today)
+
+    # Если кэш-файл отчета не существует, загружаем новые данные и сохраняем в кэш-файл
+    if not os.path.exists(report_file_name):
+        if LOGGING_DEBUG:
+            print('{} not exist'.format(report_file_name))
+
+        context = get_report_context()
+
+        with open(report_file_name, mode='w', encoding='utf-8') as f:
+            f.write(context)
+    else:
+        if LOGGING_DEBUG:
+            print('{} exist'.format(report_file_name))
+
+        with open(report_file_name, encoding='utf-8') as f:
+            context = f.read()
 
     html = BeautifulSoup(context, 'lxml')
     report = html.select('#report tbody tr')
@@ -179,7 +197,7 @@ if __name__ == '__main__':
     sorted_person_list = sorted(person_list, key=lambda x: x.deviation_of_time, reverse=True)
 
     for i, person in enumerate(sorted_person_list, 1):
-        print('{}. {}'.format(i, person.full_name), person.deviation_of_time)
+        print('{:>3}. {} {}'.format(i, person.full_name, person.deviation_of_time))
 
     print()
     found = list(filter(lambda x: x.second_name == 'Петраш', person_list))
