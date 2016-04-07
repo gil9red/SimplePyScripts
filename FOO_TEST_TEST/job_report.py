@@ -176,10 +176,13 @@ if __name__ == '__main__':
     assert sorted(person_list, key=lambda x: x.deviation_of_time) == \
            sorted(person_list, key=lambda x: x.deviation_of_time.total)
 
-    for i, person in enumerate(sorted(person_list, key=lambda x: x.deviation_of_time, reverse=True), 1):
+    sorted_person_list = sorted(person_list, key=lambda x: x.deviation_of_time, reverse=True)
+
+    for i, person in enumerate(sorted_person_list, 1):
         print('{}. {}'.format(i, person.full_name), person.deviation_of_time)
 
     print()
     found = list(filter(lambda x: x.second_name == 'Петраш', person_list))
     if found:
-        print(found[0].full_name, found[0].deviation_of_time)
+        person = found[0]
+        print('#{}. {} {}'.format(sorted_person_list.index(person) + 1, person.full_name, person.deviation_of_time))
