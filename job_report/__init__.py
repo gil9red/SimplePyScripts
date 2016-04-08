@@ -4,4 +4,4 @@
 __author__ = 'ipetrash'
 
 
-from job_report.utils import get_report_context, get_report_persons_info
+from job_report.utils import get_report_context, get_report_persons_info, get_person_info

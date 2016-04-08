@@ -7,6 +7,7 @@ __author__ = 'ipetrash'
 from datetime import datetime
 from collections import defaultdict
 import os.path
+from itertools import chain
 
 import requests
 requests.packages.urllib3.disable_warnings()
@@ -101,3 +102,21 @@ def get_report_persons_info(pem_file_name):
             report_dict[current_dep].append(person)
 
     return report_dict
+
+
+def get_person_info(pem_file_name, second_name, first_name=None, middle_name=None, report_dict=None):
+    if report_dict is None:
+        report_dict = get_report_persons_info(pem_file_name)
+
+    # Вывести всех сотрудников, отсортировав их по количеству переработанных часов
+    for person in list(chain(*report_dict.values())):
+        found = person.second_name == second_name
+
+        if first_name is not None:
+            found = found and person.first_name == first_name
+
+        if middle_name is not None:
+            found = found and person.middle_name == middle_name
+
+        if found:
+            return person

@@ -15,7 +15,7 @@ PEM_FILE_NAME = 'ipetrash.pem'
 
 
 if __name__ == '__main__':
-    from job_report.utils import get_report_persons_info
+    from job_report.utils import get_report_persons_info, get_person_info
     report_dict = get_report_persons_info(PEM_FILE_NAME)
 
     # Вывести всех сотрудников, отсортировав их по количестве переработанных часов
@@ -32,7 +32,6 @@ if __name__ == '__main__':
         print('{:>3}. {} {}'.format(i, person.full_name, person.deviation_of_time))
 
     print()
-    found = list(filter(lambda x: x.second_name == 'Петраш', person_list))
-    if found:
-        person = found[0]
+    person = get_person_info(PEM_FILE_NAME, second_name='Петраш', first_name='Илья', report_dict=report_dict)
+    if person:
         print('#{}. {} {}'.format(sorted_person_list.index(person) + 1, person.full_name, person.deviation_of_time))
