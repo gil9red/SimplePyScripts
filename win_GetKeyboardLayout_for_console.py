@@ -12,7 +12,7 @@ __author__ = 'ipetrash'
 """
 
 
-# Переписал на python используя этот ответ: http://stackoverflow.com/questions/12379713/cant-get-current-keyboard-layout/12383335#12383335
+# Переписал на python используя этот ответ: http://stackoverflow.com/a/12383335/5909792
 
 
 from ctypes import *
