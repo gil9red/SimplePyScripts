@@ -44,8 +44,6 @@ def search_of_empty_folders(dir):
 
 
 if __name__ == '__main__':
-    # os.makedirs(r'1\11\22\33\44\55')
-
     path = r'C:\\'
 
     empty_folders = search_of_empty_folders(path)
