@@ -20,11 +20,20 @@ def pc_name(ip):
 
 
 if __name__ == '__main__':
+    # with open('ip_pc_name', mode='a') as f:
+    #     for j in range(9):
+    #         for m in range(256):
+    #             ping = '{}.{}.{}.{}'.format(10, 7, j, m)
+    #             name = pc_name(ping)
+    #
+    #             if name is not None:
+    #                 found = True
+    #
+    #                 print(ping, name, file=f)
+    #                 print(ping, name)
+
     # TODO: четыре цикла хотелось бы заменить одним -- должны быть инструменты в коробке
     # для генерации подобного
-
-    # TODO: должен быть другой способ пройтись по всем существующим в сети ip -- текущий перебор
-    # слишком долгий
     with open('ip_pc_name', mode='w') as f:
         for i in range(256):
             for j in range(256):
