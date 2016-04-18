@@ -4,7 +4,10 @@
 __author__ = 'ipetrash'
 
 
-from flask import Flask, request
+"""Вывод переработки текущего (или конкретного) пользователя"""
+
+
+from flask import Flask
 app = Flask(__name__)
 
 import logging
@@ -21,10 +24,7 @@ import sys
 sys.path.append(dir)
 
 
-# from itertools import chain
-
-# from job_report import get_report_persons_info, get_person_info
-from job_report import get_person_info
+from job_report.utils import get_report_persons_info, get_person_info
 
 
 PEM_FILE_NAME = 'ipetrash.pem'
@@ -32,30 +32,16 @@ PEM_FILE_NAME = 'ipetrash.pem'
 
 @app.route("/")
 def index():
-    # report_dict = get_report_persons_info(PEM_FILE_NAME)
-    #
-    # # Вывести всех сотрудников, отсортировав их по количестве переработанных часов
-    # person_list = list(chain(*report_dict.values()))
+    report_dict = get_report_persons_info(PEM_FILE_NAME)
 
-    # # Проверка того, что сортировка работает (в принципе, думаю можно удалить)
-    # assert sorted(person_list, key=lambda x: x.deviation_of_time) == \
-    #        sorted(person_list, key=lambda x: x.deviation_of_time.total)
-    #
-    # sorted_person_list = sorted(person_list, key=lambda x: x.deviation_of_time, reverse=True)
-    #
-    # for i, person in enumerate(sorted_person_list, 1):
-    #     print('{:>3}. {} {}'.format(i, person.full_name, person.deviation_of_time))
-    #
-    # print()
-    #
-    # found = list(filter(lambda x: x.second_name == 'Петраш', person_list))
-    # if found:
-    #     person = found[0]
-    #     # return '#{}. {} {}'.format(sorted_person_list.index(person) + 1, person.full_name, person.deviation_of_time)
-    #     return '{} {}'.format(person.full_name, person.deviation_of_time)
+    try:
+        person = report_dict['Текущий пользователь'][0]
+    except:
+        person = None
 
-    # person = get_person_info(PEM_FILE_NAME, second_name='Петраш', first_name='Илья', report_dict=report_dict)
-    person = get_person_info(PEM_FILE_NAME, second_name='Петраш')
+    if person is None:
+        person = get_person_info(PEM_FILE_NAME, second_name='Петраш', report_dict=report_dict)
+
     if person:
         return '{} {}'.format(person.full_name, person.deviation_of_time)
 
