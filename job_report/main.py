@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     # Вывести всех сотрудников, отсортировав их по количестве переработанных часов
     from itertools import chain
-    person_list = list(chain(*report_dict.values()))
+    person_list = set(chain(*report_dict.values()))
 
     # Проверка того, что сортировка работает (в принципе, думаю можно удалить)
     assert sorted(person_list, key=lambda x: x.deviation_of_time) == \

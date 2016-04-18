@@ -65,6 +65,12 @@ class ReportPerson:
     def get_work_time(time_str):
         return ReportPerson.Time(time_str)
 
+    def __hash__(self):
+        return hash(self.full_name)
+
+    def __eq__(self, other):
+        return self.full_name == other.full_name
+
     def __repr__(self):
         return "{}. Невыходов на работу: {}. По календарю ({} смен / {} ч:мин). " \
                "Фактически ({} смен / {} ч:мин) Отклонение ({} смен / {} ч:мин)".format(self.full_name,

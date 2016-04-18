@@ -87,19 +87,19 @@ def get_report_persons_info(pem_file_name):
 
     current_dep = None
 
-    report_dict = defaultdict(list)
+    report_dict = defaultdict(set)
 
     for row in report:
         children = list(row.children)
         if len(children) == 1 and children[0].name == 'th':
-            current_dep = children[0].text
+            current_dep = children[0].text.strip()
             continue
 
         if children[0].has_attr('class') and children[0].attrs['class'][0] == 'person':
             person_tags = [children[0].text] + [i.text for i in row.nextSibling.select('td')[1:]]
             person = ReportPerson(person_tags)
 
-            report_dict[current_dep].append(person)
+            report_dict[current_dep].add(person)
 
     return report_dict
 
