@@ -38,6 +38,7 @@ if __name__ == '__main__':
     QWebSettings.globalSettings().setAttribute(QWebSettings.DeveloperExtrasEnabled, True)
 
     view = QWebView()
+    view.resize(400, 600)
     view.show()
 
     url = 'http://gabrielecirulli.github.io/2048/'
@@ -58,6 +59,6 @@ if __name__ == '__main__':
     # Таймер для случайных кликов
     timer = QTimer()
     timer.timeout.connect(random_click)
-    timer.start(1000)
+    timer.start(333)
 
     app.exec_()
