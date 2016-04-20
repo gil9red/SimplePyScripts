@@ -38,6 +38,7 @@ if __name__ == '__main__':
     QWebSettings.globalSettings().setAttribute(QWebSettings.DeveloperExtrasEnabled, True)
 
     view = QWebView()
+    view.resize(400, 600)
     view.show()
 
     url = 'http://gabrielecirulli.github.io/2048/'
