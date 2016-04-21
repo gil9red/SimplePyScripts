@@ -27,14 +27,14 @@ if __name__ == '__main__':
     # path_and_query раскодированным, а requests достаточно умный, чтобы
     # сам кодировать заголовок, если нужно.
     # Раскодированный URL:
-    # https://test.api.unistream.com/v1/agents?page=1&pageSize=10&from=2016-04-20T00:00:00&to=2016-04-21T00:00:00
+    # https://test.api.unistream.com/v1/operations?page=1&pageSize=10&from=2016-04-20T00:00:00&to=2016-04-21T00:00:00
     #
     # Кодированный URL:
-    # https://test.api.unistream.com/v1/agents?page=1&pageSize=10&from=2016-04-20T00%3A00%3A00&to=2016-04-21T00%3A00%3A00
+    # https://test.api.unistream.com/v1/operations?page=1&pageSize=10&from=2016-04-20T00%3A00%3A00&to=2016-04-21T00%3A00%3A00
     #
     # Для кодирования нужно:
     # from urllib.parse import urlencode
-    # URL = 'https://test.api.unistream.com/v1/agents' + '?' + urlencode(params)
+    # URL = 'https://test.api.unistream.com/v1/operations' + '?' + urlencode(params)
 
     URL = 'https://test.api.unistream.com/v1/operations'
     URL += '?' + '&'.join(['{}={}'.format(k, v) for k, v in params.items()])
