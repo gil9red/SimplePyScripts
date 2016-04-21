@@ -25,9 +25,13 @@ def hmac_sha256(key, msg):
 
 
 def get_authorization_header(application_id, secret, today_date, url):
-    secret = base64.b64decode(secret)
+    url_parts = urlsplit(url)
+    path_and_query = url_parts.path
+    if url_parts.query:
+        path_and_query += '?' + url_parts.query
 
-    message = "GET\n\n" + today_date + "\n" + urlsplit(url).path
+    message = "GET\n\n" + today_date + "\n" + path_and_query
+    secret = base64.b64decode(secret)
     signature = hmac_sha256(secret, message.encode())
 
     return "UNIHMAC {}:{}".format(application_id, signature)
