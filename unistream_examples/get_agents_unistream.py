@@ -4,6 +4,13 @@
 __author__ = 'ipetrash'
 
 
+"""
+Получение списка доступных партнеров.
+
+GET https://test.api.unistream.com/v1/agents
+"""
+
+
 if __name__ == '__main__':
     from utils import get_today_RFC1123_date, get_authorization_header
     from config import APPLICATION_ID, SECRET
