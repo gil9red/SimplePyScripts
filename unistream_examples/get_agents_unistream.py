@@ -18,10 +18,9 @@ if __name__ == '__main__':
     URL = 'https://test.api.unistream.com/v1/agents'
     TODAY_DATE = get_today_RFC1123_date()
 
-    headers = {
-        'Authorization': get_authorization_header(APPLICATION_ID, SECRET, TODAY_DATE, URL),
-        'Date': TODAY_DATE,
-    }
+    headers = dict()
+    headers['Date'] = TODAY_DATE
+    headers['Authorization'] = get_authorization_header(APPLICATION_ID, SECRET, TODAY_DATE, URL, headers)
 
     import requests
     rs = requests.get(URL, headers=headers)

@@ -4,8 +4,9 @@
 __author__ = 'ipetrash'
 
 
-from urllib.parse import urlsplit
 import base64
+import logging
+from urllib.parse import urlsplit
 
 
 def get_today_RFC1123_date():
@@ -24,14 +25,29 @@ def hmac_sha256(key, msg):
     return base64.b64encode(signature).decode()
 
 
-def get_authorization_header(application_id, secret, today_date, url):
+def get_authorization_header(application_id, secret, today_date, url, headers):
+    logging.debug('Url:\n%s', url)
+
     url_parts = urlsplit(url)
     path_and_query = url_parts.path
     if url_parts.query:
         path_and_query += '?' + url_parts.query
 
-    message = "GET\n\n" + today_date + "\n" + path_and_query
+    message = "GET\n\n" + today_date + "\n" + path_and_query.lower()
+
+    # Канкатенация значений заголовков, соответствующих маске X-Unistream-*.
+    # Заголовки сортируются по возрастанию по названию, приведенному к строчным буквам.
+    # Значение каждого заголовка начинается с символа "\n"
+    x_unistream_headers = [(k, str(v)) for k, v in headers.items() if 'X-Unistream-' in k]
+    if x_unistream_headers:
+        x_unistream_headers.sort(key=lambda x: x[0].lower())
+        x_unistream_headers_value = [v for k, v in x_unistream_headers]
+        message += '\n' + '\n'.join(x_unistream_headers_value)
+
     secret = base64.b64decode(secret)
     signature = hmac_sha256(secret, message.encode())
+
+    logging.debug('Message:\n%s', message)
+    logging.debug('Signature:\n%s', signature)
 
     return "UNIHMAC {}:{}".format(application_id, signature)
