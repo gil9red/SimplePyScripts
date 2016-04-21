@@ -38,10 +38,10 @@ def get_authorization_header(application_id, secret, today_date, url, headers):
     # Канкатенация значений заголовков, соответствующих маске X-Unistream-*.
     # Заголовки сортируются по возрастанию по названию, приведенному к строчным буквам.
     # Значение каждого заголовка начинается с символа "\n"
-    x_unistream_headers = [(k, str(v)) for k, v in headers.items() if 'X-Unistream-' in k]
+    x_unistream_headers = [k for k in headers.keys() if 'X-Unistream-' in k]
     if x_unistream_headers:
-        x_unistream_headers.sort(key=lambda x: x[0].lower())
-        x_unistream_headers_value = [v for k, v in x_unistream_headers]
+        x_unistream_headers.sort(key=str.lower)
+        x_unistream_headers_value = [headers[k] for k in x_unistream_headers]
         message += '\n' + '\n'.join(x_unistream_headers_value)
 
     secret = base64.b64decode(secret)
