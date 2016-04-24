@@ -122,25 +122,6 @@ DIRECTION_DICT = {
     'W': 'WEST',
 }
 
-CHANGE_DIRECTION_DICT = {
-    ('SOUTH', False): 'EAST',
-    ('EAST', False): 'NORTH',
-    ('NORTH', False): 'WEST',
-    ('WEST', False): 'SOUTH',
-
-    ('WEST', True): 'NORTH',
-    ('NORTH', True): 'EAST',
-    ('EAST', True): 'SOUTH',
-    ('SOUTH', True): 'WEST',
-}
-
-# INVERT_CHANGE_DIRECTION_DICT = {
-#     'WEST': 'NORTH',
-#     'NORTH': 'EAST',
-#     'EAST': 'SOUTH',
-#     'SOUTH': 'WEST',
-# }
-
 
 DEBUG = True
 
@@ -200,41 +181,14 @@ class Bender:
         log("look_around: {} {}x{}".format(look_around, self.pos_i, self.pos_j))
         log('Current direction:', self.direction_name)
 
-###
-
-        # next_step_direction_name = self.direction_name
-        #
-        # priorities = ['SOUTH', 'EAST', 'NORTH', 'WEST']
-        # priorities.remove(next_step_direction_name)
-        #
-        # while look_around and priorities:
-        #     next_cell = look_around.pop(next_step_direction_name)
-        #     log(next_step_direction_name, next_cell, look_around)
-        #
-        #     # Если следующий шаг не в препятствие
-        #     if next_cell not in ['#', 'X']:
-        #         break
-        #
-        #     new_direction_name = priorities.pop(0)
-        #     log('look_around change direction: {} -> {}.'.format(next_step_direction_name, new_direction_name))
-        #     next_step_direction_name = new_direction_name
-        #     self.direction_name = next_step_direction_name
-
-###
-        # while look_around:
-        #     next_cell = look_around.pop(self.direction_name)
-        #     log('while look_around: {} "{}" {}'.format(self.direction_name, next_cell, look_around))
-        #
-        #     # Если следующий шаг не в препятствие
-        #     if next_cell not in ['#', 'X']:
-        #         break
-        #
-        #     new_direction_name = CHANGE_DIRECTION_DICT[(self.direction_name, self.invert)]
-        #     log('look_around change direction: {} -> {}.'.format(self.direction_name, new_direction_name))
-        #     self.direction_name = new_direction_name
-###
-
+        # Приоритеты смены движения при встрече с препятствием:
+        # SOUTH -> EAST -> NORTH -> WEST -> SOUTH
+        # WEST -> NORTH -> EAST -> SOUTH -> WEST
         priorities = ['SOUTH', 'EAST', 'NORTH', 'WEST']
+        if self.invert:
+            priorities.reverse()
+
+        log('Current priorities:', priorities)
         priorities.remove(self.direction_name)
 
         while look_around:
