@@ -144,6 +144,12 @@ class Bender:
         self.direction_name = 'SOUTH'
 
         self.invert = False
+        self.breaker = False
+
+        # Пиво должно оставаться после того как его Бендер подберет
+        # поэтому заводим флаг, который вернет пиво, после того как Бендер пройдет на следующую ячейку
+        self.__previous_step_was_beer = False
+
         self.city_map = city_map
         self.steps = list()
 
@@ -195,8 +201,8 @@ class Bender:
             next_cell = look_around.pop(self.direction_name)
             log('while look_around: {} "{}" {}'.format(self.direction_name, next_cell, look_around))
 
-            # Если следующий шаг не в препятствие
-            if next_cell not in ['#', 'X']:
+            # Если следующий шаг не в препятствие, или препятствие и Бендер в режиме breaker
+            if next_cell not in ['#', 'X'] or (next_cell == 'X' and self.breaker):
                 break
 
             # new_direction_name = CHANGE_DIRECTION_DICT[(priorities.pop(0), self.invert)]
@@ -205,20 +211,39 @@ class Bender:
             self.direction_name = new_direction_name
 
         di, dj = self.get_direction(self.direction_name)
-        self.city_map[self.pos_i][self.pos_j] = ' '
+
+        if self.__previous_step_was_beer:
+            self.__previous_step_was_beer = False
+
+            # Пиво должно остаться на месте
+            self.city_map[self.pos_i][self.pos_j] = 'B'
+
+        else:
+            self.city_map[self.pos_i][self.pos_j] = ' '
+
         self.pos_i += di
         self.pos_j += dj
+        current_cell = self.city_map[self.pos_i][self.pos_j]
+
+        # Перемещаем Бендера
         self.city_map[self.pos_i][self.pos_j] = '@'
 
         self.steps.append(self.direction_name)
 
         # Проверяем, что наступили на изменение шага
-        if next_cell in ['S', 'E', 'N', 'W']:
+        if current_cell in ['S', 'E', 'N', 'W']:
             # Указываем следующее направление движения
-            self.direction_name = DIRECTION_DICT[next_cell]
+            self.direction_name = DIRECTION_DICT[current_cell]
 
-        # Если попали на инвертирование приоритетов, меняем флаг
-        elif next_cell == 'I':
+        # Если попали на инвертирование приоритетов
+        elif current_cell == 'I':
             self.invert = not self.invert
 
-        return next_cell
+        # Если нашли пиво
+        elif current_cell == 'B':
+            self.breaker = not self.breaker
+            log('breaker:', self.breaker)
+
+            self.__previous_step_was_beer = True
+
+        return current_cell
