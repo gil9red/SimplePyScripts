@@ -242,5 +242,42 @@ SOUTH
 
         self.bender_run(city_map, correct)
 
+    def test_Teleport(self):
+        city_map = """
+##########
+#    T   #
+#        #
+#        #
+#        #
+#@       #
+#        #
+#        #
+#    T  $#
+##########
+        """
+
+        correct = """
+SOUTH
+SOUTH
+SOUTH
+EAST
+EAST
+EAST
+EAST
+EAST
+EAST
+EAST
+SOUTH
+SOUTH
+SOUTH
+SOUTH
+SOUTH
+SOUTH
+SOUTH
+        """
+
+        self.bender_run(city_map, correct)
+
+
 if __name__ == '__main__':
     unittest.main()
