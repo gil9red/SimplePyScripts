@@ -2,6 +2,7 @@ table {
 	font-family: verdana,arial,sans-serif;
 	font-size: 17px;
 	color: #333333;
+	border-spacing: 0px;
 }
 table th {
 	border-width: 1px;
