@@ -22,12 +22,7 @@ def get_all_stops():
     if rs['status'] != 200:
         raise Exception(rs['message'])
 
-    data_list = list()
-
-    for stop in rs['data']:
-        data_list.append((stop['id'], stop['name']))
-
-    return data_list
+    return [(stop['id'], stop['name']) for stop in rs['data']]
 
 
 def get_stop_route(stop_id):
@@ -44,12 +39,7 @@ def get_stop_route(stop_id):
     if rs['status'] != 200:
         raise Exception(rs['message'])
 
-    data_list = list()
-
-    for stop in rs['data']:
-        data_list.append((stop['shortName'], stop['name']))
-
-    return data_list
+    return [(stop['shortName'], stop['name']) for stop in rs['data']]
 
 
 import sys
