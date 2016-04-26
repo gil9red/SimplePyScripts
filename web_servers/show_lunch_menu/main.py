@@ -4,7 +4,10 @@
 __author__ = 'ipetrash'
 
 
-"""Чтение из docx файла таблицы меню и отображении таблицы на веб странице."""
+"""Чтение из docx файла таблицы меню и отображении таблицы на веб странице.
+
+Устанавливать docx так: pip install python-docx
+"""
 
 
 from flask import Flask, render_template_string
