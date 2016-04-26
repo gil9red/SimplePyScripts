@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# Устанавливать docx так: pip install python-docx
+
+
 from docx import Document
 document = Document("Обеденное меню 777.docx")
 
