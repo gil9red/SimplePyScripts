@@ -17,6 +17,7 @@ for table in document.tables:
 
         if name == weight == price or (not weight or not price):
             print()
+            name = name.title()
             print(name)
             continue
 
