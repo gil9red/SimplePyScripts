@@ -14,7 +14,13 @@ multi_space_pattern = re.compile(r'[ ]{2,}')
 for table in document.tables:
     for row in table.rows:
         name, weight, price = [multi_space_pattern.sub(' ', i.text.strip()) for i in row.cells]
-        print('name: {}, weight: {}, price: {}'.format(name, weight, price))
+
+        if name == weight == price or (not weight or not price):
+            print()
+            print(name)
+            continue
+
+        print('{} {} {}'.format(name, weight, price))
 
     # Таблицы в меню дублируются
     break
