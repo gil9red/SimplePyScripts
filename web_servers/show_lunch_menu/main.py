@@ -20,8 +20,7 @@ multi_space_pattern = re.compile(r'[ ]{2,}')
 from docx import Document
 
 
-@app.route("/")
-def index():
+def get_rows_lunch_menu():
     document = Document("lunch_menu.docx")
 
     rows = list()
@@ -43,25 +42,24 @@ def index():
         # Таблицы в меню дублируются
         break
 
+    return rows
+
+
+@app.route("/")
+def index():
+    rows = get_rows_lunch_menu()
+
     return render_template_string('''\
     <html>
-    <head><title>Обеденное меню</title></head>
+    <head>
+        <title>Обеденное меню</title>
+        <link rel="stylesheet" href="static/style.css">
+    </head>
+
     <body>
 
-    <p>Обеденное меню</p>
-    <br>
-
-    <style type="text/css">
-        table {
-            border-collapse: collapse;
-        }
-        table.brd th,
-        table.brd td {
-            border: 1px solid #000;
-        }
-    </style>
-
-    <table class="brd">
+    <table>
+        <tr><th colspan="3" align="center">Обеденное меню</th></tr>
         <tr><th>Название</th><th>Вес</th><th>Цена</th></tr>
         {% for row in rows %}
 
@@ -73,7 +71,7 @@ def index():
                 </tr>
             {% else %}
                 <tr>
-                    <th>{{ row[0] }}</th><th></th><th></th>
+                    <td class="category" colspan="3">{{ row[0] }}</td>
                 </tr>
             {% endif %}
         {% endfor %}
