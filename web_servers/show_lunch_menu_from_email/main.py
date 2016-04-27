@@ -86,6 +86,7 @@ def get_last_lunch_menu():
     typ, msgnums = connect.search(None, '(HEADER From {})'.format(config.lunch_email))
 
     # TODO: думаю, лучше проверять дату получения письма и выводить ее на веб страницу
+    # TODO: смотреть можно также на заголовок письма -- там указан день недели
     last_id = msgnums[0].split()[-1]
     typ, data = connect.fetch(last_id, '(RFC822)')
     msg = email.message_from_bytes(data[0][1])
@@ -99,7 +100,7 @@ def get_last_lunch_menu():
     return file_name
 
 
-from flask import Flask, render_template_string
+from flask import Flask, render_template_string, request
 app = Flask(__name__)
 
 # Регулярка для поиска последовательностей пробелов: от двух подряд и более
@@ -141,7 +142,7 @@ def get_rows_lunch_menu():
 
 @app.route("/")
 def index():
-    logging.debug('/index')
+    logging.debug('/index from %s.', request.remote_addr)
 
     try:
         rows = get_rows_lunch_menu()
