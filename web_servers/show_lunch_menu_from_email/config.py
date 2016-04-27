@@ -3,6 +3,7 @@
 
 __author__ = 'ipetrash'
 
+
 # Например: <username>@mail.com
 username = "<username>"
 password = "<password>"
@@ -12,5 +13,7 @@ smtp_server = "<smtp_server>"
 
 # email отправителя писем с прикрепленными файлами обеденных меню в docx
 lunch_email = "<lunch_email>"
+
+header_date_format = "%d/%m/%Y %H:%M:%S"
 
 debug = True
