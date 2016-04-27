@@ -14,10 +14,6 @@ __author__ = 'ipetrash'
 """
 
 
-import imaplib
-import email
-
-from datetime import date
 import os
 import traceback
 import sys
@@ -30,6 +26,7 @@ if config.debug:
 
 
 def get_current_lunch_file_name():
+    from datetime import date
     filename = date.today().strftime('%d.%m.%y') + '.docx'
     return os.path.join('lunch menu', filename)
 
@@ -62,6 +59,41 @@ def save_attachment(msg):
     return file_name
 
 
+def add_lunch_email_info(msg, file_name):
+    """
+    Функция для добавления в поле comments docx информации о письме.
+
+    :param msg:
+    :param file_name:
+    :return:
+    """
+
+    try:
+        import email
+
+        # Получаем заголовок письма
+        data, charset = email.header.decode_header(msg['Subject'])[0]
+        subject = data.decode(charset).strip().replace('\t', ' ')
+        logging.debug('Subject: "%s".', subject)
+
+        # Получаем дату получения (отправления??) письма
+        from datetime import datetime
+        date_tuple = email.utils.parsedate_tz(msg['Date'])
+        email_date = datetime.fromtimestamp(email.utils.mktime_tz(date_tuple))
+        email_date = email_date.strftime(config.header_date_format)
+        logging.debug("Date: %s.", email_date)
+
+        # Открываем документ и переписываем поле comments, добавляя в него свою информацию
+        from docx import Document
+        document = Document(file_name)
+        document.core_properties.comments = subject + '\t' + email_date
+        document.save(file_name)
+
+    except BaseException as e:
+        logging.warning('add_lunch_email_info: "%s".', e)
+        logging.warning(traceback.format_exc())
+
+
 def get_last_lunch_menu():
     """
     Функция получает последнее письмо от указанного емейла
@@ -77,6 +109,7 @@ def get_last_lunch_menu():
 
     logging.debug('Check last email.')
 
+    import imaplib
     connect = imaplib.IMAP4(config.smtp_server)
     connect.login(config.username, config.password)
     connect.select()
@@ -84,15 +117,15 @@ def get_last_lunch_menu():
     logging.debug('Search emails from %s.', config.lunch_email)
 
     typ, msgnums = connect.search(None, '(HEADER From {})'.format(config.lunch_email))
-
-    # TODO: думаю, лучше проверять дату получения письма и выводить ее на веб страницу
-    # TODO: смотреть можно также на заголовок письма -- там указан день недели
     last_id = msgnums[0].split()[-1]
     typ, data = connect.fetch(last_id, '(RFC822)')
+
+    import email
     msg = email.message_from_bytes(data[0][1])
 
     logging.debug('Save lunch file name: %s.', file_name)
     file_name = save_attachment(msg)
+    add_lunch_email_info(msg, file_name)
 
     connect.close()
     connect.logout()
@@ -107,10 +140,8 @@ app = Flask(__name__)
 import re
 multi_space_pattern = re.compile(r'[ ]{2,}')
 
-from docx import Document
 
-
-def get_rows_lunch_menu():
+def get_info_lunch_menu():
     rows = list()
 
     file_name = get_last_lunch_menu()
@@ -118,7 +149,18 @@ def get_rows_lunch_menu():
         return rows
 
     logging.debug('Read lunch file name: %s.', file_name)
+    from docx import Document
     document = Document(file_name)
+
+    subject, date = '', ''
+    comments = document.core_properties.comments
+    if comments:
+        parts = comments.split('\t', 2)
+        if len(parts) == 2:
+            subject, date = parts
+
+    logging.debug('Subject: "%s".', subject)
+    logging.debug('Date: "%s".', date)
 
     for table in document.tables:
         # Перебор начинается со второй строки, потому что, первая строка таблицы -- это строка "Обеденное меню"
@@ -137,7 +179,7 @@ def get_rows_lunch_menu():
         # Таблицы в меню дублируются
         break
 
-    return rows
+    return rows, subject, date
 
 
 @app.route("/")
@@ -145,24 +187,23 @@ def index():
     logging.debug('/index from %s.', request.remote_addr)
 
     try:
-        rows = get_rows_lunch_menu()
-    except Exception as e:
+        rows, subject, date = get_info_lunch_menu()
+    except BaseException as e:
         logging.error(e)
         logging.error(traceback.format_exc())
-
-        rows = list()
+        return 'Error: "{}".'.format(e), 500
 
     return render_template_string('''\
     <html>
     <head>
-        <title>Обеденное меню</title>
+        <title>{{ subject }}</title>
         <link rel="stylesheet" href="static/style.css">
     </head>
 
     <body>
 
     <table>
-        <tr><th colspan="3" align="center">Обеденное меню</th></tr>
+        <tr><th colspan="3" align="center">{{ subject }} <small>(Меню получено: {{ date }})</small></th></tr>
         <tr><th>Название</th><th>Вес</th><th>Цена</th></tr>
         {% for row in rows %}
 
@@ -182,7 +223,7 @@ def index():
 
     </body>
     </html>
-    ''', rows=rows)
+    ''', rows=rows, subject=subject, date=date)
 
 
 if __name__ == '__main__':
