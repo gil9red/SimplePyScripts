@@ -31,14 +31,13 @@ def get_last_lunch_menu():
     connect.login(username, password)
     connect.select()
 
-    logging.debug('Search emails from %s.', from_email)
-
     # Если не ограничивать датой, соберет все письма и запрос будет дольше выполняться
     from datetime import date, timedelta
     today = date.today()
     week_ago = today - timedelta(weeks=1)
     since = week_ago.strftime('%d-%b-%Y')
 
+    logging.debug('Search emails from %s.', from_email)
     typ, msgnums = connect.search(None, 'HEADER From', from_email, 'SINCE', since)
     logging.debug('Search result: %s.', msgnums[0].split())
 
