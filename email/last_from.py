@@ -33,7 +33,15 @@ def get_last_lunch_menu():
 
     logging.debug('Search emails from %s.', from_email)
 
-    typ, msgnums = connect.search(None, 'HEADER From', from_email)
+    # Если не ограничивать датой, соберет все письма и запрос будет дольше выполняться
+    from datetime import date, timedelta
+    today = date.today()
+    week_ago = today - timedelta(weeks=1)
+    since = week_ago.strftime('%d-%b-%Y')
+
+    typ, msgnums = connect.search(None, 'HEADER From', from_email, 'SINCE', since)
+    logging.debug('Search result: %s.', msgnums[0].split())
+
     last_id = msgnums[0].split()[-1]
     typ, data = connect.fetch(last_id, '(RFC822)')
 
