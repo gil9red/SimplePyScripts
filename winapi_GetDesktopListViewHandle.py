@@ -27,25 +27,20 @@ def GetDesktopListViewHandle():
     import ctypes
     FindWindow = ctypes.windll.user32.FindWindowW
     GetWindow = ctypes.windll.user32.GetWindow
-    GetClassName = ctypes.windll.user32.GetClassNameW
+
+    def GetClassName(hwnd):
+        buff = ctypes.create_unicode_buffer(100)
+        ctypes.windll.user32.GetClassNameW(hwnd, buff, 99)
+        return buff.value
 
     from win32con import GW_CHILD
 
-    def get_class_name(hwnd):
-        buff = ctypes.create_unicode_buffer(100)
-        GetClassName(hwnd, buff, 99)
-        return buff.value
-
     # Ищем окно с классом "Progman" ("Program Manager")
     hwnd = FindWindow('Progman', None)
+    hwnd = GetWindow(hwnd, GW_CHILD)  # SHELLDLL_DefView
+    hwnd = GetWindow(hwnd, GW_CHILD)  # SysListView32
 
-    # SHELLDLL_DefView
-    hwnd = GetWindow(hwnd, GW_CHILD)
-
-    # SysListView32
-    hwnd = GetWindow(hwnd, GW_CHILD)
-
-    if get_class_name(hwnd) != 'SysListView32':
+    if GetClassName(hwnd) != 'SysListView32':
         return 0
 
     return hwnd
