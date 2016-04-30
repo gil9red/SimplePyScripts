@@ -28,7 +28,8 @@ def GetDesktopListViewHandle():
     FindWindow = ctypes.windll.user32.FindWindowW
     GetWindow = ctypes.windll.user32.GetWindow
     GetClassName = ctypes.windll.user32.GetClassNameW
-    GW_CHILD = 0x5
+
+    from win32con import GW_CHILD
 
     def get_class_name(hwnd):
         buff = ctypes.create_unicode_buffer(100)
