@@ -4,6 +4,45 @@
 __author__ = 'ipetrash'
 
 
+# import sys
+# import random
+#
+# from PyQt5 import QtGui
+# from PyQt5.QtGui import *
+# from PyQt5.QtCore import *
+#
+#
+# class MainWindow(QMainWindow, QWidget, QApplication):
+#
+#     def __init__(self, parent = None):
+#         super(MainWindow, self).__init__(parent)
+#
+#         QTimer.singleShot(0, self.task)
+#         # self.task()
+#
+#     def task(self):
+#         self.taskbarButton = QWinTaskbarButton(self)
+#         self.taskbarButton.setWindow(self.windowHandle())
+#
+#         self.taskbarProgress = self.taskbarButton.progress()
+#
+#         self.taskbarProgress.setRange(0, 100)
+#         self.taskbarProgress.setVisible(True)
+#         self.taskbarProgress.setValue(random.randint(0, 100))
+#
+#         self.taskbarProgress.show()
+#
+#
+# if __name__ == '__main__':
+#
+#     app = QApplication(sys.argv)
+#     mainWindow = MainWindow()
+#     mainWindow.show()
+#     sys.exit(app.exec_())
+#
+#
+# quit()
+
 
 import ctypes
 
@@ -92,6 +131,49 @@ class POINT(ctypes.Structure):
         ('x', ctypes.c_int),
         ('y', ctypes.c_int),
     ]
+
+    def __repr__(self):
+        return '{}x{}'.format(self.x, self.y)
+
+
+class RECT(ctypes.Structure):
+    _fields_ = [
+        ('left', ctypes.c_int),
+        ('top', ctypes.c_int),
+        ('right', ctypes.c_int),
+        ('bottom', ctypes.c_int),
+    ]
+
+    def __repr__(self):
+        return '{}x{}x{}x{}'.format(self.left, self.top, self.right, self.bottom)
+
+
+# TODO: исправить
+# def ListView_GetItemRect(hwnd, i, rect, code=None):
+#     """
+#
+#     Gets the bounding rectangle for all or part of an item in the current view.
+#
+#     Оригинал:
+#     #define ListView_GetItemRect(hwnd,i,prc,code)
+#     (WINBOOL) SNDMSG(
+#         (hwnd),
+#         LVM_GETITEMRECT,
+#         (WPARAM)(int)(i),
+#         ((prc) ? (((RECT *)(prc))->left = (code), (LPARAM)(RECT *)(prc)) : (LPARAM)(RECT *)NULL)
+#     )
+#
+#     """
+#
+#     import commctrl
+#     import ctypes
+#     SendMessage = ctypes.windll.user32.SendMessageW
+#
+#     if code is None:
+#         code = commctrl.LVIR_BOUNDS
+#
+#     rect.left = code
+#     return SendMessage(hwnd, commctrl.LVM_GETITEMRECT, i, rect)
 
 
 # Source: http://stackoverflow.com/q/28505766/5909792
@@ -256,7 +338,23 @@ def get_desktop_icons_list():
             SendMessage(hwnd, LVM_GETITEMPOSITION, i, p_buffer_pnt)
             p = POINT()
             ReadProcessMemory(h_process, p_buffer_pnt, ctypes.addressof(p), ctypes.sizeof(p), p_copied)
+
             icons_list.append((i, name, p))
+
+
+            # # rect = RECT()
+            # # ListView_GetItemRect(hwnd, i, rect)
+            #
+            # import commctrl
+            #
+            # rect = RECT()
+            # rect.left = commctrl.LVIR_BOUNDS
+            #
+            # p_buffer_pnt = VirtualAllocEx(h_process, 0, ctypes.sizeof(rect), MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE)
+            # SendMessage(hwnd, commctrl.LVM_GETITEMRECT, i, p_buffer_pnt)
+            # ReadProcessMemory(h_process, p_buffer_pnt, ctypes.addressof(rect), ctypes.sizeof(rect), p_copied)
+            # print(i, name, p, rect)
+            # quit()
 
     finally:
         try:
