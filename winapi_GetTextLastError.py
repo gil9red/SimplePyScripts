@@ -5,7 +5,12 @@ __author__ = 'ipetrash'
 
 
 def GetTextLastError(error_code=None):
-    """Функция возвращает описание текстовое описание ошибки."""
+    """
+    Функция возвращает текстовое описание ошибки.
+    Если в не передавать код ошибки, будет возвращаться описание ошибки
+    из GetLastError().
+
+    """
 
     import ctypes
     GetLastError = ctypes.windll.kernel32.GetLastError
