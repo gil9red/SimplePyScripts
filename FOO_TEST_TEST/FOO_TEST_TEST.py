@@ -67,7 +67,6 @@ def ListView_GetItemCount(hwnd):
     return SendMessage(hwnd, commctrl.LVM_GETITEMCOUNT, 0, 0)
 
 
-# TODO: поиграться с int
 class LVITEMW(ctypes.Structure):
     _fields_ = [
         ('mask', ctypes.c_uint32),
@@ -203,45 +202,69 @@ class POINT(ctypes.Structure):
 
 
 def get_desktop_icons_list():
-    import struct, commctrl, win32gui, win32con, win32api
-    hwnd = GetDesktopListViewHandle()
-    pid = ctypes.create_string_buffer(4)
-    p_pid = ctypes.addressof(pid)
-    ctypes.windll.user32.GetWindowThreadProcessId(hwnd, p_pid)
-    hProcHnd = ctypes.windll.kernel32.OpenProcess(win32con.PROCESS_ALL_ACCESS, False, struct.unpack("i",pid)[0])
-    pBuffertxt = ctypes.windll.kernel32.VirtualAllocEx(hProcHnd, 0, 4096, win32con.MEM_RESERVE|win32con.MEM_COMMIT, win32con.PAGE_READWRITE)
-    copied = ctypes.create_string_buffer(4)
-    p_copied = ctypes.addressof(copied)
-    lvitem = LVITEMW()
-    lvitem.mask = ctypes.c_uint32(commctrl.LVIF_TEXT)
-    lvitem.pszText = ctypes.c_uint64(pBuffertxt)
-    lvitem.cchTextMax = ctypes.c_int32(4096)
-    lvitem.iSubItem = ctypes.c_int32(0)
-    pLVI = ctypes.windll.kernel32.VirtualAllocEx(hProcHnd, 0, 4096, win32con.MEM_RESERVE| win32con.MEM_COMMIT,  win32con.PAGE_READWRITE)
-    win32api.SetLastError(0)
-    ctypes.windll.kernel32.WriteProcessMemory(hProcHnd, pLVI, ctypes.addressof(lvitem), ctypes.sizeof(lvitem), p_copied)
-    num_items = ListView_GetItemCount(hwnd)
+    try:
+        import struct
+        from commctrl import LVIF_TEXT, LVM_GETITEMTEXT, LVM_GETITEMPOSITION
+        import win32gui
+        from win32con import PROCESS_ALL_ACCESS, MEM_RESERVE, MEM_COMMIT, PAGE_READWRITE, MEM_RELEASE
+        import win32api
+        import ctypes
 
-    p = POINT()
-    pBufferpnt = ctypes.windll.kernel32.VirtualAllocEx(hProcHnd, 0, ctypes.sizeof(p), win32con.MEM_RESERVE|win32con.MEM_COMMIT, win32con.PAGE_READWRITE)
-    icons_list = list()
+        GetWindowThreadProcessId = ctypes.windll.user32.GetWindowThreadProcessId
+        OpenProcess = ctypes.windll.kernel32.OpenProcess
+        VirtualAllocEx = ctypes.windll.kernel32.VirtualAllocEx
+        WriteProcessMemory = ctypes.windll.kernel32.WriteProcessMemory
+        ReadProcessMemory = ctypes.windll.kernel32.ReadProcessMemory
+        VirtualFreeEx = ctypes.windll.kernel32.VirtualFreeEx
 
-    for i in range(num_items):
-        # Get icon text
-        win32gui.SendMessage(hwnd, commctrl.LVM_GETITEMTEXT, i, pLVI)
-        target_bufftxt = ctypes.create_string_buffer(4096)
-        ctypes.windll.kernel32.ReadProcessMemory(hProcHnd, pBuffertxt, ctypes.addressof(target_bufftxt), 4096, p_copied)
-        name = target_bufftxt.value
-        # Get icon position
-        win32api.SendMessage(hwnd, commctrl.LVM_GETITEMPOSITION, i, pBufferpnt)
+        MAX_LEN = 4096
+
+        hwnd = GetDesktopListViewHandle()
+        pid = ctypes.create_string_buffer(4)
+        p_pid = ctypes.addressof(pid)
+        GetWindowThreadProcessId(hwnd, p_pid)
+
+        h_process = OpenProcess(PROCESS_ALL_ACCESS, False, struct.unpack("i", pid)[0])
+        buffer_txt = VirtualAllocEx(h_process, 0, MAX_LEN, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE)
+
+        copied = ctypes.create_string_buffer(4)
+        p_copied = ctypes.addressof(copied)
+
+        lvitem = LVITEMW()
+        lvitem.mask = ctypes.c_uint32(LVIF_TEXT)
+        lvitem.pszText = ctypes.c_uint64(buffer_txt)
+        lvitem.cchTextMax = ctypes.c_int32(MAX_LEN)
+        lvitem.iSubItem = ctypes.c_int32(0)
+
+        p_lvi = VirtualAllocEx(h_process, 0, MAX_LEN, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE)
+        # TODO: зачем SetLastError(0)?
+        win32api.SetLastError(0)
+        WriteProcessMemory(h_process, p_lvi, ctypes.addressof(lvitem), ctypes.sizeof(lvitem), p_copied)
+        num_items = ListView_GetItemCount(hwnd)
+
         p = POINT()
-        ctypes.windll.kernel32.ReadProcessMemory(hProcHnd, pBufferpnt, ctypes.addressof(p), ctypes.sizeof(p), p_copied)
-        icons_list.append((i, name, p))
+        p_buffer_pnt = VirtualAllocEx(h_process, 0, ctypes.sizeof(p), MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE)
+        icons_list = list()
 
-    ctypes.windll.kernel32.VirtualFreeEx(hProcHnd, pLVI, 0, win32con.MEM_RELEASE)
-    ctypes.windll.kernel32.VirtualFreeEx(hProcHnd, pBuffertxt, 0, win32con.MEM_RELEASE)
-    ctypes.windll.kernel32.VirtualFreeEx(hProcHnd, pBufferpnt, 0, win32con.MEM_RELEASE)
-    win32api.CloseHandle(hProcHnd)
+        for i in range(num_items):
+            # Get icon text
+            win32gui.SendMessage(hwnd, LVM_GETITEMTEXT, i, p_lvi)
+            target_bufftxt = ctypes.create_string_buffer(MAX_LEN)
+            ReadProcessMemory(h_process, buffer_txt, ctypes.addressof(target_bufftxt), MAX_LEN, p_copied)
+            name = target_bufftxt.value
+
+            # Get icon position
+            win32api.SendMessage(hwnd, LVM_GETITEMPOSITION, i, p_buffer_pnt)
+            p = POINT()
+            ReadProcessMemory(h_process, p_buffer_pnt, ctypes.addressof(p), ctypes.sizeof(p), p_copied)
+            icons_list.append((i, name, p))
+
+    finally:
+        VirtualFreeEx(h_process, p_lvi, 0, MEM_RELEASE)
+        VirtualFreeEx(h_process, buffer_txt, 0, MEM_RELEASE)
+        VirtualFreeEx(h_process, p_buffer_pnt, 0, MEM_RELEASE)
+        win32api.CloseHandle(h_process)
+
     return icons_list
 
 
@@ -253,16 +276,16 @@ def point_to_long(p):
 icons_list = get_desktop_icons_list()
 
 # # Сортировка по индексу
-# for i, name, pos in sorted(icons_list, key=lambda x: x[0]):
+for i, name, pos in sorted(icons_list, key=lambda x: x[0]):
 
-# Сортировка по положению на экране
-for i, name, pos in sorted(icons_list, key=lambda x: (x[2].x, x[2].y)):
+# # Сортировка по положению на экране
+# for i, name, pos in sorted(icons_list, key=lambda x: (x[2].x, x[2].y)):
     try:
         name = name.decode()
     except UnicodeDecodeError:
         name = name.decode('cp1251')
 
-    print('{}. "{}": {}x{}'.format(i, name, pos.x, pos.y))
+    print('{}. "{}": {}x{}'.format(i + 1, name, pos.x, pos.y))
 
 
 quit()
