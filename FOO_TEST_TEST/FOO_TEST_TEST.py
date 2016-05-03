@@ -202,23 +202,25 @@ class POINT(ctypes.Structure):
 
 
 def get_desktop_icons_list():
+    import struct
+    import ctypes
+    from commctrl import LVIF_TEXT, LVM_GETITEMTEXT, LVM_GETITEMPOSITION
+    from win32con import PROCESS_ALL_ACCESS, MEM_RESERVE, MEM_COMMIT, PAGE_READWRITE, MEM_RELEASE
+
+    GetWindowThreadProcessId = ctypes.windll.user32.GetWindowThreadProcessId
+    SendMessage = ctypes.windll.user32.SendMessageW
+    OpenProcess = ctypes.windll.kernel32.OpenProcess
+    VirtualAllocEx = ctypes.windll.kernel32.VirtualAllocEx
+    WriteProcessMemory = ctypes.windll.kernel32.WriteProcessMemory
+    ReadProcessMemory = ctypes.windll.kernel32.ReadProcessMemory
+    VirtualFreeEx = ctypes.windll.kernel32.VirtualFreeEx
+    CloseHandle = ctypes.windll.kernel32.CloseHandle
+
+    MAX_LEN = 4096
+
+    icons_list = list()
+
     try:
-        import struct
-        from commctrl import LVIF_TEXT, LVM_GETITEMTEXT, LVM_GETITEMPOSITION
-        import win32gui
-        from win32con import PROCESS_ALL_ACCESS, MEM_RESERVE, MEM_COMMIT, PAGE_READWRITE, MEM_RELEASE
-        import win32api
-        import ctypes
-
-        GetWindowThreadProcessId = ctypes.windll.user32.GetWindowThreadProcessId
-        OpenProcess = ctypes.windll.kernel32.OpenProcess
-        VirtualAllocEx = ctypes.windll.kernel32.VirtualAllocEx
-        WriteProcessMemory = ctypes.windll.kernel32.WriteProcessMemory
-        ReadProcessMemory = ctypes.windll.kernel32.ReadProcessMemory
-        VirtualFreeEx = ctypes.windll.kernel32.VirtualFreeEx
-
-        MAX_LEN = 4096
-
         hwnd = GetDesktopListViewHandle()
         pid = ctypes.create_string_buffer(4)
         p_pid = ctypes.addressof(pid)
@@ -237,55 +239,58 @@ def get_desktop_icons_list():
         lvitem.iSubItem = ctypes.c_int32(0)
 
         p_lvi = VirtualAllocEx(h_process, 0, MAX_LEN, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE)
-        # TODO: зачем SetLastError(0)?
-        win32api.SetLastError(0)
         WriteProcessMemory(h_process, p_lvi, ctypes.addressof(lvitem), ctypes.sizeof(lvitem), p_copied)
         num_items = ListView_GetItemCount(hwnd)
 
         p = POINT()
         p_buffer_pnt = VirtualAllocEx(h_process, 0, ctypes.sizeof(p), MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE)
-        icons_list = list()
 
         for i in range(num_items):
             # Get icon text
-            win32gui.SendMessage(hwnd, LVM_GETITEMTEXT, i, p_lvi)
+            SendMessage(hwnd, LVM_GETITEMTEXT, i, p_lvi)
             target_bufftxt = ctypes.create_string_buffer(MAX_LEN)
             ReadProcessMemory(h_process, buffer_txt, ctypes.addressof(target_bufftxt), MAX_LEN, p_copied)
-            name = target_bufftxt.value
+            name = target_bufftxt.value.decode('cp1251')
 
             # Get icon position
-            win32api.SendMessage(hwnd, LVM_GETITEMPOSITION, i, p_buffer_pnt)
+            SendMessage(hwnd, LVM_GETITEMPOSITION, i, p_buffer_pnt)
             p = POINT()
             ReadProcessMemory(h_process, p_buffer_pnt, ctypes.addressof(p), ctypes.sizeof(p), p_copied)
             icons_list.append((i, name, p))
 
     finally:
-        VirtualFreeEx(h_process, p_lvi, 0, MEM_RELEASE)
-        VirtualFreeEx(h_process, buffer_txt, 0, MEM_RELEASE)
-        VirtualFreeEx(h_process, p_buffer_pnt, 0, MEM_RELEASE)
-        win32api.CloseHandle(h_process)
+        try:
+            VirtualFreeEx(h_process, p_lvi, 0, MEM_RELEASE)
+        except:
+            pass
+
+        try:
+            VirtualFreeEx(h_process, buffer_txt, 0, MEM_RELEASE)
+        except:
+            pass
+
+        try:
+            VirtualFreeEx(h_process, p_buffer_pnt, 0, MEM_RELEASE)
+        except:
+            pass
+
+        try:
+            CloseHandle(h_process)
+        except:
+            pass
 
     return icons_list
 
 
-def point_to_long(p):
-    ret = (p.y * 0x10000) + (p.x & 0xFFFF)
-    return ctypes.c_long(ret)
-
-
 icons_list = get_desktop_icons_list()
 
-# # Сортировка по индексу
-for i, name, pos in sorted(icons_list, key=lambda x: x[0]):
 
 # # Сортировка по положению на экране
 # for i, name, pos in sorted(icons_list, key=lambda x: (x[2].x, x[2].y)):
-    try:
-        name = name.decode()
-    except UnicodeDecodeError:
-        name = name.decode('cp1251')
-
-    print('{}. "{}": {}x{}'.format(i + 1, name, pos.x, pos.y))
+#
+# # Сортировка по индексу
+for i, name, pos in sorted(icons_list, key=lambda x: x[0]):
+    print('{: >3}. "{}": {}x{}'.format(i + 1, name, pos.x, pos.y))
 
 
 quit()
