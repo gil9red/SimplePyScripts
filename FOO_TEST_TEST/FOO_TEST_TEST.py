@@ -4,6 +4,400 @@
 __author__ = 'ipetrash'
 
 
+
+import ctypes
+
+
+def GetDesktopListViewHandle():
+    """
+    Функция возвращает указатель на ListView рабочего стола.
+
+    Оригинал:
+    function GetDesktopListViewHandle: THandle;
+        var
+            S: string;
+        begin
+            Result := FindWindow('ProgMan', nil);
+            Result := GetWindow(Result, GW_CHILD);
+            Result := GetWindow(Result, GW_CHILD);
+            SetLength(S, 40);
+            GetClassName(Result, PChar(S), 39);
+            if PChar(S) <> 'SysListView32' then
+                Result := 0;
+        end;
+
+    """
+
+    import ctypes
+    FindWindow = ctypes.windll.user32.FindWindowW
+    GetWindow = ctypes.windll.user32.GetWindow
+
+    def GetClassName(hwnd):
+        buff = ctypes.create_unicode_buffer(100)
+        ctypes.windll.user32.GetClassNameW(hwnd, buff, 99)
+        return buff.value
+
+    from win32con import GW_CHILD
+
+    # Ищем окно с классом "Progman" ("Program Manager")
+    hwnd = FindWindow('Progman', None)
+    hwnd = GetWindow(hwnd, GW_CHILD)  # SHELLDLL_DefView
+    hwnd = GetWindow(hwnd, GW_CHILD)  # SysListView32
+
+    if GetClassName(hwnd) != 'SysListView32':
+        return 0
+
+    return hwnd
+
+
+def ListView_GetItemCount(hwnd):
+    """
+
+    Функция возвращает количество элементов указанного ListView.
+
+    Оригинал:
+    define ListView_GetItemCount(hwnd) (int)SNDMSG((hwnd),LVM_GETITEMCOUNT,(WPARAM)0,(LPARAM)0)
+
+    """
+
+    import commctrl
+    import ctypes
+    SendMessage = ctypes.windll.user32.SendMessageW
+
+    return SendMessage(hwnd, commctrl.LVM_GETITEMCOUNT, 0, 0)
+
+
+# TODO: поиграться с int
+class LVITEMW(ctypes.Structure):
+    _fields_ = [
+        ('mask', ctypes.c_uint32),
+        ('iItem', ctypes.c_int32),
+        ('iSubItem', ctypes.c_int32),
+        ('state', ctypes.c_uint32),
+        ('stateMask', ctypes.c_uint32),
+        ('pszText', ctypes.c_uint64),
+        ('cchTextMax', ctypes.c_int32),
+        ('iImage', ctypes.c_int32),
+        ('lParam', ctypes.c_uint64), # On 32 bit should be c_long
+        ('iIndent',ctypes.c_int32),
+        ('iGroupId', ctypes.c_int32),
+        ('cColumns', ctypes.c_uint32),
+        ('puColumns', ctypes.c_uint64),
+        ('piColFmt', ctypes.c_int64),
+        ('iGroup', ctypes.c_int32),
+    ]
+
+
+class POINT(ctypes.Structure):
+    _fields_ = [
+        ('x', ctypes.c_int),
+        ('y', ctypes.c_int),
+    ]
+
+
+# Source: http://stackoverflow.com/q/28505766/5909792
+
+# import ctypes
+#
+# class LVITEMW(ctypes.Structure):
+#     _fields_ = [
+#         ('mask', ctypes.c_uint32),
+#         ('iItem', ctypes.c_int32),
+#         ('iSubItem', ctypes.c_int32),
+#         ('state', ctypes.c_uint32),
+#         ('stateMask', ctypes.c_uint32),
+#         ('pszText', ctypes.c_uint64),
+#         ('cchTextMax', ctypes.c_int32),
+#         ('iImage', ctypes.c_int32),
+#         ('lParam', ctypes.c_uint64), # On 32 bit should be c_long
+#         ('iIndent',ctypes.c_int32),
+#         ('iGroupId', ctypes.c_int32),
+#         ('cColumns', ctypes.c_uint32),
+#         ('puColumns', ctypes.c_uint64),
+#         ('piColFmt', ctypes.c_int64),
+#         ('iGroup', ctypes.c_int32),
+#     ]
+#
+# class POINT(ctypes.Structure):
+#     _fields_ = [('x', ctypes.c_int), ('y', ctypes.c_int)]
+#
+# def icon_save_restore(savedicons=None, restore=False):
+#     import struct, commctrl, win32gui, win32con, win32api
+#     dthwnd = win32gui.FindWindow(None, 'Program Manager')
+#     ukhwnd = win32gui.GetWindow(dthwnd, win32con.GW_CHILD)
+#     slvhwnd = win32gui.GetWindow(ukhwnd, win32con.GW_CHILD)
+#     pid = ctypes.create_string_buffer(4)
+#     p_pid = ctypes.addressof(pid)
+#     ctypes.windll.user32.GetWindowThreadProcessId(slvhwnd, p_pid)
+#     hProcHnd = ctypes.windll.kernel32.OpenProcess(win32con.PROCESS_ALL_ACCESS, False, struct.unpack("i",pid)[0])
+#     pBuffertxt = ctypes.windll.kernel32.VirtualAllocEx(hProcHnd, 0, 4096, win32con.MEM_RESERVE|win32con.MEM_COMMIT, win32con.PAGE_READWRITE)
+#     copied = ctypes.create_string_buffer(4)
+#     p_copied = ctypes.addressof(copied)
+#     lvitem = LVITEMW()
+#     lvitem.mask = ctypes.c_uint32(commctrl.LVIF_TEXT)
+#     lvitem.pszText = ctypes.c_uint64(pBuffertxt)
+#     lvitem.cchTextMax = ctypes.c_int32(4096)
+#     lvitem.iSubItem = ctypes.c_int32(0)
+#     pLVI = ctypes.windll.kernel32.VirtualAllocEx(hProcHnd, 0, 4096, win32con.MEM_RESERVE| win32con.MEM_COMMIT,  win32con.PAGE_READWRITE)
+#     win32api.SetLastError(0)
+#     ctypes.windll.kernel32.WriteProcessMemory(hProcHnd, pLVI, ctypes.addressof(lvitem), ctypes.sizeof(lvitem), p_copied)
+#     num_items = win32gui.SendMessage(slvhwnd, commctrl.LVM_GETITEMCOUNT)
+#     if restore is False:
+#         p = POINT()
+#         pBufferpnt = ctypes.windll.kernel32.VirtualAllocEx(hProcHnd, 0, ctypes.sizeof(p), win32con.MEM_RESERVE|win32con.MEM_COMMIT, win32con.PAGE_READWRITE)
+#         icons = {}
+#         for i in xrange(num_items):
+#             # Get icon text
+#             win32gui.SendMessage(slvhwnd, commctrl.LVM_GETITEMTEXT, i, pLVI)
+#             target_bufftxt = ctypes.create_string_buffer(4096)
+#             ctypes.windll.kernel32.ReadProcessMemory(hProcHnd, pBuffertxt, ctypes.addressof(target_bufftxt), 4096, p_copied)
+#             key = target_bufftxt.value
+#             # Get icon position
+#             win32api.SendMessage(slvhwnd, commctrl.LVM_GETITEMPOSITION, i, pBufferpnt)
+#             p = POINT()
+#             ctypes.windll.kernel32.ReadProcessMemory(hProcHnd, pBufferpnt, ctypes.addressof(p), ctypes.sizeof(p), p_copied)
+#             icons[key] = (i,p)
+#         ctypes.windll.kernel32.VirtualFreeEx(hProcHnd, pLVI, 0, win32con.MEM_RELEASE)
+#         ctypes.windll.kernel32.VirtualFreeEx(hProcHnd, pBuffertxt, 0, win32con.MEM_RELEASE)
+#         ctypes.windll.kernel32.VirtualFreeEx(hProcHnd, pBufferpnt, 0, win32con.MEM_RELEASE)
+#         win32api.CloseHandle(hProcHnd)
+#         return icons
+#     else:  # RESTORE ICON POSITIONS PROBLEM IS HERE SOMEWHERE!!!
+#         win32gui.SendMessage(slvhwnd, win32con.WM_SETREDRAW, 0, 0)
+#         for i in xrange(num_items):
+#             # Get icon text
+#             win32gui.SendMessage(slvhwnd, commctrl.LVM_GETITEMTEXT, i, pLVI)
+#             target_bufftxt = ctypes.create_string_buffer(4096)
+#             ctypes.windll.kernel32.ReadProcessMemory(hProcHnd, pBuffertxt, ctypes.addressof(target_bufftxt), 4096, p_copied)
+#             key = target_bufftxt.value
+#             if key in savedicons.keys():
+#                 # Set icon position
+#                 p = savedicons[key][1]  # p is ctypes POINT
+#                 p_lng = point_to_long(p)  # explicitly convert to HIWORD/LOWORD and c_long
+#                 # Reserve space for input variable in foreign process and get pointer to it the that memory space
+#                 pBufferpnt = ctypes.windll.kernel32.VirtualAllocEx(hProcHnd, 0, ctypes.sizeof(p_lng), win32con.MEM_RESERVE|win32con.MEM_COMMIT, win32con.PAGE_READWRITE)
+#                 # Write the desired coordinates in to the space just created
+#                 ret = ctypes.windll.kernel32.WriteProcessMemory(hProcHnd, pBufferpnt, ctypes.addressof(p_lng), ctypes.sizeof(p_lng), p_copied)
+#                 if ret == 0:
+#                     raise WindowsError
+#                 # Send the message to change the position for that item's index and the pointer to the new position
+#                 ret = win32gui.SendMessage(slvhwnd, commctrl.LVM_SETITEMPOSITION, i, pBufferpnt)
+#                 if ret == 0:
+#                     raise WindowsError
+#                 # Release the reserved memory for the variable (I recognize that I probably don't need to aLloc/free this within the loop)
+#                 ctypes.windll.kernel32.VirtualFreeEx(hProcHnd, pBufferpnt, 0, win32con.MEM_RELEASE)
+#         win32gui.SendMessage(slvhwnd, win32con.WM_SETREDRAW, 1, 0)
+#         ctypes.windll.kernel32.VirtualFreeEx(hProcHnd, pLVI, 0, win32con.MEM_RELEASE)
+#         ctypes.windll.kernel32.VirtualFreeEx(hProcHnd, pBuffertxt, 0, win32con.MEM_RELEASE)
+#         win32api.CloseHandle(hProcHnd)
+#         return None
+#
+#
+# def point_to_long(p):
+#     ret = (p.y * 0x10000) + (p.x & 0xFFFF)
+#     return ctypes.c_long(ret)
+#
+# if __name__ == '__main__':
+#     mysavedicons = icon_save_restore(restore=False)
+#     icon_save_restore(mysavedicons, restore=True)
+
+
+def get_desktop_icons_list():
+    import struct, commctrl, win32gui, win32con, win32api
+    hwnd = GetDesktopListViewHandle()
+    pid = ctypes.create_string_buffer(4)
+    p_pid = ctypes.addressof(pid)
+    ctypes.windll.user32.GetWindowThreadProcessId(hwnd, p_pid)
+    hProcHnd = ctypes.windll.kernel32.OpenProcess(win32con.PROCESS_ALL_ACCESS, False, struct.unpack("i",pid)[0])
+    pBuffertxt = ctypes.windll.kernel32.VirtualAllocEx(hProcHnd, 0, 4096, win32con.MEM_RESERVE|win32con.MEM_COMMIT, win32con.PAGE_READWRITE)
+    copied = ctypes.create_string_buffer(4)
+    p_copied = ctypes.addressof(copied)
+    lvitem = LVITEMW()
+    lvitem.mask = ctypes.c_uint32(commctrl.LVIF_TEXT)
+    lvitem.pszText = ctypes.c_uint64(pBuffertxt)
+    lvitem.cchTextMax = ctypes.c_int32(4096)
+    lvitem.iSubItem = ctypes.c_int32(0)
+    pLVI = ctypes.windll.kernel32.VirtualAllocEx(hProcHnd, 0, 4096, win32con.MEM_RESERVE| win32con.MEM_COMMIT,  win32con.PAGE_READWRITE)
+    win32api.SetLastError(0)
+    ctypes.windll.kernel32.WriteProcessMemory(hProcHnd, pLVI, ctypes.addressof(lvitem), ctypes.sizeof(lvitem), p_copied)
+    num_items = ListView_GetItemCount(hwnd)
+
+    p = POINT()
+    pBufferpnt = ctypes.windll.kernel32.VirtualAllocEx(hProcHnd, 0, ctypes.sizeof(p), win32con.MEM_RESERVE|win32con.MEM_COMMIT, win32con.PAGE_READWRITE)
+    icons_list = list()
+
+    for i in range(num_items):
+        # Get icon text
+        win32gui.SendMessage(hwnd, commctrl.LVM_GETITEMTEXT, i, pLVI)
+        target_bufftxt = ctypes.create_string_buffer(4096)
+        ctypes.windll.kernel32.ReadProcessMemory(hProcHnd, pBuffertxt, ctypes.addressof(target_bufftxt), 4096, p_copied)
+        name = target_bufftxt.value
+        # Get icon position
+        win32api.SendMessage(hwnd, commctrl.LVM_GETITEMPOSITION, i, pBufferpnt)
+        p = POINT()
+        ctypes.windll.kernel32.ReadProcessMemory(hProcHnd, pBufferpnt, ctypes.addressof(p), ctypes.sizeof(p), p_copied)
+        icons_list.append((i, name, p))
+
+    ctypes.windll.kernel32.VirtualFreeEx(hProcHnd, pLVI, 0, win32con.MEM_RELEASE)
+    ctypes.windll.kernel32.VirtualFreeEx(hProcHnd, pBuffertxt, 0, win32con.MEM_RELEASE)
+    ctypes.windll.kernel32.VirtualFreeEx(hProcHnd, pBufferpnt, 0, win32con.MEM_RELEASE)
+    win32api.CloseHandle(hProcHnd)
+    return icons_list
+
+
+def point_to_long(p):
+    ret = (p.y * 0x10000) + (p.x & 0xFFFF)
+    return ctypes.c_long(ret)
+
+
+icons_list = get_desktop_icons_list()
+
+# # Сортировка по индексу
+# for i, name, pos in sorted(icons_list, key=lambda x: x[0]):
+
+# Сортировка по положению на экране
+for i, name, pos in sorted(icons_list, key=lambda x: (x[2].x, x[2].y)):
+    try:
+        name = name.decode()
+    except UnicodeDecodeError:
+        name = name.decode('cp1251')
+
+    print('{}. "{}": {}x{}'.format(i, name, pos.x, pos.y))
+
+
+quit()
+
+
+
+# from winreg import OpenKey, EnumValue, HKEY_CURRENT_USER, KEY_READ
+#
+#
+# def get_key_value(key, key_key):
+#
+#     i = 0
+#     while True:
+#         try:
+#             k, v, _ = EnumValue(key, i)
+#             if k == key_key:
+#                 return v
+#             i += 1
+#
+#         except WindowsError:
+#             break
+#
+# key = OpenKey(HKEY_CURRENT_USER, r"Software\\Microsoft\\Windows\\Shell\\Bags\\1\\Desktop", 0, KEY_READ)
+# print(get_key_value(key, 'ItemPos1920x1080x96(1)'))
+#
+# quit()
+
+
+# card_stren_p_1_list = [8, 11, 4, 8, 6, 12, 10, 1, 5, 11, 7, 0, 9, 11, 1, 0, 10, 12, 9, 5, 11, 8, 2, 12, 3, 3]
+# card_stren_p_2_list = [0, 7, 6, 2, 3, 12, 9, 10, 5, 3, 2, 4, 4, 10, 7, 8, 2, 9, 4, 1, 6, 1, 5, 7, 6, 0]
+#
+# # # Список карт преобразуется в список сил карт
+# # card_stren_p_1_list = [strongest_card.index(i[:len(i) - 1]) for i in cardp_1_list]
+# # card_stren_p_2_list = [strongest_card.index(i[:len(i) - 1]) for i in cardp_2_list]
+# # print(card_stren_p_1_list, file=sys.stderr)
+# # print(card_stren_p_2_list, file=sys.stderr)
+#
+# # Стек карт, полученных в "войне" первого и второго игрока
+# war_stack_1 = list()
+# war_stack_2 = list()
+#
+# winner = None
+# turn = 0
+#
+# # Ограничение количества итераций бесконечного цикла
+# count = 1000
+#
+#
+# class FindWinnerException(Exception):
+#     def __init__(self, winner):
+#         self.winner = winner
+#
+#
+# def fight():
+#     if not card_stren_p_1_list:
+#         raise FindWinnerException(2)
+#
+#     if not card_stren_p_2_list:
+#         raise FindWinnerException(1)
+#
+#     card_p_1 = card_stren_p_1_list.pop(0)
+#     card_p_2 = card_stren_p_2_list.pop(0)
+#
+#     if card_p_1 > card_p_2:
+#         while war_stack_1:
+#             card_stren_p_1_list.append(war_stack_1.pop(0))
+#
+#         while war_stack_2:
+#             card_stren_p_1_list.append(war_stack_2.pop(0))
+#
+#         card_stren_p_1_list.append(card_p_1)
+#         card_stren_p_1_list.append(card_p_2)
+#
+#     elif card_p_1 < card_p_2:
+#         while war_stack_1:
+#             card_stren_p_2_list.append(war_stack_1.pop(0))
+#
+#         while war_stack_2:
+#             card_stren_p_2_list.append(war_stack_2.pop(0))
+#
+#         card_stren_p_2_list.append(card_p_1)
+#         card_stren_p_2_list.append(card_p_2)
+#     else:
+#         war()
+#
+#     if not card_stren_p_1_list:
+#         raise FindWinnerException(2)
+#
+#     if not card_stren_p_2_list:
+#         raise FindWinnerException(1)
+#
+#
+# def war():
+#     for _ in range(3):
+#         if not card_stren_p_1_list:
+#             raise FindWinnerException(2)
+#
+#         if not card_stren_p_2_list:
+#             raise FindWinnerException(1)
+#
+#         war_stack_1.append(card_stren_p_1_list.pop(0))
+#         war_stack_2.append(card_stren_p_2_list.pop(0))
+#
+#     fight()
+#
+#
+# while True:
+#     try:
+#         turn += 1
+#
+#         count -= 1
+#         if count <= 0:
+#             break
+#
+#         fight()
+#
+#         # print(turn, file=sys.stderr)
+#         # print(card_stren_p_1_list, file=sys.stderr)
+#         # print(card_stren_p_2_list, file=sys.stderr)
+#         # print('', file=sys.stderr)
+#
+#     except FindWinnerException as e:
+#         winner = e.winner
+#         break
+#
+# if winner is None:
+#     raise Exception('Unknown winner')
+#
+# print("{} {}".format(winner, turn))
+# # print("PAT")
+#
+#
+# quit()
+#
+
 # # Convertor githun pages url to github repo url
 # # http://nemilya.github.io/coffeescript-game-life/html/game.html
 # # https://github.com/nemilya/coffeescript-game-life
