@@ -133,19 +133,19 @@ class POINT(ctypes.Structure):
     ]
 
     def __repr__(self):
-        return '{}x{}'.format(self.x, self.y)
+        return 'POINT<({}x{})>'.format(self.x, self.y)
 
 
 class RECT(ctypes.Structure):
     _fields_ = [
-        ('left', ctypes.c_int),
-        ('top', ctypes.c_int),
-        ('right', ctypes.c_int),
-        ('bottom', ctypes.c_int),
+        ('left', ctypes.c_ulong),
+        ('top', ctypes.c_ulong),
+        ('right', ctypes.c_ulong),
+        ('bottom', ctypes.c_ulong),
     ]
 
     def __repr__(self):
-        return '{}x{}x{}x{}'.format(self.left, self.top, self.right, self.bottom)
+        return '<RECT({}x{}, {}x{})>'.format(self.left, self.top, self.right, self.bottom)
 
 
 # TODO: исправить
@@ -342,19 +342,19 @@ def get_desktop_icons_list():
             icons_list.append((i, name, p))
 
 
-            # # rect = RECT()
-            # # ListView_GetItemRect(hwnd, i, rect)
-            #
-            # import commctrl
-            #
             # rect = RECT()
-            # rect.left = commctrl.LVIR_BOUNDS
-            #
-            # p_buffer_pnt = VirtualAllocEx(h_process, 0, ctypes.sizeof(rect), MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE)
-            # SendMessage(hwnd, commctrl.LVM_GETITEMRECT, i, p_buffer_pnt)
-            # ReadProcessMemory(h_process, p_buffer_pnt, ctypes.addressof(rect), ctypes.sizeof(rect), p_copied)
-            # print(i, name, p, rect)
-            # quit()
+            # ListView_GetItemRect(hwnd, i, rect)
+
+            import commctrl
+
+            rect = RECT()
+            rect.left = commctrl.LVIR_BOUNDS
+
+            p_buffer_pnt = VirtualAllocEx(h_process, 0, ctypes.sizeof(rect), MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE)
+            SendMessage(hwnd, commctrl.LVM_GETITEMRECT, i, p_buffer_pnt)
+            ReadProcessMemory(h_process, p_buffer_pnt, ctypes.addressof(rect), ctypes.sizeof(rect), p_copied)
+            print(i, name, p, rect)
+            quit()
 
     finally:
         try:
