@@ -221,16 +221,31 @@ class LVITEMW(ctypes.Structure):
 #     icon_save_restore(mysavedicons, restore=True)
 
 
-def get_desktop_icons_list():
-    import struct
+def get_desktop_process_handle(hwnd=None):
     import ctypes
-    from commctrl import LVIF_TEXT, LVM_GETITEMTEXT, LVM_GETITEMPOSITION, LVIR_BOUNDS, LVM_GETITEMRECT
-    from win32con import PROCESS_ALL_ACCESS, MEM_RESERVE, MEM_COMMIT, PAGE_READWRITE, MEM_RELEASE
-    from ctypes.wintypes import POINT, RECT
+    import struct
+    from win32con import PROCESS_ALL_ACCESS
 
     GetWindowThreadProcessId = ctypes.windll.user32.GetWindowThreadProcessId
-    SendMessage = ctypes.windll.user32.SendMessageW
     OpenProcess = ctypes.windll.kernel32.OpenProcess
+
+    if hwnd is None:
+        hwnd = GetDesktopListViewHandle()
+
+    pid = ctypes.create_string_buffer(4)
+    p_pid = ctypes.addressof(pid)
+    GetWindowThreadProcessId(hwnd, p_pid)
+
+    return OpenProcess(PROCESS_ALL_ACCESS, False, struct.unpack("i", pid)[0])
+
+
+def get_desktop_icons_list():
+    import ctypes
+    from commctrl import LVIF_TEXT, LVM_GETITEMTEXT, LVM_GETITEMPOSITION, LVIR_BOUNDS, LVM_GETITEMRECT
+    from win32con import MEM_RESERVE, MEM_COMMIT, PAGE_READWRITE, MEM_RELEASE
+    from ctypes.wintypes import POINT, RECT
+
+    SendMessage = ctypes.windll.user32.SendMessageW
     VirtualAllocEx = ctypes.windll.kernel32.VirtualAllocEx
     WriteProcessMemory = ctypes.windll.kernel32.WriteProcessMemory
     ReadProcessMemory = ctypes.windll.kernel32.ReadProcessMemory
@@ -243,11 +258,7 @@ def get_desktop_icons_list():
 
     try:
         hwnd = GetDesktopListViewHandle()
-        pid = ctypes.create_string_buffer(4)
-        p_pid = ctypes.addressof(pid)
-        GetWindowThreadProcessId(hwnd, p_pid)
-
-        h_process = OpenProcess(PROCESS_ALL_ACCESS, False, struct.unpack("i", pid)[0])
+        h_process = get_desktop_process_handle(hwnd)
         buffer_txt = VirtualAllocEx(h_process, 0, MAX_LEN, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE)
 
         copied = ctypes.create_string_buffer(4)
