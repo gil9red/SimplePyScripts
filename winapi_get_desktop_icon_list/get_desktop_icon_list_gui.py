@@ -53,6 +53,12 @@ if __name__ == '__main__':
 
     scene = QGraphicsScene()
 
+    width_desktop, height_desktop = get_desktop_resolution()
+    width_desktop //= n
+    height_desktop //= n
+    scene.addRect(0, 0, width_desktop, height_desktop)
+    scene.setSceneRect(0, 0, width_desktop, height_desktop)
+
     for i, name, pos, rect in get_desktop_icons_list():
         x, y, w, h = pos.x, pos.y, rect.right - rect.left, rect.bottom - rect.top
         x //= n
@@ -60,11 +66,6 @@ if __name__ == '__main__':
         w //= n
         h //= n
         scene.addRect(x, y, w, h)
-
-    width_desktop, height_desktop = get_desktop_resolution()
-    width_desktop //= n
-    height_desktop //= n
-    scene.setSceneRect(0, 0, width_desktop, height_desktop)
 
     view = QGraphicsView()
     view.setWindowTitle('winapi_get_desktop_icon_list')
