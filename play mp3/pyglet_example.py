@@ -18,6 +18,9 @@ def play(file_name):
 
     def update(dt):
         if not player.playing:
+            # Отпишем функцию, иначе при повторном вызове, иначе
+            # будет двойной вызов при следующем воспроизведении
+            pyglet.clock.unschedule(update)
             pyglet.app.exit()
 
     # Every 500 ms / 0.5 sec
