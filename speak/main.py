@@ -39,17 +39,34 @@ def bing_speak(text, locale, gender='female'):
 
 
 if __name__ == '__main__':
-    # # Для логирования запросов requests:
-    # import logging
-    # import sys
-    # logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
+    # Для логирования запросов requests:
+    import logging
+    import sys
+    logging.basicConfig(
+        level=logging.DEBUG,
+        stream=sys.stdout,
+        format='[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s',
+    )
 
     text = 'Сорок тысяч обезьян в жопу сунули банан'
 
-    with open('speak_female.mp3', 'wb') as f:
+    logging.debug('Text: "%s".', text)
+
+    logging.debug('Female')
+    female_file_name = 'speak_female.mp3'
+    with open(female_file_name, 'wb') as f:
         female_mp3_content = bing_speak(text, 'ru-RU')
         f.write(female_mp3_content)
 
-    with open('speak_male.mp3', 'wb') as f:
+    logging.debug('Female play')
+    from play_mp3 import play
+    play(female_file_name)
+
+    logging.debug('Male')
+    male_file_name = 'speak_male.mp3'
+    with open(male_file_name, 'wb') as f:
         male_mp3_content = bing_speak(text, 'ru-RU', gender='male')
         f.write(male_mp3_content)
+
+    logging.debug('Male play')
+    play(male_file_name)
