@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from django.db.models.expressions import Date
 
 __author__ = 'ipetrash'
 
@@ -18,7 +17,7 @@ logging.basicConfig(
 )
 
 
-def get_site_content(url='https://test.api.unistream.com/help/index.html'):
+def get_site_text(url='https://test.api.unistream.com/help/index.html'):
     """Функция возвращает содержимое по указанному url."""
 
     import sys
@@ -52,8 +51,8 @@ def get_site_content(url='https://test.api.unistream.com/help/index.html'):
     return doc.toOuterXml()
 
 
-def hash_from_str(text):
-    """Функция возвращает хэш от строки в виде HEX чисел, используя алгоритм sha1."""
+def get_hash_from_str(text):
+    """Функция возвращает хеш от строки в виде HEX чисел, используя алгоритм sha1."""
 
     import hashlib
     alg = hashlib.sha1()
@@ -61,57 +60,94 @@ def hash_from_str(text):
     return alg.hexdigest().upper()
 
 
-def get_diff(str_1, str_2):
+def get_diff(str_1, str_2, full=True):
     """
     Функция сравнивает переданные строки и возвращает результат сравнения в html.
 
     """
 
-    from difflib import HtmlDiff
-    diff = HtmlDiff()
+    import difflib
 
-    # diff умеет работать с списками, поэтому строку нужно разбить на списки строк,
-    # например, построчно:
-    return diff.make_file(str_1.split('\n'), str_2.split('\n'))
+    diff_html = ""
+    theDiffs = difflib.ndiff(str_1.splitlines(), str_2.splitlines())
+    for eachDiff in theDiffs:
+        if eachDiff[0] == "-":
+            diff_html += "<del>%s</del><br>" % eachDiff[1:].strip()
+        elif eachDiff[0] == "+":
+            diff_html += "<ins>%s</ins><br>" % eachDiff[1:].strip()
+
+    return """<html><head>
+            <meta charset="utf-8">
+        </head> <body>""" + diff_html + "</body></html>"
+
+    # from lxml.html.diff import htmldiff
+    # return """<html><head>
+    #     <meta charset="utf-8">
+    # </head> <body>""" + htmldiff(str_1, str_2) + "</body></html>"
+
+    # from difflib import HtmlDiff
+    # diff = HtmlDiff()
+    #
+    # str_lines_1 = str_1.split('\n')
+    # str_lines_2 = str_2.split('\n')
+    #
+    # # diff умеет работать с списками, поэтому строку нужно разбить на списки строк,
+    # # например, построчно:
+    # if full:
+    #     return diff.make_file(str_lines_1, str_lines_2)
+    # else:
+    #     return diff.make_table(str_lines_1, str_lines_2)
 
 
-from sqlalchemy import Column, Integer, String, Date
+from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
-class ContentRevision(Base):
+class TextRevision(Base):
     """
-    Класс описывает таблицу ревизий содержимого.
+    Класс описывает таблицу ревизий текста.
     Новая запись в таблице появляется только если предыдущая запись имеет отличия от новой.
 
     """
 
-    __tablename__ = 'ContentRevision'
+    __tablename__ = 'TextRevision'
 
     id = Column(Integer, primary_key=True)
 
-    # Содержимое
-    content = Column(String)
+    text = Column(String)
 
-    # Хэш содержимого
-    content_hash = Column(String)
+    # Хеш текста
+    text_hash = Column(String)
 
-    # Дата проверки содержимого
-    date = Column(Date)
+    # Дата проверки
+    datetime = Column(DateTime)
 
     # Поле описывает разницу с предыдущей ревизией.
     # Содержимым является полноценная html страница
+    diff_full = Column(String)
+
+    # Поле описывает разницу с предыдущей ревизией.
+    # Содержимым является таблица html страницы
     diff = Column(String)
-    
-    def __init__(self, content, content_hash, date, diff):
-        self.content = content
-        self.content_hash = content_hash
-        self.date = date
-        self.diff = diff
+
+    def __init__(self, text, other_text=''):
+        """
+        Конструктор принимает контент и сравниваемый контент, запоминает хеш содержимого,
+        текущую дату и время и результат сравнения
+
+        """
+
+        from datetime import datetime
+
+        self.text = text
+        self.text_hash = get_hash_from_str(text)
+        self.datetime = datetime.today()
+        self.diff_full = get_diff(text, other_text)
+        self.diff = get_diff(text, other_text, full=False)
 
     def __repr__(self):
-        return "<ContentRevision(id: {}, date: %s, hash: %s)>".format(self.id, self.date, self.hash)
+        return "<TextRevision(id: {}, datetime: {}, text_hash: {})>".format(self.id, self.datetime, self.text_hash)
 
 
 def get_session():
@@ -135,19 +171,69 @@ def get_session():
     return Session()
 
 
+session = get_session()
+
+
+def get_last_revision():
+    """Функция возвращает последнуюю запись в таблице TextRevision."""
+
+    return session.query(TextRevision).order_by(TextRevision.id.desc()).first()
+
+
+def add_text_revision(text):
+    """Функция добавляет новую ревизию, предварительно сравнив ее с предыдущей."""
+
+    last = get_last_revision()
+    logging.debug('Последняя запись: %s.', last)
+
+    text_revision = None
+
+    # Если таблица пуста
+    if last is None:
+        text_revision = TextRevision(text)
+    else:
+        # Если хеши текстов отличаются, добавляем новую ревизию
+        if last.text_hash != get_hash_from_str(text):
+            logging.debug('Обнаружено изменение, создаю ревизию.')
+            open('last.text.html', 'w', encoding='utf-8').write(last.text)
+            open('text.html', 'w', encoding='utf-8').write(text)
+            text_revision = TextRevision(text, last.text)
+            open('text_revision.diff_full.html', 'w', encoding='utf-8').write(text_revision.diff_full)
+        else:
+            return
+
+    if text_revision:
+        session.add(text_revision)
+        session.commit()
+
+    return text_revision
+
+
 if __name__ == '__main__':
-    print(get_site_content())
+    # print(session.query(TextRevision).all())
+    # quit()
 
-    # import time
-    #
-    # while True:
-    #     # Задержка каждые 7 часов
-    #     time.sleep(60 * 60 * 7)
-    #
-    # # session = get_session()
-    # #
-    # # # session.add(User("dfdf", 'dfdf', '223'))
-    # # # session.commit()
-    # #
-    # # print(session.query(ContentRevision).all())
+    logging.debug('Запуск.')
 
+    import time
+
+    while True:
+        try:
+            logging.debug('Проверка сайта.')
+            text = get_site_text()
+            add_text_revision(text)
+            logging.debug('Проверка закончена.')
+
+            break
+            # Задержка каждые 7 часов
+            time.sleep(60 * 60 * 7)
+        except:
+            logging.exception('Error:')
+    #
+    #
+    # # print(session.query(TextRevision).all()[1].diff_full)
+
+    last = get_last_revision()
+    print(len(last.text))
+    if last:
+        open('diff.html', 'w', encoding='utf-8').write(last.diff_full)
