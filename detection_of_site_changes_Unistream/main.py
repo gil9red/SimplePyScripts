@@ -4,7 +4,15 @@
 __author__ = 'ipetrash'
 
 
+# NOTE: костыль для винды, для исправления проблем с исключениями
+# при выводе юникодных символов в консоль винды
 import sys
+if sys.platform == 'win32':
+    import codecs
+    # Для винды кодировкой консоли будет cp866
+    sys.stdout = codecs.getwriter(sys.stdout.encoding)(sys.stdout.detach(), 'backslashreplace')
+    sys.stderr = codecs.getwriter(sys.stderr.encoding)(sys.stderr.detach(), 'backslashreplace')
+
 
 import logging
 logging.basicConfig(
@@ -87,19 +95,26 @@ def get_diff(str_1, str_2, full=True):
     logging.debug('x1')
     import difflib
 
+    print('!', len(str_1), len(str_2))
+
     logging.debug('x2')
     diff_html = ""
     logging.debug('x3')
     theDiffs = difflib.ndiff(str_1.splitlines(), str_2.splitlines())
 
     logging.debug('x4')
+    theDiffs = list(theDiffs)
+    print(theDiffs)
     for eachDiff in theDiffs:
-        logging.debug('  x5')
+        # logging.debug('  x5')
+        # print(' ', eachDiff[0])
         if eachDiff[0] == "-":
             diff_html += "<del>%s</del><br>" % eachDiff[1:].strip()
         elif eachDiff[0] == "+":
             diff_html += "<ins>%s</ins><br>" % eachDiff[1:].strip()
     logging.debug('x5')
+
+    print(112121, diff_html)
 
     if full:
         return """<html><head><meta charset="utf-8"></head> <body>""" + diff_html + "</body></html>"
@@ -168,7 +183,7 @@ class TextRevision(Base):
     # Содержимым является только разница
     diff = Column(String)
 
-    def __init__(self, text, other_text=''):
+    def __init__(self, new_text, old_text=''):
         """
         Конструктор принимает контент и сравниваемый контент, запоминает хеш содержимого,
         текущую дату и время и результат сравнения
@@ -177,11 +192,12 @@ class TextRevision(Base):
 
         from datetime import datetime
 
-        self.text = text
-        self.text_hash = get_hash_from_str(text)
+        self.text = new_text
+        self.text_hash = get_hash_from_str(new_text)
         self.datetime = datetime.today()
-        self.diff_full = get_diff(text, other_text)
-        self.diff = get_diff(text, other_text, full=False)
+
+        self.diff_full = get_diff(old_text, new_text)
+        self.diff = get_diff(old_text, new_text, full=False)
 
     def __repr__(self):
         return "<TextRevision(id: {}, datetime: {}, text_hash: {})>".format(self.id, self.datetime, self.text_hash)
@@ -257,6 +273,11 @@ if __name__ == '__main__':
     while True:
         try:
             logging.debug('Проверка сайта.')
+
+            # text = "dfsdfsdfsdfsdf"
+            # text += get_site_text()
+            # text += "dfsdfsdfsdfsdf"
+
             text = get_site_text()
 
             # У сайта есть особенность -- некоторые данные в примерах с каждой загрузки
@@ -278,12 +299,18 @@ if __name__ == '__main__':
             add_text_revision(text)
             logging.debug('Проверка закончена.')
 
+            # last = get_last_revision()
+            # print(len(last.text))
+            # if last:
+            #     open('diff.html', 'w', encoding='utf-8').write(last.diff_full)
+            # quit()
+
             # Задержка каждые 7 часов
             time.sleep(60 * 60 * 7)
         except Exception:
             logging.exception('Error:')
 
-    last = get_last_revision()
-    print(len(last.text))
-    if last:
-        open('diff.html', 'w', encoding='utf-8').write(last.diff_full)
+    # last = get_last_revision()
+    # print(len(last.text))
+    # if last:
+    #     open('diff.html', 'w', encoding='utf-8').write(last.diff_full)
