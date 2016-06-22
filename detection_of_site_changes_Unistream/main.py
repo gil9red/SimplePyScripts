@@ -36,7 +36,8 @@ def get_site_text(url='https://test.api.unistream.com/help/index.html'):
         def userAgentForUrl(self, url):
             return 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0'
 
-    QApplication(sys.argv)
+    if QApplication.instance() is None:
+        QApplication(sys.argv)
 
     view = QWebView()
     view.setPage(WebPage())
@@ -48,7 +49,9 @@ def get_site_text(url='https://test.api.unistream.com/help/index.html'):
     loop.exec_()
 
     doc = view.page().mainFrame().documentElement()
-    return doc.toOuterXml()
+    print(len(doc.toOuterXml()), len(doc.toPlainText()))
+    return doc.toPlainText()
+    # return doc.toOuterXml()
 
 
 def get_hash_from_str(text):
@@ -66,37 +69,71 @@ def get_diff(str_1, str_2, full=True):
 
     """
 
+    # from diff_match_patch import diff_match_patch
+    #
+    # # open('str1', 'w', encoding='utf-8').write(str_1)
+    # # open('str2', 'w', encoding='utf-8').write(str_2)
+    # # import os
+    # # os.system('kdiff3 str1 str2')
+    #
+    # diff = diff_match_patch()
+    # diffs = diff.diff_main(str_1, str_2)
+    # diff_html = diff.diff_prettyHtml(diffs)
+    #
+    # print(diffs)
+    # print(len(diffs))
+    # quit()
+
+    logging.debug('x1')
     import difflib
 
+    logging.debug('x2')
     diff_html = ""
+    logging.debug('x3')
     theDiffs = difflib.ndiff(str_1.splitlines(), str_2.splitlines())
+
+    logging.debug('x4')
     for eachDiff in theDiffs:
+        logging.debug('  x5')
         if eachDiff[0] == "-":
             diff_html += "<del>%s</del><br>" % eachDiff[1:].strip()
         elif eachDiff[0] == "+":
             diff_html += "<ins>%s</ins><br>" % eachDiff[1:].strip()
+    logging.debug('x5')
 
-    return """<html><head>
-            <meta charset="utf-8">
-        </head> <body>""" + diff_html + "</body></html>"
+    if full:
+        return """<html><head><meta charset="utf-8"></head> <body>""" + diff_html + "</body></html>"
+    else:
+        return diff_html
 
-    # from lxml.html.diff import htmldiff
-    # return """<html><head>
-    #     <meta charset="utf-8">
-    # </head> <body>""" + htmldiff(str_1, str_2) + "</body></html>"
+    # # from lxml.html.diff import htmldiff
+    # # return """<html><head>
+    # #     <meta charset="utf-8">
+    # # </head> <body>""" + htmldiff(str_1, str_2) + "</body></html>"
 
+    # open('str1', 'w', encoding='utf-8').write(str_1)
+    # open('str2', 'w', encoding='utf-8').write(str_2)
+
+    # logging.debug('x1')
+    # str_lines_1 = str_1.splitlines()
+    # str_lines_2 = str_2.splitlines()
+    # logging.debug('x2')
+    # # print(len(str_lines_1), len(str_lines_2))
+    # # print(str_lines_1[:5], str_lines_2[:5])
+    #
     # from difflib import HtmlDiff
     # diff = HtmlDiff()
     #
-    # str_lines_1 = str_1.split('\n')
-    # str_lines_2 = str_2.split('\n')
+    # # # diff умеет работать с списками, поэтому строку нужно разбить на списки строк,
+    # # # например, построчно:
+    # # if full:
+    # #     return diff.make_file(str_lines_1, str_lines_2)
+    # # else:
+    # #     return diff.make_table(str_lines_1, str_lines_2)
     #
-    # # diff умеет работать с списками, поэтому строку нужно разбить на списки строк,
-    # # например, построчно:
-    # if full:
-    #     return diff.make_file(str_lines_1, str_lines_2)
-    # else:
-    #     return diff.make_table(str_lines_1, str_lines_2)
+    # return """<html><head>
+    #     <meta charset="utf-8">
+    # </head> <body>""" + diff.make_table(str_lines_1, str_lines_2) + "</body></html>"
 
 
 from sqlalchemy import Column, Integer, String, DateTime
@@ -128,7 +165,7 @@ class TextRevision(Base):
     diff_full = Column(String)
 
     # Поле описывает разницу с предыдущей ревизией.
-    # Содержимым является таблица html страницы
+    # Содержимым является только разница
     diff = Column(String)
 
     def __init__(self, text, other_text=''):
@@ -195,24 +232,24 @@ def add_text_revision(text):
         # Если хеши текстов отличаются, добавляем новую ревизию
         if last.text_hash != get_hash_from_str(text):
             logging.debug('Обнаружено изменение, создаю ревизию.')
-            open('last.text.html', 'w', encoding='utf-8').write(last.text)
-            open('text.html', 'w', encoding='utf-8').write(text)
             text_revision = TextRevision(text, last.text)
-            open('text_revision.diff_full.html', 'w', encoding='utf-8').write(text_revision.diff_full)
+            logging.debug('-')
         else:
+            logging.debug('Одинаковые значения, пропускаю добавление.')
             return
 
+    logging.debug('@')
     if text_revision:
+        logging.debug('add')
         session.add(text_revision)
+        logging.debug('commit')
         session.commit()
 
+    logging.debug('return')
     return text_revision
 
 
 if __name__ == '__main__':
-    # print(session.query(TextRevision).all())
-    # quit()
-
     logging.debug('Запуск.')
 
     import time
@@ -221,17 +258,30 @@ if __name__ == '__main__':
         try:
             logging.debug('Проверка сайта.')
             text = get_site_text()
+
+            # У сайта есть особенность -- некоторые данные в примерах с каждой загрузки
+            # новые, и они портят работу скрипта, но не несут никакой пользы
+            # Нужно их удалить.
+            # Данные:
+            # "OperationId": "ab0ddd72-767d-400c-b17c-811c88c2cdc1",
+            # "CommandId": "c4a52a43-8caf-4f51-bcd3-8090fb91b597",
+            # "cashierUniqueId": "cc3b8fe2-8ecc-4af4-9076-d5315aa74896",
+            # "id": "31f7e9e2-ea4f-469a-a498-379cfcc3fa12",
+            # "createTime": "2016-06-22T10:13:42.0888396+03:00",
+            import re
+            text = re.sub(r'"((?i)OperationId)": ".+?"', r'"\1": "<removed>"', text)
+            text = re.sub(r'"((?i)CommandId)": ".+?"', r'"\1": "<removed>"', text)
+            text = re.sub(r'"((?i)cashierUniqueId)": ".+?"', r'"\1": "<removed>"', text)
+            text = re.sub(r'"((?i)id)": ".+?"', r'""\1"": "<removed>"', text)
+            text = re.sub(r'"((?i)createTime)": ".+?"', r'"\1": "<removed>"', text)
+
             add_text_revision(text)
             logging.debug('Проверка закончена.')
 
-            break
             # Задержка каждые 7 часов
             time.sleep(60 * 60 * 7)
-        except:
+        except Exception:
             logging.exception('Error:')
-    #
-    #
-    # # print(session.query(TextRevision).all()[1].diff_full)
 
     last = get_last_revision()
     print(len(last.text))
