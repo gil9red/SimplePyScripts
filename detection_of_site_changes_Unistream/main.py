@@ -296,6 +296,9 @@ if __name__ == '__main__':
             text = re.sub(r'"((?i)id)": ".+?"', r'""\1"": "<removed>"', text)
             text = re.sub(r'"((?i)createTime)": ".+?"', r'"\1": "<removed>"', text)
 
+            if not text:
+                continue
+
             add_text_revision(text)
             logging.debug('Проверка закончена.')
 
