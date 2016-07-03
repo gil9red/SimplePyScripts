@@ -4,8 +4,12 @@
 __author__ = 'ipetrash'
 
 
+# TODO: оформить
+# TODO: gui
+
 url = 'https://www.youtube.com/playlist?list=PLqf5JRBicHXnV4fUNPJtE2YFAjPMHRX4K'
 # url = 'https://www.youtube.com/playlist?list=PLKom48yw6lJpyYN2Q_zmss68ntjzxxpHd'
+url = 'https://www.youtube.com/playlist?list=PLvX4-HTvsLu-j-K9n14cV5OvxwBl_8Won'
 
 import grab
 
