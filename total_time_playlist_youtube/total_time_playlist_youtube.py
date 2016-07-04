@@ -38,8 +38,6 @@ def count_total_playlist_time(url, proxy=None, proxy_type='http'):
     return total_seconds
 
 
-# TODO: gui
-
 if __name__ == '__main__':
     url = 'https://www.youtube.com/playlist?list=PLqf5JRBicHXnV4fUNPJtE2YFAjPMHRX4K'
     # url = 'https://www.youtube.com/playlist?list=PLKom48yw6lJpyYN2Q_zmss68ntjzxxpHd'
