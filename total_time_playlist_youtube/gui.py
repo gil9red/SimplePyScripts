@@ -42,7 +42,12 @@ class MainWindow(QMainWindow):
 
             url = self.url_line_edit.text()
             total_seconds = count_total_playlist_time(url, config.proxy, config.proxy_type)
-            self.result_label.setText(str(total_seconds))
+
+            from datetime import timedelta
+            text = 'Total time: {} ({} total seconds).'.format(timedelta(seconds=total_seconds), total_seconds)
+            print('\n' + text)
+
+            self.result_label.setText(text)
 
         except Exception as e:
             import traceback
