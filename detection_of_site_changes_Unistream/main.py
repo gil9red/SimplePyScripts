@@ -13,13 +13,15 @@ if sys.platform == 'win32':
     sys.stdout = codecs.getwriter(sys.stdout.encoding)(sys.stdout.detach(), 'backslashreplace')
     sys.stderr = codecs.getwriter(sys.stderr.encoding)(sys.stderr.detach(), 'backslashreplace')
 
-
+import os
+DIR = os.path.dirname(__file__)
+        
 import logging
 logging.basicConfig(
     level=logging.DEBUG,
     format='[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s',
     handlers=[
-        logging.FileHandler('log', encoding='utf8'),
+        logging.FileHandler(os.path.join(DIR, 'log'), encoding='utf8'),
         logging.StreamHandler(stream=sys.stdout),
     ],
 )
@@ -59,7 +61,6 @@ def get_site_text(url='https://test.api.unistream.com/help/index.html'):
     doc = view.page().mainFrame().documentElement()
     print(len(doc.toOuterXml()), len(doc.toPlainText()))
     return doc.toPlainText()
-    # return doc.toOuterXml()
 
 
 def get_hash_from_str(text):
@@ -77,25 +78,8 @@ def get_diff(str_1, str_2, full=True):
 
     """
 
-    # from diff_match_patch import diff_match_patch
-    #
-    # # open('str1', 'w', encoding='utf-8').write(str_1)
-    # # open('str2', 'w', encoding='utf-8').write(str_2)
-    # # import os
-    # # os.system('kdiff3 str1 str2')
-    #
-    # diff = diff_match_patch()
-    # diffs = diff.diff_main(str_1, str_2)
-    # diff_html = diff.diff_prettyHtml(diffs)
-    #
-    # print(diffs)
-    # print(len(diffs))
-    # quit()
-
     logging.debug('x1')
     import difflib
-
-    print('!', len(str_1), len(str_2))
 
     logging.debug('x2')
     diff_html = ""
@@ -106,8 +90,6 @@ def get_diff(str_1, str_2, full=True):
     theDiffs = list(theDiffs)
     print(theDiffs)
     for eachDiff in theDiffs:
-        # logging.debug('  x5')
-        # print(' ', eachDiff[0])
         if eachDiff[0] == "-":
             diff_html += "<del>%s</del><br>" % eachDiff[1:].strip()
         elif eachDiff[0] == "+":
@@ -120,35 +102,6 @@ def get_diff(str_1, str_2, full=True):
         return """<html><head><meta charset="utf-8"></head> <body>""" + diff_html + "</body></html>"
     else:
         return diff_html
-
-    # # from lxml.html.diff import htmldiff
-    # # return """<html><head>
-    # #     <meta charset="utf-8">
-    # # </head> <body>""" + htmldiff(str_1, str_2) + "</body></html>"
-
-    # open('str1', 'w', encoding='utf-8').write(str_1)
-    # open('str2', 'w', encoding='utf-8').write(str_2)
-
-    # logging.debug('x1')
-    # str_lines_1 = str_1.splitlines()
-    # str_lines_2 = str_2.splitlines()
-    # logging.debug('x2')
-    # # print(len(str_lines_1), len(str_lines_2))
-    # # print(str_lines_1[:5], str_lines_2[:5])
-    #
-    # from difflib import HtmlDiff
-    # diff = HtmlDiff()
-    #
-    # # # diff умеет работать с списками, поэтому строку нужно разбить на списки строк,
-    # # # например, построчно:
-    # # if full:
-    # #     return diff.make_file(str_lines_1, str_lines_2)
-    # # else:
-    # #     return diff.make_table(str_lines_1, str_lines_2)
-    #
-    # return """<html><head>
-    #     <meta charset="utf-8">
-    # </head> <body>""" + diff.make_table(str_lines_1, str_lines_2) + "</body></html>"
 
 
 from sqlalchemy import Column, Integer, String, DateTime
@@ -204,8 +157,6 @@ class TextRevision(Base):
 
 
 def get_session():
-    import os
-    DIR = os.path.dirname(__file__)
     DB_FILE_NAME = 'sqlite:///' + os.path.join(DIR, 'database')
     # DB_FILE_NAME = 'sqlite:///:memory:'
 
