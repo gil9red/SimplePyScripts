@@ -240,14 +240,14 @@ if __name__ == '__main__':
             # "cashierUniqueId": "cc3b8fe2-8ecc-4af4-9076-d5315aa74896",
             # "id": "31f7e9e2-ea4f-469a-a498-379cfcc3fa12",
             # "createTime": "2016-06-22T10:13:42.0888396+03:00",
-#            "templateId": "e6635cf6-47c3-4164-8173-cb8fd249604a"
+            # "templateId": "e6635cf6-47c3-4164-8173-cb8fd249604a"
             import re
             text = re.sub(r'"((?i)OperationId)": ".+?"', r'"\1": "<removed>"', text)
             text = re.sub(r'"((?i)CommandId)": ".+?"', r'"\1": "<removed>"', text)
             text = re.sub(r'"((?i)cashierUniqueId)": ".+?"', r'"\1": "<removed>"', text)
             text = re.sub(r'"((?i)id)": ".+?"', r'""\1"": "<removed>"', text)
             text = re.sub(r'"((?i)createTime)": ".+?"', r'"\1": "<removed>"', text)
-            # text = re.sub(r'"((?i)templateId)": ".+?"', r'"\1": "<removed>"', text)
+            text = re.sub(r'"((?i)templateId)": ".+?"', r'"\1": "<removed>"', text)
             if not text:
                 continue
 
