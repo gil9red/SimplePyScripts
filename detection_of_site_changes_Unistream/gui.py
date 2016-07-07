@@ -14,6 +14,9 @@ from PySide.QtCore import *
 
 from main import session, TextRevision
 
+# TODO: возможность удаления записи
+# TODO: возможность ручного запуска проверки
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
