@@ -149,6 +149,7 @@ class TextRevision(Base):
         self.text_hash = get_hash_from_str(new_text)
         self.datetime = datetime.today()
 
+        # TODO: удалить diff_full и diff -- не используются, к тому что, имея text можно самому сделать сравнение
         self.diff_full = get_diff(old_text, new_text)
         self.diff = get_diff(old_text, new_text, full=False)
 
