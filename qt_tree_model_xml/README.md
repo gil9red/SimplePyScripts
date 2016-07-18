@@ -5,4 +5,4 @@ qt_tree_model_xml
 
 
 ####
-![](https://raw.githubusercontent.com/gil9red/SimplePyScripts/master/qt_tree_model/screenshot.png)
+![](screenshot.png)

@@ -12,7 +12,12 @@ import sys
 from PySide.QtGui import *
 from PySide.QtCore import *
 
+from collections import defaultdict
+
 from main import session, TextRevision
+
+# TODO: возможность удаления записи
+# TODO: возможность ручного запуска проверки
 
 
 class MainWindow(QMainWindow):
@@ -24,12 +29,26 @@ class MainWindow(QMainWindow):
         self.revision_list_widget = QListWidget()
         self.revision_list_widget.itemDoubleClicked.connect(self._show_last_diff)
 
+        # Словарь в ключе содержит хеш ревизии, а в значении -- список элементов ревизий
+        text_hash_by_group_revisions_dict = defaultdict(list)
+
         text_revisions = session.query(TextRevision).all()
         for rev in text_revisions:
             item = QListWidgetItem()
             item.setText(str(rev))
             item.setData(Qt.UserRole, rev)
+
+            text_hash_by_group_revisions_dict[rev.text_hash].append(item)
             self.revision_list_widget.addItem(item)
+
+        # TODO: возможны коллизии по первым 6-символам
+        # TODO: учитывать, что может получиться слишком светлый или темный фон
+        for text_hash, items in text_hash_by_group_revisions_dict.items():
+            if len(items) > 1:
+                for item in items:
+                    # Придаем элементу ревизии цвет, зависящий от первых 6-ти символов его хеша
+                    color = QColor('#' + text_hash[:6])
+                    item.setBackground(color)
 
         self.setCentralWidget(self.revision_list_widget)
 
@@ -58,6 +77,7 @@ class MainWindow(QMainWindow):
             os.remove(file_name_b)
 
 
+# TODO: выделять одинаковые элементы одним цветом
 if __name__ == '__main__':
     app = QApplication(sys.argv)
 
