@@ -4,6 +4,65 @@
 __author__ = 'ipetrash'
 
 
+def collect_user_comments(user, url_manga):
+    """Скрипт ищет комментарии указанного пользователя сайта http://readmanga.me/ и выводит их."""
+
+    from urllib.parse import urljoin
+    import grab
+
+    g = grab.Grab()
+    g.go(url_manga)
+
+    number = 0
+
+    # Из комбобокса вытаскиванием список всех глав
+    for option in reversed(g.doc.select('//*[@id="chapterSelectorSelect"]/option')):
+        title = option.text()
+
+        # Относительную ссылку на главу делаем абсолютной
+        volume_url = urljoin(url_manga, option.attr('value'))
+
+        g.go(volume_url)
+
+        comments = list()
+
+        # Сбор всех комментариев главы
+        for div in g.doc.select('//*[@id="twitts"]/div/div'):
+            a = div.select('a')
+            span = div.select('span')
+
+            # Возможны div без комментов внутри, поэтому проверяем наличие тегов a (логин) и span (текст)
+            if a.exists() and span.exists():
+                if a.text() == user:
+                    comments.append((a.text(), span.text()))
+
+        # Если список не пуст
+        if comments:
+            number += len(comments)
+
+            print('Глава "{}": {}'.format(title, volume_url))
+
+            for login, text in comments:
+                print('  {}: {}'.format(login, text))
+
+            print()
+
+    print()
+    print('Найдено {} комментов "{}".'.format(number, user))
+
+
+# user = 'Rihoko7'
+# url = 'http://mintmanga.com/tokyo_ghoul/vol1/1?mature=1'
+# collect_user_comments(user, url)
+#
+# print('\n\n')
+user = 'gil9red'
+url = 'http://mintmanga.com/tokyo_ghoul/vol1/1?mature=1'
+collect_user_comments(user, url)
+
+quit()
+
+
 # NOTE: set position icon
 # SOURCE: http://webcache.googleusercontent.com/search?q=cache:GoDfFADI1_oJ:systools.losthost.org/%3Fcode%3D9+&cd=15&hl=ru&ct=clnk&client=firefox-b-ab
 # SendMessage(lv, LVM_SETITEMPOSITION, i, MAKELONG(pt.x, pt.y));
