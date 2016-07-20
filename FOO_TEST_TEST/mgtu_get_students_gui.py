@@ -7,8 +7,13 @@ __author__ = 'ipetrash'
 import requests
 
 
-from PySide.QtGui import *
-from PySide.QtCore import *
+try:
+    from PyQt5.QtGui import *
+    from PyQt5.QtWidgets import *
+    from PyQt5.QtCore import *
+except:
+    from PySide.QtGui import *
+    from PySide.QtCore import *
 
 a = QApplication([])
 
@@ -35,6 +40,8 @@ class Widget(QWidget):
     def fill(self):
         self.lw_dep.clear()
         rs = requests.get('http://magtu.ru/modules/mod_reiting/mobile.php?action=get_all_department')
+        if not rs.ok:
+            rs.raise_for_status()
 
         for dep in rs.json():
             id_dep = list(dep.keys())[0]
@@ -49,6 +56,9 @@ class Widget(QWidget):
 
         id_dep = item_dep.data(Qt.UserRole)
         rs = requests.get('http://magtu.ru/modules/mod_reiting/mobile.php?action=get_spec_by_depart&depart_kod=' + id_dep)
+        if not rs.ok:
+            rs.raise_for_status()
+
         for kaf in rs.json():
             id_kaf = list(kaf.keys())[0]
             name = kaf[id_kaf]
@@ -62,6 +72,9 @@ class Widget(QWidget):
 
         id_kaf = item_kaf.data(Qt.UserRole)
         rs = requests.get('http://magtu.ru/modules/mod_reiting/mobile.php?action=get_reiting&spec_kod=' + id_kaf)
+        if not rs.ok:
+            rs.raise_for_status()
+
         for stud in rs.json():
             name = stud[0]
 
