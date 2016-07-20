@@ -7,11 +7,14 @@ __author__ = 'ipetrash'
 def collect_user_comments(user, url_manga):
     """Скрипт ищет комментарии указанного пользователя сайта http://readmanga.me/ и выводит их."""
 
+    # TODO: вместо grab использовать lxml
     from urllib.parse import urljoin
     import grab
 
-    g = grab.Grab()
-    g.go(url_manga)
+    from urllib.request import urlopen
+    g = grab.Grab(urlopen(url_manga).read())
+    # g = grab.Grab()
+    # g.go(url_manga)
 
     number = 0
 
@@ -22,7 +25,8 @@ def collect_user_comments(user, url_manga):
         # Относительную ссылку на главу делаем абсолютной
         volume_url = urljoin(url_manga, option.attr('value'))
 
-        g.go(volume_url)
+        g = grab.Grab(urlopen(volume_url).read())
+        # g.go(volume_url)
 
         comments = list()
 
@@ -57,7 +61,7 @@ def collect_user_comments(user, url_manga):
 #
 # print('\n\n')
 user = 'gil9red'
-url = 'http://mintmanga.com/tokyo_ghoul/vol1/1?mature=1'
+url = 'http://readmanga.me/naruto/vol50/472'
 collect_user_comments(user, url)
 
 quit()
