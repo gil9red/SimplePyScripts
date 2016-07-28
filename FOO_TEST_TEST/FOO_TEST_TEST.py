@@ -4,6 +4,43 @@
 __author__ = 'ipetrash'
 
 
+
+# TODO: сделать программу, которая пишет список подключенных usb-устройств
+
+# http://doc.qt.io/qt-5/qtserialport-terminal-example.html
+
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtSerialPort import *
+
+
+app = QApplication([])
+
+for info in QSerialPortInfo.availablePorts():
+    print("Name:", info.portName())
+    print("Description:", info.description())
+    print("Manufacturer:", info.manufacturer())
+
+
+# # Example use QSerialPortInfo
+# foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
+#     qDebug() << "Name : " << info.portName();
+#     qDebug() << "Description : " << info.description();
+#     qDebug() << "Manufacturer: " << info.manufacturer();
+#
+#     // Example use QSerialPort
+#     QSerialPort serial;
+#     serial.setPort(info);
+#     if (serial.open(QIODevice::ReadWrite))
+#         serial.close();
+# }
+
+# app.exec()
+
+quit()
+
+
 def collect_user_comments(user, url_manga):
     """Скрипт ищет комментарии указанного пользователя сайта http://readmanga.me/ и выводит их."""
 
