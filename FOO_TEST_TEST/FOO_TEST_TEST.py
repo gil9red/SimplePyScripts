@@ -5,6 +5,14 @@ __author__ = 'ipetrash'
 
 
 
+import win32com.client
+
+wmi = win32com.client.GetObject("winmgmts:")
+for i, usb in enumerate(wmi.InstancesOf("Win32_USBHub"), 1):
+    print(i, usb.DeviceID)
+quit()
+
+
 # TODO: сделать программу, которая пишет список подключенных usb-устройств
 
 # http://doc.qt.io/qt-5/qtserialport-terminal-example.html
