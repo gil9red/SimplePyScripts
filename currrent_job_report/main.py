@@ -23,16 +23,21 @@ if __name__ == '__main__':
     tray.show()
 
     def tray_message(reason=None):
-        from get_user_and_deviation_hours import get_user_and_deviation_hours
-        name, deviation_hours = get_user_and_deviation_hours()
+        # TODO: ловить исключения
+        try:
+            from get_user_and_deviation_hours import get_user_and_deviation_hours
+            name, deviation_hours = get_user_and_deviation_hours()
 
-        ok = deviation_hours[0] != '-'
-        title = 'Переработка' if ok else 'Недоработка'
-        text = name + ': ' + title.lower() + ' ' + deviation_hours
-        icon = QSystemTrayIcon.Information if ok else QSystemTrayIcon.Warning
-        print(text)
+            ok = deviation_hours[0] != '-'
+            title = 'Переработка' if ok else 'Недоработка'
+            text = name + ': ' + title.lower() + ' ' + deviation_hours
+            icon = QSystemTrayIcon.Information if ok else QSystemTrayIcon.Warning
+            print(text)
 
-        tray.showMessage(title, text, icon)
+            tray.showMessage(title, text, icon)
+
+        except Exception as e:
+            print(e)
 
     tray.activated.connect(tray_message)
 
