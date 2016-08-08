@@ -4,7 +4,6 @@
 __author__ = 'ipetrash'
 
 
-
 import win32com.client
 
 wmi = win32com.client.GetObject("winmgmts:")
@@ -49,47 +48,49 @@ for info in QSerialPortInfo.availablePorts():
 quit()
 
 
+# TODO: Перенести в отдельный файл
 def collect_user_comments(user, url_manga):
     """Скрипт ищет комментарии указанного пользователя сайта http://readmanga.me/ и выводит их."""
 
-    # TODO: вместо grab использовать lxml
     from urllib.parse import urljoin
-    import grab
 
     from urllib.request import urlopen
-    g = grab.Grab(urlopen(url_manga).read())
-    # g = grab.Grab()
-    # g.go(url_manga)
+    html = urlopen(url_manga).read()
+
+    from lxml import etree
+    root = etree.HTML(html)
 
     number = 0
 
     # Из комбобокса вытаскиванием список всех глав
-    for option in reversed(g.doc.select('//*[@id="chapterSelectorSelect"]/option')):
-        title = option.text()
+    for option in reversed(root.xpath('//*[@id="chapterSelectorSelect"]/option')):
+        title = option.text
 
         # Относительную ссылку на главу делаем абсолютной
-        volume_url = urljoin(url_manga, option.attr('value'))
+        volume_url = urljoin(url_manga, option.attrib['value'])
+        print('Глава "{}": {}'.format(title, volume_url))
 
-        g = grab.Grab(urlopen(volume_url).read())
-        # g.go(volume_url)
+        html = urlopen(volume_url).read()
+        root = etree.HTML(html)
 
         comments = list()
 
         # Сбор всех комментариев главы
-        for div in g.doc.select('//*[@id="twitts"]/div/div'):
-            a = div.select('a')
-            span = div.select('span')
+        for div in root.xpath('//*[@id="twitts"]/div/div'):
+            a = div.xpath('a')
+            span = div.xpath('span')
 
             # Возможны div без комментов внутри, поэтому проверяем наличие тегов a (логин) и span (текст)
-            if a.exists() and span.exists():
-                if a.text() == user:
-                    comments.append((a.text(), span.text()))
+            if a and span:
+                a = a[0]
+                span = span[0]
+
+                if a.text == user:
+                    comments.append((a.text, span.text))
 
         # Если список не пуст
         if comments:
             number += len(comments)
-
-            print('Глава "{}": {}'.format(title, volume_url))
 
             for login, text in comments:
                 print('  {}: {}'.format(login, text))
@@ -100,14 +101,14 @@ def collect_user_comments(user, url_manga):
     print('Найдено {} комментов "{}".'.format(number, user))
 
 
-# user = 'Rihoko7'
-# url = 'http://mintmanga.com/tokyo_ghoul/vol1/1?mature=1'
-# collect_user_comments(user, url)
+user = 'Rihoko7'
+url = 'http://mintmanga.com/tokyo_ghoul/vol1/1?mature=1'
+collect_user_comments(user, url)
 #
 # print('\n\n')
-user = 'gil9red'
-url = 'http://readmanga.me/naruto/vol50/472'
-collect_user_comments(user, url)
+# user = 'gil9red'
+# url = 'http://readmanga.me/naruto/vol50/472'
+# collect_user_comments(user, url)
 
 quit()
 
