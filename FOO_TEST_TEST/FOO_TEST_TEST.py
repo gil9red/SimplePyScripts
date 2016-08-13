@@ -4,6 +4,129 @@
 __author__ = 'ipetrash'
 
 
+# from PyQt5.QtWidgets import *
+# from PyQt5.QtCore import *
+# from PyQt5.QtGui import *
+#
+# """
+# Заполнение списка из функции без фриза окна. Вариант с QApplication.processEvents.
+# """
+#
+#
+# def foo():
+#     for i in range(1000000):
+#         yield i
+#         QApplication.processEvents()
+#
+# app = QApplication([])
+#
+# lw = QListWidget()
+# lw.show()
+#
+# for i in foo():
+#     lw.addItem(str(i))
+#     lw.scrollToBottom()
+#
+# app.exec_()
+
+
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+
+"""
+Заполнение списка из функции без фриза окна. Вариант с QThread.
+"""
+
+
+import traceback
+def log_uncaught_exceptions(ex_cls, ex, tb):
+    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+    text += ''.join(traceback.format_tb(tb))
+
+    print('Error: ', text)
+
+import sys
+sys.excepthook = log_uncaught_exceptions
+
+
+class MyThread(QThread):
+    about_new_value = pyqtSignal(int)
+
+    def __init__(self):
+        super().__init__()
+
+        self.executed = False
+
+    def run(self):
+        print('start thread')
+
+        try:
+            for i in range(1000):
+                if not self.executed:
+                    break
+
+                self.about_new_value.emit(i)
+                print(i)
+
+                # Задержка в 5 миллисекунд
+                import time
+                time.sleep(0.005)
+
+        finally:
+            print('finish thread')
+
+    def start(self, priority=QThread.InheritPriority):
+        self.executed = True
+
+        return super().start(priority)
+
+    def exit(self, returnCode=0):
+        self.executed = False
+
+        return super().exit(returnCode)
+
+
+app = QApplication([])
+
+lw = QListWidget()
+
+def add(i):
+    lw.addItem(str(i))
+    lw.scrollToBottom()
+
+    # Можно использовать, если форма фризится. Или просто у потока увеличить время задержки
+    # QApplication.processEvents()
+
+
+my_thread = MyThread()
+my_thread.about_new_value.connect(add)
+
+start_button = QPushButton('Start thread')
+start_button.clicked.connect(my_thread.start)
+
+stop_button = QPushButton('Stop thread')
+stop_button.clicked.connect(my_thread.exit)
+
+clear_button = QPushButton('Clear')
+clear_button.clicked.connect(lw.clear)
+
+layout = QVBoxLayout()
+layout.addWidget(start_button)
+layout.addWidget(stop_button)
+layout.addWidget(clear_button)
+layout.addWidget(lw)
+
+w = QWidget()
+w.setLayout(layout)
+w.show()
+
+app.exec_()
+
+
+quit()
+
+
 import win32com.client
 
 wmi = win32com.client.GetObject("winmgmts:")
