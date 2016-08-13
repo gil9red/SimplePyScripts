@@ -4,6 +4,17 @@
 __author__ = 'ipetrash'
 
 
+def foo():
+    while True:
+        import time
+        yield time.time()
+        time.sleep(1)
+
+for i in foo():
+    print(i)
+
+quit()
+
 # from PyQt5.QtWidgets import *
 # from PyQt5.QtCore import *
 # from PyQt5.QtGui import *
