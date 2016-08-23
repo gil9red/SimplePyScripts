@@ -30,7 +30,7 @@ TRAY_ICON = os.path.join(os.path.dirname(__file__), TRAY_ICON)
 
 # TODO: кэширование
 # TODO: свое меню трея (просто интересно)
-# TODO: добавить батник сборки в ехе
+# TODO: добавить батник сборки в ехе иконку
 if __name__ == '__main__':
     app = QApplication([])
 
@@ -41,8 +41,6 @@ if __name__ == '__main__':
     def tray_message(reason=None):
         from get_user_and_deviation_hours import get_user_and_deviation_hours
         name, deviation_hours = get_user_and_deviation_hours()
-        print(name)
-        print(deviation_hours)
 
         ok = deviation_hours[0] != '-'
         title = 'Переработка' if ok else 'Недоработка'
