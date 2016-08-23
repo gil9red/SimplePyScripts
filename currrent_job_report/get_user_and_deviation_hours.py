@@ -13,8 +13,7 @@ URL = 'https://confluence.compassplus.ru/reports/index.jsp'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0'
 
 import os.path
-PEM_FILE_NAME = 'ipetrash.pem'
-PEM_FILE_NAME = os.path.join(os.path.dirname(__file__), PEM_FILE_NAME)
+PEM_FILE_NAME = os.path.abspath('ipetrash.pem')
 
 
 def get_report_context():
