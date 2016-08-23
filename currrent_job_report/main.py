@@ -24,13 +24,13 @@ from PyQt5.QtWidgets import QApplication, QSystemTrayIcon, QMessageBox
 from PyQt5.QtGui import QIcon
 
 import os.path
-TRAY_ICON = 'favicon.ico'
-TRAY_ICON = os.path.join(os.path.dirname(__file__), TRAY_ICON)
+TRAY_ICON = os.path.abspath('favicon.ico')
 
 
 # TODO: кэширование
 # TODO: свое меню трея (просто интересно)
 # TODO: добавить батник сборки в ехе иконку
+# TODO: возможность закрывать программу
 if __name__ == '__main__':
     app = QApplication([])
 

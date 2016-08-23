@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 import os.path
 
-file_name = os.path.join(os.path.dirname(__file__), 'abusive words.txt')
+file_name = os.path.abspath('abusive words.txt')
 WORDS = open(file_name, encoding='utf-8').readlines()
 
 
