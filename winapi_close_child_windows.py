@@ -4,23 +4,37 @@
 __author__ = 'ipetrash'
 
 
-"""Скрипт ищет у запущенного Notepad++ панели инструментов и закрывает их."""
+"""
+The script looks for in a running Notepad ++ toolbar and closes them.
+
+Скрипт ищет у запущенного Notepad++ панели инструментов и закрывает их.
+"""
 
 
-from win32gui import *
-from win32con import *
+import win32gui
+import win32con
 
 
 def all_ok(hwnd, param):
-    text = GetWindowText(hwnd)
-    class_name = GetClassName(hwnd)
+    text = win32gui.GetWindowText(hwnd)
+    class_name = win32gui.GetClassName(hwnd)
     print('#{:0>8x} "{}": {}'.format(hwnd, text, class_name))
 
     # Закрытие панели инструментов
     if class_name == 'ToolbarWindow32':
-        PostMessage(hwnd, WM_CLOSE, 0, 0)
+        win32gui.PostMessage(hwnd, win32con.WM_CLOSE, 0, 0)
 
     return True
 
-hwnd = FindWindow('Notepad++', None)
-EnumChildWindows(hwnd, all_ok, None)
+
+def close_toolbars():
+    hwnd = win32gui.FindWindow('Notepad++', None)
+    if not hwnd:
+        print('Window "Notepad++" not found!')
+        return
+
+    win32gui.EnumChildWindows(hwnd, all_ok, None)
+
+
+if __name__ == '__main__':
+    close_toolbars()
