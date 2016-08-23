@@ -4,7 +4,23 @@
 __author__ = 'ipetrash'
 
 
-from PyQt5.QtWidgets import QApplication, QSystemTrayIcon
+import traceback
+
+
+# Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
+def log_uncaught_exceptions(ex_cls, ex, tb):
+    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+    text += ''.join(traceback.format_tb(tb))
+
+    print('Error: ', text)
+    QMessageBox.critical(None, 'Error', text)
+    quit()
+
+import sys
+sys.excepthook = log_uncaught_exceptions
+
+
+from PyQt5.QtWidgets import QApplication, QSystemTrayIcon, QMessageBox
 from PyQt5.QtGui import QIcon
 
 import os.path
@@ -23,21 +39,18 @@ if __name__ == '__main__':
     tray.show()
 
     def tray_message(reason=None):
-        # TODO: ловить исключения
-        try:
-            from get_user_and_deviation_hours import get_user_and_deviation_hours
-            name, deviation_hours = get_user_and_deviation_hours()
+        from get_user_and_deviation_hours import get_user_and_deviation_hours
+        name, deviation_hours = get_user_and_deviation_hours()
+        print(name)
+        print(deviation_hours)
 
-            ok = deviation_hours[0] != '-'
-            title = 'Переработка' if ok else 'Недоработка'
-            text = name + ': ' + title.lower() + ' ' + deviation_hours
-            icon = QSystemTrayIcon.Information if ok else QSystemTrayIcon.Warning
-            print(text)
+        ok = deviation_hours[0] != '-'
+        title = 'Переработка' if ok else 'Недоработка'
+        text = name + ': ' + title.lower() + ' ' + deviation_hours
+        icon = QSystemTrayIcon.Information if ok else QSystemTrayIcon.Warning
+        print(text)
 
-            tray.showMessage(title, text, icon)
-
-        except Exception as e:
-            print(e)
+        tray.showMessage(title, text, icon)
 
     tray.activated.connect(tray_message)
 

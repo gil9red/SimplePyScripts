@@ -48,7 +48,15 @@ def get_user_and_deviation_hours():
 
     # Получение следующего следующего элемента после текущего, у него получение последнего
     # ребенка, у которого вытаскивается текст
-    deviation_hours = current_user_tr.getnext().getnext().getchildren()[-1].text.strip()
+    # Ищем последную строку текущего пользователя -- в ней и находится время работы
+    # Ее легко найти -- ее первая ячейка пустая
+    deviation_tr = current_user_tr.getnext()
+
+    # Ищем строку с пустой ячейкой
+    while next(deviation_tr.iterchildren()).text.strip():
+        deviation_tr = deviation_tr.getnext()
+
+    deviation_hours = deviation_tr.getchildren()[-1].text.strip()
 
     return name, deviation_hours
 
