@@ -24,7 +24,8 @@ from PyQt5.QtWidgets import QApplication, QSystemTrayIcon, QMessageBox
 from PyQt5.QtGui import QIcon
 
 import os.path
-TRAY_ICON = os.path.abspath('favicon.ico')
+TRAY_ICON = 'favicon.ico'
+TRAY_ICON = os.path.join(os.path.dirname(__file__), TRAY_ICON)
 
 
 # TODO: кэширование

@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 def play(file_name):
     import pyglet
     import os
-    dll_file_name = os.path.abspath('avbin')
+    dll_file_name = os.path.join(os.path.dirname(__file__), 'avbin')
     pyglet.lib.load_library(dll_file_name)
 
     player = pyglet.media.Player()
