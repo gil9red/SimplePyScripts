@@ -193,21 +193,6 @@ if __name__ == '__main__':
 quit()
 
 
-import win32gui
-import win32con
-
-# Закрытие рекламных уведомлений от аваста
-# hwnd = win32gui.FindWindow('#32770', 'Настройки')
-# hwnd = win32gui.FindWindow('#32770', None)
-hwnd = win32gui.FindWindow('asw_av_popup_wndclass', None)
-print(hwnd)
-
-win32gui.PostMessage(hwnd, win32con.WM_CLOSE, 0, 0)
-
-
-quit()
-
-
 # TODO: использовать http://www.cbr.ru/scripts/Root.asp?PrtId=SXML или разобраться с данными от query.yahooapis.com
 # непонятны некоторые параметры
 # TODO: сделать консоль
