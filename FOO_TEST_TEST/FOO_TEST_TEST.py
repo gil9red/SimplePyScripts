@@ -7,52 +7,6 @@ __author__ = 'ipetrash'
 TOKEN = '<TOKEN>'
 
 
-import logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-from telegram.ext import Updater, MessageHandler, Filters
-from url2image import url2image
-
-
-def work(bot, update):
-    file_name = 'html.png'
-    url2image(update.message.text, file_name)
-
-    with open(file_name, 'rb') as f:
-        bot.sendPhoto(update.message.chat_id, f)
-
-
-def error(bot, update, error):
-    logger.warn('Update "%s" caused error "%s"' % (update, error))
-
-
-if __name__ == '__main__':
-    # Create the EventHandler and pass it your bot's token.
-    updater = Updater(TOKEN)
-
-    # Get the dispatcher to register handlers
-    dp = updater.dispatcher
-    dp.add_handler(MessageHandler([Filters.text], work))
-
-    # log all errors
-    dp.add_error_handler(error)
-
-    # Start the Bot
-    updater.start_polling()
-
-    # Run the bot until the you presses Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
-    updater.idle()
-
-
-quit()
-
-
-TOKEN = '<TOKEN>'
-
-
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 
@@ -102,6 +56,35 @@ def pict(bot, update):
 def pict2(bot, update):
     with open('OP_836_page02.png', 'rb') as f:
         bot.sendPhoto(update.message.chat_id, f)
+
+
+#
+#
+# Поиск на YouTube
+def video(bot, update, args):
+    print(args)
+    if not args:
+        bot.sendMessage(update.message.chat_id, text='К команде добавьте запрос.')
+        return
+
+    msg = ' '.join(args)
+
+    import urllib
+    import re
+    import random
+    from telegram import ParseMode
+
+    link = urllib.parse.urlencode({"search_query": msg})
+    content = urllib.request.urlopen("https://www.youtube.com/results?" + link)
+    search_results = re.findall('href=\"\/watch\?v=(.*?)\"', content.read().decode())
+    if len(search_results)>0:
+        # Первые 10 результатов
+        search_results = search_results[0:9:1]
+        choice_f = random.choice(search_results)
+        yt_link = "https://www.youtube.com/watch?v="+choice_f
+        bot.sendMessage(update.message.chat_id, text=yt_link, parse_mode=ParseMode.MARKDOWN)
+    else:
+        bot.sendMessage(update.message.chat_id, text='Ничего не найдено.')
 
 
 locale = 'ru-RU'
@@ -213,6 +196,7 @@ def main():
     dp.add_handler(CommandHandler("curs", curs))
     dp.add_handler(CommandHandler("pict", pict))
     dp.add_handler(CommandHandler("pict2", pict2))
+    dp.add_handler(CommandHandler("yt", video, pass_args=True))
 
     dp.add_handler(CommandHandler("speak", speak, pass_args=True))
     dp.add_handler(CommandHandler("speak_set_locale", speak_set_locale, pass_args=True))
