@@ -8,6 +8,21 @@ __author__ = 'ipetrash'
 # TODO: проверять поддерживаемые форматы по суффиксу file_name, если формат не поддерживается,
 # кидать исключение с описание поддерживаемых параметров
 
+
+from PyQt4.QtWebKit import QWebView, QWebPage
+from PyQt4.QtGui import QApplication, QImage, QPainter
+from PyQt4.QtCore import QEventLoop, QSize, QUrl
+from PyQt4.QtNetwork import QNetworkProxyFactory
+
+# Чтобы не было проблем запуска компов с прокси
+QNetworkProxyFactory.setUseSystemConfiguration(True)
+
+
+class WebPage(QWebPage):
+    def userAgentForUrl(self, url):
+        return 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0'
+
+
 qApp = None
 
 
@@ -19,21 +34,16 @@ def url2image(url, file_name=None):
     Если передать file_name, тогда функция сохранит в файл картинку.
     """
 
-    from PyQt4.QtWebKit import QWebView
-    from PyQt4.QtGui import QApplication, QImage, QPainter
-    from PyQt4.QtCore import QEventLoop, QSize, QUrl
-    from PyQt4.QtNetwork import QNetworkProxyFactory
-
-    # Чтобы не было проблем запуска компов с прокси
-    QNetworkProxyFactory.setUseSystemConfiguration(True)
-
     # Нужно создавать только один раз
     global qApp
     if qApp is None:
         qApp = QApplication([])
 
+    # TODO: прятать вертикальный и горизонтальный ползунки
     # Загрузка url и ожидание ее
     view = QWebView()
+    view.setPage(WebPage())
+
     view.load(QUrl(url))
     loop = QEventLoop()
     view.loadFinished.connect(loop.quit)
