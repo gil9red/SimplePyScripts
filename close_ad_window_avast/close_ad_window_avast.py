@@ -34,6 +34,7 @@ def get_logger():
 log = get_logger()
 
 
+# TODO: не все окна являются рекламными, это может быть окно сканирования системы
 def close_ad():
     import win32gui
     import win32con
@@ -43,7 +44,7 @@ def close_ad():
         log.debug('Found Avast advertising window, close it.')
 
         # Send close window command
-        win32gui.PostMessage(hwnd, win32con.WM_CLOSE, 0, 0)
+        win32gui.SendMessage(hwnd, win32con.WM_CLOSE, 0, 0)
 
 
 if __name__ == '__main__':
