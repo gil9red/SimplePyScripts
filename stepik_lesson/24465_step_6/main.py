@@ -32,5 +32,7 @@ if __name__ == '__main__':
         # Сортировка
         py_file_list = sorted(py_file_list)
 
-        for file_name in py_file_list:
-            print(file_name)
+        with open('main_ans.txt', 'w') as f:
+            for file_name in py_file_list:
+                print(file_name)
+                print(file_name, file=f)
