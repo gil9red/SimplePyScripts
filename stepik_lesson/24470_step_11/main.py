@@ -23,7 +23,8 @@ blabla is a tandem repetition
 
 # Пример использования. В консоли:
 # > python main.py < in
-# 3
+# blabla is a tandem repetition
+# 123123 is good too
 
 
 if __name__ == '__main__':
