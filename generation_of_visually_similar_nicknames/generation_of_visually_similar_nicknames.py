@@ -143,9 +143,7 @@ SIMILAR_SYMBOLS_DICT = {k: v for k, v in SIMILAR_SYMBOLS_LIST}
 SIMILAR_SYMBOLS_DICT.update({v: k for k, v in SIMILAR_SYMBOLS_LIST})
 
 text = 'Привет! Большой тупой урод! Cat! Dog! Enot! gil9red! Big Nagibator! Zevs! '
-new_text = ''
-for c in text:
-    new_text += SIMILAR_SYMBOLS_DICT.get(c, c)
+new_text = ''.join(SIMILAR_SYMBOLS_DICT.get(c, c) for c in text)
 
 print(text)
 print(new_text)
