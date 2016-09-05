@@ -65,7 +65,7 @@ if __name__ == '__main__':
                             found = True
                             break
 
-                except (etree.XMLSyntaxError, urllib.error.HTTPError):
+                except urllib.error.HTTPError:
                     pass
 
     # Т.е. ошибка произошла только при загрузке и парсинге url_a, что не дает шансов проверить дальше
