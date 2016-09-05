@@ -55,11 +55,7 @@ if __name__ == '__main__':
 
             # Перебор ссылок в url_a (первый переход, т.е. A)
             for url_c in root.xpath('//a/@href'):
-                if found:
-                    break
-
                 try:
-                    # Проверка наличия ссылки в C
                     with urlopen(url_c) as f:
                         if url_b in f.read().decode():
                             found = True
