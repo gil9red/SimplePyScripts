@@ -48,7 +48,7 @@ if __name__ == '__main__':
         color = element.attrib['color']
         color_by_price_dict[color] += level
 
-        for child in element.iterchildren():
+        for child in element:
             work(child, level + 1)
 
     xml = input()
