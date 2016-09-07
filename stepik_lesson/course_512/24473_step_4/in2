@@ -1,0 +1,12 @@
+[
+  {"name": "kvrwxkmqfy", "parents": ["zemrehxvuo", "qzntzflodp", "pjvisgmdrw"]},
+  {"name": "ogqoyccgkn", "parents": ["ppcmlxqgmn", "titthqeskb"]},
+  {"name": "uhfdrfrhzx", "parents": ["ogqoyccgkn", "ppcmlxqgmn", "wubwjzolrx", "pjvisgmdrw", "titthqeskb"]},
+  {"name": "zemrehxvuo", "parents": ["uhfdrfrhzx", "wubwjzolrx", "pjvisgmdrw", "titthqeskb"]},
+  {"name": "ppcmlxqgmn", "parents": ["pjvisgmdrw", "thceozowkb"]},
+  {"name": "qzntzflodp", "parents": ["wubwjzolrx", "titthqeskb", "thceozowkb"]},
+  {"name": "wubwjzolrx", "parents": []},
+  {"name": "pjvisgmdrw", "parents": []},
+  {"name": "titthqeskb", "parents": ["wubwjzolrx", "pjvisgmdrw"]},
+  {"name": "thceozowkb", "parents": ["pjvisgmdrw", "titthqeskb"]}
+]

@@ -41,26 +41,52 @@ C : 2
 
 if __name__ == '__main__':
     class_list = input()
-    # class_list = '[{"name": "A", "parents": []}, {"name": "B", "parents": ["A", "C"]}, {"name": "C", "parents": ["A"]}]'
 
     import json
     class_list = json.loads(class_list)
 
-    from collections import defaultdict
-    cls_parent_count_dict = defaultdict(int)
+    class Class:
+        def __init__(self, name):
+            self.name = name
+            self.children = list()
 
-    for cls in class_list:
-        # По заданию, класс является предком самого себя
-        cls_parent_count_dict[cls['name']] += 1
+        def all_children(self, cls=None, children=None):
+            if not children:
+                children = list()
 
-        for cls2 in class_list:
-            # Не смысла у самого себя проверять
-            if cls == cls2:
-                continue
+            if not cls:
+                cls = self
 
-            if cls['name'] in cls2['parents']:
-                cls_parent_count_dict[cls['name']] += 1
+            for sub_cls in cls.children:
+                children.append(sub_cls)
+                self.all_children(sub_cls, children)
+
+            return children
+
+        def __str__(self):
+            return '<Class "{}": {}>'.format(self.name, [cls.name for cls in self.children])
+
+        def __repr__(self):
+            return self.__str__()
+
+
+    dict_class_by_name_dict = {cls['name']: cls for cls in class_list}
+
+    # Сначала создаем объекты всех классов и заполняем их в словаре
+    class_by_name_dict = {name: Class(name) for name in dict_class_by_name_dict}
+
+    # После создания всех объектов, перебираем, получаем их родителей, которые
+    # из свежесозданного словаря получаем, чтобы у их родителей заполнить список детей
+    for name, dict_cls in dict_class_by_name_dict.items():
+        cls = class_by_name_dict[name]
+
+        for parent_cls_name in dict_cls['parents']:
+            parent_cls = class_by_name_dict[parent_cls_name]
+            parent_cls.children.append(cls)
 
     # Сортировка по имени класса
-    for k in sorted(cls_parent_count_dict.keys()):
-        print('{} : {}'.format(k, cls_parent_count_dict[k]))
+    for name, cls in sorted(class_by_name_dict.items(), key=lambda x: x[0]):
+        # Получение списка имен детей, из которого удаляются повторы (с помощью множества) и подсчет
+        # количества элементов. По условию, класс является потомком самого себя, поэтому прибавляем 1
+        number = len(set(child_cls.name for child_cls in cls.all_children()))
+        print('{} : {}'.format(name, number + 1))
