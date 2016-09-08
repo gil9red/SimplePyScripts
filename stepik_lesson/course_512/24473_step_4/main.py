@@ -50,16 +50,13 @@ if __name__ == '__main__':
             self.name = name
             self.children = list()
 
-        def all_children(self, cls=None, children=None):
+        def all_children(self, children=None):
             if not children:
                 children = list()
 
-            if not cls:
-                cls = self
-
-            for sub_cls in cls.children:
+            for sub_cls in self.children:
                 children.append(sub_cls)
-                self.all_children(sub_cls, children)
+                sub_cls.all_children(children)
 
             return children
 
