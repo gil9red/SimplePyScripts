@@ -29,7 +29,12 @@ def get_logger(name, file='log.txt', encoding='utf8'):
     return log
 
 
-from PySide.QtCore import QObject, Signal
+try:
+    from PyQt4.QtCore import QObject
+    from PyQt4.QtCore import pyqtSignal as Signal
+
+except ImportError:
+    from PySide.QtCore import QObject, Signal
 
 
 class OutputLogger(QObject):

@@ -6,13 +6,18 @@ __author__ = 'ipetrash'
 
 if __name__ == '__main__':
     import sys
-    from PySide.QtGui import QApplication
+
+    try:
+        from PyQt4.QtGui import QApplication
+    except ImportError:
+        from PySide.QtGui import QApplication
+
     from mainwindow import MainWindow
 
     app = QApplication(sys.argv)
 
     mw = MainWindow()
-    mw.resize(1300, 800)
+    mw.resize(1400, 800)
     mw.read_settings()
     mw.show()
 

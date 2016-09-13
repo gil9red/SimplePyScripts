@@ -3,22 +3,59 @@
 
 __author__ = 'ipetrash'
 
+
+try:
+    from PyQt4.QtGui import (
+        QApplication, QMainWindow, QDockWidget, QKeyEvent, QToolBar, QPlainTextEdit, QTextEdit,
+        QErrorMessage, QTextCharFormat, QTextCursor, QFont, QMessageBox
+    )
+
+except ImportError:
+    from PySide.QtGui import (
+        QApplication, QMainWindow, QDockWidget, QKeyEvent, QToolBar, QPlainTextEdit, QTextEdit,
+        QErrorMessage, QTextCharFormat, QTextCursor, QFont, QMessageBox
+    )
+
+try:
+    from PyQt4.QtCore import Qt, QEventLoop, QTimer, QSettings, QObject, QUrl
+except ImportError:
+    from PySide.QtCore import Qt, QEventLoop, QTimer, QSettings, QObject, QUrl
+
+try:
+    from PyQt4.QtNetwork import QNetworkProxyFactory
+except ImportError:
+    from PySide.QtNetwork import QNetworkProxyFactory
+
+try:
+    from PyQt4.QtWebKit import QWebView, QWebSettings
+except ImportError:
+    from PySide.QtWebKit import QWebView, QWebSettings
+
+
 import io
+import random
+import os
 
 
 from mainwindow_ui import Ui_MainWindow
 from common import *
 
-from PySide.QtGui import (
-    QApplication, QMainWindow, QDockWidget, QKeyEvent, QToolBar, QPlainTextEdit, QTextEdit,
-    QErrorMessage, QTextCharFormat, QTextCursor, QFont
-)
-from PySide.QtCore import Qt, QEventLoop, QTimer, QSettings
+logger = get_logger('main_window')
 
-from PySide.QtNetwork import QNetworkProxyFactory
-from PySide.QtWebKit import QWebView, QWebSettings
-import random
-import os
+
+import traceback
+
+
+def log_uncaught_exceptions(ex_cls, ex, tb):
+    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+    text += ''.join(traceback.format_tb(tb))
+
+    logger.critical(text)
+    QMessageBox.critical(None, 'Error', text)
+    quit()
+
+
+sys.excepthook = log_uncaught_exceptions
 
 
 def key_press_release(widget, key, modifier=Qt.NoModifier):
@@ -34,9 +71,6 @@ def key_press_release(widget, key, modifier=Qt.NoModifier):
 
     key_release = QKeyEvent(QKeyEvent.KeyRelease, key, modifier, None, False, 0)
     QApplication.sendEvent(widget, key_release)
-
-
-logger = get_logger('main_window')
 
 
 OUTPUT_LOGGER_STDOUT = OutputLogger(sys.stdout, OutputLogger.Severity.DEBUG)
@@ -70,7 +104,8 @@ class MainWindow(QMainWindow, QObject):
         self.setCentralWidget(self.view)
 
         # Загрузка url и ожидание ее
-        self.view.load(URL)
+        self.view.load(QUrl(URL))
+
         loop = QEventLoop()
         self.view.loadFinished.connect(loop.quit)
         loop.exec_()
