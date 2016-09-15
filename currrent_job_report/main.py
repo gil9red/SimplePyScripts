@@ -16,6 +16,7 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
     QMessageBox.critical(None, 'Error', text)
     quit()
 
+
 import sys
 sys.excepthook = log_uncaught_exceptions
 
@@ -28,9 +29,12 @@ TRAY_ICON = 'favicon.ico'
 TRAY_ICON = os.path.join(os.path.dirname(__file__), TRAY_ICON)
 
 
-# TODO: кэширование
+import datetime
+
+from get_user_and_deviation_hours import get_user_and_deviation_hours
+
+
 # TODO: свое меню трея (просто интересно)
-# TODO: добавить батник сборки в ехе иконку
 # TODO: возможность закрывать программу
 if __name__ == '__main__':
     app = QApplication([])
@@ -39,17 +43,24 @@ if __name__ == '__main__':
     tray.setToolTip('Compass Plus. Рапорт учета рабочего времени')
     tray.show()
 
+    LAST_DAY = None
+    TITLE, TEXT, ICON = None, None, None
+
     def tray_message(reason=None):
-        from get_user_and_deviation_hours import get_user_and_deviation_hours
-        name, deviation_hours = get_user_and_deviation_hours()
+        global LAST_DAY, TITLE, TEXT, ICON
 
-        ok = deviation_hours[0] != '-'
-        title = 'Переработка' if ok else 'Недоработка'
-        text = name + ': ' + title.lower() + ' ' + deviation_hours
-        icon = QSystemTrayIcon.Information if ok else QSystemTrayIcon.Warning
-        print(text)
+        if LAST_DAY != datetime.date.today().day:
+            LAST_DAY = datetime.date.today().day
 
-        tray.showMessage(title, text, icon)
+            name, deviation_hours = get_user_and_deviation_hours()
+
+            ok = deviation_hours[0] != '-'
+            TITLE = 'Переработка' if ok else 'Недоработка'
+            TEXT = name + ': ' + TITLE.lower() + ' ' + deviation_hours
+            ICON = QSystemTrayIcon.Information if ok else QSystemTrayIcon.Warning
+
+        print(TEXT)
+        tray.showMessage(TITLE, TEXT, ICON)
 
     tray.activated.connect(tray_message)
 
