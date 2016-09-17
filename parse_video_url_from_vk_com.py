@@ -16,7 +16,7 @@ def get_video_file_urls(url):
         return video_urls
 
     for source in re.findall(r'<source.+?>', rs.text):
-        source = source.replace('\/', '/').replace('\\"', '"')
+        source = source.replace('\\', '')
         match = re.search('src="(http.+?\.mp4).*?"', source)
         if match:
             url_video = match.group(1)
