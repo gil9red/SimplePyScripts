@@ -34,3 +34,7 @@ if __name__ == '__main__':
 
     # ['https://cs508203.vk.me/4/u94788893/videos/1119e2d5ca.720.mp4', 'https://cs3-1v4.vk-cdn.net/p6/8e6972dc8e27.480.mp4', 'https://cs508202.vk.me/4/u94788893/videos/1119e2d5ca.360.mp4', 'https://cs508202.vk.me/4/u94788893/videos/1119e2d5ca.240.mp4']
     print(get_video_file_urls('https://vk.com/video-47366412_171735915'))
+
+    # TODO: нет доступа, нужно с подобным разобраться
+    print(get_video_file_urls('https://vk.com/video-121893751_456239017'))
+    print(get_video_file_urls('https://m.vk.com/video-121893751_456239017'))
