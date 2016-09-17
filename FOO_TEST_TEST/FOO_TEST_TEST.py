@@ -4,6 +4,8 @@
 __author__ = 'ipetrash'
 
 
+quit()
+
 #
 #
 # # https://good-developers.com/prostoj-telegram-bot/#comment-5427
