@@ -22,8 +22,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 import os.path
-TRAY_ICON = 'favicon.ico'
-TRAY_ICON = os.path.join(os.path.dirname(__file__), TRAY_ICON)
+TRAY_ICON = os.path.join(os.path.dirname(__file__), 'favicon.ico')
 
 
 import datetime
@@ -41,7 +40,6 @@ class JobReportWidget(QWidget):
         super().__init__()
 
         self.last_day = None
-        self.title = None
         self.text = None
         self.ok = None
 
@@ -52,10 +50,21 @@ class JobReportWidget(QWidget):
         self.refresh_button.setAutoRaise(True)
         self.refresh_button.clicked.connect(lambda x: self.reread() or self.refresh())
 
+        self.quit_button = QToolButton()
+        self.quit_button.setText('Quit')
+        self.quit_button.setAutoRaise(True)
+        self.quit_button.clicked.connect(QApplication.instance().quit)
+
         layout = QVBoxLayout()
+        layout.setSpacing(0)
         layout.addWidget(self.info)
-        layout.addStretch()
+        layout.addSpacing(10)
         layout.addWidget(self.refresh_button)
+        layout.addWidget(self.quit_button)
+
+        self.timer = QTimer()
+        self.timer.setInterval(1000 * 60 * 60)
+        self.timer.timeout.connect(self.refresh)
 
         self.setLayout(layout)
 
@@ -66,27 +75,19 @@ class JobReportWidget(QWidget):
 
         name, deviation_hours = get_user_and_deviation_hours()
 
-        # TODO: формат вывода сделать получше
         self.ok = deviation_hours[0] != '-'
-        self.title = 'Переработка' if self.ok else 'Недоработка'
-        self.text = name + ': ' + self.title.lower() + ' ' + deviation_hours
+        self.text = name + '\n' + ('Переработка' if self.ok else 'Недоработка') + ' ' + deviation_hours
 
     def refresh(self):
         print('refresh')
 
-        today = datetime.date.today().day
+        today = datetime.date.today()
         if self.last_day != today:
             self.last_day = today
             self.reread()
 
         print(self.text)
-        self.info.setText('{}\n{}'.format(self.title, self.text))
-
-    def setVisible(self, val):
-        if val:
-            self.refresh()
-
-        super().setVisible(val)
+        self.info.setText('Check for {}\n{}'.format(self.last_day.strftime('%d/%m/%Y'), self.text))
 
     def paintEvent(self, event):
         super().paintEvent(event)
@@ -110,7 +111,6 @@ if __name__ == '__main__':
 
     menu = QMenu()
     menu.addAction(job_report_widget_action)
-    menu.addAction('Quit').triggered.connect(app.quit)
 
     tray.setContextMenu(menu)
     tray.activated.connect(lambda x: menu.exec(tray.geometry().center()))
