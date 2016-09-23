@@ -94,8 +94,10 @@ class EmployeeInfo(QWidget):
         self.department = QLabel()
         # TODO: показывать также сколько осталось до др
         self.birthday = QLabel()
-        # TODO: кликабельный url
+
         self.url = QLabel()
+        self.url.setOpenExternalLinks(True)
+
         self.work_phone = QLabel()
         self.mobile_phone = QLabel()
         self.id = QLabel()
@@ -130,6 +132,10 @@ class EmployeeInfo(QWidget):
         layout.addWidget(scroll_area)
         self.setLayout(layout)
 
+        # Все QLabel на форме умеет поддержку выделения и при наличии ссылок на них можно кликать
+        for label in self.findChildren(QLabel):
+            label.setTextInteractionFlags(Qt.TextBrowserInteraction)
+
     def set_employee(self, employee):
         if not employee:
             # TODO: нужно показывать какое-то изображение по умолчанию, например, то которое самой системой
@@ -158,7 +164,7 @@ class EmployeeInfo(QWidget):
         self.job.setText(employee.job)
         self.department.setText(employee.department)
         self.birthday.setText(employee.birthday)
-        self.url.setText(employee.url)
+        self.url.setText('<a href="{0}">{0}</a>'.format(employee.url))
         self.work_phone.setText(employee.work_phone)
         self.mobile_phone.setText(employee.mobile_phone)
         self.id.setText(employee.id)
