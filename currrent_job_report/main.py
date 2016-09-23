@@ -35,20 +35,48 @@ from qtpy.QtGui import *
 from qtpy.QtCore import *
 
 
+import time
+
+
+class CheckJobReportThread(QThread):
+    about_new_text = Signal(str)
+    about_ok = Signal(bool)
+
+    def __init__(self):
+        super().__init__()
+
+        self.last_text = None
+        self.ok = None
+
+    def run(self):
+        while True:
+            today = datetime.datetime.today().strftime('%d/%m/%Y %H:%M:%S')
+            print('Check for', today)
+
+            name, deviation_hours = get_user_and_deviation_hours()
+
+            ok = deviation_hours[0] != '-'
+            text = name + '\n' + ('Переработка' if ok else 'Недоработка') + ' ' + deviation_hours
+
+            if self.last_text != text:
+                print('    ' + text.strip().replace('\n', ' ') + '\n')
+                self.last_text = text
+
+                text = 'Обновлено {}\n{}'.format(today, self.last_text)
+                self.about_new_text.emit(text)
+
+            if self.ok != ok:
+                self.ok = ok
+                self.about_ok.emit(self.ok)
+
+            time.sleep(3600)
+
+
 class JobReportWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.last_day = None
-        self.text = None
-        self.ok = None
-
         self.info = QLabel()
-
-        self.refresh_button = QToolButton()
-        self.refresh_button.setText('Refresh')
-        self.refresh_button.setAutoRaise(True)
-        self.refresh_button.clicked.connect(lambda x: self.reread() or self.refresh())
 
         self.quit_button = QToolButton()
         self.quit_button.setText('Quit')
@@ -58,41 +86,24 @@ class JobReportWidget(QWidget):
         layout = QVBoxLayout()
         layout.setSpacing(0)
         layout.addWidget(self.info)
-        layout.addSpacing(10)
-        layout.addWidget(self.refresh_button)
+        layout.addStretch()
         layout.addWidget(self.quit_button)
-
-        self.timer = QTimer()
-        self.timer.setInterval(1000 * 60 * 60)
-        self.timer.timeout.connect(self.refresh)
 
         self.setLayout(layout)
 
-        self.refresh()
+        self.thread = CheckJobReportThread()
+        self.thread.about_new_text.connect(self.info.setText)
+        self.thread.about_ok.connect(self._set_ok)
+        self.thread.start()
 
-    def reread(self):
-        print('reread')
-
-        name, deviation_hours = get_user_and_deviation_hours()
-
-        self.ok = deviation_hours[0] != '-'
-        self.text = name + '\n' + ('Переработка' if self.ok else 'Недоработка') + ' ' + deviation_hours
-
-    def refresh(self):
-        print('refresh')
-
-        today = datetime.date.today()
-        if self.last_day != today:
-            self.last_day = today
-            self.reread()
-
-        print(self.text)
-        self.info.setText('Check for {}\n{}'.format(self.last_day.strftime('%d/%m/%Y'), self.text))
+    def _set_ok(self, val):
+        self.ok = val
+        self.update()
 
     def paintEvent(self, event):
         super().paintEvent(event)
 
-        color = Qt.green if self.ok else Qt.red
+        color = QColor('#29AB87') if self.ok else QColor(255, 0, 0, 128)
 
         painter = QPainter(self)
         painter.setBrush(color)
@@ -106,6 +117,7 @@ if __name__ == '__main__':
     tray = QSystemTrayIcon(QIcon(TRAY_ICON))
 
     job_report_widget = JobReportWidget()
+    job_report_widget.setFixedSize(200, 100)
     job_report_widget_action = QWidgetAction(job_report_widget)
     job_report_widget_action.setDefaultWidget(job_report_widget)
 
