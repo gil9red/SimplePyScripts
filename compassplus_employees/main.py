@@ -175,6 +175,7 @@ class EmployeeInfo(QWidget):
         self.email.setText('<a href="mailto:{0}">{0}</a>'.format(employee.email))
 
 
+# TODO: в окне вводе при клике не стрелку вниз фокус переходит в таблицу
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
