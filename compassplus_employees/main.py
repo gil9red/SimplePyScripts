@@ -152,6 +152,7 @@ class EmployeeInfo(QWidget):
             self.url.setText("None")
             self.work_phone.setText("None")
             self.mobile_phone.setText("None")
+            self.id.setText("None")
             self.email.setText("None")
             return
 
