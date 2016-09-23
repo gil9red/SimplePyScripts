@@ -137,12 +137,17 @@ class EmployeeInfo(QWidget):
         for label in self.findChildren(QLabel):
             label.setTextInteractionFlags(Qt.TextBrowserInteraction)
 
+    @staticmethod
+    def _pixmap_from_base64(base64_text):
+        pixmap = QPixmap()
+        pixmap.loadFromData(base64.b64decode(base64_text))
+        pixmap = pixmap.scaledToWidth(192, Qt.SmoothTransformation)
+
+        return pixmap
+
     def set_employee(self, employee):
         if not employee:
-            # TODO: нужно показывать какое-то изображение по умолчанию, например, то которое самой системой
-            # используется, т.к. есть те, у кого фотки нет
-            self.photo.clear()
-            self.photo.setText("None")
+            self.photo.setPixmap(self._pixmap_from_base64(config.PERSON_PLACEHOLDER_PHOTO))
 
             self.name.setText("None")
             self.short_name.setText("None")
@@ -156,10 +161,7 @@ class EmployeeInfo(QWidget):
             self.email.setText("None")
             return
 
-        pixmap = QPixmap()
-        pixmap.loadFromData(base64.b64decode(employee.photo.encode()))
-        pixmap = pixmap.scaledToWidth(192, Qt.SmoothTransformation)
-        self.photo.setPixmap(pixmap)
+        self.photo.setPixmap(self._pixmap_from_base64(employee.photo))
 
         self.name.setText(employee.name)
         self.short_name.setText(employee.short_name)
