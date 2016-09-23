@@ -187,7 +187,7 @@ class MainWindow(QMainWindow):
         self.employees_table = QTableWidget()
         self.employees_table.setSelectionBehavior(QTableWidget.SelectRows)
         self.employees_table.setSelectionMode(QTableWidget.SingleSelection)
-        self.employees_table.itemClicked.connect(self._item_click)
+        self.employees_table.currentItemChanged.connect(lambda item, _: self._item_click(item))
 
         layout_filter = QHBoxLayout()
         layout_filter.addWidget(QLabel('Filter:'))
@@ -257,7 +257,6 @@ class MainWindow(QMainWindow):
 
         query = db_session.query(Employee).filter(sql_filter)
         rows = query.count()
-        # print(rows)
 
         self.employees_table.setRowCount(rows)
 
@@ -270,8 +269,6 @@ class MainWindow(QMainWindow):
 
         row = 0
         for employee in query:
-            # print(employee)
-
             self.employees_table.setItem(row, 0, QTableWidgetItem(employee.name))
             self.employees_table.setItem(row, 1, QTableWidgetItem(employee.short_name))
             self.employees_table.setItem(row, 2, QTableWidgetItem(employee.job))
@@ -291,7 +288,6 @@ class MainWindow(QMainWindow):
         # Показываем информацию о первом сотруднике
         if self.employees_table.rowCount() > 0:
             item = self.employees_table.item(0, 0)
-            self._item_click(item)
             self.employees_table.setCurrentItem(item)
 
     def read_settings(self):
