@@ -101,8 +101,9 @@ class EmployeeInfo(QWidget):
         self.work_phone = QLabel()
         self.mobile_phone = QLabel()
         self.id = QLabel()
-        # TODO: при клике открывается стандартный почтовик, чтобы написать письмо
+
         self.email = QLabel()
+        self.email.setOpenExternalLinks(True)
 
         form_layout = QFormLayout()
         form_layout.addRow("Name:", self.name)
@@ -168,7 +169,7 @@ class EmployeeInfo(QWidget):
         self.work_phone.setText(employee.work_phone)
         self.mobile_phone.setText(employee.mobile_phone)
         self.id.setText(employee.id)
-        self.email.setText(employee.email)
+        self.email.setText('<a href="mailto:{0}">{0}</a>'.format(employee.email))
 
 
 class MainWindow(QMainWindow):
