@@ -366,7 +366,6 @@ start parsing for the collection of employees and populate the database.""")
             self.employees_table.setCurrentItem(item)
 
     def read_settings(self):
-        # TODO: при сложных настройках, лучше перейти на json или yaml
         ini = QSettings(config.SETTINGS_FILE_NAME, QSettings.IniFormat)
 
         state = ini.value('MainWindow_State')
