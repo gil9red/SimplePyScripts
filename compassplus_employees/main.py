@@ -4,6 +4,21 @@
 __author__ = 'ipetrash'
 
 
+# Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
+def log_uncaught_exceptions(ex_cls, ex, tb):
+    import traceback
+    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+    text += ''.join(traceback.format_tb(tb))
+
+    print('Error: ', text)
+    QMessageBox.critical(None, 'Error', text)
+    quit()
+
+
+import sys
+sys.excepthook = log_uncaught_exceptions
+
+
 import config
 
 
@@ -15,59 +30,6 @@ from db import *
 
 import requests
 from requests_ntlm import HttpNtlmAuth
-
-
-session = requests.Session()
-session.auth = HttpNtlmAuth(config.LOGIN, config.PASSWORD, session)
-
-
-def fill_db():
-    # Авторизация
-    rs = session.get(config.URL)
-    if not rs.ok:
-        print('Не удалось авторизоваться')
-        print('rs.status_code = {}'.format(rs.status_code))
-        print('rs.headers = {}'.format(rs.headers))
-        return
-
-    page = 1
-
-    rs = session.get(get_url(page))
-    data = rs.json()
-
-    max_page = data['Pages']
-
-    employee_list = list()
-    employee_list += data['Properties']
-
-    while page < max_page:
-        page += 1
-
-        rs = session.get(get_url(page))
-        data = rs.json()
-
-        employee_list += data['Properties']
-
-    for i, row in enumerate(employee_list, 1):
-        employee_id = row['Id']
-
-        if exists(employee_id):
-            print('Employee with id = {} already exist.'.format(employee_id))
-            continue
-
-        rs = session.get(config.URL_GET_EMPLOYEE_INFO.format(employee_id))
-        if not rs.ok:
-            print("Request getting employee info (id={}) not ok.".format(employee_id))
-            print("rs.status_code = {}".format(rs.status_code))
-            print("rs.headers = {}".format(rs.headers))
-            continue
-
-        employee = Employee.parse(rs.text, session)
-        print(i, employee)
-
-        db_session.add(employee)
-
-    db_session.commit()
 
 
 # # TODO: показывать короткое имя пользователя: ipetrash, ypaliy и т.п.
@@ -183,8 +145,8 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Compass Plus Employees')
         self.setContextMenuPolicy(Qt.NoContextMenu)
 
+        # TODO: таблица не редактируемая
         # TODO: добавить кнопку очистки редактора
-        # TODO: добавить кнопку перечитывания всей таблицы
         # TODO: окно с информацией о выделенном сотруднике умеет показывать его переработку/недоработку и прочее
         self.filter_line_edit = QLineEdit()
         self.filter_line_edit.textEdited.connect(self.run_filter)
@@ -214,18 +176,122 @@ class MainWindow(QMainWindow):
         employee_info_dock_widget.setWidget(self.employee_info)
         self.addDockWidget(Qt.RightDockWidgetArea, employee_info_dock_widget)
 
-        # tool_bar = self.addToolBar('Основное')
-        # action_reload = tool_bar.addAction("Перечитать все гисты пользователя")
-        # action_reload.setToolTip('Удаление текущих гистов и подгрузка новых')
-        # action_reload.setStatusTip(action_reload.toolTip())
-        # action_reload.triggered.connect(self.reload)
-        #
-        # action_sync = tool_bar.addAction("Синхронизация")
-        # action_sync.setToolTip('Удаление уже несуществующих гистов и добавление новых')
-        # action_sync.setStatusTip(action_reload.toolTip())
-        # action_sync.triggered.connect(self.sync)
-        #
-        # self.setStatusBar(QStatusBar())
+        tool_bar = self.addToolBar("General")
+        action_refill = tool_bar.addAction("Parse and refill")
+        action_refill.setToolTip("Clear database, parse site with employees, and fill database")
+        action_refill.setStatusTip(action_refill.toolTip())
+        action_refill.triggered.connect(self.refill)
+
+        self.setStatusBar(QStatusBar())
+
+    def refill(self):
+        # TODO: можно в отдельный класс вынести
+        dialog = QDialog()
+        dialog.setWindowTitle('Auth and refill database')
+
+        info = QLabel()
+        info.setText("""When you click on OK, you will be cleansing a database of employees,
+start parsing for the collection of employees and populate the database.""")
+
+        login = QLineEdit("CP\\")
+        password = QLineEdit()
+        password.setEchoMode(QLineEdit.Password)
+
+        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        button_box.accepted.connect(dialog.accept)
+        button_box.rejected.connect(dialog.reject)
+
+        form_layout = QFormLayout()
+        form_layout.addRow("Login:", login)
+        form_layout.addRow("Password:", password)
+
+        layout = QVBoxLayout()
+        layout.addWidget(info)
+        layout.addLayout(form_layout)
+        layout.addStretch()
+        layout.addWidget(button_box)
+
+        dialog.setLayout(layout)
+        if not dialog.exec():
+            return
+
+        login, password = login.text(), password.text()
+
+        # Сначала пытаемся авторизоваться
+        session = requests.Session()
+        session.auth = HttpNtlmAuth(login, password, session)
+
+        # Авторизация
+        rs = session.get(config.URL)
+        if not rs.ok:
+            QMessageBox.information(self, "Info", "Failed to login")
+            print('Не удалось авторизоваться')
+            print('rs.status_code = {}'.format(rs.status_code))
+            print('rs.headers = {}'.format(rs.headers))
+            return
+
+        # TODO: move to db.py
+        # Очищение базы данных
+        for i in db_session.query(Employee):
+            db_session.delete(i)
+        db_session.commit()
+
+        self.run_filter()
+        self.fill_db(session)
+        self.run_filter()
+
+    def fill_db(self, session):
+        page = 1
+
+        rs = session.get(get_url(page))
+        data = rs.json()
+
+        max_page = data['Pages']
+
+        # TODO: наверное тоже нужно в QProgressDialog обернуть, хоть сбор и быстрый
+        employee_list = list()
+        employee_list += data['Properties']
+
+        while page < max_page:
+            page += 1
+
+            rs = session.get(get_url(page))
+            data = rs.json()
+
+            employee_list += data['Properties']
+
+        # Для отображения диалога парсинга и заполнения базы
+        progress = QProgressDialog("Operation in progress...", "Cancel", 0, len(employee_list), self)
+        progress.setWindowTitle("Parsing")
+        progress.setWindowModality(Qt.WindowModal)
+
+        for i, row in enumerate(employee_list, 1):
+            progress.setValue(i)
+
+            if progress.wasCanceled():
+                break
+
+            employee_id = row['Id']
+
+            if exists(employee_id):
+                print('Employee with id = {} already exist.'.format(employee_id))
+                continue
+
+            rs = session.get(config.URL_GET_EMPLOYEE_INFO.format(employee_id))
+            if not rs.ok:
+                print("Request getting employee info (id={}) not ok.".format(employee_id))
+                print("rs.status_code = {}".format(rs.status_code))
+                print("rs.headers = {}".format(rs.headers))
+                continue
+
+            employee = Employee.parse(rs.text, session)
+            print(i, employee)
+
+            db_session.add(employee)
+
+        db_session.commit()
+
+        progress.setValue(len(employee_list))
 
     def _item_click(self, item):
         employee = None

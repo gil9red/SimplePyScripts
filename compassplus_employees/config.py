@@ -4,9 +4,6 @@
 __author__ = 'ipetrash'
 
 
-LOGIN = '<LOGIN>'
-PASSWORD = '<PASSWORD>'
-
 URL = 'https://portal.compassplus.com/Employees/Pages/OfficeReferenceBook.aspx'
 URL_GET_EMPLOYEES_LIST = 'https://portal.compassplus.com/_layouts/15/tbi/employees.ashx?' \
                          'p=50&c=1&s={}&fl=MPhotoUrl;NameLink;JobTitle;Department;WorkPhone'
