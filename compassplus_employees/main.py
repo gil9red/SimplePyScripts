@@ -145,7 +145,6 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Compass Plus Employees')
         self.setContextMenuPolicy(Qt.NoContextMenu)
 
-        # TODO: таблица не редактируемая
         # TODO: добавить кнопку очистки редактора
         # TODO: окно с информацией о выделенном сотруднике умеет показывать его переработку/недоработку и прочее
         self.filter_line_edit = QLineEdit()
@@ -355,6 +354,11 @@ start parsing for the collection of employees and populate the database.""")
             self.employees_table.item(row, 0).setData(Qt.UserRole, employee)
 
             row += 1
+
+        # Запрет редактирования ячеек таблицы
+        for row in range(self.employees_table.rowCount()):
+            for column in range(self.employees_table.columnCount()):
+                self.employees_table.item(row, column).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
 
         # Показываем информацию о первом сотруднике
         if self.employees_table.rowCount() > 0:
