@@ -137,6 +137,7 @@ class EmployeeInfo(QWidget):
         self.email.setText('<a href="mailto:{0}">{0}</a>'.format(employee.email))
 
 
+# TODO: ввод с клавы при фокусе на таблицу меняет редактор фильтра
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
