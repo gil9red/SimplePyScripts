@@ -144,10 +144,18 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Compass Plus Employees')
         self.setContextMenuPolicy(Qt.NoContextMenu)
 
-        # TODO: добавить кнопку очистки редактора
         # TODO: окно с информацией о выделенном сотруднике умеет показывать его переработку/недоработку и прочее
         self.filter_line_edit = QLineEdit()
-        self.filter_line_edit.textEdited.connect(self.run_filter)
+
+        # Добавление в редактор фильтра кнопки очищения содержимого
+        clear_icon = self.style().standardIcon(QStyle.SP_LineEditClearButton)
+        clear_action = self.filter_line_edit.addAction(clear_icon, QLineEdit.TrailingPosition)
+        clear_action.setVisible(len(self.filter_line_edit.text()) > 0)
+        clear_action.triggered.connect(self.filter_line_edit.clear)
+
+        # При изменении окна происходит вызов run_filter и отображение/скрытие кнопки очистки текста
+        self.filter_line_edit.textChanged.connect(self.run_filter)
+        self.filter_line_edit.textChanged.connect(lambda text: clear_action.setVisible(len(text) > 0))
         self.filter_line_edit.installEventFilter(self)
 
         self.employees_table = QTableWidget()
