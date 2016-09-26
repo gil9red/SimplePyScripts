@@ -137,7 +137,6 @@ class EmployeeInfo(QWidget):
         self.email.setText('<a href="mailto:{0}">{0}</a>'.format(employee.email))
 
 
-# TODO: в окне вводе при клике не стрелку вниз фокус переходит в таблицу
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -149,6 +148,7 @@ class MainWindow(QMainWindow):
         # TODO: окно с информацией о выделенном сотруднике умеет показывать его переработку/недоработку и прочее
         self.filter_line_edit = QLineEdit()
         self.filter_line_edit.textEdited.connect(self.run_filter)
+        self.filter_line_edit.installEventFilter(self)
 
         self.employees_table = QTableWidget()
         self.employees_table.setSelectionBehavior(QTableWidget.SelectRows)
@@ -381,6 +381,15 @@ start parsing for the collection of employees and populate the database.""")
         ini = QSettings(config.SETTINGS_FILE_NAME, QSettings.IniFormat)
         ini.setValue('MainWindow_State', self.saveState())
         ini.setValue('MainWindow_Geometry', self.saveGeometry())
+
+    def eventFilter(self, object, event):
+        # В окне вводе при клике на стрелку вниз фокус переходит в таблицу
+        if object == self.filter_line_edit:
+            if event.type() == QEvent.KeyRelease and event.key() == Qt.Key_Down:
+                self.employees_table.setFocus()
+                return False
+
+        return super().eventFilter(object, event)
 
     def closeEvent(self, _):
         self.write_settings()
