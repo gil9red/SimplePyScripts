@@ -77,6 +77,7 @@ class JobReportWidget(QWidget):
         super().__init__()
 
         self.info = QLabel()
+        self.ok = None
 
         self.quit_button = QToolButton()
         self.quit_button.setText('Quit')
