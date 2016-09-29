@@ -104,6 +104,43 @@ def save_to_xml(table_name, columns, rows, pretty=True):
         f.write(doc.toprettyxml() if pretty else doc.toxml())
 
 
+def save_to_html(table_name, columns, rows):
+    file_name = table_name + '.html'
+    if not os.path.exists(DIR):
+        os.mkdir(DIR)
+
+    file_name = os.path.join(DIR, file_name)
+
+    HTML_TABLE_TEMPLATE = """
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+            <title>{0}</title>
+        </head>
+        <body>
+            <table border="1">
+                <caption>{0}</caption>
+                {1}
+                {2}
+            </table>
+        </body>
+    </html>
+"""
+
+    table_header = "<tr>" + ''.join("<th>{}</th>".format(column) for column in columns) + "</tr>"
+
+    table_rows = list()
+    for row in rows:
+        table_rows.append("<tr>" + ''.join("<td>{}</td>".format(field) for field in row) + "</tr>")
+
+    table_rows = '\n'.join(table_rows)
+
+    with open(file_name, 'w', encoding='utf-8') as f:
+        html = HTML_TABLE_TEMPLATE.format(table_name, table_header, table_rows)
+        f.write(html)
+
+
 if __name__ == '__main__':
     table_name, columns, rows = get_table_database_info('database')
 
@@ -114,3 +151,5 @@ if __name__ == '__main__':
 
     save_to_xml(table_name, columns, rows)
     save_to_xml(table_name, columns, rows, pretty=False)
+
+    save_to_html(table_name, columns, rows)
