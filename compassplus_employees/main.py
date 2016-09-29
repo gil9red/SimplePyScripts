@@ -37,12 +37,29 @@ from requests_ntlm import HttpNtlmAuth
 # if __name__ == '__main__':
 #     fill_db()
 
+# TODO:
+import os
+if 'QT_API' not in os.environ:
+    # os.environ['QT_API'] = 'pyqt4'
+    os.environ['QT_API'] = 'pyqt5'
 
 from qtpy.QtGui import *
 from qtpy.QtWidgets import *
 from qtpy.QtCore import *
 
+# from PyQt4.QtGui import *
+# from PyQt4.QtCore import *
+
+
 import base64
+
+
+def pixmap_from_base64(base64_text):
+    pixmap = QPixmap()
+    pixmap.loadFromData(base64.b64decode(base64_text))
+    pixmap = pixmap.scaledToWidth(192, Qt.SmoothTransformation)
+
+    return pixmap
 
 
 class EmployeeInfo(QWidget):
@@ -99,17 +116,9 @@ class EmployeeInfo(QWidget):
         for label in self.findChildren(QLabel):
             label.setTextInteractionFlags(Qt.TextBrowserInteraction)
 
-    @staticmethod
-    def _pixmap_from_base64(base64_text):
-        pixmap = QPixmap()
-        pixmap.loadFromData(base64.b64decode(base64_text))
-        pixmap = pixmap.scaledToWidth(192, Qt.SmoothTransformation)
-
-        return pixmap
-
     def set_employee(self, employee):
         if not employee:
-            self.photo.setPixmap(self._pixmap_from_base64(config.PERSON_PLACEHOLDER_PHOTO))
+            self.photo.setPixmap(pixmap_from_base64(config.PERSON_PLACEHOLDER_PHOTO))
 
             self.name.setText("None")
             self.short_name.setText("None")
@@ -123,7 +132,7 @@ class EmployeeInfo(QWidget):
             self.email.setText("None")
             return
 
-        self.photo.setPixmap(self._pixmap_from_base64(employee.photo))
+        self.photo.setPixmap(pixmap_from_base64(employee.photo))
 
         self.name.setText(employee.name)
         self.short_name.setText(employee.short_name)
@@ -147,17 +156,25 @@ class MainWindow(QMainWindow):
 
         # TODO: окно с информацией о выделенном сотруднике умеет показывать его переработку/недоработку и прочее
         self.filter_line_edit = QLineEdit()
-
-        # Добавление в редактор фильтра кнопки очищения содержимого
-        clear_icon = self.style().standardIcon(QStyle.SP_LineEditClearButton)
-        clear_action = self.filter_line_edit.addAction(clear_icon, QLineEdit.TrailingPosition)
-        clear_action.setVisible(len(self.filter_line_edit.text()) > 0)
-        clear_action.triggered.connect(self.filter_line_edit.clear)
-
         # При изменении окна происходит вызов run_filter и отображение/скрытие кнопки очистки текста
         self.filter_line_edit.textChanged.connect(self.run_filter)
-        self.filter_line_edit.textChanged.connect(lambda text: clear_action.setVisible(len(text) > 0))
         self.filter_line_edit.installEventFilter(self)
+
+        try:
+            # Добавление в редактор фильтра кнопки очищения содержимого
+            clear_icon = self.style().standardIcon(QStyle.SP_LineEditClearButton)
+
+            clear_action = self.filter_line_edit.addAction(clear_icon, QLineEdit.TrailingPosition)
+            clear_action.setVisible(len(self.filter_line_edit.text()) > 0)
+            clear_action.triggered.connect(self.filter_line_edit.clear)
+
+            self.filter_line_edit.textChanged.connect(lambda text: clear_action.setVisible(len(text) > 0))
+
+        # Если SP_LineEditClearButton не найден
+        except AttributeError:
+            # TODO: сделать реализацию для Qt4
+            # clear_icon = pixmap_from_base64(config.LINE_EDIT_CLEAR_BUTTON_32x32)
+            pass
 
         self.employees_table = QTableWidget()
         self.employees_table.setSelectionBehavior(QTableWidget.SelectRows)
@@ -185,6 +202,7 @@ class MainWindow(QMainWindow):
         self.addDockWidget(Qt.RightDockWidgetArea, employee_info_dock_widget)
 
         tool_bar = self.addToolBar("General")
+        tool_bar.setObjectName("General")
         action_refill = tool_bar.addAction("Parse and refill")
         action_refill.setToolTip("Clear database, parse site with employees, and fill database")
         action_refill.setStatusTip(action_refill.toolTip())
@@ -407,6 +425,25 @@ start parsing for the collection of employees and populate the database.""")
 
 if __name__ == '__main__':
     app = QApplication([])
+
+
+    # TODO: согласовать с os.environ['QT_API']
+    # def load_PyQt4_plugins():
+    #     """
+    #     Функция загружает Qt плагины.
+    #
+    #     """
+    #
+    #     import PyQt4
+    #     import os
+    #
+    #     qApp = PyQt4.QtGui.QApplication.instance()
+    #
+    #     for plugins_dir in [os.path.join(p, "plugins") for p in PyQt4.__path__]:
+    #         qApp.addLibraryPath(plugins_dir)
+    #
+    #
+    # load_PyQt4_plugins()
 
     mw = MainWindow()
     mw.resize(1000, 750)
