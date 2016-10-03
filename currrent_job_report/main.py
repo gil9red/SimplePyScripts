@@ -65,11 +65,13 @@ class CheckJobReportThread(QThread):
                 text = "Отчет на сегодня еще не готов."
 
             if self.last_text != text:
-                self.about_log.emit('    ' + text.strip().replace('\n', ' ') + '\n')
                 self.last_text = text
 
                 text = 'Обновлено {}\n{}'.format(today, self.last_text)
                 self.about_new_text.emit(text)
+                self.about_log.emit("    " + self.last_text + "\n")
+            else:
+                self.about_log.emit("    Ничего не изменилось\n")
 
             if self.ok != ok:
                 self.ok = ok
@@ -92,6 +94,7 @@ class JobReportWidget(QWidget):
 
         self.log = QPlainTextEdit()
         self.log.setWindowTitle("Log")
+        self.log.setMaximumBlockCount(500)
         self.log.hide()
 
         visible_log_button = QToolButton()
