@@ -42,6 +42,8 @@ class CheckJobReportThread(QThread):
     about_new_text = Signal(str)
     about_ok = Signal(bool)
 
+    about_log = Signal(str)
+
     def __init__(self):
         super().__init__()
 
@@ -51,7 +53,7 @@ class CheckJobReportThread(QThread):
     def run(self):
         while True:
             today = datetime.datetime.today().strftime('%d/%m/%Y %H:%M:%S')
-            print('Check for', today)
+            self.about_log.emit('Check for {}'.format(today))
 
             try:
                 name, deviation_hours = get_user_and_deviation_hours()
@@ -63,7 +65,7 @@ class CheckJobReportThread(QThread):
                 text = "Отчет на сегодня еще не готов."
 
             if self.last_text != text:
-                print('    ' + text.strip().replace('\n', ' ') + '\n')
+                self.about_log.emit('    ' + text.strip().replace('\n', ' ') + '\n')
                 self.last_text = text
 
                 text = 'Обновлено {}\n{}'.format(today, self.last_text)
@@ -88,9 +90,24 @@ class JobReportWidget(QWidget):
         self.quit_button.setAutoRaise(True)
         self.quit_button.clicked.connect(QApplication.instance().quit)
 
+        self.log = QPlainTextEdit()
+        self.log.setWindowTitle("Log")
+        self.log.hide()
+
+        visible_log_button = QToolButton()
+        visible_log_button.setToolTip("Show log")
+        visible_log_button.setAutoRaise(True)
+        visible_log_button.setText("+")
+        visible_log_button.clicked.connect(self.log.show)
+
         layout = QVBoxLayout()
         layout.setSpacing(0)
-        layout.addWidget(self.info)
+
+        hlayout = QHBoxLayout()
+        hlayout.addWidget(self.info)
+        hlayout.addWidget(visible_log_button)
+        layout.addLayout(hlayout)
+
         layout.addStretch()
         layout.addWidget(self.quit_button)
 
@@ -99,11 +116,16 @@ class JobReportWidget(QWidget):
         self.thread = CheckJobReportThread()
         self.thread.about_new_text.connect(self.info.setText)
         self.thread.about_ok.connect(self._set_ok)
+        self.thread.about_log.connect(self._add_log)
         self.thread.start()
 
     def _set_ok(self, val):
         self.ok = val
         self.update()
+
+    def _add_log(self, val):
+        print(val)
+        self.log.appendPlainText(val)
 
     def paintEvent(self, event):
         super().paintEvent(event)
@@ -122,7 +144,7 @@ if __name__ == '__main__':
     tray = QSystemTrayIcon(QIcon(TRAY_ICON))
 
     job_report_widget = JobReportWidget()
-    job_report_widget.setFixedSize(200, 100)
+    job_report_widget.setFixedSize(220, 100)
     job_report_widget_action = QWidgetAction(job_report_widget)
     job_report_widget_action.setDefaultWidget(job_report_widget)
 
