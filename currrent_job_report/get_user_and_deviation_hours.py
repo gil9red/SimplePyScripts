@@ -34,13 +34,21 @@ def get_report_context():
     return rs.text
 
 
+class NotFoundReport(Exception):
+    pass
+
+
 def get_user_and_deviation_hours():
     content = get_report_context()
 
     from lxml import etree
     root = etree.HTML(content)
-    # Вытаскивание tr, у которого есть вложенный th, имеющий в содержимом текст "Текущий пользователь"
-    current_user_tr = root.xpath('//table[@id="report"]/tbody/tr[th[contains(text(),"Текущий пользователь")]]')[0]
+
+    try:
+        # Вытаскивание tr, у которого есть вложенный th, имеющий в содержимом текст "Текущий пользователь"
+        current_user_tr = root.xpath('//table[@id="report"]/tbody/tr[th[contains(text(),"Текущий пользователь")]]')[0]
+    except IndexError:
+        raise NotFoundReport()
 
     # Получение следующего элемента после текущего, у него получение первого ребенка, у которого вытаскивается текст
     name = next(current_user_tr.getnext().iterchildren()).text.strip()

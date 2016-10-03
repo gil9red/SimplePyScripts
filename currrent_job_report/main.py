@@ -27,7 +27,7 @@ TRAY_ICON = os.path.join(os.path.dirname(__file__), 'favicon.ico')
 
 import datetime
 
-from get_user_and_deviation_hours import get_user_and_deviation_hours
+from get_user_and_deviation_hours import get_user_and_deviation_hours, NotFoundReport
 
 
 from qtpy.QtWidgets import *
@@ -53,10 +53,14 @@ class CheckJobReportThread(QThread):
             today = datetime.datetime.today().strftime('%d/%m/%Y %H:%M:%S')
             print('Check for', today)
 
-            name, deviation_hours = get_user_and_deviation_hours()
+            try:
+                name, deviation_hours = get_user_and_deviation_hours()
 
-            ok = deviation_hours[0] != '-'
-            text = name + '\n' + ('Переработка' if ok else 'Недоработка') + ' ' + deviation_hours
+                ok = deviation_hours[0] != '-'
+                text = name + '\n' + ('Переработка' if ok else 'Недоработка') + ' ' + deviation_hours
+            except NotFoundReport:
+                ok = True
+                text = "Отчет на сегодня еще не готов."
 
             if self.last_text != text:
                 print('    ' + text.strip().replace('\n', ' ') + '\n')
