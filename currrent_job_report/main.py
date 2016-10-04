@@ -143,6 +143,7 @@ class JobReportWidget(QWidget):
 
 if __name__ == '__main__':
     app = QApplication([])
+    app.setQuitOnLastWindowClosed(False)
 
     tray = QSystemTrayIcon(QIcon(TRAY_ICON))
 
