@@ -141,6 +141,7 @@ class JobReportWidget(QWidget):
         painter.drawRect(self.rect())
 
 
+# TODO: Нарисовать график
 if __name__ == '__main__':
     app = QApplication([])
     app.setQuitOnLastWindowClosed(False)
