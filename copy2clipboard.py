@@ -8,7 +8,11 @@ import sys
 
 
 def to(text):
-    from PySide.QtGui import QApplication
+    try:
+        from PyQt4.QtGui import QApplication
+    except ImportError:
+        from PySide.QtGui import QApplication
+
     app = QApplication(sys.argv)
     app.clipboard().setText(text)
 
