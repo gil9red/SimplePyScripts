@@ -11,7 +11,10 @@ PASSWORD = '<PASSWORD>'
 if __name__ == '__main__':
     from robobrowser import RoboBrowser
 
-    browser = RoboBrowser(parser='lxml')
+    browser = RoboBrowser(
+        user_agent='Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0',
+        parser='lxml'
+    )
     browser.open('https://github.com/login')
 
     signup_form = browser.get_form()
