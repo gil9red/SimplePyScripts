@@ -4,6 +4,49 @@
 __author__ = 'ipetrash'
 
 
+LOGIN = '<LOGIN>'
+PASSWORD = '<PASSWORD>'
+
+
+import requests
+session = requests.Session()
+session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0'
+# session.headers['User-Agent'] = LOGIN
+
+# from requests.auth import HTTPBasicAuth
+# rs = requests.get('https://api.github.com/user', auth=HTTPBasicAuth(LOGIN, PASSWORD))
+# print(rs)
+
+# users = requests.get('https://api.github.com/users/richcollins', auth=('github_user', 'github_password'))
+
+rs = session.get('https://github.com')
+print(rs)
+
+rs = session.get('https://github.com/login')
+print(rs)
+
+from lxml import etree
+root = etree.HTML(rs.content)
+
+input_name_by_value = dict()
+for input_tag in root.xpath('//input'):
+    try:
+        input_name_by_value[input_tag.attrib['name']] = input_tag.attrib['value']
+    except KeyError:
+        pass
+
+input_name_by_value['login'] = LOGIN
+input_name_by_value['password'] = PASSWORD
+
+rs = session.post('https://github.com/session', data=input_name_by_value)
+print(rs)
+# print(rs.text)
+
+rs = session.get('https://github.com/gil9red/search_in_users_github_gists')
+print(rs)
+print(rs.text)
+
+quit()
 
 """Скрипт для эмуляции запроса поиска видео в vk"""
 
