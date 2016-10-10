@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
+
+# Указывает нужно ли выводить сообщения общения smtp сервера и
+# нашего скрипта при отправке писем
+debug_smtp = True
+debug_smtp = False
+
+username = "<username>"
+password = "<password>"
+
+smtp_server = "smtp.gmail.com"
+
+# email отправителя, т.е. наша почта
+sender = username
+
+# email, на которое нужно отправить письма с заказом меню
+to_email = '<to_email>'
+
+# Получатели копии письма
+to_cc_emails = [
+    # sender,
+]
+
+subject = 'Pyhton test'
+text = 'Pyhton test\Pyhton test\Pyhton test\Pyhton test'
+
+
+# typical values for text_subtype are plain, html, xml
+text_subtype = 'plain'
+
+from email.mime.text import MIMEText
+msg = MIMEText(text, text_subtype)
+msg['Subject'] = subject
+msg['From'] = sender
+msg['To'] = to_email
+msg['Cc'] = ', '.join(to_cc_emails)
+
+# # this invokes the secure SMTP protocol (port 465, uses SSL)
+from smtplib import SMTP_SSL as SMTP
+
+# use this for standard SMTP protocol   (port 25, no encryption)
+# from smtplib import SMTP
+
+with SMTP(smtp_server, 465) as smtp:
+    smtp.set_debuglevel(debug_smtp)
+    smtp.login(username, password)
+    smtp.send_message(msg)
