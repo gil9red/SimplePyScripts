@@ -15,7 +15,6 @@ user = 'gil9red'
 
 if __name__ == '__main__':
     from github import Github
-
     gh = Github(LOGIN, PASSWORD)
 
     # Словарь, у которого ключом является название репозитория, значением -- объект репозитория
