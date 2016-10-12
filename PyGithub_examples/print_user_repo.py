@@ -8,6 +8,16 @@ __author__ = 'ipetrash'
 LOGIN = None
 PASSWORD = None
 
+# http://user:password@proxy_host:proxy_port
+PROXY = None
+
+# http://user:password@proxy_host:proxy_port
+PROXY = None
+
+if PROXY:
+    import os
+    os.environ['http_proxy'] = PROXY
+
 # TODO: сделать версию с gui
 
 # Пользователь, чьи репозитории собираемся вывести в консоль
