@@ -5,9 +5,10 @@ __author__ = 'ipetrash'
 
 
 url = 'https://github.com/gil9red/search_in_users_github_gists.git'
-i = url.rfind('.git')
-if i != -1:
-    url = url[:i]
+# Если закончивается url на .git
+len_url = len(url)
+if '.git' == url[len_url - 4: len_url]:
+    url = url[:len_url - 4]
 
 import os
 
