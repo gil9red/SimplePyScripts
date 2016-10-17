@@ -15,6 +15,7 @@ import os
 rw_dir = 'my_git_repos'
 path = os.path.join(rw_dir, url.split('/')[-1])
 
+# pip install gitpython
 import git
 
 if os.path.exists(path):

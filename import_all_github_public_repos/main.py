@@ -87,6 +87,7 @@ def clone_repo(url, repos_dir, branch='master'):
     import os
     path = os.path.join(repos_dir, url.split('/')[-1])
 
+    # pip install gitpython
     import git
     if os.path.exists(path):
         repo = git.Repo(path)
