@@ -16,6 +16,36 @@ from config import *
 # TODO: если не указывать юзера при запросе репозиториев, но гитхаб выдаст репозитории, в которых
 #       участвовал юзер, например в группе, возможно, их тоже нужно импортировать
 
+# TODO: Ошибка:
+# Repository(full_name="gil9red/QRcodeGen") https://api.github.com/repos/gil9red/QRcodeGen
+# Traceback (most recent call last):
+#   File "C:/Users/ipetrash/Documents/GitHub/SimplePyScripts/import_all_github_public_repos/main.py", line 66, in <module>
+#     os.makedirs(REPOS_DIR)
+#   File "C:/Users/ipetrash/Documents/GitHub/SimplePyScripts/import_all_github_public_repos/main.py", line 45, in get_repo
+#
+#   File "C:\Users\ipetrash\AppData\Local\Continuum\Anaconda3\lib\site-packages\git\remote.py", line 762, in pull
+#     res = self._get_fetch_info_from_stderr(proc, progress)
+#   File "C:\Users\ipetrash\AppData\Local\Continuum\Anaconda3\lib\site-packages\git\remote.py", line 640, in _get_fetch_info_from_stderr
+#     finalize_process(proc, stderr=stderr_text)
+#   File "C:\Users\ipetrash\AppData\Local\Continuum\Anaconda3\lib\site-packages\git\util.py", line 155, in finalize_process
+#     proc.wait(**kwargs)
+#   File "C:\Users\ipetrash\AppData\Local\Continuum\Anaconda3\lib\site-packages\git\cmd.py", line 335, in wait
+#     raise GitCommandError(self.args, status, errstr)
+# git.exc.GitCommandError: 'git pull -v origin' returned with exit code 1
+# stderr: 'fatal: unable to access 'https://github.com/gil9red/QRcodeGen/': Received HTTP code 503 from proxy after CONNECT'
+
+# TODO: поддержка архивации всей папки: к названию папки просто добавить zip
+# TODO: поддержка импорта в дропбокс (хотя бы сохранение репозиториев в папку синхронизации дропбокса)
+# TODO: поддержка импорта в гугл-диск (можно просто архив кидать)
+#       импорт делать только при наличии изменений -- новые репозитории или изменение текущих
+#       удаление репозиториев на гитхабе не удаляет репозитории на диске
+# TODO: поддержка импорта в яндекс-диск
+# TODO: поддержка импорта в облако-мейл: https://cloud.mail.ru/home/
+
+# TODO: поддержка запароливания и шифрования репозиториев (особенно это касается приватных)
+# TODO: поддержка уведомления на почту при импортировании
+
+
 # TODO: дать более подходящее название
 def get_repo(url, repos_dir, branch='master'):
     # Если закончивается url на .git
