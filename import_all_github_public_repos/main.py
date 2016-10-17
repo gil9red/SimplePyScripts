@@ -54,21 +54,25 @@ from config import *
 # TODO: поддержка уведомления на почту при импортировании
 
 
-def get_repo_list(user=None, add_fork=False, add_private=False):
+def get_repo_list(login=None, password=None, user=None, add_fork=False, add_private=False):
     """Get repo list with filters."""
 
     repo_list = list()
+
+    from github import Github
+    gh = Github(login, password)
     for repo in gh.get_user(user).get_repos():
+        if repo.fork or repo.private:
+            # If fork repo
+            if repo.fork and add_fork:
+                repo_list.append(repo)
+
+            # If private repo
+            elif repo.private and add_private:
+                repo_list.append(repo)
+
         # If public repo (source repo)
-        if not repo.private and not repo.fork:
-            repo_list.append(repo)
-
-        # If fork repo
-        elif repo.fork and add_fork:
-            repo_list.append(repo)
-
-        # If private repo
-        elif repo.private and add_private:
+        else:
             repo_list.append(repo)
 
     return repo_list
@@ -111,9 +115,6 @@ if __name__ == '__main__':
         import os
         os.environ['http_proxy'] = PROXY
 
-    from github import Github
-    gh = Github(LOGIN, PASSWORD)
-
     from git.exc import GitCommandError
 
     # Пользователь, чьи репозитории собираемся импортировать
@@ -123,7 +124,7 @@ if __name__ == '__main__':
     if not os.path.exists(REPOS_DIR):
         os.makedirs(REPOS_DIR)
 
-    repo_list = get_repo_list(user)
+    repo_list = get_repo_list(LOGIN, PASSWORD, user)
     for i, repo in enumerate(repo_list, 1):
         print('{}. {}: {}'.format(i, repo, repo.url))
         try:
