@@ -127,6 +127,7 @@ if __name__ == '__main__':
 
     repo_list = get_repo_list(LOGIN, PASSWORD, user)
     for i, repo in enumerate(repo_list, 1):
+        # TODO: вывести размер репозитория с учетом .git и без
         print('{}. {}: {}'.format(i, repo, repo.url))
         try:
             clone_repo(repo.html_url, REPOS_DIR, repo.default_branch)
