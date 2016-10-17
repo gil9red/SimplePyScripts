@@ -33,6 +33,14 @@ from config import *
 #     raise GitCommandError(self.args, status, errstr)
 # git.exc.GitCommandError: 'git pull -v origin' returned with exit code 1
 # stderr: 'fatal: unable to access 'https://github.com/gil9red/QRcodeGen/': Received HTTP code 503 from proxy after CONNECT'
+#
+# 503 Service Unavailable — сервер временно не имеет возможности обрабатывать запросы по техническим причинам
+# (обслуживание, перегрузка и прочее). В поле Retry-After заголовка сервер может указать время, через которое клиенту
+# рекомендуется повторить запрос. Хотя во время перегрузки очевидным кажется сразу разрывать соединение, эффективней
+# может оказаться установка большого значения поля Retry-After для уменьшения частоты избыточных запросов. Появился
+# в HTTP/1.0.
+#
+# Проверить поле Retry-After
 
 # TODO: поддержка архивации всей папки: к названию папки просто добавить zip
 # TODO: поддержка импорта в дропбокс (хотя бы сохранение репозиториев в папку синхронизации дропбокса)
@@ -46,8 +54,27 @@ from config import *
 # TODO: поддержка уведомления на почту при импортировании
 
 
-# TODO: дать более подходящее название
-def get_repo(url, repos_dir, branch='master'):
+def get_repo_list(user=None, add_fork=False, add_private=False):
+    """Get repo list with filters."""
+
+    repo_list = list()
+    for repo in gh.get_user(user).get_repos():
+        # If public repo (source repo)
+        if not repo.private and not repo.fork:
+            repo_list.append(repo)
+
+        # If fork repo
+        elif repo.fork and add_fork:
+            repo_list.append(repo)
+
+        # If private repo
+        elif repo.private and add_private:
+            repo_list.append(repo)
+
+    return repo_list
+
+
+def clone_repo(url, repos_dir, branch='master'):
     # Если закончивается url на .git
     len_url = len(url)
     if '.git' == url[len_url - 4: len_url]:
@@ -87,6 +114,8 @@ if __name__ == '__main__':
     from github import Github
     gh = Github(LOGIN, PASSWORD)
 
+    from git.exc import GitCommandError
+
     # Пользователь, чьи репозитории собираемся импортировать
     user = 'gil9red'
 
@@ -94,7 +123,15 @@ if __name__ == '__main__':
     if not os.path.exists(REPOS_DIR):
         os.makedirs(REPOS_DIR)
 
-    # Только публичные репозитории (форки и приватные репозитории игнорируются)
-    for repo in filter(lambda repo: not repo.fork and not repo.private, gh.get_user(user).get_repos()):
-        print(repo, repo.url)
-        get_repo(repo.html_url, REPOS_DIR, repo.default_branch)
+    repo_list = get_repo_list(user)
+    for i, repo in enumerate(repo_list, 1):
+        print('{}. {}: {}'.format(i, repo, repo.url))
+        try:
+            clone_repo(repo.html_url, REPOS_DIR, repo.default_branch)
+
+        # TODO: обработка и timeout при ошибках
+        except GitCommandError as e:
+            print(e, e.status)
+            print(e.command)
+            import traceback
+            print(traceback.format_exc())
