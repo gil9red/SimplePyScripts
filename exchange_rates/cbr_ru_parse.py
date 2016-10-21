@@ -18,6 +18,9 @@ if __name__ == '__main__':
         parser='lxml'
     )
     browser.open(url)
+    if not browser.response.ok:
+        print(browser.response.status_code, browser.response.reason)
+        quit()
 
     for tr in browser.select('.data tr'):
         td_list = tr.select('td')
