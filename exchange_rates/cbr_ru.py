@@ -4,25 +4,33 @@
 __author__ = 'ipetrash'
 
 
-"""Парсер курса доллара и евро за текущую дату от сайта центробанка России."""
-
+# http://www.cbr.ru/scripts/XML_daily.asp
+# http://www.cbr.ru/scripts/XML_daily.asp?date_req=21.10.2016
 
 if __name__ == '__main__':
-    from datetime import date
-    date_req = date.today().strftime('%d.%m.%Y')
-    url = 'https://www.cbr.ru/currency_base/daily.aspx?date_req=' + date_req
+    # from datetime import date
+    # date_req = date.today().strftime('%d.%m.%Y')
+    # url = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=' + date_req
+    url = 'http://www.cbr.ru/scripts/XML_daily.asp'
 
-    from robobrowser import RoboBrowser
-    browser = RoboBrowser(
-        user_agent='Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0',
-        parser='lxml'
-    )
-    browser.open(url)
+    from urllib.request import urlopen
+    with urlopen(url) as f:
+        from lxml import etree
+        root = etree.XML(f.read())
 
-    for tr in browser.select('.data tr'):
-        td_list = tr.select('td')
-        if not td_list:
-            continue
-
-        if td_list[1].text in ['USD', 'EUR']:
-            print(td_list[1].text, td_list[4].text)
+        # 840 / 978
+        # <ValCurs Date="21.10.2016" name="Foreign Currency Market">
+        #     <Valute ID="R01010">
+        #         <NumCode>036</NumCode>
+        #         <CharCode>AUD</CharCode>
+        #         <Nominal>1</Nominal>
+        #         <Name>Австралийский доллар</Name>
+        #         <Value>47,8382</Value>
+        #     </Valute>
+        print(root.attrib['Date'])
+        for valute in root:
+            currency = valute.xpath('child::CharCode/text()')[0]
+            value = valute.xpath('child::Value/text()')[0]
+            print(currency)
+            if currency in ['840', '978']:
+                print(currency, value)
