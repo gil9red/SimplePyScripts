@@ -13,6 +13,9 @@ if __name__ == '__main__':
 
     url = 'http://www.duma.gov.ru/structure/deputies/?letter=%D0%92%D1%81%D0%B5&by=name&order=asc'
     browser.open(url)
+    if not browser.response.ok:
+        print(browser.response.status_code, browser.response.reason)
+        quit()
 
     from collections import defaultdict
     user_by_factions = defaultdict(list)
