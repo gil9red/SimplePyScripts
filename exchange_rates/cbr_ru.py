@@ -15,11 +15,11 @@ def exchange_rate(currency, date_req=None):
     # Example:
     # http://www.cbr.ru/scripts/XML_daily.asp
     # http://www.cbr.ru/scripts/XML_daily.asp?date_req=21.10.2016
-
+    from datetime import date
     if date_req is None:
-        from datetime import date, timedelta
         date_req = date.today()
-        date_req -= timedelta(days=1)
+
+    if isinstance(date_req, date):
         date_req = date_req.strftime('%d.%m.%Y')
 
     url = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=' + date_req
@@ -45,9 +45,29 @@ def exchange_rate(currency, date_req=None):
             value = valute.xpath('child::Value/text()')[0]
 
             if currency == ccy:
-                return float(value.replace(',', '.'))
+                return float(value.replace(',', '.')), root.attrib['Date']
+
+    return None, None
 
 
 if __name__ == '__main__':
     print('USD:', exchange_rate('USD'))
     print('EUR:', exchange_rate('EUR'))
+
+    from datetime import date, timedelta
+
+    date_req = date.today()
+    value, rate_date = exchange_rate('USD', date_req)
+    print('{}: USD: {}'.format(rate_date, value))
+
+    date_req = date.today() - timedelta(days=1)
+    value, rate_date = exchange_rate('USD', date_req)
+    print('{}: USD: {}'.format(rate_date, value))
+
+    date_req = date.today() + timedelta(days=1)
+    value, rate_date = exchange_rate('USD', date_req)
+    print('{}: USD: {}'.format(rate_date, value))
+
+    date_req = date.today() + timedelta(days=2)
+    value, rate_date = exchange_rate('USD', date_req)
+    print('{}: USD: {}'.format(rate_date, value))
