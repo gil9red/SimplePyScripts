@@ -4,28 +4,53 @@
 __author__ = 'ipetrash'
 
 
-from flask import Flask, Response, request
-app = Flask(__name__)
+# TODO: append logging
+
+import flask
+app = flask.Flask(__name__)
 app.debug = True
 
-from urllib.request import urlopen
+from urllib.request import urlopen, Request
 
 
 @app.route('/')
 def index():
-    url = request.args.get('url')
+    url = flask.request.args.get('url')
     print('URL:', url)
     if url is None:
-        return "Append url, please: {}?url=&lt;your_url&gt;".format(request.host_url)
+        return "Append url, please: {}?url=&lt;your_url&gt;".format(flask.request.host_url)
 
-    with urlopen(url) as f:
+    headers = dict()
+    headers['Origin'] = flask.request.host_url
+
+    request = Request(url, headers=headers)
+
+    with urlopen(request) as f:
         content = f.read()
+        print(content)
+
+        # Нужно узнать encoding, для этого вытаскиваем xml-декларацию, а из нее уже значение encoding
+        try:
+            s_index = content.find(b'<?')
+            e_index = content.find(b'?>')
+            if s_index != -1 and e_index != -1:
+                declaration = content[s_index: e_index + len(b'?>')].decode('utf-8')
+
+                import re
+                match = re.search(r'encoding="(.+)"', declaration)
+                if match:
+                    print(match.group(1))
+                    content = content.decode(match.group(1))
+
+        except Exception as e:
+            print(e)
+
         headers = dict(f.getheaders())
 
-        rs = Response(content)
+        rs = flask.Response(content)
         rs.headers.extend(headers)
         rs.headers['Access-Control-Allow-Origin'] = '*'
-
+        print(rs.headers)
         return rs
 
 
