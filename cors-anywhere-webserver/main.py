@@ -14,13 +14,12 @@ from urllib.request import urlopen
 @app.route('/')
 def index():
     url = request.args.get('url')
-    print(url)
+    print('URL:', url)
     if url is None:
-        return "Append url, please: http://127.0.0.1:5000/?=<your_url>"
+        return "Append url, please: {}?url=&lt;your_url&gt;".format(request.host_url)
 
     with urlopen(url) as f:
         content = f.read()
-        print(content)
         headers = dict(f.getheaders())
 
         rs = Response(content)
