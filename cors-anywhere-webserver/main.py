@@ -16,7 +16,7 @@ def index():
     url = request.args.get('url')
     print(url)
     if url is None:
-        return "Append url, please"
+        return "Append url, please: http://127.0.0.1:5000/?=<your_url>"
 
     with urlopen(url) as f:
         content = f.read()
