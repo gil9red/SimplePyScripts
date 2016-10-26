@@ -41,6 +41,41 @@ from config import *
 # в HTTP/1.0.
 #
 # Проверить поле Retry-After
+#
+# TODO: Ошибка
+# 21. Repository(full_name="gil9red/compress_image_fb2"): https://api.github.com/repos/gil9red/compress_image_fb2
+# Cmd('git') failed due to: exit code(128)
+#   cmdline: git reset --hard
+#   stderr: 'fatal: Unable to create 'C:/Users/ipetrash/Dropbox/my_git_repos/compress_image_fb2/.git/index.lock': File exists.
+#
+# Another git process seems to be running in this repository, e.g.
+# an editor opened by 'git commit'. Please make sure all processes
+# are terminated then try again. If it still fails, a git process
+# may have crashed in this repository earlier:
+# remove the file manually to continue.' 128
+# ['git', 'reset', '--hard']
+# Traceback (most recent call last):
+#   File "C:/Users/ipetrash/Projects/SimplePyScripts/import_all_github_public_repos/main.py", line 134, in <module>
+#     clone_repo(repo.html_url, REPOS_DIR, repo.default_branch)
+#   File "C:/Users/ipetrash/Projects/SimplePyScripts/import_all_github_public_repos/main.py", line 98, in clone_repo
+#     repo.git.reset('--hard')
+#   File "C:\Python35\lib\site-packages\git\cmd.py", line 403, in <lambda>
+#     return lambda *args, **kwargs: self._call_process(name, *args, **kwargs)
+#   File "C:\Python35\lib\site-packages\git\cmd.py", line 831, in _call_process
+#     return self.execute(call, **_kwargs)
+#   File "C:\Python35\lib\site-packages\git\cmd.py", line 652, in execute
+#     raise GitCommandError(command, status, stderr_value, stdout_value)
+# git.exc.GitCommandError: Cmd('git') failed due to: exit code(128)
+#   cmdline: git reset --hard
+#   stderr: 'fatal: Unable to create 'C:/Users/ipetrash/Dropbox/my_git_repos/compress_image_fb2/.git/index.lock': File exists.
+#
+# Another git process seems to be running in this repository, e.g.
+# an editor opened by 'git commit'. Please make sure all processes
+# are terminated then try again. If it still fails, a git process
+# may have crashed in this repository earlier:
+# remove the file manually to continue.'
+
+
 
 # TODO: поддержка архивации всей папки: к названию папки просто добавить zip
 # TODO: поддержка импорта в дропбокс (хотя бы сохранение репозиториев в папку синхронизации дропбокса)
@@ -125,16 +160,23 @@ if __name__ == '__main__':
     if not os.path.exists(REPOS_DIR):
         os.makedirs(REPOS_DIR)
 
-    repo_list = get_repo_list(LOGIN, PASSWORD, user)
-    for i, repo in enumerate(repo_list, 1):
-        # TODO: вывести размер репозитория с учетом .git и без
-        print('{}. {}: {}'.format(i, repo, repo.url))
-        try:
-            clone_repo(repo.html_url, REPOS_DIR, repo.default_branch)
+    # TODO: показывать только новые репозитории (локальные) или те, что было
+    # изменены, для измененных показывать количество новых коммитов
+    while True:
+        repo_list = get_repo_list(LOGIN, PASSWORD, user)
+        for i, repo in enumerate(repo_list, 1):
+            # TODO: вывести размер репозитория с учетом .git и без
+            print('{}. {}: {}'.format(i, repo, repo.url))
+            try:
+                clone_repo(repo.html_url, REPOS_DIR, repo.default_branch)
 
-        # TODO: обработка и timeout при ошибках
-        except GitCommandError as e:
-            print(e, e.status)
-            print(e.command)
-            import traceback
-            print(traceback.format_exc())
+            # TODO: обработка и timeout при ошибках
+            except GitCommandError as e:
+                print(e, e.status)
+                print(e.command)
+                import traceback
+                print(traceback.format_exc())
+
+        # Задержка на 24 часа
+        import time
+        time.sleep(60 * 60 * 24)
