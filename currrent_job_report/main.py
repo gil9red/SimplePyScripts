@@ -60,9 +60,15 @@ class CheckJobReportThread(QThread):
 
                 ok = deviation_hours[0] != '-'
                 text = name + '\n' + ('Переработка' if ok else 'Недоработка') + ' ' + deviation_hours
+
             except NotFoundReport:
                 ok = True
                 text = "Отчет на сегодня еще не готов."
+
+            except Exception as e:
+                self.about_log.emit("Error: " + str(e))
+                self.about_log.emit("Wait 60 secs")
+                time.sleep(60)
 
             if self.last_text != text:
                 self.last_text = text
