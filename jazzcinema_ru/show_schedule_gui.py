@@ -86,18 +86,19 @@ class Movie:
                     self.duration = value
 
 # Начало проката:
-# Окончание проката:
-# Страна:
-# Режиссёр:
-# В ролях:
-# Возрастные ограничения:
-# Продолжительность:
+#
+#
+#
+#
+#
+#
 
 
 class MovieInfoWidget(QWidget):
     def __init__(self):
         super().__init__()
 
+        # TODO: кликабельные ссылки
         self.browser = QTextBrowser()
 
         layout = QVBoxLayout()
@@ -114,7 +115,29 @@ class MovieInfoWidget(QWidget):
     </head>
 
     <body>
-        {0.title}
+        <table>
+            <tr>
+                <td><img src="{0.img_url}"/></td>
+                <td>
+                    <a href="{0.movie_url}">{0.title}</a>
+                    <br>
+
+                    <table>
+                        <tr><td>Начало проката:</td><td>{0.}</td></tr>
+                        <tr><td>Окончание проката:</td><td>{0.}</td></tr>
+                        <tr><td>Жанр:</td><td>{0.}</td></tr>
+                        <tr><td>Страна:</td><td>{0.}</td></tr>
+                        <tr><td>Режиссёр:</td><td>{0.}</td></tr>
+                        <tr><td>В ролях:</td><td>{0.}</td></tr>
+                        <tr><td>Возрастные ограничения:</td><td>{0.}</td></tr>
+                        <tr><td>Продолжительность:</td><td>{0.}</td></tr>
+                        <tr><td></td></tr>
+
+                        <tr><td></td></tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
     </body>
 </html>
         """.format(movie)
@@ -191,8 +214,22 @@ class MainWindow(QMainWindow):
 if __name__ == '__main__':
     app = QApplication([])
 
-    mw = MainWindow()
-    mw.show()
-    mw.load()
+    movie = None
+    with urlopen(URL) as f:
+        root = BeautifulSoup(f.read(), 'lxml')
+
+        # Список расписаний
+        schedule = root.select('.schedule')[0]
+
+        border = schedule.select('.border')[0]
+        movie = Movie(border)
+
+    movie_info = MovieInfoWidget()
+    movie_info.show()
+    movie_info.set_movie(movie)
+
+    # mw = MainWindow()
+    # mw.show()
+    # mw.load()
 
     app.exec()
