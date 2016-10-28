@@ -37,13 +37,13 @@ if __name__ == '__main__':
                 for border in schedule.select('.border'):
                     a = border.select_one('.movie .title > a')
                     url = urljoin(url, a['href'])
-                    print(a['title'], url)
-                    print('   ', border.select_one('.genre').text)
+                    print('    "{}": {}'.format(a['title'], url))
+                    print('        {}'.format(border.select_one('.genre').text))
 
                     for seanse in border.select('.seanses'):
                         time = seanse.select_one('a').text
                         price = seanse.select_one('.price').text
-                        print('    {} : {}'.format(time, price))
+                        print('        {} : {}'.format(time, price))
 
                     print()
 
