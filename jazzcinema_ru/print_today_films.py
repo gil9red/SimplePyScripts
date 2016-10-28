@@ -29,18 +29,19 @@ if __name__ == '__main__':
             schedule_date = datetime.strptime(schedule['rel'], 'calendar-%Y-%m-%d-schedule').date()
             schedule_date_str = schedule_date.strftime('%d/%m/%Y')
 
-            if schedule_date == today:
+            border_list = schedule.select('.border')
+            if schedule_date == today and border_list:
                 today_found = True
                 print('Расписание фильмов на сегодня {}:'.format(schedule_date_str))
 
                 # Получение фильмов в текущей вкладке (по идеи, текущая вкладка -- текущий день)
-                for border in schedule.select('.border'):
+                for border in border_list:
                     a = border.select_one('.movie .title > a')
                     url = urljoin(url, a['href'])
                     print('    "{}": {}'.format(a['title'], url))
                     print('        {}'.format(border.select_one('.genre').text))
 
-                    for seanse in border.select('.seanses'):
+                    for seanse in border.select('.seanses li'):
                         time = seanse.select_one('a').text
                         price = seanse.select_one('.price').text
                         print('        {} : {}'.format(time, price))

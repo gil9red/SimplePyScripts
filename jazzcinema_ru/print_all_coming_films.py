@@ -40,7 +40,7 @@ if __name__ == '__main__':
                 if genre:
                     print('        {}'.format(genre.text))
 
-                for seanse in border.select('.seanses'):
+                for seanse in border.select('.seanses li'):
                     time = seanse.select_one('a').text
                     price = seanse.select_one('.price').text
                     print('        {} : {}'.format(time, price))
