@@ -93,8 +93,9 @@ class MovieInfoWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        # TODO: кликабельные ссылки
+        # TODO: можно и видео добавить
         self.browser = QTextBrowser()
+        self.browser.setOpenExternalLinks(True)
 
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
@@ -140,7 +141,7 @@ class MovieInfoWidget(QWidget):
                         <tr><td>Жанр:</td><td>{0.genre}</td></tr>
                         <tr><td>Страна:</td><td>{0.country}</td></tr>
                         <tr><td>Режиссёр:</td><td>{0.producer}</td></tr>
-                        <tr><td>В ролях:</td><td>{0.actors}</td></tr>
+                        <tr><td>В ролях:</td><td colspan="3">{0.actors}</td></tr>
                         <tr><td>Возрастные ограничения:</td><td>{0.age_restrictions}</td></tr>
                         <tr><td>Продолжительность:</td><td>{0.duration}</td></tr>
                         <tr><td colspan="4">Аннотация:<br>{0.annotation}</td></tr>
