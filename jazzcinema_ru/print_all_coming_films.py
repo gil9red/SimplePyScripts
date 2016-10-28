@@ -18,7 +18,7 @@ if __name__ == '__main__':
     with urlopen(url) as f:
         root = BeautifulSoup(f.read(), 'lxml')
 
-        # Список расписаний, первый в списке -- текущий день
+        # Список расписаний
         schedule_list = root.select('.schedule')
 
         for schedule in schedule_list:
