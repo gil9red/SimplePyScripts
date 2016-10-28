@@ -85,4 +85,7 @@ if __name__ == '__main__':
             # record["Code"]
             print('{}. {}: {}'.format(i, record["Date"], record.findChild("Buy").text))
 
-        gen_plot(dates, prices, "Стоимость грамма золота в рублях")
+        metall = root.findChild('Metall')
+        from_date = datetime.strptime(metall['FromDate'], '%Y%m%d').strftime('%d.%m.%Y')
+        to_date = datetime.strptime(metall['ToDate'], '%Y%m%d').strftime('%d.%m.%Y')
+        gen_plot(dates, prices, "Стоимость грамма золота в рублях за {} - {}".format(from_date, to_date))
