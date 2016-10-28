@@ -203,7 +203,7 @@ class MainWindow(QMainWindow):
         self.tab_widget = QTabWidget()
 
         layout = QVBoxLayout()
-        layout.addWidget(QLabel('Расписание фильмов за:'))
+        layout.addWidget(QLabel('Расписание фильмов на:'))
         layout.addWidget(self.tab_widget)
 
         widget = QWidget()
