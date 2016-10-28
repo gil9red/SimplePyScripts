@@ -33,7 +33,7 @@ import sys
 sys.excepthook = log_uncaught_exceptions
 
 
-URL = 'http://www.jazzcinema.ru/'
+URL = 'http://www.jazzcinema.ru/schedule/'
 
 
 class Movie:
@@ -43,17 +43,19 @@ class Movie:
 
         self.title = a['title']
 
-        genre = border.select_one('.genre')
-        if genre:
-            self.genre = genre.text
+        self.genre = border.select_one('.genre')
+        if self.genre:
+            self.genre = self.genre.text
 
         self.seanses = OrderedDict()
-        for seanse in border.select('.seanses'):
+        for seanse in border.select('.seanses li'):
             time = seanse.select_one('a').text
             price = seanse.select_one('.price').text
             self.seanses[time] = price
 
         movie_info = border.next_sibling
+
+        self.annotation = movie_info.select_one('.text').text.strip()
 
         img_url = movie_info.select_one('.poster img')["src"]
         self.img_url = urljoin(URL, img_url)
@@ -66,6 +68,7 @@ class Movie:
         self.producer = None
         self.actors = None
         self.duration = None
+        self.age_restrictions = movie_info.select_one('.text.age-count').text.strip()
 
         for td in movie_info.select('table td'):
             key = td.text.strip()
@@ -85,14 +88,6 @@ class Movie:
                 elif 'Продолжительность:' == key:
                     self.duration = value
 
-# Начало проката:
-#
-#
-#
-#
-#
-#
-
 
 class MovieInfoWidget(QWidget):
     def __init__(self):
@@ -108,6 +103,23 @@ class MovieInfoWidget(QWidget):
         self.setLayout(layout)
 
     def set_movie(self, movie):
+        data = dict()
+
+        # Скачивание обложки и получени base64
+        with urlopen(movie.img_url) as f:
+            import base64
+            img_base64 = base64.standard_b64encode(f.read()).decode('utf-8')
+            data["img_url"] = "data:image/png;base64," + img_base64
+
+        seanses_table = '<table>'
+
+        for time, price in movie.seanses.items():
+            seanses_table += "<tr><td>{}&nbsp;&nbsp;&nbsp;&nbsp;</td><td>{}</td></tr>".format(time, price)
+
+        seanses_table += "</table>"
+
+        data["seanses_table"] = seanses_table
+
         html = """
 <html>
     <head>
@@ -115,33 +127,37 @@ class MovieInfoWidget(QWidget):
     </head>
 
     <body>
-        <table>
+        <table cellpadding="10">
             <tr>
-                <td><img src="{0.img_url}"/></td>
+                <td><img src="{img_url}"/></td>
                 <td>
                     <a href="{0.movie_url}">{0.title}</a>
                     <br>
 
                     <table>
-                        <tr><td>Начало проката:</td><td>{0.}</td></tr>
-                        <tr><td>Окончание проката:</td><td>{0.}</td></tr>
-                        <tr><td>Жанр:</td><td>{0.}</td></tr>
-                        <tr><td>Страна:</td><td>{0.}</td></tr>
-                        <tr><td>Режиссёр:</td><td>{0.}</td></tr>
-                        <tr><td>В ролях:</td><td>{0.}</td></tr>
-                        <tr><td>Возрастные ограничения:</td><td>{0.}</td></tr>
-                        <tr><td>Продолжительность:</td><td>{0.}</td></tr>
-                        <tr><td></td></tr>
+                        <tr><td>Начало проката:</td><td>{0.start_rentals}</td></tr>
+                        <tr><td>Окончание проката:</td><td>{0.end_rentals}</td></tr>
+                        <tr><td>Жанр:</td><td>{0.genre}</td></tr>
+                        <tr><td>Страна:</td><td>{0.country}</td></tr>
+                        <tr><td>Режиссёр:</td><td>{0.producer}</td></tr>
+                        <tr><td>В ролях:</td><td>{0.actors}</td></tr>
+                        <tr><td>Возрастные ограничения:</td><td>{0.age_restrictions}</td></tr>
+                        <tr><td>Продолжительность:</td><td>{0.duration}</td></tr>
+                        <tr><td colspan="4">Аннотация:<br>{0.annotation}</td></tr>
+                        <tr></tr>
 
-                        <tr><td></td></tr>
+                        <tr>
+                            <td colspan="2">Сеансы:
+                            {seanses_table}
+                            </td>
+                        </tr>
                     </table>
                 </td>
             </tr>
         </table>
     </body>
 </html>
-        """.format(movie)
-        print(html)
+        """.format(movie, **data)
 
         self.browser.setHtml(html)
 
@@ -214,22 +230,24 @@ class MainWindow(QMainWindow):
 if __name__ == '__main__':
     app = QApplication([])
 
-    movie = None
-    with urlopen(URL) as f:
-        root = BeautifulSoup(f.read(), 'lxml')
+    # movie = None
+    # with urlopen(URL) as f:
+    #     root = BeautifulSoup(f.read(), 'lxml')
+    #
+    #     # Список расписаний
+    #     schedule = root.select('.schedule')[1]
+    #     print(schedule)
+    #
+    #     border = schedule.select('.border')[0]
+    #     movie = Movie(border)
+    #
+    # movie_info = MovieInfoWidget()
+    # movie_info.show()
+    # movie_info.set_movie(movie)
 
-        # Список расписаний
-        schedule = root.select('.schedule')[0]
-
-        border = schedule.select('.border')[0]
-        movie = Movie(border)
-
-    movie_info = MovieInfoWidget()
-    movie_info.show()
-    movie_info.set_movie(movie)
-
-    # mw = MainWindow()
-    # mw.show()
-    # mw.load()
+    mw = MainWindow()
+    mw.resize(900, 500)
+    mw.show()
+    mw.load()
 
     app.exec()
