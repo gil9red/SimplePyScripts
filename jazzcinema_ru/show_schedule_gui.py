@@ -7,9 +7,31 @@ __author__ = 'ipetrash'
 from urllib.parse import urljoin
 from urllib.request import urlopen
 
+from datetime import datetime
+
 from collections import OrderedDict
 
 from bs4 import BeautifulSoup
+
+from qtpy.QtWidgets import *
+from qtpy.QtGui import *
+from qtpy.QtCore import *
+
+
+def log_uncaught_exceptions(ex_cls, ex, tb):
+    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+
+    import traceback
+    text += ''.join(traceback.format_tb(tb))
+
+    import logging
+    logging.critical(text)
+    QMessageBox.critical(None, 'Error', text)
+    quit()
+
+import sys
+sys.excepthook = log_uncaught_exceptions
+
 
 URL = 'http://www.jazzcinema.ru/'
 
@@ -72,25 +94,105 @@ class Movie:
 # Продолжительность:
 
 
+class MovieInfoWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.browser = QTextBrowser()
+
+        layout = QVBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(self.browser)
+
+        self.setLayout(layout)
+
+    def set_movie(self, movie):
+        html = """
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>
+
+    <body>
+        {0.title}
+    </body>
+</html>
+        """.format(movie)
+        print(html)
+
+        self.browser.setHtml(html)
+
+
+class SchedulerMoviePage(QWidget):
+    def __init__(self, schedule):
+        super().__init__()
+
+        self.schedule_date_str = datetime.strptime(schedule['rel'], 'calendar-%Y-%m-%d-schedule').strftime('%d/%m/%Y')
+
+        self.movie_list_widget = QListWidget()
+        self.movie_list_widget.currentItemChanged.connect(lambda current, previous:
+                                                          self.movie_info.set_movie(current.data(Qt.UserRole)))
+
+        self.movie_info = MovieInfoWidget()
+
+        splitter = QSplitter(Qt.Horizontal)
+        splitter.addWidget(self.movie_list_widget)
+        splitter.addWidget(self.movie_info)
+
+        layout = QVBoxLayout()
+        layout.addWidget(splitter)
+        self.setLayout(layout)
+
+        # Получение фильмов в текущей вкладке (по идеи, текущая вкладка -- текущий день)
+        for border in schedule.select('.border'):
+            movie = Movie(border)
+
+            item = QListWidgetItem(movie.title)
+            item.setData(Qt.UserRole, movie)
+            self.movie_list_widget.addItem(item)
+
+        self.movie_list_widget.setCurrentRow(0)
+
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle('show_schedule_gui.py')
+
+        self.tab_widget = QTabWidget()
+
+        layout = QVBoxLayout()
+        layout.addWidget(QLabel('Расписание фильмов за:'))
+        layout.addWidget(self.tab_widget)
+
+        widget = QWidget()
+        widget.setLayout(layout)
+
+        self.setCentralWidget(widget)
+
+    def load(self):
+        with urlopen(URL) as f:
+            root = BeautifulSoup(f.read(), 'lxml')
+
+            # Список расписаний
+            schedule_list = root.select('.schedule')
+
+            # Проходим по списку расписаний
+            for schedule in schedule_list:
+                # Если фильмов нет
+                if not schedule.select('.border'):
+                    continue
+
+                tab = SchedulerMoviePage(schedule)
+                self.tab_widget.addTab(tab, tab.schedule_date_str)
+
+
 if __name__ == '__main__':
-    with urlopen(URL) as f:
-        root = BeautifulSoup(f.read(), 'lxml')
+    app = QApplication([])
 
-        # Список расписаний
-        schedule_list = root.select('.schedule')
+    mw = MainWindow()
+    mw.show()
+    mw.load()
 
-        from datetime import datetime, date
-        today = date.today()
-
-        today_found = False
-
-        # Проходим по списку и ищем расписание на текущую дату
-        for schedule in schedule_list:
-            schedule_date = datetime.strptime(schedule['rel'], 'calendar-%Y-%m-%d-schedule').date()
-            schedule_date_str = schedule_date.strftime('%d/%m/%Y')
-
-            # Получение фильмов в текущей вкладке (по идеи, текущая вкладка -- текущий день)
-            for border in schedule.select('.border'):
-                movie = Movie(border)
-                print(movie.title)
-                quit()
+    app.exec()
