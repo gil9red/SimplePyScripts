@@ -67,7 +67,6 @@ if __name__ == '__main__':
     url = 'http://readmanga.me/one__piece/vol60/591'
 
     try:
-        url = 'http://readmanga.me/one__piece/vol60/591'
         urls = get_url_images(url)
         print('Urls:', urls)
         print('Всего картинок:', len(urls))
