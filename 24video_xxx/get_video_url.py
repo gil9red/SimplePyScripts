@@ -19,8 +19,6 @@ def get_video_url_from_24video_xxx(url):
         if match:
             return match[0]
 
-    return ""
-
 
 if __name__ == '__main__':
     url = 'http://www.24video.xxx/video/view/2249418'
