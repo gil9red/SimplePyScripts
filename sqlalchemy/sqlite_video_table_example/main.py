@@ -67,6 +67,12 @@ class SerialVideo(Base):
 
 
 if __name__ == '__main__':
+    # http://docs.sqlalchemy.org/en/latest/orm/basic_relationships.html
+    # http://docs.sqlalchemy.org/en/latest/orm/relationship_api.html
+    # http://lectureswww.readthedocs.io/6.www.sync/2.codding/9.databases/2.sqlalchemy/3.orm.html
+    # https://bitbucket.org/zzzeek/pycon2013_student_package/src/a5b84d0659cbf1df11766fbbdc215dbe32be8044/04_orm.py?at=master&fileviewer=file-view-default#cl-313
+    # http://docs.sqlalchemy.org/en/latest/orm/cascades.html#unitofwork-cascades
+
     # DEBUG = True
     DEBUG = False
 
