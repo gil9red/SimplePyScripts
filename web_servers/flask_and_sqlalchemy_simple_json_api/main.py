@@ -7,6 +7,9 @@ __author__ = 'ipetrash'
 from flask import Flask, request, render_template_string, render_template
 app = Flask(__name__)
 
+import api
+
+
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
