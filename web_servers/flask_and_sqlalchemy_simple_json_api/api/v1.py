@@ -8,9 +8,13 @@ def search():
     pass
 
 
-def get():
+def get_serial():
     pass
 
 
-def add():
+def get_serial_video_list():
+    pass
+
+
+def add_serial():
     pass

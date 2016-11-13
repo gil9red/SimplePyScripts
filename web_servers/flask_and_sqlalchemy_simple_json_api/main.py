@@ -19,20 +19,34 @@ def index():
     return render_template_string("Hello")
 
 
-@app.route("/api/v1/get")
-def api_v1_get():
-    _id = request.args.get('id', None)
-    return "id='{}', '{}'".format(_id)
-
-
 @app.route("/api/v1/search")
 def api_v1_search():
+    # api.v1.search
+
     _id = request.args.get('id', None)
     return "id='{}', '{}'".format(_id)
 
 
-@app.route("/api/v1/post", methods=['GET', 'POST'])
-def api_v1_post():
+@app.route("/api/v1/get_serial")
+def api_v1_get_serial():
+    # api.v1.get_serial
+
+    _id = request.args.get('id', None)
+    return "id='{}', '{}'".format(_id)
+
+
+@app.route("/api/v1/get_serial_video_list")
+def api_v1_get_get_serial_video_list():
+    # api.v1.get_serial_video_list
+
+    _id = request.args.get('id', None)
+    return "id='{}', '{}'".format(_id)
+
+
+@app.route("/api/v1/add_serial", methods=['GET', 'POST'])
+def api_v1_add():
+    # api.v1.add_serial
+
     _id = request.args.get('id', None)
     return "id='{}', '{}'".format(_id)
 
