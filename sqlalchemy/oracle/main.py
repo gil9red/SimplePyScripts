@@ -14,8 +14,8 @@ if __name__ == '__main__':
     PORT = '1521'
     SERVICE_NAME = 'SERVICE_NAME'
 
-    # Example: 'oracle://scott:123/@localhost:1521/myservicename
-    DB_URL = 'oracle://{}:{}/@{}:{}/{}'.format(USER, PASS, HOST, PORT, SERVICE_NAME)
+    # Example: 'oracle://scott:123@localhost:1521/myservicename
+    DB_URL = 'oracle://{}:{}@{}:{}/{}'.format(USER, PASS, HOST, PORT, SERVICE_NAME)
 
     import sqlalchemy
     engine = sqlalchemy.create_engine(DB_URL, echo=True)
