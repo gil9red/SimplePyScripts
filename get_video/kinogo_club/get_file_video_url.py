@@ -50,8 +50,9 @@ def DecodeUppod_tr(data, ch1, ch2):
     return data
 
 
-# secret_word случайно вставляется base64_data
-def decode_file_url(base64_data, secret_word):
+def decode_file_url(base64_data):
+    # secret_word случайно вставляется base64_data, портя его
+    secret_word = 'tQ3N'
     file_url = DecodeUppodTextHash(base64_data.replace(secret_word, ''))
     return file_url.decode('utf-8')
 
@@ -81,7 +82,7 @@ def get_file_video_url(url):
     if match is None:
         return
 
-    return decode_file_url(match.group(1), 'tQ3N')
+    return decode_file_url(match.group(1))
 
 
 if __name__ == '__main__':
