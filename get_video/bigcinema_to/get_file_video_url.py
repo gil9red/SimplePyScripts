@@ -18,15 +18,50 @@ def decode_base64_bigcinema_to(base64_data):
         base64_data = base64_data.replace(a, b)
         base64_data = base64_data.replace('___', a)
 
-    # secret_word случайно вставляется base64_data, портя его
-    secret_word = 'NTkyMQ=='
-    base64_data = base64_data.replace(secret_word, '')
+    # secret_words случайно вставляется base64_data, портя его
+    # NOTE: Похоже, секретные слова меняются и похоже у них одинаковый шаблон.
+    secret_words = ['NTkyMQ==', 'NTgwNA==']
+
+    for word in secret_words:
+        base64_data = base64_data.replace(word, '')
 
     import base64
     data = base64.standard_b64decode(base64_data)
     return data.decode('utf-8')
 
 
-print(decode_base64_bigcinema_to('RWaQBfmU4GZYkoNGRGJZtT3jtGQU62yQt2vUv5NTeQy3Bo3yaFNISyslafAltIFrM76LiZajJv3v07hORogp0JiZle0EEv324GnU6oyyBlwLOf=8JizYt7AQ'))
-print(decode_base64_bigcinema_to('RWaQBfmU4GZYkoNGRGJZtT3jtGQU62yQtJiZle0EE2vUM7kKHo9=Blnb0ikSvfkOknz8RWubR76LiZajJv3v0icJMZQI0v324GnU6oyyBlw5Jiu5OiZYt7AQ'))
-print(decode_base64_bigcinema_to('RWaQBfmU4GZYkoNGRGJZtT3jtGQU62yQt2vU0iNdS5yHOWJHkWk2RFNz6Q9R0IcYM76LiZajJv3v0icPa==I0v324GnU6oyyBlwpefJiZle0EEA5Jizp4on8JAEE'))
+# Нужно вытащить значение из file
+# var flashvals = {
+#     uid:            player_id,
+#     st:"http://bigcinema.to/templates/framework/swf/default_middle.txt?v=8",
+#                     file:"RWaQBfmU4GZYkoNGRGJZtT3jtGQU6 ... JAEEJJ926d0v324GnU6oyyBlwLOf=8JizYt7AQ"
+#
+# };
+import re
+get_file_data_from_flashvals_pattern = re.compile(r"""file *?: *?['"](.+?)['"]""")
+
+
+def get_file_video_url(url):
+    import requests
+    rs = requests.get(url)
+    if not rs.ok:
+        return
+
+    # Значений может быть несколько. И я не разобрался чем отличаются ссылки в file друг от друга,
+    # поэтому берем первый попавшийся
+    match = get_file_data_from_flashvals_pattern.search(rs.text)
+    if match is None:
+        return
+
+    return decode_base64_bigcinema_to(match.group(1))
+
+
+if __name__ == '__main__':
+    url = 'http://bigcinema.to/movie/menya-zovut-dzhig-robot-lo-chiamavano-jeeg-robot.html'
+    print(get_file_video_url(url))
+
+    url = 'http://bigcinema.to/movie/pit-i-ego-drakon-petes-dragon.html'
+    print(get_file_video_url(url))
+
+    url = 'http://bigcinema.to/movie/bokser-marionetka-cardboard-boxer.html'
+    print(get_file_video_url(url))
