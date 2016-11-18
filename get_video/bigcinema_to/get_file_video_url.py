@@ -20,6 +20,7 @@ def decode_base64_bigcinema_to(base64_data):
 
     # secret_words случайно вставляется base64_data, портя его
     # NOTE: Похоже, секретные слова меняются и похоже у них одинаковый шаблон.
+    # TODO: Поиграться, и если нужно написать регулярку, которая удалит секретное слово
     secret_words = ['NTkyMQ==', 'NTgwNA==']
 
     for word in secret_words:
