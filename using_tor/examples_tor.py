@@ -23,7 +23,7 @@
 # # from sockshandler import SocksiPyHandler
 # #
 # # # All requests made by the opener will pass through the SOCKS proxy
-# # opener = build_opener(SocksiPyHandler(socks.PROXY_TYPE_SOCKS5, "127.0.0.1", 9150))
+# # opener = build_opener(SocksiPyHandler(socks.PROXY_TYPE_SOCKS5, "127.0.0.1", 9050))
 # # print(opener.open('http://httpbin.org/ip'))
 #
 #
@@ -48,13 +48,13 @@
 # # import socket
 # import requests
 # #
-# # socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, "localhost", 9150)
+# # socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, "localhost", 9050)
 # # socket.socket = socks.socksocket
 #
 # from SocksiPy import socks
 # # import socks
 # s = socks.socksocket()
-# s.setproxy(socks.PROXY_TYPE_SOCKS5,"localhost", 9150)
+# s.setproxy(socks.PROXY_TYPE_SOCKS5,"localhost", 9050)
 # # s.connect(('icanhazip.com', 80))
 # s.connect(("www.sourceforge.net",80))
 #
@@ -102,7 +102,7 @@ app = QApplication(sys.argv)
 proxy = QNetworkProxy()
 proxy.setType(QNetworkProxy.Socks5Proxy)
 proxy.setHostName("localhost")
-proxy.setPort(9150)
+proxy.setPort(9050)
 QNetworkProxy.setApplicationProxy(proxy)
 
 view = QWebView()
