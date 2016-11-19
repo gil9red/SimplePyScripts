@@ -9,6 +9,15 @@ __author__ = 'ipetrash'
 # И в него добавляется содержимое:
 # NewCircuitPeriod 5
 # MaxCircuitDirtiness 10
+#
+# NewCircuitPeriod 5
+# MaxCircuitDirtiness 10
+#
+# SOCKSPort 9050
+# SOCKSPort 9051
+# SOCKSPort 9052
+# SOCKSPort 9053
+
 
 # pip install -U requests[socks]
 import requests
