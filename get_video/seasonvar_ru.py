@@ -6,13 +6,10 @@ __author__ = 'ipetrash'
 
 import re
 
-# Регулярка для поиска последовательностей пробелов: от двух подряд и более
-multi_space_pattern = re.compile(r'[ ]{2,}')
-
-# Регулярка для вытаскивания id сериала
+# Регулярка для вытаскивания id сериала из url
 serial_id_from_url_pattern = re.compile(r'https?://seasonvar\.ru/serial-(\d+?)-')
 
-# Регулярка для вытаскивания id сериала
+# Регулярка для вытаскивания секретного случайного кода
 secure_mark_pattern = re.compile(r'var secureMark = "(.*)";')
 
 
