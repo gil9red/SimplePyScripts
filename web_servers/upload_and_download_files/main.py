@@ -56,7 +56,7 @@ def upload_file():
 
 # Пример обработчика, возвращающий файлы из папки app.config['UPLOAD_FOLDER'] для путей uploads и files.
 # т.е. не нужно давать специальное название, чтобы получить файл в flask
-@app.route('/uploads/<filename>')
+# @app.route('/uploads/<filename>')
 @app.route('/files/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
@@ -64,4 +64,5 @@ def uploaded_file(filename):
 
 if __name__ == '__main__':
     # Localhost
-    app.run()
+    # Включение поддержки множества подключений
+    app.run(threaded=True)
