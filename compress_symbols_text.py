@@ -17,7 +17,7 @@ def compress(text):
 
     import itertools
     for char, same in itertools.groupby(text):
-        count = sum(1 for _ in same)  # number of repetitions
+        count = len(tuple(same))  # number of repetitions
         chars.append(char if count == 1 else str(count) + char)
 
     return ''.join(chars)
