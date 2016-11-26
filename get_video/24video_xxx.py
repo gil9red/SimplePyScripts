@@ -13,8 +13,8 @@ def get_video_url_from_24video_xxx(url):
     video_id = url.split('/')[-1]
     xml_info_url = 'http://www.24video.xxx/video/xml/{}?mode=play'.format(video_id)
 
-    with urlopen(xml_info_url) as f:
-        root = etree.XML(f.read())
+    with urlopen(xml_info_url) as rs:
+        root = etree.XML(rs.read())
         match = root.xpath('//video/@url')
         if match:
             return match[0]
