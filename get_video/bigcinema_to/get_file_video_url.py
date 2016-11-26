@@ -19,14 +19,20 @@ def decode_base64_bigcinema_to(base64_data):
         base64_data = base64_data.replace('___', a)
 
     # secret_words случайно вставляется base64_data, портя его
-    # NOTE: Похоже, секретные слова меняются и похоже у них одинаковый шаблон.
+    # У bigcinema.to секретное слово меняется
     # TODO: Поиграться, и если нужно написать регулярку, которая удалит секретное слово
     # NTgwNA== -> 5804
     # NTkyMQ== -> 5921
-    secret_words = ['NTkyMQ==', 'NTgwNA==']
+    # NzgwOA== -> 7808
 
-    for word in secret_words:
-        base64_data = base64_data.replace(word, '')
+    # Секретные слова очень похожие, и можно попытаться регуляркой их заменять
+    import re
+    # base64_data = re.sub(r'N.{,5}==', '', base64_data)
+
+    # Или, попытаемся вырезать подстроки, оканчивающиеся на ==
+    # Я заметил, что перед == всегда идут 6 символов, и по этому признаку
+    # будем удалять такую строку
+    base64_data = re.sub(r'.{,6}==', '', base64_data, count=1)
 
     import base64
     data = base64.standard_b64decode(base64_data)
@@ -41,7 +47,7 @@ def decode_base64_bigcinema_to(base64_data):
 #
 # };
 import re
-get_file_data_from_flashvals_pattern = re.compile(r"""file *?: *?['"](.+?)['"]""")
+GET_FILE_DATA_FROM_FLASHVALS_PATTERN = re.compile(r"""file *?: *?['"](.+?)['"]""")
 
 
 def get_file_video_url(url):
@@ -52,7 +58,7 @@ def get_file_video_url(url):
 
     # Значений может быть несколько. И я не разобрался чем отличаются ссылки в file друг от друга,
     # поэтому берем первый попавшийся
-    match = get_file_data_from_flashvals_pattern.search(rs.text)
+    match = GET_FILE_DATA_FROM_FLASHVALS_PATTERN.search(rs.text)
     if match is None:
         return
 
