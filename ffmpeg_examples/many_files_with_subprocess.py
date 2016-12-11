@@ -18,12 +18,12 @@ videos = [
 ]
 
 
-DIRECTORY = 'extracted_images2'
+DIRECTORY = 'extracted_images'
 import os
 if not os.path.exists(DIRECTORY):
     os.mkdir(DIRECTORY)
 
-COMMAND_PATTERN = 'ffmpeg -i "{file_name}" -r 1 -ss 01:30:00 -t 1 -f image2 "{directory}/{file_name}_%05d.{ext}"'
+COMMAND_PATTERN = 'ffmpeg -ss 01:30:00 -t 1 -r 1 -i "{file_name}" -f image2 "{directory}/{file_name}_%05d.{ext}"'
 
 process_list = list()
 
