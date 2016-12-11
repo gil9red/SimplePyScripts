@@ -6,6 +6,8 @@ __author__ = 'ipetrash'
 
 """Запуск нескольких процессов ffmpeg и ожидание пока все они завершатся."""
 
+# Чтобы убить все процессы ffmpeg в винде: Taskkill /F /IM ffmpeg.exe
+
 
 videos = [
     'Горит от чатика - Dark Souls #1 176x144.3gp',
