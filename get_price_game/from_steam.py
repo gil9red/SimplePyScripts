@@ -6,11 +6,11 @@ __author__ = 'ipetrash'
 
 text = 'resident evil 6'
 
+# category1 = 998 (Game)
+url = 'http://store.steampowered.com/search/?category1=998&os=win&supportedlang=english&term=' + text
 
 import requests
-
-# category1 = 998 (Game)
-rs = requests.get('http://store.steampowered.com/search/?category1=998&os=win&supportedlang=english&term=' + text)
+rs = requests.get(url)
 print(rs)
 
 from bs4 import BeautifulSoup
