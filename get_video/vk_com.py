@@ -26,6 +26,7 @@ def get_video_file_urls(url):
 
 
 if __name__ == '__main__':
+    # Пишет: Страница доступна только авторизованным пользователям.
     # ['https://cs514210.vk.me/u80746722/videos/bb238dead1.240.mp4']
     print(get_video_file_urls('https://m.vk.com/video80746722_163361560'))
 
