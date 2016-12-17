@@ -12,7 +12,7 @@ def get_html(url):
 
     class ExtractorHtml:
         def __init__(self, url):
-            self._app = QApplication([])
+            _app = QApplication([])
             self._page = QWebEnginePage()
             self._page.loadFinished.connect(self._load_finished_handler)
 
@@ -29,12 +29,12 @@ def get_html(url):
             # Ожидание загрузки страницы и получения его содержимого
             # Этот цикл асинхронный код делает синхронным
             while self.html is None:
-                self._app.processEvents()
+                _app.processEvents()
 
-            self._app.quit()
+            _app.quit()
 
+            # Чтобы избежать падений скрипта
             self._page = None
-            self._app = None
 
         def _callable(self, data):
             self.html = data
