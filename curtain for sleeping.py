@@ -9,9 +9,14 @@ __author__ = 'ipetrash'
 """
 
 
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+try:
+    from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QSizePolicy, QApplication
+    from PyQt5.QtGui import QPainter
+    from PyQt5.QtCore import Qt, QTimer
+
+except ImportError:
+    from PyQt4.QtGui import QWidget, QPainter, QVBoxLayout, QPushButton, QSizePolicy, QApplication
+    from PyQt4.QtCore import Qt, QTimer
 
 
 class CurtainWidget(QWidget):
@@ -24,7 +29,15 @@ class CurtainWidget(QWidget):
         self._activate_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self._activate_button.clicked.connect(self._activate)
 
+        # Таймер не дает, в течении 2 секунд, движением мышки вернуть окно в нормальный вид
+        # Это сделано чтобы после клика на разворачивание во весь экран случайно оно не было возвращено обратно
+        # в нормальное состояние
+        self._timer_block_normal = QTimer()
+        self._timer_block_normal.setSingleShot(True)
+        self._timer_block_normal.setInterval(2000)
+
         layout = QVBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._activate_button)
         self.setLayout(layout)
 
@@ -42,20 +55,17 @@ class CurtainWidget(QWidget):
     def showFullScreen(self):
         self._activate_button.hide()
         self.setCursor(Qt.BlankCursor)
+        self._timer_block_normal.start()
 
         super().showFullScreen()
 
     def mouseMoveEvent(self, event):
-        if self.isFullScreen():
+        if not self._timer_block_normal.isActive() and self.isFullScreen():
             self.showNormal()
 
         super().mouseMoveEvent(event)
 
     def paintEvent(self, event):
-        if not self.isFullScreen():
-            super().paintEvent(event)
-            return
-
         painter = QPainter(self)
         painter.setBrush(Qt.black)
         painter.setPen(Qt.black)
