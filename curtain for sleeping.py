@@ -25,6 +25,8 @@ class CurtainWidget(QWidget):
 
         self.setWindowTitle('Curtain for sleeping')
 
+        self._flags = self.windowFlags()
+
         self._activate_button = QPushButton('Activate curtain for sleeping')
         self._activate_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self._activate_button.clicked.connect(self._activate)
@@ -52,10 +54,17 @@ class CurtainWidget(QWidget):
 
         super().showNormal()
 
+        # Восстановление старых флагов
+        self.setWindowFlags(self._flags)
+        self.show()
+
     def showFullScreen(self):
         self._activate_button.hide()
         self.setCursor(Qt.BlankCursor)
         self._timer_block_normal.start()
+
+        # Установка флага Поверх всех окон
+        self.setWindowFlags(self._flags | Qt.WindowStaysOnTopHint)
 
         super().showFullScreen()
 
