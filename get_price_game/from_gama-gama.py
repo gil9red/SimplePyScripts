@@ -58,7 +58,7 @@ from bs4 import BeautifulSoup
 root = BeautifulSoup(html, 'lxml')
 
 for game in root.select('.catalog-content > a'):
-    name = game.attrs['title'].strip()
+    name = game['title'].strip()
     name = name.replace('Купить ', '')
 
     price = None
