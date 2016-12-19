@@ -2017,13 +2017,6 @@ def get_desktop_image_icon(index):
 # # print(translation)
 
 
-# TODO: функцию перевода используя гугл-переводчик или даже скрипт, который будет запускаться в качестве
-# процесса, вывод, которого будем читать и парсить. Вывод и будет содержать перевод или ошибку в специальном
-# формате
-# import urllib.parse
-# urllib.parse.quote('grgr\nge\r')
-
-
 # http://habrahabr.ru/post/192102/
 # http://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html
 #
@@ -2033,59 +2026,6 @@ def get_desktop_image_icon(index):
 # for row in gen_sudoku():
 #     print(row)
 #
-
-
-# s = """
-# - Robocop Versus The Terminator
-#   Mortal Kombat 3
-# - Dune - The Battle for Arrakis
-# - Comix Zone
-# @ Disney's Aladdin
-# - Earthworm Jim 1, 2
-# - Jungle Book, The
-# - Sonic The Hedgehog 1, 2, 3
-# - Lion King, The
-# @ Theme Park
-# - Tiny Toon Adventures - Acme All-Stars
-# @ Mickey Mania - Timeless Adventures of Mickey Mouse
-# @ Battletoads
-# - Prince of Persia
-#   Side Pocket
-# - Boogerman
-#   Flintstones, The
-# - Zero the Kamikaze Squirrel
-# @ Gargoyles
-#   Weaponlord
-# @ Vectorman
-# - Michael Jackson's Moonwalker
-#
-#   Ultimate Mortal Kombat 3
-# - Comix Zone
-# - Earthworm Jim 2
-# - Battletoads and Double Dragon
-# @ Disney's Aladdin
-# - Sonic The Hedgehog 2, 3
-# - Earthworm Jim
-# - Dune - The Battle for Arrakis
-# - Boogerman
-#   Lion King, The
-# - Golden Axe III
-# - Jungle Book, The
-# - Robocop Versus The Terminator
-# - Desert Strike - Return to the Gulf
-# - Prince of Persia
-#   Flintstones, The
-# - Vectorman
-# - Gargoyles
-# """
-#
-# l = set()
-#
-# for c in s.split('\n'):
-#     if c:
-#         l.add(c[2:])
-# print('\n'.join(l))
-# quit()
 
 
 # def get_short_url(url):
@@ -2102,69 +2042,6 @@ def get_desktop_image_icon(index):
 #
 # url = 'https://www.google.ru/search?q=short+url+python'
 # print(get_short_url(url))
-
-
-# class Student:
-#     def __init__(self, name, group, age):
-#         self.name = name
-#         self.group = group
-#         self.age = age
-#
-#
-# list_students = []
-# list_students.append(Student('Вася', 'АВ-1', 16))
-# list_students.append(Student('Саша', 'АВ-1', 20))
-# list_students.append(Student('Петя', 'АВ-1', 16))
-# list_students.append(Student('Аня', 'АВ-3', 19))
-# list_students.append(Student('Анетта', 'АВ-2', 18))
-# list_students.append(Student('Василий', 'АВ-2', 18))
-#
-#
-# list_students.sort(key=lambda x: len(x.name))
-# # list_students.sort(key=lambda x: x.name)
-# # list_students.sort(key=lambda x: x.age)
-# # list_students.sort(key=lambda x: x.group)
-#
-# for student in list_students:
-#     print('{}, {}, {}'.format(student.name, student.group, student.age))
-
-
-# # В институте биоинформатики по офису передвигается робот. Недавно студенты из группы программистов написали
-# # для него программу, по которой робот, когда видит программистов, считает их количество и произносит
-# # вслух "n программистов".
-# #
-# # Для того, чтобы это звучало правильно, для каждого n нужно использовать верное окончание слова.
-# #
-# # Напишите программу, считывающую с пользовательского ввода целое число n (неотрицательное), выводящее
-# # это число в консоль вместе с правильным образом изменённым словом "программист", для того, чтобы робот
-# # мог нормально общаться с людьми, например: 1 программист, 2 программиста, 5 программистов.
-#
-# n = 101
-#
-# if n % 10 == 1 and n % 100 != 11:
-#     end = ''
-# elif (n % 100 != 12 and n % 100 != 13 and n % 100 != 14) and (n % 10 == 2 or n % 10 == 3 or n % 10 == 4):
-#     end = 'а'
-# else:
-#     end = 'ов'
-#
-# print('%s программист%s' % (n, end))
-
-
-
-# alp = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
-# result = "Роскомнадзор запретил букву "
-#
-# # Перебор всех символов алфавита
-# for c in alp:
-#     # Проверяем, что в строке result текущая буква не найдена
-#     if c in result or c.upper() in result:
-#         # Выводим надпись
-#         print(result + c.upper())
-#
-#         # Удаляем букву из надписи
-#         result = result.replace(c, '')
-#         result = result.replace(c.upper(), '')
 
 
 
@@ -2294,7 +2171,6 @@ def get_desktop_image_icon(index):
 # print(quote)
 
 
-
 # # TODO: пример работы с ini файлами
 # # https://docs.python.org/3/library/configparser.html
 #
@@ -2330,67 +2206,6 @@ def get_desktop_image_icon(index):
 #
 # import sys
 # sys.exit()
-
-
-
-# # Следующий пример строит график функции f(x) = x / sin(x):
-#
-# import math
-#
-# # !!! Импортируем один из пакетов Matplotlib
-# import pylab
-#
-# # !!! Импортируем пакет со вспомогательными функциями
-# from matplotlib import mlab
-#
-# if __name__ == '__main__':
-#     # Будем рисовать график этой функции
-#     def func(x):
-#         """
-#         sinc (x)
-#         """
-#         if x == 0:
-#             return 1.0
-#         return math.sin (x) / x
-#
-#     # Интервал изменения переменной по оси X
-#     xmin = -20.0
-#     xmax = 20.0
-#
-#     # Шаг между точками
-#     dx = 0.01
-#
-#     # !!! Создадим список координат по оси X на отрезке [-xmin; xmax], включая концы
-#     xlist = mlab.frange (xmin, xmax, dx)
-#
-#     # Вычислим значение функции в заданных точках
-#     ylist = [func (x) for x in xlist]
-#
-#     # !!! Нарисуем одномерный график
-#     pylab.plot (xlist, ylist)
-#
-#     # !!! Покажем окно с нарисованным графиком
-#     pylab.show()
-
-
-
-# left, right, up, down = 0, 0, 0, height
-#
-# # Перебор всех пикселей изображения
-# for y in range(height):
-#     for x in range(width):
-#         # Получаем пиксель
-#         pxl = im2.getpixel((x, y))
-#
-#         if pxl == black_pxl:
-#             up = max(up, y)
-#             down = min(down, y)
-#
-# print(left, right, up, down)
-
-
-
-
 
 
 # # TODO: переместить в папку PySide
@@ -2463,10 +2278,6 @@ def get_desktop_image_icon(index):
 # print(from_ghbdtn(text))
 
 
-
-# TODO: пример работы с requests
-
-
 ## TODO: lived time
 # import datetime
 # my_bd = datetime.datetime(day=18, month=8, year=1992)
@@ -2514,39 +2325,11 @@ def get_desktop_image_icon(index):
 # http://algolist.manual.ru/graphics/fracart.php
 
 
-# TODO: service pastebin.com
-# http://pastebin.com/
-# http://pastebin.com/api
-# https://pypi.python.org/pypi/Pastebin/1.1.1
-
-
 # TODO: service parse.com
 # https://parse.com
 # https://parse.com/docs/api_libraries
 # https://github.com/dgrtwo/ParsePy
 # http://habrahabr.ru/post/246989/
-
-
-# import requests
-#
-# url = 'http://www.prog.org.ru/index.php'
-# login = '*****'
-# psw = '******'
-#
-# r = requests.get(url, auth=(login, psw))
-# # print(r.status_code)
-# # print(r.headers['content-type'])
-# # print(r.encoding)
-# print(r.text)
-# # print(r.json())
-#
-# print('\n\n')
-#
-# from grab import Grab
-# g = Grab()
-# g.setup(post={'login': login, 'password': psw})
-# g.go(url)
-# print(g.response.body)
 
 
 # # http://pythonworld.ru/moduli/modul-calendar.html
@@ -2748,60 +2531,8 @@ def get_desktop_image_icon(index):
 # print(binascii.b2a_hex(my_str.encode('ascii')))
 
 
-# # TODO: добавить в примеры работы с регулярными выражениями
-#
-# def convert_url_githubio_to_repo(url):
-#     # Функция конвертирует путь из проекта github.io в репозиторий проекта github.com
-#     # http://gabrielecirulli.github.io/2048/ -> https://github.com/gabrielecirulli/2048/
-#
-#     import re
-#     pattern = r'http://(.+).github.io/(.+)/'
-#     search = re.search(pattern, url)
-#
-#     user = search.group(1)
-#     repo = search.group(2)
-#     return 'https://github.com/{}/{}/'.format(user, repo)
-#
-#
-# url = 'http://gabrielecirulli.github.io/2048/'
-# url_repo = convert_url_githubio_to_repo(url)
-# print(url)
-# print(url_repo)
-
-
 # TODO: больше примеров работы с модулями py
 # http://pythonworld.ru/karta-sajta
-
-
-# TODO: воспроизведение музыкальных файлов
-# # Window only
-# # https://docs.python.org/3/library/winsound.html
-# import winsound
-# # Play Windows exit sound.
-# winsound.PlaySound("SystemExit", winsound.SND_ALIAS)
-#
-# # Probably play Windows default sound, if any is registered (because
-# # "*" probably isn't the registered name of any sound).
-# winsound.PlaySound("*", winsound.SND_ALIAS)
-#
-# winsound.PlaySound('Gorillaz-Clint_Eastwood.wav', winsound.SND_FILENAME)
-
-
-# TODO: pretty-print
-# https://docs.python.org/3.4/library/pprint.html
-# import pprint
-#
-# # stuff = ['spam', 'eggs', 'lumberjack', 'knights', 'ni']
-# # stuff.insert(0, stuff[:])
-# # pp = pprint.PrettyPrinter(indent=4)
-# # pp.pprint(stuff)
-# #
-# # pp = pprint.PrettyPrinter(width=41, compact=True)
-# # pp.pprint(stuff)
-#
-# # tup = ('spam', ('eggs', ('lumberjack', ('knights', ('ni', ('dead', ('parrot', ('fresh fruit',))))))))
-# # pp = pprint.PrettyPrinter(depth=3)
-# # pp.pprint(tup)
 
 
 # __author__ = 'ipetrash'
@@ -2920,26 +2651,6 @@ def get_desktop_image_icon(index):
 #     input("")
 #     # image.save(path)
 
-
-# # TODO: добавление примеров:
-# http://jenyay.net/Matplotlib/Date
-# http://jenyay.net/Matplotlib/Text
-# http://jenyay.net/Matplotlib/Xkcd
-# http://jenyay.net/Matplotlib/Locators
-# http://jenyay.net/Matplotlib/LogAxes
-
-
-# TODO: Сумма чисел
-# l = [1, 2, 3, 4]
-# print(sum(l))
-
-
-# TODO: Среднее значение суммы чисел
-# l = [1, 2, 3, 4]
-# print(sum(l))
-# print(sum(l) / len(l))
-
-
 # TODO: https://docs.python.org/3/tutorial/stdlib2.html
 # import textwrap
 # text = 'Придумать простое приложение и реализовать его с помощью TDD (используя unit-тесты)'
@@ -2947,10 +2658,6 @@ def get_desktop_image_icon(index):
 
 
 # TODO: придумать простое приложение и реализовтаь его с помощью TDD (используя unit-тесты)
-
-
-# TODO: Excel
-# "Интеграция MS Excel и Python": http://habrahabr.ru/post/232291/
 
 
 # TODO: tornado
