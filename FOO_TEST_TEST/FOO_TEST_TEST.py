@@ -1645,61 +1645,6 @@ def get_desktop_image_icon(index):
 # # print(translation)
 
 
-# def anonymization_quotes(quote_text):
-#     """ Функция заменяет ники в цитатах на псевдонимы 'xxx', 'yyy' и т.п.
-#     Шаблон определения "^(.+?):"
-#
-#     Пример валидной цитаты: "BlackFox: Кто нибудь, хоть раз, физически ощущал как он седеет?..."
-#     """
-#
-#     import re
-#     login_pattern = re.compile(r'^(.+?):')
-#
-#     # Словарь, в котором ключом является логин, а значением псевдоним
-#     all_logins = {}
-#
-#     # Счетчик логинов
-#     count_logins = 0
-#
-#     # Сгенерируем список с псевдонимами. Список будет вида: ['aaa', 'bbb', ..., 'zzz', 'AAA', ... 'ZZZ']
-#     import string
-#     login_aliases = [c*3 for c in string.ascii_letters]
-#
-#     # Разбиваем цитату по строчно
-#     for line in quote_text.split('\n'):
-#         # Ищем логин
-#         match = login_pattern.search(line)
-#
-#         # Если нашли
-#         if match:
-#             # Вытаскиваем только логин -- нам не нужно двоеточние после логина
-#             login = match.group(1)
-#
-#             # Если такого логина нет в словаре, добавляем в словарь логин и его псевдоним
-#             if login not in all_logins:
-#                 all_logins[login] = login_aliases[count_logins]
-#                 count_logins += 1
-#
-#     quote = quote_text
-#
-#     # Проходим по словарю и делаем замену логина на псевдоним в строке цитаты
-#     for login, alias in all_logins.items():
-#         quote = quote.replace(login, alias)
-#
-#     return quote
-#
-#
-# quote = """Аня: Не хочу и комп занят
-# Кирилл: вредный старший брат окупировал комп?
-# Кирилл: у моей сестры таже проблема"""
-#
-# print(quote)
-#
-# quote = anonymization_quotes(quote)
-# print()
-# print(quote)
-
-
 # # TODO: пример работы с ini файлами
 # # https://docs.python.org/3/library/configparser.html
 #
@@ -1753,21 +1698,6 @@ def get_desktop_image_icon(index):
 # print(nx.shortest_path(G, 'A', 'D', weight='weight'))
 
 
-# http://habrahabr.ru/sandbox/84639/
-# https://github.com/dimka665/vk
-# https://pypi.python.org/pypi/vk/1.5
-#
-# import vk
-#
-# # vkapi = vk.API(app_id='app_id', user_login='+login', user_password='password')
-# # or
-# vkapi = vk.API(access_token='access_token')
-# print(vkapi.getServerTime())
-# profiles = vkapi.users.get(user_id=1)
-# print(profiles[0]['last_name'])
-# # vkapi.wall.post(message="Hello, world")
-
-
 # TODO: нарисовать какой-нибудь фрактал
 # https://ru.wikipedia.org/wiki/Фрактал
 # https://ru.wikipedia.org/wiki/Множество_Мандельброта
@@ -1780,15 +1710,6 @@ def get_desktop_image_icon(index):
 # https://parse.com/docs/api_libraries
 # https://github.com/dgrtwo/ParsePy
 # http://habrahabr.ru/post/246989/
-
-
-# # http://pythonworld.ru/moduli/modul-calendar.html
-# # https://docs.python.org/3/library/calendar.html
-# import calendar
-# a = calendar.LocaleHTMLCalendar(locale='Russian_Russia')
-#
-# with open('calendar.html', 'w', encoding='utf-8') as g:
-#     g.write(a.formatyear(2014, width=4))
 
 
 # # TODO: сделать парсер для получения значения тегов
@@ -1984,122 +1905,6 @@ def get_desktop_image_icon(index):
 # TODO: больше примеров работы с модулями py
 # http://pythonworld.ru/karta-sajta
 
-
-# __author__ = 'ipetrash'
-#
-# # Суть задачи в том, чтобы из англо-латинского словаря сделать латино-английский.
-# #
-# # Примеры тестов:
-# #  Входные данные
-# #  3
-# #  apple - malum, pomum, popula
-# #  fruit - baca, bacca, popum
-# #  punishment - malum, multa
-# #
-# #  Выходные данные
-# #  7
-# #  baca - fruit
-# #  bacca - fruit
-# #  malum - apple, punishment
-# #  multa - punishment
-# #  pomum - apple
-# #  popula - apple
-# #  popum - fruit
-#
-#
-# if __name__ == '__main__':
-# la_en = {}
-#
-#     # Открываем для чтения
-#     with open('input.txt', mode='r') as f:
-#         # Первая строка -- количество записей
-#         count = int(f.readline())
-#
-#         # Получаем count строк
-#         for i in range(count):
-#             # Получим строку вида: baca - fruit
-#             row = f.readline().strip()
-#
-#             # Разделим строку на две части
-#             en, la_words = row.split(' - ')
-#
-#             # Из правой части (латинские слова) разделяем на список
-#             # и добавляем в словарь, в котором ключом является латинское
-#             # слово, а значением -- список английский слов
-#             for la in la_words.split(', '):
-#                 # Если слово la уже есть в словаре, то добавляем английское слово
-#                 # в список в правой части, иначе создаем список
-#                 if la in la_en:
-#                     la_en[la].append(en)
-#                 else:
-#                     la_en[la] = [en]
-#
-#     # Открываем для записи
-#     with open('output.txt', mode='w') as f:
-#         # Первая строка -- количество записей
-#         count = len(la_en)
-#         f.write(str(count) + '\n')
-#
-#         # Перебираем список отсортированных латинский слов
-#         for la in sorted(la_en.keys()):
-#             f.write('{} - {}\n'.format(la, ', '.join(la_en[la])))
-
-
-# import re
-# import os
-# # file_name = input("File name: ")
-# file_name = "D:\hosts.txt"
-# if os.path.exists(file_name):
-# with open(file_name) as file:
-# for row in file:
-#             m = re.search(r"(\d{1,3}).(\d{1,3}).(\d{1,3}).(\d{1,3})(/(\d{1,3}))?", row)
-#             if m:
-#                 ip = m.group(0)
-#                 ip_1 = m.group(1)
-#                 ip_2 = m.group(2)
-#                 ip_3 = m.group(3)
-#                 ip_4 = m.group(4)
-#                 ip_5 = m.group(6)  # m.group(5) -- this (/([0-9]{1,3})), m.group(6) -- ([0-9]{1,3})
-#                 if ip_5:
-#                     print("ip: '{}':\n    1:'{}' 2:'{}' 3:'{}' 4:'{}' 5:'{}'".format(ip, ip_1, ip_2, ip_3, ip_4, ip_5))
-#                 else:
-#                     print("ip: '{}':\n    1:'{}' 2:'{}' 3:'{}' 4:'{}'".format(ip, ip_1, ip_2, ip_3, ip_4))
-#                 print()
-
-
-# # Overlay "watermark" image / Наложение "водяного знака" на изображение
-# import os
-# from PIL import Image, ImageDraw, ImageFont
-#
-# # from PIL import Image, ImageDraw
-# # text = "Hello, PIL!!!"
-# # color = (0, 0, 120)
-# # img = Image.new('RGB', (100, 50), color)
-# # imgDrawer = ImageDraw.Draw(img)
-# # imgDrawer.text((10, 20), text)
-# # img.save("pil_example-basic-example.png")
-#
-# path = r"C:\Users\ipetrash\Desktop\pic.png"
-# # path = input("Input path: ")
-# path = os.path.normpath(path)
-# if os.path.exists(path):
-#     print("File: %s" % path)
-#
-#     image = Image.open(path)
-#     width, height = image.size
-#     # image.show()
-#
-#     drawer = ImageDraw.Draw(image)
-#     font = ImageFont.truetype("arial.ttf", 25)
-#     text = "Hello World!"
-#     width_text, height_text = font.getsize(text)
-#     for i in range(0, width, width_text * 2):
-#         for j in range(0, height, height_text * 2):
-#             drawer.text((i, j), text, font=font, fill=(0x00, 0xff, 0x00))
-#
-#     image.show()
-#     input("")
-#     # image.save(path)
 
 # TODO: https://docs.python.org/3/tutorial/stdlib2.html
 # import textwrap
