@@ -11,7 +11,7 @@ if __name__ == '__main__':
     from PIL import Image
     import PIL.ImageOps
 
-    image_file = r"TowerOfGod_s2_ch100_p02_SIU.png_res.jpg"
+    image_file = "TowerOfGod_s2_ch100_p02_SIU.png_res.jpg"
     image = Image.open(image_file)
     if image.mode == 'RGBA':
         r, g, b, a = image.split()
