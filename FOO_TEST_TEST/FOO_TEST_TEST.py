@@ -1594,22 +1594,6 @@ def get_desktop_image_icon(index):
 # quit()
 #
 
-# # Convertor githun pages url to github repo url
-# # http://nemilya.github.io/coffeescript-game-life/html/game.html
-# # https://github.com/nemilya/coffeescript-game-life
-#
-# import re
-#
-# github_pages_url = 'http://nemilya.github.io/coffeescript-game-life/html/game.html'
-#
-# match = re.search('https?://(.+)\.github.io/(.+)', github_pages_url)
-# if match is not None:
-#     user = match.group(1)
-#     repo = match.group(2).split('/')[0]
-#
-#     github_repo_url = 'https://github.com/{}/{}'.format(user, repo)
-#     print(github_repo_url)
-
 
 # """У нас есть список сил и возможно комбинировать одновременно только две разные силы,
 # причем повторов быть не должно -- ('Огонь', 'Молния') и ('Молния', 'Огонь') -- повторы."""
@@ -1825,17 +1809,6 @@ def get_desktop_image_icon(index):
 # # translator = Translator(to_lang="ru")
 # # translation = translator.translate(r)
 # # print(translation)
-
-
-# http://habrahabr.ru/post/192102/
-# http://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html
-#
-# def gen_sudoku(n=3):
-#     return [[((i*n + i//n + j) % (n*n) + 1) for j in range(n*n)] for i in range(n*n)]
-#
-# for row in gen_sudoku():
-#     print(row)
-#
 
 
 # def anonymization_quotes(quote_text):
