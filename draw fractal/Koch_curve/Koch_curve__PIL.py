@@ -51,14 +51,14 @@ __author__ = 'ipetrash'
 # ?>
 
 
-def draw_koch(draw, xa, ya, xe, ye, n, color):
+def draw_koch(draw, xa, ya, xe, ye, n):
     """
     Draws koch curve between two points.
 
     """
 
     if n == 0:
-        draw.line((xa, ya, xe, ye), fill=color)
+        draw.line((xa, ya, xe, ye), fill="black")
     else:
         #       C
         #      / \
@@ -75,19 +75,17 @@ def draw_koch(draw, xa, ya, xe, ye, n, color):
         xc = xb + (xd - xb) * cos60 - sin60 * (yd - yb)
         yc = yb + (xd - xb) * sin60 + cos60 * (yd - yb)
 
-        draw_koch(draw, xa, ya, xb, yb, n - 1, color)
-        draw_koch(draw, xb, yb, xc, yc, n - 1, color)
-        draw_koch(draw, xc, yc, xd, yd, n - 1, color)
-        draw_koch(draw, xd, yd, xe, ye, n - 1, color)
+        draw_koch(draw, xa, ya, xb, yb, n - 1)
+        draw_koch(draw, xb, yb, xc, yc, n - 1)
+        draw_koch(draw, xc, yc, xd, yd, n - 1)
+        draw_koch(draw, xd, yd, xe, ye, n - 1)
 
-
-from PIL import Image, ImageDraw
 
 if __name__ == '__main__':
-    n = 4
-
+    from PIL import Image, ImageDraw
     img = Image.new("RGB", (600, 200), "white")
 
-    draw_koch(ImageDraw.Draw(img), 0, img.height - 1, img.width, img.height - 1, n, "black")
+    step = 4
+    draw_koch(ImageDraw.Draw(img), 0, img.height - 1, img.width, img.height - 1, step)
 
     img.save('img.png')

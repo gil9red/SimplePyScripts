@@ -51,17 +51,14 @@ __author__ = 'ipetrash'
 # ?>
 
 
-def draw_koch(painter, xa, ya, xe, ye, n, color):
+def draw_koch(painter, xa, ya, xe, ye, n):
     """
     Draws koch curve between two points.
 
     """
 
-    painter.setPen(color)
-
     if n == 0:
         painter.drawLine(xa, ya, xe, ye)
-
     else:
         #       C
         #      / \
@@ -78,11 +75,10 @@ def draw_koch(painter, xa, ya, xe, ye, n, color):
         xc = xb + (xd - xb) * cos60 - sin60 * (yd - yb)
         yc = yb + (xd - xb) * sin60 + cos60 * (yd - yb)
 
-        draw_koch(painter, xa, ya, xb, yb, n - 1, color)
-        draw_koch(painter, xb, yb, xc, yc, n - 1, color)
-        draw_koch(painter, xc, yc, xd, yd, n - 1, color)
-        draw_koch(painter, xd, yd, xe, ye, n - 1, color)
-
+        draw_koch(painter, xa, ya, xb, yb, n - 1)
+        draw_koch(painter, xb, yb, xc, yc, n - 1)
+        draw_koch(painter, xc, yc, xd, yd, n - 1)
+        draw_koch(painter, xd, yd, xe, ye, n - 1)
 
 try:
     from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QSpinBox, QVBoxLayout, QSizePolicy
@@ -131,9 +127,14 @@ class Widget(QWidget):
         img = QImage(600, 200, QImage.Format_RGB16)
         img.fill(Qt.white)
 
-        draw_koch(QPainter(img), 0, img.height() - 1, img.width(), img.height() - 1, step, Qt.black)
+        painter = QPainter(img)
+        painter.setPen(Qt.black)
+
+        draw_koch(painter, 0, img.height() - 1, img.width(), img.height() - 1, step)
 
         self.img_label.setPixmap(QPixmap.fromImage(img))
+
+        painter.end()
 
 
 if __name__ == '__main__':
