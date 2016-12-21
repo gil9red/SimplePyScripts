@@ -80,4 +80,3 @@ if __name__ == '__main__':
     draw_snowflake_koch(draw, step)
 
     img.save('img.png')
-
