@@ -1903,13 +1903,6 @@ def get_desktop_image_icon(index):
 # print(nx.shortest_path(G, 'A', 'D', weight='weight'))
 
 
-# TODO: нарисовать какой-нибудь фрактал
-# https://ru.wikipedia.org/wiki/Фрактал
-# https://ru.wikipedia.org/wiki/Множество_Мандельброта
-# https://ru.wikipedia.org/wiki/Кривая_Коха
-# http://algolist.manual.ru/graphics/fracart.php
-
-
 # TODO: service parse.com
 # https://parse.com
 # https://parse.com/docs/api_libraries
