@@ -10,67 +10,80 @@ __author__ = 'ipetrash'
 """
 
 
-# Оригинал: https://ru.wikipedia.org/wiki/Кривая_Леви
-# <?php
-#     $i = 10;
+# Оригинал: http://www.cyberforum.ru/pascalabc/thread994987.html
+# uses GraphABC;
 #
-#     $image = imagecreatetruecolor(640, 480);
-#     imagefilledrectangle($image, 0, 0, imagesx($image) - 1, imagesy($image) - 1,
-#             imagecolorresolve($image, 255, 255, 255));
-#     $color = imagecolorresolve($image, 0, 0, 0);
+# procedure Draw;
+# const iter = 50000;
+# var
+#     t, x, y, p : Real;
+#     k : LongInt;
+#     mx, my, rad : Integer;
+# begin
+#     mx := 200;
+#     my := 300;
+#     rad := 250;
+#     Randomize;
+#     x := 0.0;
+#     y := 0.0;
+#     for k := 1 to iter do
+#     begin
+#         p := Random;
+#         t := x;
+#         if p <= 1/2 then
+#         begin
+#             x := 0.5*x - 0.5*y;
+#             y := 0.5*t + 0.5*y;
+#         end
+#         else
+#         begin
+#             x := 0.5*x + 0.5*y + 0.5;
+#             y := -0.5*t + 0.5*y + 0.5;
+#         end;
+#         PutPixel(mx + Round(rad * x), my - Round(rad * y), clBlue);
+#     end;
+# end;
 #
-#     drawLevy($image, imagesx($image) * 3/8, imagesy($image) * 3/8,
-#             imagesx($image) * 5/8, imagesy($image) * 5/8, $i, $color);
-#
-#     /**
-#      * Draws levy curve between two points.
-#      * @return void
-#      */
-#     function drawLevy($image, $xa, $ya, $xc, $yc, $i, $color) {
-#         if($i == 0)
-#             imageline($image, $xa, $ya, $xc, $yc, $color);
-#         else {
-#             // A---B
-#             //     |
-#             //     C
-#             $xb = ($xa + $xc) / 2 + ($yc - $ya) / 2;
-#             $yb = ($ya + $yc) / 2 - ($xc - $xa) / 2;
-#             drawLevy($image, $xa, $ya, $xb, $yb, $i - 1, $color);
-#             drawLevy($image, $xb, $yb, $xc, $yc, $i - 1, $color);
-#         }
-#     }
-#
-#     header('Content-type: image/png');
-#     imagepng($image);
-#     imagedestroy($image);
-# ?>
+# begin
+#     SetWindowCaption('Фракталы: Кривая Леви');
+#   SetWindowSize(650,450);
+#   ClearWindow;
+#     Draw
+# end.
 
 
-def draw_levy(draw, xa, ya, xc, yc, n):
-    """
-    Draws levy curve between two points.
+import random
 
-    """
 
-    if n == 0:
-        draw.line((xa, ya, xc, yc), fill="black")
-    else:
-        # A---B
-        #     |
-        #     C
-        xb = (xa + xc) / 2 + (yc - ya) / 2
-        yb = (ya + yc) / 2 - (xc - xa) / 2
+def draw_levy(draw):
+    iter = 50000
 
-        draw_levy(draw, xa, ya, xb, yb, n - 1)
-        draw_levy(draw, xb, yb, xc, yc, n - 1)
+    mx = 200
+    my = 300
+    rad = 250
+
+    x = 0.0
+    y = 0.0
+
+    for k in range(iter):
+        p = random.random()
+        t = x
+        if p <= 1/2:
+            x = 0.5*x - 0.5*y
+            y = 0.5*t + 0.5*y
+        else:
+            x = 0.5*x + 0.5*y + 0.5;
+            y = -0.5*t + 0.5*y + 0.5;
+
+        draw.point((mx + rad * x, my - rad * y), "blue")
 
 
 if __name__ == '__main__':
     from PIL import Image, ImageDraw
-    img = Image.new("RGB", (640, 480), "white")
+    img = Image.new("RGB", (650, 450), "white")
 
     step = 10
 
-    draw_levy(ImageDraw.Draw(img), img.width * 3/8, img.height * 3/8, img.width * 5/8, img.height * 5/8, step)
+    draw_levy(ImageDraw.Draw(img))
 
     img.save('img.png')
