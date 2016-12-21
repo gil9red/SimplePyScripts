@@ -9,12 +9,18 @@ import sys
 
 def to(text):
     try:
-        from PyQt4.QtGui import QApplication
-    except ImportError:
-        from PySide.QtGui import QApplication
+        from PyQt5.QtGui import QGuiApplication as QApplication
 
-    app = QApplication(sys.argv)
+    except ImportError:
+        try:
+            from PyQt4.QtGui import QApplication
+
+        except ImportError:
+            from PySide.QtGui import QApplication
+
+    app = QApplication([])
     app.clipboard().setText(text)
+    app = None
 
 
 if __name__ == '__main__':
