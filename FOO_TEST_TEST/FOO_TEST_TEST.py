@@ -4,6 +4,361 @@
 __author__ = 'ipetrash'
 
 
+import requests
+# rs = requests.get('https://enter.contact-sys.com:2221/wstrans/wsTrans.exe/soap/ITransmitter')
+# rs = requests.get('http://0.0.0.0:12000')
+# rs = requests.get('http://10.7.8.31:12000')
+
+post_data = """
+<REQUEST OBJECT_CLASS="TAbonentObject" ACTION="GET_CHANGES" POINT_CODE=""
+VERSION="" TYPE_VERSION="" PORTION="" PACK="" BOOK_ID=""/>
+"""
+
+post_data = """
+
+<REQUEST OBJECT_CLASS="TAbonentObject" ACTION="GET_CHANGES" POINT_CODE="TZCL" TYPE_VERSION="I" VERSION="261672" />
+"""
+
+post_data = """
+<?xml version="1.0" encoding="windows-1251"?>
+<REQUEST OBJECT_CLASS="TAbonentObject" ACTION="GET_CHANGES" POINT_CODE="TZGX" VERSION="0" TYPE_VERSION="I" PORTION="1" PACK="ZLIB" PART="0"/>
+"""
+rs = requests.post('http://10.7.8.31:12000', data=post_data)
+# rs = requests.post('http://0.0.0.0:12000', data=post_data)
+print(rs)
+print(rs.content.decode('cp1251'))
+
+# 10.7.8.31:12000
+
+quit()
+
+json_rows = list()
+
+import csv
+with open('_.csv', newline='', encoding='utf-8') as csvfile:
+    spamreader = csv.reader(csvfile, delimiter=';')
+
+    csv_rows = list(spamreader)
+    headers = csv_rows[0]
+
+    # ['Card', 'PAN', 'PSNTag 5F34', 'Expiry', 'Country', 'Currency', 'Product', 'Magstripe',
+    # 'VSDCCVN', 'qVSDC CVN', 'MSD', 'Comments', 'BIN', 'Track 2 data', 'Track 1 data',
+    # 'CVV2', 'PIN']
+    # print(headers)
+
+    # Словарь для поиска повторяющихся переменных, например PAN и Expiry у многих
+    # повторяется.
+    # Ключом словаря будет кортеж (<название_переменной>, <значение>) и счетчика
+    # совпадений. Уникальным значение будет 1
+    params_group_dict = dict()
+
+    pan_list = list()
+
+    for rows in csv_rows[1:]:
+        if rows[1] in pan_list:
+            print(rows)
+            continue
+
+        pan_list.append(rows[1])
+
+        from collections import OrderedDict
+        row_data = OrderedDict()
+
+        # PAN, BIN, Expiry, Track_2_data, Track_1_data, CVV2, PIN
+        #
+        # 0     1    2            3       4        5         6        7          8
+        # Card, PAN, PSNTag 5F34, Expiry, Country, Currency, Product, Magstripe, VSDCCVN,
+        #
+        # 9          10   11        12   13            14            15    16
+        # qVSDC CVN, MSD, Comments, BIN, Track 2 data, Track 1 data, CVV2, PIN
+        row_data['Number'] = rows[0]
+        row_data['PAN'] = rows[1]
+        row_data['BIN'] = rows[12]
+        row_data['Expiry'] = rows[3]
+        row_data['Track_2_data'] = rows[13]
+        row_data['Track_1_data'] = rows[14]
+        row_data['CVV2'] = rows[15]
+        row_data['PIN'] = rows[16]
+
+        for k, v in row_data.items():
+            if (k, v) not in params_group_dict:
+                params_group_dict[(k, v)] = 0
+
+            params_group_dict[(k, v)] += 1
+
+        # # print(rows)
+        # for field_name, value in zip(headers, rows):
+        #     row_data[field_name] = value
+
+        json_rows.append(row_data)
+
+
+params_group_dict_filtered = dict(filter(lambda x: x[1] > 1, params_group_dict.items()))
+# print(params_group_dict_filtered)
+
+from collections import defaultdict
+params_by_values_dict = defaultdict(list)
+for k, _ in params_group_dict_filtered.items():
+    params_by_values_dict[k[0]].append(k[1])
+
+var_by_params_dict = dict()
+for k, values in params_by_values_dict.items():
+    for i, v in enumerate(values, 1):
+        global_var = '<TestCard_Group_{}_{}>'.format(k, i)
+        var_by_params_dict[v] = global_var
+
+# for k, v in var_by_params_dict.items():
+#     print('{}: {}'.format(v, k))
+
+variable_pattern = 'TestCard_{}_{}'
+
+from collections import OrderedDict
+variables_dict = OrderedDict()
+
+# Аналог variables_dict, но с заменой повторяющихся переменных
+# общими
+variables_dict_shorted = OrderedDict()
+variables_dict_shorted = OrderedDict()
+global_variables_dict_shorted = OrderedDict()
+
+
+for data in json_rows:
+    # print(data)
+
+    for k, v in data.items():
+        if k != 'Number':
+            var = variable_pattern.format(data['Number'], k)
+            variables_dict[var] = v
+
+            variables_dict_shorted[var] = v
+            if v in var_by_params_dict:
+                global_variables_dict_shorted[var_by_params_dict[v]] = v
+                variables_dict_shorted[var] = var_by_params_dict[v], v
+
+print()
+# print(len(variables_dict))
+# for k, v in variables_dict.items():
+#     print('{}: {}'.format(k, v))
+print(len(variables_dict))
+print(len(list(filter(lambda x: not isinstance(x[1], tuple), variables_dict_shorted.items()))))
+print(len(global_variables_dict_shorted))
+
+pans = list()
+for k, v in variables_dict_shorted.items():
+    if 'PAN' in k:
+        pans.append(v)
+
+print(len(pans))
+print(len(set(pans)))
+
+# quit()
+
+# print()
+# i = 0
+# for k, v in variables_dict_shorted.items():
+#     # if isinstance(v, tuple):
+#     #     continue
+#
+#     # print('{}: {}'.format(k, v))
+#     print('{}\t{}'.format(k, v[0] if isinstance(v, tuple) else v))
+#
+#     i += 1
+#     if i % 7 == 0:
+#         print()
+#
+# print()
+# print()
+# for k, v in sorted(global_variables_dict_shorted.items(), key=lambda x: x[0]):
+#     print('{}\t{}'.format(k, v))
+
+
+# TODO: еще хорошо бы и тип указывать в TestParameter
+# TODO: некоторые из значений -- "N/A", а это наверное не по стандарту, возможно это нужно заменять пустой строкой
+TestParameter_pattern = '<tes:TestParameter Name="{}"><tes:Kind>0</tes:Kind></tes:TestParameter>'
+TestParameterValue_pattern = '<tes:TestParameterValue TestParameterName="{}"><tes:Value>{}</tes:Value></tes:TestParameterValue>'
+
+xml_pattern = '''<?xml version="1.0" encoding="UTF-8"?>
+<tes:TestParameterGroups xmlns:tes="http://schemas.optt.com/testSetupImpExp.xsd">
+  <tes:TestParameterGroup ExtGuid="HEAK6HV6CBDC5LRIJ6UIN7FRTY">
+    <tes:Title>Visa Test Card</tes:Title>
+    <tes:TestParameters>
+      {}
+    </tes:TestParameters>
+    <tes:TestParameterValueSets>
+      <tes:TestParameterValueSet ExtGuid="EHJRPDW54NCTXHGR2FW6YNDQYQ">
+        <tes:Title>Test cards</tes:Title>
+        <tes:TestParameterValues>
+          {}
+        </tes:TestParameterValues>
+      </tes:TestParameterValueSet>
+    </tes:TestParameterValueSets>
+  </tes:TestParameterGroup>
+</tes:TestParameterGroups>
+'''
+
+TestParameter_list = list()
+TestParameterValue_list = list()
+
+all_vars = list()
+all_vars += [(var[1: -1], k) for var, k in global_variables_dict_shorted.items()]
+all_vars += list(filter(lambda x: not isinstance(x[1], tuple), variables_dict_shorted.items()))
+for k, v in all_vars:
+    print(k, v)
+    TestParameter_list.append(TestParameter_pattern.format(k))
+    TestParameterValue_list.append(TestParameterValue_pattern.format(k, v))
+
+xml = xml_pattern.format(''.join(TestParameter_list), ''.join(TestParameterValue_list))
+print(xml)
+open('test_params_group_for_visa_test_cards.xml', 'w', encoding='utf-8').write(xml)
+
+
+from bs4 import BeautifulSoup
+BeautifulSoup(open('test_params_group_for_visa_test_cards.xml'), 'lxml')
+
+# for k, v in sorted(filter(lambda x: x[1] > 1, params_group_dict.items()), key=lambda x: x[0]):
+#     print(k, v)
+
+# import json
+# print(json.dumps(json_rows, ensure_ascii=False, indent=4).replace('"', "'"))
+
+
+quit()
+
+# json_rows = list()
+#
+# import csv
+# with open('_.csv', newline='', encoding='utf-8') as csvfile:
+#     spamreader = csv.reader(csvfile, delimiter=';')
+#
+#     csv_rows = list(spamreader)
+#     headers = csv_rows[0]
+#
+#     print(headers)
+#
+#     for rows in csv_rows[1:]:
+#         from collections import OrderedDict
+#         row_data = OrderedDict()
+#
+#         # print(rows)
+#         for field_name, value in zip(headers, rows):
+#             row_data[field_name] = value
+#
+#         json_rows.append(row_data)
+#
+#
+# import json
+# print(json.dumps(json_rows, ensure_ascii=False).replace('"', "'"))
+
+
+quit()
+
+
+api_key = None
+url = 'https://search-maps.yandex.ru/v1/?text=Магнитогорск, бизнец-центра&type=biz&lang=ru_RU&apikey={}'.format(api_key)
+import requests
+print(requests.get(url).json())
+
+
+quit()
+
+# import PyPDF2
+# pdf_file = open('test.pdf', 'rb')
+# read_pdf = PyPDF2.PdfFileReader(pdf_file)
+# number_of_pages = read_pdf.getNumPages()
+# page = read_pdf.getPage(0)
+# print(page)
+# page_content = page.extractText()
+# print(page_content)
+# print(page_content.encode('utf-8'))
+#
+# quit()
+
+
+import os
+from flask import Flask, request, redirect, url_for, flash, send_from_directory
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = os.path.abspath(UPLOAD_FOLDER)
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+
+@app.route('/', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+
+        file = request.files['file']
+
+        # if user does not select file, browser also
+        # submit a empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+
+        if file:
+            # Функция secure_filename не дружит с не ascii-символами, поэтому
+            # файлы русскими словами не называть
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            # Функция url_for('uploaded_file', filename=filename) возвращает строку вида: /uploads/<filename>
+            return redirect(url_for('uploaded_file', filename=filename))
+
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form action="" method=post enctype=multipart/form-data>
+      <p><input type=file name=file>
+         <input type=submit value=Upload>
+    </form>
+    '''
+
+
+# Пример обработчика, возвращающий файлы из папки app.config['UPLOAD_FOLDER'] для путей uploads и files.
+# т.е. не нужно давать специальное название, чтобы получить файл в flask
+@app.route('/uploads/<filename>')
+@app.route('/files/<filename>')
+def uploaded_file(filename):
+    # NOTE: не работает
+    # print(filename)
+    # if os.path.isdir(filename):
+    #     parts = filename.split('/')
+    #     filename = parts[-1]
+    #
+    #     # Возврат списка с первого до предпоследнего элемента (у нас это имя файла) и распаковывание списка
+    #     my_dir = os.path.join(app.config['UPLOAD_FOLDER'], *parts[:-1])
+    #     print(my_dir)
+    #
+    #     return send_from_directory(my_dir, filename)
+    # else:
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+# Localhost
+app.run()
+
+
+# from sqlalchemy import create_engine, inspect
+#
+# engine = create_engine("postgresql+psycopg2://localhost/test")
+# insp = inspect(engine)  # will be a PGInspector
+#
+# print(insp.get_enums())
+
+
+quit()
+
+
 """Скрипт для эмуляции запроса поиска видео в vk"""
 
 
@@ -560,40 +915,6 @@ print(rs.json())
 for rate in rs.json()['query']['results']['rate']:
     print(rate['Name'], rate['Rate'])
 
-
-quit()
-
-
-"""Advanced time-outs -- прогрессивные тайм-ауты
-В случае неудачной попытки время следующей попытки откладывается на некоторую увеличивающуюся величину.
-
-"""
-
-
-def work():
-    import random
-    if random.randint(0, 5):
-        raise Exception()
-
-    print('Work!')
-
-
-timeout = 0.5
-
-# Для обеспечения повторных попыток выполнения используется цикл
-while True:
-    try:
-        work()
-
-        # Если не было исключений, прерываем цикл
-        break
-
-    except:
-        print('Неудача с таймаутом {}.'.format(timeout))
-
-        import time
-        time.sleep(timeout)
-        timeout += 0.1
 
 quit()
 
@@ -1424,47 +1745,6 @@ def get_desktop_image_icon(index):
             pass
 
 
-
-# import sys
-# import random
-#
-# from PyQt5 import QtGui
-# from PyQt5.QtGui import *
-# from PyQt5.QtCore import *
-#
-#
-# class MainWindow(QMainWindow, QWidget, QApplication):
-#
-#     def __init__(self, parent = None):
-#         super(MainWindow, self).__init__(parent)
-#
-#         QTimer.singleShot(0, self.task)
-#         # self.task()
-#
-#     def task(self):
-#         self.taskbarButton = QWinTaskbarButton(self)
-#         self.taskbarButton.setWindow(self.windowHandle())
-#
-#         self.taskbarProgress = self.taskbarButton.progress()
-#
-#         self.taskbarProgress.setRange(0, 100)
-#         self.taskbarProgress.setVisible(True)
-#         self.taskbarProgress.setValue(random.randint(0, 100))
-#
-#         self.taskbarProgress.show()
-#
-#
-# if __name__ == '__main__':
-#
-#     app = QApplication(sys.argv)
-#     mainWindow = MainWindow()
-#     mainWindow.show()
-#     sys.exit(app.exec_())
-#
-#
-# quit()
-
-
 # from winreg import OpenKey, EnumValue, HKEY_CURRENT_USER, KEY_READ
 #
 #
@@ -1597,44 +1877,6 @@ def get_desktop_image_icon(index):
 #         time.sleep(2)
 
 
-# # Удаление // комментариев и пробелов с табуляцией
-# def rem(text):
-#     line_list = list()
-#
-#     for line in text.strip().split('\n'):
-#         line = line.strip()
-#
-#         if line.startswith('//'):
-#             line = line[2:]
-#
-#         line = line.strip()
-#         line_list.append(line)
-#
-#     return '\n'.join(line_list)
-#
-#
-# r = rem("""
-#
-#     // Summary:
-#     //     The account selection transaction unit is used for building transactions
-#     //     in which the customer must select or identify an account on which the transaction
-#     //     is to be performed. Several different methods are supported for identifying
-#     //     the account. The method to be used is configured through the AccountSelectionMethod
-#     //     property: see help for that property for more details.  The SelectAccount
-#     //     method is the main top-level method called by Customer Transaction Objects
-#     //     for performing account selection.
-#
-# """)
-# print(r)
-#
-#
-# import re
-# r = r.replace('\n', ' ')
-# r = re.sub('[ ]{2,}', '', r)
-# import copy2clipboard
-# copy2clipboard.to(r)
-# print(r)
-#
 # import goslate
 # gs = goslate.Goslate()
 # print('\n', gs.translate(r, 'ru'))
@@ -1643,43 +1885,6 @@ def get_desktop_image_icon(index):
 # # translator = Translator(to_lang="ru")
 # # translation = translator.translate(r)
 # # print(translation)
-
-
-# # TODO: пример работы с ini файлами
-# # https://docs.python.org/3/library/configparser.html
-#
-# import configparser
-#
-# ini = configparser.ConfigParser()
-# ini['Default'] = {
-#     'x': 10,
-#     'y': 15,
-#     'z': 3,
-# }
-#
-# ini['Additional'] = {}
-# additional = ini['Additional']
-# additional['top'] = str(True)
-# additional['text'] = "Hello World!"
-# additional['arrays'] = str([1, 2, 3, 4, 5])
-#
-# ini['Empty'] = {}
-#
-# with open('config.ini', 'w') as f:
-#     ini.write(f)
-#
-#
-# ini_read = configparser.ConfigParser()
-# ini_read.read('config.ini')
-# print(ini_read.sections())
-#
-# print(ini_read['Additional']['top'])
-# print(ini_read['Additional']['text'])
-# print(ini_read['Additional']['arrays'])
-# print(ini_read['Additional']['arrays'].replace('[', '').replace(']', '').split(', '))
-#
-# import sys
-# sys.exit()
 
 
 # # TODO: пример работы с networkx
@@ -1712,204 +1917,8 @@ def get_desktop_image_icon(index):
 # http://habrahabr.ru/post/246989/
 
 
-# # TODO: сделать парсер для получения значения тегов
-# # http://www.emvlab.org/tlvutils/?data=5F2A0206435F360102
-# # https://ru.wikipedia.org/wiki/X.690
-#
-#
-# def get_id_class_ber_desk(id_class_ber):
-#     if id_class_ber == '00':
-#         return "Universal"
-#     elif id_class_ber == '01':
-#         return "Application"
-#     elif id_class_ber == '10':
-#         return "Context-specific"
-#     elif id_class_ber == '11':
-#         return "Private"
-#
-#
-# def get_id_type_ber_desk(id_type_ber):
-#     if id_type_ber == '0':
-#         return "Primitive"
-#     elif id_type_ber == '1':
-#         return "Constructed"
-#     else:
-#         raise Exception('id_type_ber может быть равным или 0, или 1.')
-#
-#
-# # url: https://en.wikipedia.org/wiki/X.690, table "Universal Class Tags"
-# UNIVERSAL_CLASS_TAGS = {
-#     '0': 'EOC (End-of-Content)',
-#     '1': 'BOOLEAN',
-#     '2': 'INTEGER',
-#     '3': 'BIT STRING',
-#     '4': 'OCTET STRING',
-#     '5': 'NULL',
-#     '6': 'OBJECT IDENTIFIER',
-#     '7': 'Object Descriptor',
-#     '8': 'EXTERNAL',
-#     '9': 'REAL (float)',
-#     'A': 'ENUMERATED',
-#     'B': 'EMBEDDED PDV',
-#     'C': 'UTF8String',
-#     'D': 'RELATIVE-OID',
-#     'E': '(reserved)',
-#     'F': '(reserved)',
-#     '10': 'SEQUENCE and SEQUENCE OF',
-#     '11': 'SET and SET OF',
-#     '12': 'NumericString',
-#     '13': 'PrintableString',
-#     '14': 'T61String',
-#     '15': 'VideotexString',
-#     '16': 'IA5String',
-#     '17': 'UTCTime',
-#     '18': 'GeneralizedTime',
-#     '19': 'GraphicString',
-#     '1A': 'VisibleString',
-#     '1B': 'GeneralString',
-#     '1C': 'UniversalString',
-#     '1D': 'CHARACTER STRING',
-#     '1E': 'BMPString',
-#     '1F': '(use long-form)',
-# }
-#
-#
-# def get_id_tag_ber_desk(id_tag_hex_ber):
-#     # Удаляем пробелы с краев, удаляем префикс '0x, переводим в верхний регистр
-#     tag_hex = id_tag_hex_ber.strip().lstrip('0x').upper()
-#     return UNIVERSAL_CLASS_TAGS.get(tag_hex)
-#
-#
-# def split_id_ber(id_hex_int):
-#     def bit_value(num, pos):
-#         return str((num & (1 << pos)) >> pos)
-#
-#     def bit_values(num, begin, end):
-#         return ''.join([bit_value(num, i - 1) for i in range(begin, end - 1, -1)])
-#
-#     b5_b1 = bit_values(id_hex_int, 5, 1)
-#     b6 = bit_value(id_hex_int, 6)
-#     b8_b7 = bit_values(id_hex_int, 8, 7)
-#
-#     return (
-#         b8_b7,  # Class
-#         b6,  # Type
-#         b5_b1  # Tag
-#     )
-#
-#
-# if __name__ == '__main__':
-#     data_hex = '130B5465737420557365722031'
-#     # print(data_hex)
-#
-#     id_hex_ber = data_hex[0:2]
-#     # print("id: " + id_hex_ber)
-#
-#     id_bin_ber = bin(int(id_hex_ber, 16))[2:].zfill(8)
-#     # print("id bin: " + id_bin_ber)
-#
-#     id_hex_int = int(id_hex_ber, 16)
-#
-#
-#     id_class_ber, id_type_ber, id_tag_bin_ber = split_id_ber(id_hex_int)
-#     # print("id_class: " + id_class_ber, end=" -> ")
-#     id_class_desk_ber = get_id_class_ber_desk(id_class_ber)
-#
-#     # print("id_type: " + id_type_ber, end=" -> ")
-#     id_type_desk_ber = get_id_type_ber_desk(id_type_ber)
-#
-#     # print("id_tag: " + id_tag_bin_ber, end=" -> ")
-#     id_tag_dec_ber = int(id_tag_bin_ber, 2)
-#     id_tag_hex_ber = hex(id_tag_dec_ber)
-#     # print(str(id_tag_dec_ber) + " -> " + id_tag_hex_ber)
-#
-#     id_tag_desk_ber = get_id_tag_ber_desk(id_tag_hex_ber)
-#
-#
-#     obj = {
-#         'data_tlv': data_hex,
-#         'id': {
-#             'hex': id_hex_ber,
-#             'bin': id_bin_ber,
-#             'dec': id_hex_int,
-#             'class': {
-#                 'value': id_class_ber,
-#                 'desk': id_class_desk_ber,
-#             },
-#             'type': {
-#                 'value': id_type_ber,
-#                 'desk': id_type_desk_ber,
-#             },
-#             'tag': {
-#                 'bin': id_tag_bin_ber,
-#                 'dec': id_tag_dec_ber,
-#                 'hex': id_tag_hex_ber,
-#                 'desc': id_tag_desk_ber,
-#             },
-#         },
-#     }
-#
-#     import json
-#     str_json_obj = json.dumps(obj, sort_keys=True, indent=4)
-#     print(str_json_obj)
-
-
-# TODO: ascii -> hex and hex -> ascii
-# def ascii2hex(s, prefix_hex='0x'):
-#     """
-#     ASCII -> HEX
-#     RU -> 0x5255
-#     """
-#
-#     ascii_str = s.encode('ascii')
-#
-#     hex_str = ''
-#
-#     for c in ascii_str:
-#         hex_str += str(hex(c)).lstrip('0x')
-#
-#     return prefix_hex + hex_str
-#
-#
-# def hex_str2ascii(hex_str):
-#     """
-#     HEX -> ASCII
-#     0x5255 -> RU
-#     """
-#
-#     hex_str = hex_str.lstrip('0x')
-#
-#     ascii_str = ''
-#     for i in range(len(hex_str)):
-#         if i % 2:
-#             hex_num = int(hex_str[i - 1] + hex_str[i], base=16)
-#             ascii_str += chr(hex_num)
-#
-#     return ascii_str
-#
-#
-# my_str = 'RUASCIIEN'
-#
-# hex_str = ascii2hex(my_str)
-# ascii_str = hex_str2ascii(hex_str)
-#
-# print('{} -> {}'.format(my_str, hex_str))
-# print('{} -> {}'.format(hex_str, ascii_str))
-#
-#
-# import binascii
-# my_str = 'RUASCIIEN'
-# print(binascii.b2a_hex(my_str.encode('ascii')))
-
-
 # TODO: больше примеров работы с модулями py
 # http://pythonworld.ru/karta-sajta
-
-
-# TODO: https://docs.python.org/3/tutorial/stdlib2.html
-# import textwrap
-# text = 'Придумать простое приложение и реализовать его с помощью TDD (используя unit-тесты)'
-# print(textwrap.fill(text, width=45))
 
 
 # TODO: придумать простое приложение и реализовтаь его с помощью TDD (используя unit-тесты)
