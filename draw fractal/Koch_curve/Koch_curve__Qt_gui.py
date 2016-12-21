@@ -105,7 +105,7 @@ class Widget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('Koch snowflake')
+        self.setWindowTitle('Koch_curve snowflake')
 
         self.img_label = QLabel()
         self.img_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
