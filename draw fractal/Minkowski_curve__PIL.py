@@ -70,14 +70,14 @@ __author__ = 'ipetrash'
 # ?>
 
 
-def draw_minkowski(draw, xa, ya, xi, yi, n, color):
+def draw_minkowski(draw, xa, ya, xi, yi, n):
     """
     Draws minkowski curve between two points.
 
     """
 
     if n == 0:
-        draw.line((xa, ya, xi, yi), fill=color)
+        draw.line((xa, ya, xi, yi), fill="black")
     else:
         #     C---D
         #     |   |
@@ -109,24 +109,21 @@ def draw_minkowski(draw, xa, ya, xi, yi, n, color):
         xg = xf + (xh - xe)
         yg = yf + (yh - ye)
 
-        draw_minkowski(draw, xa, ya, xb, yb, n - 1, color)
-        draw_minkowski(draw, xb, yb, xc, yc, n - 1, color)
-        draw_minkowski(draw, xc, yc, xd, yd, n - 1, color)
-        draw_minkowski(draw, xd, yd, xe, ye, n - 1, color)
-        draw_minkowski(draw, xe, ye, xf, yf, n - 1, color)
-        draw_minkowski(draw, xf, yf, xg, yg, n - 1, color)
-        draw_minkowski(draw, xg, yg, xh, yh, n - 1, color)
-        draw_minkowski(draw, xh, yh, xi, yi, n - 1, color)
-
-
-from PIL import Image, ImageDraw
+        draw_minkowski(draw, xa, ya, xb, yb, n - 1)
+        draw_minkowski(draw, xb, yb, xc, yc, n - 1)
+        draw_minkowski(draw, xc, yc, xd, yd, n - 1)
+        draw_minkowski(draw, xd, yd, xe, ye, n - 1)
+        draw_minkowski(draw, xe, ye, xf, yf, n - 1)
+        draw_minkowski(draw, xf, yf, xg, yg, n - 1)
+        draw_minkowski(draw, xg, yg, xh, yh, n - 1)
+        draw_minkowski(draw, xh, yh, xi, yi, n - 1)
 
 
 if __name__ == '__main__':
-    n = 3
-
+    from PIL import Image, ImageDraw
     img = Image.new("RGB", (600, 400), "white")
 
-    draw_minkowski(ImageDraw.Draw(img), 0, img.height / 2, img.width, img.height / 2, n, "black")
+    step = 3
+    draw_minkowski(ImageDraw.Draw(img), 0, img.height / 2, img.width, img.height / 2, step)
 
     img.save('img.png')
