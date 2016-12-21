@@ -74,9 +74,9 @@ def draw_snowflake_koch(draw_by_image, step):
 if __name__ == '__main__':
     from PIL import Image, ImageDraw
     img = Image.new("RGB", (425, 500), "white")
-    draw = ImageDraw.Draw(img)
+    draw_by_image = ImageDraw.Draw(img)
 
     step = 4
-    draw_snowflake_koch(draw, step)
+    draw_snowflake_koch(draw_by_image, step)
 
     img.save('img.png')
