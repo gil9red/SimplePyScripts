@@ -4,8 +4,7 @@
 __author__ = 'ipetrash'
 
 
-# Оригинал:
-# https://ru.wikipedia.org/wiki/Кривая_Коха
+# Оригинал: https://ru.wikipedia.org/wiki/Кривая_Коха
 # <?php
 #     $i = 4;
 #
