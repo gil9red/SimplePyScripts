@@ -4,6 +4,12 @@
 __author__ = 'ipetrash'
 
 
+"""
+Кривая Леви
+
+"""
+
+
 # Оригинал: https://ru.wikipedia.org/wiki/Кривая_Леви
 # <?php
 #     $i = 10;

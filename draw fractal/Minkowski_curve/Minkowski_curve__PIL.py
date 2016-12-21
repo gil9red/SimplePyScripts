@@ -4,6 +4,12 @@
 __author__ = 'ipetrash'
 
 
+"""
+Кривая Минковского
+
+"""
+
+
 # Оригинал: https://ru.wikipedia.org/wiki/Кривая_Минковского
 # <?php
 #     $i = 2;

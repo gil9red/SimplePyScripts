@@ -4,7 +4,10 @@
 __author__ = 'ipetrash'
 
 
-"""Кривая Госпера"""
+"""
+Кривая Госпера
+
+"""
 
 
 # Оригинал: http://www.cyberforum.ru/pascalabc/thread994987.html

@@ -4,7 +4,10 @@
 __author__ = 'ipetrash'
 
 
-"""Снежинка Коха"""
+"""
+Снежинка Коха
+
+"""
 
 
 # Оригинал: http://www.cyberforum.ru/pascalabc/thread994987.html
