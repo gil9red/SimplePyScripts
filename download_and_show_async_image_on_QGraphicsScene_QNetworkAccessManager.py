@@ -34,11 +34,12 @@ class Widget(QWidget):
         self.setLayout(layout)
 
     def finish_request(self, reply):
+        self.scene.clear()
+
         img = QPixmap()
         img.loadFromData(reply.readAll())
 
         item = QGraphicsPixmapItem(img)
-        self.scene.clear()
         self.scene.addItem(item)
 
 
