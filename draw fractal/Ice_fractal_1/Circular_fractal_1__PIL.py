@@ -5,7 +5,7 @@ __author__ = 'ipetrash'
 
 
 """
-Ледяной фрактал / Ice fractal
+Ледяной фрактал 1 / Ice fractal 1
 
 """
 
@@ -48,7 +48,7 @@ __author__ = 'ipetrash'
 from math import *
 
 
-def draw_ice_fractal(draw_by_image, step):
+def draw_ice_fractal_1(draw_by_image, step):
     def draw2(x, y, l, u, t):
         draw(x, y, l, u, t)
         return x + l * cos(u), y - l * sin(u)
@@ -75,6 +75,6 @@ if __name__ == '__main__':
     img = Image.new("RGB", (420, 420), "white")
 
     step = 5
-    draw_ice_fractal(ImageDraw.Draw(img), step)
+    draw_ice_fractal_1(ImageDraw.Draw(img), step)
 
     img.save('img.png')
