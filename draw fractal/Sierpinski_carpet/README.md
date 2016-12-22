@@ -1,4 +1,4 @@
-Ковёр Серпинского / Sierpinski_carpet
+Ковёр Серпинского / Sierpinski carpet
 
 ##
 ![](img.png)
