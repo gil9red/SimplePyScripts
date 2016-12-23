@@ -57,7 +57,7 @@ def draw_fingerprint(draw_by_image, width, height):
             x = 0.005 * (ix - 200)
             y = 0.005 * (iy - 150)
 
-            for i in range(1, n):
+            for i in range(n):
                 x1 = x * x - y * y + cx
                 y1 = x * y + 1.4 * y + cy
 

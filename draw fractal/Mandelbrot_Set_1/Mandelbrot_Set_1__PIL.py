@@ -56,7 +56,7 @@ def draw_mandelbrot_set_1(draw_by_image, width, height):
             cx = 0.002 * (ix - 720)
             cy = 0.002 * (iy - 150)
     
-            for i in range(1, n):
+            for i in range(n):
                 x1 = x * x - y * y + cx
                 y1 = 2 * x * y + cy
     
