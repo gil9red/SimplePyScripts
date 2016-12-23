@@ -124,7 +124,6 @@ if __name__ == '__main__':
     from PIL import Image, ImageDraw
     img = Image.new("RGB", (520, 500), "white")
 
-    step = 6
     draw_monkey_tree(ImageDraw.Draw(img))
 
     img.save('img.png')
