@@ -48,7 +48,6 @@ __author__ = 'ipetrash'
 
 def draw_fern(draw_by_image, width, height):
     n = 255
-    max = 10
 
     cx = 0.251
     cy = 0.95
@@ -61,7 +60,7 @@ def draw_fern(draw_by_image, width, height):
             for i in range(n):
                 x1 = 0.5 * x * x - 0.88 * y * y + cx
                 y1 = x * y + cy
-                if x1 > max or y1 > max:
+                if x1 > 10 or y1 > 10:
                     break
 
                 x = x1
@@ -75,7 +74,6 @@ if __name__ == '__main__':
     from PIL import Image, ImageDraw
     img = Image.new("RGB", (300, 300), "white")
 
-    step = 6
     draw_fern(ImageDraw.Draw(img), img.width, img.height)
 
     img.save('img.png')
