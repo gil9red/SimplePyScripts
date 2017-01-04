@@ -16,16 +16,21 @@ from bs4 import BeautifulSoup
 import time
 
 
-while True:
-    try:
-        rs = requests.get('http://iknowwhatyoudownload.com/ru/peer/', headers={'User-Agent': '-'})
-        root = BeautifulSoup(rs.content, 'lxml')
+def get_my_torrents():
+    rs = requests.get('http://iknowwhatyoudownload.com/ru/peer/', headers={'User-Agent': '-'})
+    root = BeautifulSoup(rs.content, 'lxml')
 
-        items = [item.text.strip() for item in root.select('.torrent_files > a')]
-        print(len(items), items)
+    return [item.text.strip() for item in root.select('.torrent_files > a')]
 
-        # Every 12 hours
-        time.sleep(60 * 60 * 12)
 
-    except Exception as e:
-        print('Error:', e)
+if __name__ == '__main__':
+    while True:
+        try:
+            items = get_my_torrents()
+            print(len(items), items)
+
+            # Every 12 hours
+            time.sleep(60 * 60 * 12)
+
+        except Exception as e:
+            print('Error:', e)
