@@ -11,10 +11,8 @@ __author__ = 'ipetrash'
 
 """
 
-# NOTE: На момент написания скрипта ни один из ip не был в базе iknowwhatyoudownload
 
-
-def get_torrents_by_ip(ip):
+def get_torrents_by_ip(ip, append_torrent_size=False):
     url = 'http://iknowwhatyoudownload.com/ru/peer/?ip=' + ip
 
     import requests
@@ -23,7 +21,19 @@ def get_torrents_by_ip(ip):
     from bs4 import BeautifulSoup
     root = BeautifulSoup(rs.content, 'lxml')
 
-    return [item.text.strip() for item in root.select('.torrent_files > a')]
+    # Если нужно вместе с названием передавать и размер торрента
+    if not append_torrent_size:
+        return [item.text.strip() for item in root.select('.torrent_files > a')]
+
+    items = list()
+
+    for row in root.select('table > tbody > tr'):
+        name = row.select_one('.name-column').text.strip()
+        size = row.select_one('.size-column').text.strip()
+
+        items.append((name, size))
+
+    return items
 
 
 if __name__ == '__main__':
@@ -38,11 +48,25 @@ if __name__ == '__main__':
     # Получение и сортировка элементов по названию организации
     items = sorted(rs.json()['ranges'].items(), key=lambda x: x[0])
 
-    for i, (name, ip_list) in enumerate(items, 1):
+    for i, (name, ip_network_list) in enumerate(items, 1):
         print('{}. {}'.format(i, name))
 
-        for ip in ip_list:
-            ip = ip.split('/')[0]
-            torrents = get_torrents_by_ip(ip)
+        if i == 4:
+            # Получени ip с маской подсети
+            for ip_network in ip_network_list:
+                print('    {}:'.format(ip_network))
 
-            print('    {}: {}'.format(ip, torrents))
+                # Получение ip подсети
+                import ipaddress
+                net4 = ipaddress.ip_network(ip_network)
+
+                # Перебор ip адресов указанной организации
+                for ip in net4.hosts():
+                    ip = str(ip)
+
+                    torrents = get_torrents_by_ip(ip, append_torrent_size=True)
+                    if torrents:
+                        print('        {}. Найдено {}: {}'.format(ip, len(torrents), torrents))
+
+                    import time
+                    time.sleep(0.3)

@@ -16,11 +16,23 @@ from bs4 import BeautifulSoup
 import time
 
 
-def get_my_torrents():
+def get_my_torrents(append_torrent_size=False):
     rs = requests.get('http://iknowwhatyoudownload.com/ru/peer/', headers={'User-Agent': '-'})
     root = BeautifulSoup(rs.content, 'lxml')
 
-    return [item.text.strip() for item in root.select('.torrent_files > a')]
+    # Если нужно вместе с названием передавать и размер торрента
+    if not append_torrent_size:
+        return [item.text.strip() for item in root.select('.torrent_files > a')]
+
+    items = list()
+
+    for row in root.select('table > tbody > tr'):
+        name = row.select_one('.name-column').text.strip()
+        size = row.select_one('.size-column').text.strip()
+
+        items.append((name, size))
+
+    return items
 
 
 if __name__ == '__main__':
