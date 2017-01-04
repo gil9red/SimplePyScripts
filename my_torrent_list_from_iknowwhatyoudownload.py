@@ -5,7 +5,7 @@ __author__ = 'ipetrash'
 
 
 """
-Скрипт, используя сервис http://iknowwhatyoudownload.com показывает список торрентов текущего ip,
+Скрипт, через сервис http://iknowwhatyoudownload.com получает список торрентов текущего ip,
 попавшего в базу сервиса.
 
 """
