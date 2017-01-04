@@ -51,22 +51,21 @@ if __name__ == '__main__':
     for i, (name, ip_network_list) in enumerate(items, 1):
         print('{}. {}'.format(i, name))
 
-        if i == 4:
-            # Получени ip с маской подсети
-            for ip_network in ip_network_list:
-                print('    {}:'.format(ip_network))
+        # Получени ip с маской подсети
+        for ip_network in ip_network_list:
+            print('    {}:'.format(ip_network))
 
-                # Получение ip подсети
-                import ipaddress
-                net4 = ipaddress.ip_network(ip_network)
+            # Получение ip подсети
+            import ipaddress
+            net4 = ipaddress.ip_network(ip_network)
 
-                # Перебор ip адресов указанной организации
-                for ip in net4.hosts():
-                    ip = str(ip)
+            # Перебор ip адресов указанной организации
+            for ip in net4.hosts():
+                ip = str(ip)
 
-                    torrents = get_torrents_by_ip(ip, append_torrent_size=True)
-                    if torrents:
-                        print('        {}. Найдено {}: {}'.format(ip, len(torrents), torrents))
+                torrents = get_torrents_by_ip(ip, append_torrent_size=True)
+                if torrents:
+                    print('        {}. Найдено {}: {}'.format(ip, len(torrents), torrents))
 
-                    import time
-                    time.sleep(0.3)
+                import time
+                time.sleep(0.3)
