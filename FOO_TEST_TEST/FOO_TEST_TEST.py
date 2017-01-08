@@ -8,6 +8,87 @@ __author__ = 'ipetrash'
 # https://gist.github.com/gil9red/50283a567f05c8cae9531d573f905ae2
 
 
+import re
+PARSE_GAME_NAME_PATTERN = re.compile(r'(\d+(, ?\d+)+)|(\d+ *?- *?\d+)|([MDCLXVI]+(, ?[MDCLXVI]+)+)',
+                                     flags=re.IGNORECASE)
+
+
+def parse_game_name(game_name):
+    match = PARSE_GAME_NAME_PATTERN.search(game_name)
+    if match is None:
+        return [game_name]
+
+    seq_str = match.group(0)
+    short_name = game_name.replace(seq_str, '').strip()
+
+    if ',' in seq_str:
+        seq = seq_str.replace(' ', '').split(',')
+
+    elif '-' in seq_str:
+        seq = seq_str.replace(' ', '').split('-')
+        if len(seq) > 2:
+            print('Unknown seq str = "{}".'.format(seq_str))
+        else:
+            seq = tuple(map(int, seq))
+            seq = tuple(range(seq[0], seq[1] + 1))
+    else:
+        print('Unknown seq str = "{}".'.format(seq_str))
+        return [game_name]
+
+    # Сразу проверяем номер игры в серии и если она первая, то не добавляем в названии ее номер
+    return [short_name if str(num) == '1' else '{} {}'.format(short_name, num) for num in seq]
+
+
+import requests
+rs = requests.get('https://gist.github.com/gil9red/2f80a34fb601cd685353')
+
+from bs4 import BeautifulSoup
+root = BeautifulSoup(rs.content, 'lxml')
+href = root.select_one('.file-actions > a')['href']
+
+from urllib.parse import urljoin
+raw_url = urljoin(rs.url, href)
+print(raw_url)
+
+# Чтобы при тестировании, при каждом запуске не парсить, лучше скачать и работать
+# уже с самим файлом, отрабатывая алгоритм
+# Сохранение указанного url в файл
+from urllib.request import urlretrieve
+urlretrieve(raw_url, 'gist_games')
+
+game_list = list()
+
+with open('gist_games', encoding='utf-8') as f:
+    found_pc = False
+
+    # Перебор строк файла
+    for line in f:
+        # Удаление пустых символов справа (пробелы, переводы на следующую строку и т.п.)
+        line = line.rstrip()
+
+        # Если строка пустая
+        if not line.strip():
+            continue
+
+        # Проверка, что первым символом не может быть флаг для игр и что последним символом будет :
+        # Т.е. ищем признак платформы
+        if line[0] not in [' ', '-', '@'] and line.endswith(':'):
+            # Если встретили PC
+            found_pc = line == 'PC:'
+            continue
+
+        # Теперь, осталось вывести все пройденные игры
+        if found_pc and line.startswith('  '):
+            name = line.strip()
+
+            game_list += parse_game_name(name)
+
+
+print(len(game_list))
+for game in game_list:
+    print(game)
+
+
 quit()
 
 import requests
