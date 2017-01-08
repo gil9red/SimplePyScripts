@@ -142,7 +142,8 @@ def _callable(html):
             file_name = os.path.basename(href)
             file_name = date_string + '_' + file_name
 
-            print(file_name, file_url)
+            from datetime import datetime
+            print(datetime.today().date(), file_name, file_url)
 
 
 url = 'http://www.dns-shop.ru/'
