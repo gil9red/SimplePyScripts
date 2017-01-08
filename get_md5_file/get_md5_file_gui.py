@@ -13,11 +13,15 @@ __author__ = 'ipetrash'
 import traceback
 
 try:
-    from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QMessageBox, QWidget, QFormLayout, QVBoxLayout
+    from PyQt5.QtWidgets import (
+        QApplication, QMainWindow, QLabel, QMessageBox, QWidget, QFormLayout, QVBoxLayout, QCheckBox
+    )
     from PyQt5.QtCore import Qt
 
 except:
-    from PyQt4.QtGui import QApplication, QMainWindow, QLabel, QMessageBox, QWidget, QFormLayout, QVBoxLayout
+    from PyQt4.QtGui import (
+        QApplication, QMainWindow, QLabel, QMessageBox, QWidget, QFormLayout, QVBoxLayout, QCheckBox
+    )
     from PyQt4.QtCore import Qt
 
 
@@ -55,14 +59,21 @@ class MainWindow(QMainWindow):
         self.label_md5 = QLabel()
         self.label_md5.setTextInteractionFlags(Qt.TextSelectableByMouse)
 
+        self.checkbox_copy_md5_to_clipboard = QCheckBox('After drop copy md5 to clipboard')
+        self.checkbox_copy_md5_to_clipboard.setChecked(False)
+
+        label_file_name_label = QLabel('File name:')
+        label_file_name_label.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+
         layout = QFormLayout()
-        layout.addRow('File name:', self.label_file_name)
+        layout.addRow(label_file_name_label, self.label_file_name)
         layout.addRow('MD5:', self.label_md5)
 
         main_layout = QVBoxLayout()
         main_layout.addWidget(QLabel('Drag and drop the file:'))
         main_layout.addLayout(layout)
         main_layout.addStretch()
+        main_layout.addWidget(self.checkbox_copy_md5_to_clipboard)
 
         central_widget = QWidget()
         central_widget.setLayout(main_layout)
@@ -82,9 +93,10 @@ class MainWindow(QMainWindow):
         self.label_file_name.setText(file_name)
         self.label_md5.setText(md5_hex)
 
-        # NOTE: если нужно сохранить md5 в буфер обмена
-        # clipboard = QApplication.instance().clipboard()
-        # clipboard.setText(md5_hex)
+        # Копирование md5 в буфер обмена
+        if self.checkbox_copy_md5_to_clipboard.isChecked():
+            clipboard = QApplication.instance().clipboard()
+            clipboard.setText(md5_hex)
 
         return super().dropEvent(event)
 
