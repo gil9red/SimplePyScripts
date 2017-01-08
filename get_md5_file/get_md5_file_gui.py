@@ -82,6 +82,10 @@ class MainWindow(QMainWindow):
         self.label_file_name.setText(file_name)
         self.label_md5.setText(md5_hex)
 
+        # NOTE: если нужно сохранить md5 в буфер обмена
+        # clipboard = QApplication.instance().clipboard()
+        # clipboard.setText(md5_hex)
+
         return super().dropEvent(event)
 
 
