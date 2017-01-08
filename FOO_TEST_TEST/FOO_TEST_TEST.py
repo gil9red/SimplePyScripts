@@ -4,6 +4,12 @@
 __author__ = 'ipetrash'
 
 
+# Подсчитать стоимость игр:
+# https://gist.github.com/gil9red/50283a567f05c8cae9531d573f905ae2
+
+
+quit()
+
 import requests
 # rs = requests.get('https://enter.contact-sys.com:2221/wstrans/wsTrans.exe/soap/ITransmitter')
 # rs = requests.get('http://0.0.0.0:12000')
