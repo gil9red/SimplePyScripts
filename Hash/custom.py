@@ -1,10 +1,23 @@
-from datetime import datetime 
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
+
+from datetime import datetime
 import hashlib 
 
-ts = datetime.today().timestamp() 
-bts = str(ts).encode()  
 
-md5 = hashlib.md5() 
-md5.update(bts)  
+if __name__ == '__main__':
+    ts = datetime.today().timestamp()
+    bts = str(ts).encode()
 
-print(md5.hexdigest())
+    # Long
+    md5 = hashlib.md5()
+    md5.update(bts)
+
+    print(md5.hexdigest())
+
+    # Short
+    print(hashlib.md5(bts).hexdigest())
+
