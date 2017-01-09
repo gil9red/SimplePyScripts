@@ -39,22 +39,25 @@ def parse_game_name(game_name):
     return [short_name if str(num) == '1' else '{} {}'.format(short_name, num) for num in seq]
 
 
-import requests
-rs = requests.get('https://gist.github.com/gil9red/2f80a34fb601cd685353')
+# Кеширование
+import os
+if not os.path.exists('gist_games'):
+    import requests
+    rs = requests.get('https://gist.github.com/gil9red/2f80a34fb601cd685353')
 
-from bs4 import BeautifulSoup
-root = BeautifulSoup(rs.content, 'lxml')
-href = root.select_one('.file-actions > a')['href']
+    from bs4 import BeautifulSoup
+    root = BeautifulSoup(rs.content, 'lxml')
+    href = root.select_one('.file-actions > a')['href']
 
-from urllib.parse import urljoin
-raw_url = urljoin(rs.url, href)
-print(raw_url)
+    from urllib.parse import urljoin
+    raw_url = urljoin(rs.url, href)
+    print(raw_url)
 
-# Чтобы при тестировании, при каждом запуске не парсить, лучше скачать и работать
-# уже с самим файлом, отрабатывая алгоритм
-# Сохранение указанного url в файл
-from urllib.request import urlretrieve
-urlretrieve(raw_url, 'gist_games')
+    # Чтобы при тестировании, при каждом запуске не парсить, лучше скачать и работать
+    # уже с самим файлом, отрабатывая алгоритм
+    # Сохранение указанного url в файл
+    from urllib.request import urlretrieve
+    urlretrieve(raw_url, 'gist_games')
 
 game_list = list()
 
@@ -85,9 +88,35 @@ with open('gist_games', encoding='utf-8') as f:
 
 
 print(len(game_list))
-for game in game_list:
-    print(game)
 
+
+# https://docs.python.org/3.4/library/sqlite3.html
+import sqlite3
+conn = sqlite3.connect('example.db')
+c = conn.cursor()
+
+# Create table
+try:
+    c.execute('CREATE TABLE Game (name text UNIQUE, price text, modify_price_date integer)')
+except Exception as e:
+    if ' already exists' not in str(e):
+        raise e
+
+for name in game_list:
+    c.execute("INSERT OR IGNORE INTO Game VALUES (?,NULL,NULL)", (name,))
+
+# Save (commit) the changes
+conn.commit()
+
+import time
+timestamp = int(time.time())
+c.execute("UPDATE Game SET modify_price_date = ? WHERE name = ?", (timestamp, 'Demigod'))
+conn.commit()
+
+for row in c.execute('SELECT * FROM game'):
+    print(row)
+
+conn.close()
 
 quit()
 
