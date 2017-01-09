@@ -14,13 +14,13 @@ if __name__ == '__main__':
 
     # Create table
     try:
-        c.execute('''CREATE TABLE Game (name text, price text, date integer)''')
+        c.execute('''CREATE TABLE stocks (date text, trans text, symbol text, qty real, price real)''')
     except Exception as e:
         if ' already exists' not in str(e):
             raise e
 
     # Insert a row of data
-    c.execute("INSERT INTO Game VALUES (?)", ())
+    c.execute("INSERT INTO stocks VALUES ('2006-01-05','BUY','RHAT',100,35.14)")
 
     # Save (commit) the changes
     conn.commit()
