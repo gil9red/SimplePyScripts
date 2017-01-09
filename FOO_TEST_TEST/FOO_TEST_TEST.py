@@ -91,6 +91,40 @@ for game in game_list:
 
 quit()
 
+
+# post_data = """
+# <REQUEST OBJECT_CLASS="TAbonentObject" ACTION="GET_CHANGES" POINT_CODE=""
+# VERSION="" TYPE_VERSION="" PORTION="" PACK="" BOOK_ID=""/>
+# """
+#
+# post_data = """
+#
+# <REQUEST OBJECT_CLASS="TAbonentObject" ACTION="GET_CHANGES" POINT_CODE="TZCL" TYPE_VERSION="I" VERSION="261672" />
+# """
+#
+# post_data = """
+# <?xml version="1.0" encoding="windows-1251"?>
+# <REQUEST OBJECT_CLASS="TAbonentObject" ACTION="GET_CHANGES" POINT_CODE="TZGX" VERSION="0" TYPE_VERSION="I" PORTION="1" PACK="ZLIB" PART="0"/>
+# """
+#
+# post_data = """
+# <REQUEST OBJECT_CLASS="TAbonentObject" ACTION="GET_CHANGES" POINT_CODE="CDPA" TYPE_VERSION="I" VERSION="0"
+# INT_SOFT_ID="CCD38CEB-58A8-4D26-9859-706FE1497F86"
+# />
+# """
+#
+# post_data = """
+# <?xml version="1.0" encoding="UTF-8"?>
+# <REQUEST OBJECT_CLASS="TAbonentObject" ACTION="Ping" POINT_CODE="TZUM" USER_ID="1" INT_SOFT_ID="DA61D1CE-757F-44C3-B3F7-11A026C37CD4"/>
+# """
+#
+# import requests
+# rs = requests.post('http://10.7.8.31:12000', data=post_data)
+# print(rs)
+# print(rs.content)
+# print(rs.content.decode('cp1251'))
+
+
 import requests
 # rs = requests.get('https://enter.contact-sys.com:2221/wstrans/wsTrans.exe/soap/ITransmitter')
 # rs = requests.get('http://0.0.0.0:12000')
