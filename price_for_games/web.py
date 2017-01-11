@@ -13,17 +13,25 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/")
 def index():
-    from common import DB_FILE_NAME, FINISHED, FINISHED_WATCHED
+    from common import FINISHED, FINISHED_WATCHED, create_connect
 
-    import sqlite3
-    conn = sqlite3.connect(DB_FILE_NAME)
-    c = conn.cursor()
+    connect = create_connect()
+    try:
+        cursor = connect.cursor()
 
-    get_game_sql = 'SELECT name, price, modify_date FROM game where kind = ? order by name'
-    finished_games = c.execute(get_game_sql, (FINISHED,)).fetchall()
-    finished_watched_games = c.execute(get_game_sql, (FINISHED_WATCHED,)).fetchall()
+        get_game_sql = '''
+            SELECT name, price
+            FROM game
+            WHERE kind = ?
+            ORDER BY name
+        '''
+        finished_games = cursor.execute(get_game_sql, (FINISHED,)).fetchall()
+        finished_watched_games = cursor.execute(get_game_sql, (FINISHED_WATCHED,)).fetchall()
 
-    headers = ['NAME', 'PRICE', 'MODIFY_DATE']
+    finally:
+        connect.close()
+
+    headers = ['NAME', 'PRICE']
 
     return render_template_string('''\
 <!DOCTYPE html>

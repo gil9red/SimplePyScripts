@@ -9,31 +9,33 @@ __author__ = 'ipetrash'
 
 from common import (
     parse_game_name, search_game_price_list, smart_comparing_names,
-    DB_FILE_NAME, FINISHED, FINISHED_WATCHED
+    DB_FILE_NAME, FINISHED, FINISHED_WATCHED,
+    create_connect,
 )
+
+connect = create_connect()
+cursor = connect.cursor()
 
 #
 # Создание базы и таблицы
 #
 
-# https://docs.python.org/3.4/library/sqlite3.html
-import sqlite3
-conn = sqlite3.connect(DB_FILE_NAME)
-c = conn.cursor()
-
 # Имя игры и ее вид должны быть уникальными
-c.execute('''CREATE TABLE IF NOT EXISTS Game (
-    name text,
-    price text,
-    modify_date integer,
-    kind text,
+cursor.execute('''CREATE TABLE IF NOT EXISTS Game (
+    name TEXT,
+    price TEXT,
+    modify_date TIMESTAMP,
+    kind TEXT,
 
     CONSTRAINT game_pk PRIMARY KEY (name, kind)
 );
 ''')
 
+
+# TODO: зациклить заполнение базы и сохранять время после цикла
+
 #
-# Скачивание списка игр, вытаскивание из него игр
+# Скачивание списка игр, вытаскивание из него пройденных и просмотренных игр
 #
 
 # Пройденные игры
@@ -108,7 +110,7 @@ print(len(finished_watched_game_list))
 
 
 def insert_game(name, kind):
-    c.execute("INSERT OR IGNORE INTO Game VALUES (?,NULL,NULL,?)", (name, kind))
+    cursor.execute("INSERT OR IGNORE INTO Game VALUES (?,NULL,NULL,?)", (name, kind))
 
 # Добавлени в базу пройденных игр
 for name in finished_game_list:
@@ -119,7 +121,7 @@ for name in finished_watched_game_list:
     insert_game(name, FINISHED_WATCHED)
 
 # Save (commit) the changes
-conn.commit()
+connect.commit()
 
 #
 # Получение игр без указанной цены, указание цены
@@ -128,7 +130,7 @@ conn.commit()
 # Перебор игр и указание их цены
 # Перед перебором собираем все игры и удаляем дубликаты (игры могут и просмотренными, и пройденными)
 # заодно список кортежей из одного имени делаем просто списом имен
-games_list = set(game for (game,) in c.execute('SELECT name FROM game where price is null').fetchall())
+games_list = set(game for (game,) in cursor.execute('SELECT name FROM game where price is null').fetchall())
 for game in games_list:
     game_price = None
 
@@ -147,13 +149,11 @@ for game in games_list:
 
     print('Нашли игру: {} -> {} : {}\n'.format(game, name, price))
 
+    cursor.execute("UPDATE Game SET price = ?, modify_date = date('now') WHERE name = ?", (price, game))
+    connect.commit()
+
     import time
-    timestamp = int(time.time())
-    c.execute("UPDATE Game SET price = ?, modify_date = ? WHERE name = ?", (price, timestamp, game))
-
     time.sleep(3)
-
-conn.commit()
 
 
 # print('\n\n')
@@ -161,4 +161,8 @@ conn.commit()
 # for row in c.execute('SELECT * FROM game'):
 #     print(row)
 
-conn.close()
+# NOTE: пусть коннект живет все время работы скрипта
+# TODO: или нужно испоьлдзование коннекта обернуть в блоки типа with и вызывать автоматом, после выполнения
+# блока кода
+# NOTE: По идеи, соединение и так прервется, когда скрипт завершится
+# connect.close()

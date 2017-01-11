@@ -8,6 +8,27 @@ DB_FILE_NAME = 'games.sqlite'
 FINISHED = 'Finished'
 FINISHED_WATCHED = 'Finished watched'
 
+# TODO: доработать идею
+# https://docs.python.org/3.4/library/sqlite3.html
+# import sqlite3
+# connect = sqlite3.connect(DB_FILE_NAME)
+# cursor = connect.cursor()
+
+
+def create_connect():
+    import sqlite3
+    return sqlite3.connect(DB_FILE_NAME)
+
+
+# NOTE: пример получения данных с конвертированием времени в строковой вид
+# get_game_sql = '''
+#     SELECT name, price, strftime('%Y-%m-%d', modify_date)
+#     FROM game
+#     WHERE kind = ?
+#     ORDER BY name
+# '''
+
+
 import re
 PARSE_GAME_NAME_PATTERN = re.compile(r'(\d+(, ?\d+)+)|(\d+ *?- *?\d+)|([MDCLXVI]+(, ?[MDCLXVI]+)+)',
                                      flags=re.IGNORECASE)
