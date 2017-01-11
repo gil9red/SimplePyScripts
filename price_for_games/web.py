@@ -51,7 +51,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/")
 def index():
-    from common import FINISHED, FINISHED_WATCHED, create_connect
+    from common import FINISHED, FINISHED_WATCHED, create_connect, settings
     connect = create_connect()
     try:
         cursor = connect.cursor()
@@ -100,6 +100,9 @@ def index():
     </style>
 </head>
 <body>
+    Последнее обновление было: {{ last_run_date }}
+    <br>
+
     <table id="finished_game" width="70%" border="1">
         <caption>Пройденные игры {{ finished_game_statistic }}</caption>
         <tr>
@@ -159,7 +162,8 @@ def index():
         finished_game_statistic=finished_game_statistic,
         finished_watched_game_statistic=finished_watched_game_statistic,
         total_price_finished_games=total_price_finished_games,
-        total_price_finished_watched_games=total_price_finished_watched_games
+        total_price_finished_watched_games=total_price_finished_watched_games,
+        last_run_date=settings.last_run_date,
     )
 
 
