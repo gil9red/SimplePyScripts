@@ -4,6 +4,44 @@
 __author__ = 'ipetrash'
 
 
+# NOTE: вычисление такого можно было перенести на клиента и описать через javascript
+# но т.к. данных мало и пользоваться ими будут очень редко, можно на серверной стороне
+# их считать.
+# Это будет касаться и подсчета сумм.
+def statistic_string(games):
+    """
+    Функция возвращает строку с статистикой: сколько всего игр, сколько имеют цены, и процент.
+    Пример: (0 / 160 (0%))
+
+    """
+
+    price_number = len([(name, price) for name, price in games if price is not None])
+    return '({} / {} ({:.0f}%))'.format(
+        price_number,
+        len(games),
+        price_number / len(games) * 100
+    )
+
+
+def total_price(games):
+    """
+    Функция подсчитает и вернет сумму цен игр в списке.
+
+    """
+
+    def get_price(price_title):
+        """Функция удаляет из получаемое строки все символы кроме цифровых и точки."""
+
+        # TODO: быстрый вариант решения проблемы, но не надежный
+        price = price_title.replace(' pуб.', '').strip()
+        return float(price)
+
+    total = sum(get_price(price) for _, price in games if price is not None)
+
+    # Чтобы избавиться от пустой дробной части: 50087.0 -> 50087
+    return total if total != int(total) else int(total)
+
+
 from flask import Flask, render_template_string
 app = Flask(__name__)
 
@@ -27,30 +65,14 @@ def index():
         finished_games = cursor.execute(get_game_sql, (FINISHED,)).fetchall()
         finished_watched_games = cursor.execute(get_game_sql, (FINISHED_WATCHED,)).fetchall()
 
-        # NOTE: вычисление такого можно было перенести на клиента и описать через javascript
-        # но т.к. данных мало и пользоваться ими будут очень редко, можно на серверной стороне
-        # их считать.
-        # Это будет касаться и подсчета сумм.
-
-        def statistic_string(games):
-            """
-            Функция возвращает строку с статистикой: сколько всего игр, сколько имеют цены, и процент.
-            Пример: (0 / 160 (0%))
-
-            """
-
-            price_number = len([item for item in games if item[1] is not None])
-            return '({} / {} ({:.0f}%))'.format(
-                price_number,
-                len(games),
-                price_number / len(games) * 100
-            )
-
-        finished_game_statistic = statistic_string(finished_games)
-        finished_watched_game_statistic = statistic_string(finished_watched_games)
-
     finally:
         connect.close()
+
+    finished_game_statistic = statistic_string(finished_games)
+    finished_watched_game_statistic = statistic_string(finished_watched_games)
+
+    total_price_finished_games = total_price(finished_games)
+    total_price_finished_watched_games = total_price(finished_watched_games)
 
     headers = ['NAME', 'PRICE']
 
@@ -89,6 +111,8 @@ def index():
         {% for name, price in finished_games %}
             <tr><td>{{ name }}</td><td>{{ price }}</td></tr>
         {% endfor %}
+
+        <tr><td align="right">Итого:</td><td>{{ total_price_finished_games }}</td></tr>
     </table>
     <br><br><br>
 
@@ -103,6 +127,8 @@ def index():
         {% for name, price in finished_watched_games %}
             <tr><td>{{ name }}</td><td>{{ price }}</td></tr>
         {% endfor %}
+
+        <tr><td align="right">Итого:</td><td>{{ total_price_finished_watched_games }}</td></tr>
     </table>
 
     <script>
@@ -131,7 +157,9 @@ def index():
         headers=headers,
         finished_games=finished_games, finished_watched_games=finished_watched_games,
         finished_game_statistic=finished_game_statistic,
-        finished_watched_game_statistic=finished_watched_game_statistic
+        finished_watched_game_statistic=finished_watched_game_statistic,
+        total_price_finished_games=total_price_finished_games,
+        total_price_finished_watched_games=total_price_finished_watched_games
     )
 
 
