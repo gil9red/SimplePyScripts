@@ -151,7 +151,6 @@ for game in games_list:
     timestamp = int(time.time())
     c.execute("UPDATE Game SET price = ?, modify_date = ? WHERE name = ?", (price, timestamp, game))
 
-    import time
     time.sleep(3)
 
 conn.commit()
