@@ -174,10 +174,13 @@ if __name__ == '__main__':
     app.run(
         port=5000,
 
-        # Включение поддержки множества подключений
-        threaded=True,
+        # NOTE: убрал т.к. вызывало при получении запроса ошибку "sqlite3.ProgrammingError: SQLite objects created
+        # in a thread can only be used in that same thread.The object was created in thread id 9284 and this is"
+        # а разбираться с этим не было желания
+        #
+        # # Включение поддержки множества подключений
+        # threaded=True,
     )
 
     # # Public IP
     # app.run(host='0.0.0.0')
-
