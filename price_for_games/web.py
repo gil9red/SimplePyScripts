@@ -74,7 +74,7 @@ def index():
     total_price_finished_games = total_price(finished_games)
     total_price_finished_watched_games = total_price(finished_watched_games)
 
-    headers = ['NAME', 'PRICE']
+    headers = ['Название', 'Цена']
 
     return render_template_string('''\
 <!DOCTYPE html>
@@ -87,6 +87,10 @@ def index():
         /* Увеличим заголовок таблиц */
         table > caption {
             font-size: 150%;
+        }
+
+        th {
+            font-size: 120%;
         }
 
         /* Небольшой отступ внутри ячеек */
