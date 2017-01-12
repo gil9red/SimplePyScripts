@@ -12,7 +12,7 @@ __author__ = 'ipetrash'
 
 
 from common import (
-    parse_game_name, search_game_price_list, smart_comparing_names,
+    parse_game_name, steam_search_game_price_list, smart_comparing_names,
     DB_FILE_NAME, FINISHED, FINISHED_WATCHED,
     create_connect, get_games_list, append_games_to_base, fill_price_of_games, settings
 )
@@ -46,7 +46,7 @@ while True:
 
     # Добавление в базу новых игр
     append_games_to_base(connect, finished_game_list, finished_watched_game_list)
-
+    quit()
     # Заполнение цен игр
     fill_price_of_games(connect)
 
