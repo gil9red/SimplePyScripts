@@ -4,8 +4,12 @@
 __author__ = 'ipetrash'
 
 
-# Подсчитать стоимость игр:
-# https://gist.github.com/gil9red/50283a567f05c8cae9531d573f905ae2
+"""
+Этот скрипт анализирует файл с списком игр, заполняет sqlite базу пройденными и просмотренными играми, ищет цену
+этим играм и заполняет указывает их играм.
+
+"""
+
 
 from common import (
     parse_game_name, search_game_price_list, smart_comparing_names,
@@ -49,15 +53,3 @@ while True:
     # Every 3 days
     import time
     time.sleep(60 * 60 * 24 * 3)
-
-
-# print('\n\n')
-# # for row in c.execute('SELECT * FROM game where price is not null'):
-# for row in c.execute('SELECT * FROM game'):
-#     print(row)
-
-# NOTE: пусть коннект живет все время работы скрипта
-# TODO: или нужно испоьлдзование коннекта обернуть в блоки типа with и вызывать автоматом, после выполнения
-# блока кода
-# NOTE: По идеи, соединение и так прервется, когда скрипт завершится
-# connect.close()
