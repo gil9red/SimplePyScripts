@@ -8,25 +8,10 @@ DB_FILE_NAME = 'games.sqlite'
 FINISHED = 'Finished'
 FINISHED_WATCHED = 'Finished watched'
 
-# TODO: доработать идею
-# https://docs.python.org/3.4/library/sqlite3.html
-# import sqlite3
-# connect = sqlite3.connect(DB_FILE_NAME)
-# cursor = connect.cursor()
-
 
 def create_connect():
     import sqlite3
     return sqlite3.connect(DB_FILE_NAME)
-
-
-# NOTE: пример получения данных с конвертированием времени в строковой вид
-# get_game_sql = '''
-#     SELECT name, price, strftime('%Y-%m-%d', modify_date)
-#     FROM game
-#     WHERE kind = ?
-#     ORDER BY name
-# '''
 
 
 def get_games_list():
@@ -141,7 +126,7 @@ def fill_price_of_games(connect):
         game_price = None
 
         # Поищем игру и ее цену
-        game_price_list = search_game_price_list(game)
+        game_price_list = steam_search_game_price_list(game)
         for name, price in game_price_list:
             # Если нашли игру, запоминаем цену и прерываем сравнение с другими найденными играми
             if smart_comparing_names(game, name):
@@ -162,12 +147,26 @@ def fill_price_of_games(connect):
         time.sleep(3)
 
 
+# Регулярка вытаскивает выражения вида: 1, 2, 3 или 1-3, или римские цифры: III, IV
 import re
 PARSE_GAME_NAME_PATTERN = re.compile(r'(\d+(, ?\d+)+)|(\d+ *?- *?\d+)|([MDCLXVI]+(, ?[MDCLXVI]+)+)',
                                      flags=re.IGNORECASE)
 
 
 def parse_game_name(game_name):
+    """
+    Функция принимает название игры и пытается разобрать его, после возвращает список названий.
+    Т.к. в названии игры может находиться указание ее частей, то функция разберет их.
+
+    Пример:
+        "Resident Evil 4, 5, 6" станет:
+            ["Resident Evil 4", "Resident Evil 5", "Resident Evil 6"]
+
+        "Resident Evil 1-3" станет:
+            ["Resident Evil", "Resident Evil 2", "Resident Evil 3"]
+
+    """
+
     match = PARSE_GAME_NAME_PATTERN.search(game_name)
     if match is None:
         return [game_name]
@@ -193,7 +192,13 @@ def parse_game_name(game_name):
     return [short_name if str(num) == '1' else '{} {}'.format(short_name, num) for num in seq]
 
 
-def search_game_price_list(name):
+def steam_search_game_price_list(name):
+    """
+    Функция принимает название игры, после ищет его в стиме и возвращает результат как список
+    кортежей из (название игры, цена).
+
+    """
+
     # category1 = 998 (Game)
     url = 'http://store.steampowered.com/search/?category1=998&os=win&supportedlang=english&term=' + name
 
@@ -232,23 +237,24 @@ def search_game_price_list(name):
     return game_price_list
 
 
-def clear_name(name):
-    import re
-    return re.sub(r'[^\w]', '', name).replace('_', '')
-
-
 def smart_comparing_names(name_1, name_2):
+    """
+    Функция для сравнивания двух названий игр.
+    Возвращает True, если совпадают, иначе -- False.
+
+    """
+
     # Приведение строк к одному регистру
     name_1 = name_1.lower()
     name_2 = name_2.lower()
 
+    def clear_name(name):
+        import re
+        return re.sub(r'[^\w]', '', name).replace('_', '')
+
     # Удаление символов кроме буквенных и цифр: "the witcher®3:___ вася! wild hunt" -> "thewitcher3васяwildhunt"
     name_1 = clear_name(name_1)
     name_2 = clear_name(name_2)
-
-    # TODO: REMOVE THIS
-    if name_1 == name_2:
-        print(name_1, name_2)
 
     return name_1 == name_2
 
