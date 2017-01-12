@@ -46,7 +46,7 @@ while True:
 
     # Добавление в базу новых игр
     append_games_to_base(connect, finished_game_list, finished_watched_game_list)
-    quit()
+
     # Заполнение цен игр
     fill_price_of_games(connect)
 
