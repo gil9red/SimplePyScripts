@@ -6,7 +6,8 @@ __author__ = 'ipetrash'
 
 while True:
     from datetime import datetime
-    print(datetime.today())
+    today = datetime.today()
+    print(today)
     print()
 
     from main import main
@@ -15,5 +16,10 @@ while True:
     print('\n\n' + '-' * 20 + '\n\n')
 
     # Every 12 hours
-    import time
-    time.sleep(60 * 60 * 12)
+    from datetime import timedelta
+    while today <= today + timedelta(hours=12):
+        # Delay 5 minutes
+        import time
+        time.sleep(5 * 60)
+
+        today = datetime.today()
