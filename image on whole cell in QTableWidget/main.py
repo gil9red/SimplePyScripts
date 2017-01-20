@@ -36,9 +36,6 @@ def create_item(img):
 
 
 class MyDelegate(QStyledItemDelegate):
-    def __init__(self):
-        super().__init__()
-
     def paint(self, painter, option, index):
         painter.save()
 
