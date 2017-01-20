@@ -146,7 +146,7 @@ def clone_repo(url, repos_dir, branch='master'):
     repo.remotes.origin.pull()
 
 
-if __name__ == '__main__':
+def main():
     if PROXY:
         import os
         os.environ['http_proxy'] = PROXY
@@ -180,3 +180,7 @@ if __name__ == '__main__':
         # Задержка на 24 часа
         import time
         time.sleep(60 * 60 * 24)
+
+
+if __name__ == '__main__':
+    main()
