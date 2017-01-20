@@ -35,7 +35,7 @@ def create_item(img):
     return item
 
 
-class MyDelegate(QStyledItemDelegate):
+class MyDelegate_1(QStyledItemDelegate):
     def paint(self, painter, option, index):
         painter.save()
 
@@ -65,15 +65,55 @@ class MyDelegate(QStyledItemDelegate):
         # super().paint(painter, option, index)
 
 
+class MyDelegate_2(QStyledItemDelegate):
+    def paint(self, painter, option, index):
+        painter.save()
+
+        rect = option.rect
+        img = index.model().data(index, Qt.DecorationRole)
+
+        x, y = rect.x(), rect.y()
+
+        painter.drawPixmap(x, y, img)
+
+        painter.drawPixmap(x + 16, y, img)
+        painter.drawPixmap(x + 32, y, img)
+        painter.drawPixmap(x + 48, y, img)
+        painter.drawPixmap(x + 64, y, img)
+        painter.drawPixmap(x + 80, y, img)
+
+        painter.drawPixmap(x, y + 16, img)
+        painter.drawPixmap(x + 16, y + 16, img)
+
+        item_option = QStyleOptionViewItem(option)
+        self.initStyleOption(item_option, index)
+
+        # Обработка при выделении ячейки делегата
+        # Рисуем выделение полупрозрачным чтобы было видно нарисованное ранее
+        if item_option.state & QStyle.State_Selected:
+            color = item_option.palette.color(QPalette.Highlight)
+            color.setAlpha(180)
+
+            painter.setPen(Qt.NoPen)
+            painter.setBrush(color)
+            painter.drawRect(rect)
+
+        painter.restore()
+
+        # # Если хотим что-то дорисовать (например текст)
+        # super().paint(painter, option, index)
+
+
 if __name__ == '__main__':
     app = QApplication([])
 
     table = QTableWidget()
     table.show()
+    table.resize(400, 200)
 
-    headers = ['Normal', 'Delegate']
-    table.setHorizontalHeaderLabels(headers)
+    headers = ['Normal', 'Delegate v1', 'Delegate v2']
     table.setColumnCount(len(headers))
+    table.setHorizontalHeaderLabels(headers)
     table.setRowCount(3)
     table.verticalHeader().hide()
 
@@ -81,14 +121,16 @@ if __name__ == '__main__':
     pix_2 = QPixmap('favicon_prog_org.png')
     pix_3 = QPixmap('favicon_google_tr.png')
 
-    table.setItem(0, 0, create_item(pix_1))
-    table.setItem(1, 0, create_item(pix_2))
-    table.setItem(2, 0, create_item(pix_3))
+    for pix in [pix_1, pix_2, pix_3]:
+        for col in range(table.columnCount()):
+            table.setItem(0, col, create_item(pix_1))
+            table.setItem(1, col, create_item(pix_2))
+            table.setItem(2, col, create_item(pix_3))
 
-    table.setItem(0, 1, create_item(pix_1))
-    table.setItem(1, 1, create_item(pix_2))
-    table.setItem(2, 1, create_item(pix_3))
+    delegate_1 = MyDelegate_1()
+    delegate_2 = MyDelegate_2()
 
-    table.setItemDelegateForColumn(1, MyDelegate())
+    table.setItemDelegateForColumn(1, delegate_1)
+    table.setItemDelegateForColumn(2, delegate_2)
 
     app.exec()
