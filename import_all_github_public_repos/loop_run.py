@@ -17,6 +17,7 @@ while True:
 
     # Every 12 hours
     from datetime import timedelta
+    today = datetime.today()
     timeout_date = today + timedelta(hours=12)
 
     while today <= timeout_date:
@@ -31,3 +32,5 @@ while True:
         time.sleep(10)
 
         today = datetime.today()
+
+    print('\n')
