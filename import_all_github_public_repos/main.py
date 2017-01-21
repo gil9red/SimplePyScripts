@@ -146,7 +146,7 @@ def clone_repo(url, repos_dir, branch='master'):
     repo.remotes.origin.pull()
 
 
-def main():
+def run():
     if PROXY:
         import os
         os.environ['http_proxy'] = PROXY
@@ -162,25 +162,20 @@ def main():
 
     # TODO: показывать только новые репозитории (локальные) или те, что было
     # изменены, для измененных показывать количество новых коммитов
-    while True:
-        repo_list = get_repo_list(LOGIN, PASSWORD, user)
-        for i, repo in enumerate(repo_list, 1):
-            # TODO: вывести размер репозитория с учетом .git и без
-            print('{}. {}: {}'.format(i, repo, repo.url))
-            try:
-                clone_repo(repo.html_url, REPOS_DIR, repo.default_branch)
+    repo_list = get_repo_list(LOGIN, PASSWORD, user)
+    for i, repo in enumerate(repo_list, 1):
+        # TODO: вывести размер репозитория с учетом .git и без
+        print('{}. {}: {}'.format(i, repo, repo.url))
+        try:
+            clone_repo(repo.html_url, REPOS_DIR, repo.default_branch)
 
-            # TODO: обработка и timeout при ошибках
-            except GitCommandError as e:
-                print(e, e.status)
-                print(e.command)
-                import traceback
-                print(traceback.format_exc())
-
-        # Задержка на 24 часа
-        import time
-        time.sleep(60 * 60 * 24)
+        # TODO: обработка и timeout при ошибках
+        except GitCommandError as e:
+            print(e, e.status)
+            print(e.command)
+            import traceback
+            print(traceback.format_exc())
 
 
 if __name__ == '__main__':
-    main()
+    run()

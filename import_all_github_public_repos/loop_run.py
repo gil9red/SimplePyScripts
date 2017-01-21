@@ -10,8 +10,8 @@ while True:
     print(today)
     print()
 
-    from main import main
-    main()
+    from main import run
+    run()
 
     print('\n\n' + '-' * 20 + '\n\n')
 
@@ -26,8 +26,8 @@ while True:
         import sys
         sys.stdout.flush()
 
-        # Delay 10 minutes
+        # Delay 10 seconds
         import time
-        time.sleep(10 * 60)
+        time.sleep(10)
 
         today = datetime.today()
