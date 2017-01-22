@@ -113,7 +113,7 @@ if __name__ == '__main__':
     table.show()
     table.resize(400, 200)
 
-    headers = ['Normal', 'Delegate v1', 'Delegate v2']
+    headers = ['Normal', 'Delegate v1', 'Delegate v1 (without img)', 'Delegate v2']
     table.setColumnCount(len(headers))
     table.setHorizontalHeaderLabels(headers)
     table.setRowCount(3)
@@ -123,17 +123,19 @@ if __name__ == '__main__':
     pix_2 = QPixmap('favicon_prog_org.png')
     pix_3 = QPixmap('favicon_google_tr.png')
 
-    for pix in [pix_1, pix_2, pix_3]:
-        for col in range(table.columnCount()):
-            table.setItem(0, col, create_item(pix_1))
+    for col in range(table.columnCount()):
+        if col == 2:
             table.setItem(1, col, QTableWidgetItem())
-            # table.setItem(1, col, create_item(pix_2))
+        else:
+            table.setItem(0, col, create_item(pix_1))
+            table.setItem(1, col, create_item(pix_2))
             table.setItem(2, col, create_item(pix_3))
 
     delegate_1 = MyDelegate_1()
     delegate_2 = MyDelegate_2()
 
     table.setItemDelegateForColumn(1, delegate_1)
-    table.setItemDelegateForColumn(2, delegate_2)
+    table.setItemDelegateForColumn(2, delegate_1)
+    table.setItemDelegateForColumn(3, delegate_2)
 
     app.exec()
