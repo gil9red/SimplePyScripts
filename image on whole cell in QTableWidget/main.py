@@ -110,6 +110,7 @@ if __name__ == '__main__':
     app = QApplication([])
 
     table = QTableWidget()
+    table.setSelectionBehavior(QTableView.SelectRows)
     table.show()
     table.resize(400, 200)
 
