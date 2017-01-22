@@ -37,13 +37,15 @@ def create_item(img):
 
 class MyDelegate_1(QStyledItemDelegate):
     def paint(self, painter, option, index):
-        painter.save()
+        img = index.model().data(index, Qt.DecorationRole)
+        if img is None:
+            super().paint(painter, option, index)
+            return
 
         rect = option.rect
-        img = index.model().data(index, Qt.DecorationRole)
-
         w, h = rect.size().width(), rect.size().height()
         img = img.scaled(w, h, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+
         painter.drawPixmap(rect, img)
 
         item_option = QStyleOptionViewItem(option)
@@ -55,11 +57,11 @@ class MyDelegate_1(QStyledItemDelegate):
             color = item_option.palette.color(QPalette.Highlight)
             color.setAlpha(180)
 
+            painter.save()
             painter.setPen(Qt.NoPen)
             painter.setBrush(color)
             painter.drawRect(rect)
-
-        painter.restore()
+            painter.restore()
 
         # Если хотим что-то дорисовать (например текст)
         # super().paint(painter, option, index)
@@ -67,13 +69,13 @@ class MyDelegate_1(QStyledItemDelegate):
 
 class MyDelegate_2(QStyledItemDelegate):
     def paint(self, painter, option, index):
-        painter.save()
+        img = index.model().data(index, Qt.DecorationRole)
+        if img is None:
+            super().paint(painter, option, index)
+            return
 
         rect = option.rect
-        img = index.model().data(index, Qt.DecorationRole)
-
         x, y = rect.x(), rect.y()
-
         painter.drawPixmap(x, y, img)
 
         painter.drawPixmap(x + 16, y, img)
@@ -94,11 +96,11 @@ class MyDelegate_2(QStyledItemDelegate):
             color = item_option.palette.color(QPalette.Highlight)
             color.setAlpha(180)
 
+            painter.save()
             painter.setPen(Qt.NoPen)
             painter.setBrush(color)
             painter.drawRect(rect)
-
-        painter.restore()
+            painter.restore()
 
         # # Если хотим что-то дорисовать (например текст)
         # super().paint(painter, option, index)
@@ -124,7 +126,8 @@ if __name__ == '__main__':
     for pix in [pix_1, pix_2, pix_3]:
         for col in range(table.columnCount()):
             table.setItem(0, col, create_item(pix_1))
-            table.setItem(1, col, create_item(pix_2))
+            table.setItem(1, col, QTableWidgetItem())
+            # table.setItem(1, col, create_item(pix_2))
             table.setItem(2, col, create_item(pix_3))
 
     delegate_1 = MyDelegate_1()
