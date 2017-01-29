@@ -88,7 +88,6 @@ def load_finished_handler(ok):
             # Get video time and append global list
             global video_time_list
             video_time_list.update(get_video_time_list())
-            print("More")
 
             # Get video link and append to list
             global video_link_list
@@ -99,6 +98,7 @@ def load_finished_handler(ok):
             return
 
         # Click on button "More"
+        print("More")
         button.evaluateJavaScript('this.click()')
 
     timer.timeout.connect(timeout_handler)
