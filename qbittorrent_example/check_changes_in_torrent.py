@@ -34,25 +34,6 @@ def get_rutor_torrent_download_info(torrent_url):
     return torrent_url.replace('/torrent/', '/download/'), magnet_url, info_hash
 
 
-def download_and_parse_torrent_file(torrent_file_url):
-    while True:
-        try:
-            import requests
-            data = requests.get(torrent_file_url).content.decode('latin1')
-
-            import effbot_bencode
-            torrent = effbot_bencode.decode(data)
-            return torrent
-
-        except:
-            import traceback
-            print(traceback.format_exc())
-
-            # Если произошла какая-то ошибка попытаемся через 30 секунд попробовать снова
-            import time
-            time.sleep(30)
-
-
 def remove_previous_torrent_from_qbittorrent(qb, new_info_hash):
     info_hash_by_name_dict = {torrent['hash']: torrent['name'] for torrent in qb.torrents()}
 
@@ -88,7 +69,7 @@ if __name__ == '__main__':
 
     torrent_url = 'http://anti-tor.org/torrent/544942'
 
-    last_number_files = 0
+    last_info_hash = None
 
     while True:
         from datetime import datetime
@@ -97,16 +78,9 @@ if __name__ == '__main__':
         torrent_file_url, _, info_hash = get_rutor_torrent_download_info(torrent_url)
         print('{}: Проверка {}: {} / {}'.format(today, torrent_url, torrent_file_url, info_hash))
 
-        torrent = download_and_parse_torrent_file(torrent_file_url)
-        files = ["/".join(file["path"]) for file in torrent["info"]["files"]]
-
-        if len(files) != last_number_files:
-            print('Обнаружены изменения: {} файлов, {} фильмов: {}'.format(
-                len(files),
-                len(list(filter(lambda x: x.endswith('.avi'), files))),
-                files
-            ))
-            last_number_files = len(files)
+        if info_hash != last_info_hash:
+            print('Торрент изменился, пора его перекачивать')
+            last_info_hash = info_hash
 
             # Say qbittorrent download torrent file
             qb.download_from_link(torrent_file_url)
