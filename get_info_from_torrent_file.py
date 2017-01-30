@@ -62,6 +62,8 @@ if __name__ == '__main__':
     import requests
     data = requests.get('http://anti-tor.org/download/544942').content.decode('latin1')
     torrent = decode(data)
+    print(torrent)
 
+    print('Files:')
     for file in torrent["info"]["files"]:
-        print("%r - %d bytes" % ("/".join(file["path"]), file["length"]))
+        print("    %r - %d bytes" % ("/".join(file["path"]), file["length"]))
