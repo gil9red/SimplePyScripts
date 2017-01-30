@@ -56,8 +56,37 @@ def remove_previous_torrent_from_qbittorrent(qb, new_info_hash):
 
         # Remove previous torrents
         if info_hash_list:
-            print('Remove previous torrents: {}'.format(info_hash_list))
+            print('Удаление предыдущих раздач этого торрента: {}'.format(info_hash_list))
             qb.delete(info_hash_list)
+
+
+def wait(hours):
+    from datetime import timedelta
+    today = datetime.today()
+    timeout_date = today + timedelta(hours=hours)
+
+    while today <= timeout_date:
+        def str_timedelta(td):
+            mm, ss = divmod(td.seconds, 60)
+            hh, mm = divmod(mm, 60)
+            return "%d:%02d:%02d" % (hh, mm, ss)
+
+        left = timeout_date - today
+        left = str_timedelta(left)
+
+        print('\r' * 50, end='')
+        print('До следующего запуска осталось {}'.format(left), end='')
+
+        import sys
+        sys.stdout.flush()
+
+        # Delay 1 seconds
+        import time
+        time.sleep(1)
+        today = datetime.today()
+
+    print('\r' * 50, end='')
+    print('\n')
 
 
 if __name__ == '__main__':
@@ -72,54 +101,41 @@ if __name__ == '__main__':
     last_info_hash = None
 
     while True:
-        from datetime import datetime
-        today = datetime.today()
-
-        torrent_file_url, _, info_hash = get_rutor_torrent_download_info(torrent_url)
-        print('{}: Проверка {}: {} / {}'.format(today, torrent_url, torrent_file_url, info_hash))
-
-        if qb.get_torrent(info_hash):
-            print('Торрент {} уже есть в списке раздачи'.format(info_hash))
-
-        else:
-            if info_hash != last_info_hash:
-                print('Торрент изменился, пора его перекачивать')
-                last_info_hash = info_hash
-
-                # Say qbittorrent download torrent file
-                qb.download_from_link(torrent_file_url)
-
-                remove_previous_torrent_from_qbittorrent(qb, info_hash)
-
-            else:
-                print('Изменений нет')
-
-        print()
-
-        # Every 3 hours
-        from datetime import timedelta
-        today = datetime.today()
-        timeout_date = today + timedelta(hours=3)
-
-        while today <= timeout_date:
-            def str_timedelta(td):
-                mm, ss = divmod(td.seconds, 60)
-                hh, mm = divmod(mm, 60)
-                return "%d:%02d:%02d" % (hh, mm, ss)
-
-            left = timeout_date - today
-            left = str_timedelta(left)
-
-            print('\r' * 50, end='')
-            print('До следующего запуска осталось {}'.format(left), end='')
-
-            import sys
-            sys.stdout.flush()
-
-            # Delay 1 seconds
-            import time
-            time.sleep(1)
+        try:
+            from datetime import datetime
             today = datetime.today()
 
-        print('\r' * 50, end='')
-        print('\n')
+            torrent_file_url, _, info_hash = get_rutor_torrent_download_info(torrent_url)
+            print('{}: Проверка {}: {} / {}'.format(today, torrent_url, torrent_file_url, info_hash))
+
+            if qb.get_torrent(info_hash):
+                print('Торрент {} уже есть в списке раздачи'.format(info_hash))
+
+            else:
+                if info_hash != last_info_hash:
+                    print('Торрент изменился, пора его перекачивать')
+                    last_info_hash = info_hash
+
+                    # Say qbittorrent client download torrent file
+                    qb.download_from_link(torrent_file_url)
+
+                    remove_previous_torrent_from_qbittorrent(qb, info_hash)
+
+                else:
+                    print('Изменений нет')
+
+            print()
+
+            # Every 3 hours
+            wait(hours=3)
+
+        except:
+            import traceback
+            print('Ошибка:')
+            print(traceback.format_exc())
+
+            print('Через 5 минут попробую снова...')
+
+            # Wait 5 minutes before next attempt
+            import time
+            time.sleep(5 * 60)
