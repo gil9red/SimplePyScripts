@@ -4,10 +4,9 @@
 __author__ = 'ipetrash'
 
 
-from config import *
-
-
 if __name__ == '__main__':
+    from config import *
+
     from qbittorrent import Client
     qb = Client(IP_HOST)
     qb.login(USER, PASSWORD)
