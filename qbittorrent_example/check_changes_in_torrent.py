@@ -99,6 +99,7 @@ if __name__ == '__main__':
     torrent_url = 'http://anti-tor.org/torrent/544942'
 
     last_info_hash = None
+    last_torrent_files = list()
 
     while True:
         try:
@@ -113,8 +114,25 @@ if __name__ == '__main__':
 
             else:
                 if info_hash != last_info_hash:
-                    print('Торрент изменился, пора его перекачивать')
+                    import requests
+                    data = requests.get(torrent_file_url).content.decode('latin1')
+
+                    import effbot_bencode
+                    torrent = effbot_bencode.decode(data)
+                    files = ["/".join(file["path"]) for file in torrent["info"]["files"]]
+
+                    # Использование множеств, чтобы узнать разницу списков, т.е. какие файлы были добавлены
+                    # А чтобы узнать какие были удалены: list(set(last_torrent_files) - set(files))
+                    new_files = list(set(files) - set(last_torrent_files))
+
+                    if last_info_hash is None:
+                        print("Добавление торрента с {} файлами: {}".format(len(new_files), new_files))
+                    else:
+                        print('Торрент изменился, пора его перекачивать')
+                        print("Добавлено {} файлов: {}".format(len(new_files), new_files))
+
                     last_info_hash = info_hash
+                    last_torrent_files = files
 
                     # Say qbittorrent client download torrent file
                     qb.download_from_link(torrent_file_url)
@@ -129,7 +147,7 @@ if __name__ == '__main__':
             # Every 3 hours
             wait(hours=3)
 
-        except:
+        except Exception:
             import traceback
             print('Ошибка:')
             print(traceback.format_exc())
