@@ -78,17 +78,21 @@ if __name__ == '__main__':
         torrent_file_url, _, info_hash = get_rutor_torrent_download_info(torrent_url)
         print('{}: Проверка {}: {} / {}'.format(today, torrent_url, torrent_file_url, info_hash))
 
-        if info_hash != last_info_hash:
-            print('Торрент изменился, пора его перекачивать')
-            last_info_hash = info_hash
-
-            # Say qbittorrent download torrent file
-            qb.download_from_link(torrent_file_url)
-
-            remove_previous_torrent_from_qbittorrent(qb, info_hash)
+        if qb.get_torrent(info_hash):
+            print('Торрент {} уже есть в списке раздачи'.format(info_hash))
 
         else:
-            print('Изменений нет')
+            if info_hash != last_info_hash:
+                print('Торрент изменился, пора его перекачивать')
+                last_info_hash = info_hash
+
+                # Say qbittorrent download torrent file
+                qb.download_from_link(torrent_file_url)
+
+                remove_previous_torrent_from_qbittorrent(qb, info_hash)
+
+            else:
+                print('Изменений нет')
 
         print()
 
