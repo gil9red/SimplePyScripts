@@ -20,11 +20,10 @@ if __name__ == '__main__':
     import effbot_bencode
     torrent = effbot_bencode.decode(torrent_file_text)
 
-    files = torrent["info"]["files"]
     total_size = 0
 
     print('Files:')
-    for file in files:
+    for file in torrent["info"]["files"]:
         print("    %r - %d bytes" % ("/".join(file["path"]), file["length"]))
 
         total_size += file["length"]
