@@ -32,12 +32,12 @@ if __name__ == '__main__':
 ATM - VSDC Issuing:         4  / 48
 ATM - Magstripe Issuing:    0  / 4
 Retail - VSDC Issuing:      0  / 13
-Retail - Magstripe Issuing: 0  / 4
+Retail - Magstripe Issuing: 4  / 4
 UCAT - Mag or VSDC Issuing: 2  / 2
 T&E - Mag or VSDC Issuing:  2  / 2
 CNP - Key-Entered Issuing:  15 / 15
 Cash - Mag or VSDC Issuing: 5  / 5
 Payments - Issuing:         0  / 6
-    """
+"""
 
     parse(text)
