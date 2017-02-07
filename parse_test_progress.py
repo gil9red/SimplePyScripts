@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-def parse(text):
+def parse(text, append_test_case_list=True):
     total_value = 0
     total_max_value = 0
 
@@ -12,6 +12,11 @@ def parse(text):
         line = line.strip()
         if not line:
             continue
+
+        if not append_test_case_list:
+            import re
+            line = re.sub('{#}:.*$', '{#}', line)
+            line = line.strip()
 
         import re
         match = re.search(r'(\d+) +/ +(\d+)', line)
@@ -41,4 +46,6 @@ Cash - Mag or VSDC Issuing: 5  / 5  {#}:
 Payments - Issuing:         0  / 6  {#}:
 """
 
+    parse(text, append_test_case_list=False)
+    print('\n')
     parse(text)
