@@ -21,7 +21,8 @@ def parse(text):
         total_value += value
         total_max_value += max_value
 
-        print(line + " ({}%)".format(int(value / max_value * 100)))
+        line = line.replace('{#}', "({}%)".format(int(value / max_value * 100)))
+        print(line)
 
     print()
     print("Total: {} / {} ({}%)".format(total_value, total_max_value, int(total_value / total_max_value * 100)))
@@ -29,15 +30,15 @@ def parse(text):
 
 if __name__ == '__main__':
     text = """
-ATM - VSDC Issuing:         4  / 48
-ATM - Magstripe Issuing:    0  / 4
-Retail - VSDC Issuing:      0  / 13
-Retail - Magstripe Issuing: 4  / 4
-UCAT - Mag or VSDC Issuing: 2  / 2
-T&E - Mag or VSDC Issuing:  2  / 2
-CNP - Key-Entered Issuing:  15 / 15
-Cash - Mag or VSDC Issuing: 5  / 5
-Payments - Issuing:         0  / 6
+ATM - VSDC Issuing:         4  / 48 {#}: 9.1, 9.7, 9.8, 9.13
+ATM - Magstripe Issuing:    4  / 4  {#}: 8.1, 8.7, 8.8, 12.1
+Retail - VSDC Issuing:      0  / 13 {#}:
+Retail - Magstripe Issuing: 4  / 4  {#}:
+UCAT - Mag or VSDC Issuing: 2  / 2  {#}:
+T&E - Mag or VSDC Issuing:  2  / 2  {#}:
+CNP - Key-Entered Issuing:  15 / 15 {#}: 1.1, 3.1, 3.2, 3.3, 4.1, 4.2, 9.1, 9.3, 12.1, 12.4, 12.5, 13.1, 13.2, 16.4
+Cash - Mag or VSDC Issuing: 5  / 5  {#}:
+Payments - Issuing:         0  / 6  {#}:
 """
 
     parse(text)
