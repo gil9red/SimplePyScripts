@@ -144,7 +144,7 @@ if __name__ == '__main__':
                     url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
                         api_id=API_ID,
                         to=TO,
-                        text="Скачана новая серия '{}'".format(torrent['info']['name'])
+                        text="Вышла новая серия '{}'".format(torrent['info']['name'])
                     )
                     rs = requests.get(url)
                     print(rs.text)
