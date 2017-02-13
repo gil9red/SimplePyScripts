@@ -154,6 +154,6 @@ if __name__ == '__main__':
 
             print('Через 5 минут попробую снова...')
 
-            # Wait 5 minutes before next attempt
+            # Wait 1 minute before next attempt
             import time
-            time.sleep(5 * 60)
+            time.sleep(60)
