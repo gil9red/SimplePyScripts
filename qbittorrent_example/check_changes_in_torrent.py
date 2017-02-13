@@ -59,6 +59,9 @@ def remove_previous_torrent_from_qbittorrent(qb, new_info_hash):
             print('Удаление предыдущих раздач этого торрента: {}'.format(info_hash_list))
             qb.delete(info_hash_list)
 
+    else:
+        print("Предыдущие закачки не найдены")
+
 
 def wait(hours):
     from datetime import timedelta
@@ -136,6 +139,10 @@ if __name__ == '__main__':
 
                     # Say qbittorrent client download torrent file
                     qb.download_from_link(torrent_file_url)
+
+                    # Даем 5 секунд на добавление торрента в клиент
+                    import time
+                    time.sleep(5)
 
                     remove_previous_torrent_from_qbittorrent(qb, info_hash)
 
