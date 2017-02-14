@@ -59,6 +59,9 @@ def remove_previous_torrent_from_qbittorrent(qb, new_info_hash):
             print('Удаление предыдущих раздач этого торрента: {}'.format(info_hash_list))
             qb.delete(info_hash_list)
 
+    else:
+        print("Предыдущие закачки не найдены")
+
 
 def wait(hours):
     from datetime import timedelta
@@ -137,6 +140,19 @@ if __name__ == '__main__':
                     # Say qbittorrent client download torrent file
                     qb.download_from_link(torrent_file_url)
 
+                    # Отправляю смс на номер
+                    url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
+                        api_id=API_ID,
+                        to=TO,
+                        text="Вышла новая серия '{}'".format(torrent['info']['name'])
+                    )
+                    rs = requests.get(url)
+                    print(rs.text)
+
+                    # Даем 5 секунд на добавление торрента в клиент
+                    import time
+                    time.sleep(5)
+
                     remove_previous_torrent_from_qbittorrent(qb, info_hash)
 
                 else:
@@ -154,6 +170,6 @@ if __name__ == '__main__':
 
             print('Через 5 минут попробую снова...')
 
-            # Wait 5 minutes before next attempt
+            # Wait 1 minute before next attempt
             import time
-            time.sleep(5 * 60)
+            time.sleep(60)
