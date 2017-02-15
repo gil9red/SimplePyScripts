@@ -11,10 +11,15 @@ def parse(text, append_test_case_list=True):
     for line in text.splitlines():
         line = line.strip()
         if not line:
+            print(line)
             continue
 
         import re
         match = re.search(r'{@} +/ +(\d+)', line)
+        if not match:
+            print(line)
+            continue
+
         max_value = int(match.group(1))
 
         match = re.search('{#}:(.*)$', line)
@@ -52,17 +57,18 @@ def parse(text, append_test_case_list=True):
 
 if __name__ == '__main__':
     text = """
-ATM - VSDC Issuing:         {@}  / 48 {#}: 9.1, 9.7, 9.8, 9.13
+Набивка тестов:
+ATM - VSDC Issuing:         {@}  / 48 {#}:
 ATM - Magstripe Issuing:    {@}  / 4  {#}: 8.1, 8.7, 8.8, 12.1
 Retail - VSDC Issuing:      {@}  / 13 {#}:
 Retail - Magstripe Issuing: {@}  / 4  {#}: 2.1, 2.3, 3.1, 7.1
 UCAT - Mag or VSDC Issuing: {@}  / 2  {#}: 2.3, 6.1
 T&E - Mag or VSDC Issuing:  {@}  / 2  {#}: 1.2, 1.3
-CNP - Key-Entered Issuing:  {@} / 15 {#}: 1.1, 3.1, 3.2, 3.3, 4.1, 4.2, 9.1, 9.3, 12.1, 12.4, 12.5, 13.1, 13.2, 16.4, 16.5
+CNP - Key-Entered Issuing:  {@} / 15 {#}: 1.1, 3.1, 3.2, 3.3, 4.1, 4.2, 9.1, 9.3, 12.1, 12.4, 12.5
 Cash - Mag or VSDC Issuing: {@}  / 5  {#}: 1.1, 1.2, 1.3, 1.4, 2.1
-Payments - Issuing:         {@}  / 6  {#}:
+Payments - Issuing:         {@}  / 6  {#}: 3.1, 3.3, 3.4, 6.1, 6.3
 """
 
-    parse(text, append_test_case_list=False)
-    print('\n')
+    # parse(text, append_test_case_list=False)
+    # print('\n')
     parse(text)
