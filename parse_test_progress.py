@@ -56,7 +56,7 @@ def parse(text, append_test_case_list=True):
 
 
 if __name__ == '__main__':
-    text = """
+    text = """\
 Набивка тестов:
 ATM - VSDC Issuing:         {@}  / 48 {#}:
 ATM - Magstripe Issuing:    {@}  / 4  {#}: 8.1, 8.7, 8.8, 12.1
