@@ -52,7 +52,7 @@ def parse(text, append_test_case_list=True):
         print(line)
 
     print()
-    print("Total: {} / {} ({}%)".format(total_value, total_max_value, int(total_value / total_max_value * 100)))
+    print("Итого: {} / {} ({}%)".format(total_value, total_max_value, int(total_value / total_max_value * 100)))
 
 
 if __name__ == '__main__':
@@ -66,7 +66,7 @@ UCAT - Mag or VSDC Issuing: {@}  / 2  {#}: 2.3, 6.1
 T&E - Mag or VSDC Issuing:  {@}  / 2  {#}: 1.2, 1.3
 CNP - Key-Entered Issuing:  {@} / 15 {#}: 1.1, 3.1, 3.2, 3.3, 4.1, 4.2, 9.1, 9.3, 12.1, 12.4, 12.5
 Cash - Mag or VSDC Issuing: {@}  / 5  {#}: 1.1, 1.2, 1.3, 1.4, 2.1
-Payments - Issuing:         {@}  / 6  {#}: 3.1, 3.3, 3.4, 6.1, 6.3
+Payments - Issuing:         {@}  / 6  {#}: 3.1, 3.3, 3.4, 6.1, 6.3, 6.4
 """
 
     # parse(text, append_test_case_list=False)
