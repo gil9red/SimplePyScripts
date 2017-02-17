@@ -61,8 +61,8 @@ class BCDClock(QWidget):
 
         size_ball = 25
 
-        x = 50
-        y = 90
+        x = 10
+        y = 10
         space_beetween_balls = 6
 
         indent_y = 0
@@ -79,7 +79,15 @@ class BCDClock(QWidget):
                     color = Qt.transparent
 
                 painter.setBrush(color)
-                painter.drawEllipse(QPoint(x + indent_x, y + indent_y), size_ball, size_ball)
+
+                x1 = x + indent_x
+                y1 = y + indent_y
+                x2 = size_ball * 2
+                y2 = size_ball * 2
+                painter.drawEllipse(x1, y1, x2, y2)
+
+                # NOTE: отличие в том, что начальная точка -- центр шара
+                # painter.drawEllipse(QPoint(x + indent_x, y + indent_y), size_ball, size_ball)
 
                 indent_x += size_ball + size_ball + space_beetween_balls
 
@@ -89,11 +97,47 @@ class BCDClock(QWidget):
         # NOTE: x_first_line и x_second_line получены путем подбора значений
         painter.setPen(QPen(Qt.darkGray, 2.0))
 
-        x_first_line = x + size_ball + size_ball + size_ball + space_beetween_balls + space_beetween_balls / 2
-        painter.drawLine(x_first_line, 0, x_first_line, self.height())
+        for i in range(6):
+            x_line = x + (size_ball * 2 + space_beetween_balls) * (i + 1) - space_beetween_balls / 2
+            painter.drawLine(x_line, 0, x_line, self.height())
 
-        x_second_line = x_first_line + (size_ball + size_ball + space_beetween_balls) * 2
-        painter.drawLine(x_second_line, 0, x_second_line, self.height())
+        for i in range(4):
+            y_line = y + (size_ball * 2 + space_beetween_balls) * (i + 1) - space_beetween_balls / 2
+            painter.drawLine(0, y_line, self.width(), y_line)
+
+
+        # DRAW 8
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(Qt.yellow)
+        i = 5
+        x_line = x + (size_ball * 2 + space_beetween_balls) * (i + 1) - space_beetween_balls / 2
+
+        i = 0
+        y_line = y + (size_ball * 2 + space_beetween_balls) * i - space_beetween_balls / 2
+
+        painter.drawRect(x_line, y_line, size_ball * 2 + space_beetween_balls / 2, size_ball * 2 + space_beetween_balls / 2)
+
+        painter.setPen(Qt.black)
+        painter.drawText(x_line, y_line, size_ball * 2 + space_beetween_balls / 2, size_ball * 2 + space_beetween_balls / 2, Qt.AlignCenter, "8")
+
+
+        # DRAW 4
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(Qt.yellow)
+        i = 5
+        x_line = x + (size_ball * 2 + space_beetween_balls) * (i + 1) - space_beetween_balls / 2
+
+        i = 1
+        y_line = y + (size_ball * 2 + space_beetween_balls) * i - space_beetween_balls / 2
+
+        painter.drawRect(x_line, y_line, size_ball * 2 + space_beetween_balls / 2, size_ball * 2 + space_beetween_balls / 2)
+
+        painter.setPen(Qt.black)
+        painter.drawText(x_line, y_line, size_ball * 2 + space_beetween_balls / 2, size_ball * 2 + space_beetween_balls / 2, Qt.AlignCenter, "4")
+
+
+
+
 
 
 if __name__ == '__main__':
