@@ -46,13 +46,13 @@ class BCDClock(QWidget):
         self._space_beetween_cell = 10
         self._indent_x = 10
         self._indent_y = 90
-        self._size_cell = 25
+        self._size_cell = 50
 
     def _get_pos_size_cell(self, row, col):
-        x = self._indent_x + (self._size_cell * 2 + self._space_beetween_cell * 2) * col
-        y = self._indent_y + (self._size_cell * 2 + self._space_beetween_cell * 2) * row
-        w = self._size_cell * 2 + self._space_beetween_cell
-        h = self._size_cell * 2 + self._space_beetween_cell
+        x = self._indent_x + (self._size_cell + self._space_beetween_cell * 2) * col
+        y = self._indent_y + (self._size_cell + self._space_beetween_cell * 2) * row
+        w = self._size_cell + self._space_beetween_cell
+        h = self._size_cell + self._space_beetween_cell
 
         return x, y, w, h
 
