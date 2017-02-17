@@ -43,9 +43,22 @@ class BCDClock(QWidget):
 
         self.setWindowTitle('BCDClock')
 
+        self._space_beetween_cell = 10
+        self._indent_x = 10
+        self._indent_y = 90
+        self._size_cell = 25
+
+    def _get_pos_size_cell(self, row, col):
+        x = self._indent_x + (self._size_cell * 2 + self._space_beetween_cell * 2) * col
+        y = self._indent_y + (self._size_cell * 2 + self._space_beetween_cell * 2) * row
+        w = self._size_cell * 2 + self._space_beetween_cell
+        h = self._size_cell * 2 + self._space_beetween_cell
+
+        return x, y, w, h
+
     def paintEvent(self, event):
         painter = QPainter(self)
-        # painter.setRenderHint(QPainter.HighQualityAntialiasing)
+        painter.setRenderHint(QPainter.HighQualityAntialiasing)
 
         painter.setPen(Qt.NoPen)
         painter.setBrush(Qt.white)
@@ -59,85 +72,54 @@ class BCDClock(QWidget):
             ( 1, 0,  1, 1,  0, 1),
         )
 
-        size_ball = 25
+        # Рисование шариков
+        painter.save()
 
-        x = 10
-        y = 10
-        space_beetween_balls = 6
+        painter.setPen(Qt.NoPen)
 
-        indent_y = 0
+        for i, row in enumerate(grid):
+            for j, col in enumerate(row):
+                if col == -1:
+                    continue
 
-        for row in grid:
-            indent_x = 0
-
-            for i in row:
-                if i == 0:
+                if col == 0:
                     color = QColor("#EDEDEB")
-                elif i == 1:
-                    color = Qt.darkGray
                 else:
-                    color = Qt.transparent
+                    color = Qt.darkGray
 
                 painter.setBrush(color)
 
-                x1 = x + indent_x
-                y1 = y + indent_y
-                x2 = size_ball * 2
-                y2 = size_ball * 2
-                painter.drawEllipse(x1, y1, x2, y2)
+                x, y, w, h = self._get_pos_size_cell(i, j)
+                painter.drawEllipse(x, y, w, h)
 
-                # NOTE: отличие в том, что начальная точка -- центр шара
-                # painter.drawEllipse(QPoint(x + indent_x, y + indent_y), size_ball, size_ball)
+        painter.restore()
 
-                indent_x += size_ball + size_ball + space_beetween_balls
+        # Рисование вертикальных линий для разделения часов, минут и секунд
+        painter.save()
 
-            indent_y += size_ball + size_ball + space_beetween_balls
+        painter.setPen(QPen(Qt.darkGray, 2))
 
-        # Нарисуем две вертикальные линии, которые разделяют часы, минуты и секунды
-        # NOTE: x_first_line и x_second_line получены путем подбора значений
-        painter.setPen(QPen(Qt.darkGray, 2.0))
+        x, y, w, h = self._get_pos_size_cell(0, 2)
+        x -= self._space_beetween_cell / 2
+        painter.drawLine(x, 0, x, self.height())
 
-        for i in range(6):
-            x_line = x + (size_ball * 2 + space_beetween_balls) * (i + 1) - space_beetween_balls / 2
-            painter.drawLine(x_line, 0, x_line, self.height())
+        x, y, w, h = self._get_pos_size_cell(0, 4)
+        x -= self._space_beetween_cell / 2
+        painter.drawLine(x, 0, x, self.height())
 
-        for i in range(4):
-            y_line = y + (size_ball * 2 + space_beetween_balls) * (i + 1) - space_beetween_balls / 2
-            painter.drawLine(0, y_line, self.width(), y_line)
+        painter.restore()
 
+        # Рисование цифр в последнем столбце
+        painter.save()
 
-        # DRAW 8
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(Qt.yellow)
-        i = 5
-        x_line = x + (size_ball * 2 + space_beetween_balls) * (i + 1) - space_beetween_balls / 2
+        painter.setPen(Qt.lightGray)
+        painter.setFont(QFont("Arial", 26))
 
-        i = 0
-        y_line = y + (size_ball * 2 + space_beetween_balls) * i - space_beetween_balls / 2
+        for i, c in enumerate(['8', '4', '2', '1']):
+            x, y, w, h = self._get_pos_size_cell(i, 6)
+            painter.drawText(x, y, w, h, Qt.AlignCenter, c)
 
-        painter.drawRect(x_line, y_line, size_ball * 2 + space_beetween_balls / 2, size_ball * 2 + space_beetween_balls / 2)
-
-        painter.setPen(Qt.black)
-        painter.drawText(x_line, y_line, size_ball * 2 + space_beetween_balls / 2, size_ball * 2 + space_beetween_balls / 2, Qt.AlignCenter, "8")
-
-
-        # DRAW 4
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(Qt.yellow)
-        i = 5
-        x_line = x + (size_ball * 2 + space_beetween_balls) * (i + 1) - space_beetween_balls / 2
-
-        i = 1
-        y_line = y + (size_ball * 2 + space_beetween_balls) * i - space_beetween_balls / 2
-
-        painter.drawRect(x_line, y_line, size_ball * 2 + space_beetween_balls / 2, size_ball * 2 + space_beetween_balls / 2)
-
-        painter.setPen(Qt.black)
-        painter.drawText(x_line, y_line, size_ball * 2 + space_beetween_balls / 2, size_ball * 2 + space_beetween_balls / 2, Qt.AlignCenter, "4")
-
-
-
-
+        painter.restore()
 
 
 if __name__ == '__main__':
