@@ -41,7 +41,7 @@ class BCDClock(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('BCDClock')
+        self.setWindowTitle('BCD (Binary-coded decimal) clock')
 
         self._space_beetween_cell = 10
         self._indent_x = 10
