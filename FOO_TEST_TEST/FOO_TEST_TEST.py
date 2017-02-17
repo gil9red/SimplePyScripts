@@ -4,6 +4,106 @@
 __author__ = 'ipetrash'
 
 
+# https://gist.github.com/gil9red/8097f98064fc7337cf6485a6d8dfa965
+# TODO: add in readme: BCD (Binary-coded decimal) clock.
+
+"""
+Скрипт для рисования часов с двоично-десятичным представлением.
+
+Пример: https://upload.wikimedia.org/wikipedia/commons/2/27/Binary_clock.svg
+Статья: https://ru.wikipedia.org/wiki/Двоично-десятичный_код
+
+"""
+
+
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+
+
+# Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
+def log_uncaught_exceptions(ex_cls, ex, tb):
+    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+
+    import traceback
+    text += ''.join(traceback.format_tb(tb))
+
+    print('Error: ', text)
+    QMessageBox.critical(None, 'Error', text)
+    quit()
+
+
+import sys
+sys.excepthook = log_uncaught_exceptions
+
+
+class BCDClock(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle('BCDClock')
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        # painter.setRenderHint(QPainter.HighQualityAntialiasing)
+
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(Qt.white)
+
+        painter.drawRect(self.rect())
+
+        grid = (
+            (-1, 0, -1, 0, -1, 1),
+            (-1, 0,  0, 1,  1, 0),
+            ( 0, 0,  1, 1,  0, 0),
+            ( 1, 0,  1, 1,  0, 1),
+        )
+
+        size_ball = 25
+
+        x = 50
+        y = 90
+        space_beetween_balls = 6
+
+        indent_y = 0
+
+        for row in grid:
+            indent_x = 0
+
+            for i in row:
+                if i == 0:
+                    color = QColor("#EDEDEB")
+                elif i == 1:
+                    color = Qt.darkGray
+                else:
+                    color = Qt.transparent
+
+                painter.setBrush(color)
+                painter.drawEllipse(QPoint(x + indent_x, y + indent_y), size_ball, size_ball)
+
+                indent_x += size_ball + size_ball + space_beetween_balls
+
+            indent_y += size_ball + size_ball + space_beetween_balls
+
+        # Нарисуем две вертикальные линии, которые разделяют часы, минуты и секунды
+        # NOTE: x_first_line и x_second_line получены путем подбора значений
+        painter.setPen(QPen(Qt.darkGray, 2.0))
+
+        x_first_line = x + size_ball + size_ball + size_ball + space_beetween_balls + space_beetween_balls / 2
+        painter.drawLine(x_first_line, 0, x_first_line, self.height())
+
+        x_second_line = x_first_line + (size_ball + size_ball + space_beetween_balls) * 2
+        painter.drawLine(x_second_line, 0, x_second_line, self.height())
+
+
+if __name__ == '__main__':
+    app = QApplication([])
+
+    w = BCDClock()
+    w.show()
+
+    app.exec()
+
 
 quit()
 
