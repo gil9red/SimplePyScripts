@@ -4,16 +4,14 @@
 __author__ = 'ipetrash'
 
 
-import traceback
-
-from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
 
 
 # Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
 def log_uncaught_exceptions(ex_cls, ex, tb):
     text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+
+    import traceback
     text += ''.join(traceback.format_tb(tb))
 
     print('Error: ', text)
