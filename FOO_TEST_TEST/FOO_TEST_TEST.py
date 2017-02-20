@@ -227,9 +227,7 @@ class BCDClock(QWidget):
 
     def paintEvent(self, event):
         painter = QPainter(self)
-
-        # TODO: Что-то не работает, такое ощущение что это дело в save/restore
-        painter.setRenderHint(QPainter.HighQualityAntialiasing)
+        painter.setRenderHint(QPainter.Antialiasing)
 
         painter.setPen(Qt.white)
         painter.setBrush(Qt.white)
