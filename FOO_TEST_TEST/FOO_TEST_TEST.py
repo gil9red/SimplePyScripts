@@ -44,15 +44,15 @@ class BCDClock(QWidget):
         self.setWindowTitle('BCD (Binary-coded decimal) clock')
 
         self._space_beetween_cell = 10
-        self._indent_x = 10
+        self._indent_x = 20
         self._indent_y = 90
         self._size_cell = 50
 
     def _get_pos_size_cell(self, row, col):
-        x = self._indent_x + (self._size_cell + self._space_beetween_cell * 2) * col
-        y = self._indent_y + (self._size_cell + self._space_beetween_cell * 2) * row
-        w = self._size_cell + self._space_beetween_cell
-        h = self._size_cell + self._space_beetween_cell
+        x = self._indent_x + (self._size_cell + self._space_beetween_cell) * col
+        y = self._indent_y + (self._size_cell + self._space_beetween_cell) * row
+        w = self._size_cell
+        h = self._size_cell
 
         return x, y, w, h
 
@@ -60,7 +60,7 @@ class BCDClock(QWidget):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.HighQualityAntialiasing)
 
-        painter.setPen(Qt.NoPen)
+        painter.setPen(Qt.white)
         painter.setBrush(Qt.white)
 
         painter.drawRect(self.rect())
@@ -75,8 +75,6 @@ class BCDClock(QWidget):
         # Рисование шариков
         painter.save()
 
-        painter.setPen(Qt.NoPen)
-
         for i, row in enumerate(grid):
             for j, col in enumerate(row):
                 if col == -1:
@@ -87,9 +85,11 @@ class BCDClock(QWidget):
                 else:
                     color = Qt.darkGray
 
+                painter.setPen(color)
                 painter.setBrush(color)
 
                 x, y, w, h = self._get_pos_size_cell(i, j)
+                painter.drawRect(x, y, w, h)
                 painter.drawEllipse(x, y, w, h)
 
         painter.restore()
@@ -118,6 +118,33 @@ class BCDClock(QWidget):
         for i, c in enumerate(['8', '4', '2', '1']):
             x, y, w, h = self._get_pos_size_cell(i, 6)
             painter.drawText(x, y, w, h, Qt.AlignCenter, c)
+
+        painter.restore()
+
+        # Рисование надписи "HH:MM:SS"
+        painter.save()
+
+        painter.setPen(QColor('#555753'))
+        painter.setFont(QFont("Arial", 28, QFont.Bold))
+
+        y = self._indent_y - 70
+        h = self._size_cell
+        w = self._size_cell * 2 + self._space_beetween_cell
+
+        x = self._indent_x
+        painter.drawText(x, y, w, h, Qt.AlignCenter, "HH")
+
+        x = self._indent_x + w
+        painter.drawText(x, y, 10, h, Qt.AlignCenter, ":")
+
+        x = self._indent_x + (self._size_cell + self._space_beetween_cell) * 2
+        painter.drawText(x, y, w, h, Qt.AlignCenter, "MM")
+
+        x = self._indent_x + w * 2 + self._space_beetween_cell / 2
+        painter.drawText(x, y, 20, h, Qt.AlignCenter, ":")
+
+        x = self._indent_x + (self._size_cell + self._space_beetween_cell) * 4
+        painter.drawText(x, y, w, h, Qt.AlignCenter, "SS")
 
         painter.restore()
 
