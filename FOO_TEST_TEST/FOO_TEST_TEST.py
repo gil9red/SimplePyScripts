@@ -38,6 +38,20 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class BCDClock(QWidget):
+    DECIMAL_NUMBER_BY_BCD = {
+        #   1  2  4  8
+        0: (0, 0, 0, 0),
+        1: (1, 0, 0, 0),
+        2: (0, 1, 0, 0),
+        3: (1, 1, 0, 0),
+        4: (0, 0, 1, 0),
+        5: (1, 0, 1, 0),
+        6: (0, 1, 1, 0),
+        7: (1, 1, 1, 0),
+        8: (0, 0, 0, 1),
+        9: (1, 0, 0, 1),
+    }
+
     def __init__(self):
         super().__init__()
 
@@ -82,32 +96,22 @@ class BCDClock(QWidget):
         self.minutes = now.minute
         self.seconds = now.second
 
-        decimal_number_by_bcd = {
-            #   1  2  4  8
-            0: (0, 0, 0, 0),
-            1: (1, 0, 0, 0),
-            2: (0, 1, 0, 0),
-            3: (1, 1, 0, 0),
-            4: (0, 0, 1, 0),
-            5: (1, 0, 1, 0),
-            6: (0, 1, 1, 0),
-            7: (1, 1, 1, 0),
-            8: (0, 0, 0, 1),
-            9: (1, 0, 0, 1),
-        }
         c1, c2 = divmod(self.hours, 10)
         c3, c4 = divmod(self.minutes, 10)
         c5, c6 = divmod(self.seconds, 10)
 
         self._grid = (
-            decimal_number_by_bcd[c1],
-            decimal_number_by_bcd[c2],
+            # HH
+            self.DECIMAL_NUMBER_BY_BCD[c1],
+            self.DECIMAL_NUMBER_BY_BCD[c2],
 
-            decimal_number_by_bcd[c3],
-            decimal_number_by_bcd[c4],
+            # MM
+            self.DECIMAL_NUMBER_BY_BCD[c3],
+            self.DECIMAL_NUMBER_BY_BCD[c4],
 
-            decimal_number_by_bcd[c5],
-            decimal_number_by_bcd[c6],
+            # SS
+            self.DECIMAL_NUMBER_BY_BCD[c5],
+            self.DECIMAL_NUMBER_BY_BCD[c6],
         )
 
         # Вызов перерисовки
@@ -223,6 +227,8 @@ class BCDClock(QWidget):
 
     def paintEvent(self, event):
         painter = QPainter(self)
+
+        # TODO: Что-то не работает, такое ощущение что это дело в save/restore
         painter.setRenderHint(QPainter.HighQualityAntialiasing)
 
         painter.setPen(Qt.white)
