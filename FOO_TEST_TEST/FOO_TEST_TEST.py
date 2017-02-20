@@ -43,73 +43,119 @@ class BCDClock(QWidget):
 
         self.setWindowTitle('BCD (Binary-coded decimal) clock')
 
-        self._space_beetween_cell = 10
+        self._space_between_cell = 10
         self._indent_x = 20
         self._indent_y = 90
         self._size_cell = 50
 
+        #    1  2  4  8
+        self._grid = (
+            # HH
+            (0, 0, 0, 0),
+            (0, 0, 0, 0),
+
+            # MM
+            (0, 0, 0, 0),
+            (0, 0, 0, 0),
+
+            # SS
+            (0, 0, 0, 0),
+            (0, 0, 0, 0),
+        )
+
+        self.hours = 0
+        self.minutes = 0
+        self.seconds = 0
+
+        self._update_time_of_clock()
+
+        self._timer = QTimer()
+        self._timer.setInterval(33)
+        self._timer.timeout.connect(self._update_time_of_clock)
+        self._timer.start()
+
+    def _update_time_of_clock(self):
+        from datetime import datetime
+        now = datetime.now()
+
+        self.hours = now.hour
+        self.minutes = now.minute
+        self.seconds = now.second
+
+        decimal_number_by_bcd = {
+            #   1  2  4  8
+            0: (0, 0, 0, 0),
+            1: (1, 0, 0, 0),
+            2: (0, 1, 0, 0),
+            3: (1, 1, 0, 0),
+            4: (0, 0, 1, 0),
+            5: (1, 0, 1, 0),
+            6: (0, 1, 1, 0),
+            7: (1, 1, 1, 0),
+            8: (0, 0, 0, 1),
+            9: (1, 0, 0, 1),
+        }
+        c1, c2 = divmod(self.hours, 10)
+        c3, c4 = divmod(self.minutes, 10)
+        c5, c6 = divmod(self.seconds, 10)
+
+        self._grid = (
+            decimal_number_by_bcd[c1],
+            decimal_number_by_bcd[c2],
+
+            decimal_number_by_bcd[c3],
+            decimal_number_by_bcd[c4],
+
+            decimal_number_by_bcd[c5],
+            decimal_number_by_bcd[c6],
+        )
+
+        # Вызов перерисовки
+        self.update()
+
     def _get_pos_size_cell(self, row, col):
-        x = self._indent_x + (self._size_cell + self._space_beetween_cell) * col
-        y = self._indent_y + (self._size_cell + self._space_beetween_cell) * row
+        x = self._indent_x + (self._size_cell + self._space_between_cell) * col
+        y = self._indent_y + (self._size_cell + self._space_between_cell) * row
         w = self._size_cell
         h = self._size_cell
 
         return x, y, w, h
 
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.HighQualityAntialiasing)
-
-        painter.setPen(Qt.white)
-        painter.setBrush(Qt.white)
-
-        painter.drawRect(self.rect())
-
-        grid = (
-            (-1, 0, -1, 0, -1, 1),
-            (-1, 0,  0, 1,  1, 0),
-            ( 0, 0,  1, 1,  0, 0),
-            ( 1, 0,  1, 1,  0, 1),
-        )
-
-        # Рисование шариков
+    def _draw_balls(self, painter, grid):
         painter.save()
 
-        for i, row in enumerate(grid):
-            for j, col in enumerate(row):
-                if col == -1:
-                    continue
-
-                if col == 0:
-                    color = QColor("#EDEDEB")
-                else:
+        # Перебор по столбцам
+        for j, cols in enumerate(grid):
+            for i, row in enumerate(reversed(cols)):
+                if row:
                     color = Qt.darkGray
+                else:
+                    color = QColor("#EDEDEB")
 
                 painter.setPen(color)
                 painter.setBrush(color)
 
                 x, y, w, h = self._get_pos_size_cell(i, j)
-                painter.drawRect(x, y, w, h)
                 painter.drawEllipse(x, y, w, h)
 
         painter.restore()
 
-        # Рисование вертикальных линий для разделения часов, минут и секунд
+    def _draw_vertical_lines(self, painter):
         painter.save()
 
         painter.setPen(QPen(Qt.darkGray, 2))
 
         x, y, w, h = self._get_pos_size_cell(0, 2)
-        x -= self._space_beetween_cell / 2
+        x -= self._space_between_cell / 2
         painter.drawLine(x, 0, x, self.height())
 
         x, y, w, h = self._get_pos_size_cell(0, 4)
-        x -= self._space_beetween_cell / 2
+        x -= self._space_between_cell / 2
         painter.drawLine(x, 0, x, self.height())
 
         painter.restore()
 
-        # Рисование цифр в последнем столбце
+    def _draw_weight_of_number(self, painter):
         painter.save()
 
         painter.setPen(Qt.lightGray)
@@ -121,15 +167,15 @@ class BCDClock(QWidget):
 
         painter.restore()
 
-        # Рисование надписи "HH:MM:SS"
+    def _draw_time_format(self, painter):
         painter.save()
 
         painter.setPen(QColor('#555753'))
-        painter.setFont(QFont("Arial", 28, QFont.Bold))
+        painter.setFont(QFont("Arial", 30, QFont.Bold))
 
         y = self._indent_y - 70
         h = self._size_cell
-        w = self._size_cell * 2 + self._space_beetween_cell
+        w = self._size_cell * 2 + self._space_between_cell
 
         x = self._indent_x
         painter.drawText(x, y, w, h, Qt.AlignCenter, "HH")
@@ -137,16 +183,69 @@ class BCDClock(QWidget):
         x = self._indent_x + w
         painter.drawText(x, y, 10, h, Qt.AlignCenter, ":")
 
-        x = self._indent_x + (self._size_cell + self._space_beetween_cell) * 2
+        x = self._indent_x + (self._size_cell + self._space_between_cell) * 2
         painter.drawText(x, y, w, h, Qt.AlignCenter, "MM")
 
-        x = self._indent_x + w * 2 + self._space_beetween_cell / 2
+        x = self._indent_x + w * 2 + self._space_between_cell / 2
         painter.drawText(x, y, 20, h, Qt.AlignCenter, ":")
 
-        x = self._indent_x + (self._size_cell + self._space_beetween_cell) * 4
+        x = self._indent_x + (self._size_cell + self._space_between_cell) * 4
         painter.drawText(x, y, w, h, Qt.AlignCenter, "SS")
 
         painter.restore()
+
+    def _draw_time(self, painter):
+        painter.save()
+
+        painter.setPen(QColor('#555753'))
+        painter.setFont(QFont("Arial", 44, QFont.Bold))
+
+        y = self._indent_y + 250
+        h = self._size_cell
+        w = self._size_cell * 2 + self._space_between_cell
+
+        x = self._indent_x
+        painter.drawText(x, y, w, h, Qt.AlignCenter, str(self.hours).zfill(2))
+
+        x = self._indent_x + w
+        painter.drawText(x, y, 10, h, Qt.AlignCenter, ":")
+
+        x = self._indent_x + (self._size_cell + self._space_between_cell) * 2
+        painter.drawText(x, y, w, h, Qt.AlignCenter, str(self.minutes).zfill(2))
+
+        x = self._indent_x + w * 2 + self._space_between_cell / 2
+        painter.drawText(x, y, 20, h, Qt.AlignCenter, ":")
+
+        x = self._indent_x + (self._size_cell + self._space_between_cell) * 4
+        painter.drawText(x, y, w, h, Qt.AlignCenter, str(self.seconds).zfill(2))
+
+        painter.restore()
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.HighQualityAntialiasing)
+
+        painter.setPen(Qt.white)
+        painter.setBrush(Qt.white)
+
+        painter.drawRect(self.rect())
+
+        # Рисование шариков
+        self._draw_balls(painter, self._grid)
+
+        # Рисование вертикальных линий для разделения часов, минут и секунд
+        self._draw_vertical_lines(painter)
+
+        # Рисование цифр в последнем столбце
+        self._draw_weight_of_number(painter)
+
+        # Рисование надписи "HH:MM:SS"
+        self._draw_time_format(painter)
+
+        # TODO: рисование рассчетов
+
+        # Рисование времени в формате "HH:MM:SS"
+        self._draw_time(painter)
 
 
 if __name__ == '__main__':
