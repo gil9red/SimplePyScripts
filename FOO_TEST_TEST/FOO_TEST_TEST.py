@@ -51,6 +51,7 @@ class BCDClock(QWidget):
         8: (0, 0, 0, 1),
         9: (1, 0, 0, 1),
     }
+    # BCD_BY_DECIMAL_NUMBER = {v: k for k, v in DECIMAL_NUMBER_BY_BCD.items()}
 
     def __init__(self):
         super().__init__()
@@ -59,7 +60,7 @@ class BCDClock(QWidget):
 
         self._space_between_cell = 10
         self._indent_x = 20
-        self._indent_y = 90
+        self._indent_y = 70
         self._size_cell = 50
 
         #    1  2  4  8
@@ -124,6 +125,36 @@ class BCDClock(QWidget):
         h = self._size_cell
 
         return x, y, w, h
+
+    @staticmethod
+    def calc_from_bcd(bcd: [int, int, int, int]) -> (int, str):
+        """
+        Функция принимает последовательность разрядов в BCD, считает в десятичном виде,
+        записывает расчеты в виде суммы например: "1+2+0+8" и возвращает строку с расчетами
+        и само итоговое десятичное значение. Для примера расчета это: 11.
+
+        """
+
+        # 1 2 4 8
+        num = 0
+
+        calculation_str = "1" if bcd[0] else "0"
+        if bcd[0]:
+            num += 1
+
+        calculation_str += "+" + ("2" if bcd[1] else "0")
+        if bcd[1]:
+            num += 2
+
+        calculation_str += "+" + ("4" if bcd[2] else "0")
+        if bcd[2]:
+            num += 4
+
+        calculation_str += "+" + ("8" if bcd[3] else "0")
+        if bcd[3]:
+            num += 8
+
+        return num, calculation_str
 
     def _draw_balls(self, painter, grid):
         painter.save()
@@ -204,7 +235,7 @@ class BCDClock(QWidget):
         painter.setPen(QColor('#555753'))
         painter.setFont(QFont("Arial", 44, QFont.Bold))
 
-        y = self._indent_y + 250
+        y = self._indent_y + 350
         h = self._size_cell
         w = self._size_cell * 2 + self._space_between_cell
 
@@ -247,6 +278,44 @@ class BCDClock(QWidget):
         self._draw_time_format(painter)
 
         # TODO: рисование рассчетов
+        painter.save()
+
+        def _draw_calc_decimal(x, y, bsd_grid_column_index):
+            value, calc = self.calc_from_bcd(self._grid[bsd_grid_column_index])
+
+            h = self._size_cell
+            w = self._size_cell
+
+            painter.setPen(Qt.gray)
+            painter.setFont(QFont("Arial", 7))
+
+            painter.drawText(x, y, w, h, Qt.AlignCenter, calc)
+            painter.drawText(x, y + 15, w, h, Qt.AlignCenter, '=')
+
+            painter.setFont(QFont("Arial", 20))
+            painter.drawText(x, y + 40, w, h, Qt.AlignCenter, str(value))
+
+        x = self._indent_x
+        y = self._indent_y + 250
+
+        _draw_calc_decimal(x, y, 0)
+
+        x = self._indent_x + self._size_cell + self._space_between_cell
+        _draw_calc_decimal(x, y, 1)
+
+        x = self._indent_x + (self._size_cell + self._space_between_cell) * 2
+        _draw_calc_decimal(x, y, 2)
+
+        x = self._indent_x + (self._size_cell + self._space_between_cell) * 3
+        _draw_calc_decimal(x, y, 3)
+
+        x = self._indent_x + (self._size_cell + self._space_between_cell) * 4
+        _draw_calc_decimal(x, y, 4)
+
+        x = self._indent_x + (self._size_cell + self._space_between_cell) * 5
+        _draw_calc_decimal(x, y, 5)
+
+        painter.restore()
 
         # Рисование времени в формате "HH:MM:SS"
         self._draw_time(painter)
@@ -257,6 +326,7 @@ if __name__ == '__main__':
 
     w = BCDClock()
     w.show()
+    w.resize(500, 500)
 
     app.exec()
 
