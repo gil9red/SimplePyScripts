@@ -14,6 +14,8 @@ URL = 'https://confluence.compassplus.ru/reports/index.jsp'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0'
 
 import os.path
+
+# NOTE. Get <PEM_FILE_NAME>: openssl pkcs12 -nodes -out key.pem -in file.p12
 PEM_FILE_NAME = os.path.abspath('ipetrash.pem')
 
 
