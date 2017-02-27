@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from builtins import print
 
 __author__ = 'ipetrash'
 
@@ -31,6 +32,9 @@ def get_report_context():
     }
 
     rs = requests.post(URL, data=data, headers=headers, cert=PEM_FILE_NAME, verify=False)
+    if not rs.ok:
+        raise NotFoundReport('HTTP status is {}'.format(rs.status_code))
+
     return rs.text
 
 
