@@ -33,9 +33,12 @@ for page in range(1, 106):
             rs = requests.get(url_info, headers=headers)
             root = BeautifulSoup(rs.content, 'lxml')
 
+            # TODO: Ignore tags without description
             if root.select_one('.post-text'):
                 tags[tag] = {
                     'url_info': url_info,
+
+                    # TODO: scrap only need text
                     'description': root.select_one('.post-text').text.strip(),
                 }
 
