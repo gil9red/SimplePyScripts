@@ -8,6 +8,9 @@ __author__ = 'ipetrash'
 Скрипт использует вебсервис languagetool.org, основанный на LanguageTool,
 для проверки проверки грамматики, пунктуации, орфографии и стиля.
 
+Сайт: https://www.languagetool.org/ru/
+Гитхаб: https://github.com/languagetool-org/
+
 """
 
 
