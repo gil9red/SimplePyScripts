@@ -4,6 +4,11 @@
 __author__ = 'ipetrash'
 
 
+
+
+quit()
+
+
 # post_data = """
 # <REQUEST OBJECT_CLASS="TAbonentObject" ACTION="GET_CHANGES" POINT_CODE=""
 # VERSION="" TYPE_VERSION="" PORTION="" PACK="" BOOK_ID=""/>
