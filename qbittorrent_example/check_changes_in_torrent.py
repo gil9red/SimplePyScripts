@@ -77,7 +77,7 @@ def wait(hours):
         left = timeout_date - today
         left = str_timedelta(left)
 
-        print('\r' * 50, end='')
+        print('\r' * 100, end='')
         print('До следующего запуска осталось {}'.format(left), end='')
 
         import sys
@@ -88,7 +88,7 @@ def wait(hours):
         time.sleep(1)
         today = datetime.today()
 
-    print('\r' * 50, end='')
+    print('\r' * 100, end='')
     print('\n')
 
 
