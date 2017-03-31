@@ -63,10 +63,13 @@ def remove_previous_torrent_from_qbittorrent(qb, new_info_hash):
         print("Предыдущие закачки не найдены")
 
 
-def wait(hours):
+def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0):
     from datetime import timedelta
     today = datetime.today()
-    timeout_date = today + timedelta(hours=hours)
+    timeout_date = today + timedelta(
+        days=days, seconds=seconds, microseconds=microseconds,
+        milliseconds=milliseconds, minutes=minutes, hours=hours, weeks=weeks
+    )
 
     while today <= timeout_date:
         def str_timedelta(td):
