@@ -31,7 +31,7 @@ def get_short_link_from_vk(login: str, password: str, link: str) -> str:
 
     login_form_action = get_form_action(rs.text)
     if not login_form_action:
-        raise Exception('VK changed login flow')
+        raise Exception('Не получилось из формы авторизации вытащить ссылку на авторизацию')
 
     login_form_data = {
         'email': login,
