@@ -31,12 +31,6 @@ def number_of_pension_points_for_year(zp: float) -> float:
     return round(kpk_trud * 100) / 100
 
 
-# TODO:
-# http://www.pfrf.ru/thm/common/mod/pensCalc/js/public.js
-def pens_calc():
-    pass
-
-
 if __name__ == '__main__':
     # Сколько пенсионных баллов может быть начислено Вам за 2017 год?
     #
