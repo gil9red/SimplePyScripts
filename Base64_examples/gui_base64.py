@@ -10,8 +10,17 @@ if __name__ == '__main__':
     import traceback
     import sys
 
-    from PySide.QtGui import *
-    from PySide.QtCore import *
+    try:
+        from PyQt5.QtWidgets import *
+        from PyQt5.QtCore import *
+
+    except:
+        try:
+            from PyQt4.QtGui import *
+            from PyQt4.QtCore import *
+        except:
+            from PySide.QtGui import *
+            from PySide.QtCore import *
 
     app = QApplication(sys.argv)
 
