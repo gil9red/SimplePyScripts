@@ -30,8 +30,8 @@ import requests
 # quit()
 
 
-# Пример опроса сервера о новых новостях
-rs = requests.get('http://127.0.0.1:5000/reset_all_is_read')
+# # Пример опроса сервера о новых новостях
+# rs = requests.get('http://127.0.0.1:5000/reset_all_is_read')
 
 while True:
     rs = requests.get('http://127.0.0.1:5000/get_news_list_and_mark_as_read/games?count=3')
