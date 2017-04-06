@@ -42,15 +42,15 @@ while True:
 
     if not rs_json['count']:
         print('Новостей нет')
-        continue
 
-    for interest, news_list in rs_json['items'].items():
-        print('{} ({}):'.format(interest, len(news_list)))
+    else:
+        for interest, news_list in rs_json['items'].items():
+            print('{} ({}):'.format(interest, len(news_list)))
 
-        for i, news in enumerate(news_list, 1):
-            print("    {}. {}: {}".format(i, news['title'], news['url']))
+            for i, news in enumerate(news_list, 1):
+                print("    {}. {}: {}".format(i, news['title'], news['url']))
 
-    print()
+        print()
 
     # Ждем 5 минут
     import time
