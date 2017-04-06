@@ -42,7 +42,7 @@ while True:
 
     if not rs_json['count']:
         print('Новостей нет')
-        break
+        continue
 
     for interest, news_list in rs_json['items'].items():
         print('{} ({}):'.format(interest, len(news_list)))
