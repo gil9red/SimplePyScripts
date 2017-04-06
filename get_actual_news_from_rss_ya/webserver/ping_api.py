@@ -25,6 +25,9 @@ import requests
 #
 #     for i, news in enumerate(news_list, 1):
 #         print("    {}. {}: {}".format(i, news['title'], news['url']))
+#
+#
+# quit()
 
 
 # Пример опроса сервера о новых новостях
