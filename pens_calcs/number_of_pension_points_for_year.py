@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from common import *
+import common
 
 
 # http://www.pfrf.ru/thm/common/mod/pensCalc/js/cash.js
@@ -16,15 +16,15 @@ def number_of_pension_points_for_year(zp: float) -> float:
     :return:
     """
 
-    if zp > ZPM:
-        zp = ZPM
+    if zp > common.ZPM:
+        zp = common.ZPM
 
     # Зарплата меньше мрот
-    if zp < MROT:
+    if zp < common.MROT:
         raise Exception('Ошибка! Введите зарплату выше, чем минимальный размер оплаты труда в '
                         'Российской Федерации в 2017 году - 7 500 рублей')
 
-    kpk_trud = zp / ZPM * 10
+    kpk_trud = zp / common.ZPM * 10
     if kpk_trud > 8.26:
         kpk_trud = 8.26
 
