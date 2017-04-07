@@ -198,7 +198,8 @@ if retireWorkWithoutPension > 10:
     retireWorkWithoutPension = 10
 
 # Расчеты в зависимости от типа занятости
-var careerPlan = persionFormInputs.filter('[name="careerPlan"]:checked').val()
+# TODO: узнать возможные варианты значения
+careerPlan = '1'
 
 # Наемный работник
 def calcEmpl(fee: int, careerLength: int, pensionTarif: int):
@@ -284,72 +285,63 @@ var calcPartEmpl = null
 var calcPartSZ = null
 var IPKtrud = null
 var S = null
-//var selhoz = 0
-switch(careerPlan) {
-    case '1':
-        //наемный работник
-        calcPart = calcEmpl()
-        if(calcPart === false) return false
 
-        //selhoz = persionFormInputs.filter('#careerSelHoz').val()
+if careerPlan == '1':
+    # Наемный работник
+    calcPart = calcEmpl()
+    if(calcPart === false) return false
 
-        // Стаж
-        S = calcPart.S
+    # Стаж
+    S = calcPart.S
 
-        // Пенсионные коэффициенты
-        IPKtrud = calcPart.IPKtrud
+    # Пенсионные коэффициенты
+    IPKtrud = calcPart.IPKtrud
 
-        break
-    case '2':
-        //самозанятый
-        calcPart = calcSZ()
+elif careerPlan == '2':
+    # Самозанятый
+    calcPart = calcSZ()
 
-        // Стаж
-        S = calcPart.S
+    # Стаж
+    S = calcPart.S
 
-        // Пенсионные коэффициенты
-        IPKtrud = calcPart.IPKtrud
+    # Пенсионные коэффициенты
+    IPKtrud = calcPart.IPKtrud
 
-        break
-    case '3':
-        //совмещающий
-        calcPartEmpl = calcEmpl()
-        if(calcPartEmpl === false) return false
+elif careerPlan == '3':
+    # Совмещающий
+    calcPartEmpl = calcEmpl()
+    if(calcPartEmpl === false) return false
 
-        calcPartSZ = calcSZ()
+    calcPartSZ = calcSZ()
 
-        //selhoz = persionFormInputs.filter('#careerSelHoz').val()
+    # Количество пенсионных коэффициентов свыше максимально установленного значения в год, полученных при совмещённой деятельности
+    var So = persionFormInputs.filter('#combinePeriod').val()
+    if(So.length < 1) {
+        So = 0
+        persionFormInputs.filter('#combinePeriod').val(So)
+    }
+    if(So > Math.min(calcPartEmpl.S, calcPartSZ.S)) {
+        combinationWarning.show()
+        $(output_area).slideDown()
+        return false
+    }
 
-        // Количество пенсионных коэффициентов свыше максимально установленного значения в год, полученных при совмещённой деятельности
-        var So = persionFormInputs.filter('#combinePeriod').val()
-        if(So.length < 1) {
-            So = 0
-            persionFormInputs.filter('#combinePeriod').val(So)
-        }
-        if(So > Math.min(calcPartEmpl.S, calcPartSZ.S)) {
-            combinationWarning.show()
-            $(output_area).slideDown()
-            return false
-        }
+    # Годовой пенсионный коэффициент, получаемый гражданином в года совмещения деятельности
+    var IPKemp = calcPartEmpl.IPKtrud * So / calcPartEmpl.S
+    var IPKsz = calcPartSZ.IPKtrud * So / calcPartSZ.S
+    var IPKo = (IPKsz + IPKemp) / So
+    if(IPKo > 10) IPKo = 10
+    var IPKis = IPKo * So
 
-        // Годовой пенсионный коэффициент, получаемый гражданином в года совмещения деятельности
-        var IPKemp = calcPartEmpl.IPKtrud * So / calcPartEmpl.S
-        var IPKsz = calcPartSZ.IPKtrud * So / calcPartSZ.S
-        var IPKo = (IPKsz + IPKemp) / So
-        if(IPKo > 10) IPKo = 10
-        var IPKis = IPKo * So
+    # Стаж
+    S = calcPartEmpl.S + calcPartSZ.S - So
 
-        // Стаж
-        S = calcPartEmpl.S + calcPartSZ.S - So
+    # Пенсионные коэффициенты
+    IPKtrud = (calcPartSZ.IPKtrud - IPKsz) + (calcPartEmpl.IPKtrud - IPKemp) + IPKis
+    if(So == 0) {
+        IPKtrud = calcPartSZ.IPKtrud + calcPartEmpl.IPKtrud
+    }
 
-        // Пенсионные коэффициенты
-        IPKtrud = (calcPartSZ.IPKtrud - IPKsz) + (calcPartEmpl.IPKtrud - IPKemp) + IPKis
-        if(So == 0) {
-            IPKtrud = calcPartSZ.IPKtrud + calcPartEmpl.IPKtrud
-        }
-
-        break
-}
 
 # Переходный период для наемных и самозанятых
 if careerPlan == '1' or careerPlan == '2':
