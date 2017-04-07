@@ -124,66 +124,80 @@ pensionTarif = 0
 # }
 # pensionTarif = parseInt(pensionTarif.val())
 
-// Общий расчет
+# Общий расчет
 
-// Служба в армии
-var VSyears = parseInt(persionFormInputs.filter('[name="yearsInArmy"]').val())
-var VSmonth = parseInt(persionFormInputs.filter('[name="monthInArmy"]').val())
-var VSdays = parseInt(persionFormInputs.filter('[name="daysInArmy"]').val())
+# Служба в армии
+yearsInArmy = 1
+monthInArmy = 0
+daysInArmy = 0
 
-// Стаж
-var VS = ((((VSyears * 12) + VSmonth) / 12 * 365) + VSdays) / 365
+# Стаж в армии
+VS = ((((yearsInArmy * 12) + monthInArmy) / 12 * 365) + daysInArmy) / 365
 
-// Коэффициент
-var VSK = VS * common.VSkoef
+# Коэффициент стажа
+VSK = VS * common.VSkoef
 
-// Уход за нетрудоспособными
-var CRyears = parseInt(persionFormInputs.filter('[name="careYears"]').val())
-var CRmonth = parseInt(persionFormInputs.filter('[name="careMonth"]').val())
-var CRdays = parseInt(persionFormInputs.filter('[name="careDays"]').val())
+# Уход за нетрудоспособными
+careYears = 1
+careMonth = 0
+careDays = 0
 
-// Стаж
-var CR = ((((CRyears * 12) + CRmonth) / 12 * 365) + CRdays) / 365
+# Стаж ухода за нетрудоспособными
+CR = ((((careYears * 12) + careMonth) / 12 * 365) + careDays) / 365
 
-// Коэффициент
-var CRK = CR * common.CRkoef
+# Коэффициент ухода
+CRK = CR * common.CRkoef
 
-// Дети, не более 4х
-var D = parseInt(persionFormInputs.filter('#childrenCount1').val())
-if(D < 0) {
-    D = 0
-}
-else {
-    if(D > 4) D = 4
-}
+# Дети, не более 4х
+childrenCount1 = 1
+if childrenCount1 < 0:
+    childrenCount1 = 0
 
-// Стаж
-var DO = parseFloat(persionFormInputs.filter('#childrenVac1').val())
-if(DO < 0) {
-    DO = 0
-}
-else {
-    if(DO > 1.5) DO = 1.5
-}
+elif childrenCount1 > 4:
+    childrenCount1 = 4
 
-// Коэффициент
-var KD = 0
+# TODO: узнать что за childrenVac1
+# TODO: и что за стаж
+# Стаж
+childrenVac1 = 0
+if childrenVac1 < 0:
+    childrenVac1 = 0
+    
+elif childrenVac1 > 1.5:
+    childrenVac1 = 1.5
 
-if(D > 0) {
-    KD = DO * (D > 0 ? 1.8 + (D > 1 ? 3.6 + (D > 2 ? 5.4 + (D > 3 ? (5.4) : 0) : 0) : 0) : 0)
-    DO = DO * D
-}
 
-// Коэффициент за нетрудовые периоды
-var NK = KD + CRK + VSK
+# Коэффициент
+KD = 0.0
 
-// Стаж за нетрудовые периоды
-var NS = DO + VS + CR
+if childrenCount1 > 0:
+    if childrenCount1 > 0:
+        KD += 1.8
 
-var retireWork = persionFormInputs.filter('#retireWorkWithoutPension').val()
-if(retireWork > 10) retireWork = 10
+    if childrenCount1 > 1:
+        KD += 3.6
 
-// Расчеты в зависимости от типа занятости
+    if childrenCount1 > 2:
+        KD += 5.4
+
+    if childrenCount1 > 3:
+        KD += 5.4
+
+    KD *= childrenVac1
+    childrenVac1 *= childrenCount1
+
+# Коэффициент за нетрудовые периоды
+NK = KD + CRK + VSK
+
+# Стаж за нетрудовые периоды
+NS = childrenVac1 + VS + CR
+
+# NOTE: сколько после пенсионного возраста собираешься работать неполучая пенсию
+retireWorkWithoutPension = 5
+if retireWorkWithoutPension > 10:
+    retireWorkWithoutPension = 10
+
+# Расчеты в зависимости от типа занятости
 var careerPlan = persionFormInputs.filter('[name="careerPlan"]:checked').val()
 
 # Наемный работник
@@ -337,95 +351,75 @@ switch(careerPlan) {
         break
 }
 
-// Переходный период для наемных и самозанятых
-if(careerPlan == '1' || careerPlan == '2') {
-    var IPKtrud2021 = 0
-    var ZP = persionFormInputs.filter('#fee').val()
-    var IPKtrud2015 = 0
-    var GD = parseInt(persionFormInputs.filter('#revenue').val())
-    if(GD.length < 1) {
-        GD = 0
-    }
-    if(GD < 0) GD = 0
+# Переходный период для наемных и самозанятых
+if careerPlan == '1' or careerPlan == '2':
+    IPKtrud2015 = 0
+    IPKtrud2021 = 0
 
-    // Сумма страховых взносов на страховую пенсию, начисленных исходя из размера годового дохода
-    var SVGD = 0
-    var SVGDkoeff = 0
-    if(pensionTarif == 0) {
-        SVGDkoeff = 16
-    }
-    else {
-        SVGDkoeff = 10
-    }
+    fee = persionFormInputs.filter('#fee').val()
+    revenue = parseInt(persionFormInputs.filter('#revenue').val())
+    if revenue < 0:
+        revenue = 0
 
-    if(GD < common.GDmax) {
+    # Сумма страховых взносов на страховую пенсию, начисленных исходя из размера годового дохода
+    SVGD = 0
+    SVGDkoeff = 16 if pensionTarif == 0 else 10
+
+    if revenue < common.GDmax:
         SVGD = (SVGDkoeff * (common.MROT * 0.26 * 12)) / 26
-    }
-    else {
-        SVGD = (SVGDkoeff * (common.MROT * 0.26 * 12) + ((GD - common.GDmax) * 0.01)) / 26
-    }
+    else
+        SVGD = (SVGDkoeff * (common.MROT * 0.26 * 12) + ((revenue - common.GDmax) * 0.01)) / 26
 
-    if(S > 5) {
+    if S > 5:
         IPKtrud2021 = IPKtrud * ((S - 5) / S)
-        if(careerPlan == '1') {
-            IPKtrud2015 = ZP / common.ZPM * 10
-        }
-        else {
-            if(careerPlan == '2') {
-                IPKtrud2015 = (SVGD / common.MSSV) * 10
-            }
-        }
-    }
-    if(S < 6) {
-        IPKtrud2021 = 0
-        if(careerPlan == '1') {
-            IPKtrud2015 = ZP / common.ZPM * 10
-        }
-        else {
-            if(careerPlan == '2') {
-                IPKtrud2015 = (SVGD / common.MSSV) * 10
-            }
-        }
-    }
 
-    if(pensionTarif == '0') { //KNPG = 1
+        if careerPlan == '1':
+            IPKtrud2015 = fee / common.ZPM * 10
+
+        elif careerPlan == '2':
+            IPKtrud2015 = (SVGD / common.MSSV) * 10
+
+    elif S < 6:
+        if careerPlan == '1':
+            IPKtrud2015 = fee / common.ZPM * 10
+
+        elif careerPlan == '2':
+            IPKtrud2015 = (SVGD / common.MSSV) * 10
+
+    # KNPG = 1
+    if pensionTarif == '0':
         IPKtrud2015 = (S > 0 ? Math.min(8.26, IPKtrud2015) : 0) + (S > 1 ? Math.min(8.70, IPKtrud2015) : 0) +
             (S > 2 ? Math.min(9.13, IPKtrud2015) : 0) + (S > 3 ? Math.min(9.57, IPKtrud2015) : 0)
-    }
-    else { //KNPG = 0.625
+
+    # KNPG = 0.625
+    else:
         IPKtrud2015 = (S > 0 ? Math.min(8.26, IPKtrud2015) : 0) + (S > 1 ? Math.min(5.43, IPKtrud2015) : 0) +
             (S > 2 ? Math.min(5.71, IPKtrud2015) : 0) + (S > 3 ? Math.min(5.98, IPKtrud2015) : 0)
-    }
-
 
     IPKtrud = IPKtrud2015 + IPKtrud2021
 
-}
 
-if(careerPlan == '1') {
-    persionFormInputs.filter('#SZPeriod').val(0)
-    persionFormInputs.filter('#revenue').val(0)
-}
-else {
-    if(careerPlan == '2') {
-        persionFormInputs.filter('#careerLength').val(0)
-        persionFormInputs.filter('#fee').val(0)
-    }
-}
+# TODO: какое-то обнуление значений в редакторе полей
+# if(careerPlan == '1') {
+#     persionFormInputs.filter('#SZPeriod').val(0)
+#     persionFormInputs.filter('#revenue').val(0)
+# }
+# else {
+#     if(careerPlan == '2') {
+#         persionFormInputs.filter('#careerLength').val(0)
+#         persionFormInputs.filter('#fee').val(0)
+#     }
+# }
 
-// Пенсионные коэффициенты
-var IPK = (IPKtrud + NK) * common.SPKop[retireWork]
+# Пенсионные коэффициенты
+IPK = (IPKtrud + NK) * common.SPKop[retireWorkWithoutPension]
 
-// Общий стаж
-var OS = S + NS
+# Общий стаж
+OS = S + NS
 
 newCoefSummSmall.html((Math.round(IPK * 100) / 100).toString())
 personOSsmall.html((Math.round(OS * 100) / 100).toString())
 
-if(lang == 'ru') {
-    newCoefSummSmall.html(newCoefSummSmall.html().replace(/\./, ","))
-    personOSsmall.html(personOSsmall.html().replace(/\./, ","))
-}
 
 var WR = OS.toString().substr(-1)
 
@@ -546,7 +540,7 @@ if(S == 8 && IPK < 30) {
 }
 
 # Страховая пенсия
-SP = (common.FIKS * common.BPKop[retireWork]) + (IPK * common.CPK)
+SP = (common.FIKS * common.BPKop[retireWorkWithoutPension]) + (IPK * common.CPK)
 
 var newCoefSummCont = $("#newCoefSumm")
 newCoefSummCont.html((Math.round(IPK * 100) / 100).toString())
