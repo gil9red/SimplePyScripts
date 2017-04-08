@@ -10,7 +10,6 @@ __author__ = 'ipetrash'
 import vk_api
 
 import logging
-import traceback
 import datetime
 import time
 import sys
@@ -77,5 +76,4 @@ if __name__ == '__main__':
         send_message('Hello! Привет!\nYahoo!', USER_ID)
 
     except Exception as e:
-        logger.error('{}\n{}'.format(e, traceback.format_exc()))
-        exit()
+        logger.exception("Error:")
