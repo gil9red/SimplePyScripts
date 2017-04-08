@@ -156,10 +156,10 @@ if __name__ == '__main__':
             try:
                 offset, total_messages = get_history(offset, count_step, USER_ID)
             except (vk_api.ApiError, HTTPError) as e:
-                logger.error('{}\n{}'.format(e, traceback.format_exc()))
+                logger.exception("Error:")
                 logger.debug('Waiting 60 seconds')
                 time.sleep(60)
 
     except Exception as e:
-        logger.error('{}\n{}'.format(e, traceback.format_exc()))
+        logger.exception("Error:")
         sys.exit()
