@@ -18,6 +18,33 @@ if sys.platform == 'win32':
 from config import *
 
 
+def get_logger(name=__name__, file='log.txt', encoding='utf8'):
+    import sys
+    import logging
+
+    log = logging.getLogger(name)
+    log.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s')
+
+    fh = logging.FileHandler(file, encoding=encoding)
+    fh.setLevel(logging.DEBUG)
+
+    ch = logging.StreamHandler(stream=sys.stdout)
+    ch.setLevel(logging.DEBUG)
+
+    fh.setFormatter(formatter)
+    ch.setFormatter(formatter)
+
+    log.addHandler(fh)
+    log.addHandler(ch)
+
+    return log
+
+
+log = get_logger()
+
+
 def get_feeds_by_manga_chapters(url_rss: str) -> list:
     import requests
     rss_text = requests.get(url_rss).text
@@ -43,7 +70,7 @@ def get_feeds_by_manga_chapters(url_rss: str) -> list:
 
 
 def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0):
-    from datetime import timedelta
+    from datetime import timedelta, datetime
     today = datetime.today()
     timeout_date = today + timedelta(
         days=days, seconds=seconds, microseconds=microseconds,
@@ -76,24 +103,26 @@ def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, 
 
 
 def send_sms(api_id: str, to: str, text: str):
+    log.debug('Send sms: "%s"', text)
+
     # Отправляю смс на номер
     url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
         api_id=api_id,
         to=to,
         text=text
     )
-    print(repr(url))
+    log.debug(repr(url))
 
     import requests
     rs = requests.get(url)
-    print(rs.text)
+    log.debug(rs.text)
 
 
 if __name__ == '__main__':
     # Загрузка последних новостей из файла
     import ast
     current_feeds = ast.literal_eval(open(FILE_NAME_CURRENT_FEEDS, encoding='utf-8').read())
-    print(current_feeds)
+    log.debug('Feeds from "%s": %s', FILE_NAME_CURRENT_FEEDS, current_feeds)
 
     # Флаг служит для того, чтобы при первом запуске скрипта, при пустом списке глав в файле <FILE_NAME_CURRENT_FEEDS>
     # скрипт не реагировал на "новые главы"
@@ -101,12 +130,10 @@ if __name__ == '__main__':
 
     while True:
         try:
-            from datetime import datetime
-            today = datetime.today()
-            print(today)
+            log.debug('get_feeds_by_manga_chapters')
 
             new_feeds = get_feeds_by_manga_chapters(URL_USER_RSS)
-            print(new_feeds)
+            log.debug('new_feeds: %s', new_feeds)
 
             # NOTE: Тоже самое можно сделать через цикл и новый список
             new_manga = set(new_feeds) - set(current_feeds)
@@ -117,27 +144,24 @@ if __name__ == '__main__':
                 open(FILE_NAME_CURRENT_FEEDS, 'w', encoding='utf-8').write(str(current_feeds))
 
                 if not first_run:
-                    print('Вышло:')
+                    log.debug('Вышло:')
                     for manga in new_manga:
-                        print('    ' + manga)
+                        log.debug('    ' + manga)
 
                     send_sms(API_ID, TO, 'Новые главы: {}'.format(len(new_manga)))
 
                 first_run = False
 
             else:
-                print('Новых глав нет')
+                log.debug('Новых глав нет')
 
-            print()
+            log.debug("")
 
             wait(hours=5)
 
         except Exception:
-            import traceback
-            print('Ошибка:')
-            print(traceback.format_exc())
-
-            print('Через 5 минут попробую снова...')
+            log.exception('Ошибка:')
+            log.debug('Через 5 минут попробую снова...')
 
             # Wait 5 minutes before next attempt
             import time
