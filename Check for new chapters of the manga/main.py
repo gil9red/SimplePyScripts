@@ -115,7 +115,7 @@ def send_sms(api_id: str, to: str, text: str):
 
     import requests
     rs = requests.get(url)
-    log.debug(rs.text)
+    log.debug(repr(rs.text))
 
 
 if __name__ == '__main__':
