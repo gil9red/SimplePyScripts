@@ -12,7 +12,6 @@ import time
 from urllib.parse import urljoin
 from random import randint
 import sys
-import traceback
 
 import requests
 import vk_api
@@ -63,7 +62,7 @@ def vk_auth(login, password):
         logger.debug('Авторизуюсь в vk.')
         vk.authorization()
     except Exception as e:
-        logger.error('При авторизации произошла ошибка: "%s".\n\n%s', e, traceback.format_exc())
+        logger.exception("При авторизации произошла ошибка:")
         quit()
 
     logger.debug('Удачная авторизация.')
@@ -144,4 +143,4 @@ if __name__ == '__main__':
                 time.sleep(interval)
 
         except Exception as e:
-            logger.error('Произошла ошибка: "%s".\n\n%s', e, traceback.format_exc())
+            logger.exception("Произошла ошибка:")
