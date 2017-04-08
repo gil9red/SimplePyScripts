@@ -319,7 +319,7 @@ class MainWindow(QMainWindow, QObject):
                 pickle.dump(tag, f)
 
         except Exception as e:
-            logger.error('{}.\n\n{}'.format(e, traceback.format_exc()))
+            logger.exception("Error:")
             logger.debug('Restore {} from {}.'.format(file_name, file_name_backup))
 
             # Произошла ошибка. Восстанавливаем файл из бекапа
