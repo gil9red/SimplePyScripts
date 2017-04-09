@@ -15,6 +15,9 @@ __author__ = 'ipetrash'
 #     sys.stderr = codecs.getwriter(sys.stderr.encoding)(sys.stderr.detach(), 'backslashreplace')
 
 
+from config import *
+
+
 def get_logger(name, file='log.txt', encoding='utf8'):
     import sys
     import logging
@@ -40,6 +43,22 @@ def get_logger(name, file='log.txt', encoding='utf8'):
 
 
 log = get_logger('games_with_denuvo')
+
+
+def send_sms(api_id: str, to: str, text: str):
+    log.debug('Send sms: "%s"', text)
+
+    # Отправляю смс на номер
+    url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
+        api_id=api_id,
+        to=to,
+        text=text
+    )
+    log.debug(repr(url))
+
+    import requests
+    rs = requests.get(url)
+    log.debug(repr(rs.text))
 
 
 DB_FILE_NAME = 'database.sqlite'
@@ -117,10 +136,16 @@ def append_list_games(games: [(str, bool)]):
 
                 # Если игра раньше имела статус is_cracked = False, а теперь он поменялся на True:
                 if not rs_is_cracked and is_cracked:
-                    log.debug('Игру "%s" взломали', name)
-
                     # Поменяем флаг у игры в базе
                     connect.execute('UPDATE Game SET is_cracked = 1 WHERE name = ?', (name,))
+
+                    text = 'Игру "{}" взломали'.format(name)
+
+                    log.debug(text)
+                    try:
+                        send_sms(API_ID, TO, text)
+                    except Exception:
+                        log.exception("При отправке sms возникла ошибка:")
 
         connect.commit()
 
