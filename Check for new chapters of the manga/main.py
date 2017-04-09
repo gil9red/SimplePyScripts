@@ -151,7 +151,11 @@ if __name__ == '__main__':
                     for manga in new_manga:
                         log.debug('    ' + manga)
 
-                    send_sms(API_ID, TO, 'Новые главы: {}'.format(len(new_manga)))
+                    try:
+                        send_sms(API_ID, TO, 'Новые главы: {}'.format(len(new_manga)))
+
+                    except Exception:
+                        log.exception("При отправке sms произошла ошибка:")
 
                 first_run = False
 
