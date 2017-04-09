@@ -116,7 +116,7 @@ def init_db():
         connect.close()
 
 
-def append_list_games(games: [(str, bool)]):
+def append_list_games(games: [(str, bool)], notified_by_sms=True):
     connect = create_connect()
 
     def insert(name: str, is_cracked: bool) -> bool:
@@ -144,8 +144,16 @@ def append_list_games(games: [(str, bool)]):
                     connect.execute('UPDATE Game SET is_cracked = 1 WHERE name = ?', (name,))
 
                     text = 'Игру "{}" взломали'.format(name)
-
                     log.debug(text)
+
+                    if notified_by_sms:
+                        send_sms(API_ID, TO, text)
+
+            elif is_cracked:
+                text = 'Игру "{}" взломали'.format(name)
+                log.debug(text)
+
+                if notified_by_sms:
                     send_sms(API_ID, TO, text)
 
         connect.commit()

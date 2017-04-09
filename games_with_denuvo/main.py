@@ -67,6 +67,10 @@ if __name__ == '__main__':
 
     init_db()
 
+    # NOTE: С этим флагом нужно быть осторожным при первом запуске, когда база пуста,
+    # ведь на каждую добавленную взломанную игру отправится уведомление по смс
+    notified_by_sms = True
+
     while True:
         try:
             log.debug('get_games_with_denuvo')
@@ -75,7 +79,7 @@ if __name__ == '__main__':
             games = get_games_with_denuvo()
             log.debug('games: %s', games)
 
-            append_list_games(games)
+            append_list_games(games, notified_by_sms)
 
             wait(weeks=1)
 
