@@ -23,7 +23,7 @@ def get_games_with_denuvo() -> [(str, bool)]:
     # Таблица "Список защищённых игр"
     table = root.select('.wikitable')[0]
 
-    games_with_denuvo = list()
+    games = list()
 
     for tr in table.select('tr'):
         td_list = tr.select('td')
@@ -41,9 +41,9 @@ def get_games_with_denuvo() -> [(str, bool)]:
         if '[' in name and ']' in name:
             name = name[:name.index('[')]
 
-        games_with_denuvo.append((name, is_cracked))
+        games.append((name, is_cracked))
 
-    return games_with_denuvo
+    return games
 
 
 if __name__ == '__main__':
