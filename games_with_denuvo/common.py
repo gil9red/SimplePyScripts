@@ -46,19 +46,23 @@ log = get_logger('games_with_denuvo')
 
 
 def send_sms(api_id: str, to: str, text: str):
-    log.debug('Send sms: "%s"', text)
+    log.debug('Отправка sms: "%s"', text)
 
-    # Отправляю смс на номер
-    url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
-        api_id=api_id,
-        to=to,
-        text=text
-    )
-    log.debug(repr(url))
+    try:
+        # Отправляю смс на номер
+        url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
+            api_id=api_id,
+            to=to,
+            text=text
+        )
+        log.debug(repr(url))
 
-    import requests
-    rs = requests.get(url)
-    log.debug(repr(rs.text))
+        import requests
+        rs = requests.get(url)
+        log.debug(repr(rs.text))
+
+    except Exception:
+        log.exception("При отправке sms произошла ошибка:")
 
 
 DB_FILE_NAME = 'database.sqlite'
@@ -142,10 +146,7 @@ def append_list_games(games: [(str, bool)]):
                     text = 'Игру "{}" взломали'.format(name)
 
                     log.debug(text)
-                    try:
-                        send_sms(API_ID, TO, text)
-                    except Exception:
-                        log.exception("При отправке sms возникла ошибка:")
+                    send_sms(API_ID, TO, text)
 
         connect.commit()
 

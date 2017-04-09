@@ -106,19 +106,23 @@ def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, 
     
 
 def send_sms(api_id: str, to: str, text: str):
-    log.debug('Send sms: "%s"', text)
+    log.debug('Отправка sms: "%s"', text)
 
-    # Отправляю смс на номер
-    url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
-        api_id=api_id,
-        to=to,
-        text=text
-    )
-    log.debug(repr(url))
+    try:
+        # Отправляю смс на номер
+        url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
+            api_id=api_id,
+            to=to,
+            text=text
+        )
+        log.debug(repr(url))
 
-    import requests
-    rs = requests.get(url)
-    log.debug(repr(rs.text))
+        import requests
+        rs = requests.get(url)
+        log.debug(repr(rs.text))
+
+    except Exception:
+        log.exception("При отправке sms произошла ошибка:")
 
 
 if __name__ == '__main__':
@@ -151,11 +155,7 @@ if __name__ == '__main__':
                     for manga in new_manga:
                         log.debug('    ' + manga)
 
-                    try:
-                        send_sms(API_ID, TO, 'Новые главы: {}'.format(len(new_manga)))
-
-                    except Exception:
-                        log.exception("При отправке sms произошла ошибка:")
+                    send_sms(API_ID, TO, 'Новые главы: {}'.format(len(new_manga)))
 
                 first_run = False
 
