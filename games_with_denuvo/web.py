@@ -41,10 +41,10 @@ def index():
 </head>
 <body>
     <table>
+        <caption><a href="https://en.wikipedia.org/wiki/Denuvo">Список взломанных игр</a><caption>
+
         <colgroup>
             <col span="1" style="width: 5%;">
-            <col span="1" style="width: 70%;">
-            <col span="1" style="width: 20%;">
         </colgroup>
 
         <tbody>
@@ -58,14 +58,20 @@ def index():
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ name }}</td>
-                <td></td>
+                <td>
+                    <button onclick="window.open('http://anti-tor.org/search/0/8/000/0/' + '{{ name }}' )">Rutor</button>
+                    <button onclick="window.open('http://search.tfile.co/?q=' + '{{ name }}' )">tFile</button>
+                    <button onclick="window.open('http://www.torrentino.me/search?type=games&search=' + '{{ name }}' )">Torrentino</button>
+                    <button onclick="window.open('https://yandex.ru/yandsearch?&text=' + '{{ name }}' )">Yandex</button>
+                    <button onclick="window.open('https://www.google.ru/#newwindow=1&q=' + '{{ name }}' )">Google</button>
+                </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 </body>
 </html>
-    """, games=[name for name, _ in games], headers=["№", "Название", "Поиск"])
+    """, headers=["№", "Название", "Поиск"], games=[name for name, _ in games])
 
 
 if __name__ == "__main__":
