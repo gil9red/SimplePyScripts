@@ -9,6 +9,7 @@ def get_news_from_rss(url_rss) -> list:
     rss = feedparser.parse(url_rss)
     return [(entry.title, entry.link) for entry in rss.entries]
 
+
 def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0):
     from datetime import timedelta, datetime
     today = datetime.today()
