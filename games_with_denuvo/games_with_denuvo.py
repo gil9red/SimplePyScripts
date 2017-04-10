@@ -33,7 +33,7 @@ def get_games_with_denuvo() -> [(str, bool)]:
             continue
 
         name = td_list[0].text.strip()
-        cracked = td_list[-1].text.lower()
+        cracked = td_list[5].text.lower()
 
         is_cracked = 'да' in cracked or 'yes' in cracked
 
