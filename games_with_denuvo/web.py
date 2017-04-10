@@ -22,7 +22,6 @@ def index():
 
     <style type="text/css">
         table {
-            width: 40%;
             border-collapse: collapse; /* Убираем двойные линии между ячейками */
         }
             /* Увеличим заголовок таблиц */
