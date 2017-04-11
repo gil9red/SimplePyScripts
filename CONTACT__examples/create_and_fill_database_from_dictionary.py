@@ -91,7 +91,7 @@ def build_sql_rows_data_table(table_name: str, rows_of_table: [dict]) -> str:
         return "INSERT OR IGNORE INTO {table_name} ({fields}) VALUES ({values});".format(
             table_name=table_name.upper(),
             fields=','.join(key.upper() for key in keys),
-            values=','.join(repr(row_of_table[key]) for key in keys),
+            values=','.join(repr(row_of_table[key]).replace('\\"', '').replace("\\'", '') for key in keys),
         )
 
     return '\n'.join(build_insert(row_data.attrs) for row_data in rows_of_table)
@@ -134,22 +134,23 @@ if __name__ == '__main__':
 
         sql_table = build_sql_table(table_name, format_fields_of_dict)
         sql_table_data_rows = build_sql_rows_data_table(table_name, rows_of_dict)
-        print(sql_table + "\n\n" + sql_table_data_rows)
+        # print(sql_table + "\n\n" + sql_table_data_rows)
 
+        print('  Append {} rows'.format(len(rows_of_dict)))
         create_table(table_name, sql_table, sql_table_data_rows)
 
-        print()
-        print("Test sql")
-        connect = create_connect()
-
-        import sqlite3
-        connect.row_factory = sqlite3.Row
-
-        try:
-            for country in connect.execute('SELECT * FROM {}'.format(table_name)).fetchall():
-                print(dict(country))
-
-        finally:
-            connect.close()
-
-        print('\n')
+        # print()
+        # print("Test sql")
+        # connect = create_connect()
+        #
+        # import sqlite3
+        # connect.row_factory = sqlite3.Row
+        #
+        # try:
+        #     for country in connect.execute('SELECT * FROM {}'.format(table_name)).fetchall():
+        #         print(dict(country))
+        #
+        # finally:
+        #     connect.close()
+        #
+        # print('\n')
