@@ -1,0 +1,87 @@
+<?xml version="1.0" standalone="yes"?>
+<html>
+ <body>
+  <datapacket version="2.0">
+   <metadata>
+    <fields>
+     <field attrname="VERSION" fieldtype="i4">
+     </field>
+     <field attrname="ERASED" fieldtype="i4">
+     </field>
+     <field attrname="ID" fieldtype="i4">
+     </field>
+     <field attrname="NAME" fieldtype="string" width="80">
+     </field>
+     <field attrname="NAME_LAT" fieldtype="string" width="80">
+     </field>
+     <field attrname="CODE" fieldtype="string" width="3">
+     </field>
+     <field attrname="PP_CODE" fieldtype="string" width="6">
+     </field>
+     <field attrname="SEND_CURR" fieldtype="string" width="252">
+     </field>
+     <field attrname="REC_CURR" fieldtype="string" width="252">
+     </field>
+     <field attrname="IS_RUR" fieldtype="i4">
+     </field>
+     <field attrname="IS_USD" fieldtype="i4">
+     </field>
+     <field attrname="IS_EUR" fieldtype="i4">
+     </field>
+     <field attrname="IS_FATF" fieldtype="i4">
+     </field>
+    </fields>
+    <params>
+    </params>
+   </metadata>
+   <rowdata>
+    <row code="RU" erased="0" id="0" is_eur="1" is_fatf="1" is_rur="1" is_usd="1" name="Российская Федерация" name_lat="RUSSIAN FEDERATION" pp_code="CDPA  " rec_curr="RUR;USD;EUR;" send_curr="RUR;USD;EUR;" version="15">
+    </row>
+    <row code="TJ" erased="0" id="762" is_eur="1" is_fatf="0" is_rur="1" is_usd="1" name="ТАДЖИКИСТАН" name_lat="TAJIKISTAN" rec_curr="RUR;USD;EUR;" send_curr="USD;EUR;" version="15">
+    </row>
+    <row code="BY" erased="0" id="112" is_eur="1" is_fatf="0" is_rur="1" is_usd="1" name="БЕЛАРУСЬ" name_lat="BELARUS" rec_curr="RUR;USD;EUR;" send_curr="" version="15">
+    </row>
+    <row code="KZ" erased="0" id="398" is_eur="1" is_fatf="0" is_rur="1" is_usd="1" name="КАЗАХСТАН" name_lat="KAZAKHSTAN" rec_curr="RUR;USD;EUR;" send_curr="" version="15">
+    </row>
+    <row code="UZ" erased="0" id="860" is_eur="1" is_fatf="0" is_rur="1" is_usd="1" name="УЗБЕКИСТАН" name_lat="UZBEKISTAN" rec_curr="RUR;USD;EUR;" send_curr="" version="15">
+    </row>
+    <row code="LB" erased="0" id="422" is_eur="0" is_fatf="0" is_rur="0" is_usd="1" name="ЛИВАН" name_lat="LEBANON" rec_curr="USD;" send_curr="USD;" version="15">
+    </row>
+    <row code="DE" erased="0" id="276" is_eur="1" is_fatf="1" is_rur="1" is_usd="1" name="ГЕРМАНИЯ" name_lat="GERMANY" rec_curr="EUR;" send_curr="EUR;" version="15">
+    </row>
+    <row code="CN" erased="0" id="156" is_eur="1" is_fatf="1" is_rur="1" is_usd="1" name="КИТАЙ" name_lat="CHINA" rec_curr="RUR;USD;EUR;" send_curr="RUR;USD;EUR;" version="15">
+    </row>
+    <row code="RS" erased="0" id="688" is_eur="1" is_fatf="0" is_rur="0" is_usd="0" name="СЕРБИЯ" name_lat="SERBIA" rec_curr="EUR;" send_curr="EUR;" version="15">
+    </row>
+    <row code="EE" erased="0" id="233" is_eur="1" is_fatf="0" is_rur="1" is_usd="1" name="ЭСТОНИЯ" name_lat="ESTONIA" rec_curr="RUR;USD;EUR;" send_curr="" version="15">
+    </row>
+    <row code="LT" erased="0" id="440" is_eur="1" is_fatf="0" is_rur="1" is_usd="1" name="ЛИТВА" name_lat="LITHUANIA" rec_curr="RUR;USD;EUR;" send_curr="" version="15">
+    </row>
+    <row code="AB" erased="0" id="895" is_eur="1" is_fatf="0" is_rur="1" is_usd="1" name="АБХАЗИЯ" name_lat="ABHAZIA" rec_curr="RUR;USD;EUR;" send_curr="" version="15">
+    </row>
+    <row code="GE" erased="0" id="268" is_eur="1" is_fatf="0" is_rur="1" is_usd="1" name="ГРУЗИЯ" name_lat="GEORGIA" rec_curr="RUR;USD;EUR;" send_curr="" version="15">
+    </row>
+    <row code="BR" erased="0" id="76" is_eur="1" is_fatf="1" is_rur="1" is_usd="1" name="БРАЗИЛИЯ" name_lat="BRAZIL" rec_curr="USD;" send_curr="USD;" version="15">
+    </row>
+    <row code="KG" erased="0" id="417" is_eur="1" is_fatf="0" is_rur="1" is_usd="1" name="КЫРГЫЗСТАН" name_lat="KYRGYZSTAN" rec_curr="RUR;USD;EUR;" send_curr="RUR;USD;EUR;" version="15">
+    </row>
+    <row code="DK" erased="0" id="208" is_eur="1" is_fatf="1" is_rur="1" is_usd="1" name="ДАНИЯ" name_lat="DENMARK" rec_curr="USD;EUR;" send_curr="USD;EUR;" version="15">
+    </row>
+    <row code="IT" erased="0" id="380" is_eur="1" is_fatf="1" is_rur="1" is_usd="1" name="ИТАЛИЯ" name_lat="ITALY" rec_curr="USD;EUR;" send_curr="USD;EUR;" version="15">
+    </row>
+    <row code="UA" erased="0" id="804" is_eur="1" is_fatf="0" is_rur="1" is_usd="1" name="УКРАИНА" name_lat="UKRAINE" rec_curr="RUR;USD;EUR;" send_curr="" version="15">
+    </row>
+    <row code="AZ" erased="0" id="31" is_eur="1" is_fatf="0" is_rur="1" is_usd="1" name="АЗЕРБАЙДЖАН" name_lat="AZERBAIJAN" rec_curr="RUR;USD;EUR;" send_curr="" version="15">
+    </row>
+    <row code="ES" erased="0" id="724" is_eur="1" is_fatf="1" is_rur="1" is_usd="1" name="ИСПАНИЯ" name_lat="SPAIN" rec_curr="RUR;USD;EUR;" send_curr="USD;EUR;" version="15">
+    </row>
+    <row code="EG" erased="0" id="818" is_eur="0" is_fatf="0" is_rur="0" is_usd="1" name="ЕГИПЕТ" name_lat="EGYPT" rec_curr="USD;" send_curr="USD;" version="15">
+    </row>
+    <row code="MD" erased="0" id="498" is_eur="1" is_fatf="0" is_rur="1" is_usd="1" name="МОЛДОВА" name_lat="MOLDOVA" rec_curr="RUR;USD;EUR;" send_curr="" version="15">
+    </row>
+    <row code="AM" erased="0" id="51" is_eur="1" is_fatf="0" is_rur="1" is_usd="1" name="АРМЕНИЯ" name_lat="ARMENIA" rec_curr="RUR;USD;EUR;" send_curr="" version="15">
+    </row>
+   </rowdata>
+  </datapacket>
+ </body>
+</html>

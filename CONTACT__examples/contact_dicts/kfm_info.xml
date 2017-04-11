@@ -1,0 +1,57 @@
+<?xml version="1.0" standalone="yes"?>
+<html>
+ <body>
+  <datapacket version="2.0">
+   <metadata>
+    <fields>
+     <field attrname="VERSION" fieldtype="i4">
+     </field>
+     <field attrname="ID" fieldtype="i4">
+     </field>
+     <field attrname="ERASED" fieldtype="i4">
+     </field>
+     <field attrname="NAMEU_F" fieldtype="string" width="50">
+     </field>
+     <field attrname="NAMEU_I" fieldtype="string" width="50">
+     </field>
+     <field attrname="NAMEU_O" fieldtype="string" width="50">
+     </field>
+     <field attrname="BIRTHDAY" fieldtype="string" width="254">
+     </field>
+     <field attrname="PASSPORT" fieldtype="string" width="254">
+     </field>
+     <field attrname="ADDRESS" fieldtype="string" width="254">
+     </field>
+     <field attrname="DELETED" fieldtype="i4">
+     </field>
+     <field attrname="NAMEU" fieldtype="string" width="150">
+     </field>
+    </fields>
+    <params>
+    </params>
+   </metadata>
+   <rowdata>
+    <row address="н.п. Улус-Керт Шатойского района Чеченской Республики" birthday="21.10.1984 с. Улус-Керт  Советского р-на  ЧИАССР" deleted="0" erased="0" id="428212" nameu="ЯСУЕВМОВЛАДИСАИД-МАГОМЕДОВИЧ" nameu_f="ЯСУЕВ" nameu_i="МОВЛАДИ" nameu_o="САИД-МАГОМЕДОВИЧ" passport="Паспорт РФ выдан Шатойским ВОВД 24.07.2000 9699 018341" version="15">
+    </row>
+    <row address="с. Старые Атаги Грозненского района Чеченской Республики, ул. Центральная, д. 51" birthday="26.12.1984 с. Старые Атаги Грозненского района ЧИАССР" deleted="0" erased="0" id="428213" nameu="ЯСУЕВАСЛАНБЕКШАРПУДИЕВИЧ" nameu_f="ЯСУЕВ" nameu_i="АСЛАНБЕК" nameu_o="ШАРПУДИЕВИЧ" passport="Паспорт РФ выдан ОВД Грозненского района Чеченской Республики 17.10.2000 9699 055895" version="15">
+    </row>
+    <row address="с. Кади-Юрт Гудермесского района Чеченской Республики" birthday="23.02.1972 с. Кади-Юрт Гудермесского района ЧИАССР" deleted="0" erased="0" id="428214" nameu="ЯСАКОВРЕШЕДИБРАГИМОВИЧ" nameu_f="ЯСАКОВ" nameu_i="РЕШЕД" nameu_o="ИБРАГИМОВИЧ" passport="" version="15">
+    </row>
+    <row address="с. Автуры Шалинского района Чеченской Республики, ул. Терешковой, д. 34" birthday="06.07.1987 г. Шали ЧИАССР" deleted="0" erased="0" id="428215" nameu="ЯРМОЛАТОВУМАРВАХИТОВИЧ" nameu_f="ЯРМОЛАТОВ" nameu_i="УМАР" nameu_o="ВАХИТОВИЧ" passport="Паспорт РФ выдан Шалинским отделом УФМС РФ по Чеченской Республике 28.08.2007 9607 003272" version="15">
+    </row>
+    <row address="с. Автуры Чеченской Республики, ул. А.Митаева, д. 31" birthday="02.12.1983 с. Автуры ЧИАССР" deleted="0" erased="0" id="428216" nameu="ЯРМОЛАТОВРАМЗАНВАХИТОВИЧ" nameu_f="ЯРМОЛАТОВ" nameu_i="РАМЗАН" nameu_o="ВАХИТОВИЧ" passport="Паспорт РФ выдан ОВД г. Шали ЧР 01.06.2004 9604 735005" version="15">
+    </row>
+    <row address="с. Ведено Веденского района Чеченской Республики, ул. Ленина, д. 20" birthday="15.11.1987 с. Ведено Веденского района ЧИАССР" deleted="0" erased="0" id="428217" nameu="ЯРАЛИЕВМУСЛИМЮСУПОВИЧ" nameu_f="ЯРАЛИЕВ" nameu_i="МУСЛИМ" nameu_o="ЮСУПОВИЧ" passport="Паспорт РФ выдан ТП УФМС России по ЧР в Веденском районе 12.02.2008 9607 039823" version="15">
+    </row>
+    <row address="г. Карабулак Республики Ингушетия, ул. Московская (территория МТФ-1)" birthday="27.08.1984 г. Грозный ЧИАССР" deleted="0" erased="0" id="428218" nameu="ЯНДИЕВЗАУРБЕКМУХАМЕДОВИЧ" nameu_f="ЯНДИЕВ" nameu_i="ЗАУРБЕК" nameu_o="МУХАМЕДОВИЧ" passport="" version="15">
+    </row>
+    <row address="г. Назрань Республики Ингушетия, м/о Плиевский, ул. Партизанская, д.22" birthday="20.09.1975 г. Назрань ЧИАССР" deleted="0" erased="0" id="428219" nameu="ЯНДИЕВАЛИЯСУЛТАНОВИЧ" nameu_f="ЯНДИЕВ" nameu_i="АЛИЯ" nameu_o="СУЛТАНОВИЧ" passport="" version="15">
+    </row>
+    <row address="г. Доха, Катар, ул. Эйхтар, д. 17" birthday="12.09.1951 Верхубинский район Восточно-Казахской области Казахской ССР" deleted="0" erased="0" id="428220" nameu="ЯНДАРБИЕВЗЕЛИМХАНАБДУЛ-МУСЛИМОВИЧ" nameu_f="ЯНДАРБИЕВ" nameu_i="ЗЕЛИМХАН" nameu_o="АБДУЛ-МУСЛИМОВИЧ" passport="" version="15">
+    </row>
+    <row address="Покровское Хасавюртовского района Республики Дагестан" birthday="20.11.1974" deleted="0" erased="0" id="428221" nameu="ЯНГИЗБИЕВИСМАИЛМИСАРАСУЛТАНОВИЧ" nameu_f="ЯНГИЗБИЕВ" nameu_i="ИСМАИЛ" nameu_o="МИСАРАСУЛТАНОВИЧ" passport="" version="15">
+    </row>
+   </rowdata>
+  </datapacket>
+ </body>
+</html>
