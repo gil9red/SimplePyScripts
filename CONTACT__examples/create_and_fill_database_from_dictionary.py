@@ -103,7 +103,7 @@ def create_connect():
 
 
 def create_table(table_name: str, sql_table: str, sql_table_data_rows: str, drop_table=False):
-    # РЎРѕР·РґР°РЅРёРµ С‚Р°Р±Р»РёС†С‹
+    # Создание таблицы
     connect = create_connect()
     try:
         if drop_table:
