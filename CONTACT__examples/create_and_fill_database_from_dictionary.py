@@ -88,6 +88,7 @@ def build_sql_rows_data_table(table_name: str, rows_of_table: [dict]) -> str:
     def build_insert(row_of_table: dict) -> str:
         keys = sorted(key for key in row_of_table.keys())
 
+        # return "INSERT OR REPLACE INTO {table_name} ({fields}) VALUES ({values});".format(
         return "INSERT OR IGNORE INTO {table_name} ({fields}) VALUES ({values});".format(
             table_name=table_name.upper(),
             fields=','.join(key.upper() for key in keys),
@@ -124,7 +125,7 @@ if __name__ == '__main__':
         import os
         table_name = os.path.splitext(os.path.basename(file_name))[0]
 
-        print('Append {} from {}\n'.format(table_name, file_name))
+        print('Append {} from {}'.format(table_name, file_name))
 
         from bs4 import BeautifulSoup
         root = BeautifulSoup(open(file_name, 'rb'), 'lxml')
@@ -136,7 +137,7 @@ if __name__ == '__main__':
         sql_table_data_rows = build_sql_rows_data_table(table_name, rows_of_dict)
         # print(sql_table + "\n\n" + sql_table_data_rows)
 
-        print('  Append {} rows'.format(len(rows_of_dict)))
+        print('  Append {} rows\n'.format(len(rows_of_dict)))
         create_table(table_name, sql_table, sql_table_data_rows)
 
         # print()
