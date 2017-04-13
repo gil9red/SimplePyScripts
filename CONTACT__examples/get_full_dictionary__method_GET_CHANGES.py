@@ -10,13 +10,8 @@ __author__ = 'ipetrash'
 """
 
 
-URL_NG_SERVER = '<URL_NG_SERVER>'
+from config import *
 
-# Идентификатор программного обеспечения интегратора
-INT_SOFT_ID = '<INT_SOFT_ID>'
-
-# Код точки обслуживания
-POINT_CODE = '<POINT_CODE>'
 
 FILE_NAME_FULL_DICT = 'full_dict__CONTACT.xml'
 
