@@ -29,4 +29,7 @@ if __name__ == '__main__':
         import base64
         img_data = base64.b64decode(logo_data)
 
-        open(os.path.join(DIR_LOGO_IMAGES, logo_name), 'wb').write(img_data)
+        file_name = os.path.join(DIR_LOGO_IMAGES, logo_name)
+
+        with open(file_name, 'wb') as f:
+            f.write(img_data)
