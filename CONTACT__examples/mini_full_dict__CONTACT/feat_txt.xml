@@ -1,0 +1,127 @@
+<?xml version="1.0" standalone="yes"?><html><body><datapacket version="2.0"><metadata><fields><field attrname="VERSION" fieldtype="i4"></field><field attrname="ID" fieldtype="i4"></field><field attrname="ERASED" fieldtype="i4"></field><field attrname="FEATURE" fieldtype="i4"></field><field attrname="LINE_NO" fieldtype="i4"></field><field attrname="LINE_TEXT" fieldtype="string" width="254"></field><field attrname="XML_TEXT" fieldtype="bin.hex" subtype="Text"></field></fields><params></params></metadata><rowdata><row erased="0" feature="898" id="5034" line_no="0" line_text="Особые условия выплат изменены" version="15"></row><row erased="0" feature="1134" id="5778" line_no="0" version="15"></row><row erased="0" feature="1135" id="5779" line_no="0" version="15"></row><row erased="0" feature="1289" id="5933" line_no="0" version="15"></row><row erased="0" feature="1290" id="5934" line_no="0" version="15"></row><row erased="0" feature="1346" id="5990" line_no="0" version="15"></row><row erased="0" feature="1347" id="5991" line_no="0" version="15"></row><row erased="0" feature="1498" id="6144" line_no="0" version="15"></row><row erased="0" feature="1499" id="6145" line_no="0" version="15"></row><row erased="0" feature="1696" id="6370" line_no="0" version="15" xml_text='&lt;PAYMENT_FEATURES&gt;
+  DELIVERY_METHOD="Office pick up"
+  TERM_DELIVERY=""
+  TERM_CANCEL_FROM="0"
+  TERM_CANCEL_TO="0"
+  TERM_CANCEL_MEASURE_UNIT=""
+  CUT_OFF_TIME=""
+  PAID_CURRENCY="RUR;USD;EUR;"
+  RATE_EXCHANGE=""
+  LANGUAGE_SMS=""
+  NOTE=""
+  BNF_BANK_TYPE=""
+  BNF_TYPE="Physical person"
+  ACCOUNT_CURRENCY=""
+&lt;/PAYMENT_FEATURES&gt;'></row><row erased="0" feature="1697" id="6371" line_no="0" version="15" xml_text='&lt;PAYMENT_FEATURES&gt;
+  DELIVERY_METHOD="Наличные"
+  TERM_DELIVERY=""
+  TERM_CANCEL_FROM="0"
+  TERM_CANCEL_TO="0"
+  TERM_CANCEL_MEASURE_UNIT=""
+  CUT_OFF_TIME=""
+  PAID_CURRENCY="RUR;USD;EUR;"
+  RATE_EXCHANGE=""
+  LANGUAGE_SMS=""
+  NOTE=""
+  BNF_BANK_TYPE=""
+  BNF_TYPE="физическое лицо"
+  ACCOUNT_CURRENCY=""
+&lt;/PAYMENT_FEATURES&gt;'></row><row erased="0" feature="1935" id="6773" line_no="0" version="15" xml_text='&lt;PAYMENT_FEATURES&gt;
+  DELIVERY_METHOD="Наличные"
+  TERM_DELIVERY=""
+  TERM_CANCEL_FROM="0"
+  TERM_CANCEL_TO="0"
+  TERM_CANCEL_MEASURE_UNIT=""
+  CUT_OFF_TIME=""
+  PAID_CURRENCY="RUR;USD;EUR;"
+  RATE_EXCHANGE=""
+  LANGUAGE_SMS=""
+  NOTE=""
+  BNF_BANK_TYPE=""
+  BNF_TYPE="физическое лицо"
+  ACCOUNT_CURRENCY=""
+&lt;/PAYMENT_FEATURES&gt;'></row><row erased="0" feature="1936" id="6774" line_no="0" version="15" xml_text='&lt;PAYMENT_FEATURES&gt;
+  DELIVERY_METHOD="Office pick up"
+  TERM_DELIVERY=""
+  TERM_CANCEL_FROM="0"
+  TERM_CANCEL_TO="0"
+  TERM_CANCEL_MEASURE_UNIT=""
+  CUT_OFF_TIME=""
+  PAID_CURRENCY="RUR;USD;EUR;"
+  RATE_EXCHANGE=""
+  LANGUAGE_SMS=""
+  NOTE=""
+  BNF_BANK_TYPE=""
+  BNF_TYPE="Physical person"
+  ACCOUNT_CURRENCY=""
+&lt;/PAYMENT_FEATURES&gt;'></row><row erased="0" feature="1939" id="6777" line_no="0" version="15" xml_text='&lt;PAYMENT_FEATURES&gt;
+  DELIVERY_METHOD="Наличные"
+  TERM_DELIVERY=""
+  TERM_CANCEL_FROM="0"
+  TERM_CANCEL_TO="0"
+  TERM_CANCEL_MEASURE_UNIT=""
+  CUT_OFF_TIME=""
+  PAID_CURRENCY="RUR;USD;EUR;"
+  RATE_EXCHANGE=""
+  LANGUAGE_SMS=""
+  NOTE=""
+  BNF_BANK_TYPE=""
+  BNF_TYPE="физическое лицо"
+  ACCOUNT_CURRENCY=""
+&lt;/PAYMENT_FEATURES&gt;'></row><row erased="0" feature="1940" id="6778" line_no="0" version="15" xml_text='&lt;PAYMENT_FEATURES&gt;
+  DELIVERY_METHOD="Office pick up"
+  TERM_DELIVERY=""
+  TERM_CANCEL_FROM="0"
+  TERM_CANCEL_TO="0"
+  TERM_CANCEL_MEASURE_UNIT=""
+  CUT_OFF_TIME=""
+  PAID_CURRENCY="RUR;USD;EUR;"
+  RATE_EXCHANGE=""
+  LANGUAGE_SMS=""
+  NOTE=""
+  BNF_BANK_TYPE=""
+  BNF_TYPE="Physical person"
+  ACCOUNT_CURRENCY=""
+&lt;/PAYMENT_FEATURES&gt;'></row><row erased="0" feature="1951" id="6789" line_no="0" version="15" xml_text='&lt;PAYMENT_FEATURES&gt;
+  DELIVERY_METHOD="Наличные"
+  TERM_DELIVERY=""
+  TERM_CANCEL_FROM="0"
+  TERM_CANCEL_TO="0"
+  TERM_CANCEL_MEASURE_UNIT=""
+  CUT_OFF_TIME=""
+  PAID_CURRENCY="RUR;USD;EUR;"
+  RATE_EXCHANGE=""
+  LANGUAGE_SMS=""
+  NOTE=""
+  BNF_BANK_TYPE=""
+  BNF_TYPE="физическое лицо"
+  ACCOUNT_CURRENCY=""
+&lt;/PAYMENT_FEATURES&gt;'></row><row erased="0" feature="1952" id="6790" line_no="0" version="15" xml_text='&lt;PAYMENT_FEATURES&gt;
+  DELIVERY_METHOD="Office pick up"
+  TERM_DELIVERY=""
+  TERM_CANCEL_FROM="0"
+  TERM_CANCEL_TO="0"
+  TERM_CANCEL_MEASURE_UNIT=""
+  CUT_OFF_TIME=""
+  PAID_CURRENCY="RUR;USD;EUR;"
+  RATE_EXCHANGE=""
+  LANGUAGE_SMS=""
+  NOTE=""
+  BNF_BANK_TYPE=""
+  BNF_TYPE="Physical person"
+  ACCOUNT_CURRENCY=""
+&lt;/PAYMENT_FEATURES&gt;'></row><row erased="0" feature="2334" id="7175" line_no="0" version="15"></row><row erased="0" feature="2335" id="7176" line_no="0" version="15"></row><row erased="0" feature="2442" id="7283" line_no="0" version="15" xml_text='&lt;PAYMENT_FEATURES&gt;
+  DELIVERY_METHOD="Office pick up"
+  TERM_DELIVERY=""
+  TERM_CANCEL_FROM="0"
+  TERM_CANCEL_TO="0"
+  TERM_CANCEL_MEASURE_UNIT=""
+  CUT_OFF_TIME=""
+  PAID_CURRENCY="RUR;USD;EUR;"
+  RATE_EXCHANGE=""
+  LANGUAGE_SMS=""
+  NOTE=""
+  BNF_BANK_TYPE=""
+  BNF_TYPE="Physical person"
+  ACCOUNT_CURRENCY=""
+&lt;/PAYMENT_FEATURES&gt;'></row></rowdata></datapacket></body></html>
