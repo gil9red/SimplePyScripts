@@ -167,6 +167,7 @@ elif childrenVac1 > 1.5:
     childrenVac1 = 1.5
 
 
+# NOTE: только внутри кода объявляется
 # Коэффициент
 KD = 0.0
 
@@ -280,16 +281,19 @@ def calcSZ(SZPeriod: int, revenue: int, pensionTarif: int):
         'IPKtrud': IPKtrud
     }
 
-var calcPart = null
-var calcPartEmpl = null
-var calcPartSZ = null
-var IPKtrud = null
-var S = null
+calcPart = None
+calcPartEmpl = None
+calcPartSZ = None
+IPKtrud = None
+S = None
 
 if careerPlan == '1':
     # Наемный работник
     calcPart = calcEmpl()
-    if(calcPart === false) return false
+    # TODO: добавить проверку, проверить какое значение может возвращаться из функции и как влияет
+    # возврат значения тут
+    #
+    # if(calcPart === false) return false
 
     # Стаж
     S = calcPart.S
@@ -310,37 +314,43 @@ elif careerPlan == '2':
 elif careerPlan == '3':
     # Совмещающий
     calcPartEmpl = calcEmpl()
-    if(calcPartEmpl === false) return false
+    # TODO: добавить проверку, проверить какое значение может возвращаться из функции и как влияет
+    # возврат значения тут
+    #
+    # if(calcPartEmpl === false) return false
 
     calcPartSZ = calcSZ()
 
     # Количество пенсионных коэффициентов свыше максимально установленного значения в год, полученных при совмещённой деятельности
-    var So = persionFormInputs.filter('#combinePeriod').val()
-    if(So.length < 1) {
-        So = 0
-        persionFormInputs.filter('#combinePeriod').val(So)
-    }
-    if(So > Math.min(calcPartEmpl.S, calcPartSZ.S)) {
-        combinationWarning.show()
-        $(output_area).slideDown()
-        return false
-    }
+    combinePeriod = 0
+    # TODO: проверить
+    # if(combinePeriod.length < 1) {
+    #     combinePeriod = 0
+    #     persionFormInputs.filter('#combinePeriod').val(combinePeriod)
+    # }
+    # TODO: проверить
+    # if combinePeriod > Math.min(calcPartEmpl.S, calcPartSZ.S)) {
+    #     combinationWarning.show()
+    #     $(output_area).slideDown()
+    #     return false
+    # }
 
     # Годовой пенсионный коэффициент, получаемый гражданином в года совмещения деятельности
-    var IPKemp = calcPartEmpl.IPKtrud * So / calcPartEmpl.S
-    var IPKsz = calcPartSZ.IPKtrud * So / calcPartSZ.S
-    var IPKo = (IPKsz + IPKemp) / So
-    if(IPKo > 10) IPKo = 10
-    var IPKis = IPKo * So
+    IPKemp = calcPartEmpl.IPKtrud * combinePeriod / calcPartEmpl.S
+    IPKsz = calcPartSZ.IPKtrud * combinePeriod / calcPartSZ.S
+    IPKo = (IPKsz + IPKemp) / combinePeriod
+    if IPKo > 10:
+        IPKo = 10
+
+    IPKis = IPKo * combinePeriod
 
     # Стаж
-    S = calcPartEmpl.S + calcPartSZ.S - So
+    S = calcPartEmpl.S + calcPartSZ.S - combinePeriod
 
     # Пенсионные коэффициенты
     IPKtrud = (calcPartSZ.IPKtrud - IPKsz) + (calcPartEmpl.IPKtrud - IPKemp) + IPKis
-    if(So == 0) {
+    if combinePeriod == 0:
         IPKtrud = calcPartSZ.IPKtrud + calcPartEmpl.IPKtrud
-    }
 
 
 # Переходный период для наемных и самозанятых
@@ -348,8 +358,8 @@ if careerPlan == '1' or careerPlan == '2':
     IPKtrud2015 = 0
     IPKtrud2021 = 0
 
-    fee = persionFormInputs.filter('#fee').val()
-    revenue = parseInt(persionFormInputs.filter('#revenue').val())
+    fee = 10000
+    revenue = 1
     if revenue < 0:
         revenue = 0
 
@@ -359,7 +369,7 @@ if careerPlan == '1' or careerPlan == '2':
 
     if revenue < common.GDmax:
         SVGD = (SVGDkoeff * (common.MROT * 0.26 * 12)) / 26
-    else
+    else:
         SVGD = (SVGDkoeff * (common.MROT * 0.26 * 12) + ((revenue - common.GDmax) * 0.01)) / 26
 
     if S > 5:
@@ -409,8 +419,9 @@ IPK = (IPKtrud + NK) * common.SPKop[retireWorkWithoutPension]
 # Общий стаж
 OS = S + NS
 
-newCoefSummSmall.html((Math.round(IPK * 100) / 100).toString())
-personOSsmall.html((Math.round(OS * 100) / 100).toString())
+# # NOTE: Установка значений
+# newCoefSummSmall.html((Math.round(IPK * 100) / 100).toString())
+# personOSsmall.html((Math.round(OS * 100) / 100).toString())
 
 
 var WR = OS.toString().substr(-1)
@@ -426,7 +437,7 @@ else {
     }
 }
 
-//пересчёт права выхода на пенсию по стажу (каждому году свой минимальный стаж)
+# пересчёт права выхода на пенсию по стажу (каждому году свой минимальный стаж)
 $(output_area).hide()
 if(S == 0 && OS < 8) {
     socialPensionWarning.show()
