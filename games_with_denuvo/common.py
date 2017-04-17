@@ -150,7 +150,7 @@ def append_list_games(games: [(str, bool)], notified_by_sms=True):
                         send_sms(API_ID, TO, text)
 
             elif is_cracked:
-                text = 'Игру "{}" взломали'.format(name)
+                text = 'Добавлена взломанная игра "{}"'.format(name)
                 log.debug(text)
 
                 if notified_by_sms:
