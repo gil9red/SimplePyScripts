@@ -8,10 +8,20 @@ You must have matplotlib for this to work.
 
 """
 
-import matplotlib.pyplot as plt
-import networkx as nx
+# import matplotlib.pyplot as plt
+# import networkx as nx
+#
+# G = nx.path_graph(8)
+# nx.draw(G)
+# plt.savefig("simple_path.png")  # save as png
+# plt.show()  # display
 
-G = nx.path_graph(8)
-nx.draw(G)
-plt.savefig("simple_path.png")  # save as png
-plt.show()  # display
+
+if __name__ == '__main__':
+    import networkx as nx
+    G = nx.path_graph(8)
+    nx.draw(G)
+
+    import matplotlib.pyplot as plt
+    plt.savefig("simple_path.png")  # save as png
+    plt.show()  # display
