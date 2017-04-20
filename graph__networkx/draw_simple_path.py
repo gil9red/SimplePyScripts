@@ -19,8 +19,8 @@ You must have matplotlib for this to work.
 
 if __name__ == '__main__':
     import networkx as nx
-    G = nx.path_graph(8)
-    nx.draw(G)
+    g = nx.path_graph(8)
+    nx.draw(g)
 
     import matplotlib.pyplot as plt
     plt.savefig("simple_path.png")  # save as png
