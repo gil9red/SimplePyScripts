@@ -40,8 +40,6 @@ if __name__ == '__main__':
     from bs4 import BeautifulSoup
     root = BeautifulSoup(rs.content, 'lxml')
 
-    url_by_location = dict()
-
     for a in root.select('#mw-pages .mw-content-ltr a'):
         rel_url = a['href']
 
