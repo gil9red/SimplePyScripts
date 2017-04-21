@@ -34,6 +34,8 @@ def get_transitions_location(url_location):
 if __name__ == '__main__':
     url = 'http://ru.darksouls.wikia.com/wiki/Категория:Локации_(Dark_Souls_II)?display=page&sort=alphabetical'
 
+    visited_locations = set()
+
     import requests
     rs = requests.get(url)
 
@@ -51,7 +53,11 @@ if __name__ == '__main__':
             continue
 
         print(a.text, url)
+        visited_locations.add(a.text)
+
         for url_trans, title_trans in transitions:
             print('    {} -> {}'.format(title_trans, url_trans))
 
         print('\n')
+
+    print(len(visited_locations), visited_locations)
