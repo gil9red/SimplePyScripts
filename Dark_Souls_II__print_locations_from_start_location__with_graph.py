@@ -105,8 +105,6 @@ if __name__ == '__main__':
         # print('{} -> {}'.format(title, title_trans))
         G.add_edge(title, title_trans)
 
-    print()
-
     pos = nx.spring_layout(G)  # positions for all nodes
 
     # edges
