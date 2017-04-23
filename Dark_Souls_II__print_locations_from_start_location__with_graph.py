@@ -47,44 +47,26 @@ if __name__ == '__main__':
         visited_locations = set()
 
         def print_transitions(url, title):
-            title = title.lower()
-
-            # if len(visited_locations) >= 7:
-            #     return
+            title = title.lower().strip()
 
             if title in visited_locations:
                 return
 
             visited_locations.add(title)
-            # print(title.title(), url)
 
             transitions = get_transitions_location(url)
             if not transitions:
                 return transitions
 
-            # # Сначала напечатаем все связанные локации
-            # for url_trans, title_trans in transitions:
-            #     print('    {} -> {}'.format(title_trans.title(), url_trans))
-            #
-            # print('\n')
-
             # Поищем у этих локаций связаные с ними локации
             for url_trans, title_trans in transitions:
-                title_trans = title_trans.lower()
+                title_trans = title_trans.lower().strip()
 
                 # Проверяем что локации с обратной связью не занесены
                 if (title_trans, title) not in global_transitions:
                     global_transitions.add((title, title_trans))
 
                 print_transitions(url_trans, title_trans)
-
-                # if title_trans not in visited_locations:
-                #     # if len(global_transitions) >= 5:
-                #     #     return
-                #     #
-                #     global_transitions.add((title, title_trans))
-                #
-                #     print_transitions(url_trans, title_trans)
 
         url_start_location = 'http://ru.darksouls.wikia.com/wiki/%D0%9C%D0%B5%D0%B6%D0%B4%D1%83%D0%BC%D0%B8%D1%80%D1%8C%D0%B5'
         print_transitions(url_start_location, 'Междумирье')

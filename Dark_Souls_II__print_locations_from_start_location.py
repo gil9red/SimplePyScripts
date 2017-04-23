@@ -35,7 +35,7 @@ if __name__ == '__main__':
     visited_locations = set()
 
     def print_transitions(url, title):
-        title = title.lower()
+        title = title.lower().strip()
 
         if title in visited_locations:
             return
@@ -49,14 +49,15 @@ if __name__ == '__main__':
 
         # Сначала напечатаем все связанные локации
         for url_trans, title_trans in transitions:
-            print('    {} -> {}'.format(title_trans.title(), url_trans))
+            print('    {} -> {}'.format(title_trans.title().strip(), url_trans))
 
         print('\n')
 
         # Поищем у этих локаций связаные с ними локации
         for url_trans, title_trans in transitions:
+            title_trans = title_trans.lower().strip()
+
             if title_trans not in visited_locations:
-                title_trans = title_trans.lower()
                 print_transitions(url_trans, title_trans)
 
 
