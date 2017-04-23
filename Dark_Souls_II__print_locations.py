@@ -52,12 +52,16 @@ if __name__ == '__main__':
         if not transitions:
             continue
 
-        print(a.text, url)
+        title = a.text
+        print(title, url)
+
+        title = title.lower()
         visited_locations.add(a.text)
 
         for url_trans, title_trans in transitions:
-            print('    {} -> {}'.format(title_trans, url_trans))
+            print('    {} -> {}'.format(title_trans.strip(), url_trans))
 
         print('\n')
 
+    visited_locations = [_.title() for _ in visited_locations]
     print(len(visited_locations), visited_locations)
