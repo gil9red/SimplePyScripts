@@ -32,14 +32,16 @@ def get_transitions_location(url_location):
 
 
 if __name__ == '__main__':
-    visited_locations = list()
+    visited_locations = set()
 
     def print_transitions(url, title):
+        title = title.lower()
+
         if title in visited_locations:
             return
 
-        visited_locations.append(title)
-        print(title, url)
+        visited_locations.add(title)
+        print(title.title(), url)
 
         transitions = get_transitions_location(url)
         if not transitions:
@@ -47,13 +49,14 @@ if __name__ == '__main__':
 
         # Сначала напечатаем все связанные локации
         for url_trans, title_trans in transitions:
-            print('    {} -> {}'.format(title_trans, url_trans))
+            print('    {} -> {}'.format(title_trans.title(), url_trans))
 
         print('\n')
 
         # Поищем у этих локаций связаные с ними локации
         for url_trans, title_trans in transitions:
             if title_trans not in visited_locations:
+                title_trans = title_trans.lower()
                 print_transitions(url_trans, title_trans)
 
 
@@ -61,4 +64,4 @@ if __name__ == '__main__':
     print_transitions(url_start_location, 'Междумирье')
 
     print()
-    print(len(visited_locations), visited_locations)
+    print(len(visited_locations), [_.title() for _ in visited_locations])
