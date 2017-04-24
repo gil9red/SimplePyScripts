@@ -24,7 +24,7 @@ if __name__ == '__main__':
     nx.draw_networkx_nodes(G, pos, node_size=70)
 
     # labels
-    nx.draw_networkx_labels(G, pos, font_size=20, font_family='sans-serif')
+    nx.draw_networkx_labels(G, pos, font_size=20, font_family='Verdana')
 
     import matplotlib.pyplot as plt
 
