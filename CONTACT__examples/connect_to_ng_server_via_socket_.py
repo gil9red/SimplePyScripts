@@ -30,7 +30,7 @@ http_request = (
     'Host: {host}:{port}\r\n',
     'Accept-Encoding: gzip, deflate\r\n',
     'User-Agent: {user_agent}\r\n',
-    'Connection: keep-alive\r\n',
+    'Connection: close\r\n',
     'Accept: */*\r\n',
     'Content-Length: {content_length}\r\n',
     '\r\n',
