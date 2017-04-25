@@ -48,15 +48,16 @@ print(repr(http_request))
 
 
 import socket
-s = socket.socket()
-s.connect((HOST, PORT))
-s.send(http_request.encode())
+sock = socket.socket()
+sock.connect((HOST, PORT))
+sock.send(http_request.encode())
 
+print('Socket name: {}'.format(sock.getsockname()))
 print('\nResponse:')
 
 while True:
-    result = s.recv(1024)
-    if not result:
+    data = sock.recv(1024)
+    if not data:
         break
 
-    print(repr(result))
+    print(len(data), data)
