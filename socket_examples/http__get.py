@@ -9,13 +9,18 @@ host = "stackoverflow.com"
 port = 80
 
 import socket
-s = socket.socket()
-s.connect((host, port))
-s.send(request)
+sock = socket.socket()
+sock.settimeout(60)  # Если за 60 секунд данные не придут, соединение закрывается
+sock.connect((host, port))
+sock.send(request)
 
-while True:
-    result = s.recv(1024)
-    if not result:
-        break
+try:
+    while True:
+        data = sock.recv(1024)
+        if not data:
+            break
 
-    print(result)
+        print(len(data), data)
+
+except socket.timeout:
+    pass
