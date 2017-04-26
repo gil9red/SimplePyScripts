@@ -11,9 +11,9 @@
 
 <script type="text/javascript">
 
-    var w = 1680;
-    var h = 800;
-    var linkDistance=20;
+    var w = 1980;
+    var h = 1000;
+    var linkDistance=25;
 
     var colors = d3.scale.category10();
 
@@ -90,11 +90,12 @@
                'font-size':10,
                'fill':'#aaa'});
 
+/* Тут добавляются метки для ребер
     edgelabels.append('textPath')
         .attr('xlink:href',function(d,i) {return '#edgepath'+i})
         .style("pointer-events", "none")
         .text(function(d,i){return 'label '+i});
-
+*/
 
     svg.append('defs').append('marker')
         .attr({'id':'arrowhead',
