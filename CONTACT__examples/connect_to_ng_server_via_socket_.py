@@ -34,8 +34,7 @@ http_request = (
     'Accept: */*\r\n',
     'Content-Length: {content_length}\r\n',
     '\r\n',
-    '\n',
-    '{body}\n'
+    '{body}'
 )
 http_request = ''.join(http_request)
 http_request = http_request.format(
