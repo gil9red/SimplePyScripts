@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
+
+# SOURCE: https://technobeans.com/2012/04/16/5-ways-of-fibonacci-in-python/
+
+NUMBER = 15
+
+# Example 1: Using looping technique
+def fib(n):
+    a, b = 1, 1
+    for i in range(n - 1):
+        a, b = b, a + b
+    return a
+
+
+print('Example 1')
+print(fib(NUMBER))
+print()
+
+
+# Example 2: Using recursion
+def fibR(n):
+    if n == 1 or n == 2:
+        return 1
+    return fibR(n - 1) + fibR(n - 2)
+
+
+print('Example 2')
+print(fibR(NUMBER))
+print()
+
+# Example 3: Using generators
+a, b = 0, 1
+
+
+def fibI():
+    global a, b
+    while True:
+        a, b = b, a + b
+        yield a
+
+
+print('Example 3')
+f = fibI()
+for _ in range(NUMBER):
+    print(next(f))
+print()
+
+
+# Example 4: Using memoization
+def memoize(fn, arg):
+    memo = {}
+    if arg not in memo:
+        memo[arg] = fn(arg)
+        return memo[arg]
+
+
+# fib() as written in example 1.
+print('Example 4')
+fibm = memoize(fib, NUMBER)
+print(fibm)
+print()
+
+
+# Example 5: Using memoization as decorator
+class Memoize:
+    def __init__(self, fn):
+        self.fn = fn
+        self.memo = {}
+
+    def __call__(self, arg):
+        if arg not in self.memo:
+            self.memo[arg] = self.fn(arg)
+            return self.memo[arg]
+
+
+@Memoize
+def fib(n):
+    a, b = 1, 1
+    for i in range(n - 1):
+        a, b = b, a + b
+    return a
+
+print('Example 5')
+print(fib(NUMBER))
+print()
