@@ -18,7 +18,7 @@ import math
 import pylab
 
 # Импортируем пакет со вспомогательными функциями
-from matplotlib import mlab
+from matplotlib__examples import mlab
 
 # Будем рисовать график этой функции
 def func (x):

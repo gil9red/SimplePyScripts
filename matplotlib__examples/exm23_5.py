@@ -14,7 +14,7 @@ __author__ = 'ipetrash'
 import numpy
 
 import pylab
-import matplotlib.ticker
+import matplotlib__examples.ticker
 
 
 if __name__ == "__main__":

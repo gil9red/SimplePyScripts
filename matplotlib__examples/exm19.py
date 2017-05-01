@@ -21,7 +21,7 @@ __author__ = 'ipetrash'
 import math
 
 import pylab
-import matplotlib
+import matplotlib__examples
 
 def plotGraph ():
     # Будем рисовать график этой функции
@@ -41,7 +41,7 @@ def plotGraph ():
     dx = 0.01
 
     # Создадим список координат по оси X на отрезке [-xmin; xmax], включая концы
-    xlist = matplotlib.mlab.frange (xmin, xmax, dx)
+    xlist = matplotlib__examples.mlab.frange (xmin, xmax, dx)
 
     # Вычислим значение функции в заданных точках
     ylist = [func (x) for x in xlist]
@@ -51,7 +51,7 @@ def plotGraph ():
 
 if __name__ == '__main__':
     # создаем таблицу (сетку) размером 4 x 4 ячеек
-    grid = matplotlib.gridspec.GridSpec(4, 4)
+    grid = matplotlib__examples.gridspec.GridSpec(4, 4)
 
     # Одномерное индексирование.
     # 0-ая ячейка, начиная с левого верхнего угла

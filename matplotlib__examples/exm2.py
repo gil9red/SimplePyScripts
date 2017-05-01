@@ -1,7 +1,8 @@
 __author__ = 'ipetrash'
 
 
-# Следующий пример строит график функции f(x) = x / sin(x):
+# Если вызывать функцию plot() несколько раз подряд, то на график
+# будут добавляться новые кривые. Следующий пример рисует два графика на одних осях:
 
 import math
 
@@ -9,11 +10,11 @@ import math
 import pylab
 
 # !!! Импортируем пакет со вспомогательными функциями
-from matplotlib import mlab
+from matplotlib__examples import mlab
 
 if __name__ == '__main__':
     # Будем рисовать график этой функции
-    def func(x):
+    def func (x):
         """
         sinc (x)
         """
@@ -28,14 +29,16 @@ if __name__ == '__main__':
     # Шаг между точками
     dx = 0.01
 
-    # !!! Создадим список координат по оси X на отрезке [-xmin; xmax], включая концы
+    # !!! Создадим список координат по оиси X на отрезке [-xmin; xmax], включая концы
     xlist = mlab.frange (xmin, xmax, dx)
 
     # Вычислим значение функции в заданных точках
-    ylist = [func (x) for x in xlist]
+    ylist1 = [func (x) for x in xlist]
+    ylist2 = [func (x * 0.2) for x in xlist]
 
-    # !!! Нарисуем одномерный график
-    pylab.plot (xlist, ylist)
+    # !!! Нарисуем одномерные графики
+    pylab.plot (xlist, ylist1)
+    pylab.plot (xlist, ylist2)
 
     # !!! Покажем окно с нарисованным графиком
     pylab.show()

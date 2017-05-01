@@ -14,7 +14,7 @@ __author__ = 'ipetrash'
 import math
 
 import pylab
-import matplotlib
+import matplotlib__examples
 
 
 def plotGraph ():
@@ -35,7 +35,7 @@ def plotGraph ():
     dx = 0.01
 
     # Создадим список координат по оси X на отрезке [-xmin; xmax], включая концы
-    xlist = matplotlib.mlab.frange (xmin, xmax, dx)
+    xlist = matplotlib__examples.mlab.frange (xmin, xmax, dx)
 
     # Вычислим значение функции в заданных точках
     ylist = [func (x) for x in xlist]
@@ -54,10 +54,10 @@ if __name__ == '__main__':
     # height_ratios - список соотношений высот ячеек
     # В данном случае высота второй строки будет в 2 раза больше первого,
     # а высота третьей строки будет в 3 раза больше первой (в 1.5 раза больше второй)
-    grid = matplotlib.gridspec.GridSpec(rows,
-            cols,
-            width_ratios=[1, 1.5],
-            height_ratios=[1, 2, 3])
+    grid = matplotlib__examples.gridspec.GridSpec(rows,
+                                                  cols,
+                                                  width_ratios=[1, 1.5],
+                                                  height_ratios=[1, 2, 3])
 
     for n in range (rows * cols):
         pylab.subplot (grid[n])

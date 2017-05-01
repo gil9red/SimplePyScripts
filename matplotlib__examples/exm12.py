@@ -13,7 +13,7 @@ __author__ = 'ipetrash'
 
 import pylab
 from mpl_toolkits.mplot3d import Axes3D
-from matplotlib.colors import LinearSegmentedColormap
+from matplotlib__examples.colors import LinearSegmentedColormap
 import numpy
 
 # Эта функция возвращает три двумерные матрицы: x, y, z.

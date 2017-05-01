@@ -18,7 +18,7 @@ __author__ = 'ipetrash'
 import numpy
 
 import pylab
-import matplotlib.ticker
+import matplotlib__examples.ticker
 
 
 if __name__ == "__main__":
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     axes = figure.add_subplot (1, 1, 1)
 
     # Создаем форматер
-    formatter = matplotlib.ticker.FixedFormatter([u"Раз", u"Два", u"Три", u"Четыре", u"Пять"])
+    formatter = matplotlib__examples.ticker.FixedFormatter([u"Раз", u"Два", u"Три", u"Четыре", u"Пять"])
 
     # Установка форматера для оси X
     axes.xaxis.set_major_formatter (formatter)

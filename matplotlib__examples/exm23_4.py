@@ -25,7 +25,7 @@ __author__ = 'ipetrash'
 import numpy
 
 import pylab
-import matplotlib.ticker
+import matplotlib__examples.ticker
 
 
 def funcForFormatter (x, pos):
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     axes = figure.add_subplot (1, 1, 1)
 
     # Создаем форматер
-    formatter = matplotlib.ticker.FuncFormatter(funcForFormatter)
+    formatter = matplotlib__examples.ticker.FuncFormatter(funcForFormatter)
 
     # Установка форматера для оси X
     axes.xaxis.set_major_formatter (formatter)
