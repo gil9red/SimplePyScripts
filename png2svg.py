@@ -7,18 +7,29 @@ __author__ = 'ipetrash'
 import os.path
 import sys
 
-from PySide.QtGui import *
-from PySide.QtCore import *
-from PySide.QtSvg import *
 
+try:
+    from PyQt5.QtWidgets import QApplication
+    from PyQt5.QtGui import QPainter, QImage
+    from PyQt5.QtCore import QPointF, QRectF, QRect
+    from PyQt5.QtSvg import QSvgGenerator
 
-# TODO: load svg, transform svg and save as svg
+except:
+    try:
+        from PyQt4.QtGui import QApplication, QPainter, QImage
+        from PyQt4.QtCore import QPointF, QRectF, QRect
+        from PyQt4.QtSvg import QSvgGenerator
+
+    except:
+        from PySide.QtGui import QApplication, QPainter, QImage
+        from PySide.QtCore import QPointF, QRectF, QRect
+        from PySide.QtSvg import QSvgGenerator
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
 
-    file_name = r'C:\Users\ipetrash\Desktop\Move_left.png'
+    file_name = r'C:\Users\ipetrash\Desktop\explorer.png'
 
     im = QImage()
     im.load(file_name)
