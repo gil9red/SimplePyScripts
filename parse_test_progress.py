@@ -9,7 +9,7 @@ def parse(text, append_test_case_list=True):
     total_max_value = 0
 
     for line in text.splitlines():
-        line = line.strip()
+        line = line.rstrip()
         if not line:
             print(line)
             continue
