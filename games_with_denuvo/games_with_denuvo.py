@@ -49,10 +49,9 @@ def get_games_with_denuvo() -> [(str, bool)]:
 if __name__ == '__main__':
     games_with_denuvo = get_games_with_denuvo()
 
-    print('Всего игр с Denuvo {}: {}'.format(len(games_with_denuvo), games_with_denuvo))
-    cracked_games = list(filter(lambda x: x[1], games_with_denuvo))
+    print('Всего игр с Denuvo {}: {}\n'.format(len(games_with_denuvo), games_with_denuvo))
 
-    print()
+    cracked_games = list(filter(lambda x: x[1], games_with_denuvo))
     print('Взломанные ({}):'.format(len(cracked_games)))
     for game in sorted(game for game, is_cracked in cracked_games):
         print(game)
