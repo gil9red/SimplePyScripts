@@ -25,15 +25,17 @@ XInputSetState.argtypes = [ctypes.c_uint, ctypes.POINTER(XINPUT_VIBRATION)]
 XInputSetState.restype = ctypes.c_uint
 
 
-# You can also create a helper function like this:
-def set_vibration(controller, left_motor, right_motor, duration=1.0):
+def set_vibration(controller, left_motor, right_motor):
     vibration = XINPUT_VIBRATION(int(left_motor * 65535), int(right_motor * 65535))
+    XInputSetState(controller, ctypes.byref(vibration))
 
+
+def set_vibration_with_duration(controller, left_motor, right_motor, duration=1.0):
     import time
     t = time.time()
 
     while True:
-        XInputSetState(controller, ctypes.byref(vibration))
+        set_vibration(controller, left_motor, right_motor)
         if time.time() - t >= duration:
             break
 
@@ -41,4 +43,4 @@ def set_vibration(controller, left_motor, right_motor, duration=1.0):
 
 
 if __name__ == '__main__':
-    set_vibration(0, 1.0, 0.5, duration=2.0)
+    set_vibration_with_duration(0, 1.0, 0.5, duration=2.0)
