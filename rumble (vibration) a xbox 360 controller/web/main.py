@@ -205,10 +205,8 @@ def get_status():
 def vibration_tick():
     while True:
         if DEBUG:
-            print('ENABLED: {} ({}), LEFT_MOTOR: {} ({}), RIGHT_MOTOR: {} ({})'.format(
-                ENABLED, type(ENABLED),
-                LEFT_MOTOR, type(LEFT_MOTOR),
-                RIGHT_MOTOR, type(RIGHT_MOTOR)
+            print('ENABLED: {} ({}), LEFT_MOTOR: {}, RIGHT_MOTOR: {}'.format(
+                ENABLED, type(ENABLED), LEFT_MOTOR, RIGHT_MOTOR,
             ))
 
         if ENABLED:
