@@ -164,6 +164,9 @@ def index():
 </html>''')
 
 
+# Для отладки состояния ENABLED, LEFT_MOTOR и RIGHT_MOTOR
+DEBUG = False
+
 ENABLED = False
 LEFT_MOTOR = 0
 RIGHT_MOTOR = 0
@@ -201,11 +204,12 @@ def get_status():
 
 def vibration_tick():
     while True:
-        print('ENABLED: {} ({}), LEFT_MOTOR: {} ({}), RIGHT_MOTOR: {} ({})'.format(
-            ENABLED, type(ENABLED),
-            LEFT_MOTOR, type(LEFT_MOTOR),
-            RIGHT_MOTOR, type(RIGHT_MOTOR)
-        ))
+        if DEBUG:
+            print('ENABLED: {} ({}), LEFT_MOTOR: {} ({}), RIGHT_MOTOR: {} ({})'.format(
+                ENABLED, type(ENABLED),
+                LEFT_MOTOR, type(LEFT_MOTOR),
+                RIGHT_MOTOR, type(RIGHT_MOTOR)
+            ))
 
         if ENABLED:
             set_vibration(LEFT_MOTOR, RIGHT_MOTOR)
@@ -213,7 +217,7 @@ def vibration_tick():
             set_vibration(0, 0)
 
         import time
-        time.sleep(0.3)
+        time.sleep(0.1)
 
 
 if __name__ == "__main__":
