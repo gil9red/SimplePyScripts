@@ -226,6 +226,8 @@ if __name__ == "__main__":
     # Localhost
     # app.debug = True
     app.run(
+        # OR: host='127.0.0.1'
+        host='192.168.0.102',
         port=10000,
 
         # # Включение поддержки множества подключений
@@ -233,4 +235,4 @@ if __name__ == "__main__":
     )
 
     # # Public IP
-    # app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0')
