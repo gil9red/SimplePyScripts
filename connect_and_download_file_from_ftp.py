@@ -8,9 +8,9 @@ from ftplib import FTP
 
 # Connect to host, default port
 ftp = FTP('ftp.debian.org')
-print(ftp)
+print(ftp.host)
 
-# User anonymous, passwd anonymous@
+# User anonymous, passwd anonymous
 print(ftp.login())
 
 # Change into "debian" directory
