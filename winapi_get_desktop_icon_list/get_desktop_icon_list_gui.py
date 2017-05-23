@@ -17,8 +17,6 @@ def get_desktop_resolution():
     MonitorFromWindow = ctypes.windll.user32.MonitorFromWindow
     GetMonitorInfo = ctypes.windll.user32.GetMonitorInfoW
 
-    from winapi_GetDesktopListViewHandle import GetDesktopListViewHandle
-
     class MONITORINFO(ctypes.Structure):
         _fields_ = [
             ('cbSize', ctypes.c_int),
@@ -27,6 +25,7 @@ def get_desktop_resolution():
             ('dwFlags', ctypes.c_int),
         ]
 
+    from get_desktop_icon_list import GetDesktopListViewHandle
     hwnd = GetDesktopListViewHandle()
     monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST)
     info = MONITORINFO()
@@ -43,8 +42,19 @@ from get_desktop_icon_list import get_desktop_icons_list
 if __name__ == '__main__':
     import sys
 
-    from PySide.QtGui import *
-    from PySide.QtCore import *
+    try:
+        from PyQt5.QtGui import *
+        from PyQt5.QtWidgets import *
+        from PyQt5.QtCore import *
+
+    except:
+        try:
+            from PyQt4.QtGui import *
+            from PyQt4.QtCore import *
+
+        except:
+            from PySide.QtGui import *
+            from PySide.QtCore import *
 
     app = QApplication(sys.argv)
 
