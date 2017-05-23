@@ -37,35 +37,32 @@ def get_desktop_resolution():
     return width, height
 
 
-from get_desktop_icon_list import get_desktop_icons_list
+try:
+    from PyQt5.QtGui import *
+    from PyQt5.QtWidgets import *
+    from PyQt5.QtCore import *
 
-if __name__ == '__main__':
-    import sys
-
+except:
     try:
-        from PyQt5.QtGui import *
-        from PyQt5.QtWidgets import *
-        from PyQt5.QtCore import *
+        from PyQt4.QtGui import *
+        from PyQt4.QtCore import *
 
     except:
-        try:
-            from PyQt4.QtGui import *
-            from PyQt4.QtCore import *
+        from PySide.QtGui import *
+        from PySide.QtCore import *
 
-        except:
-            from PySide.QtGui import *
-            from PySide.QtCore import *
 
-    app = QApplication(sys.argv)
-
-    scene = QGraphicsScene()
+if __name__ == '__main__':
+    app = QApplication([])
 
     width_desktop, height_desktop = get_desktop_resolution()
-
     scene_rect = QRectF(0, 0, width_desktop, height_desktop)
+
+    scene = QGraphicsScene()
     scene.addRect(scene_rect)
     scene.setSceneRect(scene_rect)
 
+    from get_desktop_icon_list import get_desktop_icons_list
     for i, name, pos, rect in get_desktop_icons_list():
         x, y, w, h = pos.x, pos.y, rect.right - rect.left, rect.bottom - rect.top
         scene.addRect(x, y, w, h)
