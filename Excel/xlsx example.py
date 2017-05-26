@@ -14,7 +14,7 @@ rows = [
 import openpyxl
 wb = openpyxl.Workbook()
 
-# Удаление существующих листов (какой-то всегда создается по умолчанию)
+# Remove default sheet
 for sheet_name in wb.sheetnames:
     sheet = wb.get_sheet_by_name(sheet_name)
     wb.remove_sheet(sheet)
