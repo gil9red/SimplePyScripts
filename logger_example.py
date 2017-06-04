@@ -9,7 +9,7 @@ def get_logger(name, file='log.txt', encoding='utf-8'):
     log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter('[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s')
+    formatter = logging.Formatter('[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s')
 
     from logging.handlers import RotatingFileHandler
     fh = RotatingFileHandler(file, maxBytes=10000000, backupCount=5, encoding=encoding)
