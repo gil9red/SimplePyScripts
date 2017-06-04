@@ -122,7 +122,7 @@ FILE_NAME_CURRENT_BOOKS = 'books'
 
 if __name__ == '__main__':
     # NOTE: С этим флагом нужно быть осторожным при первом запуске, когда список книг пустой
-    notified_by_sms = False
+    notified_by_sms = True
 
     # Загрузка текущих книг
     import ast
@@ -151,8 +151,7 @@ if __name__ == '__main__':
             else:
                 log.debug('Новых книг нет')
 
-            # wait(weeks=1)
-            break
+            wait(weeks=1)
 
         except:
             log.exception('Ошибка:')
