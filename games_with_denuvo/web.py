@@ -58,11 +58,11 @@ def index():
                 <td>{{ loop.index }}</td>
                 <td>{{ name }}</td>
                 <td>
-                    <button onclick="window.open('http://anti-tor.org/search/0/8/000/0/' + '{{ name }}' )">Rutor</button>
-                    <button onclick="window.open('http://search.tfile.co/?q=' + '{{ name }}' )">tFile</button>
-                    <button onclick="window.open('http://www.torrentino.me/search?type=games&search=' + '{{ name }}' )">Torrentino</button>
-                    <button onclick="window.open('https://yandex.ru/yandsearch?text=' + '{{ name }}' )">Yandex</button>
-                    <button onclick="window.open('https://www.google.ru/#newwindow=1&q=' + '{{ name }}' )">Google</button>
+                    <button onclick="window.open('http://anti-tor.org/search/0/8/000/0/{{ name|replace('"', '')|replace("'", "") }}')">Rutor</button>
+                    <button onclick="window.open('http://search.tfile.co/?q={{ name|replace('"', '')|replace("'", "") }}')">tFile</button>
+                    <button onclick="window.open('http://www.torrentino.me/search?type=games&search={{ name|replace('"', '')|replace("'", "") }}')">Torrentino</button>
+                    <button onclick="window.open('https://yandex.ru/yandsearch?text={{ name|replace('"', '')|replace("'", "") }}')">Yandex</button>
+                    <button onclick="window.open('https://www.google.ru/#newwindow=1&q={{ name|replace('"', '')|replace("'", "") }}')">Google</button>
                 </td>
             </tr>
         {% endfor %}
