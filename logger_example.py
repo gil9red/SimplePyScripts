@@ -4,34 +4,31 @@
 __author__ = 'ipetrash'
 
 
-import logging
-import sys
-
-
-def get_logger(name, file='log.txt', encoding='utf8'):
+def get_logger(name, file='log.txt', encoding='utf-8'):
+    import logging
     log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter('[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s')
 
-    if file is not None:
-        fh = logging.FileHandler(file, encoding=encoding)
-        fh.setLevel(logging.DEBUG)
-        fh.setFormatter(formatter)
-        log.addHandler(fh)
+    from logging.handlers import RotatingFileHandler
+    fh = RotatingFileHandler(file, maxBytes=10000000, backupCount=5, encoding=encoding)
+    fh.setFormatter(formatter)
+    log.addHandler(fh)
 
-    ch = logging.StreamHandler(stream=sys.stdout)
-    ch.setLevel(logging.DEBUG)
-    ch.setFormatter(formatter)
-    log.addHandler(ch)
+    import sys
+    sh = logging.StreamHandler(stream=sys.stdout)
+    sh.setLevel(logging.DEBUG)
+    sh.setFormatter(formatter)
+    log.addHandler(sh)
 
     return log
 
 
-logger = get_logger('foo')
+log = get_logger(__file__)
 
 
 if __name__ == '__main__':
-    logger.debug('foo')
-    logger.debug('bar')
-    logger.debug(__file__)
+    log.debug('foo')
+    log.debug('bar')
+    log.debug(__file__)
