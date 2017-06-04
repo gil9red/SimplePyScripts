@@ -43,6 +43,7 @@ def get_logger(name, file='log.txt', encoding='utf8'):
 
 
 log = get_logger('games_with_denuvo')
+log_cracked_games = get_logger('cracked_games', file='cracked_games.log.txt')
 
 
 def send_sms(api_id: str, to: str, text: str):
@@ -145,6 +146,7 @@ def append_list_games(games: [(str, bool)], notified_by_sms=True):
 
                     text = 'Игру "{}" взломали'.format(name)
                     log.debug(text)
+                    log_cracked_games.debug(text)
 
                     if notified_by_sms:
                         send_sms(API_ID, TO, text)
@@ -152,6 +154,7 @@ def append_list_games(games: [(str, bool)], notified_by_sms=True):
             elif is_cracked:
                 text = 'Добавлена взломанная игра "{}"'.format(name)
                 log.debug(text)
+                log_cracked_games.debug(text)
 
                 if notified_by_sms:
                     send_sms(API_ID, TO, text)
