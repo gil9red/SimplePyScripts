@@ -108,21 +108,29 @@ def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, 
 def send_sms(api_id: str, to: str, text: str):
     log.debug('Отправка sms: "%s"', text)
 
-    try:
-        # Отправляю смс на номер
-        url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
-            api_id=api_id,
-            to=to,
-            text=text
-        )
-        log.debug(repr(url))
+    # Отправляю смс на номер
+    url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
+        api_id=api_id,
+        to=to,
+        text=text
+    )
+    log.debug(repr(url))
 
-        import requests
-        rs = requests.get(url)
-        log.debug(repr(rs.text))
+    while True:
+        try:
+            import requests
+            rs = requests.get(url)
+            log.debug(repr(rs.text))
 
-    except Exception:
-        log.exception("При отправке sms произошла ошибка:")
+            break
+
+        except:
+            log.exception("При отправке sms произошла ошибка:")
+            log.debug('Через 5 минут попробую снова...')
+
+            # Wait 5 minutes before next attempt
+            import time
+            time.sleep(5 * 60)
 
 
 if __name__ == '__main__':

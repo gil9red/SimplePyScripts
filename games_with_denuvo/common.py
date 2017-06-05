@@ -49,21 +49,29 @@ log_cracked_games = get_logger('cracked_games', file='cracked_games.log.txt')
 def send_sms(api_id: str, to: str, text: str):
     log.debug('Отправка sms: "%s"', text)
 
-    try:
-        # Отправляю смс на номер
-        url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
-            api_id=api_id,
-            to=to,
-            text=text
-        )
-        log.debug(repr(url))
+    # Отправляю смс на номер
+    url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
+        api_id=api_id,
+        to=to,
+        text=text
+    )
+    log.debug(repr(url))
 
-        import requests
-        rs = requests.get(url)
-        log.debug(repr(rs.text))
+    while True:
+        try:
+            import requests
+            rs = requests.get(url)
+            log.debug(repr(rs.text))
 
-    except Exception:
-        log.exception("При отправке sms произошла ошибка:")
+            break
+
+        except:
+            log.exception("При отправке sms произошла ошибка:")
+            log.debug('Через 5 минут попробую снова...')
+
+            # Wait 5 minutes before next attempt
+            import time
+            time.sleep(5 * 60)
 
 
 DB_FILE_NAME = 'database.sqlite'
