@@ -133,48 +133,58 @@ def send_sms(api_id: str, to: str, text: str):
             time.sleep(5 * 60)
 
 
-if __name__ == '__main__':
-    # Загрузка последних новостей из файла
-    import ast
-    current_feeds = ast.literal_eval(open(FILE_NAME_CURRENT_FEEDS, encoding='utf-8').read())
-    log.debug('Feeds from "%s": %s', FILE_NAME_CURRENT_FEEDS, current_feeds)
+URL_USER_RSS = 'https://grouple.ru/user/rss/315828?filter='
+FILE_NAME_LAST_FEED = 'last_feed'
 
-    # Флаг служит для того, чтобы при первом запуске скрипта, при пустом списке глав в файле <FILE_NAME_CURRENT_FEEDS>
-    # скрипт не реагировал на "новые главы"
-    first_run = len(current_feeds) == 0
+
+def save_last_feed(feed):
+    open(FILE_NAME_LAST_FEED, 'w', encoding='utf-8').write(str(feed))
+
+
+if __name__ == '__main__':
+    # NOTE: С этим флагом нужно быть осторожным при первом запуске, когда список книг пустой
+    notified_by_sms = True
+
+    # Загрузка последней новости
+    last_feed = open(FILE_NAME_LAST_FEED, encoding='utf-8').read()
+    log.debug('Last feed: "%s"', last_feed)
 
     while True:
         try:
             log.debug('get_feeds_by_manga_chapters')
 
-            new_feeds = get_feeds_by_manga_chapters(URL_USER_RSS)
-            log.debug('new_feeds: %s', new_feeds)
+            current_feeds = get_feeds_by_manga_chapters(URL_USER_RSS)
+            log.debug('current_feeds: %s', current_feeds)
 
-            # NOTE: Тоже самое можно сделать через цикл и новый список
-            new_manga = set(new_feeds) - set(current_feeds)
+            # Если последняя новость есть в списке текущих новостей
+            if last_feed in current_feeds:
+                index = current_feeds.index(last_feed)
 
-            # Если что-то появилось новое, сохраняем новости
-            if new_manga:
-                current_feeds = new_feeds
-                open(FILE_NAME_CURRENT_FEEDS, 'w', encoding='utf-8').write(str(current_feeds))
+                # Получаем список новостей после последней новости
+                new_feeds = current_feeds[:index]
+                if new_feeds:
+                    last_feed = new_feeds[0]
+                    save_last_feed(last_feed)
 
-                if not first_run:
                     log.debug('Вышло:')
-                    for manga in new_manga:
+                    for manga in new_feeds:
                         log.debug('    ' + manga)
 
-                    send_sms(API_ID, TO, 'Новые главы: {}'.format(len(new_manga)))
+                    if notified_by_sms:
+                        send_sms(API_ID, TO, 'Новые главы: {}'.format(len(new_feeds)))
 
-                first_run = False
+                else:
+                    log.debug('Новых глав нет')
 
             else:
-                log.debug('Новых глав нет')
+                # Считаем что это первый запуск
+                log.debug("Первый запуск, запоминаю последнюю главу.")
+                last_feed = current_feeds[0]
+                save_last_feed(last_feed)
 
-            log.debug("")
+            wait(hours=6)
 
-            wait(hours=5)
-
-        except Exception:
+        except:
             log.exception('Ошибка:')
             log.debug('Через 5 минут попробую снова...')
 
