@@ -1,23 +1,16 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 __author__ = 'ipetrash'
 
 
 import feedparser
-# import HTMLParser
+rss = feedparser.parse('http://bash.im/rss/')
+print(rss.feed.subtitle)
 
-if __name__ == '__main__':
-    d = feedparser.parse('http://bash.im/rss/')
-    # print(d["feed"]["subtitle"])
-    #
-    # for entry in d["entries"]:
-    #     quote = entry["summary"]
-    #     h = HTMLParser.HTMLParser()
-    #     quote = h.unescape(quote).replace("<br />", "\n")
-    #     print(quote + '\n\n')
+for entry in rss.entries:
+    import html
+    quote = html.unescape(entry.summary)
+    quote = quote.replace('<br>', '\n')
 
-    print(d.feed.subtitle)
-
-    for entry in d.entries:
-        quote = entry.summary
-        # h = HTMLParser.HTMLParser()
-        # quote = h.unescape(quote).replace("<br />", "\n")
-        print(quote + '\n\n')
+    print('{0.title}: {0.link}\n{1}\n\n'.format(entry, quote))
