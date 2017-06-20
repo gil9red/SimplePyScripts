@@ -188,6 +188,6 @@ if __name__ == '__main__':
             log.exception('Ошибка:')
             log.debug('Через 5 минут попробую снова...')
 
-            # Wait 5 minutes before next attempt
+            # Wait 30 seconds before next attempt
             import time
-            time.sleep(5 * 60)
+            time.sleep(30)
