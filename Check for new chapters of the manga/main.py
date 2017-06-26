@@ -138,7 +138,7 @@ FILE_NAME_LAST_FEED = 'last_feed'
 
 
 def save_last_feed(feed):
-    open(FILE_NAME_LAST_FEED, 'w', encoding='utf-8').write(str(feed))
+    open(FILE_NAME_LAST_FEED, 'w', encoding='utf-8').write(feed)
 
 
 if __name__ == '__main__':
@@ -147,11 +147,11 @@ if __name__ == '__main__':
 
     # Загрузка последней новости
     last_feed = open(FILE_NAME_LAST_FEED, encoding='utf-8').read()
-    log.debug('Last feed: "%s"', last_feed)
 
     while True:
         try:
             log.debug('get_feeds_by_manga_chapters')
+            log.debug('Last feed: "%s"', last_feed)
 
             current_feeds = get_feeds_by_manga_chapters(URL_USER_RSS)
             log.debug('current_feeds: %s', current_feeds)
@@ -178,8 +178,9 @@ if __name__ == '__main__':
 
             else:
                 # Считаем что это первый запуск
-                log.debug("Первый запуск, запоминаю последнюю главу.")
                 last_feed = current_feeds[0]
+                log.debug('Первый запуск, запоминаю последнюю главу: "{}"'.format(last_feed))
+
                 save_last_feed(last_feed)
 
             wait(hours=6)
