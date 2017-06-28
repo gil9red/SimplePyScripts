@@ -18,6 +18,8 @@ print(uuid.uuid4())  # UUID('16fd2706-8baf-433b-82eb-8c7fada847da')
 # make a UUID using a SHA-1 hash of a namespace UUID and a name
 print(uuid.uuid5(uuid.NAMESPACE_DNS, 'python.org'))  # UUID('886313e1-3b8a-5372-9b90-0c9aee199e5d')
 
+print()
+print('From UUID / GUID')
 # make a UUID from a string of hex digits (braces and hyphens ignored)
 x = uuid.UUID('{00010203-0405-0607-0809-0a0b0c0d0e0f}')
 
