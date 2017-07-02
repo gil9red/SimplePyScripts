@@ -145,6 +145,7 @@ if __name__ == '__main__':
                     last_torrent_files = files
 
                     # Say qbittorrent client download torrent file
+                    # NOTE: or qb.download_from_file
                     qb.download_from_link(torrent_file_url)
 
                     # Отправляю смс на номер
