@@ -41,7 +41,7 @@ def get_logger(name, file='log.txt', encoding='utf-8', log_stdout=True, log_file
     return log
 
 
-DEBUG = False
+DEBUG = True
 
 
 if DEBUG:
@@ -184,17 +184,37 @@ def append_list_games(games: [(str, bool)], notified_by_sms=True):
         connect.close()
 
 
-def get_games(filter_by_is_cracked=None, sorted_by_name=True) -> [(str, bool)]:
+def get_games(filter_by_is_cracked=None, sorted_by_name=True, sorted_by_crack_date=False) -> [(str, bool, str)]:
+    """
+    Функция возвращает из базы список вида:
+        [('Abzû2', 1, '2017-07-02'), ('Adrift', 1, '2017-07-02'), ('Agents of Mayhem', 0, None), ...
+
+    :param filter_by_is_cracked: определяет нужно ли фильтровать по полю is_cracked. Если filter_by_is_cracked = None,
+    фильтр не используется, иначе фильтрация будет по значению в filter_by_is_cracked
+
+    :param sorted_by_name: использовать ли сортировку по названию игры
+    :param sorted_by_crack_date: использовать ли сортировку по crack_date
+    :return:
+    """
+
     connect = create_connect()
+
+    sort = ''
+    if sorted_by_name:
+        sort = ' order by name'
+
+    if sorted_by_crack_date:
+        # Обратный порядок, чтобы первым в списке были самые новые
+        sort = ' order by crack_date desc'
 
     try:
         if filter_by_is_cracked is None:
-            items = connect.execute("SELECT name, is_cracked FROM Game").fetchall()
-        else:
-            items = connect.execute("SELECT name, is_cracked FROM Game WHERE is_cracked = ?", (filter_by_is_cracked,)).fetchall()
+            sql = "SELECT name, is_cracked, crack_date FROM Game" + sort
+            items = connect.execute(sql).fetchall()
 
-        if sorted_by_name:
-            items.sort(key=lambda x: x[0])
+        else:
+            sql = "SELECT name, is_cracked, crack_date FROM Game WHERE is_cracked = ?" + sort
+            items = connect.execute(sql, (filter_by_is_cracked,)).fetchall()
 
         return items
 
@@ -209,7 +229,10 @@ if __name__ == '__main__':
     print('Games:', len(games), games)
 
     games = get_games(filter_by_is_cracked=True)
-    print('Cracked:', len(games), [name for name, _ in games])
+    print('Cracked:', len(games), [name for name, _, _ in games])
 
     games = get_games(filter_by_is_cracked=False)
-    print('Not cracked:', len(games), [name for name, _ in games])
+    print('Not cracked:', len(games), [name for name, _, _ in games])
+
+    games = get_games(filter_by_is_cracked=True, sorted_by_crack_date=True)
+    print('Cracked and sorted:', len(games), [name for name, _, _ in games])
