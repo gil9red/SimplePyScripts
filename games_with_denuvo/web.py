@@ -11,7 +11,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     from common import get_games
-    games = get_games(filter_by_is_cracked=True)
+    games = get_games(filter_by_is_cracked=True, sorted_by_crack_date=True)
 
     return render_template_string("""
 <!DOCTYPE html>
@@ -53,10 +53,11 @@ def index():
             {% endfor %}
             </tr>
 
-        {% for name in games %}
+        {% for name, _, crack_date in games %}
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ name }}</td>
+                <td>{{ crack_date }}</td>
                 <td>
                     <button onclick="window.open('http://anti-tor.org/search/0/8/000/0/{{ name|replace('"', '')|replace("'", "") }}')">Rutor</button>
                     <button onclick="window.open('http://search.tfile.co/?q={{ name|replace('"', '')|replace("'", "") }}')">tFile</button>
@@ -70,7 +71,7 @@ def index():
     </table>
 </body>
 </html>
-    """, headers=["№", "Название", "Поиск"], games=[name for name, _ in games])
+    """, headers=["№", "Название", "Дата взлома", "Поиск"], games=games)
 
 
 if __name__ == "__main__":
