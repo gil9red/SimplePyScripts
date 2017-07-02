@@ -22,6 +22,7 @@ if sys.platform == 'win32':
 
 
 import time
+import requests
 
 
 def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0):
@@ -177,7 +178,9 @@ if __name__ == '__main__':
             else:
                 log.debug('Новых видео нет')
 
-            wait(weeks=1)
+            # TODO: временно, удалить!
+            # wait(weeks=1)
+            wait(days=1)
 
         except requests.exceptions.ConnectionError as e:
             log.warning('Ошибка подключения к сети: %s', e)
