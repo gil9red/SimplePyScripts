@@ -21,7 +21,6 @@ if sys.platform == 'win32':
     sys.stderr = codecs.getwriter(sys.stderr.encoding)(sys.stderr.detach(), 'backslashreplace')
 
 
-import requests
 import time
 
 
@@ -122,13 +121,18 @@ def send_sms(api_id: str, to: str, text: str):
 def get_video_list():
     text = 'Gorgeous Freeman - '
 
+    import requests
     rs = requests.get('https://www.youtube.com/user/antoine35DeLak/search?query=' + text)
+    log.debug('rs: %s', rs)
 
     from bs4 import BeautifulSoup
     root = BeautifulSoup(rs.content, 'lxml')
 
+    video_title_list = [x.text for x in root.select('.yt-lockup-title > a')]
+    log.debug('video_title_list[%s]: %s', len(video_title_list), video_title_list)
+
     # Get video list and filter by <text>
-    return list(filter(lambda x: x.startswith(text), (x.text for x in root.select('.yt-lockup-title > a'))))
+    return list(filter(lambda x: x.startswith(text), video_title_list))
 
 
 FILE_NAME_CURRENT_NUMBER_VIDEO = 'current_number_video'
@@ -137,7 +141,6 @@ FILE_NAME_CURRENT_NUMBER_VIDEO = 'current_number_video'
 if __name__ == '__main__':
     # NOTE: С этим флагом нужно быть осторожным при первом запуске, когда список книг пустой
     notified_by_sms = True
-    notified_by_sms = False
 
     try:
         current_number_video = int(open(FILE_NAME_CURRENT_NUMBER_VIDEO, encoding='utf-8').read())
