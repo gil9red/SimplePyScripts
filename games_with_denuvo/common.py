@@ -41,7 +41,7 @@ def get_logger(name, file='log.txt', encoding='utf-8', log_stdout=True, log_file
     return log
 
 
-DEBUG = True
+DEBUG = False
 
 
 if DEBUG:
