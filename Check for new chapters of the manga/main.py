@@ -15,6 +15,7 @@ if sys.platform == 'win32':
     sys.stderr = codecs.getwriter(sys.stderr.encoding)(sys.stderr.detach(), 'backslashreplace')
 
 
+import requests
 from config import *
 
 
@@ -46,7 +47,6 @@ log = get_logger()
 
 
 def get_feeds_by_manga_chapters(url_rss: str) -> list:
-    import requests
     rss_text = requests.get(url_rss).text
 
     import feedparser
@@ -118,17 +118,22 @@ def send_sms(api_id: str, to: str, text: str):
 
     while True:
         try:
-            import requests
             rs = requests.get(url)
             log.debug(repr(rs.text))
 
             break
 
+        except requests.exceptions.ConnectionError as e:
+            log.warning('Ошибка подключения к сети: %s', e)
+            log.debug('Через минуту попробую снова...')
+
+            import time
+            time.sleep(60)
+
         except:
             log.exception("При отправке sms произошла ошибка:")
             log.debug('Через 5 минут попробую снова...')
 
-            # Wait 5 minutes before next attempt
             import time
             time.sleep(5 * 60)
 
@@ -185,10 +190,16 @@ if __name__ == '__main__':
 
             wait(hours=6)
 
+        except requests.exceptions.ConnectionError as e:
+            log.warning('Ошибка подключения к сети: %s', e)
+            log.debug('Через минуту попробую снова...')
+
+            import time
+            time.sleep(60)
+
         except:
-            log.exception('Ошибка:')
+            log.exception('Непредвиденная ошибка:')
             log.debug('Через 5 минут попробую снова...')
 
-            # Wait 30 seconds before next attempt
             import time
-            time.sleep(30)
+            time.sleep(5 * 60)
