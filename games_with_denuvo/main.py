@@ -10,17 +10,6 @@ __author__ = 'ipetrash'
 """
 
 
-# TODO: костыль для винды, для исправления проблем с исключениями
-# при выводе юникодных символов в консоль винды
-# Возможно, не только для винды, но и для любой платформы стоит использовать
-# эту настройку -- мало какие проблемы могут встретиться
-import sys
-if sys.platform == 'win32':
-    import codecs
-    sys.stdout = codecs.getwriter(sys.stdout.encoding)(sys.stdout.detach(), 'backslashreplace')
-    sys.stderr = codecs.getwriter(sys.stderr.encoding)(sys.stderr.detach(), 'backslashreplace')
-
-
 def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0):
     from datetime import timedelta, datetime
     today = datetime.today()
