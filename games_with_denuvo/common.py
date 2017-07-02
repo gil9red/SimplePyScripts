@@ -18,36 +18,47 @@ __author__ = 'ipetrash'
 from config import *
 
 
-def get_logger(name, file='log.txt', encoding='utf8'):
-    import sys
+def get_logger(name, file='log.txt', encoding='utf-8', log_stdout=True, log_file=True):
     import logging
-
     log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter('[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s')
+    formatter = logging.Formatter('[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s')
 
-    fh = logging.FileHandler(file, encoding=encoding)
-    fh.setLevel(logging.DEBUG)
+    if log_file:
+        from logging.handlers import RotatingFileHandler
+        fh = RotatingFileHandler(file, maxBytes=10000000, backupCount=5, encoding=encoding)
+        fh.setFormatter(formatter)
+        log.addHandler(fh)
 
-    ch = logging.StreamHandler(stream=sys.stdout)
-    ch.setLevel(logging.DEBUG)
-
-    fh.setFormatter(formatter)
-    ch.setFormatter(formatter)
-
-    log.addHandler(fh)
-    log.addHandler(ch)
+    if log_stdout:
+        import sys
+        sh = logging.StreamHandler(stream=sys.stdout)
+        sh.setLevel(logging.DEBUG)
+        sh.setFormatter(formatter)
+        log.addHandler(sh)
 
     return log
 
 
-log = get_logger('games_with_denuvo')
-log_cracked_games = get_logger('cracked_games', file='cracked_games.log.txt')
+DEBUG = False
+
+
+if DEBUG:
+    DB_FILE_NAME = 'test.database.sqlite'
+
+    log = get_logger('test_games_with_denuvo', file='test_log.txt')
+    log_cracked_games = get_logger('test_cracked_games', file='test_cracked_games.log.txt', log_stdout=False)
+
+else:
+    DB_FILE_NAME = 'database.sqlite'
+
+    log = get_logger('games_with_denuvo')
+    log_cracked_games = get_logger('cracked_games', file='cracked_games.log.txt', log_stdout=False)
 
 
 def send_sms(api_id: str, to: str, text: str):
-    log.debug('Отправка sms: "%s"', text)
+    log.info('Отправка sms: "%s"', text)
 
     # Отправляю смс на номер
     url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
@@ -74,9 +85,6 @@ def send_sms(api_id: str, to: str, text: str):
             time.sleep(5 * 60)
 
 
-DB_FILE_NAME = 'database.sqlite'
-
-
 def create_connect():
     import sqlite3
     return sqlite3.connect(DB_FILE_NAME)
@@ -91,35 +99,32 @@ def init_db():
                 id INTEGER PRIMARY KEY,
                 name TEXT NOT NULL,
                 is_cracked BOOLEAN NOT NULL,
+                crack_date TIMESTAMP DEFAULT NULL,
 
                 CONSTRAINT name_unique UNIQUE (name)
             );
         ''')
 
-        connect.commit()
-
-        # NOTE: Пример, когда нужно в таблице подправить схему:
-        # cursor.executescript('''
-        # DROP TABLE Game2;
+        # # NOTE: Пример, когда нужно в таблице подправить схему:
+        # connect.executescript('''
+        #     DROP TABLE IF EXISTS Game2;
         #
-        # CREATE TABLE IF NOT EXISTS Game2 (
-        #     id INTEGER PRIMARY KEY,
+        #     CREATE TABLE IF NOT EXISTS Game2 (
+        #         id INTEGER PRIMARY KEY,
+        #         name TEXT NOT NULL,
+        #         is_cracked BOOLEAN NOT NULL,
+        #         crack_date TIMESTAMP DEFAULT NULL,
         #
-        #     name TEXT NOT NULL,
-        #     price TEXT DEFAULT NULL,
-        #     modify_date TIMESTAMP DEFAULT NULL,
-        #     kind TEXT NOT NULL,
-        #     check_steam BOOLEAN NOT NULL DEFAULT 0
-        # );
+        #         CONSTRAINT name_unique UNIQUE (name)
+        #     );
         #
-        # INSERT INTO Game2 SELECT * FROM Game;
+        #     INSERT INTO Game2 SELECT id, name, is_cracked, date('now') FROM Game;
         #
-        # DROP TABLE Game;
-        # ALTER TABLE Game2 RENAME TO Game;
-        #
+        #     DROP TABLE Game;
+        #     ALTER TABLE Game2 RENAME TO Game;
         # ''')
-        #
-        # connect.commit()
+
+        connect.commit()
 
     finally:
         connect.close()
@@ -137,6 +142,10 @@ def append_list_games(games: [(str, bool)], notified_by_sms=True):
         log.debug('Добавляю "%s" (%s)', name, is_cracked)
         connect.execute("INSERT OR IGNORE INTO Game (name, is_cracked) VALUES (?,?)", (name, is_cracked))
 
+        # Если добавлена уже взломанная игра, указываем дату
+        if is_cracked:
+            connect.execute("UPDATE Game SET crack_date = date('now') WHERE name = ?", (name,))
+
         return True
 
     try:
@@ -150,21 +159,23 @@ def append_list_games(games: [(str, bool)], notified_by_sms=True):
                 # Если игра раньше имела статус is_cracked = False, а теперь он поменялся на True:
                 if not rs_is_cracked and is_cracked:
                     # Поменяем флаг у игры в базе
-                    connect.execute('UPDATE Game SET is_cracked = 1 WHERE name = ?', (name,))
+                    connect.execute("UPDATE Game SET is_cracked = 1, crack_date = date('now') WHERE name = ?", (name,))
 
                     text = 'Игру "{}" взломали'.format(name)
-                    log.debug(text)
+                    log.info(text)
                     log_cracked_games.debug(text)
 
-                    if notified_by_sms:
+                    # При DEBUG = True, отправки смс не будет
+                    if notified_by_sms and not DEBUG:
                         send_sms(API_ID, TO, text)
 
             elif is_cracked:
                 text = 'Добавлена взломанная игра "{}"'.format(name)
-                log.debug(text)
+                log.info(text)
                 log_cracked_games.debug(text)
 
-                if notified_by_sms:
+                # При DEBUG = True, отправки смс не будет
+                if notified_by_sms and not DEBUG:
                     send_sms(API_ID, TO, text)
 
         connect.commit()
@@ -192,6 +203,8 @@ def get_games(filter_by_is_cracked=None, sorted_by_name=True) -> [(str, bool)]:
 
 
 if __name__ == '__main__':
+    init_db()
+
     games = get_games()
     print('Games:', len(games), games)
 
