@@ -4,15 +4,15 @@
 __author__ = 'ipetrash'
 
 
-# # TODO: костыль для винды, для исправления проблем с исключениями
-# # при выводе юникодных символов в консоль винды
-# # Возможно, не только для винды, но и для любой платформы стоит использовать
-# # эту настройку -- мало какие проблемы могут встретиться
-# import sys
-# if sys.platform == 'win32':
-#     import codecs
-#     sys.stdout = codecs.getwriter(sys.stdout.encoding)(sys.stdout.detach(), 'backslashreplace')
-#     sys.stderr = codecs.getwriter(sys.stderr.encoding)(sys.stderr.detach(), 'backslashreplace')
+# TODO: костыль для винды, для исправления проблем с исключениями
+# при выводе юникодных символов в консоль винды
+# Возможно, не только для винды, но и для любой платформы стоит использовать
+# эту настройку -- мало какие проблемы могут встретиться
+import sys
+if sys.platform == 'win32':
+    import codecs
+    sys.stdout = codecs.getwriter(sys.stdout.encoding)(sys.stdout.detach(), 'backslashreplace')
+    sys.stderr = codecs.getwriter(sys.stderr.encoding)(sys.stderr.detach(), 'backslashreplace')
 
 
 from config import *
@@ -197,6 +197,9 @@ def get_games(filter_by_is_cracked=None, sorted_by_name=True, sorted_by_crack_da
     :return:
     """
 
+    log.debug('Start get_games: filter_by_is_cracked=%s, sorted_by_name=%s, sorted_by_crack_date=%s',
+              filter_by_is_cracked, sorted_by_name, sorted_by_crack_date)
+
     connect = create_connect()
 
     sort = ''
@@ -214,11 +217,17 @@ def get_games(filter_by_is_cracked=None, sorted_by_name=True, sorted_by_crack_da
     try:
         if filter_by_is_cracked is None:
             sql = "SELECT name, is_cracked, crack_date FROM Game" + sort
+            log.debug('sql: %s', sql)
+
             items = connect.execute(sql).fetchall()
 
         else:
             sql = "SELECT name, is_cracked, crack_date FROM Game WHERE is_cracked = ?" + sort
+            log.debug('sql: %s', sql)
+
             items = connect.execute(sql, (filter_by_is_cracked,)).fetchall()
+
+        log.debug('Finish get_games: items[%s]: %s', len(items), items)
 
         return items
 
