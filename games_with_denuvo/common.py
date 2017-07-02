@@ -204,8 +204,12 @@ def get_games(filter_by_is_cracked=None, sorted_by_name=True, sorted_by_crack_da
         sort = ' order by name'
 
     if sorted_by_crack_date:
-        # Обратный порядок, чтобы первым в списке были самые новые
-        sort = ' order by crack_date desc'
+        # # Обратный порядок, чтобы первым в списке были самые новые
+        # sort = ' order by crack_date desc'
+
+        # NOTE: идея такая: сначала сортировка по дате, а после сортировка по имени
+        # среди тех игр, у которых crack_date одинаковый
+        sort = ' order by crack_date desc, name asc'
 
     try:
         if filter_by_is_cracked is None:
