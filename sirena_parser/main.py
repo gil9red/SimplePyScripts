@@ -95,7 +95,7 @@ if __name__ == '__main__':
 
     sirena_file = SirenaFile(in_file_name)
 
-    f = open(out_file_name, 'w', encoding='cp1251')
+    f = open(out_file_name, 'w', encoding='cp1251', newline='\n')
 
     for message in sirena_file.messages:
         for record in message.records:
