@@ -4,16 +4,7 @@
 __author__ = 'ipetrash'
 
 
-# Если указывать свой логин и пароль, можно больше запросов делать в апи
-LOGIN = None
-PASSWORD = None
-
-# http://user:password@proxy_host:proxy_port
-PROXY = None
-
-if PROXY:
-    import os
-    os.environ['http_proxy'] = PROXY
+from config import LOGIN, PASSWORD
 
 # TODO: сделать версию с gui
 
