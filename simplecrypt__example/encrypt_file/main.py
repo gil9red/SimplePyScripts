@@ -25,12 +25,12 @@ if __name__ == '__main__':
 
     print()
     print('Encrypt message...')
-    ciphertext = encrypt(PASSWORD, message)
-    print('Encrypt message len: {}'.format(len(ciphertext)))
+    cipher_text = encrypt(PASSWORD, message)
+    print('Encrypt message len: {}'.format(len(cipher_text)))
 
     print()
     print('Decrypt message...')
-    decrypt_message = decrypt(PASSWORD, ciphertext)
+    decrypt_message = decrypt(PASSWORD, cipher_text)
     decrypt_message_digest = get_sha1_hexdigest(message)
     print('Decrypt message len: {}, sha1: {}'.format(len(decrypt_message), decrypt_message_digest))
 
