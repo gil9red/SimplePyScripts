@@ -31,7 +31,7 @@ if __name__ == '__main__':
     print()
     print('Decrypt message...')
     decrypt_message = decrypt(PASSWORD, cipher_text)
-    decrypt_message_digest = get_sha1_hexdigest(message)
+    decrypt_message_digest = get_sha1_hexdigest(decrypt_message)
     print('Decrypt message len: {}, sha1: {}'.format(len(decrypt_message), decrypt_message_digest))
 
     print()
