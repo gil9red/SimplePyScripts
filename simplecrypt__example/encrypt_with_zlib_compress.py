@@ -81,13 +81,12 @@ def crypt_decrypt_test(message, password, use_zlib=False, show_hex=False):
     log.debug('')
     log.debug('Digest is equal: {}'.format(message_digest == decrypt_message_digest))
     log.debug('Total time: {:.3f} seconds'.format(time.time() - start_time))
-    log.debug('')
 
 
 # Random message
 import random
 import string
-MESSAGE = ''.join(random.choice(string.hexdigits) for _ in range(50000))
+MESSAGE = ''.join(random.choice(string.hexdigits) for _ in range(5000000))
 MESSAGE = MESSAGE.encode()
 
 PASSWORD = "secret"
@@ -97,6 +96,7 @@ if __name__ == '__main__':
     log.debug('CRYPT_DECRYPT_TEST: use_zlib=False')
     crypt_decrypt_test(MESSAGE, PASSWORD, use_zlib=False)
 
+    log.debug('')
     log.debug('_' * 100)
     log.debug('')
 
