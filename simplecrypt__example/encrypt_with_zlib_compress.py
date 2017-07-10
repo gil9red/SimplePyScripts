@@ -1,0 +1,104 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
+
+def encrypt(password, message, use_zlib=False):
+    if use_zlib:
+        import zlib
+        message = zlib.compress(message)
+
+    from simplecrypt import encrypt
+    message = encrypt(password, message)
+    return message
+
+
+def decrypt(password, message, use_zlib=False):
+    from simplecrypt import decrypt
+    message = decrypt(password, message)
+
+    if use_zlib:
+        import zlib
+        message = zlib.decompress(message)
+
+    return message
+
+
+def get_sha1_hexdigest(data):
+    import hashlib
+    sha1 = hashlib.sha1(data)
+    return sha1.hexdigest()
+
+
+import time
+import binascii
+
+
+def get_logger(name):
+    import logging
+    log = logging.getLogger(name)
+    log.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('[%(asctime)s] %(message)s')
+
+    import sys
+    ch = logging.StreamHandler(stream=sys.stdout)
+    ch.setLevel(logging.DEBUG)
+    ch.setFormatter(formatter)
+    log.addHandler(ch)
+
+    return log
+
+
+log = get_logger('encrypt_with_zlib_compress')
+
+
+def crypt_decrypt_test(message, password, use_zlib=False, show_hex=False):
+    start_time = time.time()
+
+    text_hex = binascii.hexlify(message)
+    message_digest = get_sha1_hexdigest(message)
+    log.debug('Message len: {}, sha1: {}'.format(len(message), message_digest))
+    show_hex and log.debug('text_hex: "{}"'.format(text_hex))
+    log.debug('')
+
+    log.debug('Encrypt...')
+    encrypt_text = encrypt(password, message, use_zlib)
+    encrypt_text_hex = binascii.hexlify(encrypt_text)
+    encrypt_message_digest = get_sha1_hexdigest(encrypt_text)
+    log.debug('Encrypt message len: {}, sha1: {}'.format(len(encrypt_text), encrypt_message_digest))
+    show_hex and log.debug('encrypt_text_hex: "{}"'.format(encrypt_text_hex))
+
+    log.debug('')
+    log.debug('Decrypt...')
+    decrypt_text = decrypt(password, encrypt_text, use_zlib)
+    decrypt_text_hex = binascii.hexlify(decrypt_text)
+    decrypt_message_digest = get_sha1_hexdigest(decrypt_text)
+    log.debug('Decrypt message len: {}, sha1: {}'.format(len(decrypt_text), decrypt_message_digest))
+    show_hex and log.debug('decrypt_text_hex: "{}"'.format(decrypt_text_hex))
+
+    log.debug('')
+    log.debug('Digest is equal: {}'.format(message_digest == decrypt_message_digest))
+    log.debug('Total time: {:.3f} seconds'.format(time.time() - start_time))
+    log.debug('')
+
+
+# Random message
+import random
+import string
+MESSAGE = ''.join(random.choice(string.hexdigits) for _ in range(50000))
+MESSAGE = MESSAGE.encode()
+
+PASSWORD = "secret"
+
+
+if __name__ == '__main__':
+    log.debug('CRYPT_DECRYPT_TEST: use_zlib=False')
+    crypt_decrypt_test(MESSAGE, PASSWORD, use_zlib=False)
+
+    log.debug('_' * 100)
+    log.debug('')
+
+    log.debug('CRYPT_DECRYPT_TEST: use_zlib=True')
+    crypt_decrypt_test(MESSAGE, PASSWORD, use_zlib=True)
