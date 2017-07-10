@@ -86,9 +86,7 @@ def crypt_decrypt_test(message, password, use_zlib=False, show_hex=False):
 # Random message
 import random
 import string
-MESSAGE = ''.join(random.choice(string.hexdigits) for _ in range(5000000))
-MESSAGE = MESSAGE.encode()
-
+MESSAGE = ''.join(random.choice(string.hexdigits) for _ in range(5000000)).encode()
 PASSWORD = "secret"
 
 
