@@ -25,6 +25,9 @@ if __name__ == '__main__':
     print('Message len: {}, sha1: {}'.format(len(message), message_digest))
 
     print()
+    print('_' * 100)
+    print()
+
     print("Compress message...")
     compress_text = zlib.compress(message)
     compress_message_digest = get_sha1_hexdigest(compress_text)
@@ -36,6 +39,9 @@ if __name__ == '__main__':
     print('Encrypt compress message len: {}'.format(len(cipher_compress_text)))
 
     print()
+    print('_' * 100)
+    print()
+
     print('Decrypt compress message...')
     decrypt_compress_message = decrypt(PASSWORD, cipher_compress_text)
     decrypt_compress_message_digest = get_sha1_hexdigest(decrypt_compress_message)
