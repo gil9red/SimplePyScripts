@@ -13,11 +13,11 @@ print()
 
 from simplecrypt import encrypt, decrypt
 ciphertext = encrypt(password, message)
-print('ciphertext: "{}"'.format(ciphertext))
+print('ciphertext[{}]: "{}"'.format(len(ciphertext), ciphertext))
 
 import binascii
 ciphertext_hex = binascii.hexlify(ciphertext)
-print('ciphertext_hex: "{}"'.format(ciphertext_hex))
+print('ciphertext_hex[{}]: "{}"'.format(len(ciphertext_hex), ciphertext_hex))
 print()
 
 print('After decrypt:')
