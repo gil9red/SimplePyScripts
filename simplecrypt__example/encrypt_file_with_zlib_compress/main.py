@@ -8,7 +8,7 @@ from simplecrypt import encrypt, decrypt
 import zlib
 
 
-def get_sha1_hexdigest(data):
+def get_digest(data):
     import hashlib
     sha1 = hashlib.sha1(data)
     return sha1.hexdigest()
@@ -21,8 +21,8 @@ FILENAME = "message.txt"
 if __name__ == '__main__':
     print("Reading message...")
     message = open('message.txt', mode='rb').read()
-    message_digest = get_sha1_hexdigest(message)
-    print('Message len: {}, sha1: {}'.format(len(message), message_digest))
+    message_digest = get_digest(message)
+    print('Message len: {}, digest: {}'.format(len(message), message_digest))
 
     print()
     print('_' * 100)
@@ -30,8 +30,8 @@ if __name__ == '__main__':
 
     print("Compress message...")
     compress_text = zlib.compress(message)
-    compress_message_digest = get_sha1_hexdigest(compress_text)
-    print('Compress message len: {}, sha1: {}'.format(len(compress_text), compress_message_digest))
+    compress_message_digest = get_digest(compress_text)
+    print('Compress message len: {}, digest: {}'.format(len(compress_text), compress_message_digest))
 
     print()
     print('Encrypt compress message...')
@@ -44,14 +44,18 @@ if __name__ == '__main__':
 
     print('Decrypt compress message...')
     decrypt_compress_message = decrypt(PASSWORD, cipher_compress_text)
-    decrypt_compress_message_digest = get_sha1_hexdigest(decrypt_compress_message)
-    print('Decrypt compress message len: {}, sha1: {}'.format(len(decrypt_compress_message), decrypt_compress_message_digest))
+    decrypt_compress_message_digest = get_digest(decrypt_compress_message)
+    print('Decrypt compress message len: {}, digest: {}'.format(len(decrypt_compress_message), decrypt_compress_message_digest))
 
     print()
     print("Decompress message...")
     decompress_text = zlib.decompress(decrypt_compress_message)
-    decompress_message_digest = get_sha1_hexdigest(decompress_text)
-    print('Decompress message len: {}, sha1: {}'.format(len(decompress_text), decompress_message_digest))
+    decompress_message_digest = get_digest(decompress_text)
+    print('Decompress message len: {}, digest: {}'.format(len(decompress_text), decompress_message_digest))
+
+    print()
+    print('_' * 100)
+    print()
 
     print()
     print('Digest for compress is equal: {}'.format(compress_message_digest == decrypt_compress_message_digest))
