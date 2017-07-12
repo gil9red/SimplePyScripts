@@ -65,7 +65,7 @@ if __name__ == '__main__':
     
     print()
     print("Decompress message from zip...")
-    with zipfile.ZipFile(zip_data_io, mode='r', compression=zipfile.ZIP_DEFLATED) as zf:
+    with zipfile.ZipFile(zip_data_io, mode='r') as zf:
         decompress_message = zf.read(FILENAME)
 
     decompress_message_digest = get_digest(decompress_message)
