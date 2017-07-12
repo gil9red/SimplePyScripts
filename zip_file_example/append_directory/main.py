@@ -13,4 +13,7 @@ if __name__ == '__main__':
         import os
         for root, dirs, files in os.walk(DIR_NAME):
             for file in files:
-                zf.write(os.path.join(root, file))
+                file_name = os.path.join(root, file)
+                zf.write(file_name)
+
+                print(file_name)
