@@ -19,7 +19,9 @@ FILENAME = "message.txt"
 
 if __name__ == '__main__':
     print("Reading message...")
-    message = open('message.txt', mode='rb').read()
+    with open('message.txt', mode='rb') as f:
+        message = f.read()
+
     message_digest = get_digest(message)
     print('Message len: {}, digest: {}'.format(len(message), message_digest))
 
@@ -28,8 +30,19 @@ if __name__ == '__main__':
     cipher_text = encrypt(PASSWORD, message)
     print('Encrypt message len: {}'.format(len(cipher_text)))
 
+    with open(FILENAME + ".crypto", mode='wb') as f:
+        f.write(cipher_text)
+
+    print('')
+    print('_' * 100)
+    print('')
+
     print()
     print('Decrypt message...')
+
+    with open(FILENAME + ".crypto", mode='rb') as f:
+        cipher_text = f.read()
+
     decrypt_message = decrypt(PASSWORD, cipher_text)
     decrypt_message_digest = get_digest(decrypt_message)
     print('Decrypt message len: {}, digest: {}'.format(len(decrypt_message), decrypt_message_digest))
