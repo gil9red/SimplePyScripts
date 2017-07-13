@@ -46,9 +46,9 @@ if __name__ == '__main__':
     print('Append: ' + new_file_name)
 
     repo.index.add([new_file_name])
-    # or:
-    # repo.git.add(new_file_name)
     # # or:
-    # # repo.git.add('-A')
+    # repo.index.add(['*'])
+    # repo.git.add(new_file_name)
+    # repo.git.add('-A')
 
     repo.index.commit("Commit " + new_file_name)
