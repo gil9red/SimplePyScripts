@@ -9,6 +9,7 @@ import github
 from config import LOGIN, PASSWORD
 
 # NOTE: delete repo: Settings -> <Danger Zone> -> <Delete this repository>
+#       or repo.delete()
 NEW_REPO = 'Test-Repo'
 
 
