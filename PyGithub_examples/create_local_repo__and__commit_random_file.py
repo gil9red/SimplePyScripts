@@ -27,6 +27,7 @@ if __name__ == '__main__':
     import os
     repo_path = os.path.abspath(FILE_NAME_REPO)
 
+    # pip install GitPython
     import git
     try:
         repo = git.Repo(FILE_NAME_REPO)
