@@ -22,7 +22,7 @@ print()
 
 # Random uuid
 import uuid
-file_name = str(uuid.uuid4()).upper()
+file_name = str(uuid.uuid4())
 print('Save to file:', file_name)
 
 with open(file_name, mode='wb') as f:
