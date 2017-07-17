@@ -18,7 +18,7 @@ y = 30
 
 clock = pygame.time.Clock()
 
-while not done:
+while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
@@ -31,7 +31,7 @@ while not done:
     pressed = pygame.key.get_pressed()
 
     # If Esc clicked
-    if pressed[pygame.K_ESCAPE]:
+    if pressed[pygame.K_ESCAPE] or done:
         break
 
     if pressed[pygame.K_UP]:
