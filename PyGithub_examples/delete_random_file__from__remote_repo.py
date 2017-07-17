@@ -59,6 +59,6 @@ if __name__ == '__main__':
         print('Remove:', file_name)
 
         repo.index.remove([file_name])
-        repo.index.commit("Commit remove: " + file_name)
+        repo.index.commit("Remove: " + file_name)
 
         repo.remotes.origin.push()

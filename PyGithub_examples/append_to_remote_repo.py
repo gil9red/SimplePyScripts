@@ -65,7 +65,7 @@ if __name__ == '__main__':
     # repo.git.add(new_file_name)
     # repo.git.add('-A')
 
-    repo.index.commit("Commit append: " + new_file_name)
+    repo.index.commit("Create: " + new_file_name)
 
     repo.remotes.origin.push()
     # repo.remotes.origin.pull()
