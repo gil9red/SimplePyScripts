@@ -31,33 +31,41 @@ REPO_PATH = os.path.abspath(NEW_REPO)
 # git clone https://username:password@github.com/username/repository.git
 URL_GIT = 'https://{0}:{1}@github.com/{0}/{2}.git'.format(LOGIN, PASSWORD, NEW_REPO)
 
-# pip install GitPython
-import git
 
-try:
-    repo = git.Repo(REPO_PATH)
-except:
-    repo = git.Repo.clone_from(URL_GIT, REPO_PATH)
+def get_repo():
+    # pip install GitPython
+    import git
 
-print(repo)
-print()
+    try:
+        return git.Repo(REPO_PATH)
 
-logs = repo.git.log('--pretty=format:%H%x09%an%x09%ad%x09%s').splitlines()
-print('Logs[{}]:'.format(len(logs)))
+    except:
+        return git.Repo.clone_from(URL_GIT, REPO_PATH)
 
-for log in logs:
-    print(log)
 
-new_file_name = create_random_file(repo)[1]
-print(new_file_name)
+if __name__ == '__main__':
+    repo = get_repo()
+    print(repo)
+    print()
 
-repo.index.add([new_file_name])
-# # or:
-# repo.index.add(['*'])
-# repo.git.add(new_file_name)
-# repo.git.add('-A')
+    logs = repo.git.log('--pretty=format:%H%x09%an%x09%ad%x09%s').splitlines()
+    print('Logs[{}]:'.format(len(logs)))
 
-repo.index.commit("Commit " + new_file_name)
+    for log in logs:
+        print(log)
 
-repo.remotes.origin.push()
-# repo.remotes.origin.pull()
+    print()
+
+    new_file_name = create_random_file(repo)[1]
+    print('Append:', new_file_name)
+
+    repo.index.add([new_file_name])
+    # # or:
+    # repo.index.add(['*'])
+    # repo.git.add(new_file_name)
+    # repo.git.add('-A')
+
+    repo.index.commit("Commit append: " + new_file_name)
+
+    repo.remotes.origin.push()
+    # repo.remotes.origin.pull()
