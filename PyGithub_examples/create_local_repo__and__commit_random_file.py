@@ -46,7 +46,7 @@ if __name__ == '__main__':
     print()
 
     new_file_name = create_random_file(repo)[1]
-    print('Append: ' + new_file_name)
+    print('Create: ' + new_file_name)
 
     repo.index.add([new_file_name])
     # # or:
@@ -54,4 +54,4 @@ if __name__ == '__main__':
     # repo.git.add(new_file_name)
     # repo.git.add('-A')
 
-    repo.index.commit("Commit " + new_file_name)
+    repo.index.commit("Create " + new_file_name)
