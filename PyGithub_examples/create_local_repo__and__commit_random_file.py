@@ -37,10 +37,12 @@ if __name__ == '__main__':
     print('Repo:', repo)
     print()
 
-    logs = list(repo.head.log())
+    logs = repo.git.log('--pretty=format:%H%x09%an%x09%ad%x09%s').splitlines()
     print('Logs[{}]:'.format(len(logs)))
+
     for log in logs:
-        print(str(log).strip())
+        print(log)
+
     print()
 
     new_file_name = create_random_file(repo)[1]
