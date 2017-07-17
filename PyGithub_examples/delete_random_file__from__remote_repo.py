@@ -56,9 +56,10 @@ if __name__ == '__main__':
     file_name = get_random_file(repo)
     if file_name:
         file_name = os.path.basename(file_name)
-        print('Remove:', file_name)
+        message = 'Remove:', file_name
+        print(message)
 
         repo.index.remove([file_name])
-        repo.index.commit("Remove: " + file_name)
+        repo.index.commit(message)
 
         repo.remotes.origin.push()
