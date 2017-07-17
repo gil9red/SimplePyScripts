@@ -57,7 +57,7 @@ if __name__ == '__main__':
     print()
 
     new_file_name = create_random_file(repo)[1]
-    message = 'Create:', new_file_name
+    message = 'Create: ' + new_file_name
     print(message)
 
     repo.index.add([new_file_name])
@@ -68,5 +68,5 @@ if __name__ == '__main__':
 
     repo.index.commit(message)
 
-    repo.remotes.origin.push()
     # repo.remotes.origin.pull()
+    repo.remotes.origin.push()
