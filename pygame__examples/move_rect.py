@@ -53,6 +53,8 @@ while not done:
 
     pygame.display.flip()
 
+    pygame.display.set_caption("move_rect [{} fps]".format(int(clock.get_fps())))
+
     # will block execution until 1/60 seconds have passed
     # since the previous time clock.tick was called.
     clock.tick(60)
