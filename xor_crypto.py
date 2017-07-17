@@ -4,27 +4,6 @@
 __author__ = 'ipetrash'
 
 
-# def crypto_xor_1(message, secret, sequre_fraq=False):
-#     new_chars = list()
-#
-#     for num_chr in (ord(c) for c in message):
-#         if type(secret) == int:
-#             num_chr ^= secret
-#
-#         else:
-#             if sequre_fraq:
-#                 for num_secret_char in (ord(c) for c in secret):
-#                     num_chr ^= num_secret_char
-#
-#             else:
-#                 for num_secret_char in (ord(c) for c in secret):
-#                     num_chr ^= num_secret_char
-#
-#         new_chars.append(num_chr)
-#
-#     return ''.join(chr(c) for c in new_chars)
-
-
 def crypto_xor_1(message, secret):
     return ''.join(chr(ord(c) ^ secret) for c in message)
 
