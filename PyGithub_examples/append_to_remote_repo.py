@@ -25,28 +25,28 @@ from config import LOGIN, PASSWORD
 NEW_REPO = 'Test-Repo'
 
 import os
-repo_path = os.path.abspath(NEW_REPO)
+REPO_PATH = os.path.abspath(NEW_REPO)
 
 # How use without input login and password:
 # git clone https://username:password@github.com/username/repository.git
-url_git = 'https://{0}:{1}@github.com/{0}/{2}.git'.format(LOGIN, PASSWORD, NEW_REPO)
+URL_GIT = 'https://{0}:{1}@github.com/{0}/{2}.git'.format(LOGIN, PASSWORD, NEW_REPO)
 
 # pip install GitPython
 import git
 
 try:
-    repo = git.Repo(repo_path)
+    repo = git.Repo(REPO_PATH)
 except:
-    repo = git.Repo.clone_from(url_git, repo_path)
+    repo = git.Repo.clone_from(URL_GIT, REPO_PATH)
 
 print(repo)
 print()
 
-logs = list(repo.head.log())
+logs = repo.git.log('--pretty=format:%H%x09%an%x09%ad%x09%s').splitlines()
 print('Logs[{}]:'.format(len(logs)))
+
 for log in logs:
-    print(str(log).strip())
-print()
+    print(log)
 
 new_file_name = create_random_file(repo)[1]
 print(new_file_name)
