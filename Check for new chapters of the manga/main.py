@@ -55,13 +55,12 @@ def get_feeds_by_manga_chapters(url_rss: str) -> list:
     feeds = list()
 
     for entry in feed.entries:
-        url = entry.link
         title = entry.title
 
-        if 'readmanga' in url:
+        if title.startswith('Манга '):
             title = title[len('Манга '):]
 
-        elif 'mintmanga' in url:
+        elif title.startswith('Взрослая манга '):
             title = title[len('Взрослая манга '):]
 
         feeds.append(title)
