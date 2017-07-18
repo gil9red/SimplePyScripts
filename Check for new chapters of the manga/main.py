@@ -47,10 +47,8 @@ log = get_logger()
 
 
 def get_feeds_by_manga_chapters(url_rss: str) -> list:
-    rss_text = requests.get(url_rss).text
-
     import feedparser
-    feed = feedparser.parse(rss_text)
+    feed = feedparser.parse(url_rss)
 
     feeds = list()
 
