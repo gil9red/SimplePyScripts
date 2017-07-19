@@ -65,7 +65,7 @@ def get_logger(name):
 log = get_logger('encrypt_with_zip_compress')
 
 
-def crypt_decrypt_test(message, password, use_zip=False, show_hex=False):
+def run_crypt_decrypt(message, password, use_zip=False, show_hex=False):
     start_time = time.time()
 
     text_hex = binascii.hexlify(message)
@@ -103,11 +103,11 @@ PASSWORD = "secret"
 
 if __name__ == '__main__':
     log.debug('CRYPT_DECRYPT_TEST: use_zip=False')
-    crypt_decrypt_test(MESSAGE, PASSWORD, use_zip=False)
+    run_crypt_decrypt(MESSAGE, PASSWORD, use_zip=False)
 
     log.debug('')
     log.debug('_' * 100)
     log.debug('')
 
     log.debug('CRYPT_DECRYPT_TEST: use_zip=True')
-    crypt_decrypt_test(MESSAGE, PASSWORD, use_zip=True)
+    run_crypt_decrypt(MESSAGE, PASSWORD, use_zip=True)
