@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# pip install simple-crypt
+# https://github.com/andrewcooke/simple-crypt
+
 message = 'Hello World!'
 password = 'secret'
 
