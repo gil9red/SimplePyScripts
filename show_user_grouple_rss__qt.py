@@ -42,11 +42,8 @@ class MainWindow(QMainWindow):
         self.line_edit_id_user = QLineEdit()
         self.line_edit_rss_user = QLineEdit()
 
-        # Example url: https://grouple.co/user/315828
-        self.line_edit_url_user.textChanged.connect(lambda text: self.line_edit_id_user.setText(text.split('/')[-1]))
-        self.line_edit_id_user.textChanged.connect(lambda text: self.line_edit_rss_user.setText(
-            'https://grouple.co/user/rss/{}?filter='.format(text)
-        ))
+        self.line_edit_url_user.textChanged.connect(self._on_line_edit_url_user_text_changed)
+        self.line_edit_id_user.textChanged.connect(self._on_line_edit_id_user_text_changed)
 
         self.push_button_start = QPushButton('Start')
         self.push_button_start.clicked.connect(self._start)
@@ -77,6 +74,14 @@ class MainWindow(QMainWindow):
 
         # Set default url
         self.line_edit_url_user.setText('https://grouple.co/user/315828')
+
+    def _on_line_edit_url_user_text_changed(self, text):
+        id_user = text.replace(' ', '').split('/')[-1]
+        self.line_edit_id_user.setText(id_user)
+
+    def _on_line_edit_id_user_text_changed(self, text):
+        id_user = text.strip()
+        self.line_edit_rss_user.setText('https://grouple.co/user/rss/{}?filter='.format(id_user))
 
     def _start(self):
         self.list_widget_feeds.clear()
