@@ -200,7 +200,7 @@ if __name__ == '__main__':
     print('Games:', len(games))
 
     print('DLC:')
-    for game in games:
+    for game in sorted(games):
         if is_dlc(game):
             print('    ' + game)
 
