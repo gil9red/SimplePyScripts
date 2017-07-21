@@ -68,6 +68,7 @@ def is_dlc(game):
     return False
 
 
+# Parser from https://github.com/gil9red/played_games/blob/master/mini_played_games_parser.py
 def parse_played_games(text: str) -> dict:
     """
     Функция для парсинга списка игр.
