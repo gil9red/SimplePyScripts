@@ -6,8 +6,7 @@ __author__ = 'ipetrash'
 
 # TODO: обрабатывать не последнее полученное сообщение, а пачку, например 100
 
-LOGIN = '<LOGIN>'
-PASSWORD = '<PASSWORD>'
+from config import LOGIN, PASSWORD
 
 
 if __name__ == '__main__':
