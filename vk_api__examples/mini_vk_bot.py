@@ -48,6 +48,7 @@ if __name__ == '__main__':
             if from_user_id == bot_user_id:
                 continue
 
+            # Бот реагирует только на сообщения, начинающиеся с префикса
             if not message.lower().startswith(command_prefix.lower()):
                 continue
 
