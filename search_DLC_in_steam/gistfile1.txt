@@ -1,0 +1,366 @@
+PC:
+  Ведьмак 1, 2, 3
+  Far Cry 1, 2
+  Devil May Cry 3, 4, 5
+  The Elder Scrolls: Oblivion
+  The Elder Scrolls: Skyrim
+  Fallout 3
+  Fallout: New Vegas
+  Fallout 4
+  Resident Evil 4, 5, 6
+  Resident Evil: Revelations
+  Resident Evil: Revelations 2
+  Heroes of Might and Magic 3, 4, 5
+  Sacred 1
+  Prince of Persia: The Two Thrones
+  Prince of Persia 2008
+  Diablo 2
+  Half-Life
+  Half-Life 2
+  Half-Life 2: Episode One
+  Half-Life 2: Episode Two
+@ Half-Life: The Xeno Project
+  Grand Theft Auto: Vice City
+  Grand Theft Auto: San Andreas
+  Need for Speed II
+  Dragon Age: Origins
+  Dragon Age II
+  The Bard’s Tale (2004)
+  Quake 4
+  Warcraft III: Reign of Chaos
+  Warcraft III: The Frozen Throne
+  Max Payne 1, 2, 3
+  Legacy of Kain: Blood Omen 2
+  Alone in the Dark 2008
+  Serious Sam: The Second Encounter
+  Serious Sam II
+  Metal Gear Rising: Revengeance
+  Magicka
+  Borderlands 2
+  Titan Quest
+  Titan Quest: The Immortal Throne
+@ Outlast
+@ Outlast: Whistleblower
+  F.E.A.R.
+  F.E.A.R. Extraction Point
+  F.E.A.R. 2: Project Origin
+@ F.E.A.R. 3
+  I Am Alive
+  Call of Duty 4: Modern Warfare
+  S.T.A.L.K.E.R.: Shadow of Chernobyl
+  Dark Messiah of Might and Magic
+@ Saints Row 4
+  Prey
+  Prototype 1, 2
+  SWAT 4
+@ BioShock Infinite
+  Alice: Madness Returns
+@ Knock-Knock
+@ Five Nights At Freddy's 1, 2, 3, 4
+@ The Binding of Isaac: Rebirth
+@ Neverending Nightmares
+@ Amnesia: The Dark Descent
+@ Amnesia: A Machine for Pigs
+@ Child Of Light
+@ The Wolf Among Us
+@ A Bird Story
+@ To The Moon
+@ Valiant Hearts: The Great War
+@ The Forest
+@ Among The Sleep
+@ Brothers: A Tale Of Two Sons
+@ Unfair Mario
+@ Mario Kart 8
+@ Double Dragon Neon
+@ Bloodbath kavkaz
+  Middle-Earth: Shadow of Mordor
+@ Max: The Curse Of Brotherhood
+@ Daylight
+@ Deadlight
+@ Never Alone
+  Trine 1, 2
+@ The Stanley Parable
+@ The Walking Dead: Season 1, 2
+@ Nightmare House 2
+@ Goat Simulator
+@ Murdered: Soul Suspect
+@ Downfall
+@ Rayman Origins
+@ Rayman Legends
+@ Grey
+@ The Cat Lady
+@ Mount Your Friends
+@ Surgeon Simulator
+@ Happy Wheels
+@ Sniper Elite 3
+@ Slendytubbies
+@ SCP-087
+@ SCP-087-B
+@ Inside
+@ Eyes The Horror Game
+@ The Hat Man Shadow Ward
+@ Life After Us: Shipwrecked
+@ Nox Timore
+@ Trollface Quest 1-7
+  Stubbs the Zombie
+  Front Mission Evolved
+  Fable (2004)
+  Neverwinter Nights 1, 2
+  Disciples 2, 3
+  Painkiller
+  Painkiller: Battle Out of Hell
+  Painkiller: Overdose
+@ Troll Tale
+@ Stupidella 
+@ Cat Mario
+@ Monst
+@ Невероятные Приключения Трояна 1-3
+@ Failman 
+@ Slap-Man
+@ Geometry Dash
+@ Draw a Stickman: Episode 1, 2
+@ Dark Deception
+@ Pizza Delivery 2
+@ DreadOut Act 1, 2
+@ Cry Of Fear
+@ Slender: The Arrival
+@ Стоп-Гоп 1, 2
+@ Предатор
+  Dark Sector
+  Dishonored
+@ Dishonored - The Knife of Dunwall
+@ Dishonored - The Brigmore Witches
+  The Punisher (2005)
+@ Dead Rising 1
+  Rage
+  Ori and the Blind Forest
+  King’s Bounty. Легенда о рыцаре
+  King’s Bounty. Принцесса в доспехах
+  King’s Bounty. Перекрёстки миров
+  Minecraft
+  Sudeki
+  Jade Empire
+  Darksiders 1, 2
+  Castlevania - Lords of Shadow 1, 2
+  Final Fantasy III Remake
+  Final Fantasy IV Remake
+  Bionic Commando
+  Oceanhorn Monster of Uncharted Seas
+@ Tales from the Borderlands: Episode 1, 2, 3, 4, 5
+@ Mortal Kombat 9, 10
+@ Five Nights in Anime v3
+@ Five Nights at Freddy's 3D
+@ Ziggurat
+@ Vanish
+@ Spooky's House of Jump Scares
+@ One Night at Flumpty's 1, 2
+@ Real Horror Stories
+@ Bad Dream: Butcher
+@ Bad Dream: Graveyard
+@ Bad Dream: Hospital
+@ Bad Dream: Cyclops
+@ Bad Dream: Memories
+@ Bad Dream: Bridge
+@ Fahrenheit
+@ Cube Escape: Harvey's Box
+@ Cube Escape: Seasons
+@ Cube Escape: The Lake
+@ Cube Escape: Arles
+@ Cube Escape: Case 23
+@ Cube Escape: The Mill
+@ Samsara Room
+@ Tormentum - Dark Sorrow
+@ Ryse: Son of Rome
+@ Tesla Effect
+@ Injustice: Gods Among Us
+@ Dungeon Nightmares
+@-Sherlock Holmes: Crimes and Punishments
+@-Battlefield Hardline
+-@L.A. Noire
+-@Dark Souls 2
+-@Watch Dogs
+-@Game of Thrones
+@ Broken Age
+@ Deadpool
+@ Reign Of Kings
+@ Hotline Miami
+@ Hotline Miami 2: Wrong Number
+  Dragon Age: Inquisition
+  Portal 1, 2
+  Silverfall
+  Silverfall: Earth Awakening
+@ Hand Of Fate
+@ Year Walk
+@ Life Is Strange
+  Sleeping Dogs
+  Falling apart
+  Evoland
+  Metro 2033
+  Metro Last Light
+  South Park - The Stick of Truth
+  TimeShift
+  Legend Hand of God
+- Deus Ex Human Revolution
+  Final Fantasy XIII
+@ Nevermind
+@ PuniTy
+@ Dude, Stop
+@ Whack Your Neighbour
+@ Whack Your Boss
+@ Whack Your Ex
+@ Whack Your Teacher
+@ Whack The Thief
+@ McPixel
+@ 60 Seconds!
+@ Bulb Boy
+@ Hotel Remorse
+@ Love Is Strange (DEMO)
+@ Gemini Rue
+@-Blues and Bullets
+@ Fran Bow
+- Sacred Citadel
+  Lost - Via Domus
+@-The Beginner's Guide
+-@Claire
+-@Lucius 2
+  Will Rock
+- AMDM / Алмазный меч, Деревянный меч
+- Victor Vran
+- Syberia
+
+- Final Fantasy IV Remake - The After Years  
+- Heroes of Might and Magic 6  
+- Icewind Dale
+- Магия крови
+- Dead Space
+- Метро 2033
+- Crysis
+- Cold Fear  
+- Вивисектор. Зверь внутри
+- Mirror's Edge
+- BioShock
+- S.T.A.L.K.E.R.: Чистое небо | S.T.A.L.K.E.R.: Clear Sky
+- S.T.A.L.K.E.R.: Зов Припяти | S.T.A.L.K.E.R.: Call of Pripyat
+- Аватар: Легенда о Корре
+- Left 4 Dead 2
+- HellGate: London
+- Mass Effect
+- Bioshock
+- World of Warcraft
+- Risen
+- Loki: Heroes of Mythology
+- Трудно Быть Богом / Hard to Be a God
+
+PS:
+  Final Fantasy 5, 6, 7, 8, 9
+  Breath of Fire 4
+  Resident Evil 3: Nemesis
+  Medal of Honor
+  Harry Potter and the Philosopher’s Stone
+  Harry Potter and the Chamber of Secrets
+  Parasite Eve 1, 2
+  Brigandine
+  Chrono Trigger
+  Front Mission 3
+  Vanguard Bandits
+  Bloody Roar
+@ Galerians
+  The Legend of Dragoon
+  Lunar 2: Eternal Blue Complete
+  Need for Speed: High Stakes
+  Need for Speed: Porsche Unleashed
+  The Simpsons Wrestling
+  Spider-Man
+  Spider-Man 2: Enter Electro
+  Syphon Filter 2
+  Syphon Filter 3
+  Tekken 3
+  Twisted Metal III
+  Worms Armageddon
+  WWF SmackDown! 2: Know Your Role
+  Colin McRae Rally 04
+  Danger Girl
+  X-Men Mutant Academy
+  Delta Force: Urban Warfare
+  Disney's Action Game Featuring Hercules
+  Hogs of War
+  James Bond 007 The world is not enough
+  Disney's Tarzan
+  Gold and Glory: The Road to El Dorado
+  Atlantis: The Lost Empire
+
+- Final Fantasy 1
+- Final Fantasy Tactics
+- V.I.P. with Pam Anderson
+- 007 James Bond -Tomorrow never dies
+- Alone In The Dark
+- The Fifth Element
+- Driver 2
+- Diablo
+- Crash Bandicoot 1, 2, 3
+- Crash Team Racing
+- Twisted Metal 4
+- Blood Omen: Legacy of Kain
+- Legacy of Kain: Soul Reaver
+- Command & Conquer: Red Alert
+- Xena: Warrior Princess
+- The X-Files
+- Tony Hawk's Pro Skater 4
+- Tomb Raider 2:
+- Quake II
+- Pepsiman
+- MediEvil 2
+- The Mummy
+- C-12: Final Resistance
+- Silent Hill
+- SimCity 2000
+
+PS 2:
+  Final Fantasy 10
+
+PS 3:
+@ Heavy Rain
+@ Heavy Rain Chronicles: Episode One - The Taxidermist
+
+Sega:
+- Gargoyles
+@ Theme Park
+- Zero the Kamikaze Squirrel
+- Battletoads
+@ Disney's Aladdin
+  Flintstones, The
+- Jungle Book, The
+- Mickey Mania - Timeless Adventures of Mickey Mouse
+- Ultimate Mortal Kombat 3
+- Battletoads and Double Dragon
+- Weaponlord
+- Golden Axe III
+- Earthworm Jim 1, 2
+- Sonic The Hedgehog 1, 2, 3
+- Prince of Persia
+- Vectorman
+- Robocop Versus The Terminator
+- Comix Zone
+- Desert Strike - Return to the Gulf
+  Tiny Toon Adventures - Acme All-Stars
+- Boogerman
+  Lion King, The
+- Side Pocket
+- Michael Jackson's Moonwalker
+- Dune - The Battle for Arrakis
+- Mortal Kombat 3
+- Shinobi III - Return of the Ninja Master 
+- Warlock
+
+Symbian:
+  Sid Meier's Civilization IV: Defenders of the Gates
+ 
+Android:
+  Prison Escape
+  Flow Free
+  Escape the Room Zombies
+  Monster Dash
+  Jetpack Joyride
+  Sea battle
+  Berzerk Ball 2
+  Escape Ghost Villa
