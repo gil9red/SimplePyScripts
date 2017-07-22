@@ -4,6 +4,8 @@
 __author__ = 'ipetrash'
 
 
+# NOTE: see https://github.com/gil9red/mini_vk_bot
+
 # TODO: обрабатывать не последнее полученное сообщение, а пачку, например 100
 
 from config import LOGIN, PASSWORD
