@@ -19,6 +19,9 @@ if __name__ == '__main__':
     # https://developer.yahoo.com/weather/documentation.html in Condition Codes
     # code = condition['code']
     #
+    # Weather image: http://l.yimg.com/a/i/us/we/52/' + code + '.gif
+    # Example: http://l.yimg.com/a/i/us/we/52/26.gif
+    #
     condition = item['condition']
     print('Current: {temp} °C, {text}'.format(**condition))
     print()
