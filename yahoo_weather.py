@@ -16,8 +16,11 @@ if __name__ == '__main__':
     rs = requests.get(url)
     item = rs.json()['query']['results']['channel']['item']
 
+    # https://developer.yahoo.com/weather/documentation.html in Condition Codes
+    # code = condition['code']
+    #
     condition = item['condition']
-    print('Current: {temp} °C, (text)'.format(**condition))
+    print('Current: {temp} °C, {text}'.format(**condition))
     print()
 
     print('Forecast:')
