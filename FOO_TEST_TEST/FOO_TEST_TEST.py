@@ -4,19 +4,19 @@
 __author__ = 'ipetrash'
 
 
-# url = 'http://opendata.mkrf.ru/opendata/7705851331-register_movies/data-14-structure-3.json'
+# url = 'http://opendata.mkrf.ru/opendata/7705851331-register_movies/data-16-structure-3.json'
 #
 # import requests
-# rs = requests.get(url, stream=True)
-# with open('data-14-structure-3.json', mode='wb') as f:
-#     for chunk in rs.iter_content(chunk_size=1024):
-#         if chunk:
-#             f.write(chunk)
+# rs = requests.get(url)
+#
+# with open('data-16-structure-3.json', mode='wb') as f:
+#     f.write(rs.content)
+
 
 # TODO: append sqlite: https://github.com/gil9red/SimplePyScripts/blob/bd30048f16679789fc366e41ffc57cba71c032c9/games_with_denuvo/common.py
 
 import json
-json_data = json.load(open('data-14-structure-3.json', 'r', encoding='utf-8'))
+json_data = json.load(open('data-16-structure-3.json', 'r', encoding='utf-8'))
 # print(len(json_data))
 # print(json.dumps(json_data[0], indent=4, ensure_ascii=False))
 for film in json_data:
