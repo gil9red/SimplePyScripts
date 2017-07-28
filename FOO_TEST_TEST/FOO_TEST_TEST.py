@@ -13,6 +13,7 @@ __author__ = 'ipetrash'
 #         if chunk:
 #             f.write(chunk)
 
+# TODO: append sqlite: https://github.com/gil9red/SimplePyScripts/blob/bd30048f16679789fc366e41ffc57cba71c032c9/games_with_denuvo/common.py
 
 import json
 json_data = json.load(open('data-14-structure-3.json', 'r', encoding='utf-8'))
