@@ -23,14 +23,3 @@ URL_GIT = 'https://{0}:{1}@github.com/{0}/{2}.git'.format(LOGIN, PASSWORD, NEW_R
 if PROXY:
     import os
     os.environ['http_proxy'] = PROXY
-
-
-def get_repo():
-    # pip install GitPython
-    import git
-
-    try:
-        return git.Repo(REPO_PATH)
-
-    except:
-        return git.Repo.clone_from(URL_GIT, REPO_PATH)

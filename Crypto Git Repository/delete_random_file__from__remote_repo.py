@@ -25,13 +25,12 @@ def get_random_file(repo):
 
 # NOTE: first execute append_to_remote_repo.py
 if __name__ == '__main__':
-    from config import get_repo
-    repo = get_repo()
+    import api
+    repo = api.get_repo()
     print(repo)
     print()
 
-    from print_repo_log import print_log
-    print_log(repo)
+    api.print_log(repo)
     print()
 
     file_name = get_random_file(repo)

@@ -21,13 +21,12 @@ def create_random_file(repo):
 
 
 if __name__ == '__main__':
-    from config import get_repo
-    repo = get_repo()
+    import api
+    repo = api.get_repo()
     print(repo)
     print()
 
-    from print_repo_log import print_log
-    print_log(repo)
+    api.print_log(repo)
     print()
 
     new_file_name = create_random_file(repo)[1]

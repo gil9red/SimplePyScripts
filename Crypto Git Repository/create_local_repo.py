@@ -5,11 +5,10 @@ __author__ = 'ipetrash'
 
 
 if __name__ == '__main__':
-    from config import get_repo
-    repo = get_repo()
+    import api
+    repo = api.get_repo()
 
     print('Repo:', repo)
     print()
 
-    from print_repo_log import print_log
-    print_log(repo)
+    api.print_log(repo)
