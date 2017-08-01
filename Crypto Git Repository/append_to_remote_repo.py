@@ -22,24 +22,20 @@ def create_random_file(repo):
 
 if __name__ == '__main__':
     import api
-    repo = api.get_repo()
+    repo = api.repo
     print(repo)
     print()
 
-    api.print_log(repo)
+    api.print_log()
     print()
 
-    new_file_name = create_random_file(repo)[1]
-    message = 'Create: ' + new_file_name
+    file_name = create_random_file(repo)[1]
+    message = 'Create: ' + file_name
     print(message)
 
-    repo.index.add([new_file_name])
-    # # or:
-    # repo.index.add(['*'])
-    # repo.git.add(new_file_name)
-    # repo.git.add('-A')
+    api.append(file_name)
+    api.commit(message)
 
-    repo.index.commit(message)
-
+    # api.pull()
     # repo.remotes.origin.pull()
-    repo.remotes.origin.push()
+    api.push()

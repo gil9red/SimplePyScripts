@@ -6,9 +6,9 @@ __author__ = 'ipetrash'
 
 if __name__ == '__main__':
     import api
-    repo = api.get_repo()
+    repo = api.repo
 
     print('Repo:', repo)
     print()
 
-    api.print_log(repo)
+    api.print_log()

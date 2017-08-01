@@ -26,21 +26,23 @@ def get_random_file(repo):
 # NOTE: first execute append_to_remote_repo.py
 if __name__ == '__main__':
     import api
-    repo = api.get_repo()
+    repo = api.repo
     print(repo)
     print()
 
-    api.print_log(repo)
+    api.print_log()
     print()
 
-    file_name = get_random_file(repo)
-    if file_name:
+    abs_file_name = get_random_file(repo)
+    if abs_file_name:
         import os
-        file_name = os.path.basename(file_name)
+        file_name = os.path.basename(abs_file_name)
         message = 'Remove: ' + file_name
         print(message)
 
-        repo.index.remove([file_name])
-        repo.index.commit(message)
+        api.remove(file_name)
+        api.commit(message)
 
-        repo.remotes.origin.push()
+        api.push()
+
+        os.remove(abs_file_name)
