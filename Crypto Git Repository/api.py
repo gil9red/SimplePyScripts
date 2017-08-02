@@ -31,9 +31,12 @@ def get_repo():
 repo = get_repo()
 
 
-def print_log():
+def print_log(reverse=False):
     logs = repo.git.log('--pretty=format:%H%x09%an%x09%ad%x09%s').splitlines()
     print('Logs[{}]:'.format(len(logs)))
+
+    if reverse:
+        logs.reverse()
 
     for log in logs:
         print(log)
