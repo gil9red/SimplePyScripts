@@ -6,4 +6,4 @@ __author__ = 'ipetrash'
 
 if __name__ == '__main__':
     import api
-    api.print_log()
+    api.print_log(reverse=True)
