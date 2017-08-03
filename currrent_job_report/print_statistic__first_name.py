@@ -6,20 +6,20 @@ __author__ = 'ipetrash'
 
 """
 Скрипт для анализа популярности имен и выдачи топа из 10 имен.
-Пример:
 
+Пример:
     Total: 384
     Top 10:
-        Дмитрий: 20
-        Александр: 18
-        Елена: 15
-        Евгений: 15
-        Сергей: 14
-        Алексей: 12
-        Ольга: 11
-        Илья: 10
-        Денис: 10
-        Владимир: 9
+        Дмитрий: 20 (5.2%)
+        Александр: 18 (4.7%)
+        Евгений: 15 (3.9%)
+        Елена: 15 (3.9%)
+        Сергей: 14 (3.6%)
+        Алексей: 12 (3.1%)
+        Ольга: 11 (2.9%)
+        Денис: 10 (2.6%)
+        Илья: 10 (2.6%)
+        Владимир: 9 (2.3%)
 
 """
 
@@ -34,7 +34,8 @@ if __name__ == '__main__':
     # Имена описаны как "<Фамилия> <Имя> <Отчество>"
     first_name_list = [report.text.split()[1].strip() for report in root.select('#report .person')]
 
-    print('Total:', len(first_name_list))
+    total = len(first_name_list)
+    print('Total:', total)
 
     print('Top 10:')
     from collections import Counter
@@ -42,4 +43,4 @@ if __name__ == '__main__':
 
     # Сортировка по количеству
     for name, number in sorted(counter.items(), key=lambda x: x[1], reverse=True)[:10]:
-        print('    {}: {}'.format(name, number))
+        print('    {}: {} ({:.1f}%)'.format(name, number, number * 100 / total))
