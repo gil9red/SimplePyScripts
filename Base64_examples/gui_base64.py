@@ -142,7 +142,6 @@ class MainWindow(QWidget):
 
         self.button_direct = QPushButton()
 
-        # TODO: добавить больше кодировок, и лучше не вручную
         self.cb_encoding = QComboBox()
         self.cb_encoding.addItems(STANDART_ENCODINGS)
         self.cb_encoding.setFixedWidth(100)
