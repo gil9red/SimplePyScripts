@@ -23,38 +23,16 @@ def get_random_file(repo):
         return None
 
 
-from config import LOGIN, PASSWORD
-
-# NOTE:
-NEW_REPO = 'Test-Repo'
-
-import os
-REPO_PATH = os.path.abspath(NEW_REPO)
-
-# How use without input login and password:
-# git clone https://username:password@github.com/username/repository.git
-URL_GIT = 'https://{0}:{1}@github.com/{0}/{2}.git'.format(LOGIN, PASSWORD, NEW_REPO)
-
-
-def get_repo():
-    # pip install GitPython
-    import git
-
-    try:
-        return git.Repo(REPO_PATH)
-
-    except:
-        return git.Repo.clone_from(URL_GIT, REPO_PATH)
-
-
-# NOTE: first execute append_to_remote_repo.py
+# NOTE: before execute this, run append_to_remote_repo.py
 if __name__ == '__main__':
+    from common import get_repo
     repo = get_repo()
     print(repo)
     print()
 
     file_name = get_random_file(repo)
     if file_name:
+        import os
         file_name = os.path.basename(file_name)
         message = 'Remove: ' + file_name
         print(message)

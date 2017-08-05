@@ -4,29 +4,6 @@
 __author__ = 'ipetrash'
 
 
-from config import LOGIN, PASSWORD
-
-NEW_REPO = 'Test-Repo'
-
-import os
-REPO_PATH = os.path.abspath(NEW_REPO)
-
-# How use without input login and password:
-# git clone https://username:password@github.com/username/repository.git
-URL_GIT = 'https://{0}:{1}@github.com/{0}/{2}.git'.format(LOGIN, PASSWORD, NEW_REPO)
-
-
-def get_repo():
-    # pip install GitPython
-    import git
-
-    try:
-        return git.Repo(REPO_PATH)
-
-    except:
-        return git.Repo.clone_from(URL_GIT, REPO_PATH)
-
-
 def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0):
     from datetime import timedelta, datetime
     today = datetime.today()
@@ -64,8 +41,10 @@ def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, 
 
 
 if __name__ == '__main__':
+    from common import get_repo
     repo = get_repo()
 
+    import os
     new_file_name = os.path.join(repo.working_tree_dir, 'cycle_file')
 
     while True:

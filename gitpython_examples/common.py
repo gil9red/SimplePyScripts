@@ -4,7 +4,16 @@
 __author__ = 'ipetrash'
 
 
-from config import LOGIN, PASSWORD
+LOGIN = None
+PASSWORD = None
+
+# http://user:password@proxy_host:proxy_port
+PROXY = None
+
+if PROXY:
+    import os
+    os.environ['http_proxy'] = PROXY
+
 
 NEW_REPO = 'Test-Repo'
 
@@ -37,7 +46,3 @@ def print_log(reverse=False):
 
     for log in logs:
         print(log)
-
-
-if __name__ == '__main__':
-    print_log(reverse=True)
