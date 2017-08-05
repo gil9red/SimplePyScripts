@@ -78,5 +78,3 @@ if __name__ == '__main__':
 
         # Every 1 hour
         wait(hours=1)
-
-        print()
