@@ -39,7 +39,10 @@ def upload_image_to_telegraph(file_name_or_url: str) -> str:
 
 if __name__ == '__main__':
     urls = [
+        # Local file name:
         'Visa Test System screenshot communication s8|ettings.png',
+
+        # Urls:
         'https://qph.ec.quoracdn.net/main-qimg-6c945d3d82f6a2d261f45c17099a799f-c',
         'http://newspaper.readthedocs.io/en/latest/_static/newspaper.jpg'
     ]
