@@ -11,7 +11,8 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     from common import get_games
-    games = get_games(filter_by_is_cracked=True, sorted_by_crack_date=True)
+    cracked_games = get_games(filter_by_is_cracked=True, sorted_by_crack_date=True)
+    not_cracked_games = get_games(filter_by_is_cracked=False)
 
     return render_template_string("""
 <!DOCTYPE html>
@@ -40,7 +41,7 @@ def index():
 </head>
 <body>
     <table>
-        <caption><a href="https://en.wikipedia.org/wiki/Denuvo">Список взломанных игр</a><caption>
+        <caption><a href="https://en.wikipedia.org/wiki/Denuvo#List_of_games_using_Denuvo">Список взломанных игр</a><caption>
 
         <colgroup>
             <col span="1" style="width: 5%;">
@@ -48,12 +49,12 @@ def index():
 
         <tbody>
             <tr>
-            {% for header in headers %}
+            {% for header in cracked_headers %}
                 <th>{{ header }}</th>
             {% endfor %}
             </tr>
 
-        {% for name, _, crack_date in games %}
+        {% for name, _, crack_date in cracked_games %}
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ name }}</td>
@@ -69,9 +70,38 @@ def index():
         {% endfor %}
         </tbody>
     </table>
+    
+    <br><br>
+    <hr>
+    <br><br>
+    
+    <table>
+        <caption>Еще не взломали:<caption>
+
+        <colgroup>
+            <col span="1" style="width: 5%;">
+        </colgroup>
+
+        <tbody>
+            <tr>
+            {% for header in not_cracked_headers %}
+                <th>{{ header }}</th>
+            {% endfor %}
+            </tr>
+
+        {% for name, _, _ in not_cracked_games %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
-    """, headers=["№", "Название", "Дата взлома", "Поиск"], games=games)
+    """, cracked_headers=["№", "Название", "Дата взлома", "Поиск"], cracked_games=cracked_games,
+         not_cracked_headers=["№", "Название"], not_cracked_games=not_cracked_games
+    )
 
 
 if __name__ == "__main__":
