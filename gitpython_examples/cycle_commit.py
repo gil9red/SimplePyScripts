@@ -48,33 +48,40 @@ if __name__ == '__main__':
     new_file_name = os.path.join(repo.working_tree_dir, 'cycle_file')
 
     while True:
-        repo.remotes.origin.pull()
+        try:
+            repo.remotes.origin.pull()
 
-        if not os.path.exists(new_file_name):
-            number = 0
-            print(number)
-
-            message = "Start cycle #{}".format(number)
-
-        else:
-            with open(new_file_name, 'r') as f:
-                number = int(f.read())
-                number += 1
-
+            if not os.path.exists(new_file_name):
+                number = 0
                 print(number)
 
-            message = "Cycle commit #{}".format(number)
+                message = "Start cycle #{}".format(number)
 
-        # Обновление значения
-        with open(new_file_name, 'w') as f:
-            f.write(str(number))
+            else:
+                with open(new_file_name, 'r') as f:
+                    number = int(f.read())
+                    number += 1
 
-        print(message)
-        repo.index.add([new_file_name])
-        repo.index.commit(message)
+                    print(number)
 
-        repo.remotes.origin.push()
-        print('Finish push')
+                message = "Cycle commit #{}".format(number)
 
-        # Every 1 hour
-        wait(hours=1)
+            # Обновление значения
+            with open(new_file_name, 'w') as f:
+                f.write(str(number))
+
+            print(message)
+            repo.index.add([new_file_name])
+            repo.index.commit(message)
+
+            repo.remotes.origin.push()
+            print('Finish push')
+
+            # Every 1 hour
+            wait(hours=1)
+
+        except Exception as e:
+            print(e)
+
+            import time
+            time.sleep(30)
