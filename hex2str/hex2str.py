@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-def do(hex_string):
+def hex2str(hex_string):
     char_list = list()
 
     for i in range(0, len(hex_string), 2):
@@ -14,6 +14,8 @@ def do(hex_string):
 
     return ''.join(char_list)
 
+
 if __name__ == '__main__':
-    text = "504F53542068747470733A"
-    print(do(text))
+    hex_text = "504F53542068747470733A"
+    text = hex2str(hex_text)
+    print('"{}"'.format(text))
