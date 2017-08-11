@@ -31,6 +31,7 @@ def show_notification():
     text = request.args.get('text')
     print('text:', text)
 
+    # Run function in new thread
     thread = threading.Thread(target=show, args=(text,))
     thread.start()
 
@@ -41,7 +42,6 @@ if __name__ == '__main__':
     # Localhost
     app.run(
         port=5000,
-        threaded=True,
     )
 
     # # Public IP
