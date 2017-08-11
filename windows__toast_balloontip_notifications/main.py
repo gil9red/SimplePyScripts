@@ -14,6 +14,7 @@ import win32con
 import sys
 import os
 import time
+import uuid
 
 
 class WindowsBalloonTip:
@@ -26,7 +27,9 @@ class WindowsBalloonTip:
         # Register the Window class.
         wc = WNDCLASS()
         hinst = wc.hInstance = GetModuleHandle(None)
-        wc.lpszClassName = "PythonTaskbar"
+
+        # Random class name
+        wc.lpszClassName = str(uuid.uuid1())
         wc.lpfnWndProc = message_map  # could also specify a wndproc.
 
         class_atom = RegisterClass(wc)
