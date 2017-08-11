@@ -67,4 +67,5 @@ class WindowsBalloonTip:
 
 if __name__ == '__main__':
     WindowsBalloonTip.balloon_tip('First', 'My Text!', duration=2)
-    WindowsBalloonTip.balloon_tip('Second', 'My NEW Text!')
+    WindowsBalloonTip.balloon_tip('Second', 'My NEW Text!', duration=3)
+    WindowsBalloonTip.balloon_tip('Three', 'With invalid icons!', icon_path_name='fdfs.ico')
