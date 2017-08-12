@@ -21,16 +21,16 @@ class TimeThis(object):
 
 
 if __name__ == '__main__':
-    with TimeThis() as f:
+    with TimeThis():
         import time
         time.sleep(1)
 
-    with TimeThis("Test") as f:
+    with TimeThis("Test"):
         text = ''
         for i in range(10 ** 6):
             text += str(i)
 
-    with TimeThis("Test") as f:
+    with TimeThis("Test"):
         items = []
         for i in range(10 ** 6):
             items.append(str(i))
