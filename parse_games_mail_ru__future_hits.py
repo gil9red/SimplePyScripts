@@ -34,22 +34,23 @@ def get_game_list():
 if __name__ == '__main__':
     game_list = get_game_list()
 
-    # # Full
-    # for i, (title, description, release_date, url, img_url) in enumerate(game_list, 1):
-    #     print('{:2}. "{}" ({}): {} [{}]\n{}\n'.format(i, title, release_date, url, img_url, description))
+    def print_list(items):
+        for i, (title, description, release_date, url, img_url) in enumerate(items, 1):
+            print('{:2}. "{}" ({}): {} [{}]\n{}\n'.format(i, title, release_date, url, img_url, description))
+
+    # Full
+    print_list(game_list)
 
     # # First 5
-    # for i, (title, description, release_date, url, img_url) in enumerate(game_list[:5], 1):
-    #     print('{:2}. "{}" ({}): {} [{}]\n{}\n'.format(i, title, release_date, url, img_url, description))
-
+    # new_game_list = game_list[:5]
+    # print_list(new_game_list)
+    #
     # # Sorted by title
-    # for i, (title, description, release_date, url, img_url) in enumerate(sorted(game_list, key=lambda x: x[0]), 1):
-    #     print('{:2}. "{}" ({}): {} [{}]\n{}\n'.format(i, title, release_date, url, img_url, description))
+    # new_game_list = sorted(game_list, key=lambda x: x[0])
+    # print_list(new_game_list)
 
-    # Sorted by year
-    import re
-    get_year = lambda text: int(re.search('\d{4}', text).group())
-    game_list = sorted(game_list, key=lambda x: get_year(x[2]))
-
-    for i, (title, description, release_date, url, img_url) in enumerate(game_list, 1):
-        print('{:2}. "{}" ({}): {} [{}]\n{}\n'.format(i, title, release_date, url, img_url, description))
+    # # Sorted by year, reverse
+    # import re
+    # get_year = lambda text: int(re.search('\d{4}', text).group())
+    # new_game_list = sorted(game_list, key=lambda x: get_year(x[2]), reverse=True)
+    # print_list(new_game_list)
