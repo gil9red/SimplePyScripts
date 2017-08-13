@@ -5,9 +5,12 @@ __author__ = 'ipetrash'
 
 
 def search_empty_folders(disk):
-    with open('log of ' + disk[0], mode='w', encoding='utf-8') as f:
+    file_name = 'log of {}.txt'.format(disk[0])
+
+    with open(file_name, mode='w', encoding='utf-8') as f:
         import os
         for root, dirs, files in os.walk(disk):
+            # If dir empty
             if not dirs and not files:
                 f.write(root + '\n')
 
