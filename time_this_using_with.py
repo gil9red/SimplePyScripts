@@ -17,7 +17,7 @@ class TimeThis(object):
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         import time
-        print('[{}]: total time: {} sec'.format(self.title, time.clock() - self.start_time))
+        print('[{}] total time: {} sec'.format(self.title, time.clock() - self.start_time))
 
 
 if __name__ == '__main__':
