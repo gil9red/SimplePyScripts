@@ -41,16 +41,17 @@ class Widget(QWidget):
 
         self.setWindowTitle('hex2str')
 
-        self.button_hex2str = QPushButton('hex2str')
-        self.button_hex2str.clicked.connect(self._on_hex2str)
+        self.radio_button_hex2str = QRadioButton('hex2str')
+        self.radio_button_hex2str.setChecked(True)
 
-        self.button_str2hex = QPushButton('str2hex')
-        self.button_str2hex.clicked.connect(self._on_str2hex)
+        self.radio_button_str2hex = QRadioButton('str2hex')
 
         self.text_edit_input = QPlainTextEdit()
+        self.text_edit_input.textChanged.connect(self._convert)
 
         self.text_edit_output = QPlainTextEdit()
         self.text_edit_output.setReadOnly(True)
+        # self.text_edit_output.selectionChanged.connect(self._on_output_selection_changed)
 
         self.label_error = QLabel()
         self.label_error.setStyleSheet("QLabel { color : red; }")
@@ -67,7 +68,7 @@ class Widget(QWidget):
 
         layout_left_side = QVBoxLayout()
         layout_left_side.setContentsMargins(0, 0, 0, 0)
-        layout_left_side.addWidget(self.button_hex2str)
+        # layout_left_side.addWidget(self.button_hex2str)
         layout_left_side.addWidget(QLabel('Input:'))
         layout_left_side.addWidget(self.text_edit_input)
         left_side = QWidget()
@@ -75,7 +76,7 @@ class Widget(QWidget):
 
         layout_right_side = QVBoxLayout()
         layout_right_side.setContentsMargins(0, 0, 0, 0)
-        layout_right_side.addWidget(self.button_str2hex)
+        # layout_right_side.addWidget(self.button_str2hex)
         layout_right_side.addWidget(QLabel('Output:'))
         layout_right_side.addWidget(self.text_edit_output)
         right_side = QWidget()
@@ -90,11 +91,32 @@ class Widget(QWidget):
         layout_error.addWidget(self.label_error)
         layout_error.addWidget(self.button_detail_error)
 
+        self._button_group = QButtonGroup()
+        self._button_group.addButton(self.radio_button_hex2str)
+        self._button_group.addButton(self.radio_button_str2hex)
+        self._button_group.buttonClicked.connect(self._convert)
+
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(self.radio_button_hex2str)
+        button_layout.addWidget(self.radio_button_str2hex)
+
         layout = QVBoxLayout()
+        layout.addLayout(button_layout)
         layout.addWidget(splitter)
         layout.addLayout(layout_error)
 
         self.setLayout(layout)
+
+    # def _on_input_selection_changed(self):
+    #     cursor = self.text_edit_input.textCursor()
+    #     start = cursor.selectionStart()
+    #     end = cursor.selectionEnd()
+    #     print(start, end, self.text_edit_input.toPlainText()[start: end])
+    #
+    #     # self.text_edit_output.setTextCursor()
+    #
+    # def _on_output_selection_changed(self):
+    #     pass
 
     def show_detail_error_massage(self):
         message = self.last_error_message + '\n\n' + self.last_detail_error_message
@@ -108,7 +130,7 @@ class Widget(QWidget):
 
         mb.exec_()
 
-    def _convert(self, func):
+    def _convert(self):
         self.label_error.clear()
         self.button_detail_error.hide()
 
@@ -116,6 +138,10 @@ class Widget(QWidget):
         self.last_detail_error_message = None
 
         try:
+            # Выбор функции конвертации в зависимости от значения радио-кнопки
+            from hex2str import hex2str, str2hex
+            func = hex2str if self.radio_button_hex2str.isChecked() else str2hex
+
             text = self.text_edit_input.toPlainText()
             text = func(text)
 
@@ -134,14 +160,6 @@ class Widget(QWidget):
             self.button_detail_error.show()
 
             self.label_error.setText('Error: ' + self.last_error_message)
-
-    def _on_hex2str(self):
-        from hex2str import hex2str
-        self._convert(hex2str)
-
-    def _on_str2hex(self):
-        from hex2str import str2hex
-        self._convert(str2hex)
 
 
 if __name__ == '__main__':
