@@ -33,7 +33,6 @@ sys.excepthook = log_uncaught_exceptions
 
 
 # TODO: обоюдное выделеление текста в полях ввода: выделяешь в hex строке выделяется его аналог в тексте и наоборот
-# TODO: конвертирование в обе стороны
 
 
 class Widget(QWidget):
@@ -42,10 +41,16 @@ class Widget(QWidget):
 
         self.setWindowTitle('hex2str')
 
+        self.button_hex2str = QPushButton('hex2str')
+        self.button_hex2str.clicked.connect(self._on_hex2str)
+
+        self.button_str2hex = QPushButton('str2hex')
+        self.button_str2hex.clicked.connect(self._on_str2hex)
+
         self.text_edit_input = QPlainTextEdit()
-        self.text_edit_input.textChanged.connect(self.input_text_changed)
 
         self.text_edit_output = QPlainTextEdit()
+        self.text_edit_output.setReadOnly(True)
 
         self.label_error = QLabel()
         self.label_error.setStyleSheet("QLabel { color : red; }")
@@ -62,6 +67,7 @@ class Widget(QWidget):
 
         layout_left_side = QVBoxLayout()
         layout_left_side.setContentsMargins(0, 0, 0, 0)
+        layout_left_side.addWidget(self.button_hex2str)
         layout_left_side.addWidget(QLabel('Input:'))
         layout_left_side.addWidget(self.text_edit_input)
         left_side = QWidget()
@@ -69,6 +75,7 @@ class Widget(QWidget):
 
         layout_right_side = QVBoxLayout()
         layout_right_side.setContentsMargins(0, 0, 0, 0)
+        layout_right_side.addWidget(self.button_str2hex)
         layout_right_side.addWidget(QLabel('Output:'))
         layout_right_side.addWidget(self.text_edit_output)
         right_side = QWidget()
@@ -101,7 +108,7 @@ class Widget(QWidget):
 
         mb.exec_()
 
-    def input_text_changed(self):
+    def _convert(self, func):
         self.label_error.clear()
         self.button_detail_error.hide()
 
@@ -110,9 +117,7 @@ class Widget(QWidget):
 
         try:
             text = self.text_edit_input.toPlainText()
-
-            from hex2str import hex2str
-            text = hex2str(text)
+            text = func(text)
 
             self.text_edit_output.setPlainText(text)
 
@@ -129,6 +134,14 @@ class Widget(QWidget):
             self.button_detail_error.show()
 
             self.label_error.setText('Error: ' + self.last_error_message)
+
+    def _on_hex2str(self):
+        from hex2str import hex2str
+        self._convert(hex2str)
+
+    def _on_str2hex(self):
+        from hex2str import str2hex
+        self._convert(str2hex)
 
 
 if __name__ == '__main__':
