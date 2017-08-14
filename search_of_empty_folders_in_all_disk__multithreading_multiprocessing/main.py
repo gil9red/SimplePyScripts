@@ -5,14 +5,21 @@ __author__ = 'ipetrash'
 
 
 def search_empty_folders(disk):
-    file_name = 'log of {}.txt'.format(disk[0])
+    disk_letter = disk[0]
+    file_name = 'log of {}.txt'.format(disk_letter)
+
+    import time
+    t = time.clock()
+    print('  Start of ' + disk_letter)
 
     with open(file_name, mode='w', encoding='utf-8') as f:
         import os
         for root, dirs, files in os.walk(disk):
-            # If dir empty
+            # If dir is empty
             if not dirs and not files:
                 f.write(root + '\n')
+
+    print('  Finish "{}"! Elapsed time: {:.3f} secs'.format(disk_letter, time.clock() - t))
 
 
 if __name__ == '__main__':
