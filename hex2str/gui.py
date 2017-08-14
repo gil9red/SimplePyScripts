@@ -40,10 +40,11 @@ class Widget(QWidget):
     def __init__(self):
         super().__init__()
 
-        from os.path import split as path_split
-        self.setWindowTitle(path_split(__file__)[1])
+        self.setWindowTitle('hex2str')
 
         self.text_edit_input = QPlainTextEdit()
+        self.text_edit_input.textChanged.connect(self.input_text_changed)
+
         self.text_edit_output = QPlainTextEdit()
 
         self.label_error = QLabel()
@@ -59,13 +60,24 @@ class Widget(QWidget):
         self.last_error_message = None
         self.last_detail_error_message = None
 
-        self.text_edit_input.textChanged.connect(self.input_text_changed)
-        self.text_edit_input.setPlainText('504F53542068747470733A')
+        layout_left_side = QVBoxLayout()
+        layout_left_side.setContentsMargins(0, 0, 0, 0)
+        layout_left_side.addWidget(QLabel('Input:'))
+        layout_left_side.addWidget(self.text_edit_input)
+        left_side = QWidget()
+        left_side.setLayout(layout_left_side)
+
+        layout_right_side = QVBoxLayout()
+        layout_right_side.setContentsMargins(0, 0, 0, 0)
+        layout_right_side.addWidget(QLabel('Output:'))
+        layout_right_side.addWidget(self.text_edit_output)
+        right_side = QWidget()
+        right_side.setLayout(layout_right_side)
 
         splitter = QSplitter()
         splitter.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        splitter.addWidget(self.text_edit_input)
-        splitter.addWidget(self.text_edit_output)
+        splitter.addWidget(left_side)
+        splitter.addWidget(right_side)
 
         layout_error = QHBoxLayout()
         layout_error.addWidget(self.label_error)
@@ -124,6 +136,7 @@ if __name__ == '__main__':
 
     mw = Widget()
     mw.resize(650, 500)
+    mw.text_edit_input.setPlainText('504F53542068747470733A')
     mw.show()
 
     sys.exit(app.exec_())
