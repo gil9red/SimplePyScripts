@@ -7,6 +7,7 @@ __author__ = 'ipetrash'
 try:
     from PyQt5.QtWidgets import *
     from PyQt5.QtCore import *
+    from PyQt5.QtGui import *
 
 except:
     try:
@@ -32,9 +33,6 @@ import sys
 sys.excepthook = log_uncaught_exceptions
 
 
-# TODO: обоюдное выделеление текста в полях ввода: выделяешь в hex строке выделяется его аналог в тексте и наоборот
-
-
 class Widget(QWidget):
     def __init__(self):
         super().__init__()
@@ -48,10 +46,17 @@ class Widget(QWidget):
 
         self.text_edit_input = QPlainTextEdit()
         self.text_edit_input.textChanged.connect(self._convert)
+        self.text_edit_input.selectionChanged.connect(self._on_input_selection_changed)
 
         self.text_edit_output = QPlainTextEdit()
-        self.text_edit_output.setReadOnly(True)
-        # self.text_edit_output.selectionChanged.connect(self._on_output_selection_changed)
+        self.text_edit_output.selectionChanged.connect(self._on_output_selection_changed)
+
+        # Изменение цвета выделения текста, чтобы при отсутствии фокуса был такой же цвет как при его наличии
+        palette = self.text_edit_input.palette()
+        palette.setColor(QPalette.Inactive, QPalette.Highlight, palette.color(QPalette.Active, QPalette.Highlight))
+        palette.setColor(QPalette.Inactive, QPalette.HighlightedText, palette.color(QPalette.Active, QPalette.HighlightedText))
+        self.text_edit_input.setPalette(palette)
+        self.text_edit_output.setPalette(palette)
 
         self.label_error = QLabel()
         self.label_error.setStyleSheet("QLabel { color : red; }")
@@ -68,7 +73,6 @@ class Widget(QWidget):
 
         layout_left_side = QVBoxLayout()
         layout_left_side.setContentsMargins(0, 0, 0, 0)
-        # layout_left_side.addWidget(self.button_hex2str)
         layout_left_side.addWidget(QLabel('Input:'))
         layout_left_side.addWidget(self.text_edit_input)
         left_side = QWidget()
@@ -76,7 +80,6 @@ class Widget(QWidget):
 
         layout_right_side = QVBoxLayout()
         layout_right_side.setContentsMargins(0, 0, 0, 0)
-        # layout_right_side.addWidget(self.button_str2hex)
         layout_right_side.addWidget(QLabel('Output:'))
         layout_right_side.addWidget(self.text_edit_output)
         right_side = QWidget()
@@ -107,16 +110,67 @@ class Widget(QWidget):
 
         self.setLayout(layout)
 
-    # def _on_input_selection_changed(self):
-    #     cursor = self.text_edit_input.textCursor()
-    #     start = cursor.selectionStart()
-    #     end = cursor.selectionEnd()
-    #     print(start, end, self.text_edit_input.toPlainText()[start: end])
-    #
-    #     # self.text_edit_output.setTextCursor()
-    #
-    # def _on_output_selection_changed(self):
-    #     pass
+    def _on_input_selection_changed(self):
+        try:
+            # Нехорошо будет если второй будет вызывать сигналы, например о выделении текста
+            self.text_edit_output.blockSignals(True)
+
+            cursor = self.text_edit_input.textCursor()
+            if not cursor.hasSelection():
+                cursor_output = self.text_edit_output.textCursor()
+                cursor_output.clearSelection()
+                self.text_edit_output.setTextCursor(cursor_output)
+                return
+
+            start = cursor.selectionStart()
+            end = cursor.selectionEnd()
+
+            # Hex символов в 2 раза больше чем их символьных представлений
+            is_hex2str = self.radio_button_hex2str.isChecked()
+            if is_hex2str:
+                new_start, new_end = start // 2, end // 2
+            else:
+                new_start, new_end = start * 2, end * 2
+
+            cursor_output = self.text_edit_output.textCursor()
+            cursor_output.setPosition(new_start, QTextCursor.MoveAnchor)
+            cursor_output.setPosition(new_end, QTextCursor.KeepAnchor)
+
+            self.text_edit_output.setTextCursor(cursor_output)
+
+        finally:
+            self.text_edit_output.blockSignals(False)
+
+    def _on_output_selection_changed(self):
+        try:
+            # Нехорошо будет если второй будет вызывать сигналы, например о выделении текста
+            self.text_edit_input.blockSignals(True)
+
+            cursor = self.text_edit_output.textCursor()
+            if not cursor.hasSelection():
+                cursor_output = self.text_edit_input.textCursor()
+                cursor_output.clearSelection()
+                self.text_edit_input.setTextCursor(cursor_output)
+                return
+
+            start = cursor.selectionStart()
+            end = cursor.selectionEnd()
+
+            # Hex символов в 2 раза больше чем их символьных представлений
+            is_hex2str = self.radio_button_hex2str.isChecked()
+            if not is_hex2str:
+                new_start, new_end = start // 2, end // 2
+            else:
+                new_start, new_end = start * 2, end * 2
+
+            cursor_output = self.text_edit_input.textCursor()
+            cursor_output.setPosition(new_start, QTextCursor.MoveAnchor)
+            cursor_output.setPosition(new_end, QTextCursor.KeepAnchor)
+
+            self.text_edit_input.setTextCursor(cursor_output)
+
+        finally:
+            self.text_edit_input.blockSignals(False)
 
     def show_detail_error_massage(self):
         message = self.last_error_message + '\n\n' + self.last_detail_error_message
