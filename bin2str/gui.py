@@ -45,9 +45,6 @@ class Widget(QWidget):
         button_str2bin.clicked.connect(self._str2bin)
 
         self.plain_text_bin = QPlainTextEdit()
-        self.plain_text_bin.setPlainText('01001000 01100101 01101100 01101100 01101111 00100000 '
-                                         '01010111 01101111 01110010 01101100 01100100 00100001')
-
         self.plain_text_str = QPlainTextEdit()
 
         h_layout = QHBoxLayout()
@@ -85,6 +82,8 @@ if __name__ == '__main__':
     app = QApplication([])
 
     w = Widget()
+    w.plain_text_bin.setPlainText('01001000 01100101 01101100 01101100 01101111 00100000 '
+                                  '01010111 01101111 01110010 01101100 01100100 00100001')
     w.show()
 
     app.exec()
