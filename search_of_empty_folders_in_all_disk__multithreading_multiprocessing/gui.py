@@ -61,7 +61,7 @@ def sizeof_fmt(num):
     return "%3.1f%s" % (num, 'TB')
 
 
-class Widget(QMainWindow):
+class MainWindow(QMainWindow):
 
     class EmptyFoldersTab(QWidget):
         about_new_text = pyqtSignal(str)
@@ -160,7 +160,7 @@ class Widget(QMainWindow):
         empty_folders_tab_list = []
 
         for file_name in file_name_list:
-            tab = Widget.EmptyFoldersTab()
+            tab = MainWindow.EmptyFoldersTab()
             tab.about_new_text.connect(self.append_log)
 
             empty_folders_tab_list.append((tab, file_name))
@@ -185,7 +185,7 @@ class Widget(QMainWindow):
 if __name__ == '__main__':
     app = QApplication([])
 
-    mw = Widget()
+    mw = MainWindow()
     mw.show()
     mw.resize(800, 600)
 
