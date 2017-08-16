@@ -117,9 +117,16 @@ class EmptyFoldersTab(QWidget):
         msg_box.setDefaultButton(QMessageBox.No)
 
         result = msg_box.exec()
-        if result == QMessageBox.Ok:
-            self.about_new_text.emit('Remove file: "{}"'.format(file_name))
-            os.remove(file_name)
+        if result != QMessageBox.Ok:
+            return
+
+        self.about_new_text.emit('Remove file: "{}"'.format(file_name))
+
+        try:
+            os.rmdir(file_name)
+
+        except PermissionError as e:
+            QMessageBox.critical(None, 'PermissionError', str(e))
 
     def fill(self, file_name):
         self.about_new_text.emit('Start fill: ' + file_name)
