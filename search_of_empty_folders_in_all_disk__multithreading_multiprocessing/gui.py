@@ -52,8 +52,6 @@ class SearchThread(QThread):
             line = line.rstrip()
             self.about_new_text.emit(line)
 
-        print('!!!!!')
-
 
 def sizeof_fmt(num):
     for x in ['bytes', 'KB', 'MB', 'GB']:
