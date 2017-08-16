@@ -4,13 +4,24 @@
 __author__ = 'ipetrash'
 
 
+def sizeof_fmt(num):
+        for x in ['bytes', 'KB', 'MB', 'GB']:
+            if num < 1024.0:
+                return "%3.1f %s" % (num, x)
+            num /= 1024.0
+        return "%3.1f%s" % (num, 'TB')
+
+
 def search_empty_folders(disk):
     disk_letter = disk[0]
     file_name = 'log of {}.txt'.format(disk_letter)
 
     import time
     t = time.clock()
-    print('  Start of ' + disk_letter)
+
+    import shutil
+    usage = shutil.disk_usage(disk)
+    print('  Start of {} ({} free of {})'.format(disk_letter, sizeof_fmt(usage.free), sizeof_fmt(usage.total)))
 
     with open(file_name, mode='w', encoding='utf-8') as f:
         import os
