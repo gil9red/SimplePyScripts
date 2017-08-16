@@ -124,6 +124,7 @@ class EmptyFoldersTab(QWidget):
 
         try:
             os.rmdir(file_name)
+            self.model.removeRow(index.row())
 
         except PermissionError as e:
             QMessageBox.critical(None, 'PermissionError', str(e))
