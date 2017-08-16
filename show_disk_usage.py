@@ -14,6 +14,9 @@ def sizeof_fmt(num):
 
 import shutil
 usage = shutil.disk_usage('C://')
+
+print('{} free of {}'.format(sizeof_fmt(usage.free), sizeof_fmt(usage.total)))
+print()
 print('total: {:>8} ({} bytes)'.format(sizeof_fmt(usage.total), usage.total))
 print('used:  {:>8} ({} bytes)'.format(sizeof_fmt(usage.used), usage.used))
 print('free:  {:>8} ({} bytes)'.format(sizeof_fmt(usage.free), usage.free))
