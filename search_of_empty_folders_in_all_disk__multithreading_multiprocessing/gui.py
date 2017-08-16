@@ -4,6 +4,8 @@
 __author__ = 'ipetrash'
 
 
+# TODO: добавить строку с фильтром
+
 try:
     from PyQt5.QtWidgets import *
     from PyQt5.QtCore import *
@@ -61,41 +63,91 @@ def sizeof_fmt(num):
     return "%3.1f%s" % (num, 'TB')
 
 
+class EmptyFoldersTab(QWidget):
+    about_new_text = pyqtSignal(str)
+
+    def __init__(self):
+        super().__init__()
+
+        self.push_button_show_in_explorer = QPushButton('Show in explorer')
+        self.push_button_show_in_explorer.clicked.connect(self._on_show_in_explorer)
+
+        self.push_button_remove_folder = QPushButton('Remove folder')
+        self.push_button_remove_folder.clicked.connect(self._on_remove_folder)
+
+        self.model = QStringListModel()
+
+        self.view = QListView()
+        self.view.setEditTriggers(QListView.NoEditTriggers)
+        self.view.setAlternatingRowColors(True)
+        self.view.setModel(self.model)
+        self.view.doubleClicked.connect(self._on_show_in_explorer)
+
+        layout_buttons = QHBoxLayout()
+        layout_buttons.addWidget(self.push_button_show_in_explorer)
+        layout_buttons.addWidget(self.push_button_remove_folder)
+
+        layout = QVBoxLayout()
+        layout.addLayout(layout_buttons)
+        layout.addWidget(self.view)
+        self.setLayout(layout)
+
+    def _on_show_in_explorer(self, index=None):
+        if not index:
+            index = self.view.currentIndex()
+            if index is None:
+                return
+
+        file_name = self.model.data(index, Qt.DisplayRole)
+
+        cmd = 'Explorer /n,"{}"'.format(file_name)
+        self.about_new_text.emit('Run command: {}'.format(cmd))
+
+        import os
+        os.system(cmd)
+
+    def _on_remove_folder(self):
+        index = self.view.currentIndex()
+        if index is None:
+            return
+
+        file_name = self.model.data(index, Qt.DisplayRole)
+
+        import os
+        if not os.path.exists(file_name):
+            QMessageBox.information(self, 'Info', 'File "{}" not exists!'.format(file_name))
+
+        msg_box = QMessageBox(QMessageBox.Question, 'Question', 'Remove file: "{}"?'.format(file_name))
+        msg_box.setStandardButtons(QMessageBox.Ok | QMessageBox.No)
+        msg_box.setDefaultButton(QMessageBox.No)
+
+        result = msg_box.exec()
+        if result == QMessageBox.Ok:
+            self.about_new_text.emit('Remove file: "{}"'.format(file_name))
+            os.remove(file_name)
+
+    def fill(self, file_name):
+        self.about_new_text.emit('Start fill: ' + file_name)
+
+        t = time.clock()
+
+        with open(file_name, mode='rb') as f:
+            byte_data = f.read()
+            data = byte_data.decode('utf-8')
+
+        self.about_new_text.emit('Size of "{}": {}'.format(file_name, sizeof_fmt(len(byte_data))))
+
+        line_list = data.splitlines()
+        self.about_new_text.emit('Lines: {}'.format(len(line_list)))
+
+        self.model.setStringList(line_list)
+        if line_list:
+            self.view.setCurrentIndex(self.model.index(0))
+
+        self.about_new_text.emit('Finish fill, elapsed time: {:.3f} secs'.format(time.clock() - t))
+
+
 class MainWindow(QMainWindow):
-
-    class EmptyFoldersTab(QWidget):
-        about_new_text = pyqtSignal(str)
-
-        def __init__(self):
-            super().__init__()
-
-            self.model = QStringListModel()
-
-            self.view = QListView()
-            self.view.setModel(self.model)
-
-            layout = QVBoxLayout()
-            layout.addWidget(self.view)
-            self.setLayout(layout)
-
-        def fill(self, file_name):
-            self.about_new_text.emit('Start fill: ' + file_name)
-
-            t = time.clock()
-
-            with open(file_name, mode='rb') as f:
-                byte_data = f.read()
-                data = byte_data.decode('utf-8')
-
-            self.about_new_text.emit('Size of "{}": {}'.format(file_name, sizeof_fmt(len(byte_data))))
-
-            line_list = data.splitlines()
-            self.about_new_text.emit('Lines: {}'.format(len(line_list)))
-
-            self.model.setStringList(line_list)
-
-            self.about_new_text.emit('Finish fill, elapsed time: {:.3f} secs'.format(time.clock() - t))
-
     def __init__(self):
         super().__init__()
 
@@ -160,7 +212,7 @@ class MainWindow(QMainWindow):
         empty_folders_tab_list = []
 
         for file_name in file_name_list:
-            tab = MainWindow.EmptyFoldersTab()
+            tab = EmptyFoldersTab()
             tab.about_new_text.connect(self.append_log)
 
             empty_folders_tab_list.append((tab, file_name))
