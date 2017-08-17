@@ -176,7 +176,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('search_of_empty_folders')
+        self.setWindowTitle('search_of_empty_folders [{}]'.format(sys.executable))
 
         self.text_edit_log = QTextEdit()
 
