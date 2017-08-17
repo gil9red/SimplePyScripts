@@ -1,8 +1,6 @@
 __author__ = 'ipetrash'
 
 
-# TODO: доделать
-# https://docs.python.org/3.4/library/json.html
 import json
 
 

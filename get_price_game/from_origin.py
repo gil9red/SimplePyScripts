@@ -17,7 +17,6 @@ def get_html(url):
 
             self.html = None
 
-            # TODO: ВНИМАНИЕ! ТУТ КОСТЫЛЬ ДЛЯ https://www.origin.com/rus/ru-ru/search?searchString=
             # Небольшой костыль для получения содержимого страницы сайта
             # https://www.origin.com/rus/ru-ru/search?searchString=
             # Загрузка страницы проходит постепенно -- данные не сразу появляются, поэтому нужно

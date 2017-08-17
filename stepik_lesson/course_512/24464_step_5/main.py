@@ -21,7 +21,7 @@ print(list(itertools.takewhile(lambda x : x <= 31, primes())))
 
 
 def primes():
-    # TODO: костыльно
+    # Костыльно
     n = 100000
 
     # Алгоритм взят из https://habrahabr.ru/post/122538/
