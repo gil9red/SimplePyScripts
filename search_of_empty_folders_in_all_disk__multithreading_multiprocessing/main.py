@@ -5,11 +5,11 @@ __author__ = 'ipetrash'
 
 
 def sizeof_fmt(num):
-        for x in ['bytes', 'KB', 'MB', 'GB']:
-            if num < 1024.0:
-                return "%3.1f %s" % (num, x)
-            num /= 1024.0
-        return "%3.1f%s" % (num, 'TB')
+    for x in ['bytes', 'KB', 'MB', 'GB']:
+        if num < 1024.0:
+            return "%3.1f %s" % (num, x)
+        num /= 1024.0
+    return "%3.1f%s" % (num, 'TB')
 
 
 def search_empty_folders(disk):
@@ -34,10 +34,12 @@ def search_empty_folders(disk):
 
 
 if __name__ == '__main__':
+    print('Start')
+
     import psutil
     disk_list = [disk.device for disk in psutil.disk_partitions() if 'fixed' in disk.opts]
-
-    print('Start')
+    print('  Found ({}): {}'.format(len(disk_list), disk_list))
+    print()
 
     import time
     t = time.clock()
