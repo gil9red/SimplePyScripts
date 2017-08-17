@@ -128,7 +128,7 @@ def get_video_list():
     log.debug('rs: %s', rs)
 
     from bs4 import BeautifulSoup
-    root = BeautifulSoup(rs.content, 'lxml')
+    root = BeautifulSoup(rs.content, 'lxml', from_encoding='utf-8')
 
     video_title_list = [x.text for x in root.select('.yt-lockup-title > a')]
     # log.debug('video_title_list[%s]: %s', len(video_title_list), video_title_list)
@@ -158,8 +158,7 @@ if __name__ == '__main__':
             video_list = get_video_list()
             number_video = len(video_list)
 
-            # log.debug('video list[%s]: %s', number_video, sorted(video_list))
-            log.debug('video list[%s]', number_video)
+            log.debug('video list[%s]: %s', number_video, sorted(video_list))
 
             if number_video > current_number_video:
                 current_number_video = number_video
