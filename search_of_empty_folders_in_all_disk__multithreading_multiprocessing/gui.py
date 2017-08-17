@@ -44,9 +44,9 @@ class SearchThread(QThread):
         # "-u : unbuffered binary stdout and stderr." Иначе, при запуске питона, пока н завершится скрипт
         # данные с stdout и stderr не будут получены
         import sys
-        command = sys.executable + ' -u main.py'
+        command = [sys.executable, '-u', 'main.py']
 
-        self.about_new_text.emit('Execute: "{}"'.format(command))
+        self.about_new_text.emit('Execute: "{}"'.format(' '.join(command)))
 
         from subprocess import Popen, PIPE, STDOUT
         rs = Popen(command, universal_newlines=True, stdout=PIPE, stderr=STDOUT)
@@ -148,7 +148,8 @@ class EmptyFoldersTab(QWidget):
 
         filter_text = self.line_edit_filter.text()
         if filter_text:
-            new_line_list = [line for line in self.line_list if filter_text in line]
+            filter_text = filter_text.lower()
+            new_line_list = [line for line in self.line_list if filter_text in line.lower()]
 
         self.model.setStringList(new_line_list)
 
@@ -214,6 +215,10 @@ class MainWindow(QMainWindow):
         t = time.clock()
 
         self.append_log('Start search')
+
+        # Удаление всех вкладок, кроме главной
+        for i in reversed(range(1, self.tab_widget.count())):
+            self.tab_widget.removeTab(i)
 
         self.push_button_start.setEnabled(False)
 

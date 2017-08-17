@@ -48,10 +48,10 @@ if __name__ == '__main__':
     worker_number = len(disk_list)
 
     # If need use threads
-    # from multiprocessing.dummy import Pool
+    from multiprocessing.dummy import Pool
     #
     # Or:
-    from multiprocessing import Pool
+    # from multiprocessing import Pool
     pool = Pool(worker_number)
 
     results = pool.map(search_empty_folders, disk_list)
