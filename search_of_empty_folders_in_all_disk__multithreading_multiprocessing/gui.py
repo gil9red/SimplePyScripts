@@ -42,7 +42,7 @@ class SearchThread(QThread):
 
     def run(self):
         import sys
-        command = sys.executable + ' main.py'
+        command = sys.executable + ' -u main.py'
 
         self.about_new_text.emit('Execute: "{}"'.format(command))
 
