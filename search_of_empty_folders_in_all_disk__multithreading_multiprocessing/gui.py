@@ -41,6 +41,8 @@ class SearchThread(QThread):
     about_new_text = pyqtSignal(str)
 
     def run(self):
+        # "-u : unbuffered binary stdout and stderr." Иначе, при запуске питона, пока н завершится скрипт
+        # данные с stdout и stderr не будут получены
         import sys
         command = sys.executable + ' -u main.py'
 
