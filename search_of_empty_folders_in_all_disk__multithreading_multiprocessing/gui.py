@@ -4,8 +4,6 @@
 __author__ = 'ipetrash'
 
 
-# TODO: добавить строку с фильтром
-
 try:
     from PyQt5.QtWidgets import *
     from PyQt5.QtCore import *
@@ -64,6 +62,12 @@ class EmptyFoldersTab(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.line_list = None
+
+        self.line_edit_filter = QLineEdit()
+        self.line_edit_filter.setToolTip('Filter')
+        self.line_edit_filter.textEdited.connect(self._reread_list)
+
         self.push_button_show_in_explorer = QPushButton('Show in explorer')
         self.push_button_show_in_explorer.clicked.connect(self._on_show_in_explorer)
 
@@ -82,8 +86,13 @@ class EmptyFoldersTab(QWidget):
         layout_buttons.addWidget(self.push_button_show_in_explorer)
         layout_buttons.addWidget(self.push_button_remove_folder)
 
+        layout_filter = QHBoxLayout()
+        layout_filter.addWidget(QLabel('Search:'))
+        layout_filter.addWidget(self.line_edit_filter)
+
         layout = QVBoxLayout()
         layout.addLayout(layout_buttons)
+        layout.addLayout(layout_filter)
         layout.addWidget(self.view)
         self.setLayout(layout)
 
@@ -129,6 +138,21 @@ class EmptyFoldersTab(QWidget):
         except PermissionError as e:
             QMessageBox.critical(None, 'PermissionError', str(e))
 
+    def _reread_list(self):
+        if not self.line_list:
+            return
+
+        new_line_list = self.line_list
+
+        filter_text = self.line_edit_filter.text()
+        if filter_text:
+            new_line_list = [line for line in self.line_list if filter_text in line]
+
+        self.model.setStringList(new_line_list)
+
+        if new_line_list:
+            self.view.setCurrentIndex(self.model.index(0))
+
     def fill(self, file_name):
         self.about_new_text.emit('Start fill: ' + file_name)
 
@@ -138,14 +162,12 @@ class EmptyFoldersTab(QWidget):
             byte_data = f.read()
             data = byte_data.decode('utf-8')
 
-        self.about_new_text.emit('Size of "{}": {}'.format(file_name, sizeof_fmt(len(byte_data))))
+        self.about_new_text.emit('  Size of "{}": {}'.format(file_name, sizeof_fmt(len(byte_data))))
 
-        line_list = data.splitlines()
-        self.about_new_text.emit('Lines: {}'.format(len(line_list)))
+        self.line_list = data.splitlines()
+        self.about_new_text.emit('  Lines: {}'.format(len(self.line_list)))
 
-        self.model.setStringList(line_list)
-        if line_list:
-            self.view.setCurrentIndex(self.model.index(0))
+        self._reread_list()
 
         self.about_new_text.emit('Finish fill, elapsed time: {:.3f} secs'.format(time.clock() - t))
 
@@ -193,8 +215,12 @@ class MainWindow(QMainWindow):
 
         self.push_button_start.setEnabled(False)
 
+        self.append_log('')
+        self.append_log('  Start thread')
+
         thread = SearchThread()
-        thread.about_new_text.connect(self.append_log)
+        # Отслеживание сообщений от потока и при добавлении в лог дополнительный отступ
+        thread.about_new_text.connect(lambda text: self.append_log('    ' + text))
         thread.start()
 
         # QEventLoop нужен чтобы при запуске потока выполнение кода главного
@@ -203,34 +229,43 @@ class MainWindow(QMainWindow):
         thread.finished.connect(loop.quit)
         loop.exec()
 
+        self.append_log('  Finish thread')
+
         self.append_log('')
 
         import glob
         file_name_list = glob.glob('log of*.txt')
-        self.append_log('Found logs: {}'.format(', '.join(file_name_list)))
+        self.append_log('  Found logs: {}'.format(', '.join(file_name_list)))
 
         self.append_log('')
-        self.append_log('Create tabs')
+        self.append_log('  Create tabs')
 
         empty_folders_tab_list = []
 
         for file_name in file_name_list:
             tab = EmptyFoldersTab()
-            tab.about_new_text.connect(self.append_log)
+            # Отслеживание сообщений от вкладки и при добавлении в лог дополнительный отступ
+            tab.about_new_text.connect(lambda text: self.append_log('    ' + text))
 
             empty_folders_tab_list.append((tab, file_name))
             self.tab_widget.addTab(tab, file_name)
 
-        self.append_log('Finish create tabs')
+            self.append_log('    Create tab "{}"'.format(file_name))
+
+        self.append_log('  Finish create tabs')
 
         self.append_log('')
-        self.append_log('Fill tabs')
+        self.append_log('  Fill tabs')
 
-        for tab, file_name in empty_folders_tab_list:
+        for i, (tab, file_name) in enumerate(empty_folders_tab_list, 1):
             tab.fill(file_name)
-            self.append_log('')
 
-        self.append_log('Finish fill tabs')
+            # Заморочка, чтобы для последнего элемента не печатался пустой лог
+            if i != len(empty_folders_tab_list):
+                self.append_log('')
+
+        self.append_log('  Finish fill tabs')
+        self.append_log('')
 
         self.push_button_start.setEnabled(True)
 
