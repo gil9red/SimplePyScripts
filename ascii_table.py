@@ -9,7 +9,14 @@ def ascii_table(rows):
     headers = rows[0]
     lens = list()
     for i in range(len(rows[0])):
-        lens.append(len(max([x[i] for x in rows] + [headers[i]], key=lambda x: len(str(x)))))
+        lens.append(
+            len(
+                max(
+                    [str(x[i]) for x in rows] + [headers[i]],
+                    key=lambda x: len(str(x))
+                )
+            )
+        )
 
     formats = ["%%-%ds" % col_len for col_len in lens]
 
