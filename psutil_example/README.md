@@ -1,4 +1,4 @@
 psutil
 ===========
 
-RU: Содержит примеры работы с модулем psutil.
+https://github.com/giampaolo/psutil
