@@ -22,7 +22,7 @@ for disk in psutil.disk_partitions():
 
 print()
 print('Disk usage:')
-for disk in psutil.disk_partitions():
+for disk in filter(lambda x: 'fixed' in x.opts,psutil.disk_partitions()):
     info = psutil.disk_usage(disk.device)
     print('  {} {}'.format(disk.device, info))
     print('    {} free of {}'.format(sizeof_fmt(info.free), sizeof_fmt(info.total)))
