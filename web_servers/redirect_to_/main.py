@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.DEBUG)
 def index():
     return render_template_string('''
 <form action="/redirect">
-    <input type="text" name="url" value="http://bash.im/">
+    <input type="url" name="url" value="http://bash.im/">
     <input type="submit" value="Перейти">
 <form>
     ''')
