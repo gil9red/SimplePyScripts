@@ -43,9 +43,9 @@ print('Physical drive io (input/output) counters ({}):'.format(len(physical_driv
 #
 # for drive, info in physical_drive_by_info:
 #     print('  {}: {}'.format(drive, info))
-#
-# OR:
-#
+# #
+# # OR:
+# #
 headers = ('drive',) + physical_drive_by_info[0][1]._fields
 headers = [header.upper() for header in headers]
 
