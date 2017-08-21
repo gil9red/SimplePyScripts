@@ -98,6 +98,11 @@ class JobReportWidget(QWidget):
         self.quit_button.setAutoRaise(True)
         self.quit_button.clicked.connect(QApplication.instance().quit)
 
+        self.hide_button = QToolButton()
+        self.hide_button.setText('Hide')
+        self.hide_button.setAutoRaise(True)
+        self.hide_button.clicked.connect(lambda x=None: self.parent().hide())
+
         self.log = QPlainTextEdit()
         self.log.setWindowTitle("Log")
         self.log.setMaximumBlockCount(500)
@@ -118,7 +123,13 @@ class JobReportWidget(QWidget):
         layout.addLayout(hlayout)
 
         layout.addStretch()
-        layout.addWidget(self.quit_button)
+
+        layout_buttons = QHBoxLayout()
+        layout_buttons.addWidget(self.quit_button)
+        layout_buttons.addStretch()
+        layout_buttons.addWidget(self.hide_button)
+
+        layout.addLayout(layout_buttons)
 
         self.setLayout(layout)
 
