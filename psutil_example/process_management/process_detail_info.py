@@ -8,6 +8,7 @@ __author__ = 'ipetrash'
 
 
 def print_info(pid):
+    # pip install psutil
     import psutil
     process = psutil.Process(pid)
     print('Process:', process)

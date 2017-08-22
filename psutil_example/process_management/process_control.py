@@ -23,6 +23,7 @@ if __name__ == '__main__':
     p.start()
     print(p.pid)
 
+    # pip install psutil
     import psutil
     process = psutil.Process(p.pid)
     print('is_running:', process.is_running())
