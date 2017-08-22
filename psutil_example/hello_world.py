@@ -5,7 +5,5 @@ __author__ = 'ipetrash'
 
 
 # pip install psutil
-
-
 import psutil
 psutil.test()
