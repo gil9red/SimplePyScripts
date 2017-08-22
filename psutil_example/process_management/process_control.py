@@ -28,8 +28,10 @@ if __name__ == '__main__':
     process = psutil.Process(p.pid)
     print('is_running:', process.is_running())
 
-    # from process_detail_info import print_info
-    # print_info(p.pid)
+    print('Info:')
+    from process_detail_info import print_info
+    print_info(p.pid)
+    print('\n')
 
     import time
     time.sleep(4)
