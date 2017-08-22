@@ -46,4 +46,5 @@ if __name__ == '__main__':
     process.terminate()
     print('terminate')
 
-    process.wait(timeout=3)
+    result_code = process.wait(timeout=3)
+    print('result_code:', result_code)
