@@ -33,7 +33,6 @@ def get_logger(name, file='log.txt', encoding='utf-8', log_stdout=True, log_file
     if log_stdout:
         import sys
         sh = logging.StreamHandler(stream=sys.stdout)
-        sh.setLevel(logging.DEBUG)
         sh.setFormatter(formatter)
         log.addHandler(sh)
 
