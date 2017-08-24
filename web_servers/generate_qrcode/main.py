@@ -53,7 +53,6 @@ def index():
         
         <script>
         $(document).ready(function() {
-            // Обработка изменения цены конкретной игры
             $("#form__generate_qrcode").submit(function() {
                 var thisForm = this;
     
