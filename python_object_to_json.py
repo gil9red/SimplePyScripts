@@ -14,14 +14,11 @@ class Object:
 
 
 def object_to_dict(object):
-    fields_from_class = dict(filter(lambda x: not x[0].startswith('_'), object.__class__.__dict__.items()))
-    fields_from_object = dict(filter(lambda x: not x[0].startswith('_'), object.__dict__.items()))
-
     fields = dict()
-    fields.update(fields_from_class)
-    fields.update(fields_from_object)
+    fields.update(object.__class__.__dict__)
+    fields.update(object.__dict__)
 
-    return fields
+    return dict(filter(lambda x: not x[0].startswith('_'), fields.items()))
 
 obj = Object()
 fields = object_to_dict(obj)
