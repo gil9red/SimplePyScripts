@@ -126,7 +126,7 @@ def generate_qrcode():
         return redirect(uri)
 
     if download:
-        return send_from_directory(app.config['UPLOAD_FOLDER'], file_name, as_attachment=True)
+        return send_from_directory(upload_folder, file_name, as_attachment=True)
 
     return jsonify({
         # url_for составляет путь для функции images, которая возвращает картинку с сервера
