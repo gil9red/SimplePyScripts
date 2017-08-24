@@ -75,7 +75,7 @@ def index():
                         
                         $('#img_qrcode').attr('src', data.file_name);
                         $('#url_qrcode').attr('href', data.file_name);
-                        $('#url_qrcode_download').attr('href', data.file_name + '?download=True');
+                        $('#url_qrcode_download').attr('href', data.file_name + '?download');
                         $('#block_qrcode').show();
                     },
                 });
@@ -91,19 +91,25 @@ def index():
 
 @app.route("/generate_qrcode", methods=['GET', 'POST'])
 def generate_qrcode():
+    print('request.args:', request.args)
+    print('request.form:', request.form)
+    print()
+
     text = request.args.get('text', None)
     if not text:
         text = request.form.get('text')
 
-    download = request.args.get('download', False)
-    is_redirect = request.args.get('redirect', None)
+    download = 'download' in request.args
+    is_redirect = 'redirect' in request.args
+    as_image = 'as_image' in request.args
 
     if not text:
         return """\
         Example:<br>
         <a href="/generate_qrcode?text=Hello World!">/generate_qrcode?text=Hello World!<a><br>
-        <a href="/generate_qrcode?text=Hello World!&download=True">/generate_qrcode?text=Hello World!&download=True<a><br>
-        <a href="/generate_qrcode?text=Hello World!&redirect=True">/generate_qrcode?text=Hello World!&redirect=True<a><br>
+        <a href="/generate_qrcode?text=Hello World!&download">/generate_qrcode?text=Hello World!&download<a><br>
+        <a href="/generate_qrcode?text=Hello World!&redirect">/generate_qrcode?text=Hello World!&redirect<a><br>
+        <a href="/generate_qrcode?text=Hello World!&as_image">/generate_qrcode?text=Hello World!&as_image<a>
         """
 
     import hashlib
@@ -123,11 +129,18 @@ def generate_qrcode():
     uri = url_for(upload_folder, file_name=file_name)
 
     if is_redirect:
+        # Вернется ссылка на картинку
         return redirect(uri)
 
+    if as_image:
+        # Вернется картинка
+        return send_from_directory(upload_folder, file_name, as_attachment=False)
+
     if download:
+        # Браузер откроет диалог и предложит скачать файл
         return send_from_directory(upload_folder, file_name, as_attachment=True)
 
+    # Вернется json c ссылкой на картинку
     return jsonify({
         # url_for составляет путь для функции images, которая возвращает картинку с сервера
         'file_name': uri,
@@ -136,7 +149,7 @@ def generate_qrcode():
 
 @app.route('/' + UPLOAD_FOLDER + '/<file_name>')
 def images(file_name):
-    download = request.args.get('download', False)
+    download = 'download' in request.args
     return send_from_directory(app.config['UPLOAD_FOLDER'], file_name, as_attachment=download)
 
 
