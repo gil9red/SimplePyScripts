@@ -104,13 +104,13 @@ def generate_qrcode():
     as_image = 'as_image' in request.args
 
     if not text:
-        return """\
+        return render_template_string("""\
         Example:<br>
-        <a href="/generate_qrcode?text=Hello World!">/generate_qrcode?text=Hello World!<a><br>
-        <a href="/generate_qrcode?text=Hello World!&download">/generate_qrcode?text=Hello World!&download<a><br>
-        <a href="/generate_qrcode?text=Hello World!&redirect">/generate_qrcode?text=Hello World!&redirect<a><br>
-        <a href="/generate_qrcode?text=Hello World!&as_image">/generate_qrcode?text=Hello World!&as_image<a>
-        """
+        <a href="{{ example_uri }}">{{ example_uri }}<a><br>
+        <a href="{{ example_uri }}&download">{{ example_uri }}&download<a><br>
+        <a href="{{ example_uri }}&redirect">{{ example_uri }}&redirect<a><br>
+        <a href="{{ example_uri }}&as_image">{{ example_uri }}&as_image<a>
+        """, example_uri='/generate_qrcode?text=Hello World!')
 
     import hashlib
     algo = hashlib.md5(text.encode())
