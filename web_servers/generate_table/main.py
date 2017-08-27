@@ -33,24 +33,33 @@ def index():
     <title>generate_table</title>
     
     <style>
+        table {
+            border-spacing: 0;
+        }
+        
+        table, th, td {
+           border: solid black 1px;
+        }
+    
         td {
             width: 30px;
+            padding: 5px;
         }
         
         tr:nth-child(1) {
-          background: #cccccc;
+            background: #cccccc;
         }
         tr > td:nth-child(1) {
-          background: #cccccc;
+            background: #cccccc;
         }
         tr:nth-child(1) > td:nth-child(1) {
-          background: #ffffff;
+            background: #ffffff;
         }
         
     </style>
 </head>
 <body>
-    <table cellspacing="0" border="1" cellpadding="5">
+    <table>
         <tbody>
             {% for row in items %}
             <tr>
