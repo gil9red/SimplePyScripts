@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/")
 def index():
-    N = 40
+    N = 33
     items = [[str(i) for i in range(N + 1)]]
 
     for i in range(1, N + 1):
@@ -34,14 +34,17 @@ def index():
     
     <style>
         td {
-            width: 25px;
+            width: 30px;
         }
         
         tr:nth-child(1) {
           background: #cccccc;
         }
-        tr td:nth-child(1) {
+        tr > td:nth-child(1) {
           background: #cccccc;
+        }
+        tr:nth-child(1) > td:nth-child(1) {
+          background: #ffffff;
         }
         
     </style>
