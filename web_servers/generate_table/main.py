@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/")
 def index():
-    N = 33
+    N = 20
     items = [[str(i) for i in range(N + 1)]]
 
     for i in range(1, N + 1):
