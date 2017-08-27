@@ -24,6 +24,7 @@ for tag, value in tags.items():
     try:
         if value.field_type == 1:
             try:
+                # If last 2 items equals [0, 0]
                 if value.values[-2:] == [0, 0]:
                     value = bytes(value.values[:-2]).decode('utf-16')
                 else:
