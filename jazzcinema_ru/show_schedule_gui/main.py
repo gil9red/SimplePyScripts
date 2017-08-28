@@ -183,7 +183,7 @@ class SchedulerMoviePage(QWidget):
         layout.addWidget(splitter)
         self.setLayout(layout)
 
-        # Получение фильмов в текущей вкладке (по идеи, текущая вкладка -- текущий день)
+        # Получение фильмов в текущей вкладке (в каждой вкладке будет свой список фильмов на день)
         for border in schedule.select('.border'):
             movie = Movie(border)
 
@@ -230,21 +230,6 @@ class MainWindow(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication([])
-
-    # movie = None
-    # with urlopen(URL) as f:
-    #     root = BeautifulSoup(f.read(), 'lxml')
-    #
-    #     # Список расписаний
-    #     schedule = root.select('.schedule')[1]
-    #     print(schedule)
-    #
-    #     border = schedule.select('.border')[0]
-    #     movie = Movie(border)
-    #
-    # movie_info = MovieInfoWidget()
-    # movie_info.show()
-    # movie_info.set_movie(movie)
 
     mw = MainWindow()
     mw.resize(900, 500)
