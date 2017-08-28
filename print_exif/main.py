@@ -18,6 +18,7 @@ if not tags:
 
 print('Tags ({}):'.format(len(tags)))
 
+tags_by_value = dict()
 categories_by_tag = dict()
 
 for tag, value in tags.items():
@@ -44,6 +45,7 @@ for tag, value in tags.items():
             import base64
             value = base64.b64encode(value).decode()
 
+    tags_by_value[tag] = value
     print('  "{}": {}'.format(tag, value))
 
     # Fill categories_by_tag
@@ -62,4 +64,5 @@ for tag, value in tags.items():
 print('\n')
 print('CATEGORIES_BY_TAG:')
 import json
+print(json.dumps(tags_by_value, sort_keys=True, ensure_ascii=False, indent=4))
 print(json.dumps(categories_by_tag, sort_keys=True, ensure_ascii=False, indent=4))
