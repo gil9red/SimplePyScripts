@@ -8,6 +8,7 @@ __author__ = 'ipetrash'
 f = open('exif_this.jpg', mode='rb')
 
 # Return Exif tags
+# pip install exifread
 import exifread
 tags = exifread.process_file(f)
 
