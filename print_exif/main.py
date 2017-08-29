@@ -69,7 +69,6 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
 
 
 if __name__ == '__main__':
-
     import json
     print('TAGS_BY_VALUE:')
     f = open('exif_this.jpg', mode='rb')
