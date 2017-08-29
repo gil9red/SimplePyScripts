@@ -4,65 +4,116 @@
 __author__ = 'ipetrash'
 
 
-# Open image file for reading (binary mode)
-f = open('exif_this.jpg', mode='rb')
+def get_exif_tags(file_object_or_file_name, as_category=True):
+    if type(file_object_or_file_name) == str:
+        # Open image file for reading (binary mode)
+        file_object_or_file_name = open(file_object_or_file_name, mode='rb')
 
-# Return Exif tags
-# pip install exifread
-import exifread
-tags = exifread.process_file(f)
+    # Return Exif tags
+    # pip install exifread
+    import exifread
+    tags = exifread.process_file(file_object_or_file_name)
+    tags_by_value = dict()
 
-if not tags:
-    print('Not tags')
-    quit()
+    if not tags:
+        print('Not tags')
+        return tags_by_value
 
-print('Tags ({}):'.format(len(tags)))
+    print('Tags ({}):'.format(len(tags)))
 
-tags_by_value = dict()
-categories_by_tag = dict()
+    for tag, value in tags.items():
+        # Process value
+        try:
+            if value.field_type == 1:
+                try:
+                    # If last 2 items equals [0, 0]
+                    if value.values[-2:] == [0, 0]:
+                        value = bytes(value.values[:-2]).decode('utf-16')
+                    else:
+                        value = bytes(value.values).decode('utf-16')
 
-for tag, value in tags.items():
-    # Process value
-    try:
-        if value.field_type == 1:
-            try:
-                # If last 2 items equals [0, 0]
-                if value.values[-2:] == [0, 0]:
-                    value = bytes(value.values[:-2]).decode('utf-16')
-                else:
-                    value = bytes(value.values).decode('utf-16')
+                except:
+                    value = str(value.values)
+            else:
+                value = value.printable
 
-            except:
-                value = str(value.values)
+            value = value.strip()
+
+        except:
+            # Example tag JPEGThumbnail
+            if type(value) == bytes:
+                import base64
+                value = base64.b64encode(value).decode()
+
+        print('  "{}": {}'.format(tag, value))
+
+        if not as_category:
+            tags_by_value[tag] = value
+
         else:
-            value = value.printable
+            # Fill categories_by_tag
+            if ' ' in tag:
+                category, sub_tag = tag.split(' ')
 
-        value = value.strip()
+                if category not in tags_by_value:
+                    tags_by_value[category] = dict()
 
-    except:
-        # Example tag JPEGThumbnail
-        if type(value) == bytes:
-            import base64
-            value = base64.b64encode(value).decode()
+                tags_by_value[category][sub_tag] = value
 
-    tags_by_value[tag] = value
-    print('  "{}": {}'.format(tag, value))
+            else:
+                tags_by_value[tag] = value
 
-    # Fill categories_by_tag
-    if ' ' in tag:
-        category, sub_tag = tag.split(' ')
+    print()
 
-        if category not in categories_by_tag:
-            categories_by_tag[category] = dict()
-
-        categories_by_tag[category][sub_tag] = value
-
-    else:
-        categories_by_tag[tag] = value
+    return tags_by_value
 
 
-print('\n')
-print('CATEGORIES_BY_TAG:')
-import json
-print(json.dumps(tags_by_value, sort_keys=True, ensure_ascii=False, indent=4))
-print(json.dumps(categories_by_tag, sort_keys=True, ensure_ascii=False, indent=4))
+if __name__ == '__main__':
+
+    import json
+    print('TAGS_BY_VALUE:')
+    f = open('exif_this.jpg', mode='rb')
+    tags_by_value = get_exif_tags(f, as_category=False)
+    print(json.dumps(tags_by_value, sort_keys=True, ensure_ascii=False, indent=4))
+    #
+    # tags_by_value:
+    # {
+    #     "EXIF ExposureProgram": "Portrait Mode",
+    #     "EXIF Padding": "[]",
+    #     "Image Artist": "gil9red",
+    #     "Image ExifOffset": "2202",
+    #     "Image ImageDescription": "print_exif",
+    #     "Image Make": "gil9red",
+    #     "Image Padding": "[]",
+    #     "Image XPAuthor": "gil9red",
+    #     "Image XPComment": "https://github.com/gil9red/SimplePyScripts",
+    #     "Image XPKeywords": "python;exif;example;питон",
+    #     "Image XPSubject": "python, exif, example",
+    #     "Image XPTitle": "print_exif"
+    # }
+
+    print('\n\n')
+    print('CATEGORIES_BY_TAG:')
+    f = open('exif_this.jpg', mode='rb')
+    categories_by_tag = get_exif_tags(f)
+    print(json.dumps(categories_by_tag, sort_keys=True, ensure_ascii=False, indent=4))
+    #
+    # categories_by_tag:
+    # {
+    #     "EXIF": {
+    #         "ExposureProgram": "Portrait Mode",
+    #         "Padding": "[]"
+    #     },
+    #     "Image": {
+    #         "Artist": "gil9red",
+    #         "ExifOffset": "2202",
+    #         "ImageDescription": "print_exif",
+    #         "Make": "gil9red",
+    #         "Padding": "[]",
+    #         "XPAuthor": "gil9red",
+    #         "XPComment": "https://github.com/gil9red/SimplePyScripts",
+    #         "XPKeywords": "python;exif;example;питон",
+    #         "XPSubject": "python, exif, example",
+    #         "XPTitle": "print_exif"
+    #     }
+    # }
