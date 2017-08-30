@@ -13,12 +13,14 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/")
 def index():
-    return render_template_string('''
+    return render_template_string('''\
+<a href="{{ example }}">{{ example }}</a><br><br>
+    
 <form action="/redirect">
     <input type="url" name="url" value="http://bash.im/">
     <input type="submit" value="Перейти">
 <form>
-    ''')
+    ''', example='/redirect?url=http://bash.im/')
 
 
 @app.route('/redirect')
