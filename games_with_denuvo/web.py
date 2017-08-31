@@ -12,7 +12,7 @@ app = Flask(__name__)
 def index():
     from common import get_games
     cracked_games = get_games(filter_by_is_cracked=True, sorted_by_crack_date=True)
-    not_cracked_games = get_games(filter_by_is_cracked=False)
+    not_cracked_games = get_games(filter_by_is_cracked=False, sorted_by_append_date=True)
 
     return render_template_string("""
 <!DOCTYPE html>
@@ -54,7 +54,7 @@ def index():
             {% endfor %}
             </tr>
 
-        {% for name, _, crack_date in cracked_games %}
+        {% for name, _, _, crack_date in cracked_games %}
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ name }}</td>
@@ -89,10 +89,11 @@ def index():
             {% endfor %}
             </tr>
 
-        {% for name, _, _ in not_cracked_games %}
+        {% for name, _, append_date, _ in not_cracked_games %}
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ name }}</td>
+                <td>{{ append_date }}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -100,7 +101,7 @@ def index():
 </body>
 </html>
     """, cracked_headers=["№", "Название", "Дата взлома", "Поиск"], cracked_games=cracked_games,
-         not_cracked_headers=["№", "Название"], not_cracked_games=not_cracked_games
+         not_cracked_headers=["№", "Название", "Дата добавления"], not_cracked_games=not_cracked_games
     )
 
 

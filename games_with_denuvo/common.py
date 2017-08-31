@@ -4,14 +4,20 @@
 __author__ = 'ipetrash'
 
 
-# При выводе юникодных символов в консоль винды
-# Возможно, не только для винды, но и для любой платформы стоит использовать
-# эту настройку -- мало какие проблемы могут встретиться
-import sys
-if sys.platform == 'win32':
-    import codecs
-    sys.stdout = codecs.getwriter(sys.stdout.encoding)(sys.stdout.detach(), 'backslashreplace')
-    sys.stderr = codecs.getwriter(sys.stderr.encoding)(sys.stderr.detach(), 'backslashreplace')
+# # При выводе юникодных символов в консоль винды
+# # Возможно, не только для винды, но и для любой платформы стоит использовать
+# # эту настройку -- мало какие проблемы могут встретиться
+# import sys
+# if sys.platform == 'win32':
+#     import codecs
+#
+#     try:
+#         sys.stdout = codecs.getwriter(sys.stdout.encoding)(sys.stdout.detach(), 'backslashreplace')
+#         sys.stderr = codecs.getwriter(sys.stderr.encoding)(sys.stderr.detach(), 'backslashreplace')
+#
+#     except AttributeError:
+#         # ignore "AttributeError: '_io.BufferedWriter' object has no attribute 'encoding'"
+#         pass
 
 
 from config import *
@@ -40,6 +46,7 @@ def get_logger(name, file='log.txt', encoding='utf-8', log_stdout=True, log_file
 
 
 DEBUG = False
+# DEBUG = True
 
 
 if DEBUG:
@@ -97,6 +104,8 @@ def init_db():
                 id INTEGER PRIMARY KEY,
                 name TEXT NOT NULL,
                 is_cracked BOOLEAN NOT NULL,
+                
+                append_date TIMESTAMP DEFAULT NULL,
                 crack_date TIMESTAMP DEFAULT NULL,
 
                 CONSTRAINT name_unique UNIQUE (name)
@@ -111,12 +120,14 @@ def init_db():
         #         id INTEGER PRIMARY KEY,
         #         name TEXT NOT NULL,
         #         is_cracked BOOLEAN NOT NULL,
+        #
+        #         append_date TIMESTAMP DEFAULT NULL,
         #         crack_date TIMESTAMP DEFAULT NULL,
         #
         #         CONSTRAINT name_unique UNIQUE (name)
         #     );
         #
-        #     INSERT INTO Game2 SELECT id, name, is_cracked, date('now') FROM Game;
+        #     INSERT INTO Game2 SELECT id, name, is_cracked, date('now'), crack_date FROM Game;
         #
         #     DROP TABLE Game;
         #     ALTER TABLE Game2 RENAME TO Game;
@@ -138,7 +149,7 @@ def append_list_games(games: [(str, bool)], notified_by_sms=True):
             return False
 
         log.debug('Добавляю "%s" (%s)', name, is_cracked)
-        connect.execute("INSERT OR IGNORE INTO Game (name, is_cracked) VALUES (?,?)", (name, is_cracked))
+        connect.execute("INSERT OR IGNORE INTO Game (name, is_cracked, append_date) VALUES (?, ?, date('now'))", (name, is_cracked))
 
         # Если добавлена уже взломанная игра, указываем дату
         if is_cracked:
@@ -182,7 +193,8 @@ def append_list_games(games: [(str, bool)], notified_by_sms=True):
         connect.close()
 
 
-def get_games(filter_by_is_cracked=None, sorted_by_name=True, sorted_by_crack_date=False) -> [(str, bool, str)]:
+def get_games(filter_by_is_cracked=None, sorted_by_name=True,
+              sorted_by_crack_date=False, sorted_by_append_date=False) -> [(str, bool, str, str)]:
     """
     Функция возвращает из базы список вида:
         [('Abzû2', 1, '2017-07-02'), ('Adrift', 1, '2017-07-02'), ('Agents of Mayhem', 0, None), ...
@@ -212,15 +224,18 @@ def get_games(filter_by_is_cracked=None, sorted_by_name=True, sorted_by_crack_da
         # среди тех игр, у которых crack_date одинаковый
         sort = ' order by crack_date desc, name asc'
 
+    if sorted_by_append_date:
+        sort = ' order by append_date desc, name asc'
+
     try:
         if filter_by_is_cracked is None:
-            sql = "SELECT name, is_cracked, crack_date FROM Game" + sort
+            sql = "SELECT name, is_cracked, append_date, crack_date FROM Game" + sort
             log.debug('sql: %s', sql)
 
             items = connect.execute(sql).fetchall()
 
         else:
-            sql = "SELECT name, is_cracked, crack_date FROM Game WHERE is_cracked = ?" + sort
+            sql = "SELECT name, is_cracked, append_date, crack_date FROM Game WHERE is_cracked = ?" + sort
             log.debug('sql: %s', sql)
 
             items = connect.execute(sql, (filter_by_is_cracked,)).fetchall()
@@ -240,10 +255,13 @@ if __name__ == '__main__':
     print('Games:', len(games), games)
 
     games = get_games(filter_by_is_cracked=True)
-    print('Cracked:', len(games), [name for name, _, _ in games])
+    print('Cracked:', len(games), [name for name, _, _, _ in games])
 
     games = get_games(filter_by_is_cracked=False)
-    print('Not cracked:', len(games), [name for name, _, _ in games])
+    print('Not cracked:', len(games), [name for name, _, _, _ in games])
 
     games = get_games(filter_by_is_cracked=True, sorted_by_crack_date=True)
-    print('Cracked and sorted:', len(games), [name for name, _, _ in games])
+    print('Cracked and sorted:', len(games), [name for name, _, _, _ in games])
+
+    games = get_games(filter_by_is_cracked=False, sorted_by_append_date=True)
+    print('Not cracked and sorted by append:', len(games), [name for name, _, _, _ in games])
