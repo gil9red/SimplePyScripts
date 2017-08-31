@@ -197,13 +197,14 @@ def get_games(filter_by_is_cracked=None, sorted_by_name=True,
               sorted_by_crack_date=False, sorted_by_append_date=False) -> [(str, bool, str, str)]:
     """
     Функция возвращает из базы список вида:
-        [('Abzû2', 1, '2017-07-02'), ('Adrift', 1, '2017-07-02'), ('Agents of Mayhem', 0, None), ...
+        [('Abzû', 1, '2017-07-02', '2017-07-02'), ('Adrift', 1, '2017-07-02', '2017-07-02'), ...
 
     :param filter_by_is_cracked: определяет нужно ли фильтровать по полю is_cracked. Если filter_by_is_cracked = None,
     фильтр не используется, иначе фильтрация будет по значению в filter_by_is_cracked
 
     :param sorted_by_name: использовать ли сортировку по названию игры
     :param sorted_by_crack_date: использовать ли сортировку по crack_date
+    :param sorted_by_append_date: использовать ли сортировку по append_date
     :return:
     """
 
@@ -214,31 +215,29 @@ def get_games(filter_by_is_cracked=None, sorted_by_name=True,
 
     sort = ''
     if sorted_by_name:
-        sort = ' order by name'
+        sort = ' ORDER BY name'
 
     if sorted_by_crack_date:
         # # Обратный порядок, чтобы первым в списке были самые новые
-        # sort = ' order by crack_date desc'
+        # sort = ' ORDER BY crack_date DESC'
 
         # NOTE: идея такая: сначала сортировка по дате, а после сортировка по имени
         # среди тех игр, у которых crack_date одинаковый
-        sort = ' order by crack_date desc, name asc'
+        sort = ' ORDER BY crack_date DESC, name ASC'
 
     if sorted_by_append_date:
-        sort = ' order by append_date desc, name asc'
+        sort = ' ORDER BY append_date DESC, name ASC'
 
     try:
-        if filter_by_is_cracked is None:
-            sql = "SELECT name, is_cracked, append_date, crack_date FROM Game" + sort
-            log.debug('sql: %s', sql)
+        sql = "SELECT name, is_cracked, append_date, crack_date FROM Game"
 
-            items = connect.execute(sql).fetchall()
+        if filter_by_is_cracked is not None:
+            sql += ' WHERE is_cracked = ' + str(int(filter_by_is_cracked))
 
-        else:
-            sql = "SELECT name, is_cracked, append_date, crack_date FROM Game WHERE is_cracked = ?" + sort
-            log.debug('sql: %s', sql)
+        sql += sort
 
-            items = connect.execute(sql, (filter_by_is_cracked,)).fetchall()
+        log.debug('sql: %s', sql)
+        items = connect.execute(sql).fetchall()
 
         log.debug('Finish get_games: items[%s]: %s', len(items), items)
 
