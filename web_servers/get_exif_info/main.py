@@ -69,19 +69,158 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
     return tags_by_value
 
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template_string, redirect, request
 app = Flask(__name__)
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
 
-@app.route("/")
+@app.route('/')
 def index():
-    # Open image file for reading (binary mode)
-    f = open('exif_this.jpg', mode='rb')
+    return render_template_string('''\
+<html>
+    <head>
+        <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+        <title>get_size_upload_file</title>
 
-    categories_by_tag = get_exif_tags(f)
+        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+        
+        <style>
+            /* 
+                https://stackoverflow.com/a/7220510/5909792
+                FOR function syntaxHighlight
+            */
+            pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; white-space:pre-wrap; }
+            .string { color: green; }
+            .number { color: darkorange; }
+            .boolean { color: blue; }
+            .null { color: magenta; }
+            .key { color: red; }
+        </style>
+        
+    </head>
+    <body>
+        <br>
+        <form class="form__upload_file" action="/get_exif" method="post" enctype="multipart/form-data">
+            <p>Узнайте EXIF у JPG:</p>
+            <p><input type="file" name="file"></p>
+            <p><input type="submit"></p>
+        </form>
+
+        <div class="block progress" style="display: none">
+            <p>Пожалуйста, подождите, файл загружаются.</p>
+            <progress class="progress upload" max="100" value="0"></progress>
+        </div>
+
+        <br><br>
+        
+        <div class="exif show" style="display: none"></div>
+
+        <script>
+        $(document).ready(function() {
+            function progress(e) {
+                if(e.lengthComputable) {
+                    var max = e.total;
+                    var current = e.loaded;
+
+                    var percentage = (current * 100) / max;
+                    console.log(percentage);
+                    $('.progress.upload').val(percentage);
+                }  
+            }
+
+            // https://stackoverflow.com/a/7220510/5909792
+            function syntaxHighlight(json) {
+                json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                    var cls = 'number';
+                    if (/^"/.test(match)) {
+                        if (/:$/.test(match)) {
+                            cls = 'key';
+                        } else {
+                            cls = 'string';
+                        }
+                    } else if (/true|false/.test(match)) {
+                        cls = 'boolean';
+                    } else if (/null/.test(match)) {
+                        cls = 'null';
+                    }
+                    return '<span class="' + cls + '">' + match + '</span>';
+                });
+            }
+
+            $(".form__upload_file").submit(function() {
+                $('.block.progress').show();
+                $('.exif.show').hide();
+
+                var thisForm = this;
+
+                var url = $(this).attr("action");
+                var method = $(this).attr("method");
+                if (method === undefined) {
+                    method = "get";
+                }
+
+                // var data = $(this).serialize();
+                //
+                // For send file object:
+                var input = $(".form__upload_file > input[type=file]");
+                var data = new FormData(thisForm);
+
+                $.ajax({
+                    url: url,
+                    method: method,  // HTTP метод, по умолчанию GET
+                    data: data,
+                    dataType: "json",  // тип данных загружаемых с сервера
+
+                    // Без этих опций неудастся передать файл
+                    processData: false,
+                    contentType: false,
+
+                    xhr: function() {
+                        var myXhr = $.ajaxSettings.xhr();
+                        if (myXhr.upload) {
+                            myXhr.upload.addEventListener('progress', progress, false);
+                        }
+
+                        return myXhr;
+                    },
+                    cache:false,
+
+                    success: function(data) {
+                        console.log(data);
+                        $('.block.progress').hide();
+                        
+                        var json_str = JSON.stringify(data, undefined, 4);
+                        console.log(json_str);
+                        
+                        json_str = syntaxHighlight(json_str);
+
+                        $('.exif.show').html('<pre>' + json_str + '</pre>');
+                        $('.exif.show').show();
+                    },
+                });
+
+                return false;
+            });
+        });
+        </script>
+    </body>
+</html>
+''')
+
+
+@app.route("/get_exif", methods=['POST'])
+def get_exif():
+    print(request.files)
+
+    # check if the post request has the file part
+    if 'file' not in request.files:
+        return redirect('/')
+
+    file = request.files['file']
+    categories_by_tag = get_exif_tags(file.stream)
     return jsonify(categories_by_tag)
 
 
