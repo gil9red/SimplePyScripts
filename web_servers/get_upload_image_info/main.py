@@ -107,6 +107,7 @@ def sizeof_fmt(num):
 
 from flask import Flask, jsonify, render_template_string, redirect, request
 app = Flask(__name__)
+app.config['JSON_SORT_KEYS'] = False
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
@@ -267,18 +268,34 @@ def get_info():
     from PIL import Image
     img = Image.open(io.BytesIO(file_data))
 
-    return jsonify({
-        'exif': exif,
-        'img_base64': img_base64,
-        'length': {
-            'value': length,
-            'text': sizeof_fmt(length),
-        },
-        'size': {
-            'width': img.width,
-            'height': img.height,
-        },
-    })
+    # info = {
+    #     'exif': exif,
+    #     'img_base64': img_base64,
+    #     'length': {
+    #         'value': length,
+    #         'text': sizeof_fmt(length),
+    #     },
+    #     'size': {
+    #         'width': img.width,
+    #         'height': img.height,
+    #     },
+    # }
+
+    # Save order
+    from collections import OrderedDict
+    info = OrderedDict()
+    info['length'] = OrderedDict()
+    info['length']['value'] = length
+    info['length']['text'] = sizeof_fmt(length)
+
+    info['size'] = OrderedDict()
+    info['size']['width'] = img.width
+    info['size']['height'] = img.height
+
+    info['exif'] = exif
+    info['img_base64'] = img_base64
+
+    return jsonify(info)
 
 
 if __name__ == '__main__':
