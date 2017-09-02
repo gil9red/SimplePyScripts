@@ -104,7 +104,7 @@ def index():
         <br>
         <form class="form__upload_file" action="/get_exif" method="post" enctype="multipart/form-data">
             <p>Узнайте EXIF у JPG:</p>
-            <p><input type="file" name="file" accept=".jpg, .jpeg,></p>
+            <p><input type="file" name="file" accept=".jpg, .jpeg,"></p>
             <p><input type="submit"></p>
         </form>
 
