@@ -82,7 +82,7 @@ def index():
 <html>
     <head>
         <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
-        <title>get_size_upload_file</title>
+        <title>get_exif_info</title>
 
         <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
         
