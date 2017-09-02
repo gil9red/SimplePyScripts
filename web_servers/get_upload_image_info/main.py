@@ -137,7 +137,6 @@ def index():
         
     </head>
     <body>
-        <br>
         <form class="form__upload_file" action="/get_info" method="post" enctype="multipart/form-data">
             <p>get_upload_image_info:</p>
             <p><input type="file" name="file" accept=".jpg, .jpeg,"></p>
