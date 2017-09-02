@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 def img_to_base64_html(file_name_or_bytes):
     if type(file_name_or_bytes) == str:
-        with open(file_name, mode='rb') as f:
+        with open(file_name_or_bytes, mode='rb') as f:
             img_bytes = f.read()
 
     else:
