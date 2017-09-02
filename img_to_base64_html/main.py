@@ -4,13 +4,18 @@
 __author__ = 'ipetrash'
 
 
-def img_to_base64_html(file_name_or_bytes):
-    if type(file_name_or_bytes) == str:
-        with open(file_name_or_bytes, mode='rb') as f:
+def img_to_base64_html(file_name__or__bytes__or__file_object):
+    arg = file_name__or__bytes__or__file_object
+
+    if type(arg) == str:
+        with open(arg, mode='rb') as f:
             img_bytes = f.read()
 
+    elif type(arg) == bytes:
+        img_bytes = arg
+
     else:
-        img_bytes = file_name_or_bytes
+        img_bytes = arg.read()
 
     import io
     bytes_io = io.BytesIO(img_bytes)
