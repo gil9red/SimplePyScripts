@@ -157,6 +157,7 @@ def index():
 
         <div class="result json show" style="display: none">
             <p>Результат от сервера:</p>
+            <img width="200px" height="200px"/><br/><br/>
             <pre></pre>
         </div>
 
@@ -234,6 +235,12 @@ def index():
                     success: function(data) {
                         console.log(data);
                         $('.block.progress').hide();
+                            
+                        $('.result.json.show > img').attr('src', data.img_base64);
+                        
+                        if (data.img_base64.length > 100) {
+                            data.img_base64 = data.img_base64.substring(0, 100) + "...";
+                        }
                         
                         var json_str = JSON.stringify(data, undefined, 4);
                         console.log(json_str);
