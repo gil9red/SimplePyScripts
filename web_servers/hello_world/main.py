@@ -26,6 +26,8 @@ if __name__ == '__main__':
     app.threaded = True
 
     # Localhost
+    # port=0 -- random free port
+    # app.run(port=0)
     app.run(port=5000)
 
     # # Public IP
