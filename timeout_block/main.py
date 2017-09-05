@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-def timeout(seconds=None):
+def timeout(seconds=None, raise_timeout=False):
     def wrapper(function_to_decorate):
         def the_wrapper_around_the_original_function(*args, **kwargs):
             from kthread import KThread
@@ -14,6 +14,9 @@ def timeout(seconds=None):
 
             if thread.is_alive():
                 thread.kill()
+
+                if raise_timeout:
+                    raise TimeoutError()
 
         return the_wrapper_around_the_original_function
 
@@ -32,5 +35,18 @@ def unlimited_wait():
         time.sleep(1)
 
 
+@timeout(seconds=3, raise_timeout=True)
+def unlimited_wait2():
+    import time
+
+    i = 0
+
+    while True:
+        i += 1
+        print(i)
+        time.sleep(1)
+
 if __name__ == '__main__':
     unlimited_wait()
+
+    unlimited_wait2()
