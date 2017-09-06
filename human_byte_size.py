@@ -12,8 +12,12 @@ def sizeof_fmt(num):
     return "%3.1f%s" % (num, 'TB')
 
 
-import shutil
-usage = shutil.disk_usage('C://')
-print('total: {:>8} ({} bytes)'.format(sizeof_fmt(usage.total), usage.total))
-print('used:  {:>8} ({} bytes)'.format(sizeof_fmt(usage.used), usage.used))
-print('free:  {:>8} ({} bytes)'.format(sizeof_fmt(usage.free), usage.free))
+if __name__ == '__main__':
+    print(sizeof_fmt(25000000000))
+    print()
+
+    import shutil
+    usage = shutil.disk_usage('C://')
+    print('total: {:>8} ({} bytes)'.format(sizeof_fmt(usage.total), usage.total))
+    print('used:  {:>8} ({} bytes)'.format(sizeof_fmt(usage.used), usage.used))
+    print('free:  {:>8} ({} bytes)'.format(sizeof_fmt(usage.free), usage.free))
