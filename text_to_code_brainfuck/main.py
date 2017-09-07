@@ -82,7 +82,20 @@ if __name__ == '__main__':
 
     code_brainfuck = text_to_code_brainfuck(text)
     print(len(code_brainfuck))
-    # print(code_brainfuck)
+    print(code_brainfuck)
+
+    # TODO: Compress variant
+    import zlib
+    code_brainfuck_compress = zlib.compress(code_brainfuck.encode('utf-8'))
+    print()
+    print(len(code_brainfuck_compress))
+    print(code_brainfuck_compress)
+
+    import base64
+    code_brainfuck_compress_base64 = base64.b64encode(code_brainfuck_compress).decode('utf-8')
+    print()
+    print(len(code_brainfuck_compress_base64))
+    print(code_brainfuck_compress_base64)
 
     with open('code.bf', mode='w', encoding='utf-8') as f:
         f.write(code_brainfuck)
