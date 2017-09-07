@@ -83,6 +83,14 @@ if __name__ == '__main__':
     code_brainfuck = text_to_code_brainfuck(text)
     print(len(code_brainfuck))
     print(code_brainfuck)
+    print()
+
+    # Test generated brainfuck code
+    import simple_brainfuck
+    result = simple_brainfuck.execute(code_brainfuck)
+    print(len(result))
+    print(result)
+    assert result == text
 
     # TODO: Compress variant
     import zlib
