@@ -36,13 +36,19 @@ def get_repo():
         return git.Repo.clone_from(URL_GIT, REPO_PATH)
 
 
-def print_log(reverse=False):
+def return_log(reverse=False):
     repo = get_repo()
     logs = repo.git.log('--pretty=format:%H%x09%an%x09%ad%x09%s').splitlines()
-    print('Logs[{}]:'.format(len(logs)))
 
     if reverse:
         logs.reverse()
+
+    return logs
+
+
+def print_log(reverse=False):
+    logs = return_log(reverse)
+    print('Logs[{}]:'.format(len(logs)))
 
     for log in logs:
         print(log)
