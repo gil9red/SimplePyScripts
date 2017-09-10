@@ -35,11 +35,11 @@ if __name__ == '__main__':
     #
     # First 10:
     for history in list(reversed(gist.history))[:10]:
-        print('    committed_at: {}, version: {}, files: {}'.format(
+        print('  committed_at: {}, version: {}, files: {}'.format(
             history.committed_at, history.version, history.files)
         )
 
         file = history.files['gistfile1.txt']
-        print('        url: {}'.format(file.raw_url))
-        print('        [{}]: {}'.format(len(file.content), repr(file.content)[:150]))
+        print('    url: {}'.format(file.raw_url))
+        print('    [{}]: {}'.format(len(file.content), repr(file.content)[:150]))
         print()
