@@ -10,6 +10,11 @@ from config import LOGIN, PASSWORD
 if __name__ == '__main__':
     from github import Github
     gh = Github(LOGIN, PASSWORD)
+    # #
+    # # OR:
+    # # But: "github.GithubException.RateLimitExceededException: 403 {'message': "API rate limit exceeded for \
+    # # 79.000.10.000. (But here's the good news: Authenticated requests get a higher rate limit. Check out the
+    # # documentation for more details.)", 'documentation_url': 'https://developer.github.com/v3/#rate-limiting'}"
     # gh = Github()
 
     gist = gh.get_gist('2f80a34fb601cd685353')
