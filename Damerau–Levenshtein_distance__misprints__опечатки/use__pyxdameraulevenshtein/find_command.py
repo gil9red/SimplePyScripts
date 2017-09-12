@@ -35,7 +35,8 @@ def find_command(text):
     import numpy as np
     array = np.array(ALL_COMMANDS)
 
-    from pyxdameraulevenshtein import normalized_damerau_levenshtein_distance_ndarray, damerau_levenshtein_distance_ndarray
+    from pyxdameraulevenshtein import normalized_damerau_levenshtein_distance_ndarray
+    # TODO: поиграться с damerau_levenshtein_distance_ndarray
     result = list(zip(ALL_COMMANDS, list(normalized_damerau_levenshtein_distance_ndarray(text, array))))
     # print()
     # print(result)
