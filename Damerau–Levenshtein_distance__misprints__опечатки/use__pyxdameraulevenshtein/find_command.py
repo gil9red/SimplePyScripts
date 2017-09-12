@@ -38,8 +38,7 @@ def find_command(text):
     from pyxdameraulevenshtein import normalized_damerau_levenshtein_distance_ndarray
     # TODO: поиграться с damerau_levenshtein_distance_ndarray
     result = list(zip(ALL_COMMANDS, list(normalized_damerau_levenshtein_distance_ndarray(text, array))))
-    # print()
-    # print(text, sorted(result, key=lambda x: x[1]))
+    # print('\n' + text, sorted(result, key=lambda x: x[1]))
 
     command, rate = min(result, key=lambda x: x[1])
 
@@ -53,7 +52,7 @@ def find_command(text):
 if __name__ == '__main__':
     # SHOW RESULT
     def check(text):
-        format_text = '{:<%s} -> {}' % (len(max(ALL_COMMANDS, key=len)) + 5)
+        format_text = '{:<%s} -> {}' % (len(max(ALL_COMMANDS, key=len)) + 2)
 
         command = find_command(text)
         if command is None:
@@ -74,6 +73,13 @@ if __name__ == '__main__':
     check('добавь напаменание')
     check('добавить напоминание')
     check('добавить команду')
+    check('hex2str')
+    check('hex2dtr')
+    check('qrcode')
+    check('qtcode')
+    check('qrcodr')
+    check('курс криптовалют')
+    check('курс крептоволют')
 
     #
     # Run test
