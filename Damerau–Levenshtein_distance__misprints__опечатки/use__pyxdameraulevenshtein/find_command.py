@@ -39,12 +39,12 @@ def find_command(text):
     # TODO: поиграться с damerau_levenshtein_distance_ndarray
     result = list(zip(ALL_COMMANDS, list(normalized_damerau_levenshtein_distance_ndarray(text, array))))
     # print()
-    # print(result)
+    # print(text, sorted(result, key=lambda x: x[1]))
 
     command, rate = min(result, key=lambda x: x[1])
 
     # Подобранное значение для определения совпадения текста среди значений указанного списка
-    if rate > 0.25:
+    if rate >= 0.25:
         return
 
     return command
