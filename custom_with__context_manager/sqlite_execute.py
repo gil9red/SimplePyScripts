@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-def old_variant():
+def old_old_variant():
     import sqlite3
     connect = sqlite3.connect(":memory:")
 
@@ -13,10 +13,10 @@ def old_variant():
 
         connect.executescript('''\
         CREATE TABLE Test (
-            id INTEGER PRIMARY KEY, 
+            id INTEGER PRIMARY KEY,
             name TEXT
         );
-    
+
         INSERT INTO Test (name) VALUES ('One');
         INSERT INTO Test (name) VALUES ('Two');
         INSERT INTO Test (name) VALUES ('Three');
@@ -29,6 +29,29 @@ def old_variant():
 
     finally:
         connect.close()
+
+
+def old_variant():
+    import sqlite3
+
+    with sqlite3.connect(":memory:") as connect:
+        print(connect.execute('SELECT sqlite_version();').fetchone())
+
+        connect.executescript('''\
+        CREATE TABLE Test (
+            id INTEGER PRIMARY KEY, 
+            name TEXT
+        );
+
+        INSERT INTO Test (name) VALUES ('One');
+        INSERT INTO Test (name) VALUES ('Two');
+        INSERT INTO Test (name) VALUES ('Three');
+        ''')
+
+        print(connect.execute('select * from Test;').fetchall())
+        print()
+
+        connect.commit()
 
 
 class SQLite3Connect(object):
@@ -65,5 +88,6 @@ def new_variant():
 
 
 if __name__ == '__main__':
+    old_old_variant()
     old_variant()
     new_variant()
