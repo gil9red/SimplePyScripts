@@ -31,7 +31,7 @@ ALL_COMMANDS = [
 ]
 
 
-def find_command(text):
+def fix_command(text):
     import numpy as np
     array = np.array(ALL_COMMANDS)
 
@@ -54,7 +54,7 @@ if __name__ == '__main__':
     def check(text):
         format_text = '{:<%s} -> {}' % (len(max(ALL_COMMANDS, key=len)) + 2)
 
-        command = find_command(text)
+        command = fix_command(text)
         if command is None:
             result = 'is None (не удалось распознать команду: "{}")'.format(text)
             print(format_text.format(text, result))
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     # Run test
     def run_tests():
         def test(text, expected):
-            command = find_command(text)
+            command = fix_command(text)
             assert expected == command, 'Expected: "{}", get: "{}"'.format(expected, command)
 
         expected = 'команды'
