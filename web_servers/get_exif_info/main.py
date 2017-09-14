@@ -54,7 +54,8 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
         else:
             # Fill categories_by_tag
             if ' ' in tag:
-                category, sub_tag = tag.split(' ')
+                ''.split()
+                category, sub_tag = tag.split(' ',  maxsplit=1)
 
                 if category not in tags_by_value:
                     tags_by_value[category] = dict()
@@ -197,7 +198,7 @@ def index():
                         var json_str = JSON.stringify(data, undefined, 4);
                         console.log(json_str);
                         
-                        json_str = syntaxHighlight(json_str);
+                        //json_str = syntaxHighlight(json_str);
 
                         $('.exif.show > pre').html(json_str);
                         $('.exif.show').show();

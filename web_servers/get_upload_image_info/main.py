@@ -54,7 +54,7 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
         else:
             # Fill categories_by_tag
             if ' ' in tag:
-                category, sub_tag = tag.split(' ')
+                category, sub_tag = tag.split(' ', maxsplit=1)
 
                 if category not in tags_by_value:
                     tags_by_value[category] = dict()
