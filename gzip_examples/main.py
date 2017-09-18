@@ -9,7 +9,7 @@ import gzip
 # From file name
 with gzip.open('build-kernel.xml.gz') as f:
     file_content = f.read()
-    print(repr(file_content))
+    print(file_content)
 
 # From bytes / memory file
 bytes_data = open('build-kernel.xml.gz', mode='rb').read()
@@ -19,4 +19,4 @@ byte_io = io.BytesIO(bytes_data)
 
 with gzip.open(byte_io) as f:
     file_content = f.read()
-    print(repr(file_content))
+    print(file_content)
