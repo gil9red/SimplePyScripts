@@ -11,7 +11,7 @@ with gzip.open('build-kernel.xml.gz') as f:
     file_content = f.read()
     print(repr(file_content))
 
-# From bytes
+# From bytes / memory file
 bytes_data = open('build-kernel.xml.gz', mode='rb').read()
 
 import io
