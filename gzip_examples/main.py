@@ -12,8 +12,10 @@ with gzip.open('build-kernel.xml.gz') as f:
     print(repr(file_content))
 
 # From bytes
+bytes_data = open('build-kernel.xml.gz', mode='rb').read()
+
 import io
-byte_io = io.BytesIO(open('build-kernel.xml.gz', mode='rb').read())
+byte_io = io.BytesIO(bytes_data)
 
 with gzip.open(byte_io) as f:
     file_content = f.read()
