@@ -144,7 +144,8 @@ if __name__ == '__main__':
         for committed_at, content in connect.execute('SELECT committed_at, content FROM GistFile'):
             platforms = parse_played_games(content, silence=True)
             for platform, categories in platforms.items():
-                append_game_date[platform] = defaultdict(dict)
+                if platform not in append_game_date:
+                    append_game_date[platform] = defaultdict(dict)
 
                 for game in categories[FINISHED_GAME]:
                     if game not in append_game_date[platform][FINISHED_GAME]:
