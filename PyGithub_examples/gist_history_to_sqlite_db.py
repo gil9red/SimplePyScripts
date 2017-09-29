@@ -47,19 +47,29 @@ if __name__ == '__main__':
     print('History ({}):'.format(len(gist.history)))
 
     with create_connect() as connect:
-        for history in reversed(gist.history):
-            print('  committed_at: {}, version: {}, files: {}'.format(
-                history.committed_at, history.version, history.files)
-            )
+        try:
+            for history in reversed(gist.history):
+                print('  committed_at: {}, version: {}, files: {}'.format(
+                    history.committed_at, history.version, history.files)
+                )
 
-            file = history.files['gistfile1.txt']
-            # print('    url: {}'.format(file.raw_url))
-            # print('    [{}]: {}'.format(len(file.content), repr(file.content)[:150]))
-            # print()
+                if 'gistfile1.txt' not in history.files:
+                    print('  Not found file "gistfile1.txt"!')
+                    continue
 
-            connect.execute(
-                'INSERT OR IGNORE INTO GistFile (commit_hash, committed_at, raw_url, content) VALUES (?, ?, ?, ?)',
-                (history.version, history.committed_at, file.raw_url, file.content)
-            )
+                file = history.files['gistfile1.txt']
+                # print('    url: {}'.format(file.raw_url))
+                # print('    [{}]: {}'.format(len(file.content), repr(file.content)[:150]))
+                # print()
 
-        connect.commit()
+                connect.execute(
+                    'INSERT OR IGNORE INTO GistFile (commit_hash, committed_at, raw_url, content) VALUES (?, ?, ?, ?)',
+                    (history.version, history.committed_at, file.raw_url, file.content)
+                )
+
+        except Exception as e:
+            import traceback
+            print('ERROR: {}:\n\n{}'.format(e, traceback.format_exc()))
+
+        finally:
+            connect.commit()
