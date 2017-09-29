@@ -143,15 +143,17 @@ if __name__ == '__main__':
     with create_connect() as connect:
         for committed_at, content in connect.execute('SELECT committed_at, content FROM GistFile'):
             platforms = parse_played_games(content, silence=True)
-            for categories in platforms.values():
+            for platform, categories in platforms.items():
+                append_game_date[platform] = defaultdict(dict)
+
                 for game in categories[FINISHED_GAME]:
-                    if game not in append_game_date[FINISHED_GAME]:
-                        append_game_date[FINISHED_GAME][game] = committed_at
+                    if game not in append_game_date[platform][FINISHED_GAME]:
+                        append_game_date[platform][FINISHED_GAME][game] = committed_at
 
                 for game in categories[FINISHED_WATCHED]:
-                    if game not in append_game_date[FINISHED_WATCHED]:
-                        append_game_date[FINISHED_WATCHED][game] = committed_at
+                    if game not in append_game_date[platform][FINISHED_WATCHED]:
+                        append_game_date[platform][FINISHED_WATCHED][game] = committed_at
 
     # Check
-    print('Ведьмак:', append_game_date['FINISHED_GAME']['Ведьмак'])
-    print('Dragon Age II:', append_game_date['FINISHED_GAME']['Dragon Age II'])
+    print('Ведьмак:', append_game_date['PC']['FINISHED_GAME']['Ведьмак'])
+    print('Dragon Age II:', append_game_date['PC']['FINISHED_GAME']['Dragon Age II'])
