@@ -46,14 +46,14 @@ def print_the_most_profitable_dish(url):
     import re
 
     for i, product in enumerate(root.select('.CardContent'), 1):
-        title = product.select_one('.CardText__title').text
+        title = product.select_one('.CardText__title').text.strip()
 
-        price = product.select_one('[itemprop="price"] > span').text
+        price = product.select_one('.ProductParams__price').text
         price = int(re.sub('\D', '', price))
 
         try:
-            subtitle = product.select_one('.CardText__subtitle > span > b').text.strip()
-            weight, metrics = subtitle.split()
+            tag_subtitle = product.select_one('.CardText__subtitle > span > b').text.strip()
+            weight, metrics = tag_subtitle.split()
 
         except AttributeError:
             unknown_metrics_items.append((title, price))
@@ -61,7 +61,7 @@ def print_the_most_profitable_dish(url):
 
         # Ignore
         if metrics not in ['кг.', 'гр.']:
-            unknown_metrics_items.append((title, subtitle, price))
+            unknown_metrics_items.append((title, tag_subtitle, price))
             continue
 
         weight = float(weight)
