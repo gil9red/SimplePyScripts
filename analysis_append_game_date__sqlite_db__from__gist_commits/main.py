@@ -158,3 +158,7 @@ if __name__ == '__main__':
     # Check
     print('Ведьмак:', append_game_date['PC']['FINISHED_GAME']['Ведьмак'])
     print('Dragon Age II:', append_game_date['PC']['FINISHED_GAME']['Dragon Age II'])
+
+    # Dump this
+    import json
+    json.dump(append_game_date, open('dumn.json', mode='w', encoding='utf-8'), ensure_ascii=False, indent=4)
