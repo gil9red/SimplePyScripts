@@ -71,4 +71,4 @@ class BaseServer:
 
 if __name__ == '__main__':
     server = BaseServer()
-    server.run()
+    server.run(port=9090)
