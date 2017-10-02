@@ -22,6 +22,10 @@ class BaseServer:
         self.name = 'BaseServer'
 
     @cherrypy.expose
+    def get_name(self):
+        return self.name
+
+    @cherrypy.expose
     def execute(self):
         return 'Not implement'
 
@@ -32,7 +36,8 @@ class BaseServer:
         return '''
             This is: <b>{}</b><br>
             <a href="/error">Get error</a><br>
-            <a href="/execute">Execute</a>
+            <a href="/execute">Execute</a><br>
+            <a href="/get_name">Get name</a>
         '''.format(self.name)
 
     @cherrypy.expose
