@@ -4,7 +4,6 @@
 
 # pip install cherrypy
 # https://github.com/cherrypy/cherrypy
-# SOURCE: https://github.com/cherrypy/cherrypy/blob/master/cherrypy/tutorial/tut01_helloworld.py
 
 import cherrypy
 
