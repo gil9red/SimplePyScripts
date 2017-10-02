@@ -9,12 +9,23 @@
 import cherrypy
 
 
+def all_exception_handler(status, message, traceback, version):
+    response = cherrypy.response
+    response.headers['Content-Type'] = 'application/json'
+
+    import json
+    return json.dumps({
+        'about': 'Catch error!',
+        'status': status,
+        'message': message,
+        'traceback': traceback,
+        'version': version,
+    })
+
+
 class Root:
-    def __init__(self):
-        # Set a custom response for errors.
-        self._cp_config = {'error_page.default': Root.all_exception_handler}
-        # # OR:
-        # Root._cp_config = {'error_page.default': Root.all_exception_handler}
+    # Set a custom response for errors.
+    _cp_config = {'error_page.default': all_exception_handler}
 
     # Expose the index method through the web. CherryPy will never
     # publish methods that don't have the exposed attribute set to True.
@@ -31,20 +42,6 @@ class Root:
         _ = 1 / 0
 
         return 'Bad!'
-
-    @staticmethod
-    def all_exception_handler(status, message, traceback, version):
-        response = cherrypy.response
-        response.headers['Content-Type'] = 'application/json'
-
-        import json
-        return json.dumps({
-            'about': 'Catch error!',
-            'status': status,
-            'message': message,
-            'traceback': traceback,
-            'version': version,
-        })
 
 
 if __name__ == '__main__':
