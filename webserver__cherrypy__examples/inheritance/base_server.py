@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+
+# pip install cherrypy
+# https://github.com/cherrypy/cherrypy
+
+import cherrypy
+
+
+class BaseServer:
+    expose = cherrypy.expose
+    json_in = cherrypy.tools.json_in()
+    json_out = cherrypy.tools.json_out()
+
+    def __init__(self):
+        # Set a custom response for errors.
+        self._cp_config = {'error_page.default': self.all_exception_handler}
+        # # OR:
+        # Root._cp_config = {'error_page.default': Root.all_exception_handler}
+
+        self.name = 'BaseServer'
+
+    @cherrypy.expose
+    def execute(self):
+        return 'Not implement'
+
+    # Expose the index method through the web. CherryPy will never
+    # publish methods that don't have the exposed attribute set to True.
+    @cherrypy.expose
+    def index(self):
+        return '''
+            This is: <b>{}</b><br>
+            <a href="/error">Get error</a><br>
+            <a href="/execute">Execute</a>
+        '''.format(self.name)
+
+    @cherrypy.expose
+    def error(self):
+        _ = 1 / 0
+
+        return 'Bad!'
+
+    def all_exception_handler(self, status, message, traceback, version):
+        response = cherrypy.response
+        response.headers['Content-Type'] = 'application/json'
+
+        import json
+        return json.dumps({
+            'about': 'Catch error!',
+            'status': status,
+            'message': message,
+            'traceback': traceback,
+            'server_name': self.name,
+        })
+
+    def run(self, port=9090):
+        # Set port
+        cherrypy.config.update({'server.socket_port': port})
+
+        # Autoreload off
+        cherrypy.config.update({'engine.autoreload.on': False})
+
+        cherrypy.quickstart(self)
+
+
+if __name__ == '__main__':
+    server = BaseServer()
+    server.run()
