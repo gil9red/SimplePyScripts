@@ -29,6 +29,13 @@ class BaseServer:
     def execute(self):
         return 'Not implement'
 
+    @cherrypy.expose
+    def execute_func(self):
+        return self._execute_func()
+
+    def _execute_func(self):
+        return 'Not implement'
+
     # Expose the index method through the web. CherryPy will never
     # publish methods that don't have the exposed attribute set to True.
     @cherrypy.expose
@@ -37,6 +44,7 @@ class BaseServer:
             This is: <b>{}</b><br>
             <a href="/error">Get error</a><br>
             <a href="/execute">Execute</a><br>
+            <a href="/execute_func">Execute func</a><br>
             <a href="/get_name">Get name</a>
         '''.format(self.name)
 

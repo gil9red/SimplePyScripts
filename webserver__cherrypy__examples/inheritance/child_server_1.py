@@ -17,6 +17,9 @@ class ChildServer(BaseServer):
     def execute(self):
         return 'ChildServer_1.execute!'
 
+    def _execute_func(self):
+        return 'ChildServer_1 _execute_func'
+
     @BaseServer.expose
     def error(self):
         raise Exception('ChildServer_1 EXCEPTION!')
