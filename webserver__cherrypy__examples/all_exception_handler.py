@@ -41,6 +41,7 @@ class Root:
             'about': 'Catch error!',
             'status': status,
             'message': message,
+            'text': traceback.strip().split('\n')[-1],
             'traceback': traceback,
             'version': version,
         })

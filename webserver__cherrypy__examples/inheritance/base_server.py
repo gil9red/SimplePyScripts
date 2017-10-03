@@ -63,6 +63,7 @@ class BaseServer:
             'about': 'Catch error!',
             'status': status,
             'message': message,
+            'text': traceback.strip().split('\n')[-1],
             'traceback': traceback,
             'server_name': self.name,
         })
