@@ -77,6 +77,7 @@ class FileDemo(object):
             data = myFile.file.read(8192)
             if not data:
                 break
+
             size += len(data)
 
         return out % (size, myFile.filename, myFile.content_type)
