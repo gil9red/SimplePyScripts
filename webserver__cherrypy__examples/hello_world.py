@@ -30,4 +30,8 @@ if __name__ == '__main__':
 
     # Set port
     cherrypy.config.update({'server.socket_port': 9090})
+
+    # # Public IP
+    # cherrypy.config.update({'server.socket_host': '0.0.0.0'})
+
     cherrypy.quickstart(HelloWorld())
