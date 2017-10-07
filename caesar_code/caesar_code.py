@@ -1,51 +1,93 @@
 __author__ = 'ipetrash'
 
 
-"""Скрипт реализует простейшую реализацию алгоритма Код Цезаря."""
+"""Реализация алгоритма Код Цезаря."""
+
+
+from string import ascii_lowercase, ascii_uppercase
+ru_lowercase = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+ru_uppercase = ru_lowercase.upper()
+
+alphabet_list = [
+    ascii_lowercase,
+    ascii_uppercase,
+    ru_lowercase,
+    ru_uppercase,
+]
+
+
+def get_alp_by_char(char: str) -> list:
+    for alphabet in alphabet_list:
+        if char in alphabet:
+            return alphabet
+
+    return None
 
 
 def caesar_code(text, shift):
     """Функция принимает текстовую строку и возвращает, новую строку
     символы которой сдвинуты по алфавиту."""
 
-    alp = [chr(c) for c in range(ord('a'), ord('z') + 1)]
-    new_t = ''
-    for c in text.lower():
-        if c in alp:
-            i = (alp.index(c) + shift) % len(alp)
-            new_t += alp[i]
-        else:
-            new_t += c
-    return new_t
-
-
-from string import ascii_uppercase
-
-
-def shift(text, num):
     shift_text = ''
 
     for c in text:
-        if c not in ascii_uppercase:
+        alphabet = get_alp_by_char(c)
+        if alphabet is None:
             shift_text += c
             continue
 
-        i = (ascii_uppercase.index(c) + num) % len(ascii_uppercase)
-        shift_text += ascii_uppercase[i]
+        i = (alphabet.index(c) + shift) % len(alphabet)
+        shift_text += alphabet[i]
 
     return shift_text
 
 
 if __name__ == '__main__':
-    print(caesar_code("Hello World!", shift=2))
-    print(caesar_code("Hello World!", shift=-4))
-    print(caesar_code("Hello World!", shift=26))
-    print(caesar_code("Hello World!", shift=50))
-    print(caesar_code("Hello World!", shift=78))
+    text = "Hello World!"
+    print(caesar_code(text, shift=0))
+    print(caesar_code(text, shift=2))
+    print(caesar_code(text, shift=-4))
+    print(caesar_code(text, shift=26))
+    print(caesar_code(text, shift=50))
+    print(caesar_code(text, shift=78))
+
+    assert caesar_code(text, shift=0) == text
+    assert caesar_code(text, shift=2) == 'Jgnnq Yqtnf!'
+    assert caesar_code(text, shift=-4) == 'Dahhk Sknhz!'
+    assert caesar_code(text, shift=26) == 'Hello World!'
+    assert caesar_code(text, shift=50) == 'Fcjjm Umpjb!'
+    assert caesar_code(text, shift=78) == 'Hello World!'
 
     print()
 
-    TEXT = 'VWDQ LV QRW ZKDW KH VHHPV'
+    text = "Привет мир!"
+    print(caesar_code(text, shift=0))
+    print(caesar_code(text, shift=2))
+    print(caesar_code(text, shift=-4))
+    print(caesar_code(text, shift=33))
+    print(caesar_code(text, shift=50))
+    print(caesar_code(text, shift=99))
 
+    assert caesar_code(text, shift=0) == text
+    assert caesar_code(text, shift=2) == 'Сткджф окт!'
+    assert caesar_code(text, shift=-4) == 'Лмеюбо ием!'
+    assert caesar_code(text, shift=33) == 'Привет мир!'
+    assert caesar_code(text, shift=50) == 'Абщтхг эщб!'
+    assert caesar_code(text, shift=99) == 'Привет мир!'
+
+    print()
+    text = "Hello мир!"
+    print(caesar_code(text, shift=0))
+    print(caesar_code(text, shift=2))
+    print(caesar_code(text, shift=-4))
+
+    assert caesar_code(text, shift=0) == text
+    assert caesar_code(text, shift=2) == 'Jgnnq окт!'
+    assert caesar_code(text, shift=-4) == 'Dahhk ием!'
+
+    # Hint: see shift=23
+    print()
+    print()
+    TEXT = 'VWDQ LV QRW ZKDW KH VHHPV'
     for i in range(len(ascii_uppercase)):
-        print(i, shift(TEXT, i))
+        print(i, caesar_code(TEXT, i))
