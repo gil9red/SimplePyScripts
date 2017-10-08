@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+Рыбное
+ - Cynicmansion</title>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" type="text/css" href="/media/style.css" />
+        <meta http-equiv="Content-Language" content="ru" />
+        <meta name="verify-v1" content="jjBisv2UfPZs0zbfJif4tsOKgTU33CfAe1tNngw9Xqg=" />
+        <meta name='yandex-verification' content='599b6137c2e4a51e' />
+        <link rel="shortcut icon" type="image/x-icon" href="/media/images/favicon.ico" />
+        <script type="text/javascript" src="/media/js/paginator3000.js"></script>
+        <script type="text/javascript" src="/media/js/js-core.2.8.1.min.js"></script>
+        <link rel="alternate" type="application/atom+xml" title="Cynicmansion - комиксы" href="/atomfeed/" />
+        <script type="text/javascript" src="http://userapi.com/js/api/openapi.js?34"></script>
+        <script type="text/javascript">
+              VK.init({apiId: 2423629, onlyWidgets: true});
+        </script>
+        <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
+            {lang: 'ru'}
+	</script>
+
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//cynicmansion.ru/piwik/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '1']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->
+
+    </head>
+    <body>
+        
+        <div class="root">
+            <header>
+                <h1 class="h1-cynic">Cynicmansion</h1>
+                <div class="logo"><a href="/" title="cynicmansion.ru">
+                    <img src="/media/images/logo.jpg" alt="сynicmansion" title="сynicmansion" border="0" />
+                </a></div>
+            
+            </header>
+
+            
+<div style="text-align: center"></div>
+<div class="comics_wrap">
+    <p class="comics_name">Рыбное</p>
+    <div class="comics_image"><img src="/media/files/comics/2016/fish.PNG" alt="Рыбное" border="0" /></div>
+    
+    <div class="comics_image"><img src="/media/files/covers/2016/fishpun.PNG" alt="Рыбное" border="0" /></div>
+    
+    <p class="comics_desc">И бонусная в голосовалке, философы. Не забываем так же про аккаунт на <a href= "http://ask.fm/kill_all_humans">аске</a>. Так же вы можете поддержать автора на <a href= "https://www.patreon.com/killallhumans?ty=h">патреоне</a>.</p>
+    <table cellspacing="0" cellpadding="0" width="100%">
+        <tr>
+            <td width="200">
+                
+            </td>
+            <td align="center">
+                <a href="http://top.a-comics.ru/voter.php?q=ZA&cid=56" title="Сделать хорошее дело" target="_blank">Голосовать!</a><br />
+                
+            </td>
+            <td class="comics_date"  width="200">
+                <b>killallhumans</b>
+                13 ноября 2016 г. 23:47:01
+            </td>
+        </tr>
+    </table>
+    <div style="clear:both;"></div>
+</div>
+<div class="comments_wrap">
+    <div>
+        <div>
+            <div id="vk_like"></div>
+            <script type="text/javascript">
+                VK.Widgets.Like("vk_like", {type: "full", pageImage: "https://cynicmansion.ru/media/files/comics/2016/fish.PNG"});
+            </script>
+        </div>
+        <div>
+            <div id="fb-root"></div>
+            <script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
+            <fb:like href="" send="false" width="90" show_faces="false" font=""></fb:like>
+        </div>
+        <div>
+            <g:plusone></g:plusone>
+        </div>
+    </div>
+    <p class="text-header">Комментарии:</p>
+    <div class="line"><img src="/media/images/spacer.gif" alt=""></div>
+    <br />
+    <dl id="comments">
+  
+    <dt id="c10294">
+        14 ноября 2016 г. 1:32:32 - O_Tiger
+    </dt>
+    <dd>
+    <p><p>Правильно, нужно уточнять кто кому будет отдавать половину и чья вообще удочка</p></p>
+    </dd>
+  
+    <dt id="c10295">
+        14 ноября 2016 г. 7:04:43 - аноним
+    </dt>
+    <dd>
+    <p><p>капитализом</p></p>
+    </dd>
+  
+    <dt id="c10297">
+        14 ноября 2016 г. 9:37:25 - аноним
+    </dt>
+    <dd>
+    <p><p>Он ловит рыбу стоя у обочины дороги?</p></p>
+    </dd>
+  
+    <dt id="c10299">
+        15 ноября 2016 г. 8:48:19 - аноним
+    </dt>
+    <dd>
+    <p><p>остро-социально<br /></p></p>
+    </dd>
+  
+</dl>
+
+</div>
+<div class="comments_wrap">
+    
+    
+<form action="/comments/post/" method="post"><div style='display:none'><input type='hidden' name='csrfmiddlewaretoken' value='AMTDbYm1uS6zGELLBhlAY2mabqxe9vU0' /></div>
+    <input type="hidden" name="next" value="/1657/" />
+    <table>
+    
+        
+        <tr>
+            <td></td>
+            <td><input type="hidden" name="content_type" value="comics.comic" id="id_content_type" /></td>
+        </tr>
+    
+    
+        
+        <tr>
+            <td></td>
+            <td><input type="hidden" name="object_pk" value="1657" id="id_object_pk" /></td>
+        </tr>
+    
+    
+        
+        <tr>
+            <td></td>
+            <td><input type="hidden" name="timestamp" value="1507469884" id="id_timestamp" /></td>
+        </tr>
+    
+    
+        
+        <tr>
+            <td></td>
+            <td><input type="hidden" name="security_hash" value="840a4b6c0da197405dc248f5d734a355f6b66ecc" id="id_security_hash" /></td>
+        </tr>
+    
+    
+        
+        
+        <tr
+            
+             style="display:none;">
+            <th><label for="id_name">не заполняйте это поле</label></th>
+            <td><input id="id_name" type="text" name="name" maxlength="50" /></td>
+        </tr>
+        
+    
+        
+        
+        <tr
+            
+             style="display:none;">
+            <th><label for="id_honeypot">Если что-нибудь введете в это поле, то ваш комментарий будет признан спамом</label></th>
+            <td><input type="text" name="honeypot" id="id_honeypot" /></td>
+        </tr>
+        
+    
+        
+        
+        <tr
+            
+            >
+            <th><label for="id_real_name">Имя</label></th>
+            <td><input id="id_real_name" type="text" name="real_name" value="аноним" maxlength="50" /></td>
+        </tr>
+        
+    
+        
+        
+        <tr
+            
+            >
+            <th><label for="id_comment">Комментарий</label></th>
+            <td><textarea id="id_comment" rows="10" cols="40" name="comment"></textarea></td>
+        </tr>
+        
+    
+    </table>
+    <p class="submit">
+        <input type="submit" name="post" class="submit-post" value="Опубликовать" />
+    </p>
+</form>
+
+</div>
+
+
+            <div align="center">
+                <!-- HotLog -->
+                <a
+                href="http://kommix.ru" title="Каталог комиксов Kommix"><img
+                src="http://kommix.ru/banner.png" width="88" height="31" alt="каталог
+                комиксов" /></a>
+                <noindex>
+                <!--Rating@Mail.ru counter-->
+                <script language="javascript" type="text/javascript"><!--
+                d=document;var a='';a+=';r='+escape(d.referrer);js=10;//--></script>
+                <script language="javascript1.1" type="text/javascript"><!--
+                a+=';j='+navigator.javaEnabled();js=11;//--></script>
+                <script language="javascript1.2" type="text/javascript"><!--
+                s=screen;a+=';s='+s.width+'*'+s.height;
+                a+=';d='+(s.colorDepth?s.colorDepth:s.pixelDepth);js=12;//--></script>
+                <script language="javascript1.3" type="text/javascript"><!--
+                js=13;//--></script><script language="javascript" type="text/javascript"><!--
+                d.write('<a href="http://top.mail.ru/jump?from=1608764" target="_top">'+
+                '<img src="http://dc.c8.b8.a1.top.mail.ru/counter?id=1608764;t=67;js='+js+
+                a+';rand='+Math.random()+'" alt="Рейтинг@Mail.ru" border="0" '+
+                'height="31" width="38"><\/a>');if(11<js)d.write('<'+'!-- ');//--></script>
+                <noscript><a target="_top" href="http://top.mail.ru/jump?from=1608764">
+                <img src="http://dc.c8.b8.a1.top.mail.ru/counter?js=na;id=1608764;t=67"
+                height="31" width="38" border="0" alt="Рейтинг@Mail.ru"></a></noscript>
+                <script language="javascript" type="text/javascript"><!--
+                if(11<js)d.write('--'+'>');//--></script>
+                <!--// Rating@Mail.ru counter-->
+                </noindex>
+            </div>
+        </div>
+    </body>
+</html>
