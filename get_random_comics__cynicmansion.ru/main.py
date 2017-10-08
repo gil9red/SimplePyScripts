@@ -48,7 +48,7 @@ def get_random_comics_url() -> str:
 
 
 def get_comics_image_url(comics_id__or__url: typing.Union[str, int]) -> str:
-    _, _, url_image = get_comics_info(url_comics)
+    _, _, url_image = get_comics_info(comics_id__or__url)
 
     return url_image
 
@@ -59,7 +59,7 @@ def get_random_comics_image_url() -> str:
     return get_comics_image_url(url)
 
 
-def get_random_comics_info() -> str:
+def get_random_comics_info() -> typing.Tuple[str, str, str]:
     url = get_random_comics_url()
 
     return get_comics_info(url)
@@ -67,16 +67,19 @@ def get_random_comics_info() -> str:
 
 if __name__ == '__main__':
     url_comics = get_random_comics_url()
-    print(url_comics)
+    print('url_comics:', url_comics)
 
     url_image = get_comics_image_url(url_comics)
-    print(url_image)
+    print('url_image:', url_image)
 
     comics_id = url_comics.split('/')[-2]
     import requests
     rs = requests.get(url_image)
 
-    with open('{}.png'.format(comics_id), 'wb') as f:
+    file_name = '{}.png'.format(comics_id)
+    print('Save in:', file_name)
+
+    with open(file_name, mode='wb') as f:
         f.write(rs.content)
 
     print()
