@@ -57,7 +57,6 @@ sys.path.append('..')
 from config import LOGIN, PASSWORD
 
 
-# NOTE: this my version, but user vk_api
 # def upload_image(vk, file_name):
 #     img_data = {
 #         'photo': (file_name, open(file_name, mode='rb'))
@@ -80,7 +79,6 @@ from config import LOGIN, PASSWORD
 #     attachment_image = 'photo{owner_id}_{id}'.format(**rs[0])
 #     return attachment_image
 
-# NOTE: vk_api version
 
 def upload_images(file_names):
     import vk_api
