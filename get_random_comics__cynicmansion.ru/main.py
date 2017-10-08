@@ -4,6 +4,33 @@
 __author__ = 'ipetrash'
 
 
+import typing
+
+
+def get_comics_url_by_id(comics_id: typing.Union[str, int]) -> str:
+    return 'https://cynicmansion.ru/{}/'.format(comics_id)
+
+
+def get_comics_info(comics_id__or__url: typing.Union[str, int]) -> typing.Tuple[str, str, str]:
+    if type(comics_id__or__url) == str and comics_id__or__url.startswith('http'):
+        url_comics = comics_id__or__url
+    else:
+        url_comics = get_comics_url_by_id(comics_id__or__url)
+
+    import requests
+    rs = requests.get(url_comics)
+
+    from bs4 import BeautifulSoup
+    root = BeautifulSoup(rs.content, 'lxml')
+
+    title = root.select_one('.comics_name').text.strip()
+
+    from urllib.parse import urljoin
+    url_image = urljoin(rs.url, root.select_one('.comics_image > img')['src'])
+
+    return url_comics, title, url_image
+
+
 def get_random_comics_url() -> str:
     url = 'https://cynicmansion.ru/'
 
@@ -17,26 +44,25 @@ def get_random_comics_url() -> str:
     import random
     random_comics_number = random.randint(1, comics_number)
 
-    return 'https://cynicmansion.ru/{}/'.format(random_comics_number)
+    return get_comics_url_by_id(random_comics_number)
 
 
-def get_comics_image_url(url_comics: str) -> str:
-    import requests
-    rs = requests.get(url_comics)
+def get_comics_image_url(comics_id__or__url: typing.Union[str, int]) -> str:
+    _, _, url_image = get_comics_info(url_comics)
 
-    from bs4 import BeautifulSoup
-    root = BeautifulSoup(rs.content, 'lxml')
-
-    from urllib.parse import urljoin
-    url = urljoin(rs.url, root.select_one('.comics_image > img')['src'])
-
-    return url
+    return url_image
 
 
 def get_random_comics_image_url() -> str:
     url = get_random_comics_url()
 
     return get_comics_image_url(url)
+
+
+def get_random_comics_info() -> str:
+    url = get_random_comics_url()
+
+    return get_comics_info(url)
 
 
 if __name__ == '__main__':
@@ -54,7 +80,24 @@ if __name__ == '__main__':
         f.write(rs.content)
 
     print()
-    print('Random comics:')
+    print('Random comics image:')
     print(get_random_comics_image_url())
     print(get_random_comics_image_url())
     print(get_random_comics_image_url())
+
+    print()
+    print('Random comics image:')
+    print(get_random_comics_info())
+    print(get_random_comics_info())
+    print(get_random_comics_info())
+
+    print()
+    comics_id = 1538
+    url = get_comics_url_by_id(comics_id)
+    print(comics_id, url)
+    print()
+    print(get_comics_info(comics_id))
+    print(get_comics_info(url))
+    print()
+    print(get_comics_image_url(comics_id))
+    print(get_comics_image_url(url))
