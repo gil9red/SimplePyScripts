@@ -4,6 +4,8 @@ __author__ = 'ipetrash'
 """Реализация алгоритма Код Цезаря."""
 
 
+import typing
+
 from string import ascii_lowercase, ascii_uppercase
 ru_lowercase = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
 ru_uppercase = ru_lowercase.upper()
@@ -13,10 +15,13 @@ alphabet_list = [
     ascii_uppercase,
     ru_lowercase,
     ru_uppercase,
+
+    # Грузинский язык
+    'აბგდევზთიკლმნოპჟრსტჳუფქღყშჩცძწჭხჴჯჰ',
 ]
 
 
-def get_alp_by_char(char: str) -> list:
+def get_alp_by_char(char: str) -> typing.Union[list, None]:
     for alphabet in alphabet_list:
         if char in alphabet:
             return alphabet
@@ -24,7 +29,7 @@ def get_alp_by_char(char: str) -> list:
     return None
 
 
-def caesar_code(text, shift):
+def caesar_code(text: str, shift: int) -> str:
     """Функция принимает текстовую строку и возвращает, новую строку
     символы которой сдвинуты по алфавиту."""
 
@@ -84,6 +89,16 @@ if __name__ == '__main__':
     assert caesar_code(text, shift=0) == text
     assert caesar_code(text, shift=2) == 'Jgnnq окт!'
     assert caesar_code(text, shift=-4) == 'Dahhk ием!'
+
+    print()
+    text = 'გამარჯობა მსოფლიოში!'
+    print(caesar_code(text, shift=0))
+    print(caesar_code(text, shift=2))
+    print(caesar_code(text, shift=-4))
+
+    assert caesar_code(text, shift=0) == text
+    assert caesar_code(text, shift=2) == 'ეგოგტაჟდგ ოჳჟღნლჟცლ!'
+    assert caesar_code(text, shift=-4) == 'ჯხთხნწკჴხ თოკსზეკფე!'
 
     # Hint: see shift=23
     print()
