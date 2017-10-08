@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-def get_random_comics_url():
+def get_random_comics_url() -> str:
     url = 'https://cynicmansion.ru/'
 
     import requests
@@ -20,13 +20,41 @@ def get_random_comics_url():
     return 'https://cynicmansion.ru/{}/'.format(random_comics_number)
 
 
-if __name__ == '__main__':
-    url = get_random_comics_url()
-    print(url)
-
-    comics_id = url.split('/')[-2]
+def get_comics_image_url(url_comics: str) -> str:
     import requests
-    rs = requests.get(url)
+    rs = requests.get(url_comics)
+
+    from bs4 import BeautifulSoup
+    root = BeautifulSoup(rs.content, 'lxml')
+
+    from urllib.parse import urljoin
+    url = urljoin(rs.url, root.select_one('.comics_image > img')['src'])
+
+    return url
+
+
+def get_random_comics_image_url() -> str:
+    url = get_random_comics_url()
+
+    return get_comics_image_url(url)
+
+
+if __name__ == '__main__':
+    url_comics = get_random_comics_url()
+    print(url_comics)
+
+    url_image = get_comics_image_url(url_comics)
+    print(url_image)
+
+    comics_id = url_comics.split('/')[-2]
+    import requests
+    rs = requests.get(url_image)
 
     with open('{}.png'.format(comics_id), 'wb') as f:
         f.write(rs.content)
+
+    print()
+    print('Random comics:')
+    print(get_random_comics_image_url())
+    print(get_random_comics_image_url())
+    print(get_random_comics_image_url())
