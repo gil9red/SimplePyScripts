@@ -40,8 +40,8 @@ def upload_images(file_names):
     rs = upload.photo_messages(file_names)
 
     # Составление названия изображений: https://vk.com/dev/messages.send
-    attachment_images = ','.join('photo{owner_id}_{id}'.format(**item) for item in rs)
-    return attachment_images
+    attachment = ','.join('photo{owner_id}_{id}'.format(**item) for item in rs)
+    return attachment
 
 
 if __name__ == '__main__':
