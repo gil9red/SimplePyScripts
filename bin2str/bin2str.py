@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-def bin2str(bin_str):
+def bin2str(bin_str: str) -> str:
     bin_str = bin_str.replace(' ', '')
     length = len(bin_str)
 
@@ -23,9 +23,8 @@ def bin2str(bin_str):
     return text
 
 
-def str2bin(text):
-    bin_words = [bin(ord(c)).replace('0b', '').rjust(8, '0') for c in text]
-
+def str2bin(text: str) -> str:
+    bin_words = [bin(ord(c))[2:].rjust(8, '0') for c in text]
     return ' '.join(bin_words)
 
 
