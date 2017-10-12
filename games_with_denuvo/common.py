@@ -197,7 +197,7 @@ def get_games(filter_by_is_cracked=None, sorted_by_name=True,
               sorted_by_crack_date=False, sorted_by_append_date=False) -> [(str, bool, str, str)]:
     """
     Функция возвращает из базы список вида:
-        [('Abzû', 1, '2017-07-02', '2017-07-02'), ('Adrift', 1, '2017-07-02', '2017-07-02'), ...
+        [('Monopoly Plus', 1, '12/09/2017', '07/10/2017 '), ('FIFA 18', 1, '18/09/2017', '03/10/2017 '), ...
 
     :param filter_by_is_cracked: определяет нужно ли фильтровать по полю is_cracked. Если filter_by_is_cracked = None,
     фильтр не используется, иначе фильтрация будет по значению в filter_by_is_cracked
@@ -218,9 +218,6 @@ def get_games(filter_by_is_cracked=None, sorted_by_name=True,
         sort = ' ORDER BY name'
 
     if sorted_by_crack_date:
-        # # Обратный порядок, чтобы первым в списке были самые новые
-        # sort = ' ORDER BY crack_date DESC'
-
         # NOTE: идея такая: сначала сортировка по дате, а после сортировка по имени
         # среди тех игр, у которых crack_date одинаковый
         sort = ' ORDER BY crack_date DESC, name ASC'
@@ -229,7 +226,7 @@ def get_games(filter_by_is_cracked=None, sorted_by_name=True,
         sort = ' ORDER BY append_date DESC, name ASC'
 
     try:
-        sql = "SELECT name, is_cracked, append_date, crack_date FROM Game"
+        sql = "SELECT name, is_cracked, strftime('%d/%m/%Y', append_date), strftime('%d/%m/%Y ', crack_date) FROM Game"
 
         if filter_by_is_cracked is not None:
             sql += ' WHERE is_cracked = ' + str(int(filter_by_is_cracked))
