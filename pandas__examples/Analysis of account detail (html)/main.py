@@ -82,7 +82,9 @@ print(df_months_06_07_08.to_string())
 # показать. Таблице нужно поле Итого
 print('\n\nPrint internet info:')
 df_internet = df[df['Номер'] == 'internet.mts.ru']
-data_list = sorted(set(df_internet['Дата'].tolist()))
+
+from datetime import datetime
+data_list = sorted(set(df_internet['Дата'].tolist()), key=lambda data: datetime.strptime(data, '%d.%m.%Y'))
 
 total_mb = 0
 
