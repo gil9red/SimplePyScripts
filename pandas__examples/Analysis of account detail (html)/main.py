@@ -77,3 +77,22 @@ print('\nPrint total price by phone:', df_by_phone['Стоимость руб. �
 df_months_06_07_08 = df_with_price[df_with_price['Дата'].str.contains('|'.join(['.06.', '.07.', '.08.']))]
 print('\nTotal price for months 06, 07 and 08:', df_months_06_07_08['Стоимость руб. без НДС'].sum())
 print(df_months_06_07_08.to_string())
+
+# TODO: интересно было бы полностью силами пандаса такое подсчитать, а после выбрать какие столбцы в итоговой таблице
+# показать. Таблице нужно поле Итого
+print('\n\nPrint internet info:')
+df_internet = df[df['Номер'] == 'internet.mts.ru']
+data_list = sorted(set(df_internet['Дата'].tolist()))
+
+total_mb = 0
+
+for data in data_list:
+    kb_list = df_internet[df_internet['Дата'] == data]['Длительность/Объем (мин.:сек.)/(Kb)'].tolist()
+    kb_list = [int(kb.replace('Kb', '')) for kb in kb_list]
+    sum_mb = sum(kb_list) // 1024
+    total_mb += sum_mb
+
+    print(data, sum_mb, 'MB')
+
+print('Total:', total_mb, 'MB')
+
