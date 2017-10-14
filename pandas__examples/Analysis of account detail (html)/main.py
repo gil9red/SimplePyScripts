@@ -4,6 +4,10 @@
 __author__ = 'ipetrash'
 
 
+# TODO: сделать детализацию счета и заказать в html/excel
+#       замаскировать телефоны
+#       сделать обработку excel на pandas: Analysis of account detail (excel)
+
 import zipfile
 with zipfile.ZipFile('Doc_df7c89c378c04e8daf69257ea95d9a2e.zip') as f:
     data_file = f.read('Doc_df7c89c378c04e8daf69257ea95d9a2e.html')
