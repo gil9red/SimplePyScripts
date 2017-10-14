@@ -70,6 +70,8 @@ if __name__ == '__main__':
 
             append_list_games(games, notified_by_sms)
 
+            db_create_backup()
+
             wait(days=3)
 
         except Exception:

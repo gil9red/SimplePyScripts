@@ -139,6 +139,20 @@ def init_db():
         connect.close()
 
 
+def db_create_backup(backup_dir='backup'):
+    from datetime import datetime
+    file_name = str(datetime.today().date()) + '.sqlite'
+
+    import os
+    if not os.path.exists(backup_dir):
+        os.mkdir(backup_dir)
+
+    file_name = os.path.join(backup_dir, file_name)
+
+    import shutil
+    shutil.copy(DB_FILE_NAME, file_name)
+
+
 def append_list_games(games: [(str, bool)], notified_by_sms=True):
     connect = create_connect()
 
