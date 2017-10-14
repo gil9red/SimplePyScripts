@@ -74,6 +74,7 @@ print(f"My cool string is called {Foo().strange_2(name)}.")
 print(f"My cool string is called {Foo.strange_3(name)}.")
 f = Foo(name)
 print(f"My cool string is called {f}.")
+print(f"My cool string is called {repr(f)}.")
 print(f"My cool string is called {f!r}.")
 print()
 
@@ -86,3 +87,13 @@ print()
 print('Loop:')
 for i in range(1, 10):
     print(f'  {i}: {i * i}')
+
+print()
+
+print('Lambda:')
+print(f"My cool string is called {(lambda x: x.upper())(name)}.")
+print()
+
+print('Raw and f-strings may be combined. For example, they could be used to build up regular expressions:')
+header = 'Subject'
+print(fr'{header}:\s+')
