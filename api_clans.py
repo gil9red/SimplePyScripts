@@ -15,8 +15,11 @@ class Api:
         self.login = login
         self.password = password
 
-        self.session = requests.session()
+        self.session = requests.Session()
         self.session.headers['Authorization'] = self.make_authorization(login, password)
+        # # Or:
+        # self.session = requests.Session()
+        # self.auth = (login, password)
 
     def method(self, method: str, data: dict = None) -> requests.Response:
         url = self.API_URL + method
