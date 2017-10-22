@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 import requests
 
 
-class ApiClans:
+class Api:
     # TODO: this
     API_URL = '<HOST>/api_clans/1/index.php?request='
 
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     LOGIN = '<LOGIN>'
     PASSWORD = '<PASSWORD>'
 
-    api = ApiClans(LOGIN, PASSWORD)
+    api = Api(LOGIN, PASSWORD)
 
     # Получение информации о текущем пользователе
     rs = api.get_user_data()
