@@ -105,7 +105,7 @@ if __name__ == '__main__':
     rs = api.method('add_user', data)
     new_user_id = rs.json()
 
-    # Регистрация пользователя
+    # Регистрация (Проверка кода подтверждения e-mail)
     rs = api.method('check_email_code', data={'people_id': new_user_id})
     email_code = rs.json()
 
