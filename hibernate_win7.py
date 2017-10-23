@@ -20,16 +20,12 @@ if __name__ == '__main__':
                 seconds_delay -= 1
 
         print('\nGo to Hibernate')
+        
+        # Для включения режима гибернации нужно запустить консоль от администратора и ввести:
+        # powercfg -hibernate on
 
         import os
-        
-        # Следует заметить, что если у вас включен гибридный режим сна (Hibernate), то войдет он именно в этот режим. Отключить его можно запустив от имени администратора следующее:
-        # powercfg -hibernate off
-        
         os.system('rundll32 powrprof.dll,SetSuspendState 0,1,0')
-        # os.system('shutdown /h /f')
-        # os.system('shutdown /f')
-        # os.system(r'%windir%\system32\rundll32.exe powrprof.dll,SetSuspendState Hibernate')
 
     except KeyboardInterrupt:
         print('\nInterrupt')
