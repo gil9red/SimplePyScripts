@@ -23,7 +23,7 @@ if __name__ == '__main__':
     print("decode(base85): '%s'" % base64.b85decode(b85))
 
     print()
-    print("decode(base16) utf-8: '%s'" % base64.b16decode(b16).decode("utf-8"))
-    print("decode(base32) utf-8: '%s'" % base64.b32decode(b32).decode("utf-8"))
-    print("decode(base64) utf-8: '%s'" % base64.b64decode(b64).decode("utf-8"))
-    print("decode(base85) utf-8: '%s'" % base64.b85decode(b85).decode("utf-8"))
+    print("decode(base16) utf-8: '%s'" % base64.b16decode(b16).decode())
+    print("decode(base32) utf-8: '%s'" % base64.b32decode(b32).decode())
+    print("decode(base64) utf-8: '%s'" % base64.b64decode(b64).decode())
+    print("decode(base85) utf-8: '%s'" % base64.b85decode(b85).decode())
