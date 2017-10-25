@@ -92,6 +92,9 @@ print(Color.GREEN == 'red')  # False
 print()
 print(Color.RED in Color)  # True
 print("red" in Color)  # False
+print("red" in Color)  # False
+print()
+print('Color is ' + Color.RED)  # Color is red
 print()
 
 data = [
