@@ -86,6 +86,14 @@ class Color(StrEnum):
     BLUE = 'blue'
 
 
+print(Color.RED == 'red')  # True
+print(Color.GREEN == 'green')  # True
+print(Color.GREEN == 'red')  # False
+print()
+print(Color.RED in Color)  # True
+print("red" in Color)  # False
+print()
+
 data = [
     {
         'name': 'car',
