@@ -95,6 +95,8 @@ print("red" in Color)  # False
 print("red" in Color)  # False
 print()
 print('Color is ' + Color.RED)  # Color is red
+print('Color is ' + Color.RED + Color.GREEN)  # Color is redgreen
+print('Colors: ' + ', '.join(Color))  # Colors: red, green, blue
 print()
 
 data = [
