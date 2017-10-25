@@ -81,19 +81,19 @@ class StrEnum(str, Enum):
 
 @unique
 class Color(StrEnum):
-    red = 'red'
-    green = 'green'
-    blue = 'blue'
+    RED = 'red'
+    GREEN = 'green'
+    BLUE = 'blue'
 
 
 data = [
     {
         'name': 'car',
-        'color': Color.red,
+        'color': Color.RED,
     },
     {
         'name': 'dog',
-        'color': Color.blue,
+        'color': Color.BLUE,
     },
 ]
 
