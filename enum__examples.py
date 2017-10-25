@@ -75,13 +75,11 @@ print(Planet.EARTH.surface_gravity)  # 9.802652743337129
 print()
 
 
-from enum import Enum
-
-
 class StrEnum(str, Enum):
     pass
 
 
+@unique
 class Color(StrEnum):
     red = 'red'
     green = 'green'
