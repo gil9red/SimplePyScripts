@@ -59,9 +59,9 @@ if __name__ == '__main__':
     assert caesar_code(text, shift=0) == text
     assert caesar_code(text, shift=2) == 'Jgnnq Yqtnf!'
     assert caesar_code(text, shift=-4) == 'Dahhk Sknhz!'
-    assert caesar_code(text, shift=26) == 'Hello World!'
+    assert caesar_code(text, shift=26) == text
     assert caesar_code(text, shift=50) == 'Fcjjm Umpjb!'
-    assert caesar_code(text, shift=78) == 'Hello World!'
+    assert caesar_code(text, shift=78) == text
 
     print()
 
@@ -76,9 +76,9 @@ if __name__ == '__main__':
     assert caesar_code(text, shift=0) == text
     assert caesar_code(text, shift=2) == 'Сткджф окт!'
     assert caesar_code(text, shift=-4) == 'Лмеюбо ием!'
-    assert caesar_code(text, shift=33) == 'Привет мир!'
+    assert caesar_code(text, shift=33) == text
     assert caesar_code(text, shift=50) == 'Абщтхг эщб!'
-    assert caesar_code(text, shift=99) == 'Привет мир!'
+    assert caesar_code(text, shift=99) == text
 
     print()
     text = "Hello мир!"
