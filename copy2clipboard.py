@@ -4,9 +4,6 @@
 __author__ = 'ipetrash'
 
 
-import sys
-
-
 def to(text):
     try:
         from PyQt5.QtGui import QGuiApplication as QApplication
@@ -24,6 +21,7 @@ def to(text):
 
 
 if __name__ == '__main__':
+    import sys
     if len(sys.argv) > 1:
         text = ' '.join(sys.argv[1:])
         print('Text: "{}"'.format(text))
