@@ -5,6 +5,8 @@ __author__ = 'ipetrash'
 
 
 import typing
+import requests
+from bs4 import BeautifulSoup
 
 
 def get_comics_url_by_id(comics_id: typing.Union[str, int]) -> str:
@@ -17,10 +19,7 @@ def get_comics_info(comics_id__or__url: typing.Union[str, int]) -> typing.Tuple[
     else:
         url_comics = get_comics_url_by_id(comics_id__or__url)
 
-    import requests
     rs = requests.get(url_comics)
-
-    from bs4 import BeautifulSoup
     root = BeautifulSoup(rs.content, 'lxml')
 
     title = root.select_one('.comics_name').text.strip()
@@ -34,10 +33,7 @@ def get_comics_info(comics_id__or__url: typing.Union[str, int]) -> typing.Tuple[
 def get_random_comics_url() -> str:
     url = 'https://cynicmansion.ru/'
 
-    import requests
     rs = requests.get(url)
-
-    from bs4 import BeautifulSoup
     root = BeautifulSoup(rs.content, 'lxml')
     comics_number = int(root.select_one('.comics_wrap > table > tr > td > a')['href'].replace('/', ''))
 
@@ -73,13 +69,12 @@ if __name__ == '__main__':
     print('url_image:', url_image)
 
     comics_id = url_comics.split('/')[-2]
-    import requests
-    rs = requests.get(url_image)
 
     file_name = '{}.png'.format(comics_id)
     print('Save in:', file_name)
 
     with open(file_name, mode='wb') as f:
+        rs = requests.get(url_image)
         f.write(rs.content)
 
     print()
@@ -96,6 +91,8 @@ if __name__ == '__main__':
 
     print()
     comics_id = 1538
+    print('About #{} comics'.format(comics_id))
+
     url = get_comics_url_by_id(comics_id)
     print(comics_id, url)
     print()
