@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 def split_by_case(text: str) -> list:
     import re
-    return re.findall(r'[a-zA-Z][^A-Z]+', text)
+    return re.findall(r'[a-zA-Z][a-z]+', text)
 
 
 if __name__ == '__main__':
