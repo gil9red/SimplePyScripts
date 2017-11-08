@@ -7,13 +7,13 @@ __author__ = 'ipetrash'
 # SOURCE: https://github.com/dsoprea/PySvn
 
 import svn.local
-client = svn.local.LocalClient('E:/OPTT/optt_trunk')
+repo = svn.local.LocalClient('E:/OPTT/optt_trunk')
 
 # OR:
 # import svn.remote
-# client = svn.remote.RemoteClient('svn+cplus://svn2.compassplus.ru/twrbs/csm/optt/dev/trunk')
+# repo = svn.remote.RemoteClient('svn+cplus://svn2.compassplus.ru/twrbs/csm/optt/dev/trunk')
 
-log_list = [log for log in client.log_default()]
+log_list = [log for log in repo.log_default()]
 print('Total commits:', len(log_list))
 
 from collections import defaultdict
