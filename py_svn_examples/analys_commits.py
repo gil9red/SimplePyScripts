@@ -48,6 +48,8 @@ df_month = pd.DataFrame({'count': df.groupby("year_month").size()}).reset_index(
 print(df_month)
 print()
 
+# TODO: вывести на графике всех юзеров, обозначив разным цветом и добавив легенду
+
 import matplotlib.pyplot as plt
 fig = plt.figure(1)
 ax1 = fig.add_subplot(111)
