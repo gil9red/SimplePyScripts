@@ -4,6 +4,8 @@
 __author__ = 'ipetrash'
 
 
+# TODO: добавить подписи на осями x/y
+
 from datetime import datetime
 
 from download_jira_log import FILE_NAME
