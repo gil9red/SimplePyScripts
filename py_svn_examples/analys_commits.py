@@ -14,7 +14,7 @@ repo = svn.local.LocalClient('E:/OPTT/optt_trunk')
 # repo = svn.remote.RemoteClient('svn+cplus://svn2.compassplus.ru/twrbs/csm/optt/dev/trunk')
 
 log_list = [log for log in repo.log_default()]
-print('Total commits:', len(log_list))
+print('Total commits ({}):'.format(len(log_list)))
 
 from collections import defaultdict
 author_by_log = defaultdict(list)
@@ -23,7 +23,7 @@ for log in log_list:
     author_by_log[log.author].append(log)
 
 for author, logs in sorted(author_by_log.items(), key=lambda item: len(item[1]), reverse=True):
-    print('    {}: commits {}'.format(author, len(logs)))
+    print('    {}: {}'.format(author, len(logs)))
 
 print('\n\n')
 
