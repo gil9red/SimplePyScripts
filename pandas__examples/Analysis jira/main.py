@@ -4,8 +4,6 @@
 __author__ = 'ipetrash'
 
 
-# TODO: добавить подписи на осями x/y
-
 from datetime import datetime
 
 from download_jira_log import FILE_NAME
@@ -41,15 +39,23 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import FormatStrFormatter
 
 fig = plt.figure(1)
+fig.suptitle('Analysis jira', fontsize=14, fontweight='bold')
+
 ax1 = fig.add_subplot(121)
 ax1.plot(df_month['resolved_year_month'], df_month['count'])
 ax1.grid()
+ax1.set_title('Jira by month')
+ax1.set_xlabel('Date')
+ax1.set_ylabel('Count')
 plt.gcf().autofmt_xdate()
 
 ax2 = fig.add_subplot(122)
 ax2.plot(df_year['resolved_year'], df_year['count'])
 ax2.ticklabel_format(useOffset=False)
 ax2.xaxis.set_major_formatter(FormatStrFormatter('%d'))
+ax2.set_title('Jira by year')
+ax2.set_xlabel('Date')
+ax2.set_ylabel('Count')
 ax2.grid()
 plt.gcf().autofmt_xdate()
 
