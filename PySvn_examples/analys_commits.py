@@ -6,57 +6,35 @@ __author__ = 'ipetrash'
 
 # SOURCE: https://github.com/dsoprea/PySvn
 
-import svn.local
-repo = svn.local.LocalClient('E:/OPTT/optt_trunk')
+def get_log_list() -> list:
+    import svn.local
+    repo = svn.local.LocalClient('E:/OPTT/optt_trunk')
 
-# OR:
-# import svn.remote
-# repo = svn.remote.RemoteClient('svn+cplus://svn2.compassplus.ru/twrbs/csm/optt/dev/trunk')
+    # OR:
+    # import svn.remote
+    # repo = svn.remote.RemoteClient('svn+cplus://svn2.compassplus.ru/twrbs/csm/optt/dev/trunk')
 
-log_list = [log for log in repo.log_default()]
-print('Total commits ({}):'.format(len(log_list)))
+    return list(repo.log_default())
 
-from collections import defaultdict
-author_by_log = defaultdict(list)
 
-for log in log_list:
-    author_by_log[log.author].append(log)
+def get_log_list_by_author(log_list: list = None) -> dict:
+    if not log_list:
+        log_list = get_log_list()
 
-for author, logs in sorted(author_by_log.items(), key=lambda item: len(item[1]), reverse=True):
-    print('    {}: {}'.format(author, len(logs)))
+    from collections import defaultdict
+    author_by_log = defaultdict(list)
 
-print('\n\n')
+    for log in log_list:
+        author_by_log[log.author].append(log)
 
-#
-# TODO: create new py script for plot
-#
-# Draw plot
-#
+    return author_by_log
 
-records = []
 
-from datetime import datetime
+if __name__ == '__main__':
+    log_list = get_log_list()
+    print('Total commits ({}):'.format(len(log_list)))
 
-for log in author_by_log['ipetrash']:
-    year_month = datetime(log.date.year, log.date.month, 1)
-    records.append((log.date, year_month))
+    author_by_log = get_log_list_by_author(log_list)
 
-import pandas as pd
-df = pd.DataFrame(data=records, columns=['date', 'year_month'])
-print(df)
-print('Total rows:', len(df))
-
-df_month = pd.DataFrame({'count': df.groupby("year_month").size()}).reset_index()
-print(df_month)
-print()
-
-# TODO: вывести на графике всех юзеров, обозначив разным цветом и добавив легенду
-
-import matplotlib.pyplot as plt
-fig = plt.figure(1)
-ax1 = fig.add_subplot(111)
-ax1.plot(df_month['year_month'], df_month['count'])
-ax1.grid()
-plt.gcf().autofmt_xdate()
-
-plt.show()
+    for author, logs in sorted(author_by_log.items(), key=lambda item: len(item[1]), reverse=True):
+        print('    {}: {}'.format(author, len(logs)))
