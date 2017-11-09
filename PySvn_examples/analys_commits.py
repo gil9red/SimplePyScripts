@@ -28,6 +28,8 @@ for author, logs in sorted(author_by_log.items(), key=lambda item: len(item[1]),
 print('\n\n')
 
 #
+# TODO: create new py script for plot
+#
 # Draw plot
 #
 
