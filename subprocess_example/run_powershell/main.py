@@ -4,8 +4,6 @@
 __author__ = 'ipetrash'
 
 
-# PowerShell example: https://stackoverflow.com/documentation/powershell/822/getting-started-with-powershell/3444/allow-scripts-stored-on-your-machine-to-run-un-signed#t=20170819174703981402
-
 import os
 WIN_DIR = os.path.expandvars('%WINDIR%')
 FILE_NAME_POWERSHELL = os.path.join(WIN_DIR, r'system32\WindowsPowerShell\v1.0\powershell.exe')
