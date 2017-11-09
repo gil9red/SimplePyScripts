@@ -4,12 +4,14 @@
 __author__ = 'ipetrash'
 
 
+AUTHOR = 'ipetrash'
+
 from analys_commits import get_log_list_by_author
 author_by_log = get_log_list_by_author()
 
 # Сбор коммитов за месяц/год
 from datetime import datetime
-records = [datetime(log.date.year, log.date.month, 1) for log in author_by_log['ipetrash']]
+records = [datetime(log.date.year, log.date.month, 1) for log in author_by_log[AUTHOR]]
 
 import pandas as pd
 df = pd.DataFrame(data=records, columns=['year_month'])
@@ -29,7 +31,8 @@ fig = plt.figure(1)
 fig.suptitle(plot_title, fontsize=14, fontweight='bold')
 
 ax = fig.add_subplot(111)
-ax.plot(df_month['year_month'], df_month['count'])
+ax.plot(df_month['year_month'], df_month['count'], label='{} ({})'.format(AUTHOR, len(author_by_log[AUTHOR])))
+ax.legend()
 ax.grid()
 ax.set_title('Commits')
 ax.set_xlabel('Date')

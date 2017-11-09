@@ -28,7 +28,7 @@ for author, logs in list_top5_author_by_log:
 
     df = pd.DataFrame(data=records, columns=['year_month'])
     df_month = pd.DataFrame({'count': df.groupby("year_month").size()}).reset_index()
-    ax.plot(df_month['year_month'], df_month['count'], label=author)
+    ax.plot(df_month['year_month'], df_month['count'], label='{} ({})'.format(author, len(logs)))
 
 ax.legend()
 ax.grid()
