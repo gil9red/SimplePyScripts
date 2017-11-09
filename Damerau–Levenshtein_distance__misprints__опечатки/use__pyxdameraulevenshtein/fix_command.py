@@ -43,6 +43,7 @@ def fix_command(text):
     command, rate = min(result, key=lambda x: x[1])
 
     # Подобранное значение для определения совпадения текста среди значений указанного списка
+    # Если True, считаем что слишком много ошибок в слове, т.е. text среди all_commands нет
     if rate > 0.25:
         return
 
