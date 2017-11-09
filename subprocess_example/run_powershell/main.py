@@ -6,13 +6,16 @@ __author__ = 'ipetrash'
 
 # PowerShell example: https://stackoverflow.com/documentation/powershell/822/getting-started-with-powershell/3444/allow-scripts-stored-on-your-machine-to-run-un-signed#t=20170819174703981402
 
-FILE_NAME_POWERSHELL = r'C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe'
+import os
+WIN_DIR = os.path.expandvars('%WINDIR%')
+FILE_NAME_POWERSHELL = os.path.join(WIN_DIR, r'system32\WindowsPowerShell\v1.0\powershell.exe')
+print('Powershell:', FILE_NAME_POWERSHELL)
+print()
 
 file_name_ps1 = 'hello_world.ps1'
 command = FILE_NAME_POWERSHELL + ' -ExecutionPolicy Bypass -File ' + file_name_ps1
 
 print('OS:')
-import os
 os.system(command)
 
 print()
