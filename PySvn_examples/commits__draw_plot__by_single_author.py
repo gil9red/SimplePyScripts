@@ -7,16 +7,12 @@ __author__ = 'ipetrash'
 from analys_commits import get_log_list_by_author
 author_by_log = get_log_list_by_author()
 
-records = []
-
+# Сбор коммитов за месяц/год
 from datetime import datetime
-
-for log in author_by_log['ipetrash']:
-    year_month = datetime(log.date.year, log.date.month, 1)
-    records.append((log.date, year_month))
+records = [datetime(log.date.year, log.date.month, 1) for log in author_by_log['ipetrash']]
 
 import pandas as pd
-df = pd.DataFrame(data=records, columns=['date', 'year_month'])
+df = pd.DataFrame(data=records, columns=['year_month'])
 print(df)
 print('Total rows:', len(df))
 
