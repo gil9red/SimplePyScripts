@@ -11,7 +11,7 @@ from PyQt5.QtGui import *
 
 
 if __name__ == '__main__':
-    con = sqlite3.connect('test.sqlite3')
+    con = sqlite3.connect('test.sqlite')
     cur = con.cursor()
     cur.execute('''
     CREATE TABLE IF NOT EXISTS Images (
