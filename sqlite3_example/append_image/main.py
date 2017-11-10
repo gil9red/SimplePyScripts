@@ -18,10 +18,10 @@ if __name__ == '__main__':
         Data BLOB
     )
     ''')
+    con.commit()
 
-    with open('capture.png', "rb") as f:
-        img_data = f.read()
-        binary = sqlite3.Binary(img_data)
+    with open('capture.png', mode='rb') as f:
+        binary = sqlite3.Binary(f.read())
 
         cur.execute("INSERT INTO Images(Data) VALUES (?)", (binary,))
         con.commit()
