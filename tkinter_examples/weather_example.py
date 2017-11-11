@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+API_KEY = '87c7712a9b72646a269102230858837b'
+
+
 def get_weather_info(api_key, place):
     import pyowm
     owm = pyowm.OWM(api_key)
@@ -13,9 +16,6 @@ def get_weather_info(api_key, place):
     status = w.get_status()
 
     return temperature, status
-
-
-API_KEY = '87c7712a9b72646a269102230858837b'
 
 
 from tkinter import *
