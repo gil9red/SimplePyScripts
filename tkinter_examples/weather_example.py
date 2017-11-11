@@ -31,7 +31,7 @@ label2.grid()
 
 
 def update_clock():
-    temperature, status = get_weather_info(api_key=API_KEY, place='Донецк')
+    temperature, status = get_weather_info(api_key=API_KEY, place='Donetsk')
     print(temperature, status)
 
     label.configure(text='Температура: ' + str(temperature))
