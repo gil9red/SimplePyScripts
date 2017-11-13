@@ -16,8 +16,9 @@ fig = plt.figure(1)
 fig.suptitle(plot_title, fontsize=14, fontweight='bold')
 ax = fig.add_subplot(111)
 
-from analys_commits import get_log_list_by_author
-author_by_log = get_log_list_by_author()
+import config
+from common import get_log_list_by_author
+author_by_log = get_log_list_by_author(config.SVN_FILE_NAME)
 
 list_top_author_by_log = sorted(author_by_log.items(), key=lambda item: len(item[1]), reverse=True)
 

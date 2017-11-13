@@ -4,12 +4,14 @@
 __author__ = 'ipetrash'
 
 
+import config
+
 import svn.local
-repo = svn.local.LocalClient('E:/OPTT/optt_trunk')
+repo = svn.local.LocalClient(config.SVN_FILE_NAME)
 
 # OR:
 # import svn.remote
-# repo = svn.remote.RemoteClient('svn+cplus://svn2.compassplus.ru/twrbs/csm/optt/dev/trunk')
+# repo = svn.remote.RemoteClient(config.URL_SVN)
 
 
 log_list = [log for log in repo.log_default()]

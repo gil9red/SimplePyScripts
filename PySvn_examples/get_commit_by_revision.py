@@ -4,9 +4,9 @@
 __author__ = 'ipetrash'
 
 
-url = 'svn+cplus://svn2.compassplus.ru/twrbs/csm/optt/dev/trunk'
+import config
 
 import svn.remote
-repo = svn.remote.RemoteClient(url)
+repo = svn.remote.RemoteClient(config.URL_SVN)
 
 print(list(repo.log_default(revision_from=159807, limit=1)))

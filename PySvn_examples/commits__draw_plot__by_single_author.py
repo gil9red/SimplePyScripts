@@ -6,8 +6,9 @@ __author__ = 'ipetrash'
 
 AUTHOR = 'ipetrash'
 
-from analys_commits import get_log_list_by_author
-author_by_log = get_log_list_by_author()
+import config
+from common import get_log_list_by_author
+author_by_log = get_log_list_by_author(config.SVN_FILE_NAME)
 
 # Сбор коммитов за месяц/год
 from datetime import datetime
