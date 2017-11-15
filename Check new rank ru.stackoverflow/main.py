@@ -193,7 +193,7 @@ if __name__ == '__main__':
 
             # TODO: вернуть обратно
             # wait(weeks=1)
-            wait(days=1)
+            wait(hours=1)
 
         except requests.exceptions.ConnectionError as e:
             log.warning('Ошибка подключения к сети: %s', e)
