@@ -24,6 +24,5 @@ def get_user_rank_and_reputation() -> (str, str):
 
 if __name__ == '__main__':
     rank, reputation = get_user_rank_and_reputation()
-
     print('rank:', rank)
     print('reputation:', reputation)
