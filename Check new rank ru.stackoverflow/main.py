@@ -155,7 +155,7 @@ def update_file_data(value: str):
 
 
 if __name__ == '__main__':
-    notified_by_sms = False
+    notified_by_sms = True
 
     try:
         last_rank = open(FILE_NAME_LAST_RANK, encoding='utf-8').read()
