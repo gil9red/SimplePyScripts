@@ -62,7 +62,7 @@ class Widget(QWidget):
 
     def _draw_pixel(self):
         # Количество пикселей за один шаг
-        pixels_by_step = 20
+        pixels_by_step = 15
 
         for _ in range(pixels_by_step):
             y, x = self.pixel_list.pop()
