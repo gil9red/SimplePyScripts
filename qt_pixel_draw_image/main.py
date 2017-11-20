@@ -70,9 +70,6 @@ class Widget(QWidget):
         self.update()
 
     def paintEvent(self, event):
-        # painter = QPainter(self)
-        # painter.drawPixmap(0, 0, self.img)
-
         painter = QPainter(self)
 
         # Рисуем старую картинку
