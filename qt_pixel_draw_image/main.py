@@ -56,7 +56,7 @@ class Widget(QWidget):
         self.timer.start(1)  # 100 ms
 
     def _draw_pixel(self):
-        # Если список опустеет
+        # Если список пустой
         if not self.pixel_list:
             self.timer.stop()
             return
