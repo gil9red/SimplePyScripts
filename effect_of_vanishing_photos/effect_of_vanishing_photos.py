@@ -12,8 +12,34 @@ __author__ = 'ipetrash'
 
 import sys
 
-from PySide.QtGui import *
-from PySide.QtCore import *
+
+try:
+    from PyQt5.QtWidgets import *
+    from PyQt5.QtGui import *
+    from PyQt5.QtCore import *
+
+except:
+    try:
+        from PyQt4.QtGui import *
+        from PyQt4.QtCore import *
+
+    except:
+        from PySide.QtGui import *
+        from PySide.QtCore import *
+
+
+def log_uncaught_exceptions(ex_cls, ex, tb):
+    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+    import traceback
+    text += ''.join(traceback.format_tb(tb))
+
+    print(text)
+    QMessageBox.critical(None, 'Error', text)
+    quit()
+
+
+import sys
+sys.excepthook = log_uncaught_exceptions
 
 
 class Timer(QTimer):
@@ -67,7 +93,7 @@ class Widget(QWidget):
     def mouseReleaseEvent(self, event):
         super().mouseReleaseEvent(event)
 
-        self.timer.add(event.posF())
+        self.timer.add(event.pos())
 
     def paintEvent(self, event):
         super().paintEvent(event)
