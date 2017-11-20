@@ -44,7 +44,7 @@ class Widget(QWidget):
         #     for x in range(self.img_width):
         #         self.pixel_list.append((y, x))
 
-        # Перемещаем список координат
+        # Перемешаем элементы списка случайным образом
         import random
         random.shuffle(self.pixel_list)
 
