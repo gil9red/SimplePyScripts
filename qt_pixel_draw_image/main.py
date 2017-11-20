@@ -53,7 +53,7 @@ class Widget(QWidget):
 
         self.timer = QTimer()
         self.timer.timeout.connect(self._draw_pixel)
-        self.timer.start(1)  # 100 ms
+        self.timer.start(1)  # 1 ms
 
     def _draw_pixel(self):
         # Если список пустой
