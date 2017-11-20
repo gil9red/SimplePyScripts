@@ -61,24 +61,19 @@ class Widget(QWidget):
         self.timer.start(1)  # 1 ms
 
     def _draw_pixel(self):
-        # Проверка на всякий случай
-        # Если список пустой
-        if not self.pixel_list:
-            self.timer.stop()
-            return
-
         # Количество пикселей за один шаг
         pixels_by_step = 15
 
         for _ in range(pixels_by_step):
-            y, x = self.pixel_list.pop()
-            pixel = self.img.pixel(x, y)
+            # Если список не пустой
+            if self.pixel_list:
+                y, x = self.pixel_list.pop()
+                pixel = self.img.pixel(x, y)
 
-            # Установка пикселя в новой картинке
-            self.new_img.setPixel(x, y, pixel)
+                # Установка пикселя в новой картинке
+                self.new_img.setPixel(x, y, pixel)
 
-            # Если список пустой
-            if not self.pixel_list:
+            else:
                 self.timer.stop()
                 break
 
