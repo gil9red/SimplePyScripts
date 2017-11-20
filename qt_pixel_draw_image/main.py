@@ -37,11 +37,12 @@ class Widget(QWidget):
         self.img_height = self.img.size().height()
 
         # Сгенерируем список координат пикселей
-        # self.pixel_list = [(x, y) for y in range(self.img_height) for x in range(self.img_width)]
-        self.pixel_list = []
-        for y in range(self.img_height):
-            for x in range(self.img_width):
-                self.pixel_list.append((y, x))
+        self.pixel_list = [(y, x) for y in range(self.img_height) for x in range(self.img_width)]
+        # OR:
+        # self.pixel_list = []
+        # for y in range(self.img_height):
+        #     for x in range(self.img_width):
+        #         self.pixel_list.append((y, x))
 
         # Перемещаем список координат
         import random
