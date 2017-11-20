@@ -39,6 +39,7 @@ class Widget(QWidget):
         self.img_width = self.img.size().width()
         self.img_height = self.img.size().height()
 
+        # Размер окна под размер картинок
         self.resize(self.img_width * 2 + 20, self.img_height + 20)
 
         # Сгенерируем список координат пикселей
