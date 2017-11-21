@@ -4,45 +4,15 @@
 __author__ = 'ipetrash'
 
 
-# # При выводе юникодных символов в консоль винды
-# # Возможно, не только для винды, но и для любой платформы стоит использовать
-# # эту настройку -- мало какие проблемы могут встретиться
-# import sys
-# if sys.platform == 'win32':
-#     import codecs
-#
-#     try:
-#         sys.stdout = codecs.getwriter(sys.stdout.encoding)(sys.stdout.detach(), 'backslashreplace')
-#         sys.stderr = codecs.getwriter(sys.stderr.encoding)(sys.stderr.detach(), 'backslashreplace')
-#
-#     except AttributeError:
-#         # ignore "AttributeError: '_io.BufferedWriter' object has no attribute 'encoding'"
-#         pass
+# Чтобы можно было импортировать all_common.py, находящийся уровнем выше
+import sys
+sys.path.append('..')
 
 
-from config import *
+from all_common import get_logger, wait, simple_send_sms
 
 
-def get_logger(name, file='log.txt', encoding='utf-8', log_stdout=True, log_file=True):
-    import logging
-    log = logging.getLogger(name)
-    log.setLevel(logging.DEBUG)
-
-    formatter = logging.Formatter('[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s')
-
-    if log_file:
-        from logging.handlers import RotatingFileHandler
-        fh = RotatingFileHandler(file, maxBytes=10000000, backupCount=5, encoding=encoding)
-        fh.setFormatter(formatter)
-        log.addHandler(fh)
-
-    if log_stdout:
-        import sys
-        sh = logging.StreamHandler(stream=sys.stdout)
-        sh.setFormatter(formatter)
-        log.addHandler(sh)
-
-    return log
+# make_backslashreplace_console()
 
 
 DEBUG = False
@@ -60,34 +30,6 @@ else:
 
     log = get_logger('games_with_denuvo')
     log_cracked_games = get_logger('cracked_games', file='cracked_games.log.txt', log_stdout=False)
-
-
-def send_sms(api_id: str, to: str, text: str):
-    log.info('Отправка sms: "%s"', text)
-
-    # Отправляю смс на номер
-    url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
-        api_id=api_id,
-        to=to,
-        text=text
-    )
-    log.debug(repr(url))
-
-    while True:
-        try:
-            import requests
-            rs = requests.get(url)
-            log.debug(repr(rs.text))
-
-            break
-
-        except:
-            log.exception("При отправке sms произошла ошибка:")
-            log.debug('Через 5 минут попробую снова...')
-
-            # Wait 5 minutes before next attempt
-            import time
-            time.sleep(5 * 60)
 
 
 def create_connect():
@@ -190,7 +132,7 @@ def append_list_games(games: [(str, bool)], notified_by_sms=True):
 
                     # При DEBUG = True, отправки смс не будет
                     if notified_by_sms and not DEBUG:
-                        send_sms(API_ID, TO, text)
+                        simple_send_sms(text, log)
 
             elif is_cracked:
                 text = 'Добавлена взломанная игра "{}"'.format(name)
@@ -199,7 +141,7 @@ def append_list_games(games: [(str, bool)], notified_by_sms=True):
 
                 # При DEBUG = True, отправки смс не будет
                 if notified_by_sms and not DEBUG:
-                    send_sms(API_ID, TO, text)
+                    simple_send_sms(text, log)
 
         connect.commit()
 
