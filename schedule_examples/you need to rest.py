@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 
@@ -13,27 +14,34 @@ app = QApplication([])
 
 
 # 60 * 1000 * 10 -- 10 minutes
-def show_message(text, timeout=60 * 1000 * 30):
+def show_message(text, timeout=60 * 1000 * 10):
     print('show_message: "{}"'.format(text))
 
-    msg_box = QMessageBox()
-    msg_box.setWindowFlags(msg_box.windowFlags() | Qt.WindowStaysOnTopHint)
-    msg_box.setWindowTitle("Информация")
-    msg_box.setText(text)
-    msg_box.setIcon(QMessageBox.Information)
-    msg_box.setStandardButtons(QMessageBox.Ok)
+    msg = QMessageBox()
+    msg.setWindowFlags(msg.windowFlags() | Qt.WindowStaysOnTopHint)
+    msg.setWindowTitle("Информация")
+    msg.setText("<p align='center'>{}<.p>".format(text))
+    msg.setIcon(QMessageBox.Information)
+    msg.setStandardButtons(QMessageBox.Ok)
 
-    QTimer.singleShot(timeout, msg_box.close)
+    # font = msg.font()
+    # or:
+    font = QFont()
+    font.setFamily('Times')
+    font.setPointSize(50)
+    msg.setFont(font)
 
-    msg_box.exec()
+    QTimer.singleShot(timeout, msg.close)
+
+    msg.exec()
 
 
 # pip install schedule
 import schedule
-schedule.every().day.at("11:00").do(lambda: show_message("Пора в столовку сходить"))
-schedule.every().day.at("13:00").do(lambda: show_message("Подними жопу и прогуляйся"))
-schedule.every().day.at("15:00").do(lambda: show_message("Подними жопу и прогуляйся"))
-schedule.every().day.at("17:00").do(lambda: show_message("Подними жопу и прогуляйся"))
+schedule.every().day.at("11:00").do(lambda: show_message("Пора в столовку"))
+schedule.every().day.at("13:00").do(lambda: show_message("Иди прогуляйся"))
+schedule.every().day.at("15:00").do(lambda: show_message("Иди прогуляйся"))
+schedule.every().day.at("17:00").do(lambda: show_message("Иди прогуляйся"))
 schedule.every().day.at("19:00").do(lambda: show_message("Вали домой"))
 
 
