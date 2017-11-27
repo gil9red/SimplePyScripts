@@ -65,7 +65,7 @@ class RunSchedulerThread(QThread):
             import time
             time.sleep(1)
 
-            next_job_time = schedule.next_run()
+            next_job_time = schedule.next_run().time()
             idle_secs = int(schedule.idle_seconds())
 
             local_description_gui = description_gui
