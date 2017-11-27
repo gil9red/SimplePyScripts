@@ -34,9 +34,7 @@ def show_message(text, timeout=60 * 1000 * 10):
 
 class RunSchedulerThread(QThread):
     about_show_message = pyqtSignal(str)
-
-    def __init__(self):
-        super().__init__()
+    about_description = pyqtSignal(str)
 
     def run(self):
         # pip install schedule
@@ -47,11 +45,16 @@ class RunSchedulerThread(QThread):
         schedule.every().day.at("17:00").do(lambda: self.about_show_message.emit("Иди прогуляйся"))
         schedule.every().day.at("19:00").do(lambda: self.about_show_message.emit("Вали домой"))
 
-        print('Jobs:')
+        description = 'Jobs:\n'
         for job in schedule.jobs:
-            print('    ' + str(job))
+            description += '    ' + str(job) + "\n"
 
-        print()
+        # Костыль для показа сообщения вида "Every 1 day at 11:00:00"
+        import re
+        description = re.sub(r' do <lambda>\(\) \(last run: .+?, next run: .+?\)', '', description)
+
+        print(description)
+        self.about_description.emit(description)
 
         while True:
             schedule.run_pending()
@@ -70,6 +73,15 @@ if __name__ == '__main__':
     tray = QSystemTrayIcon(icon)
 
     menu = QMenu()
+
+    widget_info = QPlainTextEdit()
+    widget_info.setReadOnly(True)
+    widget_info.setFixedSize(200, 130)
+    widget_info_action = QWidgetAction(widget_info)
+    widget_info_action.setDefaultWidget(widget_info)
+
+    menu.addAction(widget_info_action)
+
     action_quit = menu.addAction('Quit')
     action_quit.triggered.connect(quit)
 
@@ -84,6 +96,7 @@ if __name__ == '__main__':
     # только в главном потоке, поэтому от потока будет идти сигнал, который в главном потоке вызовет окно с сообщением
     thread = RunSchedulerThread()
     thread.about_show_message.connect(show_message)
+    thread.about_description.connect(widget_info.setPlainText)
     thread.start()
 
     app.exec()
