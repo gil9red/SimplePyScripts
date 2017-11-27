@@ -25,12 +25,12 @@ sys.excepthook = log_uncaught_exceptions
 
 if __name__ == '__main__':
     app = QApplication([])
+    style = app.style()
 
     enum_items_standard_pixmap = [x for x in dir(QStyle) if x.startswith('SP_')]
 
     lw = QListWidget()
     lw.setWindowTitle('show_all_standard_qt_icon__from_StandardPixmap')
-    style = lw.style()
 
     for enum_name in enum_items_standard_pixmap:
         enum_value = getattr(QStyle, enum_name)
