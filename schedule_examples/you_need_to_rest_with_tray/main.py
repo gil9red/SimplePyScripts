@@ -46,15 +46,18 @@ class RunSchedulerThread(QThread):
         schedule.every().day.at("19:00").do(lambda: self.about_show_message.emit("Вали домой"))
 
         description = 'Jobs:\n'
+        description_gui = ''
         for job in schedule.jobs:
             description += '    ' + str(job) + "\n"
+            description_gui += str(job) + "\n"
 
         # Костыль для показа сообщения вида "Every 1 day at 11:00:00"
         import re
-        description = re.sub(r' do <lambda>\(\) \(last run: .+?, next run: .+?\)', '', description)
+        pattern = re.compile(r' do <lambda>\(\) \(last run: .+?, next run: .+?\)')
+        description = pattern.sub('', description)
+        description_gui = pattern.sub('', description_gui)
 
         print(description)
-        self.about_description.emit(description)
 
         while True:
             schedule.run_pending()
@@ -62,24 +65,32 @@ class RunSchedulerThread(QThread):
             import time
             time.sleep(1)
 
+            next_job_time = schedule.next_run()
+            idle_secs = int(schedule.idle_seconds())
+
+            local_description_gui = description_gui
+            local_description_gui += '\n\n'
+            local_description_gui += 'Следующий перерыв будет в {}, осталось {} секунд'.format(next_job_time, idle_secs)
+            self.about_description.emit(local_description_gui)
+
+
+import os.path
+TRAY_ICON = os.path.join(os.path.dirname(__file__), 'rest_32x32.png')
+
 
 if __name__ == '__main__':
     app = QApplication([])
     app.setQuitOnLastWindowClosed(False)
 
-    style = app.style()
-    icon = style.standardIcon(QStyle.SP_BrowserReload)
-
-    tray = QSystemTrayIcon(icon)
-
-    menu = QMenu()
+    tray = QSystemTrayIcon(QIcon(TRAY_ICON))
 
     widget_info = QPlainTextEdit()
     widget_info.setReadOnly(True)
-    widget_info.setFixedSize(200, 130)
+    widget_info.setFixedSize(220, 180)
     widget_info_action = QWidgetAction(widget_info)
     widget_info_action.setDefaultWidget(widget_info)
 
+    menu = QMenu()
     menu.addAction(widget_info_action)
 
     action_quit = menu.addAction('Quit')
