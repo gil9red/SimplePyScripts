@@ -84,20 +84,34 @@ if __name__ == '__main__':
 
     tray = QSystemTrayIcon(QIcon(TRAY_ICON))
 
+    menu = QMenu()
+
     widget_info = QPlainTextEdit()
     widget_info.setReadOnly(True)
     widget_info.setFixedSize(220, 180)
-    widget_info_action = QWidgetAction(widget_info)
+    widget_info_action = QWidgetAction(app)
     widget_info_action.setDefaultWidget(widget_info)
 
-    menu = QMenu()
+    button_box_layout = QHBoxLayout()
+    button_box_layout.setContentsMargins(0, 0, 0, 0)
+    button_box_layout.setSpacing(0)
+
+    button = QPushButton('Hide')
+    button.clicked.connect(menu.hide)
+    button_box_layout.addWidget(button)
+
+    button = QPushButton('Quit')
+    button.clicked.connect(quit)
+    button_box_layout.addWidget(button)
+
+    button_box = QWidget()
+    button_box.setLayout(button_box_layout)
+
+    button_box_action = QWidgetAction(app)
+    button_box_action.setDefaultWidget(button_box)
+
     menu.addAction(widget_info_action)
-
-    action = menu.addAction('Hide')
-    action.triggered.connect(menu.hide)
-
-    action = menu.addAction('Quit')
-    action.triggered.connect(quit)
+    menu.addAction(button_box_action)
 
     tray.setContextMenu(menu)
     tray.activated.connect(lambda x: menu.exec(tray.geometry().center()))
