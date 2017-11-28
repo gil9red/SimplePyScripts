@@ -93,8 +93,11 @@ if __name__ == '__main__':
     menu = QMenu()
     menu.addAction(widget_info_action)
 
-    action_quit = menu.addAction('Quit')
-    action_quit.triggered.connect(quit)
+    action = menu.addAction('Hide')
+    action.triggered.connect(menu.hide)
+
+    action = menu.addAction('Quit')
+    action.triggered.connect(quit)
 
     tray.setContextMenu(menu)
     tray.activated.connect(lambda x: menu.exec(tray.geometry().center()))
