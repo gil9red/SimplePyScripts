@@ -5,7 +5,6 @@ __author__ = 'ipetrash'
 
 
 import traceback
-import sys
 
 try:
     from PyQt5.QtWidgets import *
@@ -31,6 +30,7 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
     quit()
 
 
+import sys
 sys.excepthook = log_uncaught_exceptions
 
 
