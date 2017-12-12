@@ -9,6 +9,20 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 
+def log_uncaught_exceptions(ex_cls, ex, tb):
+    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+    import traceback
+    text += ''.join(traceback.format_tb(tb))
+
+    print(text)
+    QMessageBox.critical(None, 'Error', text)
+    quit()
+
+
+import sys
+sys.excepthook = log_uncaught_exceptions
+
+
 # 60 * 1000 * 10 -- 10 minutes
 def show_message(text, timeout=60 * 1000 * 10):
     print('show_message: "{}"'.format(text))
