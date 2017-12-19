@@ -32,4 +32,8 @@ if __name__ == '__main__':
     import time
     time.sleep(60 * 60)
 
+    # # infinity
+    # while True:
+    #     time.sleep(1)
+
     preventing_off()
