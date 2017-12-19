@@ -27,6 +27,11 @@ if __name__ == '__main__':
     button.toggled.connect(button_clicked)
     button.setCheckable(True)
     button.setChecked(True)
+
+    font = button.font()
+    font.setPointSize(20)
+
+    button.setFont(font)
     button.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
 
     w.layout().addWidget(qtw.QLabel(w.windowTitle()))
