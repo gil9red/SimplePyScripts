@@ -20,7 +20,6 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
 
 
 import sys
-
 sys.excepthook = log_uncaught_exceptions
 
 
