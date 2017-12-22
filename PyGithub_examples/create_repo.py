@@ -4,8 +4,8 @@
 __author__ = 'ipetrash'
 
 
-import github
-
+# pip install pygithub
+from github import Github
 from config import LOGIN, PASSWORD
 
 # NOTE: delete repo: Settings -> <Danger Zone> -> <Delete this repository>
@@ -13,14 +13,13 @@ from config import LOGIN, PASSWORD
 NEW_REPO = 'Test-Repo'
 
 
-if __name__ == '__main__':
-    gh = github.Github(LOGIN, PASSWORD)
-    user = gh.get_user()
+gh = Github(LOGIN, PASSWORD)
+user = gh.get_user()
 
-    try:
-        repo = user.get_repo(NEW_REPO)
+try:
+    repo = user.get_repo(NEW_REPO)
 
-    except:
-        repo = user.create_repo(NEW_REPO)
+except:
+    repo = user.create_repo(NEW_REPO)
 
-    print(repo)
+print(repo)
