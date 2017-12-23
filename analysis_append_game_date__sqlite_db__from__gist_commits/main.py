@@ -139,6 +139,8 @@ if __name__ == '__main__':
 
     FINISHED_GAME = 'FINISHED_GAME'
     FINISHED_WATCHED = 'FINISHED_WATCHED'
+    # NOT_FINISHED_GAME = 'NOT_FINISHED_GAME'
+    # NOT_FINISHED_WATCHED = 'NOT_FINISHED_WATCHED'
 
     with create_connect() as connect:
         for committed_at, content in connect.execute('SELECT committed_at, content FROM GistFile'):
@@ -154,6 +156,14 @@ if __name__ == '__main__':
                 for game in categories[FINISHED_WATCHED]:
                     if game not in append_game_date[platform][FINISHED_WATCHED]:
                         append_game_date[platform][FINISHED_WATCHED][game] = committed_at
+
+                # for game in categories[NOT_FINISHED_GAME]:
+                #     if game not in append_game_date[platform][NOT_FINISHED_GAME]:
+                #         append_game_date[platform][NOT_FINISHED_GAME][game] = committed_at
+                #
+                # for game in categories[NOT_FINISHED_WATCHED]:
+                #     if game not in append_game_date[platform][NOT_FINISHED_WATCHED]:
+                #         append_game_date[platform][NOT_FINISHED_WATCHED][game] = committed_at
 
     # Check
     print('Ведьмак:', append_game_date['PC']['FINISHED_GAME']['Ведьмак'])

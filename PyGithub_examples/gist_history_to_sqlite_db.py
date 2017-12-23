@@ -33,6 +33,7 @@ def init_db():
 if __name__ == '__main__':
     init_db()
 
+    # pip install pygithub
     from github import Github
     gh = Github(LOGIN, PASSWORD)
     # #

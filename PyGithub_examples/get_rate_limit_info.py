@@ -4,20 +4,19 @@
 __author__ = 'ipetrash'
 
 
+# pip install pygithub
+from github import Github
 from config import LOGIN, PASSWORD
 
+gh = Github(LOGIN, PASSWORD)
+print('With auth:')
+print('  rate_limiting:', gh.rate_limiting)
+print('  rate_limiting_resettime:', gh.rate_limiting_resettime)
+print('  gh.get_rate_limit():', gh.get_rate_limit())
+print()
 
-if __name__ == '__main__':
-    from github import Github
-    gh = Github(LOGIN, PASSWORD)
-    print('With auth:')
-    print('  rate_limiting:', gh.rate_limiting)
-    print('  rate_limiting_resettime:', gh.rate_limiting_resettime)
-    print('  gh.get_rate_limit():', gh.get_rate_limit())
-    print()
-
-    gh = Github()
-    print('Without auth:')
-    print('  rate_limiting:', gh.rate_limiting)
-    print('  rate_limiting_resettime:', gh.rate_limiting_resettime)
-    print('  gh.get_rate_limit():', gh.get_rate_limit())
+gh = Github()
+print('Without auth:')
+print('  rate_limiting:', gh.rate_limiting)
+print('  rate_limiting_resettime:', gh.rate_limiting_resettime)
+print('  gh.get_rate_limit():', gh.get_rate_limit())

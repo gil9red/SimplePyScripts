@@ -4,10 +4,10 @@
 __author__ = 'ipetrash'
 
 
+# pip install pygithub
+from github import Github
 from config import LOGIN, PASSWORD
 
-
-from github import Github
 gh = Github(LOGIN, PASSWORD)
 # print(list(gh.search_code('requests auth github filename:.py language:python')[:5]))
 
