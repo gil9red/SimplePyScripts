@@ -74,20 +74,20 @@ if __name__ == '__main__':
     url = 'http://ru.darksouls.wikia.com/wiki/Боссы'
     bosses_ds1 = get_bosses(url)
     print_bosses(url, bosses_ds1)
-    export_to_json('dumps/bosses_ds1.json', bosses_ds1)
-    export_to_json('dumps/bosses_ds1__only_name.json', convert_bosses_to_only_name(bosses_ds1))
+    export_to_json('dumps/ds1/bosses.json', bosses_ds1)
+    export_to_json('dumps/ds1/bosses__only_name.json', convert_bosses_to_only_name(bosses_ds1))
 
     url = 'http://ru.darksouls.wikia.com/wiki/Боссы_(Dark_Souls_II)'
     bosses_ds2 = get_bosses(url)
     print_bosses(url, bosses_ds2)
-    export_to_json('dumps/bosses_ds2.json', bosses_ds2)
-    export_to_json('dumps/bosses_ds2__only_name.json', convert_bosses_to_only_name(bosses_ds2))
+    export_to_json('dumps/ds2/bosses.json', bosses_ds2)
+    export_to_json('dumps/ds2/bosses__only_name.json', convert_bosses_to_only_name(bosses_ds2))
 
     url = 'http://ru.darksouls.wikia.com/wiki/Боссы_(Dark_Souls_III)'
     bosses_ds3 = get_bosses(url)
     print_bosses(url, bosses_ds3)
-    export_to_json('dumps/bosses_ds3.json', bosses_ds3)
-    export_to_json('dumps/bosses_ds3__only_name.json', convert_bosses_to_only_name(bosses_ds3))
+    export_to_json('dumps/ds3/bosses.json', bosses_ds3)
+    export_to_json('dumps/ds3/bosses__only_name.json', convert_bosses_to_only_name(bosses_ds3))
 
     # All bosses
     bosses_ds123 = {
