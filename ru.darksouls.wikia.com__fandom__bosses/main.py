@@ -70,6 +70,39 @@ def export_to_json(file_name, bosses):
     json.dump(bosses, open(file_name, 'w', encoding='utf-8'), ensure_ascii=False, indent=4)
 
 
+def export_to_sqlite(file_name: str, bosses_ds123: dict(dict([]))):
+    import os
+    dir_name = os.path.dirname(file_name)
+
+    if not os.path.exists(dir_name):
+        os.makedirs(dir_name)
+
+    import sqlite3
+    connect = sqlite3.connect(file_name)
+
+    connect.executescript('''
+        DROP TABLE IF EXISTS Boss;
+    
+        CREATE TABLE Boss (
+            id INTEGER PRIMARY KEY,
+            game TEXT,
+            category TEXT,
+            name TEXT,
+            url TEXT
+        );
+    ''')
+
+    for game, categories in bosses_ds123.items():
+        for category, bosses in categories.items():
+            for name, url in bosses:
+                connect.execute(
+                    'INSERT INTO Boss (game, category, name, url) VALUES (?, ?, ?, ?)',
+                    (game, category, name, url)
+                )
+
+    connect.commit()
+
+
 if __name__ == '__main__':
     url = 'http://ru.darksouls.wikia.com/wiki/Боссы'
     bosses_ds1 = get_bosses(url)
@@ -104,4 +137,16 @@ if __name__ == '__main__':
     }
     export_to_json('dumps/bosses_ds123__only_name.json', bosses_ds123__only_name)
 
-    # TODO: export_to_sqlite
+    #
+    # SQLITE
+    #
+    sql_file_name = 'dumps/bosses_ds123.sqlite'
+    export_to_sqlite(sql_file_name, bosses_ds123)
+
+    # TEST
+    import sqlite3
+    connect = sqlite3.connect(sql_file_name)
+    print('Total boss:', connect.execute('SELECT count(*) FROM BOSS').fetchone()[0])
+    print('Total boss DS1:', connect.execute('SELECT count(*) FROM BOSS WHERE game = "Dark Souls"').fetchone()[0])
+    print('Total boss DS2:', connect.execute('SELECT count(*) FROM BOSS WHERE game = "Dark Souls II"').fetchone()[0])
+    print('Total boss DS3:', connect.execute('SELECT count(*) FROM BOSS WHERE game = "Dark Souls III"').fetchone()[0])
