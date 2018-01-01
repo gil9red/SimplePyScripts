@@ -51,6 +51,12 @@ def print_bosses(url, bosses: dict([])):
 
 
 def export_to_json(file_name, bosses):
+    import os
+    dir_name = os.path.dirname(file_name)
+
+    if not os.path.exists(dir_name):
+        os.makedirs(dir_name)
+
     import json
     json.dump(bosses, open(file_name, 'w', encoding='utf-8'), ensure_ascii=False, indent=4)
 
@@ -59,14 +65,22 @@ if __name__ == '__main__':
     url = 'http://ru.darksouls.wikia.com/wiki/Боссы'
     bosses_ds1 = get_bosses(url)
     print_bosses(url, bosses_ds1)
-    export_to_json('bosses_ds1.json', bosses_ds1)
+    export_to_json('dumps/bosses_ds1.json', bosses_ds1)
 
     url = 'http://ru.darksouls.wikia.com/wiki/Боссы_(Dark_Souls_II)'
     bosses_ds2 = get_bosses(url)
     print_bosses(url, bosses_ds2)
-    export_to_json('bosses_ds2.json', bosses_ds2)
+    export_to_json('dumps/bosses_ds2.json', bosses_ds2)
 
     url = 'http://ru.darksouls.wikia.com/wiki/Боссы_(Dark_Souls_III)'
     bosses_ds3 = get_bosses(url)
     print_bosses(url, bosses_ds3)
-    export_to_json('bosses_ds3.json', bosses_ds3)
+    export_to_json('dumps/bosses_ds3.json', bosses_ds3)
+
+    # All bosses
+    bosses_ds123 = {
+        'Dark Souls': bosses_ds1,
+        'Dark Souls II': bosses_ds2,
+        'Dark Souls III': bosses_ds3,
+    }
+    export_to_json('dumps/bosses_ds123.json', bosses_ds123)
