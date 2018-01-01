@@ -50,6 +50,15 @@ def print_bosses(url, bosses: dict([])):
     print()
 
 
+def convert_bosses_to_only_name(bosses: dict([])) -> dict([]):
+    from collections import OrderedDict
+    bosses_only_name = OrderedDict()
+    for category, bosses_list in bosses.items():
+        bosses_only_name[category] = [name for name, _ in bosses_list]
+
+    return bosses_only_name
+
+
 def export_to_json(file_name, bosses):
     import os
     dir_name = os.path.dirname(file_name)
@@ -66,16 +75,19 @@ if __name__ == '__main__':
     bosses_ds1 = get_bosses(url)
     print_bosses(url, bosses_ds1)
     export_to_json('dumps/bosses_ds1.json', bosses_ds1)
+    export_to_json('dumps/bosses_ds1__only_name.json', convert_bosses_to_only_name(bosses_ds1))
 
     url = 'http://ru.darksouls.wikia.com/wiki/Боссы_(Dark_Souls_II)'
     bosses_ds2 = get_bosses(url)
     print_bosses(url, bosses_ds2)
     export_to_json('dumps/bosses_ds2.json', bosses_ds2)
+    export_to_json('dumps/bosses_ds2__only_name.json', convert_bosses_to_only_name(bosses_ds2))
 
     url = 'http://ru.darksouls.wikia.com/wiki/Боссы_(Dark_Souls_III)'
     bosses_ds3 = get_bosses(url)
     print_bosses(url, bosses_ds3)
     export_to_json('dumps/bosses_ds3.json', bosses_ds3)
+    export_to_json('dumps/bosses_ds3__only_name.json', convert_bosses_to_only_name(bosses_ds3))
 
     # All bosses
     bosses_ds123 = {
@@ -84,3 +96,12 @@ if __name__ == '__main__':
         'Dark Souls III': bosses_ds3,
     }
     export_to_json('dumps/bosses_ds123.json', bosses_ds123)
+
+    bosses_ds123__only_name = {
+        'Dark Souls': convert_bosses_to_only_name(bosses_ds1),
+        'Dark Souls II': convert_bosses_to_only_name(bosses_ds2),
+        'Dark Souls III': convert_bosses_to_only_name(bosses_ds3),
+    }
+    export_to_json('dumps/bosses_ds123__only_name.json', bosses_ds123__only_name)
+
+    # TODO: export_to_sqlite
