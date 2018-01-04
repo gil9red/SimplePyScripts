@@ -29,4 +29,5 @@ if __name__ == '__main__':
 
         print('{:<3} {} ({})'.format(i, torrent['name'], sizeof_fmt(torrent_size)))
 
-    print('\n\nTotal torrents: {}, total size: {}'.format(len(torrents), sizeof_fmt(total_size)))
+    print('\n')
+    print('Total torrents: {}, total size: {} ({} bytes)'.format(len(torrents), sizeof_fmt(total_size), total_size))
