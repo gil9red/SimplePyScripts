@@ -47,18 +47,26 @@ class Widget(QWidget):
         self.setLayout(layout)
 
     def keyPressEvent(self, event):
-        key = chr(event.key())
+        try:
+            key = chr(event.key())
 
-        if key in self.key_by_button:
-            self.key_by_button[key].setDown(True)
+            if key in self.key_by_button:
+                self.key_by_button[key].setDown(True)
+
+        except:
+            pass
 
         super().keyPressEvent(event)
 
     def keyReleaseEvent(self, event):
-        key = chr(event.key())
+        try:
+            key = chr(event.key())
 
-        if key in self.key_by_button:
-            self.key_by_button[key].setDown(False)
+            if key in self.key_by_button:
+                self.key_by_button[key].setDown(False)
+
+        except:
+            pass
 
         super().keyReleaseEvent(event)
 
