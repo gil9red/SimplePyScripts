@@ -7,9 +7,6 @@ __author__ = 'ipetrash'
 # pip install psutil
 import psutil
 
-# pip install tabulate
-from tabulate import tabulate
-
 net_interface_by_address_list = list(psutil.net_if_addrs().items())
 print('Net interface by address list ({}):'.format(len(net_interface_by_address_list)))
 
@@ -35,4 +32,6 @@ if net_interface_by_address_list:
         for i, address in enumerate(address_list):
             rows.append((name if i == 0 else '',) + tuple(address))
 
+    # pip install tabulate
+    from tabulate import tabulate
     print(tabulate(rows, headers=headers, tablefmt="grid"))

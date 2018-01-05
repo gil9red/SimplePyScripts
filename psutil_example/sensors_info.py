@@ -4,11 +4,10 @@
 __author__ = 'ipetrash'
 
 
-# pip install psutil
+# Only Linux
 
-# Only Linux:
+# pip install psutil
 import psutil
 print(psutil.sensors_temperatures())
 print(psutil.sensors_fans())
 print(psutil.sensors_battery())
-

@@ -7,9 +7,6 @@ __author__ = 'ipetrash'
 # pip install psutil
 import psutil
 
-# pip install tabulate
-from tabulate import tabulate
-
 net_connections = psutil.net_connections()
 print('Net connections ({}):'.format(len(net_connections)))
 
@@ -27,4 +24,6 @@ if net_connections:
 
     rows = [tuple(info) for info in net_connections]
 
+    # pip install tabulate
+    from tabulate import tabulate
     print(tabulate(rows, headers=headers, tablefmt="grid", showindex=True))

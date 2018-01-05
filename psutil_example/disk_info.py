@@ -33,9 +33,6 @@ print('Disk io (input/output) total sum counters:')
 print('  {}'.format(psutil.disk_io_counters()))
 
 
-# pip install tabulate
-from tabulate import tabulate
-
 physical_drive_by_info = list(psutil.disk_io_counters(True).items())
 
 print()
@@ -51,6 +48,8 @@ headers = [header.upper() for header in headers]
 
 rows = [(drive,) + tuple(info) for drive, info in physical_drive_by_info]
 
+# pip install tabulate
+from tabulate import tabulate
 print(tabulate(rows, headers=headers, tablefmt="grid"))
 print()
 print()

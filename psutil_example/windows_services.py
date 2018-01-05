@@ -7,9 +7,6 @@ __author__ = 'ipetrash'
 # pip install psutil
 import psutil
 
-# pip install tabulate
-from tabulate import tabulate
-
 win_service_list = list(psutil.win_service_iter())
 print('Win service list ({}):'.format(len(win_service_list)))
 
@@ -31,6 +28,8 @@ if win_service_list:
 
     headers = [header.upper() for header in headers]
 
+    # pip install tabulate
+    from tabulate import tabulate
     print(tabulate(rows, headers=headers, tablefmt="grid", showindex=True))
     print()
 

@@ -7,9 +7,6 @@ __author__ = 'ipetrash'
 # pip install psutil
 import psutil
 
-# pip install tabulate
-from tabulate import tabulate
-
 network_interface_card_by_info = list(psutil.net_if_stats().items())
 print('Network interface card by info ({}):'.format(len(network_interface_card_by_info)))
 
@@ -28,4 +25,6 @@ if network_interface_card_by_info:
 
     rows = [(name,) + tuple(info) for name, info in network_interface_card_by_info]
 
+    # pip install tabulate
+    from tabulate import tabulate
     print(tabulate(rows, headers=headers, tablefmt="grid"))

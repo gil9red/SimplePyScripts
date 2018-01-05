@@ -6,9 +6,9 @@ __author__ = 'ipetrash'
 
 def func():
     import time
-    i = 1
-
     import threading
+
+    i = 1
 
     while True:
         print(threading.current_thread(), i)

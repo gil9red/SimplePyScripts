@@ -5,8 +5,6 @@ __author__ = 'ipetrash'
 
 
 # pip install psutil
-
-
 import psutil
 print('Users:', psutil.users())
 print()
