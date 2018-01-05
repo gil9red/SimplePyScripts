@@ -18,5 +18,4 @@ def get_all_games():
 
 if __name__ == '__main__':
     games = get_all_games()
-    print(len(games))
-    print(games)
+    print('Games ({}): {}'.format(len(games), games))
