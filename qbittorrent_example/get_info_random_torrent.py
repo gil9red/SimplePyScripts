@@ -26,5 +26,15 @@ print('{} ({})'.format(torrent['name'], sizeof_fmt(torrent['total_size'])))
 files = qb.get_torrent_files(torrent['hash'])
 print('Files ({}):'.format(len(files)))
 
-for file in sorted(files, key=lambda x: x['name']):
-    print('    {} ({})'.format(file['name'], sizeof_fmt(file['size'])))
+rows = [(file['name'], sizeof_fmt(file['size'])) for file in sorted(files, key=lambda x: x['name'])]
+headers = ['#', 'File Name', 'Size']
+
+# pip install tabulate
+from tabulate import tabulate
+print(tabulate(rows, headers=headers, tablefmt="grid", showindex=range(1, len(rows) + 1)))
+
+# OR:
+#
+# print('Files ({}):'.format(len(files)))
+# for file in sorted(files, key=lambda x: x['name']):
+#     print('    {} ({})'.format(file['name'], sizeof_fmt(file['size'])))
