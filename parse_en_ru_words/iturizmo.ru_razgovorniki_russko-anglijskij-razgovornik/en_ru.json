@@ -1,0 +1,1590 @@
+[
+    [
+        "Yes",
+        "да"
+    ],
+    [
+        "No",
+        "нет"
+    ],
+    [
+        "Please",
+        "пожалуйста"
+    ],
+    [
+        "Thanks",
+        "спасибо"
+    ],
+    [
+        "Thank you",
+        "большое спасибо"
+    ],
+    [
+        "could you …",
+        "не могли бы вы …"
+    ],
+    [
+        "it’s all right",
+        "все в порядке"
+    ],
+    [
+        "please, accept my apologies",
+        "примите мои извинения"
+    ],
+    [
+        "young man…",
+        "молодой человек…"
+    ],
+    [
+        "young lady (miss)",
+        "девушка…"
+    ],
+    [
+        "sir",
+        "господин"
+    ],
+    [
+        "mister N. …",
+        "господин Н."
+    ],
+    [
+        "madam",
+        "госпожа"
+    ],
+    [
+        "sorry for…",
+        "извини(те) меня за …"
+    ],
+    [
+        "Entrance",
+        "вход"
+    ],
+    [
+        "Exit",
+        "выход"
+    ],
+    [
+        "no harm done",
+        "не стоит извинятья"
+    ],
+    [
+        "Open/ Closed",
+        "открыто / закрыто"
+    ],
+    [
+        "Forbidden",
+        "запрещается"
+    ],
+    [
+        "excuse me…",
+        "простите"
+    ],
+    [
+        "I beg your pardon…",
+        "позвольте обратиться…"
+    ],
+    [
+        "please, forgive me",
+        "пожалуйста, прости(те) меня"
+    ],
+    [
+        "I am sorry",
+        "извините (после поступка)"
+    ],
+    [
+        "excuse me",
+        "извините (до поступка)"
+    ],
+    [
+        "you are welcome!",
+        "пожалуйста!"
+    ],
+    [
+        "it’s nothing (not at all)",
+        "не за что (не стоит)"
+    ],
+    [
+        "thank you in advance",
+        "заранее благодарен"
+    ],
+    [
+        "I must (would like to) thank you",
+        "я должен (хочу) поблагодарить вас!"
+    ],
+    [
+        "thak you very much",
+        "я вам очень признателен"
+    ],
+    [
+        "thanks a lot for …",
+        "большое спасибо за …"
+    ],
+    [
+        "thank you for …",
+        "спасибо за …"
+    ],
+    [
+        "glad (nice) to meet you!",
+        "рад с вами познакомиться!"
+    ],
+    [
+        "my name is…",
+        "меня зовут…"
+    ],
+    [
+        "let me introduce you to…",
+        "позвольте вас представить…"
+    ],
+    [
+        "may i introduce myself?",
+        "разрешите представиться"
+    ],
+    [
+        "tell",
+        "сказать"
+    ],
+    [
+        "help",
+        "помочь"
+    ],
+    [
+        "show?",
+        "показать?"
+    ],
+    [
+        "please …",
+        "пожалуйста…"
+    ],
+    [
+        "bring",
+        "принесите"
+    ],
+    [
+        "read",
+        "прочтите"
+    ],
+    [
+        "give",
+        "дайте"
+    ],
+    [
+        "may i ask you?",
+        "можно вас спросить?"
+    ],
+    [
+        "may i ask you to …?",
+        "могу я вас попросить … ?"
+    ],
+    [
+        "will (would) you please, give me …?",
+        "не дадите ли вы мне …?"
+    ],
+    [
+        "do you mind …?",
+        "вы не возражаете против …?"
+    ],
+    [
+        "may i …?",
+        "могу ли я …? (разрешите мне …)"
+    ],
+    [
+        "can i …?",
+        "могу ли я … ?"
+    ],
+    [
+        "of course (sure)",
+        "да, конечно"
+    ],
+    [
+        "all right",
+        "хорошо"
+    ],
+    [
+        "O.K (=okay)",
+        "ладно"
+    ],
+    [
+        "i agree",
+        "я согласен"
+    ],
+    [
+        "yes, you may (you can)",
+        "да, можно"
+    ],
+    [
+        "i shouldn’t (don’t) mind",
+        "я не возражаю"
+    ],
+    [
+        "i cannot (i can’t)",
+        "я не могу"
+    ],
+    [
+        "it’s a pity (unfortunately), i can’t",
+        "к сожалению ( к несчастью), я не могу"
+    ],
+    [
+        "it’s impossible",
+        "это невозможно"
+    ],
+    [
+        "i forbid you to …",
+        "я запрещаю вам…"
+    ],
+    [
+        "by no means!",
+        "ни в коем случае!"
+    ],
+    [
+        "may i invite you to…",
+        "разрешите пригласить вас…"
+    ],
+    [
+        "the theatre",
+        "в театр"
+    ],
+    [
+        "restaurant",
+        "в ресторан"
+    ],
+    [
+        "my place",
+        "ко мне в гости"
+    ],
+    [
+        "let’s go to …",
+        "давай пойдём (сходим) в …"
+    ],
+    [
+        "with pleasure!",
+        "с удовольствием"
+    ],
+    [
+        "i don’t mind",
+        "я не против"
+    ],
+    [
+        "it’s a pity",
+        "очень жаль"
+    ],
+    [
+        "how well i understand you",
+        "как я вас понимаю"
+    ],
+    [
+        "don’t get upset, things do happen",
+        "не расстраивайтесь, всякое бывает"
+    ],
+    [
+        "don’t worry",
+        "не волнуйтесь"
+    ],
+    [
+        "you did it right",
+        "вы правильно сделали"
+    ],
+    [
+        "just a moment (a minute)",
+        "сейчас (минутку)!"
+    ],
+    [
+        "what is your name?",
+        "как вас зовут?"
+    ],
+    [
+        "май нэйм из",
+        "меня зовут …"
+    ],
+    [
+        "how old are you?",
+        "сколько вам лет?"
+    ],
+    [
+        "when were you born?",
+        "когда вы родились?"
+    ],
+    [
+        "where are you from?",
+        "откуда вы?"
+    ],
+    [
+        "i am from …",
+        "я из …"
+    ],
+    [
+        "where do you live?",
+        "где вы живете?"
+    ],
+    [
+        "i live in …",
+        "я живу в …"
+    ],
+    [
+        "what is your native language?",
+        "какой ваш родной язык?"
+    ],
+    [
+        "i speak …",
+        "я говорю по- …"
+    ],
+    [
+        "english",
+        "английски"
+    ],
+    [
+        "russian",
+        "русски"
+    ],
+    [
+        "french",
+        "французски"
+    ],
+    [
+        "spanish",
+        "испански"
+    ],
+    [
+        "italian",
+        "итальянски"
+    ],
+    [
+        "i speak english (russian) a little bit",
+        "я немного говорю по-английски ( по-русски)"
+    ],
+    [
+        "hello, hi",
+        "здравствуй(те)"
+    ],
+    [
+        "good evening!",
+        "добрый вечер!"
+    ],
+    [
+        "good afternoon!",
+        "добрый день!"
+    ],
+    [
+        "good morning!",
+        "доброе утро!"
+    ],
+    [
+        "how are you? how are you getting on?",
+        "как поживаете?"
+    ],
+    [
+        "how are you doing? how are things?",
+        "как дела?"
+    ],
+    [
+        "more or less",
+        "более-менее"
+    ],
+    [
+        "not too bad",
+        "неплохо"
+    ],
+    [
+        "i am very well, thank you",
+        "все хорошо, спасибо"
+    ],
+    [
+        "i am fine!",
+        "у меня все прекрасно"
+    ],
+    [
+        "so-so",
+        "так себе"
+    ],
+    [
+        "couldn’t be worse",
+        "хуже не бывает"
+    ],
+    [
+        "what’s new? what is the news?",
+        "что нового?"
+    ],
+    [
+        "all the best!",
+        "всего хорошего!"
+    ],
+    [
+        "good bye!",
+        "до свидания!"
+    ],
+    [
+        "see you …",
+        "до встречи"
+    ],
+    [
+        "tomorrow",
+        "завтра"
+    ],
+    [
+        "on Monday",
+        "в понедельник"
+    ],
+    [
+        "what are the fares?",
+        "сколько это стоит?"
+    ],
+    [
+        "one single and one return ticket for tomorrow, please.",
+        "один билет туда и один обратно, пожалуйста"
+    ],
+    [
+        "two tickets to …, please, for the six thirty p.m. train",
+        "два билета на поезд в …, отправляющийся в шесть тридцать вечера, пожалуйста"
+    ],
+    [
+        "i want to reserve tickets in advance",
+        "я хочу заказать билеты заранее"
+    ],
+    [
+        "i must go and get a ticket for the train (plane, ship)",
+        "я должен пойти и купить билет на поезд (самолёт, пароход)"
+    ],
+    [
+        "where can i book a ticket for the train (plane, ship)?",
+        "где я могу купить билет на поезд (самолёт, пароход) ?"
+    ],
+    [
+        "I’d like to pay the fares in advance",
+        "я бы хотел заплатить сразу"
+    ],
+    [
+        "i’d like a ticket to the …",
+        "я бы хотел билет …"
+    ],
+    [
+        "nonsmoker (smoker)",
+        "в вагон для некурящих (курящих)"
+    ],
+    [
+        "slumber coach",
+        "в купе на двоих"
+    ],
+    [
+        "i’d like a lower berth",
+        "я бы хотел нижнее место ( нижнюю полку)"
+    ],
+    [
+        "how mane luggage pieces may i take free of charge?",
+        "сколько мест багажа я могу взять с собой бесплатно?"
+    ],
+    [
+        "where can i check my luggage?",
+        "где я могу сдать багаж?"
+    ],
+    [
+        "please, take my luggage to …",
+        "пожалуйста, отвезите мой багаж в …"
+    ],
+    [
+        "how does one get to the platform?",
+        "как пройти на платформу?"
+    ],
+    [
+        "how long is it till the train departure?",
+        "сколько осталось до отправления поезда?"
+    ],
+    [
+        "i want a tiket for tomorrow flight to…",
+        "я хочу купить билеты на самолёт, вылетающий завтра в …"
+    ],
+    [
+        "what flights are there to …?",
+        "какие рейсы есть до …"
+    ],
+    [
+        "is there any direct flight to … for the day after tomorrow?",
+        "есть ли какой-нибудь прямой рейс до … на послезавтра?"
+    ],
+    [
+        "give me, please a seat by a window",
+        "дайте мне место у окна"
+    ],
+    [
+        "where is the …",
+        "где здесь"
+    ],
+    [
+        "arrivals",
+        "зал прилёта"
+    ],
+    [
+        "departures",
+        "зал вылета"
+    ],
+    [
+        "luggage check-in",
+        "регистрация багажа"
+    ],
+    [
+        "eyquiry office (information desk)",
+        "справочная"
+    ],
+    [
+        "toilet",
+        "туалет"
+    ],
+    [
+        "when does the check-in begin?",
+        "когда начинается регистрация"
+    ],
+    [
+        "the flight is delayed by two hours",
+        "рейс откладывается на два часа"
+    ],
+    [
+        "where can i return my ticket?",
+        "где я могу сдать свой билет?"
+    ],
+    [
+        "where are boat tickets sold?",
+        "где продаются билеты на теплоход?"
+    ],
+    [
+        "what is the price of a passage to …",
+        "сколько стоит проезд морем до …"
+    ],
+    [
+        "i’d like the first (second, third) class cabin for two",
+        "я бы хотел каюту первого ( второго, третьего) класса на двоих"
+    ],
+    [
+        "Passport control",
+        "Паспортный контроль."
+    ],
+    [
+        "Here are my passport and custom declaration",
+        "Вот мой паспорт и таможенная декларация."
+    ],
+    [
+        "Here is my luggage",
+        "Вот мой багаж."
+    ],
+    [
+        "It is a private visit",
+        "Это частная поездка."
+    ],
+    [
+        "It is a business trip",
+        "Это деловая поездка."
+    ],
+    [
+        "It is a turistic visit",
+        "Это туристическая поездка."
+    ],
+    [
+        "I travel with a group",
+        "Я еду в составе тургруппы."
+    ],
+    [
+        "Excuse me, I don’t understand",
+        "Извините, я не понимаю."
+    ],
+    [
+        "I need an interpreter",
+        "Мне нужен переводчик."
+    ],
+    [
+        "Call for the head of the group",
+        "Позовите руководителя группы."
+    ],
+    [
+        "I will be met",
+        "Меня встречают."
+    ],
+    [
+        "Custom",
+        "Таможня."
+    ],
+    [
+        "I have nothing to declare",
+        "Мне нечего декларировать"
+    ],
+    [
+        "these are my personal items",
+        "Это вещи для личного пользования."
+    ],
+    [
+        "This is a present",
+        "Это подарок."
+    ],
+    [
+        "what is to be mentioned in the customs declaration?",
+        "что надо упомянуть в таможенной декларации?"
+    ],
+    [
+        "where can i get my customs papers?",
+        "где я могу получить мои таможенные документы?"
+    ],
+    [
+        "I’m seeking",
+        "Я ищу…"
+    ],
+    [
+        "My hotel",
+        "мой отель"
+    ],
+    [
+        "Touristic office",
+        "туристический офис"
+    ],
+    [
+        "Street phone",
+        "телефон-автомат"
+    ],
+    [
+        "Chemists",
+        "аптеку"
+    ],
+    [
+        "Supermarket",
+        "супермаркет"
+    ],
+    [
+        "Post office",
+        "почту"
+    ],
+    [
+        "Bank",
+        "банк"
+    ],
+    [
+        "Where is the nearest police office",
+        "Где здесь ближайший полицейский участок?"
+    ],
+    [
+        "Where is the nearest….?",
+        "Где здесь ближайшая…"
+    ],
+    [
+        "Metro station",
+        "Станция метро"
+    ],
+    [
+        "Bus stop",
+        "Остановка автобуса"
+    ],
+    [
+        "Petrol station",
+        "Бензозаправка"
+    ],
+    [
+        "Police",
+        "Полиция"
+    ],
+    [
+        "Market",
+        "Рынок"
+    ],
+    [
+        "bakery",
+        "булочная"
+    ],
+    [
+        "Square",
+        "Площадь"
+    ],
+    [
+        "Street",
+        "Улица"
+    ],
+    [
+        "which is the way to the post-office (police station)?",
+        "как пройти к почте( полицейскому участку)?"
+    ],
+    [
+        "it’s about ten minutes walk",
+        "это примерно в десяти минутах ходьбы"
+    ],
+    [
+        "it is far off. you had better take a bus (taxi, car)",
+        "это далеко отсюда, лучше поезжайте автобусом (такси, машиной)"
+    ],
+    [
+        "Help!",
+        "Помогите!"
+    ],
+    [
+        "Call the police",
+        "Вызовите полицию."
+    ],
+    [
+        "Call for a doctor",
+        "Вызовите врача."
+    ],
+    [
+        "I’m lost",
+        "Я потерялся"
+    ],
+    [
+        "I’m lost",
+        "Я заблудился!"
+    ],
+    [
+        "Where can I take a taxi?",
+        "Где я могу взять такси?"
+    ],
+    [
+        "Call a taxi, please",
+        "Вызовите такси, пожайлуста"
+    ],
+    [
+        "What does it cost to go to?",
+        "Сколько стоит доехать до…?"
+    ],
+    [
+        "This address , please",
+        "По этому адресу, пожалуйста!"
+    ],
+    [
+        "Drive me…",
+        "Отвезите меня.."
+    ],
+    [
+        "Drive me to the airport",
+        "Отвезите меня в аэропорт."
+    ],
+    [
+        "Drive me to the station",
+        "Отвезите меня на железнодорожную станцию."
+    ],
+    [
+        "Drive me to the hotel",
+        "Отвезите меня в гостиницу…"
+    ],
+    [
+        "Drive me to a good hotel",
+        "Отвезите меня в хорошую гостиницу."
+    ],
+    [
+        "Drive to a cheap hotel",
+        "Отвезите меня в недорогую гостиницу."
+    ],
+    [
+        "Drive me to the city center",
+        "Отвезите меня в центр города."
+    ],
+    [
+        "Left",
+        "Налево"
+    ],
+    [
+        "Right",
+        "Направо"
+    ],
+    [
+        "I need come back",
+        "Мне нужно вернуться."
+    ],
+    [
+        "Stop here, please",
+        "Остановите здесь, пожалуйста."
+    ],
+    [
+        "What does it cost?",
+        "Сколько я вам должен?"
+    ],
+    [
+        "Could you wait for me, please?",
+        "Вы не могли бы меня подождать?"
+    ],
+    [
+        "what bus must i take to reach … question",
+        "на каком автобусе я смогу добраться до …?"
+    ],
+    [
+        "how often do the buses run?",
+        "как часто ходят автобусы?"
+    ],
+    [
+        "what (how much) is the fare ti …?",
+        "сколько стоит доехать до …"
+    ],
+    [
+        "i need one ticket",
+        "мне нужен один билет"
+    ],
+    [
+        "tell me,please, where i am to get off?",
+        "скажите пожалуйста, где мне надо выходить?"
+    ],
+    [
+        "Registration desk",
+        "Регистрация (администратор)."
+    ],
+    [
+        "Do you have a room",
+        "У вас есть свободные номера?"
+    ],
+    [
+        "Single room",
+        "Номер на одного?"
+    ],
+    [
+        "Double room",
+        "Номер на двоих?"
+    ],
+    [
+        "I want to order a room",
+        "Я бы хотел заказать номер."
+    ],
+    [
+        "with bathroom",
+        "С ванной."
+    ],
+    [
+        "with shower",
+        "С душем."
+    ],
+    [
+        "not expensive",
+        "Не очень дорого."
+    ],
+    [
+        "For one night",
+        "На одну ночь."
+    ],
+    [
+        "For a week",
+        "На одну неделю."
+    ],
+    [
+        "How does it cost a night per a man",
+        "Сколько стоит номер в сутки на человека?"
+    ],
+    [
+        "I pay in cash",
+        "Я оплачу наличными."
+    ],
+    [
+        "I need an iron",
+        "Мне нужен утюг."
+    ],
+    [
+        "Something wrong with light",
+        "Не работает свет."
+    ],
+    [
+        "Something wrong with shower",
+        "Что-то случилось с душем."
+    ],
+    [
+        "What’s wrong with telephone?",
+        "Что-то случилось с телефоном."
+    ],
+    [
+        "Wake me up, please at 8 o’clock",
+        "Разбудите меня, пожалуйста, в 8 часов."
+    ],
+    [
+        "Order a taxi, please for 10 o’clock",
+        "Закажите такси, пожалуйста, на десять часов."
+    ],
+    [
+        "time",
+        "время"
+    ],
+    [
+        "today",
+        "сегодня"
+    ],
+    [
+        "yesterday",
+        "вчера"
+    ],
+    [
+        "tomorrow",
+        "завтра"
+    ],
+    [
+        "the day before yestarday",
+        "позавчера"
+    ],
+    [
+        "the day after tomorrow",
+        "послезавтра"
+    ],
+    [
+        "morning",
+        "утро"
+    ],
+    [
+        "day",
+        "день"
+    ],
+    [
+        "evening",
+        "вечер"
+    ],
+    [
+        "night",
+        "ночь"
+    ],
+    [
+        "week",
+        "неделя"
+    ],
+    [
+        "days of the week",
+        "дни недели"
+    ],
+    [
+        "monday",
+        "понедельник"
+    ],
+    [
+        "tuesday",
+        "вторник"
+    ],
+    [
+        "wednesday",
+        "среда"
+    ],
+    [
+        "thursday",
+        "четверг"
+    ],
+    [
+        "friday",
+        "пятница"
+    ],
+    [
+        "saturday",
+        "суббота"
+    ],
+    [
+        "sunday",
+        "воскресенье"
+    ],
+    [
+        "month",
+        "месяц"
+    ],
+    [
+        "january",
+        "январь"
+    ],
+    [
+        "february",
+        "февраль"
+    ],
+    [
+        "march",
+        "март"
+    ],
+    [
+        "april",
+        "апрель"
+    ],
+    [
+        "may",
+        "май"
+    ],
+    [
+        "june",
+        "июнь"
+    ],
+    [
+        "july",
+        "июль"
+    ],
+    [
+        "august",
+        "август"
+    ],
+    [
+        "september",
+        "сентябрь"
+    ],
+    [
+        "octorber",
+        "октябрь"
+    ],
+    [
+        "november",
+        "ноябрь"
+    ],
+    [
+        "december",
+        "декабрь"
+    ],
+    [
+        "year",
+        "год"
+    ],
+    [
+        "season",
+        "время года"
+    ],
+    [
+        "winter",
+        "зима"
+    ],
+    [
+        "spring",
+        "весна"
+    ],
+    [
+        "summer",
+        "лето"
+    ],
+    [
+        "autumn",
+        "осень"
+    ],
+    [
+        "century",
+        "столетие, век"
+    ],
+    [
+        "leap year",
+        "високосный год"
+    ],
+    [
+        "tonight",
+        "сегодня вечером"
+    ],
+    [
+        "it is noon",
+        "сейчас полдень"
+    ],
+    [
+        "it is midnight",
+        "сейчас полночь"
+    ],
+    [
+        "it is six (a.m / p.m) sharp",
+        "сейчас ровно шесть часов (утра / вечера)"
+    ],
+    [
+        "it is ten minutes pas seven a.m (p.m)",
+        "сейчас десять минут восьмого утра (вечера)"
+    ],
+    [
+        "i haven’t a watch",
+        "у меня нет часов"
+    ],
+    [
+        "my watch is precise (keeps good time)",
+        "мои часы точны"
+    ],
+    [
+        "by my watch …",
+        "по моим часам …"
+    ],
+    [
+        "what season is it now?",
+        "какое сейчас время года?"
+    ],
+    [
+        "it’s not so cold in England as in Russia",
+        "зимой в Англии не так холодно, как в России"
+    ],
+    [
+        "what is the weather today",
+        "какая сегодня погода?"
+    ],
+    [
+        "the weather is … today",
+        "сегодня … погода"
+    ],
+    [
+        "fine",
+        "хорошая"
+    ],
+    [
+        "bright",
+        "ясная"
+    ],
+    [
+        "warm",
+        "теплая"
+    ],
+    [
+        "sunny",
+        "солнечная"
+    ],
+    [
+        "marvellous",
+        "замечательная"
+    ],
+    [
+        "rainy",
+        "дождливая"
+    ],
+    [
+        "nasty",
+        "отвратительная"
+    ],
+    [
+        "frosty",
+        "морозная"
+    ],
+    [
+        "cold",
+        "холодная"
+    ],
+    [
+        "zero",
+        "0"
+    ],
+    [
+        "one",
+        "1"
+    ],
+    [
+        "two",
+        "2"
+    ],
+    [
+        "three",
+        "3"
+    ],
+    [
+        "four",
+        "4"
+    ],
+    [
+        "five",
+        "5"
+    ],
+    [
+        "six",
+        "6"
+    ],
+    [
+        "seven",
+        "7"
+    ],
+    [
+        "eight",
+        "8"
+    ],
+    [
+        "nine",
+        "9"
+    ],
+    [
+        "ten",
+        "10"
+    ],
+    [
+        "eleven",
+        "11"
+    ],
+    [
+        "twelve",
+        "12"
+    ],
+    [
+        "thirteen",
+        "13"
+    ],
+    [
+        "fourteen",
+        "14"
+    ],
+    [
+        "fifteen",
+        "15"
+    ],
+    [
+        "sixteen",
+        "16"
+    ],
+    [
+        "seventeen",
+        "17"
+    ],
+    [
+        "eighteen",
+        "18"
+    ],
+    [
+        "nineteen",
+        "19"
+    ],
+    [
+        "twenty",
+        "20"
+    ],
+    [
+        "twenty one",
+        "21"
+    ],
+    [
+        "twenty two",
+        "22"
+    ],
+    [
+        "thirty",
+        "30"
+    ],
+    [
+        "fourty",
+        "40"
+    ],
+    [
+        "fifty",
+        "50"
+    ],
+    [
+        "sixty",
+        "60"
+    ],
+    [
+        "seventy",
+        "70"
+    ],
+    [
+        "eighty",
+        "80"
+    ],
+    [
+        "ninety",
+        "90"
+    ],
+    [
+        "one hundred",
+        "100"
+    ],
+    [
+        "one hundred and one",
+        "101"
+    ],
+    [
+        "one hundred and ten",
+        "110"
+    ],
+    [
+        "two hundred",
+        "200"
+    ],
+    [
+        "two hundred fifty eight",
+        "258"
+    ],
+    [
+        "three hundred",
+        "300"
+    ],
+    [
+        "four hundred",
+        "400"
+    ],
+    [
+        "five hundred",
+        "500"
+    ],
+    [
+        "six hundred",
+        "600"
+    ],
+    [
+        "seven hundred",
+        "700"
+    ],
+    [
+        "eight hundred",
+        "800"
+    ],
+    [
+        "nine hundred",
+        "900"
+    ],
+    [
+        "one thousand",
+        "1 000"
+    ],
+    [
+        "one thousand and one hundred",
+        "1 100"
+    ],
+    [
+        "two thousand",
+        "2 000"
+    ],
+    [
+        "ten thousand",
+        "10 000"
+    ],
+    [
+        "one million",
+        "1 000 000"
+    ],
+    [
+        "ten million",
+        "10 000 000"
+    ],
+    [
+        "i’d like to buy a suit for everyday wear",
+        "я хотел бы купить костюм на каждый день"
+    ],
+    [
+        "what size is this sweater",
+        "какого размера этот свитер?"
+    ],
+    [
+        "i want to try on this dress.",
+        "Я хочу примерить это платье"
+    ],
+    [
+        "underwear",
+        "бельё"
+    ],
+    [
+        "jeans",
+        "джинсы"
+    ],
+    [
+        "sweater",
+        "свитер"
+    ],
+    [
+        "skirt",
+        "юбку"
+    ],
+    [
+        "costume",
+        "костюм"
+    ],
+    [
+        "dress (frock)",
+        "платье"
+    ],
+    [
+        "blouse",
+        "блузку"
+    ],
+    [
+        "i want to buy …",
+        "я хочу купить …"
+    ],
+    [
+        "how long do they keep this shop open?",
+        "до какого времени работает этот магазин?"
+    ],
+    [
+        "cash-desk",
+        "касса"
+    ],
+    [
+        "foodstuffs",
+        "продукты питания"
+    ],
+    [
+        "market",
+        "рынок"
+    ],
+    [
+        "will you reduce the price?",
+        "вы снизите цену?"
+    ],
+    [
+        "it is free of charge (for nothing); Gratis",
+        "это бесплатно"
+    ],
+    [
+        "it is too dear (cheap)",
+        "это слишком дорого (дешево)"
+    ],
+    [
+        "by metres",
+        "на метры"
+    ],
+    [
+        "it costs …",
+        "это стоит …"
+    ],
+    [
+        "by the pound",
+        "на вес"
+    ],
+    [
+        "by the piece",
+        "поштучно"
+    ],
+    [
+        "what does it cost?",
+        "какова цена?"
+    ],
+    [
+        "it is sold …",
+        "это продаётся"
+    ],
+    [
+        "what is the price?",
+        "сколько это стоит?"
+    ],
+    [
+        "i need a black T-shirt",
+        "мне нужна черная футболка с коротким рукавом"
+    ],
+    [
+        "what sport’s shoes will you offer me?",
+        "какие кроссовки вы мне предложите?"
+    ],
+    [
+        "i’d like to choose …",
+        "я хочу выбрать …"
+    ],
+    [
+        "soap",
+        "мыло"
+    ],
+    [
+        "toothpaste",
+        "зубную пасту"
+    ],
+    [
+        "shampoo",
+        "шампунь"
+    ],
+    [
+        "show me, please …",
+        "покажите мне пожалуйста …"
+    ],
+    [
+        "let’s go (do) shopping",
+        "давай пойдём за покупками"
+    ],
+    [
+        "we are short of …",
+        "у нас мало …"
+    ],
+    [
+        "we have run out of…",
+        "у нас кончилось (кончились) …"
+    ],
+    [
+        "meat",
+        "мясо"
+    ],
+    [
+        "tinned food",
+        "консервы"
+    ],
+    [
+        "i need a piece of beef",
+        "мне нужен кусок говядины"
+    ],
+    [
+        "let’s buy some sausage and ham",
+        "давай купим колбасу и ветчину"
+    ],
+    [
+        "give me please ten eggs",
+        "дайте мне пожалуйста десяток яиц"
+    ],
+    [
+        "where can we buy the fish?",
+        "где мы можем купить рыбу?"
+    ],
+    [
+        "i need …",
+        "мне нужен …"
+    ],
+    [
+        "a head of cabbage",
+        "кочан капусты"
+    ],
+    [
+        "new potatoes",
+        "молодой картофель"
+    ],
+    [
+        "i like fruits",
+        "я люблю фрукты"
+    ],
+    [
+        "give me please …",
+        "дайте мне, пожалуйста …"
+    ],
+    [
+        "one loaf of rye (brown) bread",
+        "одну буханку ржаного хлеба"
+    ],
+    [
+        "long loaf of white (wheat) bread",
+        "батон белого хлеба"
+    ],
+    [
+        "is this bread new (fresh) or stale?",
+        "этот хлеб свежий или черствый?"
+    ],
+    [
+        "i want to order a table",
+        "Я хочу заказать столик"
+    ],
+    [
+        "waiter",
+        "официант"
+    ],
+    [
+        "do you have free tables?",
+        "У Вас есть свободные столики?"
+    ],
+    [
+        "accept my order",
+        "Примите мой заказ"
+    ],
+    [
+        "specialty of the house",
+        "Ваше фирменное блюдо"
+    ],
+    [
+        "beer",
+        "Пиво"
+    ],
+    [
+        "wine",
+        "Вино"
+    ],
+    [
+        "what year is the wine",
+        "Какого года вино?"
+    ],
+    [
+        "soup",
+        "Суп"
+    ],
+    [
+        "spaghetti",
+        "Вермишель"
+    ],
+    [
+        "macaronis",
+        "Макароны"
+    ],
+    [
+        "sendvich",
+        "Сандвич"
+    ],
+    [
+        "cheese / sour cream (sour)",
+        "Сыр / Сметана (кислая)"
+    ],
+    [
+        "tea / coffee",
+        "Чай / Кофе"
+    ],
+    [
+        "soluble coffee",
+        "Растворимый кофе"
+    ],
+    [
+        "ettuce",
+        "Салат-латук"
+    ],
+    [
+        "i do not eat meat",
+        "Я не ем мясо"
+    ],
+    [
+        "check please",
+        "Чек пожалуйста (счет)"
+    ]
+]

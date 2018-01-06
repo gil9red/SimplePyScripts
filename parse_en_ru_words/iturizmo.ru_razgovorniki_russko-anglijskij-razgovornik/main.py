@@ -10,7 +10,7 @@ rs = requests.get('http://iturizmo.ru/razgovorniki/russko-anglijskij-razgovornik
 from bs4 import BeautifulSoup
 root = BeautifulSoup(rs.content, 'html.parser')
 
-ru_en_items = []
+en_ru_items = []
 
 for tr in root.select(".entry-content tr"):
     td_list = [td.text.strip() for td in tr.select('td')]
@@ -18,9 +18,9 @@ for tr in root.select(".entry-content tr"):
         continue
 
     ru, en = td_list[:2]
-    ru_en_items.append((ru, en))
+    en_ru_items.append((en, ru))
 
-print(len(ru_en_items), ru_en_items)
+print(len(en_ru_items), en_ru_items)
 
 import json
-json.dump(ru_en_items, open('en_ru.json', 'w', encoding='utf-8'), indent=4, ensure_ascii=False)
+json.dump(en_ru_items, open('en_ru.json', 'w', encoding='utf-8'), indent=4, ensure_ascii=False)
