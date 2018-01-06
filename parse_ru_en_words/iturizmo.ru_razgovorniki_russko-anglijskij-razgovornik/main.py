@@ -13,7 +13,7 @@ root = BeautifulSoup(rs.content, 'html.parser')
 ru_en_items = []
 
 for tr in root.select(".entry-content tr"):
-    td_list = [td.text for td in tr.select('td')]
+    td_list = [td.text.strip() for td in tr.select('td')]
     if not td_list:
         continue
 
