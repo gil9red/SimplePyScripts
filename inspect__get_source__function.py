@@ -4,19 +4,18 @@
 __author__ = 'ipetrash'
 
 
-def foo():
-    return 1
-
-import inspect
-lines = inspect.getsourcelines(foo)
-print(lines)
-print('Empty:', lines[0][-1].strip() == 'pass')
-print()
+def check_is_empty_function(function):
+    import inspect
+    lines = inspect.getsourcelines(function)
+    return lines[0][-1].strip() == 'pass'
 
 
-def foo():
-    pass
+if __name__ == '__main__':
+    def foo():
+        pass
 
-lines = inspect.getsourcelines(foo)
-print(lines)
-print('Empty:', lines[0][-1].strip() == 'pass')
+    def foo2():
+        return 1
+
+    print('Empty:', check_is_empty_function(foo))
+    print('Empty:', check_is_empty_function(foo2))
