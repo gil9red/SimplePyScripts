@@ -10,3 +10,6 @@ keyboard.add_hotkey('shift', lambda: keyboard.write('off'), trigger_on_release=T
 
 # Block forever.
 keyboard.wait()
+
+# OR, wait Escape:
+# keyboard.wait('esc')
