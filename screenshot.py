@@ -5,9 +5,8 @@ __author__ = 'ipetrash'
 
 
 if __name__ == "__main__":
-    import pyscreenshot as ImageGrab
-
     # fullscreen
+    import pyscreenshot as ImageGrab
     im = ImageGrab.grab()
     im.save('screenshot.png')
     im.show()
