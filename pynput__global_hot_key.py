@@ -15,6 +15,7 @@ if __name__ == '__main__':
             im.save('screenshot.png')
             im.show()
 
+    # pip install pynput
     from pynput import keyboard
     with keyboard.Listener(on_release=on_release) as listener:
         listener.join()
