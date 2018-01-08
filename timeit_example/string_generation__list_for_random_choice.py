@@ -4,13 +4,14 @@
 __author__ = 'ipetrash'
 
 
+import timeit
+
 setup = '''
 from random import choices, choice
 from string import ascii_letters
 '''
 number = 100
 
-import timeit
 print(timeit.timeit(
     "[''.join(choices(ascii_letters, k=10)) for _ in range(1000)]",
     setup=setup,
