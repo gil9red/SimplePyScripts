@@ -18,7 +18,7 @@ cache_pos_button = dict()
 
 import pyautogui
 
-expression = '1234567890 * 2 = '
+expression = '1234 * 222 + 3214 = '
 
 for x in expression:
     if x not in BUTTONS:
