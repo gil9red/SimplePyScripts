@@ -16,6 +16,10 @@ for i in range(10):
 
 cache_pos_button = dict()
 
+# OpenCv -- for performance
+# pip install opencv-python
+
+# pip install pyautogui
 import pyautogui
 
 expression = '1234 * 222 + 3214 = '

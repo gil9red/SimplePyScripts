@@ -25,6 +25,10 @@ def go():
     log = get_logger()
     log_it = lambda pos, filename: log.debug('{} [{}]'.format(pos, filename))
 
+    # OpenCv -- for performance
+    # pip install opencv-python
+
+    # pip install pyautogui
     import pyautogui
 
     # Ищем меню с смайлами

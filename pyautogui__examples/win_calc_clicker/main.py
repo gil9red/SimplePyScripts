@@ -18,6 +18,10 @@ CACHE_POS_BUTTON = dict()
 
 
 def go(expression):
+    # OpenCv -- for performance
+    # pip install opencv-python
+
+    # pip install pyautogui
     import pyautogui
 
     for x in expression:
