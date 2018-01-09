@@ -14,26 +14,31 @@ BUTTONS = {
 for i in range(10):
     BUTTONS[str(i)] = 'buttons/{}.png'.format(i)
 
-cache_pos_button = dict()
+CACHE_POS_BUTTON = dict()
 
-import pyautogui
 
-expression = '1234 * 222 + 3214 = '
+def go(expression):
+    import pyautogui
 
-for x in expression:
-    if x not in BUTTONS:
-        print('Not found: "{}"'.format(x))
-        continue
-
-    if x in cache_pos_button:
-        pos = cache_pos_button[x]
-    else:
-        file_name = BUTTONS[x]
-        pos = pyautogui.locateCenterOnScreen(file_name)
-        if not pos:
+    for x in expression:
+        if x not in BUTTONS:
+            print('Not found: "{}"'.format(x))
             continue
 
-        cache_pos_button[x] = pos
+        if x in CACHE_POS_BUTTON:
+            pos = CACHE_POS_BUTTON[x]
+        else:
+            file_name = BUTTONS[x]
+            pos = pyautogui.locateCenterOnScreen(file_name)
+            if not pos:
+                continue
 
-    print(x, pos)
-    pyautogui.click(pos)
+            CACHE_POS_BUTTON[x] = pos
+
+        print(x, pos)
+        pyautogui.click(pos)
+
+
+if __name__ == '__main__':
+    expression = '1234 * 222 + 3214 = '
+    go(expression)
