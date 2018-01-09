@@ -1,9 +1,9 @@
 
 ## main.py
-![](screenshot.gif)
+![](screenshots/screenshot.gif)
 
 ## main__locateAllOnScreen.py
-![](screenshot__locateAllOnScreen.gif)
+![](screenshots/screenshot__locateAllOnScreen.gif)
 
 ## main__PI_clicker_monster.py
-![](screenshot__PI_clicker_monster.gif)
+![](screenshots/screenshot__PI_clicker_monster.gif)

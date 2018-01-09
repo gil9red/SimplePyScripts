@@ -31,6 +31,9 @@ for x in expression:
     else:
         file_name = BUTTONS[x]
         pos = pyautogui.locateCenterOnScreen(file_name)
+        if not pos:
+            continue
+
         cache_pos_button[x] = pos
 
     print(x, pos)
