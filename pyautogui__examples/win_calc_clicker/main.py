@@ -14,6 +14,8 @@ BUTTONS = {
 for i in range(10):
     BUTTONS[str(i)] = 'buttons/{}.png'.format(i)
 
+cache_pos_button = dict()
+
 import pyautogui
 
 expression = '1234567890 * 2 = '
@@ -23,7 +25,15 @@ for x in expression:
         print('Not found: "{}"'.format(x))
         continue
 
-    file_name = BUTTONS[x]
-    pos = pyautogui.locateCenterOnScreen(file_name, grayscale=True)
+    if x in cache_pos_button:
+        pos = cache_pos_button[x]
+    else:
+        file_name = BUTTONS[x]
+        pos = pyautogui.locateCenterOnScreen(file_name)
+        if not pos:
+            continue
+
+        cache_pos_button[x] = pos
+
     print(x, pos)
     pyautogui.click(pos)
