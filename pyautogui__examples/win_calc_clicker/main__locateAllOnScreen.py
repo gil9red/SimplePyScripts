@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
+
+BUTTONS = {
+    '+': 'buttons/add.png',
+    '-': 'buttons/sub.png',
+    '/': 'buttons/div.png',
+    '*': 'buttons/mul.png',
+    '=': 'buttons/equal.png',
+}
+for i in range(10):
+    BUTTONS[str(i)] = 'buttons/{}.png'.format(i)
+
+cache_pos_button = dict()
+
+import pyautogui
+
+expression = '1234 * 222 + 3214 = '
+
+for x in expression:
+    if x not in BUTTONS:
+        print('Not found: "{}"'.format(x))
+        continue
+
+    if x in cache_pos_button:
+        pos_list = cache_pos_button[x]
+    else:
+        file_name = BUTTONS[x]
+        pos_list = [pyautogui.center(pos) for pos in pyautogui.locateAllOnScreen(BUTTONS[x])]
+        if not pos_list:
+            continue
+
+        cache_pos_button[x] = pos_list
+
+    print(x, pos_list)
+    for pos in pos_list:
+        pyautogui.click(pos)
