@@ -61,8 +61,8 @@ image, contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SI
 
 if contours:
     print(len(contours))
-    print([cv2.contourArea(i) for i in contours])
-    contours = [i for i in contours if 249000 < cv2.contourArea(i) < 250000]
+    print([cv2.contourArea(i) for i in contours if cv2.contourArea(i) > 10000])
+    contours = [i for i in contours if 249000 < cv2.contourArea(i) < 255000]
 
     img_with_contour = img.copy()
     cv2.drawContours(img_with_contour, contours, -1, (0, 255, 0), 3)
