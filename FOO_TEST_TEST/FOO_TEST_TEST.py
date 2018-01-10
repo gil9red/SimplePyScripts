@@ -12,9 +12,65 @@ __author__ = 'ipetrash'
 import numpy as np
 
 import cv2
-# img = cv2.imread('img.png')
+
+img = cv2.imread('img.png')
 img = cv2.imread('img_bad.png')
-cv2.imshow('img', img)
+# img = cv2.imread('img_bad_crop.png')
+# cv2.imshow('img', img)
+
+# cv2.imshow('Color all',img)
+# cv2.imshow('Color blue',img[:,:,0])
+# cv2.imshow('Color green',img[:,:,1])
+# cv2.imshow('Color red',img[:,:,2])
+# cv2.waitKey()
+
+# ret, thresh = cv2.threshold(img[:,:,0], 140, 180, cv2.THRESH_BINARY)
+# image, contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+# cv2.imshow('image_', image)
+# cv2.waitKey()
+# cv2.destroyAllWindows()
+
+
+# quit()
+
+# print(img[0][0], type(img[0][0]))
+# quit()
+# img[img != cv2.Scalar(0,0,255)] = (255, 0, 0)
+# img[np.where(img==[255,0,0])] = [0, 0, 0]
+# img = cv2.blur(img, (2, 2))
+# plt.subplot(122),cv2.imshow('blur img', img)
+# plt.title('blur img'), plt.xticks([]), plt.yticks([])
+
+# TODO:
+# gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# cv2.imshow('gray', gray)
+
+minVal, maxVal = 100, 200
+edges = cv2.Canny(img,minVal, maxVal)
+# cv2.imshow('edges_img', edges)
+
+# edges = cv2.Canny(gray,minVal, maxVal)
+# cv2.imshow('edges_gray', edges)
+
+# # edges = cv2.Canny(cv2.blur(gray, (1, 1)),minVal, maxVal)
+# # cv2.imshow('edges_gray_blur', edges)
+
+ret, thresh = cv2.threshold(edges, 200, 255, cv2.THRESH_BINARY)
+image, contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+# cv2.imshow('image_', image)
+
+if contours:
+    print(len(contours))
+    print([cv2.contourArea(i) for i in contours])
+    contours = [i for i in contours if 249000 < cv2.contourArea(i) < 250000]
+
+    img_with_contour = img.copy()
+    cv2.drawContours(img_with_contour, contours, -1, (0, 255, 0), 3)
+    cv2.imshow('img_with_contour', img_with_contour)
+
+cv2.waitKey()
+cv2.destroyAllWindows()
+quit()
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 cv2.imshow('gray', gray)
@@ -22,7 +78,7 @@ cv2.imshow('gray', gray)
 # ret, thresh = cv2.threshold(gray, 176, 176, 176)
 ret, thresh = cv2.threshold(gray, 176, 176, cv2.THRESH_BINARY)
 image, contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-cv2.imshow('image_', image)
+# cv2.imshow('image_', image)
 # cv2.waitKey()
 # cv2.destroyAllWindows()
 
@@ -33,6 +89,10 @@ contours = [i for i in contours if 250000 < cv2.contourArea(i) < 255000]
 print([cv2.contourArea(i) for i in contours])
 print([cv2.contourArea(i) for i in contours if 250000 < cv2.contourArea(i) < 255000])
 
+if contours:
+    img_with_contour = img.copy()
+    cv2.drawContours(img_with_contour, contours, -1, (0, 255, 0), 3)
+    cv2.imshow('img_with_contour', img_with_contour)
 
 cv2.waitKey()
 cv2.destroyAllWindows()
