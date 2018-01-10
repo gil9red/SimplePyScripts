@@ -60,6 +60,8 @@ cv2.imshow("cropped", crop_img)
 
 # crop_img[crop_img == 255] = [0, 0, 255]
 gray_crop_img = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY)
+
+# Для помощи алгоритма контурирования изменим цвет пикселей сетки на черный
 gray_crop_img[gray_crop_img == 176] = 0
 
 cv2.imshow("gray_crop_img", gray_crop_img)
