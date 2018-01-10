@@ -55,7 +55,7 @@ x, y, h, w = rect_board
 # cv2.imshow('gray', gray)
 
 crop_img = img[y:y+h, x:x+w]
-cv2.imshow("cropped", crop_img)
+# cv2.imshow("cropped", crop_img)
 
 
 # crop_img[crop_img == 255] = [0, 0, 255]
@@ -64,22 +64,32 @@ gray_crop_img = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY)
 # Для помощи алгоритма контурирования изменим цвет пикселей сетки на черный
 gray_crop_img[gray_crop_img == 176] = 0
 
-cv2.imshow("gray_crop_img", gray_crop_img)
+# cv2.imshow("gray_crop_img", gray_crop_img)
 
 ret, thresh = cv2.threshold(gray_crop_img, 100, 255, cv2.THRESH_BINARY)
+# print(ret, thresh)
 
 gray_crop_img_Contours, contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+# cv2.imshow("gray_crop_img_Contours", gray_crop_img_Contours)
 # print([cv2.contourArea(i) for i in contours])
 cell_contours = [i for i in contours if 11000 < cv2.contourArea(i) < 12000]
 
-copy_crop_img = crop_img.copy()
-cv2.drawContours(copy_crop_img, contours, -1, (0, 255, 0), 3)
-cv2.imshow("all_cropped_contours", copy_crop_img)
+i = 1
+print(len(cell_contours))  # 16
+# TODO: sort cell_contours
+for contour in cell_contours:
+    rect_cell = cv2.boundingRect(contour)
+    x, y, w, h = rect_cell
+
+    cv2.putText(crop_img, str(i), (x, y + h//4), cv2.FONT_HERSHEY_SCRIPT_SIMPLEX, 1, (0, 0, 0))
+    i += 1
 
 cv2.drawContours(crop_img, cell_contours, -1, (0, 255, 0), 3)
-cv2.imshow("cropped_contours", crop_img)
-cv2.imshow("gray_crop_img_Contours", gray_crop_img_Contours)
+cv2.imshow("cropped_cell_contours", crop_img)
 
+# copy_crop_img = crop_img.copy()
+# cv2.drawContours(copy_crop_img, contours, -1, (0, 255, 0), 3)
+# cv2.imshow("all_cropped_contours", copy_crop_img)
 
 cv2.waitKey()
 cv2.destroyAllWindows()
