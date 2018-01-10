@@ -12,7 +12,7 @@ __author__ = 'ipetrash'
 import numpy as np
 
 import cv2
-img = cv2.imread('img.png')
+# img = cv2.imread('img.png')
 img = cv2.imread('img_bad.png')
 cv2.imshow('img', img)
 
