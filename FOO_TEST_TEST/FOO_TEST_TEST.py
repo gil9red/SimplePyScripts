@@ -180,23 +180,83 @@ def show_cell_on_board_v2(board_img):
 
     gray_img = cv2.cvtColor(temp_board_img, cv2.COLOR_BGR2GRAY)
     ret, thresh = cv2.threshold(gray_img, 50, 255, cv2.THRESH_BINARY)
-    gray_img_contours, contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    gray_img_contours, cell_contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # cv2.imshow("gray_img_contours", gray_img_contours)
 
-    print(len(contours))
+    print(len(cell_contours))
+    if len(cell_contours) != 16:
+        print('Нужно ровно 16 контуров ячеек')
+        quit()
 
     img_with_contour = board_img.copy()
-    cv2.drawContours(img_with_contour, contours, -1, (0, 255, 0), 3)
-    cv2.imshow('img_with_contour', img_with_contour)
+    cv2.drawContours(img_with_contour, cell_contours, -1, (0, 255, 0), 3)
+    # cv2.imshow('img_with_contour_' + str(hex(id(board_img))), img_with_contour)
+
+    sort_x = sorted([cv2.boundingRect(x)[0] for x in cell_contours])
+    mean_of_points = [
+        sum(sort_x[0:4]) // 4,
+        sum(sort_x[4:8]) // 4,
+        sum(sort_x[8:12]) // 4,
+        sum(sort_x[12:16]) // 4,
+    ]
+
+    # print(mean_of_points)
+    MEAN_EPS = 5
+    # print(sorted([cv2.boundingRect(x)[1] for x in cell_contours]))
+
+    point_by_contour = dict()
+    for contour in cell_contours:
+        x, y, _, _ = cv2.boundingRect(contour)
+        # print(x, y)
+
+        for mean_point in mean_of_points:
+            # Максимальное отклонение от средней позиции
+            if abs(x - mean_point) <= MEAN_EPS:
+                x = mean_point
+
+            if abs(y - mean_point) <= MEAN_EPS:
+                y = mean_point
+
+        point_by_contour[(x, y)] = contour
+
+    cell_contours.sort(key=lambda x: (cv2.boundingRect(x)[1], cv2.boundingRect(x)[0]))
+    print([(cv2.boundingRect(contour)[0], cv2.boundingRect(contour)[1]) for contour in cell_contours])
+
+    i = 1
+
+    # for contour in cell_contours:
+    for pos, contour in sorted(point_by_contour.items(), key=lambda x: (x[0][1], x[0][0])):
+        rect_cell = cv2.boundingRect(contour)
+        x, y, w, h = rect_cell
+        # x, y = pos
+
+        cv2.putText(img_with_contour, str(i), (x, y + h//4), cv2.FONT_HERSHEY_SCRIPT_SIMPLEX, 1, (0, 0, 0))
+        cv2.putText(img_with_contour, '{}x{}'.format(x, y), (x, y + h // 2), cv2.FONT_HERSHEY_SCRIPT_SIMPLEX, 0.5, (0, 0, 0))
+
+        # x, y = pos
+        # cv2.putText(crop_img, '{}x{}'.format(x, y), (x, y + h // 2), cv2.FONT_HERSHEY_SCRIPT_SIMPLEX, 0.5, (0, 0, 0))
+        i += 1
+
+    cv2.drawContours(img_with_contour, cell_contours, -1, (0, 255, 0), 3)
+    cv2.imshow("img_with_contour_cell_contours_" + str(hex(id(img_with_contour))), img_with_contour)
+
+    # copy_crop_img = crop_img.copy()
+    # cv2.drawContours(copy_crop_img, contours, -1, (0, 255, 0), 3)
+    # cv2.imshow("all_cropped_contours", copy_crop_img)
 
 
-img = cv2.imread('img.png')
-img = cv2.imread('img_bad.png')
-board_img = get_game_board(img)
-# cv2.imshow("board_img", board_img)
 
-# show_cell_on_board(board_img)
-show_cell_on_board_v2(board_img)
+show_cell_on_board_v2(get_game_board(cv2.imread('img_bad.png')))
+show_cell_on_board_v2(get_game_board(cv2.imread('img.png')))
+
+
+# img = cv2.imread('img.png')
+# img = cv2.imread('img_bad.png')
+# board_img = get_game_board(img)
+# # cv2.imshow("board_img", board_img)
+#
+# # show_cell_on_board(board_img)
+# show_cell_on_board_v2(board_img)
 
 cv2.waitKey()
 cv2.destroyAllWindows()
