@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+
 __author__ = 'ipetrash'
 
 
@@ -29,6 +30,13 @@ def get_game_board(img__or__file_name):
     image, contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # cv2.imshow('image_', image)
 
+    # cv2.drawContours(img, contours, -1, (0, 255, 0), 3)
+    # cv2.imshow('img_with_contour', img)
+    #
+    # cv2.waitKey()
+    # cv2.destroyAllWindows()
+
+
     if not contours:
         print('Не получилсоь найти контуры')
         quit()
@@ -38,7 +46,8 @@ def get_game_board(img__or__file_name):
     contours = [i for i in contours if 249000 < cv2.contourArea(i) < 255000]
     if not contours:
         print('Не получилсоь найти контур поля игры')
-        quit()
+        # quit()
+        return
 
     # img_with_contour = img.copy()
     # cv2.drawContours(img_with_contour, contours, -1, (0, 255, 0), 3)
@@ -137,8 +146,8 @@ def get_cell_point_by_contour(board_img):
 
 
 def show_cell_on_board(board_img, point_by_contour):
-    col = 0
     row = 0
+    col = 0
 
     i = 1
 
@@ -152,12 +161,12 @@ def show_cell_on_board(board_img, point_by_contour):
 
         cv2.putText(board_img, str(i), (x, y + h//4), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0))
         cv2.putText(board_img, '{}x{}'.format(x, y), (x + w // 2, y + h // 7), cv2.FONT_HERSHEY_PLAIN, 0.8, (0, 0, 0))
-        cv2.putText(board_img, '{}x{}'.format(col, row), (x + w // 8, y + int(h // 1.2)), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
+        cv2.putText(board_img, '{}x{}'.format(row, col), (x + w // 8, y + int(h // 1.2)), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
 
-        row += 1
-        if row == 4:
-            row = 0
-            col += 1
+        col += 1
+        if col == 4:
+            col = 0
+            row += 1
 
         # x, y = pos
         # cv2.putText(crop_img, '{}x{}'.format(x, y), (x, y + h // 2), cv2.FONT_HERSHEY_SCRIPT_SIMPLEX, 0.5, (0, 0, 0))
@@ -171,9 +180,116 @@ def show_cell_on_board(board_img, point_by_contour):
     # cv2.imshow("all_cropped_contours", copy_crop_img)
 
 
-img = cv2.imread('img.png')
-img_two = cv2.imread('two.png')
-print(cv2.matchTemplate(img, img_two, ))
+# img = cv2.imread('img.png')
+# img = cv2.imread('img_bad_crop.png')
+#
+# img_two = cv2.imread('two.png')
+# img_fake = cv2.imread('123.png')
+# # img_two = img_fake
+#
+#
+# def has(image, template):
+#     img = image.copy()
+#     res = cv2.matchTemplate(img, template, cv2.TM_SQDIFF)
+#     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+#     top_left = min_loc
+#     x,y = top_left
+#     return x, y
+#
+# print(has(img, img_two))
+# print(has(img, img_fake))
+
+# img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# img_two = cv2.cvtColor(img_two, cv2.COLOR_BGR2GRAY)
+#
+# # for i in range(6):
+# #     print(len(cv2.matchTemplate(img, img_two, i)), len(cv2.matchTemplate(img, img_fake, i)))
+#
+#
+# res = cv2.matchTemplate(img, img_two, cv2.TM_SQDIFF)
+#
+# # определение лучшее положение для сравнения
+# # (поиск минимумов и максимумов на изображении)
+# minval, maxval, minloc, maxloc = cv2.minMaxLoc(res)
+# print(minval, maxval, minloc, maxloc)
+#
+# # нормализуем
+# res = cv2.normalize(res, 1, 0, cv2.NORM_MINMAX)
+#
+#
+# # выделим область прямоугольником
+# cv2.rectangle(img, (minloc[0], minloc[1]), (minloc[0]+img_two.shape[0]-1, minloc[1]+img_two.shape[1]-1), (0, 0, 0), 1, 8)
+# cv2.imshow("res", img)
+
+# """
+# // сравнение изображения с шаблоном
+# cvMatchTemplate(image, templ, res, CV_TM_SQDIFF);
+#
+# // покажем что получили
+# cvShowImage( "res", res);
+#
+# // определение лучшее положение для сравнения
+# // (поиск минимумов и максимумов на изображении)
+# double    minval, maxval;
+# CvPoint    minloc, maxloc;
+# cvMinMaxLoc(res, &minval, &maxval, &minloc, &maxloc, 0);
+#
+# // нормализуем
+# cvNormalize(res,res,1,0,CV_MINMAX);
+# cvNamedWindow("res norm", CV_WINDOW_AUTOSIZE);
+# cvShowImage( "res norm", res);
+#
+# // выделим область прямоугольником
+# cvRectangle(image, cvPoint(minloc.x, minloc.y), cvPoint(minloc.x+templ->width-1, minloc.y+templ->height-1), CV_RGB(255, 0, 0), 1, 8);
+#
+# // показываем изображение
+# cvShowImage("Match", image);
+# """
+
+
+#
+# Способ найти основные цвета
+#
+img_cell = cv2.imread('cell_img.png')
+
+img_points = []
+
+w, h = img_cell.shape[:2]
+for i in range(h):
+    for j in range(w):
+        img_points.append(tuple(img_cell[i, j]))
+
+from collections import Counter
+print(sorted(Counter(img_points).items(), reverse=True, key=lambda x: x[1])[:3])
+
+
+# board = get_game_board('fojUvGQfBRc.jpg')
+# point_by_contour = get_cell_point_by_contour(board)
+# show_cell_on_board(board, point_by_contour)
+
+# import glob
+# for file_name in glob.glob('data/img/*.jpg'):
+#     print(file_name)
+#
+#     try:
+#         board = get_game_board(file_name)
+#         point_by_contour = get_cell_point_by_contour(board)
+#         # show_cell_on_board(board, point_by_contour)
+#
+#         for contour in point_by_contour.values():
+#             crop_img = crop_by_contour(board, contour)
+#
+#             import hashlib
+#             name_img = 'data/cell/' + hashlib.sha1(crop_img.data.tobytes()).hexdigest() + '.png'
+#             # cv2.imshow(name_img, crop_img)
+#             # hash_by_img[name_img] = crop_img
+#             print(name_img)
+#
+#             cv2.imwrite(name_img, crop_img)
+#
+#     except Exception as e:
+#         print(e)
+
 
 # #
 # # Save cell images:
@@ -213,6 +329,6 @@ print(cv2.matchTemplate(img, img_two, ))
 # # # cv2.imshow("board_img", board_img)
 # #
 # # show_cell_on_board(board_img)
-#
-# cv2.waitKey()
-# cv2.destroyAllWindows()
+
+cv2.waitKey()
+cv2.destroyAllWindows()
