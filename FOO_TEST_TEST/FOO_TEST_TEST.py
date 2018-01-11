@@ -165,14 +165,36 @@ def show_cell_on_board(img):
     # print([(cv2.boundingRect(contour)[0], cv2.boundingRect(contour)[1]) for contour in cell_contours])
 
 
+def show_cell_on_board_v2(board_img):
+    temp_board_img = board_img.copy()
+    w, h, _ = temp_board_img.shape
+
+    indent = 15
+    size_cell = 122
+
+    for i in range(5):
+        cv2.rectangle(temp_board_img, (0, size_cell * i), (w, size_cell * i + indent), 0, cv2.FILLED)
+        cv2.rectangle(temp_board_img, (size_cell * i, 0), (size_cell * i + indent, h), 0, cv2.FILLED)
+
+    # cv2.imshow("temp_board_img", temp_board_img)
+
+    gray_img = cv2.cvtColor(temp_board_img, cv2.COLOR_BGR2GRAY)
+    ret, thresh = cv2.threshold(gray_img, 50, 255, cv2.THRESH_BINARY)
+    gray_img_contours, contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    # cv2.imshow("gray_img_contours", gray_img_contours)
+
+    img_with_contour = board_img.copy()
+    cv2.drawContours(img_with_contour, contours, -1, (0, 255, 0), 3)
+    cv2.imshow('img_with_contour', img_with_contour)
+
+
 img = cv2.imread('img.png')
 img = cv2.imread('img_bad.png')
 board_img = get_game_board(img)
-cv2.imshow("board_img", board_img)
-
-# TODO: а может просто нарисовать свою сетку? размер таблицы не меняется, сетка тоже
+# cv2.imshow("board_img", board_img)
 
 # show_cell_on_board(board_img)
+show_cell_on_board_v2(board_img)
 
 cv2.waitKey()
 cv2.destroyAllWindows()
