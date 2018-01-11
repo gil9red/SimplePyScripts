@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 import cv2
+import numpy as np
 
 
 def get_game_board(img__or__file_name):
@@ -49,6 +50,94 @@ def get_game_board(img__or__file_name):
 
 
 def show_cell_on_board(img):
+    img = img.copy()
+    # print(len(np.where([204, 102, 180])))
+    # img[img == np.where([180, 102, 204]).('uint8')] = [0, 255, 0]
+    # print(img[0])
+    # print(img == 100)
+    # img = cv2.blur(img, (3, 3))
+    # img[img == [[[180, 192, 204]]]] = [0, 0, 0]
+
+    # # print()
+    # mask = img == np.array([204, 192, 180])
+    # img[mask[0]] = [0, 0, 0]
+    for i in range(img.shape[0]):
+        for j in range(img.shape[1]):
+            if (img[i, j, :] == [180, 192, 204]).all():  # if pixel is this color
+                img[i, j, :] = [0, 0, 0]  # set the pixel to [0,0,counter]
+
+    # img[np = np.where([180, 102, 204])] = [0, 255, 0]
+    # img.itemset(np.ScalarType([180, 102, 204]), [0,0,0])
+    # print(np.where([217, 227, 237]))
+    # print(np.where([[180, 102, 204]]))
+    # img[np.where([[180, 102, 204]])] = [0, 0, 0]
+    cv2.imshow("img", img)
+    # 241 176 122
+    # 204 102 180
+    # 237 227 217 rgb / bgr 217 227 237
+
+    # # compute the median of the single channel pixel intensities
+    # v = np.median(img)
+    #
+    # # apply automatic Canny edge detection using the computed median
+    # sigma = 0.25
+    # lower = int(max(0, (1.0 - sigma) * v))
+    # upper = int(min(255, (1.0 + sigma) * v))
+    #
+    # new_edges = cv2.Canny(img, lower, upper, True)
+    new_edges = cv2.Canny(img, 100, 150)
+    # print(np.where([237, 227, 217]))
+
+    cv2.imshow('new_edges_img', new_edges)
+
+    # gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # cv2.imshow("gray_img", gray_img)
+    #
+    # edges = cv2.Canny(gray_img, 100, 200)
+    # cv2.imshow('edges_img', edges)
+    #
+    # # Для помощи алгоритма контурирования изменим цвет пикселей
+    #
+    # gray_img = cv2.blur(gray_img, (1, 1))
+    # # TODO: np.any
+    # gray_img[gray_img == 197] = 230
+    # # gray_img[gray_img == 181] = 230
+    # # gray_img[gray_img == 189] = 230
+    # # gray_img[gray_img == 187] = 230
+    # # gray_img[gray_img == 188] = 230
+    # gray_img[gray_img == 171] = 230
+    # gray_img[gray_img == 195] = 230
+    # gray_img[gray_img == 196] = 230
+    # gray_img[gray_img == 198] = 230
+    # gray_img[gray_img == 199] = 230
+    # gray_img[gray_img == 205] = 230
+    # cv2.imshow("gray_img2", gray_img)
+    # # cv2.imshow("gray_img2", cv2.blur(gray_img, (3, 3)))
+
+    # new_edges = cv2.Canny(gray_img, 100, 200)
+    # cv2.imshow('new_edges_img', new_edges)
+
+    ret, thresh = cv2.threshold(new_edges, 200, 255, cv2.THRESH_BINARY)
+    # print(ret, thresh)
+
+    gray_img_contours, cell_contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    print(len(cell_contours))  # 16
+    cv2.imshow("gray_crop_img_Contours", gray_img_contours)
+    print([cv2.contourArea(i) for i in cell_contours])
+    print([cv2.contourArea(i) for i in cell_contours if cv2.contourArea(i) > 10000])
+    cell_contours = [i for i in cell_contours if cv2.contourArea(i) > 1000]
+    print([cv2.boundingRect(i)for i in cell_contours])
+    print([cv2.contourArea(i) for i in cell_contours])
+    print(len(cell_contours))  # 16
+
+    img_copy = img.copy()
+    cv2.drawContours(img_copy, cell_contours, -1, (0, 255, 0), 3)
+    cv2.imshow('img_with_contour', img_copy)
+
+    cv2.waitKey()
+    cv2.destroyAllWindows()
+    quit()
+
     gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     cv2.imshow("gray_img", gray_img)
 
@@ -79,9 +168,9 @@ def show_cell_on_board(img):
 img = cv2.imread('img.png')
 img = cv2.imread('img_bad.png')
 board_img = get_game_board(img)
-cv2.imshow("board_img", board_img)
+# cv2.imshow("board_img", board_img)
 
-# show_cell_on_board(board_img)
+show_cell_on_board(board_img)
 
 cv2.waitKey()
 cv2.destroyAllWindows()
