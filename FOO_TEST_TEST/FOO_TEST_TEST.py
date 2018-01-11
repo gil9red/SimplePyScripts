@@ -183,6 +183,8 @@ def show_cell_on_board_v2(board_img):
     gray_img_contours, contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # cv2.imshow("gray_img_contours", gray_img_contours)
 
+    print(len(contours))
+
     img_with_contour = board_img.copy()
     cv2.drawContours(img_with_contour, contours, -1, (0, 255, 0), 3)
     cv2.imshow('img_with_contour', img_with_contour)
