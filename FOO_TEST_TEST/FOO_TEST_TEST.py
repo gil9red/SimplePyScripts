@@ -4,15 +4,9 @@
 __author__ = 'ipetrash'
 
 
-# import pyautogui
-# im1 = pyautogui.screenshot()
-# im2 = pyautogui.screenshot('my_screenshot.png')
-
-
 import numpy as np
 
 import cv2
-
 img = cv2.imread('img.png')
 img = cv2.imread('img_bad.png')
 # img = cv2.imread('img_bad_crop.png')
