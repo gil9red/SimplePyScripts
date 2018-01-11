@@ -166,6 +166,7 @@ def show_cell_on_board(img):
 
 
 def show_cell_on_board_v2(board_img):
+    # cv2.imshow("board_img", board_img)
     temp_board_img = board_img.copy()
     w, h, _ = temp_board_img.shape
 
@@ -245,8 +246,11 @@ def show_cell_on_board_v2(board_img):
     # cv2.imshow("all_cropped_contours", copy_crop_img)
 
 
+# import glob
+# for file_name in glob.glob('*.jpg'):
+#     show_cell_on_board_v2(get_game_board(file_name))
 
-show_cell_on_board_v2(get_game_board(cv2.imread('img_bad.png')))
+# show_cell_on_board_v2(get_game_board(cv2.imread('img_bad.png')))
 show_cell_on_board_v2(get_game_board(cv2.imread('img.png')))
 
 
