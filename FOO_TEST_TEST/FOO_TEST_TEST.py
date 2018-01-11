@@ -168,9 +168,11 @@ def show_cell_on_board(img):
 img = cv2.imread('img.png')
 img = cv2.imread('img_bad.png')
 board_img = get_game_board(img)
-# cv2.imshow("board_img", board_img)
+cv2.imshow("board_img", board_img)
 
-show_cell_on_board(board_img)
+# TODO: а может просто нарисовать свою сетку? размер таблицы не меняется, сетка тоже
+
+# show_cell_on_board(board_img)
 
 cv2.waitKey()
 cv2.destroyAllWindows()
