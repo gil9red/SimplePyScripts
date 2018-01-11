@@ -8,6 +8,12 @@ import cv2
 import numpy as np
 
 
+def crop_by_contour(img, contour):
+    rect = cv2.boundingRect(contour)
+    x, y, h, w = rect
+    return img[y:y+h, x:x+w]
+
+
 def get_game_board(img__or__file_name):
     if isinstance(img__or__file_name, str):
         img = cv2.imread(img__or__file_name)
@@ -38,9 +44,7 @@ def get_game_board(img__or__file_name):
     # cv2.drawContours(img_with_contour, contours, -1, (0, 255, 0), 3)
     # cv2.imshow('img_with_contour', img_with_contour)
 
-    rect_board = cv2.boundingRect(contours[-1])
-    x, y, h, w = rect_board
-    crop_img = img[y:y+h, x:x+w]
+    crop_img = crop_by_contour(img, contours[-1])
     # cv2.imshow("cropped", crop_img)
     #
     # cv2.waitKey()
@@ -167,15 +171,37 @@ def show_cell_on_board(board_img, point_by_contour):
     # cv2.imshow("all_cropped_contours", copy_crop_img)
 
 
+#
+# Save cell images:
+#
+# hash_by_img = dict()
+#
+# import hashlib
 # import glob
 # for file_name in glob.glob('*.jpg'):
-#     show_cell_on_board(get_game_board(file_name))
+#     board = get_game_board(file_name)
+#     point_by_contour = get_cell_point_by_contour(board)
+#
+#     cell_contours = list(point_by_contour.values())
+#     for contour in cell_contours:
+#         crop_img = crop_by_contour(board, contour)
+#
+#         name_img = hashlib.sha1(crop_img.data.tobytes()).hexdigest() + '.png'
+#         # cv2.imshow(name_img, crop_img)
+#         hash_by_img[name_img] = crop_img
+#
+#         cv2.imwrite('cell/' + name_img, crop_img)
+#
+#
+# print(len(hash_by_img))
+# # print(hash_by_img.keys())
 
-# show_cell_on_board(get_game_board(cv2.imread('img_bad.png')))
+
+# # show_cell_on_board(get_game_board(cv2.imread('img_bad.png')))
 board_img = get_game_board(cv2.imread('img.png'))
 point_by_contour = get_cell_point_by_contour(board_img)
 show_cell_on_board(board_img, point_by_contour)
-print(point_by_contour.keys())
+# print(point_by_contour.keys())
 
 # img = cv2.imread('img.png')
 # img = cv2.imread('img_bad.png')
