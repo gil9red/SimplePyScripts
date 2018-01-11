@@ -171,44 +171,48 @@ def show_cell_on_board(board_img, point_by_contour):
     # cv2.imshow("all_cropped_contours", copy_crop_img)
 
 
-#
-# Save cell images:
-#
-# hash_by_img = dict()
-#
-# import hashlib
-# import glob
-# for file_name in glob.glob('*.jpg'):
-#     board = get_game_board(file_name)
-#     point_by_contour = get_cell_point_by_contour(board)
-#
-#     cell_contours = list(point_by_contour.values())
-#     for contour in cell_contours:
-#         crop_img = crop_by_contour(board, contour)
-#
-#         name_img = hashlib.sha1(crop_img.data.tobytes()).hexdigest() + '.png'
-#         # cv2.imshow(name_img, crop_img)
-#         hash_by_img[name_img] = crop_img
-#
-#         cv2.imwrite('cell/' + name_img, crop_img)
-#
-#
-# print(len(hash_by_img))
-# # print(hash_by_img.keys())
+img = cv2.imread('img.png')
+img_two = cv2.imread('two.png')
+print(cv2.matchTemplate(img, img_two, ))
 
-
-# # show_cell_on_board(get_game_board(cv2.imread('img_bad.png')))
-board_img = get_game_board(cv2.imread('img.png'))
-point_by_contour = get_cell_point_by_contour(board_img)
-show_cell_on_board(board_img, point_by_contour)
-# print(point_by_contour.keys())
-
-# img = cv2.imread('img.png')
-# img = cv2.imread('img_bad.png')
-# board_img = get_game_board(img)
-# # cv2.imshow("board_img", board_img)
+# #
+# # Save cell images:
+# #
+# # hash_by_img = dict()
+# #
+# # import hashlib
+# # import glob
+# # for file_name in glob.glob('*.jpg'):
+# #     board = get_game_board(file_name)
+# #     point_by_contour = get_cell_point_by_contour(board)
+# #
+# #     cell_contours = list(point_by_contour.values())
+# #     for contour in cell_contours:
+# #         crop_img = crop_by_contour(board, contour)
+# #
+# #         name_img = hashlib.sha1(crop_img.data.tobytes()).hexdigest() + '.png'
+# #         # cv2.imshow(name_img, crop_img)
+# #         hash_by_img[name_img] = crop_img
+# #
+# #         cv2.imwrite('cell/' + name_img, crop_img)
+# #
+# #
+# # print(len(hash_by_img))
+# # # print(hash_by_img.keys())
 #
-# show_cell_on_board(board_img)
-
-cv2.waitKey()
-cv2.destroyAllWindows()
+#
+# # # show_cell_on_board(get_game_board(cv2.imread('img_bad.png')))
+# board_img = get_game_board(cv2.imread('img.png'))
+# point_by_contour = get_cell_point_by_contour(board_img)
+# show_cell_on_board(board_img, point_by_contour)
+# # print(point_by_contour.keys())
+#
+# # img = cv2.imread('img.png')
+# # img = cv2.imread('img_bad.png')
+# # board_img = get_game_board(img)
+# # # cv2.imshow("board_img", board_img)
+# #
+# # show_cell_on_board(board_img)
+#
+# cv2.waitKey()
+# cv2.destroyAllWindows()
