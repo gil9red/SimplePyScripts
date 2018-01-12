@@ -152,8 +152,16 @@ def get_cell_point_by_contour(board_img):
 
 
 def show_cell_on_board(board_img, point_by_contour):
+    image = board_img.copy()
+
     row = 0
     col = 0
+    game_board = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+    ]
 
     i = 1
 
@@ -165,9 +173,21 @@ def show_cell_on_board(board_img, point_by_contour):
         x, y, w, h = rect_cell
         # x, y = pos
 
-        cv2.putText(board_img, str(i), (x, y + h//4), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0))
-        cv2.putText(board_img, '{}x{}'.format(x, y), (x + w // 2, y + h // 7), cv2.FONT_HERSHEY_PLAIN, 0.8, (0, 0, 0))
-        cv2.putText(board_img, '{}x{}'.format(row, col), (x + w // 8, y + int(h // 1.2)), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
+        cv2.putText(image, str(i), (x, y + h//4), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0))
+        cv2.putText(image, '{}x{}'.format(x, y), (x + w // 3, y + h // 7), cv2.FONT_HERSHEY_PLAIN, 0.8, (0, 0, 0))
+        cv2.putText(image, '{}x{}'.format(row, col), (x + w // 8, y + int(h // 1.2)), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
+
+        cell_img = crop_by_contour(board_img, contour)
+        main_color = get_main_color_bgr(cell_img)
+        if main_color in COLOR_BGR_BY_NUMBER:
+            value_cell = COLOR_BGR_BY_NUMBER[main_color]
+            # print(row, col, value_cell)
+            game_board[row][col] = value_cell
+
+        else:
+            file_name = 'unknown_{}.png'.format('.'.join(map(str, main_color)))
+            print('NOT FOUND COLOR:', main_color, file_name)
+            cv2.imwrite(file_name, cell_img)
 
         col += 1
         if col == 4:
@@ -178,8 +198,10 @@ def show_cell_on_board(board_img, point_by_contour):
         # cv2.putText(crop_img, '{}x{}'.format(x, y), (x, y + h // 2), cv2.FONT_HERSHEY_SCRIPT_SIMPLEX, 0.5, (0, 0, 0))
         i += 1
 
-    cv2.drawContours(board_img, cell_contours, -1, (0, 255, 0), 3)
-    cv2.imshow("img_with_contour_cell_contours_" + str(hex(id(board_img))), board_img.copy())
+    print(game_board)
+
+    cv2.drawContours(image, cell_contours, -1, (0, 255, 0), 3)
+    cv2.imshow("img_with_contour_cell_contours_" + str(hex(id(image))), image)
 
     # copy_crop_img = crop_img.copy()
     # cv2.drawContours(copy_crop_img, contours, -1, (0, 255, 0), 3)
