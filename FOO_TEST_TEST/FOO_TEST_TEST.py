@@ -36,7 +36,6 @@ def get_game_board(img__or__file_name):
     # cv2.waitKey()
     # cv2.destroyAllWindows()
 
-
     if not contours:
         print('Не получилсоь найти контуры')
         quit()
@@ -82,13 +81,20 @@ def get_cell_point_by_contour(board_img):
     # cv2.imshow("gray_img_contours", gray_img_contours)
 
     print(len(cell_contours))
+    print([cv2.contourArea(i) for i in cell_contours])
+
+    cell_contours = [i for i in cell_contours if cv2.contourArea(i) > 10000]
+    print(len(cell_contours))
+
     if len(cell_contours) != 16:
         print('Нужно ровно 16 контуров ячеек')
         quit()
 
     # img_with_contour = board_img.copy()
     # cv2.drawContours(img_with_contour, cell_contours, -1, (0, 255, 0), 3)
-    # # cv2.imshow('img_with_contour_' + str(hex(id(board_img))), img_with_contour)
+    # cv2.imshow('img_with_contour_' + str(hex(id(board_img))), img_with_contour)
+    # cv2.waitKey()
+    # cv2.destroyAllWindows()
 
     sort_x = sorted([cv2.boundingRect(x)[0] for x in cell_contours])
     mean_of_points = [
@@ -366,20 +372,20 @@ def get_main_color_bgr(image):
 # #
 # # print(len(hash_by_img))
 # # # print(hash_by_img.keys())
+
+
+# # show_cell_on_board(get_game_board(cv2.imread('img_bad.png')))
+board_img = get_game_board(cv2.imread('img.png'))
+point_by_contour = get_cell_point_by_contour(board_img)
+show_cell_on_board(board_img, point_by_contour)
+# print(point_by_contour.keys())
+
+# img = cv2.imread('img.png')
+# img = cv2.imread('img_bad.png')
+# board_img = get_game_board(img)
+# # cv2.imshow("board_img", board_img)
 #
-#
-# # # show_cell_on_board(get_game_board(cv2.imread('img_bad.png')))
-# board_img = get_game_board(cv2.imread('img.png'))
-# point_by_contour = get_cell_point_by_contour(board_img)
-# show_cell_on_board(board_img, point_by_contour)
-# # print(point_by_contour.keys())
-#
-# # img = cv2.imread('img.png')
-# # img = cv2.imread('img_bad.png')
-# # board_img = get_game_board(img)
-# # # cv2.imshow("board_img", board_img)
-# #
-# # show_cell_on_board(board_img)
+# show_cell_on_board(board_img)
 
 cv2.waitKey()
 cv2.destroyAllWindows()
