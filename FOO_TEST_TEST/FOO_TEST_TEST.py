@@ -247,6 +247,23 @@ def show_cell_on_board(board_img, point_by_contour):
 # """
 
 
+COLOR_BGR_BY_NUMBER = {
+    (180, 192, 204): 0,  # None
+    (217, 227, 237): 2,
+    (199, 223, 235): 4,
+    (122, 176, 241): 8,
+    (98, 148, 244): 16,
+    (94, 123, 244): 32,
+    (59, 93, 246): 64,
+    (115, 207, 236): 128,
+    (98, 203, 236): 256,
+    (82, 199, 236): 512,
+    (67, 196, 235): 1024,
+    (52, 193, 236): 2048,
+    (): 4096, # TODO:
+}
+
+
 #
 # Способ найти основные цвета
 #
@@ -262,31 +279,32 @@ def get_main_color_bgr(image):
     return sorted(Counter(img_points).items(), reverse=True, key=lambda x: x[1])[0][0]
 
 
-from collections import defaultdict
-color_by_images = defaultdict(list)
+# from collections import defaultdict
+# color_by_images = defaultdict(list)
+#
+# import glob
+# for file_name in glob.glob('cell/*.png'):
+#     img_cell = cv2.imread(file_name)
+#     color = get_main_color_bgr(img_cell)
+#     # print(color, file_name)
+#
+#     color_by_images[color].append(file_name)
+#
+# # С сохранением файлов по цвету
+# for color, images in sorted(color_by_images.items(), key=lambda x: len(x[1]), reverse=True):
+#     i = 1
+#
+#     print('{} ({}):'.format(color, len(images)))
+#     for file_name in images:
+#         new_file_name = 'cell_color/{}__{}.png'.format('.'.join(map(str, color)), i)
+#         print('    ' + file_name + ' -> ' + new_file_name)
+#         import shutil
+#         shutil.copy(file_name, new_file_name)
+#
+#         i += 1
+#
+#     print()
 
-import glob
-for file_name in glob.glob('cell/*.png'):
-    img_cell = cv2.imread(file_name)
-    color = get_main_color_bgr(img_cell)
-    # print(color, file_name)
-
-    color_by_images[color].append(file_name)
-
-# С сохранением файлов по цвету
-for color, images in sorted(color_by_images.items(), key=lambda x: len(x[1]), reverse=True):
-    i = 1
-
-    print('{} ({}):'.format(color, len(images)))
-    for file_name in images:
-        new_file_name = 'cell_color/{}__{}.png'.format('.'.join(map(str, color)), i)
-        print('    ' + file_name + ' -> ' + new_file_name)
-        import shutil
-        shutil.copy(file_name, new_file_name)
-
-        i += 1
-
-    print()
 
 # for color, images in sorted(color_by_images.items(), key=lambda x: len(x[1]), reverse=True):
 #     print('{} ({}):'.format(color, len(images)))
