@@ -4,6 +4,10 @@
 __author__ = 'ipetrash'
 
 
+from main import show_test_calc
+show_test_calc()
+
+
 BUTTONS = {
     '+': 'buttons/add.png',
     '-': 'buttons/sub.png',

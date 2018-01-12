@@ -43,6 +43,16 @@ def go(expression):
         pyautogui.click(pos)
 
 
+def show_test_calc():
+    import os
+    os.startfile('calc.exe')
+
+    import time
+    time.sleep(1)
+
+
 if __name__ == '__main__':
+    show_test_calc()
+
     expression = '1234 * 222 + 3214 = '
     go(expression)
