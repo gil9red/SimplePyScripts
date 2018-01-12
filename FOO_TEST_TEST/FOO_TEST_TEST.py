@@ -266,7 +266,7 @@ COLOR_BGR_BY_NUMBER = {
     (82, 199, 236): 512,
     (67, 196, 235): 1024,
     (52, 193, 236): 2048,
-    (): 4096, # TODO:
+    (50, 57, 60): 4096,
 }
 
 
@@ -289,7 +289,7 @@ def get_main_color_bgr(image):
 # color_by_images = defaultdict(list)
 #
 # import glob
-# for file_name in glob.glob('cell/*.png'):
+# for file_name in glob.glob('data/cell/*.png'):
 #     img_cell = cv2.imread(file_name)
 #     color = get_main_color_bgr(img_cell)
 #     # print(color, file_name)
@@ -302,7 +302,7 @@ def get_main_color_bgr(image):
 #
 #     print('{} ({}):'.format(color, len(images)))
 #     for file_name in images:
-#         new_file_name = 'cell_color/{}__{}.png'.format('.'.join(map(str, color)), i)
+#         new_file_name = 'data/cell_color/{}__{}.png'.format('.'.join(map(str, color)), i)
 #         print('    ' + file_name + ' -> ' + new_file_name)
 #         import shutil
 #         shutil.copy(file_name, new_file_name)
@@ -346,7 +346,7 @@ def get_main_color_bgr(image):
 #
 #     except Exception as e:
 #         print(e)
-
+#
 
 # #
 # # Save cell images:
