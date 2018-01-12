@@ -250,17 +250,50 @@ def show_cell_on_board(board_img, point_by_contour):
 #
 # Способ найти основные цвета
 #
-img_cell = cv2.imread('cell_img.png')
+def get_main_color_bgr(image):
+    img_points = []
 
-img_points = []
+    w, h = image.shape[:2]
+    for i in range(h):
+        for j in range(w):
+            img_points.append(tuple(image[i, j]))
 
-w, h = img_cell.shape[:2]
-for i in range(h):
-    for j in range(w):
-        img_points.append(tuple(img_cell[i, j]))
+    from collections import Counter
+    return sorted(Counter(img_points).items(), reverse=True, key=lambda x: x[1])[0][0]
 
-from collections import Counter
-print(sorted(Counter(img_points).items(), reverse=True, key=lambda x: x[1])[:3])
+
+from collections import defaultdict
+color_by_images = defaultdict(list)
+
+import glob
+for file_name in glob.glob('cell/*.png'):
+    img_cell = cv2.imread(file_name)
+    color = get_main_color_bgr(img_cell)
+    # print(color, file_name)
+
+    color_by_images[color].append(file_name)
+
+# С сохранением файлов по цвету
+for color, images in sorted(color_by_images.items(), key=lambda x: len(x[1]), reverse=True):
+    i = 1
+
+    print('{} ({}):'.format(color, len(images)))
+    for file_name in images:
+        new_file_name = 'cell_color/{}__{}.png'.format('.'.join(map(str, color)), i)
+        print('    ' + file_name + ' -> ' + new_file_name)
+        import shutil
+        shutil.copy(file_name, new_file_name)
+
+        i += 1
+
+    print()
+
+# for color, images in sorted(color_by_images.items(), key=lambda x: len(x[1]), reverse=True):
+#     print('{} ({}):'.format(color, len(images)))
+#     for file_name in images:
+#         print('    ' + file_name)
+#
+#     print()
 
 
 # board = get_game_board('fojUvGQfBRc.jpg')
