@@ -156,7 +156,7 @@ def show_cell_on_board(board_img, point_by_contour):
 
     row = 0
     col = 0
-    game_board = [
+    value_matrix = [
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0],
@@ -185,15 +185,16 @@ def show_cell_on_board(board_img, point_by_contour):
         cv2.putText(image, text_pos, (x + w // 3, y + h // 7), cv2.FONT_HERSHEY_PLAIN, 0.8, (0, 0, 0))
         cv2.putText(image, text_row_col, (x + w // 8, y + int(h // 1.2)), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
 
-        if main_color in COLOR_GRAY_BY_NUMBER:
-            value_cell = COLOR_GRAY_BY_NUMBER[main_color]
-            print('    value:', value_cell)
-            game_board[row][col] = value_cell
+        value_cell = get_value_by_color(main_color)
+        print('    value:', value_cell)
+        value_matrix[row][col] = value_cell
 
-            cv2.putText(image, str(value_cell), (x + w - 35, y + int(h // 1.2)), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255))
+        if value_cell is not None:
+            cv2.putText(image, str(value_cell), (x + w - 35, y + int(h // 1.2)), cv2.FONT_HERSHEY_PLAIN, 1.1, (100, 100, 0))
 
         else:
-            file_name = 'unknown_{}.png'.format(main_color)
+            # file_name = 'unknown_{}.png'.format(main_color)
+            file_name = 'unknown_{}.png'.format('-'.join(map(str, main_color)))
             print('    NOT FOUND COLOR:', main_color, file_name)
             cv2.imwrite(file_name, cell_img)
 
@@ -206,7 +207,7 @@ def show_cell_on_board(board_img, point_by_contour):
         # cv2.putText(crop_img, '{}x{}'.format(x, y), (x, y + h // 2), cv2.FONT_HERSHEY_SCRIPT_SIMPLEX, 0.5, (0, 0, 0))
         i += 1
 
-    print(game_board)
+    print(value_matrix)
 
     cv2.drawContours(image, cell_contours, -1, (0, 255, 0), 3)
     cv2.imshow("img_with_contour_cell_contours_" + str(hex(id(image))), image)
@@ -214,6 +215,39 @@ def show_cell_on_board(board_img, point_by_contour):
     # copy_crop_img = crop_img.copy()
     # cv2.drawContours(copy_crop_img, contours, -1, (0, 255, 0), 3)
     # cv2.imshow("all_cropped_contours", copy_crop_img)
+
+
+def get_value_matrix_from_board(board_img, point_by_contour):
+    row = 0
+    col = 0
+    value_matrix = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+    ]
+
+    # for contour in cell_contours:
+    for pos, contour in sorted(point_by_contour.items(), key=lambda x: (x[0][1], x[0][0])):
+        cell_img = crop_by_contour(board_img, contour)
+        main_color = get_main_color_bgr(cell_img)
+        value_cell = get_value_by_color(main_color)
+        print('    value:', value_cell)
+        value_matrix[row][col] = value_cell
+
+        if value_cell is None:
+            # file_name = 'unknown_{}.png'.format(main_color)
+            file_name = 'unknown_{}.png'.format('-'.join(map(str, main_color)))
+            print('    NOT FOUND COLOR:', main_color, file_name)
+            cv2.imwrite(file_name, cell_img)
+
+        col += 1
+        if col == 4:
+            col = 0
+            row += 1
+
+    print(value_matrix)
+    return value_matrix
 
 
 # img = cv2.imread('img.png')
@@ -283,51 +317,78 @@ def show_cell_on_board(board_img, point_by_contour):
 # """
 
 
-COLOR_GRAY_BY_NUMBER = {
-    194: 0,  # None
-    229: 2,
-    224: 4,
-    189: 8,
-    171: 16,
-    156: 32,
-    135: 64,
-    205: 128,
-    201: 256,
-    197: 512,
-    193: 1024,
-    190: 2048,
-    57: 4096,
+# COLOR_GRAY_BY_NUMBER = {
+#     194: 0,  # None
+#     229: 2,
+#     224: 4,
+#     189: 8,
+#     171: 16,
+#     156: 32,
+#     135: 64,
+#     205: 128,
+#     201: 256,
+#     197: 512,
+#     193: 1024,
+#     190: 2048,
+#     57: 4096,
+# }
+
+COLOR_BGR_BY_NUMBER = {
+    (180, 192, 204): 0,  # None
+    (217, 227, 237): 2,
+    (199, 223, 235): 4,
+    (122, 176, 241): 8,
+    (98, 148, 244): 16,
+    (94, 123, 244): 32,
+    (59, 93, 246): 64,
+    (115, 207, 236): 128,
+    (98, 203, 236): 256,
+    (82, 199, 236): 512,
+    (67, 196, 235): 1024,
+    (52, 193, 236): 2048,
+    (50, 57, 60): 4096,
 }
 
-# COLOR_BGR_BY_NUMBER = {
-#     (180, 192, 204): 0,  # None
-#     (217, 227, 237): 2,
-#     (199, 223, 235): 4,
-#     (122, 176, 241): 8,
-#     (98, 148, 244): 16,
-#     (94, 123, 244): 32,
-#     (59, 93, 246): 64,
-#     (115, 207, 236): 128,
-#     (98, 203, 236): 256,
-#     (82, 199, 236): 512,
-#     (67, 196, 235): 1024,
-#     (52, 193, 236): 2048,
-#     (50, 57, 60): 4096,
-# }
+
+def get_value_by_color(color, deviation=2):
+    def _generate_seq(value, deviation):
+        """
+        value = 5, deviation = 1 -> [4, 5, 6]
+        value = 5, deviation = 2 -> [3, 4, 5, 6, 7]
+
+        :param value:
+        :param deviation:
+        :return:
+        """
+
+        left = list(range(value, value - deviation - 1, -1))
+        right = list((range(value + 1, value + deviation + 1)))
+        return list(sorted(left + right))
+
+    for bgr_color, value in COLOR_BGR_BY_NUMBER.items():
+        b1, g1, r1 = bgr_color
+        b2, g2, r2 = color
+
+        if b2 in _generate_seq(b1, deviation) \
+                and g2 in _generate_seq(g1, deviation) \
+                and r2 in _generate_seq(r1, deviation):
+            return value
+
+    return None
 
 
 #
 # Способ найти основные цвета
 #
 def get_main_color_bgr(image):
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     img_points = []
 
     w, h = image.shape[:2]
     for i in range(h):
         for j in range(w):
-            img_points.append(int(image[i, j]))
+            img_points.append(tuple(image[i, j]))
 
     from collections import Counter
     items = sorted(Counter(img_points).items(), reverse=True, key=lambda x: x[1])
@@ -450,6 +511,8 @@ board_img = get_game_board(cv2.imread('img_bad.png'))
 # board_img = get_game_board(cv2.imread('img.png'))
 point_by_contour = get_cell_point_by_contour(board_img)
 show_cell_on_board(board_img, point_by_contour)
+value_matrix = get_value_matrix_from_board(board_img, point_by_contour)
+print('value_matrix:', value_matrix)
 # print(point_by_contour.keys())
 
 # img = cv2.imread('img.png')
