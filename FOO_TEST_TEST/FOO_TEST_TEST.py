@@ -179,15 +179,18 @@ def show_cell_on_board(board_img, point_by_contour):
 
         cell_img = crop_by_contour(board_img, contour)
         main_color = get_main_color_bgr(cell_img)
+        print(row, col, main_color)
         if main_color in COLOR_BGR_BY_NUMBER:
             value_cell = COLOR_BGR_BY_NUMBER[main_color]
-            # print(row, col, value_cell)
+            print(row, col, value_cell)
             game_board[row][col] = value_cell
+
+            # cv2.putText(image, str(value_cell), (x + w // 8, y + int(h // 1.2)), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
 
         else:
             file_name = 'unknown_{}.png'.format('.'.join(map(str, main_color)))
             print('NOT FOUND COLOR:', main_color, file_name)
-            cv2.imwrite(file_name, cell_img)
+            # cv2.imwrite(file_name, cell_img)
 
         col += 1
         if col == 4:
@@ -275,6 +278,7 @@ def show_cell_on_board(board_img, point_by_contour):
 # """
 
 
+# TODO: replace with gray color
 COLOR_BGR_BY_NUMBER = {
     (180, 192, 204): 0,  # None
     (217, 227, 237): 2,
@@ -296,15 +300,22 @@ COLOR_BGR_BY_NUMBER = {
 # Способ найти основные цвета
 #
 def get_main_color_bgr(image):
+    # TODO: ?
+    # image = cv2.blur(image, (5, 5))
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
     img_points = []
 
     w, h = image.shape[:2]
     for i in range(h):
         for j in range(w):
-            img_points.append(tuple(image[i, j]))
+            # TODO: only gray color
+            img_points.append(tuple([image[i, j]]*3))
 
     from collections import Counter
-    return sorted(Counter(img_points).items(), reverse=True, key=lambda x: x[1])[0][0]
+    items = sorted(Counter(img_points).items(), reverse=True, key=lambda x: x[1])
+    # print(items)
+    return items[0][0]
 
 
 # from collections import defaultdict
@@ -396,8 +407,15 @@ def get_main_color_bgr(image):
 # # # print(hash_by_img.keys())
 
 
-# # show_cell_on_board(get_game_board(cv2.imread('img_bad.png')))
-board_img = get_game_board(cv2.imread('img.png'))
+# # TODO:
+# cv2.imwrite('gray_img_bad.png', cv2.cvtColor(cv2.imread('img_bad.png'), cv2.COLOR_BGR2GRAY))
+# cv2.imwrite('gray_img.png', cv2.cvtColor(cv2.imread('img.png'), cv2.COLOR_BGR2GRAY))
+
+
+# show_cell_on_board(get_game_board(cv2.imread('img_bad.png')))
+
+board_img = get_game_board(cv2.imread('img_bad.png'))
+# board_img = get_game_board(cv2.imread('img.png'))
 point_by_contour = get_cell_point_by_contour(board_img)
 show_cell_on_board(board_img, point_by_contour)
 # print(point_by_contour.keys())
