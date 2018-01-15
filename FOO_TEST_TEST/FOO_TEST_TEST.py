@@ -179,18 +179,19 @@ def show_cell_on_board(board_img, point_by_contour):
 
         cell_img = crop_by_contour(board_img, contour)
         main_color = get_main_color_bgr(cell_img)
-        print(row, col, main_color)
-        if main_color in COLOR_BGR_BY_NUMBER:
-            value_cell = COLOR_BGR_BY_NUMBER[main_color]
-            print(row, col, value_cell)
-            game_board[row][col] = value_cell
-
-            # cv2.putText(image, str(value_cell), (x + w // 8, y + int(h // 1.2)), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
-
-        else:
-            file_name = 'unknown_{}.png'.format('.'.join(map(str, main_color)))
-            print('NOT FOUND COLOR:', main_color, file_name)
-            # cv2.imwrite(file_name, cell_img)
+        print(row, col, main_color, get_main_color_bgr(cell_img, append_gray=False))
+        # TODO:
+        # if main_color in COLOR_BGR_BY_NUMBER:
+        #     value_cell = COLOR_BGR_BY_NUMBER[main_color]
+        #     print(row, col, value_cell)
+        #     game_board[row][col] = value_cell
+        #
+        #     # cv2.putText(image, str(value_cell), (x + w // 8, y + int(h // 1.2)), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
+        #
+        # else:
+        #     file_name = 'unknown_{}.png'.format('.'.join(map(str, main_color)))
+        #     print('NOT FOUND COLOR:', main_color, file_name)
+        #     # cv2.imwrite(file_name, cell_img)
 
         col += 1
         if col == 4:
@@ -299,10 +300,12 @@ COLOR_BGR_BY_NUMBER = {
 #
 # Способ найти основные цвета
 #
-def get_main_color_bgr(image):
+# TODO: remove append_gray
+def get_main_color_bgr(image, append_gray=True):
     # TODO: ?
     # image = cv2.blur(image, (5, 5))
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    if append_gray:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     img_points = []
 
@@ -310,7 +313,10 @@ def get_main_color_bgr(image):
     for i in range(h):
         for j in range(w):
             # TODO: only gray color
-            img_points.append(tuple([image[i, j]]*3))
+            if append_gray:
+                img_points.append(tuple([image[i, j]]*3))
+            else:
+                img_points.append(tuple(image[i, j]))
 
     from collections import Counter
     items = sorted(Counter(img_points).items(), reverse=True, key=lambda x: x[1])
@@ -383,28 +389,40 @@ def get_main_color_bgr(image):
 
 # #
 # # Save cell images:
-# #
-# # hash_by_img = dict()
-# #
-# # import hashlib
-# # import glob
-# # for file_name in glob.glob('*.jpg'):
-# #     board = get_game_board(file_name)
-# #     point_by_contour = get_cell_point_by_contour(board)
-# #
-# #     cell_contours = list(point_by_contour.values())
-# #     for contour in cell_contours:
-# #         crop_img = crop_by_contour(board, contour)
-# #
-# #         name_img = hashlib.sha1(crop_img.data.tobytes()).hexdigest() + '.png'
-# #         # cv2.imshow(name_img, crop_img)
-# #         hash_by_img[name_img] = crop_img
-# #
-# #         cv2.imwrite('cell/' + name_img, crop_img)
-# #
-# #
-# # print(len(hash_by_img))
-# # # print(hash_by_img.keys())
+#
+# hash_by_img = dict()
+#
+# import hashlib
+# import glob
+# for file_name in glob.glob('data/img/*.jpg'):
+#     try:
+#         board = get_game_board(file_name)
+#         point_by_contour = get_cell_point_by_contour(board)
+#
+#         cell_contours = list(point_by_contour.values())
+#         for contour in cell_contours:
+#             crop_img = crop_by_contour(board, contour)
+#
+#             name_img = hashlib.sha1(crop_img.data.tobytes()).hexdigest() + '.png'
+#             # cv2.imshow(name_img, crop_img)
+#             hash_by_img[name_img] = crop_img
+#
+#             cv2.imwrite('cell/' + name_img, crop_img)
+#
+#     except:
+#         pass
+#
+#
+# print(len(hash_by_img))
+# # print(hash_by_img.keys())
+# quit()
+
+
+# import glob
+# for file_name in glob.glob('test/*.png'):
+#     image = cv2.imread(file_name)
+#     print(get_main_color_bgr(image), get_main_color_bgr(image, append_gray=False), file_name)
+# quit()
 
 
 # # TODO:
