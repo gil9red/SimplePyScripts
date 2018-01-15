@@ -128,29 +128,6 @@ def get_cell_point_by_contour(board_img):
 
     return point_by_contour
 
-    # i = 1
-    #
-    # # for contour in cell_contours:
-    # for pos, contour in sorted(point_by_contour.items(), key=lambda x: (x[0][1], x[0][0])):
-    #     rect_cell = cv2.boundingRect(contour)
-    #     x, y, w, h = rect_cell
-    #     # x, y = pos
-    #
-    #     cv2.putText(img_with_contour, str(i), (x, y + h//4), cv2.FONT_HERSHEY_SCRIPT_SIMPLEX, 1, (0, 0, 0))
-    #     cv2.putText(img_with_contour, '{}x{}'.format(x, y), (x, y + h // 2), cv2.FONT_HERSHEY_SCRIPT_SIMPLEX, 0.5, (0, 0, 0))
-    #
-    #     # x, y = pos
-    #     # cv2.putText(crop_img, '{}x{}'.format(x, y), (x, y + h // 2), cv2.FONT_HERSHEY_SCRIPT_SIMPLEX, 0.5, (0, 0, 0))
-    #     i += 1
-    #
-    # cv2.drawContours(img_with_contour, cell_contours, -1, (0, 255, 0), 3)
-    # cv2.imshow("img_with_contour_cell_contours_" + str(hex(id(img_with_contour))), img_with_contour)
-    #
-    # # copy_crop_img = crop_img.copy()
-    # # cv2.drawContours(copy_crop_img, contours, -1, (0, 255, 0), 3)
-    # # cv2.imshow("all_cropped_contours", copy_crop_img)
-
-
 def show_cell_on_board(board_img, point_by_contour):
     image = board_img.copy()
 
@@ -193,7 +170,6 @@ def show_cell_on_board(board_img, point_by_contour):
             cv2.putText(image, str(value_cell), (x + w - 35, y + int(h // 1.2)), cv2.FONT_HERSHEY_PLAIN, 1.1, (100, 100, 0))
 
         else:
-            # file_name = 'unknown_{}.png'.format(main_color)
             file_name = 'unknown_{}.png'.format('-'.join(map(str, main_color)))
             print('    NOT FOUND COLOR:', main_color, file_name)
             cv2.imwrite(file_name, cell_img)
@@ -203,18 +179,12 @@ def show_cell_on_board(board_img, point_by_contour):
             col = 0
             row += 1
 
-        # x, y = pos
-        # cv2.putText(crop_img, '{}x{}'.format(x, y), (x, y + h // 2), cv2.FONT_HERSHEY_SCRIPT_SIMPLEX, 0.5, (0, 0, 0))
         i += 1
 
     print(value_matrix)
 
     cv2.drawContours(image, cell_contours, -1, (0, 255, 0), 3)
     cv2.imshow("img_with_contour_cell_contours_" + str(hex(id(image))), image)
-
-    # copy_crop_img = crop_img.copy()
-    # cv2.drawContours(copy_crop_img, contours, -1, (0, 255, 0), 3)
-    # cv2.imshow("all_cropped_contours", copy_crop_img)
 
 
 def get_value_matrix_from_board(board_img, point_by_contour):
@@ -236,7 +206,6 @@ def get_value_matrix_from_board(board_img, point_by_contour):
         value_matrix[row][col] = value_cell
 
         if value_cell is None:
-            # file_name = 'unknown_{}.png'.format(main_color)
             file_name = 'unknown_{}.png'.format('-'.join(map(str, main_color)))
             print('    NOT FOUND COLOR:', main_color, file_name)
             cv2.imwrite(file_name, cell_img)
@@ -249,89 +218,6 @@ def get_value_matrix_from_board(board_img, point_by_contour):
     print(value_matrix)
     return value_matrix
 
-
-# img = cv2.imread('img.png')
-# img = cv2.imread('img_bad_crop.png')
-#
-# img_two = cv2.imread('two.png')
-# img_fake = cv2.imread('123.png')
-# # img_two = img_fake
-#
-#
-# def has(image, template):
-#     img = image.copy()
-#     res = cv2.matchTemplate(img, template, cv2.TM_SQDIFF)
-#     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-#     top_left = min_loc
-#     x,y = top_left
-#     return x, y
-#
-# print(has(img, img_two))
-# print(has(img, img_fake))
-
-# img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-# img_two = cv2.cvtColor(img_two, cv2.COLOR_BGR2GRAY)
-#
-# # for i in range(6):
-# #     print(len(cv2.matchTemplate(img, img_two, i)), len(cv2.matchTemplate(img, img_fake, i)))
-#
-#
-# res = cv2.matchTemplate(img, img_two, cv2.TM_SQDIFF)
-#
-# # определение лучшее положение для сравнения
-# # (поиск минимумов и максимумов на изображении)
-# minval, maxval, minloc, maxloc = cv2.minMaxLoc(res)
-# print(minval, maxval, minloc, maxloc)
-#
-# # нормализуем
-# res = cv2.normalize(res, 1, 0, cv2.NORM_MINMAX)
-#
-#
-# # выделим область прямоугольником
-# cv2.rectangle(img, (minloc[0], minloc[1]), (minloc[0]+img_two.shape[0]-1, minloc[1]+img_two.shape[1]-1), (0, 0, 0), 1, 8)
-# cv2.imshow("res", img)
-
-# """
-# // сравнение изображения с шаблоном
-# cvMatchTemplate(image, templ, res, CV_TM_SQDIFF);
-#
-# // покажем что получили
-# cvShowImage( "res", res);
-#
-# // определение лучшее положение для сравнения
-# // (поиск минимумов и максимумов на изображении)
-# double    minval, maxval;
-# CvPoint    minloc, maxloc;
-# cvMinMaxLoc(res, &minval, &maxval, &minloc, &maxloc, 0);
-#
-# // нормализуем
-# cvNormalize(res,res,1,0,CV_MINMAX);
-# cvNamedWindow("res norm", CV_WINDOW_AUTOSIZE);
-# cvShowImage( "res norm", res);
-#
-# // выделим область прямоугольником
-# cvRectangle(image, cvPoint(minloc.x, minloc.y), cvPoint(minloc.x+templ->width-1, minloc.y+templ->height-1), CV_RGB(255, 0, 0), 1, 8);
-#
-# // показываем изображение
-# cvShowImage("Match", image);
-# """
-
-
-# COLOR_GRAY_BY_NUMBER = {
-#     194: 0,  # None
-#     229: 2,
-#     224: 4,
-#     189: 8,
-#     171: 16,
-#     156: 32,
-#     135: 64,
-#     205: 128,
-#     201: 256,
-#     197: 512,
-#     193: 1024,
-#     190: 2048,
-#     57: 4096,
-# }
 
 COLOR_BGR_BY_NUMBER = {
     (180, 192, 204): 0,  # None
@@ -355,10 +241,6 @@ def get_value_by_color(color, deviation=2):
         """
         value = 5, deviation = 1 -> [4, 5, 6]
         value = 5, deviation = 2 -> [3, 4, 5, 6, 7]
-
-        :param value:
-        :param deviation:
-        :return:
         """
 
         left = list(range(value, value - deviation - 1, -1))
@@ -377,9 +259,6 @@ def get_value_by_color(color, deviation=2):
     return None
 
 
-#
-# Способ найти основные цвета
-#
 def get_main_color_bgr(image):
     # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -500,12 +379,14 @@ def get_main_color_bgr(image):
 # quit()
 
 
-# # TODO:
-# cv2.imwrite('gray_img_bad.png', cv2.cvtColor(cv2.imread('img_bad.png'), cv2.COLOR_BGR2GRAY))
-# cv2.imwrite('gray_img.png', cv2.cvtColor(cv2.imread('img.png'), cv2.COLOR_BGR2GRAY))
+# import glob
+# for file_name in glob.glob('*.jpg'):
+#     board_img = get_game_board(cv2.imread(file_name))
+#     point_by_contour = get_cell_point_by_contour(board_img)
+#     show_cell_on_board(board_img, point_by_contour)
+#     value_matrix = get_value_matrix_from_board(board_img, point_by_contour)
+#     print('value_matrix:', value_matrix)
 
-
-# show_cell_on_board(get_game_board(cv2.imread('img_bad.png')))
 
 board_img = get_game_board(cv2.imread('img_bad.png'))
 # board_img = get_game_board(cv2.imread('img.png'))
@@ -513,14 +394,6 @@ point_by_contour = get_cell_point_by_contour(board_img)
 show_cell_on_board(board_img, point_by_contour)
 value_matrix = get_value_matrix_from_board(board_img, point_by_contour)
 print('value_matrix:', value_matrix)
-# print(point_by_contour.keys())
-
-# img = cv2.imread('img.png')
-# img = cv2.imread('img_bad.png')
-# board_img = get_game_board(img)
-# # cv2.imshow("board_img", board_img)
-#
-# show_cell_on_board(board_img)
 
 cv2.waitKey()
 cv2.destroyAllWindows()
