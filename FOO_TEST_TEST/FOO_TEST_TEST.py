@@ -379,21 +379,21 @@ def get_main_color_bgr(image):
 # quit()
 
 
-# import glob
-# for file_name in glob.glob('*.jpg'):
-#     board_img = get_game_board(cv2.imread(file_name))
-#     point_by_contour = get_cell_point_by_contour(board_img)
-#     show_cell_on_board(board_img, point_by_contour)
-#     value_matrix = get_value_matrix_from_board(board_img, point_by_contour)
-#     print('value_matrix:', value_matrix)
+import glob
+for file_name in glob.glob('*.png'):
+    board_img = get_game_board(cv2.imread(file_name))
+    point_by_contour = get_cell_point_by_contour(board_img)
+    show_cell_on_board(board_img, point_by_contour)
+    value_matrix = get_value_matrix_from_board(board_img, point_by_contour)
+    print('value_matrix:', value_matrix)
 
 
-board_img = get_game_board(cv2.imread('img_bad.png'))
-# board_img = get_game_board(cv2.imread('img.png'))
-point_by_contour = get_cell_point_by_contour(board_img)
-show_cell_on_board(board_img, point_by_contour)
-value_matrix = get_value_matrix_from_board(board_img, point_by_contour)
-print('value_matrix:', value_matrix)
+# board_img = get_game_board(cv2.imread('img_bad.png'))
+# # board_img = get_game_board(cv2.imread('img.png'))
+# point_by_contour = get_cell_point_by_contour(board_img)
+# show_cell_on_board(board_img, point_by_contour)
+# value_matrix = get_value_matrix_from_board(board_img, point_by_contour)
+# print('value_matrix:', value_matrix)
 
 cv2.waitKey()
 cv2.destroyAllWindows()
