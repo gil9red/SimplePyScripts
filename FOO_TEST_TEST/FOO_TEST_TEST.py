@@ -173,25 +173,29 @@ def show_cell_on_board(board_img, point_by_contour):
         x, y, w, h = rect_cell
         # x, y = pos
 
-        cv2.putText(image, str(i), (x, y + h//4), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0))
-        cv2.putText(image, '{}x{}'.format(x, y), (x + w // 3, y + h // 7), cv2.FONT_HERSHEY_PLAIN, 0.8, (0, 0, 0))
-        cv2.putText(image, '{}x{}'.format(row, col), (x + w // 8, y + int(h // 1.2)), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
-
         cell_img = crop_by_contour(board_img, contour)
         main_color = get_main_color_bgr(cell_img)
-        print(row, col, main_color, get_main_color_bgr(cell_img, append_gray=False))
-        # TODO:
-        # if main_color in COLOR_BGR_BY_NUMBER:
-        #     value_cell = COLOR_BGR_BY_NUMBER[main_color]
-        #     print(row, col, value_cell)
-        #     game_board[row][col] = value_cell
-        #
-        #     # cv2.putText(image, str(value_cell), (x + w // 8, y + int(h // 1.2)), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
-        #
-        # else:
-        #     file_name = 'unknown_{}.png'.format('.'.join(map(str, main_color)))
-        #     print('NOT FOUND COLOR:', main_color, file_name)
-        #     # cv2.imwrite(file_name, cell_img)
+
+        text_row_col = '{}x{}'.format(row, col)
+        text_pos = '{}x{}'.format(x, y)
+        print(text_row_col)
+        print('   ', text_pos)
+
+        cv2.putText(image, str(i), (x, y + h//4), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0))
+        cv2.putText(image, text_pos, (x + w // 3, y + h // 7), cv2.FONT_HERSHEY_PLAIN, 0.8, (0, 0, 0))
+        cv2.putText(image, text_row_col, (x + w // 8, y + int(h // 1.2)), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
+
+        if main_color in COLOR_GRAY_BY_NUMBER:
+            value_cell = COLOR_GRAY_BY_NUMBER[main_color]
+            print('    value:', value_cell)
+            game_board[row][col] = value_cell
+
+            cv2.putText(image, str(value_cell), (x + w - 35, y + int(h // 1.2)), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255))
+
+        else:
+            file_name = 'unknown_{}.png'.format(main_color)
+            print('    NOT FOUND COLOR:', main_color, file_name)
+            cv2.imwrite(file_name, cell_img)
 
         col += 1
         if col == 4:
@@ -279,44 +283,51 @@ def show_cell_on_board(board_img, point_by_contour):
 # """
 
 
-# TODO: replace with gray color
-COLOR_BGR_BY_NUMBER = {
-    (180, 192, 204): 0,  # None
-    (217, 227, 237): 2,
-    (199, 223, 235): 4,
-    (122, 176, 241): 8,
-    (98, 148, 244): 16,
-    (94, 123, 244): 32,
-    (59, 93, 246): 64,
-    (115, 207, 236): 128,
-    (98, 203, 236): 256,
-    (82, 199, 236): 512,
-    (67, 196, 235): 1024,
-    (52, 193, 236): 2048,
-    (50, 57, 60): 4096,
+COLOR_GRAY_BY_NUMBER = {
+    194: 0,  # None
+    229: 2,
+    224: 4,
+    189: 8,
+    171: 16,
+    156: 32,
+    135: 64,
+    205: 128,
+    201: 256,
+    197: 512,
+    193: 1024,
+    190: 2048,
+    57: 4096,
 }
+
+# COLOR_BGR_BY_NUMBER = {
+#     (180, 192, 204): 0,  # None
+#     (217, 227, 237): 2,
+#     (199, 223, 235): 4,
+#     (122, 176, 241): 8,
+#     (98, 148, 244): 16,
+#     (94, 123, 244): 32,
+#     (59, 93, 246): 64,
+#     (115, 207, 236): 128,
+#     (98, 203, 236): 256,
+#     (82, 199, 236): 512,
+#     (67, 196, 235): 1024,
+#     (52, 193, 236): 2048,
+#     (50, 57, 60): 4096,
+# }
 
 
 #
 # Способ найти основные цвета
 #
-# TODO: remove append_gray
-def get_main_color_bgr(image, append_gray=True):
-    # TODO: ?
-    # image = cv2.blur(image, (5, 5))
-    if append_gray:
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+def get_main_color_bgr(image):
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     img_points = []
 
     w, h = image.shape[:2]
     for i in range(h):
         for j in range(w):
-            # TODO: only gray color
-            if append_gray:
-                img_points.append(tuple([image[i, j]]*3))
-            else:
-                img_points.append(tuple(image[i, j]))
+            img_points.append(int(image[i, j]))
 
     from collections import Counter
     items = sorted(Counter(img_points).items(), reverse=True, key=lambda x: x[1])
@@ -341,7 +352,8 @@ def get_main_color_bgr(image, append_gray=True):
 #
 #     print('{} ({}):'.format(color, len(images)))
 #     for file_name in images:
-#         new_file_name = 'data/cell_color/{}__{}.png'.format('.'.join(map(str, color)), i)
+#         # new_file_name = 'data/cell_color/{}__{}.png'.format('.'.join(map(str, color)), i)
+#         new_file_name = 'cell_color/{}__{}.png'.format(color, i)
 #         print('    ' + file_name + ' -> ' + new_file_name)
 #         import shutil
 #         shutil.copy(file_name, new_file_name)
@@ -349,6 +361,8 @@ def get_main_color_bgr(image, append_gray=True):
 #         i += 1
 #
 #     print()
+#
+# quit()
 
 
 # for color, images in sorted(color_by_images.items(), key=lambda x: len(x[1]), reverse=True):
