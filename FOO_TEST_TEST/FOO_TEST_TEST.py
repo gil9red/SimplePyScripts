@@ -412,6 +412,7 @@ from eshirazi_2048_bot.board_score_strategy import ExpectimaxStrategy
 
 
 STRATEGY = ExpectimaxStrategy(perfect_heuristic)
+# TODO: обертку для бота, которой даешь матрицу, а получаешь направление
 
 
 # TODO: append logger
