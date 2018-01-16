@@ -5,8 +5,8 @@
 from math import sqrt
 
 import itertools
-from simple_2048_bot.config import BOARD_SIZE
-from simple_2048_bot.helpers import chop_generator, tuplify
+from eshirazi_2048_bot.config import BOARD_SIZE
+from eshirazi_2048_bot.helpers import chop_generator, tuplify
 
 
 def is_in_board(pos):
@@ -106,7 +106,7 @@ def snake_decay_order_heuristic(board):
     return max(decay_score(board, snake) for snake in ALL_SNAKES)
 
 
-from simple_2048_bot.board import ALL_TILES
+from eshirazi_2048_bot.board import ALL_TILES
 
 
 def sum_square_heuristic(board):

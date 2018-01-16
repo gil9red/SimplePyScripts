@@ -2,9 +2,9 @@ import itertools
 import random
 
 
-from simple_2048_bot.config import BOARD_SIZE
-from simple_2048_bot.helpers import irange
-from simple_2048_bot.moves import ALL_MOVES
+from eshirazi_2048_bot.config import BOARD_SIZE
+from eshirazi_2048_bot.helpers import irange
+from eshirazi_2048_bot.moves import ALL_MOVES
 
 ALL_TILES = list(itertools.product(irange(BOARD_SIZE), irange(BOARD_SIZE)))
 POSSIBLE_NEW_TILES = [4] + ([2] * 9)

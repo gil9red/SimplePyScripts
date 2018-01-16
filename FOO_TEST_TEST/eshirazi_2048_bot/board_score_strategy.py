@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 
-from simple_2048_bot.board import Board, IllegalMoveException
-from simple_2048_bot.helpers import tuple_not_implemented, tuple_max, tuple_weighted_average
-from simple_2048_bot.moves import ALL_MOVES
+from eshirazi_2048_bot.board import Board, IllegalMoveException
+from eshirazi_2048_bot.helpers import tuple_not_implemented, tuple_max, tuple_weighted_average
+from eshirazi_2048_bot.moves import ALL_MOVES
 
 
 DEFAULT_ILLEGAL_MOVE_SCORE = -1

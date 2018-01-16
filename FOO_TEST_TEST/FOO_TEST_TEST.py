@@ -405,9 +405,10 @@ import time
 # cv2.destroyAllWindows()
 # quit()
 
-from simple_2048_bot.board import Board
-from simple_2048_bot.board_score_heuristics import perfect_heuristic
-from simple_2048_bot.board_score_strategy import ExpectimaxStrategy
+# SOURCE: https://github.com/eshirazi/2048-bot
+from eshirazi_2048_bot.board import Board
+from eshirazi_2048_bot.board_score_heuristics import perfect_heuristic
+from eshirazi_2048_bot.board_score_strategy import ExpectimaxStrategy
 
 
 STRATEGY = ExpectimaxStrategy(perfect_heuristic)
