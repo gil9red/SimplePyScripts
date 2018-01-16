@@ -231,13 +231,13 @@ COLOR_BGR_BY_NUMBER = {
     (115, 207, 236): 128,
     (98, 203, 236): 256,
     (82, 199, 236): 512,
-    (67, 196, 235): 1024,
+    (65, 196, 235): 1024,
     (52, 193, 236): 2048,
     (50, 57, 60): 4096,
 }
 
 
-def get_value_by_color(color, deviation=2):
+def get_value_by_color(color, deviation=5):
     def _generate_seq(value, deviation):
         """
         value = 5, deviation = 1 -> [4, 5, 6]
