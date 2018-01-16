@@ -12,14 +12,14 @@ class Widget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.oldPos = None
+        self.old_pos = None
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
-            self.oldPos = event.pos()
+            self.old_pos = event.pos()
 
     def mouseMoveEvent(self, event):
-        delta = event.pos() - self.oldPos
+        delta = event.pos() - self.old_pos
         self.move(self.pos() + delta)
 
 
