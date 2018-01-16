@@ -415,6 +415,7 @@ STRATEGY = ExpectimaxStrategy(perfect_heuristic)
 
 
 board = Board(value_matrix)
+print(board)
 
 next_move = STRATEGY.get_next_move(board)
 print('next_move:', next_move)
