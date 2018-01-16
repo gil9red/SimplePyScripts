@@ -128,6 +128,7 @@ def get_cell_point_by_contour(board_img):
 
     return point_by_contour
 
+
 def show_cell_on_board(board_img, point_by_contour):
     image = board_img.copy()
 
@@ -260,8 +261,6 @@ def get_value_by_color(color, deviation=2):
 
 
 def get_main_color_bgr(image):
-    # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
     img_points = []
 
     w, h = image.shape[:2]
