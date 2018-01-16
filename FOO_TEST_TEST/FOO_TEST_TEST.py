@@ -378,13 +378,13 @@ def get_main_color_bgr(image):
 # quit()
 
 
-import glob
-for file_name in glob.glob('*.png'):
-    board_img = get_game_board(cv2.imread(file_name))
-    point_by_contour = get_cell_point_by_contour(board_img)
-    show_cell_on_board(board_img, point_by_contour)
-    value_matrix = get_value_matrix_from_board(board_img, point_by_contour)
-    print('value_matrix:', value_matrix)
+# import glob
+# for file_name in glob.glob('*.png'):
+#     board_img = get_game_board(cv2.imread(file_name))
+#     point_by_contour = get_cell_point_by_contour(board_img)
+#     show_cell_on_board(board_img, point_by_contour)
+#     value_matrix = get_value_matrix_from_board(board_img, point_by_contour)
+#     print('value_matrix:', value_matrix)
 
 
 # board_img = get_game_board(cv2.imread('img_bad.png'))
@@ -393,6 +393,32 @@ for file_name in glob.glob('*.png'):
 # show_cell_on_board(board_img, point_by_contour)
 # value_matrix = get_value_matrix_from_board(board_img, point_by_contour)
 # print('value_matrix:', value_matrix)
+#
+# cv2.waitKey()
+# cv2.destroyAllWindows()
 
-cv2.waitKey()
-cv2.destroyAllWindows()
+
+value_matrix = [
+    [512, 8, 4, 2],
+    [128, 64, 16, 4],
+    [4, 16, 4, 2],
+    [16, 8, 2, 0]
+]
+
+
+from simple_2048_bot.board import Board
+from simple_2048_bot.board_score_heuristics import perfect_heuristic
+from simple_2048_bot.board_score_strategy import ExpectimaxStrategy
+
+
+STRATEGY = ExpectimaxStrategy(perfect_heuristic)
+
+
+board = Board(value_matrix)
+
+next_move = STRATEGY.get_next_move(board)
+print('next_move:', next_move)
+
+board.move(next_move)
+print('has_moves:', board.has_legal_moves())
+print('max tile:', board.get_max_tile())
