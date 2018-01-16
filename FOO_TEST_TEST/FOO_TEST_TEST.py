@@ -387,7 +387,13 @@ def get_main_color_bgr(image):
 #     print('value_matrix:', value_matrix)
 
 
-# board_img = get_game_board(cv2.imread('img_bad.png'))
+import pyautogui
+import time
+
+# pil_image = pyautogui.screenshot()
+# opencv_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
+# board_img = get_game_board(opencv_image)
+# # board_img = get_game_board(cv2.imread('img_bad.png'))
 # # board_img = get_game_board(cv2.imread('img.png'))
 # point_by_contour = get_cell_point_by_contour(board_img)
 # show_cell_on_board(board_img, point_by_contour)
@@ -396,15 +402,7 @@ def get_main_color_bgr(image):
 #
 # cv2.waitKey()
 # cv2.destroyAllWindows()
-
-
-value_matrix = [
-    [512, 8, 4, 2],
-    [128, 64, 16, 4],
-    [4, 16, 4, 2],
-    [16, 8, 2, 0]
-]
-
+# quit()
 
 from simple_2048_bot.board import Board
 from simple_2048_bot.board_score_heuristics import perfect_heuristic
@@ -414,12 +412,30 @@ from simple_2048_bot.board_score_strategy import ExpectimaxStrategy
 STRATEGY = ExpectimaxStrategy(perfect_heuristic)
 
 
-board = Board(value_matrix)
-print(board)
+while True:
+    pil_image = pyautogui.screenshot()
+    opencv_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
+    board_img = get_game_board(opencv_image)
+    if board_img is None:
+        time.sleep(1)
+        continue
 
-next_move = STRATEGY.get_next_move(board)
-print('next_move:', next_move)
+    # board_img = get_game_board(cv2.imread('img.png'))
+    point_by_contour = get_cell_point_by_contour(board_img)
+    # show_cell_on_board(board_img, point_by_contour)
+    value_matrix = get_value_matrix_from_board(board_img, point_by_contour)
+    print('value_matrix:', value_matrix)
 
-board.move(next_move)
-print('has_moves:', board.has_legal_moves())
-print('max tile:', board.get_max_tile())
+    board = Board(value_matrix)
+    print(board)
+
+    next_move = str(STRATEGY.get_next_move(board))
+    print('next_move:', next_move)
+
+    pyautogui.typewrite([next_move])
+
+    # board.move(next_move)
+    # print('has_moves:', board.has_legal_moves())
+    # print('max tile:', board.get_max_tile())
+
+    time.sleep(1)
