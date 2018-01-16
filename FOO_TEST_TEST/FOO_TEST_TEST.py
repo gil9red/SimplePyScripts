@@ -210,6 +210,7 @@ def get_value_matrix_from_board(board_img, point_by_contour):
             file_name = 'unknown_{}.png'.format('-'.join(map(str, main_color)))
             print('    NOT FOUND COLOR:', main_color, file_name)
             cv2.imwrite(file_name, cell_img)
+            quit()
 
         col += 1
         if col == 4:
