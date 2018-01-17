@@ -214,8 +214,8 @@ def get_value_matrix_from_board(board_img):
 
         if value_cell is None:
             file_name = 'unknown_{}.png'.format('-'.join(map(str, main_color)))
-            print('    NOT FOUND COLOR: {}, save in {}. Need update color in dict COLOR_BGR_BY_NUMBER'.format(
-                main_color, file_name
+            print('    NOT FOUND COLOR: {}, save in {}. Need update color in {}'.format(
+                main_color, file_name, COLOR_BGR_BY_NUMBER
             ))
             cv2.imwrite(file_name, cell_img)
             quit()
