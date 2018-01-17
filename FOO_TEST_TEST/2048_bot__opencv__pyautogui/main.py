@@ -188,7 +188,11 @@ def show_cell_on_board(board_img, point_by_contour):
     cv2.imshow("img_with_contour_cell_contours_" + str(hex(id(image))), image)
 
 
-def get_value_matrix_from_board(board_img, point_by_contour):
+def get_value_matrix_from_board(board_img):
+    point_by_contour = get_cell_point_by_contour(board_img)
+    
+    # show_cell_on_board(board_img, point_by_contour)
+
     row = 0
     col = 0
     value_matrix = [
@@ -405,14 +409,19 @@ import time
 # cv2.destroyAllWindows()
 # quit()
 
-# SOURCE: https://github.com/eshirazi/2048-bot
-from eshirazi_2048_bot.board import Board
-from eshirazi_2048_bot.board_score_heuristics import perfect_heuristic
-from eshirazi_2048_bot.board_score_strategy import ExpectimaxStrategy
 
+def get_next_move(value_matrix):
+    # SOURCE: https://github.com/eshirazi/2048-bot
+    from eshirazi_2048_bot.board import Board
+    from eshirazi_2048_bot.board_score_heuristics import perfect_heuristic
+    from eshirazi_2048_bot.board_score_strategy import ExpectimaxStrategy
 
-STRATEGY = ExpectimaxStrategy(perfect_heuristic)
-# TODO: обертку для бота, которой даешь матрицу, а получаешь направление
+    strategy = ExpectimaxStrategy(perfect_heuristic)
+
+    board = Board(value_matrix)
+    print(board)
+
+    return str(strategy.get_next_move(board))
 
 
 # TODO: append logger
@@ -430,22 +439,13 @@ while True:
         time.sleep(1)
         continue
 
-    # board_img = get_game_board(cv2.imread('img.png'))
-    point_by_contour = get_cell_point_by_contour(board_img)
-    # show_cell_on_board(board_img, point_by_contour)
-    value_matrix = get_value_matrix_from_board(board_img, point_by_contour)
+    value_matrix = get_value_matrix_from_board(board_img)
     print('value_matrix:', value_matrix)
 
-    board = Board(value_matrix)
-    print(board)
-
-    next_move = str(STRATEGY.get_next_move(board))
+    next_move = get_next_move(value_matrix)
     print('next_move:', next_move)
 
+    # Посылаем нужный клик на стрелки
     pyautogui.typewrite([next_move])
-
-    # board.move(next_move)
-    # print('has_moves:', board.has_legal_moves())
-    # print('max tile:', board.get_max_tile())
 
     time.sleep(1)
