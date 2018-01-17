@@ -13,7 +13,6 @@ gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 ret, thresh = cv2.threshold(gray_img, 0, 255, cv2.THRESH_BINARY)
 # cv2.imshow('thresh', thresh)
 
-# image, contours, _ = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 image, contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 # cv2.imshow('image_', image)
 
