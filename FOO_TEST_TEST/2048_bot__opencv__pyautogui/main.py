@@ -431,6 +431,8 @@ def get_next_move(value_matrix):
 #     cv2.setUseOptimized(True)
 #     cv2.setNumThreads(4)
 #
+# TODO: делать скриншот экрана с сохранением в файл при: ошибках, достижении победы, проигрыше
+
 while True:
     pil_image = pyautogui.screenshot()
     opencv_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
