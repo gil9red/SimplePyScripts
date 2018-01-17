@@ -30,5 +30,23 @@ for contour in contours:
 
 cv2.imshow('img_with_rect', img_with_rect)
 
+#
+# Draw img_with_rect_rect
+#
+cv2.drawContours(img_with_rect, contours, -1, (0, 255, 0), 10)
+gray_img = cv2.cvtColor(img_with_rect, cv2.COLOR_BGR2GRAY)
+image, contours, _ = cv2.findContours(gray_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+# cv2.imshow('image_', image)
+
+img_with_rect_rect = img.copy()
+
+for contour in contours:
+    rect = cv2.boundingRect(contour)
+    x, y, w, h = rect
+
+    cv2.rectangle(img_with_rect_rect, (x, y), (x + w, y + h), (0, 0, 255))
+
+cv2.imshow('img_with_rect_rect', img_with_rect_rect)
+
 cv2.waitKey()
 cv2.destroyAllWindows()
