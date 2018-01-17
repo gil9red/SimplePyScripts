@@ -417,6 +417,11 @@ STRATEGY = ExpectimaxStrategy(perfect_heuristic)
 
 # TODO: append logger
 # TODO: append try/except/finally
+# TODO: проверить опции:
+#     # speed-up using multithreads
+#     cv2.setUseOptimized(True)
+#     cv2.setNumThreads(4)
+#
 while True:
     pil_image = pyautogui.screenshot()
     opencv_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
