@@ -8,6 +8,36 @@ import cv2
 import pyautogui
 
 
+class NotFoundItem(Exception):
+    pass
+
+
+def get_logger(name=__file__, file='log.txt', encoding='utf-8'):
+    import logging
+    log = logging.getLogger(name)
+    log.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('[%(asctime)s] %(filename)s:%(lineno)d\t%(levelname)-8s %(message)s')
+
+    # Simple file handler
+    # fh = logging.FileHandler(file, encoding=encoding)
+    # or:
+    from logging.handlers import RotatingFileHandler
+    fh = RotatingFileHandler(file, maxBytes=10000000, backupCount=5, encoding=encoding)
+    fh.setFormatter(formatter)
+    log.addHandler(fh)
+
+    import sys
+    sh = logging.StreamHandler(stream=sys.stdout)
+    sh.setFormatter(formatter)
+    log.addHandler(sh)
+
+    return log
+
+
+log = get_logger()
+
+
 def crop_by_contour(img, contour):
     rect = cv2.boundingRect(contour)
     x, y, h, w = rect
@@ -36,16 +66,12 @@ def get_game_board(img__or__file_name):
     # cv2.destroyAllWindows()
 
     if not contours:
-        print('Не получилсоь найти контуры')
-        quit()
+        raise NotFoundItem('Не получилсоь найти контуры')
 
-    print(len(contours))
-    print([cv2.contourArea(i) for i in contours if cv2.contourArea(i) > 10000])
+    log.info('Контуров (%s): %s', len(contours), [cv2.contourArea(i) for i in contours if cv2.contourArea(i) > 10000])
     contours = [i for i in contours if 249000 < cv2.contourArea(i) < 255000]
     if not contours:
-        print('Не получилсоь найти контур поля игры')
-        # quit()
-        return
+        raise NotFoundItem('Не получилось найти контур поля игры')
 
     # img_with_contour = img.copy()
     # cv2.drawContours(img_with_contour, contours, -1, (0, 255, 0), 3)
@@ -79,15 +105,13 @@ def get_cell_point_by_contour(board_img):
     gray_img_contours, cell_contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # cv2.imshow("gray_img_contours", gray_img_contours)
 
-    print(len(cell_contours))
-    print([cv2.contourArea(i) for i in cell_contours])
+    log.info('Контуров (%s): %s', len(cell_contours), [cv2.contourArea(i) for i in cell_contours])
 
     cell_contours = [i for i in cell_contours if cv2.contourArea(i) > 10000]
-    print(len(cell_contours))
+    log.info('Контуров ячеек: %s', len(cell_contours))
 
     if len(cell_contours) != 16:
-        print('Нужно ровно 16 контуров ячеек')
-        quit()
+        raise NotFoundItem('Нужно ровно 16 контуров ячеек')
 
     # img_with_contour = board_img.copy()
     # cv2.drawContours(img_with_contour, cell_contours, -1, (0, 255, 0), 3)
@@ -208,23 +232,22 @@ def get_value_matrix_from_board(board_img):
         cell_img = crop_by_contour(board_img, contour)
         main_color = get_main_color_bgr(cell_img)
         value_cell = get_value_by_color(main_color)
-        print('    value:', value_cell)
+        log.debug('    value:', value_cell)
         value_matrix[row][col] = value_cell
 
         if value_cell is None:
             file_name = 'unknown_{}.png'.format('-'.join(map(str, main_color)))
-            print('    NOT FOUND COLOR: {}, save in {}. Need update color in {}'.format(
+            cv2.imwrite(file_name, cell_img)
+            raise NotFoundItem('NOT FOUND COLOR: {}, save in {}. Need update color in {}'.format(
                 main_color, file_name, COLOR_BGR_BY_NUMBER
             ))
-            cv2.imwrite(file_name, cell_img)
-            quit()
 
         col += 1
         if col == 4:
             col = 0
             row += 1
 
-    print(value_matrix)
+    log.debug('value_matrix: %s', value_matrix)
     return value_matrix
 
 
@@ -278,7 +301,7 @@ def get_main_color_bgr(image):
 
     from collections import Counter
     items = sorted(Counter(img_points).items(), reverse=True, key=lambda x: x[1])
-    # print(items)
+    log.debug('Top color: %s', items)
     return items[0][0]
 
 
@@ -291,7 +314,7 @@ def get_next_move(value_matrix):
     strategy = ExpectimaxStrategy(perfect_heuristic)
 
     board = Board(value_matrix)
-    print(board)
+    log.debug('board:\n%s', board)
 
     return str(strategy.get_next_move(board))
 
@@ -310,7 +333,7 @@ def make_screenshot():
 
     from datetime import datetime
     file_name = datetime.now().strftime('%d%m%y %H%M%S.jpg')
-    print('Save screenshot in ' + file_name)
+    log.info('Сохранение скриншота в ' + file_name)
 
     pil_image.save(file_name)
 
