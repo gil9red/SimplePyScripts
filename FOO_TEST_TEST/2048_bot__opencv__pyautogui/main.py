@@ -37,7 +37,7 @@ while True:
             log.debug('Found BUTTON_CONTINUE, pos: %s', pos)
 
             # Клик на кнопку и ожидание
-            pyautogui.click(pos, pause=5)
+            pyautogui.click(pos, pause=10)
 
         # Появляется кнопка при проигрыше
         pos = utils.locate_center_on_screen(BUTTON_PLAY_AGAIN, pil_image)
@@ -47,7 +47,10 @@ while True:
             utils.make_screenshot()
 
             # Клик на кнопку и ожидание
-            pyautogui.click(pos, pause=5)
+            pyautogui.click(pos, pause=10)
+
+        pil_image = pyautogui.screenshot()
+        log.debug('Get screenshot: %s', pil_image)
 
         opencv_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
         board_img = utils.get_game_board(opencv_image)

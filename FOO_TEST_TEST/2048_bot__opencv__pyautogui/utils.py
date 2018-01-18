@@ -242,6 +242,7 @@ def get_value_matrix_from_board(board_img):
         if value_cell is None:
             file_name = 'unknown_{}.png'.format('-'.join(map(str, main_color)))
             cv2.imwrite(file_name, cell_img)
+            make_screenshot()
             raise NotFoundItem('NOT FOUND COLOR: {}, save in {}. Need update color in {}'.format(
                 main_color, file_name, COLOR_BGR_BY_NUMBER
             ))
@@ -305,7 +306,7 @@ def get_main_color_bgr(image):
 
     from collections import Counter
     items = sorted(Counter(img_points).items(), reverse=True, key=lambda x: x[1])
-    log.debug('Top color: %s', items)
+    log.debug('Top 3 color: %s', items[:3])
     return items[0][0]
 
 
