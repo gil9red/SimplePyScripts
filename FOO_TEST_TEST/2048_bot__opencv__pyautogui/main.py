@@ -18,9 +18,9 @@ BUTTON_CONTINUE = 'button/continue.png'
 BUTTON_PLAY_AGAIN = 'button/play_again.png'
 
 # TODO: проверить опции:
-#     # speed-up using multithreads
-#     cv2.setUseOptimized(True)
-#     cv2.setNumThreads(4)
+# # Speed-up using multithreads
+# cv2.setUseOptimized(True)
+# cv2.setNumThreads(4)
 
 while True:
     t = time.clock()
@@ -51,13 +51,13 @@ while True:
 
         opencv_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
         board_img = utils.get_game_board(opencv_image)
-        log.debug('Found board: %s', board_img)
+        log.debug('Found board: %s', board_img.shape[:2])
 
         value_matrix = utils.get_value_matrix_from_board(board_img)
-        log.debug('value_matrix:', value_matrix)
+        log.debug('value_matrix: %s', value_matrix)
 
         next_move = utils.get_next_move(value_matrix)
-        log.debug('next_move:', next_move)
+        log.debug('next_move: %s', next_move)
 
         # Посылаем нужный клик на стрелки
         pyautogui.typewrite([next_move], pause=2)

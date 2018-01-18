@@ -68,7 +68,11 @@ def get_game_board(img__or__file_name):
     if not contours:
         raise NotFoundItem('Не получилсоь найти контуры')
 
-    log.info('Контуров (%s): %s', len(contours), [cv2.contourArea(i) for i in contours if cv2.contourArea(i) > 10000])
+    log.info(
+        'Всего контуров %s, поиск контура игрового поля: %s',
+        len(contours), [cv2.contourArea(i) for i in contours if cv2.contourArea(i) > 10000]
+    )
+
     contours = [i for i in contours if 249000 < cv2.contourArea(i) < 255000]
     if not contours:
         raise NotFoundItem('Не получилось найти контур поля игры')
@@ -232,7 +236,7 @@ def get_value_matrix_from_board(board_img):
         cell_img = crop_by_contour(board_img, contour)
         main_color = get_main_color_bgr(cell_img)
         value_cell = get_value_by_color(main_color)
-        log.debug('    value:', value_cell)
+        log.debug('    value: %s', value_cell)
         value_matrix[row][col] = value_cell
 
         if value_cell is None:
