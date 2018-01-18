@@ -10,7 +10,8 @@ import pyautogui
 def locate_center_on_screen(needle_image, screenshot_image=None):
     if screenshot_image:
         rect = pyautogui.locate(needle_image, screenshot_image)
-        return pyautogui.center(rect)
+        if rect:
+            return pyautogui.center(rect)
 
     return pyautogui.locateCenterOnScreen(needle_image)
 
