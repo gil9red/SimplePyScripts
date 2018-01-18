@@ -175,6 +175,7 @@ def show_cell_on_board(board_img, point_by_contour):
         else:
             file_name = 'unknown_{}.png'.format('-'.join(map(str, main_color)))
             print('    NOT FOUND COLOR:', main_color, file_name)
+            make_screenshot()
             cv2.imwrite(file_name, cell_img)
 
         col += 1
@@ -297,6 +298,13 @@ def get_next_move(value_matrix):
     return str(strategy.get_next_move(board))
 
 
+def locate_center_on_screen(needle_image, screenshot_image=None):
+    if screenshot_image:
+        rect = pyautogui.locate(needle_image, screenshot_image)
+        return pyautogui.center(rect)
+
+    return pyautogui.locateCenterOnScreen(needle_image)
+
 # TODO: append logger
 # TODO: append try/except/finally
 # TODO: проверить опции:
@@ -307,8 +315,36 @@ def get_next_move(value_matrix):
 # TODO: делать скриншот экрана с сохранением в файл при: ошибках, достижении победы, проигрыше
 # TODO: вынести функции в utils.py
 
+
+def make_screenshot():
+    pil_image = pyautogui.screenshot()
+
+    from datetime import datetime
+    file_name = datetime.now().strftime('%d%m%y %H%M%S.jpg')
+    print('Save screenshot in ' + file_name)
+
+    pil_image.save(file_name)
+
+    return pil_image
+
+
 while True:
     pil_image = pyautogui.screenshot()
+
+    # Появляется кнопка при получении ячейки 2048
+    pos = locate_center_on_screen('button/continue.png', pil_image)
+    if pos:
+        # Клик на кнопку и ожидание
+        pyautogui.click(pos, pause=5)
+
+    # Появляется кнопка при проигрыше
+    pos = locate_center_on_screen('button/play_again.png', pil_image)
+    if pos:
+        make_screenshot()
+
+        # Клик на кнопку и ожидание
+        pyautogui.click(pos, pause=5)
+
     opencv_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
     board_img = get_game_board(opencv_image)
     if board_img is None:
