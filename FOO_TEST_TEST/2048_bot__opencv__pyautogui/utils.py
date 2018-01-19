@@ -333,11 +333,11 @@ def locate_center_on_screen(needle_image, screenshot_image=None):
     return pyautogui.locateCenterOnScreen(needle_image)
 
 
-def make_screenshot():
+def make_screenshot(prefix=''):
     pil_image = pyautogui.screenshot()
 
     from datetime import datetime
-    file_name = datetime.now().strftime('%d%m%y %H%M%S.jpg')
+    file_name = datetime.now().strftime(prefix + '%d%m%y %H%M%S.jpg')
     log.info('Сохранение скриншота в ' + file_name)
 
     pil_image.save(file_name)

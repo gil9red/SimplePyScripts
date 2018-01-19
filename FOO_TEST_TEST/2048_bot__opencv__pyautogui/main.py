@@ -44,7 +44,7 @@ while True:
         if pos:
             log.debug('Found BUTTON_PLAY_AGAIN, pos: %s', pos)
 
-            utils.make_screenshot()
+            utils.make_screenshot(prefix='end_game__')
 
             # Клик на кнопку и ожидание
             pyautogui.click(pos, pause=10)
@@ -71,7 +71,7 @@ while True:
         time.sleep(5)
 
     except Exception as e:
-        utils.make_screenshot()
+        utils.make_screenshot(prefix='error__')
 
         log.exception('Ошибка:')
         log.debug('Через 5 минут попробую снова...')
