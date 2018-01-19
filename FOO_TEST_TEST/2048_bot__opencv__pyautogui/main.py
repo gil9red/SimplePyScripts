@@ -79,4 +79,4 @@ while True:
         time.sleep(5 * 60)
 
     finally:
-        log.debug('Finish. Elapsed time: %s ms', time.clock() - t)
+        log.debug('Finish. Elapsed time: %s secs', time.clock() - t)
