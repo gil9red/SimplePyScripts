@@ -78,7 +78,7 @@ if __name__ == '__main__':
 
             else:
                 if last_rank != rank:
-                    text = 'Изменился ранг: {} -> {}'.format(last_rank, rank)
+                    text = 'Изменился ранг: {} -> {} ({})'.format(last_rank, rank, reputation)
                     log.debug(text)
 
                     # Обновление последнего ранга
