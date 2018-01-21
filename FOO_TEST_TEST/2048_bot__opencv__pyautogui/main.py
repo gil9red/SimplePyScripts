@@ -50,14 +50,14 @@ while True:
             pyautogui.click(pos, pause=10)
 
         pil_image = pyautogui.screenshot()
-        log.debug('Get screenshot: %s', pil_image)
+        # log.debug('Get screenshot: %s', pil_image)
 
         opencv_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
         board_img = utils.get_game_board(opencv_image)
         log.debug('Found board: %s', board_img.shape[:2])
 
         value_matrix = utils.get_value_matrix_from_board(board_img)
-        log.debug('value_matrix: %s', value_matrix)
+        # log.debug('value_matrix: %s', value_matrix)
 
         next_move = utils.get_next_move(value_matrix)
         log.debug('next_move: %s', next_move)
