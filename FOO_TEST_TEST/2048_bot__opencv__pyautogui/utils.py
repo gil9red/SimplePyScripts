@@ -12,7 +12,11 @@ class NotFoundItem(Exception):
     pass
 
 
-def get_logger(name=__file__, file='log.txt', encoding='utf-8'):
+def get_logger(name=__file__, file='log.txt', encoding='utf-8', dir_name='logs'):
+    import os
+    if not os.path.exists(dir_name):
+        os.makedirs(dir_name)
+
     import logging
     log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
@@ -35,10 +39,7 @@ def get_logger(name=__file__, file='log.txt', encoding='utf-8'):
     return log
 
 
-import os
-os.makedirs('logs')
-
-log = get_logger(file='logs/log.txt')
+log = get_logger()
 
 
 def crop_by_contour(img, contour):
