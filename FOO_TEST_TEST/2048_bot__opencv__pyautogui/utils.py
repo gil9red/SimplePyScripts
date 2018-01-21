@@ -35,7 +35,10 @@ def get_logger(name=__file__, file='log.txt', encoding='utf-8'):
     return log
 
 
-log = get_logger()
+import os
+os.makedirs('logs')
+
+log = get_logger(file='logs/log.txt')
 
 
 def crop_by_contour(img, contour):
