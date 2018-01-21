@@ -17,6 +17,8 @@ def get_logger(name=__file__, file='log.txt', encoding='utf-8', dir_name='logs')
     if not os.path.exists(dir_name):
         os.makedirs(dir_name)
 
+    file = dir_name + '/' + file
+
     import logging
     log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
