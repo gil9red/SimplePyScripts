@@ -4,9 +4,6 @@
 __author__ = 'ipetrash'
 
 
-number = 100000
-
-
 import random
 import numpy
 
