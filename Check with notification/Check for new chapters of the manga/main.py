@@ -94,7 +94,8 @@ if __name__ == '__main__':
 
                 save_last_feed(last_feed)
 
-            wait(hours=6)
+            # wait(hours=6)
+            wait(days=7)
 
         except requests.exceptions.ConnectionError as e:
             log.warning('Ошибка подключения к сети: %s', e)
