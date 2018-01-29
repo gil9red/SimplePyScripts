@@ -49,5 +49,8 @@ for log in reversed(log_list):
     month_by_jira_info[key].add(jira)
 
 for month, jira_items in month_by_jira_info.items():
-    print('{}: ({})\t{}'.format(month, len(jira_items), list(jira_items)))
+    # Хитрая сортировка по двум параметрами: имя проекта и номер джиры
+    jira_items = sorted(jira_items, key=lambda x: (x.split('-')[0], int(x.split('-')[1])))
+
+    print('{}: ({})\t{}'.format(month, len(jira_items), jira_items))
 
