@@ -10,4 +10,4 @@ class X:
 
 
 x = X()
-print(x == 1 and x == 2 and x == 3)
+print(x == 1 and x == 2 and x == 3)  # True
