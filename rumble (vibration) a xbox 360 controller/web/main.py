@@ -11,6 +11,8 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 
+import sys
+sys.path.append('..')
 from rumble import set_vibration
 
 
