@@ -37,8 +37,11 @@ def get_books():
 FILE_NAME_CURRENT_BOOKS = 'books'
 
 
+def save_books(books):
+    open(FILE_NAME_CURRENT_BOOKS, mode='w', encoding='utf-8').write(str(books))
+
+
 if __name__ == '__main__':
-    # NOTE: С этим флагом нужно быть осторожным при первом запуске, когда список книг пустой
     notified_by_sms = True
 
     # Загрузка текущих книг
@@ -53,20 +56,26 @@ if __name__ == '__main__':
             books = get_books()
             log.debug('books: %s', books)
 
-            new_books = set(books) - set(current_books)
-            if new_books:
+            # Если список текущих книг пуст
+            if not current_books:
                 current_books = books
-                open(FILE_NAME_CURRENT_BOOKS, mode='w', encoding='utf-8').write(str(current_books))
-
-                for book in new_books:
-                    text = 'Появилась новая книга Зыкова: "{}"'.format(book)
-                    log.debug(text)
-
-                    if notified_by_sms:
-                        simple_send_sms(text, log)
+                save_books(current_books)
 
             else:
-                log.debug('Новых книг нет')
+                new_books = set(books) - set(current_books)
+                if new_books:
+                    current_books = books
+                    save_books(current_books)
+
+                    for book in new_books:
+                        text = 'Появилась новая книга Зыкова: "{}"'.format(book)
+                        log.debug(text)
+
+                        if notified_by_sms:
+                            simple_send_sms(text, log)
+
+                else:
+                    log.debug('Новых книг нет')
 
             wait(weeks=1)
 
