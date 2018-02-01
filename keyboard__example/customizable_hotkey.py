@@ -5,6 +5,7 @@
 # SOURCE: https://github.com/boppreh/keyboard/blob/master/examples/customizable_hotkey.py
 
 
+# pip install keyboard
 import keyboard
 
 print('Press and release your desired shortcut: ')

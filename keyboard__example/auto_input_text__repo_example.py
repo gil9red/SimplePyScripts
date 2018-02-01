@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+# pip install keyboard
 import keyboard
 keyboard.press_and_release('tab, tab, tab')
 

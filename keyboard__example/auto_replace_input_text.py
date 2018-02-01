@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+# pip install keyboard
 import keyboard
 
 # Type fuck then press space to replace with abbreviation.

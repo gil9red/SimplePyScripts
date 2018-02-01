@@ -10,6 +10,7 @@ Prints the scan code of all currently pressed keys.
 Updates on every keyboard event.
 """
 
+# pip install keyboard
 import keyboard
 
 

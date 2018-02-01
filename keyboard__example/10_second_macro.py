@@ -5,6 +5,7 @@
 # SOURCE: https://github.com/boppreh/keyboard/blob/master/examples/10_second_macro.py
 
 
+# pip install keyboard
 import keyboard
 import time
 

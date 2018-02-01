@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+# pip install keyboard
 import keyboard
 keyboard.add_hotkey('shift', lambda: keyboard.write('on'))
 keyboard.add_hotkey('shift', lambda: keyboard.write('off'), trigger_on_release=True)
