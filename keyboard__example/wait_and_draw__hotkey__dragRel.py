@@ -5,11 +5,14 @@ __author__ = 'ipetrash'
 
 
 RUN_COMBINATION = 'Ctrl+Shift+R'
+QUIT_COMBINATION = 'Esc'
+
 print('Press "{}" for RUN'.format(RUN_COMBINATION))
+print('Press "{}" for QUIT'.format(QUIT_COMBINATION))
 
 import os
 import keyboard
-keyboard.add_hotkey('Esc', lambda: print('Quit by Escape') or os._exit(0))
+keyboard.add_hotkey(QUIT_COMBINATION, lambda: print('Quit by Escape') or os._exit(0))
 keyboard.wait(RUN_COMBINATION)
 
 import pyautogui
