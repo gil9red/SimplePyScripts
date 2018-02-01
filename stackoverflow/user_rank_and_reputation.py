@@ -5,7 +5,7 @@ __author__ = 'ipetrash'
 
 
 def get_user_rank_and_reputation() -> (str, str):
-    url = 'https://stackexchange.com/leagues/filter-users/355/AllTime/2015-03-27/?filter=gil9red&sort=reputationchange'
+    url = 'https://stackexchange.com/leagues/filter-users/609/AllTime/2015-03-27/?filter=gil9red&sort=reputationchange'
 
     import requests
     rs = requests.get(url)
