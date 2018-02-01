@@ -28,9 +28,9 @@ import requests
 log = get_logger('Check new rank ru.stackoverflow')
 
 
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/ae8b728e9fa2a9094e99283a103151173e8eaf3a/stackoverflow/user_rank_and_reputation.py
+# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/65b8d0c0a18eea726370b5b17e8a84ce00914aeb/stackoverflow/user_rank_and_reputation.py
 def get_user_rank_and_reputation() -> (str, str):
-    url = 'https://stackexchange.com/leagues/filter-users/355/AllTime/2015-03-27/?filter=gil9red&sort=reputationchange'
+    url = 'https://stackexchange.com/leagues/filter-users/609/AllTime/2015-03-27/?filter=gil9red&sort=reputationchange'
 
     import requests
     rs = requests.get(url)
