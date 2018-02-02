@@ -5,3 +5,17 @@
 __author__ = 'ipetrash'
 
 
+headers = {
+    "SOAPAction": 'REQUEST',
+    # "Accept": "binary/octet-stream, text/xml",
+}
+data = open('example_rq.xml', 'rb').read()
+url = 'http://smev-mvf.test.gosuslugi.ru:7777/gateway/services/SID0003663/wsdl'
+
+import requests
+rs = requests.post(url, data=data, headers=headers)
+print(rs)
+
+from bs4 import BeautifulSoup
+root = BeautifulSoup(rs.content, 'html.parser')
+print(root.prettify())
