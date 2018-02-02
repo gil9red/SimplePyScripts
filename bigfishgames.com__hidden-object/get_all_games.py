@@ -19,3 +19,6 @@ def get_all_games():
 if __name__ == '__main__':
     games = get_all_games()
     print('Games ({}): {}'.format(len(games), games))
+
+    import json
+    json.dump(games, open('games.json', 'w', encoding='utf-8'), ensure_ascii=False)
