@@ -44,11 +44,14 @@ def get_video_list():
 FILE_NAME_CURRENT_NUMBER_VIDEO = 'current_number_video'
 
 
+def save_current_number_video(current_number_video):
+    open(FILE_NAME_CURRENT_NUMBER_VIDEO, mode='w', encoding='utf-8').write(str(current_number_video))
+
+
 if __name__ == '__main__':
     import time
     import requests
 
-    # NOTE: С этим флагом нужно быть осторожным при первом запуске, когда список книг пустой
     notified_by_sms = True
 
     try:
@@ -66,25 +69,32 @@ if __name__ == '__main__':
 
             log.debug('video list[%s]: %s', number_video, sorted(video_list))
 
-            if number_video > current_number_video:
+            if not current_number_video:
+                log.debug('Обнаружен первый запуск')
+
                 current_number_video = number_video
-                open(FILE_NAME_CURRENT_NUMBER_VIDEO, mode='w', encoding='utf-8').write(str(current_number_video))
-
-                text = 'Появилось новое видео Gorgeous Freeman'
-                log.debug(text)
-
-                if notified_by_sms:
-                    simple_send_sms(text, log)
-
-            elif number_video < current_number_video:
-                text = 'Случилось странное: видео по Gorgeous Freeman меньше чем было запомнено'
-                log.debug(text)
-
-                if notified_by_sms:
-                    simple_send_sms(text, log)
+                save_current_number_video(current_number_video)
 
             else:
-                log.debug('Новых видео нет')
+                if number_video > current_number_video:
+                    current_number_video = number_video
+                    save_current_number_video(current_number_video)
+
+                    text = 'Появилось новое видео Gorgeous Freeman'
+                    log.debug(text)
+
+                    if notified_by_sms:
+                        simple_send_sms(text, log)
+
+                elif number_video < current_number_video:
+                    text = 'Случилось странное: видео по Gorgeous Freeman меньше чем было запомнено'
+                    log.debug(text)
+
+                    if notified_by_sms:
+                        simple_send_sms(text, log)
+
+                else:
+                    log.debug('Новых видео нет')
 
             wait(weeks=1)
 
