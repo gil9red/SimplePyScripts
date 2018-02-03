@@ -58,6 +58,8 @@ if __name__ == '__main__':
 
             # Если список текущих книг пуст
             if not current_books:
+                log.debug('Обнаружен первый запуск')
+
                 current_books = books
                 save_books(current_books)
 

@@ -73,6 +73,8 @@ if __name__ == '__main__':
 
             # Если предыдущий ранг не был известен, например при первом запуске скрипта
             if not last_rank:
+                log.debug('Обнаружен первый запуск')
+
                 last_rank = rank
                 update_file_data(last_rank)
 
