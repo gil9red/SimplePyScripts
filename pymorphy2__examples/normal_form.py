@@ -13,5 +13,5 @@ def get_normal_form(word):
     return morph.parse(word)[0].normal_form
 
 
-print(get_normal_form('Иванова'))
-print(get_normal_form('Иванов'))
+print(get_normal_form('Иванова'))  # иванов
+print(get_normal_form('Иванов'))  # иванов
