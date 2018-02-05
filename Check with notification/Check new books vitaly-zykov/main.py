@@ -45,8 +45,13 @@ if __name__ == '__main__':
     notified_by_sms = True
 
     # Загрузка текущих книг
-    import ast
-    current_books = ast.literal_eval(open(FILE_NAME_CURRENT_BOOKS, encoding='utf-8').read())
+    try:
+        import ast
+        current_books = ast.literal_eval(open(FILE_NAME_CURRENT_BOOKS, encoding='utf-8').read())
+
+    except:
+        current_books = []
+
     log.debug('Current books: %s', current_books)
 
     while True:
