@@ -11,7 +11,7 @@ __author__ = 'ipetrash'
 
 
 from print_statistic_all_names import get_all_names
-name_list = [name for name in get_all_names()]
+name_list = get_all_names()
 total = len(name_list)
 print('Total:', total)
 print()
