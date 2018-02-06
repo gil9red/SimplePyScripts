@@ -16,6 +16,8 @@ import requests
 rs = requests.post(url, data=data, headers=headers)
 print(rs)
 
+open('example_rs.xml', 'wb').write(rs.content)
+
 from bs4 import BeautifulSoup
 root = BeautifulSoup(rs.content, 'html.parser')
 print(root.prettify())
