@@ -4,13 +4,15 @@
 __author__ = 'ipetrash'
 
 
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QWidget, QApplication
 from PyQt5.QtCore import Qt
 
 
 class Widget(QWidget):
     def __init__(self):
         super().__init__()
+
+        self.setWindowFlags(Qt.FramelessWindowHint)
 
         self.old_pos = None
 
