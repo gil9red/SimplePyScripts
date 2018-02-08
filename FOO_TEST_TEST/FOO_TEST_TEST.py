@@ -5,6 +5,16 @@
 __author__ = 'ipetrash'
 
 
+#
+# import requests
+# rs1 = requests.get('http://www.erkc-info.ru/index.php/counters/general-information/water')
+# open('rs1.html', 'wb').write(rs1.content)
+#
+# rs2 = requests.get('http://www.erkc-info.ru/index.php/2011-07-13-08-14-16')
+# open('rs2.html', 'wb').write(rs2.content)
+#
+# quit()
+
 headers = {
     "SOAPAction": 'REQUEST',
     # "Accept": "binary/octet-stream, text/xml",
