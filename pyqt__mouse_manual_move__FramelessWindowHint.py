@@ -21,7 +21,8 @@ class Widget(QWidget):
             self.old_pos = event.pos()
 
     def mouseReleaseEvent(self, event):
-        self.old_pos = None
+        if event.button() == Qt.LeftButton:
+            self.old_pos = None
 
     def mouseMoveEvent(self, event):
         if not self.old_pos:
