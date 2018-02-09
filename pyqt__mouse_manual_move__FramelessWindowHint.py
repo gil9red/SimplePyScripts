@@ -31,6 +31,7 @@ class Widget(QWidget):
     def mouseReleaseEvent(self, event):
         self.old_pos = None
 
+
 if __name__ == '__main__':
     app = QApplication([])
 
