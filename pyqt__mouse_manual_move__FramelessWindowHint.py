@@ -13,7 +13,6 @@ class Widget(QWidget):
         super().__init__()
 
         self.setWindowFlags(Qt.FramelessWindowHint)
-        self.setMouseTracking(True)
 
         self.old_pos = None
 
