@@ -16,7 +16,7 @@ __author__ = 'ipetrash'
 # quit()
 
 headers = {
-    "SOAPAction": 'REQUEST',
+    # "SOAPAction": 'REQUEST',
     # "Accept": "binary/octet-stream, text/xml",
 }
 data = open('example_rq.xml', 'rb').read()
