@@ -30,4 +30,4 @@ if __name__ == '__main__':
     print('Items ({}): {}'.format(len(items), items))
 
     import json
-    json.dump(items, open('video_list.json', 'w', encoding='utf-8'), ensure_ascii=False)
+    json.dump(items, open('video_list.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=4)
