@@ -114,3 +114,14 @@ def simple_send_sms(text: str, log=None):
 
     from all_config import API_ID, TO
     return send_sms(API_ID, TO, text, log)
+
+
+def run_notification_job(
+    log,
+    get_new_items_func,
+    read_result_func,
+    write_result_func,
+    notified_by_sms: bool,
+    wait_timeout
+):
+    pass
