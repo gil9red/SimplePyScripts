@@ -121,7 +121,9 @@ def run_notification_job(
     get_new_items_func,
     read_result_func,
     write_result_func,
-    notified_by_sms: bool,
-    wait_timeout
+    wait_timeout,
+    notified_by_sms=False,
 ):
-    pass
+    current_items = read_result_func()
+
+    log.debug('Current items(%s): %s', len(current_items), current_items)
