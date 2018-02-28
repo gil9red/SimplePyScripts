@@ -12,7 +12,7 @@ def get_all_names():
     root = BeautifulSoup(text, 'html.parser')
 
     # Имена описаны как "<Фамилия> <Имя> <Отчество>"
-    return sorted({report.text for report in root.select('#report .person')})
+    return sorted({' '.join(report.text.split()) for report in root.select('#report .person')})
 
 
 if __name__ == '__main__':
