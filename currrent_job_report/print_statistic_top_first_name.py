@@ -30,7 +30,7 @@ __author__ = 'ipetrash'
 
 
 from print_statistic_all_names import get_all_names
-first_name_list = [name.split()[1] for name in get_all_names()]
+first_name_list = [name[1] for name in get_all_names(split_name=True)]
 total = len(first_name_list)
 print('Total:', total)
 print()
