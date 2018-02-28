@@ -4,7 +4,13 @@
 __author__ = 'ipetrash'
 
 
-def get_all_names():
+def get_all_names(split_name=False):
+    """
+    split_name = False: ["<Фамилия> <Имя> <Отчество>", ...]
+    split_name = True:  [["<Фамилия>", "<Имя>", "<Отчество>"], ...]
+
+    """
+
     from get_user_and_deviation_hours import get_report_context
     text = get_report_context()
 
@@ -12,7 +18,12 @@ def get_all_names():
     root = BeautifulSoup(text, 'html.parser')
 
     # Имена описаны как "<Фамилия> <Имя> <Отчество>"
-    return sorted({' '.join(report.text.split()) for report in root.select('#report .person')})
+    items = sorted({' '.join(report.text.split()) for report in root.select('#report .person')})
+
+    if split_name:
+        return [x.split() for x in items]
+
+    return items
 
 
 if __name__ == '__main__':
