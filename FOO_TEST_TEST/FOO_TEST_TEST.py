@@ -42,9 +42,27 @@ class MainWindow(QWidget):
         from os.path import split as path_split
         self.setWindowTitle(path_split(__file__)[1])
 
+        self.escape_rules = [
+            ('"', '"', r'\"', True),
+            ("'", "'", r"\'", True),
+            (r'\n', "\n", r'\n', True),
+        ]
+        self.checkbox_by_escape = {}
+
         button_layout = QHBoxLayout()
-        button_layout.addWidget(QCheckBox('foo'))
-        button_layout.addWidget(QCheckBox('bar'))
+        for title, char, escape, checked in self.escape_rules:
+            checkbox = QCheckBox(title)
+            checkbox.setChecked(checked)
+            checkbox.clicked.connect(self.input_text_changed)
+
+            font = checkbox.font()
+            font.setBold(True)
+            font.setPointSize(font.pointSize() + 2)
+            checkbox.setFont(font)
+
+            button_layout.addWidget(checkbox)
+            self.checkbox_by_escape[checkbox] = (char, escape)
+
         button_layout.addStretch()
 
         layout = QVBoxLayout()
@@ -105,9 +123,15 @@ class MainWindow(QWidget):
         self.last_detail_error_message = None
 
         try:
-            in_text = self.text_edit_input.toPlainText()
+            out_text = self.text_edit_input.toPlainText()
 
-            out_text = in_text.replace('"', r'\"').replace("'", r"\'").replace("\n", r"\n").replace("\t", r"\t")
+            for checkbox, (char, escape) in self.checkbox_by_escape.items():
+                if not checkbox.isChecked():
+                    continue
+
+                out_text = out_text.replace(char, escape)
+
+            # out_text = in_text.replace('"', r'\"').replace("'", r"\'").replace("\n", r"\n").replace("\t", r"\t")
 
             self.text_edit_output.setPlainText(out_text)
 
