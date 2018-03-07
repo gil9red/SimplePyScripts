@@ -5,13 +5,12 @@ __author__ = 'ipetrash'
 
 
 import atexit
-import time
-
-start_time = time.clock()
+from timeit import default_timer as timer
+start_time = timer()
 
 
 def exit_handler():
-    print('Execution time: {:.3f} secs.'.format(time.clock() - start_time))
+    print('Execution time: {:.3f} secs.'.format(timer() - start_time))
 
 
 atexit.register(exit_handler)
