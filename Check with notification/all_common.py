@@ -116,14 +116,28 @@ def simple_send_sms(text: str, log=None):
     return send_sms(API_ID, TO, text, log)
 
 
+# TODO:
 def run_notification_job(
     log,
     get_new_items_func,
-    read_result_func,
-    write_result_func,
+    read_context_func,
+    save_context_func,
+    process,
     wait_timeout,
+    exception_handler,
     notified_by_sms=False,
 ):
-    current_items = read_result_func()
+    current_context = read_context_func()
 
-    log.debug('Current items(%s): %s', len(current_items), current_items)
+    while True:
+        try:
+            log.debug('Получение новых данных')
+
+            items = get_new_items_func()
+
+            process(current_context, items, save_context_func, notified_by_sms, log)
+
+            wait_timeout()
+
+        except Exception as e:
+            exception_handler(e)
