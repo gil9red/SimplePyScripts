@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
+
+# pip install selenium
+from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
+LOGIN = '<LOGIN>'
+PASSWORD = '<PASSWORD>'
+
+driver = webdriver.Firefox()
+driver.get('https://vk.com/')
+print('Title: "{}"'.format(driver.title))
+
+index_email = driver.find_element_by_id('index_email')
+index_email.send_keys(LOGIN)
+
+index_pass = driver.find_element_by_id('index_pass')
+index_pass.send_keys(PASSWORD)
+
+# Делаем скриншот результата
+driver.save_screenshot('before_auth.png')
+
+driver.find_element_by_id("index_login_button").click()
+
+try:
+    l_msg = WebDriverWait(driver, timeout=10).until(EC.presence_of_element_located((By.ID, 'l_msg')))
+
+except TimeoutException:
+    print('Timeout!')
+    quit()
+
+print('Title: "{}"'.format(driver.title))
+
+# Делаем скриншот результата
+driver.save_screenshot('after_auth.png')
+
+l_msg.click()
+
+try:
+    im_dialogs = WebDriverWait(driver, timeout=10).until(EC.presence_of_element_located((By.ID, 'im_dialogs')))
+
+except TimeoutException:
+    print('Timeout!')
+    quit()
+
+print('Title: "{}"'.format(driver.title))
+im_dialogs.screenshot('dialogs_page.png')
+
+dialog_items = driver.find_elements_by_class_name('_im_dialog_link')
+
+for dialog in dialog_items:
+    print(dialog.text)
+
+driver.quit()
