@@ -18,11 +18,8 @@ driver = webdriver.Firefox()
 driver.get('https://vk.com/')
 print('Title: "{}"'.format(driver.title))
 
-index_email = driver.find_element_by_id('index_email')
-index_email.send_keys(LOGIN)
-
-index_pass = driver.find_element_by_id('index_pass')
-index_pass.send_keys(PASSWORD)
+driver.find_element_by_id('index_email').send_keys(LOGIN)
+driver.find_element_by_id('index_pass').send_keys(PASSWORD)
 
 # Делаем скриншот результата
 driver.save_screenshot('before_auth.png')
