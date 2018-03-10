@@ -43,13 +43,13 @@ l_msg.click()
 
 try:
     im_dialogs = WebDriverWait(driver, timeout=10).until(EC.presence_of_element_located((By.ID, 'im_dialogs')))
+    im_dialogs.screenshot('dialogs_page.png')
 
 except TimeoutException:
     print('Timeout!')
     quit()
 
 print('Title: "{}"'.format(driver.title))
-im_dialogs.screenshot('dialogs_page.png')
 
 dialog_items = driver.find_elements_by_class_name('_im_dialog_link')
 

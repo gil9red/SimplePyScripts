@@ -43,13 +43,13 @@ driver.find_element_by_id("top_myprofile_link").click()
 
 try:
     page_info = WebDriverWait(driver, timeout=10).until(EC.presence_of_element_located((By.ID, 'page_info_wrap')))
+    page_info.screenshot('page_info.png')
 
 except TimeoutException:
     print('Timeout!')
     quit()
 
 print('Title: "{}"'.format(driver.title))
-page_info.screenshot('page_info.png')
 
 # Делаем скриншот результата
 driver.save_screenshot('my_vk_user_page.png')

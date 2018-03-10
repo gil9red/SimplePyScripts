@@ -32,13 +32,13 @@ driver.save_screenshot('before_search.png')
 
 try:
     elem = WebDriverWait(driver, timeout=10).until(EC.presence_of_element_located((By.ID, 'web')))
+    elem.screenshot('search_content.png')
 
 except TimeoutException:
     print('Timeout!')
     quit()
 
 print('Title: "{}"'.format(driver.title))
-elem.screenshot('search_content.png')
 
 # Делаем скриншот результата
 driver.save_screenshot('after_search.png')
