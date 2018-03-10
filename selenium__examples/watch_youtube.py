@@ -4,9 +4,6 @@
 __author__ = 'ipetrash'
 
 
-# https://pypi.python.org/pypi/selenium
-
-
 # pip install selenium
 from selenium import webdriver
 driver = webdriver.Firefox()
