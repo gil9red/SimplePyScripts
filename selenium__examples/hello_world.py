@@ -35,6 +35,7 @@ try:
 
 except TimeoutException:
     print('Timeout!')
+    quit()
 
 print('Title: "{}"'.format(driver.title))
 elem.screenshot('search_content.png')
