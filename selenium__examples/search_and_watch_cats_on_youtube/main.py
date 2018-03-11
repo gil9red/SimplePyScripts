@@ -23,8 +23,12 @@ driver.save_screenshot('before_search.png')
 
 driver.find_element_by_css_selector('input#search').send_keys('Funny cats' + Keys.RETURN)
 
+wait = WebDriverWait(driver, timeout=10)
+
 try:
-    result_count = WebDriverWait(driver, timeout=10).until(EC.presence_of_element_located((By.ID, 'result-count')))
+    result_count = wait.until(
+        EC.presence_of_element_located((By.ID, 'result-count'))
+    )
     print(result_count.text)
 
 except TimeoutException:
@@ -43,7 +47,9 @@ import random
 random.choice(video_list).click()
 
 try:
-    video_title = WebDriverWait(driver, timeout=10).until(EC.presence_of_element_located((By.CLASS_NAME, 'title')))
+    video_title = wait.until(
+        EC.presence_of_element_located((By.CLASS_NAME, 'title'))
+    )
 
 except TimeoutException:
     print('Timeout!')

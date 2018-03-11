@@ -27,8 +27,12 @@ driver.save_screenshot('before_auth.png')
 
 driver.find_element_by_id("index_login_button").click()
 
+wait = WebDriverWait(driver, timeout=10)
+
 try:
-    l_msg = WebDriverWait(driver, timeout=10).until(EC.presence_of_element_located((By.ID, 'l_msg')))
+    l_msg = wait.until(
+        EC.presence_of_element_located((By.ID, 'l_msg'))
+    )
 
 except TimeoutException:
     print('Timeout!')
@@ -42,7 +46,9 @@ driver.save_screenshot('after_auth.png')
 l_msg.click()
 
 try:
-    im_dialogs = WebDriverWait(driver, timeout=10).until(EC.presence_of_element_located((By.ID, 'im_dialogs')))
+    im_dialogs = wait.until(
+        EC.presence_of_element_located((By.ID, 'im_dialogs'))
+    )
     im_dialogs.screenshot('dialogs_page.png')
 
 except TimeoutException:

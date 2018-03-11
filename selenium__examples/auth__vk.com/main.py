@@ -26,8 +26,12 @@ driver.save_screenshot('before_auth.png')
 
 driver.find_element_by_id("index_login_button").click()
 
+wait = WebDriverWait(driver, timeout=10)
+
 try:
-    profile_url = WebDriverWait(driver, timeout=10).until(EC.presence_of_element_located((By.ID, 'top_profile_link')))
+    profile_url = wait.until(
+        EC.presence_of_element_located((By.ID, 'top_profile_link'))
+    )
 
 except TimeoutException:
     print('Timeout!')
@@ -42,7 +46,9 @@ driver.find_element_by_id("top_profile_menu").screenshot('top_profile_menu.png')
 driver.find_element_by_id("top_myprofile_link").click()
 
 try:
-    page_info = WebDriverWait(driver, timeout=10).until(EC.presence_of_element_located((By.ID, 'page_info_wrap')))
+    page_info = wait.until(
+        EC.presence_of_element_located((By.ID, 'page_info_wrap'))
+    )
     page_info.screenshot('page_info.png')
 
 except TimeoutException:

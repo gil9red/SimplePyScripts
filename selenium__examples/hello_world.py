@@ -30,8 +30,12 @@ search_box.send_keys('Hello World!' + Keys.RETURN)
 # Делаем скриншот результата
 driver.save_screenshot('before_search.png')
 
+wait = WebDriverWait(driver, timeout=10)
+
 try:
-    elem = WebDriverWait(driver, timeout=10).until(EC.presence_of_element_located((By.ID, 'web')))
+    elem = wait.until(
+        EC.presence_of_element_located((By.ID, 'web'))
+    )
     elem.screenshot('search_content.png')
 
 except TimeoutException:
