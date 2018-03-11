@@ -46,22 +46,13 @@ video_list = driver.find_elements_by_id('dismissable')
 import random
 random.choice(video_list).click()
 
-try:
-    video_title = wait.until(
-        EC.presence_of_element_located((By.CLASS_NAME, 'title'))
-    )
+video = wait.until(
+    EC.visibility_of_element_located((By.TAG_NAME, 'video'))
+)
 
-except TimeoutException:
-    print('Timeout!')
-    quit()
-
-while True:
-    if video_title.text:
-        print('Title: "{}"'.format(driver.title))
-        print('Video Title: "{}"'.format(video_title.text))
-        break
-
-    time.sleep(1)
+video_title = driver.find_element_by_class_name('title')
+print('Title: "{}"'.format(driver.title))
+print('Video Title: "{}"'.format(video_title.text))
 
 driver.save_screenshot('final.png')
 
