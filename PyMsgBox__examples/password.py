@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+# pip install PyMsgBox
 from pymsgbox import password
 result = password(text='My Text', title='My Title', default='Default Text', mask='*')
 print(result)

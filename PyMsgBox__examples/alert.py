@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+# pip install PyMsgBox
 from pymsgbox import alert
 button = alert(text='My Text', title='My Title', button='OK')
 print(button)
