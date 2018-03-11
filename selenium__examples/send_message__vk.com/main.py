@@ -8,7 +8,7 @@ import time
 
 # pip install selenium
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException, ElementNotInteractableException
+from selenium.common.exceptions import ElementNotInteractableException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -31,14 +31,9 @@ driver.find_element_by_id("index_login_button").click()
 
 wait = WebDriverWait(driver, timeout=10)
 
-try:
-    l_msg = wait.until(
-        EC.presence_of_element_located((By.ID, 'l_msg'))
-    )
-
-except TimeoutException:
-    print('Timeout!')
-    quit()
+l_msg = wait.until(
+    EC.presence_of_element_located((By.ID, 'l_msg'))
+)
 
 print('Title: "{}"'.format(driver.title))
 
@@ -47,17 +42,11 @@ driver.save_screenshot('after_auth.png')
 
 l_msg.click()
 
-try:
-    im_dialogs = wait.until(
-        EC.presence_of_element_located((By.ID, 'im_dialogs'))
-    )
-
-except TimeoutException:
-    print('Timeout!')
-    quit()
-
-print('Title: "{}"'.format(driver.title))
+im_dialogs = wait.until(
+    EC.presence_of_element_located((By.ID, 'im_dialogs'))
+)
 im_dialogs.screenshot('dialogs_page.png')
+print('Title: "{}"'.format(driver.title))
 
 dialog_items = driver.find_elements_by_class_name('_im_dialog_link')
 
@@ -74,14 +63,9 @@ for dialog in dialog_items:
 
         break
 
-try:
-    im_editable0 = wait.until(
-        EC.presence_of_element_located((By.ID, 'im_editable0'))
-    )
-
-except TimeoutException:
-    print('Timeout!')
-    quit()
+im_editable0 = wait.until(
+    EC.presence_of_element_located((By.ID, 'im_editable0'))
+)
 
 print('Title: "{}"'.format(driver.title))
 driver.save_screenshot('current_dialog_page.png')

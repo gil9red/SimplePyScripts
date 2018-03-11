@@ -24,7 +24,6 @@ __author__ = 'ipetrash'
 # pip install selenium
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -37,15 +36,10 @@ driver.find_element_by_css_selector('input#search').send_keys('Funny cats' + Key
 
 wait = WebDriverWait(driver, timeout=10)
 
-try:
-    result_count = wait.until(
-        EC.presence_of_element_located((By.ID, 'result-count'))
-    )
-    print(result_count.text)
-
-except TimeoutException:
-    print('Timeout!')
-    quit()
+result_count = wait.until(
+    EC.presence_of_element_located((By.ID, 'result-count'))
+)
+print(result_count.text)
 
 print('Title: "{}"'.format(driver.title))
 
