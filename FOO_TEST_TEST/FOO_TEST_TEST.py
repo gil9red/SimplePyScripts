@@ -5,12 +5,42 @@
 __author__ = 'ipetrash'
 
 
+# from selenium import webdriver
+# from selenium.webdriver.common.action_chains import ActionChains
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.support.ui import WebDriverWait
+# from selenium.webdriver.support import expected_conditions as EC
+#
+# driver = webdriver.Firefox()
+# driver.get("https://grouple.co/")
+# # driver.maximize_window()
+#
+#
+# last_height = driver.execute_script("return document.body.scrollHeight")
+# driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+#
+# # element = driver.find_element_by_css_selector('.pagination')
+# # print(element)
+# #
+# # # wait for then hover it
+# # element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".pagination")))
+# # print(element)
+# #
+# # ActionChains(driver).move_to_element(element).perform()
+#
+# # # wait for Fastrack menu item to appear, then click it
+# # fastrack = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, "//a[@data-tracking-id='0_Fastrack']")))
+# # fastrack.click()
+#
+# quit()
+
 # pip install selenium
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
 
 # # get the Firefox profile object
 # firefox_profile = webdriver.FirefoxProfile()
@@ -30,11 +60,34 @@ driver.implicitly_wait(10)  # seconds
 driver.get('https://pikabu.ru/story/ii_pobedil_5467581')
 print('Title: "{}"'.format(driver.title))
 
-i = 1
-for img in driver.find_elements_by_css_selector('img[data-large-image]'):
-    # print(img.get_attribute('src'), img.get_attribute('data-large-image'))
-    print(i, img.get_attribute('data-large-image'))
-    i += 1
+wait = WebDriverWait(driver, timeout=10)
+
+last_height = driver.execute_script("return document.body.scrollHeight")
+print('last_height:', last_height)
+driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+# <div class="b-comment-toggle b-comment-toggle_type_expand b-comment-toggle_type_hidden" style="display: inline-block"><div class="b-comment-toggle__icon fa fa-plus-square"></div><div class="b-comment-toggle__count" style="display: block">ещё комментарии <span class="b-comment-toggle__count-text"></span> <i class="i-sprite--inline-block i-sprite--comments__show"></i></div></div>
+# <div class="b-comment-toggle b-comment-toggle_type_expand" style="display: inline-block"><div class="b-comment-toggle__icon fa fa-plus-square"></div><div class="b-comment-toggle__count" style="display: block">раскрыть ветвь <span class="b-comment-toggle__count-text">1</span> <i class="i-sprite--inline-block i-sprite--comments__show"></i></div></div>
+# <div class="b-comments__next">Ещё <span class="b-comments__next-count">400 комментариев</span> <i class="fa fa-refresh"></i> <span class="b-comments__next-error"></span></div>
+
+# more_comment = wait.until(
+#     EC.visibility_of_element_located((By.CLASS_NAME, 'b-comment-toggle__count'))
+# )
+# more_comments = driver.find_elements_by_class_name('b-comment-toggle__count')
+# for more_comment in more_comments:
+#     ActionChains(driver).move_to_element(more_comment).perform()
+#
+#     import time
+#     time.sleep(4)
+
+
+# i = 1
+# for img in driver.find_elements_by_css_selector('img[data-large-image]'):
+#     # print(img.get_attribute('src'), img.get_attribute('data-large-image'))
+#     print(i, img.get_attribute('data-large-image'))
+#     i += 1
+
+
 
 # # Делаем скриншот результата
 # driver.save_screenshot('before_search.png')
