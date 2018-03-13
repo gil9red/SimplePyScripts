@@ -17,9 +17,12 @@ class Foo:
         self.items += values
         return self
 
-    def put_value(self, key, value):
+    def set_value(self, key, value):
         self.key_by_value[key] = value
         return self
+
+    def get_value(self, key):
+        return self.key_by_value[key]
 
     def __repr__(self):
         return 'Foo<items={}, values={}>'.format(len(self.items), len(self.key_by_value))
@@ -28,9 +31,11 @@ class Foo:
 foo = Foo()\
     .add_item(1)\
     .add_items('abc')\
-    .put_value('x', 1)\
-    .put_value('x[]', [1, 2, 3])
+    .set_value('x', 1)\
+    .set_value('x[]', [1, 2, 3])
 
 print(foo)
 print(foo.items)
 print(foo.key_by_value)
+print(foo.get_value('x'))
+print(foo.get_value('x[]'))
