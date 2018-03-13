@@ -19,6 +19,8 @@ from selenium.webdriver.common.by import By
 #   * Из репозитория https://github.com/mozilla/geckodriver скачать geckodriver.exe
 #   * Сохранить в папку, например: C:\Program Files\geckodriver\geckodriver.exe
 #   * Добавить в системную переменную PATH путь к папке
+#
+# OR: driver = webdriver.Firefox(executable_path=r"C:\Program Files\geckodriver\geckodriver.exe")
 driver = webdriver.Firefox()
 driver.get('https://yahoo.com')
 print('Title: "{}"'.format(driver.title))
