@@ -36,6 +36,7 @@ __author__ = 'ipetrash'
 
 # pip install selenium
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -62,11 +63,78 @@ print('Title: "{}"'.format(driver.title))
 
 wait = WebDriverWait(driver, timeout=10)
 
-last_height = driver.execute_script("return document.body.scrollHeight")
-print('last_height:', last_height)
-driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+# last_height = driver.execute_script("return document.body.scrollHeight")
+# print('last_height:', last_height)
+# driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-# <div class="b-comment-toggle b-comment-toggle_type_expand b-comment-toggle_type_hidden" style="display: inline-block"><div class="b-comment-toggle__icon fa fa-plus-square"></div><div class="b-comment-toggle__count" style="display: block">ещё комментарии <span class="b-comment-toggle__count-text"></span> <i class="i-sprite--inline-block i-sprite--comments__show"></i></div></div>
+more_comment = wait.until(
+    EC.visibility_of_element_located((By.CLASS_NAME, 'b-comment-toggle_type_expand'))
+)
+while True:
+    try:
+        more_comment = wait.until(
+            EC.visibility_of_element_located((By.CLASS_NAME, 'b-comments__next'))
+        )
+        print(more_comment, more_comment.location, more_comment.text)
+        more_comment.click()
+
+        import time
+        time.sleep(2)
+
+    except TimeoutException as e:
+        print('TimeoutException:', e)
+        break
+i = 1
+for element in driver.find_elements_by_class_name('b-comment-toggle_type_expand'):
+    if element.is_displayed():
+        print(i, element, element.location, element.text)
+        i += 1
+driver.quit()
+quit()
+
+body = driver.find_element_by_tag_name('body')
+
+while True:
+    while True:
+        try:
+            more_comment = wait.until(
+                EC.visibility_of_element_located((By.CLASS_NAME, 'b-comment-toggle_type_expand'))
+            )
+            print(more_comment, more_comment.location, more_comment.text)
+            more_comment.click()
+            # ActionChains(driver).move_to_element(more_comment).click(more_comment).perform()
+
+            import time
+            time.sleep(2)
+
+        except TimeoutException as e:
+            print('TimeoutException:', e)
+            break
+
+    body.send_keys(Keys.PAGE_DOWN)
+
+    # while True:
+    #     try:
+    #         more_comment = wait.until(
+    #             EC.visibility_of_element_located((By.CLASS_NAME, 'b-comments__next'))
+    #         )
+    #         print(more_comment, more_comment.location, more_comment.text)
+    #         more_comment.click()
+    #         # ActionChains(driver).move_to_element(more_comment).click(more_comment).perform()
+    #
+    #         import time
+    #         time.sleep(2)
+    #
+    #     except TimeoutException as e:
+    #         print('TimeoutException:', e)
+    #         break
+
+
+print('Finish')
+
+# <div class="b-comment-toggle b-comment-toggle_type_expand b-comment-toggle_type_hidden" style="display: inline-block">
+# <div class="b-comment-toggle__icon fa fa-plus-square"></div><div class="b-comment-toggle__count" style="display: block">ещё комментарии <span class="b-comment-toggle__count-text"></span> <i class="i-sprite--inline-block i-sprite--comments__show"></i></div></div>
+
 # <div class="b-comment-toggle b-comment-toggle_type_expand" style="display: inline-block"><div class="b-comment-toggle__icon fa fa-plus-square"></div><div class="b-comment-toggle__count" style="display: block">раскрыть ветвь <span class="b-comment-toggle__count-text">1</span> <i class="i-sprite--inline-block i-sprite--comments__show"></i></div></div>
 # <div class="b-comments__next">Ещё <span class="b-comments__next-count">400 комментариев</span> <i class="fa fa-refresh"></i> <span class="b-comments__next-error"></span></div>
 
@@ -118,4 +186,4 @@ driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 #
 # driver.save_screenshot('final.png')
 
-# driver.quit()
+driver.quit()
