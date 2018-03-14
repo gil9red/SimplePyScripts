@@ -21,7 +21,7 @@ print('Send:', obj)
 import pickle
 data = pickle.dumps(obj)
 
-sock.send(data)
+sock.sendall(data)
 
 print('Close')
 sock.close()
