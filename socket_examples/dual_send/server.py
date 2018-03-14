@@ -26,7 +26,8 @@ while True:
             break
 
         print('Recv: {}: {}'.format(len(data), data))
-        conn.send(data.upper())
+
+        conn.sendall(data.upper())
 
         if len(data) < BUFFER_SIZE:
             break

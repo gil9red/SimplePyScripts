@@ -15,7 +15,7 @@ sock.connect(('localhost', 9090))
 
 # Send big data
 data = ','.join(str(i) for i in range(10000))
-sock.send(data.encode())
+sock.sendall(data.encode())
 
 print('Response')
 
@@ -25,8 +25,6 @@ while True:
         break
 
     print(len(data), data)
-    if len(data) < BUFFER_SIZE:
-        break
 
 print('Close')
 sock.close()
