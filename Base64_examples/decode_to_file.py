@@ -6,8 +6,15 @@ __author__ = 'ipetrash'
 
 from base64 import b64decode
 
-# Hello World!
-text = 'SGVsbG8gV29ybGQh'
 
-with open('result.txt', 'wb') as f:
-    f.write(b64decode(text))
+def decode_base64_to_file(file_name: str, text_base64: str):
+    with open(file_name, 'wb') as f:
+        data = b64decode(text_base64)
+        f.write(data)
+
+
+if __name__ == '__main__':
+    # Hello World!
+    text = 'SGVsbG8gV29ybGQh'
+
+    decode_base64_to_file('result.txt', text)
