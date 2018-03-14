@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 # SOURCE: https://habrahabr.ru/post/149077/
 
-BUFFER_SIZE = 1024
+BUFFER_SIZE = 4096
 
 
 import socket
