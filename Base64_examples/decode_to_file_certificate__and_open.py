@@ -18,5 +18,6 @@ l1hnV3Acv5f+WLhiKblVW1gZnNjhmnacgFQo5xb3UimMqgroonZz
 from decode_to_file import decode_base64_to_file
 decode_base64_to_file(FILE_NAME, TEXT)
 
+# Open file
 import os
 os.startfile(FILE_NAME)
