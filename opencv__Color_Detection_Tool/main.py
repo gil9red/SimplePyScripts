@@ -42,7 +42,7 @@ class MainWindow(Qt.QWidget):
         self.ui.rbResult.setChecked(True)
 
         self.settings = Qt.QSettings(CONFIG_FILE_NAME, Qt.QSettings.IniFormat)
-        self.last_load_path = "."
+        self.last_load_path = self.settings.value("lastLoadPath", ".")
         self.image_source = None
 
         for w in self.findChildren(Qt.QSlider):
@@ -72,21 +72,40 @@ class MainWindow(Qt.QWidget):
 
         self.last_load_path = Qt.QFileInfo(file_name).absolutePath()
 
+        # TODO: плохо работает с изображениями с прозрачностью
         self.image_source = cv2.imread(file_name)
+        # self.image_source = cv2.imread(file_name, cv2.IMREAD_UNCHANGED)
         self.image_source = cv2.cvtColor(self.image_source, cv2.COLOR_BGR2RGB)
 
         self.refresh_HSV()
     
     @staticmethod
     def numpy_array_to_QImage(numpy_array):
-        if len(numpy_array.shape) == 3:
-            height, width, channel = numpy_array.shape
-            bytes_per_line = 3 * width
-            return Qt.QImage(numpy_array.data, width, height, bytes_per_line, Qt.QImage.Format_RGB888)
-        else:
-            height, width = numpy_array.shape
-            bytes_per_line = 1 * width
-            return Qt.QImage(numpy_array.data, width, height, bytes_per_line, Qt.QImage.Format_Indexed8)
+        gray_color_table = [Qt.qRgb(i, i, i) for i in range(256)]
+
+        if numpy_array.dtype == np.uint8:
+            if len(numpy_array.shape) == 2:
+                img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0], Qt.QImage.Format_Indexed8)
+                img.setColorTable(gray_color_table)
+                return img
+
+            elif len(numpy_array.shape) == 3:
+                if numpy_array.shape[2] == 3:
+                    img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0], Qt.QImage.Format_RGB888)
+                    return img
+
+                elif numpy_array.shape[2] == 4:
+                    img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0], Qt.QImage.Format_ARGB32)
+                    return img
+
+        # if len(numpy_array.shape) == 3:
+        #     height, width, channel = numpy_array.shape
+        #     bytes_per_line = 3 * width
+        #     return Qt.QImage(numpy_array.data, width, height, bytes_per_line, Qt.QImage.Format_RGB888)
+        # else:
+        #     height, width = numpy_array.shape
+        #     bytes_per_line = 1 * width
+        #     return Qt.QImage(numpy_array.data, width, height, bytes_per_line, Qt.QImage.Format_Indexed8)
     
     def refresh_HSV(self):
         if self.image_source is None:
@@ -174,6 +193,8 @@ class MainWindow(Qt.QWidget):
         for w in self.findChildren(Qt.QSlider):
             name = w.objectName()
             self.settings.setValue(name, w.value())
+
+        self.settings.setValue("lastLoadPath", self.last_load_path)
 
 
 if __name__ == '__main__':
