@@ -28,6 +28,8 @@ sys.excepthook = log_uncaught_exceptions
 
 
 CONFIG_FILE_NAME = "config.ini"
+WINDOW_TITLE = 'Color Detection Tool'
+GRAY_COLOR_TABLE = [Qt.qRgb(i, i, i) for i in range(256)]
 
 
 class MainWindow(Qt.QWidget):
@@ -37,7 +39,7 @@ class MainWindow(Qt.QWidget):
         self.ui = Ui_MainWidget()
         self.ui.setupUi(self)
 
-        self.setWindowTitle('Color Detection Tool')
+        self.setWindowTitle(WINDOW_TITLE)
 
         self.ui.rbResult.setChecked(True)
 
@@ -72,48 +74,40 @@ class MainWindow(Qt.QWidget):
 
         self.last_load_path = Qt.QFileInfo(file_name).absolutePath()
 
-        # TODO: плохо работает с изображениями с прозрачностью
-        # print(file_name)
-        # self.image_source = cv2.imread(file_name)
-        # # self.image_source = cv2.imread(file_name, cv2.IMREAD_UNCHANGED)
-        # self.image_source = cv2.cvtColor(self.image_source, cv2.COLOR_BGR2RGB)
-
         # Load image as bytes
         with open(file_name, 'rb') as f:
             img_data = f.read()
 
         nparr = np.frombuffer(img_data, np.uint8)
-        self.image_source = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        self.image_source = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
+
+        width, height, channels = self.image_source.shape
+        self.setWindowTitle(WINDOW_TITLE + '. {}x{} ({} channels). {}'.format(width, height, channels, file_name))
+
+        # Трансформация BGR->RGB если 3 канала. У картинок с прозрачностью каналов 4 и для них почему
+        if channels == 3:
+            self.image_source = cv2.cvtColor(self.image_source, cv2.COLOR_BGR2RGB)
 
         self.refresh_HSV()
     
     @staticmethod
     def numpy_array_to_QImage(numpy_array):
-        gray_color_table = [Qt.qRgb(i, i, i) for i in range(256)]
+        if numpy_array.dtype != np.uint8:
+            return
 
-        if numpy_array.dtype == np.uint8:
-            if len(numpy_array.shape) == 2:
-                img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0], Qt.QImage.Format_Indexed8)
-                img.setColorTable(gray_color_table)
+        if len(numpy_array.shape) == 2:
+            img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0], Qt.QImage.Format_Indexed8)
+            img.setColorTable(GRAY_COLOR_TABLE)
+            return img
+
+        elif len(numpy_array.shape) == 3:
+            if numpy_array.shape[2] == 3:
+                img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0], Qt.QImage.Format_RGB888)
                 return img
 
-            elif len(numpy_array.shape) == 3:
-                if numpy_array.shape[2] == 3:
-                    img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0], Qt.QImage.Format_RGB888)
-                    return img
-
-                elif numpy_array.shape[2] == 4:
-                    img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0], Qt.QImage.Format_ARGB32)
-                    return img
-
-        # if len(numpy_array.shape) == 3:
-        #     height, width, channel = numpy_array.shape
-        #     bytes_per_line = 3 * width
-        #     return Qt.QImage(numpy_array.data, width, height, bytes_per_line, Qt.QImage.Format_RGB888)
-        # else:
-        #     height, width = numpy_array.shape
-        #     bytes_per_line = 1 * width
-        #     return Qt.QImage(numpy_array.data, width, height, bytes_per_line, Qt.QImage.Format_Indexed8)
+            elif numpy_array.shape[2] == 4:
+                img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0], Qt.QImage.Format_ARGB32)
+                return img
     
     def refresh_HSV(self):
         if self.image_source is None:
