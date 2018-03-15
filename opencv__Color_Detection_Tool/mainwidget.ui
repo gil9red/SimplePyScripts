@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWidget</class>
+ <widget class="QWidget" name="MainWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>485</width>
+    <height>654</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWidget</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="lbView">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>500</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="bnLoad">
+       <property name="text">
+        <string>Load</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Modes:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rbOriginal">
+       <property name="text">
+        <string>Original</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rbThresholded">
+       <property name="text">
+        <string>Thresholded</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rbCanny">
+       <property name="text">
+        <string>Canny</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rbResult">
+       <property name="text">
+        <string>Result</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="1" column="1">
+      <widget class="QSlider" name="slSaturationFrom">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksBelow</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QSlider" name="slHueFrom">
+       <property name="maximum">
+        <number>179</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksBelow</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>to</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Value</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QSpinBox" name="spValueFrom"/>
+     </item>
+     <item row="1" column="2">
+      <widget class="QSpinBox" name="spSaturationFrom"/>
+     </item>
+     <item row="0" column="5">
+      <widget class="QSpinBox" name="spHueTo"/>
+     </item>
+     <item row="2" column="5">
+      <widget class="QSpinBox" name="spValueTo"/>
+     </item>
+     <item row="1" column="5">
+      <widget class="QSpinBox" name="spSaturationTo"/>
+     </item>
+     <item row="0" column="4">
+      <widget class="QSlider" name="slHueTo">
+       <property name="maximum">
+        <number>179</number>
+       </property>
+       <property name="value">
+        <number>179</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksBelow</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="4">
+      <widget class="QSlider" name="slValueTo">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="value">
+        <number>255</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksBelow</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QSpinBox" name="spHueFrom"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSlider" name="slValueFrom">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksBelow</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Saturation</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Hue</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4">
+      <widget class="QSlider" name="slSaturationTo">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="value">
+        <number>255</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksBelow</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>to</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>to</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>slHueFrom</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>spHueFrom</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>159</x>
+     <y>515</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>195</x>
+     <y>517</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spHueFrom</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slHueFrom</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>208</x>
+     <y>523</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>158</x>
+     <y>522</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slSaturationFrom</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spSaturationFrom</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>156</x>
+     <y>538</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>195</x>
+     <y>546</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spSaturationFrom</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slSaturationFrom</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>209</x>
+     <y>535</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>160</x>
+     <y>540</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slValueFrom</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>spValueFrom</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>149</x>
+     <y>568</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>211</x>
+     <y>573</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spValueFrom</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slValueFrom</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>208</x>
+     <y>561</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>152</x>
+     <y>571</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slHueTo</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>spHueTo</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>340</x>
+     <y>516</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>402</x>
+     <y>521</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spHueTo</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slHueTo</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>407</x>
+     <y>513</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>362</x>
+     <y>518</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slSaturationTo</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>spSaturationTo</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>328</x>
+     <y>544</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>410</x>
+     <y>550</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spSaturationTo</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slSaturationTo</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>407</x>
+     <y>543</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>345</x>
+     <y>543</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slValueTo</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>spValueTo</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>369</x>
+     <y>566</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>398</x>
+     <y>571</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spValueTo</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slValueTo</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>394</x>
+     <y>566</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>357</x>
+     <y>571</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
