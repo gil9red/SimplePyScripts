@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwidget.ui'
 #
-# Created by: PyQt5 UI code generator 5.9.2
+# Created by: PyQt5 UI code generator 5.7
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWidget(object):
     def setupUi(self, MainWidget):
         MainWidget.setObjectName("MainWidget")
-        MainWidget.resize(485, 654)
+        MainWidget.resize(595, 693)
         self.verticalLayout = QtWidgets.QVBoxLayout(MainWidget)
         self.verticalLayout.setContentsMargins(11, 11, 11, 11)
         self.verticalLayout.setSpacing(6)
@@ -28,6 +28,7 @@ class Ui_MainWidget(object):
         self.lbView.setObjectName("lbView")
         self.verticalLayout.addWidget(self.lbView)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setContentsMargins(11, 11, 11, 11)
         self.horizontalLayout.setSpacing(6)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.bnLoad = QtWidgets.QPushButton(MainWidget)
@@ -40,6 +41,7 @@ class Ui_MainWidget(object):
         self.line.setObjectName("line")
         self.verticalLayout.addWidget(self.line)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setContentsMargins(11, 11, 11, 11)
         self.horizontalLayout_2.setSpacing(6)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.label_4 = QtWidgets.QLabel(MainWidget)
@@ -60,10 +62,15 @@ class Ui_MainWidget(object):
         self.rbResult.setChecked(True)
         self.rbResult.setObjectName("rbResult")
         self.horizontalLayout_2.addWidget(self.rbResult)
+        self.chOnlyExternal = QtWidgets.QCheckBox(MainWidget)
+        self.chOnlyExternal.setChecked(True)
+        self.chOnlyExternal.setObjectName("chOnlyExternal")
+        self.horizontalLayout_2.addWidget(self.chOnlyExternal)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.gridLayout_2 = QtWidgets.QGridLayout()
+        self.gridLayout_2.setContentsMargins(11, 11, 11, 11)
         self.gridLayout_2.setSpacing(6)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.slSaturationFrom = QtWidgets.QSlider(MainWidget)
@@ -182,20 +189,11 @@ class Ui_MainWidget(object):
         self.rbThresholded.setText(_translate("MainWidget", "Thresholded"))
         self.rbCanny.setText(_translate("MainWidget", "Canny"))
         self.rbResult.setText(_translate("MainWidget", "Result"))
+        self.chOnlyExternal.setText(_translate("MainWidget", "Only external"))
         self.label_7.setText(_translate("MainWidget", "to"))
         self.label_3.setText(_translate("MainWidget", "Value"))
         self.label_2.setText(_translate("MainWidget", "Saturation"))
         self.label.setText(_translate("MainWidget", "Hue"))
         self.label_5.setText(_translate("MainWidget", "to"))
         self.label_9.setText(_translate("MainWidget", "to"))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWidget = QtWidgets.QWidget()
-    ui = Ui_MainWidget()
-    ui.setupUi(MainWidget)
-    MainWidget.show()
-    sys.exit(app.exec_())
 

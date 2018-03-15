@@ -32,6 +32,28 @@ WINDOW_TITLE = 'Color Detection Tool'
 GRAY_COLOR_TABLE = [Qt.qRgb(i, i, i) for i in range(256)]
 
 
+def numpy_array_to_QImage(numpy_array):
+    if numpy_array.dtype != np.uint8:
+        return
+
+    if len(numpy_array.shape) == 2:
+        img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0],
+                        Qt.QImage.Format_Indexed8)
+        img.setColorTable(GRAY_COLOR_TABLE)
+        return img
+
+    elif len(numpy_array.shape) == 3:
+        if numpy_array.shape[2] == 3:
+            img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0],
+                            Qt.QImage.Format_RGB888)
+            return img
+
+        elif numpy_array.shape[2] == 4:
+            img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0],
+                            Qt.QImage.Format_ARGB32)
+            return img
+
+
 class MainWindow(Qt.QWidget):
     def __init__(self):
         super().__init__()
@@ -42,6 +64,8 @@ class MainWindow(Qt.QWidget):
         self.setWindowTitle(WINDOW_TITLE)
 
         self.ui.rbResult.setChecked(True)
+
+        self.ui.chOnlyExternal.clicked.connect(self.refresh_HSV)
 
         self.settings = Qt.QSettings(CONFIG_FILE_NAME, Qt.QSettings.IniFormat)
         self.last_load_path = self.settings.value("lastLoadPath", ".")
@@ -90,31 +114,12 @@ class MainWindow(Qt.QWidget):
 
         self.refresh_HSV()
     
-    @staticmethod
-    def numpy_array_to_QImage(numpy_array):
-        if numpy_array.dtype != np.uint8:
-            return
-
-        if len(numpy_array.shape) == 2:
-            img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0], Qt.QImage.Format_Indexed8)
-            img.setColorTable(GRAY_COLOR_TABLE)
-            return img
-
-        elif len(numpy_array.shape) == 3:
-            if numpy_array.shape[2] == 3:
-                img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0], Qt.QImage.Format_RGB888)
-                return img
-
-            elif numpy_array.shape[2] == 4:
-                img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0], Qt.QImage.Format_ARGB32)
-                return img
-    
     def refresh_HSV(self):
         if self.image_source is None:
             return
 
         if self.ui.rbOriginal.isChecked():
-            result_img = self.numpy_array_to_QImage(self.image_source)
+            result_img = numpy_array_to_QImage(self.image_source)
 
         else:
             hue_from = self.ui.slHueFrom.value()
@@ -165,17 +170,16 @@ class MainWindow(Qt.QWidget):
                 thresholded_image = cv2.Canny(thresholded_image, 100, 50, 5)
 
             if self.ui.rbResult.isChecked():
-                # TODO: нужно добавить флаг, который отфильтрует контуры, которые внутри других контуров
-                #       чтобы остались только внешние контуры
+                mode = cv2.RETR_EXTERNAL if self.ui.chOnlyExternal.isChecked() else cv2.RETR_TREE
+
                 # Находим контуры
                 _, countours, hierarchy = cv2.findContours(
                     thresholded_image,
-                    cv2.RETR_TREE,
-                    # cv2.RETR_EXTERNAL,
+                    mode,
                     cv2.CHAIN_APPROX_SIMPLE
                 )
 
-                result_img = self.numpy_array_to_QImage(self.image_source)
+                result_img = numpy_array_to_QImage(self.image_source)
 
                 p = Qt.QPainter(result_img)
                 p.setPen(Qt.QPen(Qt.Qt.green, 2))
@@ -187,7 +191,7 @@ class MainWindow(Qt.QWidget):
                 p.end()
 
             else:
-                result_img = self.numpy_array_to_QImage(thresholded_image)
+                result_img = numpy_array_to_QImage(thresholded_image)
 
         size = self.ui.lbView.size()
         pixmap = Qt.QPixmap.fromImage(result_img).scaled(size, Qt.Qt.KeepAspectRatio, Qt.Qt.SmoothTransformation)

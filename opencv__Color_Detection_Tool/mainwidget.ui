@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>485</width>
-    <height>654</height>
+    <width>595</width>
+    <height>693</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -94,6 +94,16 @@
       <widget class="QRadioButton" name="rbResult">
        <property name="text">
         <string>Result</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="chOnlyExternal">
+       <property name="text">
+        <string>Only external</string>
        </property>
        <property name="checked">
         <bool>true</bool>
