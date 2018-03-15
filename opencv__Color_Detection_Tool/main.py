@@ -165,6 +165,8 @@ class MainWindow(Qt.QWidget):
                 thresholded_image = cv2.Canny(thresholded_image, 100, 50, 5)
 
             if self.ui.rbResult.isChecked():
+                # TODO: нужно добавить флаг, который отфильтрует контуры, которые внутри других контуров
+                #       чтобы остались только внешние контуры
                 # Находим контуры
                 _, countours, hierarchy = cv2.findContours(
                     thresholded_image,
