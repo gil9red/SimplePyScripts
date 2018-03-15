@@ -73,9 +73,17 @@ class MainWindow(Qt.QWidget):
         self.last_load_path = Qt.QFileInfo(file_name).absolutePath()
 
         # TODO: плохо работает с изображениями с прозрачностью
-        self.image_source = cv2.imread(file_name)
-        # self.image_source = cv2.imread(file_name, cv2.IMREAD_UNCHANGED)
-        self.image_source = cv2.cvtColor(self.image_source, cv2.COLOR_BGR2RGB)
+        # print(file_name)
+        # self.image_source = cv2.imread(file_name)
+        # # self.image_source = cv2.imread(file_name, cv2.IMREAD_UNCHANGED)
+        # self.image_source = cv2.cvtColor(self.image_source, cv2.COLOR_BGR2RGB)
+
+        # Load image as bytes
+        with open(file_name, 'rb') as f:
+            img_data = f.read()
+
+        nparr = np.frombuffer(img_data, np.uint8)
+        self.image_source = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
         self.refresh_HSV()
     
