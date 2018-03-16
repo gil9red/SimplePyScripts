@@ -67,6 +67,19 @@ class MainWindow(Qt.QWidget):
 
         self.ui.chOnlyExternal.clicked.connect(self.refresh_HSV)
 
+        self.lbHsvMin = Qt.QLabel()
+        self.lbHsvMin.setFrameShape(Qt.QFrame.Box)
+        self.lbHsvMin.setMinimumHeight(10)
+        self.lbHsvMin.setScaledContents(True)
+
+        self.lbHsvMax = Qt.QLabel()
+        self.lbHsvMax.setFrameShape(Qt.QFrame.Box)
+        self.lbHsvMax.setMinimumHeight(10)
+        self.lbHsvMax.setScaledContents(True)
+
+        self.ui.gridLayout_2.addWidget(self.lbHsvMin, 3, 0, 1, 3)
+        self.ui.gridLayout_2.addWidget(self.lbHsvMax, 3, 3, 1, 3)
+
         self.settings = Qt.QSettings(CONFIG_FILE_NAME, Qt.QSettings.IniFormat)
         self.last_load_path = self.settings.value("lastLoadPath", ".")
 
@@ -92,6 +105,8 @@ class MainWindow(Qt.QWidget):
             w.clicked.connect(self.refresh_HSV)
 
         self.ui.bnLoad.clicked.connect(self.on_load)
+
+        self.refresh_HSV()
 
     def on_load(self):
         image_filters = "Images (*.jpg *.jpeg *.png *.bmp)"
@@ -126,6 +141,29 @@ class MainWindow(Qt.QWidget):
         self.ui.lbView.setPixmap(pixmap)
 
     def refresh_HSV(self):
+        hue_from = self.ui.slHueFrom.value()
+        hue_to = max(hue_from, self.ui.slHueTo.value())
+
+        saturation_from = self.ui.slSaturationFrom.value()
+        saturation_to = max(saturation_from, self.ui.slSaturationTo.value())
+
+        value_from = self.ui.slValueFrom.value()
+        value_to = max(value_from, self.ui.slValueTo.value())
+
+        hsv_min = hue_from, saturation_from, value_from
+        hsv_max = hue_to, saturation_to, value_to
+
+        color_hsv_min = Qt.QColor.fromHsv(*hsv_min)
+        color_hsv_max = Qt.QColor.fromHsv(*hsv_max)
+
+        pixmap = Qt.QPixmap(1, 1)
+        pixmap.fill(color_hsv_min)
+        self.lbHsvMin.setPixmap(pixmap)
+
+        pixmap = Qt.QPixmap(1, 1)
+        pixmap.fill(color_hsv_max)
+        self.lbHsvMax.setPixmap(pixmap)
+
         if self.image_source is None:
             return
 
@@ -133,21 +171,7 @@ class MainWindow(Qt.QWidget):
             self.result_img = numpy_array_to_QImage(self.image_source)
 
         else:
-            hue_from = self.ui.slHueFrom.value()
-            hue_to = max(hue_from, self.ui.slHueTo.value())
-
-            saturation_from = self.ui.slSaturationFrom.value()
-            saturation_to = max(saturation_from, self.ui.slSaturationTo.value())
-
-            value_from = self.ui.slValueFrom.value()
-            value_to = max(value_from, self.ui.slValueTo.value())
-
             thresholded_image = cv2.cvtColor(self.image_source, cv2.COLOR_RGB2HSV)
-
-            hsv_min = hue_from, saturation_from, value_from
-            hsv_max = hue_to, saturation_to, value_to
-
-            # TODO: под слайдерами показывать пример цвета с hsv_min и hsv_max
 
             # Отфильтровываем только то, что нужно, по диапазону цветов
             thresholded_image = cv2.inRange(
