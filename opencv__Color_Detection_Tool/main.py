@@ -69,7 +69,9 @@ class MainWindow(Qt.QWidget):
 
         self.settings = Qt.QSettings(CONFIG_FILE_NAME, Qt.QSettings.IniFormat)
         self.last_load_path = self.settings.value("lastLoadPath", ".")
+
         self.image_source = None
+        self.result_img = None
 
         for w in self.findChildren(Qt.QSlider):
             w.sliderMoved.connect(self.refresh_HSV)
@@ -92,7 +94,8 @@ class MainWindow(Qt.QWidget):
         self.ui.bnLoad.clicked.connect(self.on_load)
 
     def on_load(self):
-        file_name = Qt.QFileDialog.getOpenFileName(self, "Load image", self.last_load_path, "Images (*.jpg *.jpeg *.png *.bmp)")[0]
+        image_filters = "Images (*.jpg *.jpeg *.png *.bmp)"
+        file_name = Qt.QFileDialog.getOpenFileName(self, "Load image", self.last_load_path, image_filters)[0]
         if not file_name:
             return
 
@@ -113,13 +116,21 @@ class MainWindow(Qt.QWidget):
             self.image_source = cv2.cvtColor(self.image_source, cv2.COLOR_BGR2RGB)
 
         self.refresh_HSV()
-    
+
+    def show_result(self):
+        if not self.result_img:
+            return
+
+        size = self.ui.lbView.size()
+        pixmap = Qt.QPixmap.fromImage(self.result_img).scaled(size, Qt.Qt.KeepAspectRatio, Qt.Qt.SmoothTransformation)
+        self.ui.lbView.setPixmap(pixmap)
+
     def refresh_HSV(self):
         if self.image_source is None:
             return
 
         if self.ui.rbOriginal.isChecked():
-            result_img = numpy_array_to_QImage(self.image_source)
+            self.result_img = numpy_array_to_QImage(self.image_source)
 
         else:
             hue_from = self.ui.slHueFrom.value()
@@ -179,9 +190,9 @@ class MainWindow(Qt.QWidget):
                     cv2.CHAIN_APPROX_SIMPLE
                 )
 
-                result_img = numpy_array_to_QImage(self.image_source)
+                self.result_img = numpy_array_to_QImage(self.image_source)
 
-                p = Qt.QPainter(result_img)
+                p = Qt.QPainter(self.result_img)
                 p.setPen(Qt.QPen(Qt.Qt.green, 2))
 
                 for i, c in enumerate(countours):
@@ -191,11 +202,14 @@ class MainWindow(Qt.QWidget):
                 p.end()
 
             else:
-                result_img = numpy_array_to_QImage(thresholded_image)
+                self.result_img = numpy_array_to_QImage(thresholded_image)
 
-        size = self.ui.lbView.size()
-        pixmap = Qt.QPixmap.fromImage(result_img).scaled(size, Qt.Qt.KeepAspectRatio, Qt.Qt.SmoothTransformation)
-        self.ui.lbView.setPixmap(pixmap)
+        self.show_result()
+
+    def resizeEvent(self, e):
+        super().resizeEvent(e)
+
+        self.show_result()
 
     def closeEvent(self, e):
         for w in self.findChildren(Qt.QSlider):

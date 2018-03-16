@@ -25,7 +25,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>500</height>
+       <height>200</height>
       </size>
      </property>
      <property name="text">
@@ -305,7 +305,7 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
+ <layoutdefault spacing="5" margin="10"/>
  <resources/>
  <connections>
   <connection>

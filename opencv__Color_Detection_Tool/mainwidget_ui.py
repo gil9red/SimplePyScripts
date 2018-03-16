@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwidget.ui'
 #
-# Created by: PyQt5 UI code generator 5.7
+# Created by: PyQt5 UI code generator 5.9.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,8 +13,8 @@ class Ui_MainWidget(object):
         MainWidget.setObjectName("MainWidget")
         MainWidget.resize(595, 693)
         self.verticalLayout = QtWidgets.QVBoxLayout(MainWidget)
-        self.verticalLayout.setContentsMargins(11, 11, 11, 11)
-        self.verticalLayout.setSpacing(6)
+        self.verticalLayout.setContentsMargins(10, 10, 10, 10)
+        self.verticalLayout.setSpacing(5)
         self.verticalLayout.setObjectName("verticalLayout")
         self.lbView = QtWidgets.QLabel(MainWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
@@ -22,14 +22,13 @@ class Ui_MainWidget(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lbView.sizePolicy().hasHeightForWidth())
         self.lbView.setSizePolicy(sizePolicy)
-        self.lbView.setMinimumSize(QtCore.QSize(0, 500))
+        self.lbView.setMinimumSize(QtCore.QSize(0, 200))
         self.lbView.setText("")
         self.lbView.setAlignment(QtCore.Qt.AlignCenter)
         self.lbView.setObjectName("lbView")
         self.verticalLayout.addWidget(self.lbView)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setContentsMargins(11, 11, 11, 11)
-        self.horizontalLayout.setSpacing(6)
+        self.horizontalLayout.setSpacing(5)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.bnLoad = QtWidgets.QPushButton(MainWidget)
         self.bnLoad.setObjectName("bnLoad")
@@ -41,8 +40,7 @@ class Ui_MainWidget(object):
         self.line.setObjectName("line")
         self.verticalLayout.addWidget(self.line)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_2.setContentsMargins(11, 11, 11, 11)
-        self.horizontalLayout_2.setSpacing(6)
+        self.horizontalLayout_2.setSpacing(5)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.label_4 = QtWidgets.QLabel(MainWidget)
         self.label_4.setObjectName("label_4")
@@ -70,8 +68,7 @@ class Ui_MainWidget(object):
         self.horizontalLayout_2.addItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.gridLayout_2 = QtWidgets.QGridLayout()
-        self.gridLayout_2.setContentsMargins(11, 11, 11, 11)
-        self.gridLayout_2.setSpacing(6)
+        self.gridLayout_2.setSpacing(5)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.slSaturationFrom = QtWidgets.QSlider(MainWidget)
         self.slSaturationFrom.setMaximum(255)
@@ -196,4 +193,14 @@ class Ui_MainWidget(object):
         self.label.setText(_translate("MainWidget", "Hue"))
         self.label_5.setText(_translate("MainWidget", "to"))
         self.label_9.setText(_translate("MainWidget", "to"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWidget = QtWidgets.QWidget()
+    ui = Ui_MainWidget()
+    ui.setupUi(MainWidget)
+    MainWidget.show()
+    sys.exit(app.exec_())
 
