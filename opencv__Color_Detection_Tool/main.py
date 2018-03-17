@@ -36,21 +36,20 @@ def numpy_array_to_QImage(numpy_array):
     if numpy_array.dtype != np.uint8:
         return
 
+    height, width = numpy_array.shape[:2]
+
     if len(numpy_array.shape) == 2:
-        img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0],
-                        Qt.QImage.Format_Indexed8)
+        img = Qt.QImage(numpy_array.data, width, height, numpy_array.strides[0], Qt.QImage.Format_Indexed8)
         img.setColorTable(GRAY_COLOR_TABLE)
         return img
 
     elif len(numpy_array.shape) == 3:
         if numpy_array.shape[2] == 3:
-            img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0],
-                            Qt.QImage.Format_RGB888)
+            img = Qt.QImage(numpy_array.data, width, height, numpy_array.strides[0], Qt.QImage.Format_RGB888)
             return img
 
         elif numpy_array.shape[2] == 4:
-            img = Qt.QImage(numpy_array.data, numpy_array.shape[1], numpy_array.shape[0], numpy_array.strides[0],
-                            Qt.QImage.Format_ARGB32)
+            img = Qt.QImage(numpy_array.data, width, height, numpy_array.strides[0], Qt.QImage.Format_ARGB32)
             return img
 
 
@@ -123,7 +122,7 @@ class MainWindow(Qt.QWidget):
         nparr = np.frombuffer(img_data, np.uint8)
         self.image_source = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
 
-        width, height, channels = self.image_source.shape
+        height, width, channels = self.image_source.shape
         self.setWindowTitle(WINDOW_TITLE + '. {}x{} ({} channels). {}'.format(width, height, channels, file_name))
 
         # Трансформация BGR->RGB если 3 канала. У картинок с прозрачностью каналов 4 и для них почему
