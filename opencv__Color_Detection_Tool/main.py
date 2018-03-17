@@ -208,7 +208,7 @@ class MainWindow(Qt.QWidget):
                 mode = cv2.RETR_EXTERNAL if self.ui.chOnlyExternal.isChecked() else cv2.RETR_TREE
 
                 # Находим контуры
-                _, countours, hierarchy = cv2.findContours(
+                _, contours, hierarchy = cv2.findContours(
                     thresholded_image,
                     mode,
                     cv2.CHAIN_APPROX_SIMPLE
@@ -219,7 +219,7 @@ class MainWindow(Qt.QWidget):
                 p = Qt.QPainter(self.result_img)
                 p.setPen(Qt.QPen(Qt.Qt.green, 2))
 
-                for i, c in enumerate(countours):
+                for i, c in enumerate(contours):
                     x, y, width, height = cv2.boundingRect(c)
                     p.drawRect(x, y, width, height)
 
