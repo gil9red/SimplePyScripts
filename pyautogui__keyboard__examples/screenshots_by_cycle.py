@@ -15,8 +15,10 @@ if not os.path.exists(DIR):
     os.mkdir(DIR)
 
 while True:
-    file_name = DIR + '/screenshot_{}.png'.format(datetime.now().strftime('%d%m%y %H%M%S'))
+    file_name = DIR + '/screenshot_{}.png'.format(datetime.now().strftime('%d%m%y %H%M%S.%f'))
+    print(file_name)
+
     im = pyautogui.screenshot(file_name)  # save file
     # print(im)
 
-    time.sleep(1)
+    time.sleep(0.5)
