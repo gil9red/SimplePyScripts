@@ -9,3 +9,8 @@ Bot Buff Knight Advanced
   
   * 2560 x 1440 (Fullscreen)
   * 1980 x 1080 (Windowed)
+
+##
+![](screenshots/screenshot_1.jpg)
+
+![](screenshots/screenshot_2.jpg)

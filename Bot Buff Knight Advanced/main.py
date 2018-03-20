@@ -149,7 +149,7 @@ def filter_fairy_and_button(rect_fairy, rect_button):
     return abs(x2 - x) <= 50 and abs(y2 + h2 - y) <= 50
 
 
-DIR = 'screenshots'
+DIR = 'saved_screenshots'
 
 
 def save_screenshot(prefix, img_hsv):
