@@ -4,6 +4,10 @@
 __author__ = 'ipetrash'
 
 
+import time
+import threading
+
+
 RUN_COMBINATION = 'Ctrl+Shift+R'
 QUIT_COMBINATION = 'Ctrl+Shift+T'
 AUTO_ATTACK_COMBINATION = 'Ctrl+Shift+Space'
@@ -22,7 +26,6 @@ print('Press "{}" for RUN'.format(RUN_COMBINATION))
 print('Press "{}" for QUIT'.format(QUIT_COMBINATION))
 print('Press "{}" for AUTO_ATTACK'.format(AUTO_ATTACK_COMBINATION))
 
-
 import time
 import os
 import keyboard
@@ -32,10 +35,24 @@ keyboard.wait(RUN_COMBINATION)
 
 print('Start')
 
+
+def process_auto_attack():
+    i = 1
+
+    while True:
+        print(i, 'AUTO_ATTACK:', BOT_DATA['AUTO_ATTACK'])
+
+        time.sleep(1)
+        i += 1
+
+thread_auto_attack = threading.Thread(target=process_auto_attack)
+thread_auto_attack.start()
+
+
 i = 1
 
 while True:
-    print(i, 'AUTO_ATTACK:', BOT_DATA['AUTO_ATTACK'])
+    print(i)
 
     time.sleep(1)
     i += 1
