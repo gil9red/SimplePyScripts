@@ -13,6 +13,35 @@ from datetime import datetime
 import time
 
 
+def get_logger(name, file='log.txt', encoding='utf-8', log_stdout=True, log_file=True):
+    import logging
+    log = logging.getLogger(name)
+    log.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s')
+
+    if log_file:
+        from logging.handlers import RotatingFileHandler
+        fh = RotatingFileHandler(file, maxBytes=10000000, backupCount=5, encoding=encoding)
+        fh.setFormatter(formatter)
+        log.addHandler(fh)
+
+    if log_stdout:
+        import sys
+        sh = logging.StreamHandler(stream=sys.stdout)
+        sh.setFormatter(formatter)
+        log.addHandler(sh)
+
+    return log
+
+
+log = get_logger('Bot Buff Knight Advanced')
+
+
+def get_current_datetime_str():
+    return datetime.now().strftime('%d%m%y %H%M%S.%f')
+
+
 def find_contours(image_source_hsv, hsv_min, hsv_max):
     thresholded_image = image_source_hsv
 
@@ -120,6 +149,15 @@ def filter_fairy_and_button(rect_fairy, rect_button):
     return abs(x2 - x) <= 50 and abs(y2 + h2 - y) <= 50
 
 
+DIR = 'screenshots'
+
+
+def save_screenshot(prefix, img_hsv):
+    file_name = DIR + '/{}__{}.png'.format(prefix, get_current_datetime_str())
+    log.debug(file_name)
+    cv2.imwrite(file_name, cv2.cvtColor(np.array(img_hsv), cv2.COLOR_HSV2BGR))
+
+
 BLUE_HSV_MIN = 105, 175, 182
 BLUE_HSV_MAX = 121, 255, 255
 
@@ -136,7 +174,11 @@ QUIT_COMBINATION = 'Ctrl+Shift+T'
 print('Press "{}" for RUN'.format(RUN_COMBINATION))
 print('Press "{}" for QUIT'.format(QUIT_COMBINATION))
 
+
 import os
+if not os.path.exists(DIR):
+    os.mkdir(DIR)
+
 import keyboard
 keyboard.add_hotkey(QUIT_COMBINATION, lambda: print('Quit by Escape') or os._exit(0))
 keyboard.wait(RUN_COMBINATION)
@@ -146,6 +188,8 @@ while True:
     t = timer()
 
     img_screenshot = pyautogui.screenshot()
+    log.debug('img_screenshot: %s', img_screenshot)
+
     img = cv2.cvtColor(np.array(img_screenshot), cv2.COLOR_RGB2HSV)
 
     try:
@@ -177,9 +221,7 @@ while True:
             continue
 
         if len(rects_fairy) > 1:
-            file_name = 'many_fairy__{}.png'.format(datetime.now().strftime('%d%m%y %H%M%S.%f'))
-            print(file_name)
-            cv2.imwrite(file_name, cv2.cvtColor(np.array(img), cv2.COLOR_HSV2BGR))
+            save_screenshot('many_fairy', img)
             continue
 
         # Фильтр кнопок. Нужно оставить только те кнопки, что рядом с феей
@@ -189,9 +231,7 @@ while True:
 
         # Если одновременно обе кнопки
         if rects_blue and rects_orange:
-            file_name = 'many_buttons__{}.png'.format(datetime.now().strftime('%d%m%y %H%M%S.%f'))
-            print(file_name)
-            cv2.imwrite(file_name, cv2.cvtColor(np.array(img), cv2.COLOR_HSV2BGR))
+            save_screenshot('many_buttons', img)
             continue
 
         if not rects_blue and not rects_orange:
@@ -199,12 +239,16 @@ while True:
 
         # Найдена синяя кнопка
         if rects_blue:
-            print('FOUND BLUE')
+            log.debug('FOUND BLUE')
+            save_screenshot('found_blue', img)
+
             pyautogui.typewrite('D')
 
         # Найдена оранжевая кнопка
         if rects_orange:
-            print('FOUND ORANGE')
+            log.debug('FOUND ORANGE')
+            save_screenshot('found_orange', img)
+
             pyautogui.typewrite('A')
 
         # print('rects_blue({}): {}'.format(len(rects_blue), rects_blue))
@@ -220,8 +264,7 @@ while True:
         # cv2.putText(img, 'fairy ' + str(rects_fairy), (10, 500 + 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
     finally:
-        print('Elapsed: {} secs'.format(timer() - t))
-        print()
+        log.debug('Elapsed: {} secs'.format(timer() - t))
 
         time.sleep(0.1)
 
