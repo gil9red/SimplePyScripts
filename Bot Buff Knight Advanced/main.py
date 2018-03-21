@@ -231,7 +231,7 @@ thread_auto_attack = threading.Thread(target=process_auto_attack)
 thread_auto_attack.start()
 
 
-def find_fairy(img_hsv):
+def process_find_fairy(img_hsv):
     rects_blue = find_rect_contours(img_hsv, BLUE_HSV_MIN, BLUE_HSV_MAX)
     rects_orange = find_rect_contours(img_hsv, ORANGE_HSV_MIN, ORANGE_HSV_MAX)
     rects_fairy = find_rect_contours(img_hsv, FAIRY_HSV_MIN, FAIRY_HSV_MAX)
@@ -255,11 +255,11 @@ def find_fairy(img_hsv):
         rects_fairy = new_rects_fairy
 
     if not rects_fairy:
-        return None, None
+        return
 
     if len(rects_fairy) > 1:
         save_screenshot('many_fairy', img_hsv)
-        return None, None
+        return
 
     # Фильтр кнопок. Нужно оставить только те кнопки, что рядом с феей
     rect_fairy = rects_fairy[0]
@@ -281,9 +281,24 @@ def find_fairy(img_hsv):
     # Если одновременно обе кнопки
     if rects_blue and rects_orange:
         save_screenshot('many_buttons', img_hsv)
-        return None, None
+        return
 
-    return rects_blue, rects_orange
+    if not rects_blue and not rects_orange:
+        return
+
+    # Найдена синяя кнопка
+    if rects_blue:
+        log.debug('FOUND BLUE')
+        save_screenshot('found_blue', img)
+
+        pyautogui.typewrite('D')
+
+    # Найдена оранжевая кнопка
+    if rects_orange:
+        log.debug('FOUND ORANGE')
+        save_screenshot('found_orange', img)
+
+        pyautogui.typewrite('A')
 
 
 while True:
@@ -299,23 +314,8 @@ while True:
 
         img = cv2.cvtColor(np.array(img_screenshot), cv2.COLOR_RGB2HSV)
 
-        rects_blue, rects_orange = find_fairy(img)
-        if not rects_blue and not rects_orange:
-            continue
-
-        # Найдена синяя кнопка
-        if rects_blue:
-            log.debug('FOUND BLUE')
-            save_screenshot('found_blue', img)
-
-            pyautogui.typewrite('D')
-
-        # Найдена оранжевая кнопка
-        if rects_orange:
-            log.debug('FOUND ORANGE')
-            save_screenshot('found_orange', img)
-
-            pyautogui.typewrite('A')
+        # Поиск феи
+        process_find_fairy(img)
 
     finally:
         log.debug('Elapsed: {} secs'.format(timer() - t))
