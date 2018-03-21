@@ -185,17 +185,17 @@ BOT_DATA = {
 
 def change_start():
     BOT_DATA['START'] = not BOT_DATA['START']
-    print('START:', BOT_DATA['START'])
+    log.debug('START: %s', BOT_DATA['START'])
 
 
 def change_auto_attack():
     BOT_DATA['AUTO_ATTACK'] = not BOT_DATA['AUTO_ATTACK']
-    print('AUTO_ATTACK:', BOT_DATA['AUTO_ATTACK'])
+    log.debug('AUTO_ATTACK: %s', BOT_DATA['AUTO_ATTACK'])
 
 
-print('Press "{}" for RUN / PAUSE'.format(RUN_COMBINATION))
-print('Press "{}" for QUIT'.format(QUIT_COMBINATION))
-print('Press "{}" for AUTO_ATTACK'.format(AUTO_ATTACK_COMBINATION))
+log.debug('Press "%s" for RUN / PAUSE', RUN_COMBINATION)
+log.debug('Press "%s" for QUIT', QUIT_COMBINATION)
+log.debug('Press "%s" for AUTO_ATTACK', AUTO_ATTACK_COMBINATION)
 
 
 if not os.path.exists(DIR):
@@ -204,7 +204,7 @@ if not os.path.exists(DIR):
 # TODO: возможность автоматического использования хилок и восстановления маны
 
 import keyboard
-keyboard.add_hotkey(QUIT_COMBINATION, lambda: print('Quit by Escape') or os._exit(0))
+keyboard.add_hotkey(QUIT_COMBINATION, lambda: log.debug('Quit by Escape') or os._exit(0))
 keyboard.add_hotkey(AUTO_ATTACK_COMBINATION, change_auto_attack)
 keyboard.add_hotkey(RUN_COMBINATION, change_start)
 
