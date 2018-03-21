@@ -231,6 +231,61 @@ thread_auto_attack = threading.Thread(target=process_auto_attack)
 thread_auto_attack.start()
 
 
+def find_fairy(img_hsv):
+    rects_blue = find_rect_contours(img_hsv, BLUE_HSV_MIN, BLUE_HSV_MAX)
+    rects_orange = find_rect_contours(img_hsv, ORANGE_HSV_MIN, ORANGE_HSV_MAX)
+    rects_fairy = find_rect_contours(img_hsv, FAIRY_HSV_MIN, FAIRY_HSV_MAX)
+
+    # Фильтрование оставшихся объектов
+    rects_blue = list(filter(filter_button, rects_blue))
+    rects_orange = list(filter(filter_button, rects_orange))
+    rects_fairy = list(filter(filter_fairy, rects_fairy))
+
+    if rects_blue or rects_orange:
+        new_rects_fairy = []
+
+        # Фея и кнопки находятся рядом, поэтому имеет смысл убрать те "феи", что не имеют рядом синих или оранжевых
+        for rect_fairy in rects_fairy:
+            found_blue = bool(list(filter(lambda rect: filter_fairy_and_button(rect_fairy, rect), rects_blue)))
+            found_orange = bool(list(filter(lambda rect: filter_fairy_and_button(rect_fairy, rect), rects_orange)))
+
+            if found_blue or found_orange:
+                new_rects_fairy.append(rect_fairy)
+
+        rects_fairy = new_rects_fairy
+
+    if not rects_fairy:
+        return None, None
+
+    if len(rects_fairy) > 1:
+        save_screenshot('many_fairy', img_hsv)
+        return None, None
+
+    # Фильтр кнопок. Нужно оставить только те кнопки, что рядом с феей
+    rect_fairy = rects_fairy[0]
+    rects_blue = list(filter(lambda rect: filter_fairy_and_button(rect_fairy, rect), rects_blue))
+    rects_orange = list(filter(lambda rect: filter_fairy_and_button(rect_fairy, rect), rects_orange))
+
+    # print('rects_blue({}): {}'.format(len(rects_blue), rects_blue))
+    # print('rects_orange({}): {}'.format(len(rects_orange), rects_orange))
+    # print('rects_fairy({}): {}'.format(len(rects_fairy), rects_fairy))
+    #
+    # draw_rects(img, rects_blue, (255, 0, 0))
+    # draw_rects(img, rects_orange, (0, 0, 255))
+    # draw_rects(img, rects_fairy, (255, 255, 255))
+    #
+    # cv2.putText(img, 'blue ' + str(rects_blue), (10, 500 + 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+    # cv2.putText(img, 'orange ' + str(rects_orange), (10, 500 + 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+    # cv2.putText(img, 'fairy ' + str(rects_fairy), (10, 500 + 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+
+    # Если одновременно обе кнопки
+    if rects_blue and rects_orange:
+        save_screenshot('many_buttons', img_hsv)
+        return None, None
+
+    return rects_blue, rects_orange
+
+
 while True:
     if not BOT_DATA['START']:
         time.sleep(0.01)
@@ -238,53 +293,13 @@ while True:
 
     t = timer()
 
-    img_screenshot = pyautogui.screenshot()
-    log.debug('img_screenshot: %s', img_screenshot)
-
-    img = cv2.cvtColor(np.array(img_screenshot), cv2.COLOR_RGB2HSV)
-
     try:
-        rects_blue = find_rect_contours(img, BLUE_HSV_MIN, BLUE_HSV_MAX)
-        rects_orange = find_rect_contours(img, ORANGE_HSV_MIN, ORANGE_HSV_MAX)
-        rects_fairy = find_rect_contours(img, FAIRY_HSV_MIN, FAIRY_HSV_MAX)
+        img_screenshot = pyautogui.screenshot()
+        log.debug('img_screenshot: %s', img_screenshot)
 
-        # Фильтрование оставшихся объектов
-        rects_blue = list(filter(filter_button, rects_blue))
-        rects_orange = list(filter(filter_button, rects_orange))
-        rects_fairy = list(filter(filter_fairy, rects_fairy))
+        img = cv2.cvtColor(np.array(img_screenshot), cv2.COLOR_RGB2HSV)
 
-        if rects_blue or rects_orange:
-            new_rects_fairy = []
-
-            # Фея и кнопки находятся рядом, поэтому имеет смысл убрать те "феи", что не имеют рядом синих или оранжевых
-            for rect_fairy in rects_fairy:
-                x, y = rect_fairy[:2]
-
-                found_blue = bool(list(filter(lambda rect: filter_fairy_and_button(rect_fairy, rect), rects_blue)))
-                found_orange = bool(list(filter(lambda rect: filter_fairy_and_button(rect_fairy, rect), rects_orange)))
-
-                if found_blue or found_orange:
-                    new_rects_fairy.append(rect_fairy)
-
-            rects_fairy = new_rects_fairy
-
-        if not rects_fairy:
-            continue
-
-        if len(rects_fairy) > 1:
-            save_screenshot('many_fairy', img)
-            continue
-
-        # Фильтр кнопок. Нужно оставить только те кнопки, что рядом с феей
-        rect_fairy = rects_fairy[0]
-        rects_blue = list(filter(lambda rect: filter_fairy_and_button(rect_fairy, rect), rects_blue))
-        rects_orange = list(filter(lambda rect: filter_fairy_and_button(rect_fairy, rect), rects_orange))
-
-        # Если одновременно обе кнопки
-        if rects_blue and rects_orange:
-            save_screenshot('many_buttons', img)
-            continue
-
+        rects_blue, rects_orange = find_fairy(img)
         if not rects_blue and not rects_orange:
             continue
 
@@ -302,21 +317,7 @@ while True:
 
             pyautogui.typewrite('A')
 
-        # print('rects_blue({}): {}'.format(len(rects_blue), rects_blue))
-        # print('rects_orange({}): {}'.format(len(rects_orange), rects_orange))
-        # print('rects_fairy({}): {}'.format(len(rects_fairy), rects_fairy))
-        #
-        # draw_rects(img, rects_blue, (255, 0, 0))
-        # draw_rects(img, rects_orange, (0, 0, 255))
-        # draw_rects(img, rects_fairy, (255, 255, 255))
-        #
-        # cv2.putText(img, 'blue ' + str(rects_blue), (10, 500 + 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-        # cv2.putText(img, 'orange ' + str(rects_orange), (10, 500 + 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-        # cv2.putText(img, 'fairy ' + str(rects_fairy), (10, 500 + 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-
     finally:
         log.debug('Elapsed: {} secs'.format(timer() - t))
 
         time.sleep(0.01)
-
-        # cv2.imshow('img_with_rect ' + file_name, img_with_rect)
