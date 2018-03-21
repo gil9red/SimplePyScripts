@@ -5,12 +5,17 @@
 __author__ = 'ipetrash'
 
 
+import threading
+import os
 import cv2
 import numpy as np
 import pyautogui
 from timeit import default_timer as timer
 from datetime import datetime
 import time
+
+
+# TODO: можно вынести в common.py: get_logger, get_current_datetime_str, find_contours, find_rect_contours
 
 
 def get_logger(name, file='log.txt', encoding='utf-8', log_stdout=True, log_file=True):
@@ -169,22 +174,68 @@ FAIRY_HSV_MAX = 95, 143, 255
 
 
 RUN_COMBINATION = 'Ctrl+Shift+R'
-QUIT_COMBINATION = 'Ctrl+Shift+T'
+QUIT_COMBINATION = 'Ctrl+Shift+Q'
+AUTO_ATTACK_COMBINATION = 'Space'
 
-print('Press "{}" for RUN'.format(RUN_COMBINATION))
+BOT_DATA = {
+    'START': False,
+    'AUTO_ATTACK': False,
+}
+
+
+def change_start():
+    BOT_DATA['START'] = not BOT_DATA['START']
+    print('START:', BOT_DATA['START'])
+
+
+def change_auto_attack():
+    BOT_DATA['AUTO_ATTACK'] = not BOT_DATA['AUTO_ATTACK']
+    print('AUTO_ATTACK:', BOT_DATA['AUTO_ATTACK'])
+
+
+print('Press "{}" for RUN / PAUSE'.format(RUN_COMBINATION))
 print('Press "{}" for QUIT'.format(QUIT_COMBINATION))
+print('Press "{}" for AUTO_ATTACK'.format(AUTO_ATTACK_COMBINATION))
 
 
-import os
 if not os.path.exists(DIR):
     os.mkdir(DIR)
 
+# TODO: возможность автоматического использования хилок и восстановления маны
+
 import keyboard
 keyboard.add_hotkey(QUIT_COMBINATION, lambda: print('Quit by Escape') or os._exit(0))
-keyboard.wait(RUN_COMBINATION)
+keyboard.add_hotkey(AUTO_ATTACK_COMBINATION, change_auto_attack)
+keyboard.add_hotkey(RUN_COMBINATION, change_start)
+
+
+def process_auto_attack():
+    # i = 1
+
+    while True:
+        if not BOT_DATA['START']:
+            time.sleep(0.01)
+            continue
+
+        # print(i, 'AUTO_ATTACK:', BOT_DATA['AUTO_ATTACK'])
+
+        # Симуляция атаки
+        if BOT_DATA['AUTO_ATTACK']:
+            pyautogui.typewrite('C')
+
+        time.sleep(0.01)
+        # i += 1
+
+# Запуск потока для автоатаки
+thread_auto_attack = threading.Thread(target=process_auto_attack)
+thread_auto_attack.start()
 
 
 while True:
+    if not BOT_DATA['START']:
+        time.sleep(0.01)
+        continue
+
     t = timer()
 
     img_screenshot = pyautogui.screenshot()
@@ -266,6 +317,6 @@ while True:
     finally:
         log.debug('Elapsed: {} secs'.format(timer() - t))
 
-        time.sleep(0.1)
+        time.sleep(0.01)
 
         # cv2.imshow('img_with_rect ' + file_name, img_with_rect)
