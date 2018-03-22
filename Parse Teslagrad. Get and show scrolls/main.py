@@ -52,15 +52,21 @@ IMAGE_HEIGHT = 376
 ROWS = 9
 COLS = 4
 
+SCROOLS_WIDTH = IMAGE_WIDTH * COLS
+SCROOLS_HEIGHT = IMAGE_HEIGHT * ROWS
+
 from PIL import Image
-image = Image.new('RGB', (IMAGE_WIDTH * COLS, IMAGE_HEIGHT * ROWS))
+image = Image.new('RGB', (SCROOLS_WIDTH, SCROOLS_HEIGHT))
 
 import glob
-file_names = sorted(glob.glob('scrolls/*.jpg'), key=lambda x: int(x.split('.')[0].split('_')[-1]))
+file_names = glob.glob('scrolls/*.jpg')
+
+# Sort by <number>: Teslagrad_Scroll_<number>.jpg'
+file_names.sort(key=lambda x: int(x.split('.')[0].split('_')[-1]))
 it = iter(file_names)
 
-for y in range(0, IMAGE_HEIGHT * ROWS, IMAGE_HEIGHT):
-    for x in range(0, IMAGE_WIDTH * COLS, IMAGE_WIDTH):
+for y in range(0, SCROOLS_HEIGHT, IMAGE_HEIGHT):
+    for x in range(0, SCROOLS_WIDTH, IMAGE_WIDTH):
         file_name = next(it)
         img = Image.open(file_name)
 
