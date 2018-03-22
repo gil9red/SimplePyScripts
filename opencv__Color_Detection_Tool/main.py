@@ -67,6 +67,7 @@ class MainWindow(Qt.QWidget):
         self.ui.chOnlyExternal.clicked.connect(self.refresh_HSV)
 
         # TODO: добавить флаг, который покажет картинку в HSV цвете, ведь в этом цвете и осуществляется поиск
+        # TODO: возможность настраивать тип, цвет и размер линии обводки контуров
 
         self.lbHsvMin = Qt.QLabel()
         self.lbHsvMin.setFrameShape(Qt.QFrame.Box)
