@@ -138,6 +138,7 @@ def process_find_fairy(img_hsv):
     rects_orange = list(filter(filter_button, rects_orange))
     rects_fairy = list(filter(filter_fairy, rects_fairy))
 
+    # Фильтр объектов, похожих на фею
     if rects_blue or rects_orange:
         new_rects_fairy = []
 
@@ -146,6 +147,7 @@ def process_find_fairy(img_hsv):
             found_blue = bool(list(filter(lambda rect: filter_fairy_and_button(rect_fairy, rect), rects_blue)))
             found_orange = bool(list(filter(lambda rect: filter_fairy_and_button(rect_fairy, rect), rects_orange)))
 
+            # Если возле феи что-то нашлось
             if found_blue or found_orange:
                 new_rects_fairy.append(rect_fairy)
 
