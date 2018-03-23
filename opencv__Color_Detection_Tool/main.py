@@ -67,8 +67,9 @@ class MainWindow(Qt.QWidget):
         self.ui.chOnlyExternal.clicked.connect(self.refresh_HSV)
 
         # TODO: добавить флаг, который покажет картинку в HSV цвете, ведь в этом цвете и осуществляется поиск
-        # TODO: возможность настраивать тип, цвет и размер линии обводки контуров
 
+        # TODO: вынести виджеты в UI
+        # TODO: поддержать возможность сохранения состояния для cbPenStyle, sbPenWidth, pen_color и ui.chOnlyExternal
         self.lbHsvMin = Qt.QLabel()
         self.lbHsvMin.setFrameShape(Qt.QFrame.Box)
         self.lbHsvMin.setMinimumHeight(10)
@@ -81,6 +82,47 @@ class MainWindow(Qt.QWidget):
 
         self.ui.gridLayout_2.addWidget(self.lbHsvMin, 3, 0, 1, 3)
         self.ui.gridLayout_2.addWidget(self.lbHsvMax, 3, 3, 1, 3)
+
+        self.cbPenStyle = Qt.QComboBox()
+        self.cbPenStyle.addItem('Solid', Qt.Qt.SolidLine)
+        self.cbPenStyle.addItem('Dash', Qt.Qt.DashLine)
+        self.cbPenStyle.addItem('Dot', Qt.Qt.DotLine)
+        self.cbPenStyle.addItem('Dash Dot', Qt.Qt.DashDotLine)
+        self.cbPenStyle.addItem('Dash Dot Dot', Qt.Qt.DashDotDotLine)
+        self.cbPenStyle.currentIndexChanged.connect(self.refresh_HSV)
+
+        self.sbPenWidth = Qt.QDoubleSpinBox()
+        self.sbPenWidth.setRange(1.0, 20.0)
+        self.sbPenWidth.valueChanged.connect(self.refresh_HSV)
+
+        self.pen_color = Qt.Qt.green
+
+        self.pbPenColor = Qt.QToolButton()
+        self.pbPenColor.setMinimumWidth(100)
+        palette = self.pbPenColor.palette()
+        palette.setColor(Qt.QPalette.Button, self.pen_color)
+        self.pbPenColor.setPalette(palette)
+        self.pbPenColor.setAutoFillBackground(True)
+        self.pbPenColor.setAutoRaise(True)
+        self.pbPenColor.clicked.connect(self._choose_color)
+
+        gb_pen_layout = Qt.QHBoxLayout()
+
+        gb_pen_layout.addWidget(Qt.QLabel('Style:'))
+        gb_pen_layout.addWidget(self.cbPenStyle)
+
+        gb_pen_layout.addWidget(Qt.QLabel('Width:'))
+        gb_pen_layout.addWidget(self.sbPenWidth)
+
+        gb_pen_layout.addWidget(Qt.QLabel('Color:'))
+        gb_pen_layout.addWidget(self.pbPenColor)
+
+        gb_pen_layout.addStretch()
+
+        self.gbPen = Qt.QGroupBox('Сontour:')
+        self.gbPen.setLayout(gb_pen_layout)
+
+        self.ui.gridLayout_2.addWidget(self.gbPen, 4, 0, 1, 6)
 
         self.settings = Qt.QSettings(CONFIG_FILE_NAME, Qt.QSettings.IniFormat)
         self.last_load_path = self.settings.value("lastLoadPath", ".")
@@ -141,6 +183,35 @@ class MainWindow(Qt.QWidget):
         size = self.ui.lbView.size()
         pixmap = Qt.QPixmap.fromImage(self.result_img).scaled(size, Qt.Qt.KeepAspectRatio, Qt.Qt.SmoothTransformation)
         self.ui.lbView.setPixmap(pixmap)
+
+    def _choose_color(self):
+        color = Qt.QColorDialog.getColor(self.pen_color)
+        if not color.isValid():
+            return
+
+        self.pen_color = color
+
+        palette = self.pbPenColor.palette()
+        palette.setColor(Qt.QPalette.Button, self.pen_color)
+        self.pbPenColor.setPalette(palette)
+
+        self.refresh_HSV()
+
+    def _draw_contours(self, contours):
+        self.result_img = numpy_array_to_QImage(self.image_source)
+
+        line_size = self.sbPenWidth.value()
+        line_type = self.cbPenStyle.currentData()
+        line_color = self.pen_color
+
+        p = Qt.QPainter(self.result_img)
+        p.setPen(Qt.QPen(line_color, line_size, line_type))
+
+        for c in contours:
+            x, y, width, height = cv2.boundingRect(c)
+            p.drawRect(x, y, width, height)
+
+        p.end()
 
     def refresh_HSV(self):
         hue_from = self.ui.slHueFrom.value()
@@ -210,22 +281,13 @@ class MainWindow(Qt.QWidget):
                 mode = cv2.RETR_EXTERNAL if self.ui.chOnlyExternal.isChecked() else cv2.RETR_TREE
 
                 # Находим контуры
-                _, contours, hierarchy = cv2.findContours(
+                contours = cv2.findContours(
                     thresholded_image,
                     mode,
                     cv2.CHAIN_APPROX_SIMPLE
-                )
+                )[1]
 
-                self.result_img = numpy_array_to_QImage(self.image_source)
-
-                p = Qt.QPainter(self.result_img)
-                p.setPen(Qt.QPen(Qt.Qt.green, 2))
-
-                for i, c in enumerate(contours):
-                    x, y, width, height = cv2.boundingRect(c)
-                    p.drawRect(x, y, width, height)
-
-                p.end()
+                self._draw_contours(contours)
 
             else:
                 self.result_img = numpy_array_to_QImage(thresholded_image)
