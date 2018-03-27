@@ -62,74 +62,18 @@ class MainWindow(Qt.QWidget):
 
         self.setWindowTitle(WINDOW_TITLE)
 
-        self.ui.rbResult.setChecked(True)
-
-        self.ui.chOnlyExternal.clicked.connect(self.refresh_HSV)
-
-        # TODO: поместить перед пружиной (spacer)
-        self.cbResultHSV = Qt.QCheckBox('HSV')
-        self.cbResultHSV.clicked.connect(self.refresh_HSV)
-
-        self.ui.horizontalLayout_2.addWidget(self.cbResultHSV)
-
-        # TODO: добавить флаг, который покажет картинку в HSV цвете, ведь в этом цвете и осуществляется поиск
-
-        # TODO: вынести виджеты в UI
         # TODO: поддержать возможность сохранения состояния для cbPenStyle, sbPenWidth, pen_color и ui.chOnlyExternal
-        # TODO: Result и OnlyExternal (флаг HSV) объединить в groupbox'е
-        self.lbHsvMin = Qt.QLabel()
-        self.lbHsvMin.setFrameShape(Qt.QFrame.Box)
-        self.lbHsvMin.setMinimumHeight(10)
-        self.lbHsvMin.setScaledContents(True)
-
-        self.lbHsvMax = Qt.QLabel()
-        self.lbHsvMax.setFrameShape(Qt.QFrame.Box)
-        self.lbHsvMax.setMinimumHeight(10)
-        self.lbHsvMax.setScaledContents(True)
-
-        self.ui.gridLayout_2.addWidget(self.lbHsvMin, 3, 0, 1, 3)
-        self.ui.gridLayout_2.addWidget(self.lbHsvMax, 3, 3, 1, 3)
-
-        self.cbPenStyle = Qt.QComboBox()
-        self.cbPenStyle.addItem('Solid', Qt.Qt.SolidLine)
-        self.cbPenStyle.addItem('Dash', Qt.Qt.DashLine)
-        self.cbPenStyle.addItem('Dot', Qt.Qt.DotLine)
-        self.cbPenStyle.addItem('Dash Dot', Qt.Qt.DashDotLine)
-        self.cbPenStyle.addItem('Dash Dot Dot', Qt.Qt.DashDotDotLine)
-        self.cbPenStyle.currentIndexChanged.connect(self.refresh_HSV)
-
-        self.sbPenWidth = Qt.QDoubleSpinBox()
-        self.sbPenWidth.setRange(1.0, 20.0)
-        self.sbPenWidth.valueChanged.connect(self.refresh_HSV)
+        self.ui.cbPenStyle.addItem('Solid', Qt.Qt.SolidLine)
+        self.ui.cbPenStyle.addItem('Dash', Qt.Qt.DashLine)
+        self.ui.cbPenStyle.addItem('Dot', Qt.Qt.DotLine)
+        self.ui.cbPenStyle.addItem('Dash Dot', Qt.Qt.DashDotLine)
+        self.ui.cbPenStyle.addItem('Dash Dot Dot', Qt.Qt.DashDotDotLine)
 
         self.pen_color = Qt.Qt.green
 
-        self.pbPenColor = Qt.QToolButton()
-        self.pbPenColor.setMinimumWidth(100)
-        palette = self.pbPenColor.palette()
+        palette = self.ui.pbPenColor.palette()
         palette.setColor(Qt.QPalette.Button, self.pen_color)
-        self.pbPenColor.setPalette(palette)
-        self.pbPenColor.setAutoFillBackground(True)
-        self.pbPenColor.setAutoRaise(True)
-        self.pbPenColor.clicked.connect(self._choose_color)
-
-        gb_pen_layout = Qt.QHBoxLayout()
-
-        gb_pen_layout.addWidget(Qt.QLabel('Style:'))
-        gb_pen_layout.addWidget(self.cbPenStyle)
-
-        gb_pen_layout.addWidget(Qt.QLabel('Width:'))
-        gb_pen_layout.addWidget(self.sbPenWidth)
-
-        gb_pen_layout.addWidget(Qt.QLabel('Color:'))
-        gb_pen_layout.addWidget(self.pbPenColor)
-
-        gb_pen_layout.addStretch()
-
-        self.gbPen = Qt.QGroupBox('Сontour:')
-        self.gbPen.setLayout(gb_pen_layout)
-
-        self.ui.gridLayout_2.addWidget(self.gbPen, 4, 0, 1, 6)
+        self.ui.pbPenColor.setPalette(palette)
 
         self.settings = Qt.QSettings(CONFIG_FILE_NAME, Qt.QSettings.IniFormat)
         self.last_load_path = self.settings.value("lastLoadPath", ".")
@@ -143,19 +87,26 @@ class MainWindow(Qt.QWidget):
             name = w.objectName()
             w.setValue(int(self.settings.value(name, w.value())))
             sp = self.findChild(Qt.QSpinBox, "sp" + name[2:])
-            if sp:
-                sp.setMinimum(w.minimum())
-                sp.setMaximum(w.maximum())
-                sp.setValue(w.value())
-                sp.valueChanged.connect(self.refresh_HSV)
+            if not sp:
+                continue
 
-        for w in self.findChildren(Qt.QSpinBox):
-            w.valueChanged.connect(self.refresh_HSV)
+            sp.setMinimum(w.minimum())
+            sp.setMaximum(w.maximum())
+            sp.setValue(w.value())
+            sp.valueChanged.connect(self.refresh_HSV)
 
-        for w in self.findChildren(Qt.QRadioButton):
-            w.clicked.connect(self.refresh_HSV)
+        self.ui.rbOriginal.clicked.connect(self.refresh_HSV)
+        self.ui.rbThresholded.clicked.connect(self.refresh_HSV)
+        self.ui.rbCanny.clicked.connect(self.refresh_HSV)
+        self.ui.rbResult.clicked.connect(self.refresh_HSV)
+        self.ui.cbResultHSV.clicked.connect(self.refresh_HSV)
+        self.ui.chOnlyExternal.clicked.connect(self.refresh_HSV)
+
+        self.ui.cbPenStyle.currentIndexChanged.connect(self.refresh_HSV)
+        self.ui.sbPenWidth.valueChanged.connect(self.refresh_HSV)
 
         self.ui.bnLoad.clicked.connect(self.on_load)
+        self.ui.pbPenColor.clicked.connect(self._choose_color)
 
         self.refresh_HSV()
 
@@ -198,15 +149,15 @@ class MainWindow(Qt.QWidget):
 
         self.pen_color = color
 
-        palette = self.pbPenColor.palette()
+        palette = self.ui.pbPenColor.palette()
         palette.setColor(Qt.QPalette.Button, self.pen_color)
-        self.pbPenColor.setPalette(palette)
+        self.ui.pbPenColor.setPalette(palette)
 
         self.refresh_HSV()
 
     def _draw_contours(self, result_img, contours):
-        line_size = self.sbPenWidth.value()
-        line_type = self.cbPenStyle.currentData()
+        line_size = self.ui.sbPenWidth.value()
+        line_type = self.ui.cbPenStyle.currentData()
         line_color = self.pen_color
 
         p = Qt.QPainter(result_img)
@@ -236,11 +187,11 @@ class MainWindow(Qt.QWidget):
 
         pixmap = Qt.QPixmap(1, 1)
         pixmap.fill(color_hsv_min)
-        self.lbHsvMin.setPixmap(pixmap)
+        self.ui.lbHsvMin.setPixmap(pixmap)
 
         pixmap = Qt.QPixmap(1, 1)
         pixmap.fill(color_hsv_max)
-        self.lbHsvMax.setPixmap(pixmap)
+        self.ui.lbHsvMax.setPixmap(pixmap)
 
         if self.image_source is None:
             return
@@ -295,7 +246,7 @@ class MainWindow(Qt.QWidget):
                 result_img = self.image_source.copy()
 
                 # Конвертирование цвета в HSV
-                if self.cbResultHSV.isChecked():
+                if self.ui.cbResultHSV.isChecked():
                     result_img = cv2.cvtColor(result_img, cv2.COLOR_RGB2HSV)
 
                 self.result_img = numpy_array_to_QImage(result_img)
