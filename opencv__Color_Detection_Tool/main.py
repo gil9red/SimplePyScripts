@@ -66,10 +66,17 @@ class MainWindow(Qt.QWidget):
 
         self.ui.chOnlyExternal.clicked.connect(self.refresh_HSV)
 
+        # TODO: поместить перед пружиной (spacer)
+        self.cbResultHSV = Qt.QCheckBox('HSV')
+        self.cbResultHSV.clicked.connect(self.refresh_HSV)
+
+        self.ui.horizontalLayout_2.addWidget(self.cbResultHSV)
+
         # TODO: добавить флаг, который покажет картинку в HSV цвете, ведь в этом цвете и осуществляется поиск
 
         # TODO: вынести виджеты в UI
         # TODO: поддержать возможность сохранения состояния для cbPenStyle, sbPenWidth, pen_color и ui.chOnlyExternal
+        # TODO: Result и OnlyExternal (флаг HSV) объединить в groupbox'е
         self.lbHsvMin = Qt.QLabel()
         self.lbHsvMin.setFrameShape(Qt.QFrame.Box)
         self.lbHsvMin.setMinimumHeight(10)
@@ -197,14 +204,12 @@ class MainWindow(Qt.QWidget):
 
         self.refresh_HSV()
 
-    def _draw_contours(self, contours):
-        self.result_img = numpy_array_to_QImage(self.image_source)
-
+    def _draw_contours(self, result_img, contours):
         line_size = self.sbPenWidth.value()
         line_type = self.cbPenStyle.currentData()
         line_color = self.pen_color
 
-        p = Qt.QPainter(self.result_img)
+        p = Qt.QPainter(result_img)
         p.setPen(Qt.QPen(line_color, line_size, line_type))
 
         for c in contours:
@@ -287,7 +292,14 @@ class MainWindow(Qt.QWidget):
                     cv2.CHAIN_APPROX_SIMPLE
                 )[1]
 
-                self._draw_contours(contours)
+                result_img = self.image_source.copy()
+
+                # Конвертирование цвета в HSV
+                if self.cbResultHSV.isChecked():
+                    result_img = cv2.cvtColor(result_img, cv2.COLOR_RGB2HSV)
+
+                self.result_img = numpy_array_to_QImage(result_img)
+                self._draw_contours(self.result_img, contours)
 
             else:
                 self.result_img = numpy_array_to_QImage(thresholded_image)
