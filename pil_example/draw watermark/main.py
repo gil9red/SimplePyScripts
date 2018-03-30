@@ -14,7 +14,7 @@ Overlay "watermark" image / Наложение "водяного знака" н�
 from PIL import Image, ImageDraw, ImageFont
 
 
-file_name = "example.jpg"
+file_name = "input.jpg"
 image = Image.open(file_name)
 width, height = image.size
 

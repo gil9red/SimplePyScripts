@@ -21,7 +21,7 @@ def invert(image):
 
 
 if __name__ == '__main__':
-    image_file = "example.jpg"
+    image_file = "input.jpg"
     image = Image.open(image_file)
 
     image_invert = invert(image)

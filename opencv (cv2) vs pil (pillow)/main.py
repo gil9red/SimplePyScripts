@@ -9,7 +9,7 @@ __author__ = 'ipetrash'
 
 import timeit
 
-FILE_NAME = 'img.jpg'
+FILE_NAME = 'input.jpg'
 NUMBER = 100
 GLOBALS = {
     'FILE_NAME': FILE_NAME

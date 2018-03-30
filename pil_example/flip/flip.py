@@ -6,6 +6,6 @@ __author__ = 'ipetrash'
 
 # pip install Pillow
 from PIL import Image, ImageOps
-img = Image.open('img.png')
+img = Image.open('input.png')
 img = ImageOps.flip(img)
 img.show()

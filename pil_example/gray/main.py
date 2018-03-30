@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 # pip install Pillow
 from PIL import Image, ImageOps
 
-image_file = "example.jpg"
+image_file = "input.jpg"
 image = Image.open(image_file)
 
 image_gray = ImageOps.grayscale(image)
