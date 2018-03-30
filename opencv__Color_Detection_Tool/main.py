@@ -64,30 +64,29 @@ class MainWindow(Qt.QWidget):
 
         self.setWindowTitle(WINDOW_TITLE)
 
-        # TODO: поддержать возможность сохранения состояния для cbPenStyle, sbPenWidth, pen_color и ui.chOnlyExternal
         self.ui.cbPenStyle.addItem('Solid', Qt.Qt.SolidLine)
         self.ui.cbPenStyle.addItem('Dash', Qt.Qt.DashLine)
         self.ui.cbPenStyle.addItem('Dot', Qt.Qt.DotLine)
         self.ui.cbPenStyle.addItem('Dash Dot', Qt.Qt.DashDotLine)
         self.ui.cbPenStyle.addItem('Dash Dot Dot', Qt.Qt.DashDotDotLine)
 
-        self.pen_color = Qt.Qt.green
+        self.pen_color = Qt.QColor(Qt.Qt.green)
 
         palette = self.ui.pbPenColor.palette()
         palette.setColor(Qt.QPalette.Button, self.pen_color)
         self.ui.pbPenColor.setPalette(palette)
 
-        self.settings = Qt.QSettings(CONFIG_FILE_NAME, Qt.QSettings.IniFormat)
-        self.last_load_path = self.settings.value("lastLoadPath", ".")
+        self.last_load_path = "."
 
         self.image_source = None
         self.result_img = None
+
+        self.load_settings()
 
         for w in self.findChildren(Qt.QSlider):
             w.sliderMoved.connect(self.refresh_HSV)
 
             name = w.objectName()
-            w.setValue(int(self.settings.value(name, w.value())))
             sp = self.findChild(Qt.QSpinBox, "sp" + name[2:])
             if not sp:
                 continue
@@ -110,6 +109,7 @@ class MainWindow(Qt.QWidget):
         self.ui.bnLoad.clicked.connect(self.on_load)
         self.ui.pbPenColor.clicked.connect(self._choose_color)
 
+        self._update_pen_color()
         self.refresh_HSV()
 
     def on_load(self):
@@ -132,7 +132,15 @@ class MainWindow(Qt.QWidget):
 
         # Трансформация BGR->RGB если 3 канала. У картинок с прозрачностью каналов 4 и для них почему
         if channels == 3:
-            self.image_source = cv2.cvtColor(self.image_source, cv2.COLOR_BGR2RGB)
+            code = cv2.COLOR_BGR2RGB
+
+        elif channels == 4:
+            code = cv2.COLOR_BGRA2RGB
+
+        else:
+            raise Exception('Unexpected number of channels: {}'.format(channels))
+
+        self.image_source = cv2.cvtColor(self.image_source, code)
 
         self.refresh_HSV()
 
@@ -144,6 +152,11 @@ class MainWindow(Qt.QWidget):
         pixmap = Qt.QPixmap.fromImage(self.result_img).scaled(size, Qt.Qt.KeepAspectRatio, Qt.Qt.SmoothTransformation)
         self.ui.lbView.setPixmap(pixmap)
 
+    def _update_pen_color(self):
+        palette = self.ui.pbPenColor.palette()
+        palette.setColor(Qt.QPalette.Button, self.pen_color)
+        self.ui.pbPenColor.setPalette(palette)
+
     def _choose_color(self):
         color = Qt.QColorDialog.getColor(self.pen_color)
         if not color.isValid():
@@ -151,10 +164,7 @@ class MainWindow(Qt.QWidget):
 
         self.pen_color = color
 
-        palette = self.ui.pbPenColor.palette()
-        palette.setColor(Qt.QPalette.Button, self.pen_color)
-        self.ui.pbPenColor.setPalette(palette)
-
+        self._update_pen_color()
         self.refresh_HSV()
 
     def _draw_contours(self, result_img, contours):
@@ -259,17 +269,99 @@ class MainWindow(Qt.QWidget):
 
         self.show_result()
 
+    def save_settings(self):
+        settings = Qt.QSettings(CONFIG_FILE_NAME, Qt.QSettings.IniFormat)
+
+        settings.setValue(self.objectName(), self.saveGeometry())
+
+        # TODO: рефакторинг циклов
+
+        for w in self.findChildren(Qt.QComboBox):
+            name = w.objectName()
+            settings.setValue(name, w.currentIndex())
+
+        for w in self.findChildren(Qt.QRadioButton):
+            name = w.objectName()
+            settings.setValue(name, int(w.isChecked()))
+
+        for w in self.findChildren(Qt.QSlider):
+            name = w.objectName()
+            settings.setValue(name, w.value())
+
+        for w in self.findChildren(Qt.QDoubleSpinBox):
+            name = w.objectName()
+            settings.setValue(name, w.value())
+
+        for w in self.findChildren(Qt.QSpinBox):
+            name = w.objectName()
+            settings.setValue(name, w.value())
+
+        for w in self.findChildren(Qt.QCheckBox):
+            name = w.objectName()
+            settings.setValue(name, int(w.isChecked()))
+
+        settings.setValue('PenColor', self.pen_color.name())
+
+        settings.setValue("lastLoadPath", self.last_load_path)
+
+    def load_settings(self):
+        settings = Qt.QSettings(CONFIG_FILE_NAME, Qt.QSettings.IniFormat)
+
+        geometry = settings.value(self.objectName())
+        if geometry:
+            self.restoreGeometry(geometry)
+
+        self.last_load_path = settings.value("lastLoadPath", ".")
+
+        self.pen_color = Qt.QColor(settings.value('PenColor', Qt.Qt.green))
+
+        # TODO: рефакторинг циклов
+
+        for w in self.findChildren(Qt.QComboBox):
+            name = w.objectName()
+            value = int(settings.value(name, w.currentIndex()))
+            w.setCurrentIndex(value)
+
+        for w in self.findChildren(Qt.QRadioButton):
+            name = w.objectName()
+            value = bool(int(settings.value(name, w.isChecked())))
+            w.setChecked(value)
+
+        for w in self.findChildren(Qt.QSpinBox):
+            name = w.objectName()
+            value = int(settings.value(name, w.value()))
+            w.setValue(value)
+
+        for w in self.findChildren(Qt.QDoubleSpinBox):
+            name = w.objectName()
+            value = float(settings.value(name, w.value()))
+            w.setValue(value)
+
+        for w in self.findChildren(Qt.QCheckBox):
+            name = w.objectName()
+            value = bool(int(settings.value(name, w.isChecked())))
+            w.setChecked(value)
+
+        for w in self.findChildren(Qt.QSlider):
+            name = w.objectName()
+            value = int(settings.value(name, w.value()))
+            w.setValue(value)
+
+            sp = self.findChild(Qt.QSpinBox, "sp" + name[2:])
+            if sp:
+                sp.setMinimum(w.minimum())
+                sp.setMaximum(w.maximum())
+                sp.setValue(w.value())
+
     def resizeEvent(self, e):
         super().resizeEvent(e)
 
         self.show_result()
 
     def closeEvent(self, e):
-        for w in self.findChildren(Qt.QSlider):
-            name = w.objectName()
-            self.settings.setValue(name, w.value())
+        self.save_settings()
 
-        self.settings.setValue("lastLoadPath", self.last_load_path)
+        super().closeEvent(e)
 
 
 if __name__ == '__main__':
