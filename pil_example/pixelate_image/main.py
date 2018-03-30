@@ -21,6 +21,9 @@ image = image.resize((image.size[0] // pixel_size, image.size[1] // pixel_size),
 image = image.resize((image.size[0] * pixel_size, image.size[1] * pixel_size), Image.NEAREST)
 pixel = image.load()
 
+image.save('output_without_margin.jpg')
+image.show()
+
 # Draw black margin between pixels
 for i in range(0, image.size[0], pixel_size):
     for j in range(0, image.size[1], pixel_size):
