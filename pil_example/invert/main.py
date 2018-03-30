@@ -7,20 +7,19 @@ __author__ = 'ipetrash'
 """Инвертирование цвета картинки"""
 
 
-from PIL import Image
-import PIL.ImageOps
+from PIL import Image, ImageOps
 
 
 def invert(image):
     if image.mode == 'RGBA':
         r, g, b, a = image.split()
         rgb_image = Image.merge('RGB', (r, g, b))
-        inverted_image = PIL.ImageOps.invert(rgb_image)
+        inverted_image = ImageOps.invert(rgb_image)
         r2, g2, b2 = inverted_image.split()
         return Image.merge('RGBA', (r2, g2, b2, a))
 
     else:
-        return PIL.ImageOps.invert(image)
+        return ImageOps.invert(image)
 
 
 if __name__ == '__main__':
