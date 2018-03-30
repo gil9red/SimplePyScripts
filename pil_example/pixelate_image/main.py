@@ -13,7 +13,7 @@ A Python script to pixelate an image and add a thin black margin between the sim
 
 from PIL import Image
 
-background_color = (0,) * 3
+background_color = (0, 0, 0)  # black
 pixel_size = 9
 
 image = Image.open('input.jpg')
