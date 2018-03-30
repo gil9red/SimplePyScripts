@@ -4,10 +4,7 @@
 __author__ = 'ipetrash'
 
 
-if __name__ == '__main__':
-    from PIL import Image
-    from PIL.ImageOps import flip
-
-    im = Image.open('im.png')
-    im = flip(im)
-    im.show()
+from PIL import Image, ImageOps
+img = Image.open('img.png')
+img = ImageOps.flip(img)
+img.show()

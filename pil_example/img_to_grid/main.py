@@ -20,5 +20,5 @@ for row in range(ROW_COUNT):
         x = column * height
         grid_image.paste(image, (x, y))
 
-# grid_image.show()
+grid_image.show()
 grid_image.save('grid_img.jpg')
