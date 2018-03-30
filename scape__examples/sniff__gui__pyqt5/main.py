@@ -73,7 +73,7 @@ class MainWindow(Qt.QMainWindow):
         self.thread.start()
 
     def _append_new_item(self, data):
-        # Если фдаг снят
+        # Если флаг не стоит
         if not self.cb_log.isChecked():
             return
 
