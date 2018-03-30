@@ -3,8 +3,10 @@
 
 __author__ = 'ipetrash'
 
+
 # SOURCE: http://docs.opencv.org/3.1.0/dc/da5/tutorial_py_drawing_functions.html
 
+# pip install opencv-python
 import numpy as np
 import cv2
 

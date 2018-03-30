@@ -6,6 +6,7 @@ __author__ = 'ipetrash'
 
 # SOURCE: https://tproger.ru/translations/finding-books-python-opencv/
 
+# pip install opencv-python
 import cv2
 
 # Загрузка изображения
