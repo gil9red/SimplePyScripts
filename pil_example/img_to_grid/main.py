@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+# pip install Pillow
 from PIL import Image
 image = Image.open("img.jpg")
 width, height = image.size

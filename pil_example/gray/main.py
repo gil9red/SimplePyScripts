@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+# pip install Pillow
 from PIL import Image, ImageOps
 
 image_file = "example.jpg"

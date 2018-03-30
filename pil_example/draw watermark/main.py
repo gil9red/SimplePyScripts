@@ -10,6 +10,7 @@ Overlay "watermark" image / Наложение "водяного знака" н�
 """
 
 
+# pip install Pillow
 from PIL import Image, ImageDraw, ImageFont
 
 

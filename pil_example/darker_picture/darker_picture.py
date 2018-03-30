@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+# pip install Pillow
 from PIL import Image
 
 image_file = "Collapse all.png"

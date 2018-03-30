@@ -7,6 +7,7 @@ __author__ = 'ipetrash'
 """Инвертирование цвета картинки"""
 
 
+# pip install Pillow
 from PIL import Image, ImageOps
 
 
