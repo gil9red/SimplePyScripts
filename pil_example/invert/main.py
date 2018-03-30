@@ -23,9 +23,9 @@ def invert(image):
 
 
 if __name__ == '__main__':
-    image_file = "TowerOfGod_s2_ch100_p02_SIU.png_res.jpg"
+    image_file = "example.jpg"
     image = Image.open(image_file)
 
-    inverted_image = invert(image)
-    inverted_image.save('new_name.png')
-    inverted_image.show()
+    image_invert = invert(image)
+    image_invert.save('image_invert.png')
+    image_invert.show()
