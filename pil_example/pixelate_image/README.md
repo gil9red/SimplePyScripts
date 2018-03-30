@@ -3,8 +3,12 @@
 ##
 ![](image/input.jpg)
 
-![](image/output_without_margin.jpg)
+![](image/output_no_margin.jpg)
 
 ![](image/output.jpg)
 
-![](image/output_pixel_size=32.jpg)
+![](image/output_16.jpg)
+
+![](image/output_32.jpg)
+
+![](image/output_48.jpg)

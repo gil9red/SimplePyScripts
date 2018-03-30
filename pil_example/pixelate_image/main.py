@@ -34,16 +34,17 @@ def pixelate(image, pixel_size=9, draw_margin=True):
 
 if __name__ == '__main__':
     image = Image.open('image/input.jpg')
-    image.show()
+    # image.show()
 
     image_pixelate = pixelate(image, draw_margin=False)
-    image_pixelate.save('image/output_without_margin.jpg')
-    image_pixelate.show()
+    image_pixelate.save('image/output_no_margin.jpg')
+    # image_pixelate.show()
 
     image_pixelate = pixelate(image)
     image_pixelate.save('image/output.jpg')
-    image_pixelate.show()
+    # image_pixelate.show()
 
-    image_pixelate = pixelate(image, pixel_size=32)
-    image_pixelate.save('image/output_pixel_size=32.jpg')
-    image_pixelate.show()
+    for size in (16, 32, 48):
+        image_pixelate = pixelate(image, pixel_size=size)
+        image_pixelate.save('image/output_{}.jpg'.format(size))
+        # image_pixelate.show()
