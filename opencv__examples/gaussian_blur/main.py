@@ -6,11 +6,11 @@ __author__ = 'ipetrash'
 
 # pip install opencv-python
 import cv2
-import numpy as np
-import pyautogui
 
-img = pyautogui.screenshot()
-img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+img = cv2.imread('example.jpg')
 cv2.imshow('img', img)
+
+img_blur = cv2.GaussianBlur(img, (5, 5), 0)
+cv2.imshow('img_blur', img_blur)
 
 cv2.waitKey()

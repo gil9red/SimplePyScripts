@@ -10,10 +10,11 @@ Overlay "watermark" image / Наложение "водяного знака" н�
 """
 
 
+# pip install Pillow
 from PIL import Image, ImageDraw, ImageFont
 
 
-file_name = r"../TowerOfGod_s2_ch100_p02_SIU.png_res.jpg"
+file_name = "input.jpg"
 image = Image.open(file_name)
 width, height = image.size
 

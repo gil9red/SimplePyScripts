@@ -9,6 +9,8 @@ __author__ = 'ipetrash'
 
 from PyQt5 import Qt
 from mainwidget_ui import Ui_MainWidget
+
+# pip install opencv-python
 import cv2
 import numpy as np
 

@@ -6,6 +6,7 @@ __author__ = 'ipetrash'
 
 # SOURCE: https://www.pyimagesearch.com/2016/02/01/opencv-center-of-contour/
 
+# pip install opencv-python
 import cv2
 
 img = cv2.imread('example.jpg')

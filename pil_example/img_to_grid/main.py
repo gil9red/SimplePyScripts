@@ -4,8 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# pip install Pillow
 from PIL import Image
-image = Image.open("img.jpg")
+image = Image.open("input.jpg")
 width, height = image.size
 
 ROW_COUNT = 3
@@ -20,5 +21,5 @@ for row in range(ROW_COUNT):
         x = column * height
         grid_image.paste(image, (x, y))
 
-# grid_image.show()
-grid_image.save('grid_img.jpg')
+grid_image.show()
+grid_image.save('output.jpg')

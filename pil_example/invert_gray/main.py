@@ -4,9 +4,6 @@
 __author__ = 'ipetrash'
 
 
-"""Инвертирование цвета картинки"""
-
-
 # pip install Pillow
 from PIL import Image, ImageOps
 
@@ -28,5 +25,7 @@ if __name__ == '__main__':
     image = Image.open(image_file)
 
     image_invert = invert(image)
-    image_invert.save('image_invert.png')
-    image_invert.show()
+    image_invert_gray = ImageOps.grayscale(image_invert)
+    image_invert_gray.save('image_invert_gray.png')
+    image_invert_gray.show()
+

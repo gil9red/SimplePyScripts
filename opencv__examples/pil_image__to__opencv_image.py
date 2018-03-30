@@ -4,7 +4,8 @@
 __author__ = 'ipetrash'
 
 
-# from PIL import Image
+# pip install opencv-python
+# pip install Pillow
 
 import pyautogui
 import cv2

@@ -10,6 +10,7 @@ import os
 from timeit import default_timer as timer
 import time
 
+# pip install opencv-python
 import cv2
 import numpy as np
 import pyautogui
