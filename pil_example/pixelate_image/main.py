@@ -33,7 +33,7 @@ def pixelate(image, pixel_size=9, draw_margin=True):
 
 
 if __name__ == '__main__':
-    image = Image.open('image/input.jpg')
+    image = Image.open('image/input.jpg').convert('RGB')
     # image.show()
 
     image_pixelate = pixelate(image, draw_margin=False)
