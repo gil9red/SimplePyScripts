@@ -28,4 +28,3 @@ if __name__ == '__main__':
     image_invert_gray = ImageOps.grayscale(image_invert)
     image_invert_gray.save('image_invert_gray.png')
     image_invert_gray.show()
-
