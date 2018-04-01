@@ -117,6 +117,17 @@ class MainWindow(Qt.QWidget):
 
         self._do_pixelate()
 
+    def load(self):
+        image_filters = "Images (*.jpg *.jpeg *.png *.bmp)"
+        self.file_name = Qt.QFileDialog.getOpenFileName(self, "Load image", self.last_load_path, image_filters)[0]
+        if not self.file_name:
+            return
+
+        self.last_load_path = Qt.QFileInfo(self.file_name).absolutePath()
+        self.image_source = Image.open(self.file_name).convert('RGB')
+
+        self._do_pixelate()
+
     def save_as(self):
         image_filters = "Images (*.jpg *.jpeg *.png *.bmp)"
 
@@ -130,13 +141,14 @@ class MainWindow(Qt.QWidget):
         self.image_result.save(file_name)
 
     def _do_pixelate(self):
-        # Кнопка будет доступна только если стоит флаг на Result
+        # Виджеты будут доступны только если стоит флаг на Result и картинка загружена
         ok = self.rb_result.isChecked() and self.image_source is not None
         self.pb_save_as.setEnabled(ok)
         self.cb_draw_margin.setEnabled(ok)
         self.sl_pixel_size.setEnabled(ok)
         self.sb_pixel_size.setEnabled(ok)
 
+        # Делаем пиксеализацию
         if ok:
             pixel_size = self.sl_pixel_size.value()
             draw_margin = self.cb_draw_margin.isChecked()
@@ -144,17 +156,6 @@ class MainWindow(Qt.QWidget):
             self.image_result = pixelate(self.image_source, pixel_size, draw_margin)
 
         self.show_result()
-
-    def load(self):
-        image_filters = "Images (*.jpg *.jpeg *.png *.bmp)"
-        self.file_name = Qt.QFileDialog.getOpenFileName(self, "Load image", self.last_load_path, image_filters)[0]
-        if not self.file_name:
-            return
-
-        self.last_load_path = Qt.QFileInfo(self.file_name).absolutePath()
-        self.image_source = Image.open(self.file_name).convert('RGB')
-
-        self._do_pixelate()
 
     def show_result(self):
         image_result = self.image_result if self.rb_result.isChecked() else self.image_source
