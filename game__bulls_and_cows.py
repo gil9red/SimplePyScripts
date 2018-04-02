@@ -59,7 +59,7 @@ while True:
     num = input('Введите 4-х значное число: ')
 
     # TODO: Удалить
-    if num == '9999':
+    if num == 'show':
         print(hidden_num)
         continue
 
