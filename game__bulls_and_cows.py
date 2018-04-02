@@ -41,7 +41,7 @@ def get_bulls_and_cows(hidden_num, num):
 hidden_num = get_unique_four_digits()
 print('Я загадал число\n')
 
-trying = 2
+trying = 10
 
 while True:
     num = input('Введите 4-х значное число: ')
