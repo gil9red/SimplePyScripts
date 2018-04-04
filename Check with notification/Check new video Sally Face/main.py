@@ -78,25 +78,22 @@ if __name__ == '__main__':
                 save_current_number_video(current_number_video)
 
             else:
-                if number_video > current_number_video:
+                if number_video == current_number_video:
+                    log.debug('Новых видео нет')
+
+                else:
+                    if number_video > current_number_video:
+                        text = 'Появилось новое видео Sally Face'
+                    else:
+                        text = 'Случилось странное: видео по Sally Face меньше чем было запомнено'
+
+                    log.debug(text)
+
                     current_number_video = number_video
                     save_current_number_video(current_number_video)
 
-                    text = 'Появилось новое видео Sally Face'
-                    log.debug(text)
-
                     if notified_by_sms:
                         simple_send_sms(text, log)
-
-                elif number_video < current_number_video:
-                    text = 'Случилось странное: видео по Sally Face меньше чем было запомнено'
-                    log.debug(text)
-
-                    if notified_by_sms:
-                        simple_send_sms(text, log)
-
-                else:
-                    log.debug('Новых видео нет')
 
             wait(weeks=1)
 
