@@ -17,10 +17,10 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
     tags_by_value = dict()
 
     if not tags:
-        print('Not tags')
+        # print('Not tags')
         return tags_by_value
 
-    print('Tags ({}):'.format(len(tags)))
+    # print('Tags ({}):'.format(len(tags)))
 
     for tag, value in tags.items():
         # Process value
@@ -46,7 +46,7 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
                 import base64
                 value = base64.b64encode(value).decode()
 
-        print('  "{}": {}'.format(tag, value))
+        # print('  "{}": {}'.format(tag, value))
 
         if not as_category:
             tags_by_value[tag] = value
@@ -64,7 +64,7 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
             else:
                 tags_by_value[tag] = value
 
-    print()
+    # print()
 
     return tags_by_value
 
@@ -155,6 +155,8 @@ def get_image_info(file_name__or__bytes__or__bytes_io, pretty_json_str=False):
     return info
 
 
+import requests
+
 from flask import Flask, jsonify, render_template_string, redirect, request
 app = Flask(__name__)
 
@@ -190,15 +192,29 @@ def index():
             .boolean { color: blue; }
             .null { color: magenta; }
             .key { color: red; }
+        
         </style>
         
     </head>
     <body>
-        <form class="form__upload_file" action="/get_info" method="post" enctype="multipart/form-data">
-            <p>get_upload_image_info:</p>
-            <p><input type="file" name="file" accept="image/*"></p>
-            <p><input type="submit"></p>
-        </form>
+        <p>get_upload_image_info:</p>
+        <table>
+            <tr>
+                <td>
+                    <form class="form__upload_file" action="/get_info_from_file" method="post" enctype="multipart/form-data">
+                        <label>Image file: <input type="file" name="file" accept="image/*"></label>
+                        <p><input type="submit"></p>
+                    </form>
+                </td>
+                <td><div style="width: 100px;"></div></td>
+                <td>
+                    <form class="form__upload_url" action="/get_info_from_url" method="post" enctype="multipart/form-data">
+                        <label>Image url: <input type="url" name="url" onkeydown="this.style.width = ((this.value.length + 1) * 8) + 'px';"></label>
+                        <p><input type="submit"></p>
+                    </form>
+                </td>
+            </tr>
+        <table>
 
         <div class="block progress" style="display: none">
             <p>Пожалуйста, подождите, файл загружаются.</p>
@@ -243,7 +259,26 @@ def index():
                     return '<span class="' + cls + '">' + match + '</span>';
                 });
             }
+        
+            function on_success(data) {
+                console.log(data);
+                $('.block.progress').hide();
+                    
+                $('.result.json.show > img').attr('src', data.img_base64);
+                
+                if (data.img_base64.length > 100) {
+                    data.img_base64 = data.img_base64.substring(0, 100) + "...";
+                }
+                
+                var json_str = JSON.stringify(data, undefined, 4);
+                console.log(json_str);
+                
+                json_str = syntaxHighlight(json_str);
 
+                $('.result.json.show > pre').html(json_str);
+                $('.result.json.show').show();
+            }
+        
             $(".form__upload_file").submit(function() {
                 $('.block.progress').show();
                 $('.result.json.show').hide();
@@ -282,24 +317,46 @@ def index():
                     },
                     cache:false,
 
-                    success: function(data) {
-                        console.log(data);
-                        $('.block.progress').hide();
-                            
-                        $('.result.json.show > img').attr('src', data.img_base64);
-                        
-                        if (data.img_base64.length > 100) {
-                            data.img_base64 = data.img_base64.substring(0, 100) + "...";
-                        }
-                        
-                        var json_str = JSON.stringify(data, undefined, 4);
-                        console.log(json_str);
-                        
-                        json_str = syntaxHighlight(json_str);
+                    success: on_success,
+                });
 
-                        $('.result.json.show > pre').html(json_str);
-                        $('.result.json.show').show();
+                return false;
+            });
+            
+            $(".form__upload_url").submit(function() {
+                $('.block.progress').show();
+                $('.result.json.show').hide();
+
+                var thisForm = this;
+
+                var url = $(this).attr("action");
+                var method = $(this).attr("method");
+                if (method === undefined) {
+                    method = "get";
+                }
+
+                var data = $(this).serialize();
+                                
+                // For send file object:
+                //// var input = $(".form__upload_file > input[type=file]");
+                //// var data = new FormData(thisForm);
+
+                $.ajax({
+                    url: url,
+                    method: method,  // HTTP метод, по умолчанию GET
+                    data: data,
+                    dataType: "json",  // тип данных загружаемых с сервера
+
+                    xhr: function() {
+                        var myXhr = $.ajaxSettings.xhr();
+                        if (myXhr.upload) {
+                            myXhr.upload.addEventListener('progress', progress, false);
+                        }
+
+                        return myXhr;
                     },
+
+                    success: on_success,
                 });
 
                 return false;
@@ -311,8 +368,8 @@ def index():
 ''')
 
 
-@app.route("/get_info", methods=['POST'])
-def get_info():
+@app.route("/get_info_from_file", methods=['POST'])
+def get_info_from_file():
     print(request.files)
 
     # check if the post request has the file part
@@ -321,6 +378,22 @@ def get_info():
 
     file = request.files['file']
     file_data = file.stream.read()
+
+    info = get_image_info(file_data)
+    info['img_base64'] = img_to_base64_html(file_data)
+
+    return jsonify(info)
+
+
+@app.route("/get_info_from_url", methods=['POST'])
+def get_info_from_url():
+    print(request.form)
+
+    if 'url' not in request.form:
+        return redirect('/')
+
+    url = request.form['url']
+    file_data = requests.get(url).content
 
     info = get_image_info(file_data)
     info['img_base64'] = img_to_base64_html(file_data)
