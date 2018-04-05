@@ -100,8 +100,6 @@ def get_image_info(file_name__or__bytes__or__bytes_io, pretty_json_str=False):
     from PIL import Image
     img = Image.open(data)
 
-    # TODO: append channels number (maybe img.mode parsing?)
-
     # Save order
     from collections import OrderedDict
     info = OrderedDict()
@@ -109,8 +107,13 @@ def get_image_info(file_name__or__bytes__or__bytes_io, pretty_json_str=False):
     info['length']['value'] = length
     info['length']['text'] = sizeof_fmt(length)
 
-    info['mode'] = img.mode
     info['format'] = img.format
+    info['mode'] = img.mode
+    info['channels'] = len(img.getbands())
+    info['bit_color'] = {
+        '1': 1, 'L': 8, 'P': 8, 'RGB': 24, 'RGBA': 32,
+        'CMYK': 32, 'YCbCr': 24, 'I': 32, 'F': 32
+    }[img.mode]
 
     info['size'] = OrderedDict()
     info['size']['width'] = img.width
