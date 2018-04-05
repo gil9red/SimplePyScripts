@@ -101,8 +101,55 @@ def sizeof_fmt(num):
     for x in ['bytes', 'KB', 'MB', 'GB']:
         if num < 1024.0:
             return "%3.1f %s" % (num, x)
+
         num /= 1024.0
+
     return "%3.1f %s" % (num, 'TB')
+
+
+# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/78a789c0b24c97a4cd452dfed756d01d132406fd/get_image_info/main.py#L84
+def get_image_info(file_name__or__bytes__or__bytes_io, pretty_json_str=False):
+    data = file_name__or__bytes__or__bytes_io
+    type_data = type(data)
+
+    # File name
+    if type_data == str:
+        with open(data, mode='rb') as f:
+            data = f.read()
+
+    if type(data) == bytes:
+        import io
+        data = io.BytesIO(data)
+
+    length = len(data.getvalue())
+    exif = get_exif_tags(data)
+
+    from PIL import Image
+    img = Image.open(data)
+
+    # TODO: append channels number (maybe img.mode parsing?)
+
+    # Save order
+    from collections import OrderedDict
+    info = OrderedDict()
+    info['length'] = OrderedDict()
+    info['length']['value'] = length
+    info['length']['text'] = sizeof_fmt(length)
+
+    info['mode'] = img.mode
+    info['format'] = img.format
+
+    info['size'] = OrderedDict()
+    info['size']['width'] = img.width
+    info['size']['height'] = img.height
+
+    info['exif'] = exif
+
+    if pretty_json_str:
+        import json
+        info = json.dumps(info, indent=4, ensure_ascii=False)
+
+    return info
 
 
 from flask import Flask, jsonify, render_template_string, redirect, request
@@ -157,7 +204,7 @@ def index():
 
         <div class="result json show" style="display: none">
             <p>Результат от сервера:</p>
-            <img width="200px" height="200px"/><br/><br/>
+            <img width="200px" height="200px" alt="image"/><br/><br/>
             <pre></pre>
         </div>
 
@@ -271,42 +318,9 @@ def get_info():
 
     file = request.files['file']
     file_data = file.stream.read()
-    length = len(file_data)
 
-    img_base64 = img_to_base64_html(file_data)
-
-    import io
-    exif = get_exif_tags(io.BytesIO(file_data))
-
-    from PIL import Image
-    img = Image.open(io.BytesIO(file_data))
-
-    # info = {
-    #     'exif': exif,
-    #     'img_base64': img_base64,
-    #     'length': {
-    #         'value': length,
-    #         'text': sizeof_fmt(length),
-    #     },
-    #     'size': {
-    #         'width': img.width,
-    #         'height': img.height,
-    #     },
-    # }
-
-    # Save order
-    from collections import OrderedDict
-    info = OrderedDict()
-    info['length'] = OrderedDict()
-    info['length']['value'] = length
-    info['length']['text'] = sizeof_fmt(length)
-
-    info['size'] = OrderedDict()
-    info['size']['width'] = img.width
-    info['size']['height'] = img.height
-
-    info['exif'] = exif
-    info['img_base64'] = img_base64
+    info = get_image_info(file_data)
+    info['img_base64'] = img_to_base64_html(file_data)
 
     return jsonify(info)
 
