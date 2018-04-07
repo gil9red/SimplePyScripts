@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-def get_logger(name=__file__, file='log.txt', encoding='utf-8'):
+def get_logger(name, file='log.txt', encoding='utf-8'):
     import logging
     log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
@@ -27,7 +27,7 @@ def get_logger(name=__file__, file='log.txt', encoding='utf-8'):
     return log
 
 
-log = get_logger()
+log = get_logger(__file__)
 
 
 if __name__ == '__main__':
