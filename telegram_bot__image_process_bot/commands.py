@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageFilter
 import io
 
 
@@ -89,3 +89,19 @@ def get_image_info(img, pretty_json_str=True):
         info = json.dumps(info, indent=4, ensure_ascii=False)
 
     return info
+
+
+def jackal_jpg(img):
+    data_io = io.BytesIO()
+    img.save(data_io, format='JPEG', quality=1)
+
+    return Image.open(data_io)
+
+
+def thumbnail(img, size=(128, 128)):
+    img.thumbnail(size)
+    return img
+
+
+def blur(img, radius=2):
+    return img.filter(ImageFilter.GaussianBlur(radius))

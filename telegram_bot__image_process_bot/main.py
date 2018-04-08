@@ -5,7 +5,7 @@ __author__ = 'ipetrash'
 
 
 # pip install python-telegram-bot --upgrade
-from telegram import ReplyKeyboardMarkup, ChatAction
+from telegram import ReplyKeyboardMarkup, ChatAction, TelegramError
 from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
 
 from config import TOKEN, TIMEOUT, LAST_IMAGE_DIR
@@ -50,7 +50,18 @@ def log_func(func):
     @functools.wraps(func)
     def decorator(self, *args, **kwargs):
         log.debug('Entering: %s', func.__name__)
-        result = func(self, *args, **kwargs)
+
+        try:
+            result = func(self, *args, **kwargs)
+
+        except TelegramError:
+            raise
+
+        except Exception as e:
+            log.exception('Error:')
+
+            raise TelegramError(str(e))
+
         log.debug('Result: %s', result)
         log.debug('Exiting: %s', func.__name__)
 
@@ -59,16 +70,29 @@ def log_func(func):
     return decorator
 
 
-from commands import invert, gray, invert_gray, pixelate, get_image_info
+from commands import invert, gray, invert_gray, pixelate, get_image_info, jackal_jpg, thumbnail, blur
 COMMANDS = {
     'invert': invert,
     'gray': gray,
     'invert_gray': invert_gray,
-    'pixelate': pixelate,
     'get_image_info': get_image_info,
+    'pixelate': pixelate,
+    'pixelate16': lambda img: pixelate(img, 16),
+    'pixelate32': lambda img: pixelate(img, 32),
+    'pixelate48': lambda img: pixelate(img, 48),
+    'jackal_jpg': jackal_jpg,
+    'thumbnail32': lambda img: thumbnail(img, (32, 32)),
+    'thumbnail64': lambda img: thumbnail(img, (64, 64)),
+    'thumbnail128': lambda img: thumbnail(img, (128, 129)),
+    'blur': blur,
+    'blur5': lambda img: blur(img, 5),
+    'original': lambda img: img
 }
 BUTTON_LIST = [
-    sorted(COMMANDS),
+    ['invert', 'gray', 'invert_gray', 'jackal_jpg'],
+    ['pixelate', 'pixelate16', 'pixelate32', 'pixelate48'],
+    ['thumbnail32', 'thumbnail64', 'thumbnail128'],
+    ['get_image_info', 'blur', 'blur5', 'original'],
 ]
 REPLY_KEYBOARD_MARKUP = ReplyKeyboardMarkup(BUTTON_LIST, resize_keyboard=True)
 
@@ -82,6 +106,7 @@ def get_file_name_image(user_id):
 
 
 # Отправка сообщения на команду /start
+@log_func
 def start(bot, update):
     log.debug('start')
 
@@ -131,6 +156,7 @@ def work_text(bot, update):
         os.remove(file_name)
 
 
+@log_func
 def work_photo(bot, update):
     log.debug('work_photo')
 
@@ -153,7 +179,7 @@ def work_photo(bot, update):
     update.message.reply_text('Картинка скачана!', timeout=TIMEOUT)
 
     update.message.reply_text(
-        "Теперь ты можешь выбрать команду над последней загруженной картинкой",
+        "Теперь доступны команды над картинкой!",
         reply_markup=REPLY_KEYBOARD_MARKUP,
         timeout=TIMEOUT
     )
