@@ -108,16 +108,15 @@ def get_file_name_image(user_id):
 # Отправка сообщения на команду /start
 @log_func
 def start(bot, update):
-    log.debug('start')
+    log.debug('chat: %s', update.message.chat)
 
     update.message.reply_text('Отправь мне картинку')
 
 
 @log_func
 def work_text(bot, update):
-    log.debug('work_text')
-
     chat_id = update.message.chat_id
+    log.debug('chat: %s', update.message.chat)
 
     text = update.message.text
     log.debug('text: %s', text)
@@ -158,9 +157,8 @@ def work_text(bot, update):
 
 @log_func
 def work_photo(bot, update):
-    log.debug('work_photo')
-
     chat_id = update.message.chat_id
+    log.debug('chat: %s', update.message.chat)
 
     log.debug('Скачиваю картинку...')
     update.message.reply_text('Скачиваю картинку...', timeout=TIMEOUT)
