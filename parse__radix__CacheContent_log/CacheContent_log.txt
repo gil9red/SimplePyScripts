@@ -1,0 +1,255 @@
+new_object: Tran[180409000010273756]
+Trace contexts: ...
+*****
+
+new_object: Doer.Processor[180409000010273756~1]
+Trace contexts: ...
+*****
+
+new_object: Doer.Acquirer[180409000010273756~3]
+Trace contexts: ...
+*****
+
+new_object: Doer.Terminal[180409000010273756~4]
+Trace contexts: ...
+*****
+
+new_object: Doer.Issuer[180409000010273756~2]
+Trace contexts: ...
+*****
+
+new_object: Doer.Token[180409000010273756~5]
+Trace contexts: ...
+*****
+
+new_object: Doer.Contract[180409000010273756~6]
+Trace contexts: ...
+*****
+
+new_object: Hold[]
+Trace contexts: ...
+*****
+
+existing_object: Hold[13703]
+Trace contexts: ...
+*****
+
+existing_object: Hold[34288]
+Trace contexts: ...
+*****
+
+existing_object: Currency[398]
+Trace contexts: ...
+*****
+
+existing_object: Hold[14308]
+Trace contexts: ...
+*****
+
+existing_object: Hold[102373]
+Trace contexts: ...
+*****
+
+existing_object: Hold[13706]
+Trace contexts: ...
+*****
+
+existing_object: Hold[66446]
+Trace contexts: ...
+*****
+
+existing_object: AuthSchemeItem[JMMEZBH3ARBR5CN4UQOM3T3LUY]
+Trace contexts: ...
+*****
+
+existing_object: Hold[13708]
+Trace contexts: ...
+*****
+
+existing_object: Hold[102370]
+Trace contexts: ...
+*****
+
+existing_object: Hold[65866]
+Trace contexts: ...
+*****
+
+existing_object: Hold[1628]
+Trace contexts: ...
+*****
+
+existing_object: Hold[14303]
+Trace contexts: ...
+*****
+
+existing_object: Hold[66449]
+Trace contexts: ...
+*****
+
+existing_object: Route[72]
+Trace contexts: ...
+*****
+
+existing_object: Route[75]
+Trace contexts: ...
+*****
+
+existing_object: Hold[65869]
+Trace contexts: ...
+*****
+
+existing_object: Hold[1625]
+Trace contexts: ...
+*****
+
+existing_object: Currency[392]
+Trace contexts: ...
+*****
+
+existing_object: Hold[14306]
+Trace contexts: ...
+*****
+
+existing_object: Hold[37093]
+Trace contexts: ...
+*****
+
+existing_object: Hold[18591]
+Trace contexts: ...
+*****
+
+existing_object: Hold[37090]
+Trace contexts: ...
+*****
+
+existing_object: Hold[34290]
+Trace contexts: ...
+*****
+
+existing_object: Hold[34291]
+Trace contexts: ...
+*****
+
+existing_object: Hold[69100]
+Trace contexts: ...
+*****
+
+existing_object: Hold[18594]
+Trace contexts: ...
+*****
+
+existing_object: FinOperHandlerEntryPart[2742~-1]
+Trace contexts: ...
+*****
+
+existing_object: Hold[66451]
+Trace contexts: ...
+*****
+
+existing_object: Hold[69108]
+Trace contexts: ...
+*****
+
+existing_object: Hold[1633]
+Trace contexts: ...
+*****
+
+existing_object: Hold[9111]
+Trace contexts: ...
+*****
+
+existing_object: Hold[1630]
+Trace contexts: ...
+*****
+
+existing_object: Hold[66454]
+Trace contexts: ...
+*****
+
+existing_object: Hold[69105]
+Trace contexts: ...
+*****
+
+existing_object: Hold[69103]
+Trace contexts: ...
+*****
+
+existing_object: Route[81]
+Trace contexts: ...
+*****
+
+existing_object: Hold[16589]
+Trace contexts: ...
+*****
+
+existing_object: Route[86]
+Trace contexts: ...
+*****
+
+existing_object: Hold[51874]
+Trace contexts: ...
+*****
+
+existing_object: Hold[31593]
+Trace contexts: ...
+*****
+
+existing_object: Hold[16591]
+Trace contexts: ...
+*****
+
+existing_object: Hold[16594]
+Trace contexts: ...
+*****
+
+existing_object: Hold[51877]
+Trace contexts: ...
+*****
+
+existing_object: Hold[9108]
+Trace contexts: ...
+*****
+
+existing_object: Hold[37088]
+Trace contexts: ...
+*****
+
+existing_object: Hold[9106]
+Trace contexts: ...
+*****
+
+existing_object: Hold[102378]
+Trace contexts: ...
+*****
+
+existing_object: Hold[37085]
+Trace contexts: ...
+*****
+
+existing_object: Hold[51872]
+Trace contexts: ...
+*****
+
+existing_object: Hold[102375]
+Trace contexts: ...
+*****
+
+existing_object: Hold[59826]
+Trace contexts: ...
+*****
+
+existing_object: Hold[59829]
+Trace contexts: ...
+*****
+
+existing_object: Hold[57698]
+Trace contexts: ...
+*****
+
+existing_object: Hold[59824]
+Trace contexts: ...
+*****
+
+existing_object: Hold[57696]
+Trace contexts: ...
+*****
