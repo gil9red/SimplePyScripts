@@ -158,6 +158,8 @@ if __name__ == '__main__':
            "Это конфиденциальный текст, которым вы действительно не должны делиться."
     username = 'hello world/привет мир'
 
+    print(len(text), text)
+
     text_zero_width = append_fingerprint_to_text(text, username)
     print(len(text_zero_width), text_zero_width)
     print(repr(text_zero_width))
