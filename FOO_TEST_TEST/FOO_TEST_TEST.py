@@ -5,6 +5,8 @@
 __author__ = 'ipetrash'
 
 
+# Fingerprinting with Zero-Width Characters
+
 # zero-width-detection
 # https://medium.com/@umpox/be-careful-what-you-copy-invisibly-inserting-usernames-into-text-with-zero-width-characters-18b4e6f17b66
 # https://habrahabr.ru/post/352950/
@@ -152,8 +154,8 @@ def get_username_from_text(text: str) -> str:
 
 
 if __name__ == '__main__':
-    text = "This is some confidential text that you really shouldn't be sharing anywhere else." \
-           "/Это конфиденциальный текст, который вы действительно не должны делиться нигде."
+    text = "This is some confidential text that you really shouldn't be sharing anywhere else. " \
+           "Это конфиденциальный текст, которым вы действительно не должны делиться."
     username = 'hello world/привет мир'
 
     text_zero_width = append_fingerprint_to_text(text, username)
