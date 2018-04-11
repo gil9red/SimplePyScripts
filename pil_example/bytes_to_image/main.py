@@ -4,11 +4,10 @@
 __author__ = 'ipetrash'
 
 
-import io
-
 with open('input.jpg', 'rb') as f:
     data = f.read()
 
+import io
 data_io = io.BytesIO(data)
 
 # pip install Pillow
