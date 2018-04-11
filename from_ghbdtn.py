@@ -5,24 +5,11 @@ __author__ = 'ipetrash'
 
 
 def from_ghbdtn(text):
-    """ Convert
-      "b ,skb ghj,ktvs c ujcntdjq" -> "и были проблемы с гостевой"
-      "ghbdtn" -> "привет"
-    """
+    # SOURCE: https://ru.stackoverflow.com/a/812203/201445
+    layout = dict(zip(map(ord, '''qwertyuiop[]asdfghjkl;'zxcvbnm,./`QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?~'''),
+                               '''йцукенгшщзхъфывапролджэячсмитьбю.ёЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,Ё'''))
 
-    en_keyboard = 'qwertyuiop[]asdfghjkl;\'\zxcvbnm,./`?'
-    ru_keyboard = 'йцукенгшщзхъфывапролджэ\ячсмитьбю.ё,'
-
-    result = ''
-
-    for c in text:
-        en_index = en_keyboard.find(c.lower())
-        if en_index != -1:
-            result += ru_keyboard[en_index]
-        else:
-            result += c
-
-    return result
+    return text.translate(layout)
 
 
 if __name__ == '__main__':
