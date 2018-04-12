@@ -8,7 +8,11 @@ import traceback
 
 
 from PyQt5 import Qt
-from bs4 import BeautifulSoup
+
+from lxml import etree
+
+# pip install cssselect
+from lxml.cssselect import CSSSelector
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
@@ -33,10 +37,7 @@ class MainWindow(Qt.QWidget):
 
         self.le_xpath_css = Qt.QLineEdit()
 
-        # TODO: support XPATH
         self.rb_xpath = Qt.QRadioButton('XPath')
-        self.rb_xpath.hide()
-
         self.rb_css_selector = Qt.QRadioButton('CSS selector')
         self.rb_css_selector.setChecked(True)
 
@@ -97,15 +98,31 @@ class MainWindow(Qt.QWidget):
             if not text or not self.le_xpath_css.text():
                 return
 
-            root = BeautifulSoup(text, 'html.parser')
-            text = root.select(self.le_xpath_css.text())
-            text = str(text)
+            search_text = self.le_xpath_css.text()
 
-            self.text_edit_output.setPlainText(text)
+            root = etree.fromstring(text)
+
+            if self.rb_xpath.isChecked():
+                result = root.xpath(search_text)
+            else:
+                selector = CSSSelector(search_text)
+                result = selector(root)
+
+            print(len(result), result)
+
+            def to_str(x):
+                try:
+                    return etree.tounicode(x, method='html')
+                except:
+                    return x
+
+            result = map(to_str, result)
+            output = '\n'.join('{}. {}'.format(i, x) for i, x in enumerate(result, 1))
+            self.text_edit_output.setPlainText(output)
 
         except Exception as e:
-            # Выводим ошибку в консоль
-            traceback.print_exc()
+            # # Выводим ошибку в консоль
+            # traceback.print_exc()
 
             # Сохраняем в переменную
             tb = traceback.format_exc()
@@ -139,7 +156,7 @@ if __name__ == '__main__':
     # For example
     mw.text_edit_input.setPlainText('''\
 <Recipe name="хлеб" preptime="5min" cooktime="180min">
-   <Title>Простой хлеб</title>
+   <Title>Простой хлеб</Title>
    <Composition>
       <Ingredient amount="3" unit="стакан">Мука</Ingredient>
       <Ingredient amount="0.25" unit="грамм">Дрожжи</Ingredient>
@@ -147,7 +164,8 @@ if __name__ == '__main__':
    </Composition>
 </Recipe>
     ''')
-    mw.le_xpath_css.setText('ingredient[amount=0.25]')
+    # //Ingredient[@amount=0.25]
+    mw.le_xpath_css.setText("Ingredient[amount='0.25']")
     mw.on_process()
 
     app.exec_()
