@@ -15,6 +15,13 @@ from lxml import etree
 from lxml.cssselect import CSSSelector
 
 
+def to_str(x):
+    try:
+        return etree.tounicode(x, method='html')
+    except:
+        return x
+
+
 def log_uncaught_exceptions(ex_cls, ex, tb):
     text = '{}: {}:\n'.format(ex_cls.__name__, ex)
     import traceback
@@ -109,12 +116,6 @@ class MainWindow(Qt.QWidget):
                 result = selector(root)
 
             print(len(result), result)
-
-            def to_str(x):
-                try:
-                    return etree.tounicode(x, method='html')
-                except:
-                    return x
 
             result = map(to_str, result)
             output = '\n'.join('{}. {}'.format(i, x) for i, x in enumerate(result, 1))
