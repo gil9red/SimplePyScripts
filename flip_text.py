@@ -19,13 +19,7 @@ FLIP_TABLE = {
 
 
 def flip_text(text, reverse=True):
-    new_text = []
-
-    for c in text.lower():
-        if c in FLIP_TABLE:
-            new_text.append(FLIP_TABLE[c])
-        else:
-            new_text.append(c)
+    new_text = [FLIP_TABLE.get(c, c) for c in text.lower()]
 
     if reverse:
         new_text.reverse()
