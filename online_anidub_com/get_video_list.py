@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-def search_video_list(text):
+def search_video_list(text) -> list:
     url = 'https://online.anidub.com/index.php?do=search'
 
     data = {
