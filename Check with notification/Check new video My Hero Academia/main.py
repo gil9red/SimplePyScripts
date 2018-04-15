@@ -17,7 +17,12 @@ sys.path.append('../../online_anidub_com')
 
 
 from all_common import make_backslashreplace_console, get_logger, simple_send_sms, wait
-from get_video_list import search_video_list
+from get_video_list import search_video_list, get_shorted_names
+
+
+def my_search_video_list():
+    items = search_video_list('Моя геройская академия')
+    return get_shorted_names(items)
 
 
 make_backslashreplace_console()
@@ -50,7 +55,7 @@ if __name__ == '__main__':
         try:
             log.debug('get items')
 
-            items = search_video_list('Моя геройская академия')
+            items = my_search_video_list()
             log.debug('items: %s', items)
 
             # Если список текущих игр
