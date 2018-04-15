@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-def search_video_list():
+def search_video_list(text):
     url = 'https://online.anidub.com/index.php?do=search'
 
     data = {
@@ -13,7 +13,7 @@ def search_video_list():
         'search_start': '1',
         'full_search': '0',
         'result_from': '1',
-        'story': 'Моя геройская академия',
+        'story': text,
     }
 
     import requests
@@ -26,8 +26,11 @@ def search_video_list():
 
 
 if __name__ == '__main__':
-    items = search_video_list()
+    items = search_video_list('Моя геройская академия')
     print('Items ({}): {}'.format(len(items), items))
 
     import json
     json.dump(items, open('video_list.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=4)
+
+    items = search_video_list('Богиня благословляет этот прекрасный мир')
+    print('Items ({}): {}'.format(len(items), items))
