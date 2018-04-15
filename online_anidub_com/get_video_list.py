@@ -40,13 +40,17 @@ def get_shorted_names(items: list) -> list:
     import re
 
     for name in items:
-        first, last = map(str.strip, name.split('/'))
+        if '[' in name or 'OVA' in name:
+            first, last = map(str.strip, name.split('/'))
 
-        match = re.search('(\[.+?\])|(OVA.*)', last)
-        if match and not first.endswith(match.group(0)):
-            first += ' ' + match.group(0)
+            match = re.search('(\[.+?\])|(OVA.*)', last)
+            if match and not first.endswith(match.group(0)):
+                first += ' ' + match.group(0)
 
-        new_items.append(first)
+            new_items.append(first)
+
+        else:
+            new_items.append(name)
 
     return new_items
 
