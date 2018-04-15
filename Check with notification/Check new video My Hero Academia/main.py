@@ -13,37 +13,17 @@ __author__ = 'ipetrash'
 # Чтобы можно было импортировать all_common.py, находящийся уровнем выше
 import sys
 sys.path.append('..')
+sys.path.append('../../online_anidub_com')
 
 
 from all_common import make_backslashreplace_console, get_logger, simple_send_sms, wait
+from get_video_list import search_video_list
 
 
 make_backslashreplace_console()
 
 
 log = get_logger('new video My Hero Academia')
-
-
-# https://github.com/gil9red/SimplePyScripts/blob/e3279dcf83a2e88ffc5248cf54a14b6e3c81c1f9/online.anidub.com/get%20video%20list%20My%20Hero%20Academia.py
-def search_video_list():
-    url = 'https://online.anidub.com/index.php?do=search'
-
-    data = {
-        'do': 'search',
-        'subaction': 'search',
-        'search_start': '1',
-        'full_search': '0',
-        'result_from': '1',
-        'story': 'Моя геройская академия',
-    }
-
-    import requests
-    rs = requests.post(url, data)
-
-    from bs4 import BeautifulSoup
-    root = BeautifulSoup(rs.content, 'html.parser')
-
-    return [a.text.strip() for a in root.select('.newstitle a')]
 
 
 FILE_NAME_CURRENT_ITEMS = 'video'
@@ -70,7 +50,7 @@ if __name__ == '__main__':
         try:
             log.debug('get items')
 
-            items = search_video_list()
+            items = search_video_list('Моя геройская академия')
             log.debug('items: %s', items)
 
             # Если список текущих игр
