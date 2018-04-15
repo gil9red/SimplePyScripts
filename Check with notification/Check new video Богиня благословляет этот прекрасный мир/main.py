@@ -22,7 +22,11 @@ from get_video_list import search_video_list, get_shorted_names
 
 def my_search_video_list():
     items = search_video_list('Богиня благословляет этот прекрасный мир')
-    return get_shorted_names(items)
+    new_items = get_shorted_names(items)
+
+    log.debug('my_search_video_list\nitems: %s\nnew_items: %s', items, new_items)
+
+    return new_items
 
 
 make_backslashreplace_console()
