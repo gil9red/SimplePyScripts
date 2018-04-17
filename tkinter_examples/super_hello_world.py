@@ -34,17 +34,17 @@ def on_btn_2():
     messagebox.showinfo("Information", text)
 
 
-root = tk.Tk()
-root.title("super_hello_world")
-center_window(root)
+app = tk.Tk()
+app.title("super_hello_world")
+center_window(app)
 
-label = tk.Label(root, text="Hello World!", font=("Helvetica", 16), fg='red')
+label = tk.Label(app, text="Hello World!", font="Arial 16", fg='red')
 label.pack()
 
-btn_1 = tk.Button(root, text="Hello World!", command=on_btn_1)
+btn_1 = tk.Button(app, text="Hello World!", command=on_btn_1)
 btn_1.pack()
 
-btn_2 = tk.Button(root, text="Click Me!", command=on_btn_2)
+btn_2 = tk.Button(app, text="Click Me!", command=on_btn_2)
 btn_2.pack()
 
-root.mainloop()
+app.mainloop()
