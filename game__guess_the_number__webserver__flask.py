@@ -117,7 +117,7 @@ def send_num():
     trying -= 1
 
     if trying == 0:
-        game_data['response'] += 'Закончились попытки. Проирыш!\nЗагаданное число: {}'.format(hidden_num)
+        game_data['response'] += 'Закончились попытки. Проигрыш!\nЗагаданное число: {}'.format(hidden_num)
         game_data['end_game'] = True
         return redirect('/')
 
