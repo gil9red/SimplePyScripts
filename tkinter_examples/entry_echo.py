@@ -13,7 +13,7 @@ app.title("entry_echo")
 center_window(app)
 
 
-def _on_key_press(x):
+def _on_key_press(event):
     text = entry.get()
 
     label_1['text'] = text
@@ -21,7 +21,7 @@ def _on_key_press(x):
 
 
 entry = tk.Entry(app)
-entry.bind('<KeyPress>', _on_key_press)
+entry.bind('<KeyRelease>', _on_key_press)
 entry.pack()
 
 label_1 = tk.Label(app)
