@@ -4,8 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from tkinter import *
-from tkinter import ttk
+import tkinter as tk
 
 
 def on_button_perevod_clicked():
@@ -19,12 +18,12 @@ def on_button_perevod_clicked():
     label_info['text'] = b
 
 
-root = Tk()
-text1 = StringVar()
+root = tk.Tk()
+text1 = tk.StringVar()
 
-button_perevod = ttk.Button(root, text="perevod", command=on_button_perevod_clicked)
-entry_info = ttk.Entry(root, textvariable=text1)
-label_info = ttk.Label(root, text="")
+button_perevod = tk.Button(root, text="perevod", command=on_button_perevod_clicked)
+entry_info = tk.Entry(root, textvariable=text1)
+label_info = tk.Label(root, text="")
 
 button_perevod.pack()
 entry_info.pack()
