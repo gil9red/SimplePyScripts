@@ -7,6 +7,7 @@ __author__ = 'ipetrash'
 # pip install pyqt5
 from PyQt5 import Qt
 
+# https://github.com/secdev/scapy
 # pip install scapy
 from scapy.all import sniff
 

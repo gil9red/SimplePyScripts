@@ -4,7 +4,8 @@
 
 # SOURCE: http://www.secdev.org/projects/scapy/build_your_own_tools.html
 
-
+# https://github.com/secdev/scapy
+# pip install scapy
 from scapy.all import *
 
 
