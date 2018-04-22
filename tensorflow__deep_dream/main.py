@@ -281,6 +281,8 @@ def main():
     render_deepdream_from_layer_by_channel(img_noise, 'noise', 'head1_bottleneck_pre_relu', 1)
 
     # FROM FILENAME
+    render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4d_1x1_pre_relu', 39)
+
     render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4d_5x5_pre_relu', 61)
     # render_deepdream_from_layer_by_channel(t_obj, img0, layer)
     # img = render_deepdream(t_obj, sess, img0)
@@ -299,8 +301,6 @@ def main():
     # t_obj = tf.square(T(layer)[:, :, :, channel])
     # img = render_deepdream(t_obj, sess, img0)
     # savearray(img / 255.0, '{}/{}__{}__{}.png'.format(output_dir, 'pilatus800', layer, channel))
-
-    render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4d_1x1_pre_relu', 39)
 
     # # PROCESS FROM ALL LAYERS
     # # ['conv2d0_pre_relu', 'conv2d1_pre_relu', 'conv2d2_pre_relu', 'mixed3a_1x1_pre_relu', ...
