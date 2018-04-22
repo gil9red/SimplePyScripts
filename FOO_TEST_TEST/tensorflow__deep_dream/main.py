@@ -4,10 +4,41 @@
 __author__ = 'ipetrash'
 
 
+# MOTE: То, что эта нейронная сеть делает называется "Инцепционизм" -- картины, «написанные» нейронными сетями.
+
 # SOURCE: https://github.com/llSourcell/deep_dream_challenge
 
-# IF    "FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated"
-# THEN: pip3 install h5py==2.8.0rc1
+# OTHER:
+#     https://github.com/llSourcell/deep_dream_challenge/blob/master/deep_dream.py
+#     https://github.com/samkit-jain/Data-Science-by-Siraj-Raval/blob/a66b7791a4628f815dc683605dd224acad9bc277/deep_dream_challenge.py#L149
+#     https://medium.com/@mrubash1/deepdream-accelerating-deep-learning-with-hardware-5085ea415d8a
+#     https://github.com/mrubash1/DeepDream_Streaming_Video/tree/master/src
+#     https://github.com/mrubash1/DeepDream_Streaming_Video/blob/master/src/deep_dream.py
+#     https://github.com/mrubash1/DeepDream_Streaming_Video/blob/master/src/app.py
+
+# Статьи на русском о DeepDream:
+#     https://habrahabr.ru/company/io/blog/262267/
+#     https://meduza.io/shapito/2015/06/19/hudozhnik-ot-gugla-neyronnye-seti-nauchilis-pisat-kartiny
+#     https://meduza.io/galleries/2015/06/19/intseptsionizm
+
+# LAYERS:
+#     http://storage.googleapis.com/deepdream/visualz/tensorflow_inception/index.html
+#
+#     import requests
+#     rs = requests.get('http://storage.googleapis.com/deepdream/visualz/tensorflow_inception/index.html')
+#
+#     from bs4 import BeautifulSoup
+#     root = BeautifulSoup(rs.content, 'html.parser')
+#     layers = [a.text for a in root.select('a')]
+#     print(layers)  # ['conv2d0_pre_relu', 'conv2d1_pre_relu', 'conv2d2_pre_relu', 'head0_bottleneck_pre_relu', ...
+
+
+# ABOUT CODE:
+#     http://nbviewer.jupyter.org/github/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/deepdream/deepdream.ipynb
+
+
+# NOTE: "FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated"
+#       pip3 install h5py==2.8.0rc1
 
 # pip install tensorflow
 import tensorflow as tf
@@ -92,6 +123,7 @@ def main():
         plt.show()
 
     def savearray(a, file_name):
+        print('save:', file_name)
         a = np.uint8(np.clip(a, 0, 1) * 255)
         PIL.Image.fromarray(a).save(file_name)
 
@@ -199,33 +231,90 @@ def main():
 
         return img
 
+    #
+    # # PRINT: layer by channels
+    # t_obj_layers = [x.split('/')[1] for x in layers]
+    # for l in t_obj_layers:
+    #     print(l, int(T(l).get_shape()[-1]))
+    #
+
     output_dir = 'output'
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
 
     savearray(img_noise / 255.0, '{}/noise.png'.format(output_dir, 'noise'))
+    print()
 
-    # FROM noise
-    layer = 'mixed4c'
-    t_obj = tf.square(T(layer))
-    img = render_deepdream(t_obj, sess)
-    # showarray(img / 255.0)
-    savearray(img / 255.0, '{}/{}_{}.png'.format(output_dir, 'noise', layer))
-
-    # FROM filename
-    t_obj = tf.square(T(layer))
+    # layer = 'mixed4c'
+    # t_obj = tf.square(T(layer))
     img0 = PIL.Image.open('pilatus800.jpg')
     img0 = np.float32(img0)
-    img = render_deepdream(t_obj, sess, img0)
-    savearray(img / 255.0, '{}/{}_{}.png'.format(output_dir, 'pilatus800', layer))
 
-    # FROM filters
-    layer = 'mixed4d_3x3_bottleneck_pre_relu'
-    filter_name = {'Tornado': 84, 'Flowers': 139, 'Fireworks': 50, 'Caves': 38, 'Mountains': 142, 'Van Gogh': 1}
-    for name, channel in filter_name.items():
-        t_obj = tf.square(T(layer)[:, :, :, channel])
+    def render_deepdream_from_layer_by_channel(img0, name, layer, channel=None):
+        import time
+        t = time.clock()
+
+        # t_obj = tf.square(T(layer)[:, :, :, channel])
+        t_obj = T(layer)
+        if channel:
+            t_obj = t_obj[:, :, :, channel]
+
+        # t_obj = tf.square(t_obj)
+
         img = render_deepdream(t_obj, sess, img0)
-        savearray(img / 255.0, '{}/{}_{}_{}.png'.format(output_dir, 'pilatus800', name, layer))
+
+        if channel:
+            file_name = '{}/{}__{}__{}.png'.format(output_dir, name, layer, channel)
+        else:
+            file_name = '{}/{}__{}.png'.format(output_dir, name, layer)
+
+        savearray(img / 255.0, file_name)
+
+        print('elapsed {} secs'.format(time.clock() - t))
+        print()
+
+    # FROM NOISE
+    render_deepdream_from_layer_by_channel(img_noise, 'noise', 'mixed4d_5x5_pre_relu', 61)
+    render_deepdream_from_layer_by_channel(img_noise, 'noise', 'head1_bottleneck_pre_relu', 1)
+
+    # FROM FILENAME
+    render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4d_5x5_pre_relu', 61)
+    # render_deepdream_from_layer_by_channel(t_obj, img0, layer)
+    # img = render_deepdream(t_obj, sess, img0)
+    # savearray(img / 255.0, '{}/{}__{}.png'.format(output_dir, 'pilatus800', layer))
+
+    render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4c_3x3_bottleneck_pre_relu', 64)
+    # layer = 'mixed4c_3x3_bottleneck_pre_relu'
+    # channel = 64
+    # t_obj = tf.square(T(layer)[:, :, :, channel])
+    # img = render_deepdream(t_obj, sess, img0)
+    # savearray(img / 255.0, '{}/{}__{}__{}.png'.format(output_dir, 'pilatus800', layer, channel))
+
+    render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4c_3x3_bottleneck_pre_relu', 104)
+    # layer = 'mixed4c_3x3_bottleneck_pre_relu'
+    # channel = 104
+    # t_obj = tf.square(T(layer)[:, :, :, channel])
+    # img = render_deepdream(t_obj, sess, img0)
+    # savearray(img / 255.0, '{}/{}__{}__{}.png'.format(output_dir, 'pilatus800', layer, channel))
+
+    render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4d_1x1_pre_relu', 39)
+
+    # # PROCESS FROM ALL LAYERS
+    # # ['conv2d0_pre_relu', 'conv2d1_pre_relu', 'conv2d2_pre_relu', 'mixed3a_1x1_pre_relu', ...
+    # t_obj_layers = [x.split('/')[1] for x in layers]
+    # for name in t_obj_layers:
+    #     render_deepdream_from_layer_by_channel(img0, name)
+    #     # t_obj = tf.square(T(layer))
+    #     # img = render_deepdream(t_obj, sess, img0)
+    #     # savearray(img / 255.0, '{}/{}_{}.png'.format(output_dir, 'pilatus800', layer))
+
+    # # FROM filters
+    # layer = 'mixed4d_3x3_bottleneck_pre_relu'
+    # filter_name = {'Tornado': 84, 'Flowers': 139, 'Fireworks': 50, 'Caves': 38, 'Mountains': 142, 'Van Gogh': 1}
+    # for name, channel in filter_name.items():
+    #     t_obj = tf.square(T(layer)[:, :, :, channel])
+    #     img = render_deepdream(t_obj, sess, img0)
+    #     savearray(img / 255.0, '{}/{}_{}_{}.png'.format(output_dir, 'pilatus800', name, layer))
 
     # TODO: test
     # render_deepdreamvideo(sess)
@@ -257,13 +346,6 @@ def main():
     # print(T('mixed4c'))
     # # print(T('abc'))
     # quit()
-    #
-    # filter_name = {'Tornado': 84, 'Flowers': 139, 'Fireworks': 50, 'Caves': 38, 'Mountains': 142, 'Van Gogh': 1}
-    # for name, channel in filter_name.items():
-    #     t_obj = tf.square(T(layer)[:, :, :, channel])
-    #     img = render_deepdream(t_obj, sess, img0)
-    #     savearray(img / 255.0, 'output/output_{}.png'.format(name))
-
 
 if __name__ == '__main__':
     main()
