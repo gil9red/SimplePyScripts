@@ -238,6 +238,9 @@ def main():
     #     print(l, int(T(l).get_shape()[-1]))
     #
 
+    # Layer: mixed4d_1x1_pre_relu
+    # Url:   http://storage.googleapis.com/deepdream/visualz/tensorflow_inception/mixed4d_1x1_pre_relu.html
+
     output_dir = 'output'
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
@@ -264,9 +267,9 @@ def main():
         img = render_deepdream(t_obj, sess, img0)
 
         if channel:
-            file_name = '{}/{}__{}__{}.png'.format(output_dir, name, layer, channel)
+            file_name = '{}/{}__{}__{}.jpg'.format(output_dir, name, layer, channel)
         else:
-            file_name = '{}/{}__{}.png'.format(output_dir, name, layer)
+            file_name = '{}/{}__{}.jpg'.format(output_dir, name, layer)
 
         savearray(img / 255.0, file_name)
 
