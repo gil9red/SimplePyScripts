@@ -46,15 +46,14 @@ import numpy as np
 import PIL.Image
 import matplotlib.pyplot as plt
 import os
-from common import download_tensorflow_model
+from common import download_tensorflow_model, IMG_NOISE
 
 
 def main():
-    # Step 1 - download google's pre-trained neural network
-    download_tensorflow_model()
+    data_dir = 'data/'
 
-    # start with a gray image with a little noise
-    img_noise = np.random.uniform(size=(224, 224, 3)) + 100.0
+    # Step 1 - download google's pre-trained neural network
+    download_tensorflow_model(data_dir)
 
     model_fn = 'tensorflow_inception_graph.pb'
 
@@ -187,7 +186,7 @@ def main():
 
         writer.close()
 
-    def render_deepdream(t_obj, sess, img0=img_noise, iter_n=10, step=1.5, octave_n=4, octave_scale=1.4):
+    def render_deepdream(t_obj, sess, img0=IMG_NOISE, iter_n=10, step=1.5, octave_n=4, octave_scale=1.4):
         t_score = tf.reduce_mean(t_obj)  # defining the optimization objective
         t_grad = tf.gradients(t_score, t_input)[0]  # behold the power of automatic differentiation!
 
@@ -230,7 +229,7 @@ def main():
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
 
-    savearray(img_noise / 255.0, '{}/noise.png'.format(output_dir, 'noise'))
+    savearray(IMG_NOISE / 255.0, '{}/noise.png'.format(output_dir, 'noise'))
     print()
 
     # layer = 'mixed4c'
@@ -262,8 +261,8 @@ def main():
         print()
 
     # FROM NOISE
-    render_deepdream_from_layer_by_channel(img_noise, 'noise', 'mixed4d_5x5_pre_relu', 61)
-    render_deepdream_from_layer_by_channel(img_noise, 'noise', 'head1_bottleneck_pre_relu', 1)
+    render_deepdream_from_layer_by_channel(IMG_NOISE, 'noise', 'mixed4d_5x5_pre_relu', 61)
+    render_deepdream_from_layer_by_channel(IMG_NOISE, 'noise', 'head1_bottleneck_pre_relu', 1)
 
     # FROM FILENAME
     render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4d_1x1_pre_relu', 39)
@@ -334,6 +333,7 @@ def main():
     # print(T('mixed4c'))
     # # print(T('abc'))
     # quit()
+
 
 if __name__ == '__main__':
     main()
