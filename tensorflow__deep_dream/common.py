@@ -8,10 +8,10 @@ __author__ = 'ipetrash'
 
 
 # pip install tensorflow
-import tensorflow as tf
+# import tensorflow as tf
 import numpy as np
-import PIL.Image
-import matplotlib.pyplot as plt
+# import PIL.Image
+# import matplotlib.pyplot as plt
 import urllib.request
 import os
 import zipfile
@@ -22,3 +22,28 @@ IMG_NOISE = np.random.uniform(size=(224, 224, 3)) + 100.0
 
 
 # TODO: перенести сюда вспомогательные методы из основного скрипта
+
+
+def download_tensorflow_model(data_dir='data/'):
+    if not os.path.exists(data_dir):
+        os.mkdir(data_dir)
+
+    url = 'https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip'
+    model_name = os.path.split(url)[-1]
+
+    local_zip_file = os.path.join(data_dir, model_name)
+    if not os.path.exists(local_zip_file):
+        print('Not found: {}. Step download...'.format(local_zip_file))
+
+        # Download
+        model_url = urllib.request.urlopen(url)
+        with open(local_zip_file, 'wb') as output:
+            output.write(model_url.read())
+
+        print('Finish download. Step extract...')
+
+        # Extract
+        with zipfile.ZipFile(local_zip_file, 'r') as zip_ref:
+            zip_ref.extractall(data_dir)
+
+        print('Finish extract')
