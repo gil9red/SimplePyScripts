@@ -10,8 +10,8 @@ __author__ = 'ipetrash'
 # pip install tensorflow
 # import tensorflow as tf
 import numpy as np
-# import PIL.Image
-# import matplotlib.pyplot as plt
+import PIL.Image
+import matplotlib.pyplot as plt
 import urllib.request
 import os
 import zipfile
@@ -47,3 +47,16 @@ def download_tensorflow_model(data_dir='data/'):
             zip_ref.extractall(data_dir)
 
         print('Finish extract')
+
+
+def showarray(a):
+    a = np.uint8(np.clip(a, 0, 1) * 255)
+    plt.imshow(a)
+    plt.show()
+
+
+def savearray(a, file_name):
+    print('save:', file_name)
+
+    a = np.uint8(np.clip(a, 0, 1) * 255)
+    PIL.Image.fromarray(a).save(file_name)

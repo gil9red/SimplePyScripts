@@ -46,7 +46,7 @@ import numpy as np
 import PIL.Image
 import matplotlib.pyplot as plt
 import os
-from common import download_tensorflow_model, IMG_NOISE
+from common import download_tensorflow_model, IMG_NOISE, showarray, savearray
 
 
 def main():
@@ -101,19 +101,20 @@ def main():
     #             n.input[i] = rename_func(s) if s[0] != '^' else '^' + rename_func(s[1:])
     #     return res_def
 
-    def showarray(a):
-        a = np.uint8(np.clip(a, 0, 1) * 255)
-        plt.imshow(a)
-        plt.show()
-
-    def savearray(a, file_name):
-        print('save:', file_name)
-        a = np.uint8(np.clip(a, 0, 1) * 255)
-        PIL.Image.fromarray(a).save(file_name)
-
-    def visstd(a, s=0.1):
-        '''Normalize the image range for visualization'''
-        return (a - a.mean()) / max(a.std(), 1e-4) * s + 0.5
+    # def showarray(a):
+    #     a = np.uint8(np.clip(a, 0, 1) * 255)
+    #     plt.imshow(a)
+    #     plt.show()
+    #
+    # def savearray(a, file_name):
+    #     print('save:', file_name)
+    #
+    #     a = np.uint8(np.clip(a, 0, 1) * 255)
+    #     PIL.Image.fromarray(a).save(file_name)
+    #
+    # def visstd(a, s=0.1):
+    #     '''Normalize the image range for visualization'''
+    #     return (a - a.mean()) / max(a.std(), 1e-4) * s + 0.5
 
     def T(layer):
         '''Helper for getting layer output tensor'''
