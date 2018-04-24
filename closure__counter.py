@@ -22,7 +22,7 @@ def make_counter(start=0, step=1):
 def make_counter_adder(start=0):
     i = start
 
-    def counter(step=1):  # counter() is a closure
+    def counter(step=0):  # counter() is a closure
         nonlocal i
         i += step
 
