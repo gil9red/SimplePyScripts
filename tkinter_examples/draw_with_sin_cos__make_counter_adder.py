@@ -37,7 +37,7 @@ inc = make_counter_adder(0.0)
 
 
 def but(event):
-    for _ in range(10):
+    for _ in range(100):
         t = inc()
 
         x = r * (k - 1) * (cos(t) + (cos((k - 1) * t)) / (k - 1))
