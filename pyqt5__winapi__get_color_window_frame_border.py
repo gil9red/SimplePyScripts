@@ -38,21 +38,13 @@ def getWindowFrameColor():
 if __name__ == '__main__':
     app = Qt.QApplication([])
 
-    label = Qt.QLabel()
-    label.setScaledContents(True)
-
     def get_color():
-        pixmap = Qt.QPixmap(1, 1)
         color = getWindowFrameColor()
-        pixmap.fill(color)
-
-        label.setPixmap(pixmap)
+        button.setStyleSheet('background-color: ' + color.name())
 
     button = Qt.QPushButton('Get')
     button.clicked.connect(get_color)
+    button.resize(100, 100)
     button.show()
-
-    label.resize(100, 100)
-    label.show()
 
     app.exec()
