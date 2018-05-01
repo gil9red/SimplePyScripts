@@ -14,7 +14,8 @@ sock = socket.socket()
 sock.connect(('localhost', 9090))
 
 # Send big data
-data = ','.join(str(i) for i in range(10000))
+# data = ','.join(str(i) for i in range(10000))
+data = 'HelloWorld!' * 10000
 sock.sendall(data.encode())
 
 print('Response')
