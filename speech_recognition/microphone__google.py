@@ -24,4 +24,4 @@ except sr.UnknownValueError:
     print("Робот не расслышал фразу")
 
 except sr.RequestError as e:
-    print("Ошибка сервиса: {0}".format(e))
+    print("Ошибка сервиса: {}".format(e))
