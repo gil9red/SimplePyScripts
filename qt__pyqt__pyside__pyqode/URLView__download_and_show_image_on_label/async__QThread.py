@@ -43,6 +43,10 @@ class URLView(Qt.QWidget):
         self.thread = LoadImageThread()
         self.thread.about_new_image.connect(self.imageLabel.setPixmap)
 
+        # Пока выполняется загрузка картинки, кнопка недоступна
+        self.thread.started.connect(lambda: self.loadButton.setEnabled(False))
+        self.thread.finished.connect(lambda: self.loadButton.setEnabled(True))
+
     def on_load(self):
         print("Load image")
 
