@@ -26,7 +26,6 @@ class URLView(Qt.QWidget):
 
         self.loadButton.clicked.connect(self.on_load)
 
-        # Создаем объект потока и привязываем его сигнал к слоту установки картинки
         self.nam = Qt.QNetworkAccessManager()
         self.nam.finished.connect(self.finish_request)
 
