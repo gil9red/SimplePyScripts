@@ -32,14 +32,9 @@ sys.excepthook = log_uncaught_exceptions
 class SpeechRecognitionThread(Qt.QThread):
     about_text = Qt.pyqtSignal(str)
 
-    about_start = Qt.pyqtSignal()
-    about_finish = Qt.pyqtSignal()
-
     language = "en-US"
 
     def run(self):
-        self.about_start.emit()
-
         try:
             r = sr.Recognizer()
 
@@ -65,7 +60,6 @@ class SpeechRecognitionThread(Qt.QThread):
 
         finally:
             self.about_text.emit('')
-            self.about_finish.emit()
 
 
 class Window(Qt.QWidget):
@@ -100,8 +94,8 @@ class Window(Qt.QWidget):
 
         self.thread = SpeechRecognitionThread()
         self.thread.about_text.connect(self.pte_result.appendPlainText)
-        self.thread.about_start.connect(self.progress_bar.show)
-        self.thread.about_finish.connect(self._speech_recognition_finish)
+        self.thread.started.connect(self.progress_bar.show)
+        self.thread.finished.connect(self._speech_recognition_finish)
 
         # Start speech recognition
         self.pb_microphone.clicked.connect(self._speech_recognition_start)
@@ -116,6 +110,7 @@ class Window(Qt.QWidget):
     def _speech_recognition_finish(self):
         self.pb_microphone.setEnabled(True)
         self.progress_bar.hide()
+
 
 if __name__ == '__main__':
     app = Qt.QApplication([])
