@@ -53,10 +53,10 @@ class SpeechRecognitionThread(Qt.QThread):
             self.about_text.emit("Робот не расслышал фразу")
 
         except sr.RequestError as e:
-            self.about_text.emit("Ошибка сервиса: {0}".format(e))
+            self.about_text.emit("Ошибка сервиса: {}".format(e))
 
         except Exception as e:
-            self.about_text.emit("Ошибка: {0}".format(e))
+            self.about_text.emit("Ошибка: {}".format(e))
 
         finally:
             self.about_text.emit('')
