@@ -9,6 +9,8 @@ def go(url):
     rs = urlopen(url)
     print(url, rs)
 
+    return rs
+
 
 urls = [
     'http://www.python.org',
@@ -19,4 +21,5 @@ urls = [
 
 from multiprocessing.dummy import Pool as ThreadPool
 pool = ThreadPool()
-pool.map(go, urls)
+resuls = pool.map(go, urls)
+print(resuls)
