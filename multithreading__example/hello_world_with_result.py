@@ -4,12 +4,7 @@
 __author__ = 'ipetrash'
 
 
-def go(url):
-    from urllib.request import urlopen
-    rs = urlopen(url)
-    print(url, rs)
-
-    return url + ' - ok!'
+from urllib.request import urlopen
 
 
 urls = [
@@ -21,5 +16,5 @@ urls = [
 
 from multiprocessing.dummy import Pool as ThreadPool
 pool = ThreadPool()
-result = pool.map(go, urls)
+result = pool.map(urlopen, urls)
 print(result)
