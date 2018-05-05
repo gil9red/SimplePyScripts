@@ -4,7 +4,8 @@
 __author__ = 'ipetrash'
 
 
-from urllib.request import urlopen
+from multiprocessing.dummy import Pool as ThreadPool
+import requests
 
 
 urls = [
@@ -14,7 +15,6 @@ urls = [
     'http://www.python.org/download/',
 ]
 
-from multiprocessing.dummy import Pool as ThreadPool
 pool = ThreadPool()
-result = pool.map(urlopen, urls)
+result = pool.map(requests.get, urls)
 print(result)
