@@ -16,6 +16,7 @@ if __name__ == '__main__':
     rs = requests.get(url)
     item = rs.json()['query']['results']['channel']['item']
 
+    # Если нужна иконка для погоды:
     # https://developer.yahoo.com/weather/documentation.html in Condition Codes
     # code = condition['code']
     #
