@@ -8,6 +8,7 @@ API_KEY = '87c7712a9b72646a269102230858837b'
 
 
 def get_weather_info(api_key, place):
+    # pip install pyowm
     import pyowm
     owm = pyowm.OWM(api_key)
     observation = owm.weather_at_place(place)
