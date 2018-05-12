@@ -318,7 +318,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0" colspan="3">
+     <item row="4" column="0" colspan="3">
       <widget class="QLabel" name="lbHsvMin">
        <property name="minimumSize">
         <size>
@@ -337,7 +337,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="3" colspan="3">
+     <item row="4" column="3" colspan="3">
       <widget class="QLabel" name="lbHsvMax">
        <property name="minimumSize">
         <size>
@@ -353,6 +353,26 @@
        </property>
        <property name="scaledContents">
         <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="label_hsv_from_text">
+       <property name="text">
+        <string>0, 0, 0</string>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="4">
+      <widget class="QLabel" name="label_hsv_to_text">
+       <property name="text">
+        <string>0, 0, 0</string>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
        </property>
       </widget>
      </item>

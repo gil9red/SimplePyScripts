@@ -8,7 +8,7 @@ __author__ = 'ipetrash'
 
 
 from PyQt5 import Qt
-from mainwidget_ui import Ui_MainWidget
+from PyQt5 import uic
 
 # pip install opencv-python
 import cv2
@@ -59,22 +59,21 @@ class MainWindow(Qt.QWidget):
     def __init__(self):
         super().__init__()
 
-        self.ui = Ui_MainWidget()
-        self.ui.setupUi(self)
+        uic.loadUi('mainwidget.ui', self)
 
         self.setWindowTitle(WINDOW_TITLE)
 
-        self.ui.cbPenStyle.addItem('Solid', Qt.Qt.SolidLine)
-        self.ui.cbPenStyle.addItem('Dash', Qt.Qt.DashLine)
-        self.ui.cbPenStyle.addItem('Dot', Qt.Qt.DotLine)
-        self.ui.cbPenStyle.addItem('Dash Dot', Qt.Qt.DashDotLine)
-        self.ui.cbPenStyle.addItem('Dash Dot Dot', Qt.Qt.DashDotDotLine)
+        self.cbPenStyle.addItem('Solid', Qt.Qt.SolidLine)
+        self.cbPenStyle.addItem('Dash', Qt.Qt.DashLine)
+        self.cbPenStyle.addItem('Dot', Qt.Qt.DotLine)
+        self.cbPenStyle.addItem('Dash Dot', Qt.Qt.DashDotLine)
+        self.cbPenStyle.addItem('Dash Dot Dot', Qt.Qt.DashDotDotLine)
 
         self.pen_color = Qt.QColor(Qt.Qt.green)
 
-        palette = self.ui.pbPenColor.palette()
+        palette = self.pbPenColor.palette()
         palette.setColor(Qt.QPalette.Button, self.pen_color)
-        self.ui.pbPenColor.setPalette(palette)
+        self.pbPenColor.setPalette(palette)
 
         self.last_load_path = "."
 
@@ -96,18 +95,18 @@ class MainWindow(Qt.QWidget):
             sp.setValue(w.value())
             sp.valueChanged.connect(self.refresh_HSV)
 
-        self.ui.rbOriginal.clicked.connect(self.refresh_HSV)
-        self.ui.rbThresholded.clicked.connect(self.refresh_HSV)
-        self.ui.rbCanny.clicked.connect(self.refresh_HSV)
-        self.ui.rbResult.clicked.connect(self.refresh_HSV)
-        self.ui.cbResultHSV.clicked.connect(self.refresh_HSV)
-        self.ui.chOnlyExternal.clicked.connect(self.refresh_HSV)
+        self.rbOriginal.clicked.connect(self.refresh_HSV)
+        self.rbThresholded.clicked.connect(self.refresh_HSV)
+        self.rbCanny.clicked.connect(self.refresh_HSV)
+        self.rbResult.clicked.connect(self.refresh_HSV)
+        self.cbResultHSV.clicked.connect(self.refresh_HSV)
+        self.chOnlyExternal.clicked.connect(self.refresh_HSV)
 
-        self.ui.cbPenStyle.currentIndexChanged.connect(self.refresh_HSV)
-        self.ui.sbPenWidth.valueChanged.connect(self.refresh_HSV)
+        self.cbPenStyle.currentIndexChanged.connect(self.refresh_HSV)
+        self.sbPenWidth.valueChanged.connect(self.refresh_HSV)
 
-        self.ui.bnLoad.clicked.connect(self.on_load)
-        self.ui.pbPenColor.clicked.connect(self._choose_color)
+        self.bnLoad.clicked.connect(self.on_load)
+        self.pbPenColor.clicked.connect(self._choose_color)
 
         self._update_pen_color()
         self.refresh_HSV()
@@ -148,14 +147,14 @@ class MainWindow(Qt.QWidget):
         if not self.result_img:
             return
 
-        size = self.ui.lbView.size()
+        size = self.lbView.size()
         pixmap = Qt.QPixmap.fromImage(self.result_img).scaled(size, Qt.Qt.KeepAspectRatio, Qt.Qt.SmoothTransformation)
-        self.ui.lbView.setPixmap(pixmap)
+        self.lbView.setPixmap(pixmap)
 
     def _update_pen_color(self):
-        palette = self.ui.pbPenColor.palette()
+        palette = self.pbPenColor.palette()
         palette.setColor(Qt.QPalette.Button, self.pen_color)
-        self.ui.pbPenColor.setPalette(palette)
+        self.pbPenColor.setPalette(palette)
 
     def _choose_color(self):
         color = Qt.QColorDialog.getColor(self.pen_color)
@@ -168,8 +167,8 @@ class MainWindow(Qt.QWidget):
         self.refresh_HSV()
 
     def _draw_contours(self, result_img, contours):
-        line_size = self.ui.sbPenWidth.value()
-        line_type = self.ui.cbPenStyle.currentData()
+        line_size = self.sbPenWidth.value()
+        line_type = self.cbPenStyle.currentData()
         line_color = self.pen_color
 
         p = Qt.QPainter(result_img)
@@ -182,14 +181,14 @@ class MainWindow(Qt.QWidget):
         p.end()
 
     def refresh_HSV(self):
-        hue_from = self.ui.slHueFrom.value()
-        hue_to = max(hue_from, self.ui.slHueTo.value())
+        hue_from = self.slHueFrom.value()
+        hue_to = max(hue_from, self.slHueTo.value())
 
-        saturation_from = self.ui.slSaturationFrom.value()
-        saturation_to = max(saturation_from, self.ui.slSaturationTo.value())
+        saturation_from = self.slSaturationFrom.value()
+        saturation_to = max(saturation_from, self.slSaturationTo.value())
 
-        value_from = self.ui.slValueFrom.value()
-        value_to = max(value_from, self.ui.slValueTo.value())
+        value_from = self.slValueFrom.value()
+        value_to = max(value_from, self.slValueTo.value())
 
         hsv_min = hue_from, saturation_from, value_from
         hsv_max = hue_to, saturation_to, value_to
@@ -197,18 +196,21 @@ class MainWindow(Qt.QWidget):
         color_hsv_min = Qt.QColor.fromHsv(*hsv_min)
         color_hsv_max = Qt.QColor.fromHsv(*hsv_max)
 
+        self.label_hsv_from_text.setText(', '.join(map(str, hsv_min)))
+        self.label_hsv_to_text.setText(', '.join(map(str, hsv_max)))
+
         pixmap = Qt.QPixmap(1, 1)
         pixmap.fill(color_hsv_min)
-        self.ui.lbHsvMin.setPixmap(pixmap)
+        self.lbHsvMin.setPixmap(pixmap)
 
         pixmap = Qt.QPixmap(1, 1)
         pixmap.fill(color_hsv_max)
-        self.ui.lbHsvMax.setPixmap(pixmap)
+        self.lbHsvMax.setPixmap(pixmap)
 
         if self.image_source is None:
             return
 
-        if self.ui.rbOriginal.isChecked():
+        if self.rbOriginal.isChecked():
             self.result_img = numpy_array_to_QImage(self.image_source)
 
         else:
@@ -241,12 +243,12 @@ class MainWindow(Qt.QWidget):
                 cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
             )
 
-            if self.ui.rbCanny.isChecked():
+            if self.rbCanny.isChecked():
                 # Визуально выделяем границы
                 thresholded_image = cv2.Canny(thresholded_image, 100, 50, 5)
 
-            if self.ui.rbResult.isChecked():
-                mode = cv2.RETR_EXTERNAL if self.ui.chOnlyExternal.isChecked() else cv2.RETR_TREE
+            if self.rbResult.isChecked():
+                mode = cv2.RETR_EXTERNAL if self.chOnlyExternal.isChecked() else cv2.RETR_TREE
 
                 # Находим контуры
                 contours = cv2.findContours(
@@ -258,7 +260,7 @@ class MainWindow(Qt.QWidget):
                 result_img = self.image_source.copy()
 
                 # Конвертирование цвета в HSV
-                if self.ui.cbResultHSV.isChecked():
+                if self.cbResultHSV.isChecked():
                     result_img = cv2.cvtColor(result_img, cv2.COLOR_RGB2HSV)
 
                 self.result_img = numpy_array_to_QImage(result_img)
