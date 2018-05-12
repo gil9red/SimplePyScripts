@@ -4,6 +4,8 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: https://habrahabr.ru/post/149077/
+
 BUFFER_SIZE = 4096
 
 
@@ -18,17 +20,17 @@ while True:
     conn, addr = sock.accept()
     print('Connected:', addr)
 
-    all_data = bytearray()
-
     while True:
         data = conn.recv(BUFFER_SIZE)
         if not data:
             break
 
         print('Recv: {}: {}'.format(len(data), data))
-        all_data += data
 
-    print('All data ({}): {}'.format(len(all_data), all_data))
+        conn.sendall(data.upper())
+
+        if len(data) < BUFFER_SIZE:
+            break
 
     print('Close')
     conn.close()
