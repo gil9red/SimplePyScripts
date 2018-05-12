@@ -18,11 +18,11 @@ def send_msg(sock, msg):
 
 def recv_msg(sock):
     # Read message length and unpack it into an integer
-    raw_msglen = recv_all(sock, 4)
-    if not raw_msglen:
+    raw_msg_len = recv_all(sock, 4)
+    if not raw_msg_len:
         return None
 
-    msg_len = struct.unpack('>I', raw_msglen)[0]
+    msg_len = struct.unpack('>I', raw_msg_len)[0]
 
     # Read the message data
     return recv_all(sock, msg_len)
