@@ -18,7 +18,7 @@ with socket.socket() as sock:
     sock.bind(('', 9090))
     sock.listen(1)
 
-    print('Sock name: {}'.format(sock.getsockname()))
+    print('Server: {}'.format(sock.getsockname()))
 
     while True:
         conn, addr = sock.accept()
