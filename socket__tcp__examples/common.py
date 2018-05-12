@@ -4,10 +4,12 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: https://stackoverflow.com/a/17668009/5909792
+
+
 import struct
 
 
-# SOURCE: https://stackoverflow.com/a/17668009/5909792
 def send_msg(sock, msg):
     # Prefix each message with a 4-byte length (network byte order)
     msg = struct.pack('>I', len(msg)) + msg
