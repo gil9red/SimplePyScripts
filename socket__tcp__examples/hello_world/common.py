@@ -28,7 +28,7 @@ def recv_msg(sock):
 
 def recv_all(sock, n):
     # Helper function to recv n bytes or return None if EOF is hit
-    data = b''
+    data = bytearray()
 
     while len(data) < n:
         packet = sock.recv(n - len(data))
@@ -37,4 +37,4 @@ def recv_all(sock, n):
 
         data += packet
 
-    return data
+    return bytes(data)
