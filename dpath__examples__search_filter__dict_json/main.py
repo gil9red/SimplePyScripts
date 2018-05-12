@@ -25,7 +25,7 @@ print(dpath.util.get(x, 'a/b/43'))  # 30
 print()
 
 print(dpath.util.values(x, "**/43"))  # [30]
-print(dpath.util.values(x, "**/d/1"))  # [30]
+print(dpath.util.values(x, "**/d/1"))  # [buggy]
 print()
 
 print(dpath.util.search(x, "**/43"))  # {'a': {'b': {'43': 30}}}
