@@ -8,6 +8,10 @@ __author__ = 'ipetrash'
 
 
 import socket
+
+import sys
+sys.path.append('..')
+
 from common import send_msg, recv_msg
 
 
