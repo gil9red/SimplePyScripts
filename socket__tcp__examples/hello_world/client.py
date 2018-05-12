@@ -30,4 +30,4 @@ with socket.socket() as sock:
     response_data = recv_msg(sock)
     print('Response ({}): {}'.format(len(response_data), response_data))
 
-    print('Close')
+    print('Close\n')

@@ -30,4 +30,4 @@ with socket.socket() as sock:
         print('Sending')
         send_msg(conn, data.upper())
 
-        print('Close')
+        print('Close\n')
