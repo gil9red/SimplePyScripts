@@ -15,7 +15,7 @@ import cv2
 import numpy as np
 import pyautogui
 
-from common import get_logger, get_current_datetime_str, find_contours, find_rect_contours
+from common import get_logger, get_current_datetime_str, find_rect_contours
 
 
 log = get_logger('Bot Buff Knight Advanced')
