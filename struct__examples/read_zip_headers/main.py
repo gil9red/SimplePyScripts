@@ -11,6 +11,9 @@ import struct
 
 
 with open('myfile.zip', 'rb') as f:
+    rows = []
+    headers = ('file_name', 'crc32', 'comp_size', 'uncomp_size')
+
     data = f.read()
     start = 0
 
@@ -18,16 +21,34 @@ with open('myfile.zip', 'rb') as f:
     for _ in range(3):
         start += 14
         fields = struct.unpack('<IIIHH', data[start:start + 16])
-        crc32, comp_size, uncomp_size, filenamesize, extra_size = fields
+        crc32, comp_size, uncomp_size, file_name_size, extra_size = fields
 
         start += 16
-        filename = data[start:start + filenamesize]
-        start += filenamesize
-        extra = data[start:start + extra_size]
+        file_name = data[start:start + file_name_size]
+        file_name = str(file_name, 'utf-8')
+        start += file_name_size
 
-        print('filename: {}, crc32: {}, comp_size: {}, uncomp_size: {}'.format(
-            filename, hex(crc32), comp_size, uncomp_size)
+        print('file_name: {}, crc32: {}, comp_size: {}, uncomp_size: {}'.format(
+            file_name, hex(crc32), comp_size, uncomp_size)
         )
+        rows.append((file_name, hex(crc32), comp_size, uncomp_size))
 
         # Пропустить до следующего заголовка
         start += extra_size + comp_size
+
+    print()
+
+    # RESULT:
+    # +-------------+------------+-------------+---------------+
+    # | file_name   | crc32      |   comp_size |   uncomp_size |
+    # +=============+============+=============+===============+
+    # | 1.csv       | 0x7eb0f2b2 |          16 |            16 |
+    # +-------------+------------+-------------+---------------+
+    # | 2.csv       | 0x5d884c77 |          16 |            16 |
+    # +-------------+------------+-------------+---------------+
+    # | result.csv  | 0xefede9b1 |           8 |             6 |
+    # +-------------+------------+-------------+---------------+
+
+    # pip install tabulate
+    from tabulate import tabulate
+    print(tabulate(rows, headers, tablefmt="grid"))
