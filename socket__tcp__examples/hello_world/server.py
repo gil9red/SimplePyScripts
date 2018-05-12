@@ -8,10 +8,11 @@ __author__ = 'ipetrash'
 
 
 import socket
+from common import send_msg, recv_msg
 
 
 PORT = 9090
-BUFFER_SIZE = 4096
+
 
 with socket.socket() as sock:
     sock.bind(('', 9090))
@@ -23,16 +24,10 @@ with socket.socket() as sock:
         conn, addr = sock.accept()
         print('Connected:', addr)
 
-        while True:
-            data = conn.recv(BUFFER_SIZE)
-            if not data:
-                break
+        data = recv_msg(conn)
+        print('Receiving: {}: {}'.format(len(data), data))
 
-            print('Recv: {}: {}'.format(len(data), data))
-
-            conn.sendall(data.upper())
-
-            if len(data) < BUFFER_SIZE:
-                break
+        print('Sending')
+        send_msg(conn, data.upper())
 
         print('Close')

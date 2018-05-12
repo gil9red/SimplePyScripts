@@ -8,10 +8,10 @@ __author__ = 'ipetrash'
 
 
 import socket
+from common import send_msg, recv_msg
 
 
 HOST, PORT = "localhost", 9090
-BUFFER_SIZE = 4096
 
 
 with socket.socket() as sock:
@@ -20,27 +20,14 @@ with socket.socket() as sock:
     # Send big data
     # data = ','.join(str(i) for i in range(10000))
     data = 'HelloWorld!' * 10000
-    print('Send len: {}'.format(len(data)))
+    print('Sending ({}): {}'.format(len(data), data))
     print()
 
-    sock.sendall(data.encode())
+    send_msg(sock, data.encode())
 
-    print('Response')
+    print('Receiving')
 
-    response_data = bytearray()
-
-    while True:
-        data = sock.recv(BUFFER_SIZE)
-        if not data:
-            break
-
-        print(len(data), data)
-        response_data += data
-
-        if len(data) < BUFFER_SIZE:
-            break
-
-    print()
-    print('Total len: {}'.format(len(response_data)))
+    response_data = recv_msg(sock)
+    print('Response ({}): {}'.format(len(response_data), response_data))
 
     print('Close')
