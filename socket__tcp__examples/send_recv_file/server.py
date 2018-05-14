@@ -26,7 +26,7 @@ with socket.socket() as sock:
         print('Connected:', addr)
 
         data = recv_msg(conn)
-        print('Receiving: {}: {}'.format(len(data), data))
+        print('Receiving ({}): {}'.format(len(data), data))
 
         text = 'Ok! Message size: {}'.format(len(data))
         print('Sending: {}'.format(text))

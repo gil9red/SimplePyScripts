@@ -43,7 +43,7 @@ with socket.socket() as sock:
         print('Connected:', addr)
 
         data = recv_msg(conn)
-        print('Receiving: {}: {}'.format(len(data), data))
+        print('Receiving ({}): {}'.format(len(data), data))
 
         command = str(data, 'utf-8')
         response_data = execute_command(command)

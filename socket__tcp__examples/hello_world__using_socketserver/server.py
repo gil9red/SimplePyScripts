@@ -31,7 +31,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         print('Connected:', self.client_address)
 
         data = recv_msg(self.request)
-        print('Receiving: {}: {}'.format(len(data), data))
+        print('Receiving ({}): {}'.format(len(data), data))
 
         print('Sending')
         send_msg(self.request, data.upper())

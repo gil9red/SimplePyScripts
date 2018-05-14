@@ -29,7 +29,7 @@ with socket.socket() as sock:
         print('Connected:', addr)
 
         data = recv_msg__with_crc32(conn)
-        print('Receiving: {} bytes'.format(len(data), data))
+        print('Receiving {} bytes'.format(len(data)))
 
         img = Image.open(io.BytesIO(data))
         print('Receiving image:', img)
@@ -47,7 +47,7 @@ with socket.socket() as sock:
 
         response_data = data_io.getvalue()
 
-        print('Sending: {} bytes'.format(len(response_data)))
+        print('Sending {} bytes'.format(len(response_data)))
 
         send_msg__with_crc32(conn, response_data)
 
