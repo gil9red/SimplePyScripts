@@ -4,9 +4,6 @@
 __author__ = 'ipetrash'
 
 
-# SOURCE: https://habrahabr.ru/post/149077/
-
-
 import socket
 
 import sys
