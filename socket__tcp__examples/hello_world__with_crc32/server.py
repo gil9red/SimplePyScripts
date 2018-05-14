@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
+
+# SOURCE: https://habrahabr.ru/post/149077/
+
+
+import socket
+
+import sys
+sys.path.append('..')
+
+from common import send_msg__with_crc32, recv_msg__with_crc32
+
+
+PORT = 9090
+
+
+with socket.socket() as sock:
+    sock.bind(('', 9090))
+    sock.listen(1)
+
+    print('Server: {}'.format(sock.getsockname()))
+
+    while True:
+        conn, addr = sock.accept()
+        print('Connected:', addr)
+
+        data = recv_msg__with_crc32(conn)
+        print('Receiving: {}: {}'.format(len(data), data))
+
+        print('Sending')
+        send_msg__with_crc32(conn, data.upper())
+
+        print('Close\n')
