@@ -54,7 +54,7 @@ def recv_msg(sock):
     if not raw_msg_len:
         return None
 
-    msg_len, crc32 = struct.unpack('>II', raw_msg_len)
+    msg_len = struct.unpack('>I', raw_msg_len)[0]
 
     # Read the message data
     return recv_all(sock, msg_len)
