@@ -8,6 +8,37 @@ __author__ = 'ipetrash'
 
 
 import struct
+import zlib
+
+
+def crc32_from_bytes(data: bytes) -> int:
+    return zlib.crc32(data) & 0xFFFFFFFF
+
+
+def send_msg__with_crc32(sock, msg):
+    # Prefix each message with a 8-byte (network byte order) length: 4-byte data length and 4-byte crc32 data
+    crc32 = crc32_from_bytes(msg)
+    msg = struct.pack('>II', len(msg), crc32) + msg
+    sock.sendall(msg)
+
+
+def recv_msg__with_crc32(sock):
+    # Read message length and crc32
+    raw_msg_len = recv_all(sock, 8)
+    if not raw_msg_len:
+        return None
+
+    msg_len, crc32 = struct.unpack('>II', raw_msg_len)
+
+    # Read the message data
+    msg = recv_all(sock, msg_len)
+
+    # Check message
+    msg_crc32 = crc32_from_bytes(msg)
+    if msg_crc32 != crc32:
+        raise Exception('Incorrect message: invalid crc32. Receiving crc32: {}, current: {}'.format(crc32, msg_crc32))
+
+    return msg
 
 
 def send_msg(sock, msg):
@@ -22,7 +53,7 @@ def recv_msg(sock):
     if not raw_msg_len:
         return None
 
-    msg_len = struct.unpack('>I', raw_msg_len)[0]
+    msg_len, crc32 = struct.unpack('>II', raw_msg_len)
 
     # Read the message data
     return recv_all(sock, msg_len)
