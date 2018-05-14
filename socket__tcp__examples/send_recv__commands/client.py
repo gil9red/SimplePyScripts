@@ -38,3 +38,6 @@ if __name__ == '__main__':
 
     rs = send_command('FOO_BAR')
     print(rs)
+
+    rs = send_command('EXIT')
+    print(rs)

@@ -28,6 +28,9 @@ def execute_command(command: str) -> str:
         import random
         return str(random.randint(0, 1000000))
 
+    elif command == 'EXIT':
+        return 'OK'
+
     else:
         return '<UNKNOWN COMMAND: "{}">'.format(command)
 
@@ -51,5 +54,8 @@ with socket.socket() as sock:
 
         print('Sending')
         send_msg(conn, response_data)
+
+        if command == 'EXIT':
+            quit()
 
         print('Close\n')
