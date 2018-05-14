@@ -25,9 +25,10 @@ with socket.socket() as sock:
     # data = ','.join(str(i) for i in range(10000))
     data = 'HelloWorld!' * 10000
     print('Sending ({}): {}'.format(len(data), data))
+    data = bytes(data, 'utf-8')
     print()
 
-    send_msg(sock, data.encode())
+    send_msg(sock, data)
 
     print('Receiving')
 
