@@ -19,6 +19,7 @@ def send_msg__with_crc32(sock, msg):
     # Prefix each message with a 8-byte (network byte order) length: 4-byte data length and 4-byte crc32 data
     crc32 = crc32_from_bytes(msg)
     msg = struct.pack('>II', len(msg), crc32) + msg
+
     sock.sendall(msg)
 
 
