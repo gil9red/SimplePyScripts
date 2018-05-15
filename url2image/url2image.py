@@ -4,6 +4,8 @@
 __author__ = 'ipetrash'
 
 
+# TODO: лучше попробовать переписать на селениум, пример: https://github.com/gil9red/SimplePyScripts/blob/59322c5da8ce17ca5c68424b9db5fb82eda5e4dd/selenium__examples/screenshot.py
+
 # TODO: сделать также PyQt5 вариант
 # TODO: проверять поддерживаемые форматы по суффиксу file_name, если формат не поддерживается,
 # кидать исключение с описание поддерживаемых параметров
