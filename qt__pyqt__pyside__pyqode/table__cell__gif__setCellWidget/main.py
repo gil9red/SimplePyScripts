@@ -11,8 +11,6 @@ class Window(Qt.QWidget):
     def __init__(self):
         super().__init__()
 
-        main_layout = Qt.QHBoxLayout()
-
         self.table = Qt.QTableWidget()
         self.table.setColumnCount(3)
         self.table.setRowCount(3)
@@ -26,6 +24,7 @@ class Window(Qt.QWidget):
 
                 self.table.setCellWidget(i, j, item)
 
+        main_layout = Qt.QHBoxLayout()
         main_layout.addWidget(self.table)
 
         self.setLayout(main_layout)
