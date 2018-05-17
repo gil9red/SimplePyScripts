@@ -4,9 +4,7 @@
 __author__ = 'ipetrash'
 
 
-def get_all_games():
-    url = 'https://www.bigfishgames.com/download-games/genres/15/hidden-object.html'
-
+def get_all_games(url='https://www.bigfishgames.com/download-games/genres/15/hidden-object.html'):
     import requests
     rs = requests.get(url)
 
