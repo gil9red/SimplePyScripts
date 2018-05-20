@@ -27,8 +27,8 @@ def get_random_hex_color():
 def set_fill_color(ws):
     size = 250
 
-    for i in range(1, size):
-        for j in range(1, size):
+    for i in range(1, size + 1):
+        for j in range(1, size + 1):
             cell = ws.cell(row=i, column=j)
             cell.fill = PatternFill(fgColor=get_random_hex_color(), fill_type="solid")
 
