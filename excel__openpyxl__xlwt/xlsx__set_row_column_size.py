@@ -8,15 +8,15 @@ import openpyxl
 from openpyxl.utils.cell import _get_column_letter
 
 
-def set_row_column_size(worksheet):
+def set_row_column_size(ws):
     for i in range(1, 500):
-        row = worksheet.row_dimensions[i]
+        row = ws.row_dimensions[i]
         row.height = 15
 
         for j in range(1, 500):
             j = _get_column_letter(j)
 
-            col = worksheet.column_dimensions[j]
+            col = ws.column_dimensions[j]
             col.width = 3.5
 
 
