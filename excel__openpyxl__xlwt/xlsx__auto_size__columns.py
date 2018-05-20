@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 import openpyxl
 
 
-def column_set_column_size(worksheet):
+def set_column_size(worksheet):
     dims = dict()
 
     for row in worksheet.rows:
@@ -48,7 +48,7 @@ fill_sheet(ws)
 # Sheet 2
 ws = wb.create_sheet('auto')
 fill_sheet(ws)
-column_set_column_size(ws)
+set_column_size(ws)
 
 from openpyxl.writer.excel import save_workbook
 save_workbook(wb, 'excel.xlsx')
