@@ -30,7 +30,7 @@ NOT_ARGS_HTML = """\
 @app.route("/")
 def index():
     if not request.args:
-        return NOT_ARGS_HTML.format('/?url=http://readmanga.me/one__piece/vol60/591')
+        return NOT_ARGS_HTML.format('/?url=http://readmanga.me/one_punch_man/vol0/9')
 
     url = request.args.get('url')
     print('Url manga:', url)
@@ -62,7 +62,7 @@ def index():
 @app.route("/export")
 def export():
     if not request.args:
-        return NOT_ARGS_HTML.format('/export?url=http://readmanga.me/one__piece/vol60/591')
+        return NOT_ARGS_HTML.format('/export?http://readmanga.me/one_punch_man/vol0/9')
 
     url = request.args.get('url')
     print('Url manga:', url)
