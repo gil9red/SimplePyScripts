@@ -5,19 +5,14 @@ __author__ = 'ipetrash'
 
 
 import openpyxl
-from openpyxl.utils.cell import _get_column_letter
 
 
 def set_row_column_size(ws):
-    for i in range(1, 500):
-        row = ws.row_dimensions[i]
-        row.height = 15
-
-        for j in range(1, 500):
-            j = _get_column_letter(j)
-
-            col = ws.column_dimensions[j]
-            col.width = 3.5
+    # SOURCE: excel__openpyxl__xlwt\excel\xl\worksheets\sheet1.xml
+    # <sheetFormatPr defaultColWidth="1.77734375" defaultRowHeight="6.6" customHeight="1" x14ac:dyDescent="0.3"/>
+    ws.sheet_format.defaultColWidth = 1.77734375
+    ws.sheet_format.defaultRowHeight = 9.0
+    ws.sheet_format.customHeight = 1
 
 
 wb = openpyxl.Workbook()
