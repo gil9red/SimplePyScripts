@@ -27,8 +27,3 @@ __author__ = 'ipetrash'
 # # print(translit(u"Тбилиси", 'ru', reversed=True))
 # # Tbilisi
 # #
-
-
-# TODO: excel__openpyxl__xlwt: cell as pixel / draw image in sheet / cell is small size (1x1)
-# TODO: после сделать аналогичное, но со списокм картинок. Тогда каждая картинка будет на своем листе
-#       а названия листов будут браться из назваиня файлов картинок
