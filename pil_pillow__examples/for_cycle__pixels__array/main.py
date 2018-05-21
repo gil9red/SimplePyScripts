@@ -8,10 +8,6 @@ __author__ = 'ipetrash'
 from PIL import Image
 
 
-def rgb2hex(r: int, g: int, b: int) -> str:
-    return '{:02X}{:02X}{:02X}'.format(r, g, b)
-
-
 def get_pixel_array(img, rgb_hex=False):
     width, height = img.size
 
@@ -25,7 +21,8 @@ def get_pixel_array(img, rgb_hex=False):
             r, g, b = img.getpixel((x, y))
 
             if rgb_hex:
-                row.append(rgb2hex(r, g, b))
+                value = '{:02X}{:02X}{:02X}'.format(r, g, b)
+                row.append(value)
             else:
                 row.append((r, g, b))
 
