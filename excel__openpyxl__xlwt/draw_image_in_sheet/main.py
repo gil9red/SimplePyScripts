@@ -56,18 +56,19 @@ def draw_image(ws, img):
             cell.fill = PatternFill(fgColor=pixels[i][j], fill_type="solid")
 
 
-wb = openpyxl.Workbook()
-ws = wb.get_active_sheet()
+if __name__ == '__main__':
+    wb = openpyxl.Workbook()
+    ws = wb.get_active_sheet()
 
-# Масштаб 10%
-ws.sheet_view.zoomScale = 10
+    # Масштаб 10%
+    ws.sheet_view.zoomScale = 10
 
-set_row_column_size(ws)
+    set_row_column_size(ws)
 
-file_name = "input.jpg"
-img = Image.open(file_name)
-ws.title = file_name
-draw_image(ws, img)
+    file_name = "input.jpg"
+    img = Image.open(file_name)
+    ws.title = file_name
+    draw_image(ws, img)
 
-from openpyxl.writer.excel import save_workbook
-save_workbook(wb, 'excel.xlsx')
+    from openpyxl.writer.excel import save_workbook
+    save_workbook(wb, 'excel.xlsx')
