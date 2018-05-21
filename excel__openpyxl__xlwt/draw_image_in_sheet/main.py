@@ -43,6 +43,8 @@ def get_pixel_array(img, rgb_hex=False):
 
 
 def draw_image(ws, img):
+    img = img.convert('RGB')
+
     # Resize
     img.thumbnail((250, 250))
 
