@@ -27,3 +27,19 @@ __author__ = 'ipetrash'
 # # print(translit(u"Тбилиси", 'ru', reversed=True))
 # # Tbilisi
 # #
+
+
+# TODO: openpyxl: http://openpyxl.readthedocs.io/en/stable/usage.html#inserting-an-image
+# wb = openpyxl.Workbook()
+# ws = wb.get_active_sheet()
+#
+# from openpyxl.drawing.image import Image
+#
+# ws['A1'] = 'You should see three logos below'
+#
+# # create an image
+# img = Image('input.jpg')
+#
+# # add to worksheet and anchor next to cells
+# ws.add_image(img, 'A1')
+# wb.save('logo.xlsx')
