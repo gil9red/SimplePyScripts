@@ -27,3 +27,5 @@ __author__ = 'ipetrash'
 # # print(translit(u"Тбилиси", 'ru', reversed=True))
 # # Tbilisi
 # #
+
+# TODO: текущий квартал, сколько осталось дней до следующего квартала
