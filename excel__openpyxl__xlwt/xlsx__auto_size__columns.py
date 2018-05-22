@@ -50,5 +50,4 @@ ws = wb.create_sheet('auto')
 fill_sheet(ws)
 set_column_size(ws)
 
-from openpyxl.writer.excel import save_workbook
-save_workbook(wb, 'excel.xlsx')
+wb.save('excel.xlsx')

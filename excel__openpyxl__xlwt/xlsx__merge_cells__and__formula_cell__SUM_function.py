@@ -30,5 +30,4 @@ ws.merge_cells('C2:C4')
 # Total:
 ws['C2'].value = '=SUM(B2:B4)'
 
-from openpyxl.writer.excel import save_workbook
-save_workbook(wb, 'excel.xlsx')
+wb.save('excel.xlsx')

@@ -31,5 +31,4 @@ for i, row in enumerate(rows, 2):
     ws.cell(row=i, column=3).value = "StackOverflow"
 
 
-from openpyxl.writer.excel import save_workbook
-save_workbook(wb, 'excel.xlsx')
+wb.save('excel.xlsx')

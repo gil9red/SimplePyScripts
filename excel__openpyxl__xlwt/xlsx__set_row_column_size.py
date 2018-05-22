@@ -22,5 +22,4 @@ ws = wb.get_active_sheet()
 ws = wb.create_sheet()
 set_row_column_size(ws)
 
-from openpyxl.writer.excel import save_workbook
-save_workbook(wb, 'excel.xlsx')
+wb.save('excel.xlsx')

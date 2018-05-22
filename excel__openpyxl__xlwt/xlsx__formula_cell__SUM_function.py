@@ -29,5 +29,4 @@ for i, row in enumerate(rows, 2):
 # Total:
 ws.cell(row=5, column=2).value = '=SUM(B2:B4)'
 
-from openpyxl.writer.excel import save_workbook
-save_workbook(wb, 'excel.xlsx')
+wb.save('excel.xlsx')

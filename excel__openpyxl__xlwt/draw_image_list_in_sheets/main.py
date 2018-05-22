@@ -40,5 +40,4 @@ if __name__ == '__main__':
         img = Image.open(file_name)
         draw_image(ws, img)
 
-    from openpyxl.writer.excel import save_workbook
-    save_workbook(wb, 'excel.xlsx')
+    wb.save('excel.xlsx')

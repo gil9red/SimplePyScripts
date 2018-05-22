@@ -28,5 +28,4 @@ for i, row in enumerate(rows, 2):
     for j, value in enumerate(row, 1):
         ws.cell(row=i, column=j).value = value
 
-from openpyxl.writer.excel import save_workbook
-save_workbook(wb, 'excel.xlsx')
+wb.save('excel.xlsx')

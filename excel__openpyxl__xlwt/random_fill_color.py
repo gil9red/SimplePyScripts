@@ -42,5 +42,4 @@ ws.sheet_view.zoomScale = 10
 set_row_column_size(ws)
 set_fill_color(ws)
 
-from openpyxl.writer.excel import save_workbook
-save_workbook(wb, 'excel.xlsx')
+wb.save('excel.xlsx')

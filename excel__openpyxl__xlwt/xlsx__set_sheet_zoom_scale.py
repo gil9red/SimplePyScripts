@@ -27,5 +27,4 @@ ws.sheet_view.zoomScale = 200
 ws = wb.create_sheet('500')
 ws.sheet_view.zoomScale = 500
 
-from openpyxl.writer.excel import save_workbook
-save_workbook(wb, 'excel.xlsx')
+wb.save('excel.xlsx')
