@@ -11,6 +11,8 @@ rows = [
     ['Inna', '16', 1],
 ]
 
+
+# pip install openpyxl
 import openpyxl
 wb = openpyxl.Workbook()
 
