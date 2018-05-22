@@ -4,6 +4,10 @@
 __author__ = 'ipetrash'
 
 
+# pip install xlwt
+import xlwt
+
+
 columns = ['Name', 'Age', 'Course']
 rows = [
     ['Vasya', '16', 1],
@@ -11,7 +15,7 @@ rows = [
     ['Inna', '16', 1],
 ]
 
-import xlwt
+
 wb = xlwt.Workbook()
 ws = wb.add_sheet('Students')
 

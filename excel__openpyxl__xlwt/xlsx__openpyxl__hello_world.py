@@ -4,6 +4,10 @@
 __author__ = 'ipetrash'
 
 
+# pip install openpyxl
+import openpyxl
+
+
 columns = ['Name', 'Age', 'Course']
 rows = [
     ['Vasya', '16', 1],
@@ -12,8 +16,6 @@ rows = [
 ]
 
 
-# pip install openpyxl
-import openpyxl
 wb = openpyxl.Workbook()
 
 # Remove default sheet
