@@ -77,6 +77,16 @@ if __name__ == '__main__':
     p = document.add_paragraph('hyperlink: ')
     add_hyperlink(p, 'https://google.ru', 'google', color='FF8822')
 
+    # Empty line
+    document.add_paragraph()
+
+    p = document.add_paragraph('Hello World! -> ')
+    add_hyperlink(p, 'https://google.ru/search?q=Hello', 'Hello')
+    p.add_run(' ')
+    add_hyperlink(p, 'https://google.ru/search?q=World', 'World')
+    p.add_run(' -> ')
+    add_hyperlink(p, 'https://google.ru/search?q=Hello World!', 'Hello World!')
+
     # Save
     file_name_doc = 'word.docx'
     document.save(file_name_doc)
