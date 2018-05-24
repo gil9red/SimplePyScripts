@@ -9,11 +9,11 @@ __author__ = 'ipetrash'
 
 
 # pip install python-docx
-from docx import Document
+import docx
 from docx.shared import Inches, Cm, Mm
 
 
-document = Document()
+document = docx.Document()
 document.add_heading('Document Title', 0)
 
 p = document.add_paragraph('A plain paragraph having some ')
