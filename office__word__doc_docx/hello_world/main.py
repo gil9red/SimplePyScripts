@@ -42,10 +42,13 @@ rows = [
 
 # Без style='Table Grid' у таблицы не будет выделена решетка
 table = document.add_table(rows=1, cols=len(headers), style='Table Grid')
-hdr_cells = table.rows[0].cells
+heading_cells = table.rows[0].cells
 
 for i, value in enumerate(headers):
-    hdr_cells[i].text = value
+    # heading_cells[i].text = value.title()
+
+    # Bold column
+    heading_cells[i].paragraphs[0].add_run(value.title()).bold = True
 
 for row in rows:
     row_cells = table.add_row().cells
