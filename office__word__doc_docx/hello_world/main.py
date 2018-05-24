@@ -70,9 +70,9 @@ document.add_picture(file_name_image, width=Cm(5))
 
 document.add_page_break()
 
-# SAVE
+# Save
 document.save('word.docx')
 
-# OPEN FILE
+# Open file
 import os
 os.startfile('word.docx')
