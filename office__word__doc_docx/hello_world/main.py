@@ -7,7 +7,6 @@ __author__ = 'ipetrash'
 # pip install python-docx
 from docx import Document
 from docx.shared import Inches, Cm, Mm
-from docx.image.gif import Gif
 
 
 document = Document()
