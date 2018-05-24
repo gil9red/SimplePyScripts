@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-#  pip install Py-StackExchange
+# pip install Py-StackExchange
 import stackexchange
 from stackexchange.sites import __SEAPI
 
@@ -22,9 +22,3 @@ while True:
 
     page += 1
     quit()
-
-# print(so.all_tags()[0].name)
-# print(so.all_tags(page=1)[0].name)
-# print(so.all_tags(page=20000))
-# quit()
-# print(so.all_tags(page=20000)[0].name)
