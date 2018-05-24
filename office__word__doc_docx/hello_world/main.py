@@ -75,8 +75,9 @@ document.add_picture(file_name_image, width=Cm(5))
 document.add_page_break()
 
 # Save
-document.save('word.docx')
+file_name_doc = 'word.docx'
+document.save(file_name_doc)
 
 # Open file
 import os
-os.startfile('word.docx')
+os.startfile(file_name_doc)
