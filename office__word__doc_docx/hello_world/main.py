@@ -4,6 +4,10 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: https://github.com/python-openxml/python-docx
+# SOURCE: https://python-docx.readthedocs.io/en/latest/
+
+
 # pip install python-docx
 from docx import Document
 from docx.shared import Inches, Cm, Mm
