@@ -14,7 +14,7 @@ from docx.shared import Inches, Cm, Mm
 
 
 document = docx.Document()
-document.add_heading('Document Title', 0)
+document.add_heading('Document Title', level=0)
 
 p = document.add_paragraph('A plain paragraph having some ')
 p.add_run('bold').bold = True
