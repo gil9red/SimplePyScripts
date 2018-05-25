@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# ANALOG: https://github.com/gil9red/SimplePyScripts/blob/67bd8172e86df674b28e558e32990c8a20dbb345/stackoverflow/download_tags__and_export_docx.py
+
+
 # pip install Py-StackExchange
 import stackexchange
 
