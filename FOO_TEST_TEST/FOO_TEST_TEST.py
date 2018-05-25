@@ -89,7 +89,8 @@ for tag in so.all_tags(pagesize=100):
         #       разработки веб-приложений. Используйте эту метку, если у Вас возникли вопросы по применению
         #       данного языка или о самом языке.'
         #       https://ru.stackoverflow.com/tags/php/info
-
+        # NOTE: похоже, API не дает возможность получить тело тега, значит задачу придется решать через парсер:
+        #       https://github.com/gil9red/SimplePyScripts/blob/340a84f9922c86a4de7f218c7d836fe1dd9b8a13/stackoverflow/download_tags.py
         wiki = tag.wiki.fetch()
         excerpt = wiki.excerpt
 
