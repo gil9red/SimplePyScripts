@@ -13,6 +13,8 @@ Download tags with description and save in file as JSON.
 import requests
 from bs4 import BeautifulSoup
 import time
+import itertools
+
 
 headers = {
     'User-Agent': "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:51.0) Gecko/20100101 Firefox/51.0"
@@ -20,18 +22,20 @@ headers = {
 
 tags = dict()
 
-for page in range(1, 106):
-    print(page)
+for page in itertools.count(start=1):
+    print('page:', page)
 
     try:
         rs = requests.get('http://ru.stackoverflow.com/tags?page={}&tab=popular'.format(page), headers=headers)
 
-        root = BeautifulSoup(rs.content, 'lxml')
+        root = BeautifulSoup(rs.content, 'html.parser')
         for tag in [a.text.strip() for a in root.select('.tag-cell > a')]:
+            print('  tag: "{}"'.format(tag))
+
             url_info = 'http://ru.stackoverflow.com/tags/{}/info'.format(tag)
 
             rs = requests.get(url_info, headers=headers)
-            root = BeautifulSoup(rs.content, 'lxml')
+            root = BeautifulSoup(rs.content, 'html.parser')
 
             # TODO: Ignore tags without description
             if root.select_one('.post-text'):
@@ -48,7 +52,8 @@ for page in range(1, 106):
         import traceback
         print("ERROR: {}\n\n{}".format(e, traceback.format_exc()))
 
-        break
+        # Для отработки алгоритма
+        # break
 
 import json
 json.dump(tags, open('tags.json', 'w', encoding='utf-8'), ensure_ascii=False)
