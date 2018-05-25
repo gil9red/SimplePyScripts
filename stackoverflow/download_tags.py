@@ -16,46 +16,68 @@ import time
 import itertools
 
 
-headers = {
-    'User-Agent': "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:51.0) Gecko/20100101 Firefox/51.0"
-}
+def get_all_tags(need_pages=None, on_exception_stop=False) -> dict:
+    """
+    Функция парсит страницу тегов/меток и возвращает их.
 
-tags = dict()
+    :param need_pages: Т.к. теги будут в порядке убывания популярности, то теги на первых десятках страниц будут
+    гарантировано заполнены, из-за их популярности, остальные может не иметь смысла скачивать
+    Пример получения первых 20 страниц: NEED_PAGES = 20
+    :param on_exception_stop: если True и при парсинге возникнет исключение, парсер будет остановлен
+    :return: dict
+    """
 
-for page in itertools.count(start=1):
-    print('page:', page)
+    headers = {
+        'User-Agent': "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:51.0) Gecko/20100101 Firefox/51.0"
+    }
 
-    try:
-        rs = requests.get('http://ru.stackoverflow.com/tags?page={}&tab=popular'.format(page), headers=headers)
+    tags = dict()
 
-        root = BeautifulSoup(rs.content, 'html.parser')
-        for tag in [a.text.strip() for a in root.select('.tag-cell > a')]:
-            print('  tag: "{}"'.format(tag))
+    for page in itertools.count(start=1):
+        print('page:', page)
 
-            url_info = 'http://ru.stackoverflow.com/tags/{}/info'.format(tag)
-
-            rs = requests.get(url_info, headers=headers)
+        try:
+            rs = requests.get('http://ru.stackoverflow.com/tags?page={}&tab=popular'.format(page), headers=headers)
             root = BeautifulSoup(rs.content, 'html.parser')
 
-            # TODO: Ignore tags without description
-            if root.select_one('.post-text'):
-                tags[tag] = {
-                    'url_info': url_info,
+            for tag in [a.text.strip() for a in root.select('.tag-cell > a')]:
+                print('  tag: "{}"'.format(tag))
 
-                    # TODO: scrap only need text
-                    'description': root.select_one('.post-text').text.strip(),
-                }
+                url_info = 'http://ru.stackoverflow.com/tags/{}/info'.format(tag)
 
-            time.sleep(2)
+                rs = requests.get(url_info, headers=headers)
+                root = BeautifulSoup(rs.content, 'html.parser')
 
-    except Exception as e:
-        import traceback
-        print("ERROR: {}\n\n{}".format(e, traceback.format_exc()))
+                # TODO: Ignore tags without description
+                if root.select_one('.post-text'):
+                    tags[tag] = {
+                        'url_info': url_info,
 
-        # Для отработки алгоритма
-        # break
+                        # TODO: scrap only need text
+                        'description': root.select_one('.post-text').text.strip(),
+                    }
 
-    print()
+                time.sleep(2)
 
-import json
-json.dump(tags, open('tags.json', 'w', encoding='utf-8'), ensure_ascii=False)
+        except Exception as e:
+            import traceback
+            print("ERROR: {}\n\n{}".format(e, traceback.format_exc()))
+
+            if on_exception_stop:
+                break
+
+        print()
+
+        if page == need_pages:
+            break
+
+    return tags
+
+
+if __name__ == '__main__':
+    # # Parse all pages:
+    # tags = get_all_tags()
+    tags = get_all_tags(need_pages=10)
+
+    import json
+    json.dump(tags, open('tags.json', 'w', encoding='utf-8'), ensure_ascii=False)
