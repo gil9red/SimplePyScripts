@@ -16,7 +16,7 @@ import time
 import itertools
 
 
-def get_all_tags(need_pages=None, on_exception_stop=False) -> dict:
+def get_all_tags(need_pages=None, on_exception_stop=False, repeat_request_tag_on_error=True) -> dict:
     """
     Функция парсит страницу тегов/меток и возвращает их.
 
@@ -24,6 +24,7 @@ def get_all_tags(need_pages=None, on_exception_stop=False) -> dict:
     гарантировано заполнены, из-за их популярности, остальные может не иметь смысла скачивать
     Пример получения первых 20 страниц: NEED_PAGES = 20
     :param on_exception_stop: если True и при парсинге возникнет исключение, парсер будет остановлен
+    :param repeat_request_tag_on_error: если True, запрос парсинга тега будет повторяться пока не будет удачен
     :return: dict
     """
 
@@ -42,22 +43,31 @@ def get_all_tags(need_pages=None, on_exception_stop=False) -> dict:
 
             for tag in [a.text.strip() for a in root.select('.tag-cell > a')]:
                 print('  tag: "{}"'.format(tag))
-
                 url_info = 'http://ru.stackoverflow.com/tags/{}/info'.format(tag)
 
-                rs = requests.get(url_info, headers=headers)
-                root = BeautifulSoup(rs.content, 'html.parser')
+                while True:
+                    try:
+                        rs = requests.get(url_info, headers=headers)
+                        root = BeautifulSoup(rs.content, 'html.parser')
 
-                # TODO: Ignore tags without description
-                if root.select_one('.post-text'):
-                    tags[tag] = {
-                        'url_info': url_info,
+                        # TODO: Ignore tags without description
+                        tag_text = root.select_one('.post-text')
+                        if tag_text:
+                            tags[tag] = {
+                                'url_info': url_info,
+                                'description': tag_text.text.strip(),
+                            }
 
-                        # TODO: scrap only need text
-                        'description': root.select_one('.post-text').text.strip(),
-                    }
+                        # Нам не нужно ДОСить сайт
+                        time.sleep(2)
+                        break
 
-                time.sleep(2)
+                    except Exception as e:
+                        import traceback
+                        print("ERROR: {}\n\n{}".format(e, traceback.format_exc()))
+
+                        if not repeat_request_tag_on_error:
+                            break
 
         except Exception as e:
             import traceback
@@ -77,7 +87,7 @@ def get_all_tags(need_pages=None, on_exception_stop=False) -> dict:
 if __name__ == '__main__':
     # # Parse all pages:
     # tags = get_all_tags()
-    tags = get_all_tags(need_pages=10)
+    tags = get_all_tags(need_pages=20)
 
     import json
     json.dump(tags, open('tags.json', 'w', encoding='utf-8'), ensure_ascii=False)
