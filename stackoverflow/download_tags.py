@@ -55,5 +55,7 @@ for page in itertools.count(start=1):
         # Для отработки алгоритма
         # break
 
+    print()
+
 import json
 json.dump(tags, open('tags.json', 'w', encoding='utf-8'), ensure_ascii=False)
