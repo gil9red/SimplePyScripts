@@ -59,6 +59,19 @@ def get_all_tags(need_pages=None, need_tags=None, on_exception_stop=False, repea
                                 'description': tag_text.text.strip(),
                             }
 
+                            # TODO: удалить текст
+                            # Для этой метки до сих пор нет описания.
+                            # Описание помогает новичкам глубже понять тематику метки, содержит обзор темы, которую
+                            # представляет метка, а также инструкции по её использованию.
+                            # Все зарегистированные пользователи могут предлагать новые описания меток.
+                            # (Обратите внимание: если у вас меньше 20000 баллов репутации, то перед публикацией ваши
+                            # изменения в описании метки должны будут пройти проверку).
+
+                            # TODO: удалить лишние пробелы, \n и \t
+                            # description = re.sub(' {2,}', ' ', description)
+                            # description = re.sub('\n{2,}', '\n', description)
+                            # description = re.sub('\t{2,}', '\t', description)
+
                             if need_tags and len(tags) == need_tags:
                                 return tags
 
