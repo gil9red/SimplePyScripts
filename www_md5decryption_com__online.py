@@ -29,5 +29,5 @@ def md5decryption(hash_):
 
 
 if __name__ == '__main__':
-    print(md5decryption('45af13298a22119fa84debdfc6b2d909'))
-    print(md5decryption('ed076287532e86365e841e92bfc50d8c'))
+    print(md5decryption('45af13298a22119fa84debdfc6b2d909'))  # kombat
+    print(md5decryption('ed076287532e86365e841e92bfc50d8c'))  # Hello World!
