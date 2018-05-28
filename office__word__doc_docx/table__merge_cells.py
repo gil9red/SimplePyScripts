@@ -11,7 +11,7 @@ import docx
 COL_COUNT = 5
 ROW_COUNT = 5
 
-HEADERS = [str(i) for i in range(1, ROW_COUNT + 1)]
+HEADERS = ['TABLE HEADER', '', '', '', '']
 ROWS = [
     ['{}x{}'.format(i, j) for j in range(1, COL_COUNT + 1)] for i in range(1, ROW_COUNT + 1)
 ]
@@ -19,7 +19,14 @@ ROWS = [
 
 def fill_table(document, headers, rows):
     table = document.add_table(rows=1, cols=len(headers), style='Table Grid')
-    table.cell(0, 0).text = 'TABLE HEADER'
+    heading_cells = table.rows[0].cells
+
+    for i, value in enumerate(headers):
+        # heading_cells[i].text = value
+
+        # Bold column
+        if value:
+            heading_cells[i].paragraphs[0].add_run(value).bold = True
 
     for row in rows:
         cells = table.add_row().cells
