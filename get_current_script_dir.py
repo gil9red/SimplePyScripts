@@ -15,7 +15,7 @@ def get_current_script_dir(follow_symlinks=True, normcase=False) -> str:
     if getattr(sys, 'frozen', False):
         path = os.path.abspath(sys.executable)
     else:
-        # NOTE: analog inspect.getabsfile without os.path.normcase
+        # Analog inspect.getabsfile without os.path.normcase
         path = inspect.getframeinfo(inspect.currentframe()).filename
         path = os.path.abspath(path)
 
