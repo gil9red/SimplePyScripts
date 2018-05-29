@@ -5,7 +5,7 @@ __author__ = 'ipetrash'
 
 
 # pip install simpleeval
-from simpleeval import simple_eval, EvalWithCompoundTypes
+from simpleeval import simple_eval
 
 
 print(simple_eval("21 + 21"))  # 42
@@ -23,6 +23,7 @@ print(simple_eval("'1,2,3,4'.split(',')"))  # ['1', '2', '3', '4']
 print(simple_eval("'+'.join('1234')"))  # 1+2+3+4
 print()
 
+from simpleeval import EvalWithCompoundTypes
 print(EvalWithCompoundTypes().eval('list("Hello").count("l")'))  # 2
 print(simple_eval('list("Hello").count("l")', functions={'list': list}))  # 2
 print()
