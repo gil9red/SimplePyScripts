@@ -18,4 +18,4 @@ s.operators[ast.BitXor] = operator.xor
 # # OR:
 # s.operators[ast.BitXor] = lambda a, b: a ^ b
 
-print(s.eval("2 ^ 10"))
+print(s.eval("2 ^ 10"))  # 8
