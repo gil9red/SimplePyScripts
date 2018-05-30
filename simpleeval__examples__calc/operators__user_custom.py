@@ -4,7 +4,9 @@
 __author__ = 'ipetrash'
 
 
-# TODO: https://github.com/danthedeckie/simpleeval#operators
+# SOURCE: https://github.com/danthedeckie/simpleeval#operators
+
+
 # pip install simpleeval
 from simpleeval import SimpleEval
 
