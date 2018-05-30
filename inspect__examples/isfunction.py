@@ -14,8 +14,16 @@ class Foo:
 
 
 import inspect
-print(inspect.isfunction(lambda: 1))  # True
-print(inspect.isfunction(foo))  # True
+print(inspect.isroutine(lambda: 1))  # True
+print(inspect.isroutine(foo))  # True
+print()
 
 # Functor
-print(inspect.isfunction(Foo()))  # False
+foo = Foo()
+print(inspect.isroutine(foo))  # False
+print(hasattr(foo, '__call__'))  # True
+print()
+
+import math
+print(inspect.isroutine(math.sin))  # True
+print(inspect.isroutine(print))  # True
