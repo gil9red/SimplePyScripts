@@ -11,10 +11,10 @@ __author__ = 'ipetrash'
 from simpleeval import SimpleEval
 
 import ast
-import operator
+import operator as op
 
 s = SimpleEval()
-s.operators[ast.BitXor] = operator.xor
+s.operators[ast.BitXor] = op.xor
 # # OR:
 # s.operators[ast.BitXor] = lambda a, b: a ^ b
 

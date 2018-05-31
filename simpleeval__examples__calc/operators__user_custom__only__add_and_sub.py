@@ -11,12 +11,12 @@ __author__ = 'ipetrash'
 from simpleeval import simple_eval, SimpleEval
 
 import ast
-import operator
+import operator as op
 
 
 SUPPORTED_OPERATORS = {
-    ast.Add: operator.add,
-    ast.Sub: operator.sub,
+    ast.Add: op.add,
+    ast.Sub: op.sub,
 }
 
 
