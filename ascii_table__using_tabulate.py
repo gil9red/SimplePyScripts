@@ -10,3 +10,15 @@ rows = [['#1', 'http://amiller.example.com', 'Andrew Miller', 'amiller', '11 Dec
 # pip install tabulate
 from tabulate import tabulate
 print(tabulate(rows, headers=headers, tablefmt="grid"))
+
+print('\n')
+
+# Without header
+rows = [
+    ['randint(x)', 'Return a random int below x'],
+    ['rand()', 'Return a random float between 0 and 1'],
+    ['int(x)', 'Convert x to an int.'],
+    ['float(x)', 'Convert x to a float.'],
+    ['str(x)', 'Convert x to a str (unicode in py2)'],
+]
+print(tabulate(rows, headers=[], tablefmt="grid"))
