@@ -13,4 +13,3 @@ keyboard.add_hotkey('Ctrl + 1', lambda: winsound.Beep(1000, duration=50) or pyau
 keyboard.add_hotkey('Ctrl + 2', lambda: winsound.Beep(1000, duration=50) or pyautogui.mouseUp())
 
 keyboard.wait('Ctrl + Q')
-
