@@ -13,6 +13,7 @@ from simpleeval import SimpleEval
 import ast
 import operator as op
 
+
 s = SimpleEval()
 s.operators[ast.BitXor] = op.xor
 # # OR:
