@@ -8,7 +8,7 @@ __author__ = 'ipetrash'
 
 
 # pip install simpleeval
-from simpleeval import simple_eval
+from simpleeval import simple_eval, SimpleEval
 
 
 print(simple_eval("a + b", names={"a": 11, "b": 100}))   # 111
@@ -39,3 +39,21 @@ def name_handler_dict(node):
 
 
 print(simple_eval('A + b + c', names=name_handler_dict))  # 111
+print()
+
+
+# SimpleEval class
+
+my_eval = SimpleEval()
+my_eval.names['a'] = 1
+my_eval.names['b'] = 1
+
+print(my_eval.eval("a + b"))  # 2
+
+try:
+    print(my_eval.eval("a + b + c"))
+except Exception as e:
+    print(e)  # 'c' is not defined for expression 'a + b + c'
+
+my_eval.names['c'] = 3
+print(my_eval.eval("a + b + c"))  # 5
