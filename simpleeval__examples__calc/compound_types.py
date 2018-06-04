@@ -11,8 +11,10 @@ __author__ = 'ipetrash'
 # SimpleEval with that.
 # """
 
+
 # pip install simpleeval
 from simpleeval import simple_eval, SimpleEval, EvalWithCompoundTypes
+
 
 # SimpleEval and simple_eval NOT WORK with compound types
 try:
