@@ -8,8 +8,8 @@ __author__ = 'ipetrash'
 from simpleeval import simple_eval
 
 
-print(simple_eval("21 + 21"))  # 42
-print(simple_eval("'21' + '21'"))  # '2121'
+print(simple_eval("21 + 21"))           # 42
+print(simple_eval("'21' + '21'"))       # '2121'
 print(simple_eval("int('21' + '21')"))  # 2121
 print()
 
@@ -20,7 +20,7 @@ print()
 
 # Call methods
 print(simple_eval("'1,2,3,4'.split(',')"))  # ['1', '2', '3', '4']
-print(simple_eval("'+'.join('1234')"))  # 1+2+3+4
+print(simple_eval("'+'.join('1234')"))      # 1+2+3+4
 print()
 
 from simpleeval import EvalWithCompoundTypes
@@ -41,5 +41,15 @@ def my_md5(value):
 
 
 print(simple_eval("md5('Hello World!')", functions={'md5': my_md5}))  # ed076287532e86365e841e92bfc50d8c
-
 print(simple_eval("list('1234')", functions={'list': list}))  # ['1', '2', '3', '4']
+print()
+
+# Using SimpleEval class
+from simpleeval import SimpleEval
+
+my_eval = SimpleEval()
+my_eval.names['a'] = 2
+my_eval.functions['square'] = lambda x: x * x
+
+print(my_eval.eval('1 + 1 * a'))          # 3
+print(my_eval.eval('square(1 + 1 * a)'))  # 9
