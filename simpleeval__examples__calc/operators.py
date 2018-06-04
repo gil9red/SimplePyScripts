@@ -38,8 +38,10 @@ __author__ = 'ipetrash'
 # | in | is something contained within something else. "spam" in "my breakfast" -> False |
 # +----+---------------------------------------------------------------------------------+
 
+
 # pip install simpleeval
 from simpleeval import simple_eval
+
 
 print(simple_eval("21 + 21"))  # 42
 print(simple_eval("100 - 1"))  # 99
