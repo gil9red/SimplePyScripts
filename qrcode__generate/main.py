@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: https://github.com/lincolnloop/python-qrcode
+
+
 text = 'Hello World!'
 
 # pip install qrcode
