@@ -7,8 +7,9 @@ __author__ = 'ipetrash'
 # SOURCE: https://github.com/danthedeckie/simpleeval/blob/master/README.rst#extending
 
 
-import ast
+# pip install simpleeval
 import simpleeval
+import ast
 
 
 class EvalNoMethods(simpleeval.SimpleEval):
