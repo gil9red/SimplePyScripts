@@ -8,7 +8,7 @@ from io import StringIO
 from contextlib import redirect_stdout
 
 
-with StringIO() as file, redirect_stdout(file):
+with StringIO() as f, redirect_stdout(f):
     print('Hello ', end='')
 
     def foo():
@@ -17,6 +17,6 @@ with StringIO() as file, redirect_stdout(file):
     foo()
 
     # Read from IO
-    result = file.getvalue()
+    result = f.getvalue()
 
 print(repr(result))  # 'Hello World\n'
