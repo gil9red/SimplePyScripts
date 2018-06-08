@@ -26,6 +26,8 @@ class SimpleMathEval(SimpleEval):
             'nan': math.nan,
             'pi': math.pi,
             'tau': math.tau,
+            'True': True,
+            'False': False,
         }
         functions = get_name_by_func(math)
 
