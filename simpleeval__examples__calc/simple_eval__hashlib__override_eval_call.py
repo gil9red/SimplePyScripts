@@ -9,10 +9,7 @@ from simpleeval import SimpleEval
 
 import hashlib
 
-
-def hashlib_func(value, algo_name):
-    data = bytes(str(value), 'utf-8')
-    return hashlib.new(algo_name, data).hexdigest()
+from simple_eval__hashlib__fill_functions import hashlib_func
 
 
 class SimpleHashlibEval(SimpleEval):
