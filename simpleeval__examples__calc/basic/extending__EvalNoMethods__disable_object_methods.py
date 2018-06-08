@@ -17,7 +17,7 @@ class EvalNoMethods(simpleeval.SimpleEval):
         if isinstance(node.func, ast.Attribute):
             raise simpleeval.FeatureNotAvailable("No methods please, we're British")
 
-        return super(EvalNoMethods, self)._eval_call(node)
+        return super()._eval_call(node)
 
 
 if __name__ == '__main__':
