@@ -13,7 +13,7 @@ __author__ = 'ipetrash'
 import svgwrite
 
 
-dwg = svgwrite.Drawing('test.svg', (200, 200), debug=True)
+dwg = svgwrite.Drawing('hello_world.svg')
 paragraph = dwg.add(dwg.g(font_size=20))
 paragraph.add(dwg.text("Hello World!", (5, 20)))
 paragraph.add(dwg.text("Привет Мир!", (5, 40)))
