@@ -14,6 +14,7 @@ import svgwrite
 
 
 dwg = svgwrite.Drawing('hello_world.svg')
+
 paragraph = dwg.add(dwg.g(font_size=20))
 paragraph.add(dwg.text("Hello World!", (5, 20)))
 paragraph.add(dwg.text("Привет Мир!", (5, 40)))
