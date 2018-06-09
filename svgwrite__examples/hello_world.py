@@ -4,7 +4,9 @@
 __author__ = 'ipetrash'
 
 
-# SOURCE: https://github.com/mozman/svgwrite
+# SOURCE:   https://github.com/mozman/svgwrite
+# DOC:      https://svgwrite.readthedocs.io/en/master/
+# EXAMPLES: https://github.com/mozman/svgwrite/tree/master/examples
 
 
 # pip install svgwrite
