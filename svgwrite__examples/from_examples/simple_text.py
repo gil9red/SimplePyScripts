@@ -38,6 +38,6 @@ def simple_text(name):
 
 if __name__ == '__main__':
     import sys
-    prog_name = sys.argv[0].rstrip('.py')
+    prog_name = sys.argv[0].rstrip('.py') + '.svg'
 
-    simple_text(prog_name + ".svg")
+    simple_text(prog_name)

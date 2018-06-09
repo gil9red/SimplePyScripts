@@ -54,9 +54,9 @@ def draw_board(dwg):
 
 
 if __name__ == '__main__':
-    prog_name = sys.argv[0].rstrip('.py')
+    prog_name = sys.argv[0].rstrip('.py') + '.svg'
 
-    dwg = svgwrite.Drawing(prog_name + '.svg', size=BOARD_SIZE)
+    dwg = svgwrite.Drawing(prog_name, size=BOARD_SIZE)
     dwg.viewbox(0, 0, 80, 80)
 
     # checkerboard has a size of 10cm x 10cm;

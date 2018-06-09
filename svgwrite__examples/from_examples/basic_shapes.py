@@ -41,4 +41,7 @@ def basic_shapes(name):
 
 
 if __name__ == '__main__':
-    basic_shapes('basic_shapes.svg')
+    import sys
+    prog_name = sys.argv[0].rstrip('.py') + '.svg'
+
+    basic_shapes(prog_name)

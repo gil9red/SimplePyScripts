@@ -22,4 +22,7 @@ def hyperlink(name):
 
 
 if __name__ == '__main__':
-    hyperlink("hyperlink.svg")
+    import sys
+    prog_name = sys.argv[0].rstrip('.py') + '.svg'
+
+    hyperlink(prog_name)

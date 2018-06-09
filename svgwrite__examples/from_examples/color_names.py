@@ -197,6 +197,6 @@ def create_svg(name):
 
 if __name__ == '__main__':
     import sys
-    prog_name = sys.argv[0].rstrip('.py')
+    prog_name = sys.argv[0].rstrip('.py') + '.svg'
 
-    create_svg(prog_name + '.svg')
+    create_svg(prog_name)
