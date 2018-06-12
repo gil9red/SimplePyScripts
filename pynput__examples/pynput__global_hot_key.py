@@ -4,18 +4,20 @@
 __author__ = 'ipetrash'
 
 
-if __name__ == '__main__':
-    def on_release(key):
-        if str(key) == 'Key.f7':
-            print('screenshot')
+# pip install pynput
+from pynput.keyboard import Key, Listener
 
-            # Fullscreen
-            import pyscreenshot as ImageGrab
-            im = ImageGrab.grab()
-            im.save('screenshot.png')
-            im.show()
 
-    # pip install pynput
-    from pynput import keyboard
-    with keyboard.Listener(on_release=on_release) as listener:
-        listener.join()
+def on_release(key):
+    if key == Key.f7:
+        print('screenshot')
+
+        # Fullscreen
+        import pyscreenshot as ImageGrab
+        im = ImageGrab.grab()
+        im.save('screenshot.png')
+        im.show()
+
+
+with Listener(on_release=on_release) as listener:
+    listener.join()
