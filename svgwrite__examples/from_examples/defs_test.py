@@ -51,7 +51,7 @@ def create_svg(name):
     # rendered. it is only there to be referenced elsewhere. To do this, and to allow convenient
     # grouping defined content, SVG provides the 'defs' element."
 
-    # 1. create template polygons
+    # 1. Create template polygons
     half_size = triangle_size / 2
     points = [
         (-half_size, -half_size),
@@ -59,24 +59,24 @@ def create_svg(name):
         (0, triangle_size * 0.433013)
     ]
 
-    # 2. create the symbol
+    # 2. Create the symbol
     symbol_without_fill = dwg.symbol(id='symbol_without_fill')
 
-    # 3. add symbols to the defs section
+    # 3. Add symbols to the defs section
     dwg.defs.add(symbol_without_fill)
 
-    # 4. important: define viewbox of the symbol!
+    # 4. Important: define viewbox of the symbol!
     symbol_without_fill.viewbox(-half_size, -half_size, triangle_size, triangle_size)
 
-    # and define how the symbol should behave on resizing by <use>
+    # And define how the symbol should behave on resizing by <use>
     # default parameters for fit(horiz="center", vert="middle", scale="meet")
     # seems not necessary
     # symbol_without_fill.fit()
 
-    # 5. add triangles to the symbol containers
+    # 5. Add triangles to the symbol containers
     symbol_without_fill.add(dwg.polygon(points))
 
-    # 6. use symbols - param size is necessary - and only unset params can be overwritten
+    # 6. Use symbols - param size is necessary - and only unset params can be overwritten
     dwg.add(dwg.use(symbol_without_fill, insert=(200, 200), size=(triangle_size, triangle_size), class_='yellow'))
     dwg.add(dwg.use(symbol_without_fill, insert=(300, 300), size=(triangle_size*1.2, triangle_size*1.2), class_ ='red'))
     dwg.add(dwg.use(symbol_without_fill, insert=(400, 400), size=(triangle_size*0.5, triangle_size*0.5), class_ ='blue'))
