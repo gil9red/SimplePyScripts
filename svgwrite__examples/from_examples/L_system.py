@@ -118,4 +118,4 @@ if __name__ == '__main__':
     LSystem(prog_name + '__hilbert_space_filling_curve.svg', formula=HilbertSpaceFillingCurve)
     LSystem(prog_name + '__levy_dragon.svg', formula=LevyDragon)
     LSystem(prog_name + '__levy_curve.svg', formula=LevyCurve)
-    LSystem(prog_name + '__kochsnow_flake.svg', formula=KochSnowflake)
+    LSystem(prog_name + '__kochsnow_snowflake.svg', formula=KochSnowflake)
