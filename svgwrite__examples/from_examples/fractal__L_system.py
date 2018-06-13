@@ -59,6 +59,10 @@ HilbertSpaceFillingCurve = {
 }
 
 
+# TODO: append "Sierpinski triangle", "Fractal plant", "Cantor set", "Fractal (binary) tree"
+#       https://en.wikipedia.org/wiki/L-system
+
+
 # SOURCE: http://code.activestate.com/recipes/577159/
 def LSystem(name, formula=LevyCurve):
     # L-System Fractals
