@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 # SOURCE: https://github.com/mozman/svgwrite/blob/master/examples/LSystem.py
+# DOC:    https://en.wikipedia.org/wiki/L-system
 
 
 # pip install svgwrite
@@ -13,21 +14,49 @@ import svgwrite
 import math
 
 
-LevyDragon = {'length':1, 'numAngle':4, 'level':16, 'init': 'FX',
-              'target': 'X', 'replacement': 'X+YF+', 'target2': 'Y',
-              'replacement2': '-FX-Y'}
+LevyDragon = {
+    'length': 1,
+    'numAngle': 4,
+    'level': 16,
+    'init': 'FX',
+    'target': 'X',
+    'replacement': 'X+YF+',
+    'target2': 'Y',
+    'replacement2': '-FX-Y'
+}
 
-KochSnowflake = {'length':1, 'numAngle':6, 'level':6, 'init': 'F++F++F',
-                 'target': 'F', 'replacement': 'F-F++F-F', 'target2': '',
-                 'replacement2': ''}
+KochSnowflake = {
+    'length': 1,
+    'numAngle': 6,
+    'level': 6,
+    'init': 'F++F++F',
+    'target': 'F',
+    'replacement': 'F-F++F-F',
+    'target2': '',
+    'replacement2': ''
+}
 
-LevyCurve = {'length':1, 'numAngle':8, 'level':17, 'init': 'F',
-             'target': 'F', 'replacement': '+F--F+', 'target2': '',
-             'replacement2': ''}
+LevyCurve = {
+    'length': 1,
+    'numAngle': 8,
+    'level': 17,
+    'init': 'F',
+    'target': 'F',
+    'replacement': '+F--F+',
+    'target2': '',
+    'replacement2': ''
+}
 
-HilbertSpaceFillingCurve = {'length':1, 'numAngle':4, 'level':5, 'init': 'L',
-             'target': 'L', 'replacement': '+RF-LFL-FR+', 'target2': 'R',
-             'replacement2': '-LF+RFR+FL-'}
+HilbertSpaceFillingCurve = {
+    'length': 1,
+    'numAngle': 4,
+    'level': 5,
+    'init': 'L',
+    'target': 'L',
+    'replacement': '+RF-LFL-FR+',
+    'target2': 'R',
+    'replacement2': '-LF+RFR+FL-'
+}
 
 
 # SOURCE: http://code.activestate.com/recipes/577159/
@@ -83,24 +112,24 @@ def LSystem(name, formula=LevyCurve):
 
     for ch in fractal:
         if ch == 'F':
-            # turtle forward(length)
+            # Turtle forward(length)
             x += length * cs[k]
             y += length * sn[k]
 
             curve.points.append( (x, y) )
 
-            # find maxima
+            # Find maxima
             xmin = min(xmin, x)
             xmax = max(xmax, x)
             ymin = min(ymin, y)
             ymax = max(ymax, y)
 
         elif ch == '+':
-            # turtle right(angle)
+            # Turtle right(angle)
             k = (k + 1) % num_angle
 
         elif ch == '-':
-            # turtle left(angle)
+            # Turtle left(angle)
             k = ((k - 1) + num_angle) % num_angle
 
     print("L-System with %d segments.\n" % (len(curve.points) - 1))
