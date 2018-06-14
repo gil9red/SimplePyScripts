@@ -71,6 +71,19 @@ SierpinskiTriangle = {
     'replacement2': 'GG'
 }
 
+# https://en.wikipedia.org/wiki/L-system#Example_5:_Sierpinski_triangle
+SierpinskiTriangleArrowheadCurve = {
+    'length': 1,
+    'numAngle': 6,
+    'level': 6,
+    'init': 'A',
+    'target': 'A',
+    'replacement': 'B-A-B',
+    'target2': 'B',
+    'replacement2': 'A+B+A'
+}
+
+
 # TODO: append "Fractal plant", "Cantor set", "Fractal (binary) tree", "Koch curve"
 #       https://en.wikipedia.org/wiki/L-system
 
@@ -165,3 +178,4 @@ if __name__ == '__main__':
     LSystem(prog_name + '__levy_curve.svg', formula=LevyCurve)
     LSystem(prog_name + '__hilbert_space_filling_curve.svg', formula=HilbertSpaceFillingCurve)
     LSystem(prog_name + '__sierpinski_triangle.svg', formula=SierpinskiTriangle)
+    LSystem(prog_name + '__sierpinski_triangle_arrowhead_curve.svg', formula=SierpinskiTriangleArrowheadCurve)
