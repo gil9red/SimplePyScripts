@@ -103,7 +103,9 @@ KochCurve = {
 # TODO: append "Fractal plant", "Cantor set", "Fractal (binary) tree"
 #       https://en.wikipedia.org/wiki/L-system
 #
-# TODO: _LSystem -> support square bracket syntax, example: https://en.wikipedia.org/wiki/L-system#Example_7:_Fractal_plant
+# TODO: _LSystem -> support square bracket syntax, example:
+#       https://en.wikipedia.org/wiki/L-system#Example_2:_Fractal_(binary)_tree
+#       https://en.wikipedia.org/wiki/L-system#Example_7:_Fractal_plant
 
 
 # SOURCE: http://code.activestate.com/recipes/577159/
