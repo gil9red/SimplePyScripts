@@ -87,9 +87,22 @@ SierpinskiTriangleArrowheadCurve = {
     'replacement2': 'A+B+A'
 }
 
+# https://en.wikipedia.org/wiki/L-system#Example_4:_Koch_curve
+KochCurve = {
+    'length': 1,
+    'numAngle': 4,
+    'level': 3,
+    'init': 'F',
+    'target': 'F',
+    'replacement': 'F+F-F-F+F',
+    'target2': '',
+    'replacement2': ''
+}
 
-# TODO: append "Fractal plant", "Cantor set", "Fractal (binary) tree", "Koch curve"
+
+# TODO: append "Fractal plant", "Cantor set", "Fractal (binary) tree"
 #       https://en.wikipedia.org/wiki/L-system
+#
 # TODO: _LSystem -> support square bracket syntax, example: https://en.wikipedia.org/wiki/L-system#Example_7:_Fractal_plant
 
 
@@ -190,6 +203,7 @@ if __name__ == '__main__':
     LSystem(prog_name + '__hilbert_space_filling_curve.svg', formula=HilbertSpaceFillingCurve)
     LSystem(prog_name + '__sierpinski_triangle.svg', formula=SierpinskiTriangle)
     LSystem(prog_name + '__sierpinski_triangle_arrowhead_curve.svg', formula=SierpinskiTriangleArrowheadCurve)
+    LSystem(prog_name + '__koch_curve.svg', formula=KochCurve)
 
     # # Loop for level step
     # for i in range(2, 5 + 1):
