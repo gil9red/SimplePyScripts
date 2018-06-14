@@ -14,7 +14,7 @@ import svgwrite
 import math
 
 
-LevyDragon = {
+DragonCurve = {
     'length': 1,
     'numAngle': 4,
     'level': 16,
@@ -66,8 +66,8 @@ HilbertSpaceFillingCurve = {
 # SOURCE: http://code.activestate.com/recipes/577159/
 def LSystem(name, formula=LevyCurve):
     # L-System Fractals
-    # FB - 201003276
-    # image size
+
+    print("Creating: " + name)
 
     # Generate the fractal drawing string
     def _LSystem(formula):
@@ -92,7 +92,6 @@ def LSystem(name, formula=LevyCurve):
 
         return state
 
-    print("Creating: %s\n" % name)
     xmin, ymin = (100000, 100000)
     xmax, ymax = (-100000, -100000)
 
@@ -120,7 +119,7 @@ def LSystem(name, formula=LevyCurve):
             x += length * cs[k]
             y += length * sn[k]
 
-            curve.points.append( (x, y) )
+            curve.points.append((x, y))
 
             # Find maxima
             xmin = min(xmin, x)
@@ -149,6 +148,6 @@ if __name__ == '__main__':
     prog_name = sys.argv[0].rstrip('.py')
 
     LSystem(prog_name + '__hilbert_space_filling_curve.svg', formula=HilbertSpaceFillingCurve)
-    LSystem(prog_name + '__levy_dragon.svg', formula=LevyDragon)
+    LSystem(prog_name + '__dragon_curve.svg', formula=DragonCurve)
     LSystem(prog_name + '__levy_curve.svg', formula=LevyCurve)
     LSystem(prog_name + '__kochsnow_snowflake.svg', formula=KochSnowflake)
