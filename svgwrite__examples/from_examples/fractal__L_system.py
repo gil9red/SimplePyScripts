@@ -14,10 +14,11 @@ import svgwrite
 import math
 
 
+# https://en.wikipedia.org/wiki/L-system#Example_6:_Dragon_curve
 DragonCurve = {
     'length': 1,
     'numAngle': 4,
-    'level': 16,
+    'level': 10,
     'init': 'FX',
     'target': 'X',
     'replacement': 'X+YF+',
@@ -39,7 +40,7 @@ KochSnowflake = {
 LevyCurve = {
     'length': 1,
     'numAngle': 8,
-    'level': 17,
+    'level': 12,
     'init': 'F',
     'target': 'F',
     'replacement': '+F--F+',
@@ -58,8 +59,19 @@ HilbertSpaceFillingCurve = {
     'replacement2': '-LF+RFR+FL-'
 }
 
+# https://en.wikipedia.org/wiki/L-system#Example_5:_Sierpinski_triangle
+SierpinskiTriangle = {
+    'length': 1,
+    'numAngle': 3,
+    'level': 6,
+    'init': 'F-G-G',
+    'target': 'F',
+    'replacement': 'F-G+F+G-F',
+    'target2': 'G',
+    'replacement2': 'GG'
+}
 
-# TODO: append "Sierpinski triangle", "Fractal plant", "Cantor set", "Fractal (binary) tree"
+# TODO: append "Fractal plant", "Cantor set", "Fractal (binary) tree", "Koch curve"
 #       https://en.wikipedia.org/wiki/L-system
 
 
@@ -99,6 +111,7 @@ def LSystem(name, formula=LevyCurve):
     length = formula['length']
     fractal = _LSystem(formula)
     na = 2.0 * math.pi / num_angle
+
     sn = []
     cs = []
 
@@ -114,7 +127,15 @@ def LSystem(name, formula=LevyCurve):
     curve = dwg.polyline(points=[(x, y)], stroke='green', fill='none', stroke_width=0.1)
 
     for ch in fractal:
-        if ch == 'F':
+        if ch == '+':
+            # Turtle right(angle)
+            k = (k + 1) % num_angle
+
+        elif ch == '-':
+            # Turtle left(angle)
+            k = ((k - 1) + num_angle) % num_angle
+
+        else:
             # Turtle forward(length)
             x += length * cs[k]
             y += length * sn[k]
@@ -126,14 +147,6 @@ def LSystem(name, formula=LevyCurve):
             xmax = max(xmax, x)
             ymin = min(ymin, y)
             ymax = max(ymax, y)
-
-        elif ch == '+':
-            # Turtle right(angle)
-            k = (k + 1) % num_angle
-
-        elif ch == '-':
-            # Turtle left(angle)
-            k = ((k - 1) + num_angle) % num_angle
 
     print("L-System with %d segments.\n" % (len(curve.points) - 1))
 
@@ -147,7 +160,8 @@ if __name__ == '__main__':
     import sys
     prog_name = sys.argv[0].rstrip('.py')
 
-    LSystem(prog_name + '__hilbert_space_filling_curve.svg', formula=HilbertSpaceFillingCurve)
     LSystem(prog_name + '__dragon_curve.svg', formula=DragonCurve)
-    LSystem(prog_name + '__levy_curve.svg', formula=LevyCurve)
     LSystem(prog_name + '__kochsnow_snowflake.svg', formula=KochSnowflake)
+    LSystem(prog_name + '__levy_curve.svg', formula=LevyCurve)
+    LSystem(prog_name + '__hilbert_space_filling_curve.svg', formula=HilbertSpaceFillingCurve)
+    LSystem(prog_name + '__sierpinski_triangle.svg', formula=SierpinskiTriangle)
