@@ -23,7 +23,8 @@ DragonCurve = {
     'target': 'X',
     'replacement': 'X+YF+',
     'target2': 'Y',
-    'replacement2': '-FX-Y'
+    'replacement2': '-FX-Y',
+    'ignore': 'XY',
 }
 
 KochSnowflake = {
@@ -48,16 +49,19 @@ LevyCurve = {
     'replacement2': ''
 }
 
+# https://en.wikipedia.org/wiki/Hilbert_curve#Representation_as_Lindenmayer_system
 HilbertSpaceFillingCurve = {
     'length': 1,
     'numAngle': 4,
     'level': 5,
-    'init': 'L',
-    'target': 'L',
-    'replacement': '+RF-LFL-FR+',
-    'target2': 'R',
-    'replacement2': '-LF+RFR+FL-'
+    'init': 'A',
+    'target': 'A',
+    'replacement': '-BF+AFA+FB-',
+    'target2': 'B',
+    'replacement2': '+AF-BFB-FA+',
+    'ignore': 'AB'
 }
+
 
 # https://en.wikipedia.org/wiki/L-system#Example_5:_Sierpinski_triangle
 SierpinskiTriangle = {
@@ -86,6 +90,7 @@ SierpinskiTriangleArrowheadCurve = {
 
 # TODO: append "Fractal plant", "Cantor set", "Fractal (binary) tree", "Koch curve"
 #       https://en.wikipedia.org/wiki/L-system
+# TODO: _LSystem -> support square bracket syntax, example: https://en.wikipedia.org/wiki/L-system#Example_7:_Fractal_plant
 
 
 # SOURCE: http://code.activestate.com/recipes/577159/
@@ -140,6 +145,10 @@ def LSystem(name, formula=LevyCurve):
     curve = dwg.polyline(points=[(x, y)], stroke='green', fill='none', stroke_width=0.1)
 
     for ch in fractal:
+        # Ignore
+        if formula.get('ignore') and ch in formula.get('ignore'):
+            continue
+
         if ch == '+':
             # Turtle right(angle)
             k = (k + 1) % num_angle
@@ -149,6 +158,8 @@ def LSystem(name, formula=LevyCurve):
             k = ((k - 1) + num_angle) % num_angle
 
         else:
+            # Draw line
+
             # Turtle forward(length)
             x += length * cs[k]
             y += length * sn[k]
@@ -179,3 +190,9 @@ if __name__ == '__main__':
     LSystem(prog_name + '__hilbert_space_filling_curve.svg', formula=HilbertSpaceFillingCurve)
     LSystem(prog_name + '__sierpinski_triangle.svg', formula=SierpinskiTriangle)
     LSystem(prog_name + '__sierpinski_triangle_arrowhead_curve.svg', formula=SierpinskiTriangleArrowheadCurve)
+
+    # # Loop for level step
+    # for i in range(2, 5 + 1):
+    #     formula = SierpinskiTriangle.copy()
+    #     formula['level'] = i
+    #     LSystem(prog_name + '__sierpinski_triangle__n{}.svg'.format(i), formula=formula)
