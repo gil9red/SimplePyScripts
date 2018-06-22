@@ -225,16 +225,16 @@ if __name__ == "__main__":
     t = threading.Thread(target=vibration_tick)
     t.start()
 
-    # Localhost
-    # app.debug = True
-    app.run(
-        # OR: host='127.0.0.1'
-        host='192.168.0.102',
-        port=10000,
-
-        # # Включение поддержки множества подключений
-        # threaded=True,
-    )
+    # # Localhost
+    # # app.debug = True
+    # app.run(
+    #     # OR: host='127.0.0.1'
+    #     host='192.168.0.102',
+    #     port=10000,
+    #
+    #     # # Включение поддержки множества подключений
+    #     # threaded=True,
+    # )
 
     # # Public IP
     app.run(host='0.0.0.0')
