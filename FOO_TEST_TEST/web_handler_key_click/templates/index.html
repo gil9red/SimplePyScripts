@@ -1,0 +1,107 @@
+<html>
+    <head>
+        <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+
+        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+
+        <!-- SOURCE: https://github.com/silviubogan/jquery-autoclick-while-pressed -->
+        <script type="text/javascript" src="{{ url_for('static', filename='js/autoclick-while-pressed.min.js') }}"></script>
+
+        <style>
+            table {
+                width: 100%;
+                height: 100%;
+            }
+
+            table tr {
+                height: 33%;
+            }
+
+            table td button {
+                width: 100%;
+                height: 100%;
+
+                font-size: 10em;
+            }
+
+            /*
+            // Стиль для отключения возможности выделять
+            // .noselect {
+            button {
+                -webkit-touch-callout: none; /* iOS Safari */
+                -webkit-user-select: none; /* Safari */
+                -khtml-user-select: none; /* Konqueror HTML */
+                -moz-user-select: none; /* Firefox */
+                -ms-user-select: none; /* Internet Explorer/Edge */
+                user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+            }
+            */
+        </style>
+    </head>
+
+    <body>
+        <table>
+            <colgroup>
+               <col span="1"  style="width: 33%;">
+               <col span="1" style="width: 33%;">
+               <col span="1" style="width: 33%;">
+            </colgroup>
+
+            <tr>
+                <td></td>
+                <td><button value="up">UP</button></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><button value="left">LEFT</button></td>
+                <td><button value="space">SPACE</button></td>
+                <td><button value="right">RIGHT</button></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><button value="down">DOWN</button></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <script>
+            $(document).ready(function() {
+                // Чтобы был автоклик при зажатии кнопки
+                // SOURCE: https://github.com/silviubogan/jquery-autoclick-while-pressed
+                $("button").autoclickWhilePressed({
+					intervalLength: 300,
+					initialDelay: 500
+				});
+
+                // Чтобы отключить приближение экрана при двойном клике на мобилке
+                // SOURCE: https://stackoverflow.com/a/28752323/5909792
+                $("button").bind('touchend', function(e) {
+                  e.preventDefault();
+                  // Add your code here.
+                  $(this).click();
+                  // This line still calls the standard click event, in case the user needs to interact with the element that is being clicked on, but still avoids zooming in cases of double clicking.
+                });
+
+                $("button").click(function() {
+                    var data = {"key": $(this).attr("value")};
+                    console.log(data);
+                    console.log(JSON.stringify(data));
+
+                    $.ajax({
+                        url: "/key_click",
+                        method: "POST",
+                        data: JSON.stringify(data),
+
+                        contentType: "application/json",
+                        dataType: "json",  // тип данных загружаемых с сервера
+
+                        success: function(data) {
+                            console.log(data);
+                            console.log(JSON.stringify(data));
+                        },
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
