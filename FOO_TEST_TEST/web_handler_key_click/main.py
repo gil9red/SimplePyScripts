@@ -6,6 +6,22 @@ __author__ = 'ipetrash'
 
 import pyautogui
 
+
+# def scroll(down=True, value=200):
+#     value = abs(value)
+#
+#     if down:
+#         value = -value
+#
+#     pyautogui.scroll(value)
+#
+#
+# scroll(down=True)
+# scroll(down=True)
+#
+#
+# quit()
+
 from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 
