@@ -51,11 +51,7 @@
 
     <body>
         <table>
-            <colgroup>
-               <col span="1"  style="width: 33%;">
-               <col span="1" style="width: 33%;">
-               <col span="1" style="width: 33%;">
-            </colgroup>
+            <colgroup></colgroup>
 
             <tr>
                 <td></td>
@@ -76,6 +72,15 @@
 
         <script>
             $(document).ready(function() {
+                // Установка автоширины столбцов таблицы
+                var column_number = $("table").find("tr:first td").length;
+                var colgroup = $("colgroup");
+
+                for (var i = 0; i < column_number; i++) {
+                    colgroup.append('<col span="1" style="width: ' + Math.floor(100 / column_number) + '%;">');
+                }
+
+
                 // Чтобы был автоклик при зажатии кнопки
                 // SOURCE: https://github.com/silviubogan/jquery-autoclick-while-pressed
                 $("button").autoclickWhilePressed({
@@ -83,14 +88,17 @@
 					initialDelay: 500
 				});
 
+
                 // Чтобы отключить приближение экрана при двойном клике на мобилке
                 // SOURCE: https://stackoverflow.com/a/28752323/5909792
                 $("button").bind('touchend', function(e) {
                   e.preventDefault();
                   // Add your code here.
                   $(this).click();
-                  // This line still calls the standard click event, in case the user needs to interact with the element that is being clicked on, but still avoids zooming in cases of double clicking.
+                  // This line still calls the standard click event, in case the user needs to interact with the
+                  // element that is being clicked on, but still avoids zooming in cases of double clicking.
                 });
+
 
                 $("button").click(function() {
                     var data = {"key": $(this).attr("value")};
