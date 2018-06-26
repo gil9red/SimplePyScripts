@@ -71,7 +71,9 @@
                 var colgroup = $("colgroup");
 
                 for (var i = 0; i < column_number; i++) {
-                    colgroup.append('<col span="1" style="width: ' + Math.floor(100 / column_number) + '%;">');
+                    colgroup.append(
+                        '<col span="1" style="width: ' + Math.floor(100 / column_number) + '%;">'
+                    );
                 }
 
 
