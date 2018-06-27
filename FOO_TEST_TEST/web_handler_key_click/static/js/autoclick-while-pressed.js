@@ -16,14 +16,14 @@
         var f = this;
 
         return this.on({
-            mousedown : function () {
+            'mousedown touchstart' : function () {
                 d = setTimeout(function () {
                     c = setInterval(function () {
                         f.trigger(e.eventToTrigger)
                     }, e.intervalLength)
                 }, e.initialDelay)
             },
-            "mouseup mouseleave" : function () {
+            "mouseup mouseleave touchend" : function () {
                 if (null !== d)
                     clearTimeout(d);
 

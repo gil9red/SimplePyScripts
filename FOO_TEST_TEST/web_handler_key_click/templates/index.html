@@ -5,7 +5,7 @@
         <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
 
         <!-- SOURCE: https://github.com/silviubogan/jquery-autoclick-while-pressed -->
-        <script type="text/javascript" src="{{ url_for('static', filename='js/autoclick-while-pressed.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/autoclick-while-pressed.js') }}"></script>
 
         <style>
             table {
@@ -25,6 +25,7 @@
                 font-size: 6em;
             }
 
+            /*
             /* Добавление сетки таблицы */
             table {
                 border-collapse: collapse; /* Убираем двойные линии между ячейками */
@@ -33,6 +34,7 @@
                 padding: 3px; /* Поля вокруг содержимого таблицы */
                 border: 1px solid black; /* Параметры рамки */
             }
+            */
 
             /*
             // Стиль для отключения возможности выделять
@@ -93,7 +95,13 @@
 					initialDelay: 500
 				});
 
+				/*
+                $("button").on("click mousedown mouseup touchstart touchmove touchend", function(e){
+                     console.log(e.type, e);
+                });
+                */
 
+                /*
                 // Чтобы отключить приближение экрана при двойном клике на мобилке
                 // SOURCE: https://stackoverflow.com/a/28752323/5909792
                 $("button").bind('touchend', function(e) {
@@ -103,6 +111,7 @@
                   // This line still calls the standard click event, in case the user needs to interact with the
                   // element that is being clicked on, but still avoids zooming in cases of double clicking.
                 });
+                */
 
 
                 $("button").click(function() {
