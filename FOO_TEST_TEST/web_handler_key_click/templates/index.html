@@ -11,7 +11,7 @@
                 table-layout: fixed; /* Фиксированная ширина ячеек */
             }
 
-            table td button {
+            .control {
                 width: 100%;
                 height: 100%;
 
@@ -19,8 +19,7 @@
             }
 
             // Стиль для отключения возможности выделять
-            // .noselect {
-            button {
+            .noselect {
                  -webkit-touch-callout: none; /* iOS Safari */
                  -webkit-user-select: none; /* Safari */
                  -khtml-user-select: none; /* Konqueror HTML */
@@ -48,17 +47,17 @@
 
             <tr>
                 <td></td>
-                <td><button value="up">UP</button></td>
+                <td><button class="control noselect" value="up">UP</button></td>
                 <td></td>
             </tr>
             <tr>
-                <td><button value="left">LEFT</button></td>
-                <td><button value="space">SPACE</button></td>
-                <td><button value="right">RIGHT</button></td>
+                <td><button class="control noselect" value="left">LEFT</button></td>
+                <td><button class="control noselect" value="space">SPACE</button></td>
+                <td><button class="control noselect" value="right">RIGHT</button></td>
             </tr>
             <tr>
                 <td></td>
-                <td><button value="down">DOWN</button></td>
+                <td><button class="control noselect" value="down">DOWN</button></td>
                 <td></td>
             </tr>
         </table>
@@ -80,7 +79,7 @@
 
                 // Чтобы отключить приближение экрана при двойном клике на мобилке
                 // SOURCE: https://stackoverflow.com/a/28752323/5909792
-                $("button").bind('touchend', function(e) {
+                $(".control").bind('touchend', function(e) {
                   e.preventDefault();
                   // Add your code here.
                   $(this).click();
@@ -88,7 +87,7 @@
                   // element that is being clicked on, but still avoids zooming in cases of double clicking.
                 });
 
-                $("button").click(function() {
+                $(".control").click(function() {
                     var data = {"key": $(this).attr("value")};
                     console.log(data);
                     console.log(JSON.stringify(data));
