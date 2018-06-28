@@ -28,29 +28,36 @@
                 float: left;
             }
 
+
             .mouse_area_container {
-                height: 30%;
+                height: 40%;
             }
 
             .mouse_control_container {
                 height: 7%;
             }
 
-            .mouse_control_container > div {
-                width: 100%;
-                height: 100%;
-            }
-
-            .mouse_control_container > div > div {
+            .mouse_control_container > button {
                 width: 50%;
                 height: 100%;
             }
 
-            .mouse_area {
-                width: 100%;
+            #mouse_area {
+                width: 80%;
                 height: 100%;
                 background: lightgray; /* Цвет фона */
                 border: 1px solid black; /* Рамка */
+
+                float: left;
+            }
+
+            #mouse_wheel {
+                width: 17%;
+                height: 100%;
+                background: gray; /* Цвет фона */
+                border: 1px solid black; /* Рамка */
+
+                float: right;
             }
 
             // Стиль для отключения возможности выделять
@@ -63,6 +70,7 @@
                 user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
             }
 
+            {#
             /* Добавление сетки таблицы */
             table {
                 border-collapse: collapse; /* Убираем двойные линии между ячейками */
@@ -71,6 +79,7 @@
                 padding: 3px; /* Поля вокруг содержимого таблицы */
                 border: 1px solid black; /* Параметры рамки */
             }
+            #}
         </style>
     </head>
 
@@ -95,15 +104,14 @@
             </tr>
             <tr>
                 <td class="mouse_area_container" colspan="3">
-                    <div class="mouse_area"></div>
+                    <div id="mouse_area"></div>
+                    <div id="mouse_wheel"></div>
                 </td>
             </tr>
             <tr>
-                <td colspan="3" class="mouse_control_container">
-                    <div>
-                        <div class="child"><button class="mouse_control noselect" value="left">LEFT</button></div>
-                        <div class="child"><button class="mouse_control noselect" value="right">RIGHT</button></div>
-                    </div>
+                <td class="mouse_control_container" colspan="3">
+                    <button id="mouse_left" class="noselect child">LEFT</button>
+                    <button id="mouse_right" class="noselect child">RIGHT</button>
                 </td>
             </tr>
         </table>
@@ -124,6 +132,8 @@
                 var row_number = $("table tr").length;
                 $('table tr').css('height', Math.floor(100 / row_number) + '%');
                 */
+
+                // TODO: сделать это отключение для всех элементов на форме
 
                 // Чтобы отключить приближение экрана при двойном клике на мобилке
                 // SOURCE: https://stackoverflow.com/a/28752323/5909792
