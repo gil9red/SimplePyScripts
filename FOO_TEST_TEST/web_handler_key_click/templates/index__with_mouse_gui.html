@@ -249,8 +249,12 @@
                             }
                             break;
                     }
-
                 });
+
+                $("#mouse_wheel").on("touchstart touchmove touchend mousemove mousedown mouseup", function(e) {
+                   // ...
+                });
+
             });
         </script>
     </body>

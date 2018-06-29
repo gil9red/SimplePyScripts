@@ -7,21 +7,6 @@ __author__ = 'ipetrash'
 import pyautogui
 
 
-# def scroll(down=True, value=200):
-#     value = abs(value)
-#
-#     if down:
-#         value = -value
-#
-#     pyautogui.scroll(value)
-#
-#
-# scroll(down=True)
-# scroll(down=True)
-#
-#
-# quit()
-
 from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 
@@ -78,6 +63,21 @@ def mouse_move():
     relative_y = data.get('relative_y')
 
     pyautogui.moveRel(xOffset=relative_x, yOffset=relative_y)
+
+    return jsonify({'text': 'ok'})
+
+
+@app.route("/scroll", methods=['POST'])
+def scroll():
+    print('scroll')
+
+    data = request.get_json()
+    print('data:', data)
+
+    down = data['down']
+
+    value = -200 if down else 200
+    pyautogui.scroll(value)
 
     return jsonify({'text': 'ok'})
 
