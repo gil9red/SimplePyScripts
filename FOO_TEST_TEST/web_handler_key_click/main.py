@@ -56,13 +56,28 @@ def mouse_click():
 
     possible_values = ('left', 'right')
 
-    button = data['button']
+    button = data.get('button')
     if button not in possible_values:
         text = f'Unsupported mouse button: {button}. Possible values: {", ".join(possible_values)}'
         print(text)
         return jsonify({'text': text})
 
     pyautogui.click(button=button)
+
+    return jsonify({'text': 'ok'})
+
+
+@app.route("/mouse_move", methods=['POST'])
+def mouse_move():
+    print('mouse_move')
+
+    data = request.get_json()
+    print('data:', data)
+
+    relative_x = data.get('relative_x')
+    relative_y = data.get('relative_y')
+
+    pyautogui.moveRel(xOffset=relative_x, yOffset=relative_y)
 
     return jsonify({'text': 'ok'})
 

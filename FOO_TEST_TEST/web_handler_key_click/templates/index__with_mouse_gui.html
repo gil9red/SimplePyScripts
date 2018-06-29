@@ -136,6 +136,26 @@
                 });
             }
 
+            function pointerEventToXY(e) {
+                var out = {
+                    x : 0,
+                    y : 0
+                };
+
+                if (e.type.startsWith("touch")) {
+                    var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+                    out.x = touch.pageX;
+                    out.y = touch.pageY;
+                }
+
+                if (e.type.startsWith("mouse")) {
+                    out.x = e.pageX;
+                    out.y = e.pageY;
+                }
+
+                return out;
+            };
+
             $(document).ready(function() {
                 /*
                 // Установка автоширины столбцов таблицы
@@ -154,15 +174,17 @@
 
                 // TODO: сделать это отключение для всех элементов на форме
 
+                /*
                 // Чтобы отключить приближение экрана при двойном клике на мобилке
                 // SOURCE: https://stackoverflow.com/a/28752323/5909792
-                $(".key_control").bind('touchend', function(e) {
+                $(".key_control").on('touchend', function(e) {
                   e.preventDefault();
                   // Add your code here.
                   $(this).click();
                   // This line still calls the standard click event, in case the user needs to interact with the
                   // element that is being clicked on, but still avoids zooming in cases of double clicking.
                 });
+                */
 
                 $("#mouse_left").click(function() {
                     var data = {"button": "left"};
@@ -177,6 +199,57 @@
                 $(".key_control").click(function() {
                     var data = {"key": $(this).attr("value")};
                     send_ajax("/mouse_click", data);
+                });
+
+                // Глобальная переменная-фдаг для работы c событиями mouse / touch
+                _on_press = false;
+
+                // Глобальная переменная-фдаг для работы c событиями touch
+                _is_touch = false;
+
+                _last_relative_x = null;
+                _last_relative_y = null;
+
+                $("#mouse_area").on("touchstart touchmove touchend mousemove mousedown mouseup", function(e) {
+                    // https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Supporting_both_TouchEvent_and_MouseEvent
+                    if (_is_touch == false && e.type.startsWith("touch")) {
+                        _is_touch = true;
+                    }
+
+                    // События mouse тоже возможны при событиях touch, но нам желательно только с одним видом событий
+                    // работать, поэтому если были замечены touch-события, то mouse будут отменяться
+                    if (e.type.startsWith("mouse") && _is_touch) {
+                        e.preventDefault();
+                        return;
+                    }
+
+                    switch (e.type) {
+                        case "touchstart":
+                        case "mousedown":
+                            _on_press = true;
+                            console.log(e.type, _on_press, e);
+                            break;
+
+                        case "touchend":
+                        case "mouseup":
+                            _on_press = false;
+                            console.log(e.type, _on_press, e);
+                            break;
+
+                        case "touchmove":
+                        case "mousemove":
+                            if (_on_press) {
+                                var out = pointerEventToXY(e);
+
+                                var tag = $(e.currentTarget);
+                                var x = Math.floor(out.x - tag.offset().left);
+                                var y = Math.floor(out.y - tag.offset().top);
+
+                                console.log(e.type, _on_press, (x + " x " + y), e);
+                            }
+                            break;
+                    }
+
                 });
             });
         </script>
