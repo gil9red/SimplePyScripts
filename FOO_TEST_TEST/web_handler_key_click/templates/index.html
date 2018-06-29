@@ -214,11 +214,7 @@
 
                 // Глобальная переменная-фдаг для работы c событиями touch
                 _is_touch = false;
-
-                _last_relative_x = null;
-                _last_relative_y = null;
-
-                press_pos = null;
+                _press_pos = null;
 
                 $("#mouse_area").on("touchstart touchmove touchend mousemove mousedown mouseup mouseout", function(e) {
                     // https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Supporting_both_TouchEvent_and_MouseEvent
@@ -236,23 +232,23 @@
                     switch (e.type) {
                         case "touchstart":
                         case "mousedown": {
-                            press_pos = pointerEventToXY(e);
-                            console.log(e.type, press_pos);
+                            _press_pos = pointerEventToXY(e);
+                            console.log(e.type, _press_pos);
 
                             break;
                         }
 
                         case "touchend":
                         case "mouseup": {
-                            if (press_pos == null) {
+                            if (_press_pos == null) {
                                 break;
                             }
 
                             var pos = pointerEventToXY(e);
 
-                            var relative_x = pos.x - press_pos.x;
-                            var relative_y = pos.y - press_pos.y;
-                            console.log(e.type, press_pos, pos, (relative_x + 'x' + relative_y));
+                            var relative_x = pos.x - _press_pos.x;
+                            var relative_y = pos.y - _press_pos.y;
+                            console.log(e.type, _press_pos, pos, (relative_x + 'x' + relative_y));
 
                             var data = {"relative_x": relative_x, "relative_y": relative_y};
                             send_ajax("/mouse_move", data);
