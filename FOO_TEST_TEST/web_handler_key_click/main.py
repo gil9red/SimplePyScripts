@@ -31,7 +31,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template('index__with_mouse_gui.html')
 
 
 @app.route("/key_click", methods=['POST'])
@@ -44,7 +44,27 @@ def key_click():
     key = data['key']
     pyautogui.typewrite([key])
 
-    return jsonify({'status': 'ok'})
+    return jsonify({'text': 'ok'})
+
+
+@app.route("/mouse_click", methods=['POST'])
+def mouse_click():
+    print('mouse_click')
+
+    data = request.get_json()
+    print('data:', data)
+
+    possible_values = ('left', 'right')
+
+    button = data['button']
+    if button not in possible_values:
+        text = f'Unsupported mouse button: {button}. Possible values: {", ".join(possible_values)}'
+        print(text)
+        return jsonify({'text': text})
+
+    pyautogui.click(button=button)
+
+    return jsonify({'text': 'ok'})
 
 
 if __name__ == "__main__":
@@ -52,8 +72,9 @@ if __name__ == "__main__":
     app.debug = True
     app.run(
         # OR: host='127.0.0.1'
-        host='192.168.0.102',
-        port=9999,
+        host='127.0.0.1'
+        # host='192.168.0.102',
+        # port=9999,
 
         # # Включение поддержки множества подключений
         # threaded=True,

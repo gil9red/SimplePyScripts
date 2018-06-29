@@ -117,6 +117,25 @@
         </table>
 
         <script>
+            function send_ajax(method, data) {
+                console.log(data);
+                console.log(JSON.stringify(data));
+
+                $.ajax({
+                    url: method,
+                    method: "POST",
+                    data: JSON.stringify(data),
+
+                    contentType: "application/json",
+                    dataType: "json",  // тип данных загружаемых с сервера
+
+                    success: function(data) {
+                        console.log(data);
+                        console.log(JSON.stringify(data));
+                    },
+                });
+            }
+
             $(document).ready(function() {
                 /*
                 // Установка автоширины столбцов таблицы
@@ -145,24 +164,19 @@
                   // element that is being clicked on, but still avoids zooming in cases of double clicking.
                 });
 
+                $("#mouse_left").click(function() {
+                    var data = {"button": "left"};
+                    send_ajax("/mouse_click", data);
+                });
+
+                $("#mouse_right").click(function() {
+                    var data = {"button": "right"};
+                    send_ajax("/mouse_click", data);
+                });
+
                 $(".key_control").click(function() {
                     var data = {"key": $(this).attr("value")};
-                    console.log(data);
-                    console.log(JSON.stringify(data));
-
-                    $.ajax({
-                        url: "/key_click",
-                        method: "POST",
-                        data: JSON.stringify(data),
-
-                        contentType: "application/json",
-                        dataType: "json",  // тип данных загружаемых с сервера
-
-                        success: function(data) {
-                            console.log(data);
-                            console.log(JSON.stringify(data));
-                        },
-                    });
+                    send_ajax("/mouse_click", data);
                 });
             });
         </script>
