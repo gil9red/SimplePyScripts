@@ -230,7 +230,7 @@
                 _last_relative_x = null;
                 _last_relative_y = null;
 
-                $("#mouse_area").on("touchstart touchmove touchend mousemove mousedown mouseup", function(e) {
+                $("#mouse_area").on("touchstart touchmove touchend mousemove mousedown mouseup mouseout", function(e) {
                     // https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Supporting_both_TouchEvent_and_MouseEvent
                     if (_is_touch == false && e.type.startsWith("touch")) {
                         _is_touch = true;
@@ -252,6 +252,7 @@
 
                         case "touchend":
                         case "mouseup":
+                        case "mouseout":
                             _on_press = false;
                             console.log(e.type, _on_press, e);
                             break;
@@ -266,6 +267,9 @@
                                 var y = Math.floor(out.y - tag.offset().top);
 
                                 console.log(e.type, _on_press, (x + " x " + y), e);
+
+                                var data = {"x": x, "y": y};
+                                send_ajax("/mouse_move", data);
                             }
                             break;
                     }
