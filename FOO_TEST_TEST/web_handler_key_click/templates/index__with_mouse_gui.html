@@ -2,6 +2,13 @@
     <head>
         <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
 
+        <!--
+        SOURCE: ttps://habr.com/company/google/blog/173861/
+
+        Чтобы переключить браузер в более удобный для чтения режим, необходимо использовать метаэлемент viewport:
+        -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
 
         <style>
@@ -54,7 +61,6 @@
             #mouse_wheel {
                 width: 17%;
                 height: 100%;
-                background: gray; /* Цвет фона */
                 border: 1px solid black; /* Рамка */
 
                 float: right;
@@ -69,11 +75,11 @@
 
             // Стиль для отключения возможности выделять
             .noselect {
-                 -webkit-touch-callout: none; /* iOS Safari */
-                 -webkit-user-select: none; /* Safari */
-                 -khtml-user-select: none; /* Konqueror HTML */
-                 -moz-user-select: none; /* Firefox */
-                 -ms-user-select: none; /* Internet Explorer/Edge */
+                -webkit-touch-callout: none; /* iOS Safari */
+                -webkit-user-select: none; /* Safari */
+                -khtml-user-select: none; /* Konqueror HTML */
+                -moz-user-select: none; /* Firefox */
+                -ms-user-select: none; /* Internet Explorer/Edge */
                 user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
             }
 
@@ -182,20 +188,6 @@
                 $('table tr').css('height', Math.floor(100 / row_number) + '%');
                 */
 
-                // TODO: сделать это отключение для всех элементов на форме
-
-                /*
-                // Чтобы отключить приближение экрана при двойном клике на мобилке
-                // SOURCE: https://stackoverflow.com/a/28752323/5909792
-                $(".key_control").on('touchend', function(e) {
-                  e.preventDefault();
-                  // Add your code here.
-                  $(this).click();
-                  // This line still calls the standard click event, in case the user needs to interact with the
-                  // element that is being clicked on, but still avoids zooming in cases of double clicking.
-                });
-                */
-
                 $("#mouse_left").click(function() {
                     var data = {"button": "left"};
                     send_ajax("/mouse_click", data);
@@ -221,14 +213,13 @@
                     send_ajax("/scroll", data);
                 });
 
-                // Глобальная переменная-фдаг для работы c событиями mouse / touch
-                _on_press = false;
-
                 // Глобальная переменная-фдаг для работы c событиями touch
                 _is_touch = false;
 
                 _last_relative_x = null;
                 _last_relative_y = null;
+
+                press_pos = null;
 
                 $("#mouse_area").on("touchstart touchmove touchend mousemove mousedown mouseup mouseout", function(e) {
                     // https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Supporting_both_TouchEvent_and_MouseEvent
@@ -245,20 +236,34 @@
 
                     switch (e.type) {
                         case "touchstart":
-                        case "mousedown":
-                            _on_press = true;
-                            console.log(e.type, _on_press, e);
+                        case "mousedown": {
+                            press_pos = pointerEventToXY(e);
+                            console.log(e.type, press_pos);
+
                             break;
+                        }
 
                         case "touchend":
-                        case "mouseup":
-                        case "mouseout":
-                            _on_press = false;
-                            console.log(e.type, _on_press, e);
-                            break;
+                        case "mouseup": {
+                            if (press_pos == null) {
+                                break;
+                            }
 
+                            var pos = pointerEventToXY(e);
+
+                            var relative_x = pos.x - press_pos.x;
+                            var relative_y = pos.y - press_pos.y;
+                            console.log(e.type, press_pos, pos, (relative_x + 'x' + relative_y));
+
+                            var data = {"relative_x": relative_x, "relative_y": relative_y};
+                            send_ajax("/mouse_move", data);
+
+                            break;
+                        }
+
+                        /*
                         case "touchmove":
-                        case "mousemove":
+                        case "mousemove": {
                             if (_on_press) {
                                 var out = pointerEventToXY(e);
 
@@ -272,6 +277,8 @@
                                 send_ajax("/mouse_move", data);
                             }
                             break;
+                        }
+                        */
                     }
                 });
             });

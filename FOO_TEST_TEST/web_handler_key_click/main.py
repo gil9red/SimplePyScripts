@@ -14,10 +14,6 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 
-LAST_MOUSE_POS_X = None
-LAST_MOUSE_POS_Y = None
-
-
 @app.route("/")
 def index():
     return render_template('index__with_mouse_gui.html')
@@ -63,23 +59,8 @@ def mouse_move():
     data = request.get_json()
     print('data:', data)
 
-    x = data.get('x')
-    y = data.get('x')
-
-    global LAST_MOUSE_POS_X
-    global LAST_MOUSE_POS_Y
-
-    if not LAST_MOUSE_POS_X and not LAST_MOUSE_POS_Y:
-        LAST_MOUSE_POS_X = x
-        LAST_MOUSE_POS_Y = y
-        return jsonify({'text': 'ok'})
-
-    relative_x = x - LAST_MOUSE_POS_X
-    relative_y = y - LAST_MOUSE_POS_Y
-    print(f'{x}x{y} -> {relative_x}x{relative_y}')
-
-    LAST_MOUSE_POS_X = x
-    LAST_MOUSE_POS_Y = y
+    relative_x = data['relative_x']
+    relative_y = data['relative_y']
 
     pyautogui.moveRel(xOffset=relative_x, yOffset=relative_y)
 
@@ -106,9 +87,9 @@ if __name__ == "__main__":
     app.debug = True
     app.run(
         # OR: host='127.0.0.1'
-        host='127.0.0.1',
-        # host='192.168.0.102',
-        # port=9999,
+        # host='127.0.0.1',
+        host='192.168.0.102',
+        port=9999,
 
         # # Включение поддержки множества подключений
         # threaded=True,
