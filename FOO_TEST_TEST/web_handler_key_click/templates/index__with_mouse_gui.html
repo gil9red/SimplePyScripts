@@ -60,6 +60,13 @@
                 float: right;
             }
 
+            #mouse_wheel > button {
+                width: 100%;
+                height: 50%;
+
+                font-size: 3em;
+            }
+
             // Стиль для отключения возможности выделять
             .noselect {
                  -webkit-touch-callout: none; /* iOS Safari */
@@ -105,7 +112,10 @@
             <tr>
                 <td class="mouse_area_container" colspan="3">
                     <div id="mouse_area"></div>
-                    <div id="mouse_wheel"></div>
+                    <div id="mouse_wheel">
+                        <button id="mouse_wheel_up" class="noselect">⬆</button>
+                        <button id="mouse_wheel_down" class="noselect">⬇</button>
+                    </div>
                 </td>
             </tr>
             <tr>
@@ -201,6 +211,16 @@
                     send_ajax("/mouse_click", data);
                 });
 
+                $("#mouse_wheel_up").click(function() {
+                    var data = {"down": false};
+                    send_ajax("/scroll", data);
+                });
+
+                $("#mouse_wheel_down").click(function() {
+                    var data = {"down": true};
+                    send_ajax("/scroll", data);
+                });
+
                 // Глобальная переменная-фдаг для работы c событиями mouse / touch
                 _on_press = false;
 
@@ -250,11 +270,6 @@
                             break;
                     }
                 });
-
-                $("#mouse_wheel").on("touchstart touchmove touchend mousemove mousedown mouseup", function(e) {
-                   // ...
-                });
-
             });
         </script>
     </body>
