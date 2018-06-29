@@ -208,7 +208,7 @@
 
                 $(".key_control").click(function() {
                     var data = {"key": $(this).attr("value")};
-                    send_ajax("/mouse_click", data);
+                    send_ajax("/key_click", data);
                 });
 
                 $("#mouse_wheel_up").click(function() {
