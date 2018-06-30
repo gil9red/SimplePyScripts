@@ -242,8 +242,8 @@
 
                             var pos = pointerEventToXY(e);
 
-                            var relative_x = pos.x - _press_pos.x;
-                            var relative_y = pos.y - _press_pos.y;
+                            var relative_x = Math.floor(pos.x - _press_pos.x);
+                            var relative_y = Math.floor(pos.y - _press_pos.y);
                             console.log(e.type, _press_pos, pos, (relative_x + 'x' + relative_y));
 
                             var data = {"relative_x": relative_x, "relative_y": relative_y};
