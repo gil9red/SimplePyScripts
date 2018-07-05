@@ -12,7 +12,7 @@ __author__ = 'ipetrash'
 
 # TODO: generate image_png.py: https://github.com/gil9red/SimplePyScripts/blob/aec64c1749d4f6f3176e3222c7e7c554f40c693f/generator_py_with_inner_image_with_open/main.py
 # TODO: convert image to ico
-
+# TODO: append to zip
 
 # Analog build_exe.bat
 import subprocess
