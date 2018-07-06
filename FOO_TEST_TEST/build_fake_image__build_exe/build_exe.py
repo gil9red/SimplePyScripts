@@ -12,11 +12,25 @@ __author__ = 'ipetrash'
 
 # TODO: generate image_png.py: https://github.com/gil9red/SimplePyScripts/blob/aec64c1749d4f6f3176e3222c7e7c554f40c693f/generator_py_with_inner_image_with_open/main.py
 # TODO: convert image to ico
-# TODO: append to zip
+
+
+import subprocess
+import zipfile
+import shutil
+
+
+FILE_NAME = 'main.exe'
+
+# Юникодная последовательсть \u202E нужна чтобы превратить: picgpj.exe -> pic‮gpj.exe
+NEW_FILE_NAME = 'pic\u202Egpj.exe'
+
+FILE_NAME_ARCHIVE = 'pic.zip'
 
 # Analog build_exe.bat
-import subprocess
-subprocess.call(["pyinstaller", "--onefile", "--noconsole", "--icon=icon.ico", "--name=main", "main.py"])
+subprocess.call(["pyinstaller", "--onefile", "--noconsole", "--icon=icon.ico", "--name=" + FILE_NAME, "main.py"])
 
-import shutil
-shutil.copy('dist/main.exe', 'dist/pic\u202Egpj.exe')
+shutil.copy('dist/' + FILE_NAME, 'dist/' + NEW_FILE_NAME)
+
+# Добавляем файл в архив
+with zipfile.ZipFile('dist/' + FILE_NAME_ARCHIVE, mode='w', compression=zipfile.ZIP_DEFLATED) as f:
+    f.write('dist/' + NEW_FILE_NAME, NEW_FILE_NAME)
