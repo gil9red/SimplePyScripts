@@ -10,26 +10,42 @@ __author__ = 'ipetrash'
 
 # TODO: этот частный случай, сделать общий -- возможность засунуть любой файл
 
-# TODO: generate image_png.py: https://github.com/gil9red/SimplePyScripts/blob/aec64c1749d4f6f3176e3222c7e7c554f40c693f/generator_py_with_inner_image_with_open/main.py
-# TODO: convert image to ico
-
 
 import subprocess
 import zipfile
 import shutil
+import os
+import generator
 
 
-FILE_NAME = 'main.exe'
+FILE_NAME = 'image.jpg'
+FILE_NAME_ICO = 'icon.ico'
+ICON_SIZES = [(16, 16), (32, 32), (48, 48), (64, 64)]
+
+OUT_FILE_NAME = 'main.exe'
 
 # Юникодная последовательсть \u202E нужна чтобы превратить: picgpj.exe -> pic‮gpj.exe
 NEW_FILE_NAME = 'pic\u202Egpj.exe'
 
 FILE_NAME_ARCHIVE = 'pic.zip'
 
-# Analog build_exe.bat
-subprocess.call(["pyinstaller", "--onefile", "--noconsole", "--icon=icon.ico", "--name=" + FILE_NAME, "main.py"])
 
-shutil.copy('dist/' + FILE_NAME, 'dist/' + NEW_FILE_NAME)
+# Создадим ico файл для иконки приложения
+generator.convert_image_to_ico(FILE_NAME, FILE_NAME_ICO, ICON_SIZES)
+
+# Cгенерируем python-файл с картинкой
+generator.generate(FILE_NAME)
+
+# Analog build_exe.bat
+subprocess.call(
+    ["pyinstaller", "--onefile", "--noconsole", "--icon=" + FILE_NAME_ICO, "--name=" + OUT_FILE_NAME, "main.py"]
+)
+
+# Подчистим за собой, удалив ненужные файлы
+os.remove(FILE_NAME_ICO)
+os.remove(generator.FILE_NAME)
+
+shutil.copy('dist/' + OUT_FILE_NAME, 'dist/' + NEW_FILE_NAME)
 
 # Добавляем файл в архив
 with zipfile.ZipFile('dist/' + FILE_NAME_ARCHIVE, mode='w', compression=zipfile.ZIP_DEFLATED) as f:
