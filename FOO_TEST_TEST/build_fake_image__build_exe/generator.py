@@ -52,6 +52,8 @@ def save_and_run():
 
 '''.format(file_name, img_base64))
 
+    # TODO: append generate main.py file
+
 
 if __name__ == '__main__':
     file_name = 'image.jpg'
