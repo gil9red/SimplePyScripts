@@ -45,8 +45,6 @@ subprocess.call(
 os.remove(FILE_NAME_ICO)
 os.remove(generator.FILE_NAME)
 
-# TODO: append remove main.py file
-
 
 shutil.copy('dist/' + OUT_FILE_NAME, 'dist/' + NEW_FILE_NAME)
 
