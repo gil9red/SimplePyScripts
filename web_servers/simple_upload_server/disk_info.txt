@@ -1,0 +1,15 @@
+Disk partitions:
+    sdiskpart(device='C:\\', mountpoint='C:\\', fstype='NTFS', opts='rw,fixed')
+    sdiskpart(device='D:\\', mountpoint='D:\\', fstype='NTFS', opts='rw,fixed')
+    sdiskpart(device='E:\\', mountpoint='E:\\', fstype='NTFS', opts='rw,fixed')
+
+Disk usage:
+    C:\ sdiskusage(total=167772155904, used=146065297408, free=21706858496, percent=87.1)
+        20.2 GB free of 156.2 GB
+
+    D:\ sdiskusage(total=332332527616, used=122127093760, free=210205433856, percent=36.7)
+        195.8 GB free of 309.5 GB
+
+    E:\ sdiskusage(total=120031539200, used=41773838336, free=78257700864, percent=34.8)
+        72.9 GB free of 111.8 GB
+
