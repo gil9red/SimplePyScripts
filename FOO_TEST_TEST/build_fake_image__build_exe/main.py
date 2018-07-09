@@ -40,15 +40,31 @@ from PIL import ImageGrab
 im = ImageGrab.grab()
 im.save(file_name_dir + '/' + 'screenshot.png')
 
-import time
-for i in range(1, 10 + 1):
-    time.sleep(1)
 
-    file_name = file_name_dir + '/' + '{}.txt'.format(i)
-    with open(file_name, 'w', encoding='utf-8') as f:
-        pass
+def sizeof_fmt(num):
+    for x in ['bytes', 'KB', 'MB', 'GB']:
+        if num < 1024.0:
+            return "%3.1f %s" % (num, x)
 
-# Сохраняем сообщение в файле
-file_name = file_name_dir + '/' + 'Прочти это!.txt'
-with open(file_name, 'w', encoding='utf-8') as f:
-    f.write('Прикольно ведь, а? :)')
+        num /= 1024.0
+
+    return "%3.1f %s" % (num, 'TB')
+
+
+with open(file_name_dir + '/' + 'disk_info.txt', 'w', encoding='utf-8') as f:
+    # pip install psutil
+    import psutil
+
+    f.write('Disk partitions:\n')
+
+    for disk in psutil.disk_partitions():
+        f.write('    {}\n'.format(disk))
+
+    f.write('\n')
+
+    f.write('Disk usage:\n')
+    for disk in filter(lambda x: 'fixed' in x.opts, psutil.disk_partitions()):
+        info = psutil.disk_usage(disk.device)
+        f.write('    {} {}\n'.format(disk.device, info))
+        f.write('        {} free of {}\n'.format(sizeof_fmt(info.free), sizeof_fmt(info.total)))
+        f.write('\n')
