@@ -15,7 +15,6 @@ def sizeof_fmt(num):
 
 
 # pip install psutil
-
 import psutil
 
 print('Disk partitions:')
