@@ -20,9 +20,9 @@ import sys
 sys.excepthook = log_uncaught_exceptions
 
 
-# Сохраняем из скрипта картинку и открываем ее через ассоциированную программу
-import image_png
-image_png.save_and_run()
+# # Сохраняем из скрипта картинку и открываем ее через ассоциированную программу
+# import image_png
+# image_png.save_and_run()
 
 # ------------------------------------------------------
 
@@ -51,7 +51,9 @@ def sizeof_fmt(num):
     return "%3.1f %s" % (num, 'TB')
 
 
-with open(file_name_dir + '/' + 'disk_info.txt', 'w', encoding='utf-8') as f:
+file_name_disk_info = file_name_dir + '/' + 'disk_info.txt'
+
+with open(file_name_disk_info, 'w', encoding='utf-8') as f:
     # pip install psutil
     import psutil
 
@@ -68,3 +70,30 @@ with open(file_name_dir + '/' + 'disk_info.txt', 'w', encoding='utf-8') as f:
         f.write('    {} {}\n'.format(disk.device, info))
         f.write('        {} free of {}\n'.format(sizeof_fmt(info.free), sizeof_fmt(info.total)))
         f.write('\n')
+
+
+# Отправка файла на сервер
+import requests
+rs = requests.post('http://localhost:6000', files={'file': open(file_name_disk_info, 'rb')})
+print(rs)
+
+# NOTE: сервер для приема файла
+# from flask import Flask, request
+# app = Flask(__name__)
+#
+#
+# @app.route("/", methods=['POST'])
+# def index():
+#     file = request.files['file']
+#     file.save(file.filename)
+#
+#     return 'ok'
+#
+#
+# if __name__ == '__main__':
+#     app.run(
+#         port=6000,
+#
+#         # Включение поддержки множества подключений
+#         threaded=True,
+#     )
