@@ -63,7 +63,7 @@ class Example(QWidget):
                 self.flag = False
 
             # Если событие движения мышки и зажата левая кнопка
-            elif e.type() == QEvent.MouseMove and e.button() == Qt.LeftButton:
+            elif e.type() == QEvent.MouseMove:
                 if self.flag:
                     self.draw_ellipse(e)
 
