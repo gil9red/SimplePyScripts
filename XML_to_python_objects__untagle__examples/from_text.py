@@ -4,6 +4,8 @@
 __author__ = 'ipetrash'
 
 
+# pip install untangle
+# OR:
 # pip install git+https://github.com/stchris/untangle.git
 import untangle
 
