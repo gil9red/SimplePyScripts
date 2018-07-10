@@ -1,0 +1,7 @@
+<root>
+    <child name="child1"/>
+    <child name="child2">Text</child>
+    <child name="child3">
+    This text!
+    </child>
+</root>
