@@ -69,7 +69,7 @@ def log(msg):
 
 
 def logError(msg):
-    sys.stdout.write(msg + '\n')
+    print(msg, file=sys.stderr)
 
 
 def getProcessID(dwEventThread, hwnd):
@@ -129,8 +129,7 @@ def getProcessFilename(processID):
         kernel32.CloseHandle(hProcess)
 
 
-def callback(hWinEventHook, event, hwnd, idObject, idChild, dwEventThread,
-             dwmsEventTime):
+def callback(hWinEventHook, event, hwnd, idObject, idChild, dwEventThread, dwmsEventTime):
     global lastTime
     length = user32.GetWindowTextLengthW(hwnd)
     title = ctypes.create_unicode_buffer(length + 1)
@@ -149,12 +148,11 @@ def callback(hWinEventHook, event, hwnd, idObject, idChild, dwEventThread,
     elif idObject == win32con.OBJID_CURSOR:
         hwnd = '<Cursor>'
 
-    log(u"%s:%04.2f\t%-10s\t"
-        u"W:%-8s\tP:%-8d\tT:%-8d\t"
-        u"%s\t%s" % (
+    log("%s:%04.2f\t%-10s\tW:%-8s\tP:%-8d\tT:%-8d\t%s\t%s" % (
         dwmsEventTime, float(dwmsEventTime - lastTime)/1000, eventTypes.get(event, hex(event)),
         hwnd, processID or -1, dwEventThread or -1,
-        shortName, title.value))
+        shortName, title.value
+    ))
 
     lastTime = dwmsEventTime
 
