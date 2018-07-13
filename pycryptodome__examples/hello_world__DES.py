@@ -35,4 +35,4 @@ data = des.decrypt(encrypted_text)
 print(data)  # b'Hello World!    '
 
 data = data.rstrip(b' ')
-print(data)  # b'Hello World!    '
+print(data)  # b'Hello World!'
