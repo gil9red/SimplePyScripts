@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: https://docs.python.org/3/library/lzma.html#lzma.compress
+
+
 s_in = "HelloWorld!" * 1000000
 s_in = bytes(s_in, encoding='utf-8')
 print(len(s_in))  # 11000000
