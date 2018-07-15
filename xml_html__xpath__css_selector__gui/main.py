@@ -17,7 +17,8 @@ from lxml.cssselect import CSSSelector
 
 def to_str(x):
     try:
-        return etree.tounicode(x, method='html')
+        # return etree.tounicode(x, method='html')
+        return etree.tostring(x, method='html', encoding='unicode')
     except:
         return x
 
