@@ -28,19 +28,34 @@ def get_html_by_url__from_cache(url, cache_dir='cache'):
         return rs.content
 
 
-url = 'https://ru.wikipedia.org/wiki/Список_серий_«Наруто»_(сезоны_1—3)'
-# url = 'https://ru.wikipedia.org/wiki/Список_серий_«Наруто»_(сезоны_4—6)'
-# url = 'https://ru.wikipedia.org/wiki/Список_серий_«Наруто»_(сезоны_7—9)'
-# url = 'https://ru.wikipedia.org/wiki/Список_серий_«Наруто:_Ураганные_хроники»_(сезоны_1—4)'
-html_content = get_html_by_url__from_cache(url)
+def get_urls_of_season_1():
+    return [
+        'https://ru.wikipedia.org/wiki/Список_серий_«Наруто»_(сезоны_1—3)',
+        'https://ru.wikipedia.org/wiki/Список_серий_«Наруто»_(сезоны_4—6)',
+        'https://ru.wikipedia.org/wiki/Список_серий_«Наруто»_(сезоны_7—9)',
+    ]
 
 
 from bs4 import BeautifulSoup
-root = BeautifulSoup(html_content, 'html.parser')
 
-td_list = []
 
-for td in root.select('td'):
-    if td.has_attr('id') and td['id'].startswith('ep'):
-        td_list.append(td)
-        print(td)
+# url = 'https://ru.wikipedia.org/wiki/Список_серий_«Наруто:_Ураганные_хроники»_(сезоны_1—4)'
+
+
+ep_chapters_s1 = []
+
+
+for url in get_urls_of_season_1():
+    html_content = get_html_by_url__from_cache(url)
+
+    root = BeautifulSoup(html_content, 'html.parser')
+
+    for td in root.select('td'):
+        if td.has_attr('id') and td['id'].startswith('ep'):
+            episode = td.text.strip()
+            manga_chapters = td.next_sibling.next_sibling.text.strip()
+
+            ep_chapters_s1.append((episode, manga_chapters))
+
+
+print(len(ep_chapters_s1), ep_chapters_s1)
