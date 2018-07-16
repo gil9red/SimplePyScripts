@@ -9,7 +9,11 @@ def get_html_by_url__from_cache(url, cache_dir='cache'):
     if not os.path.exists(cache_dir):
         os.makedirs(cache_dir)
 
-    file_name = os.path.basename(url).replace(':', '_')
+    file_name = os.path.basename(url)
+
+    import re
+    file_name = re.sub(r'[^\w\d]', '_', file_name)
+
     file_name = cache_dir + '/' + file_name + '.html'
 
     if os.path.exists(file_name):
