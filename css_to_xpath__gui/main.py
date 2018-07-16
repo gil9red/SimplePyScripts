@@ -8,7 +8,9 @@ import traceback
 
 from PyQt5 import Qt
 
-from examples import css_to_xpath
+# pip install cssselect
+from cssselect import HTMLTranslator
+css_to_xpath = HTMLTranslator(xhtml=True).css_to_xpath
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
