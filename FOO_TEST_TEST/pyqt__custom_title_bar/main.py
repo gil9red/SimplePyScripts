@@ -25,29 +25,27 @@ from FramelessWindow import FramelessWindow
 
 
 class MainWindow(QWidget):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        objectTitleBar = args[0].titleBar
+    def __init__(self, frameless_window):
+        super().__init__()
+
+        self.titleBar = frameless_window.titleBar
+        self.titleBar.signalButtonMy.connect(self.onButtonMy)
 
         self.textEdit = QTextEdit()
 
         layout = QVBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(QPushButton('Кнопка'))
         layout.addWidget(self.textEdit)
 
         self.setLayout(layout)
 
-        objectTitleBar.signalButtonMy.connect(self.onButtonMy)
-
     def onButtonMy(self):
         self.textEdit.append("Нажата `Своя Кнопка`!")
 
 
 # стиль
-StyleSheet = """
+STYLE_SHEET = """
 /* Панель заголовка */
 TitleBar {
     background-color: rgb(54, 157, 180);
@@ -83,7 +81,7 @@ if __name__ == '__main__':
     import sys
     from PyQt5.QtWidgets import QApplication
     app = QApplication(sys.argv)
-    app.setStyleSheet(StyleSheet)
+    app.setStyleSheet(STYLE_SHEET)
     w = FramelessWindow()
     w.setWindowTitle('Тестовая строка заголовка')
     w.setWindowIcon(QIcon('Qt.ico'))
