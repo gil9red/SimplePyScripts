@@ -171,8 +171,9 @@ class FramelessWindow(QWidget):
     # Четыре периметра
     Margins = 5
 
-    def __init__(self, *args, **kwargs):
-        super(FramelessWindow, self).__init__(*args, **kwargs)
+    def __init__(self):
+        super().__init__()
+
         self._pressed  = False
         self.Direction = None
 
@@ -180,7 +181,11 @@ class FramelessWindow(QWidget):
         self.setAttribute(Qt.WA_TranslucentBackground, True)
 
         # Нет границы
-        self.setWindowFlag(Qt.FramelessWindowHint)
+        self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint)
+
+        # TODO: AttributeError: 'FramelessWindow' object has no attribute 'setWindowFlag'
+        # self.setWindowFlag(Qt.FramelessWindowHint)
+
         # Отслеживание мыши
         self.setMouseTracking(True)
 
