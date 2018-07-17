@@ -10,6 +10,7 @@ import traceback
 from PyQt5 import Qt
 
 from lxml import etree
+from lxml import html
 
 # pip install cssselect
 from lxml.cssselect import CSSSelector
@@ -71,6 +72,16 @@ class MainWindow(Qt.QWidget):
         self.text_edit_input.textChanged.connect(self.on_process)
         self.button_detail_error.clicked.connect(self.show_detail_error_message)
 
+        self.rb_parser_xml = Qt.QRadioButton('XML')
+        self.rb_parser_xml.setChecked(True)
+        self.rb_parser_html = Qt.QRadioButton('HTML')
+
+        self.button_parser_group = Qt.QButtonGroup()
+        self.button_parser_group.addButton(self.rb_parser_xml)
+        self.button_parser_group.addButton(self.rb_parser_html)
+
+        self.button_parser_group.buttonClicked.connect(self.on_process)
+
         splitter = Qt.QSplitter()
         splitter.setSizePolicy(Qt.QSizePolicy.Expanding, Qt.QSizePolicy.Expanding)
         splitter.addWidget(self.text_edit_input)
@@ -84,6 +95,13 @@ class MainWindow(Qt.QWidget):
         layout = Qt.QVBoxLayout()
         layout.addLayout(layout_xpath_css)
         layout.addWidget(splitter)
+
+        layout_input_parser = Qt.QHBoxLayout()
+        layout_input_parser.addWidget(Qt.QLabel('Parser:'))
+        layout_input_parser.addWidget(self.rb_parser_xml)
+        layout_input_parser.addWidget(self.rb_parser_html)
+        layout_input_parser.addStretch()
+        layout.addLayout(layout_input_parser)
 
         layout_error = Qt.QHBoxLayout()
         layout_error.addWidget(self.label_error)
@@ -108,7 +126,10 @@ class MainWindow(Qt.QWidget):
 
             search_text = self.le_xpath_css.text()
 
-            root = etree.fromstring(text)
+            if self.rb_parser_html.isChecked():
+                root = html.fromstring(text)
+            else:
+                root = etree.fromstring(text)
 
             if self.rb_xpath.isChecked():
                 result = root.xpath(search_text)
