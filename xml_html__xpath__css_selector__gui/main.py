@@ -72,9 +72,9 @@ class MainWindow(Qt.QWidget):
         self.text_edit_input.textChanged.connect(self.on_process)
         self.button_detail_error.clicked.connect(self.show_detail_error_message)
 
-        self.rb_parser_xml = Qt.QRadioButton('XML')
-        self.rb_parser_xml.setChecked(True)
         self.rb_parser_html = Qt.QRadioButton('HTML')
+        self.rb_parser_html.setChecked(True)
+        self.rb_parser_xml = Qt.QRadioButton('XML')
 
         self.button_parser_group = Qt.QButtonGroup()
         self.button_parser_group.addButton(self.rb_parser_xml)
@@ -98,8 +98,8 @@ class MainWindow(Qt.QWidget):
 
         layout_input_parser = Qt.QHBoxLayout()
         layout_input_parser.addWidget(Qt.QLabel('Parser:'))
-        layout_input_parser.addWidget(self.rb_parser_xml)
         layout_input_parser.addWidget(self.rb_parser_html)
+        layout_input_parser.addWidget(self.rb_parser_xml)
         layout_input_parser.addStretch()
         layout.addLayout(layout_input_parser)
 
@@ -126,7 +126,9 @@ class MainWindow(Qt.QWidget):
 
             search_text = self.le_xpath_css.text()
 
-            if self.rb_parser_html.isChecked():
+            is_html_parser = self.rb_parser_html.isChecked()
+
+            if is_html_parser:
                 root = html.fromstring(text)
             else:
                 root = etree.fromstring(text)
@@ -134,7 +136,7 @@ class MainWindow(Qt.QWidget):
             if self.rb_xpath.isChecked():
                 result = root.xpath(search_text)
             else:
-                selector = CSSSelector(search_text)
+                selector = CSSSelector(search_text, translator='html' if is_html_parser else 'xml')
                 result = selector(root)
 
             print(len(result), result)
