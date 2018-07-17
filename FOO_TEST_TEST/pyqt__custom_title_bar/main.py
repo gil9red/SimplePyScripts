@@ -77,10 +77,12 @@ TitleBar {
 }
 """
 
+
 if __name__ == '__main__':
     import sys
     from PyQt5.QtWidgets import QApplication
     app = QApplication(sys.argv)
+    # TODO: FramelessWindow.setStyleSheet
     app.setStyleSheet(STYLE_SHEET)
     w = FramelessWindow()
     w.setWindowTitle('Тестовая строка заголовка')
