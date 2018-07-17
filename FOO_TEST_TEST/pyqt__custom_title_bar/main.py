@@ -35,6 +35,7 @@ class MainWindow(QWidget):
 
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
         layout.addWidget(QPushButton('Кнопка'))
         layout.addWidget(self.textEdit)
 
