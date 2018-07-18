@@ -23,6 +23,40 @@ from PyQt5.QtGui import QFont, QEnterEvent, QPainter, QColor, QPen
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QSpacerItem, QSizePolicy, QPushButton
 
 
+# стиль
+STYLE_SHEET = """
+/* Панель заголовка */
+TitleBar {
+    background-color: rgb(54, 157, 180);
+}
+/* Минимизировать кнопку `Максимальное выключение` Общий фон по умолчанию */
+#buttonMinimum,#buttonMaximum,#buttonClose, #buttonMy {
+    border: none;
+    background-color: rgb(54, 157, 180);
+}
+/* Зависание */
+#buttonMinimum:hover,#buttonMaximum:hover {
+    background-color: rgb(48, 141, 162);
+}
+#buttonClose:hover {
+    color: white;
+    background-color: rgb(232, 17, 35);
+}
+#buttonMy:hover {
+    color: white;
+    background-color: green;   /* rgb(232, 17, 35) */
+}
+/* Мышь удерживать */
+#buttonMinimum:pressed,#buttonMaximum:pressed {
+    background-color: rgb(44, 125, 144);
+}
+#buttonClose:pressed {
+    color: white;
+    background-color: rgb(161, 73, 92);
+}
+"""
+
+
 class TitleBar(QWidget):
     # Сигнал минимизации окна
     windowMinimumed = pyqtSignal()
@@ -43,56 +77,57 @@ class TitleBar(QWidget):
     signalButtonMy = pyqtSignal()
 
     def __init__(self, *args, **kwargs):
-        super(TitleBar, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # Поддержка настройки фона qss
         self.setAttribute(Qt.WA_StyledBackground, True)
-        self.mPos     = None
-        self.iconSize = 20                       # Размер значка по умолчанию
+        self.mPos = None
+
+        # Размер значка по умолчанию
+        self.iconSize = 20
 
         # Установите цвет фона по умолчанию, иначе он будет прозрачным из-за влияния родительского окна
         self.setAutoFillBackground(True)
+
         palette = self.palette()
         palette.setColor(palette.Window, QColor(240, 240, 240))
         self.setPalette(palette)
 
-        # макет
-        layout = QHBoxLayout(self, spacing=0)
-        layout.setContentsMargins(0, 0, 0, 0)
-
         # значок окна
-        self.iconLabel = QLabel(self)
-#         self.iconLabel.setScaledContents(True)
-        layout.addWidget(self.iconLabel)
+        self.iconLabel = QLabel()
+        # self.iconLabel.setScaledContents(True)
 
         # название окна
-        self.titleLabel = QLabel(self)
+        self.titleLabel = QLabel()
         self.titleLabel.setMargin(2)
-        layout.addWidget(self.titleLabel)
-
-        # Средний телескопический бар
-        layout.addSpacerItem(QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
 
         # Использовать шрифты Webdings для отображения значков
         font = self.font() or QFont()
         font.setFamily('Webdings')
 
-        # Своя Кнопка ++++++++++++++++++++++++++
-        self.buttonMy = QPushButton('@', self, clicked=self.showButtonMy, font=font, objectName='buttonMy')
+        # TODO: возможность кастомно добавлять виджеты
+        self.buttonMy = QPushButton('@', clicked=self.showButtonMy, font=font, objectName='buttonMy')
+
+        self.buttonMinimum = QPushButton('0', clicked=self.windowMinimumed.emit, font=font, objectName='buttonMinimum')
+        self.buttonMaximum = QPushButton('1', clicked=self.showMaximized, font=font, objectName='buttonMaximum')
+        self.buttonClose = QPushButton('r', clicked=self.windowClosed.emit, font=font, objectName='buttonClose')
+
+        # макет
+        layout = QHBoxLayout(spacing=0)
+        layout.setContentsMargins(0, 0, 0, 0)
+
+        layout.addWidget(self.iconLabel)
+        layout.addWidget(self.titleLabel)
+
+        # Средний телескопический бар
+        layout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
+
         layout.addWidget(self.buttonMy)
-
-        # Свернуть кнопку
-        self.buttonMinimum = QPushButton('0', self, clicked=self.windowMinimumed.emit, font=font, objectName='buttonMinimum')
         layout.addWidget(self.buttonMinimum)
-
-        # Кнопка Max / restore
-        self.buttonMaximum = QPushButton('1', self, clicked=self.showMaximized, font=font, objectName='buttonMaximum')
         layout.addWidget(self.buttonMaximum)
-
-        # Кнопка закрытия
-        self.buttonClose = QPushButton('r', self, clicked=self.windowClosed.emit, font=font, objectName='buttonClose')
         layout.addWidget(self.buttonClose)
+
+        self.setLayout(layout)
 
         # начальная высота
         self.setHeight()
@@ -140,10 +175,10 @@ class TitleBar(QWidget):
 
     def enterEvent(self, event):
         self.setCursor(Qt.ArrowCursor)
-        super(TitleBar, self).enterEvent(event)
+        super().enterEvent(event)
 
     def mouseDoubleClickEvent(self, event):
-        super(TitleBar, self).mouseDoubleClickEvent(event)
+        super().mouseDoubleClickEvent(event)
         self.showMaximized()
 
     def mousePressEvent(self, event):
@@ -163,6 +198,7 @@ class TitleBar(QWidget):
         event.accept()
 
 
+# TODO: append enum
 # Перечислить верхнюю левую, нижнюю правую и четыре неподвижные точки
 Left, Top, Right, Bottom, LeftTop, RightTop, LeftBottom, RightBottom = range(8)
 
@@ -174,7 +210,9 @@ class FramelessWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self._pressed  = False
+        self.setStyleSheet(STYLE_SHEET)
+
+        self._pressed = False
         self.Direction = None
 
         # Фон прозрачный
@@ -190,7 +228,7 @@ class FramelessWindow(QWidget):
         self.setMouseTracking(True)
 
         # макет
-        layout = QVBoxLayout(self, spacing=0)
+        layout = QVBoxLayout(spacing=0)
 
         # Зарезервировать границы для изменения размера окна без полей
         layout.setContentsMargins(self.Margins, self.Margins, self.Margins, self.Margins)
@@ -198,6 +236,8 @@ class FramelessWindow(QWidget):
         # Панель заголовка
         self.titleBar = TitleBar(self)
         layout.addWidget(self.titleBar)
+
+        self.setLayout(layout)
 
         # слот сигнала
         self.titleBar.windowMinimumed.connect(self.showMinimized)
@@ -233,52 +273,51 @@ class FramelessWindow(QWidget):
         if self.windowState() == Qt.WindowMaximized or self.windowState() == Qt.WindowFullScreen:
             # Максимизировать или полноэкранный режим не допускается
             return
-        super(FramelessWindow, self).move(pos)
+        super().move(pos)
 
     def showMaximized(self):
         """ Чтобы максимизировать, удалите верхнюю, нижнюю, левую и правую границы.
             Если вы не удалите его, в пограничной области будут пробелы. """
-        super(FramelessWindow, self).showMaximized()
+        super().showMaximized()
         self.layout().setContentsMargins(0, 0, 0, 0)
 
     def showNormal(self):
         """ Восстановить, сохранить верхнюю и нижнюю левую и правую границы,
             иначе нет границы, которую нельзя отрегулировать """
-        super(FramelessWindow, self).showNormal()
-        self.layout().setContentsMargins(
-            self.Margins, self.Margins, self.Margins, self.Margins)
+        super().showNormal()
+        self.layout().setContentsMargins(self.Margins, self.Margins, self.Margins, self.Margins)
 
     def eventFilter(self, obj, event):
         """ Фильтр событий, используемый для решения мыши в других элементах
             управления и восстановления стандартного стиля мыши """
         if isinstance(event, QEnterEvent):
             self.setCursor(Qt.ArrowCursor)
-        return super(FramelessWindow, self).eventFilter(obj, event)
+        return super().eventFilter(obj, event)
 
     def paintEvent(self, event):
         """ Поскольку это полностью прозрачное фоновое окно, жесткая для поиска
             граница с прозрачностью 1 рисуется в событии перерисовывания, чтобы отрегулировать размер окна. """
-        super(FramelessWindow, self).paintEvent(event)
+        super().paintEvent(event)
         painter = QPainter(self)
         painter.setPen(QPen(QColor(255, 255, 255, 1), 2 * self.Margins))
         painter.drawRect(self.rect())
 
     def mousePressEvent(self, event):
         """ Событие клика мыши """
-        super(FramelessWindow, self).mousePressEvent(event)
+        super().mousePressEvent(event)
         if event.button() == Qt.LeftButton:
             self._mpos = event.pos()
             self._pressed = True
 
     def mouseReleaseEvent(self, event):
         ''' Событие отказов мыши '''
-        super(FramelessWindow, self).mouseReleaseEvent(event)
+        super().mouseReleaseEvent(event)
         self._pressed = False
         self.Direction = None
 
     def mouseMoveEvent(self, event):
         """ Событие перемещения мыши """
-        super(FramelessWindow, self).mouseMoveEvent(event)
+        super().mouseMoveEvent(event)
         pos = event.pos()
         xPos, yPos = pos.x(), pos.y()
         wm, hm = self.width() - self.Margins, self.height() - self.Margins

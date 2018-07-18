@@ -45,49 +45,15 @@ class MainWindow(QWidget):
         self.textEdit.append("Нажата `Своя Кнопка`!")
 
 
-# стиль
-STYLE_SHEET = """
-/* Панель заголовка */
-TitleBar {
-    background-color: rgb(54, 157, 180);
-}
-/* Минимизировать кнопку `Максимальное выключение` Общий фон по умолчанию */
-#buttonMinimum,#buttonMaximum,#buttonClose, #buttonMy {
-    border: none;
-    background-color: rgb(54, 157, 180);
-}
-/* Зависание */
-#buttonMinimum:hover,#buttonMaximum:hover {
-    background-color: rgb(48, 141, 162);
-}
-#buttonClose:hover {
-    color: white;
-    background-color: rgb(232, 17, 35);
-}
-#buttonMy:hover {
-    color: white;
-    background-color: green;   /* rgb(232, 17, 35) */
-}
-/* Мышь удерживать */
-#buttonMinimum:pressed,#buttonMaximum:pressed {
-    background-color: rgb(44, 125, 144);
-}
-#buttonClose:pressed {
-    color: white;
-    background-color: rgb(161, 73, 92);
-}
-"""
-
-
 if __name__ == '__main__':
     import sys
     from PyQt5.QtWidgets import QApplication
     app = QApplication(sys.argv)
-    # TODO: FramelessWindow.setStyleSheet
-    app.setStyleSheet(STYLE_SHEET)
+
     w = FramelessWindow()
     w.setWindowTitle('Тестовая строка заголовка')
     w.setWindowIcon(QIcon('Qt.ico'))
     w.setWidget(MainWindow(w))          # Добавить свое окно
     w.show()
+
     sys.exit(app.exec_())
