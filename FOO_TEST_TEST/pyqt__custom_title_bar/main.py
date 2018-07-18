@@ -45,6 +45,7 @@ class MainWindow(Qt.QWidget):
 
         self.line_edit_my = Qt.QLineEdit('Test!', returnPressed=self._on_process_clicked)
 
+        # TODO: append setColor for Title / support transparent
         self.titleBar = frameless_window.titleBar
         self.titleBar.addWidget(self.line_edit_my, width=75, height=20)
         self.titleBar.addWidget(self.buttonMy)
