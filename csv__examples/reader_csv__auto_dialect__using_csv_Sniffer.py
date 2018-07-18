@@ -7,7 +7,9 @@ __author__ = 'ipetrash'
 import csv
 
 with open('input.csv') as f:
-    dialect = csv.Sniffer().sniff(f.readline(), delimiters=[',', ';'])
+    dialect = csv.Sniffer().sniff(f.readline())
+    # # With delimiters:
+    # dialect = csv.Sniffer().sniff(f.readline(), delimiters=[',', ';'])
     f.seek(0)
 
     csv_reader = csv.reader(f, dialect=dialect)
