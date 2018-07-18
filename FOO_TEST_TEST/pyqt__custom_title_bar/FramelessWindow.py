@@ -33,7 +33,7 @@ TitleBar {
     background-color: rgb(54, 157, 180);
 }
 /* Минимизировать кнопку `Максимальное выключение` Общий фон по умолчанию */
-#buttonMinimum,#buttonMaximum,#buttonClose, #buttonMy {
+#buttonMinimum, #buttonMaximum, #buttonClose {
     border: none;
     background-color: rgb(54, 157, 180);
 }
@@ -44,10 +44,6 @@ TitleBar {
 #buttonClose:hover {
     color: white;
     background-color: rgb(232, 17, 35);
-}
-#buttonMy:hover {
-    color: white;
-    background-color: green;   /* rgb(232, 17, 35) */
 }
 /* Мышь удерживать */
 #buttonMinimum:pressed,#buttonMaximum:pressed {
@@ -75,9 +71,6 @@ class TitleBar(QWidget):
 
     # Окно мобильных
     windowMoved = pyqtSignal(QPoint)
-
-    # Сигнал Своя Кнопка +++
-    signalButtonMy = pyqtSignal()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -108,9 +101,6 @@ class TitleBar(QWidget):
         font = self.font() or QFont()
         font.setFamily('Webdings')
 
-        # TODO: возможность кастомно добавлять виджеты
-        self.buttonMy = QPushButton('@', clicked=self.showButtonMy, font=font, objectName='buttonMy')
-
         self.buttonMinimum = QPushButton('0', clicked=self.windowMinimumed.emit, font=font, objectName='buttonMinimum')
         self.buttonMaximum = QPushButton('1', clicked=self.showMaximized, font=font, objectName='buttonMaximum')
         self.buttonClose = QPushButton('r', clicked=self.windowClosed.emit, font=font, objectName='buttonClose')
@@ -125,7 +115,10 @@ class TitleBar(QWidget):
         # Средний телескопический бар
         layout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
 
-        layout.addWidget(self.buttonMy)
+        self.layout_custom_widget = QHBoxLayout()
+        self.layout_custom_widget.setContentsMargins(0, 0, 0, 0)
+
+        layout.addLayout(self.layout_custom_widget)
         layout.addWidget(self.buttonMinimum)
         layout.addWidget(self.buttonMaximum)
         layout.addWidget(self.buttonClose)
@@ -135,10 +128,11 @@ class TitleBar(QWidget):
         # начальная высота
         self.setHeight()
 
-    # +++ Вызывается по нажатию кнопки buttonMy
-    def showButtonMy(self):
-        print("Своя Кнопка ")
-        self.signalButtonMy.emit()
+    def addWidget(self, widget, width=38, height=38):
+        self.layout_custom_widget.addWidget(widget)
+
+        widget.setMinimumSize(width, height)
+        widget.setMaximumSize(width, height)
 
     def showMaximized(self):
         if self.buttonMaximum.text() == '1':
@@ -160,9 +154,6 @@ class TitleBar(QWidget):
         self.buttonMaximum.setMaximumSize(height, height)
         self.buttonClose.setMinimumSize(height, height)
         self.buttonClose.setMaximumSize(height, height)
-
-        self.buttonMy.setMinimumSize(height, height)
-        self.buttonMy.setMaximumSize(height, height)
 
     def setTitle(self, title):
         """ Установить заголовок """
