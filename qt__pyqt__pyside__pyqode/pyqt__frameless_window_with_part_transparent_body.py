@@ -17,12 +17,11 @@ class Widget(QWidget):
         self.setAttribute(Qt.WA_TranslucentBackground)
 
         self.old_pos = None
+        self.frame_color = Qt.darkCyan
 
         layout = QVBoxLayout()
         layout.addStretch()
         layout.addWidget(QPushButton("Закрыть окно", clicked=self.close))
-
-        self.frame_color = Qt.darkCyan
 
         self.setLayout(layout)
 
