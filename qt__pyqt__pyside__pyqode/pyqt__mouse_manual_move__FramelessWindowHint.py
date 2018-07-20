@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from PyQt5.QtWidgets import QWidget, QApplication
+from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton
 from PyQt5.QtCore import Qt
 
 
@@ -15,6 +15,12 @@ class Widget(QWidget):
         self.setWindowFlags(Qt.FramelessWindowHint)
 
         self.old_pos = None
+
+        layout = QVBoxLayout()
+        layout.addStretch()
+        layout.addWidget(QPushButton("Закрыть окно", clicked=self.close))
+
+        self.setLayout(layout)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -36,6 +42,7 @@ if __name__ == '__main__':
     app = QApplication([])
 
     w = Widget()
+    w.resize(400, 400)
     w.show()
 
     app.exec()
