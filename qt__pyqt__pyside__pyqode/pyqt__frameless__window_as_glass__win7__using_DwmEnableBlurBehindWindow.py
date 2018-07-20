@@ -35,6 +35,10 @@ has_dwm = hasattr(windll, 'dwmapi') and hasattr(windll.dwmapi, 'DwmIsComposition
 
 # SOURCE: https://github.com/stendec/siding/blob/master/siding/_aeroglass.py
 def DWM_enable_blur_behind_window(widget):
+    # NOTE: с WA_TranslucentBackground клики проходят сквозь окно
+    # widget.setAttribute(Qt.WA_TranslucentBackground)
+    widget.setAttribute(Qt.WA_NoSystemBackground)
+
     DWM_BB_ENABLE = 0x0001
 
     bb = DWM_BLURBEHIND()
@@ -42,12 +46,7 @@ def DWM_enable_blur_behind_window(widget):
     bb.dwFlags = DWM_BB_ENABLE
     bb.hRgnBlur = None
 
-    # NOTE: с WA_TranslucentBackground клики проходят сквозь окно
-    # widget.setAttribute(Qt.WA_TranslucentBackground)
-    widget.setAttribute(Qt.WA_NoSystemBackground)
-
     result = _DwmEnableBlurBehindWindow(c_int(widget.winId()), bb)
-
     return not result
 
 
