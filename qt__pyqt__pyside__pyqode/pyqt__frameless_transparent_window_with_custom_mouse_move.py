@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5 import QtGui
-from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtCore import Qt
 
 
 class Example(QWidget):
@@ -15,25 +15,26 @@ class Example(QWidget):
 
         self.setWindowTitle('Example')
         self.setGeometry(300, 300, 300, 220)
-        self.setAttribute(Qt.WA_TranslucentBackground, True)
+        self.setAttribute(Qt.WA_TranslucentBackground)
         self.setWindowFlags(Qt.FramelessWindowHint)
 
         self.press = False
-        self.last_pos = QPoint(0, 0)
-
-    def mouseMoveEvent(self, event):
-        if self.press:
-            self.move(event.globalPos() - self.last_pos)
+        self.old_pos = None
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
-            self.press = True
-
-        self.last_pos = event.pos()
+            self.old_pos = event.pos()
 
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.LeftButton:
-            self.press = False
+            self.old_pos = None
+
+    def mouseMoveEvent(self, event):
+        if not self.old_pos:
+            return
+
+        delta = event.pos() - self.old_pos
+        self.move(self.pos() + delta)
 
     def paintEvent(self, event: QtGui.QPaintEvent):
         painter = QtGui.QPainter(self)
