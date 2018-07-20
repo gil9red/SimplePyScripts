@@ -54,7 +54,7 @@ class Widget(QWidget):
         painter = QPainter(self)
 
         painter.setBrush(Qt.white)
-        painter.setPen(QPen(self.frame_color, 10))
+        painter.setPen(QPen(self.frame_color, 20))
 
         painter.drawRect(self.rect())
 
