@@ -9,7 +9,7 @@ from PyQt5.QtCore import Qt
 
 
 import ctypes
-from ctypes.wintypes import DWORD, HRGN, HWND, BOOL, LPVOID, PINT, ULONG
+from ctypes.wintypes import DWORD, ULONG
 from ctypes import windll, c_bool, c_int, POINTER, Structure
 
 
