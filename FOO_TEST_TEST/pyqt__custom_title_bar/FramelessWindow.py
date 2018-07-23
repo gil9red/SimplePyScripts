@@ -207,7 +207,7 @@ class Direction(Enum):
 
 class FramelessWindow(QWidget):
     # Четыре периметра
-    MARGINS = 5
+    MARGINS = 7
 
     def __init__(self):
         super().__init__()
