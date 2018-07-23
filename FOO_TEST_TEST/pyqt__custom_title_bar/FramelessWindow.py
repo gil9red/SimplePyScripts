@@ -182,7 +182,7 @@ class TitleBar(QWidget):
         event.accept()
 
     def mouseReleaseEvent(self, event):
-        ''' Событие отказов мыши '''
+        """ Событие отказов мыши """
         self.mPos = None
         event.accept()
 
@@ -214,8 +214,8 @@ class FramelessWindow(QWidget):
 
         self.setStyleSheet(STYLE_SHEET)
 
-        self._pressed = False
-        self.Direction = None
+        self._old_pos = None
+        self._direction = None
 
         self._widget = None
 
@@ -262,8 +262,6 @@ class FramelessWindow(QWidget):
 
     def setWidget(self, widget):
         """ Настройте свои собственные элементы управления """
-        if hasattr(self, '_widget'):
-            return
 
         self._widget = widget
 
@@ -318,15 +316,14 @@ class FramelessWindow(QWidget):
         super().mousePressEvent(event)
 
         if event.button() == Qt.LeftButton:
-            self._mpos = event.pos()
-            self._pressed = True
+            self._old_pos = event.pos()
 
     def mouseReleaseEvent(self, event):
-        ''' Событие отказов мыши '''
+        """ Событие отказов мыши """
         super().mouseReleaseEvent(event)
 
-        self._pressed = False
-        self.Direction = None
+        self._old_pos = None
+        self._direction = None
 
     def mouseMoveEvent(self, event):
         """ Событие перемещения мыши """
@@ -337,65 +334,65 @@ class FramelessWindow(QWidget):
         wm, hm = self.width() - self.MARGINS, self.height() - self.MARGINS
 
         if self.isMaximized() or self.isFullScreen():
-            self.Direction = None
+            self._direction = None
             self.setCursor(Qt.ArrowCursor)
             return
 
-        if event.buttons() == Qt.LeftButton and self._pressed:
+        if event.buttons() == Qt.LeftButton and self._old_pos:
             self._resizeWidget(pos)
             return
 
         if xPos <= self.MARGINS and yPos <= self.MARGINS:
             # Верхний левый угол
-            self.Direction = Direction.LEFT_TOP
+            self._direction = Direction.LEFT_TOP
             self.setCursor(Qt.SizeFDiagCursor)
 
         elif wm <= xPos <= self.width() and hm <= yPos <= self.height():
             # Нижний правый угол
-            self.Direction = Direction.RIGHT_BOTTOM
+            self._direction = Direction.RIGHT_BOTTOM
             self.setCursor(Qt.SizeFDiagCursor)
 
         elif wm <= xPos and yPos <= self.MARGINS:
             # верхний правый угол
-            self.Direction = Direction.RIGHT_TOP
+            self._direction = Direction.RIGHT_TOP
             self.setCursor(Qt.SizeBDiagCursor)
 
         elif xPos <= self.MARGINS and hm <= yPos:
             # Нижний левый угол
-            self.Direction = Direction.LEFT_BOTTOM
+            self._direction = Direction.LEFT_BOTTOM
             self.setCursor(Qt.SizeBDiagCursor)
 
         elif 0 <= xPos <= self.MARGINS and self.MARGINS <= yPos <= hm:
             # Влево
-            self.Direction = Direction.LEFT
+            self._direction = Direction.LEFT
             self.setCursor(Qt.SizeHorCursor)
 
         elif wm <= xPos <= self.width() and self.MARGINS <= yPos <= hm:
             # Право
-            self.Direction = Direction.RIGHT
+            self._direction = Direction.RIGHT
             self.setCursor(Qt.SizeHorCursor)
 
         elif self.MARGINS <= xPos <= wm and 0 <= yPos <= self.MARGINS:
             # выше
-            self.Direction = Direction.TOP
+            self._direction = Direction.TOP
             self.setCursor(Qt.SizeVerCursor)
 
         elif self.MARGINS <= xPos <= wm and hm <= yPos <= self.height():
             # ниже
-            self.Direction = Direction.BOTTOM
+            self._direction = Direction.BOTTOM
             self.setCursor(Qt.SizeVerCursor)
 
     def _resizeWidget(self, pos):
         """ Отрегулируйте размер окна """
-        if self.Direction is None:
+        if self._direction is None:
             return
 
-        mpos = pos - self._mpos
+        mpos = pos - self._old_pos
         xPos, yPos = mpos.x(), mpos.y()
         geometry = self.geometry()
         x, y, w, h = geometry.x(), geometry.y(), geometry.width(), geometry.height()
 
-        if self.Direction == Direction.LEFT_TOP:          # Верхний левый угол
+        if self._direction == Direction.LEFT_TOP:          # Верхний левый угол
             if w - xPos > self.minimumWidth():
                 x += xPos
                 w -= xPos
@@ -404,59 +401,76 @@ class FramelessWindow(QWidget):
                 y += yPos
                 h -= yPos
 
-        elif self.Direction == Direction.RIGHT_BOTTOM:    # Нижний правый угол
+        elif self._direction == Direction.RIGHT_BOTTOM:    # Нижний правый угол
             if w + xPos > self.minimumWidth():
                 w += xPos
-                self._mpos = pos
+                self._old_pos = pos
 
             if h + yPos > self.minimumHeight():
                 h += yPos
-                self._mpos = pos
+                self._old_pos = pos
 
-        elif self.Direction == Direction.RIGHT_TOP:       # верхний правый угол
+        elif self._direction == Direction.RIGHT_TOP:       # верхний правый угол
             if h - yPos > self.minimumHeight():
                 y += yPos
                 h -= yPos
 
             if w + xPos > self.minimumWidth():
                 w += xPos
-                self._mpos.setX(pos.x())
+                self._old_pos.setX(pos.x())
 
-        elif self.Direction == Direction.LEFT_BOTTOM:     # Нижний левый угол
+        elif self._direction == Direction.LEFT_BOTTOM:     # Нижний левый угол
             if w - xPos > self.minimumWidth():
                 x += xPos
                 w -= xPos
 
             if h + yPos > self.minimumHeight():
                 h += yPos
-                self._mpos.setY(pos.y())
+                self._old_pos.setY(pos.y())
 
-        elif self.Direction == Direction.LEFT:            # Влево
+        elif self._direction == Direction.LEFT:            # Влево
             if w - xPos > self.minimumWidth():
                 x += xPos
                 w -= xPos
             else:
                 return
 
-        elif self.Direction == Direction.RIGHT:           # Право
+        elif self._direction == Direction.RIGHT:           # Право
             if w + xPos > self.minimumWidth():
                 w += xPos
-                self._mpos = pos
+                self._old_pos = pos
             else:
                 return
 
-        elif self.Direction == Direction.TOP:             # выше
+        elif self._direction == Direction.TOP:             # выше
             if h - yPos > self.minimumHeight():
                 y += yPos
                 h -= yPos
             else:
                 return
 
-        elif self.Direction == Direction.BOTTOM:          # ниже
+        elif self._direction == Direction.BOTTOM:          # ниже
             if h + yPos > self.minimumHeight():
                 h += yPos
-                self._mpos = pos
+                self._old_pos = pos
             else:
                 return
 
         self.setGeometry(x, y, w, h)
+
+
+if __name__ == '__main__':
+    import sys
+    from PyQt5.QtWidgets import QApplication, QTextEdit
+
+    app = QApplication(sys.argv)
+
+    w = FramelessWindow()
+    w.setWindowTitle('Test')
+
+    # Добавить свое окно
+    w.setWidget(QTextEdit("Hello World!", w))
+    w.show()
+
+    sys.exit(app.exec_())
+
