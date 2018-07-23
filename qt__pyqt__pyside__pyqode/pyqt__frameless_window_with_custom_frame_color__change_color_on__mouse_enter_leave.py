@@ -20,7 +20,7 @@ class Widget(QWidget):
         self.frame_color = Qt.darkCyan
 
         layout = QVBoxLayout()
-        layout.addWidget(QLabel("Перетаскиваем окно, созданное без полей."))
+        layout.addWidget(QLabel("Перетаскиваем окно, созданное без полей.", alignment=Qt.AlignCenter))
         layout.addWidget(QPushButton("Закрыть окно", clicked=self.close))
 
         self.setLayout(layout)
