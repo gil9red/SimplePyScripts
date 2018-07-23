@@ -382,6 +382,10 @@ class FramelessWindow(QWidget):
             self._direction = Direction.BOTTOM
             self.setCursor(Qt.SizeVerCursor)
 
+        else:
+            # Курсор по умолчанию
+            self.setCursor(Qt.ArrowCursor)
+
     def _resizeWidget(self, pos):
         """ Отрегулируйте размер окна """
         if self._direction is None:
