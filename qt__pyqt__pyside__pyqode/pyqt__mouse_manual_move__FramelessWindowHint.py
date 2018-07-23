@@ -14,7 +14,7 @@ class Widget(QWidget):
 
         self.setWindowFlags(Qt.FramelessWindowHint)
 
-        self.old_pos = None
+        self._old_pos = None
 
         layout = QVBoxLayout()
         layout.addStretch()
@@ -24,17 +24,17 @@ class Widget(QWidget):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
-            self.old_pos = event.pos()
+            self._old_pos = event.pos()
 
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.LeftButton:
-            self.old_pos = None
+            self._old_pos = None
 
     def mouseMoveEvent(self, event):
-        if not self.old_pos:
+        if not self._old_pos:
             return
 
-        delta = event.pos() - self.old_pos
+        delta = event.pos() - self._old_pos
         self.move(self.pos() + delta)
 
 
