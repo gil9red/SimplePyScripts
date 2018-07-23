@@ -207,7 +207,7 @@ class Direction(Enum):
 
 class FramelessWindow(QWidget):
     # Четыре периметра
-    Margins = 5
+    MARGINS = 5
 
     def __init__(self):
         super().__init__()
@@ -216,6 +216,8 @@ class FramelessWindow(QWidget):
 
         self._pressed = False
         self.Direction = None
+
+        self._widget = None
 
         # Фон прозрачный
         self.setAttribute(Qt.WA_TranslucentBackground, True)
@@ -233,7 +235,7 @@ class FramelessWindow(QWidget):
         layout = QVBoxLayout(spacing=0)
 
         # Зарезервировать границы для изменения размера окна без полей
-        layout.setContentsMargins(self.Margins, self.Margins, self.Margins, self.Margins)
+        layout.setContentsMargins(self.MARGINS, self.MARGINS, self.MARGINS, self.MARGINS)
 
         # Панель заголовка
         self.titleBar = TitleBar(self)
@@ -264,6 +266,7 @@ class FramelessWindow(QWidget):
             return
 
         self._widget = widget
+
         # Установите цвет фона по умолчанию, иначе он будет прозрачным из-за влияния родительского окна
         self._widget.setAutoFillBackground(True)
         palette = self._widget.palette()
@@ -291,7 +294,7 @@ class FramelessWindow(QWidget):
             иначе нет границы, которую нельзя отрегулировать """
         super().showNormal()
 
-        self.layout().setContentsMargins(self.Margins, self.Margins, self.Margins, self.Margins)
+        self.layout().setContentsMargins(self.MARGINS, self.MARGINS, self.MARGINS, self.MARGINS)
 
     def eventFilter(self, obj, event):
         """ Фильтр событий, используемый для решения мыши в других элементах
@@ -307,7 +310,7 @@ class FramelessWindow(QWidget):
         super().paintEvent(event)
 
         painter = QPainter(self)
-        painter.setPen(QPen(QColor(255, 255, 255, 1), 2 * self.Margins))
+        painter.setPen(QPen(QColor(255, 255, 255, 1), 2 * self.MARGINS))
         painter.drawRect(self.rect())
 
     def mousePressEvent(self, event):
@@ -331,43 +334,53 @@ class FramelessWindow(QWidget):
 
         pos = event.pos()
         xPos, yPos = pos.x(), pos.y()
-        wm, hm = self.width() - self.Margins, self.height() - self.Margins
+        wm, hm = self.width() - self.MARGINS, self.height() - self.MARGINS
+
         if self.isMaximized() or self.isFullScreen():
             self.Direction = None
             self.setCursor(Qt.ArrowCursor)
             return
+
         if event.buttons() == Qt.LeftButton and self._pressed:
             self._resizeWidget(pos)
             return
-        if xPos <= self.Margins and yPos <= self.Margins:
+
+        if xPos <= self.MARGINS and yPos <= self.MARGINS:
             # Верхний левый угол
             self.Direction = Direction.LEFT_TOP
             self.setCursor(Qt.SizeFDiagCursor)
+
         elif wm <= xPos <= self.width() and hm <= yPos <= self.height():
             # Нижний правый угол
             self.Direction = Direction.RIGHT_BOTTOM
             self.setCursor(Qt.SizeFDiagCursor)
-        elif wm <= xPos and yPos <= self.Margins:
+
+        elif wm <= xPos and yPos <= self.MARGINS:
             # верхний правый угол
             self.Direction = Direction.RIGHT_TOP
             self.setCursor(Qt.SizeBDiagCursor)
-        elif xPos <= self.Margins and hm <= yPos:
+
+        elif xPos <= self.MARGINS and hm <= yPos:
             # Нижний левый угол
             self.Direction = Direction.LEFT_BOTTOM
             self.setCursor(Qt.SizeBDiagCursor)
-        elif 0 <= xPos <= self.Margins and self.Margins <= yPos <= hm:
+
+        elif 0 <= xPos <= self.MARGINS and self.MARGINS <= yPos <= hm:
             # Влево
             self.Direction = Direction.LEFT
             self.setCursor(Qt.SizeHorCursor)
-        elif wm <= xPos <= self.width() and self.Margins <= yPos <= hm:
+
+        elif wm <= xPos <= self.width() and self.MARGINS <= yPos <= hm:
             # Право
             self.Direction = Direction.RIGHT
             self.setCursor(Qt.SizeHorCursor)
-        elif self.Margins <= xPos <= wm and 0 <= yPos <= self.Margins:
+
+        elif self.MARGINS <= xPos <= wm and 0 <= yPos <= self.MARGINS:
             # выше
             self.Direction = Direction.TOP
             self.setCursor(Qt.SizeVerCursor)
-        elif self.Margins <= xPos <= wm and hm <= yPos <= self.height():
+
+        elif self.MARGINS <= xPos <= wm and hm <= yPos <= self.height():
             # ниже
             self.Direction = Direction.BOTTOM
             self.setCursor(Qt.SizeVerCursor)
@@ -381,52 +394,64 @@ class FramelessWindow(QWidget):
         xPos, yPos = mpos.x(), mpos.y()
         geometry = self.geometry()
         x, y, w, h = geometry.x(), geometry.y(), geometry.width(), geometry.height()
+
         if self.Direction == Direction.LEFT_TOP:          # Верхний левый угол
             if w - xPos > self.minimumWidth():
                 x += xPos
                 w -= xPos
+
             if h - yPos > self.minimumHeight():
                 y += yPos
                 h -= yPos
+
         elif self.Direction == Direction.RIGHT_BOTTOM:    # Нижний правый угол
             if w + xPos > self.minimumWidth():
                 w += xPos
                 self._mpos = pos
+
             if h + yPos > self.minimumHeight():
                 h += yPos
                 self._mpos = pos
+
         elif self.Direction == Direction.RIGHT_TOP:       # верхний правый угол
             if h - yPos > self.minimumHeight():
                 y += yPos
                 h -= yPos
+
             if w + xPos > self.minimumWidth():
                 w += xPos
                 self._mpos.setX(pos.x())
+
         elif self.Direction == Direction.LEFT_BOTTOM:     # Нижний левый угол
             if w - xPos > self.minimumWidth():
                 x += xPos
                 w -= xPos
+
             if h + yPos > self.minimumHeight():
                 h += yPos
                 self._mpos.setY(pos.y())
+
         elif self.Direction == Direction.LEFT:            # Влево
             if w - xPos > self.minimumWidth():
                 x += xPos
                 w -= xPos
             else:
                 return
+
         elif self.Direction == Direction.RIGHT:           # Право
             if w + xPos > self.minimumWidth():
                 w += xPos
                 self._mpos = pos
             else:
                 return
+
         elif self.Direction == Direction.TOP:             # выше
             if h - yPos > self.minimumHeight():
                 y += yPos
                 h -= yPos
             else:
                 return
+
         elif self.Direction == Direction.BOTTOM:          # ниже
             if h + yPos > self.minimumHeight():
                 h += yPos
