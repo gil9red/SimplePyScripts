@@ -12,7 +12,7 @@ def match_two_words(word_1, word_2):
     from pyxdameraulevenshtein import damerau_levenshtein_distance
     number = damerau_levenshtein_distance(word_1, word_2)
 
-    # Считаем что разница в 2 символа еще нормальная
+    # Считаем что разница в 2 символа и меньше еще нормальная
     return number < 3
 
 
