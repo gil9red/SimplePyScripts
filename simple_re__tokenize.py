@@ -5,11 +5,11 @@ __author__ = 'ipetrash'
 
 
 def tokenize(expression):
-    if expression == "":
+    if not expression:
         return []
 
     import re
-    regex = re.compile(r"\s*(=>|[-+*\/%=\(\)]|[A-Za-z_][A-Za-z0-9_]*|[0-9]*\.?[0-9]+)\s*")
+    regex = re.compile(r"\s*(=>|[-+*/%=()]|[A-Za-z_][A-Za-z0-9_]*|[0-9]*\.?[0-9]+)\s*")
     tokens = regex.findall(expression)
     return [s for s in tokens if not s.isspace()]
 
