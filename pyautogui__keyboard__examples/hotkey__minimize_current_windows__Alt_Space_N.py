@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 # pip install keyboard
 import keyboard
-keyboard.add_hotkey('Win + -', lambda: keyboard.send('Alt + Space + N'))
+keyboard.add_hotkey('Win + PageDown', lambda: keyboard.send('Alt + Space + N'))
 
 # Block forever.
 keyboard.wait()
