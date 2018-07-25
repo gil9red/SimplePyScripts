@@ -14,6 +14,8 @@ class Widget(QWidget):
         super().__init__()
 
         self.setWindowFlags(Qt.FramelessWindowHint)
+
+        # Задний фон не будет нарисован, это нужно чтобы через paintEvent его рисовать
         self.setAttribute(Qt.WA_TranslucentBackground)
 
         self._old_pos = None
