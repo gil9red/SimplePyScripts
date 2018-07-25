@@ -70,11 +70,6 @@ class MainWindow(Qt.QWidget):
         self.cbPenStyle.addItem('Dash Dot Dot', Qt.Qt.DashDotDotLine)
 
         self.pen_color = Qt.QColor(Qt.Qt.green)
-
-        palette = self.pbPenColor.palette()
-        palette.setColor(Qt.QPalette.Button, self.pen_color)
-        self.pbPenColor.setPalette(palette)
-
         self.last_load_path = "."
 
         self.image_source = None
