@@ -77,7 +77,7 @@ class TitleBar(QWidget):
 
         # Поддержка настройки фона qss
         self.setAttribute(Qt.WA_StyledBackground, True)
-        self.mPos = None
+        self._old_pos = None
 
         # Размер значка по умолчанию
         self.iconSize = 20
@@ -178,17 +178,17 @@ class TitleBar(QWidget):
     def mousePressEvent(self, event):
         """ Событие клика мыши """
         if event.button() == Qt.LeftButton:
-            self.mPos = event.pos()
+            self._old_pos = event.pos()
         event.accept()
 
     def mouseReleaseEvent(self, event):
         """ Событие отказов мыши """
-        self.mPos = None
+        self._old_pos = None
         event.accept()
 
     def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton and self.mPos:
-            self.windowMoved.emit(self.mapToGlobal(event.pos() - self.mPos))
+        if event.buttons() == Qt.LeftButton and self._old_pos:
+            self.windowMoved.emit(self.mapToGlobal(event.pos() - self._old_pos))
         event.accept()
 
 
