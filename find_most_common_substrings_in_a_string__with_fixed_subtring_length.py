@@ -9,7 +9,7 @@ key_len = 4
 
 
 from collections import defaultdict, Counter
-accumulator = Counter(text[i: i + key_len] for i in range(len(text) - key_len))  # O(n*k)
+accumulator = Counter(text[i: i + key_len] for i in range(len(text) - key_len + 1))
 
 print(accumulator)  # {'A': 7, 'C': 6, 'G': 9, 'T': 7,
 
