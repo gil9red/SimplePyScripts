@@ -4,7 +4,9 @@
 __author__ = 'ipetrash'
 
 
-from PyQt5.Qt import *
+from PyQt5.QtWidgets import QDialog, QLabel, QVBoxLayout, QApplication, QMainWindow
+from PyQt5.QtGui import QPaintEvent, QPainter, QColor
+from PyQt5.QtCore import Qt, QPropertyAnimation, QTimer
 
 
 # SOURCE: https://ru.stackoverflow.com/a/860257/201445
@@ -51,24 +53,25 @@ class WelcomeWidget(QDialog):
         painter.drawRoundedRect(self.rect(), 10, 10)
 
 
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-
-        self.setWindowTitle('MAIN WINDOW')
-        self.setFixedSize(500, 500)
-
-        label = QLabel('MAIN WINDOW')
-        label.setAlignment(Qt.AlignCenter)
-        label.setStyleSheet("font-size: 50px;")
-        self.setCentralWidget(label)
-
-
 if __name__ == '__main__':
     app = QApplication([])
 
     WelcomeWidget().exec()
     WelcomeWidget('Еще, раз! Привет!', duration=1500).exec()
+
+
+    class MainWindow(QMainWindow):
+        def __init__(self):
+            super().__init__()
+
+            self.setWindowTitle('MAIN WINDOW')
+            self.setFixedSize(500, 500)
+
+            label = QLabel('MAIN WINDOW')
+            label.setAlignment(Qt.AlignCenter)
+            label.setStyleSheet("font-size: 50px;")
+            self.setCentralWidget(label)
+
 
     mw = MainWindow()
     mw.show()
