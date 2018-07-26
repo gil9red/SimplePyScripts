@@ -6,6 +6,7 @@ __author__ = 'ipetrash'
 
 text = 'ACGTTGCATGTCGCATGATGCATGAGAGCT'
 
+
 from collections import defaultdict
 accumulator = defaultdict(int)
 

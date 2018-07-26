@@ -7,6 +7,7 @@ __author__ = 'ipetrash'
 text = 'ACGTTGCATGTCGCATGATGCATGAGAGCT'
 key_len = 4
 
+
 from collections import defaultdict, Counter
 accumulator = Counter(text[i: i + key_len] for i in range(len(text) - key_len))  # O(n*k)
 
