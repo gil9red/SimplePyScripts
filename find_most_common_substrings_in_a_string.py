@@ -5,7 +5,6 @@ __author__ = 'ipetrash'
 
 
 text = 'ACGTTGCATGTCGCATGATGCATGAGAGCT'
-max_key_length = 4
 
 from collections import defaultdict
 accumulator = defaultdict(int)
@@ -15,18 +14,15 @@ for length in range(1, len(text) + 1):
         sub_text = text[start: start + length]
         accumulator[sub_text] += 1
 
-print(accumulator)  # {'A': 7, 'C': 6, 'G': 9, 'T': 7,
+print(accumulator)
 
 max_items = defaultdict(list)
 
 for k, v in accumulator.items():
-    if len(k) != max_key_length:
-        continue
-
     max_items[v].append(k)
 
-print(max_items)  # ... , 2: ['TGCA', 'ATGA'], 3: ['GCAT', 'CATG']})
+print(max_items)
 
 # Находим ключ с максимальным значением
 max_key = max(max_items)
-print(max_items[max_key])  # ['GCAT', 'CATG']
+print(max_key, max_items[max_key])  # 9 ['G']
