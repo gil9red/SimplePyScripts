@@ -49,7 +49,6 @@ class MainWindow(QMainWindow):
 
         for url in event.mimeData().urls():
             file_name = url.toLocalFile()
-            print(url, file_name)
             self.list_files.addItem(file_name)
 
         self._update_states()
