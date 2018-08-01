@@ -11,7 +11,7 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('Animation check password')
+        self.setWindowTitle('Check password')
 
         self.le_target_password = QLineEdit('123')
         self.le_current_password = QLineEdit()
