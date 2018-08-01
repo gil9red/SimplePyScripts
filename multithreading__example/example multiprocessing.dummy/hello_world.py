@@ -21,5 +21,5 @@ urls = [
 
 from multiprocessing.dummy import Pool as ThreadPool
 pool = ThreadPool()
-resuls = pool.map(go, urls)
-print(resuls)
+results = pool.map(go, urls)
+print(results)
