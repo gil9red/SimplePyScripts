@@ -33,7 +33,7 @@ class MainWindow(QWidget):
         self.animation.setEndValue(1.0)
 
     def set_border_color_password(self, value):
-        color = '0, 255, 0' if self.is_correct_password() else '255, 0, 0'
+        color = '0, 100, 0' if self.is_correct_password() else '255, 0, 0'
         self.le_current_password.setStyleSheet('border: 3px solid rgba({}, {});'.format(color, value))
 
     password_border_color = pyqtProperty(float, None, set_border_color_password)
