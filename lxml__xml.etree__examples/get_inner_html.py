@@ -4,19 +4,32 @@
 __author__ = 'ipetrash'
 
 
+from html import escape  # Доступно с Python 3.2
 import lxml.html
 
 
-def to_string(node):
-    return lxml.html.tostring(node, encoding='unicode')
+# SOURCE: https://ru.stackoverflow.com/a/862559/201445
+def inner_html(elem):
+    # Текст в самом начале внутри тега
+    # (не забываем про экранирование!)
+    result = [escape(elem.text or '')]
+
+    # Все элементы-потомки
+    for child in elem.iterchildren():
+        result.append(lxml.html.tostring(child, encoding='unicode'))
+
+    # Текст в конце тега принадлежит последнему элементу-потомку (tail)
+    # и добавится автоматически
+
+    # Собираем результат в одну строку
+    return ''.join(result)
 
 
-text = """<div id="game_area_description" class="game_area_description">
+if __name__ == '__main__':
+    text = """\
+<div id="game_area_description" class="game_area_description">
 <strong>Самая популярная игра в Steam</strong>
 <br>Ежедневно миллионы игроков по всему миру вступают в битву от лица одного....."""
 
-html = lxml.html.fromstring(text)
-game_descriptions = html.cssselect('#game_area_description')[0]
-
-inner_html = ''.join(to_string(child) for child in game_descriptions.iterchildren())
-print(inner_html)
+    node = lxml.html.fragment_fromstring(text)
+    print(inner_html(node))
