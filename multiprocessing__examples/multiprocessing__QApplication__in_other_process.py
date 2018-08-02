@@ -23,4 +23,6 @@ def go(name):
 if __name__ == '__main__':
     p = Process(target=go, args=('bob',))
     p.start()
-    p.join()
+
+    # Необязательно в данном случае -- главный поток все-равно закроется после дочернего
+    # p.join()
