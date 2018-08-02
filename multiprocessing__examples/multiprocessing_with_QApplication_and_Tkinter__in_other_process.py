@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
+
+from multiprocessing import Process
+from multiprocessing__QApplication__in_other_process import go as go_qt
+from multiprocessing__Tkinter__in_other_process import go as go_tk
+
+
+if __name__ == '__main__':
+    p1 = Process(target=go_qt, args=('Qt',))
+    p1.start()
+
+    p2 = Process(target=go_tk, args=('Tk',))
+    p2.start()
+
+    p1.join()
+    p2.join()
