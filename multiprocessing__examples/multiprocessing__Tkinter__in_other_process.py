@@ -4,9 +4,6 @@
 __author__ = 'ipetrash'
 
 
-from multiprocessing import Process
-
-
 def go(name):
     import tkinter as tk
     app = tk.Tk()
@@ -19,6 +16,7 @@ def go(name):
 
 
 if __name__ == '__main__':
+    from multiprocessing import Process
     p = Process(target=go, args=('bob',))
     p.start()
 

@@ -4,9 +4,6 @@
 __author__ = 'ipetrash'
 
 
-from multiprocessing import Process
-
-
 def go(name):
     from PyQt5 import Qt
     app = Qt.QApplication([])
@@ -21,6 +18,7 @@ def go(name):
 
 
 if __name__ == '__main__':
+    from multiprocessing import Process
     p = Process(target=go, args=('bob',))
     p.start()
 
