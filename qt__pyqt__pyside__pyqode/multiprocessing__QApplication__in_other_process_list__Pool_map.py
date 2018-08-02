@@ -5,17 +5,7 @@ __author__ = 'ipetrash'
 
 
 from multiprocessing import Pool
-from PyQt5 import Qt
-
-
-def go(name):
-    app = Qt.QApplication([])
-
-    mw = Qt.QLabel()
-    mw.setText('Hello, ' + name)
-    mw.show()
-
-    app.exec()
+from multiprocessing__QApplication__in_other_process import go
 
 
 if __name__ == '__main__':

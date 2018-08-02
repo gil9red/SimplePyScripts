@@ -5,13 +5,15 @@ __author__ = 'ipetrash'
 
 
 from multiprocessing import Process
-from PyQt5 import Qt
 
 
 def go(name):
+    from PyQt5 import Qt
     app = Qt.QApplication([])
 
     mw = Qt.QLabel()
+    mw.setAlignment(Qt.Qt.AlignCenter)
+    mw.setMinimumSize(150, 50)
     mw.setText('Hello, ' + name)
     mw.show()
 
