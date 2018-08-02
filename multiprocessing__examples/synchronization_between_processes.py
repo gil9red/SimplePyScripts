@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: https://docs.python.org/3.6/library/multiprocessing.html#synchronization-between-processes
+
+
 from multiprocessing import Process, Lock
 import time
 
