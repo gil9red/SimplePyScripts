@@ -4,6 +4,13 @@
 __author__ = 'ipetrash'
 
 
+# # SIMPLE EXAMPLE
+# import pyglet
+# sound = pyglet.media.load('mysound.mp3', streaming=False)
+# sound.play()
+# pyglet.app.run()
+
+
 def play(file_name):
     import pyglet
     import os
