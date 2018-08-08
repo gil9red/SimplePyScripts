@@ -7,7 +7,6 @@ __author__ = 'ipetrash'
 def seconds_to_str(seconds: int) -> str:
     mm, ss = divmod(seconds, 60)
     hh, mm = divmod(mm, 60)
-
     return "%02d:%02d:%02d" % (hh, mm, ss)
 
 
