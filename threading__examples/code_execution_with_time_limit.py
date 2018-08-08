@@ -23,6 +23,8 @@ def run():
 if __name__ == '__main__':
     thread = threading.Thread(target=run, daemon=True)
     thread.start()
+
+    # Wait
     thread.join(5)
 
     print('Quit!')
