@@ -14,6 +14,7 @@ combo_box = QComboBox()
 for i in range(10):
     combo_box.addItem("item_" + str(i + 1))
 
+# QStandardItemModel, метод model.item возвращает объекты QStandardItem
 model = combo_box.model()
 
 # Указываем какие элементы сделать невыбираемыми
