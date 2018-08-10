@@ -173,7 +173,7 @@ def get_title_book(item) -> str:
 
 
 def get_author_full_name(author_node) -> str:
-    return author_node.select_one('lastname').text + ' ' + author_node.select_one('initials').text
+    return author_node.lastname.text + ' ' + author_node.initials.text
 
 
 def get_authors(item) -> list:
