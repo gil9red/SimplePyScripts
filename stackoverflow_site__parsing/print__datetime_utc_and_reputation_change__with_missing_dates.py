@@ -37,5 +37,5 @@ if __name__ == '__main__':
     dates = generate_range_dates(start_date, end_date)
 
     # Print
-    for day in dates:
+    for day in reversed(dates):
         print('{:%d/%m/%Y} : {}'.format(day, day_by_rep.get(day, 0)))

@@ -34,6 +34,8 @@ if __name__ == '__main__':
     print('Start: {}, end: {}'.format(start_date, end_date))
     print()
 
+    dates = sorted(day_by_rep.items(), key=lambda x: x[0])
+
     # Print
-    for day, rep in sorted(day_by_rep.items(), key=lambda x: x[0]):
+    for day, rep in reversed(dates):
         print('{:%d/%m/%Y} : {}'.format(day, rep))
