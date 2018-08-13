@@ -16,10 +16,12 @@ def get_day_by_rep(url: str) -> dict:
     day_by_rep = dict()
 
     for row in root.select('.rep-table-row'):
+        # 2018-08-13
         day = row.select_one('.rep-day')['title']
         rep = row.select_one('.rep-cell').text.strip()
 
-        day = DT.datetime.strptime(day, '%Y-%m-%d').date()
+        year, month, day = map(int, day.split('-'))
+        day = DT.date(year, month, day)
 
         day_by_rep[day] = rep
 
