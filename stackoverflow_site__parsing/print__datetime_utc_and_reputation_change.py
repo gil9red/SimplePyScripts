@@ -30,6 +30,10 @@ if __name__ == '__main__':
     url = 'https://ru.stackoverflow.com/users/201445/gil9red?tab=reputation'
     day_by_rep = get_day_by_rep(url)
 
+    start_date, end_date = min(day_by_rep), max(day_by_rep)
+    print('Start: {}, end: {}'.format(start_date, end_date))
+    print()
+
     # Print
     for day, rep in sorted(day_by_rep.items(), key=lambda x: x[0]):
         print('{:%d/%m/%Y} : {}'.format(day, rep))
