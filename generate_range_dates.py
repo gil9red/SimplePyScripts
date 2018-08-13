@@ -25,8 +25,8 @@ if __name__ == '__main__':
     def d2s(date):
         return date.strftime("%d/%m/%Y")
 
-    start_date = DT.datetime(2018, 8, 4)
-    end_date = DT.datetime(2018, 7, 28)
+    start_date = DT.date(2018, 8, 4)
+    end_date = DT.date(2018, 7, 28)
     print(d2s(start_date), d2s(end_date))
 
     items = generate_range_dates(start_date, end_date)
