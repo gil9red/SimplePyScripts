@@ -14,10 +14,8 @@ def generate_range_dates(start_date, end_date) -> list:
     # Сразу добавляем стартовую дату
     items = [date_1]
 
-    i = 1
-
     while date_1 < date_2:
-        date_1 += DT.timedelta(days=i)
+        date_1 += DT.timedelta(days=1)
         items.append(date_1)
 
     return items
@@ -27,8 +25,8 @@ if __name__ == '__main__':
     def d2s(date):
         return date.strftime("%d/%m/%Y")
 
-    start_date = DT.datetime(2018, 8, 13)
-    end_date = DT.datetime(2018, 8, 1)
+    start_date = DT.datetime(2018, 8, 4)
+    end_date = DT.datetime(2018, 7, 28)
     print(d2s(start_date), d2s(end_date))
 
     items = generate_range_dates(start_date, end_date)
