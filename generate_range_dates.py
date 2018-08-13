@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 import datetime as DT
 
 
-def generate_datetime_list(start_date, end_date) -> list:
+def generate_range_dates(start_date, end_date) -> list:
     date_1 = min(start_date, end_date)
     date_2 = max(start_date, end_date)
 
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     end_date = DT.datetime(2018, 8, 1)
     print(d2s(start_date), d2s(end_date))
 
-    items = generate_datetime_list(start_date, end_date)
+    items = generate_range_dates(start_date, end_date)
     print('Items ({}): {}'.format(len(items), items))
 
     for date in items:
