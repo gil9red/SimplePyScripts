@@ -14,19 +14,17 @@ def generate_range_dates(start_date, end_date) -> list:
     # Сразу добавляем стартовую дату
     items = [date_1]
 
-    i = 1
-
     while date_1 < date_2:
-        date_1 += DT.timedelta(days=i)
+        date_1 += DT.timedelta(days=1)
         items.append(date_1)
 
     return items
 
-from print__datetime_utc_and_reputation_change import get_day_by_rep
-
 
 if __name__ == '__main__':
     url = 'https://ru.stackoverflow.com/users/201445/gil9red?tab=reputation'
+
+    from print__datetime_utc_and_reputation_change import get_day_by_rep
     day_by_rep = get_day_by_rep(url)
 
     start_date, end_date = min(day_by_rep), max(day_by_rep)
