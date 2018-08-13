@@ -9,21 +9,27 @@ from bs4 import BeautifulSoup
 import datetime as DT
 
 
-url = 'https://ru.stackoverflow.com/users/201445/gil9red?tab=reputation'
+def get_day_by_rep(url: str) -> dict:
+    rs = requests.get(url)
+    root = BeautifulSoup(rs.content, 'html.parser')
 
-rs = requests.get(url)
-root = BeautifulSoup(rs.content, 'html.parser')
+    day_by_rep = dict()
 
-day_by_rep = dict()
+    for row in root.select('.rep-table-row'):
+        day = row.select_one('.rep-day')['title']
+        rep = row.select_one('.rep-cell').text.strip()
 
-for row in root.select('.rep-table-row'):
-    day = row.select_one('.rep-day')['title']
-    rep = row.select_one('.rep-cell').text.strip()
+        day = DT.datetime.strptime(day, '%Y-%m-%d')
 
-    day = DT.datetime.strptime(day, '%Y-%m-%d')
+        day_by_rep[day] = rep
 
-    day_by_rep[day] = rep
+    return day_by_rep
 
-# Print
-for day, rep in sorted(day_by_rep.items(), key=lambda x: x[0]):
-    print('{:%d/%m/%Y} : {}'.format(day, rep))
+
+if __name__ == '__main__':
+    url = 'https://ru.stackoverflow.com/users/201445/gil9red?tab=reputation'
+    day_by_rep = get_day_by_rep(url)
+
+    # Print
+    for day, rep in sorted(day_by_rep.items(), key=lambda x: x[0]):
+        print('{:%d/%m/%Y} : {}'.format(day, rep))
