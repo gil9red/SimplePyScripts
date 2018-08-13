@@ -19,7 +19,7 @@ def get_day_by_rep(url: str) -> dict:
         day = row.select_one('.rep-day')['title']
         rep = row.select_one('.rep-cell').text.strip()
 
-        day = DT.datetime.strptime(day, '%Y-%m-%d')
+        day = DT.datetime.strptime(day, '%Y-%m-%d').date()
 
         day_by_rep[day] = rep
 
