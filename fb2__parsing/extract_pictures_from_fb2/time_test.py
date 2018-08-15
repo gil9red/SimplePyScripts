@@ -4,8 +4,8 @@
 __author__ = 'ipetrash'
 
 
-from fb2_pictures_using_lxml import do as do1
-from fb2_pictures_using_re import do as do2
+from fb2_pictures__using_lxml import do as do1
+from fb2_pictures__using_re import do as do2
 
 
 file_name = '../input/Непутевый ученик в школе магии 1. Зачисление в школу (Часть 1).fb2'
