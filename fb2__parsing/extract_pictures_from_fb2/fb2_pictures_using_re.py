@@ -72,6 +72,7 @@ def do(file_name, debug=True):
 
                 im_file_name = os.path.join(dir_im, im_id)
                 im_data = base64.b64decode(im_base64.encode())
+
                 with open(im_file_name, mode='wb') as f:
                     f.write(im_data)
 
@@ -93,5 +94,5 @@ def do(file_name, debug=True):
 
 
 if __name__ == '__main__':
-    fb2_file_name = 'Непутевый ученик в школе магии 1. Зачисление в школу (Часть 1).fb2'
+    fb2_file_name = '../input/Непутевый ученик в школе магии 1. Зачисление в школу (Часть 1).fb2'
     do(fb2_file_name)

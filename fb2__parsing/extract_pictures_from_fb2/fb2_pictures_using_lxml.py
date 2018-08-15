@@ -73,5 +73,5 @@ def do(file_name, debug=True):
 
 
 if __name__ == '__main__':
-    fb2_file_name = 'Непутевый ученик в школе магии 1. Зачисление в школу (Часть 1).fb2'
+    fb2_file_name = '../input/Непутевый ученик в школе магии 1. Зачисление в школу (Часть 1).fb2'
     do(fb2_file_name)
