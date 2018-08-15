@@ -26,8 +26,8 @@ def do(file_name, debug=True):
 
     total_image_size = 0
 
-    with open(file_name, encoding='utf8') as fb2:
-        tree = etree.XML(fb2.read().encode())
+    with open(file_name, 'rb') as fb2:
+        tree = etree.XML(fb2.read())
 
         binaries = tree.xpath("//*[local-name()='binary']")
         for i, binary in enumerate(binaries, 1):
