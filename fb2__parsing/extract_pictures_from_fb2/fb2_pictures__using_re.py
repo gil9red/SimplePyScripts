@@ -55,16 +55,8 @@ def do(file_name, debug=True):
                     if match_id is None and match_content_type is None:
                         im_base64 = part
 
-                short_content_type = content_type.split('/')[-1]
-
-                if 'jpeg' in short_content_type:
-                    if not im_id.endswith('jpg') and not im_id.endswith('jpeg'):
-                        im_id += '.' + short_content_type
-
-                elif not im_id.endswith(short_content_type):
-                    im_id += '.' + short_content_type
-
                 im_file_name = os.path.join(dir_im, im_id)
+
                 im_data = base64.b64decode(im_base64.encode())
 
                 with open(im_file_name, mode='wb') as f:

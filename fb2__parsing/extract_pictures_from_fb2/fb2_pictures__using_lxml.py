@@ -32,20 +32,11 @@ def do(file_name, debug=True):
         binaries = tree.xpath("//*[local-name()='binary']")
         for i, binary in enumerate(binaries, 1):
             try:
-                content_type = binary.attrib['content-type']
-                short_content_type = content_type.split('/')[-1]
-
                 im_id = binary.attrib['id']
-
-                if 'jpeg' in short_content_type:
-                    if not im_id.endswith('jpg') and not im_id.endswith('jpeg'):
-                        im_id += '.' + short_content_type
-
-                elif not im_id.endswith(short_content_type):
-                    im_id += '.' + short_content_type
-
                 im_file_name = os.path.join(dir_im, im_id)
+
                 im_data = base64.b64decode(binary.text.encode())
+
                 with open(im_file_name, mode='wb') as f:
                     f.write(im_data)
 
