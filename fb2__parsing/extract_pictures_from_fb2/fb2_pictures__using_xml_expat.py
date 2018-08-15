@@ -35,6 +35,7 @@ def do(file_name, debug=True):
     def on_start_element(name, attrs):
         PARSE_DATA['last_start_tag'] = name
         PARSE_DATA['last_tag_attrs'] = attrs
+        PARSE_DATA['last_tag_data'] = ''
 
     def on_char_data(data):
         if PARSE_DATA['last_start_tag'] != 'binary':
@@ -47,7 +48,6 @@ def do(file_name, debug=True):
             return
 
         data = PARSE_DATA['last_tag_data']
-        PARSE_DATA['last_tag_data'] = ''
 
         try:
             im_id = PARSE_DATA['last_tag_attrs']['id']
