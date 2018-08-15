@@ -18,8 +18,9 @@ from PIL import Image
 from common import sizeof_fmt, get_file_name_from_binary
 
 
-def do(file_name, debug=True):
-    dir_im = os.path.splitext(file_name)[0]
+def do(file_name, output_dir='output', debug=True):
+    dir_fb2 = os.path.basename(file_name)
+    dir_im = os.path.join(output_dir, dir_fb2)
     if not os.path.exists(dir_im):
         os.makedirs(dir_im)
     debug and print(dir_im + ':')

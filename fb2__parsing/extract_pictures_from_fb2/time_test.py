@@ -15,8 +15,15 @@ file_name = '../input/Непутевый ученик в школе магии 1
 count = 10
 
 from timeit import timeit
-print('LXML:      {:.3f} secs'.format(timeit('do_lxml(file_name, False)', globals=globals(), number=count)))
-print('XML EXPAT: {:.3f} secs'.format(timeit('do_xml_expat(file_name, False)', globals=globals(), number=count)))
-print('XML.ETREE: {:.3f} secs'.format(timeit('do_xml_etree(file_name, False)', globals=globals(), number=count)))
-print('XML SAX:   {:.3f} secs'.format(timeit('do_xml_sax(file_name, False)', globals=globals(), number=count)))
-print('RE:        {:.3f} secs'.format(timeit('do_using_re(file_name, False)', globals=globals(), number=count)))
+
+runs = [
+    ('LXML',      'do_lxml(file_name, debug=False)'),
+    ('XML EXPAT', 'do_lxml(file_name, debug=False)'),
+    ('XML.ETREE', 'do_lxml(file_name, debug=False)'),
+    ('XML SAX',   'do_xml_sax(file_name, debug=False)'),
+    ('REGEXP',    'do_using_re(file_name, debug=False)'),
+]
+runs_format = '{:%s} | {:.3f} secs' % (max(len(x[0]) for x in runs),)
+
+for name, stmt in runs:
+    print(runs_format.format(name, timeit(stmt, globals=globals(), number=count)))
