@@ -13,8 +13,6 @@ def sizeof_fmt(num, suffix='B'):
 
 
 def get_file_name_from_binary(binary_id: str, binary_content_type: str) -> str:
-    print(binary_id, binary_content_type)
-
     import os
     fmt = os.path.splitext(binary_id)[-1].lower()
 
