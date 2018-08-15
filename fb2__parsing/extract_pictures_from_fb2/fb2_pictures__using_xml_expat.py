@@ -53,9 +53,6 @@ def do(file_name, debug=True):
             im_id = PARSE_DATA['last_tag_attrs']['id']
             im_file_name = os.path.join(dir_im, im_id)
 
-            with open('dump.txt', 'w') as f:
-                f.write(data)
-
             im_data = base64.b64decode(data.encode())
             count_bytes = len(im_data)
             PARSE_DATA['total_image_size'] += count_bytes
