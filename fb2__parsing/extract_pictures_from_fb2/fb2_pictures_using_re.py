@@ -18,13 +18,7 @@ import re
 
 from PIL import Image
 
-
-def sizeof_fmt(num, suffix='B'):
-    for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
-        if abs(num) < 1024.0:
-            return "%3.1f%s%s" % (num, unit, suffix)
-        num /= 1024.0
-    return "%.1f%s%s" % (num, 'Yi', suffix)
+from common import sizeof_fmt
 
 
 def do(file_name, debug=True):
@@ -79,8 +73,9 @@ def do(file_name, debug=True):
                 im = Image.open(io.BytesIO(im_data))
                 count_bytes = len(im_data)
                 total_image_size += count_bytes
-                debug and print('    {}. {} {} format={} size={}'.format(i, im_id, sizeof_fmt(count_bytes),
-                                                               im.format, im.size))
+                debug and print('    {}. {} {} format={} size={}'.format(
+                    i, im_id, sizeof_fmt(count_bytes), im.format, im.size
+                ))
 
             except:
                 import traceback
@@ -89,8 +84,9 @@ def do(file_name, debug=True):
         file_size = os.path.getsize(file_name)
         debug and print()
         debug and print('fb2 file size =', sizeof_fmt(file_size))
-        debug and print('total image size = {} ({:.2f}%)'.format(sizeof_fmt(total_image_size),
-                                                                 total_image_size / file_size * 100))
+        debug and print('total image size = {} ({:.2f}%)'.format(
+            sizeof_fmt(total_image_size), total_image_size / file_size * 100
+        ))
 
 
 if __name__ == '__main__':
