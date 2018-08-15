@@ -15,7 +15,7 @@ import io
 from lxml import etree
 from PIL import Image
 
-from common import sizeof_fmt
+from common import sizeof_fmt, get_file_name_from_binary
 
 
 def do(file_name, debug=True):
@@ -33,16 +33,20 @@ def do(file_name, debug=True):
         for i, binary in enumerate(binaries, 1):
             try:
                 im_id = binary.attrib['id']
-                im_file_name = os.path.join(dir_im, im_id)
+                content_type = binary.attrib['content-type']
+
+                im_file_name = get_file_name_from_binary(im_id, content_type)
+                im_file_name = os.path.join(dir_im, im_file_name)
 
                 im_data = base64.b64decode(binary.text.encode())
+
+                count_bytes = len(im_data)
+                total_image_size += count_bytes
 
                 with open(im_file_name, mode='wb') as f:
                     f.write(im_data)
 
                 im = Image.open(io.BytesIO(im_data))
-                count_bytes = len(im_data)
-                total_image_size += count_bytes
                 debug and print('    {}. {} {} format={} size={}'.format(
                     i, im_id, sizeof_fmt(count_bytes), im.format, im.size
                 ))
