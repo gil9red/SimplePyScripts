@@ -17,11 +17,6 @@ def get_annotation(root) -> str:
 
 if __name__ == '__main__':
     import glob
-    import os
-
-    output_dir = 'output'
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
 
     for fb2_file_name in glob.glob('input/*.fb2'):
         print(fb2_file_name)
