@@ -8,10 +8,7 @@ from bs4 import BeautifulSoup
 import typing
 
 
-def get_authors(file_name: str) -> typing.List[str]:
-    with open(file_name, encoding='utf-8') as f:
-        root = BeautifulSoup(f, 'html.parser')
-
+def get_authors(root) -> typing.List[str]:
     # Пример тега:
     # <author>
     #     <first-name>Сато</first-name>
@@ -54,5 +51,8 @@ if __name__ == '__main__':
         os.makedirs(output_dir)
 
     for fb2_file_name in glob.glob('input/*.fb2'):
-        authors = get_authors(fb2_file_name)
+        with open(fb2_file_name, encoding='utf-8') as f:
+            root = BeautifulSoup(f, 'html.parser')
+
+        authors = get_authors(root)
         print(authors)

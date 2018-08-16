@@ -8,10 +8,7 @@ from bs4 import BeautifulSoup
 import base64
 
 
-def get_cover_page_image(file_name: str) -> (bytes, str):
-    with open(file_name, encoding='utf-8') as f:
-        root = BeautifulSoup(f, 'html.parser')
-
+def get_cover_page_image(root) -> (bytes, str):
     cover_page_image = root.select_one('coverpage > image')
 
     # Вытаскиваем значение атрибута href. Эти трудности с генератором из-за возможного пространства
@@ -39,7 +36,10 @@ if __name__ == '__main__':
         os.makedirs(output_dir)
 
     for fb2_file_name in glob.glob('input/*.fb2'):
-        img_data, fmt = get_cover_page_image(fb2_file_name)
+        with open(file_name, encoding='utf-8') as f:
+            root = BeautifulSoup(f, 'html.parser')
+
+        img_data, fmt = get_cover_page_image(root)
 
         file_name = os.path.basename(fb2_file_name) + '.' + fmt
         file_name = os.path.join(output_dir, file_name)
