@@ -15,6 +15,9 @@ import io
 from bs4 import BeautifulSoup
 from PIL import Image
 
+import sys
+sys.path.append('..')
+
 from common import sizeof_fmt, get_file_name_from_binary
 
 

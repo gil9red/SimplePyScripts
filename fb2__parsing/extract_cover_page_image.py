@@ -7,13 +7,14 @@ __author__ = 'ipetrash'
 from bs4 import BeautifulSoup
 import base64
 
+from common import get_attribute_value_by_local_name
+
 
 def get_cover_page_image(root) -> (bytes, str):
     cover_page_image = root.select_one('coverpage > image')
 
-    # Вытаскиваем значение атрибута href. Эти трудности с генератором из-за возможного пространства
-    # имен: l:href, xlink:href
-    id_image = next(value for attr, value in cover_page_image.attrs.items() if 'href' in attr)
+    # Вытаскиваем значение атрибута href
+    id_image = get_attribute_value_by_local_name(cover_page_image, 'href')
 
     # Получится, например, такой css-селектор: binary#cover.jpg
     binary = root.select_one('binary' + id_image)
@@ -36,7 +37,7 @@ if __name__ == '__main__':
         os.makedirs(output_dir)
 
     for fb2_file_name in glob.glob('input/*.fb2'):
-        with open(file_name, encoding='utf-8') as f:
+        with open(fb2_file_name, encoding='utf-8') as f:
             root = BeautifulSoup(f, 'html.parser')
 
         img_data, fmt = get_cover_page_image(root)

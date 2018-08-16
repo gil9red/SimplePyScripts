@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+import typing
+
+
 def sizeof_fmt(num, suffix='B'):
     for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
         if abs(num) < 1024.0:
@@ -22,3 +25,17 @@ def get_file_name_from_binary(binary_id: str, binary_content_type: str) -> str:
 
     content_type = binary_content_type.split('/')[-1]
     return binary_id + '.' + {'jpeg': 'jpg', 'png': 'png'}[content_type]
+
+
+def get_attribute_value_by_local_name(node, attr_name: str) -> typing.Union[str, None]:
+    for name, value in node.attrs.items():
+        # Если название атрибута без пространства имен
+        if ':' not in name and name == attr_name:
+            return value
+
+        # Получаем имя атрибута
+        ns, name = name.split(':', maxsplit=1)
+        if name == attr_name:
+            return value
+
+    return
