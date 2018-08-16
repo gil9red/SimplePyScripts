@@ -27,6 +27,7 @@ def get_authors(file_name: str) -> typing.List[str]:
         middle_name = author.select_one('middle-name')
 
         name = []
+
         if first_name:
             name.append(first_name.text)
 
