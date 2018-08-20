@@ -18,7 +18,7 @@ class MainWindow(qtw.QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('qt__class_tree__parse_and_print__recursively')
+        self.setWindowTitle('qt__class_tree__parse_and_print__recursively__from__doc_qt_io')
 
         self.tree = qtw.QTreeWidget()
         self.tree.setAlternatingRowColors(True)
