@@ -86,10 +86,10 @@ if __name__ == '__main__':
         # Список строк станет списком столбцов, у каждого столбца подсчитается максимальная длина
         max_len_columns = [max(map(len, col)) for col in zip(*lines)]
 
-        # Создание строки форматирования: [30, 14, 5] -> {:30} | {:14} | {:5}
+        # Создание строки форматирования: [30, 14, 5] -> "{:30} | {:14} | {:5}"
         my_table_format = ' | '.join('{:%s}' % max_len for max_len in max_len_columns)
 
-        # Ручное формирование: {:30} | {:14} | {}
+        # Ручное формирование: "{:30} | {:14} | {}"
         # my_table_format = '{:%s} | {:%s} | {}' % (max(len(x[0]) for x in lines), max(len(x[1]) for x in lines))
 
         for line in lines:
