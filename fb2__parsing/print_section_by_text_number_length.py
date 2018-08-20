@@ -41,8 +41,10 @@ def get_section_by_text(section_by_children: Dict[str, dict], title_by_section: 
             text = title.replace('\n', '. ')
             section = title_by_section[title]
 
-            # Удаление <title>
+            # Удаление <title>. Тег title относится к section, точнее, оно явлется его названием, поэтому
+            # его не нужно включать в текст
             section.title.decompose()
+
             section_text = section.text.strip()
 
             section_by_text[text] = section_text
