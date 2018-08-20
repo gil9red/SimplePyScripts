@@ -33,7 +33,7 @@ def logged_human_time_to_seconds(human_time: str) -> int:
     total_seconds = 0
 
     for part in human_time.split(', '):
-        value, metric = part.lower().split(maxsplit=1)
+        value, metric = part.lower().split()
         value = int(value)
 
         for k, v in METRIC_BY_SECONDS.items():
