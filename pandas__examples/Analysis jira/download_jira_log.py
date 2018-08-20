@@ -8,6 +8,8 @@ URL = 'https://jira.compassplus.ru/sr/jira.issueviews:searchrequest-xml/24381/Se
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0',
 }
+
+# NOTE. Get <PEM_FILE_NAME>: openssl pkcs12 -nodes -out key.pem -in file.p12
 PEM_FILE_NAME = 'ipetrash.pem'
 
 FILE_NAME = 'jira_log__clear.xml'
