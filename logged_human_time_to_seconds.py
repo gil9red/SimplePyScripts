@@ -17,13 +17,6 @@ def logged_human_time_to_seconds(human_time: str) -> int:
     30600
     """
 
-    METRIC_BY_SECONDS = {
-        'minute': 60,
-        'hour':   60 * 60,
-        'day':    8 * 60 * 60,
-        'week':   5 * 8 * 60 * 60,
-    }
-
     # Jira help:
     #   You can specify a time unit after a time value 'X', such as Xw, Xd, Xh or Xm, to represent weeks (w),
     #   days (d), hours (h) and minutes (m), respectively.
@@ -36,10 +29,17 @@ def logged_human_time_to_seconds(human_time: str) -> int:
         value, metric = part.lower().split()
         value = int(value)
 
-        for k, v in METRIC_BY_SECONDS.items():
-            if k in metric:
-                total_seconds += value * v
-                break
+        if 'minute' in metric:
+            total_seconds += value * 60
+
+        elif 'hour' in metric:
+            total_seconds += value * 60 * 60
+
+        elif 'day' in metric:
+            total_seconds += value * 8 * 60 * 60
+
+        elif 'week' in metric:
+            total_seconds += value * 5 * 8 * 60 * 60
 
     return total_seconds
 
