@@ -54,7 +54,7 @@ def _on_load_finished(ok: bool):
     # Клик на кнопку "Подать обращение"
     run_js_code(page, """qt.jQuery('button.u-form__sbt').click();""")
 
-    print('\n')
+    print()
 
 
 view.loadProgress.connect(lambda value: view.setWindowTitle('{} ({}%)'.format(view.url(), value)))
