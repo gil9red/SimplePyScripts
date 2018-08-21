@@ -76,7 +76,7 @@ view.setPage(page)
 
 
 def _on_load_finished(ok: bool):
-    print(page.url())
+    print(page.url().toString())
 
     page.runJavaScript(jquery_text)
 
@@ -116,7 +116,7 @@ def _on_load_finished(ok: bool):
     print()
 
 
-view.loadProgress.connect(lambda value: mw.setWindowTitle('{} ({}%)'.format(view.url(), value)))
+view.loadProgress.connect(lambda value: mw.setWindowTitle('{} ({}%)'.format(view.url().toString(), value)))
 view.loadFinished.connect(_on_load_finished)
 
 mw = QMainWindow()
