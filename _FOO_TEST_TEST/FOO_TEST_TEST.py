@@ -93,6 +93,10 @@ def _on_load_finished(ok: bool):
     # Клик на кнопку "Подать обращение"
     run_js_code(page, """qt.jQuery('button.u-form__sbt').click();""")
 
+    run_js_code(page, """qt.jQuery('#surname_check').val('SURNAME');""")
+    run_js_code(page, """qt.jQuery('#firstname_check').val('FIRSTNAME');""")
+    run_js_code(page, """qt.jQuery('input[name=patronymic]').val('PATRONYMIC');""")
+
     # code = """
     # console.log('testetst');
     #
@@ -117,7 +121,7 @@ view.loadFinished.connect(_on_load_finished)
 
 mw = QMainWindow()
 mw.setCentralWidget(view)
-mw.resize(500, 500)
+mw.resize(800, 800)
 mw.show()
 
 app.exec()
