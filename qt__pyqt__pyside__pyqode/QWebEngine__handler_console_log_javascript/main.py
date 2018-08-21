@@ -27,7 +27,7 @@ view.setPage(page)
 
 def _on_load_finished(ok: bool):
     page = view.page()
-    print(page.url())
+    print(page.url().toString())
 
     page.runJavaScript('console.log(document.title)')
     page.runJavaScript('console.log(this)')

@@ -41,7 +41,7 @@ view.load(QUrl('https://гибдд.рф/request_main'))
 
 def _on_load_finished(ok: bool):
     page = view.page()
-    print(page.url())
+    print(page.url().toString())
 
     page.runJavaScript(jquery_text)
 
