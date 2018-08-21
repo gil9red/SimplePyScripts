@@ -5,6 +5,8 @@ __author__ = 'ipetrash'
 
 
 # pip install git+https://github.com/ewino/qreader.git
+
+# SOURCE: https://github.com/tomerfiliba/reedsolomon/blob/master/reedsolo.py
 # pip install reedsolo
 import qreader
 
