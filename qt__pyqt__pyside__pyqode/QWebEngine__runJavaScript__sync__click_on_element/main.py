@@ -36,10 +36,7 @@ with open('../QWebEngine__append_custom_javascript__jQuery/js/jquery-3.1.1.min.j
 app = QApplication([])
 
 view = QWebEngineView()
-view.show()
-
-url = 'https://гибдд.рф/request_main'
-view.load(QUrl(url))
+view.load(QUrl('https://гибдд.рф/request_main'))
 
 
 def _on_load_finished(ok: bool):
