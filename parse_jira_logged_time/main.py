@@ -77,7 +77,7 @@ if __name__ == '__main__':
     print(rs)
     print(len(rs.text), repr(rs.text[:50]))
 
-    open('rs.xml', 'wb').write(rs.content)
+    # open('rs.xml', 'wb').write(rs.content)
     # root = BeautifulSoup(open('rs.xml', 'rb'), 'xml')
 
     # Структура документа -- xml
