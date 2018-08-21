@@ -12,8 +12,8 @@ import sys
 
 
 class MyWebEnginePage(QWebEnginePage):
-    def javaScriptConsoleMessage(self, level: 'JavaScriptConsoleMessage', message: str, lineNumber: int, sourceID: str):
-        print(f'javascript_console_message: {level}, {message}, {lineNumber}, {sourceID}', file=sys.stderr)
+    def javaScriptConsoleMessage(self, level: 'JavaScriptConsoleMessage', message: str, line_number: int, source_id: str):
+        print(f'javascript_console_message: {level}, {message}, {line_number}, {source_id}', file=sys.stderr)
 
 
 app = QApplication([])
@@ -29,9 +29,12 @@ def _on_load_finished(ok: bool):
     page = view.page()
     print(page.url())
 
+    page.runJavaScript('console.log(document.title)')
     page.runJavaScript('console.log(this)')
     page.runJavaScript('console.log("Hello World!")')
     page.runJavaScript('console.log(2 + 2 * 2)')
+
+    print()
 
 
 view.loadProgress.connect(lambda value: view.setWindowTitle('{} ({}%)'.format(view.url(), value)))
