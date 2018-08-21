@@ -1,6 +1,123 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 __author__ = 'ipetrash'
 
 
+from PyQt5.QtCore import QUrl, QEventLoop
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
+
+
+def log_uncaught_exceptions(ex_cls, ex, tb):
+    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+    import traceback
+    text += ''.join(traceback.format_tb(tb))
+
+    print(text)
+    QMessageBox.critical(None, 'Error', text)
+    quit()
+
+
+import sys
+sys.excepthook = log_uncaught_exceptions
+
+
+# TODO: MainWindow
+
+
+def run_js_code(page: QWebEnginePage, code: str) -> object:
+    loop = QEventLoop()
+
+    result_value = {
+        'value': None
+    }
+
+    def _on_callback(result: object):
+        result_value['value'] = result
+
+        loop.quit()
+
+    page.runJavaScript(code, _on_callback)
+
+    loop.exec()
+
+    return result_value['value']
+
+
+class MyWebEnginePage(QWebEnginePage):
+    def javaScriptConsoleMessage(self, level: 'JavaScriptConsoleMessage', message: str, line_number: int, source_id: str):
+        print(f'javascript_console_message: {level}, {message}, {line_number}, {source_id}', file=sys.stderr)
+
+
+with open('js/jquery-3.1.1.min.js') as f:
+    jquery_text = f.read()
+    jquery_text += "\nvar qt = { 'jQuery': jQuery.noConflict(true) };"
+
+
+app = QApplication([])
+
+
+# view.show()
+
+# def _on_url_changed(url: QUrl):
+#     mw.setWindowTitle(str(url))
+
+
+url = 'https://гибдд.рф/request_main'
+
+page = MyWebEnginePage()
+page.load(QUrl(url))
+
+view = QWebEngineView()
+view.setPage(page)
+
+# page.urlChanged.connect(_on_url_changed)
+
+
+def _on_load_finished(ok: bool):
+    print(page.url())
+
+    page.runJavaScript(jquery_text)
+
+    result = run_js_code(page, "document.title")
+    print('run_java_script:', result)
+
+    # TODO: обернуть в функцию has с css-selector
+    result = run_js_code(page, "qt.jQuery('#surname_check').length > 0")
+    print('run_java_script:', result)
+
+    # Клик на флажок "С информацией ознакомлен"
+    run_js_code(page, """qt.jQuery('input[name="agree"]').click();""")
+
+    # Клик на кнопку "Подать обращение"
+    run_js_code(page, """qt.jQuery('button.u-form__sbt').click();""")
+
+    # code = """
+    # console.log('testetst');
+    #
+    # // Клик на флажок "С информацией ознакомлен"
+    # qt.jQuery('input[name="agree"]').click();
+    #
+    # // Клик на кнопку "Подать обращение"
+    # qt.jQuery('button.u-form__sbt').click();
+    # """
+    #
+    # result = run_js_code(page, code)
+    # print('run_java_script:', result)
+
+    # page.runJavaScript(code, lambda x: print('runJavaScript:', x))
+    # page.runJavaScript("document.title", lambda x: print('runJavaScript:', x))
+
+    print()
+
+
+view.loadProgress.connect(lambda value: mw.setWindowTitle('{} ({}%)'.format(view.url(), value)))
+view.loadFinished.connect(_on_load_finished)
+
+mw = QMainWindow()
+mw.setCentralWidget(view)
+mw.resize(500, 500)
+mw.show()
+
+app.exec()
