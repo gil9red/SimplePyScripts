@@ -54,6 +54,15 @@ def get_date_str_by_entry_logged_list(root) -> Dict[str, List[Dict]]:
     return date_str_by_entry_logged_list
 
 
+def get_entry_logged_list_by_current_utc_date(date_str_by_entry_logged_list: Dict[str, List[Dict]]) -> List[Dict]:
+    current_utc_date_str = datetime.utcnow().strftime('%d/%m/%Y')
+    return date_str_by_entry_logged_list.get(current_utc_date_str, [])
+
+
+def get_logged_total_seconds(entry_logged_list: List[Dict]) -> int:
+    return sum(entry['logged_seconds'] for entry in entry_logged_list)
+
+
 if __name__ == '__main__':
     URL = 'https://jira.compassplus.ru/activity?maxResults=100&streams=user+IS+ipetrash&os_authType=basic&title=undefined'
     HEADERS = {
@@ -68,6 +77,9 @@ if __name__ == '__main__':
     print(rs)
     print(len(rs.text), repr(rs.text[:50]))
 
+    open('rs.xml', 'wb').write(rs.content)
+    # root = BeautifulSoup(open('rs.xml', 'rb'), 'xml')
+
     # Структура документа -- xml
     root = BeautifulSoup(rs.content, 'xml')
 
@@ -76,3 +88,32 @@ if __name__ == '__main__':
 
     import json
     print(json.dumps(date_str_by_entry_logged_list, indent=4, ensure_ascii=False))
+    print()
+
+    from seconds_to_str import seconds_to_str
+
+    entry_logged_list = get_entry_logged_list_by_current_utc_date(date_str_by_entry_logged_list)
+    logged_total_seconds = get_logged_total_seconds(entry_logged_list)
+    print('entry_logged_list:', entry_logged_list)
+    print('today seconds:', logged_total_seconds)
+    print('today time:', seconds_to_str(logged_total_seconds))
+    print()
+
+    # Для красоты выводим результат в табличном виде
+    sorted_items = date_str_by_entry_logged_list.items()
+    sorted_items = sorted(sorted_items, key=lambda x: datetime.strptime(x[0], '%d/%m/%Y'), reverse=True)
+
+    lines = []
+
+    for date_str, entry_logged_list in sorted_items:
+        total_seconds = get_logged_total_seconds(entry_logged_list)
+        lines.append((date_str, total_seconds, seconds_to_str(total_seconds)))
+
+    # Список строк станет списком столбцов, у каждого столбца подсчитается максимальная длина
+    max_len_columns = [max(map(len, map(str, col))) for col in zip(*lines)]
+
+    # Создание строки форматирования: [30, 14, 5] -> "{:<30} | {:<14} | {:<5}"
+    my_table_format = ' | '.join('{:<%s}' % max_len for max_len in max_len_columns)
+
+    for line in lines:
+        print(my_table_format.format(*line))
