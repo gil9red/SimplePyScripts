@@ -41,17 +41,14 @@ class MainWindow(QWidget):
         progress_dialog = QProgressDialog(self)
 
         def foo():
+            import time
             items = []
 
-            import time
-
-            i = 5
-
-            while i > 0:
+            for i in range(10):
                 items.append(i)
                 i -= 1
 
-                time.sleep(1)
+                time.sleep(0.5)
 
             return items
 
