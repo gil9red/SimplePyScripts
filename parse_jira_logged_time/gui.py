@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 from PyQt5.Qt import (
     QApplication, QMessageBox, QThread, pyqtSignal, QMainWindow, QPushButton, QCheckBox, QPlainTextEdit,
     QVBoxLayout, QHBoxLayout, QTextOption, QTableWidget, QWidget, QSizePolicy, QSplitter, Qt, QTableWidgetItem,
-    QProgressDialog, QHeaderView
+    QProgressDialog, QHeaderView, QSystemTrayIcon, QIcon, QEvent, QTimer
 )
 
 from main import (
@@ -48,6 +48,17 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle('parse_jira_logged_time')
 
+        from pathlib import Path
+        file_name = str(Path(__file__).resolve().parent / 'favicon.ico')
+        icon = QIcon(file_name)
+
+        self.setWindowIcon(icon)
+
+        self.tray = QSystemTrayIcon(icon)
+        self.tray.setToolTip(self.windowTitle())
+        self.tray.activated.connect(self._on_tray_activated)
+        self.tray.show()
+
         self.logged_dict = dict()
 
         self.pb_refresh = QPushButton('REFRESH')
@@ -68,7 +79,6 @@ class MainWindow(QMainWindow):
 
         header_labels = ['DATE', 'TOTAL LOGGED TIME']
         self.table_logged = QTableWidget()
-        # self.table_logged.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table_logged.setEditTriggers(QTableWidget.NoEditTriggers)
         self.table_logged.setSelectionBehavior(QTableWidget.SelectRows)
         self.table_logged.setSelectionMode(QTableWidget.SingleSelection)
@@ -217,6 +227,20 @@ class MainWindow(QMainWindow):
             item = QTableWidgetItem(logged['jira_id'])
             item.setToolTip(logged['jira_title'])
             self.table_logged_info.setItem(i, 2, item)
+
+    def _on_tray_activated(self, reason):
+        self.setVisible(not self.isVisible())
+
+        if self.isVisible():
+            self.showNormal()
+            self.activateWindow()
+
+    def changeEvent(self, event: QEvent):
+        if event.type() == QEvent.WindowStateChange:
+            # Если окно свернули
+            if self.isMinimized():
+                # Прячем окно с панели задач
+                QTimer.singleShot(0, self.hide)
 
 
 if __name__ == '__main__':
