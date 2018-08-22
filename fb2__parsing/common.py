@@ -29,15 +29,9 @@ def get_file_name_from_binary(binary_id: str, binary_content_type: str) -> str:
 
 def get_attribute_value_by_local_name(node, attr_name: str) -> typing.Union[str, None]:
     for name, value in node.attrs.items():
-        # Если название атрибута без пространства имен
-        if ':' not in name:
-            if name == attr_name:
-                return value
-
-        else:
-            # Получаем имя атрибута
-            ns, name = name.split(':', maxsplit=1)
-            if name == attr_name:
-                return value
+        # Получаем имя атрибута
+        name = name.split(':')[-1]
+        if name == attr_name:
+            return value
 
     return None
