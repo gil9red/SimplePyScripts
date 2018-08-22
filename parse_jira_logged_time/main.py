@@ -72,6 +72,13 @@ def get_logged_dict(root) -> Dict[str, List[Dict]]:
     return logged_dict
 
 
+def parse_logged_dict(xml_data: bytes) -> Dict[str, List[Dict]]:
+    # Структура документа -- xml
+    root = BeautifulSoup(xml_data, 'xml')
+
+    return get_logged_dict(root)
+
+
 def get_sorted_logged(date_str_by_logged_list: Dict, reverse=True) -> List[Tuple[str, List[Dict]]]:
     sorted_items = date_str_by_logged_list.items()
     sorted_items = sorted(sorted_items, key=lambda x: datetime.strptime(x[0], '%d/%m/%Y'), reverse=reverse)
@@ -92,13 +99,11 @@ if __name__ == '__main__':
     xml_data = get_rss_jira_log()
     print(len(xml_data), repr(xml_data[:50]))
 
-    # open('rs.xml', 'wb').write(rs.content)
-    # root = BeautifulSoup(open('rs.xml', 'rb'), 'xml')
+    # open('rs.xml', 'wb').write(xml_data)
+    # xml_data = open('rs.xml', 'rb').read()
 
     # Структура документа -- xml
-    root = BeautifulSoup(xml_data, 'xml')
-
-    logged_dict = get_logged_dict(root)
+    logged_dict = parse_logged_dict(xml_data)
     print(logged_dict)
 
     import json
