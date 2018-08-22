@@ -7,17 +7,18 @@ __author__ = 'ipetrash'
 from bs4 import BeautifulSoup
 from datetime import datetime
 import re
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 import sys
 sys.path.append('..')
 
 from logged_human_time_to_seconds import logged_human_time_to_seconds
+from seconds_to_str import seconds_to_str
 
 
-def get_date_str_by_entry_logged_list(root) -> Dict[str, List[Dict]]:
+def get_entry_logged_dict(root) -> Dict[str, List[Dict]]:
     from collections import defaultdict
-    date_str_by_entry_logged_list = defaultdict(list)
+    entry_logged_dict = defaultdict(list)
 
     for entry in root.select('entry'):
         title = entry.title
@@ -43,7 +44,7 @@ def get_date_str_by_entry_logged_list(root) -> Dict[str, List[Dict]]:
         entry_date = entry_dt.date()
         date_str = entry_date.strftime('%d/%m/%Y')
 
-        date_str_by_entry_logged_list[date_str].append({
+        entry_logged_dict[date_str].append({
             'date_time': entry_dt.strftime('%d/%m/%Y %H:%M:%S'),
             'logged_human_time': logged_human_time,
             'logged_seconds': logged_seconds,
@@ -51,7 +52,14 @@ def get_date_str_by_entry_logged_list(root) -> Dict[str, List[Dict]]:
             'jira_title': jira_title,
         })
 
-    return date_str_by_entry_logged_list
+    return entry_logged_dict
+
+
+def get_sorted_entry_logged(date_str_by_entry_logged_list: Dict[str, List[Dict]]) -> List[Tuple[str, List[Dict]]]:
+    sorted_items = date_str_by_entry_logged_list.items()
+    sorted_items = sorted(sorted_items, key=lambda x: datetime.strptime(x[0], '%d/%m/%Y'), reverse=True)
+
+    return list(sorted_items)
 
 
 def get_entry_logged_list_by_current_utc_date(date_str_by_entry_logged_list: Dict[str, List[Dict]]) -> List[Dict]:
@@ -83,16 +91,14 @@ if __name__ == '__main__':
     # Структура документа -- xml
     root = BeautifulSoup(rs.content, 'xml')
 
-    date_str_by_entry_logged_list = get_date_str_by_entry_logged_list(root)
-    print(date_str_by_entry_logged_list)
+    entry_logged_dict = get_entry_logged_dict(root)
+    print(entry_logged_dict)
 
     import json
-    print(json.dumps(date_str_by_entry_logged_list, indent=4, ensure_ascii=False))
+    print(json.dumps(entry_logged_dict, indent=4, ensure_ascii=False))
     print()
 
-    from seconds_to_str import seconds_to_str
-
-    entry_logged_list = get_entry_logged_list_by_current_utc_date(date_str_by_entry_logged_list)
+    entry_logged_list = get_entry_logged_list_by_current_utc_date(entry_logged_dict)
     logged_total_seconds = get_logged_total_seconds(entry_logged_list)
     print('entry_logged_list:', entry_logged_list)
     print('today seconds:', logged_total_seconds)
@@ -100,12 +106,9 @@ if __name__ == '__main__':
     print()
 
     # Для красоты выводим результат в табличном виде
-    sorted_items = date_str_by_entry_logged_list.items()
-    sorted_items = sorted(sorted_items, key=lambda x: datetime.strptime(x[0], '%d/%m/%Y'), reverse=True)
-
     lines = []
 
-    for date_str, entry_logged_list in sorted_items:
+    for date_str, entry_logged_list in get_sorted_entry_logged(entry_logged_dict):
         total_seconds = get_logged_total_seconds(entry_logged_list)
         lines.append((date_str, total_seconds, seconds_to_str(total_seconds)))
 
