@@ -16,6 +16,23 @@ from logged_human_time_to_seconds import logged_human_time_to_seconds
 from seconds_to_str import seconds_to_str
 
 
+URL = 'https://jira.compassplus.ru/activity?maxResults=100&streams=user+IS+ipetrash&os_authType=basic&title=undefined'
+HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0',
+}
+
+# NOTE. Get <PEM_FILE_NAME>: openssl pkcs12 -nodes -out key.pem -in file.p12
+PEM_FILE_NAME = 'ipetrash.pem'
+
+
+def get_rss_jira_log() -> bytes:
+    import requests
+    rs = requests.get(URL, headers=HEADERS, cert=PEM_FILE_NAME)
+    # print(rs)
+
+    return rs.content
+
+
 def get_logged_dict(root) -> Dict[str, List[Dict]]:
     from collections import defaultdict
     logged_dict = defaultdict(list)
@@ -72,24 +89,14 @@ def get_logged_total_seconds(entry_logged_list: List[Dict]) -> int:
 
 
 if __name__ == '__main__':
-    URL = 'https://jira.compassplus.ru/activity?maxResults=100&streams=user+IS+ipetrash&os_authType=basic&title=undefined'
-    HEADERS = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0',
-    }
-
-    # NOTE. Get <PEM_FILE_NAME>: openssl pkcs12 -nodes -out key.pem -in file.p12
-    PEM_FILE_NAME = 'ipetrash.pem'
-
-    import requests
-    rs = requests.get(URL, headers=HEADERS, cert=PEM_FILE_NAME)
-    print(rs)
-    print(len(rs.text), repr(rs.text[:50]))
+    xml_data = get_rss_jira_log()
+    print(len(xml_data), repr(xml_data[:50]))
 
     # open('rs.xml', 'wb').write(rs.content)
     # root = BeautifulSoup(open('rs.xml', 'rb'), 'xml')
 
     # Структура документа -- xml
-    root = BeautifulSoup(rs.content, 'xml')
+    root = BeautifulSoup(xml_data, 'xml')
 
     logged_dict = get_logged_dict(root)
     print(logged_dict)
