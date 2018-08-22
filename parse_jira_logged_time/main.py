@@ -16,9 +16,9 @@ from logged_human_time_to_seconds import logged_human_time_to_seconds
 from seconds_to_str import seconds_to_str
 
 
-def get_entry_logged_dict(root) -> Dict[str, List[Dict]]:
+def get_logged_dict(root) -> Dict[str, List[Dict]]:
     from collections import defaultdict
-    entry_logged_dict = defaultdict(list)
+    logged_dict = defaultdict(list)
 
     for entry in root.select('entry'):
         title = entry.title
@@ -44,7 +44,7 @@ def get_entry_logged_dict(root) -> Dict[str, List[Dict]]:
         entry_date = entry_dt.date()
         date_str = entry_date.strftime('%d/%m/%Y')
 
-        entry_logged_dict[date_str].append({
+        logged_dict[date_str].append({
             'date_time': entry_dt.strftime('%d/%m/%Y %H:%M:%S'),
             'logged_human_time': logged_human_time,
             'logged_seconds': logged_seconds,
@@ -52,17 +52,17 @@ def get_entry_logged_dict(root) -> Dict[str, List[Dict]]:
             'jira_title': jira_title,
         })
 
-    return entry_logged_dict
+    return logged_dict
 
 
-def get_sorted_entry_logged(date_str_by_entry_logged_list: Dict[str, List[Dict]]) -> List[Tuple[str, List[Dict]]]:
-    sorted_items = date_str_by_entry_logged_list.items()
-    sorted_items = sorted(sorted_items, key=lambda x: datetime.strptime(x[0], '%d/%m/%Y'), reverse=True)
+def get_sorted_logged(date_str_by_logged_list: Dict, reverse=True) -> List[Tuple[str, List[Dict]]]:
+    sorted_items = date_str_by_logged_list.items()
+    sorted_items = sorted(sorted_items, key=lambda x: datetime.strptime(x[0], '%d/%m/%Y'), reverse=reverse)
 
     return list(sorted_items)
 
 
-def get_entry_logged_list_by_current_utc_date(date_str_by_entry_logged_list: Dict[str, List[Dict]]) -> List[Dict]:
+def get_logged_list_by_now_utc_date(date_str_by_entry_logged_list: Dict[str, List[Dict]]) -> List[Dict]:
     current_utc_date_str = datetime.utcnow().strftime('%d/%m/%Y')
     return date_str_by_entry_logged_list.get(current_utc_date_str, [])
 
@@ -91,16 +91,16 @@ if __name__ == '__main__':
     # Структура документа -- xml
     root = BeautifulSoup(rs.content, 'xml')
 
-    entry_logged_dict = get_entry_logged_dict(root)
-    print(entry_logged_dict)
+    logged_dict = get_logged_dict(root)
+    print(logged_dict)
 
     import json
-    print(json.dumps(entry_logged_dict, indent=4, ensure_ascii=False))
+    print(json.dumps(logged_dict, indent=4, ensure_ascii=False))
     print()
 
-    entry_logged_list = get_entry_logged_list_by_current_utc_date(entry_logged_dict)
-    logged_total_seconds = get_logged_total_seconds(entry_logged_list)
-    print('entry_logged_list:', entry_logged_list)
+    logged_list = get_logged_list_by_now_utc_date(logged_dict)
+    logged_total_seconds = get_logged_total_seconds(logged_list)
+    print('entry_logged_list:', logged_list)
     print('today seconds:', logged_total_seconds)
     print('today time:', seconds_to_str(logged_total_seconds))
     print()
@@ -108,8 +108,8 @@ if __name__ == '__main__':
     # Для красоты выводим результат в табличном виде
     lines = []
 
-    for date_str, entry_logged_list in get_sorted_entry_logged(entry_logged_dict):
-        total_seconds = get_logged_total_seconds(entry_logged_list)
+    for date_str, logged_list in get_sorted_logged(logged_dict):
+        total_seconds = get_logged_total_seconds(logged_list)
         lines.append((date_str, total_seconds, seconds_to_str(total_seconds)))
 
     # Список строк станет списком столбцов, у каждого столбца подсчитается максимальная длина
