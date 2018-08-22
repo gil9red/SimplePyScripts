@@ -25,6 +25,23 @@ sys.excepthook = log_uncaught_exceptions
 
 # TODO: MainWindow
 
+# TODO: попробовать
+# def wait(until: callable, timeout=5000):
+#     """Process events until condition is satisfied
+#     Parameters
+#     ----------
+#     until: callable
+#         Returns True when condition is satisfied.
+#     timeout: int
+#         Milliseconds to wait until TimeoutError is raised.
+#     """
+#     started = time.clock()
+#     while not until():
+#         qApp.processEvents(QEventLoop.ExcludeUserInputEvents)
+#         if (time.clock() - started) * 1000 > timeout:
+#             raise TimeoutError()
+
+
 
 def run_js_code(page: QWebEnginePage, code: str) -> object:
     loop = QEventLoop()
