@@ -15,8 +15,6 @@ sys.path.append('..')
 from logged_human_time_to_seconds import logged_human_time_to_seconds
 from seconds_to_str import seconds_to_str
 
-import os
-
 URL = 'https://jira.compassplus.ru/activity?maxResults=100&streams=user+IS+ipetrash&os_authType=basic&title=undefined'
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0',
@@ -25,8 +23,10 @@ HEADERS = {
 # NOTE. Get <PEM_FILE_NAME>: openssl pkcs12 -nodes -out key.pem -in file.p12
 PEM_FILE_NAME = 'ipetrash.pem'
 
-CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
-PEM_FILE_NAME = os.path.join(CURRENT_DIR, PEM_FILE_NAME)
+from pathlib import Path
+
+# CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
+PEM_FILE_NAME = str(Path(__file__).resolve().parent / PEM_FILE_NAME)
 
 
 def get_rss_jira_log() -> bytes:
