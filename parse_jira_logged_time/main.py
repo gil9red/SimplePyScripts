@@ -63,6 +63,8 @@ def get_logged_dict(root) -> Dict[str, List[Dict]]:
 
         logged_dict[date_str].append({
             'date_time': entry_dt.strftime('%d/%m/%Y %H:%M:%S'),
+            'date': entry_dt.strftime('%d/%m/%Y'),
+            'time': entry_dt.strftime('%H:%M:%S'),
             'logged_human_time': logged_human_time,
             'logged_seconds': logged_seconds,
             'jira_id': jira_id,
