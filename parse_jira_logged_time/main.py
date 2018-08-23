@@ -15,7 +15,7 @@ sys.path.append('..')
 from logged_human_time_to_seconds import logged_human_time_to_seconds
 from seconds_to_str import seconds_to_str
 
-URL = 'https://jira.compassplus.ru/activity?maxResults=100&streams=user+IS+ipetrash&os_authType=basic&title=undefined'
+URL = 'https://jira.compassplus.ru/activity?maxResults=10&streams=user+IS+ipetrash&os_authType=basic&title=undefined'
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0',
 }
@@ -42,18 +42,32 @@ def get_logged_dict(root) -> Dict[str, List[Dict]]:
     logged_dict = defaultdict(list)
 
     for entry in root.select('entry'):
-        title = entry.title
-
-        # Содержимое тега title -- экранированное html
-        title_node = BeautifulSoup(title.text, 'html.parser')
-
-        title_text = title_node.text.strip()
-        title_text = re.sub('\s{2,}', ' ', title_text)
-
-        # Пример: "Ilya A. Petrash logged '30 minutes' on ..."
-        match = re.search("Ilya A. Petrash logged '(.+?)'", title_text)
+        # Ищем в <entry> строку с логированием
+        match = re.search("logged '(.+?)'", entry.text, flags=re.IGNORECASE)
         if not match:
             continue
+
+        # TODO: удалить
+        # title = entry.title
+        #
+        # # Содержимое тега title -- экранированное html
+        # title_node = BeautifulSoup(title.text, 'html.parser')
+        #
+        # title_text = title_node.text.strip()
+        # title_text = re.sub('\s{2,}', ' ', title_text)
+        #
+        # # Ищем в <title>
+        # # Пример: "Ilya A. Petrash logged '30 minutes' on ..."
+        # match = re.search("Ilya A. Petrash logged '(.+?)'", title_text, flags=re.IGNORECASE)
+        # if not match:
+        #     if not entry.content:
+        #         continue
+        #
+        #     # Если в <title> не нашли, ищем в <content>
+        #     # Пример: &lt;li>Logged '30 minutes'
+        #     match = re.search("logged '(.+?)'", entry.content.text, flags=re.IGNORECASE)
+        #     if not match:
+        #         continue
 
         logged_human_time = match.group(1)
         logged_seconds = logged_human_time_to_seconds(logged_human_time)
@@ -105,7 +119,7 @@ if __name__ == '__main__':
     xml_data = get_rss_jira_log()
     print(len(xml_data), repr(xml_data[:50]))
 
-    # open('rs.xml', 'wb').write(xml_data)
+    open('rs.xml', 'wb').write(xml_data)
     # xml_data = open('rs.xml', 'rb').read()
 
     # Структура документа -- xml
