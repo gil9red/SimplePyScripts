@@ -42,11 +42,14 @@ class RunFuncThread(QThread):
         self.run_finished.emit(self.func())
 
 
+WINDOW_TITLE = 'parse_jira_logged_time'
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('parse_jira_logged_time')
+        self.setWindowTitle(WINDOW_TITLE)
 
         from pathlib import Path
         file_name = str(Path(__file__).resolve().parent / 'favicon.ico')
@@ -208,6 +211,9 @@ class MainWindow(QMainWindow):
         progress_dialog.setLabelText(progress_dialog.windowTitle())
         progress_dialog.setRange(0, 0)
         progress_dialog.exec()
+
+        from datetime import datetime
+        self.setWindowTitle(WINDOW_TITLE + ". Last refresh date: " + datetime.now().strftime('%d/%m/%Y %H:%M:%S'))
 
     def _on_table_logged_item_clicked(self, item: QTableWidgetItem):
         # Удаление строк таблицы
