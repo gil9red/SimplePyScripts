@@ -15,7 +15,7 @@ sys.path.append('..')
 from logged_human_time_to_seconds import logged_human_time_to_seconds
 from seconds_to_str import seconds_to_str
 
-URL = 'https://jira.compassplus.ru/activity?maxResults=10&streams=user+IS+ipetrash&os_authType=basic&title=undefined'
+URL = 'https://jira.compassplus.ru/activity?maxResults=100&streams=user+IS+ipetrash&os_authType=basic&title=undefined'
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0',
 }
