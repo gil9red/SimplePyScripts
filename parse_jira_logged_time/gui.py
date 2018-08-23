@@ -96,6 +96,7 @@ class MainWindow(QMainWindow):
         self.table_logged_info.setHorizontalHeaderLabels(header_labels)
         self.table_logged_info.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
         self.table_logged_info.horizontalHeader().setStretchLastSection(True)
+        self.table_logged_info.itemDoubleClicked.connect(self._on_table_logged_info_item_double_clicked)
 
         main_layout = QVBoxLayout()
 
@@ -227,6 +228,15 @@ class MainWindow(QMainWindow):
             item = QTableWidgetItem(logged['jira_id'])
             item.setToolTip(logged['jira_title'])
             self.table_logged_info.setItem(i, 2, item)
+
+    def _on_table_logged_info_item_double_clicked(self, item: QTableWidgetItem):
+        row = item.row()
+        jira_id = self.table_logged_info.item(row, 2).text()
+
+        url = 'https://jira.compassplus.ru/browse/' + jira_id
+
+        import webbrowser
+        webbrowser.open(url)
 
     def _on_tray_activated(self, reason):
         self.setVisible(not self.isVisible())
