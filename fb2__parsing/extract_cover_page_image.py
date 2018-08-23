@@ -16,8 +16,11 @@ def get_cover_page_image(root) -> (bytes, str):
     # Вытаскиваем значение атрибута href
     id_image = get_attribute_value_by_local_name(cover_page_image, 'href')
 
-    # Получится, например, такой css-селектор: binary#cover.jpg
-    binary = root.select_one('binary' + id_image)
+    # "#cover.jpg" -> "cover.jpg"
+    id_image = id_image[1:]
+
+    # Получится, например, такой css-селектор: "[id='cover.jpg']"
+    binary = root.select_one("[id='{}']".format(id_image))
 
     # image/jpeg -> jpeg
     content_type = binary.attrs['content-type'].split('/')[-1]
