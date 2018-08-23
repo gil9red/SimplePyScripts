@@ -119,7 +119,7 @@ if __name__ == '__main__':
     xml_data = get_rss_jira_log()
     print(len(xml_data), repr(xml_data[:50]))
 
-    open('rs.xml', 'wb').write(xml_data)
+    # open('rs.xml', 'wb').write(xml_data)
     # xml_data = open('rs.xml', 'rb').read()
 
     # Структура документа -- xml
