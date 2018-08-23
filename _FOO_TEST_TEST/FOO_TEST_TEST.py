@@ -25,6 +25,7 @@ sys.excepthook = log_uncaught_exceptions
 
 # TODO: MainWindow
 
+# TODO: Попробовать: https://github.com/WorldWideTelescope/pywwt/blob/99a3250afb325378d054ecb2045ef65b6ef073a6/pywwt/qt.py#L70
 # TODO: попробовать
 # def wait(until: callable, timeout=5000):
 #     """Process events until condition is satisfied
