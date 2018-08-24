@@ -12,7 +12,7 @@ def abbreviate(s):
         word = match.group()
         return word[0] + str(len(word[1: -2])) + word[-1]
 
-    return re.sub(r'\b(\w+?)\b', _on_match, s)
+    return re.sub(r'\b(\w+)\b', _on_match, s)
 
 
 text = 'elephant-ride colinu'
