@@ -14,10 +14,11 @@ Point = namedtuple('Point', ['x', 'y'])
 # print(p)
 
 p = Point(1, 2)
-print(p)
+print(p)  # Point(x=1, y=2)
 print()
 
 
+# SOURCE: https://docs.python.org/3/library/typing.html#typing.NamedTuple
 from typing import NamedTuple
 
 
@@ -27,7 +28,7 @@ class Point(NamedTuple):
 
 
 p = Point()
-print(p)
+print(p)  # Point(x=0, y=0)
 
 p = Point(1, 2)
-print(p)
+print(p)  # Point(x=1, y=2)
