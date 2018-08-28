@@ -63,7 +63,7 @@ def get_crash_statistics() -> CrashStatistics:
 DB_FILE_NAME = 'db.sqlite'
 
 
-def create_connect(fields_as_dict=False, trace_sql=False):
+def create_connect(fields_as_dict=False, trace_sql=False) -> 'sqlite3.Connection':
     import sqlite3
     connect = sqlite3.connect(DB_FILE_NAME)
 
