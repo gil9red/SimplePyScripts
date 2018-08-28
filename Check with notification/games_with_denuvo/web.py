@@ -41,7 +41,7 @@ def index():
 </head>
 <body>
     <table>
-        <caption><a href="https://en.wikipedia.org/wiki/Denuvo#List_of_games_using_Denuvo">Список взломанных игр</a><caption>
+        <caption><a href="https://en.wikipedia.org/wiki/Denuvo#List_of_games_using_Denuvo">Список взломанных игр</a></caption>
 
         <colgroup>
             <col span="1" style="width: 5%;">
