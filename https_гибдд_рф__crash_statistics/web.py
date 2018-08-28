@@ -52,7 +52,7 @@ def index():
 </head>
 <body>
     <table>
-        <caption>{{ title }}</caption>
+        <caption><a href="https://гибдд.рф/">{{ title }}</a></caption>
 
         <colgroup>
             <col span="1" style="width: 5%;">
