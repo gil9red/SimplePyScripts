@@ -31,7 +31,7 @@ def index():
     
         table {
             border-collapse: collapse; /* Убираем двойные линии между ячейками */
-            width: 50%; /* Ширина таблицы */
+            width: 70%; /* Ширина таблицы */
             
             /* Для размещения таблицы по центру. SOURCE: https://stackoverflow.com/a/9402889/5909792 */
             margin: 0 auto;
