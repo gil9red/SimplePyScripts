@@ -32,6 +32,7 @@ def get_crash_statistics() -> CrashStatistics:
     root = BeautifulSoup(rs.content, 'html.parser')
     table = root.select_one('table.b-crash-stat')
 
+    # Example: "АВАРИЙНОСТЬ НА ДОРОГАХ РОССИИ ЗА 27.08.2018"
     table_title = table.select_one('th').text.strip()
 
     date_str = table_title.replace('АВАРИЙНОСТЬ НА ДОРОГАХ РОССИИ ЗА ', '')
