@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 import requests
 from bs4 import BeautifulSoup
-from typing import NamedTuple
+from typing import NamedTuple, List
 
 
 class CrashStatistics(NamedTuple):
@@ -63,9 +63,13 @@ def get_crash_statistics() -> CrashStatistics:
 DB_FILE_NAME = 'db.sqlite'
 
 
-def create_connect(fields_as_dict=False):
+def create_connect(fields_as_dict=False, trace_sql=False):
     import sqlite3
     connect = sqlite3.connect(DB_FILE_NAME)
+
+    if trace_sql:
+        my_print = lambda text: print('SQL: ' + text.strip())
+        connect.set_trace_callback(my_print)
 
     if fields_as_dict:
         connect.row_factory = sqlite3.Row
@@ -84,7 +88,9 @@ def init_db():
                 died              INTEGER  NOT NULL,
                 children_died     INTEGER  NOT NULL,
                 wounded           INTEGER  NOT NULL,
-                wounded_children  INTEGER  NOT NULL
+                wounded_children  INTEGER  NOT NULL,
+                
+                CONSTRAINT date_unique UNIQUE (date)
             );
         ''')
 
@@ -110,7 +116,29 @@ def append_crash_statistics_db(crash_statistics: CrashStatistics=None):
         connect.commit()
 
 
+def get_crash_statistics_list_db() -> List[CrashStatistics]:
+    with create_connect() as connect:
+        sql = """
+        SELECT 
+            date, dtp, died, children_died, wounded, wounded_children 
+        FROM
+            CrashStatistics
+        ORDER BY id ASC
+        """
+
+        return [CrashStatistics(*row) for row in connect.execute(sql)]
+
+
 if __name__ == '__main__':
     crash_statistics = get_crash_statistics()
     print(crash_statistics)
     print(crash_statistics._asdict())
+    print()
+
+    init_db()
+
+    append_crash_statistics_db()
+    print()
+
+    crash_statistics_list = get_crash_statistics_list_db()
+    print(f'crash_statistics_list ({len(crash_statistics_list)}): {crash_statistics_list}')
