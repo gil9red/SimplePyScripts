@@ -101,7 +101,7 @@ def append_crash_statistics_db(crash_statistics: CrashStatistics=None):
     if not crash_statistics:
         crash_statistics = get_crash_statistics()
 
-    print('Append:', crash_statistics)
+    print(f'Append: {crash_statistics}')
 
     with create_connect() as connect:
         sql = """
