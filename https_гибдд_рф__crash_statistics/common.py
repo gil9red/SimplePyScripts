@@ -141,4 +141,4 @@ if __name__ == '__main__':
     print()
 
     crash_statistics_list = get_crash_statistics_list_db()
-    print(f'crash_statistics_list ({len(crash_statistics_list)}): {crash_statistics_list}')
+    print(f'Crash statistics list ({len(crash_statistics_list)}): {crash_statistics_list}')
