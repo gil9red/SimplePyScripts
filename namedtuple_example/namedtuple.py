@@ -14,8 +14,8 @@ x, y = p             # unpack like a regular tuple
 print(x, y)
 print(p.x + p.y)     # fields also accessible by name
 print(p)             # readable __repr__ with a name=value style
-
 print()
+
 XYZPoint = namedtuple('XYZPoint', ['x', 'y', 'z'])
 xyz = XYZPoint(2, 2, z=5)
 print(xyz)
