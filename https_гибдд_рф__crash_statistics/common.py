@@ -1,0 +1,115 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
+
+import requests
+from bs4 import BeautifulSoup
+from typing import NamedTuple
+
+
+class CrashStatistics(NamedTuple):
+    date: str
+    dtp: int
+
+    died: int
+    children_died: int
+
+    wounded: int
+    wounded_children: int
+
+
+def get_crash_statistics() -> CrashStatistics:
+    """
+    Example: CrashStatistics(date='27.08.2018', dtp=424, died=40, children_died=1, wounded=549, wounded_children=81)
+
+    :return: Dict
+    """
+
+    rs = requests.get('https://гибдд.рф/')
+
+    root = BeautifulSoup(rs.content, 'html.parser')
+    table = root.select_one('table.b-crash-stat')
+
+    table_title = table.select_one('th').text.strip()
+
+    date_str = table_title.replace('АВАРИЙНОСТЬ НА ДОРОГАХ РОССИИ ЗА ', '')
+
+    # Example: {'ДТП': 424, 'Погибли': 40, 'Погибло детей': 1, 'Ранены': 549, 'Ранено детей': 81}
+    key_by_value = dict()
+
+    for tr in table.select('tr'):
+        td_list = tr.select('td')
+        if not td_list:
+            continue
+
+        k, v = [td.text.strip() for td in td_list]
+        key_by_value[k] = int(v)
+
+    return CrashStatistics(
+        date_str,
+        key_by_value['ДТП'],
+
+        key_by_value['Погибли'],
+        key_by_value['Погибло детей'],
+
+        key_by_value['Ранены'],
+        key_by_value['Ранено детей'],
+    )
+
+
+DB_FILE_NAME = 'db.sqlite'
+
+
+def create_connect(fields_as_dict=False):
+    import sqlite3
+    connect = sqlite3.connect(DB_FILE_NAME)
+
+    if fields_as_dict:
+        connect.row_factory = sqlite3.Row
+
+    return connect
+
+
+def init_db():
+    # Создание базы и таблицы
+    with create_connect() as connect:
+        connect.execute('''
+            CREATE TABLE IF NOT EXISTS CrashStatistics (
+                id                INTEGER  PRIMARY KEY,
+                date              TEXT     NOT NULL,
+                dtp               INTEGER  NOT NULL,
+                died              INTEGER  NOT NULL,
+                children_died     INTEGER  NOT NULL,
+                wounded           INTEGER  NOT NULL,
+                wounded_children  INTEGER  NOT NULL
+            );
+        ''')
+
+        connect.commit()
+
+
+def append_crash_statistics_db(crash_statistics: CrashStatistics=None):
+    if not crash_statistics:
+        crash_statistics = get_crash_statistics()
+
+    print('Append:', crash_statistics)
+
+    with create_connect() as connect:
+        sql = """
+        INSERT OR IGNORE INTO CrashStatistics 
+            (date, dtp, died, children_died, wounded, wounded_children) 
+        VALUES 
+            (:date, :dtp, :died, :children_died, :wounded, :wounded_children)
+        """
+
+        connect.execute(sql, crash_statistics._asdict())
+
+        connect.commit()
+
+
+if __name__ == '__main__':
+    crash_statistics = get_crash_statistics()
+    print(crash_statistics)
+    print(crash_statistics._asdict())
