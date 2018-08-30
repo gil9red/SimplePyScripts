@@ -8,7 +8,7 @@ def pretty_money_format(money) -> str:
     money = str(money)
 
     import re
-    money = re.sub(r'[^\.,\d]', '', money)
+    money = re.sub(r'[^.,\d]', '', money)
 
     if money.count('.') + money.count(',') > 1:
         raise Exception('Invalid money format: "{}".'.format(money))
