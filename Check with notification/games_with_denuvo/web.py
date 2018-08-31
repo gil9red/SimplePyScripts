@@ -19,7 +19,7 @@ def index():
 <html lang="ru">
 <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
-    <title>Список взломанных игр</title>
+    <title>Denuvo. Список взломанных игр</title>
 
     <style type="text/css">
         table {
