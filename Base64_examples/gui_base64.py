@@ -161,9 +161,6 @@ class MainWindow(QWidget):
         self.text_edit_output = QPlainTextEdit()
         self.text_edit_output.setReadOnly(True)
 
-        # True -- кодирование текста, False -- раскодирование
-        self.direct_encode_text = False
-
         self.label_error = QLabel()
         self.label_error.setStyleSheet("QLabel { color : red; }")
         self.label_error.setTextInteractionFlags(Qt.TextSelectableByMouse)
@@ -177,7 +174,10 @@ class MainWindow(QWidget):
         self.last_error_message = None
         self.last_detail_error_message = None
 
-        # Первый вызов, чтобы у кнопки появился текст
+        # True -- кодирование текста, False -- раскодирование
+        self.direct_encode_text = True
+
+        # Первый вызов, чтобы у кнопки появился текст (заодно это сменит режим кодирования)
         self.change_convert_direct()
 
         self.button_direct.clicked.connect(self.change_convert_direct)
