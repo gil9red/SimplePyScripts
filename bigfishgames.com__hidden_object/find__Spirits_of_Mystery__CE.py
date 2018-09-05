@@ -4,12 +4,20 @@
 __author__ = 'ipetrash'
 
 
-PREFIX = "Spirits of Mystery".upper()
-POSTFIX = "Collector's Edition".upper()
-
+import typing
 from get_all_games import get_all_games
-games = [game for game in get_all_games() if game.upper().startswith(PREFIX) and game.upper().endswith(POSTFIX)]
-print('Games ({}):'.format(len(games)))
 
-for game in games:
-    print('    ' + game)
+
+def get_games() -> typing.List[str]:
+    prefix = "Spirits of Mystery"
+    postfix = "Collector's Edition"
+
+    return get_all_games(prefix=prefix, postfix=postfix)
+
+
+if __name__ == '__main__':
+    games = get_games()
+    print('Games ({}):'.format(len(games)))
+
+    for game in games:
+        print('    ' + game)
