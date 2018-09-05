@@ -14,30 +14,15 @@ __author__ = 'ipetrash'
 import sys
 sys.path.append('..')
 
+# Чтобы импортировать функция для получения списка игр
+sys.path.append('../../bigfishgames_com__hidden_object')
 
 from all_common import make_backslashreplace_console, get_logger, simple_send_sms, wait
-
+from find__Sable_Maze__CE import get_games
 
 make_backslashreplace_console()
 
-
 log = get_logger('new game Sable Maze')
-
-
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/3d50ee8b195a0fced88a5169ebc98b487eaab050/bigfishgames.com__hidden-object/get_all_games.py
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/28dbb706db85b5af667ecc6adddf52746e618094/bigfishgames.com__hidden-object/find__Sable%20Maze__of__Collector's%20Edition.py
-def get_all_games(url='https://www.bigfishgames.com/download-games/genres/15/hidden-object.html'):
-    import requests
-    rs = requests.get(url)
-
-    from bs4 import BeautifulSoup
-    root = BeautifulSoup(rs.content, 'html.parser')
-
-    prefix = "Sable Maze".upper()
-    postfix = "Collector's Edition".upper()
-
-    games = [a.text.strip() for a in root.select('#genre_bottom a')]
-    return [game for game in games if game.upper().startswith(prefix) and game.upper().endswith(postfix)]
 
 
 FILE_NAME_CURRENT_GAMES = 'games'
@@ -64,7 +49,7 @@ if __name__ == '__main__':
         try:
             log.debug('get games')
 
-            games = get_all_games()
+            games = get_games()
             log.debug('games: %s', games)
 
             # Если список текущих игр
