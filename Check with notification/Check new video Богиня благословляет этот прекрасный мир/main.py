@@ -29,6 +29,7 @@ run_notification_job(
     'video',
     lambda: search_video_list('Богиня благословляет этот прекрасный мир'),
     notified_by_sms=True,
+    timeout={'weeks': 2},
     format_current_items='Текущий список видео (%s): %s',
     format_get_items='Запрос видео',
     format_items='Список видео (%s): %s',
