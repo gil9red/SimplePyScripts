@@ -34,7 +34,7 @@ if __name__ == '__main__':
     items = get_video_list(url, filter_func=lambda name: text in name)
     print('Items ({}): {}'.format(len(items), items))
 
-    print('\n')
+    print()
 
     text = 'Sally Face #'
     url = 'https://www.youtube.com/user/HellYeahPlay/search?query=' + text
