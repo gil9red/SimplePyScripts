@@ -4,7 +4,10 @@
 __author__ = 'ipetrash'
 
 
-def search_video_list(text) -> list:
+from typing import List
+
+
+def search_video_list(text) -> List[str]:
     url = 'https://online.anidub.com/index.php?do=search'
 
     data = {
@@ -25,7 +28,7 @@ def search_video_list(text) -> list:
     return [a.text.strip() for a in root.select('.newstitle a')]
 
 
-def get_shorted_names(items: list) -> list:
+def get_shorted_names(items: List[str]) -> List[str]:
     """
     in = ['Богиня благословляет этот прекрасный мир / Kono Subarashii Sekai ni Shukufuku wo OVA-2', 'Богиня благословляет этот прекрасный мир ТВ-2 / Kono Subarashii Sekai ni Shukufuku wo TV-2 [10 из 10]', 'Богиня благословляет этот прекрасный мир OVA / Kono Subarashii Sekai ni Shukufuku wo! OVA', 'Богиня благословляет этот прекрасный мир / Kono Subarashii Sekai ni Shukufuku wo! [10 из 10]']
     out = ['Богиня благословляет этот прекрасный мир OVA-2', 'Богиня благословляет этот прекрасный мир ТВ-2 [10 из 10]', 'Богиня благословляет этот прекрасный мир OVA', 'Богиня благословляет этот прекрасный мир [10 из 10]']
@@ -55,11 +58,20 @@ def get_shorted_names(items: list) -> list:
     return new_items
 
 
+def search_video_list_with_short_name(text) -> List[str]:
+    return get_shorted_names(search_video_list(text))
+
+
 if __name__ == '__main__':
-    items = search_video_list('Моя геройская академия')
+    text = 'Моя геройская академия'
+
+    items = search_video_list(text)
     print('Items ({}): {}'.format(len(items), items))
 
     items = get_shorted_names(items)
+    print('Items ({}): {}'.format(len(items), items))
+
+    items = search_video_list_with_short_name(text)
     print('Items ({}): {}'.format(len(items), items))
 
     import json
