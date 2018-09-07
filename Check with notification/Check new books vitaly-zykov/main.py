@@ -14,82 +14,24 @@ __author__ = 'ipetrash'
 import sys
 sys.path.append('..')
 
+# Чтобы импортировать функцию для получения списка книг
+sys.path.append('../../html_parsing')
 
-from all_common import make_backslashreplace_console, get_logger, simple_send_sms, wait
+from all_common import make_backslashreplace_console, run_notification_job
+from vitaly_zykov_ru_knigi__get_books import get_books
 
 
 make_backslashreplace_console()
 
 
-log = get_logger('vitaly-zykov new books')
-
-
-def get_books():
-    import requests
-    rs = requests.get('http://vitaly-zykov.ru/knigi')
-
-    from bs4 import BeautifulSoup
-    root = BeautifulSoup(rs.content, 'lxml')
-
-    return [x.text.strip().replace('"', '') for x in root.select('.book_tpl > h3')]
-
-
-FILE_NAME_CURRENT_BOOKS = 'books'
-
-
-def save_books(books):
-    open(FILE_NAME_CURRENT_BOOKS, mode='w', encoding='utf-8').write(str(books))
-
-
-if __name__ == '__main__':
-    notified_by_sms = True
-
-    # Загрузка текущих книг
-    try:
-        import ast
-        current_books = ast.literal_eval(open(FILE_NAME_CURRENT_BOOKS, encoding='utf-8').read())
-
-    except:
-        current_books = []
-
-    log.debug('Current books: %s', current_books)
-
-    while True:
-        try:
-            log.debug('get books')
-
-            books = get_books()
-            log.debug('books: %s', books)
-
-            # Если список текущих книг пуст
-            if not current_books:
-                log.debug('Обнаружен первый запуск')
-
-                current_books = books
-                save_books(current_books)
-
-            else:
-                new_books = set(books) - set(current_books)
-                if new_books:
-                    current_books = books
-                    save_books(current_books)
-
-                    for book in new_books:
-                        text = 'Появилась новая книга Зыкова: "{}"'.format(book)
-                        log.debug(text)
-
-                        if notified_by_sms:
-                            simple_send_sms(text, log)
-
-                else:
-                    log.debug('Новых книг нет')
-
-            wait(weeks=1)
-
-        except:
-            log.exception('Ошибка:')
-            log.debug('Через 5 минут попробую снова...')
-
-            # Wait 5 minutes before next attempt
-            import time
-            time.sleep(5 * 60)
+run_notification_job(
+    'vitaly-zykov new books',
+    'books',
+    get_books,
+    notified_by_sms=True,
+    format_current_items='Текущий список книг (%s): %s',
+    format_get_items='Запрос списка книг',
+    format_items='Список книг (%s): %s',
+    format_new_item='Появилась новая книга Зыкова: "%s"',
+    format_no_new_items='Новых книг нет',
+)

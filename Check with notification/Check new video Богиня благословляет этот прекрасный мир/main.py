@@ -13,84 +13,25 @@ __author__ = 'ipetrash'
 # Чтобы можно было импортировать all_common.py, находящийся уровнем выше
 import sys
 sys.path.append('..')
+
+# Чтобы импортировать функцию для получения списка видео
 sys.path.append('../../online_anidub_com')
 
-
-from all_common import make_backslashreplace_console, get_logger, simple_send_sms, wait
-from get_video_list import search_video_list, get_shorted_names
-
-
-def my_search_video_list():
-    items = search_video_list('Богиня благословляет этот прекрасный мир')
-    new_items = get_shorted_names(items)
-
-    log.debug('my_search_video_list\nitems: %s\nnew_items: %s', items, new_items)
-
-    return new_items
+from all_common import make_backslashreplace_console, get_logger, run_notification_job
+from get_video_list import search_video_list
 
 
 make_backslashreplace_console()
 
 
-log = get_logger('new video Богиня благословляет этот прекрасный мир')
-
-
-FILE_NAME_CURRENT_ITEMS = 'video'
-
-
-def save_items(items):
-    open(FILE_NAME_CURRENT_ITEMS, mode='w', encoding='utf-8').write(str(items))
-
-
-if __name__ == '__main__':
-    notified_by_sms = True
-
-    # Загрузка текущих элементов
-    try:
-        import ast
-        current_items = ast.literal_eval(open(FILE_NAME_CURRENT_ITEMS, encoding='utf-8').read())
-
-    except:
-        current_items = []
-
-    log.debug('Current items(%s): %s', len(current_items), current_items)
-
-    while True:
-        try:
-            log.debug('get items')
-
-            items = my_search_video_list()
-            log.debug('items: %s', items)
-
-            # Если список текущих игр
-            if not current_items:
-                log.debug('Обнаружен первый запуск')
-
-                current_items = items
-                save_items(current_items)
-
-            else:
-                new_items = set(items) - set(current_items)
-                if new_items:
-                    current_items = items
-                    save_items(current_items)
-
-                    for item in new_items:
-                        text = 'Новая серия "{}"'.format(item)
-                        log.debug(text)
-
-                        if notified_by_sms:
-                            simple_send_sms(text, log)
-
-                else:
-                    log.debug('Изменений нет')
-
-            wait(weeks=2)
-
-        except:
-            log.exception('Ошибка:')
-            log.debug('Через 5 минут попробую снова...')
-
-            # Wait 5 minutes before next attempt
-            import time
-            time.sleep(5 * 60)
+run_notification_job(
+    'new video Богиня благословляет этот прекрасный мир',
+    'video',
+    lambda: search_video_list('Богиня благословляет этот прекрасный мир'),
+    notified_by_sms=True,
+    format_current_items='Текущий список видео (%s): %s',
+    format_get_items='Запрос видео',
+    format_items='Список видео (%s): %s',
+    format_new_item='Новая серия "%s"',
+    format_no_new_items='Изменений нет',
+)

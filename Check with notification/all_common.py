@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+from typing import Callable, List, Union
+
+
 def make_backslashreplace_console():
     # При выводе юникодных символов в консоль винды
     # Возможно, не только для винды, но и для любой платформы стоит использовать
@@ -57,7 +60,7 @@ def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, 
     print('\n')
 
 
-def get_logger(name, file='log.txt', encoding='utf-8', log_stdout=True, log_file=True):
+def get_logger(name, file='log.txt', encoding='utf-8', log_stdout=True, log_file=True) -> 'logging.Logger':
     import logging
     log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
@@ -116,28 +119,86 @@ def simple_send_sms(text: str, log=None):
     return send_sms(API_ID, TO, text, log)
 
 
-# TODO:
 def run_notification_job(
-    log,
-    get_new_items_func,
-    read_context_func,
-    save_context_func,
-    process,
-    wait_timeout,
-    exception_handler,
-    notified_by_sms=False,
+    log__or__log_name: Union['logging.Logger', str],
+    file_name_items: str,
+    get_new_items: Callable[[], List[str]],
+    notified_by_sms=True,
+    timeout={'weeks': 1},
+    timeout_exception_seconds=5 * 60,
+    format_first_start_detected='Обнаружен первый запуск',
+    format_current_items='Текущий список (%s): %s',
+    format_get_items='Запрос списка',
+    format_items='Список (%s): %s',
+    format_new_item='Появился новый элемент "%s"',
+    format_no_new_items='Новых элементов нет',
+    format_on_exception='Ошибка:',
+    format_on_exception_next_attempt='Через 5 минут попробую снова...',
 ):
-    current_context = read_context_func()
+    log = log__or__log_name
+    if isinstance(log, str):
+        log = get_logger(log)
+
+    def save_items(items: List[str]):
+        with open(file_name_items, mode='w', encoding='utf-8') as f:
+            import json
+            json.dump(items, f, ensure_ascii=False, indent=4)
+
+    def read_items() -> List[str]:
+        try:
+            with open(file_name_items, encoding='utf-8') as f:
+                import json
+                obj = json.load(f)
+
+                # Должен быть список, но если в файле будет что-то другое -- это будет неправильно
+                if not isinstance(obj, list):
+                    return []
+
+                return obj
+
+        except:
+            return []
+
+    # Загрузка текущего списка из файла
+    current_items = read_items()
+    log.debug(format_current_items, len(current_items), current_items)
 
     while True:
         try:
-            log.debug('Получение новых данных')
+            log.debug(format_get_items)
 
-            items = get_new_items_func()
+            items = get_new_items()
+            log.debug(format_items, len(items), items)
 
-            process(current_context, items, save_context_func, notified_by_sms, log)
+            # Если текущих список пустой
+            if not current_items:
+                log.debug(format_first_start_detected)
 
-            wait_timeout()
+                current_items = items
+                save_items(current_items)
 
-        except Exception as e:
-            exception_handler(e)
+            else:
+                new_items = set(items) - set(current_items)
+                if new_items:
+                    current_items = items
+                    save_items(current_items)
+
+                    for item in new_items:
+                        text = format_new_item % item
+                        log.debug(text)
+
+                        if notified_by_sms:
+                            simple_send_sms(text, log)
+
+                else:
+                    log.debug(format_no_new_items)
+
+            wait(**timeout)
+
+        except:
+            log.exception(format_on_exception)
+            log.debug(format_on_exception_next_attempt)
+
+            # Wait <timeout_exception_seconds> before next attempt
+            import time
+            time.sleep(timeout_exception_seconds)
