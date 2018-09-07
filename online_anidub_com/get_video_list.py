@@ -7,7 +7,31 @@ __author__ = 'ipetrash'
 from typing import List
 
 
-def search_video_list(text) -> List[str]:
+def get_shorted_name(name: str) -> str:
+    """
+    in = 'Богиня благословляет этот прекрасный мир / Kono Subarashii Sekai ni Shukufuku wo OVA-2'
+    out = 'Богиня благословляет этот прекрасный мир OVA-2'
+
+    in = 'Моя геройская академия ТВ-2 / Boku no Hero Academia TV-2 [25 из 25]'
+    out = 'Моя геройская академия ТВ-2 [25 из 25]'
+
+    """
+
+    import re
+
+    if '[' in name or 'OVA' in name:
+        first, last = map(str.strip, name.split('/'))
+
+        match = re.search('(\[.+?\])|(OVA.*)', last)
+        if match and not first.endswith(match.group(0)):
+            first += ' ' + match.group(0)
+
+        return first
+
+    return name
+
+
+def search_video_list(text, short_name=True) -> List[str]:
     url = 'https://online.anidub.com/index.php?do=search'
 
     data = {
@@ -25,54 +49,28 @@ def search_video_list(text) -> List[str]:
     from bs4 import BeautifulSoup
     root = BeautifulSoup(rs.content, 'html.parser')
 
-    return [a.text.strip() for a in root.select('.newstitle a')]
+    items = []
 
+    for a in root.select('.newstitle a'):
+        name = a.text.strip()
 
-def get_shorted_names(items: List[str]) -> List[str]:
-    """
-    in = ['Богиня благословляет этот прекрасный мир / Kono Subarashii Sekai ni Shukufuku wo OVA-2', 'Богиня благословляет этот прекрасный мир ТВ-2 / Kono Subarashii Sekai ni Shukufuku wo TV-2 [10 из 10]', 'Богиня благословляет этот прекрасный мир OVA / Kono Subarashii Sekai ni Shukufuku wo! OVA', 'Богиня благословляет этот прекрасный мир / Kono Subarashii Sekai ni Shukufuku wo! [10 из 10]']
-    out = ['Богиня благословляет этот прекрасный мир OVA-2', 'Богиня благословляет этот прекрасный мир ТВ-2 [10 из 10]', 'Богиня благословляет этот прекрасный мир OVA', 'Богиня благословляет этот прекрасный мир [10 из 10]']
+        if short_name:
+            name = get_shorted_name(name)
 
-    in = ['Моя геройская академия ТВ-2 / Boku no Hero Academia TV-2 [25 из 25]', 'Моя геройская академия / Boku no Hero Academia [13 из 13]']
-    out = ['Моя геройская академия ТВ-2 [25 из 25]', 'Моя геройская академия [13 из 13]']
+        items.append(name)
 
-    """
-
-    new_items = []
-
-    import re
-
-    for name in items:
-        if '[' in name or 'OVA' in name:
-            first, last = map(str.strip, name.split('/'))
-
-            match = re.search('(\[.+?\])|(OVA.*)', last)
-            if match and not first.endswith(match.group(0)):
-                first += ' ' + match.group(0)
-
-            new_items.append(first)
-
-        else:
-            new_items.append(name)
-
-    return new_items
-
-
-def search_video_list_with_short_name(text) -> List[str]:
-    return get_shorted_names(search_video_list(text))
+    return items
 
 
 if __name__ == '__main__':
     text = 'Моя геройская академия'
 
+    items = search_video_list(text, short_name=False)
+    print('Items ({}): {}'.format(len(items), items))
+
     items = search_video_list(text)
     print('Items ({}): {}'.format(len(items), items))
 
-    items = get_shorted_names(items)
-    print('Items ({}): {}'.format(len(items), items))
-
-    items = search_video_list_with_short_name(text)
-    print('Items ({}): {}'.format(len(items), items))
 
     import json
     json.dump(items, open('video_list.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=4)
