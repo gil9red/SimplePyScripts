@@ -17,7 +17,7 @@ sys.path.append('..')
 # Чтобы импортировать функцию для получения списка видео
 sys.path.append('../../online_anidub_com')
 
-from all_common import make_backslashreplace_console, get_logger, run_notification_job
+from all_common import make_backslashreplace_console, run_notification_job
 from get_video_list import search_video_list
 
 

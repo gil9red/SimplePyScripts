@@ -17,7 +17,7 @@ sys.path.append('..')
 # Чтобы импортировать функцию для получения списка игр
 sys.path.append('../../bigfishgames_com__hidden_object')
 
-from all_common import make_backslashreplace_console, get_logger, run_notification_job
+from all_common import make_backslashreplace_console, run_notification_job
 from find__Spirits_of_Mystery__CE import get_games
 
 
