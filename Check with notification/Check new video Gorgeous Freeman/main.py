@@ -14,95 +14,32 @@ __author__ = 'ipetrash'
 import sys
 sys.path.append('..')
 
+# Чтобы импортировать функцию для получения списка видео
+sys.path.append('../../html_parsing')
 
-from all_common import make_backslashreplace_console, get_logger, simple_send_sms, wait
+from all_common import make_backslashreplace_console, run_notification_job
+from youtube_com__get_video_list import get_video_list
 
 
 make_backslashreplace_console()
 
 
-log = get_logger('new video Gorgeous Freeman')
+def my_get_video_list():
+    text = 'Gorgeous Freeman -'
+    url = 'https://www.youtube.com/user/antoine35DeLak/search?query=' + text
 
-
-def get_video_list():
-    text = 'Gorgeous Freeman - '
-
-    import requests
-    rs = requests.get('https://www.youtube.com/user/antoine35DeLak/search?query=' + text)
-    log.debug('rs: %s', rs)
-
-    from bs4 import BeautifulSoup
-    root = BeautifulSoup(rs.content, 'lxml')
-
-    video_title_list = [x.text for x in root.select('.yt-lockup-title > a')]
-    log.debug('video_title_list[%s]: %s', len(video_title_list), video_title_list)
-
-    # Get video list and filter by <text>
-    return list(filter(lambda x: x.startswith(text), video_title_list))
-
-
-FILE_NAME_CURRENT_NUMBER_VIDEO = 'current_number_video'
-
-
-def save_current_number_video(current_number_video):
-    open(FILE_NAME_CURRENT_NUMBER_VIDEO, mode='w', encoding='utf-8').write(str(current_number_video))
+    return get_video_list(url, filter_func=lambda name: text in name)
 
 
 if __name__ == '__main__':
-    import time
-    import requests
-
-    notified_by_sms = True
-
-    try:
-        current_number_video = int(open(FILE_NAME_CURRENT_NUMBER_VIDEO, encoding='utf-8').read())
-    except:
-        current_number_video = 0
-
-    while True:
-        try:
-            log.debug('get video number')
-            log.debug('current_number_video: %s', current_number_video)
-
-            video_list = get_video_list()
-            number_video = len(video_list)
-
-            log.debug('video list[%s]: %s', number_video, sorted(video_list))
-
-            if not current_number_video:
-                log.debug('Обнаружен первый запуск')
-
-                current_number_video = number_video
-                save_current_number_video(current_number_video)
-
-            else:
-                if number_video == current_number_video:
-                    log.debug('Новых видео нет')
-
-                else:
-                    if number_video > current_number_video:
-                        text = 'Появилось новое видео Gorgeous Freeman'
-                    else:
-                        text = 'Случилось странное: видео по Gorgeous Freeman меньше, чем было запомнено'
-
-                    log.debug(text)
-
-                    current_number_video = number_video
-                    save_current_number_video(current_number_video)
-
-                    if notified_by_sms:
-                        simple_send_sms(text, log)
-
-            wait(weeks=1)
-
-        except requests.exceptions.ConnectionError as e:
-            log.warning('Ошибка подключения к сети: %s', e)
-            log.debug('Через минуту попробую снова...')
-
-            time.sleep(60)
-
-        except:
-            log.exception('Непредвиденная ошибка:')
-            log.debug('Через 5 минут попробую снова...')
-
-            time.sleep(5 * 60)
+    run_notification_job(
+        'new video Gorgeous Freeman',
+        'video',
+        my_get_video_list,
+        notified_by_sms=True,
+        format_current_items='Текущий список видео (%s): %s',
+        format_get_items='Запрос видео',
+        format_items='Список видео (%s): %s',
+        format_new_item='Новое видео "%s"',
+        format_no_new_items='Изменений нет',
+    )
