@@ -8,6 +8,8 @@ __author__ = 'ipetrash'
 import sys
 sys.path.append('..')
 
+import vk_api
+
 from config import LOGIN, PASSWORD
 
 
@@ -34,8 +36,7 @@ from config import LOGIN, PASSWORD
 #     return attachment_image
 
 
-def upload_images(file_names):
-    import vk_api
+def upload_images(vk, file_names):
     upload = vk_api.VkUpload(vk)
     rs = upload.photo_messages(file_names)
 
@@ -45,7 +46,6 @@ def upload_images(file_names):
 
 
 if __name__ == '__main__':
-    import vk_api
     vk = vk_api.VkApi(login=LOGIN, password=PASSWORD)
     vk.auth()
 
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     vk.method('messages.send', {
         'user_id': user_id,
         'message': 'All:',
-        'attachment': upload_images(file_names),
+        'attachment': upload_images(vk, file_names),
     })
 
     import random
@@ -69,5 +69,5 @@ if __name__ == '__main__':
     vk.method('messages.send', {
         'user_id': user_id,
         'message': 'Random:',
-        'attachment': upload_images(file_name),
+        'attachment': upload_images(vk, file_name),
     })
