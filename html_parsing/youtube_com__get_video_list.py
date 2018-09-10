@@ -19,7 +19,7 @@ def get_video_list(url: str, sort=False, filter_func: Callable[[Any], bool]=None
     if sort:
         video_title_list.sort()
 
-    if filter_func:
+    if callable(filter_func):
         video_title_list = list(filter(filter_func, video_title_list))
 
     return video_title_list
