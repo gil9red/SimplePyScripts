@@ -81,8 +81,6 @@ def index():
                         
                         table.append(tr);
                     }
-                    
-                    // $('#out_get_text').text(JSON.stringify(data));
                 },
 
                 error: function(data) {
