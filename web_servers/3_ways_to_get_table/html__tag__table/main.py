@@ -22,9 +22,10 @@ def index():
     items = generate_table(10)
 
     return render_template_string("""\
-<!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
     <title>generate_table</title>
     
     <style>
