@@ -48,13 +48,6 @@ def index():
             url="get_table"
             toolbar="#toolbar"
             rownumbers="true" fitColumns="true" singleSelect="true">
-        <thead>
-            <tr>
-                <th field="name" width="25%">Name</th>
-                <th field="price" width="25%">Price</th>
-                <th field="append_date" width="25%">Append Date</th>
-            </tr>
-        </thead>
     </table>
     <div id="toolbar">
         <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addGame()">Add Game</a>
@@ -94,22 +87,22 @@ def index():
         
         function editGame() {
             var row = $('#dg').datagrid('getSelected');
-            if (row){
-                $('#dlg').dialog('open').dialog('setTitle','Edit Game');
-                $('#fm').form('load',row);
+            if (row) {
+                $('#dlg').dialog('open').dialog('setTitle', 'Edit Game');
+                $('#fm').form('load', row);
                 url = 'update_game.php?id='+row.id;
             }
         }
         
-        function saveGame(){
+        function saveGame() {
             $('#fm').form('submit',{
                 url: url,
-                onSubmit: function(){
+                onSubmit: function() {
                     return $(this).form('validate');
                 },
-                success: function(result){
+                success: function(result) {
                     var result = eval('('+result+')');
-                    if (result.errorMsg){
+                    if (result.errorMsg) {
                         $.messager.show({
                             title: 'Error',
                             msg: result.errorMsg
@@ -122,13 +115,13 @@ def index():
             });
         }
         
-        function deleteGame(){
+        function deleteGame() {
             var row = $('#dg').datagrid('getSelected');
-            if (row){
-                $.messager.confirm('Confirm','Are you sure you want to delete this Game?',function(r){
-                    if (r){
-                        $.post('delete_Game.php',{id:row.id},function(result){
-                            if (result.success){
+            if (row) {
+                $.messager.confirm('Confirm','Are you sure you want to delete this Game?',function(r) {
+                    if (r) {
+                        $.post('delete_Game.php',{id:row.id},function(result) {
+                            if (result.success) {
                                 $('#dg').datagrid('reload');    // reload the Game data
                             } else {
                                 $.messager.show({    // show error message
@@ -141,6 +134,53 @@ def index():
                 });
             }
         }
+        
+        // removing 'd' object from asp.net web service json output
+        $('#dg').datagrid({
+            loadFilter: function(data) {
+                for (var i = 0; i < data.length; i++) {
+                    var row = data[i];
+                    
+                    // 2017-06-03 21:21:17 -> 03/06/2017 21:21:17
+                    var append_date = row.append_date;
+                    var parts = append_date.split(' ')
+                    var date_parts = parts[0].split('-');
+                    append_date = date_parts[2] + '/' + date_parts[1] + '/' + date_parts[0] + ' ' + parts[1];
+                    
+                    row.append_date = append_date;
+                }
+                
+                return data;
+            },
+            
+            rowStyler:function(index, row) {
+                if (row.price == null) {
+                    // TODO: определиться
+                    // return 'background-color: lightgray';
+                    return 'background-color:pink;color:blue;font-weight:bold;';
+                }
+            },
+            
+            remoteSort: false,
+            columns: [[
+                {field: 'name', title: 'Name', width: "25%", sortable: true},
+                {field: 'price', title: 'Price', width: "25%", sortable: true,
+                    formatter: function(value, row, index) {
+                        return value == null ? "<не задано>" : value;
+                    },
+                    sorter: function(a, b){  
+                        return parseFloat(a) > parseFloat(b) ? 1 : -1;  
+                    },
+                },
+                {field: 'append_date', title: 'Append Date', width: "25%", sortable: true,  
+                    sorter: function(a, b){  
+                        a = new Date(a);
+                        b = new Date(b);  
+                        return a > b ? 1 : -1;  
+                    }  
+                },
+            ]],
+        });
     </script>
     
     <style type="text/css">
