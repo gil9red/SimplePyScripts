@@ -15,6 +15,18 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 
+import sqlite3
+
+
+def create_connect(fields_as_dict=False):
+    connect = sqlite3.connect('test_games.sqlite')
+
+    if fields_as_dict:
+        connect.row_factory = sqlite3.Row
+
+    return connect
+
+
 @app.route("/")
 def index():
     return render_template_string("""\
@@ -32,69 +44,64 @@ def index():
     
 </head>
 <body>
-    <table id="dg" title="My Users" class="easyui-datagrid" style="width:400px;height:233px"
+    <table id="dg" title="My games" class="easyui-datagrid" style="width:40%;height:600px"
             url="get_table"
             toolbar="#toolbar"
             rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>
             <tr>
-                <th field="firstname" width="25%">First Name</th>
-                <th field="lastname" width="25%">Last Name</th>
-                <th field="phone" width="25%">Phone</th>
-                <th field="email" width="25%">Email</th>
+                <th field="name" width="25%">Name</th>
+                <th field="price" width="25%">Price</th>
+                <th field="append_date" width="25%">Append Date</th>
             </tr>
         </thead>
     </table>
     <div id="toolbar">
-        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">New User</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">Edit User</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyUser()">Remove User</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addGame()">Add Game</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editGame()">Edit Game</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="deleteGame()">Remove Game</a>
     </div>
     
     <div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
             closed="true" buttons="#dlg-buttons">
-        <div class="ftitle">User Information</div>
+        <div class="ftitle">Game</div>
         <form id="fm" method="post" novalidate>
             <div class="fitem">
-                <label>First Name:</label>
-                <input name="firstname" class="easyui-textbox" required="true">
+                <label>Name:</label>
+                <input name="name" class="easyui-textbox" required="true">
             </div>
             <div class="fitem">
-                <label>Last Name:</label>
-                <input name="lastname" class="easyui-textbox" required="true">
+                <label>Price:</label>
+                <input name="price" class="easyui-textbox" required="true">
             </div>
             <div class="fitem">
-                <label>Phone:</label>
-                <input name="phone" class="easyui-textbox">
-            </div>
-            <div class="fitem">
-                <label>Email:</label>
-                <input name="email" class="easyui-textbox" validType="email">
+                <label>Append Date:</label>
+                <input name="append_date" class="easyui-textbox" disabled="true">
             </div>
         </form>
     </div>
     <div id="dlg-buttons">
-        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveGame()" style="width:90px">Save</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
     </div>
     
     <script type="text/javascript">
-        function newUser() {
-            $('#dlg').dialog('open').dialog('setTitle','New User');
+        function addGame() {
+            $('#dlg').dialog('open').dialog('setTitle','Add Game');
             $('#fm').form('clear');
-            url = 'save_user.php';
+            url = 'save_game.php';
         }
         
-        function editUser() {
+        function editGame() {
             var row = $('#dg').datagrid('getSelected');
             if (row){
-                $('#dlg').dialog('open').dialog('setTitle','Edit User');
+                $('#dlg').dialog('open').dialog('setTitle','Edit Game');
                 $('#fm').form('load',row);
-                url = 'update_user.php?id='+row.id;
+                url = 'update_game.php?id='+row.id;
             }
         }
         
-        function saveUser(){
+        function saveGame(){
             $('#fm').form('submit',{
                 url: url,
                 onSubmit: function(){
@@ -108,21 +115,21 @@ def index():
                             msg: result.errorMsg
                         });
                     } else {
-                        $('#dlg').dialog('close');        // close the dialog
-                        $('#dg').datagrid('reload');    // reload the user data
+                        $('#dlg').dialog('close');      // close the dialog
+                        $('#dg').datagrid('reload');    // reload the Game data
                     }
                 }
             });
         }
         
-        function destroyUser(){
+        function deleteGame(){
             var row = $('#dg').datagrid('getSelected');
             if (row){
-                $.messager.confirm('Confirm','Are you sure you want to destroy this user?',function(r){
+                $.messager.confirm('Confirm','Are you sure you want to delete this Game?',function(r){
                     if (r){
-                        $.post('destroy_user.php',{id:row.id},function(result){
+                        $.post('delete_Game.php',{id:row.id},function(result){
                             if (result.success){
-                                $('#dg').datagrid('reload');    // reload the user data
+                                $('#dg').datagrid('reload');    // reload the Game data
                             } else {
                                 $.messager.show({    // show error message
                                     title: 'Error',
@@ -165,23 +172,18 @@ def index():
     """)
 
 
+# TODO: support addGame(), editGame(), deleteGame()
+
+
 @app.route("/get_table", methods=['POST', 'GET'])
 def get_table():
-    # TODO: replace sqlite
-    items = [
-        {'id': '3', 'firstname': 'fname1', 'lastname': 'lname1', 'phone': '(000)000-0000', 'email': 'name1@gmail.com'},
-        {'id': '4', 'firstname': 'fname2', 'lastname': 'lname2', 'phone': '(000)000-0000', 'email': 'name2@gmail.com'},
-        {'id': '5', 'firstname': 'fname3', 'lastname': 'lname3', 'phone': '(000)000-0000', 'email': 'name3@gmail.com'},
-        {'id': '7', 'firstname': 'fname4', 'lastname': 'lname4', 'phone': '(000)000-0000', 'email': 'name4@gmail.com'},
-        {'id': '8', 'firstname': 'fname5', 'lastname': 'lname5', 'phone': '(000)000-0000', 'email': 'name5@gmail.com'},
-        {'id': '9', 'firstname': 'fname6', 'lastname': 'lname6', 'phone': '(000)000-0000', 'email': 'name6@gmail.com'},
-        {'id': '10', 'firstname': 'fname7', 'lastname': 'lname7', 'phone': '(000)000-0000', 'email': 'name7@gmail.com'},
-        {'id': '11', 'firstname': 'fname8', 'lastname': 'lname8', 'phone': '(000)000-0000', 'email': 'name8@gmail.com'},
-        {'id': '12', 'firstname': 'fname9', 'lastname': 'lname9', 'phone': '(000)000-0000', 'email': 'name9@gmail.com'},
-        {'id': '13', 'firstname': 'fname10', 'lastname': 'lname10', 'phone': '(000)000-0000', 'email': 'name10@gmail.com'},
-        {'id': '14', 'firstname': 'fname11', 'lastname': 'lname11', 'phone': '(000)000-0000', 'email': 'name11@gmail.com'},
-        {'id': '15', 'firstname': 'fname12', 'lastname': 'lname12', 'phone': '(000)000-0000', 'email': 'name12@gmail.com'},
-    ]
+    with create_connect(fields_as_dict=True) as connect:
+        get_game_sql = '''
+            SELECT id, name, price, append_date
+            FROM game
+            ORDER BY name
+        '''
+        items = list(map(dict, connect.execute(get_game_sql).fetchall()))
 
     return jsonify(items)
 
