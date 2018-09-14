@@ -130,7 +130,19 @@
                     formatter: function(value, row, index) {
                         return value == null ? "<не задано>" : value;
                     },
-                    sorter: function(a, b){
+                    sorter: function(a, b) {
+                        // При сортировке по возрастанию, игры с null ценой будут
+                        // первыми в списке
+                        if (a == null) {
+                            return 1;
+                        }
+
+                        // При сортировке по убыванию, игры с null ценой будут
+                        // последними в списке
+                        if (b == null) {
+                            return -1;
+                        }
+
                         return parseFloat(a) > parseFloat(b) ? 1 : -1;
                     },
                 },
