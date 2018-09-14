@@ -13,7 +13,7 @@
 </head>
 <body>
     <table id="dg" title="My games" class="easyui-datagrid" style="width:40%;height:600px"
-            url="get_table"
+            url="get_games"
             toolbar="#toolbar"
             rownumbers="true" fitColumns="true" singleSelect="true">
     </table>
@@ -35,10 +35,6 @@
                 <label>Price:</label>
                 <input name="price" class="easyui-textbox" required="true">
             </div>
-            <div class="fitem">
-                <label>Append Date:</label>
-                <input name="append_date" class="easyui-textbox" disabled="true">
-            </div>
         </form>
     </div>
     <div id="dlg-buttons">
@@ -50,7 +46,7 @@
         function addGame() {
             $('#dlg').dialog('open').dialog('setTitle','Add Game');
             $('#fm').form('clear');
-            url = 'save_game.php';
+            url = 'save_game';
         }
 
         function editGame() {
@@ -58,7 +54,7 @@
             if (row) {
                 $('#dlg').dialog('open').dialog('setTitle', 'Edit Game');
                 $('#fm').form('load', row);
-                url = 'update_game.php?id='+row.id;
+                url = 'update_game?id=' + row.id;
             }
         }
 
@@ -69,7 +65,8 @@
                     return $(this).form('validate');
                 },
                 success: function(result) {
-                    var result = eval('('+result+')');
+                    console.log(result.errorMsg);
+
                     if (result.errorMsg) {
                         $.messager.show({
                             title: 'Error',
@@ -88,7 +85,7 @@
             if (row) {
                 $.messager.confirm('Confirm','Are you sure you want to delete this Game?',function(r) {
                     if (r) {
-                        $.post('delete_Game.php',{id:row.id},function(result) {
+                        $.post('delete_game', {id: row.id}, function(result) {
                             if (result.success) {
                                 $('#dg').datagrid('reload');    // reload the Game data
                             } else {
@@ -103,7 +100,6 @@
             }
         }
 
-        // removing 'd' object from asp.net web service json output
         $('#dg').datagrid({
             loadFilter: function(data) {
                 for (var i = 0; i < data.length; i++) {
@@ -123,8 +119,6 @@
 
             rowStyler:function(index, row) {
                 if (row.price == null) {
-                    // TODO: определиться
-                    // return 'background-color: lightgray';
                     return 'background-color:pink;color:blue;font-weight:bold;';
                 }
             },
