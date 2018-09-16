@@ -33,9 +33,10 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.label)
 
 
-app = QApplication([])
+if __name__ == '__main__':
+    app = QApplication([])
 
-mw = MainWindow()
-mw.show()
+    mw = MainWindow()
+    mw.show()
 
-app.exec()
+    app.exec()
