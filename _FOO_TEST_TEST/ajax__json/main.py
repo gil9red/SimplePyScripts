@@ -20,7 +20,7 @@ import sqlite3
 
 
 def create_connect(fields_as_dict=False):
-    connect = sqlite3.connect('test_games.sqlite')
+    connect = sqlite3.connect('games.sqlite')
 
     if fields_as_dict:
         connect.row_factory = sqlite3.Row
@@ -102,6 +102,9 @@ def delete_game():
         return jsonify({'errorMsg': f'Some errors occured: "{e}"'})
 
     return jsonify({'success': True})
+
+
+# TODO: проверить сортировку даты
 
 
 if __name__ == '__main__':
