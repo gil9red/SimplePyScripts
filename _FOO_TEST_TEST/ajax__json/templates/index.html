@@ -101,6 +101,7 @@
         }
 
         $('#dg').datagrid({
+        {# // TODO: remove this
             loadFilter: function(data) {
                 for (var i = 0; i < data.length; i++) {
                     var row = data[i];
@@ -116,6 +117,7 @@
 
                 return data;
             },
+        #}
 
             rowStyler:function(index, row) {
                 if (row.price == null) {
@@ -147,7 +149,13 @@
                     },
                 },
                 {field: 'append_date', title: 'Append Date', width: "25%", sortable: true,
-                    sorter: function(a, b){
+                    formatter: function(value, row, index) {
+                        // 2017-06-03 21:21:17 -> 03/06/2017 21:21:17
+                        var parts = value.split(' ')
+                        var date_parts = parts[0].split('-');
+                        return date_parts[2] + '/' + date_parts[1] + '/' + date_parts[0] + ' ' + parts[1];
+                    },
+                    sorter: function(a, b) {
                         a = new Date(a);
                         b = new Date(b);
                         return a > b ? 1 : -1;
