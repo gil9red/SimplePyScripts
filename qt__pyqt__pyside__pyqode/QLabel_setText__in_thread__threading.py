@@ -27,7 +27,7 @@ class MainWindow(QMainWindow):
                 i += 1
                 time.sleep(1)
 
-        thread = threading.Thread(target=loop)
+        thread = threading.Thread(target=loop, daemon=True)
         thread.start()
 
         self.setCentralWidget(self.label)
