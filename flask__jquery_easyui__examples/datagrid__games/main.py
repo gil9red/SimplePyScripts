@@ -9,7 +9,7 @@ __author__ = 'ipetrash'
 
 
 from flask import Flask, render_template, jsonify, request
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../static')
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
