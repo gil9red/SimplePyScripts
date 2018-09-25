@@ -1,0 +1,103 @@
+<html>
+<head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+    <title>generate_table</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/jquery-easyui-1.6.3/themes/default/easyui.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/jquery-easyui-1.6.3/themes/icon.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/jquery-easyui-1.6.3/themes/color.css') }}">
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-easyui-1.6.3/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-easyui-1.6.3/jquery.easyui.min.js') }}"></script>
+
+</head>
+<body>
+    <div class="easyui-layout" data-options="fit:true">
+        <div data-options="region:'west'" style="width:10%"></div>
+        <div data-options="region:'center'" style="width:80%">
+            <div class="easyui-layout" style="height:100%">
+                <div data-options="region:'center',fit:true,split:true,title:'PC'">
+                    <div class="easyui-layout" style="height:100%">
+                        <div data-options="region:'west'" style="width:50%">
+                            <table id="dg_finished"></table>
+                        </div>
+                        <div data-options="region:'center'" style="width:50%">
+                            <table id="dg_finished_watched"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-options="region:'east'" style="width:10%"></div>
+    </div>
+
+    <script type="text/javascript">
+        function create_datagrid(table_selector, url, title) {
+            $(table_selector).datagrid({
+                url: url,
+                title: title,
+                rownumbers: true,
+                fitColumns: true,
+                singleSelect: true,
+                fit: true,
+
+                rowStyler:function(index, row) {
+                    if (row.price == null) {
+                        return 'background-color:pink;color:blue;font-weight:bold;';
+                    }
+                },
+
+                remoteSort: false,
+                columns: [[
+                    {field: 'name', title: 'Name', width: "25%", sortable: true},
+                    {field: 'price', title: 'Price', width: "25%", sortable: true,
+                        formatter: function(value, row, index) {
+                            return value == null ? "<не задано>" : value;
+                        },
+                        sorter: function(a, b) {
+                            // При сортировке по возрастанию, игры с null ценой будут
+                            // первыми в списке
+                            if (a == null) {
+                                return 1;
+                            }
+
+                            // При сортировке по убыванию, игры с null ценой будут
+                            // последними в списке
+                            if (b == null) {
+                                return -1;
+                            }
+
+                            return parseFloat(a) > parseFloat(b) ? 1 : -1;
+                        },
+                    },
+                    {field: 'append_date', title: 'Append Date', width: "25%", sortable: true,
+                        formatter: function(value, row, index) {
+                            // 2017-06-03 21:21:17 -> 03/06/2017 21:21:17
+                            var parts = value.split(' ')
+                            var date_parts = parts[0].split('-');
+                            return date_parts[2] + '/' + date_parts[1] + '/' + date_parts[0] + ' ' + parts[1];
+                        },
+                        sorter: function(a, b) {
+                            a = new Date(a);
+                            b = new Date(b);
+                            return a > b ? 1 : -1;
+                        }
+                    },
+                ]],
+            });
+        }
+
+        create_datagrid(
+            "#dg_finished",
+            "get_games?kind=Finished",
+            "My finished games",
+        );
+
+        create_datagrid(
+            "#dg_finished_watched",
+            "get_games?kind=Finished watched",
+            "My finished watched games",
+        );
+    </script>
+</body>
+</html>
