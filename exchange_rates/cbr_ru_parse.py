@@ -12,6 +12,7 @@ if __name__ == '__main__':
     date_req = date.today().strftime('%d.%m.%Y')
     url = 'https://www.cbr.ru/currency_base/daily.aspx?date_req=' + date_req
 
+    # pip install robobrowser
     from robobrowser import RoboBrowser
     browser = RoboBrowser(
         user_agent='Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0',
