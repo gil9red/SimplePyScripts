@@ -76,6 +76,12 @@ def get_logged_dict(root) -> Dict[str, List[Dict]]:
         jira_title = entry.object.summary.text.strip()
 
         entry_dt = datetime.strptime(entry.published.text, "%Y-%m-%dT%H:%M:%S.%fZ")
+
+        # Переменная entry_dt имеет время в UTC, и желательно его привести в локальное время
+        # Хитрым кодом ниже добавим разницу между UTC и локальным
+        UTC_OFFSET_TIMEDELTA = datetime.now() - datetime.utcnow()
+        entry_dt += UTC_OFFSET_TIMEDELTA
+
         entry_date = entry_dt.date()
         date_str = entry_date.strftime('%d/%m/%Y')
 
