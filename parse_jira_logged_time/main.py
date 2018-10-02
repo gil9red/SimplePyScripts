@@ -5,7 +5,7 @@ __author__ = 'ipetrash'
 
 
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, timezone
 import re
 from typing import Dict, List, Tuple
 
@@ -27,6 +27,11 @@ from pathlib import Path
 
 # CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 PEM_FILE_NAME = str(Path(__file__).resolve().parent / PEM_FILE_NAME)
+
+
+# SOURCE: https://stackoverflow.com/a/13287083/5909792
+def utc_to_local(utc_dt: datetime) -> datetime:
+    return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
 
 
 def get_rss_jira_log() -> bytes:
@@ -78,9 +83,7 @@ def get_logged_dict(root) -> Dict[str, List[Dict]]:
         entry_dt = datetime.strptime(entry.published.text, "%Y-%m-%dT%H:%M:%S.%fZ")
 
         # Переменная entry_dt имеет время в UTC, и желательно его привести в локальное время
-        # Хитрым кодом ниже добавим разницу между UTC и локальным
-        UTC_OFFSET_TIMEDELTA = datetime.now() - datetime.utcnow()
-        entry_dt += UTC_OFFSET_TIMEDELTA
+        entry_dt = utc_to_local(entry_dt)
 
         entry_date = entry_dt.date()
         date_str = entry_date.strftime('%d/%m/%Y')
