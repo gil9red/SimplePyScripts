@@ -42,7 +42,7 @@ dir_file_name = NAME_BY_PATH[name] + '/' + version
 file_name = dir_file_name + '/' + WHAT_BY_FILE[what]
 
 # Move to active dir
-os.chdir(os.path.dirname(dir_file_name))
+os.chdir(dir_file_name)
 
 # Run
 os.startfile(file_name)
