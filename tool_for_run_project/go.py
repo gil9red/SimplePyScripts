@@ -41,6 +41,8 @@ if version == 'trunk':
 dir_file_name = NAME_BY_PATH[name] + '/' + version
 file_name = dir_file_name + '/' + WHAT_BY_FILE[what]
 
+print(f'Run: "{file_name}"')
+
 # Move to active dir
 os.chdir(dir_file_name)
 
