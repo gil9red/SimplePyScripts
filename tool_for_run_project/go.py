@@ -15,8 +15,13 @@ NAME_BY_PATH = {
 
 WHAT_BY_FILE = {
     'designer': '!!designer.cmd',
+    'd': '!!designer.cmd',
+
     'explorer': '!!explorer.cmd',
+    'e': '!!explorer.cmd',
+
     'server': '!!server.cmd',
+    's': '!!server.cmd',
 }
 
 if len(sys.argv) == 1 or len(sys.argv) != 4:
