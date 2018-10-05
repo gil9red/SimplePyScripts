@@ -31,15 +31,16 @@ argc = len(sys.argv)
 
 if argc == 1:
     print('''\
-Run: <name> <version> <what>  -- Run tool
-Run: <name> <version>         -- Open dir version
-Run: <name> open              -- Open dir
-Run: <name>                   -- Print versions
+RUN:
+  <name> <version> <what>  -- Run tool
+  <name> <version>         -- Open dir version
+  <name> open              -- Open dir
+  <name>                   -- Print versions
 
 SUPPORTED NAMES:
 {}
 
-Example:
+EXAMPLES:
   > optt trunk designer
     Run: "C:/DEV__OPTT/trunk_optt/!!designer.cmd"
     
