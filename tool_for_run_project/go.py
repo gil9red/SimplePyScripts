@@ -11,8 +11,9 @@ import pathlib
 
 
 NAME_BY_PATH = {
-    'optt': 'C:/DEV__OPTT',
-    'tx':   'C:/DEV__TX',
+    'optt':    'C:/DEV__OPTT',
+    'tx':      'C:/DEV__TX',
+    'manager': 'C:/manager_1_2_11_23_8'
 }
 
 WHAT_BY_FILE = {
@@ -34,6 +35,10 @@ Run: <name> <version> <what>  -- Run tool
 Run: <name> <version>         -- Open dir version
 Run: <name> open              -- Open dir
 Run: <name>                   -- Print versions
+
+SUPPORTED NAMES:
+{}
+
 Example:
   > optt trunk designer
     Run: "C:/DEV__OPTT/trunk_optt/!!designer.cmd"
@@ -49,7 +54,7 @@ Example:
     
   > optt
     Version: ['2.1.7.1', 'trunk_optt']
-''')
+'''.format('\n'.join('  {:<10} {}'.format(k, v) for k, v in sorted(NAME_BY_PATH.items()))))
     quit()
 
 if argc == 4:
@@ -88,17 +93,31 @@ elif argc == 3:
 
 elif argc == 2:
     name = sys.argv[1].lower()
-    name = NAME_BY_PATH[name]
 
-    dirs = []
+    if name == 'manager':
+        dir_file_name = NAME_BY_PATH[name]
+        file_name = dir_file_name + '/manager/bin/manager64.exe'
 
-    for path in pathlib.Path(name).iterdir():
-        if not path.is_dir():
-            continue
+        print(f'Run: "{file_name}"')
 
-        path = path.name
+        # Move to active dir
+        os.chdir(dir_file_name)
 
-        if path.startswith('trunk_') or re.search('\d+(\.\d+)+', path):
-            dirs.append(path)
+        # Run
+        os.startfile(file_name)
 
-    print('Version:', dirs)
+    else:
+        name = NAME_BY_PATH[name]
+
+        dirs = []
+
+        for path in pathlib.Path(name).iterdir():
+            if not path.is_dir():
+                continue
+
+            path = path.name
+
+            if path.startswith('trunk_') or re.search('\d+(\.\d+)+', path):
+                dirs.append(path)
+
+        print('Version:', dirs)
