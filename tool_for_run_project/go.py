@@ -32,6 +32,7 @@ if argc == 1:
     print('''\
 Run: <name> <version> <what>  -- Run tool
 Run: <name> <version>         -- Open dir version
+Run: <name> open              -- Open dir
 Run: <name>                   -- Print versions
 Example:
   > optt trunk designer
@@ -42,6 +43,9 @@ Example:
   
   > optt trunk
     Open: "C:/DEV__OPTT/trunk_optt"
+   
+  > optt open
+    Open: "C:/DEV__OPTT"
     
   > optt
     Version: ['2.1.7.1', 'trunk_optt']
@@ -68,10 +72,15 @@ if argc == 4:
 elif argc == 3:
     name, version = map(str.lower, (sys.argv[1], sys.argv[2]))
 
-    if version == 'trunk':
-        version += '_' + name
+    dir_file_name = NAME_BY_PATH[name]
 
-    dir_file_name = NAME_BY_PATH[name] + '/' + version
+    # Для команды open версия не нужна
+    if version != 'open':
+        if version == 'trunk':
+            version += '_' + name
+
+        dir_file_name += '/' + version
+
     print(f'Open: "{dir_file_name}"')
 
     # Open
