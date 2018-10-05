@@ -28,13 +28,21 @@ WHAT_BY_FILE = {
 
 argc = len(sys.argv)
 
-if argc == 1 or (argc != 4 and argc != 2):
+if argc == 1:
     print('''\
 Run: <name> <version> <what>  -- Run tool
+Run: <name> <version>         -- Open dir version
 Run: <name>                   -- Print versions
 Example:
   > optt trunk designer
-  > tx 3.2.6 server
+    Run: "C:/DEV__OPTT/trunk_optt/!!designer.cmd"
+    
+  > tx 3.2.6.10 server
+    Run: "C:/DEV__TX/3.2.6.10/!!server.cmd"
+  
+  > optt trunk
+    Open: "C:/DEV__OPTT/trunk_optt"
+    
   > optt
     Version: ['2.1.7.1', 'trunk_optt']
 ''')
@@ -56,6 +64,18 @@ if argc == 4:
 
     # Run
     os.startfile(file_name)
+
+elif argc == 3:
+    name, version = map(str.lower, (sys.argv[1], sys.argv[2]))
+
+    if version == 'trunk':
+        version += '_' + name
+
+    dir_file_name = NAME_BY_PATH[name] + '/' + version
+    print(f'Open: "{dir_file_name}"')
+
+    # Open
+    os.startfile(dir_file_name)
 
 elif argc == 2:
     name = sys.argv[1].lower()
