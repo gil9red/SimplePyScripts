@@ -22,10 +22,12 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class FlowWidget(QWidget):
-    def __init__(self, length=25):
+    def __init__(self, length=25, cell_size=50, cell_font=QFont('Arial', 10)):
         super().__init__()
 
-        self.cell_size = 30
+        self.cell_size = cell_size
+        self.cell_font = cell_font
+
         self.column_count = 10
         self.items = list(range(1, length + 1))
 
@@ -54,6 +56,7 @@ class FlowWidget(QWidget):
         painter = QPainter(self)
         painter.setPen(Qt.black)
         painter.setBrush(Qt.white)
+        painter.setFont(self.cell_font)
 
         for index, num in enumerate(self.items):
             num = str(num)
