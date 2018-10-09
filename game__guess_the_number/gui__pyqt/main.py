@@ -8,6 +8,20 @@ import random
 from PyQt5.Qt import *
 
 
+def log_uncaught_exceptions(ex_cls, ex, tb):
+    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+    import traceback
+    text += ''.join(traceback.format_tb(tb))
+
+    print(text)
+    QMessageBox.critical(None, 'Error', text)
+    quit()
+
+
+import sys
+sys.excepthook = log_uncaught_exceptions
+
+
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/907a596654aabb9948934b68b0f7b1fe392e23bd/qt__pyqt__pyside__pyqode/pyqt__QListWidget__Flow.py
 class WrapListWidget(QListWidget):
     def __init__(self):
@@ -128,9 +142,9 @@ class PageSelectLevelWidget(QWidget):
         start_row = self.grid_layout.rowCount()
 
         for row, rows in enumerate(levels, start=start_row):
-            for col, level in enumerate(rows):
-                pb = QPushButton(str(level))
-                pb.clicked.connect(lambda level=level: self.about_select_level.emit(level))
+            for col, value in enumerate(rows):
+                pb = QPushButton(str(value))
+                pb.clicked.connect(lambda checked, level=value: self.about_select_level.emit(level))
 
                 self.grid_layout.addWidget(pb, row, col)
 
