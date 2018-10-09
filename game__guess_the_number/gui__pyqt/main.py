@@ -111,10 +111,12 @@ class PageSelectLevelWidget(QWidget):
 
         self.grid_layout = QGridLayout()
         self.grid_layout.addWidget(QLabel('Выбор уровня сложности:'), 0, 0, 1, 2)
-        self._add_level(25, 50)
-        self._add_level(75, 100)
-        self._add_level(125, 150)
-        self._add_level(175, 200)
+        self._add_levels([
+            [25, 50],
+            [75, 100],
+            [125, 150],
+            [175, 200],
+        ])
 
         layout = QVBoxLayout()
         layout.addLayout(self.grid_layout)
@@ -122,17 +124,15 @@ class PageSelectLevelWidget(QWidget):
 
         self.setLayout(layout)
 
-    def _add_level(self, level_1: int, level_2: int):
-        row = self.grid_layout.rowCount()
+    def _add_levels(self, levels):
+        start_row = self.grid_layout.rowCount()
 
-        pb_1 = QPushButton(str(level_1))
-        pb_1.clicked.connect(lambda: self.about_select_level.emit(level_1))
+        for row, rows in enumerate(levels, start=start_row):
+            for col, level in enumerate(rows):
+                pb = QPushButton(str(level))
+                pb.clicked.connect(lambda level=level: self.about_select_level.emit(level))
 
-        pb_2 = QPushButton(str(level_2))
-        pb_2.clicked.connect(lambda: self.about_select_level.emit(level_2))
-
-        self.grid_layout.addWidget(pb_1, row, 0)
-        self.grid_layout.addWidget(pb_2, row, 1)
+                self.grid_layout.addWidget(pb, row, col)
 
 
 class MainWindow(QMainWindow):
