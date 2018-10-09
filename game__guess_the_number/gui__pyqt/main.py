@@ -94,6 +94,7 @@ class PageGuessWidget(QWidget):
             self.lw_numbers.item(num - 1).setBackground(Qt.green)
             QMessageBox.information(self, "Победа", "Ты угадал число!")
             self.lw_numbers.setEnabled(False)
+            return
 
         elif self.guess_number > num:
             # Выделение от 0 индекса до указанного
