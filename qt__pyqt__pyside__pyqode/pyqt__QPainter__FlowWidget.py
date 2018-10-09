@@ -33,7 +33,8 @@ class FlowWidget(QWidget):
 
     def minimumSizeHint(self):
         try:
-            height = (len(self.items) // self.column_count + 1) * self.cell_size
+            # + 1 -- толщина рамки
+            height = (len(self.items) // self.column_count + 1) * self.cell_size + 1
             return QSize(self.minimumWidth(), height)
 
         except ZeroDivisionError:
