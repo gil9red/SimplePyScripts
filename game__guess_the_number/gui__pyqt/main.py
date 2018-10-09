@@ -143,8 +143,10 @@ class PageSelectLevelWidget(QWidget):
 
         for row, rows in enumerate(levels, start=start_row):
             for col, value in enumerate(rows):
+                _on_clicked = lambda checked, level=value: self.about_select_level.emit(level)
+
                 pb = QPushButton(str(value))
-                pb.clicked.connect(lambda checked, level=value: self.about_select_level.emit(level))
+                pb.clicked.connect(_on_clicked)
 
                 self.grid_layout.addWidget(pb, row, col)
 
