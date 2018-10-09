@@ -7,13 +7,25 @@ __author__ = 'ipetrash'
 from PyQt5.Qt import *
 
 
-app = QApplication([])
+class WrapListWidget(QListWidget):
+    def __init__(self):
+        super().__init__()
 
-list_widget = QListWidget()
-list_widget.addItems(map(str, range(1, 100 + 1)))
-list_widget.setFlow(QListView.LeftToRight)
-list_widget.setWrapping(True)
-list_widget.setUniformItemSizes(True)
-list_widget.show()
+        self.setFlow(QListView.LeftToRight)
+        self.setWrapping(True)
+        self.setUniformItemSizes(True)
 
-app.exec()
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+
+        self.setWrapping(self.isWrapping())
+
+
+if __name__ == '__main__':
+    app = QApplication([])
+
+    list_widget = WrapListWidget()
+    list_widget.addItems(map(str, range(1, 100 + 1)))
+    list_widget.show()
+
+    app.exec()
