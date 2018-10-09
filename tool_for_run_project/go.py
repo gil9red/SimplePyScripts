@@ -104,6 +104,9 @@ RUN:
 SUPPORTED NAMES:
 {}
 
+SUPPORTED WHATS:
+{}
+
 EXAMPLES:
   > optt trunk designer
     Run: "C:/DEV__OPTT/trunk_optt/!!designer.cmd"
@@ -122,7 +125,10 @@ EXAMPLES:
     
   > optt
     Version: ['2.1.7.1', 'trunk_optt']
-'''.format('\n'.join('  {:<10} {}'.format(k, v) for k, v in sorted(NAME_BY_PATH.items()))))
+'''.format(
+        '\n'.join('  {:<10} {}'.format(k, v) for k, v in sorted(NAME_BY_PATH.items())),
+        '\n'.join('  {:<10} {}'.format(k, v) for k, v in sorted(WHAT_BY_FILE.items())),
+    ))
     quit()
 
 
