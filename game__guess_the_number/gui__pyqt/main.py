@@ -82,12 +82,14 @@ class PageGuessWidget(QWidget):
             self.lw_numbers.setEnabled(False)
 
         elif self.guess_number > num:
+            # Выделение от 0 индекса до указанного
             for i in range(num):
                 self.lw_numbers.item(i).setBackground(Qt.red)
 
             QMessageBox.information(self, "Не угадал", "Загаданное число больше!")
 
         else:
+            # Выделение красным от указанного индекса до конца
             for i in range(num - 1, self.lw_numbers.count()):
                 self.lw_numbers.item(i).setBackground(Qt.red)
 
