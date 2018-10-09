@@ -4,10 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from PyQt5.Qt import (
-    QThread, pyqtSignal, QMessageBox, QApplication, QWidget, QLabel,
-    QPlainTextEdit, QVBoxLayout, QProgressDialog
-)
+from PyQt5.Qt import QThread, pyqtSignal, QMessageBox, QApplication, QWidget, QLabel, QPlainTextEdit, QVBoxLayout
 
 
 class AboutUpdateThread(QThread):
@@ -24,18 +21,6 @@ class AboutUpdateThread(QThread):
 
             # 6 hours
             QThread.sleep(6 * 60 * 60)
-
-
-class RunFuncThread(QThread):
-    run_finished = pyqtSignal(object)
-
-    def __init__(self, func):
-        super().__init__()
-
-        self.func = func
-
-    def run(self):
-        self.run_finished.emit(self.func())
 
 
 class Window(QWidget):
@@ -75,21 +60,6 @@ class Window(QWidget):
 
         # ...
         # Обновляемся
-        progress_dialog = QProgressDialog(self)
-
-        def foo():
-            # Для эмитации работы делаем задержку на 2 секунды
-            import time
-            time.sleep(2)
-
-        thread = RunFuncThread(func=foo)
-        thread.run_finished.connect(progress_dialog.close)
-        thread.start()
-
-        progress_dialog.setWindowTitle('Please wait...')
-        progress_dialog.setLabelText(progress_dialog.windowTitle())
-        progress_dialog.setRange(0, 0)
-        progress_dialog.exec()
         # ...
 
         self.add_log('Обновление поставлено успешно...')
