@@ -49,10 +49,12 @@ class Window(QWidget):
         mb.setWindowTitle("Доступно обновление")
         mb.setText("Сейчас доступно обновление")
         mb.setDetailedText(text)
-        mb.addButton("Обновить", QMessageBox.AcceptRole)
-        mb.addButton("Отклонить", QMessageBox.RejectRole)
+        button_ok = mb.addButton("Обновить", QMessageBox.AcceptRole)
+        button_cancel = mb.addButton("Отклонить", QMessageBox.RejectRole)
 
-        if mb.exec() == QMessageBox.RejectRole:
+        mb.exec()
+
+        if mb.clickedButton() == button_cancel:
             self.add_log('Пользователь отказался от обновления...')
             return
 
