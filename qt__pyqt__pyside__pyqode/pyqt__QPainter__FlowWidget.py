@@ -63,11 +63,11 @@ class FlowWidget(QWidget):
             num = str(num)
 
             # Превращаем индекс в координаты
-            i = index % self.column_count
-            j = index // self.column_count
+            row = index // self.column_count
+            col = index % self.column_count
 
-            x = i * self.cell_size
-            y = j * self.cell_size
+            x = col * self.cell_size
+            y = row * self.cell_size
             w, h = self.cell_size, self.cell_size
 
             painter.drawRect(x, y, w, h)
