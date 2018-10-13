@@ -8,7 +8,7 @@ from PyQt5.Qt import QApplication, QSystemTrayIcon, QStyle, QLabel, QWidgetActio
 
 
 app = QApplication([])
-app.setQuitOnLastWindowClosed(False)
+# app.setQuitOnLastWindowClosed(False)
 
 icon = app.style().standardIcon(QStyle.SP_DirOpenIcon)
 # icon = QIcon('favicon.ico')
