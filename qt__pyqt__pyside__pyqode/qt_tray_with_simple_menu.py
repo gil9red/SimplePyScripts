@@ -4,11 +4,14 @@
 __author__ = 'ipetrash'
 
 
-from PyQt5.Qt import QApplication, QSystemTrayIcon, QStyle, QMenu, QMessageBox
+from PyQt5.Qt import QApplication, QSystemTrayIcon, QStyle, QMenu, QMessageBox, QWidget
 
 
 app = QApplication([])
-app.setQuitOnLastWindowClosed(False)
+# app.setQuitOnLastWindowClosed(False)
+
+mw = QWidget()
+mw.show()
 
 icon = app.style().standardIcon(QStyle.SP_DirOpenIcon)
 # icon = QIcon('favicon.ico')
