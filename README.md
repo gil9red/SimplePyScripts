@@ -1,6 +1,4 @@
-![logo](README_logo.svg)
-
-===========
+![PyScripts](README_logo.svg)
 
 RU: Набор скриптов Python.
 
