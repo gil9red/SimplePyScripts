@@ -5,7 +5,7 @@ __author__ = 'ipetrash'
 
 
 # NOTE: Для смены ip нужно настроить tor
-# Для этого создается torrc файл
+# Для этого создается torrc файл (\Data\Tor\torrc)
 # И в него добавляется содержимое:
 # NewCircuitPeriod 5
 # MaxCircuitDirtiness 10
