@@ -18,8 +18,8 @@ import requests
 # Порт может быть и 9050, и 9150, и возможно другой. Нужно смотреть настройки tor. Например, tor можно через
 # Tor Browser запускать, в настройках сети Tor браузера будет указан порт tor
 proxies = {
-    'http': 'socks5h://127.0.0.1:9150',
-    'https': 'socks5h://127.0.0.1:9150'
+    'http': 'socks5h://127.0.0.1:9050',
+    'https': 'socks5h://127.0.0.1:9050'
 }
 
 data = requests.get("http://altaddresswcxlld.onion/", proxies=proxies).content
