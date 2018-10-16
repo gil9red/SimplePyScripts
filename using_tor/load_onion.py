@@ -4,7 +4,12 @@
 __author__ = 'ipetrash'
 
 
-# About socks5h: https://stackoverflow.com/a/43823166/5909792
+# About socks5h:
+# https://stackoverflow.com/a/43823166/5909792
+# "It's important to specify the proxies using the socks5h:// scheme so that DNS resolution
+# is handled over SOCKS so Tor can resolve the .onion address properly."
+#
+# https://github.com/urllib3/urllib3/issues/1035
 
 # NOTE: tor должен быть запущен
 # pip install -U requests[socks]
