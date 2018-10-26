@@ -22,9 +22,9 @@ root = BeautifulSoup(rs.content, 'html.parser')
 for sub in root.select('sup'):
     sub.decompose()
 
-df_list = pd.read_html(str(root), header=0, index_col=0)
+df_list = pd.read_html(str(root), header=0)
 df = df_list[0]
 
 print(df)
 
-df.to_excel('tekken_table.xlsx')
+df.to_excel('tekken_table.xlsx', index=False)
