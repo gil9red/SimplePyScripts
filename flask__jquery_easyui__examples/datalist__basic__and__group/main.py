@@ -95,8 +95,12 @@ def index():
     </div>
     <div style="margin:20px 0"></div>
     <div class="easyui-layout" style="width:50%;height:500px">
-        <div data-options="region:'center'" style="width:50%;">
+        <div data-options="region:'west'" style="width:50%;">
             <div id="dl2"></div>
+        </div>
+        <div data-options="region:'center'" style="width:50%;">
+            <div>Clicked:</div>
+            <textarea id="alltext" style="width:100%;height:100%"></textarea>
         </div>
     </div>
     
@@ -130,7 +134,11 @@ def index():
                 data: group_list,
                 method: 'get',
                 groupField: 'group',
-                lines: true
+                lines: true,
+                onClickRow: function(index, row) {
+                    console.log("click: " + index + ": '" + row.text + "' -> " + JSON.stringify(row));
+                    $('#alltext').append(row.text + "\\n");
+                }
             });
         });
     </script>
