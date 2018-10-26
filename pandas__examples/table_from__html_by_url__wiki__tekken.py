@@ -13,18 +13,23 @@ import requests
 # pip install bs4
 from bs4 import BeautifulSoup
 
-url = 'https://ru.wikipedia.org/wiki/Список_персонажей_Tekken'
-rs = requests.get(url)
 
-# Удаление сносок -- из-за них имена персонажей и значения присутствия в конкретной серии показывается
-# невалидно, например "Акума14", а не "Акума"
-root = BeautifulSoup(rs.content, 'html.parser')
-for sub in root.select('sup'):
-    sub.decompose()
+def get_df():
+    url = 'https://ru.wikipedia.org/wiki/Список_персонажей_Tekken'
+    rs = requests.get(url)
 
-df_list = pd.read_html(str(root), header=0)
-df = df_list[0]
+    # Удаление сносок -- из-за них имена персонажей и значения присутствия в конкретной серии показывается
+    # невалидно, например "Акума14", а не "Акума"
+    root = BeautifulSoup(rs.content, 'html.parser')
+    for sub in root.select('sup'):
+        sub.decompose()
 
-print(df)
+    df_list = pd.read_html(str(root), header=0)
+    return df_list[0]
 
-df.to_excel('tekken_table.xlsx', index=False)
+
+if __name__ == '__main__':
+    df = get_df()
+    print(df)
+
+    df.to_excel('tekken_table.xlsx', index=False)
