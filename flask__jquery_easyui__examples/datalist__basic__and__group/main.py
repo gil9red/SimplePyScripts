@@ -33,7 +33,7 @@ def index():
 <body>
     <div style="margin:20px 0"></div>
     <div class="easyui-layout" style="width:50%;height:500px">
-        <div data-options="region:'west'" style="width:33%;">
+        <div data-options="region:'west'" style="width:50%;">
             <!-- lines -- линии между элементами -->
             <ul class="easyui-datalist" title="Basic DataList" lines="true">
                 <li value="AL">Alabama</li>
@@ -89,7 +89,7 @@ def index():
             </ul>
         </div>
         
-        <div data-options="region:'center'" style="width:33%;">
+        <div data-options="region:'center'" style="width:50%;">
             <div class="easyui-datalist" title="Group DataList (HTML)" data-options="
                 url: 'datalist_data.json',
                 method: 'get',
@@ -98,17 +98,46 @@ def index():
                 ">
             </div>
         </div>
+    </div>
+    <div style="margin:20px 0"></div>
+    <div class="easyui-layout" style="width:50%;height:500px">
+        <div data-options="region:'west'" style="width:50%;">
+            <div id="dl1"></div>
+        </div>
         
-        <div data-options="region:'east'" style="width:33%;">
-            <div id="dl"></div>
+        <div data-options="region:'center'" style="width:50%;">
+            <div id="dl2"></div>
         </div>
     </div>
     
     <script type="text/javascript">
         $('document').ready(function() {
-            $('#dl').datalist({
-                title: "Group DataList (JS)",
+            $('#dl1').datalist({
+                title: "Group DataList (JS+AJAX)",
                 url: 'datalist_data.json',
+                method: 'get',
+                groupField: 'group',
+                lines: true
+            });
+            
+            var group_list = [
+                {"group":"Printer","text":"Epson WorkForce 845"},
+                {"group":"Printer","text":"Canon PIXMA MG5320"},
+                {"group":"Printer","text":"HP Deskjet 1000 Printer"},
+                {"group":"Firewall","text":"Cisco RV110W-A-NA-K9"},
+                {"group":"Firewall","text":"ZyXEL ZyWALL USG50"},
+                {"group":"Firewall","text":"NETGEAR FVS318"},
+                {"group":"Keyboard","text":"Logitech Keyboard K120"},
+                {"group":"Keyboard","text":"Microsoft Natural Ergonomic Keyboard 4000"},
+                {"group":"Keyboard","text":"Logitech Wireless Touch Keyboard K400"},
+                {"group":"Keyboard","text":"Logitech Gaming Keyboard G110"},
+                {"group":"Camera","text":"Nikon COOLPIX L26 16.1 MP"},
+                {"group":"Camera","text":"Canon PowerShot A1300"},
+                {"group":"Camera","text":"Canon PowerShot A2300"}
+            ];
+            $('#dl2').datalist({
+                title: "Group DataList (JS+JSON)",
+                data: group_list,
                 method: 'get',
                 groupField: 'group',
                 lines: true
