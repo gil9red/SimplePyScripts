@@ -19,8 +19,7 @@ def next_image_generator():
     ]
 
     while True:
-        for photo in photo_list:
-            yield photo
+        yield from photo_list
 
 
 NEXT_IMAGE = next_image_generator()
