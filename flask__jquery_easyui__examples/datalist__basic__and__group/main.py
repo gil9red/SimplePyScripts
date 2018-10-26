@@ -90,21 +90,11 @@ def index():
         </div>
         
         <div data-options="region:'center'" style="width:50%;">
-            <div class="easyui-datalist" title="Group DataList (HTML)" data-options="
-                url: 'datalist_data.json',
-                method: 'get',
-                groupField: 'group',
-                lines: true
-                ">
-            </div>
+            <div id="dl1"></div>
         </div>
     </div>
     <div style="margin:20px 0"></div>
     <div class="easyui-layout" style="width:50%;height:500px">
-        <div data-options="region:'west'" style="width:50%;">
-            <div id="dl1"></div>
-        </div>
-        
         <div data-options="region:'center'" style="width:50%;">
             <div id="dl2"></div>
         </div>
