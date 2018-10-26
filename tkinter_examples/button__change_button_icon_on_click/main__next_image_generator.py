@@ -8,7 +8,7 @@ import tkinter as tk
 
 
 def _on_button_click(button):
-    button.config(image=next(NEXT_IMAGE))
+    button.config(image=get_next_image())
 
 
 def next_image_generator():
@@ -24,11 +24,14 @@ def next_image_generator():
 
 NEXT_IMAGE = next_image_generator()
 
+def get_next_image():
+    return next(NEXT_IMAGE)
+
 
 root = tk.Tk()
 root.geometry('200x200')
 
-button = tk.Button(root, text="ClickMe!", image=next(NEXT_IMAGE))
+button = tk.Button(root, text="ClickMe!", image=get_next_image())
 button.config(command=lambda: _on_button_click(button))
 button.pack()
 
