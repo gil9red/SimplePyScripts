@@ -10,9 +10,15 @@ import tkinter as tk
 def create_window():
     window = tk.Toplevel(root)
 
+    button_new = tk.Button(window, text="Create new+ window", command=create_window)
+    button_new.pack()
+
+    button_close = tk.Button(window, text="Close", command=window.destroy)
+    button_close.pack()
+
 
 root = tk.Tk()
-b = tk.Button(root, text="Create new window", command=create_window)
-b.pack()
+button = tk.Button(root, text="Create new window", command=create_window)
+button.pack()
 
 root.mainloop()
