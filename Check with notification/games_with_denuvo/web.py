@@ -40,6 +40,57 @@ def index():
     </style>
 </head>
 <body>
+    <script>
+        function openWindowWithPost(url, data) {
+            var form = document.createElement("form");
+            form.target = "_blank";
+            form.method = "POST";
+            form.action = url;
+            form.style.display = "none";
+        
+            for (var key in data) {
+                var input = document.createElement("input");
+                input.type = "hidden";
+                input.name = key;
+                input.value = data[key];
+                form.appendChild(input);
+            }
+        
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        }
+        
+        function open_nnm_club(name) {
+            var data = {
+                nm : name,
+                prev_sd : 0,
+                prev_a : 0,
+                prev_my : 0,
+                prev_n : 0,
+                prev_shc : 0,
+                prev_shf : 1,
+                prev_sha : 1,
+                prev_shs : 0,
+                prev_shr : 0,
+                prev_sht : 0,
+                o : 1,
+                s : 2,
+                tm : -1,
+                shf : 1,
+                sha : 1,
+                ta : -1,
+                sns : -1,
+                sds : -1,
+                pn : null
+                // Submit is not a function
+                /*,
+                submit : "%CF%EE%E8%F1%EA"*/
+            };
+            openWindowWithPost("https://nnm-club.me/forum/tracker.php", data);
+        }
+    </script>
+
     <table>
         <caption><a href="https://en.wikipedia.org/wiki/Denuvo#List_of_games_using_Denuvo">Список взломанных игр</a></caption>
 
@@ -61,6 +112,7 @@ def index():
                 <td>{{ crack_date }}</td>
                 <td>
                     <button onclick="window.open('http://anti-tor.org/search/0/8/000/0/{{ name|replace('"', '')|replace("'", "") }}')">Rutor</button>
+                    <button onclick="open_nnm_club( '{{ name|replace('"', '')|replace("'", "") }}' )">NNM-Club</button>
                     <button onclick="window.open('http://search.tfile.co/?q={{ name|replace('"', '')|replace("'", "") }}')">tFile</button>
                     <button onclick="window.open('http://www.torrentino.me/search?type=games&search={{ name|replace('"', '')|replace("'", "") }}')">Torrentino</button>
                     <button onclick="window.open('https://yandex.ru/yandsearch?text={{ name|replace('"', '')|replace("'", "") }}')">Yandex</button>
@@ -112,7 +164,8 @@ if __name__ == "__main__":
     app.run(
         # Включение поддержки множества подключений
         threaded=True,
-        port=5555,
+        # port=5555,
+        port=5557,
     )
 
     # # Public IP
