@@ -165,7 +165,7 @@ if __name__ == "__main__":
         # Включение поддержки множества подключений
         threaded=True,
         # port=5555,
-        port=5557,
+        port=5555,
     )
 
     # # Public IP
