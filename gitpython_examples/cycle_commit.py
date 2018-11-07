@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+import time
+
+
 def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0):
     from datetime import timedelta, datetime
     today = datetime.today()
@@ -74,14 +77,19 @@ if __name__ == '__main__':
             repo.index.add([new_file_name])
             repo.index.commit(message)
 
-            repo.remotes.origin.push()
-            print('Finish push')
-
-            # Every 1 hour
-            wait(hours=1)
-
         except Exception as e:
             print(e)
-
-            import time
             time.sleep(30)
+
+        while True:
+            try:
+                repo.remotes.origin.push()
+                print('Finish push')
+                break
+
+            except Exception as e:
+                print(e)
+                time.sleep(30)
+
+        # Every 1 hour
+        wait(hours=1)
