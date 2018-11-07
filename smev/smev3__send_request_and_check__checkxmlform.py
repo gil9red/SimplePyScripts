@@ -28,8 +28,8 @@ HEADERS = {
     'SOAPAction': 'urn:SendRequest',
 
     # Без этого заголовка запрос с кириллицей не проходил проверку электронной подписи
-    # Запрос удачно пройдет и с "text/xml;charset=UTF-8"
-    'Content-Type': 'application/xml;charset=UTF-8',
+    # Запрос удачно пройдет и с "text/xml;charset=utf-8"
+    'Content-Type': 'application/xml;charset=utf-8',
 }
 
 for rq in RQ_ITEMS:
