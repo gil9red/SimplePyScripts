@@ -27,7 +27,7 @@ URL = 'http://smev3-n0.test.gosuslugi.ru:7500/smev/v1.2/ws?wsdl'
 HEADERS = {
     'SOAPAction': 'urn:SendRequest',
 
-    # Без этого заголовка запрос с кириллицей не проходили проверку электронной подписи
+    # Без этого заголовка запрос с кириллицей не проходил проверку электронной подписи
     'Content-Type': 'application/xml;charset=utf-8',
 }
 
