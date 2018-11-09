@@ -18,14 +18,15 @@ def index():
     
 <script type="text/javascript">
 function callAjax(url, callback) {
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            callback(xmlhttp.responseText);
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            callback(xhr.responseText);
         }
     }
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
+    
+    xhr.send();
 }
 
 callAjax('/print_args?a=1&text_en=Hello World!&text_ru=Привет Мир!&ok=true', function(responseText) {

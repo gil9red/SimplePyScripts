@@ -18,17 +18,20 @@ def index():
     
 <script type="text/javascript">
 function callAjax(url, data, callback) {
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
-            callback(xmlhttp.responseText);
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200){
+            callback(xhr.responseText);
         }
     }
-    xmlhttp.open("POST", url, true);
-    xmlhttp.send(data);
+    
+    xhr.send(data);
 }
 
-callAjax('/print_data', "HelloWorld!\\nПриветМир!", function(responseText) {
+var data = "HelloWorld!\\nПриветМир!";
+
+callAjax('/print_data', data, function(responseText) {
     document.getElementById("result").innerHTML = responseText;
 });
 </script>
@@ -44,5 +47,4 @@ def print_data():
 
 
 if __name__ == '__main__':
-    app.debug = True
     app.run()
