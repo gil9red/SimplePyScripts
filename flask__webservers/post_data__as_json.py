@@ -31,8 +31,8 @@ function callAjaxJson(url, data, callback) {
 }
 
 var json = JSON.stringify({
-  name: "Виктор",
-  surname: "Цой",
+    name: "Виктор",
+    surname: "Цой",
 });
 
 callAjaxJson('/print_data', json, function(responseText) {
