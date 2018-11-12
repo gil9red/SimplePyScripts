@@ -13,19 +13,57 @@ import pathlib
 NAME_BY_PATH = {
     'optt':    'C:/DEV__OPTT',
     'tx':      'C:/DEV__TX',
-    'manager': 'C:/manager_1_2_11_23_8'
+    'manager': 'C:/manager_1_2_11_23_8',
+    'm':       'C:/manager_1_2_11_23_8',
 }
 
 WHAT_BY_FILE = {
     'designer': '!!designer.cmd',
-    'd': '!!designer.cmd',
+    'd':        '!!designer.cmd',
 
     'explorer': '!!explorer.cmd',
-    'e': '!!explorer.cmd',
+    'e':        '!!explorer.cmd',
 
     'server': '!!server.cmd',
-    's': '!!server.cmd',
+    's':      '!!server.cmd',
 }
+
+ABOUT_TEXT = '''\
+RUN:
+  <name> <version> <what>  -- Run tool
+  <name> <what>            -- Run tool (trunk version)
+  <name> <version>         -- Open dir version
+  <name> open              -- Open dir
+  <name>                   -- Print versions
+
+SUPPORTED NAMES:
+{}
+
+SUPPORTED WHATS:
+{}
+
+EXAMPLES:
+  > optt trunk designer
+    Run: "C:/DEV__OPTT/trunk_optt/!!designer.cmd"
+    
+  > tx 3.2.6.10 server
+    Run: "C:/DEV__TX/3.2.6.10/!!server.cmd"
+  
+  > go tx designer
+    Run: "C:/DEV__TX/trunk_tx/!!designer.cmd"
+  
+  > optt trunk
+    Open: "C:/DEV__OPTT/trunk_optt"
+   
+  > optt open
+    Open: "C:/DEV__OPTT"
+    
+  > optt
+    Version: ['2.1.7.1', 'trunk_optt']
+'''.format(
+        '\n'.join('  {:<10} {}'.format(k, v) for k, v in sorted(NAME_BY_PATH.items())),
+        '\n'.join('  {:<10} {}'.format(k, v) for k, v in sorted(WHAT_BY_FILE.items())),
+    )
 
 
 def go_run(name: str, version: str, what: str):
@@ -61,7 +99,7 @@ def go_open(name: str, version: str):
 
 
 def go_print_versions(name: str):
-    if name == 'manager':
+    if name in ['manager', 'm']:
         dir_file_name = NAME_BY_PATH[name]
         file_name = dir_file_name + '/manager/bin/manager64.exe'
 
@@ -93,44 +131,8 @@ def go_print_versions(name: str):
 argc = len(sys.argv)
 
 if argc == 1:
-    print('''\
-RUN:
-  <name> <version> <what>  -- Run tool
-  <name> <what>            -- Run tool (trunk version)
-  <name> <version>         -- Open dir version
-  <name> open              -- Open dir
-  <name>                   -- Print versions
-
-SUPPORTED NAMES:
-{}
-
-SUPPORTED WHATS:
-{}
-
-EXAMPLES:
-  > optt trunk designer
-    Run: "C:/DEV__OPTT/trunk_optt/!!designer.cmd"
-    
-  > tx 3.2.6.10 server
-    Run: "C:/DEV__TX/3.2.6.10/!!server.cmd"
-  
-  > go tx designer
-    Run: "C:/DEV__TX/trunk_tx/!!designer.cmd"
-  
-  > optt trunk
-    Open: "C:/DEV__OPTT/trunk_optt"
-   
-  > optt open
-    Open: "C:/DEV__OPTT"
-    
-  > optt
-    Version: ['2.1.7.1', 'trunk_optt']
-'''.format(
-        '\n'.join('  {:<10} {}'.format(k, v) for k, v in sorted(NAME_BY_PATH.items())),
-        '\n'.join('  {:<10} {}'.format(k, v) for k, v in sorted(WHAT_BY_FILE.items())),
-    ))
+    print(ABOUT_TEXT)
     quit()
-
 
 if argc == 4:
     name, version, what = map(str.lower, sys.argv[1:])
