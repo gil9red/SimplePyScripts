@@ -5,30 +5,8 @@ __author__ = 'ipetrash'
 
 
 from multiprocessing import Process
-
-
-def go_qt(name):
-    from PyQt5.Qt import QApplication, Qt, QLabel
-    app = QApplication([])
-
-    mw = QLabel()
-    mw.setAlignment(Qt.AlignCenter)
-    mw.setMinimumSize(150, 50)
-    mw.setText('Hello, ' + name)
-    mw.show()
-
-    app.exec()
-
-
-def go_tk(name):
-    import tkinter as tk
-    app = tk.Tk()
-    app.minsize(150, 50)
-
-    mw = tk.Label(app, text='Hello, ' + name)
-    mw.pack(fill='both', expand=True)
-
-    app.mainloop()
+from multiprocessing__QApplication__in_other_process import go as go_qt
+from multiprocessing__Tkinter__in_other_process import go as go_tk
 
 
 def create_qt():

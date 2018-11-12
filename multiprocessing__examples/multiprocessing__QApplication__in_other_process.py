@@ -5,11 +5,11 @@ __author__ = 'ipetrash'
 
 
 def go(name):
-    from PyQt5 import Qt
-    app = Qt.QApplication([])
+    from PyQt5.Qt import QApplication, Qt, QLabel
+    app = QApplication([])
 
-    mw = Qt.QLabel()
-    mw.setAlignment(Qt.Qt.AlignCenter)
+    mw = QLabel()
+    mw.setAlignment(Qt.AlignCenter)
     mw.setMinimumSize(150, 50)
     mw.setText('Hello, ' + name)
     mw.show()
