@@ -8,11 +8,11 @@ from multiprocessing import Process
 
 
 def go_qt(name):
-    from PyQt5 import Qt
-    app = Qt.QApplication([])
+    from PyQt5.Qt import QApplication, Qt, QLabel
+    app = QApplication([])
 
-    mw = Qt.QLabel()
-    mw.setAlignment(Qt.Qt.AlignCenter)
+    mw = QLabel()
+    mw.setAlignment(Qt.AlignCenter)
     mw.setMinimumSize(150, 50)
     mw.setText('Hello, ' + name)
     mw.show()
@@ -42,20 +42,20 @@ def create_tk():
 
 
 if __name__ == '__main__':
-    from PyQt5 import Qt
-    app = Qt.QApplication([])
+    from PyQt5.Qt import QApplication, QPushButton, QWidget, QVBoxLayout
+    app = QApplication([])
 
-    button_qt = Qt.QPushButton('Create Qt')
+    button_qt = QPushButton('Create Qt')
     button_qt.clicked.connect(create_qt)
 
-    button_tk = Qt.QPushButton('Create Tk')
+    button_tk = QPushButton('Create Tk')
     button_tk.clicked.connect(create_tk)
 
-    layout = Qt.QVBoxLayout()
+    layout = QVBoxLayout()
     layout.addWidget(button_qt)
     layout.addWidget(button_tk)
 
-    mw = Qt.QWidget()
+    mw = QWidget()
     mw.setLayout(layout)
     mw.show()
 
