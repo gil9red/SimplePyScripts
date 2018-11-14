@@ -5,19 +5,21 @@ __author__ = 'ipetrash'
 
 
 def attrs(**kwargs):
-    def decorate(f):
+    def decorate(cls):
         for k in kwargs:
-            setattr(f, k, kwargs[k])
-        return f
+            setattr(cls, k, kwargs[k])
+
+        return cls
 
     return decorate
 
 
-@attrs(versionadded="2.2", author="Guido van Rossum")
+@attrs(version="2.2", author="Guido van Rossum")
 class Foo:
     pass
 
 
-print(Foo.author)  # Guido van Rossum
-print(Foo().author)  # Guido van Rossum
-print(list(filter(lambda x: not x.startswith('_'), dir(Foo()))))  # ['author', 'versionadded']
+print(Foo.author)     # Guido van Rossum
+print(Foo().author)   # Guido van Rossum
+print(Foo().version)  # 2.2
+print(list(filter(lambda x: not x.startswith('_'), dir(Foo()))))  # ['author', 'version']
