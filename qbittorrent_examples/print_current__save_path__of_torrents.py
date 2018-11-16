@@ -11,7 +11,9 @@ from common import get_client, print_table
 qb = get_client()
 
 items = [torrent['save_path'] for torrent in qb.torrents()]
-print('Save path: ', sorted(set(items)))
+counter = Counter(items)
 
-for name, number in Counter(items).items():
+print('Save path:', sorted(counter.keys()))
+
+for name, number in counter.items():
     print('"{}": {}'.format(name, number))
