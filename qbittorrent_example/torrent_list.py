@@ -4,32 +4,18 @@
 __author__ = 'ipetrash'
 
 
-def sizeof_fmt(num):
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-
-        num /= 1024.0
-
-    return "%3.1f %s" % (num, 'TB')
+from common import get_client, sizeof_fmt
 
 
-if __name__ == '__main__':
-    # pip install python-qbittorrent
-    from qbittorrent import Client
-    from config import IP_HOST, USER, PASSWORD
+qb = get_client()
+torrents = qb.torrents()
+total_size = 0
 
-    qb = Client(IP_HOST)
-    qb.login(USER, PASSWORD)
+for i, torrent in enumerate(torrents, 1):
+    torrent_size = torrent['total_size']
+    total_size += torrent_size
 
-    torrents = qb.torrents()
-    total_size = 0
+    print('{:<3} {} ({})'.format(i, torrent['name'], sizeof_fmt(torrent_size)))
 
-    for i, torrent in enumerate(torrents, 1):
-        torrent_size = torrent['total_size']
-        total_size += torrent_size
-
-        print('{:<3} {} ({})'.format(i, torrent['name'], sizeof_fmt(torrent_size)))
-
-    print('\n')
-    print('Total torrents: {}, total size: {} ({} bytes)'.format(len(torrents), sizeof_fmt(total_size), total_size))
+print()
+print('Total torrents: {}, total size: {} ({} bytes)'.format(len(torrents), sizeof_fmt(total_size), total_size))

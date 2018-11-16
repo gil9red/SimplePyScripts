@@ -4,39 +4,18 @@
 __author__ = 'ipetrash'
 
 
-def sizeof_fmt(num):
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-
-        num /= 1024.0
-
-    return "%3.1f %s" % (num, 'TB')
-
-
-# pip install python-qbittorrent
-from qbittorrent import Client
-from config import IP_HOST, USER, PASSWORD
-
-qb = Client(IP_HOST)
-qb.login(USER, PASSWORD)
-
 import random
+from common import get_client, sizeof_fmt, print_table
+
+
+qb = get_client()
 torrent = random.choice(qb.torrents())
 print('{} ({})'.format(torrent['name'], sizeof_fmt(torrent['total_size'])))
+print()
 
 files = qb.get_torrent_files(torrent['hash'])
 print('Files ({}):'.format(len(files)))
 
 rows = [(file['name'], sizeof_fmt(file['size'])) for file in sorted(files, key=lambda x: x['name'])]
 headers = ['#', 'File Name', 'Size']
-
-# pip install tabulate
-from tabulate import tabulate
-print(tabulate(rows, headers=headers, tablefmt="grid", showindex=range(1, len(rows) + 1)))
-
-# OR:
-#
-# print('Files ({}):'.format(len(files)))
-# for file in sorted(files, key=lambda x: x['name']):
-#     print('    {} ({})'.format(file['name'], sizeof_fmt(file['size'])))
+print_table(rows, headers)

@@ -4,37 +4,22 @@
 __author__ = 'ipetrash'
 
 
-def sizeof_fmt(num):
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-
-        num /= 1024.0
-
-    return "%3.1f %s" % (num, 'TB')
+from common import sizeof_fmt, get_client, print_table
 
 
-if __name__ == '__main__':
-    # pip install python-qbittorrent
-    from qbittorrent import Client
-    from config import IP_HOST, USER, PASSWORD
+qb = get_client()
 
-    qb = Client(IP_HOST)
-    qb.login(USER, PASSWORD)
+torrents = qb.torrents()
 
-    torrents = qb.torrents()
+torrents_max_top5 = sorted(torrents, key=lambda x: x['total_size'], reverse=True)[:5]
+torrents_min_top5 = sorted(torrents, key=lambda x: x['total_size'])[:5]
 
-    torrents_max_top5 = sorted(torrents, key=lambda x: x['total_size'], reverse=True)[:5]
-    torrents_min_top5 = sorted(torrents, key=lambda x: x['total_size'])[:5]
+print('Max top5:')
+for i, torrent in enumerate(torrents_max_top5, 1):
+    print('    {}. {} ({})'.format(i, torrent['name'], sizeof_fmt(torrent['total_size'])))
 
-    print('Max top5:')
+print()
 
-    for i, torrent in enumerate(torrents_max_top5, 1):
-        print('    {}. {} ({})'.format(i, torrent['name'], sizeof_fmt(torrent['total_size'])))
-
-    print()
-
-    print('Min top5:')
-
-    for i, torrent in enumerate(torrents_min_top5, 1):
-        print('    {}. {} ({})'.format(i, torrent['name'], sizeof_fmt(torrent['total_size'])))
+print('Min top5:')
+for i, torrent in enumerate(torrents_min_top5, 1):
+    print('    {}. {} ({})'.format(i, torrent['name'], sizeof_fmt(torrent['total_size'])))
