@@ -22,8 +22,11 @@ def sizeof_fmt(num):
     return "%3.1f %s" % (num, 'TB')
 
 
-def print_table(rows, headers):
-    text = tabulate(rows, headers=headers, tablefmt="grid", showindex=range(1, len(rows) + 1))
+def print_table(rows, headers, show_index=True):
+    if show_index:
+        show_index = range(1, len(rows) + 1)
+
+    text = tabulate(rows, headers=headers, tablefmt="grid", showindex=show_index)
     print(text)
 
 
