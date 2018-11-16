@@ -11,5 +11,10 @@ from bs4 import BeautifulSoup
 rs = requests.get('https://mikafood.ru/')
 root = BeautifulSoup(rs.content, 'html.parser')
 
-for x in root.select('.box-menu-content .name > a'):
-    print(x.text.strip(), x['href'])
+items = [(x.text.strip(), x['href']) for x in root.select('.box-menu-content .name > a')]
+
+# Находим максимальную ширину первого столбца
+print_format = "{:%s} {}" % (max(len(x[0]) for x in items),)
+
+for title, url in items:
+    print(print_format.format(title, url))
