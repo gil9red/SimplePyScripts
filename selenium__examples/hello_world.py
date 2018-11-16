@@ -14,6 +14,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
+#
+# geckodriver: https://github.com/Mozilla/geckodriver/releases
+#
 # Если на этой строке исключение "Message: 'geckodriver' executable needs to be in PATH."
 # Нужно:
 #   * Из репозитория https://github.com/mozilla/geckodriver скачать geckodriver.exe
