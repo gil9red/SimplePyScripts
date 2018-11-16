@@ -71,7 +71,7 @@ if __name__ == '__main__':
         logger.debug('Vk authorization')
 
         vk = vk_api.VkApi(LOGIN, PASSWORD)
-        vk.authorization()  # Авторизируемся
+        vk.auth()  # Авторизируемся
 
         send_message('Hello! Привет!\nYahoo!', USER_ID)
 

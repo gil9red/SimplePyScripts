@@ -28,7 +28,7 @@ if __name__ == '__main__':
     vk = vk_api.VkApi(LOGIN, PASSWORD)
 
     try:
-        vk.authorization()
+        vk.auth()
     except Exception as e:
         print(e)
         quit()

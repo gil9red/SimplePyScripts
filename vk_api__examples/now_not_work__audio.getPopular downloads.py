@@ -248,7 +248,7 @@ if __name__ == '__main__':
 
     try:
         vk = vk_api.VkApi(LOGIN, PASSWORD)
-        vk.authorization()  # Авторизируемся
+        vk.auth()  # Авторизируемся
 
         # Закачиваем, например, на флешку:
         DOWNLOAD_DIR = 'G:'

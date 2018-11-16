@@ -56,9 +56,9 @@ def vk_auth(login, password):
     vk = vk_api.VkApi(login, password)
 
     try:
-        vk.authorization()  # Авторизируемся
-    except vk_api.AuthorizationError as error_msg:
-        print(error_msg)  # В случае ошибки выведем сообщение
+        vk.auth()  # Авторизируемся
+    except vk_api.AuthError as e:
+        print(e)  # В случае ошибки выведем сообщение
         sys.exit()
 
     return vk
