@@ -27,6 +27,12 @@ def print_table(rows, headers):
     print(text)
 
 
+def print_files_table(files):
+    rows = [(file['name'], sizeof_fmt(file['size'])) for file in sorted(files, key=lambda x: x['name'])]
+    headers = ['#', 'File Name', 'Size']
+    print_table(rows, headers)
+
+
 def get_client() -> Client:
     client = Client(IP_HOST)
     client.login(USER, PASSWORD)
