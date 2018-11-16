@@ -53,3 +53,17 @@ if __name__ == '__main__':
     session, rs = auth_vk(LOGIN, PASSWORD)
     print(session, session.cookies)
     print(rs, rs.url)
+    print()
+
+    from bs4 import BeautifulSoup
+    root = BeautifulSoup(rs.content, 'html.parser')
+    for li in root.select('.main_menu > li'):
+        print(li.text)
+    # Новости
+    # Уведомления
+    # Сообщения
+    # Друзья
+    # Группы
+    # Фотографии
+    # Закладки
+    # Поиск
