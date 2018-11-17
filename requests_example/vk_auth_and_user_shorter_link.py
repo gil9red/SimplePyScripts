@@ -10,7 +10,7 @@ def get_short_link_from_vk(login: str, password: str, link: str) -> str:
 
     """
 
-    from vk_auth import auth
+    from vk_auth__requests_re import auth
     session, rs = auth(login, password)
 
     # Страница нужна чтобы получить hash для запроса
