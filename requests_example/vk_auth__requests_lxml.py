@@ -12,13 +12,12 @@ def get_text(node):
     return html.tostring(node, encoding='unicode', method='text', with_tail=False)
 
 
-URL = 'https://m.vk.com/'
 LOGIN = '<LOGIN>'
 PASSWORD = '<PASSWORD>'
 
 
 session = requests.session()
-rs = session.get(URL)
+rs = session.get('https://m.vk.com/')
 root = html.fromstring(rs.content)
 
 form = root.forms[0]
