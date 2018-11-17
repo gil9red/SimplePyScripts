@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 import requests
 
 
-def auth_vk(login: str, password: str) -> (requests.sessions.Session, requests.models.Response):
+def auth(login: str, password: str) -> (requests.sessions.Session, requests.models.Response):
     """
     Функция для авторизации в вк.
 
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     LOGIN = '<LOGIN>'
     PASSWORD = '<PASSWORD>'
 
-    session, rs = auth_vk(LOGIN, PASSWORD)
+    session, rs = auth(LOGIN, PASSWORD)
     print(session, session.cookies)
     print(rs, rs.url)
     print()

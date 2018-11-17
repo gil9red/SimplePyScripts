@@ -10,35 +10,8 @@ def get_short_link_from_vk(login: str, password: str, link: str) -> str:
 
     """
 
-    def get_form_action(html: str) -> str:
-        """
-        Функция вернет ссылку для запроса авторизации
-
-        """
-
-        import re
-        form_action = re.findall(r'<form(?= ).* action="(.+)"', html)
-        if form_action:
-            return form_action[0]
-
-    import requests
-    session = requests.Session()
-
-    # Без авторизации не получится воспользоваться страницей укорачивания ссылок
-    url = 'https://m.vk.com'
-    rs = session.get(url)
-    print(rs)
-
-    login_form_action = get_form_action(rs.text)
-    if not login_form_action:
-        raise Exception('Не получилось из формы авторизации вытащить ссылку на авторизацию')
-
-    login_form_data = {
-        'email': login,
-        'pass': password,
-    }
-    rs = session.post(login_form_action, login_form_data)
-    print(rs)
+    from vk_auth import auth
+    session, rs = auth(login, password)
 
     # Страница нужна чтобы получить hash для запроса
     rs = session.get('https://vk.com/cc')
