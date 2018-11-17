@@ -27,7 +27,7 @@ browser.submit_form(signup_form)
 print(browser.url)
 
 for li in browser.select('.main_menu > li'):
-    print(li)
+    print(li.text.strip())
 # Новости
 # Уведомления
 # Сообщения
