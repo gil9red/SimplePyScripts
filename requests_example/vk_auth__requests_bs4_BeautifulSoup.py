@@ -30,7 +30,7 @@ rs = session.post(form_action, data=data)
 root = BeautifulSoup(rs.content, 'html.parser')
 
 for li in root.select('.main_menu > li'):
-    print(li.text.strip())
+    print(li.text)
 # Новости
 # Уведомления
 # Сообщения
