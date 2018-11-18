@@ -40,9 +40,13 @@ def get_achievements(game_id: int) -> List[Achievement]:
 if __name__ == '__main__':
     game_id = 426790
     achievements = get_achievements(game_id)
+    print(achievements[0]._asdict())
     print(f'{len(achievements)}: {achievements}')
     print([x.title for x in achievements])
     print()
+
+    # Print and export
+    all_achievements = []
 
     game_id_name_list = [
         (426790, 'Grow Up'),
@@ -56,3 +60,13 @@ if __name__ == '__main__':
         achievements = get_achievements(game_id)
         titles = [x.title for x in achievements]
         print(f'{name} ({len(titles)}): {titles}')
+
+        all_achievements.append({
+            'name': name,
+            'id': game_id,
+            'achievements': [x._asdict() for x in achievements],
+        })
+
+    import json
+    with open('steam_achievements.json', 'w', encoding='utf-8') as f:
+        json.dump(all_achievements, f, ensure_ascii=False, indent=4)
