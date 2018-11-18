@@ -17,3 +17,7 @@ print(type(root))  # <class 'bs4.BeautifulSoup'>
 
 html = str(root)
 print(html)
+
+# OR:
+html = browser.state.response.text
+print(html)
