@@ -29,6 +29,7 @@ def get_achievements(game_id: int) -> List[Achievement]:
     url = f'https://steamcommunity.com/stats/{game_id}/achievements'
 
     headers = {
+        # Чтобы описание было на русском, без этого заголовка описание будет на английском
         'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
     }
     rs = requests.get(url, headers=headers)
