@@ -27,11 +27,11 @@ class TorrentInfoWidget(QTableWidget):
         self.horizontalHeader().setStretchLastSection(True)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
-    def fill(self, torrent: dict):
+    def fill(self, torrent_details: dict):
         while self.rowCount():
             self.removeRow(0)
 
-        for k, v in torrent.items():
+        for k, v in torrent_details.items():
             row = self.rowCount()
             self.setRowCount(row + 1)
 
@@ -47,7 +47,7 @@ class MainWindow(QMainWindow):
         self.table_torrent.setEditTriggers(QTableWidget.NoEditTriggers)
         self.table_torrent.setSelectionBehavior(QTableWidget.SelectRows)
         self.table_torrent.setSelectionMode(QTableWidget.SingleSelection)
-        self.table_torrent.itemClicked.connect(self.fill_torrent_info)
+        self.table_torrent.itemSelectionChanged.connect(self.fill_torrent_info)
 
         self.torrent_info_widget = TorrentInfoWidget()
 
@@ -80,13 +80,17 @@ class MainWindow(QMainWindow):
 
                 self.table_torrent.setItem(row, column, item)
 
-    def fill_torrent_info(self, item: QTableWidgetItem):
-        torrent = item.data(Qt.UserRole)
+    def fill_torrent_info(self):
+        items = self.table_torrent.selectedItems()
+        if not items:
+            return
+
+        torrent = items[0].data(Qt.UserRole)
 
         qb = get_client()
-        torrent = qb.get_torrent(torrent['hash'])
+        torrent_details = qb.get_torrent(torrent['hash'])
 
-        self.torrent_info_widget.fill(torrent)
+        self.torrent_info_widget.fill(torrent_details)
 
 
 if __name__ == '__main__':
