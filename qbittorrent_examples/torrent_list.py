@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: https://github.com/qbittorrent/qbittorrent/wiki/WebUI-API-Documentation#get-torrent-list
+
+
 from common import get_client, sizeof_fmt
 
 
