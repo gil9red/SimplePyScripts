@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: https://pyautogui.readthedocs.io/en/latest/cheatsheet.html#keyboard-functions
+
+
 # pip install pyautogui
 import pyautogui
 
