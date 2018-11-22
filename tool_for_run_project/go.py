@@ -27,8 +27,8 @@ ABOUT_TEXT = '''\
 RUN:
   <name> <version> <what>  -- Run tool
   <name> <what>            -- Run tool (trunk version)
-  <name> <version>         -- Open dir version
-  <name> open              -- Open dir
+  open <name> <version>    -- Open dir version
+  open <name>              -- Open dir
   <name>                   -- Print versions
 
 SUPPORTED NAMES:
@@ -47,10 +47,10 @@ EXAMPLES:
   > go tx designer
     Run: "C:/DEV__TX/trunk_tx/!!designer.cmd"
   
-  > optt trunk
+  > open optt trunk
     Open: "C:/DEV__OPTT/trunk_optt"
    
-  > optt open
+  > open optt
     Open: "C:/DEV__OPTT"
     
   > optt
@@ -109,8 +109,8 @@ def get_what_by_file(alias: str) -> str:
     return WHAT_BY_FILE[key]
 
 
-def get_versions(alies: str) -> List[str]:
-    name = get_name_by_path(alies)
+def get_versions(alias: str) -> List[str]:
+    name = get_name_by_path(alias)
 
     dirs = []
 
@@ -126,11 +126,11 @@ def get_versions(alies: str) -> List[str]:
     return dirs
 
 
-def get_similar_version(name: str, alies: str) -> str:
+def get_similar_version(name: str, alias: str) -> str:
     versions = get_versions(name)
-    key = get_similar_value(alies, versions)
+    key = get_similar_value(alias, versions)
     if not key:
-        raise Exception(f'Unknown version "{alies}", supported: {versions}')
+        raise Exception(f'Unknown version "{alias}", supported: {versions}')
 
     return key
 
@@ -138,29 +138,24 @@ def get_similar_version(name: str, alies: str) -> str:
 def go_run(name: str, version: str, what: str):
     version = get_similar_version(name, version)
 
-    if what == 'open':
-        go_open(name, version)
+    dir_file_name = get_name_by_path(name) + '/' + version
+    file_name = dir_file_name + '/' + get_what_by_file(what)
 
-    else:
-        dir_file_name = get_name_by_path(name) + '/' + version
-        file_name = dir_file_name + '/' + get_what_by_file(what)
+    print(f'Run: "{file_name}"')
 
-        print(f'Run: "{file_name}"')
+    # Move to active dir
+    os.chdir(dir_file_name)
 
-        # Move to active dir
-        os.chdir(dir_file_name)
-
-        # Run
-        os.startfile(file_name)
+    # Run
+    os.startfile(file_name)
 
 
-def go_open(alias: str, version: str):
+def go_open(name: str, version: str = ""):
     # Например: "o" -> "optt"
-    name = get_similar_name(alias)
     dir_file_name = get_name_by_path(name)
+    name = get_similar_name(name)
 
-    # Для команды open версия не нужна
-    if version != 'open':
+    if version:
         dir_file_name += '/' + get_similar_version(name, version)
 
     print(f'Open: "{dir_file_name}"')
@@ -182,18 +177,21 @@ def run_manager():
     os.startfile(file_name)
 
 
-def go_print_versions(alies: str):
-    print('Version:', get_versions(alies))
+def go_print_versions(alias: str):
+    print('Version:', get_versions(alias))
 
 
 if __name__ == '__main__':
-    argc = len(sys.argv)
-    if argc == 1:
+    # Первый аргумент пропускаем -- это путь до текущего файла
+    argv = list(map(str.lower, sys.argv[1:]))
+    argc = len(argv)
+
+    if argc == 0:
         print(ABOUT_TEXT)
         quit()
 
-    elif argc == 2:
-        name = sys.argv[1].lower()
+    elif argc == 1:
+        name = argv[0]
 
         # У менеджера версий не бывает
         if 'manager'.startswith(name):
@@ -201,15 +199,19 @@ if __name__ == '__main__':
         else:
             go_print_versions(name)
 
-    elif argc == 3:
-        name, alies = map(str.lower, (sys.argv[1], sys.argv[2]))
+    elif argc == 2:
+        name, alias = argv
+        version = 'trunk'
 
-        # Если вместо версии указана программа, то считаем что нам нужен trunk
-        if has_what_by_file(alies):
-            go_run(name, 'trunk', alies)
+        if name == 'open':
+            go_open(name=alias)
         else:
-            go_open(name, alies)
+            go_run(name, 'trunk', what=alias)
 
-    elif argc == 4:
-        name, version, what = map(str.lower, sys.argv[1:])
-        go_run(name, version, what)
+    elif argc == 3:
+        name, version, what = argv
+
+        if name == 'open':
+            go_open(name=version, version=what)
+        else:
+            go_run(name, version, what)
