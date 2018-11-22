@@ -66,7 +66,7 @@ if __name__ == '__main__':
             return self
 
         def __exit__(self, exc_type, exc_value, exc_traceback):
-            print('Elapsed time: {} sec'.format(time.clock() - self.start_time))
+            print('Elapsed time: {:.6f} sec'.format(time.clock() - self.start_time))
 
     url = 'https://github.com/gil9red'
 
@@ -74,15 +74,18 @@ if __name__ == '__main__':
 
     with TimeThis():
         rs = go_url.get(url)
-        print(rs, rs.status_code, go_url.get_status_code(url), rs.content)
+        code = go_url.get_status_code(url)
+        print(rs, rs.status_code, code, rs.content)
 
     with TimeThis():
         rs = go_url.get(url)
-        print(rs, rs.status_code, go_url.get_status_code(url), rs.content)
+        code = go_url.get_status_code(url)
+        print(rs, rs.status_code, code, rs.content)
 
     with TimeThis():
         rs = go_url.get(url)
-        print(rs, rs.status_code, go_url.get_status_code(url), rs.content)
+        code = go_url.get_status_code(url)
+        print(rs, rs.status_code, code, rs.content)
 
     print()
     print('Cached proxy:')
@@ -91,12 +94,15 @@ if __name__ == '__main__':
 
     with TimeThis():
         rs = go_url.get(url)
-        print(rs, rs.status_code, go_url.get_status_code(url), rs.content)
+        code = go_url.get_status_code(url)
+        print(rs, rs.status_code, code, rs.content)
 
     with TimeThis():
         rs = go_url.get(url)
-        print(rs, rs.status_code, go_url.get_status_code(url), rs.content)
+        code = go_url.get_status_code(url)
+        print(rs, rs.status_code, code, rs.content)
 
     with TimeThis():
         rs = go_url.get(url)
-        print(rs, rs.status_code, go_url.get_status_code(url), rs.content)
+        code = go_url.get_status_code(url)
+        print(rs, rs.status_code, code, rs.content)
