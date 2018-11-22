@@ -7,10 +7,10 @@ __author__ = 'ipetrash'
 # SOURCE: https://en.wikipedia.org/wiki/Abstract_factory_pattern#Java_example
 
 
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 
 
-class IWidget(metaclass=ABCMeta):
+class IWidget(ABC):
     @abstractmethod
     def paint(self):
         pass
@@ -28,7 +28,7 @@ class IButton(IWidget):
         pass
 
 
-class IGUIFactory(metaclass=ABCMeta):
+class IGUIFactory(ABC):
     @abstractmethod
     def create_label(self) -> ILabel:
         pass

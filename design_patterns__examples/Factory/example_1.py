@@ -7,10 +7,10 @@ __author__ = 'ipetrash'
 # SOURCE: https://ru.wikipedia.org/wiki/Фабричный_метод_(шаблон_проектирования)
 
 
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 
 
-class Parser(metaclass=ABCMeta):
+class Parser(ABC):
     @abstractmethod
     def parse(self, data: str) -> object:
         pass

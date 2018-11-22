@@ -8,7 +8,7 @@ __author__ = 'ipetrash'
 # SOURCE: https://ru.wikipedia.org/wiki/Компоновщик_(шаблон_проектирования)
 
 
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from typing import List
 
 from PyQt5.Qt import *
@@ -28,7 +28,7 @@ import sys
 sys.excepthook = log_uncaught_exceptions
 
 
-class Graphic(metaclass=ABCMeta):
+class Graphic(ABC):
     @abstractmethod
     def draw(self, painter: QPainter):
         pass

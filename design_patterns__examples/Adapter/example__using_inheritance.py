@@ -7,10 +7,10 @@ __author__ = 'ipetrash'
 # SOURCE: https://ru.wikipedia.org/wiki/Адаптер_(шаблон_проектирования)#Python
 
 
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 
 
-class SourceAdapter(metaclass=ABCMeta):
+class SourceAdapter(ABC):
     @abstractmethod
     def get_picture(self):
         pass

@@ -7,10 +7,10 @@ __author__ = 'ipetrash'
 # SOURCE: https://ru.wikipedia.org/wiki/Фабричный_метод_(шаблон_проектирования)
 
 
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 
 
-class Animal(metaclass=ABCMeta):
+class Animal(ABC):
     @staticmethod
     def initial(animal: str) -> 'Animal':
         if animal == 'Lion':
