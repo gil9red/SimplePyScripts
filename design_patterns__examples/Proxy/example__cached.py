@@ -34,25 +34,25 @@ class GoUrlCachedProxy(IGoUrl):
     """Прокси"""
 
     def __init__(self):
-        self.__url = GoUrl()
-        self.__cache = dict()
-        self.__cache_status_code = dict()
+        self._url = GoUrl()
+        self._cache = dict()
+        self._cache_status_code = dict()
 
     def get(self, url: str) -> requests.Response:
-        if url in self.__cache:
-            return self.__cache[url]
+        if url in self._cache:
+            return self._cache[url]
 
-        rs = self.__url.get(url)
-        self.__cache[url] = rs
+        rs = self._url.get(url)
+        self._cache[url] = rs
 
         return rs
 
     def get_status_code(self, url: str) -> int:
-        if url in self.__cache_status_code:
-            return self.__cache_status_code[url]
+        if url in self._cache_status_code:
+            return self._cache_status_code[url]
 
-        code = self.__url.get_status_code(url)
-        self.__cache_status_code[url] = code
+        code = self._url.get_status_code(url)
+        self._cache_status_code[url] = code
 
         return code
 

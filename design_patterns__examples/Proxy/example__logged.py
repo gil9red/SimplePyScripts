@@ -33,32 +33,32 @@ def get_logger(name, file='log.txt', encoding='utf-8'):
 class GoUrlLoggedProxy(IGoUrl):
     """Прокси"""
 
-    __LOGGER = get_logger('GoUrlLoggedProxy')
+    _LOGGER = get_logger('GoUrlLoggedProxy')
 
     def __init__(self, go_url: IGoUrl = None):
         if go_url is None:
             go_url = GoUrl()
 
-        self.__url = go_url
+        self._url = go_url
 
     def get(self, url: str) -> requests.Response:
-        self.__log(f'Start get(url="{url}")')
+        self._log(f'Start get(url="{url}")')
 
-        rs = self.__url.get(url)
-        self.__log(f'Finish get(url="{url}") -> {rs}')
+        rs = self._url.get(url)
+        self._log(f'Finish get(url="{url}") -> {rs}')
 
         return rs
 
     def get_status_code(self, url: str) -> int:
-        self.__log(f'Start get_status_code(url="{url}")')
+        self._log(f'Start get_status_code(url="{url}")')
 
-        code = self.__url.get_status_code(url)
-        self.__log(f'Finish get_status_code(url="{url}") -> {code}')
+        code = self._url.get_status_code(url)
+        self._log(f'Finish get_status_code(url="{url}") -> {code}')
 
         return code
 
-    def __log(self, text: str):
-        GoUrlLoggedProxy.__LOGGER.debug(text)
+    def _log(self, text: str):
+        GoUrlLoggedProxy._LOGGER.debug(text)
 
 
 if __name__ == '__main__':

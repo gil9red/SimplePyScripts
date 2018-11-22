@@ -36,22 +36,22 @@ class Graphic(ABC):
 
 class CompositeGraphic(Graphic):
     def __init__(self):
-        self.__child_graphics: List[Graphic] = []
+        self._child_graphics: List[Graphic] = []
 
     def draw(self, painter: QPainter):
-        for graphic in self.__child_graphics:
+        for graphic in self._child_graphics:
             graphic.draw(painter)
 
     # Adds the graphic to the composition
     def add(self, graphic: Graphic):
-        if graphic in self.__child_graphics:
+        if graphic in self._child_graphics:
             return
 
-        self.__child_graphics.append(graphic)
+        self._child_graphics.append(graphic)
 
     # Removes the graphic from the composition
     def remove(self, graphic: Graphic):
-        self.__child_graphics.remove(graphic)
+        self._child_graphics.remove(graphic)
 
 
 class Ellipse(Graphic):
