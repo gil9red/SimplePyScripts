@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: Design Patterns: Prototype - Прототип
 # SOURCE: https://ru.wikipedia.org/wiki/Прототип_(шаблон_проектирования)#Пример_на_Python
 
 

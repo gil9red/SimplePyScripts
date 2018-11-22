@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: Design Patterns: Adapter - Адаптер
 # SOURCE: https://ru.wikipedia.org/wiki/Адаптер_(шаблон_проектирования)#Python
 
 

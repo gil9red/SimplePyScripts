@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: Design Patterns: Proxy - Заместитель
 # SOURCE: https://ru.wikipedia.org/wiki/Заместитель_(шаблон_проектирования)
 
 

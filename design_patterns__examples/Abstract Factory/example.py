@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: Design Patterns: Abstract Factory - Абстрактная фабрика
 # SOURCE: https://en.wikipedia.org/wiki/Abstract_factory_pattern#Java_example
 
 

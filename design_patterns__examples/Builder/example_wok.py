@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: Design Patterns: Builder — Строитель
+
+
 from typing import NamedTuple, List
 
 
