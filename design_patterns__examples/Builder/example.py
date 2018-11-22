@@ -7,6 +7,7 @@ __author__ = 'ipetrash'
 # SOURCE: Design Patterns: Builder — Строитель
 # SOURCE: https://ru.wikipedia.org/wiki/Строитель_(шаблон_проектирования)
 
+
 from abc import ABC, abstractmethod
 
 
