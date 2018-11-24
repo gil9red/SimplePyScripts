@@ -21,7 +21,7 @@ class Prototype:
 
     def unregister_object(self, name):
         """Unregister an object"""
-        del self._objects[name]
+        self._objects.pop(name)
 
     def clone(self, name, **attr):
         """Clone a registered object and update inner attributes dictionary"""
