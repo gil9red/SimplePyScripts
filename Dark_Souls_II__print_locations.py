@@ -40,9 +40,9 @@ if __name__ == '__main__':
     rs = requests.get(url)
 
     from bs4 import BeautifulSoup
-    root = BeautifulSoup(rs.content, 'lxml')
+    root = BeautifulSoup(rs.content, 'html.parser')
 
-    for a in root.select('#mw-pages .mw-content-ltr a'):
+    for a in root.select('.category-page__member-link'):
         rel_url = a['href']
 
         from urllib.parse import urljoin
