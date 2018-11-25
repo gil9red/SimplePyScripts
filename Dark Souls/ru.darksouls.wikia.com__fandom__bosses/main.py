@@ -4,7 +4,11 @@
 __author__ = 'ipetrash'
 
 
-def get_bosses(url: str) -> dict([]):
+import os
+from typing import Dict
+
+
+def get_bosses(url: str) -> Dict[str, list]:
     from urllib.parse import urljoin
 
     import requests
@@ -36,7 +40,7 @@ def get_bosses(url: str) -> dict([]):
     return bosses_by_category
 
 
-def print_bosses(url, bosses: dict([])):
+def print_bosses(url: str, bosses: Dict[str, list]):
     print('{} ({})):'.format(url, sum([len(i) for i in bosses.values()])))
 
     for category, bosses in bosses.items():
@@ -50,7 +54,7 @@ def print_bosses(url, bosses: dict([])):
     print()
 
 
-def convert_bosses_to_only_name(bosses: dict([])) -> dict([]):
+def convert_bosses_to_only_name(bosses: Dict[str, list]) -> Dict[str, list]:
     from collections import OrderedDict
     bosses_only_name = OrderedDict()
     for category, bosses_list in bosses.items():
@@ -60,22 +64,16 @@ def convert_bosses_to_only_name(bosses: dict([])) -> dict([]):
 
 
 def export_to_json(file_name, bosses):
-    import os
     dir_name = os.path.dirname(file_name)
-
-    if not os.path.exists(dir_name):
-        os.makedirs(dir_name)
+    os.makedirs(dir_name, exist_ok=True)
 
     import json
     json.dump(bosses, open(file_name, 'w', encoding='utf-8'), ensure_ascii=False, indent=4)
 
 
-def export_to_sqlite(file_name: str, bosses_ds123: dict(dict([]))):
-    import os
+def export_to_sqlite(file_name: str, bosses_ds123: Dict[str, Dict[str, list]]):
     dir_name = os.path.dirname(file_name)
-
-    if not os.path.exists(dir_name):
-        os.makedirs(dir_name)
+    os.makedirs(dir_name, exist_ok=True)
 
     import sqlite3
     connect = sqlite3.connect(file_name)
