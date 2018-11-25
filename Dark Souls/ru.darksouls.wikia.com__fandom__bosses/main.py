@@ -5,10 +5,10 @@ __author__ = 'ipetrash'
 
 
 import os
-from typing import Dict
+from typing import Dict, List, Tuple
 
 
-def get_bosses(url: str) -> Dict[str, list]:
+def get_bosses(url: str) -> Dict[str, List[Tuple[str, str]]]:
     from urllib.parse import urljoin
 
     import requests
@@ -40,8 +40,8 @@ def get_bosses(url: str) -> Dict[str, list]:
     return bosses_by_category
 
 
-def print_bosses(url: str, bosses: Dict[str, list]):
-    print('{} ({})):'.format(url, sum([len(i) for i in bosses.values()])))
+def print_bosses(url: str, bosses: Dict[str, List[Tuple[str, str]]]):
+    print('{} ({}):'.format(url, sum(len(i) for i in bosses.values())))
 
     for category, bosses in bosses.items():
         print('{} ({}):'.format(category, len(bosses)))
@@ -54,7 +54,7 @@ def print_bosses(url: str, bosses: Dict[str, list]):
     print()
 
 
-def convert_bosses_to_only_name(bosses: Dict[str, list]) -> Dict[str, list]:
+def convert_bosses_to_only_name(bosses: Dict[str, List[Tuple[str, str]]]) -> Dict[str, List[str]]:
     from collections import OrderedDict
     bosses_only_name = OrderedDict()
     for category, bosses_list in bosses.items():
@@ -71,7 +71,7 @@ def export_to_json(file_name, bosses):
     json.dump(bosses, open(file_name, 'w', encoding='utf-8'), ensure_ascii=False, indent=4)
 
 
-def export_to_sqlite(file_name: str, bosses_ds123: Dict[str, Dict[str, list]]):
+def export_to_sqlite(file_name: str, bosses_ds123: Dict[str, Dict[str, List[Tuple[str, str]]]]):
     dir_name = os.path.dirname(file_name)
     os.makedirs(dir_name, exist_ok=True)
 
@@ -122,15 +122,15 @@ if __name__ == '__main__':
 
     # All bosses
     bosses_ds123 = {
-        'Dark Souls': bosses_ds1,
-        'Dark Souls II': bosses_ds2,
+        'Dark Souls':     bosses_ds1,
+        'Dark Souls II':  bosses_ds2,
         'Dark Souls III': bosses_ds3,
     }
     export_to_json('dumps/bosses_ds123.json', bosses_ds123)
 
     bosses_ds123__only_name = {
-        'Dark Souls': convert_bosses_to_only_name(bosses_ds1),
-        'Dark Souls II': convert_bosses_to_only_name(bosses_ds2),
+        'Dark Souls':     convert_bosses_to_only_name(bosses_ds1),
+        'Dark Souls II':  convert_bosses_to_only_name(bosses_ds2),
         'Dark Souls III': convert_bosses_to_only_name(bosses_ds3),
     }
     export_to_json('dumps/bosses_ds123__only_name.json', bosses_ds123__only_name)
@@ -144,7 +144,7 @@ if __name__ == '__main__':
     # TEST
     import sqlite3
     connect = sqlite3.connect(sql_file_name)
-    print('Total boss:', connect.execute('SELECT count(*) FROM BOSS').fetchone()[0])
+    print('Total boss:',     connect.execute('SELECT count(*) FROM BOSS').fetchone()[0])
     print('Total boss DS1:', connect.execute('SELECT count(*) FROM BOSS WHERE game = "Dark Souls"').fetchone()[0])
     print('Total boss DS2:', connect.execute('SELECT count(*) FROM BOSS WHERE game = "Dark Souls II"').fetchone()[0])
     print('Total boss DS3:', connect.execute('SELECT count(*) FROM BOSS WHERE game = "Dark Souls III"').fetchone()[0])
