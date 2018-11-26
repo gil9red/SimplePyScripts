@@ -4,64 +4,51 @@
 __author__ = 'ipetrash'
 
 
-def get_transitions_location(url_location):
-    """
-    Функция для поиска переходов из локации
+from urllib.parse import urljoin
 
-    """
+import requests
+from bs4 import BeautifulSoup
 
-    import requests
-    rs = requests.get(url_location)
-
-    from bs4 import BeautifulSoup
-    root = BeautifulSoup(rs.content, 'lxml')
-
-    transitions = list()
-
-    table_transitions = root.select_one('table.pi-horizontal-group')
-    if not table_transitions or 'Переходы:' not in table_transitions.text:
-        return transitions
-
-    for a in table_transitions.select('a'):
-        from urllib.parse import urljoin
-        url = urljoin(rs.url, a['href'])
-
-        transitions.append((url, a.text))
-
-    return transitions
+from common import get_transitions_location
 
 
-if __name__ == '__main__':
-    url = 'http://ru.darksouls.wikia.com/wiki/Категория:Локации_(Dark_Souls_II)?display=page&sort=alphabetical'
+def find_locations() -> (set, set):
+    URL = 'http://ru.darksouls.wikia.com/wiki/Категория:Локации_(Dark_Souls_II)?display=page&sort=alphabetical'
 
     visited_locations = set()
+    global_transitions = set()
 
-    import requests
-    rs = requests.get(url)
-
-    from bs4 import BeautifulSoup
+    rs = requests.get(URL)
     root = BeautifulSoup(rs.content, 'html.parser')
 
     for a in root.select('.category-page__member-link'):
-        rel_url = a['href']
-
-        from urllib.parse import urljoin
-        url = urljoin(rs.url, rel_url)
+        url = urljoin(rs.url, a['href'])
 
         transitions = get_transitions_location(url)
         if not transitions:
             continue
 
-        title = a.text
+        title = a.text.strip().title()
         print(title, url)
 
-        title = title.lower()
-        visited_locations.add(a.text)
+        visited_locations.add(title)
 
         for url_trans, title_trans in transitions:
-            print('    {} -> {}'.format(title_trans.strip(), url_trans))
+            title_trans = title_trans.title()
+            print('    {} -> {}'.format(title_trans, url_trans))
 
-        print('\n')
+            # Проверяем что локации с обратной связью не занесены
+            if (title_trans, title) not in global_transitions:
+                global_transitions.add((title, title_trans))
 
-    visited_locations = [_.title() for _ in visited_locations]
-    print(len(visited_locations), visited_locations)
+        print()
+
+    return visited_locations, global_transitions
+
+
+if __name__ == '__main__':
+    visited_locations, global_transitions = find_locations()
+
+    # Выведем итоговый список
+    print(len(visited_locations), sorted(visited_locations))
+    print(len(global_transitions), sorted(global_transitions))

@@ -4,65 +4,51 @@
 __author__ = 'ipetrash'
 
 
-def get_transitions_location(url_location):
-    """
-    Функция для поиска переходов из локации
+from common import get_transitions_location
 
-    """
 
-    import requests
-    rs = requests.get(url_location)
+# NOTE: Способ поиска локаций, начиная с начальной и через переходы локаций искать другие сработал, однако
+# часть локаций потерялись -- не всегда на одной странице локации указывает переход на следующую, но это
+# может быть в обратную сторону
+# Поэтому, для большей надежности лучше использовать скрипт Dark_Souls_II__print_locations.py
 
-    from bs4 import BeautifulSoup
-    root = BeautifulSoup(rs.content, 'lxml')
+def print_transitions(url: str, title: str, visited_locations: set, global_transitions: set, log=True):
+    title = title.strip().title()
+    if title in visited_locations:
+        return
 
-    transitions = list()
+    log and print(title, url)
+    visited_locations.add(title)
 
-    table_transitions = root.select_one('table.pi-horizontal-group')
-    if not table_transitions or 'Переходы:' not in table_transitions.text:
+    transitions = get_transitions_location(url)
+    if not transitions:
         return transitions
 
-    for a in table_transitions.select('a'):
-        from urllib.parse import urljoin
-        url = urljoin(rs.url, a['href'])
+    transitions = [(url, title.title()) for url, title in transitions]
 
-        transitions.append((url, a.text))
+    if log:
+        # Сначала напечатаем все связанные локации
+        for url_trans, title_trans in transitions:
+            print('    {} -> {}'.format(title_trans, url_trans))
 
-    return transitions
+        print()
+
+    # Поищем у этих локаций связанные с ними локации
+    for url_trans, title_trans in transitions:
+        # Проверяем что локации с обратной связью не занесены
+        if (title_trans, title) not in global_transitions:
+            global_transitions.add((title, title_trans))
+
+        print_transitions(url_trans, title_trans, visited_locations, global_transitions, log)
 
 
 if __name__ == '__main__':
     visited_locations = set()
+    global_transitions = set()
 
-    def print_transitions(url, title):
-        title = title.lower().strip()
-
-        if title in visited_locations:
-            return
-
-        visited_locations.add(title)
-        print(title.title(), url)
-
-        transitions = get_transitions_location(url)
-        if not transitions:
-            return transitions
-
-        # Сначала напечатаем все связанные локации
-        for url_trans, title_trans in transitions:
-            print('    {} -> {}'.format(title_trans.title().strip(), url_trans))
-
-        print('\n')
-
-        # Поищем у этих локаций связаные с ними локации
-        for url_trans, title_trans in transitions:
-            title_trans = title_trans.lower().strip()
-
-            if title_trans not in visited_locations:
-                print_transitions(url_trans, title_trans)
-
-
-    url_start_location = 'http://ru.darksouls.wikia.com/wiki/%D0%9C%D0%B5%D0%B6%D0%B4%D1%83%D0%BC%D0%B8%D1%80%D1%8C%D0%B5'
-    print_transitions(url_start_location, 'Междумирье')
+    url_start_location = 'http://ru.darksouls.wikia.com/wiki/Междумирье'
+    print_transitions(url_start_location, 'Междумирье', visited_locations, global_transitions)
 
     print()
-    print(len(visited_locations), [_.title() for _ in visited_locations])
+    print(len(visited_locations), sorted(visited_locations))
+    print(len(global_transitions), sorted(global_transitions))
