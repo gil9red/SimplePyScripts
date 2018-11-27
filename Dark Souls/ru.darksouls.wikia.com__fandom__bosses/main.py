@@ -5,10 +5,15 @@ __author__ = 'ipetrash'
 
 
 import os
-from typing import Dict, List, Tuple
+from typing import Dict, List, NamedTuple
 
 
-def get_bosses(url: str) -> Dict[str, List[Tuple[str, str]]]:
+class Boss(NamedTuple):
+    name: str
+    url: str
+
+
+def get_bosses(url: str) -> Dict[str, List[Boss]]:
     from urllib.parse import urljoin
 
     import requests
@@ -32,33 +37,42 @@ def get_bosses(url: str) -> Dict[str, List[Tuple[str, str]]]:
         if not category_name:
             continue
 
-        td_list = [(td.text.strip(), urljoin(rs.url, td.select_one('a')['href']))
-                   for td in tr.select('td') if td.text.strip()]
+        td_list = []
+
+        for td in tr.select('td'):
+            name = td.text.strip()
+            if not name:
+                continue
+
+            url = urljoin(rs.url, td.select_one('a')['href'])
+            boss = Boss(name, url)
+
+            td_list.append(boss)
 
         bosses_by_category[category_name] += td_list
 
     return bosses_by_category
 
 
-def print_bosses(url: str, bosses: Dict[str, List[Tuple[str, str]]]):
+def print_bosses(url: str, bosses: Dict[str, List[Boss]]):
     print('{} ({}):'.format(url, sum(len(i) for i in bosses.values())))
 
     for category, bosses in bosses.items():
         print('{} ({}):'.format(category, len(bosses)))
 
-        for i, (boss_name, boss_url) in enumerate(bosses, 1):
-            print('    {}. "{}": {}'.format(i, boss_name, boss_url))
+        for i, boss in enumerate(bosses, 1):
+            print('    {}. "{}": {}'.format(i, boss.name, boss.url))
 
         print()
 
     print()
 
 
-def convert_bosses_to_only_name(bosses: Dict[str, List[Tuple[str, str]]]) -> Dict[str, List[str]]:
+def convert_bosses_to_only_name(bosses: Dict[str, List[Boss]]) -> Dict[str, List[str]]:
     from collections import OrderedDict
     bosses_only_name = OrderedDict()
     for category, bosses_list in bosses.items():
-        bosses_only_name[category] = [name for name, _ in bosses_list]
+        bosses_only_name[category] = [boss.name for boss in bosses_list]
 
     return bosses_only_name
 
@@ -71,7 +85,7 @@ def export_to_json(file_name, bosses):
     json.dump(bosses, open(file_name, 'w', encoding='utf-8'), ensure_ascii=False, indent=4)
 
 
-def export_to_sqlite(file_name: str, bosses_ds123: Dict[str, Dict[str, List[Tuple[str, str]]]]):
+def export_to_sqlite(file_name: str, bosses_ds123: Dict[str, Dict[str, List[Boss]]]):
     dir_name = os.path.dirname(file_name)
     os.makedirs(dir_name, exist_ok=True)
 
@@ -92,10 +106,10 @@ def export_to_sqlite(file_name: str, bosses_ds123: Dict[str, Dict[str, List[Tupl
 
     for game, categories in bosses_ds123.items():
         for category, bosses in categories.items():
-            for name, url in bosses:
+            for boss in bosses:
                 connect.execute(
                     'INSERT INTO Boss (game, category, name, url) VALUES (?, ?, ?, ?)',
-                    (game, category, name, url)
+                    (game, category, boss.name, boss.url)
                 )
 
     connect.commit()
