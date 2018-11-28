@@ -23,10 +23,7 @@ for a, b in global_transitions:
     source = nodes.index(a)
     target = nodes.index(b)
 
-    # TODO: Рисовать ребро без направления
-    # Рисуем ребро в два направления
     edges.append({'source': source, 'target': target})
-    edges.append({'source': target, 'target': source})
 
 
 # Пример структуры графа.
@@ -34,30 +31,15 @@ for a, b in global_transitions:
 #     edges -- список ребер, описываются как {source: <индекс узла>, target: <индекс узла>},
 # var dataset = {
 #     nodes: [
-#         {name: "Adam"},
-#         {name: "Bob"},
-#         {name: "Carrie"},
-#         {name: "Donovan"},
-#         {name: "Edward"},
-#         {name: "Felicity"},
-#         {name: "George"},
-#         {name: "Hannah"},
-#         {name: "Iris"},
-#         {name: "Jerry"}
+#         {name: "Adam"}, {name: "Bob"}, {name: "Carrie"}, {name: "Donovan"},
+#         {name: "Edward"}, {name: "Felicity"}, {name: "George"},
+#         {name: "Hannah"}, {name: "Iris"}, {name: "Jerry"}
 #     ],
 #     edges: [
-#         {source: 0, target: 1},
-#         {source: 0, target: 2},
-#         {source: 0, target: 3},
-#         {source: 0, target: 4},
-#         {source: 1, target: 5},
-#         {source: 2, target: 5},
-#         {source: 2, target: 5},
-#         {source: 3, target: 4},
-#         {source: 5, target: 8},
-#         {source: 5, target: 9},
-#         {source: 6, target: 7},
-#         {source: 7, target: 8},
+#         {source: 0, target: 1}, {source: 0, target: 2}, {source: 0, target: 3},
+#         {source: 0, target: 4}, {source: 1, target: 5}, {source: 2, target: 5},
+#         {source: 2, target: 5}, {source: 3, target: 4}, {source: 5, target: 8},
+#         {source: 5, target: 9}, {source: 6, target: 7}, {source: 7, target: 8},
 #         {source: 8, target: 9}
 #     ]
 # };
