@@ -4,13 +4,24 @@
 __author__ = 'ipetrash'
 
 
+from typing import List, NamedTuple
 from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
 
 
-def get_transitions_location(url_location: str) -> list:
+class Location(NamedTuple):
+    title: str
+    url: str
+
+
+class Link(NamedTuple):
+    source: str
+    target: str
+
+
+def get_links_location(url_location: str) -> List[Location]:
     """
     Функция для поиска переходов из локации
 
@@ -19,15 +30,89 @@ def get_transitions_location(url_location: str) -> list:
     rs = requests.get(url_location)
     root = BeautifulSoup(rs.content, 'html.parser')
 
-    transitions = []
+    locations = []
 
-    table_transitions = root.select_one('table.pi-horizontal-group')
-    if not table_transitions or 'Переходы:' not in table_transitions.text:
-        return transitions
+    table_locations = root.select_one('table.pi-horizontal-group')
+    if not table_locations or 'Переходы:' not in table_locations.text:
+        return locations
 
-    for a in table_transitions.select('a'):
+    for a in table_locations.select('a'):
         url = urljoin(rs.url, a['href'])
+        location = Location(a.text.strip().title(), url)
+        locations.append(location)
 
-        transitions.append((url, a.text.strip()))
+    return locations
 
-    return transitions
+
+def find_locations(url_locations: str, log=True) -> (List[str], List[Link]):
+    visited_locations = set()
+    links = set()
+
+    rs = requests.get(url_locations)
+    root = BeautifulSoup(rs.content, 'html.parser')
+
+    for a in root.select('.category-page__member-link'):
+        abs_url = urljoin(rs.url, a['href'])
+
+        locations = get_links_location(abs_url)
+        if not locations:
+            continue
+
+        title = a.text.strip().title()
+        log and print(title, abs_url)
+
+        visited_locations.add(title)
+
+        for x in locations:
+            log and print('    {} -> {}'.format(x.title, x.url))
+
+            # Проверяем что локации с обратной связью не занесены
+            if (x.title, title) not in links:
+                links.add((title, x.title))
+
+        log and print()
+
+    visited_locations = sorted(visited_locations)
+    links = sorted(Link(a, b) for a, b in links)
+
+    return visited_locations, links
+
+
+def find_locations_ds1(log=True) -> (List[str], List[Link]):
+    url = "http://ru.darksouls.wikia.com/wiki/Категория:Локации_(Dark_Souls)"
+    return find_locations(url, log)
+
+
+def find_locations_ds2(log=True) -> (List[str], List[Link]):
+    url = "http://ru.darksouls.wikia.com/wiki/Категория:Локации_(Dark_Souls_II)"
+    return find_locations(url, log)
+
+
+def find_locations_ds3(log=True) -> (List[str], List[Link]):
+    url = "http://ru.darksouls.wikia.com/wiki/Категория:Локации_(Dark_Souls_III)"
+    return find_locations(url, log)
+
+
+def find_links_ds1(log=True) -> List[Link]:
+    return find_locations_ds1(log)[1]
+
+
+def find_links_ds2(log=True) -> List[Link]:
+    return find_locations_ds2(log)[1]
+
+
+def find_links_ds3(log=True) -> List[Link]:
+    return find_locations_ds3(log)[1]
+
+
+if __name__ == '__main__':
+    visited_locations, links = find_locations_ds1()
+
+    # Выведем итоговый список
+    print(len(visited_locations), visited_locations)
+    print(len(links), links)
+
+    print()
+
+    links = find_links_ds1(log=False)
+    print(len(links), links)

@@ -4,21 +4,19 @@
 __author__ = 'ipetrash'
 
 
-from Dark_Souls_II__print_locations import find_locations
+from common import find_links_ds1
 
 
-visited_locations, global_transitions = find_locations()
-
-print(len(visited_locations), sorted(visited_locations))
-print(len(global_transitions), sorted(global_transitions))
+links = find_links_ds1()
+print(len(links), links)
 
 # Составим граф локаций
 # TODO: pretty graph
 import networkx as nx
 G = nx.Graph()
 
-for title, title_trans in global_transitions:
-    G.add_edge(title, title_trans)
+for link in links:
+    G.add_edge(link.source, link.target)
 
 pos = nx.spring_layout(G)  # positions for all nodes
 

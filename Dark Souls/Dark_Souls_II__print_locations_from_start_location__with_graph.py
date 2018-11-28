@@ -7,21 +7,21 @@ __author__ = 'ipetrash'
 from Dark_Souls_II__print_locations_from_start_location import print_transitions
 
 
-global_transitions = set()
+links = set()
 visited_locations = set()
 url_start_location = 'http://ru.darksouls.wikia.com/wiki/Междумирье'
 
-print_transitions(url_start_location, 'Междумирье', visited_locations, global_transitions, log=False)
+print_transitions(url_start_location, 'Междумирье', visited_locations, links, log=False)
 
 print()
 print(len(visited_locations), sorted(visited_locations))
-print(len(global_transitions), sorted(global_transitions))
+print(len(links), sorted(links))
 
 # TODO: pretty graph
 import networkx as nx
 G = nx.Graph()
 
-for title, title_trans in global_transitions:
+for title, title_trans in links:
     # print('{} -> {}'.format(title, title_trans))
     G.add_edge(title, title_trans)
 
