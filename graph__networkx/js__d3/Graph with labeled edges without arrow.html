@@ -96,24 +96,7 @@
         .text(function(d,i){return 'label '+i});
 */
 
-    svg.append('defs').append('marker')
-        .attr({'id':'arrowhead',
-               'viewBox':'-0 -5 10 10',
-               'refX':25,
-               'refY':0,
-               //'markerUnits':'strokeWidth',
-               'orient':'auto',
-               'markerWidth':10,
-               'markerHeight':10,
-               'xoverflow':'visible'})
-        .append('svg:path')
-            .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
-            .attr('fill', '#ccc')
-            .attr('stroke','#ccc');
-     
-
     force.on("tick", function(){
-
         edges.attr({"x1": function(d){return d.source.x;},
                     "y1": function(d){return d.source.y;},
                     "x2": function(d){return d.target.x;},
