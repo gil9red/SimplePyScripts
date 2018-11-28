@@ -10,20 +10,18 @@
 <body>
 
 <script type="text/javascript">
-
     var w = 1980;
     var h = 1000;
-    var linkDistance=25;
+    var linkDistance = 50;
 
-    var colors = d3.scale.category10();
+    var colors = d3.scale.category20();
 
     var dataset = {
-        nodes: [{'name': 'Башня Луны'}, {'name': 'Темная Бездна Былого'}, {'name': 'Долина Жатвы'}, {'name': 'Междумирье'}, {'name': 'Склеп Нежити'}, {'name': 'Храм Зимы'}, {'name': 'Безлюдная Пристань'}, {'name': 'Убежище Дракона'}, {'name': 'Башня Солнца'}, {'name': 'Чистилище Нежити'}, {'name': 'Память Короля'}, {'name': 'Железная Цитадель'}, {'name': 'Роща Охотника'}, {'name': 'Трон Желания'}, {'name': 'Память Орро'}, {'name': 'Холодные Окраины'}, {'name': 'Святилище Дракона'}, {'name': 'Большой Собор'}, {'name': 'Личные Палаты Лорда'}, {'name': 'Бухта Брайтстоун-Тселдора'}, {'name': 'Лес Павших Гигантов'}, {'name': 'Могила Святых'}, {'name': 'Цитадель Алдии'}, {'name': 'Предвечный Хаос'}, {'name': 'Черная Расселина'}, {'name': 'Мглистая Башня'}, {'name': 'Пещера Мертвых'}, {'name': 'Королевский Проход'}, {'name': 'Темнолесье'}, {'name': 'Воспоминания Дракона'}, {'name': 'Земляной Пик'}, {'name': 'Шульва, Священный Город'}, {'name': 'Двери Фарроса'}, {'name': 'Память Джейта'}, {'name': 'Темные Руины'}, {'name': 'Холм Грешников'}, {'name': 'Помойка'}, {'name': 'Ледяная Элеум Лойс'}, {'name': 'Память Старого Железного Короля'}, {'name': 'Память Ваммара'}, {'name': 'Храм Дракона'}, {'name': 'Огненная Башня Хейда'}, {'name': 'Железный Проход'}, {'name': 'Карта Дранглика'}, {'name': 'Замок Дранглик'}, {'name': 'Маджула'}, {'name': 'Собор Лазурного Пути'}, {'name': 'Храм Аманы'}, {'name': 'Арена Братства Крови'}, {'name': 'Гнездо Дракона'}, {'name': 'Забытая Крепость'}],
-        edges: [{'source': 48, 'target': 9}, {'source': 9, 'target': 48}, {'source': 0, 'target': 50}, {'source': 50, 'target': 0}, {'source': 8, 'target': 11}, {'source': 11, 'target': 8}, {'source': 6, 'target': 50}, {'source': 50, 'target': 6}, {'source': 6, 'target': 41}, {'source': 41, 'target': 6}, {'source': 17, 'target': 37}, {'source': 37, 'target': 17}, {'source': 17, 'target': 23}, {'source': 23, 'target': 17}, {'source': 19, 'target': 29}, {'source': 29, 'target': 19}, {'source': 19, 'target': 32}, {'source': 32, 'target': 19}, {'source': 19, 'target': 18}, {'source': 18, 'target': 19}, {'source': 49, 'target': 40}, {'source': 40, 'target': 49}, {'source': 49, 'target': 22}, {'source': 22, 'target': 49}, {'source': 32, 'target': 28}, {'source': 28, 'target': 32}, {'source': 2, 'target': 30}, {'source': 30, 'target': 2}, {'source': 2, 'target': 12}, {'source': 12, 'target': 2}, {'source': 11, 'target': 30}, {'source': 30, 'target': 11}, {'source': 11, 'target': 25}, {'source': 25, 'target': 11}, {'source': 42, 'target': 25}, {'source': 25, 'target': 42}, {'source': 50, 'target': 20}, {'source': 20, 'target': 50}, {'source': 50, 'target': 35}, {'source': 35, 'target': 50}, {'source': 44, 'target': 27}, {'source': 27, 'target': 44}, {'source': 44, 'target': 13}, {'source': 13, 'target': 44}, {'source': 44, 'target': 5}, {'source': 5, 'target': 44}, {'source': 43, 'target': 45}, {'source': 45, 'target': 43}, {'source': 27, 'target': 47}, {'source': 47, 'target': 27}, {'source': 37, 'target': 15}, {'source': 15, 'target': 37}, {'source': 37, 'target': 5}, {'source': 5, 'target': 37}, {'source': 20, 'target': 45}, {'source': 45, 'target': 20}, {'source': 20, 'target': 39}, {'source': 39, 'target': 20}, {'source': 20, 'target': 33}, {'source': 33, 'target': 20}, {'source': 20, 'target': 14}, {'source': 14, 'target': 20}, {'source': 45, 'target': 3}, {'source': 3, 'target': 45}, {'source': 45, 'target': 21}, {'source': 21, 'target': 45}, {'source': 45, 'target': 41}, {'source': 41, 'target': 45}, {'source': 45, 'target': 36}, {'source': 36, 'target': 45}, {'source': 45, 'target': 12}, {'source': 12, 'target': 45}, {'source': 45, 'target': 28}, {'source': 28, 'target': 45}, {'source': 25, 'target': 38}, {'source': 38, 'target': 25}, {'source': 21, 'target': 36}, {'source': 36, 'target': 21}, {'source': 41, 'target': 46}, {'source': 46, 'target': 41}, {'source': 10, 'target': 4}, {'source': 4, 'target': 10}, {'source': 26, 'target': 31}, {'source': 31, 'target': 26}, {'source': 36, 'target': 24}, {'source': 24, 'target': 36}, {'source': 12, 'target': 9}, {'source': 9, 'target': 12}, {'source': 16, 'target': 7}, {'source': 7, 'target': 16}, {'source': 16, 'target': 31}, {'source': 31, 'target': 16}, {'source': 4, 'target': 47}, {'source': 47, 'target': 4}, {'source': 1, 'target': 44}, {'source': 44, 'target': 1}, {'source': 1, 'target': 34}, {'source': 34, 'target': 1}, {'source': 1, 'target': 24}, {'source': 24, 'target': 1}, {'source': 28, 'target': 5}, {'source': 5, 'target': 28}, {'source': 28, 'target': 22}, {'source': 22, 'target': 28}, {'source': 24, 'target': 31}, {'source': 31, 'target': 24}]
+        nodes: [{'name': 'Башня Луны'}, {'name': 'Чистилище Нежити'}, {'name': 'Холодные Окраины'}, {'name': 'Гнездо Дракона'}, {'name': 'Память Орро'}, {'name': 'Память Ваммара'}, {'name': 'Предвечный Хаос'}, {'name': 'Пещера Мертвых'}, {'name': 'Долина Жатвы'}, {'name': 'Могила Святых'}, {'name': 'Шульва, Священный Город'}, {'name': 'Двери Фарроса'}, {'name': 'Склеп Нежити'}, {'name': 'Черная Расселина'}, {'name': 'Темнолесье'}, {'name': 'Храм Зимы'}, {'name': 'Карта Дранглика'}, {'name': 'Железный Проход'}, {'name': 'Память Короля'}, {'name': 'Убежище Дракона'}, {'name': 'Темная Бездна Былого'}, {'name': 'Личные Палаты Лорда'}, {'name': 'Королевский Проход'}, {'name': 'Память Джейта'}, {'name': 'Память Старого Железного Короля'}, {'name': 'Холм Грешников'}, {'name': 'Железная Цитадель'}, {'name': 'Храм Аманы'}, {'name': 'Большой Собор'}, {'name': 'Храм Дракона'}, {'name': 'Арена Братства Крови'}, {'name': 'Темные Руины'}, {'name': 'Мглистая Башня'}, {'name': 'Лес Павших Гигантов'}, {'name': 'Междумирье'}, {'name': 'Забытая Крепость'}, {'name': 'Земляной Пик'}, {'name': 'Огненная Башня Хейда'}, {'name': 'Трон Желания'}, {'name': 'Маджула'}, {'name': 'Цитадель Алдии'}, {'name': 'Собор Лазурного Пути'}, {'name': 'Безлюдная Пристань'}, {'name': 'Бухта Брайтстоун-Тселдора'}, {'name': 'Воспоминания Дракона'}, {'name': 'Святилище Дракона'}, {'name': 'Роща Охотника'}, {'name': 'Башня Солнца'}, {'name': 'Замок Дранглик'}, {'name': 'Ледяная Элеум Лойс'}, {'name': 'Помойка'}],
+        edges: [{'source': 30, 'target': 1}, {'source': 0, 'target': 35}, {'source': 47, 'target': 26}, {'source': 42, 'target': 35}, {'source': 42, 'target': 37}, {'source': 28, 'target': 49}, {'source': 28, 'target': 6}, {'source': 43, 'target': 44}, {'source': 43, 'target': 11}, {'source': 43, 'target': 21}, {'source': 3, 'target': 29}, {'source': 3, 'target': 40}, {'source': 11, 'target': 14}, {'source': 8, 'target': 36}, {'source': 8, 'target': 46}, {'source': 26, 'target': 36}, {'source': 26, 'target': 32}, {'source': 17, 'target': 32}, {'source': 35, 'target': 33}, {'source': 35, 'target': 25}, {'source': 48, 'target': 22}, {'source': 48, 'target': 38}, {'source': 48, 'target': 15}, {'source': 16, 'target': 39}, {'source': 22, 'target': 27}, {'source': 49, 'target': 2}, {'source': 49, 'target': 15}, {'source': 33, 'target': 39}, {'source': 33, 'target': 5}, {'source': 33, 'target': 23}, {'source': 33, 'target': 4}, {'source': 39, 'target': 34}, {'source': 39, 'target': 9}, {'source': 39, 'target': 37}, {'source': 39, 'target': 50}, {'source': 39, 'target': 46}, {'source': 39, 'target': 14}, {'source': 32, 'target': 24}, {'source': 9, 'target': 50}, {'source': 37, 'target': 41}, {'source': 18, 'target': 12}, {'source': 7, 'target': 10}, {'source': 50, 'target': 13}, {'source': 46, 'target': 1}, {'source': 45, 'target': 19}, {'source': 45, 'target': 10}, {'source': 12, 'target': 27}, {'source': 20, 'target': 48}, {'source': 20, 'target': 31}, {'source': 20, 'target': 13}, {'source': 14, 'target': 15}, {'source': 14, 'target': 40}, {'source': 13, 'target': 10}]
     };
 
- 
-    var svg = d3.select("body").append("svg").attr({"width":w,"height":h});
+    var svg = d3.select("body").append("svg").attr({"width": w, "height": h});
 
     var force = d3.layout.force()
         .nodes(dataset.nodes)
@@ -35,47 +33,51 @@
         .gravity(0.05)
         .start();
 
- 
-
     var edges = svg.selectAll("line")
-      .data(dataset.edges)
-      .enter()
-      .append("line")
-      .attr("id",function(d,i) {return 'edge'+i})
-      .attr('marker-end','url(#arrowhead)')
-      .style("stroke","#ccc")
-      .style("pointer-events", "none");
+        .data(dataset.edges)
+        .enter()
+        .append("line")
+        .attr("id",function(d,i) {return 'edge'+i})
+        .style("stroke","#ccc")
+        .style("pointer-events", "none");
     
     var nodes = svg.selectAll("circle")
-      .data(dataset.nodes)
-      .enter()
-      .append("circle")
-      .attr({"r":15})
-      .style("fill",function(d,i){return colors(i);})
-      .call(force.drag)
-
+        .data(dataset.nodes)
+        .enter()
+        .append("circle")
+        .attr({"r":15})
+        .style("fill",function(d,i){return colors(i);})
+        .call(force.drag);
 
     var nodelabels = svg.selectAll(".nodelabel") 
        .data(dataset.nodes)
        .enter()
        .append("text")
-       .attr({"x":function(d){return d.x;},
-              "y":function(d){return d.y;},
-              "class":"nodelabel",
-              "stroke":"black"})
+       .attr({
+            "x":function(d){return d.x;},
+            "y":function(d){return d.y;},
+            "class":"nodelabel",
+            "stroke":"black"
+        })
        .text(function(d){return d.name;});
 
     var edgepaths = svg.selectAll(".edgepath")
         .data(dataset.edges)
         .enter()
         .append('path')
-        .attr({'d': function(d) {return 'M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y},
-               'class':'edgepath',
-               'fill-opacity':0,
-               'stroke-opacity':0,
-               'fill':'blue',
-               'stroke':'red',
-               'id':function(d,i) {return 'edgepath'+i}})
+        .attr({
+            'd': function(d) {
+                return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y
+            },
+            'class': 'edgepath',
+            'fill-opacity': 0,
+            'stroke-opacity': 0,
+            'fill': 'blue',
+            'stroke': 'red',
+            'id': function(d, i) {
+                return 'edgepath' + i;
+            }
+        })
         .style("pointer-events", "none");
 
     var edgelabels = svg.selectAll(".edgelabel")
@@ -83,54 +85,39 @@
         .enter()
         .append('text')
         .style("pointer-events", "none")
-        .attr({'class':'edgelabel',
-               'id':function(d,i){return 'edgelabel'+i},
-               'dx':80,
-               'dy':0,
-               'font-size':10,
-               'fill':'#aaa'});
-
-/* Тут добавляются метки для ребер
-    edgelabels.append('textPath')
-        .attr('xlink:href',function(d,i) {return '#edgepath'+i})
-        .style("pointer-events", "none")
-        .text(function(d,i){return 'label '+i});
-*/
-
-    svg.append('defs').append('marker')
-        .attr({'id':'arrowhead',
-               'viewBox':'-0 -5 10 10',
-               'refX':25,
-               'refY':0,
-               //'markerUnits':'strokeWidth',
-               'orient':'auto',
-               'markerWidth':10,
-               'markerHeight':10,
-               'xoverflow':'visible'})
-        .append('svg:path')
-            .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
-            .attr('fill', '#ccc')
-            .attr('stroke','#ccc');
-     
-
-    force.on("tick", function(){
-
-        edges.attr({"x1": function(d){return d.source.x;},
-                    "y1": function(d){return d.source.y;},
-                    "x2": function(d){return d.target.x;},
-                    "y2": function(d){return d.target.y;}
+        .attr({
+            'class': 'edgelabel',
+            'id': function(d, i) {
+                return 'edgelabel' + i;
+            },
+            'dx': 80,
+            'dy': 0,
+            'font-size': 10,
+            'fill': '#aaa'
         });
 
-        nodes.attr({"cx":function(d){return d.x;},
-                    "cy":function(d){return d.y;}
+    force.on("tick", function() {
+        edges.attr({
+            "x1": function(d){return d.source.x;},
+            "y1": function(d){return d.source.y;},
+            "x2": function(d){return d.target.x;},
+            "y2": function(d){return d.target.y;}
         });
 
-        nodelabels.attr("x", function(d) { return d.x; }) 
-                  .attr("y", function(d) { return d.y; });
+        nodes.attr({
+            "cx": function(d){return d.x;},
+            "cy": function(d){return d.y;}
+        });
 
-        edgepaths.attr('d', function(d) { var path='M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y;
-                                           //console.log(d)
-                                           return path});       
+        nodelabels
+            .attr("x", function(d) { return d.x; })
+            .attr("y", function(d) { return d.y; });
+
+        edgepaths.attr('d', function(d) {
+            var path='M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y;
+            //console.log(d)
+            return path
+        });
 
         edgelabels.attr('transform',function(d,i){
             if (d.target.x<d.source.x){
@@ -138,10 +125,10 @@
                 rx = bbox.x+bbox.width/2;
                 ry = bbox.y+bbox.height/2;
                 return 'rotate(180 '+rx+' '+ry+')';
-                }
-            else {
+
+            } else {
                 return 'rotate(0)';
-                }
+            }
         });
     });
 
