@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+import sys
+sys.path.append('..')
+
 from common import get_links_location
 
 

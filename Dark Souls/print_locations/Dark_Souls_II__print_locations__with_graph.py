@@ -4,10 +4,13 @@
 __author__ = 'ipetrash'
 
 
-from common import find_links_ds1
+import sys
+sys.path.append('..')
+
+from common import find_links_ds2
 
 
-links = find_links_ds1()
+links = find_links_ds2()
 print(len(links), links)
 
 # Составим граф локаций
