@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 import pyautogui
+pyautogui.FAILSAFE = False
 
 
 from flask import Flask, render_template, request, jsonify
