@@ -85,7 +85,17 @@ def find_locations_ds3(log=True) -> (List[str], List[Tuple[str, str]]):
 
 
 def find_links_ds1(log=True) -> List[Tuple[str, str]]:
-    return find_locations_ds1(log)[1]
+    items = find_locations_ds1(log)[1]
+
+    # Исправляем название "Крепость Сен" -> "Крепость Сена"
+    def clear(text):
+        text = text.lower()
+        if text == 'крепость сен':
+            text = 'крепость сена'
+        return text.strip().title()
+
+    items = [(clear(source), clear(target)) for source, target in items]
+    return items
 
 
 def find_links_ds2(log=True) -> List[Tuple[str, str]]:
@@ -100,7 +110,6 @@ def find_links_ds3(log=True) -> List[Tuple[str, str]]:
         return text.lower().replace('(dark souls iii)', '').strip().title()
 
     items = [(clear(source), clear(target)) for source, target in items]
-
     return items
 
 
