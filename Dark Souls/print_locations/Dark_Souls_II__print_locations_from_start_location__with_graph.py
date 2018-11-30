@@ -21,9 +21,8 @@ print(len(links), sorted(links))
 import networkx as nx
 G = nx.Graph()
 
-for title, title_trans in links:
-    # print('{} -> {}'.format(title, title_trans))
-    G.add_edge(title, title_trans)
+for source, target in links:
+    G.add_edge(source, target)
 
 pos = nx.spring_layout(G)  # positions for all nodes
 
