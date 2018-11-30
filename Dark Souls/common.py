@@ -4,24 +4,14 @@
 __author__ = 'ipetrash'
 
 
-from typing import List, NamedTuple
+from typing import List, Tuple
 from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
 
 
-class Location(NamedTuple):
-    title: str
-    url: str
-
-
-class Link(NamedTuple):
-    source: str
-    target: str
-
-
-def get_links_location(url_location: str) -> List[Location]:
+def get_links_location(url_location: str) -> List[Tuple[str, str]]:
     """
     Функция для поиска переходов из локации
 
@@ -38,13 +28,14 @@ def get_links_location(url_location: str) -> List[Location]:
 
     for a in table_locations.select('a'):
         url = urljoin(rs.url, a['href'])
-        location = Location(a.text.strip().title(), url)
-        locations.append(location)
+        title = a.text.strip().title()
+
+        locations.append((title, url))
 
     return locations
 
 
-def find_locations(url_locations: str, log=True) -> (List[str], List[Link]):
+def find_locations(url_locations: str, log=True) -> (List[str], List[Tuple[str, str]]):
     visited_locations = set()
     links = set()
 
@@ -63,45 +54,45 @@ def find_locations(url_locations: str, log=True) -> (List[str], List[Link]):
 
         visited_locations.add(title)
 
-        for x in locations:
-            log and print('    {} -> {}'.format(x.title, x.url))
+        for x_title, x_url in locations:
+            log and print('    {} -> {}'.format(x_title, x_url))
 
             # Проверяем что локации с обратной связью не занесены
-            if (x.title, title) not in links:
-                links.add((title, x.title))
+            if (x_title, title) not in links:
+                links.add((title, x_title))
 
         log and print()
 
     visited_locations = sorted(visited_locations)
-    links = sorted(Link(a, b) for a, b in links)
+    links = sorted(links)
 
     return visited_locations, links
 
 
-def find_locations_ds1(log=True) -> (List[str], List[Link]):
+def find_locations_ds1(log=True) -> (List[str], List[Tuple[str, str]]):
     url = "http://ru.darksouls.wikia.com/wiki/Категория:Локации_(Dark_Souls)"
     return find_locations(url, log)
 
 
-def find_locations_ds2(log=True) -> (List[str], List[Link]):
+def find_locations_ds2(log=True) -> (List[str], List[Tuple[str, str]]):
     url = "http://ru.darksouls.wikia.com/wiki/Категория:Локации_(Dark_Souls_II)"
     return find_locations(url, log)
 
 
-def find_locations_ds3(log=True) -> (List[str], List[Link]):
+def find_locations_ds3(log=True) -> (List[str], List[Tuple[str, str]]):
     url = "http://ru.darksouls.wikia.com/wiki/Категория:Локации_(Dark_Souls_III)"
     return find_locations(url, log)
 
 
-def find_links_ds1(log=True) -> List[Link]:
+def find_links_ds1(log=True) -> List[Tuple[str, str]]:
     return find_locations_ds1(log)[1]
 
 
-def find_links_ds2(log=True) -> List[Link]:
+def find_links_ds2(log=True) -> List[Tuple[str, str]]:
     return find_locations_ds2(log)[1]
 
 
-def find_links_ds3(log=True) -> List[Link]:
+def find_links_ds3(log=True) -> List[Tuple[str, str]]:
     return find_locations_ds3(log)[1]
 
 

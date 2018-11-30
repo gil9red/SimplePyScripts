@@ -18,8 +18,8 @@ print(len(links), links)
 import networkx as nx
 G = nx.Graph()
 
-for link in links:
-    G.add_edge(link.source, link.target)
+for source, target in links:
+    G.add_edge(source, target)
 
 pos = nx.spring_layout(G)  # positions for all nodes
 

@@ -29,18 +29,18 @@ def print_transitions(url: str, title: str, visited_locations: set, links: set, 
 
     if log:
         # Сначала напечатаем все связанные локации
-        for x in locations:
-            print('    {} -> {}'.format(x.title, x.url))
+        for x_title, x_url in locations:
+            print('    {} -> {}'.format(x_title, x_url))
 
         print()
 
     # Поищем у этих локаций связанные с ними локации
-    for x in locations:
+    for x_title, x_url in locations:
         # Проверяем что локации с обратной связью не занесены
-        if (x.title, title) not in links:
-            links.add((title, x.title))
+        if (x_title, title) not in links:
+            links.add((title, x_title))
 
-        print_transitions(x.url, x.title, visited_locations, links, log)
+        print_transitions(x_url, x_title, visited_locations, links, log)
 
 
 if __name__ == '__main__':
