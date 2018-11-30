@@ -93,7 +93,15 @@ def find_links_ds2(log=True) -> List[Tuple[str, str]]:
 
 
 def find_links_ds3(log=True) -> List[Tuple[str, str]]:
-    return find_locations_ds3(log)[1]
+    items = find_locations_ds3(log)[1]
+
+    # Удаляем из названий " (Dark Souls Iii)"
+    def clear(text):
+        return text.lower().replace('(dark souls iii)', '').strip().title()
+
+    items = [(clear(source), clear(target)) for source, target in items]
+
+    return items
 
 
 if __name__ == '__main__':
