@@ -36,10 +36,10 @@ if __name__ == '__main__':
 
     print()
 
-    text = 'Sally Face #'
+    text = 'Sally Face'
     url = 'https://www.youtube.com/user/HellYeahPlay/search?query=' + text
     items = get_video_list(url)
     print('Items ({}): {}'.format(len(items), items))
 
-    items = get_video_list(url, filter_func=lambda name: text in name)
+    items = get_video_list(url, filter_func=lambda name: text in name and 'эпизод' in name.lower())
     print('Items ({}): {}'.format(len(items), items))

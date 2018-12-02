@@ -25,10 +25,10 @@ make_backslashreplace_console()
 
 
 def my_get_video_list():
-    text = 'Sally Face #'
+    text = 'Sally Face'
     url = 'https://www.youtube.com/user/HellYeahPlay/search?query=' + text
 
-    return get_video_list(url, filter_func=lambda name: text in name)
+    return get_video_list(url, filter_func=lambda name: text in name and 'эпизод' in name.lower())
 
 
 if __name__ == '__main__':
