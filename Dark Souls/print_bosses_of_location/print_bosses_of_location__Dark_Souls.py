@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 import sys
 sys.path.append('..')
 
-from common import Parser
+from common import Parser, find_bosses_of_location_ds1
 
 
 p = Parser.DS1(log=False).parse()
@@ -19,3 +19,8 @@ for location in p.get_locations():
         print(f'   {boss} -> {url}')
 
     print()
+
+print()
+
+bosses_of_location = find_bosses_of_location_ds1()
+print(len(bosses_of_location), bosses_of_location)
