@@ -14,7 +14,7 @@ def get_dataset_text(links: List[Tuple[str, str]]) -> str:
         nodes.add(a)
         nodes.add(b)
 
-    # Задаем одинаковый порядок узлов
+    # Задаем отсортированный порядок узлов
     nodes = sorted(nodes)
 
     # Список ребер
