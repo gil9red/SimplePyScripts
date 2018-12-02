@@ -113,6 +113,37 @@ def find_links_ds3(log=True) -> List[Tuple[str, str]]:
     return items
 
 
+def get_bosses_of_location(url_location: str) -> List[Tuple[str, str]]:
+    """
+    Функция для поиска боссов локации
+
+    """
+
+    rs = requests.get(url_location)
+    root = BeautifulSoup(rs.content, 'html.parser')
+
+    bosses = []
+
+    table_bosses = None
+
+    for table in root.select('table.pi-horizontal-group'):
+        if 'Босс локации:' in table.text:
+            table_bosses = table
+            break
+
+    # Если не нашли
+    if not table_bosses:
+        return bosses
+
+    for a in table_bosses.select('a'):
+        url = urljoin(rs.url, a['href'])
+        title = a.text.strip().title()
+
+        bosses.append((title, url))
+
+    return bosses
+
+
 if __name__ == '__main__':
     visited_locations, links = find_locations_ds1()
 
@@ -124,3 +155,17 @@ if __name__ == '__main__':
 
     links = find_links_ds1(log=False)
     print(len(links), links)
+
+    print()
+
+    # DS1
+    bosses = get_bosses_of_location('http://ru.darksouls.wikia.com/wiki/Северное_Прибежище_Нежити')
+    print(len(bosses), bosses)
+
+    # DS2
+    bosses = get_bosses_of_location('http://ru.darksouls.wikia.com/wiki/Маджула')
+    print(len(bosses), bosses)
+
+    # DS3
+    bosses = get_bosses_of_location('http://ru.darksouls.wikia.com/wiki/Анор_Лондо_(Dark_Souls_III)')
+    print(len(bosses), bosses)
