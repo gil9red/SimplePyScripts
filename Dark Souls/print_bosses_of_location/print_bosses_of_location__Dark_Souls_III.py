@@ -7,19 +7,15 @@ __author__ = 'ipetrash'
 import sys
 sys.path.append('..')
 
-from common import parse_locations_ds3
-from collections import defaultdict
+from common import Parser
 
 
-visited_locations, links, bosses = parse_locations_ds3(log=False)
+p = Parser.DS3(log=False).parse()
 
-location_by_bosses = defaultdict(list)
-for location, boss in bosses:
-    location_by_bosses[location].append(boss)
+for location in p.get_locations():
+    print(f'{location} -> {p.get_location_by_url(location)}')
 
-for location in visited_locations:
-    print(f'{location}:')
-    for boss in location_by_bosses[location]:
-        print(f'   {boss}')
+    for boss, url in p.get_location_by_bosses(location):
+        print(f'   {boss} -> {url}')
 
     print()
