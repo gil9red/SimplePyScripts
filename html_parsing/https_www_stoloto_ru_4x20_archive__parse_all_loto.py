@@ -60,9 +60,7 @@ print(max(result, key=lambda x: x[3]))
 
 # Наименьшая сумма приза
 print(min(result, key=lambda x: x[3]))
-
 print()
-
 
 with open('all_lotto.csv', 'w', encoding='utf-8', newline='') as f:
     file = csv.writer(f)
