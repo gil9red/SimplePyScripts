@@ -36,7 +36,7 @@ def execute_command(command: str) -> str:
 
 
 with socket.socket() as sock:
-    sock.bind(('', 9090))
+    sock.bind(('', PORT))
     sock.listen(1)
 
     print('Server: {}'.format(sock.getsockname()))
