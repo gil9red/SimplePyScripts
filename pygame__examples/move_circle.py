@@ -4,8 +4,9 @@
 __author__ = 'ipetrash'
 
 
-from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN
+# pip install pygame
 import pygame
+from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN
 
 FPS = 60
 W = 700  # ширина экрана

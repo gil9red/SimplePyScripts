@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 # SOURCE: http://www.nerdparadise.com/programming/pygame/part1
 
-
+# pip install pygame
 import pygame
 pygame.init()
 screen = pygame.display.set_mode((400, 300))
