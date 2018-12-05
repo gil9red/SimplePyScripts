@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 # pip install pygame
 import pygame
-from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN
+
 
 FPS = 60
 W = 700  # ширина экрана
@@ -44,16 +44,16 @@ while True:
 
     is_pressed = pygame.key.get_pressed()
 
-    if is_pressed[K_LEFT]:
+    if is_pressed[pygame.K_LEFT]:
         x -= step
 
-    if is_pressed[K_RIGHT]:
+    if is_pressed[pygame.K_RIGHT]:
         x += step
 
-    if is_pressed[K_UP]:
+    if is_pressed[pygame.K_UP]:
         y -= step
 
-    if is_pressed[K_DOWN]:
+    if is_pressed[pygame.K_DOWN]:
         y += step
 
     pygame.display.set_caption("move_rect [{} fps]".format(int(clock.get_fps())))
