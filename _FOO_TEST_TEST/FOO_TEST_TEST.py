@@ -54,7 +54,7 @@ FPS = 60
 WIDTH = 600  # ширина экрана
 HEIGHT = 600  # высота экрана
 BACKGROUND_COLOR = (255, 255, 255)
-BALL_NUMBER = 10000
+BALL_NUMBER = 100
 
 pygame.init()
 surface = pygame.display.set_mode((WIDTH, HEIGHT))
