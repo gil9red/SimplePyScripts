@@ -50,6 +50,41 @@ class Ball:
         return self.x + self.r
 
 
+# class Game:
+#     def __init__(self, width: int, height: int, caption='Balls!', background_color=(255, 255, 255), frame_rate=60):
+#         self.width = width
+#         self.height = height
+#         self.frame_rate = frame_rate
+#
+#         self.surface = pygame.display.set_mode((width, height))
+#         self.clock = pygame.time.Clock()
+#
+#         self.background_color = background_color
+#
+#         self.game_active = False
+#
+#         pygame.init()
+#
+#         self.update_caption()
+#
+#     def update_caption(self):
+#         pygame.display.set_caption("{} [{} fps]".format(self.caption, int(self.clock.get_fps())))
+#
+#     def
+#
+#     def update(self):
+#         pass
+#
+#     def draw(self):
+#         pass
+#
+#     def run(self):
+#         self.update()
+#         self.draw()
+#
+#         pygame.display.update()
+#         self.clock.tick(self.frame_rate)
+
 FPS = 60
 WIDTH = 600  # ширина экрана
 HEIGHT = 600  # высота экрана
