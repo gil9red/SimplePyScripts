@@ -56,7 +56,7 @@ while True:
     if is_pressed[pygame.K_DOWN]:
         y += step
 
-    pygame.display.set_caption("move_rect [{} fps]".format(int(clock.get_fps())))
+    pygame.display.set_caption("move_circle [{} fps]".format(int(clock.get_fps())))
 
     clock.tick(FPS)
     pygame.event.pump()
