@@ -50,6 +50,7 @@ class Ball:
         return self.x + self.r
 
 
+# TODO: https://habr.com/post/347138/
 # class Game:
 #     def __init__(self, width: int, height: int, caption='Balls!', background_color=(255, 255, 255), frame_rate=60):
 #         self.width = width
