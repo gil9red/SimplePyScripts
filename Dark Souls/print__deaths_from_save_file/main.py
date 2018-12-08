@@ -40,7 +40,7 @@ def get_chars_and_deaths(file_name: str) -> list:
 
 
 if __name__ == '__main__':
-    # C:\Users\<current_user>\Documents\NBGI\DarkSouls\<player_name>\DRAKS0005.sl2
+    # C:\Users\<CURRENT_USER>\Documents\NBGI\DarkSouls\<PLAYER_NAME>\DRAKS0005.sl2
     file_name = 'DRAKS0005.sl2'
 
     chars = get_chars_and_deaths(file_name)
