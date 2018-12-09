@@ -110,3 +110,12 @@ if __name__ == '__main__':
     number_all_ep_s1_2, _, number_filler_ep_s1_2, precent_filler_s1_2 = calc_statistic(ep_chapters_s1_2)
     print(f'Season 1+2.\n'
           f'    Total: {number_all_ep_s1_2}, fillers: {number_filler_ep_s1_2} ({precent_filler_s1_2:.1f}%)\n')
+
+# Season 1.
+#     Total: 220, fillers: 93 (42.3%)
+#
+# Season 2.
+#     Total: 500, fillers: 187 (37.4%)
+#
+# Season 1+2.
+#     Total: 720, fillers: 280 (38.9%)
