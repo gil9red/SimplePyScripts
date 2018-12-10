@@ -97,6 +97,8 @@ class Game:
                 ball.draw(self.screen)
                 ball.update()
 
+                # TODO: определять глубину проникновения шарика за границы и выталкивать его перед сменой вектора движения
+
                 # Условия отскакивания шарика от левого и правого края
                 if ball.left <= 0 or ball.right >= self.width:
                     ball.v_x = -ball.v_x
