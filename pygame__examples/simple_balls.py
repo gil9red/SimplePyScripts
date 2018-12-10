@@ -73,14 +73,6 @@ class Game:
     def update_caption(self):
         pygame.display.set_caption("{} [{} fps]".format(self.caption, int(self.clock.get_fps())))
 
-    def update(self):
-        for o in self.balls:
-            o.update()
-
-    def draw(self):
-        for o in self.balls:
-            o.draw(self.screen)
-
     def handle_events(self):
         # Получение всех событий
         for event in pygame.event.get():
