@@ -14,9 +14,9 @@ class MyHighlighter(QSyntaxHighlighter):
         char_format.setForeground(Qt.darkMagenta)
 
         expression = QRegularExpression(r"\b(cos|sin)\b")
-        i = expression.globalMatch(text)
-        while i.hasNext():
-            match = i.next()
+        it = expression.globalMatch(text)
+        while it.hasNext():
+            match = it.next()
             self.setFormat(match.capturedStart(), match.capturedLength(), char_format)
 
 
