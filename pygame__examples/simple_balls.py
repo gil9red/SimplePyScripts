@@ -81,21 +81,23 @@ class Game:
         for o in self.balls:
             o.draw(self.surface)
 
+    def handle_events(self):
+        # Получение всех событий
+        for event in pygame.event.get():
+            # Проверка события "Выход"
+            if event.type == pygame.QUIT:
+                self.game_active = False
+                break
+
+        is_pressed = pygame.key.get_pressed()
+        if is_pressed[pygame.K_ESCAPE]:
+            self.game_active = False
+
     def run(self):
         self.game_active = True
 
-        while True:
-            for event in pygame.event.get():  # получение всех событий
-                if event.type == pygame.QUIT:  # проверка события "Выход"
-                    self.game_active = False
-                    break
-
-            is_pressed = pygame.key.get_pressed()
-            if is_pressed[pygame.K_ESCAPE]:
-                self.game_active = False
-
-            if not self.game_active:
-                break
+        while self.game_active:
+            self.handle_events()
 
             self.surface.fill(self.background_color)
 
@@ -115,7 +117,6 @@ class Game:
             pygame.display.update()
 
             self.clock.tick(self.frame_rate)
-            pygame.event.pump()
 
     def append_random_ball(self):
         def get_random_vector():

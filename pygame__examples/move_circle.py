@@ -28,8 +28,10 @@ step = 4
 game_active = True
 
 while True:
-    for event in pygame.event.get():  # получение всех событий
-        if event.type == pygame.QUIT:  # проверка события "Выход"
+    # Получение всех событий
+    for event in pygame.event.get():
+        # Проверка события "Выход"
+        if event.type == pygame.QUIT:
             game_active = False
             break
 
@@ -59,5 +61,3 @@ while True:
     pygame.display.set_caption("move_circle [{} fps]".format(int(clock.get_fps())))
 
     clock.tick(FPS)
-    pygame.event.pump()
-
