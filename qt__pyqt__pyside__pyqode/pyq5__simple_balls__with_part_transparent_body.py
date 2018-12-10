@@ -142,7 +142,7 @@ if __name__ == '__main__':
 
     WIDTH = 600   # ширина экрана
     HEIGHT = 600  # высота экрана
-    BALL_NUMBER = 100
+    BALL_NUMBER = 1000
 
     w = Widget()
     w.resize(WIDTH, HEIGHT)
