@@ -15,7 +15,7 @@ WHITE = (255, 255, 255)
 BLUE = (0, 70, 225)
 
 pygame.init()
-sc = pygame.display.set_mode((W, H))
+screen = pygame.display.set_mode((W, H))
 clock = pygame.time.Clock()
 
 # координаты и радиус круга
@@ -38,9 +38,9 @@ while True:
     if not game_active:
         break
 
-    sc.fill(WHITE)
+    screen.fill(WHITE)
 
-    pygame.draw.circle(sc, BLUE, (x, y), r)
+    pygame.draw.circle(screen, BLUE, (x, y), r)
 
     pygame.display.update()
 

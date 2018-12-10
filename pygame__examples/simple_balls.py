@@ -23,11 +23,11 @@ class Ball:
         self.x += self.v_x
         self.y += self.v_y
 
-    def draw(self, surface):
-        pygame.draw.circle(surface, self.color, self.center, self.r)
+    def draw(self, screen):
+        pygame.draw.circle(screen, self.color, self.center, self.r)
 
         # Нарисуем поверх первого, прозрачный второй с границей (параметр width)
-        pygame.draw.circle(surface, (0, 0, 0), self.center, self.r, 1)
+        pygame.draw.circle(screen, (0, 0, 0), self.center, self.r, 1)
 
     @property
     def center(self):
@@ -56,7 +56,7 @@ class Game:
         self.height = height
         self.frame_rate = frame_rate
 
-        self.surface = pygame.display.set_mode((width, height))
+        self.screen = pygame.display.set_mode((width, height))
         self.clock = pygame.time.Clock()
 
         self.caption = caption
@@ -79,7 +79,7 @@ class Game:
 
     def draw(self):
         for o in self.balls:
-            o.draw(self.surface)
+            o.draw(self.screen)
 
     def handle_events(self):
         # Получение всех событий
@@ -99,10 +99,10 @@ class Game:
         while self.game_active:
             self.handle_events()
 
-            self.surface.fill(self.background_color)
+            self.screen.fill(self.background_color)
 
             for ball in self.balls:
-                ball.draw(self.surface)
+                ball.draw(self.screen)
                 ball.update()
 
                 # Условия отскакивания шарика от левого и правого края
