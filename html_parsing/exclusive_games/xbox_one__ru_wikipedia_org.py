@@ -18,4 +18,4 @@ df = pd.read_html(rs.text, header=0)[2]
 exclusive_games_df = df[~df['Эксклюзивность'].str.contains('(?i)Microsoft|Нет')]
 
 result_df = exclusive_games_df[['Название', 'Жанр(ы)']]
-print(result_df.to_string())
+print(result_df.to_string(index=False))
