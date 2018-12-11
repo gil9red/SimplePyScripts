@@ -4,16 +4,11 @@
 __author__ = 'ipetrash'
 
 
-# pip install pandas
-import pandas as pd
-
-import requests
+from common import get_df_list__no_sub
 
 
 url = 'https://ru.wikipedia.org/wiki/Список_игр_на_Xbox_One'
-rs = requests.get(url)
-
-df = pd.read_html(rs.text, header=0)[2]
+df = get_df_list__no_sub(url)[2]
 
 exclusive_games_df = df[~df['Эксклюзивность'].str.contains('(?i)Microsoft|Нет')]
 

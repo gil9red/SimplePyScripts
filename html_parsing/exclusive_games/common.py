@@ -8,6 +8,9 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+# pip install pandas
+import pandas as pd
+
 
 def get_game_list(root, class_name: str) -> list:
     def process_title(title: str) -> str:
@@ -34,3 +37,15 @@ def get_game_list_from(url: str, *class_names) -> list:
     exclusive_games.sort()
 
     return exclusive_games
+
+
+def get_df_list__no_sub(url):
+    rs = requests.get(url)
+
+    # Удаление сносок
+    root = BeautifulSoup(rs.content, 'html.parser')
+    for sub in root.select('sup'):
+        sub.decompose()
+
+    df_list = pd.read_html(str(root), header=0)
+    return df_list
