@@ -71,23 +71,18 @@ class Widget(QWidget):
 
         self.balls: List[Ball] = []
 
+        timeout = 1000 // 60
+
+        # Таймер обновления движения и обработки столкновения шариков
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.tick)
+        self.timer.start(timeout)
+
         layout = QVBoxLayout()
         layout.addStretch()
         layout.addWidget(QPushButton("Закрыть окно", clicked=self.close))
 
         self.setLayout(layout)
-
-        timeout = 1000 // 60
-
-        # Таймер обновления движения и обработки столкновения шариков
-        self.timer_update_balls = QTimer()
-        self.timer_update_balls.timeout.connect(self.update_balls)
-        self.timer_update_balls.start(timeout)
-
-        # Таймер обновления экрана
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.update)
-        self.timer.start(timeout)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -104,7 +99,7 @@ class Widget(QWidget):
         delta = event.pos() - self._old_pos
         self.move(self.pos() + delta)
 
-    def update_balls(self):
+    def tick(self):
         for ball in self.balls:
             ball.update()
 
@@ -115,6 +110,9 @@ class Widget(QWidget):
             # Условия отскакивания шарика верхнего и нижнего края
             if ball.top <= 0 or ball.bottom >= self.height():
                 ball.v_y = -ball.v_y
+
+        # Вызов перерисовки
+        self.update()
 
     def paintEvent(self, event):
         painter = QPainter(self)
