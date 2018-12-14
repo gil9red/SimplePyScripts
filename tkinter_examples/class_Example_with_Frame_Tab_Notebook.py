@@ -4,10 +4,11 @@
 __author__ = 'ipetrash'
 
 
-from tkinter import Tk, Frame, ttk
+import tkinter as tk
+from tkinter import ttk
 
 
-class Example(Frame):
+class Example(tk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
@@ -28,7 +29,7 @@ class Example(Frame):
 
 
 if __name__ == '__main__':
-    root = Tk()
+    root = tk.Tk()
     root.title('Example')
     ex = Example(root)
     root.geometry("300x250+300+300")

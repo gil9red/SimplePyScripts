@@ -4,11 +4,10 @@
 __author__ = 'ipetrash'
 
 
-from tkinter import Tk, Frame, Label
 import tkinter as tk
 
 
-class Example(Frame):
+class Example(tk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
@@ -26,7 +25,7 @@ class Example(Frame):
             self.lb.pack(pady=15)
 
         self.var = tk.StringVar()
-        self.label = Label(self, text=0, textvariable=self.var)
+        self.label = tk.Label(self, text=0, textvariable=self.var)
         self.label.pack()
 
     def on_select(self, val):
@@ -38,7 +37,7 @@ class Example(Frame):
 
 
 if __name__ == '__main__':
-    root = Tk()
+    root = tk.Tk()
     root.title('Example')
     ex = Example(root)
     root.geometry("300x250+300+300")
