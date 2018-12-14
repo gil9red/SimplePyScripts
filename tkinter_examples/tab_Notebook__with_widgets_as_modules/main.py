@@ -42,5 +42,5 @@ if __name__ == '__main__':
     root = Tk()
     root.title('version')
     ex = MainWindow(root)
-    root.geometry("600x500")
+    root.geometry("300x250")
     root.mainloop()
