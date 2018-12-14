@@ -11,8 +11,8 @@ import tkinter as tk
 
 
 class Application(tk.Frame):
-    def __init__(self, master=None):
-        tk.Frame.__init__(self, master)
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.pack()
         self.createWidgets()
 
@@ -29,6 +29,7 @@ class Application(tk.Frame):
         print("hi there, everyone!")
 
 
-root = tk.Tk()
-app = Application(master=root)
-app.mainloop()
+if __name__ == '__main__':
+    root = tk.Tk()
+    app = Application(parent=root)
+    app.mainloop()
