@@ -5,7 +5,7 @@ __author__ = 'ipetrash'
 
 
 from tkinter import Tk, Frame, Label
-from tkinter import BOTH, Listbox, StringVar, END
+import tkinter as tk
 
 
 class Example(Frame):
@@ -15,19 +15,17 @@ class Example(Frame):
         self.init_ui()
 
     def init_ui(self):
-        self.pack(fill=BOTH, expand=1)
+        self.pack(fill=tk.BOTH, expand=1)
 
         acts = ['Scarlett Johansson', 'Rachel Weiss', 'Natalie Portman', 'Jessica Alba']
 
-        self.lb = Listbox(self)
+        self.lb = tk.Listbox(self)
         for i in acts:
-            self.lb.insert(END, i)
-
+            self.lb.insert(tk.END, i)
             self.lb.bind("<<ListboxSelect>>", self.on_select)
-
             self.lb.pack(pady=15)
 
-        self.var = StringVar()
+        self.var = tk.StringVar()
         self.label = Label(self, text=0, textvariable=self.var)
         self.label.pack()
 
