@@ -16,7 +16,7 @@ class Example(tk.Frame):
         self.init_ui()
 
     def init_ui(self):
-        self.notebook = ttk.Notebook(width=1000, height=700)
+        self.notebook = ttk.Notebook(self, width=1000, height=700)
 
         a_tab = ttk.Frame(self.notebook)
         b_tab = ttk.Frame(self.notebook)
@@ -27,6 +27,7 @@ class Example(tk.Frame):
         self.notebook.add(c_tab, text="Notebook C")
 
         self.notebook.pack()
+        self.pack()
 
 
 if __name__ == '__main__':

@@ -29,6 +29,8 @@ class Example(tk.Frame):
         self.label = tk.Label(self, text=0, textvariable=self.var)
         self.label.pack()
 
+        self.pack()
+
     def on_select(self, val):
         sender = val.widget
         idx = sender.curselection()
