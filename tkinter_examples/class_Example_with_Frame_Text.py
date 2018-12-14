@@ -5,7 +5,6 @@ __author__ = 'ipetrash'
 
 
 import tkinter as tk
-from tkinter import ttk
 
 
 class Example(tk.Frame):
