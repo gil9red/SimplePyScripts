@@ -12,9 +12,9 @@ class Example(Frame):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
+    def init_ui(self):
         self.parent.title("Listbox")
         self.pack(fill=BOTH, expand=1)
 
