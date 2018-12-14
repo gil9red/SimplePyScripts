@@ -15,18 +15,17 @@ class Example(Frame):
         self.init_ui()
 
     def init_ui(self):
-        self.parent.title("Listbox")
         self.pack(fill=BOTH, expand=1)
 
         acts = ['Scarlett Johansson', 'Rachel Weiss', 'Natalie Portman', 'Jessica Alba']
 
-        lb = Listbox(self)
+        self.lb = Listbox(self)
         for i in acts:
-            lb.insert(END, i)
+            self.lb.insert(END, i)
 
-        lb.bind("<<ListboxSelect>>", self.on_select)
+            self.lb.bind("<<ListboxSelect>>", self.on_select)
 
-        lb.pack(pady=15)
+            self.lb.pack(pady=15)
 
         self.var = StringVar()
         self.label = Label(self, text=0, textvariable=self.var)
@@ -42,6 +41,7 @@ class Example(Frame):
 
 if __name__ == '__main__':
     root = Tk()
+    root.title('Example')
     ex = Example(root)
     root.geometry("300x250+300+300")
     root.mainloop()
