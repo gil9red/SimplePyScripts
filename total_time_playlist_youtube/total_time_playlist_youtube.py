@@ -13,6 +13,10 @@ def count_total_playlist_time(url, proxy=None, proxy_type='http'):
     if proxy:
         g.setup(proxy=proxy, proxy_type=proxy_type)
 
+    # Передаю невалидный User-Agent чтобы ютуб вернул отрендеренную страницу (данные в HTML будут)
+    # а не страницу с скриптом -- данные будут как объект javacript
+    g.setup(headers={'User-Agent': 'null'})
+
     g.go(url)
 
     video_list = g.doc.select('//*[@class="pl-video yt-uix-tile "]')
@@ -23,7 +27,7 @@ def count_total_playlist_time(url, proxy=None, proxy_type='http'):
     print('Playlist:')
     for i, (video, time) in enumerate(zip(video_list, time_list), 1):
         time_str = time.text()
-        print('{}. {} ({})'.format(i, video.attr('data-title'), time_str))
+        print('  {}. {} ({})'.format(i, video.attr('data-title'), time_str))
 
         time_split = time_str.split(':')
         if len(time_split) == 3:
@@ -42,6 +46,7 @@ if __name__ == '__main__':
     url = 'https://www.youtube.com/playlist?list=PLqf5JRBicHXnV4fUNPJtE2YFAjPMHRX4K'
     # url = 'https://www.youtube.com/playlist?list=PLKom48yw6lJpyYN2Q_zmss68ntjzxxpHd'
     url = 'https://www.youtube.com/playlist?list=PLvX4-HTvsLu-j-K9n14cV5OvxwBl_8Won'
+    url = 'https://www.youtube.com/playlist?list=PLndO6DOY2cLyxQYX7pkDspTJ42JWx07AO'
 
     import config
     total_seconds = count_total_playlist_time(url, config.proxy, config.proxy_type)
