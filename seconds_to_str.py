@@ -5,8 +5,8 @@ __author__ = 'ipetrash'
 
 
 def seconds_to_str(seconds: int) -> str:
-    mm, ss = divmod(seconds, 60)
-    hh, mm = divmod(mm, 60)
+    hh, mm = divmod(seconds, 3600)
+    mm, ss = divmod(mm, 60)
     return "%02d:%02d:%02d" % (hh, mm, ss)
 
 
@@ -25,3 +25,6 @@ if __name__ == '__main__':
 
     print(seconds_to_str(8888))  # 02:28:08
     assert seconds_to_str(8888) == '02:28:08'
+
+    print(seconds_to_str(27355))  # 07:35:55
+    assert seconds_to_str(27355) == '07:35:55'
