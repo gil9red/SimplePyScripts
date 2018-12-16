@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-import sys
+from datetime import timedelta
 
 try:
     from PyQt5.QtWidgets import *
@@ -16,7 +16,8 @@ except:
     except:
         from PySide.QtGui import *
 
-from total_time_playlist_youtube import count_total_playlist_time
+
+from total_time_playlist_youtube import parse_playlist_time
 import config
 
 
@@ -32,7 +33,7 @@ class MainWindow(QMainWindow):
         self.go_button = QPushButton('Go!')
         self.go_button.clicked.connect(self.go)
 
-        self.result_label = QLabel()
+        self.result_text = QTextEdit()
 
         layout = QHBoxLayout()
         layout.addWidget(self.url_line_edit)
@@ -40,7 +41,7 @@ class MainWindow(QMainWindow):
 
         main_layout = QVBoxLayout()
         main_layout.addLayout(layout)
-        main_layout.addWidget(self.result_label)
+        main_layout.addWidget(self.result_text)
 
         central_widget = QWidget()
         central_widget.setLayout(main_layout)
@@ -49,23 +50,26 @@ class MainWindow(QMainWindow):
     def go(self):
         try:
             url = self.url_line_edit.text()
-            total_seconds = count_total_playlist_time(url, config.proxy, config.proxy_type)
+            total_seconds, items = parse_playlist_time(url, config.proxy, config.proxy_type)
 
-            from datetime import timedelta
-            text = 'Total time: {} ({} total seconds).'.format(timedelta(seconds=total_seconds), total_seconds)
-            print('\n' + text)
+            text = 'Playlist:\n'
 
-            self.result_label.setText(text)
+            for i, (title, time) in enumerate(items, 1):
+                text += '  {}. {} ({})\n'.format(i, title, time)
+
+            text += '\nTotal time: {} ({} total seconds).'.format(timedelta(seconds=total_seconds), total_seconds)
+
+            self.result_text.setPlainText(text)
 
         except Exception as e:
             import traceback
             text = str(e) + '\n\n' + traceback.format_exc()
 
-            self.result_label.setText(text)
+            self.result_text.setPlainText(text)
 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
+    app = QApplication([])
 
     mw = MainWindow()
     mw.show()

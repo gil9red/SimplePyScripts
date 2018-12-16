@@ -4,8 +4,11 @@
 __author__ = 'ipetrash'
 
 
+from typing import List, Tuple
+
+
 # TODO: возможно, если роликов будет слишком много, не все вернутся из запроса
-def count_total_playlist_time(url, proxy=None, proxy_type='http'):
+def parse_playlist_time(url, proxy=None, proxy_type='http') -> (int, List[Tuple[str, str]]):
     """Функция парсит страницу плейлиста и подсчитывает сумму продолжительности роликов."""
 
     import grab
@@ -23,11 +26,13 @@ def count_total_playlist_time(url, proxy=None, proxy_type='http'):
     time_list = g.doc.select('//*[@class="timestamp"]')
 
     total_seconds = 0
+    items = []
 
-    print('Playlist:')
-    for i, (video, time) in enumerate(zip(video_list, time_list), 1):
+    for title, time in zip(video_list, time_list):
+        title = title.attr('data-title')
         time_str = time.text()
-        print('  {}. {} ({})'.format(i, video.attr('data-title'), time_str))
+
+        items.append((title, time_str))
 
         time_split = time_str.split(':')
         if len(time_split) == 3:
@@ -39,7 +44,7 @@ def count_total_playlist_time(url, proxy=None, proxy_type='http'):
         else:
             total_seconds += int(time_split[0])
 
-    return total_seconds
+    return total_seconds, items
 
 
 if __name__ == '__main__':
@@ -49,7 +54,12 @@ if __name__ == '__main__':
     url = 'https://www.youtube.com/playlist?list=PLndO6DOY2cLyxQYX7pkDspTJ42JWx07AO'
 
     import config
-    total_seconds = count_total_playlist_time(url, config.proxy, config.proxy_type)
+    total_seconds, items = parse_playlist_time(url, config.proxy, config.proxy_type)
+
+    print('Playlist:')
+
+    for i, (title, time) in enumerate(items, 1):
+        print('  {}. {} ({})'.format(i, title, time))
 
     from datetime import timedelta
     print('\nTotal time: {} ({} total seconds).'.format(timedelta(seconds=total_seconds), total_seconds))
