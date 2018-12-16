@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
 
     def go(self):
         try:
-            from total_time_playlist_youtube import count_total_playlist_time
+            from total_time_playlist_youtube__grab import count_total_playlist_time
             import config
 
             url = self.url_line_edit.text()
