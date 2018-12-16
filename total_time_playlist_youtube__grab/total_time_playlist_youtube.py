@@ -7,6 +7,13 @@ __author__ = 'ipetrash'
 from typing import List, Tuple
 
 
+# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/f0403620f7948306ad9e34a373f2aabc0237fb2a/seconds_to_str.py
+def seconds_to_str(seconds: int) -> str:
+    hh, mm = divmod(seconds, 3600)
+    mm, ss = divmod(mm, 60)
+    return "%02d:%02d:%02d" % (hh, mm, ss)
+
+
 # TODO: возможно, если роликов будет слишком много, не все вернутся из запроса
 def parse_playlist_time(url, proxy=None, proxy_type='http') -> (int, List[Tuple[str, str]]):
     """Функция парсит страницу плейлиста и подсчитывает сумму продолжительности роликов."""
@@ -61,5 +68,5 @@ if __name__ == '__main__':
     for i, (title, time) in enumerate(items, 1):
         print('  {}. {} ({})'.format(i, title, time))
 
-    from datetime import timedelta
-    print('\nTotal time: {} ({} total seconds).'.format(timedelta(seconds=total_seconds), total_seconds))
+    print()
+    print('Total time: {} ({} total seconds).'.format(seconds_to_str(total_seconds), total_seconds))
