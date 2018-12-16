@@ -6,35 +6,24 @@ __author__ = 'ipetrash'
 
 from typing import List, Tuple
 
+import config
 
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/f0403620f7948306ad9e34a373f2aabc0237fb2a/seconds_to_str.py
-def seconds_to_str(seconds: int) -> str:
-    hh, mm = divmod(seconds, 3600)
-    mm, ss = divmod(mm, 60)
-    return "%02d:%02d:%02d" % (hh, mm, ss)
+# Для импорта common
+import sys
+sys.path.append('..')
 
-
-def time_to_seconds(time_str: str) -> int:
-    time_split = list(map(int, time_str.split(':')))
-
-    if len(time_split) == 3:
-        h, m, s = time_split
-        return h * 60 * 60 + m * 60 + s
-
-    elif len(time_split) == 2:
-        m, s = time_split
-        return m * 60 + s
-
-    else:
-        return time_split[0]
+from common import seconds_to_str, time_to_seconds
 
 
 # TODO: возможно, если роликов будет слишком много, не все вернутся из запроса
-def parse_playlist_time(url, proxy=None, proxy_type='http') -> (int, List[Tuple[str, str]]):
+def parse_playlist_time(url: str) -> (int, List[Tuple[str, str]]):
     """Функция парсит страницу плейлиста и подсчитывает сумму продолжительности роликов."""
 
     import grab
     g = grab.Grab()
+
+    proxy, proxy_type = config.proxy, config.proxy_type
+
     if proxy:
         g.setup(proxy=proxy, proxy_type=proxy_type)
 
@@ -61,13 +50,12 @@ def parse_playlist_time(url, proxy=None, proxy_type='http') -> (int, List[Tuple[
 
 
 if __name__ == '__main__':
-    url = 'https://www.youtube.com/playlist?list=PLqf5JRBicHXnV4fUNPJtE2YFAjPMHRX4K'
+    # url = 'https://www.youtube.com/playlist?list=PLqf5JRBicHXnV4fUNPJtE2YFAjPMHRX4K'
     # url = 'https://www.youtube.com/playlist?list=PLKom48yw6lJpyYN2Q_zmss68ntjzxxpHd'
-    url = 'https://www.youtube.com/playlist?list=PLvX4-HTvsLu-j-K9n14cV5OvxwBl_8Won'
+    # url = 'https://www.youtube.com/playlist?list=PLvX4-HTvsLu-j-K9n14cV5OvxwBl_8Won'
     url = 'https://www.youtube.com/playlist?list=PLndO6DOY2cLyxQYX7pkDspTJ42JWx07AO'
 
-    import config
-    total_seconds, items = parse_playlist_time(url, config.proxy, config.proxy_type)
+    total_seconds, items = parse_playlist_time(url)
 
     print('Playlist:')
 

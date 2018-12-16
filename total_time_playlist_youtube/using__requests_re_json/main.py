@@ -10,12 +10,11 @@ import re
 import json
 import requests
 
+# Для импорта common
+import sys
+sys.path.append('..')
 
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/f0403620f7948306ad9e34a373f2aabc0237fb2a/seconds_to_str.py
-def seconds_to_str(seconds: int) -> str:
-    hh, mm = divmod(seconds, 3600)
-    mm, ss = divmod(mm, 60)
-    return "%02d:%02d:%02d" % (hh, mm, ss)
+from common import seconds_to_str
 
 
 def get_video_list(data: dict) -> list:
@@ -33,7 +32,7 @@ def get_ytInitialData(text: str) -> dict:
 
 
 # TODO: возможно, если роликов будет слишком много, не все вернутся из запроса
-def parse_playlist_time(url) -> (int, List[Tuple[str, str]]):
+def parse_playlist_time(url: str) -> (int, List[Tuple[str, str]]):
     """Функция парсит страницу плейлиста и подсчитывает сумму продолжительности роликов."""
 
     # Передаю User-Agent чтобы ютуб вернул страницу с скриптом -- данные будут как объект javacript

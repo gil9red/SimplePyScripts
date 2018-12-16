@@ -4,8 +4,6 @@
 __author__ = 'ipetrash'
 
 
-from datetime import timedelta
-
 try:
     from PyQt5.QtWidgets import *
 
@@ -17,8 +15,13 @@ except:
         from PySide.QtGui import *
 
 
-from total_time_playlist_youtube import parse_playlist_time, seconds_to_str
-import config
+# Для импорта из using__requests_re_json/main.py
+import sys
+sys.path.append('using__requests_re_json')
+
+# Функцию parse_playlist_time можно получить из using__grab, using__requests_bs4 и using__requests_re_json
+from main import parse_playlist_time
+from common import seconds_to_str
 
 
 class MainWindow(QMainWindow):
@@ -50,7 +53,7 @@ class MainWindow(QMainWindow):
     def go(self):
         try:
             url = self.url_line_edit.text()
-            total_seconds, items = parse_playlist_time(url, config.proxy, config.proxy_type)
+            total_seconds, items = parse_playlist_time(url)
 
             text = 'Playlist:\n'
 
@@ -75,6 +78,6 @@ if __name__ == '__main__':
     mw.show()
 
     # Пусть хоть что-то будет по умолчанию
-    mw.url_line_edit.setText('https://www.youtube.com/playlist?list=PLvX4-HTvsLu-j-K9n14cV5OvxwBl_8Won')
+    mw.url_line_edit.setText('https://www.youtube.com/playlist?list=PLndO6DOY2cLyxQYX7pkDspTJ42JWx07AO')
 
     app.exec_()
