@@ -69,4 +69,4 @@ if __name__ == '__main__':
         print('  {}. {} ({})'.format(i, title, time))
 
     print()
-    print('Total time: {} ({} total seconds).'.format(seconds_to_str(total_seconds), total_seconds))
+    print('Total time: {} ({} total seconds)'.format(seconds_to_str(total_seconds), total_seconds))
