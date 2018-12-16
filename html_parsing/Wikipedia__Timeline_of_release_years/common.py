@@ -4,15 +4,27 @@
 __author__ = 'ipetrash'
 
 
+from typing import Callable, Any
+
 import requests
 from bs4 import BeautifulSoup
 
 
-def get_parsed_two_column_wikitable(url: str) -> (str, str):
+def get_parsed_two_column_wikitable(url: str, is_match_func: Callable[[Any], bool]=lambda table: True) -> (str, str):
     rs = requests.get(url)
     root = BeautifulSoup(rs.content, 'html.parser')
 
-    table = root.select_one('.wikitable')
+    table = None
+    for t in root.select('.wikitable'):
+        if not t.caption:
+            continue
+
+        if is_match_func(t):
+            table = t
+            break
+
+    if not table:
+        raise Exception('Not found table "Timeline of releases"')
 
     items = []
 
