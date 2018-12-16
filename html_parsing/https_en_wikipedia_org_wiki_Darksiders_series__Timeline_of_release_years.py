@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# Хронология выхода игр
+
+
 import requests
 from bs4 import BeautifulSoup
 
