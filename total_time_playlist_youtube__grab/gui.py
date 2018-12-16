@@ -6,7 +6,18 @@ __author__ = 'ipetrash'
 
 import sys
 
-from PySide.QtGui import *
+try:
+    from PyQt5.QtWidgets import *
+
+except:
+    try:
+        from PyQt4.QtGui import *
+
+    except:
+        from PySide.QtGui import *
+
+from total_time_playlist_youtube import count_total_playlist_time
+import config
 
 
 class MainWindow(QMainWindow):
@@ -37,9 +48,6 @@ class MainWindow(QMainWindow):
 
     def go(self):
         try:
-            from total_time_playlist_youtube__grab import count_total_playlist_time
-            import config
-
             url = self.url_line_edit.text()
             total_seconds = count_total_playlist_time(url, config.proxy, config.proxy_type)
 
