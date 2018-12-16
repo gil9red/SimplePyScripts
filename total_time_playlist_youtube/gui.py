@@ -15,12 +15,11 @@ except:
         from PySide.QtGui import *
 
 
-# Для импорта из using__requests_re_json/main.py
-import sys
-sys.path.append('using__requests_re_json')
-
-# Функцию parse_playlist_time можно получить из using__grab, using__requests_bs4 и using__requests_re_json
-from main import parse_playlist_time
+# Функцию parse_playlist_time можно получить из:
+#   main__using__grab
+#   main__using__requests_bs4
+#   main__using__requests_re_json
+from main__using__requests_re_json import parse_playlist_time
 from common import seconds_to_str
 
 

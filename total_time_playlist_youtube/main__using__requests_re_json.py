@@ -10,10 +10,6 @@ import re
 import json
 import requests
 
-# Для импорта common
-import sys
-sys.path.append('..')
-
 from common import seconds_to_str
 
 
