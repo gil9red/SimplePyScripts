@@ -14,6 +14,21 @@ def seconds_to_str(seconds: int) -> str:
     return "%02d:%02d:%02d" % (hh, mm, ss)
 
 
+def time_to_seconds(time_str: str) -> int:
+    time_split = list(map(int, time_str.split(':')))
+
+    if len(time_split) == 3:
+        h, m, s = time_split
+        return h * 60 * 60 + m * 60 + s
+
+    elif len(time_split) == 2:
+        m, s = time_split
+        return m * 60 + s
+
+    else:
+        return time_split[0]
+
+
 # TODO: возможно, если роликов будет слишком много, не все вернутся из запроса
 def parse_playlist_time(url, proxy=None, proxy_type='http') -> (int, List[Tuple[str, str]]):
     """Функция парсит страницу плейлиста и подсчитывает сумму продолжительности роликов."""
@@ -38,18 +53,9 @@ def parse_playlist_time(url, proxy=None, proxy_type='http') -> (int, List[Tuple[
     for title, time in zip(video_list, time_list):
         title = title.attr('data-title')
         time_str = time.text()
-
         items.append((title, time_str))
 
-        time_split = time_str.split(':')
-        if len(time_split) == 3:
-            h, m, s = map(int, time_split)
-            total_seconds += h * 60 * 60 + m * 60 + s
-        elif len(time_split) == 2:
-            m, s = map(int, time_split)
-            total_seconds += m * 60 + s
-        else:
-            total_seconds += int(time_split[0])
+        total_seconds += time_to_seconds(time_str)
 
     return total_seconds, items
 
