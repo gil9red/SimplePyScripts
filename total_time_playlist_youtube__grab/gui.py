@@ -17,7 +17,7 @@ except:
         from PySide.QtGui import *
 
 
-from total_time_playlist_youtube import parse_playlist_time
+from total_time_playlist_youtube import parse_playlist_time, seconds_to_str
 import config
 
 
@@ -57,7 +57,7 @@ class MainWindow(QMainWindow):
             for i, (title, time) in enumerate(items, 1):
                 text += '  {}. {} ({})\n'.format(i, title, time)
 
-            text += '\nTotal time: {} ({} total seconds).'.format(timedelta(seconds=total_seconds), total_seconds)
+            text += '\nTotal time: {} ({} total seconds).'.format(seconds_to_str(total_seconds), total_seconds)
 
             self.result_text.setPlainText(text)
 
