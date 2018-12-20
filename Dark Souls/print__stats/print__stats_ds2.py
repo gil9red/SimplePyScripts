@@ -17,5 +17,11 @@ if __name__ == '__main__':
     print(f'items ({len(items)}): {items}')
     print()
 
+    # ['Адаптируемость', 'Вера', 'Жизненная сила', 'Интеллект', 'Ловкость', 'Сила', 'Стойкость', 'Уровень', 'Ученость', 'Физическая мощь']
+    stats_titles = [x[0] for x in items]
+    print(stats_titles)
+
+    print()
+
     for title, description in items:
         print('{:20}: {}'.format(title, repr(description)))

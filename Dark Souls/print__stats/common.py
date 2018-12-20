@@ -29,4 +29,6 @@ def get_parsed_two_column_table_stats(url: str) -> [(str, str)]:
 
         items.append((title, description))
 
+    items.sort(key=lambda x: x[0])
+
     return items
