@@ -12,7 +12,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def get_parsed_two_column_wikitable(url: str) -> (str, str):
+def get_parsed_two_column_wikitable(url: str) -> [(str, str)]:
     rs = requests.get(url)
     root = BeautifulSoup(rs.content, 'html.parser')
 
