@@ -56,6 +56,7 @@ if __name__ == '__main__':
         (582010, 'MONSTER HUNTER: WORLD'),
         (374320, 'DARK SOULS™ III'),
         (292030, 'The Witcher® 3: Wild Hunt'),
+        (418370, 'Resident Evil 7: Biohazard'),
     ]
     for game_id, name in game_id_name_list:
         achievements = get_achievements(game_id)
