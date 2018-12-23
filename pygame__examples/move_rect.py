@@ -34,16 +34,16 @@ while True:
     if pressed[pygame.K_ESCAPE] or done:
         break
 
-    if pressed[pygame.K_UP]:
+    if pressed[pygame.K_UP] or pressed[pygame.K_w]:
         y -= 3
 
-    if pressed[pygame.K_DOWN]:
+    if pressed[pygame.K_DOWN] or pressed[pygame.K_s]:
         y += 3
 
-    if pressed[pygame.K_LEFT]:
+    if pressed[pygame.K_LEFT] or pressed[pygame.K_a]:
         x -= 3
 
-    if pressed[pygame.K_RIGHT]:
+    if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
         x += 3
 
     screen.fill((0, 0, 0))

@@ -64,16 +64,16 @@ while True:
     if pressed[pygame.K_ESCAPE] or done:
         break
 
-    if pressed[pygame.K_UP] or hat_y == 1 or axis_y < -500:
+    if pressed[pygame.K_UP] or pressed[pygame.K_w] or hat_y == 1 or axis_y < -500:
         y -= 3
 
-    if pressed[pygame.K_DOWN] or hat_y == -1 or axis_y > 500:
+    if pressed[pygame.K_DOWN] or pressed[pygame.K_s] or hat_y == -1 or axis_y > 500:
         y += 3
 
-    if pressed[pygame.K_LEFT] or hat_x == -1 or axis_x < -500:
+    if pressed[pygame.K_LEFT] or pressed[pygame.K_a] or hat_x == -1 or axis_x < -500:
         x -= 3
 
-    if pressed[pygame.K_RIGHT] or hat_x == 1 or axis_x > 500:
+    if pressed[pygame.K_RIGHT] or pressed[pygame.K_d] or hat_x == 1 or axis_x > 500:
         x += 3
 
     screen.fill((0, 0, 0))
