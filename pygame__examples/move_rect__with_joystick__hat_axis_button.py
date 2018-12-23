@@ -26,17 +26,17 @@ else:
 
 screen = pygame.display.set_mode((400, 300))
 
-done = False
+game_active = True
 is_blue = True
 x = 100
 y = 100
 
 clock = pygame.time.Clock()
 
-while True:
+while game_active:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            done = True
+            game_active = False
             break
 
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
@@ -61,7 +61,7 @@ while True:
     pressed = pygame.key.get_pressed()
 
     # If Esc clicked
-    if pressed[pygame.K_ESCAPE] or done:
+    if pressed[pygame.K_ESCAPE] or not game_active:
         break
 
     if pressed[pygame.K_UP] or pressed[pygame.K_w] or hat_y == 1 or axis_y < -500:
