@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
+
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
+
+class HttpProcessor(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('content-type', 'text/html')
+        self.end_headers()
+        self.wfile.write(bytes("Hello!", 'utf-8'))
+
+
+if __name__ == '__main__':
+    server = HTTPServer(("localhost", 80), HttpProcessor)
+    server.serve_forever()
