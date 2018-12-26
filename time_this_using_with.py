@@ -4,25 +4,24 @@
 __author__ = 'ipetrash'
 
 
-class TimeThis(object):
+import time
+
+
+class TimeThis:
     def __init__(self, title="TimeThis"):
         self.title = title
         self.start_time = None
 
     def __enter__(self):
-        import time
         self.start_time = time.clock()
-
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
-        import time
         print('[{}] total time: {} sec'.format(self.title, time.clock() - self.start_time))
 
 
 if __name__ == '__main__':
     with TimeThis():
-        import time
         time.sleep(1)
 
     with TimeThis("Test"):
