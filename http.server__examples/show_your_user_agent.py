@@ -16,16 +16,7 @@ class HttpProcessor(BaseHTTPRequestHandler):
         self.send_header('content-type', 'text/html')
         self.end_headers()
 
-        html = f"""\
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
-    <body>
-        <div>{user_agent}</div>
-    </body>
-</html>
-"""
+        html = user_agent
 
         self.wfile.write(bytes(html, 'utf-8'))
 
