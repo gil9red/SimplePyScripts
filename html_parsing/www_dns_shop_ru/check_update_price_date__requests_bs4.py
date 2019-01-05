@@ -22,7 +22,7 @@ def go():
     for a in root.select('#price-list-downloader a'):
         href = a['href']
 
-        # Нужен вариант только с .xls ()
+        # Нужен вариант только с .xls (также там есть вариант с .zip)
         if not href.endswith('.xls'):
             continue
 
