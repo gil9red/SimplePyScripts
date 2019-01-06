@@ -44,7 +44,7 @@ def print_info(file_name: str):
         data = f.read(4)
         size = struct.unpack('<I', data)[0]
         print('size:', size)
-        print('Header:', SIZE_BY_HEADER_TYPE[size])
+        print('Header:', SIZE_BY_HEADER_TYPE.get(size, '<Unknown>'))
 
 
 if __name__ == '__main__':
