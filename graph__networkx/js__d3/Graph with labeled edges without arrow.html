@@ -23,6 +23,13 @@
  
     var svg = d3.select("body").append("svg").attr({"width":w,"height":h});
 
+    // nodes -- узлы графа
+    // links -- связи графа
+    // size  -- устанавливает доступный размер лейаута (ширину и высоту). В противном случае возвращает текущий размер, который по умолчанию равен [1, 1]
+    // linkDistance -- расстояние между связанными узлами (длину связей)
+    // charge  -- сила заряда узла
+    // theta   -- устанавливает критерий аппроксимации Барнса-Хата
+    // gravity -- устанавливает силу гравитационного притяжения
     var force = d3.layout.force()
         .nodes(dataset.nodes)
         .links(dataset.edges)
@@ -32,8 +39,6 @@
         .theta(0.1)
         .gravity(0.05)
         .start();
-
- 
 
     var edges = svg.selectAll("line")
       .data(dataset.edges)
