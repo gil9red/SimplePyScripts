@@ -41,7 +41,7 @@ def get_feeds_by_manga_chapters(url_rss: str) -> list:
     return feeds
 
 
-URL_USER_RSS = 'https://grouple.ru/user/rss/315828?filter='
+URL_USER_RSS = 'https://grouple.co/user/rss/315828?filter='
 FILE_NAME_LAST_FEED = 'last_feed'
 
 
