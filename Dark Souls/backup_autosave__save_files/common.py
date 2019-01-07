@@ -58,7 +58,6 @@ def backup_saves(path_ds_save, forced=False):
         shutil.copyfile(path_file_name, file_name_backup)
 
         log.debug(f"Saving backup: {file_name_backup}")
-        print()
 
 
 def run(path_ds_save, timeout_minutes=5):
@@ -68,7 +67,7 @@ def run(path_ds_save, timeout_minutes=5):
     backup_saves(path_ds_save, forced=True)
 
     while True:
-        print(f"Sleeping for {timeout_minutes} minutes\n")
+        print(f"\nSleeping for {timeout_minutes} minutes\n")
         time.sleep(timeout_minutes * 60)
 
         backup_saves(path_ds_save, False)
