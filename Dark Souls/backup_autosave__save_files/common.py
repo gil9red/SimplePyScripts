@@ -8,6 +8,7 @@ from glob import glob
 import os
 import time
 import shutil
+import traceback
 
 
 def get_logger(name):
@@ -67,7 +68,12 @@ def run(path_ds_save, timeout_minutes=5):
     backup_saves(path_ds_save, forced=True)
 
     while True:
-        print(f"\nSleeping for {timeout_minutes} minutes\n")
-        time.sleep(timeout_minutes * 60)
+        try:
+            print(f"\nSleeping for {timeout_minutes} minutes\n")
+            time.sleep(timeout_minutes * 60)
 
-        backup_saves(path_ds_save, False)
+            backup_saves(path_ds_save, False)
+
+        except:
+            print("ERROR:\n" + traceback.format_exc())
+            time.sleep(5 * 60)
