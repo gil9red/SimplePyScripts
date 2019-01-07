@@ -57,5 +57,5 @@ def run(path_ds_save: str, hotkey=HOTKEY):
     print(f'Using hotkey: {hotkey}\n')
 
     # Run hotkey
-    keyboard.add_hotkey(HOTKEY, lambda: backup_saves(path_ds_save))
+    keyboard.add_hotkey(hotkey, lambda: backup_saves(path_ds_save))
     keyboard.wait()
