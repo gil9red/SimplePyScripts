@@ -19,7 +19,7 @@ from utils import get_logger, backup
 log = get_logger(__file__)
 
 
-def backup_saves(path_ds_save, forced=False):
+def backup_saves(path_ds_save: str, forced=False):
     try:
         for path_file_name in glob(path_ds_save):
             log.debug(f"Check: {path_file_name}")
@@ -44,7 +44,7 @@ def backup_saves(path_ds_save, forced=False):
         time.sleep(5 * 60)
 
 
-def run(path_ds_save, timeout_minutes=5):
+def run(path_ds_save: str, timeout_minutes=5):
     # Example: r'~\Documents\NBGI\DarkSouls\*\DRAKS0005.sl2'
     path_ds_save = os.path.expanduser(path_ds_save)
 
