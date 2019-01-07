@@ -53,7 +53,7 @@ def run(path_ds_save: str, hotkey=HOTKEY):
     # Example: r'~\Documents\NBGI\DarkSouls\*\DRAKS0005.sl2'
     path_ds_save = os.path.expanduser(path_ds_save)
 
-    print(f'{path_ds_save}\n')
+    print(f'{path_ds_save}')
     print(f'Using hotkey: {hotkey}\n')
 
     # Run hotkey

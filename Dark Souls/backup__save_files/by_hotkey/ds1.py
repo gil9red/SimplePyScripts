@@ -10,4 +10,6 @@ PATH_DS_SAVE = r'~\Documents\NBGI\DarkSouls\*\DRAKS0005.sl2'
 
 if __name__ == '__main__':
     from common import run
+    # Example set another hotkey:
+    # run(PATH_DS_SAVE, hotkey="Ctrl + Alt + F + D + F3")
     run(PATH_DS_SAVE)
