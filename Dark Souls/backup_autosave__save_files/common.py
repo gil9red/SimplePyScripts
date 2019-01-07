@@ -32,8 +32,6 @@ def backup_saves(path_ds_save, forced=False):
     for path_file_name in glob(path_ds_save):
         log.debug(f"Check: {path_file_name}")
 
-        path_dir, file_name = os.path.split(path_file_name)
-
         # Get timestamps
         save_timestamp = os.path.getmtime(path_file_name)
         now_timestamp = time.time()
@@ -45,6 +43,8 @@ def backup_saves(path_ds_save, forced=False):
                   f"Reason: Forced={forced}, Is modified file save={is_modified}")
         if not ok:
             continue
+
+        path_dir, file_name = os.path.split(path_file_name)
 
         path_dir_backup = os.path.join(path_dir, "BACKUP")
 
