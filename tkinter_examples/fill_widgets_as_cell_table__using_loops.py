@@ -65,4 +65,9 @@ try:
 except IndexError:
     pass
 
+print(repr(label_a), repr(label_b), repr(label_c))
+print(repr(letter_a), repr(letter_b), repr(letter_c))
+# <tkinter.Label object .!label> <tkinter.Label object .!label2> <tkinter.Label object .!label3>
+# <tkinter.Entry object .!entry> <tkinter.Entry object .!entry2> <tkinter.Entry object .!entry3>
+
 root.mainloop()
