@@ -48,6 +48,8 @@ def run(path_ds_save: str, timeout_minutes=5):
     # Example: r'~\Documents\NBGI\DarkSouls\*\DRAKS0005.sl2'
     path_ds_save = os.path.expanduser(path_ds_save)
 
+    print(f'{path_ds_save}\n')
+
     backup_saves(path_ds_save, forced=True)
 
     while True:
