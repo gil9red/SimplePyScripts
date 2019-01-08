@@ -37,9 +37,7 @@ HOTKEY = "CTRL + F1"
 def backup_saves(path_ds_save: str):
     try:
         for path_file_name in glob(path_ds_save):
-            now_timestamp = time.time()
-
-            file_name_backup = backup(path_file_name, now_timestamp)
+            file_name_backup = backup(path_file_name)
             log.debug(f"Saving backup: {file_name_backup}")
 
         beep()
