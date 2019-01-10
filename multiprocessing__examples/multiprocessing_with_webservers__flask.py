@@ -36,16 +36,22 @@ def go_parser(urls):
 
 if __name__ == '__main__':
     from multiprocessing import Process
-    p1 = Process(target=go, args=('5001',))
+    p1 = Process(target=go, args=(5001,))
     p1.start()
 
-    p2 = Process(target=go, args=('5002',))
+    p2 = Process(target=go, args=(5002,))
     p2.start()
+
+    # OR:
+    # for port in [5001, 5002]:
+    #     p = Process(target=go, args=(port,))
+    #     p.start()
 
     urls = ['http://127.0.0.1:5001/', 'http://127.0.0.1:5002/']
     p3 = Process(target=go_parser, args=(urls,))
     p3.start()
 
-    p1.join()
-    p2.join()
-    p3.join()
+    # NOTE: optional
+    # p1.join()
+    # p2.join()
+    # p3.join()
