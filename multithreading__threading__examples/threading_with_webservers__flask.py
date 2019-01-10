@@ -25,6 +25,8 @@ def run(port=80):
 
 
 if __name__ == '__main__':
+    # NOTE: recommended to add daemon=False
+
     thread = threading.Thread(target=run, args=(5000, ))
     thread.start()
 
