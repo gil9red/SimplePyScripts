@@ -35,7 +35,10 @@ def go_parser(urls):
 
 
 if __name__ == '__main__':
+    # NOTE: recommended to add daemon=False or call join() for each process
+
     from multiprocessing import Process
+
     p1 = Process(target=go, args=(5001,))
     p1.start()
 
