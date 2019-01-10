@@ -33,3 +33,8 @@ if __name__ == '__main__':
 
     thread = threading.Thread(target=run, args=(5002,))
     thread.start()
+
+    # OR:
+    # for port in [5000, 5001, 5002]:
+    #     thread = threading.Thread(target=run, args=(port,))
+    #     thread.start()
