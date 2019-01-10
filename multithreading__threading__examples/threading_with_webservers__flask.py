@@ -25,7 +25,7 @@ def run(port=80):
 
 
 if __name__ == '__main__':
-    # NOTE: recommended to add daemon=False
+    # NOTE: recommended to add daemon=False or call join() for each thread
 
     thread = threading.Thread(target=run, args=(5000, ))
     thread.start()
