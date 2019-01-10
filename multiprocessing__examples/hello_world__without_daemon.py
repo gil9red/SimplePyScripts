@@ -20,4 +20,4 @@ if __name__ == '__main__':
     p = Process(target=run, daemon=False)
     p.start()
 
-    # Main process WAIT process
+    # Main process WAIT child process
