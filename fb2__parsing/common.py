@@ -27,7 +27,7 @@ def get_file_name_from_binary(binary_id: str, binary_content_type: str) -> str:
     return binary_id + '.' + {'jpeg': 'jpg', 'png': 'png'}[content_type]
 
 
-def get_attribute_value_by_local_name(node, attr_name: str) -> typing.Union[str, None]:
+def get_attribute_value_by_local_name(node, attr_name: str) -> typing.Optional[str]:
     for name, value in node.attrs.items():
         # Получаем имя атрибута
         name = name.split(':')[-1]

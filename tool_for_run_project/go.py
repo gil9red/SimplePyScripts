@@ -8,7 +8,7 @@ import os
 import sys
 import re
 import pathlib
-from typing import Union, List
+from typing import Optional, List
 
 
 NAME_BY_PATH = {
@@ -61,7 +61,7 @@ EXAMPLES:
     )
 
 
-def get_similar_value(alias: str, items: list) -> Union[str, None]:
+def get_similar_value(alias: str, items: list) -> Optional[str]:
     if alias in items:
         return alias
 

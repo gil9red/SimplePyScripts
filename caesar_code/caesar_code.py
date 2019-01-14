@@ -21,7 +21,7 @@ alphabet_list = [
 ]
 
 
-def get_alp_by_char(char: str) -> typing.Union[list, None]:
+def get_alp_by_char(char: str) -> typing.Optional[list]:
     for alphabet in alphabet_list:
         if char in alphabet:
             return alphabet
