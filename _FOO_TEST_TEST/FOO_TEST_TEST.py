@@ -82,7 +82,8 @@ print('\n')
 
 print(total_size, sizeof_fmt(total_size))
 
-for disc, size in sorted(total_size_by_disc.items(), key=lambda x: x[0]):
+for disc in sorted(total_size_by_disc):
+    size = total_size_by_disc[disc]
     print(disc, size, sizeof_fmt(size))
 
 
