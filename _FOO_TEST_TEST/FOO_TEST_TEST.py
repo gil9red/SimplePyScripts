@@ -71,7 +71,7 @@ paths = [
 total_size = 0
 total_size_by_disc = defaultdict(int)
 
-for file_name in paths:
+for file_name in set(paths):
     size, size_str = get_dir_total_size(file_name)
     print('{:<15} {:10} {}'.format(size, size_str, file_name))
 
