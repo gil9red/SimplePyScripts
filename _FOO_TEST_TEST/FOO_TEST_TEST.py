@@ -35,42 +35,38 @@ def get_dir_total_size(dir_name: str) -> (int, str):
 
 
 paths = [
-    'C:\\Program Files (x86)\\Raft\\Raft.exe',
-    'C:\\Program Files (x86)\\Spirits of Mystery 11. The Lost Queen CE\\SpiritsOfMystery_TheLostQueen_CE.exe',
-    'C:\\Wowangames\\Saga of the Nine Worlds 3. The Hunt CE RUS\\SagaOfTheNineWorlds_TheHunt_CE.exe',
-    'C:\\Wowangames\\Saga of the Nine Worlds. The Gathering CE RUS\\SagaOfTheNineWorlds_TheGathering_CE.exe',
-    'C:\\Wowangames\\Saga Of The Nine Worlds 2. The Four Stags CE RUS\\SagaOfTheNineWorlds_TheFourStags_CE.exe',
-    "D:\\Program Files (x86)\\R.G. Mechanics\\Alan Wake's American Nightmare\\alan_wakes_american_nightmare.exe",
-    'D:\\Program Files (x86)\\R.G. Mechanics\\Alan Wake\\AlanWake.exe',
+    'C:\\Program Files (x86)\\Raft',
+    'C:\\Program Files (x86)\\Spirits of Mystery 11. The Lost Queen CE',
+    'C:\\Wowangames\\Saga of the Nine Worlds 3. The Hunt CE RUS',
+    'C:\\Wowangames\\Saga of the Nine Worlds. The Gathering CE RUS',
+    'C:\\Wowangames\\Saga Of The Nine Worlds 2. The Four Stags CE RUS',
+    "D:\\Program Files (x86)\\R.G. Mechanics\\Alan Wake's American Nightmare",
+    'D:\\Program Files (x86)\\R.G. Mechanics\\Alan Wake',
     'D:\\Games\\Borderlands',
-    'D:\\Program Files (x86)\\R.G. Mechanics\\Dark Souls - Prepare to Die Edition\\DARKSOULS.exe',
-    'D:\\Games\\Dark Souls II Scholar of the First Sin\\DarkSoulsII.exe',
-    'D:\\R.G. Catalyst\\DARK SOULS REMASTERED\\DarkSoulsRemastered.exe',
-    'D:\\Games\\FFXV\\ffxv_s.exe',
-    'D:\\Program Files (x86)\\Final Fantasy XV\\ffxv_s.exe',
-    'D:\\Games\\Ghost of a Tale\\GoaT.exe',
-    'D:\\Games\\Life Goes On - Done to Death\\Life Goes On.exe',
-    'D:\\Program Files (x86)\\Masters of Anima\\Masters of Anima.exe',
-    'D:\\Games\\One Piece - Burning Blood\\OPBB.exe',
-    'D:\\Program Files (x86)\\Resident Evil HD Remaster\\bhd.exe',
-    'D:\\Games\\ROTTR - 20 Year Celebration\\ROTTR.exe',
-    'D:\\R.G. Catalyst\\Saints Row - Gat Out of Hell\\SR4HLauncher.exe',
-    'D:\\Program Files (x86)\\R.G. Mechanics\\Sniper Elite\\SniperElite.exe',
-    'D:\\Program Files (x86)\\Steel Rats\\SteelRats.exe',
-    'D:\\Games\\Tales of Berseria\\Tales of Berseria.exe',
-    'D:\\Games\\The Evil Within 2\\TEW2.exe',
-    'D:\\Games\\The Evil Within\\EvilWithin.exe',
-    'D:\\Program Files (x86)\\R.G. Mechanics\\Tomb Raider\\Launcher.exe',
-    'D:\\Program Files (x86)\\Willy-Nilly Knight\\wnk_game.exe',
-    'E:\\Program Files (x86)\\Ashes\\AshesGame.exe',
-    'E:\\Games\\Grow Up\\Launcher.exe',
-    'E:\\Program Files (x86)\\Rezrog\\Rezrog.exe',
-    'E:\\Games\\Tekken 7\\TekkenGame\\Binaries'
+    'D:\\Program Files (x86)\\R.G. Mechanics\\Dark Souls - Prepare to Die Edition',
+    'D:\\Games\\Dark Souls II Scholar of the First Sin',
+    'D:\\R.G. Catalyst\\DARK SOULS REMASTERED',
+    'D:\\Games\\FFXV',
+    'D:\\Program Files (x86)\\Final Fantasy XV',
+    'D:\\Games\\Ghost of a Tale',
+    'D:\\Games\\Life Goes On - Done to Death',
+    'D:\\Program Files (x86)\\Masters of Anima',
+    'D:\\Games\\One Piece - Burning Blood',
+    'D:\\Program Files (x86)\\Resident Evil HD Remaster',
+    'D:\\Games\\ROTTR - 20 Year Celebration',
+    'D:\\R.G. Catalyst\\Saints Row - Gat Out of Hell',
+    'D:\\Program Files (x86)\\R.G. Mechanics\\Sniper Elite',
+    'D:\\Program Files (x86)\\Steel Rats',
+    'D:\\Games\\Tales of Berseria',
+    'D:\\Games\\The Evil Within 2',
+    'D:\\Games\\The Evil Within',
+    'D:\\Program Files (x86)\\R.G. Mechanics\\Tomb Raider',
+    'D:\\Program Files (x86)\\Willy-Nilly Knight',
+    'E:\\Program Files (x86)\\Ashes',
+    'E:\\Games\\Grow Up',
+    'E:\\Program Files (x86)\\Rezrog',
+    'E:\\Games\\Tekken 7'
 ]
-
-
-paths = [os.path.dirname(file_name) if file_name.endswith('.exe') else file_name for file_name in paths]
-# print(len(paths), paths)
 
 total_size = 0
 total_size_by_disc = defaultdict(int)
