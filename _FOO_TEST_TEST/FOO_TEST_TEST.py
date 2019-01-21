@@ -4,6 +4,90 @@
 __author__ = 'ipetrash'
 
 
+from collections import defaultdict
+from glob import iglob
+import os
+
+
+def sizeof_fmt(num):
+    for x in ['bytes', 'KB', 'MB', 'GB']:
+        if num < 1024.0:
+            return "%3.1f %s" % (num, x)
+
+        num /= 1024.0
+
+    return "%3.1f %s" % (num, 'TB')
+
+
+# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/b6ac435ee171e48ed35044e8e61e199de641a6e7/get_dir_total_size__using_glob.py
+def get_dir_total_size(dir_name: str) -> (int, str):
+    total_size = 0
+
+    for file_name in iglob(dir_name + '/**/*', recursive=True):
+        try:
+            if os.path.isfile(file_name):
+                total_size += os.path.getsize(file_name)
+
+        except Exception as e:
+            print('File: "{}", error: "{}"'.format(file_name, e))
+
+    return total_size, sizeof_fmt(total_size)
+
+
+paths = [
+    'C:\\Program Files (x86)\\Raft\\Raft.exe',
+    'C:\\Program Files (x86)\\Spirits of Mystery 11. The Lost Queen CE\\SpiritsOfMystery_TheLostQueen_CE.exe',
+    'C:\\Wowangames\\Saga of the Nine Worlds 3. The Hunt CE RUS\\SagaOfTheNineWorlds_TheHunt_CE.exe',
+    'C:\\Wowangames\\Saga of the Nine Worlds. The Gathering CE RUS\\SagaOfTheNineWorlds_TheGathering_CE.exe',
+    'C:\\Wowangames\\Saga Of The Nine Worlds 2. The Four Stags CE RUS\\SagaOfTheNineWorlds_TheFourStags_CE.exe',
+    "D:\\Program Files (x86)\\R.G. Mechanics\\Alan Wake's American Nightmare\\alan_wakes_american_nightmare.exe",
+    'D:\\Program Files (x86)\\R.G. Mechanics\\Alan Wake\\AlanWake.exe',
+    'D:\\Games\\Borderlands',
+    'D:\\Program Files (x86)\\R.G. Mechanics\\Dark Souls - Prepare to Die Edition\\DARKSOULS.exe',
+    'D:\\Games\\Dark Souls II Scholar of the First Sin\\DarkSoulsII.exe',
+    'D:\\R.G. Catalyst\\DARK SOULS REMASTERED\\DarkSoulsRemastered.exe',
+    'D:\\Games\\FFXV\\ffxv_s.exe',
+    'D:\\Program Files (x86)\\Final Fantasy XV\\ffxv_s.exe',
+    'D:\\Games\\Ghost of a Tale\\GoaT.exe',
+    'D:\\Games\\Life Goes On - Done to Death\\Life Goes On.exe',
+    'D:\\Program Files (x86)\\Masters of Anima\\Masters of Anima.exe',
+    'D:\\Games\\One Piece - Burning Blood\\OPBB.exe',
+    'D:\\Program Files (x86)\\Resident Evil HD Remaster\\bhd.exe',
+    'D:\\Games\\ROTTR - 20 Year Celebration\\ROTTR.exe',
+    'D:\\R.G. Catalyst\\Saints Row - Gat Out of Hell\\SR4HLauncher.exe',
+    'D:\\Program Files (x86)\\R.G. Mechanics\\Sniper Elite\\SniperElite.exe',
+    'D:\\Program Files (x86)\\Steel Rats\\SteelRats.exe',
+    'D:\\Games\\Tales of Berseria\\Tales of Berseria.exe',
+    'D:\\Games\\The Evil Within 2\\TEW2.exe',
+    'D:\\Games\\The Evil Within\\EvilWithin.exe',
+    'D:\\Program Files (x86)\\R.G. Mechanics\\Tomb Raider\\Launcher.exe',
+    'D:\\Program Files (x86)\\Willy-Nilly Knight\\wnk_game.exe',
+    'E:\\Program Files (x86)\\Ashes\\AshesGame.exe',
+    'E:\\Games\\Grow Up\\Launcher.exe',
+    'E:\\Program Files (x86)\\Rezrog\\Rezrog.exe',
+    'E:\\Games\\Tekken 7\\TekkenGame\\Binaries'
+]
+
+
+paths = [os.path.dirname(file_name) if file_name.endswith('.exe') else file_name for file_name in paths]
+# print(len(paths), paths)
+
+total_size = 0
+total_size_by_disc = defaultdict(int)
+
+for file_name in paths:
+    size, size_str = get_dir_total_size(file_name)
+    print('{:<15} {:10} {}'.format(size, size_str, file_name))
+
+    total_size += size
+    total_size_by_disc[file_name[0]] += size
+
+print('\n')
+
+print(total_size, sizeof_fmt(total_size))
+
+for disc, size in sorted(total_size_by_disc.items(), key=lambda x: x[0]):
+    print(disc, size, sizeof_fmt(size))
 
 
 quit()
