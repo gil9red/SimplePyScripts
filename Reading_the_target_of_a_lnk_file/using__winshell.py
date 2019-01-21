@@ -6,6 +6,8 @@ __author__ = 'ipetrash'
 
 from glob import glob
 import os
+
+# pip install winshell
 import winshell
 
 path_desktop_lnk = os.path.expanduser(r'~\Desktop\**\*.lnk')
