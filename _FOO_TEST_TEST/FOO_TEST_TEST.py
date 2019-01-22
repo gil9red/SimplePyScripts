@@ -80,9 +80,8 @@ for file_name in paths:
     total_size += size
     total_size_by_disc[file_name[0]] += size
 
-print('\n')
-
-print(total_size, sizeof_fmt(total_size))
+print()
+print('Total size:', total_size, sizeof_fmt(total_size))
 
 for disc in sorted(total_size_by_disc):
     size = total_size_by_disc[disc]
