@@ -39,7 +39,7 @@ def get_dir_total_size(dir_name: str) -> (int, str):
 
 disc_by_number = defaultdict(int)
 
-path_desktop_lnk = os.path.expanduser(r'~\Desktop\**\*.lnk')
+path_desktop_lnk = os.path.expanduser(r'~\Desktop\*.lnk')
 
 paths = []
 
