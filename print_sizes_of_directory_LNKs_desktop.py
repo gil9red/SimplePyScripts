@@ -54,6 +54,9 @@ for file_name in iglob(path_desktop_lnk, recursive=True):
 total_size = 0
 total_size_by_disc = defaultdict(int)
 
+total_items = []
+disc_by_total_items = defaultdict(list)
+
 paths = sorted(set(paths))
 
 for file_name in paths:
@@ -61,11 +64,29 @@ for file_name in paths:
     print('{:<15} {:10} {}'.format(size, size_str, file_name))
 
     total_size += size
-    total_size_by_disc[file_name[0]] += size
+    disc = file_name[0]
+    total_size_by_disc[disc] += size
+
+    total_items.append((size, size_str, file_name))
+    disc_by_total_items[disc].append((size, size_str, file_name))
 
 print()
 print('Total size:', total_size, sizeof_fmt(total_size))
 
 for disc in sorted(total_size_by_disc):
     size = total_size_by_disc[disc]
-    print(disc, size, sizeof_fmt(size))
+    print('    {} {:<15} {}'.format(disc, size, sizeof_fmt(size)))
+
+print()
+print('Top all:')
+for size, size_str, file_name in sorted(total_items, key=lambda x: x[0], reverse=True)[:5]:
+    print('    {:<15} bytes {:10} {}'.format(size, size_str, file_name))
+
+print()
+
+for disc, total_items in disc_by_total_items.items():
+    print('Top of {}:'.format(disc))
+    for size, size_str, file_name in sorted(total_items, key=lambda x: x[0], reverse=True)[:3]:
+        print('    {:<15} bytes {:10} {}'.format(size, size_str, file_name))
+
+    print()
