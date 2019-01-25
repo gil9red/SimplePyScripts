@@ -4,11 +4,11 @@
 __author__ = 'ipetrash'
 
 
-import fnmatch
-
-
 # SOURCE: https://docs.python.org/3.7/library/fnmatch.html#fnmatch.fnmatch
 # SOURCE: https://docs.python.org/3.7/library/fnmatch.html#fnmatch.fnmatchcase
+
+
+import fnmatch
 
 
 file_name = 'README.md'
