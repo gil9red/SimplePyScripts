@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: https://docs.python.org/3.7/library/fnmatch.html#fnmatch.filter
+
+
 import fnmatch
 import os
 
