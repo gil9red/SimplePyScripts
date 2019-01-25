@@ -6,6 +6,7 @@ __author__ = 'ipetrash'
 
 import fnmatch
 
+
 file_name = 'README.md'
 patterns = ['*.md', 'READ*', 'RE*md', 'RE??ME.*']
 template_string = '{} is {:<%s} -> {}' % len(max(patterns, key=len))
