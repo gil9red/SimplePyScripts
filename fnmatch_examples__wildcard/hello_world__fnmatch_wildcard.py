@@ -9,7 +9,7 @@ import fnmatch
 
 file_name = 'README.md'
 patterns = ['*.md', 'READ*', 'RE*md', 'RE??ME.*']
-template_string = '{} is {:<%s} -> {}' % len(max(patterns, key=len))
+template_string = '{} is {:<%s} -> {}' % len(max(patterns))
 
 for p in patterns:
     print(template_string.format(file_name, p, fnmatch.fnmatch(file_name, p)))
