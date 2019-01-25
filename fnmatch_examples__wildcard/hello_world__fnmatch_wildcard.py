@@ -4,8 +4,6 @@
 __author__ = 'ipetrash'
 
 
-# wildcard / fnmatch
-
 import fnmatch
 
 file_name = 'README.md'
