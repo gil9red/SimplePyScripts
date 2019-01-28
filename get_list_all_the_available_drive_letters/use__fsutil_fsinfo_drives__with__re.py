@@ -9,7 +9,7 @@ import re
 
 
 def get_drivers() -> list:
-    text = os.popen("fsutil fsinfo drives").read()
+    text = os.popen("fsutil fsinfo drives").read().strip()
     return re.findall(r'([A-Z]):\\', text)
 
 
