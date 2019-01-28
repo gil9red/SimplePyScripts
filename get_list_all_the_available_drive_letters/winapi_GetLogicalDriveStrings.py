@@ -11,9 +11,8 @@ import win32api
 
 
 def get_drivers() -> list:
-    drives = win32api.GetLogicalDriveStrings()
-    drives = drives.split('\000')[:-1]
-    return drives
+    drives_str = win32api.GetLogicalDriveStrings()
+    return [item for item in drives_str.split("\x00") if item]
 
 
 if __name__ == '__main__':
