@@ -17,3 +17,9 @@ def is_match_func(table) -> bool:
 url = 'https://en.wikipedia.org/wiki/Darksiders_(series)'
 for year, name in get_parsed_two_column_wikitable(url, is_match_func):
     print(f'{year}: {name}')
+
+# 2010: Darksiders
+# 2012: Darksiders II
+# 2015: Darksiders II: Deathinitive Edition
+# 2016: Darksiders: Warmastered Edition
+# 2018: Darksiders III

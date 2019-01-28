@@ -4,38 +4,67 @@
 __author__ = 'ipetrash'
 
 
-from typing import Callable, Any
+from typing import Callable, Any, Optional
 
 import requests
 from bs4 import BeautifulSoup
 
 
-def get_parsed_two_column_wikitable(url: str, is_match_func: Callable[[Any], bool]=lambda table: True) -> [(str, str)]:
+MatchFunc = Callable[[Any], bool]
+
+
+def find_table(url: str, is_match_func: MatchFunc=lambda table: True) -> Optional['Table']:
     rs = requests.get(url)
     root = BeautifulSoup(rs.content, 'html.parser')
 
-    table = None
     for t in root.select('.wikitable'):
         if not t.caption:
             continue
 
         if is_match_func(t):
-            table = t
-            break
+            return t
 
+    return
+
+
+def get_parsed_two_column_wikitable(url: str, is_match_func: MatchFunc=lambda table: True) -> [(str, str)]:
+    table = find_table(url, is_match_func)
     if not table:
         raise Exception('Not found table "Timeline of releases"')
 
     items = []
 
+    year = None
+
     # Timeline of release years
     for tr in table.select('tr'):
         td_items = tr.select('td')
-        if len(td_items) != 2:
+
+        # if len(td_items) != 2:
+        #     continue
+
+        # Если пустой или None
+        if not td_items:
             continue
 
-        year = td_items[0].text.strip()
-        name = td_items[1].i.text.strip()
-        items.append((year, name))
+        # Отбрасываем строки с годом, но без игры
+        if len(td_items) == 1 and td_items[0].i is None:
+            continue
+
+        if len(td_items) == 2:
+            year = td_items[0].text.strip()
+            name = td_items[1].i.text.strip()
+
+        else:
+            # Сюда попадают игры, попавшие с другими в один и тот же год, например
+            #     2000: Resident Evil Survivor
+            #     2000: Resident Evil – Code: Veronica
+            #
+            # year берется из предыдущей строки
+            # year = ...
+            name = td_items[0].i.text.strip()
+
+        if year and name:
+            items.append((year, name))
 
     return items
