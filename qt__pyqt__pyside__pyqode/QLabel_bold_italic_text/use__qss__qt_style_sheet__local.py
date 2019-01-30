@@ -10,7 +10,11 @@ app = QApplication([])
 
 label_1 = QLabel()
 label_1.setText('Hello World!!!')
-label_1.setStyleSheet('font: bold italic')
+label_1.setStyleSheet("""
+    font: bold italic;
+    color: green;
+    background-color: black;
+""")
 
 label_2 = QLabel()
 label_2.setText('nothing...')
