@@ -22,19 +22,19 @@ def sizeof_fmt(num):
 
 
 column_width = defaultdict(int)
-process = []
+process_list = []
 
 for p in psutil.process_iter():
     memory = p.memory_info().rss
     cols = p.name(), str(memory) + ' bytes', sizeof_fmt(memory)
-    process.append(cols)
+    process_list.append(cols)
 
     for i, x in enumerate(cols):
         column_width[i] = max(column_width[i], len(x))
 
 # Sort by memory size
-process.sort(key=lambda x: int(x[1].split(' ')[0]), reverse=True)
+process_list.sort(key=lambda x: int(x[1].split(' ')[0]), reverse=True)
 
-for p in process:
+for p in process_list:
     row = [x.rjust(column_width[i]) for i, x in enumerate(p)]
     print(' | '.join(row))
