@@ -9,6 +9,7 @@ from collections import defaultdict
 # pip install psutil
 import psutil
 
+
 column_width = defaultdict(int)
 process = []
 

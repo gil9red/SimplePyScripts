@@ -7,5 +7,6 @@ __author__ = 'ipetrash'
 # pip install psutil
 import psutil
 
+
 for p in psutil.process_iter():
     print(p.name(), p.memory_info().rss)
