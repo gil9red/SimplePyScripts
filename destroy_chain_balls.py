@@ -9,7 +9,7 @@ def destroy_chain_balls(balls):
     balls = list(balls)
 
     while balls:
-        repeat_index_list = [0]
+        repeat_index_list = []
         last_ball = balls[0]
 
         for i in range(1, len(balls)):
