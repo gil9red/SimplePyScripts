@@ -27,7 +27,7 @@ def find_table(url: str, is_match_func: MatchFunc=lambda table: True) -> Optiona
     return
 
 
-def get_parsed_two_column_wikitable(url: str, is_match_func: MatchFunc=lambda table: True) -> [(str, str)]:
+def get_parsed_two_column_wikitable(url: str, is_match_func: MatchFunc=lambda table: True, is_match_row_func: MatchFunc=lambda tr: True) -> [(str, str)]:
     table = find_table(url, is_match_func)
     if not table:
         raise Exception('Not found table "Timeline of releases"')
@@ -63,6 +63,9 @@ def get_parsed_two_column_wikitable(url: str, is_match_func: MatchFunc=lambda ta
             # year берется из предыдущей строки
             # year = ...
             name = td_items[0].i.text.strip()
+
+        if not is_match_row_func(tr):
+            continue
 
         if year and name:
             items.append((year, name))
