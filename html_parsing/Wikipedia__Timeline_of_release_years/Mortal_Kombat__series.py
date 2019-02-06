@@ -10,12 +10,12 @@ __author__ = 'ipetrash'
 from common import get_parsed_two_column_wikitable
 
 
-def is_match_func(table) -> bool:
+def is_match_table_func(table) -> bool:
     return 'TIMELINE OF RELEASE YEARS' in table.caption.text.strip().upper()
 
 
 url = 'https://en.wikipedia.org/wiki/Mortal_Kombat'
-for year, name in get_parsed_two_column_wikitable(url, is_match_func):
+for year, name in get_parsed_two_column_wikitable(url, is_match_table_func):
     print(f'{year}: {name}')
 
 # 1992: Mortal Kombat

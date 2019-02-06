@@ -10,7 +10,7 @@ __author__ = 'ipetrash'
 from common import get_parsed_two_column_wikitable
 
 
-def is_match_func(table) -> bool:
+def is_match_table_func(table) -> bool:
     return 'TIMELINE OF RELEASE YEARS' in table.caption.text.strip().upper()
 
 
@@ -23,7 +23,7 @@ def is_match_row_func(tr) -> bool:
 
 
 url = 'https://en.wikipedia.org/wiki/The_Elder_Scrolls'
-for year, name in get_parsed_two_column_wikitable(url, is_match_func, is_match_row_func):
+for year, name in get_parsed_two_column_wikitable(url, is_match_table_func, is_match_row_func):
     print(f'{year}: {name}')
 
 # 1994: The Elder Scrolls: Arena

@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 MatchFunc = Callable[[Any], bool]
 
 
-def find_table(url: str, is_match_func: MatchFunc=lambda table: True) -> Optional['Table']:
+def find_table(url: str, is_match_table_func: MatchFunc=lambda table: True) -> Optional['Table']:
     rs = requests.get(url)
     root = BeautifulSoup(rs.content, 'html.parser')
 
@@ -21,14 +21,14 @@ def find_table(url: str, is_match_func: MatchFunc=lambda table: True) -> Optiona
         if not t.caption:
             continue
 
-        if is_match_func(t):
+        if is_match_table_func(t):
             return t
 
     return
 
 
-def get_parsed_two_column_wikitable(url: str, is_match_func: MatchFunc=lambda table: True, is_match_row_func: MatchFunc=lambda tr: True) -> [(str, str)]:
-    table = find_table(url, is_match_func)
+def get_parsed_two_column_wikitable(url: str, is_match_table_func: MatchFunc=lambda table: True, is_match_row_func: MatchFunc=lambda tr: True) -> [(str, str)]:
+    table = find_table(url, is_match_table_func)
     if not table:
         raise Exception('Not found table "Timeline of releases"')
 
