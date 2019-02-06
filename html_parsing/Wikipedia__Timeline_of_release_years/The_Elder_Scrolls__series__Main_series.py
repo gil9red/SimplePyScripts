@@ -18,7 +18,7 @@ def is_match_row_func(tr) -> bool:
     td_items = tr.select('td')
     td = td_items[0] if len(td_items) == 1 else td_items[1]
 
-    # Main series in bold
+    # Check <b>. Because "Main series in bold"
     return td.i.b is not None
 
 
