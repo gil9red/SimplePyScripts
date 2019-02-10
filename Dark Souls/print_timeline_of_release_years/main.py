@@ -37,3 +37,10 @@ if __name__ == '__main__':
     url = 'https://en.wikipedia.org/wiki/Souls_(series)'
     for year, name in get_parsed_two_column_wikitable(url):
         print(year, name)
+
+# 2009 Demon's Souls
+# 2011 Dark Souls
+# 2014 Dark Souls II
+# 2015 Dark Souls II: Scholar of the First Sin
+# 2016 Dark Souls III
+# 2018 Dark Souls: Remastered
