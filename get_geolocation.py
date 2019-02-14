@@ -9,6 +9,7 @@ from urllib.request import urlopen
 
 
 def get_geolocation() -> dict:
+    # SOURCE: https://github.com/Pure-L0G1C/FleX/blob/da8f30f9204a65df57063ed74b3e79a2a79a7bfc/payload/modules/geo.py
     location = {
         'Ip': None,
         'Country': None,
@@ -20,7 +21,9 @@ def get_geolocation() -> dict:
         'Timezone': None,
 
         'Latitude': None,
-        'Longitude': None
+        'Longitude': None,
+
+        'GoogleMapsLink': None,
     }
 
     try:
@@ -38,6 +41,11 @@ def get_geolocation() -> dict:
 
         location['Latitude'] = data['lat']
         location['Longitude'] = data['lon']
+
+        # SOURCE: https://github.com/maldevel/IPGeoLocation/blob/master/core/IpGeoLocation.py#L97
+        location['GoogleMapsLink'] = 'http://www.google.com/maps/place/{0},{1}/@{0},{1},16z'.format(
+            location['Latitude'], location['Longitude']
+        )
 
     except:
         pass
