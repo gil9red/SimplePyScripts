@@ -19,6 +19,6 @@ if __name__ == '__main__':
     print = upper_print(print)
 
     print(text)  # HELLO WORLD!
-    print = old_print
 
+    print = old_print
     print(text)  # hello world!
