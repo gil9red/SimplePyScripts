@@ -8,6 +8,12 @@ __author__ = 'ipetrash'
 
 quit()
 
+
+# TODO: добавить пример графа из ds1 отрисованного через graphviz
+
+# # pip install graphviz
+# from graphviz import Digraph
+#
 # t = Digraph('TrafficLights', filename='traffic_lights.gv', engine='neato')
 #
 # t.attr('node', shape='box')
