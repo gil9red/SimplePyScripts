@@ -10,10 +10,14 @@ __author__ = 'ipetrash'
 from grab import Grab
 
 
-if __name__ == '__main__':
+def get_my_public_ip() -> str:
     g = Grab()
+    g.setup(proxy='proxy.compassplus.ru:3128', proxy_type='http')
     g.go("http://api.wipmania.com")
-    context = g.response.body
-    data = context.split("<br>")
-    ip = data[0]
+    context = g.doc.body.decode('utf-8')
+    return context.split("<br>")[0]
+
+
+if __name__ == '__main__':
+    ip = get_my_public_ip()
     print("My IP: {}".format(ip))
