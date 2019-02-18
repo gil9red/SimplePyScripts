@@ -12,13 +12,13 @@ __author__ = 'ipetrash'
 # pip install graphviz
 from graphviz import Digraph
 
-dot = Digraph(comment='The Round Table')
+g = Digraph(comment='The Round Table')
 
-dot.node('A', 'King Arthur')
-dot.node('B', 'Sir Bedevere the Wise')
-dot.node('L', 'Sir Lancelot the Brave')
+g.node('A', 'King Arthur')
+g.node('B', 'Sir Bedevere the Wise')
+g.node('L', 'Sir Lancelot the Brave')
 
-dot.edges(['AB', 'AL'])
-dot.edge('B', 'L', constraint='false')
+g.edges(['AB', 'AL'])
+g.edge('B', 'L', constraint='false')
 
-dot.render('test-output/round-table.gv', view=True)
+g.render('test-output/round-table.gv', view=True)
