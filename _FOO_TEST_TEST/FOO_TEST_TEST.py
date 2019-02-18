@@ -4,25 +4,9 @@
 __author__ = 'ipetrash'
 
 
-# TODO: инструкцию поместить в будущий hello_world.py
-# Download and install: http://www.graphviz.org/download/
-# Append to PATH: C:\Program Files (x86)\Graphviz2.38\bin
-
-# pip install graphviz
-from graphviz import Digraph
-
-# dot = Digraph(comment='The Round Table')
-#
-# dot.node('A', 'King Arthur')
-# dot.node('B', 'Sir Bedevere the Wise')
-# dot.node('L', 'Sir Lancelot the Brave')
-#
-# dot.edges(['AB', 'AL'])
-# dot.edge('B', 'L', constraint='false')
-#
-# dot.render('test-output/round-table.gv', view=True)
 
 
+quit()
 
 # t = Digraph('TrafficLights', filename='traffic_lights.gv', engine='neato')
 #
@@ -56,8 +40,6 @@ from graphviz import Digraph
 #
 # t.view()
 
-# TODO: на примере показать разницу между Digraph (граф с направлением) и Graph
-
 # from graphviz import Graph
 # g = Graph('G', filename='process.gv', engine='sfdp')
 #
@@ -77,69 +59,6 @@ from graphviz import Digraph
 #
 # g.view()
 
-
-# from graphviz import Digraph
-# g = Digraph('G', filename='hello.gv')
-# g.edge('Hello', 'World')
-# g.view()
-
-
-# TODO: пример чистой генерации без показа
-# from graphviz import Digraph
-# g = Digraph('G', filename='hello.gv', format='png')
-# g.edge('Hello', 'World')
-# # g.view()
-# g.render()
-
-
-# TODO: нужен прпимер в котором сгенерированный *.gv файл будет удален
-from graphviz import Digraph
-# g = Digraph('G', filename='hello.gv', format='png')
-g = Digraph('G', filename='hello.gv', format='pdf')
-g.edge('Hello', 'World')
-
-# Delete the source file after rendering.
-g.render(cleanup=True)
-
-
-# TODO: еще один пример генерации, в отличии от верхнего, *.gv файл не был создан
-#       и, соответственно, не пришлось его удалять
-#       Более надежно, чем выше
-from graphviz import Digraph
-g = Digraph('G', filename='hello.gv', format='png')
-# TODO: добавить пример динамической смены формата
-g.format = 'plain'
-g.edge('Hello', 'World')
-# print(g)
-# Save
-with open(g.filepath + '.' + g.format, 'wb') as f:
-    data = g.pipe()
-    # print(data)
-    f.write(data)
-
-
-# TODO: добавить прмиер получения результат генерации в байтах,
-#       в строке (для определенного формата, например для 'plain' или 'svg')
-# from graphviz import Digraph
-# # g = Digraph('G', filename='hello.gv', format='png')
-# g = Digraph('G', filename='hello.gv', format='pdf')
-# g.edge('Hello', 'World')
-# # Get bytes
-# print(g.pipe())
-#
-# TODO: Piped output
-# https://graphviz.readthedocs.io/en/stable/manual.html#piped-output
-# >>> g = Graph('hello', format='svg')
-#
-# >>> g.edge('Hello', 'World')
-#
-# >>> print(g.pipe().decode('utf-8'))
-# <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-# <!DOCTYPE svg
-# ...
-# </svg>
-
-
 # TODO: сравнить чем отличаются engine: dot, neato, ...
 # C:\ProgramData\Anaconda3\Lib\site-packages\graphviz\backend.py
 # ENGINES = {  # http://www.graphviz.org/pdf/dot.1.pdf
@@ -158,18 +77,3 @@ with open(g.filepath + '.' + g.format, 'wb') as f:
 #         'bmp',
 #         'canon', 'dot', 'gv', 'xdot', 'xdot1.2', 'xdot1.4',
 #         'cgimage',
-#
-# import graphviz
-# print(graphviz.FORMATS)
-
-# from graphviz import Digraph
-# g = Digraph('G', filename='hello.gv', format='svg')
-# g.edge('Hello', 'World')
-# # g.view()
-# g.render()
-
-
-# TODO: версия
-# import graphviz
-# print(graphviz.version())
-
