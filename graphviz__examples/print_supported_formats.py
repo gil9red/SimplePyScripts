@@ -4,5 +4,6 @@
 __author__ = 'ipetrash'
 
 
+# pip install graphviz
 import graphviz
 print(sorted(graphviz.FORMATS))
