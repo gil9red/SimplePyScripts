@@ -7,8 +7,8 @@ __author__ = 'ipetrash'
 # pip install graphviz
 from graphviz import Digraph
 
-g = Digraph(comment='The Round Table')
+g = Digraph('G', filename='test-output/hello_world.gv')
 g.edge('Hello', 'World')
 
-out_file_name = g.render('test-output/hello_world.gv')
+out_file_name = g.render()
 print(out_file_name)
