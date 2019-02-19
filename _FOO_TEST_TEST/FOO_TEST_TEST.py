@@ -9,8 +9,6 @@ __author__ = 'ipetrash'
 quit()
 
 
-# TODO: добавить пример графа из ds1 отрисованного через graphviz
-
 # TODO: добавить пример получения из графа текст на DOT (https://ru.wikipedia.org/wiki/DOT_(%D1%8F%D0%B7%D1%8B%D0%BA))
 
 # # pip install graphviz
