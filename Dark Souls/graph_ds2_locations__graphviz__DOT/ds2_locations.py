@@ -16,6 +16,7 @@ links = [('Алтарь Огня', 'Бездна'), ('Алтарь Огня', '�
 for a, b in links:
     g.edge(a, b)
 
+g.attr(label=r'\n\nLocations Dark Souls')
 g.view()
 
 # g.render(format='jpg')
