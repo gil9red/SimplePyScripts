@@ -12,7 +12,7 @@ __author__ = 'ipetrash'
 # pip install graphviz
 from graphviz import Digraph
 
-g = Digraph(comment='The Round Table')
+g = Digraph(comment='King Arthur')
 
 g.node('A', 'King Arthur')
 g.node('B', 'Sir Bedevere the Wise')
@@ -21,4 +21,6 @@ g.node('L', 'Sir Lancelot the Brave')
 g.edges(['AB', 'AL'])
 g.edge('B', 'L', constraint='false')
 
-g.render('test-output/round-table.gv', view=True)
+g.attr(label=r'\n\nKing Arthur')
+
+g.render('test-output/hello_world.gv', view=True)
