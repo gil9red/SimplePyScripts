@@ -36,9 +36,13 @@ def print_pretty_table(data, cell_sep=' | '):
             header_ok = True
 
 
-def get_data() -> (list, list):
+def get_raw_data() -> str:
     cmd = 'netstat -ano -p tcp'
-    text = check_output(cmd, universal_newlines=True).strip()
+    return check_output(cmd, universal_newlines=True).strip()
+
+
+def get_data() -> (list, list):
+    text = get_raw_data()
     lines = text.split('\n')[3:]
 
     headers = ['Proto', 'Local Address', 'Foreign Address', 'State', 'PID']
@@ -46,6 +50,10 @@ def get_data() -> (list, list):
 
 
 if __name__ == '__main__':
+    print(get_raw_data())
+
+    print('\n\n')
+
     headers, rows = get_data()
 
     data = [list(map(str.upper, headers))]
