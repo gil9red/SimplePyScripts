@@ -4,6 +4,10 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: https://ru.wikipedia.org/wiki/Кодирование_длин_серий
+# SOURCE: https://en.wikipedia.org/wiki/Run-length_encoding
+
+
 def compress(text):
     """
     Функция для сжатия текста, с повторяющимися последовательностями символов
