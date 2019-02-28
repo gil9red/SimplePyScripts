@@ -6,6 +6,7 @@ __author__ = 'ipetrash'
 
 # SOURCE: Design Patterns: Facade — Фасад
 # SOURCE: https://ru.wikipedia.org/wiki/Фасад_(шаблон_проектирования)
+# SOURCE: https://refactoring.guru/ru/design-patterns/facade
 
 
 from abc import ABC
