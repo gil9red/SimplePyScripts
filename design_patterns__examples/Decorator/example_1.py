@@ -24,22 +24,22 @@ class SimpleOperation(IOperation):
 
 class BaseDecorator(IOperation):
     def __init__(self, operation: IOperation):
-        self._operation = operation
+        self._wrapped = operation
 
 
 class BoldDecorator(BaseDecorator):
     def run(self, text: str) -> str:
-        return "<b>" + self._operation.run(text) + "</b>"
+        return "<b>" + self._wrapped.run(text) + "</b>"
 
 
 class ItalicDecorator(BaseDecorator):
     def run(self, text: str) -> str:
-        return "<i>" + self._operation.run(text) + "</i>"
+        return "<i>" + self._wrapped.run(text) + "</i>"
 
 
 class UpperDecorator(BaseDecorator):
     def run(self, text: str) -> str:
-        return self._operation.run(text).upper()
+        return self._wrapped.run(text).upper()
 
 
 if __name__ == '__main__':
