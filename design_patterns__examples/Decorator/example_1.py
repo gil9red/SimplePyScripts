@@ -58,6 +58,7 @@ if __name__ == '__main__':
     print(operation.run(text))  # <I><B>HELLO WORLD!</B></I>
     print()
 
+    # ItalicDecorator -> BoldDecorator -> UpperDecorator -> SimpleOperation
     operation = SimpleOperation()
     operation = UpperDecorator(operation)
     operation = BoldDecorator(operation)
@@ -65,5 +66,6 @@ if __name__ == '__main__':
     print(operation.run(text))  # <i><b>HELLO WORLD!</b></i>
     print()
 
+    # ItalicDecorator -> BoldDecorator -> UpperDecorator -> SimpleOperation
     operation = ItalicDecorator(BoldDecorator(UpperDecorator(SimpleOperation())))
     print(operation.run(text))  # <i><b>HELLO WORLD!</b></i>
