@@ -83,11 +83,11 @@ if __name__ == '__main__':
 
     print()
 
+    notifier = SMSDecorator(notifier)
     notifier = FacebookDecorator(notifier)
     notifier = SlackDecorator(notifier)
-    notifier = SMSDecorator(notifier)
     notifier.send('Test!')
     # [Email] Send "Test!".
+    # [SMS] send "Test!".
     # [Facebook] send "Test!".
     # [Slack] send "Test!".
-    # [SMS] send "Test!".
