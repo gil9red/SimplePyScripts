@@ -10,11 +10,11 @@ __author__ = 'ipetrash'
 from copy import deepcopy
 
 
-def is_win(clock_data) -> bool:
+def is_win(clock_data: dict) -> bool:
     return all(x == 0 for x in clock_data['items'])
 
 
-def get_arrows_value(clock_data) -> (int, int):
+def get_arrows_value(clock_data: dict) -> (int, int):
     items = clock_data['items']
     arrow_1 = clock_data['left_arrow_index']
     arrow_2 = clock_data['right_arrow_index']
@@ -22,12 +22,12 @@ def get_arrows_value(clock_data) -> (int, int):
     return items[arrow_1], items[arrow_2]
 
 
-def is_fail(clock_data) -> bool:
+def is_fail(clock_data: dict) -> bool:
     a, b = get_arrows_value(clock_data)
     return a == 0 and b == 0
 
 
-def click_clock_item(clock_data, selected_index: int):
+def click_clock_item(clock_data: dict, selected_index: int):
     items = clock_data['items']
     move_value = items[selected_index]
 
@@ -48,28 +48,7 @@ def click_clock_item(clock_data, selected_index: int):
     clock_data['history'].append(deepcopy(clock_data['items']))
 
 
-#       2
-#    4     4
-#   1        1
-# 2           3
-#   5      4
-#       3
-clock_items = [2, 4, 1, 3, 4, 3, 5, 2, 1, 4]
-
-clock_data = {
-    'items': deepcopy(clock_items),
-    'history': [deepcopy(clock_items)],
-    'left_arrow_index': 0,
-    'right_arrow_index': 0,
-    'selected_indexes': [],
-    'selected_values': [],
-}
-
-
-RESULT_WIN = dict()
-
-
-def foo(clock_data, index: int):
+def solve_step(clock_data: dict, index: int, result_win: dict):
     # Если текущий индекс указывает на уже активированную кнопку
     if clock_data['items'][index] == 0:
         return
@@ -84,30 +63,56 @@ def foo(clock_data, index: int):
         # Для удаления дубликатов выбранные индексы преобразуем в ключ для словаря
         key = ','.join(map(str, clock_data['selected_indexes']))
 
-        RESULT_WIN[key] = clock_data
+        result_win[key] = clock_data
         return
 
     if is_fail(clock_data):
         return
 
     arrow_1 = clock_data['left_arrow_index']
-    foo(clock_data, arrow_1)
+    solve_step(clock_data, arrow_1, result_win)
 
     arrow_2 = clock_data['right_arrow_index']
-    foo(clock_data, arrow_2)
+    solve_step(clock_data, arrow_2, result_win)
 
 
-items = clock_data['items']
-for index in range(len(items)):
-    foo(clock_data, index)
+def solver(clock_items: list) -> list:
+    clock_data = {
+        'items': deepcopy(clock_items),
+        'history': [deepcopy(clock_items)],
+        'left_arrow_index': 0,
+        'right_arrow_index': 0,
+        'selected_indexes': [],
+        'selected_values': [],
+    }
 
-RESULT_WIN = list(RESULT_WIN.values())
+    result_win = dict()
 
-print('Winning results:', len(RESULT_WIN))
-for i, clock_data in enumerate(RESULT_WIN, 1):
-    print(f'{i}.')
+    items = clock_data['items']
+    for index in range(len(items)):
+        solve_step(clock_data, index, result_win)
 
-    for item, index, value in zip(clock_data['history'], clock_data['selected_indexes'], clock_data['selected_values']):
-        print(f'{item} -> #{index} ({value})')
+    return list(result_win.values())
 
-    print()
+
+if __name__ == '__main__':
+    #       2
+    #    4     4
+    #   1        1
+    # 2           3
+    #   5      4
+    #       3
+    clock_items = [2, 4, 1, 3, 4, 3, 5, 2, 1, 4]
+
+    result_win = solver(clock_items)
+
+    print('Winning results:', len(result_win))
+    for i, clock_data in enumerate(result_win, 1):
+        print(f'{i}.')
+
+        # Совмещение элемента истории, выбранного индекса и значения
+        total_result = zip(clock_data['history'], clock_data['selected_indexes'], clock_data['selected_values'])
+        for item, index, value in total_result:
+            print(f'{item} -> #{index} ({value})')
+
+        print()
