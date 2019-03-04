@@ -142,6 +142,7 @@ class MainWindow(QWidget):
         self.setWindowTitle(path_split(__file__)[1])
 
         self.button_direct = QPushButton()
+        self.button_direct.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
 
         self.cb_encoding = QComboBox()
         self.cb_encoding.addItems(STANDART_ENCODINGS)
@@ -150,9 +151,12 @@ class MainWindow(QWidget):
         index = self.cb_encoding.findText('utf_8')
         self.cb_encoding.setCurrentIndex(index)
 
+        self.cb_raw = QCheckBox('raw')
+
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.button_direct)
         button_layout.addWidget(self.cb_encoding)
+        button_layout.addWidget(self.cb_raw)
 
         layout = QVBoxLayout()
         layout.addLayout(button_layout)
@@ -184,6 +188,7 @@ class MainWindow(QWidget):
         self.button_direct.clicked.connect(self.change_convert_direct)
         self.text_edit_input.textChanged.connect(self.input_text_changed)
         self.cb_encoding.currentIndexChanged.connect(self.input_text_changed)
+        self.cb_raw.clicked.connect(self.input_text_changed)
 
         splitter = QSplitter()
         splitter.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -228,9 +233,14 @@ class MainWindow(QWidget):
             else:
                 text = base64.b64decode(in_text)
 
-            # Параметр errors='replace' нужен для того, чтобы при декодировании в строку проблемные символы
-            # заменялись символами-заменителями (�)
-            text = text.decode(encoding=codec_name, errors='replace')
+            # Для 'raw' не делаем декодирование, а показываем представление объекта как строку
+            if self.cb_raw.isChecked():
+                text = repr(text)
+            else:
+                # Параметр errors='replace' нужен для того, чтобы при декодировании в строку проблемные символы
+                # заменялись символами-заменителями (�)
+                text = text.decode(encoding=codec_name, errors='replace')
+
             self.text_edit_output.setPlainText(text)
 
         except Exception as e:
