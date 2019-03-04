@@ -110,6 +110,11 @@ if __name__ == '__main__':
     for i, clock_data in enumerate(wins, 1):
         print(f'{i}.')
 
+        print('Simple:')
+        print(' -> '.join('{}({})'.format(index, value) for index, value in zip(clock_data['selected_indexes'], clock_data['selected_values'])))
+        print()
+        print('Extended:')
+
         # Совмещение элемента истории, выбранного индекса и значения
         total_result = zip(clock_data['history'], clock_data['selected_indexes'], clock_data['selected_values'])
         for item, index, value in total_result:
