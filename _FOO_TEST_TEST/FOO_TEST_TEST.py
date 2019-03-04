@@ -34,7 +34,7 @@ def click_clock_item(clock_data, selected_index: int):
     clock_data['selected_indexes'].append(selected_index)
     clock_data['selected_values'].append(move_value)
 
-    # Кнопка активирована
+    # После клика кнопка теперь не активна
     items[selected_index] = 0
 
     # Остаток по модулю поможет получить индекс после вращения стрелки по часовой или против
@@ -43,6 +43,9 @@ def click_clock_item(clock_data, selected_index: int):
 
     clock_data['left_arrow_index'] = left_arrow_index
     clock_data['right_arrow_index'] = right_arrow_index
+
+    # После клика, часы изменились, поэтому нужно сохранить это в истории
+    clock_data['history'].append(deepcopy(clock_data['items']))
 
 
 #       2
@@ -63,24 +66,29 @@ clock_data = {
 }
 
 
-RESULT_WIN = []
+RESULT_WIN = dict()
 
 
 def foo(clock_data, index: int):
+    # Если текущий индекс указывает на уже активированную кнопку
+    if clock_data['items'][index] == 0:
+        return
+
+    # Т.к. этот объект используется в рекурсии, нужно делать его копии
+    # чтобы изменения в одной функции рекурсии не повлияло на другую
     clock_data = deepcopy(clock_data)
-
-    if is_win(clock_data):
-        RESULT_WIN.append(clock_data)
-        return
-
-    if is_fail(clock_data):
-        # nothing
-        return
 
     click_clock_item(clock_data, index)
 
-    # После клика изменятся часов, поэтому нужно сохранить это в истории
-    clock_data['history'].append(deepcopy(clock_data['items']))
+    if is_win(clock_data):
+        # Для удаления дубликатов выбранные индексы преобразуем в ключ для словаря
+        key = ','.join(map(str, clock_data['selected_indexes']))
+
+        RESULT_WIN[key] = clock_data
+        return
+
+    if is_fail(clock_data):
+        return
 
     arrow_1 = clock_data['left_arrow_index']
     foo(clock_data, arrow_1)
@@ -93,7 +101,9 @@ items = clock_data['items']
 for index in range(len(items)):
     foo(clock_data, index)
 
-print(len(RESULT_WIN))
+RESULT_WIN = list(RESULT_WIN.values())
+
+print('Winning results:', len(RESULT_WIN))
 for i, clock_data in enumerate(RESULT_WIN, 1):
     print(f'{i}.')
 
