@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+import base64
 import traceback
 
 try:
@@ -222,13 +223,15 @@ class MainWindow(QWidget):
             codec_name = self.cb_encoding.currentText()
             in_text = self.text_edit_input.toPlainText().encode(encoding=codec_name)
 
-            import base64
             if self.direct_encode_text:
                 text = base64.b64encode(in_text)
             else:
                 text = base64.b64decode(in_text)
 
-            self.text_edit_output.setPlainText(text.decode(encoding=codec_name))
+            # Параметр errors='replace' нужен для того, чтобы при декодировании в строку проблемные символы
+            # заменялись символами-заменителями (�)
+            text = text.decode(encoding=codec_name, errors='replace')
+            self.text_edit_output.setPlainText(text)
 
         except Exception as e:
             # Выводим ошибку в консоль
