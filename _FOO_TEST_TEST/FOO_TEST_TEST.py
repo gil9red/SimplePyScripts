@@ -86,13 +86,13 @@ def solver(clock_items: list) -> list:
         'selected_values': [],
     }
 
-    result_win = dict()
+    wins = dict()
 
     items = clock_data['items']
     for index in range(len(items)):
-        solve_step(clock_data, index, result_win)
+        solve_step(clock_data, index, wins)
 
-    return list(result_win.values())
+    return list(wins.values())
 
 
 if __name__ == '__main__':
@@ -104,10 +104,10 @@ if __name__ == '__main__':
     #       3
     clock_items = [2, 4, 1, 3, 4, 3, 5, 2, 1, 4]
 
-    result_win = solver(clock_items)
+    wins = solver(clock_items)
 
-    print('Winning results:', len(result_win))
-    for i, clock_data in enumerate(result_win, 1):
+    print('Winning results:', len(wins))
+    for i, clock_data in enumerate(wins, 1):
         print(f'{i}.')
 
         # Совмещение элемента истории, выбранного индекса и значения
