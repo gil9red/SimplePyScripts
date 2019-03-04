@@ -61,25 +61,19 @@ clock_data = {
     'selected_indexes': [],
     'selected_values': [],
 }
-# print(clock_data)
-# print(get_arrows_value(clock_data))
 
 
 RESULT_WIN = []
 
 
-def foo(clock_data, index):
+def foo(clock_data, index: int):
     clock_data = deepcopy(clock_data)
 
     if is_win(clock_data):
-        # TODO: Save current <clock_data> in <results>
-        # print('WIN!')
-        # RESULT_WIN.append(copy(clock_data))
         RESULT_WIN.append(clock_data)
         return
 
     if is_fail(clock_data):
-        # print('FAIL!')
         # nothing
         return
 
@@ -87,17 +81,6 @@ def foo(clock_data, index):
 
     # После клика изменятся часов, поэтому нужно сохранить это в истории
     clock_data['history'].append(deepcopy(clock_data['items']))
-
-    # if is_win(clock_data):
-    #     # TODO: Save current <clock_data> in <results>
-    #     # print('WIN!')
-    #     RESULT_WIN.append(copy(clock_data))
-    #     return
-    #
-    # if is_fail(clock_data):
-    #     # print('FAIL!')
-    #     # nothing
-    #     return
 
     arrow_1 = clock_data['left_arrow_index']
     foo(clock_data, arrow_1)
@@ -107,7 +90,6 @@ def foo(clock_data, index):
 
 
 items = clock_data['items']
-
 for index in range(len(items)):
     foo(clock_data, index)
 
