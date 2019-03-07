@@ -35,21 +35,6 @@ with requests.Session() as s:
 
     csrfmiddlewaretoken = get_csrfmiddlewaretoken(rs)
 
-    # Отправляем ajax, чтобы получить куки sessionid
-    data = {
-        'csrfmiddlewaretoken': csrfmiddlewaretoken,
-        'faculty': 'АВИЭТ',
-        'klass': '',
-    }
-    headers = {
-        'Referer': "https://lk.ugatu.su/raspisanie/",
-        'X-Requested-With': 'XMLHttpRequest'
-    }
-    headers.update(COMMON_HEADERS)
-
-    rs = s.post('https://lk.ugatu.su/raspisanie/', data=data, headers=headers)
-    print(rs)
-
     # Эмуляция клика на кнопку "ПОКАЗАТЬ"
     data = {
         'csrfmiddlewaretoken': csrfmiddlewaretoken,
