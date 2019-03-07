@@ -8,10 +8,10 @@ __author__ = 'ipetrash'
 # SOURCE: https://ru.wikipedia.org/wiki/Шаблонный_метод_(шаблон_проектирования)
 
 
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 
 
-class Unit(metaclass=ABCMeta):
+class Unit(ABC):
     """
     Абстрактный отряд. Аттрибуты класса, начинающиеся с подчеркивания в python
     являются protected
