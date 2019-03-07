@@ -8,10 +8,10 @@ __author__ = 'ipetrash'
 
 
 import re
+from urllib.parse import urlencode
 
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import urlencode
 
 
 def get_csrfmiddlewaretoken(rs) -> str:
@@ -85,7 +85,7 @@ with requests.Session() as s:
     root = BeautifulSoup(rs.content, 'html.parser')
     print(root.select_one('#schedule .bgc-lecture-practical'))
 
-# Вывод:
+# Консоль:
 # <Response [200]>
 # <Response [200]>
 # <td class="bgc-lecture-practical"><p><font class="font-subject">Современные проблемы биомедицинской и экологической инженерии</font><br/><font class="font-classroom"><a href="#" onclick="return false" onmouseup="GoToTheLink(1, 3, 128)">4-324</a></font><font class="font-teacher"><p>Лекция + практика</p><a href="#" onclick="return false" onmouseup="GoToTheLink(1, 2, 50126)">Демин Алексей Юрьевич</a></font></p></td>
