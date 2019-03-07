@@ -5,7 +5,7 @@ __author__ = 'ipetrash'
 
 
 # SOURCE: Design Patterns: Template method — Шаблонный метод
-# SOURCE: https:# ru.wikipedia.org/wiki/Шаблонный_метод_(шаблон_проектирования)
+# SOURCE: https://ru.wikipedia.org/wiki/Шаблонный_метод_(шаблон_проектирования)
 
 
 from abc import ABC, abstractmethod
