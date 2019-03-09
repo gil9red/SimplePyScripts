@@ -17,7 +17,8 @@ Input:
 # 2           3
 #   5      4
 #       3
-clock_items = [2, 4, 1, 3, 4, 3, 5, 2, 1, 4]
+# clock_items = [2, 4, 1, 3, 4, 3, 5, 2, 1, 4]
+clock_items = list(map(int, '2413435214'))
 ```
 
 Output:
