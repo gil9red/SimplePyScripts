@@ -95,6 +95,23 @@ def solver(clock_items: list) -> list:
     return list(wins.values())
 
 
+def print_extended(clock_data: dict):
+    num_clock_items = len(clock_data['selected_indexes'])
+
+    # Форматирование строки для красивого отображения двухзначных индексов
+    fmt_print = '{0} -> #{1:<%d} ({2})' % (2 if num_clock_items >= 11 else 1)
+
+    # Совмещение элемента истории, выбранного индекса и значения
+    total_result = zip(clock_data['history'], clock_data['selected_indexes'], clock_data['selected_values'])
+    for item, index, value in total_result:
+        print(fmt_print.format(item, index, value))
+
+
+def print_simple(clock_data: dict):
+    simple_result = zip(clock_data['selected_indexes'], clock_data['selected_values'])
+    print(' -> '.join('{}({})'.format(index, value) for index, value in simple_result))
+
+
 if __name__ == '__main__':
     #       2
     #    4     4
@@ -106,20 +123,15 @@ if __name__ == '__main__':
     clock_items = list(map(int, '2413435214'))
 
     wins = solver(clock_items)
-
     print('Winning results:', len(wins))
+
     for i, clock_data in enumerate(wins, 1):
         print(f'{i}.')
 
         print('Simple:')
-        simple_result = zip(clock_data['selected_indexes'], clock_data['selected_values'])
-        print(' -> '.join('{}({})'.format(index, value) for index, value in simple_result))
+        print_simple(clock_data)
         print()
+
         print('Extended:')
-
-        # Совмещение элемента истории, выбранного индекса и значения
-        total_result = zip(clock_data['history'], clock_data['selected_indexes'], clock_data['selected_values'])
-        for item, index, value in total_result:
-            print(f'{item} -> #{index} ({value})')
-
+        print_extended(clock_data)
         print()
