@@ -18,7 +18,7 @@ from abc import ABC, abstractmethod
 # на эти события и передавать исполнение другим компонентам.
 class IMediator(ABC):
     @abstractmethod
-    def notify(self, sender, event: str):
+    def notify(self, sender: object, event: str):
         pass
 
 
@@ -30,7 +30,7 @@ class ConcreteMediator(IMediator):
         self._component2 = component2
         self._component2.set_mediator(self)
 
-    def notify(self, sender, event: str):
+    def notify(self, sender: object, event: str):
         print(f'[+] Mediator notify(sender={sender}, event="{event}")')
 
         if event == "A":
@@ -80,7 +80,7 @@ class Component2(BaseComponent):
 
 
 if __name__ == '__main__':
-    # Клиентский код.
+    # Клиентский код
     component1 = Component1()
     component2 = Component2()
     ConcreteMediator(component1, component2)
