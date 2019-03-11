@@ -23,6 +23,11 @@ if __name__ == '__main__':
     assert data == unpad(pad(data))
     print()
 
+    assert b'123' == unpad(pad(b'123'))
+    assert b'123' * 9999 == unpad(pad(b'123' * 9999))
+    assert b'11111111' == unpad(pad(b'11111111'))
+    assert b'abcd123' == unpad(pad(b'abcd123'))
+
     print(unpad(b'12\x02\x02'))  # b'12'
     print(unpad(b'1\x01'))       # b'1'
     print()
