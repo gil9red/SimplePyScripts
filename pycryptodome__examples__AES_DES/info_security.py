@@ -37,7 +37,7 @@ class InfoSecurity:
 
     def _pad(self, s: bytes) -> bytes:
         pad_size = self.bs - (len(s) % self.bs)
-        return s + bytes(pad_size for _ in range(pad_size))
+        return s + bytes([pad_size] * pad_size)
 
     @staticmethod
     def _unpad(s: bytes) -> bytes:
