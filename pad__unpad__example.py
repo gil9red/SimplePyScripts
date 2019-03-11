@@ -11,7 +11,8 @@ def pad(s: bytes, bs=8) -> bytes:
 
 
 def unpad(s: bytes) -> bytes:
-    return s[:-ord(s[len(s) - 1:])]
+    pad_size = s[-1]
+    return s[:-pad_size]
 
 
 if __name__ == '__main__':
@@ -20,7 +21,9 @@ if __name__ == '__main__':
     print(padded_data)                         # b'Hello\x03\x03\x03'
     print(unpad(padded_data))                  # b'Hello'
     print(unpad(padded_data).decode('utf-8'))  # Hello
+    print()
 
+    print(unpad(b'\x00'))  # b''
     print()
 
     data = 'Привет!'.encode('utf-8')
