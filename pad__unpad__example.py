@@ -21,9 +21,11 @@ if __name__ == '__main__':
     print(padded_data)                         # b'Hello\x03\x03\x03'
     print(unpad(padded_data))                  # b'Hello'
     print(unpad(padded_data).decode('utf-8'))  # Hello
+    assert data == unpad(pad(data))
     print()
 
-    print(unpad(b'\x00'))  # b''
+    print(unpad(b'12\x02\x02'))  # b'12'
+    print(unpad(b'1\x01'))       # b'1'
     print()
 
     data = 'Привет!'.encode('utf-8')
@@ -31,3 +33,4 @@ if __name__ == '__main__':
     print(padded_data)         # b'\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1\x82!\x03\x03\x03'
     print(unpad(padded_data))  # b'\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1\x82!'
     print(unpad(padded_data).decode('utf-8'))  # Привет!
+    assert data == unpad(pad(data))
