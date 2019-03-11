@@ -8,15 +8,19 @@ __author__ = 'ipetrash'
 # SOURCE: https://ru.wikipedia.org/wiki/Посредник_(шаблон_проектирования)
 # SOURCE: https://refactoring.guru/ru/design-patterns/mediator
 # SOURCE: https://refactoring.guru/ru/design-patterns/mediator/csharp/example
+# SOURCE: https://refactoring.guru/ru/design-patterns/mediator/python/example
 
 
 from abc import ABC, abstractmethod
 
 
-# Интерфейс Посредника предоставляет метод, используемый компонентами для
-# уведомления посредника о различных событиях.  Посредник может реагировать
-# на эти события и передавать исполнение другим компонентам.
 class IMediator(ABC):
+    """
+    Интерфейс Посредника предоставляет метод, используемый компонентами для
+    уведомления посредника о различных событиях. Посредник может реагировать на
+    эти события и передавать исполнение другим компонентам.
+    """
+
     @abstractmethod
     def notify(self, sender: object, event: str):
         pass
@@ -47,9 +51,12 @@ class ConcreteMediator(IMediator):
             self._component2.do_c()
 
 
-# Базовый Компонент обеспечивает базовую функциональность хранения
-# экземпляра посредника внутри объектов компонентов.
 class BaseComponent(ABC):
+    """
+    Базовый Компонент обеспечивает базовую функциональность хранения экземпляра
+    посредника внутри объектов компонентов.
+    """
+
     def __init__(self, mediator: IMediator = None):
         self._mediator = mediator
 
@@ -83,7 +90,7 @@ if __name__ == '__main__':
     # Клиентский код
     component1 = Component1()
     component2 = Component2()
-    ConcreteMediator(component1, component2)
+    mediator = ConcreteMediator(component1, component2)
 
     print("Client triggets operation A.")
     component1.do_a()
