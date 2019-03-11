@@ -35,13 +35,15 @@ class InfoSecurity:
         cipher = AES.new(self.key, AES.MODE_CBC, iv)
         return self._unpad(cipher.decrypt(enc[AES.block_size:])).decode('utf-8')
 
+    # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/82810f8397907679316107f135a5b1dd1fcca516/pad__unpad__example.py#L7
     def _pad(self, s: bytes) -> bytes:
         pad_size = self.bs - (len(s) % self.bs)
         return s + bytes([pad_size] * pad_size)
 
     @staticmethod
     def _unpad(s: bytes) -> bytes:
-        return s[:-ord(s[len(s) - 1:])]
+        pad_size = s[-1]
+        return s[:-pad_size]
 
 
 if __name__ == '__main__':

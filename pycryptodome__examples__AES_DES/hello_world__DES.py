@@ -15,14 +15,15 @@ __author__ = 'ipetrash'
 from Crypto.Cipher import DES
 
 
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/713f8b9c4f607b4016c2b1d3209084c752691460/pycryptodome__examples__AES_DES/info_security.py#L38
+# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/82810f8397907679316107f135a5b1dd1fcca516/pad__unpad__example.py#L7
 def pad(s: bytes, bs=8) -> bytes:
     pad_size = bs - (len(s) % bs)
     return s + bytes([pad_size] * pad_size)
 
 
 def unpad(s: bytes) -> bytes:
-    return s[:-ord(s[len(s) - 1:])]
+    pad_size = s[-1]
+    return s[:-pad_size]
 
 
 key = b'abcdefgh'
