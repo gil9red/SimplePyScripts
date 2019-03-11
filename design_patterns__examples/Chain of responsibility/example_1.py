@@ -50,7 +50,7 @@ class IsNotStringHandler(Handler):
         self.next_handle(obj)
 
 
-class IsMatchReHandler(Handler):
+class IsNotMatchReHandler(Handler):
     def __init__(self, re_pattern: str):
         self._re_pattern = re_pattern
 
@@ -77,19 +77,19 @@ if __name__ == '__main__':
     is_not_none = IsNotNoneHandler()
     is_not_string = IsNotStringHandler()
 
-    is_match_re_1 = IsMatchReHandler("\d")
-    is_match_re_2 = IsMatchReHandler("1..")
-    is_match_re_3 = IsMatchReHandler("\d{3}")
-    is_match_re_1.set_next(is_match_re_2).set_next(is_match_re_3)
+    is_not_match_re_1 = IsNotMatchReHandler("\d")
+    is_not_match_re_2 = IsNotMatchReHandler("1..")
+    is_not_match_re_3 = IsNotMatchReHandler("\d{3}")
+    is_not_match_re_1.set_next(is_not_match_re_2).set_next(is_not_match_re_3)
 
     # Check only None
     client_code(IsNotNoneHandler())
     print()
 
     # Check all
-    is_not_none.set_next(is_not_string).set_next(is_match_re_1)
+    is_not_none.set_next(is_not_string).set_next(is_not_match_re_1)
     client_code(is_not_none)
     print()
 
     # Check only is_match_re_3
-    client_code(is_match_re_3)
+    client_code(is_not_match_re_3)
