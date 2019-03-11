@@ -36,7 +36,8 @@ class InfoSecurity:
         return self._unpad(cipher.decrypt(enc[AES.block_size:])).decode('utf-8')
 
     def _pad(self, s: bytes) -> bytes:
-        return s + bytes((self.bs - len(s) % self.bs) for _ in range(self.bs - len(s) % self.bs))
+        pad_size = self.bs - (len(s) % self.bs)
+        return s + bytes(pad_size for _ in range(pad_size))
 
     @staticmethod
     def _unpad(s: bytes) -> bytes:
