@@ -16,8 +16,7 @@ from Crypto.Cipher import DES
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/99ec5746cc93c8f1c143af0a04a42716d3dc5a16/pycryptodome__examples__AES_DES/info_security.py
-def pad(s: bytes) -> bytes:
-    bs = 8
+def pad(s: bytes, bs=8) -> bytes:
     return s + bytes((bs - len(s) % bs) for _ in range(bs - len(s) % bs))
 
 
