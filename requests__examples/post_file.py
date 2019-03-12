@@ -8,12 +8,10 @@ __author__ = 'ipetrash'
 
 
 import requests
-from os.path import basename
 
 
 url = 'https://httpbin.org/post'
 abs_file_name = __file__
-file_name = basename(abs_file_name)
 
 
 files = {'file': open(abs_file_name, 'rb')}
@@ -24,7 +22,7 @@ print()
 
 
 # With file name
-files = {'file': (file_name, open(abs_file_name, 'rb'))}
+files = {'file': ('my_file.py', open(abs_file_name, 'rb'))}
 rs = requests.post(url, files=files)
 print(rs)
 print(rs.text)
