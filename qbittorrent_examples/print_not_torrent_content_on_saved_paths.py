@@ -66,6 +66,7 @@ for path in items:
     if isfile(path):
         size = getsize(path)
     else:
+        # Найдем все файлы в папке и подпапках и подсчитаем их суммарный размер
         sub_files = filter(isfile, glob(glob_escape(path) + '/**', recursive=True))
         size = sum(getsize(file_name) for file_name in sub_files)
 
