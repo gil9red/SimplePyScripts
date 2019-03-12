@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from glob import iglob
+from glob import iglob, escape
 import os
 
 
@@ -21,7 +21,7 @@ def sizeof_fmt(num):
 def get_dir_total_size(dir_name: str) -> (int, str):
     total_size = 0
 
-    for file_name in iglob(dir_name + '/**', recursive=True):
+    for file_name in iglob(escape(dir_name) + '/**', recursive=True):
         try:
             if os.path.isfile(file_name):
                 total_size += os.path.getsize(file_name)
