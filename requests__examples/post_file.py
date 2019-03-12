@@ -36,3 +36,10 @@ files = {'file': ('report.csv', 'some,data,to,send\nanother,row,to,send\n')}
 rs = requests.post(url, files=files)
 print(rs)
 print(rs.text)
+
+
+# Send bytes as file
+files = {'file': ('report.csv', b'some,data,to,send\nanother,row,to,send\n')}
+rs = requests.post(url, files=files)
+print(rs)
+print(rs.text)
