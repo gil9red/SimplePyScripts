@@ -11,9 +11,11 @@ __author__ = 'ipetrash'
 
 from Crypto.PublicKey import RSA
 
-secret_code = "Unguessable"
+
+SECRET_CODE = "Unguessable"
+
 key = RSA.generate(2048)
-encrypted_key = key.export_key(passphrase=secret_code)
+encrypted_key = key.export_key(passphrase=SECRET_CODE)
 
 with open("rsa_private_key.pem", "wb") as f:
     f.write(encrypted_key)
