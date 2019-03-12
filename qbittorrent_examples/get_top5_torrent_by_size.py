@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from common import sizeof_fmt, get_client, print_table
+from common import sizeof_fmt, get_client
 
 
 qb = get_client()

@@ -5,7 +5,7 @@ __author__ = 'ipetrash'
 
 
 from collections import Counter
-from common import get_client, print_table
+from common import get_client
 
 
 qb = get_client()
