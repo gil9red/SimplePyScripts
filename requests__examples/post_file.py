@@ -24,7 +24,7 @@ print()
 
 
 # With file name
-files = {'file': (abs_file_name, open(abs_file_name, 'rb'))}
+files = {'file': (file_name, open(abs_file_name, 'rb'))}
 rs = requests.post(url, files=files)
 print(rs)
 print(rs.text)
