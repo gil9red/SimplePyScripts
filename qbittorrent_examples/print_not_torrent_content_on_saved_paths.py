@@ -70,7 +70,7 @@ for path in items:
         size = sum(getsize(file_name) for file_name in sub_files)
 
     total_size += size
-    print(f'{path} {size} / {sizeof_fmt(size)}')
+    print(f'{path} ({size} / {sizeof_fmt(size)})')
 
 print()
 
