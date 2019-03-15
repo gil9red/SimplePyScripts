@@ -6,6 +6,7 @@ __author__ = 'ipetrash'
 
 # SOURCE: Design Patterns: Chain of responsibility — Цепочка обязанностей
 # SOURCE: https://ru.wikipedia.org/wiki/Цепочка_обязанностей
+# SOURCE: https://ru.wikipedia.org/wiki/Цепочка_обязанностей#Пример_на_Python
 
 
 class Car:
