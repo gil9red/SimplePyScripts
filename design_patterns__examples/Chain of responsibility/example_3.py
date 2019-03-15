@@ -37,8 +37,6 @@ class Logger(ABC):
     Abstract handler in chain of responsibility pattern.
     """
 
-    _next = None
-
     def __init__(self, levels: List[LogLevel]):
         """
         Initialize new logger
@@ -46,7 +44,9 @@ class Logger(ABC):
         Args:
             levels (List[LogLevel]): List of log levels.
         """
-        self.log_levels = list(levels)
+
+        self._next = None
+        self._log_levels = list(levels)
 
     def set_next(self, next_logger: 'Logger') -> 'Logger':
         """
@@ -69,7 +69,7 @@ class Logger(ABC):
             msg (str): Message string.
             severity (LogLevel): Severity of message as log level enum.
         """
-        if LogLevel.ALL in self.log_levels or severity in self.log_levels:
+        if LogLevel.ALL in self._log_levels or severity in self._log_levels:
             self.write_message(msg)
 
         if self._next is not None:
