@@ -11,6 +11,11 @@ import glob
 import os
 
 
+items = glob.glob('../*')
+print(items)
+print(list(map(os.path.abspath, items)))
+print()
+
 items = glob.glob('../*.md')
 print(items)
 print(list(map(os.path.abspath, items)))
