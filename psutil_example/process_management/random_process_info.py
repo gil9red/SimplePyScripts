@@ -4,14 +4,14 @@
 __author__ = 'ipetrash'
 
 
+import random
+
 # pip install psutil
 import psutil
 
 print('Random process info')
 
 process_pid_list = psutil.pids()
-
-import random
 pid = random.choice(process_pid_list)
 print('Pid:', pid)
 
