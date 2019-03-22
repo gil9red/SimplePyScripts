@@ -4,12 +4,13 @@
 __author__ = 'ipetrash'
 
 
-# Need run as admin
+# NOTE: Need run as admin
+
+# pip install psutil
+import psutil
 
 
 def print_info(pid):
-    # pip install psutil
-    import psutil
     process = psutil.Process(pid)
     print('Process:', process)
 
@@ -76,8 +77,6 @@ def print_info(pid):
 if __name__ == '__main__':
     print('Random process info')
 
-    # pip install psutil
-    import psutil
     process_pid_list = psutil.pids()
 
     import random
