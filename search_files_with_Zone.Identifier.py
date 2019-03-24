@@ -14,7 +14,7 @@ import subprocess
 # Example: 'C:/Users/<user_name>/Downloads'
 DIR_NAME = normpath(expanduser('~/Downloads'))
 
-print(f'Search in "{DIR_NAME}"')
+print(f'Search in "{DIR_NAME}"\n')
 
 
 # NOTE: For test
@@ -27,9 +27,9 @@ found = 0
 for i, file_name in enumerate(files, 1):
     print(f'{i}/{len(files)} ({int(i / len(files) * 100)}%). found: {found}')
 
-    file_name = file_name.replace('[', '`[').replace(']', '`]')
+    escape_file_name = file_name.replace('[', '`[').replace(']', '`]')
     try:
-        cmd = f'''powershell -Command "get-content '{file_name}' -stream Zone.Identifier"'''
+        cmd = f'''powershell -Command "get-content '{escape_file_name}' -stream Zone.Identifier"'''
         # print(cmd)
 
         text = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
