@@ -33,11 +33,8 @@ def get_dir_total_size(dir_name: str) -> (int, str):
 
 
 if __name__ == '__main__':
-    size, size_str = get_dir_total_size(r"C:\Users\Default")
-    print(size, size_str)
+    paths = [r"C:\Users\Default", r"C:\Program Files (x86)", os.path.expanduser(r'~\Desktop')]
 
-    size, size_str = get_dir_total_size(r"C:\Users")
-    print(size, size_str)
-
-    size, size_str = get_dir_total_size(r"C:\Program Files (x86)")
-    print(size, size_str)
+    for path in paths:
+        size, size_str = get_dir_total_size(path)
+        print(f'"{path}": {size} bytes / {size_str}')
