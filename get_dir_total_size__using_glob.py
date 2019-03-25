@@ -18,6 +18,8 @@ def sizeof_fmt(num):
     return "%3.1f %s" % (num, 'TB')
 
 
+# FIXME: glob ignored dot folders and files
+#        Examples: .git/ .idea/ .gitignore
 def get_dir_total_size(dir_name: str) -> (int, str):
     total_size = 0
 
