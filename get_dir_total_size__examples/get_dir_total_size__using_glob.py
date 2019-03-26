@@ -7,15 +7,7 @@ __author__ = 'ipetrash'
 from glob import iglob, escape
 import os
 
-
-def sizeof_fmt(num):
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-
-        num /= 1024.0
-
-    return "%3.1f %s" % (num, 'TB')
+from common import sizeof_fmt
 
 
 # FIXME: glob ignored dot folders and files
