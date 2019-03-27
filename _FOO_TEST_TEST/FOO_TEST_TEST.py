@@ -70,7 +70,7 @@ def go_select_map():
 
 def bot_says():
     text = """\
-Bot version: 1.0
+Bot say:
 -aremnpakulsc
 
     """
