@@ -21,6 +21,10 @@ NEW_GAME_BUTTON_SELECT_MAP = 'images/new_game_button_select_map.png'
 OPEN_COMBO_BOX_SENTINEL = 'images/open_combo_box_sentinel.png'
 OPEN_COMBO_BOX_SCOURGE = 'images/open_combo_box_scourge.png'
 
+SELECT_AI_MENU_SENTINEL = "images/select_ai_menu_sentinel.png"
+SELECT_AI_MENU_SCOURGE = "images/select_ai_menu_scourge.png"
+AI_EASY = "images/ai_easy.png"
+
 
 def go_local_network():
     pos = pyautogui.locateCenterOnScreen(LOCAL_NETWORK_BUTTON)
@@ -64,6 +68,18 @@ def go_select_map():
     return False
 
 
+def bot_says():
+    text = """\
+Bot version: 1.0
+-aremnpakulsc
+
+    """
+
+    for line in text.splitlines():
+        pyautogui.typewrite(line)
+        pyautogui.typewrite(['enter'])
+
+
 while True:
     # Кликаем на Локальную игру
     while not go_local_network():
@@ -87,25 +103,48 @@ while True:
         # Кликаем на игроков
         #
         coords_sentinel = list(pyautogui.locateAllOnScreen(OPEN_COMBO_BOX_SENTINEL))
-        print('coords_sentinel:', coords_sentinel)
-
         coords_scourge = list(pyautogui.locateAllOnScreen(OPEN_COMBO_BOX_SCOURGE))
-        print('coords_scourge:', coords_scourge)
+        print(f'coords_sentinel: {coords_sentinel}, coords_scourge: {coords_scourge}')
 
-        if coords_sentinel or coords_scourge:
-            winsound.Beep(1000, duration=10)
+        if coords_sentinel and coords_scourge:
+            # Освобождаем место для первого игрока
+            coords_sentinel.pop(0)
+
+            bot_says()
+            quit()
+
+            # winsound.Beep(1000, duration=10)
 
             for rect in coords_sentinel + coords_scourge:
                 pos = pyautogui.center(rect)
 
-                # TODO: Научить бота выбирать соперника Легкий
-                pyautogui.moveTo(pos)
+                while True:
+                    # Клием на комбобокс
+                    pyautogui.moveTo(pos) or time.sleep(0.3)
+                    pyautogui.click(pos)
+                    time.sleep(0.3)
+
+                    # Ждем появления меню
+                    pos_menu_sentinel = pyautogui.locateCenterOnScreen(SELECT_AI_MENU_SENTINEL)
+                    pos_menu_scourge = pyautogui.locateCenterOnScreen(SELECT_AI_MENU_SCOURGE)
+                    print(f'SELECT_AI_MENU_SENTINEL: {pos_menu_sentinel}, SELECT_AI_MENU_SCOURGE: {pos_menu_scourge}')
+
+                    if pos_menu_sentinel or pos_menu_scourge:
+                        break
+
+                # Выбираем игрока
+                pos = pyautogui.locateCenterOnScreen(AI_EASY)
+                print('AI_EASY:', pos)
+                if pos:
+                    pyautogui.moveTo(pos) or time.sleep(0.3)
+                    pyautogui.click(pos)
 
                 time.sleep(0.3)
 
-            # pyautogui.moveTo(3000, 3000)
-            # time.sleep(2)
+            bot_says()
 
             break
+
+        time.sleep(1)
 
     time.sleep(1)
