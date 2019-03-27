@@ -107,11 +107,10 @@ while True:
         print(f'coords_sentinel: {coords_sentinel}, coords_scourge: {coords_scourge}')
 
         if coords_sentinel and coords_scourge:
+            bot_says()
+
             # Освобождаем место для первого игрока
             coords_sentinel.pop(0)
-
-            bot_says()
-            quit()
 
             # winsound.Beep(1000, duration=10)
 
@@ -140,8 +139,6 @@ while True:
                     pyautogui.click(pos)
 
                 time.sleep(0.3)
-
-            bot_says()
 
             break
 
