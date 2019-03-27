@@ -8,7 +8,7 @@ __author__ = 'ipetrash'
 
 
 import time
-import winsound
+# import winsound
 
 # pip install pyautogui
 import pyautogui
@@ -34,7 +34,7 @@ def go_local_network():
         pyautogui.click(pos)
         pyautogui.click(pos)
 
-        winsound.Beep(1000, duration=10)
+        # winsound.Beep(1000, duration=10)
         return True
 
     return False
@@ -48,7 +48,7 @@ def go_new_game():
         pyautogui.click(pos)
         pyautogui.click(pos)
 
-        winsound.Beep(1000, duration=10)
+        # winsound.Beep(1000, duration=10)
         return True
 
     return False
@@ -62,7 +62,7 @@ def go_select_map():
         pyautogui.click(pos)
         pyautogui.click(pos)
 
-        winsound.Beep(1000, duration=10)
+        # winsound.Beep(1000, duration=10)
         return True
 
     return False
