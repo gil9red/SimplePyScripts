@@ -80,68 +80,73 @@ Bot say:
         pyautogui.typewrite(['enter'])
 
 
-while True:
-    # Кликаем на Локальную игру
-    while not go_local_network():
-        pass
+def select_sentinel_and_scourge(coords_sentinel, coords_scourge):
+    for rect in coords_sentinel + coords_scourge:
+        pos = pyautogui.center(rect)
 
-    # Кликаем на Новую игру
-    while not go_new_game():
-        pass
+        while True:
+            # Клием на комбобокс
+            pyautogui.moveTo(pos) or time.sleep(0.3)
+            pyautogui.click(pos)
+            time.sleep(0.3)
 
-    # Прогружается и выбирается последняя карта (нам она и нужна), кликаем на Новую игру
-    while not go_select_map():
-        pass
+            # Ждем появления меню
+            pos_menu_sentinel = pyautogui.locateCenterOnScreen(SELECT_AI_MENU_SENTINEL)
+            pos_menu_scourge = pyautogui.locateCenterOnScreen(SELECT_AI_MENU_SCOURGE)
+            print(f'SELECT_AI_MENU_SENTINEL: {pos_menu_sentinel}, SELECT_AI_MENU_SCOURGE: {pos_menu_scourge}')
 
-    #
-    # Даем время прогрузиться
-    #
-    time.sleep(5)
+            if pos_menu_sentinel or pos_menu_scourge:
+                break
 
+        # Выбираем игрока
+        pos = pyautogui.locateCenterOnScreen(AI_EASY)
+        print('AI_EASY:', pos)
+        if pos:
+            pyautogui.moveTo(pos) or time.sleep(0.3)
+            pyautogui.click(pos)
+
+        time.sleep(0.3)
+
+
+if __name__ == '__main__':
     while True:
+        # Кликаем на Локальную игру
+        while not go_local_network():
+            pass
+
+        # Кликаем на Новую игру
+        while not go_new_game():
+            pass
+
+        # Прогружается и выбирается последняя карта (нам она и нужна), кликаем на Новую игру
+        while not go_select_map():
+            pass
+
         #
-        # Кликаем на игроков
+        # Даем время прогрузиться
         #
-        coords_sentinel = list(pyautogui.locateAllOnScreen(OPEN_COMBO_BOX_SENTINEL))
-        coords_scourge = list(pyautogui.locateAllOnScreen(OPEN_COMBO_BOX_SCOURGE))
-        print(f'coords_sentinel: {coords_sentinel}, coords_scourge: {coords_scourge}')
+        time.sleep(5)
 
-        if coords_sentinel and coords_scourge:
-            bot_says()
+        while True:
+            #
+            # Кликаем на игроков
+            #
+            coords_sentinel = list(pyautogui.locateAllOnScreen(OPEN_COMBO_BOX_SENTINEL))
+            coords_scourge = list(pyautogui.locateAllOnScreen(OPEN_COMBO_BOX_SCOURGE))
+            print(f'coords_sentinel: {coords_sentinel}, coords_scourge: {coords_scourge}')
 
-            # Освобождаем место для первого игрока
-            coords_sentinel.pop(0)
+            if coords_sentinel and coords_scourge:
+                # winsound.Beep(1000, duration=10)
 
-            # winsound.Beep(1000, duration=10)
+                bot_says()
 
-            for rect in coords_sentinel + coords_scourge:
-                pos = pyautogui.center(rect)
+                # Освобождаем место для первого игрока
+                coords_sentinel.pop(0)
 
-                while True:
-                    # Клием на комбобокс
-                    pyautogui.moveTo(pos) or time.sleep(0.3)
-                    pyautogui.click(pos)
-                    time.sleep(0.3)
+                select_sentinel_and_scourge(coords_sentinel, coords_scourge)
 
-                    # Ждем появления меню
-                    pos_menu_sentinel = pyautogui.locateCenterOnScreen(SELECT_AI_MENU_SENTINEL)
-                    pos_menu_scourge = pyautogui.locateCenterOnScreen(SELECT_AI_MENU_SCOURGE)
-                    print(f'SELECT_AI_MENU_SENTINEL: {pos_menu_sentinel}, SELECT_AI_MENU_SCOURGE: {pos_menu_scourge}')
+                break
 
-                    if pos_menu_sentinel or pos_menu_scourge:
-                        break
-
-                # Выбираем игрока
-                pos = pyautogui.locateCenterOnScreen(AI_EASY)
-                print('AI_EASY:', pos)
-                if pos:
-                    pyautogui.moveTo(pos) or time.sleep(0.3)
-                    pyautogui.click(pos)
-
-                time.sleep(0.3)
-
-            break
+            time.sleep(1)
 
         time.sleep(1)
-
-    time.sleep(1)
