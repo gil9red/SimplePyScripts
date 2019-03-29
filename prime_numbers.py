@@ -4,7 +4,10 @@
 __author__ = 'ipetrash'
 
 
-def get_prime_numbers(max_num):
+import math
+
+
+def get_prime_numbers(max_num: int) -> list:
     """
     Sieve of Eratosthenes algorithm.
 
@@ -17,7 +20,6 @@ def get_prime_numbers(max_num):
     sieve[1] = False
 
     # Create the sieve
-    import math
     for i in range(2, int(math.sqrt(max_num)) + 1):
         pointer = i * 2
 
