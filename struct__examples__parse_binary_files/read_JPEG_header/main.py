@@ -16,12 +16,23 @@ def print_info(file_name: str):
     print(file_name)
 
     with open(file_name, 'rb') as f:
+        # JFIF APP0
+
         # Read SOI
         data = f.read(2)
 
         if data != b'\xff\xd8':
             print('Not valid JPEG!')
             return
+
+        # APP0 marker FF E0
+        marker_APP0 = f.read(2)
+
+        # Length
+        f.read(2)
+
+        # Identifier. b'JFIF\x00'
+        data = f.read(5)
 
         # Find 0xff, 0xc0 to identify SOF0 marker
         while data:
