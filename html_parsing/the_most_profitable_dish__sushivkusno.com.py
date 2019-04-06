@@ -55,7 +55,7 @@ def print_the_most_profitable_dish(url):
             tag_subtitle = product.select_one('.CardText__subtitle > span > b').text.strip()
             weight, metrics = tag_subtitle.split()
 
-        except AttributeError:
+        except Exception:
             unknown_metrics_items.append((title, price))
             continue
 
@@ -94,7 +94,7 @@ def print_the_most_profitable_dish(url):
 if __name__ == '__main__':
     urls = [
         'http://sushivkusno.com/category/nabory-siety',
-        'http://sushivkusno.com/category/zakuski',
+        'http://sushivkusno.com/category/goriachiie-zakuski',
         'http://sushivkusno.com/category/salaty',
     ]
 
