@@ -20,7 +20,9 @@ FILES = {
 }
 
 with requests.session() as s:
-    rs = s.post(URL, headers=HEADERS, files=FILES, data=DATA)
+    s.headers.update(HEADERS)
+
+    rs = s.post(URL, files=FILES, data=DATA)
     print(rs.url)
     # https://waifu2x.booru.pics/Home/status?handle=H%3Awaifu2x.slayerduck.com%3A2949305&hash=c8a984fc10b416869ca04c8f8629d429d4b28461_s1_n1
 
