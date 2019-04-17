@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+import time
 import requests
 
 URL = "https://waifu2x.booru.pics/Home/upload"
@@ -12,14 +13,21 @@ HEADERS = {
 }
 DATA = {
     'denoise': '1',
-    'scale': '2',
+    'scale': '1',
 }
 FILES = {
     'img': open('image.jpg', 'rb')
 }
 
-rs = requests.post(URL, headers=HEADERS, files=FILES, data=DATA)
+with requests.session() as s:
+    rs = s.post(URL, headers=HEADERS, files=FILES, data=DATA)
+    print(rs.url)
+    # https://waifu2x.booru.pics/Home/status?handle=H%3Awaifu2x.slayerduck.com%3A2949305&hash=c8a984fc10b416869ca04c8f8629d429d4b28461_s1_n1
 
-# NOTE: need check status and redirect
-print(rs.url)
-# https://waifu2x.booru.pics/Home/status?handle=H%3Awaifu2x.slayerduck.com%3A2949160&hash=f3430bb9886bb97472bc6111e9c568bba9915e4a_s2_n1
+    # Ждем пока файл обработается на сервере
+    while '/Home/status?' in rs.url:
+        rs = s.get(rs.url)
+        time.sleep(0.5)
+
+    print(rs.url)
+    # https://waifu2x.booru.pics/Home/show?hash=c8a984fc10b416869ca04c8f8629d429d4b28461_s1_n1
