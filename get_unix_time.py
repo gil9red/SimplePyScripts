@@ -5,13 +5,12 @@ __author__ = 'ipetrash'
 
 
 import datetime
-import time
 
 
 def get_unix_time() -> int:
     d = datetime.datetime.now()
-    unix_time = int(time.mktime(d.timetuple()))
-    return unix_time
+    # OR: return int(time.mktime(d.timetuple()))
+    return int(d.timestamp())
 
 
 if __name__ == '__main__':
