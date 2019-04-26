@@ -30,10 +30,10 @@ def index():
                 font-size: 150%;
             }
 
-            th {
+            .frame th {
                 font-size: 120%;
             }
-            td, th {
+            .frame td, .frame th {
                 border: 1px double #333; /* Рамка таблицы */
                 padding: 5px;
             }
@@ -68,14 +68,15 @@ def index():
             openWindowWithPost("https://nnm-club.me/forum/tracker.php", data);
         }
     </script>
-
+    
     <table>
+    <tr>
+    <td style="vertical-align: top;">
+    <table class="frame">
         <caption><a href="https://en.wikipedia.org/wiki/Denuvo#List_of_games_using_Denuvo">Список взломанных игр</a></caption>
-
         <colgroup>
-            <col span="1" style="width: 5%;">
+            <col span="1">
         </colgroup>
-
         <tbody>
             <tr>
             {% for header in cracked_headers %}
@@ -100,18 +101,16 @@ def index():
         {% endfor %}
         </tbody>
     </table>
+    </td>
     
-    <br><br>
-    <hr>
-    <br><br>
+    <td width="50px"></td>
     
-    <table>
+    <td style="vertical-align: top;">
+    <table class="frame">
         <caption>Еще не взломали:<caption>
-
         <colgroup>
-            <col span="1" style="width: 5%;">
+            <col span="1">
         </colgroup>
-
         <tbody>
             <tr>
             {% for header in not_cracked_headers %}
@@ -128,6 +127,11 @@ def index():
         {% endfor %}
         </tbody>
     </table>
+    
+    </td>
+    </tr>
+    <table>
+    
 </body>
 </html>
     """, cracked_headers=["№", "Название", "Дата взлома", "Поиск"], cracked_games=cracked_games,
