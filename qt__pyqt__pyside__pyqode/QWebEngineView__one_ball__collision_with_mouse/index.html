@@ -1,0 +1,143 @@
+<body style="margin:0">
+    <canvas width="400" height="400"/>
+</body>
+<script>
+    // координаты мыши относительно центра канвы.
+    let x = 0, y = 0;
+    let outerCircle = 195;
+
+    // глобальный слушатель мышки
+    window.addEventListener('mousemove', e => {
+      let z = window.getComputedStyle(canvas).zoom || 1;
+      x = e.pageX/z - e.target.offsetLeft - canvas.width/2,
+      y = e.pageY/z - e.target.offsetTop - canvas.height/2;
+    });
+
+    let ball = {
+      r: 50,    // радиус шарика
+      x: 0,     // координата по х центра шарика
+      y: 0,     // координата по y центра шарика
+      speed: 0, // скорость движения
+      dirx: 0,  // компонент x вектора движения шарика
+      diry: 0,  // компонент y вектора движения шарика
+      damp: 10, // скорость уменьшения скорости движения (сопротивление)
+      collision: false, // признак коллизии с внешним кругом
+
+      // функция, которая проверяет наличие коллизии шарика с внешним кругом
+      hitOuterCircleCheck: function() {
+       let dr = outerCircle - this.r; //разница радиусов
+       // по теореме пифагора проверяем выход за пределы круга (коллизию)
+       if (this.x*this.x + this.y*this.y > dr*dr) {
+          // если коллизия уже была обсчитана, но шарик еще не вернулся в круг,
+          // чтобы он не застревал больше не надо обсчитывать коллизии, поэтому выходим
+          if (this.collision)
+              return;
+
+          // устанавливаем для шарика признак коллизии
+          this.collision = true;
+
+          // далее идет код расчета нового вектора движения
+
+          // найдем вектор нормали. тут он берется приближенно,
+          // в точке центра шарика в момент обсчета коллизии,
+          // при том что шарик уже проскочил границу. по идее тут
+          // необходимо посчитать точку соударения геометрически.
+          let max = Math.max(Math.abs(this.x), Math.abs(this.y));
+          let nx = -this.x/max;
+          let ny = -this.y/max;
+
+          // найдем новый вектор движения по формуле
+          // r = i−2(i⋅n)n , где
+          // i - исходный вектор
+          // n - нормаль
+          // ⋅ знак скалярного произведения
+
+          let dot2 = this.dirx * nx * 2 + this.diry * ny * 2
+          this.dirx = this.dirx-dot2*nx;
+          this.diry = this.diry-dot2*ny;
+
+          // нормализуем вектор движения
+          max = Math.max(Math.abs(this.dirx), Math.abs(this.diry));
+          this.dirx /= max;
+          this.diry /= max;
+        } else {
+
+          // сбрасываем признак коллизии когда шарик вернулся в круг.
+          this.collision = false;
+        }
+      },
+
+      // функция проверки коллизии шарика и мышки
+      hitMouseCheck: function() {
+        // если есть коллизия с внешним кругом игнорируем мышку
+        if (this.collision)
+          return;
+
+        // разница координат мышки и шарика
+        let dx = this.x - x;
+        let dy = this.y - y;
+
+        // проверяем по теореме Пифагора столкновение с мышкой
+        if (dx*dx + dy*dy < ball.r*ball.r) {
+          // задаем вектор движения и нормализуем его
+          let max = Math.max(Math.abs(dx), Math.abs(dy));
+          if (!max) return;
+          this.dirx = dx/max;
+          this.diry = dy/max;
+
+          // задаем скорость
+          this.speed = 300;
+        }
+      },
+
+      // тут осуществляется передвижение
+      // dt - кол-во секунд с прошлого обсчета
+      doMove: function(dt) {
+        // к текущей координате прибавляем вектор скорости помноженный
+        // на значение скорости помноженные на прошедшее время
+        this.x += this.dirx*this.speed*dt;
+        this.y += this.diry*this.speed*dt;
+
+        // тормозим объект, так же на значение зависящее от времени
+        this.speed = Math.max(0, this.speed - this.damp*dt);
+      }
+    };
+
+    // цикл прверок, не зависит от цикла отрисовки,
+    // все проверки запускаются дискретно, через фиксированное время 10 мс
+    // если считать "физику" в requestAnimationFrame все будет печально.
+    let t = 0;
+    setInterval(() => {
+      // считаем сколько времени прошло с прошлого обсчета
+      let dt = new Date().getTime() - t;
+      ball.hitMouseCheck();
+      ball.doMove(dt/1000);
+      ball.hitOuterCircleCheck();
+      t = new Date().getTime();
+    }, 5);
+
+    // далее нет никаких фокусов
+
+    let canvas = document.querySelector('canvas');
+    let ctx = canvas.getContext('2d');
+
+    requestAnimationFrame(draw);
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.translate(canvas.width/2, canvas.height/2)
+      circle(0, 0, outerCircle);
+      circle(ball.x, ball.y, ball.r);
+      ctx.translate(-canvas.width/2, -canvas.height/2)
+      requestAnimationFrame(draw);
+    }
+
+    function circle(x,y,r) {
+      ctx.beginPath();
+      ctx.strokeStyle = 'red';
+      ctx.lineWidth = 3;
+      ctx.arc(x, y, r, 0, Math.PI*2, true);
+      ctx.stroke();
+      ctx.closePath();
+    }
+</script>
