@@ -8,7 +8,7 @@ __author__ = 'ipetrash'
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/d50de0f237d778f7d69ee75e328503f8c8344743/qt__pyqt__pyside__pyqode/QWebEngineView__one_ball__in_outer_circle_area__collision_with_mouse/index.html
 
 
-import pathlib
+from pathlib import Path
 from timeit import default_timer
 
 from PyQt5.Qt import QApplication, QWidget, QPainter, QTimer, Qt, QPoint, QPen
@@ -107,7 +107,7 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        title = pathlib.Path(__file__).parent.name
+        title = Path(__file__).parent.name
         self.setWindowTitle(title)
 
         timeout = 1000 // 60
