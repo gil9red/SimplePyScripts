@@ -149,8 +149,8 @@ class MainWindow(QWidget):
         self.update()
 
     def mouseMoveEvent(self, event):
-        self.mouse_center_x = event.pos().x() - self.width() // 2
-        self.mouse_center_y = event.pos().y() - self.height() // 2
+        self.mouse_center_x = event.pos().x() - (self.width() / 2)
+        self.mouse_center_y = event.pos().y() - (self.height() / 2)
 
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -159,7 +159,7 @@ class MainWindow(QWidget):
         painter.setPen(QPen(Qt.red, 3))
         painter.setBrush(Qt.transparent)
 
-        painter.translate(self.width() // 2, self.height() // 2)
+        painter.translate(self.width() / 2, self.height() / 2)
 
         painter.drawEllipse(QPoint(0, 0), self.outer_circle, self.outer_circle)
         painter.drawEllipse(QPoint(self.ball.x, self.ball.y), self.ball.r, self.ball.r)
