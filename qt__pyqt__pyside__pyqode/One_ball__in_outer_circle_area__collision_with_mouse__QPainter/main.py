@@ -69,7 +69,7 @@ class Ball:
             self.collision = False
 
     # Функция проверки коллизии шарика и мышки
-    def hit_mouse_check(self, x: int, y: int):
+    def hit_mouse_check(self, x, y):
         # Если есть коллизия с внешним кругом игнорируем мышку
         if self.collision:
             return
