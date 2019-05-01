@@ -7,6 +7,7 @@ __author__ = 'ipetrash'
 # SOURCE: https://ru.stackoverflow.com/a/970882/201445
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/d50de0f237d778f7d69ee75e328503f8c8344743/qt__pyqt__pyside__pyqode/QWebEngineView__one_ball__in_outer_circle_area__collision_with_mouse/index.html
 
+
 import pathlib
 from timeit import default_timer
 
@@ -18,8 +19,8 @@ class Ball:
     x = 0      # Координата по х центра шарика
     y = 0      # Координата по y центра шарика
     speed = 0  # Скорость движения
-    dirx = 0   # Компонент x вектора движения шарика
-    diry = 0   # Компонент y вектора движения шарика
+    dir_x = 0   # Компонент x вектора движения шарика
+    dir_y = 0   # Компонент y вектора движения шарика
     damp = 10  # Скорость уменьшения скорости движения (сопротивление)
     collision = False  # Признак коллизии с внешним кругом
     speed_after_collision = 300  # Скорость движения шарика после столкновения
@@ -54,14 +55,14 @@ class Ball:
             # n - нормаль
             # ⋅ знак скалярного произведения
 
-            dot2 = self.dirx * nx * 2 + self.diry * ny * 2
-            self.dirx = self.dirx - dot2 * nx
-            self.diry = self.diry - dot2 * ny
+            dot2 = self.dir_x * nx * 2 + self.dir_y * ny * 2
+            self.dir_x = self.dir_x - dot2 * nx
+            self.dir_y = self.dir_y - dot2 * ny
 
             # Нормализуем вектор движения
-            max_value = max(abs(self.dirx), abs(self.diry))
-            self.dirx /= max_value
-            self.diry /= max_value
+            max_value = max(abs(self.dir_x), abs(self.dir_y))
+            self.dir_x /= max_value
+            self.dir_y /= max_value
 
         else:
             # Сбрасываем признак коллизии когда шарик вернулся в круг.
@@ -73,7 +74,7 @@ class Ball:
         if self.collision:
             return
 
-        # разница координат мышки и шарика
+        # Разница координат мышки и шарика
         dx = self.x - x
         dy = self.y - y
 
@@ -84,8 +85,8 @@ class Ball:
             if not max_value:
                 return
 
-            self.dirx = dx / max_value
-            self.diry = dy / max_value
+            self.dir_x = dx / max_value
+            self.dir_y = dy / max_value
 
             # Задаем скорость
             self.speed = self.speed_after_collision
@@ -95,8 +96,8 @@ class Ball:
     def do_move(self, dt):
         # К текущей координате прибавляем вектор скорости помноженный
         # на значение скорости помноженные на прошедшее время
-        self.x += self.dirx * self.speed * dt
-        self.y += self.diry * self.speed * dt
+        self.x += self.dir_x * self.speed * dt
+        self.y += self.dir_y * self.speed * dt
 
         # Тормозим объект, так же на значение зависящее от времени
         self.speed = max(0, self.speed - self.damp * dt)
