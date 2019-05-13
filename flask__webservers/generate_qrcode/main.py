@@ -5,9 +5,8 @@ __author__ = 'ipetrash'
 
 
 import os
-
 from flask import Flask, request, jsonify, render_template_string, send_from_directory, url_for, redirect
-app = Flask(__name__)
+
 
 UPLOAD_FOLDER = 'images'
 
