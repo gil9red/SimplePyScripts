@@ -9,8 +9,8 @@ from PIL import Image, ImageDraw
 
 
 def draw_progress(image: Image, percent: int) -> Image:
-    if percent <= 0:
-        return
+    if percent < 0:
+        return image
 
     if percent > 100:
         percent = 100
@@ -26,7 +26,7 @@ def draw_progress(image: Image, percent: int) -> Image:
     y1 = y0 + progress_height
 
     drawer = ImageDraw.Draw(image)
-    drawer.rectangle(xy=[x0, y0, x1, y1], fill=(0, 255, 0))
+    drawer.rectangle(xy=[x0, y0, x1, y1], fill=(0, 255, 0))  # RGB, green
 
     return image
 
