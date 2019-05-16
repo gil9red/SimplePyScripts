@@ -25,6 +25,8 @@ def draw_progress(image: Image, percent: int) -> Image:
     x1 = x0 + progress_width
     y1 = y0 + progress_height
 
+    image = image.copy()
+
     drawer = ImageDraw.Draw(image)
     drawer.rectangle(xy=[x0, y0, x1, y1], fill=(0, 255, 0))  # RGB, green
 
