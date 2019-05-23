@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-def print_pretty_table(data, cell_sep=' | '):
+def print_pretty_table(data, cell_sep=' | ', header_separator=True):
     rows = len(data)
     cols = len(data[0])
 
@@ -13,7 +13,12 @@ def print_pretty_table(data, cell_sep=' | '):
         columns = [data[row][col] for row in range(rows)]
         col_width.append(len(max(columns, key=len)))
 
-    for row in range(rows):
+    separator = "-+-".join('-' * n for n in col_width)
+
+    for i, row in enumerate(range(rows)):
+        if i == 1 and header_separator:
+            print(separator)
+
         result = []
         for col in range(cols):
             item = data[row][col].rjust(col_width[col])
@@ -31,8 +36,18 @@ if __name__ == '__main__':
         ['banana', 'David', 'goose'],
     ]
 
+    print_pretty_table(table_data, header_separator=False)
+    #    FRUIT | PERSON | ANIMAL
+    #   apples |  Alice |   dogs
+    #  oranges |    Bob |   cats
+    # cherries |  Carol |  moose
+    #   banana |  David |  goose
+
+    print()
+
     print_pretty_table(table_data)
     #    FRUIT | PERSON | ANIMAL
+    # ---------+--------+-------
     #   apples |  Alice |   dogs
     #  oranges |    Bob |   cats
     # cherries |  Carol |  moose
