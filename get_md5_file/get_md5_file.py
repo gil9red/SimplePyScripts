@@ -4,13 +4,15 @@
 __author__ = 'ipetrash'
 
 
-def md5sum(filename):
+import hashlib
+
+
+def md5sum(filename: str) -> str:
     """
     Функция для получения контрольной суммы файла, используя алгоритм MD5.
 
     """
 
-    import hashlib
     md5 = hashlib.md5()
 
     with open(filename, 'rb') as f:
@@ -21,5 +23,5 @@ def md5sum(filename):
 
 
 if __name__ == '__main__':
-    file_name = r'C:\Program Files (x86)\Agarest_Generations of War Zero\AgarestZero.exe'
+    file_name = __file__
     print(md5sum(file_name))
