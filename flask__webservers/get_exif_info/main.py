@@ -168,7 +168,7 @@ def index():
                 // var data = $(this).serialize();
                 //
                 // For send file object:
-                var input = $(".form__upload_file > input[type=file]");
+                // var input = $(".form__upload_file > input[type=file]");
                 var data = new FormData(thisForm);
 
                 $.ajax({
