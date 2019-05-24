@@ -42,7 +42,7 @@ def index():
         <br>
         <br>
     
-        <form id="form__do_hash" method="post" action="/do_hash" enctype="multipart/form-data">
+        <form id="form__do_hash" method="post" action="/do_hash">
             <table><tr>
             <tr><th align="left">Text:</th><th align="left">Algorithm:</th></tr>
             <td style="vertical-align: top;">
@@ -79,20 +79,22 @@ def index():
         <script>
         $(document).ready(function() {
             $("#form__do_hash").submit(function() {
-                var thisForm = this;
+                let thisForm = this;
     
-                var url = $(this).attr("action");
-                var method = $(this).attr("method");
+                let url = $(this).attr("action");
+                let method = $(this).attr("method");
                 if (method === undefined) {
                     method = "get";
                 }
                 
-                var data = "";
+                let data = "";
+                let contentType = "application/x-www-form-urlencoded; charset=UTF-8";
                 
                 if ($("#kind_text").prop("checked")) {
                     data = $(thisForm).serialize();
                 } else {
                     data = new FormData(thisForm);
+                    contentType = false;
                 }
     
                 $.ajax({
@@ -101,13 +103,13 @@ def index():
                     data: data,
                     dataType: "json",  // тип данных загружаемых с сервера
                     processData: false,
-                    contentType: false,
+                    contentType: contentType,
                     success: function(data) {
                         console.log(data);
                         console.log(JSON.stringify(data));
                         
-                        var about_error = $('#about_error');
-                        var result_hash = $('#result_hash');
+                        let about_error = $('#about_error');
+                        let result_hash = $('#result_hash');
                         
                         about_error.hide();
                         result_hash.hide();
@@ -151,7 +153,6 @@ def do_hash():
     if not ((text or file) and algo):
         return render_template_string("""\
         Example:<br>
-        <a href="{{ example_uri }}">{{ example_uri }}<a><br>
         <a href="{{ example_uri }}&hash=md5">{{ example_uri }}&hash=md5<a><br>
         <a href="{{ example_uri }}&hash=sha1">{{ example_uri }}&hash=sha1<a><br>
         <a href="{{ example_uri }}&hash=sha512">{{ example_uri }}&hash=sha512<a>
