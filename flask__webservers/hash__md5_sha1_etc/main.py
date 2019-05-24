@@ -42,11 +42,18 @@ def index():
         <br>
         <br>
     
-        <form id="form__do_hash" method="post" action="/do_hash">
+        <form id="form__do_hash" method="post" action="/do_hash" enctype="multipart/form-data">
             <table><tr>
             <tr><th align="left">Text:</th><th align="left">Algorithm:</th></tr>
             <td style="vertical-align: top;">
                 <textarea rows="10" cols="45" type="text" name="text" required>https://github.com/gil9red</textarea>
+                <p><input type="file" name="file"></p>
+                <p>
+                <input id="kind_text" name="kind" type="radio" value="text" checked>
+                <label for="kind_text">Text</label>
+                <input id="kind_file" name="kind" type="radio" value="file">
+                <label for="kind_file">File</label>
+                </p>
             </td>
             <td style="vertical-align: top;">
                 <select size="10" name="hash">
@@ -79,14 +86,22 @@ def index():
                 if (method === undefined) {
                     method = "get";
                 }
-    
-                var data = $(this).serialize();
+                
+                var data = "";
+                
+                if ($("#kind_text").prop("checked")) {
+                    data = $(thisForm).serialize();
+                } else {
+                    data = new FormData(thisForm);
+                }
     
                 $.ajax({
                     url: url,
                     method: method,  // HTTP метод, по умолчанию GET
                     data: data,
                     dataType: "json",  // тип данных загружаемых с сервера
+                    processData: false,
+                    contentType: false,
                     success: function(data) {
                         console.log(data);
                         console.log(JSON.stringify(data));
@@ -120,17 +135,20 @@ def index():
 def do_hash():
     print('request.args:', request.args)
     print('request.form:', request.form)
+    print('request.files:', request.files)
     print()
 
     text = request.args.get('text')
     if not text:
         text = request.form.get('text')
 
+    file = request.files.get('file')
+
     algo = request.args.get('hash')
     if not algo:
         algo = request.form.get('hash')
 
-    if not text or not algo:
+    if not ((text or file) and algo):
         return render_template_string("""\
         Example:<br>
         <a href="{{ example_uri }}">{{ example_uri }}<a><br>
@@ -148,7 +166,14 @@ def do_hash():
     if algo not in SUPPORTED_HASH_ALGOS:
         result['error'] = f'Unsupported algorithm "{algo}"'
     else:
-        digest = hashlib.new(algo, data=text.encode())
+        if file:
+            digest = hashlib.new(algo)
+            for chunk in iter(lambda: file.stream.read(128 * digest.block_size), b''):
+                digest.update(chunk)
+
+        else:
+            digest = hashlib.new(algo, data=text.encode())
+
         hex_digest = digest.hexdigest()
 
         result['result'] = hex_digest
