@@ -14,4 +14,4 @@ for f in glob.glob("*.png"):
     frame = cv2.UMat(frame)
     frame = rescale_frame(frame,shape,20)
     frame = rescale_frame(frame,shape,100)
-    cv2.imwrite(f, frame)
+    cv2.imwrite(f, frame,[int(cv2.IMWRITE_PNG_COMPRESSION), 30])
