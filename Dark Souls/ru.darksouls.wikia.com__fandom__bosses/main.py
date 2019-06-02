@@ -162,3 +162,7 @@ if __name__ == '__main__':
     print('Total boss DS1:', connect.execute('SELECT count(*) FROM BOSS WHERE game = "Dark Souls"').fetchone()[0])
     print('Total boss DS2:', connect.execute('SELECT count(*) FROM BOSS WHERE game = "Dark Souls II"').fetchone()[0])
     print('Total boss DS3:', connect.execute('SELECT count(*) FROM BOSS WHERE game = "Dark Souls III"').fetchone()[0])
+    # Total boss: 92
+    # Total boss DS1: 26
+    # Total boss DS2: 41
+    # Total boss DS3: 25
