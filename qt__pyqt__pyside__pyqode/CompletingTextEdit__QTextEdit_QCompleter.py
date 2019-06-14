@@ -95,7 +95,7 @@ class CompletingTextEdit(QTextEdit):
             return
 
         ctrlOrShift = e.modifiers() & (Qt.ControlModifier | Qt.ShiftModifier)
-        if self._completer is None or (ctrlOrShift and len(e.text()) == 0):
+        if ctrlOrShift and not e.text():
             return
 
         eow = "~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="
