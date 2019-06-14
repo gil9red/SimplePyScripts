@@ -29,14 +29,8 @@ class CompletingTextEdit(QTextEdit):
 
         self.completerSequence = QKeySequence("Ctrl+Space")
 
-        self._completer = QCompleter(self)
-        self._completer.setModelSorting(QCompleter.CaseInsensitivelySortedModel)
-        self._completer.setCaseSensitivity(Qt.CaseInsensitive)
-        self._completer.setWrapAround(True)
-
+        self._completer = QCompleter()
         self._completer.setWidget(self)
-        self._completer.setCompletionMode(QCompleter.PopupCompletion)
-        self._completer.setCaseSensitivity(Qt.CaseInsensitive)
         self._completer.activated.connect(self.insertCompletion)
 
     def insertCompletion(self, completion):
@@ -50,7 +44,7 @@ class CompletingTextEdit(QTextEdit):
         tc.insertText(completion[-extra:])
         self.setTextCursor(tc)
 
-    def textUnderCursor(self):  # прегружен
+    def textUnderCursor(self):
         tc = self.textCursor()
         tc.select(QTextCursor.WordUnderCursor)
 
@@ -59,7 +53,8 @@ class CompletingTextEdit(QTextEdit):
     def loadFromFile(self, fileName):
         f = QFile(fileName)
         if not f.open(QFile.ReadOnly):
-            return QStringListModel(self._completer)
+            model = QStringListModel()
+            self._completer.setModel(model)
 
         QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
 
@@ -76,20 +71,15 @@ class CompletingTextEdit(QTextEdit):
 
         QApplication.restoreOverrideCursor()
 
-        model = QStringListModel(words, self._completer)
+        model = QStringListModel(words)
         self._completer.setModel(model)
 
     def loadFromList(self, words):
-        model = QStringListModel(words, self._completer)
+        model = QStringListModel(words)
         self._completer.setModel(model)
 
-    def focusInEvent(self, e):
-        if self._completer is not None:
-            self._completer.setWidget(self)
-        super().focusInEvent(e)
-
     def keyPressEvent(self, e):
-        if self._completer is not None and self._completer.popup().isVisible():
+        if self._completer.popup().isVisible():
             # The following keys are forwarded by the completer to the widget.
             if e.key() in (Qt.Key_Enter, Qt.Key_Return, Qt.Key_Escape, Qt.Key_Tab, Qt.Key_Backtab):
                 e.ignore()
@@ -99,9 +89,10 @@ class CompletingTextEdit(QTextEdit):
         newSeq = QKeySequence(e.modifiers() | e.key())
         isShortcut = newSeq == self.completerSequence
 
-        if self._completer is None or not isShortcut:
+        if not isShortcut:
             # Do not process the shortcut when we have a completer.
             super().keyPressEvent(e)
+            return
 
         ctrlOrShift = e.modifiers() & (Qt.ControlModifier | Qt.ShiftModifier)
         if self._completer is None or (ctrlOrShift and len(e.text()) == 0):
@@ -111,15 +102,15 @@ class CompletingTextEdit(QTextEdit):
         hasModifier = (e.modifiers() != Qt.NoModifier) and not ctrlOrShift
         completionPrefix = self.textUnderCursor()
 
-        if not isShortcut and (hasModifier or len(e.text()) == 0 or
-                               len(completionPrefix) < 3 or e.text()[-1] in eow):
+        if not isShortcut and (hasModifier or not e.text() or len(completionPrefix) < 3 or e.text()[-1] in eow):
             self._completer.popup().hide()
             return
 
         if completionPrefix != self._completer.completionPrefix():
             self._completer.setCompletionPrefix(completionPrefix)
             self._completer.popup().setCurrentIndex(
-                self._completer.completionModel().index(0, 0))
+                self._completer.completionModel().index(0, 0)
+            )
 
         cr = self.cursorRect()
         cr.setWidth(self._completer.popup().sizeHintForColumn(0) +
@@ -135,7 +126,7 @@ class MainWindow(QMainWindow):
 
         self.textEdit = CompletingTextEdit()
 
-        self.textEdit.loadFromList(['dog', 'cat', 'python', 'собака'])
+        self.textEdit.loadFromList(['dog', 'cat', 'carry', 'python', 'собака', 'foobar'])
         # OR:
         # self.textEdit.loadFromFile('wordlist.txt')
 
@@ -150,7 +141,9 @@ class MainWindow(QMainWindow):
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
+
     mw = MainWindow()
     mw.resize(500, 300)
     mw.show()
+
     sys.exit(app.exec_())
