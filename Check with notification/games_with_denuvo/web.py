@@ -73,7 +73,7 @@ def index():
     <tr>
     <td style="vertical-align: top;">
     <table class="frame">
-        <caption><a href="https://en.wikipedia.org/wiki/Denuvo#List_of_games_using_Denuvo">Список взломанных игр</a></caption>
+        <caption><a href="https://ru.wikipedia.org/wiki/Список_игр,_защищённых_Denuvo">Список взломанных игр</a></caption>
         <colgroup>
             <col span="1">
         </colgroup>
