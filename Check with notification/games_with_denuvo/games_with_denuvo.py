@@ -10,9 +10,7 @@ def get_games_with_denuvo() -> [(str, bool)]:
 
     """
 
-    # Так-то скрипт работает и ru, с en
-    url = 'https://en.wikipedia.org/wiki/Denuvo'
-    # url = 'https://ru.wikipedia.org/wiki/Denuvo'
+    url = 'https://ru.wikipedia.org/wiki/Список_игр,_защищённых_Denuvo'
 
     import requests
     rs = requests.get(url)
