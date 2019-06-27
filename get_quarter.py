@@ -33,11 +33,17 @@ def get_quarter(month_or_date=None) -> int:
         raise Exception('Invalid "month": {}'.format(month))
 
 
+def get_quarter_num(month_or_date=None) -> str:
+    return ['I', 'II', 'III', 'IV'][get_quarter(month_or_date) - 1]
+
+
 if __name__ == '__main__':
     print(get_quarter())
     print()
     print(get_quarter(DT.datetime.today()))
     print(get_quarter(DT.date.today()))
+    print()
+    print(get_quarter_num())
     print()
 
     for dt in [DT.date(2018, month=i + 1, day=1) for i in range(12)]:
@@ -55,3 +61,16 @@ if __name__ == '__main__':
     assert get_quarter(10) == 4
     assert get_quarter(11) == 4
     assert get_quarter(12) == 4
+
+    assert get_quarter_num(1) == "I"
+    assert get_quarter_num(2) == "I"
+    assert get_quarter_num(3) == "I"
+    assert get_quarter_num(4) == "II"
+    assert get_quarter_num(5) == "II"
+    assert get_quarter_num(6) == "II"
+    assert get_quarter_num(7) == "III"
+    assert get_quarter_num(8) == "III"
+    assert get_quarter_num(9) == "III"
+    assert get_quarter_num(10) == "IV"
+    assert get_quarter_num(11) == "IV"
+    assert get_quarter_num(12) == "IV"
