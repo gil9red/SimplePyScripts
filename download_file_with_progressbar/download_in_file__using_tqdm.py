@@ -4,6 +4,16 @@
 __author__ = 'ipetrash'
 
 
+import os
+import sys
+
+# pip install tqdm
+from tqdm import tqdm
+
+# pip install requests
+import requests
+
+
 def sizeof_fmt(num):
     for x in ['bytes', 'KB', 'MB', 'GB']:
         if num < 1024.0:
@@ -13,9 +23,6 @@ def sizeof_fmt(num):
 
     return "%3.1f %s" % (num, 'TB')
 
-
-from tqdm import tqdm
-import requests
 
 url = 'https://github.com/gil9red/NotesManager/raw/master/bin.rar'
 # Streaming, so we can iterate over the response.
@@ -28,10 +35,7 @@ print('From content-length:', sizeof_fmt(total_size))
 chunk_size = 1024
 num_bars = int(total_size / chunk_size)
 
-import os
 file_name = os.path.basename(url)
-
-import sys
 
 with open(file_name, mode='wb') as f:
     for data in tqdm(rs.iter_content(chunk_size), total=num_bars, unit='KB', file=sys.stdout):
