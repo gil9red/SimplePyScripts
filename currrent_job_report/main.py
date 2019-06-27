@@ -27,7 +27,10 @@ TRAY_ICON = os.path.join(os.path.dirname(__file__), 'favicon.ico')
 
 import datetime
 
-from get_user_and_deviation_hours import get_user_and_deviation_hours, NotFoundReport
+from get_user_and_deviation_hours import (
+    get_user_and_deviation_hours, get_quarter_user_and_deviation_hours, get_quarter_num,
+    NotFoundReport
+)
 
 
 from qtpy.QtWidgets import *
@@ -51,15 +54,29 @@ class CheckJobReportThread(QThread):
         self.ok = None
 
     def run(self):
+        def _get_title(deviation_hours):
+            ok = deviation_hours[0] != '-'
+            return 'Переработка' if ok else 'Недоработка'
+
         while True:
             today = datetime.datetime.today().strftime('%d/%m/%Y %H:%M:%S')
             self.about_log.emit('Check for {}'.format(today))
 
+            ok = False
+            text = ""
+
             try:
                 name, deviation_hours = get_user_and_deviation_hours()
-
                 ok = deviation_hours[0] != '-'
-                text = name + '\n' + ('Переработка' if ok else 'Недоработка') + ' ' + deviation_hours
+
+                _, quarter_deviation_hours = get_quarter_user_and_deviation_hours()
+                if quarter_deviation_hours.count(':') == 1:
+                    quarter_deviation_hours += ":00"
+
+                text = name + '\n\n' \
+                    + _get_title(deviation_hours) + ' ' + deviation_hours + "\n" \
+                    + _get_title(quarter_deviation_hours) + ' за квартал ' + get_quarter_num() \
+                        + " " + quarter_deviation_hours
 
             except NotFoundReport:
                 ok = True
@@ -73,7 +90,7 @@ class CheckJobReportThread(QThread):
             if self.last_text != text:
                 self.last_text = text
 
-                text = 'Обновлено {}\n{}'.format(today, self.last_text)
+                text = f"Обновлено {today}\n{self.last_text}"
                 self.about_new_text.emit(text)
                 self.about_log.emit("    " + self.last_text + "\n")
             else:
@@ -119,7 +136,7 @@ class JobReportWidget(QWidget):
 
         hlayout = QHBoxLayout()
         hlayout.addWidget(self.info)
-        hlayout.addWidget(visible_log_button)
+        hlayout.addWidget(visible_log_button, alignment=Qt.AlignTop)
         layout.addLayout(hlayout)
 
         layout.addStretch()
@@ -166,7 +183,7 @@ if __name__ == '__main__':
     tray = QSystemTrayIcon(QIcon(TRAY_ICON))
 
     job_report_widget = JobReportWidget()
-    job_report_widget.setFixedSize(220, 100)
+    job_report_widget.setFixedSize(230, 130)
     job_report_widget_action = QWidgetAction(job_report_widget)
     job_report_widget_action.setDefaultWidget(job_report_widget)
 
