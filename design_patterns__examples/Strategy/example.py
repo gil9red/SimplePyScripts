@@ -41,11 +41,11 @@ class Context:
 
 if __name__ == '__main__':
     context = Context(DownloadWindowsStrategy())
-    context.download("file.txt")
-
-    context = Context(DownloadLinuxStrategy())
-    context.download("file.txt")
+    context.download("file.txt")  # Windows download: file.txt
     print()
 
+    context = Context(DownloadLinuxStrategy())
+    context.download("file.txt")  # Linux download: file.txt
+
     context.set_strategy(DownloadWindowsStrategy())
-    context.download("file.txt")
+    context.download("file.txt")  # Windows download: file.txt
