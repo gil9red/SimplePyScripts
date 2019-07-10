@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
+
+from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtGui import QPainter
+from PyQt5.QtCore import Qt, QTimer
+
+
+class MainWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.setMouseTracking(True)
+
+        self.enabledClose = False
+        QTimer.singleShot(5000, self._setEnabledClose)
+
+    def _setEnabledClose(self):
+        self.enabledClose = True
+
+    def mouseMoveEvent(self, event):
+        if self.enabledClose:
+            self.close()
+
+    def mousePressEvent(self, event):
+        if self.enabledClose:
+            self.close()
+
+    def keyPressEvent(self, event):
+        if self.enabledClose:
+            self.close()
+
+    def paintEvent(self, event):
+        color = Qt.black
+
+        painter = QPainter(self)
+        painter.setPen(color)
+        painter.setBrush(color)
+
+        painter.drawRect(self.rect())
+
+
+if __name__ == '__main__':
+    app = QApplication([])
+
+    mw = MainWindow()
+    # mw.show()
+    mw.showFullScreen()
+
+    app.exec()
