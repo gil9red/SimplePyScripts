@@ -15,22 +15,22 @@ class MainWindow(QWidget):
 
         self.setMouseTracking(True)
 
-        self.enabledClose = False
+        self._enabledClose = False
         QTimer.singleShot(5000, self._setEnabledClose)
 
     def _setEnabledClose(self):
-        self.enabledClose = True
+        self._enabledClose = True
 
     def mouseMoveEvent(self, event):
-        if self.enabledClose:
+        if self._enabledClose:
             self.close()
 
     def mousePressEvent(self, event):
-        if self.enabledClose:
+        if self._enabledClose:
             self.close()
 
     def keyPressEvent(self, event):
-        if self.enabledClose:
+        if self._enabledClose:
             self.close()
 
     def paintEvent(self, event):
