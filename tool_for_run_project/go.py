@@ -16,12 +16,18 @@ NAME_BY_PATH = {
     'tx':      'C:/DEV__TX',
     'manager': 'C:/manager_1_2_11_23_8',
 }
+NAME_BY_PATH['щзее'] = NAME_BY_PATH['optt']
+NAME_BY_PATH['еч'] = NAME_BY_PATH['tx']
+NAME_BY_PATH['ьфтфпук'] = NAME_BY_PATH['manager']
 
 WHAT_BY_FILE = {
     'designer': '!!designer.cmd',
     'explorer': '!!explorer.cmd',
     'server':   '!!server.cmd',
 }
+WHAT_BY_FILE['вуышптук'] = WHAT_BY_FILE['designer']
+WHAT_BY_FILE['учздщкук'] = WHAT_BY_FILE['explorer']
+WHAT_BY_FILE['ыукмук'] = WHAT_BY_FILE['server']
 
 ABOUT_TEXT = '''\
 RUN:
