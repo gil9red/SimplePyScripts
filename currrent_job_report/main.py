@@ -59,48 +59,57 @@ class CheckJobReportThread(QThread):
             return 'Переработка' if ok else 'Недоработка'
 
         while True:
-            today = datetime.datetime.today().strftime('%d/%m/%Y %H:%M:%S')
-            self.about_log.emit('Check for {}'.format(today))
-
-            ok = False
-            text = ""
-
             try:
-                name, deviation_hours = get_user_and_deviation_hours()
-                ok = deviation_hours[0] != '-'
+                today = datetime.datetime.today().strftime('%d/%m/%Y %H:%M:%S')
+                self.about_log.emit('Check for {}'.format(today))
 
-                _, quarter_deviation_hours = get_quarter_user_and_deviation_hours()
-                if quarter_deviation_hours.count(':') == 1:
-                    quarter_deviation_hours += ":00"
+                text = ""
+                deviation_hours = None
+                quarter_deviation_hours = None
 
-                text = name + '\n\n' \
-                    + _get_title(deviation_hours) + ' ' + deviation_hours + "\n" \
-                    + _get_title(quarter_deviation_hours) + ' за квартал ' + get_quarter_num() \
-                        + " " + quarter_deviation_hours
+                try:
+                    name, deviation_hours = get_user_and_deviation_hours()
+                    ok = deviation_hours[0] != '-'
+                    text += name + '\n\n' + _get_title(deviation_hours) + ' ' + deviation_hours
 
-            except NotFoundReport:
-                ok = True
-                text = "Отчет на сегодня еще не готов."
+                except NotFoundReport:
+                    text = "Отчет на сегодня еще не готов."
+                    ok = True
+
+                try:
+                    _, quarter_deviation_hours = get_quarter_user_and_deviation_hours()
+                    if quarter_deviation_hours.count(':') == 1:
+                        quarter_deviation_hours += ":00"
+
+                    text += "\n" + _get_title(quarter_deviation_hours) + ' за квартал ' + get_quarter_num() \
+                            + " " + quarter_deviation_hours
+
+                except NotFoundReport:
+                    pass
+
+                # Если часы за месяц не готовы, но часы за квартал есть
+                if not deviation_hours and quarter_deviation_hours:
+                    ok = True
+
+                if self.last_text != text:
+                    self.last_text = text
+
+                    text = f"Обновлено {today}\n{self.last_text}"
+                    self.about_new_text.emit(text)
+                    self.about_log.emit("    " + self.last_text + "\n")
+                else:
+                    self.about_log.emit("    Ничего не изменилось\n")
+
+                if self.ok != ok:
+                    self.ok = ok
+                    self.about_ok.emit(self.ok)
+
+                time.sleep(3600)
 
             except Exception as e:
                 self.about_log.emit("Error: " + str(e))
                 self.about_log.emit("Wait 60 secs")
                 time.sleep(60)
-
-            if self.last_text != text:
-                self.last_text = text
-
-                text = f"Обновлено {today}\n{self.last_text}"
-                self.about_new_text.emit(text)
-                self.about_log.emit("    " + self.last_text + "\n")
-            else:
-                self.about_log.emit("    Ничего не изменилось\n")
-
-            if self.ok != ok:
-                self.ok = ok
-                self.about_ok.emit(self.ok)
-
-            time.sleep(3600)
 
 
 class JobReportWidget(QWidget):
