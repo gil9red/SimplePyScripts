@@ -50,7 +50,6 @@ def get_bosses() -> Dict[str, List[Boss]]:
 
 
 def convert_bosses_to_only_name(bosses: Dict[str, List[Boss]]) -> Dict[str, List[str]]:
-    from collections import OrderedDict
     bosses_only_name = OrderedDict()
     for category, bosses_list in bosses.items():
         bosses_only_name[category] = [boss.name for boss in bosses_list]
