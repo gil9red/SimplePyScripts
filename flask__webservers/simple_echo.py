@@ -11,12 +11,13 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     print('-' * 20)
+    print(request.method)
     print(request.data)
     print(dict(request.headers))
     print('-' * 20)
     return Response(
         response=request.data,
-        content_type=request.headers['Content-Type']
+        content_type=request.headers.get('Content-Type')
     )
 
 
