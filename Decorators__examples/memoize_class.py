@@ -6,14 +6,15 @@ __author__ = 'ipetrash'
 
 # Using memoization as decorator (decorator-class)
 class MemoizeClass:
-    def __init__(self, fn):
-        self.fn = fn
+    def __init__(self, func):
+        self.func = func
         self.memo = dict()
 
-    def __call__(self, arg):
+    def __call__(self, *arg):
         if arg not in self.memo:
-            self.memo[arg] = self.fn(arg)
-            return self.memo[arg]
+            self.memo[arg] = self.func(*arg)
+
+        return self.memo[arg]
 
 
 @MemoizeClass

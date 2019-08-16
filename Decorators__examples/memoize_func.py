@@ -8,10 +8,10 @@ __author__ = 'ipetrash'
 def memoize_func(f):
     memo = dict()
 
-    def func(x):
-        if x not in memo:
-            memo[x] = f(x)
-        return memo[x]
+    def func(*args):
+        if args not in memo:
+            memo[args] = f(*args)
+        return memo[args]
 
     return func
 
