@@ -91,10 +91,12 @@ print()
 # Example 6: Using memoization as decorator (decorator-function)
 def memoize_func(f):
     memo = dict()
+
     def func(x):
         if x not in memo:
             memo[x] = f(x)
         return memo[x]
+
     return func
 
 @memoize_func
