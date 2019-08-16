@@ -9,7 +9,7 @@ __author__ = 'ipetrash'
 NUMBER = 15
 
 # Example 1: Using looping technique
-def fib(n):
+def fib_loop(n):
     a, b = 1, 1
     for i in range(n - 1):
         a, b = b, a + b
@@ -17,34 +17,33 @@ def fib(n):
 
 
 print('Example 1')
-print(fib(NUMBER))
+print(fib_loop(NUMBER))
 print()
 
 
 # Example 2: Using recursion
-def fibR(n):
+def fib_recursion(n):
     if n == 1 or n == 2:
         return 1
-    return fibR(n - 1) + fibR(n - 2)
+    return fib_recursion(n - 1) + fib_recursion(n - 2)
 
 
 print('Example 2')
-print(fibR(NUMBER))
+print(fib_recursion(NUMBER))
 print()
+
 
 # Example 3: Using generators
 a, b = 0, 1
 
-
-def fibI():
+def fib_generator():
     global a, b
     while True:
         a, b = b, a + b
         yield a
 
-
 print('Example 3')
-f = fibI()
+f = fib_generator()
 for _ in range(NUMBER):
     print(next(f))
 print()
@@ -60,16 +59,16 @@ def memoize(fn, arg):
 
 # fib() as written in example 1.
 print('Example 4')
-fibm = memoize(fib, NUMBER)
+fibm = memoize(fib_loop, NUMBER)
 print(fibm)
 print()
 
 
-# Example 5: Using memoization as decorator
-class Memoize:
+# Example 5: Using memoization as decorator (decorator-class)
+class MemoizeClass:
     def __init__(self, fn):
         self.fn = fn
-        self.memo = {}
+        self.memo = dict()
 
     def __call__(self, arg):
         if arg not in self.memo:
@@ -77,7 +76,7 @@ class Memoize:
             return self.memo[arg]
 
 
-@Memoize
+@MemoizeClass
 def fib(n):
     a, b = 1, 1
     for i in range(n - 1):
@@ -85,5 +84,26 @@ def fib(n):
     return a
 
 print('Example 5')
+print(fib(NUMBER))
+print()
+
+
+# Example 6: Using memoization as decorator (decorator-function)
+def memoize_func(f):
+    memo = dict()
+    def func(x):
+        if x not in memo:
+            memo[x] = f(x)
+        return memo[x]
+    return func
+
+@memoize_func
+def fib(n):
+    a, b = 1, 1
+    for i in range(n - 1):
+        a, b = b, a + b
+    return a
+
+print('Example 6')
 print(fib(NUMBER))
 print()
