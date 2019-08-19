@@ -37,9 +37,6 @@ with sqlite3.connect('places.sqlite') as connect:
         if url.startswith('http://'):
             url = 'https://' + url[len('http://'):]
 
-        if url == 'https://www.dns-shop.ru/product/beb750754b8d3361/sotovyj-telefon-dexp-larus-s7-belyj/':
-            continue
-
         if not url.startswith('https://www.dns-shop.ru/product/'):
             continue
 
