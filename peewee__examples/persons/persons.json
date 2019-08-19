@@ -1,0 +1,35 @@
+[
+    {
+        "name": "Bob",
+        "birthday": "1960-01-15",
+        "pets": [
+            {
+                "name": "Kitty",
+                "animal_type": "cat"
+            }
+        ]
+    },
+    {
+        "name": "Grandma",
+        "birthday": "1935-03-01",
+        "pets": []
+    },
+    {
+        "name": "Herb",
+        "birthday": "1950-05-05",
+        "pets": [
+            {
+                "name": "Fido",
+                "animal_type": "dog"
+            },
+            {
+                "name": "Mittens",
+                "animal_type": "cat"
+            },
+            {
+                "name": "Mittens Jr",
+                "animal_type": "cat"
+            }
+        ]
+    }
+]
