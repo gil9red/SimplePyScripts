@@ -11,7 +11,7 @@ import json
 from peewee import *
 
 
-db = SqliteDatabase('persons.sqlite')
+db = SqliteDatabase('persons.sqlite', pragmas={'foreign_keys': 1})
 
 
 class Person(Model):
