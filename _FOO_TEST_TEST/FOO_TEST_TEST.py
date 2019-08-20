@@ -106,7 +106,7 @@ while True:
             product, _ = Product.get_or_create(title=product_data['title'], url=product_data['url'])
             last_price = product.get_last_price()
 
-            print(f'Product<title={repr(product.title)} last_price="{last_price}" url="{product.url}">')
+            print(f'Product<title={repr(product.title)} last_price={repr(last_price)} url={repr(product.url)}>')
 
             current_price = get_price(product.url)
             print('Current price:', current_price)
