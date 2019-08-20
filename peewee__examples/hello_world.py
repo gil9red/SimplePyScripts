@@ -27,11 +27,10 @@ db.connect()
 db.create_tables([Info])
 
 
-# Вызываем впервый раз, чтобы заполнить таблицу
+# Вызываем в первый раз, чтобы заполнить таблицу
 if not Info.select().count():
     for i in range(5):
-        info = Info.create(first_name="first_name_" + str(i), second_name="second_name_" + str(i), state=i)
-        info.save()
+        Info.create(first_name="first_name_" + str(i), second_name="second_name_" + str(i), state=i)
 
 for info in Info.select():
     print(info)
