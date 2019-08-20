@@ -7,6 +7,9 @@ __author__ = 'ipetrash'
 import base64
 import hashlib
 
+# pip install pycryptodome
+# OR:
+# pip install pycryptodomex
 from Crypto.Cipher import AES
 
 
