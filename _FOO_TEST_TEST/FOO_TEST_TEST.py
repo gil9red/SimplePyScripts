@@ -69,7 +69,12 @@ def get_price(url: str) -> Optional[int]:
 db = SqliteDatabase('tracked_products.sqlite', pragmas={'foreign_keys': 1})
 
 
-class Product(Model):
+class BaseModel(Model):
+    class Meta:
+        database = db
+
+
+class Product(BaseModel):
     title = TextField()
     url = TextField(unique=True)
 
@@ -80,18 +85,13 @@ class Product(Model):
 
         return last_price.value
 
-    class Meta:
-        database = db
 
-
-class Price(Model):
+class Price(BaseModel):
     value = DecimalField(null=True)
     date = DateField(default=DT.datetime.now)
     product = ForeignKeyField(Product, backref='prices')
 
     class Meta:
-        database = db
-
         indexes = (
             (("product_id", "date"), True),
         )
