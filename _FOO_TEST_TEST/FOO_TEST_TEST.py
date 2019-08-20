@@ -128,4 +128,5 @@ while True:
         tb = traceback.format_exc()
         print(tb)
 
-        time.sleep(15 * 60)  # 60 minutes
+        print('Wait 15 minutes')
+        time.sleep(15 * 60)  # 15 minutes
