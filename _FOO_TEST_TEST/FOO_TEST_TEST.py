@@ -6,16 +6,19 @@ __author__ = 'ipetrash'
 
 import datetime as DT
 import json
-from typing import Optional
 import time
+from typing import Optional
 
-from peewee import *
 from bs4 import BeautifulSoup
 import requests
+from peewee import *
 
 
 def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0):
     from datetime import timedelta, datetime
+    import sys
+    import time
+
     today = datetime.today()
     timeout_date = today + timedelta(
         days=days, seconds=seconds, microseconds=microseconds,
@@ -36,12 +39,9 @@ def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, 
 
         print('\r' * 100, end='')
         print('До следующего запуска осталось {}'.format(left), end='')
-
-        import sys
         sys.stdout.flush()
 
         # Delay 1 seconds
-        import time
         time.sleep(1)
 
         today = datetime.today()
@@ -75,10 +75,10 @@ class Product(Model):
 
     def get_last_price(self):
         last_price = self.prices.order_by(Price.date.desc()).first()
-        if last_price:
-            last_price = last_price.value
+        if not last_price:
+            return
 
-        return last_price
+        return last_price.value
 
     class Meta:
         database = db
@@ -106,39 +106,19 @@ while True:
             product, _ = Product.get_or_create(title=product_data['title'], url=product_data['url'])
             last_price = product.get_last_price()
 
-            print(product.title, product.url, last_price)
+            print(f'Product<title="{product.title}", last price="{last_price}", url="{product.url}">')
 
             current_price = get_price(product.url)
-            print('current price:', current_price)
+            print('Current price:', current_price)
 
             # Цена отличается или у продукта еще нет цен
             if current_price != last_price or not product.prices.count():
-                print('Append new price')
+                print('Append price:', current_price)
                 Price.get_or_create(product=product, value=current_price)
 
             print()
 
             time.sleep(5)  # 5 seconds
-
-            # last_price = product.prices.order_by(Price.date.desc()).first()
-            # print(list(product.prices), last_price.value if last_price else None)
-            #
-            # #
-            # # print(product.title, get_price(product.url))
-            #
-            # for price_data in product_data.get('prices', []):
-            #     date = DT.datetime.strptime(price_data['date'], '%Y-%m-%d').date()
-            #     print(date, price_data['date'])
-            #
-            #     last_price = product.prices.order_by(Price.date.desc()).first()
-            #     if last_price:
-            #         last_price = last_price.value
-            #
-            #     Price.get_or_create(product=product, value=price_data['value'], date=date)
-            #
-            # last_price = product.prices.order_by(Price.date.desc()).first()
-            # print(list(product.prices), last_price.value if last_price else None)
-            # print()
 
         wait(days=1)
 
