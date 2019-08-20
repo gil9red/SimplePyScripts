@@ -11,6 +11,7 @@ import base64
 import hashlib
 
 from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
 
 
 class AuthenticationError(Exception):
@@ -18,8 +19,15 @@ class AuthenticationError(Exception):
 
 
 class CryptoAES:
-    def __init__(self, key: str):
-        self.key = hashlib.sha256(key.encode('utf-8')).digest()
+    def __init__(self, key: (str, bytes)):
+        if isinstance(key, str):
+            key = key.encode('utf-8')
+
+        self.key = hashlib.sha256(key).digest()
+
+    @staticmethod
+    def get_random_key_hex() -> str:
+        return get_random_bytes(32).hex()
 
     def encrypt(self, plain_text: str) -> str:
         data = plain_text.encode('utf-8')
