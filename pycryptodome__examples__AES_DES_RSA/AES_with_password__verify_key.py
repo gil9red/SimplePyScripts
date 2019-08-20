@@ -10,9 +10,13 @@ import hashlib
 from Crypto.Cipher import AES
 
 
+class AuthenticationError(Exception):
+    pass
+
+
 class CryptoAES:
     def __init__(self, key: str):
-        self.key = hashlib.sha256(key.encode()).digest()
+        self.key = hashlib.sha256(key.encode('utf-8')).digest()
 
     def encrypt(self, plain_text: str) -> str:
         data = plain_text.encode('utf-8')
@@ -28,7 +32,11 @@ class CryptoAES:
 
         nonce, tag, cipher_text = encrypted_data[:16], encrypted_data[16:32], encrypted_data[32:]
         cipher = AES.new(self.key, AES.MODE_EAX, nonce)
-        data = cipher.decrypt_and_verify(cipher_text, tag)
+
+        try:
+            data = cipher.decrypt_and_verify(cipher_text, tag)
+        except ValueError as e:
+            raise AuthenticationError(e)
 
         return data.decode('utf-8')
 
@@ -46,6 +54,6 @@ if __name__ == '__main__':
 
     # Decrypt with invalid password
     try:
-        CryptoAES(key='abc').decrypt(encrypted_text)
-    except ValueError as e:
+        CryptoAES('abc').decrypt(encrypted_text)
+    except AuthenticationError as e:
         assert str(e) == 'MAC check failed'
