@@ -14,21 +14,20 @@ from peewee import *
 db = SqliteDatabase('persons.sqlite', pragmas={'foreign_keys': 1})
 
 
-class Person(Model):
+class BaseModel(Model):
+    class Meta:
+        database = db
+
+
+class Person(BaseModel):
     name = CharField()
     birthday = DateField()
 
-    class Meta:
-        database = db
 
-
-class Pet(Model):
+class Pet(BaseModel):
     owner = ForeignKeyField(Person, backref='pets')
     name = CharField()
     animal_type = CharField()
-
-    class Meta:
-        database = db
 
 
 db.connect()
