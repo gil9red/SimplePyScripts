@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/ae88da34dc9788c2d3da61db77613b70fa44eb2a/pycryptodome__examples__AES_DES_RSA/AES_with_password__verify_key.py
+# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/328be435db9872cfcab35d6df33751006e3e8a64/pycryptodome__examples__AES_DES_RSA/AES_with_password__verify_key.py
 
 
 import base64
@@ -58,5 +58,5 @@ if __name__ == '__main__':
     # Decrypt with invalid password
     try:
         CryptoAES('abc').decrypt(encrypted_text)
-    except ValueError as e:
+    except AuthenticationError as e:
         assert str(e) == 'MAC check failed'
