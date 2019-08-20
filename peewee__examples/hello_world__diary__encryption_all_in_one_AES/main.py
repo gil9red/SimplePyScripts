@@ -97,6 +97,7 @@ def add_diary(key: str = ENCRYPT_KEY):
     if data and input('Save diary? [Y/n] ') != 'n':
         Diary.create_encrypted_content(content=data, key=key)
         print('Saved successfully.')
+        print()
 
 
 def view_diaries(key: str = ENCRYPT_KEY):
