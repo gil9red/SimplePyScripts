@@ -46,17 +46,17 @@ if not ENCRYPT_KEY:
 
 
 class Diary(BaseModel):
-    encrypt_content = TextField()
+    encrypted_content = TextField()
     created_date = DateTimeField(default=DT.datetime.now)
 
     @staticmethod
-    def create_encrypt_content(content: str, key: str) -> 'Diary':
-        encrypt_content = CryptoAES(key).encrypt(content)
-        return Diary(encrypt_content=encrypt_content).save()
+    def create_encrypted_content(content: str, key: str) -> 'Diary':
+        encrypted_content = CryptoAES(key).encrypt(content)
+        return Diary(encrypted_content=encrypted_content).save()
 
     def get_content(self, key: str) -> str:
         try:
-            return CryptoAES(key).decrypt(self.encrypt_content)
+            return CryptoAES(key).decrypt(self.encrypted_content)
         except AuthenticationError as e:
             return f'ERROR: {e}'
 
@@ -65,14 +65,14 @@ class Diary(BaseModel):
         """Print all diaries"""
 
         header_fmt = '{:<3}  | {:<50} | {:<50} | {:<19}'
-        row_fmt = '#{id:<3} | {encrypt_content:<50} | {content:<50} | {created_date:%d/%m/%Y %H:%M:%S}'
+        row_fmt = '#{id:<3} | {encrypted_content:<50} | {content:<50} | {created_date:%d/%m/%Y %H:%M:%S}'
 
-        print(header_fmt.format('ID', 'ENCRYPT_CONTENT', 'CONTENT', 'CREATED_DATE'))
+        print(header_fmt.format('ID', 'ENCRYPTED_CONTENT', 'CONTENT', 'CREATED_DATE'))
 
         for diary in Diary.select():
             print(row_fmt.format(
                 id=diary.id,
-                encrypt_content=shorten(diary.encrypt_content),
+                encrypted_content=shorten(diary.encrypted_content),
                 content=shorten(diary.get_content(key)),
                 created_date=diary.created_date,
             ))
@@ -86,8 +86,8 @@ db.create_tables([Diary])
 
 # Вызываем в первый раз, чтобы заполнить таблицу
 if not Diary.select().count():
-    Diary.create_encrypt_content(content="Hello World!", key=ENCRYPT_KEY)
-    Diary.create_encrypt_content(content="The quick brown fox jumps over the lazy dog.", key=ENCRYPT_KEY)
+    Diary.create_encrypted_content(content="Hello World!", key=ENCRYPT_KEY)
+    Diary.create_encrypted_content(content="The quick brown fox jumps over the lazy dog.", key=ENCRYPT_KEY)
 
 
 def add_diary(key: str = ENCRYPT_KEY):
@@ -95,7 +95,7 @@ def add_diary(key: str = ENCRYPT_KEY):
 
     data = input('Enter your diary: ').strip()
     if data and input('Save diary? [Y/n] ') != 'n':
-        Diary.create_encrypt_content(content=data, key=key)
+        Diary.create_encrypted_content(content=data, key=key)
         print('Saved successfully.')
 
 
@@ -108,7 +108,7 @@ def view_diaries(key: str = ENCRYPT_KEY):
         timestamp = diary.created_date.strftime('%d/%m/%Y %H:%M:%S')
         print(timestamp)
         print('=' * len(timestamp))
-        print(diary.encrypt_content)
+        print(diary.encrypted_content)
         print(diary.get_content(key))
         print()
         print('n) next diary')
