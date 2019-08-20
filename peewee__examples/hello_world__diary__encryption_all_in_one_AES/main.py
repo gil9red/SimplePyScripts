@@ -79,14 +79,6 @@ class Diary(BaseModel):
 
         print()
 
-    def __str__(self):
-        return f'Diary<' \
-               f'#{self.id} ' \
-               f'encrypt_content={repr(shorten(self.encrypt_content))} ' \
-               f'content={repr(shorten(self.get_content(ENCRYPT_KEY)))} ' \
-               f"created_date='{self.created_date:%d/%m/%Y %H:%M:%S}'" \
-               f">"
-
 
 db.connect()
 db.create_tables([Diary])
