@@ -37,26 +37,27 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class MainWindow(QWidget):
+    ESCAPE_RULES = [
+        ('"', '"', r'\"', True),
+        ("'", "'", r"\'", True),
+        (r'\n', "\n", r'\n', True),
+        (r'\t', "\t", r'\t', True),
+        (r'\b', "\b", r'\b', True),
+        (r'\f', "\f", r'\f', False),
+        ('\\', "\\", '\\\\', False),
+    ]
+    TITLE = 'EscapeString'
+
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('EscapeString')
-
-        self.escape_rules = [
-            ('"',   '"',  r'\"',  True),
-            ("'",   "'",  r"\'",  True),
-            (r'\n', "\n", r'\n',  True),
-            (r'\t', "\t", r'\t',  True),
-            (r'\b', "\b", r'\b',  True),
-            (r'\f', "\f", r'\f',  False),
-            ('\\',  "\\", '\\\\', False),
-        ]
+        self.setWindowTitle(self.TITLE)
 
         self.escape_char_by_checkbox = {}
         self.char_by_escape = {}
 
         button_layout = QHBoxLayout()
-        for title, char, escape, checked in self.escape_rules:
+        for title, char, escape, checked in self.ESCAPE_RULES:
             checkbox = QCheckBox(title)
             checkbox.setChecked(checked)
             checkbox.clicked.connect(self.input_text_changed)
@@ -89,11 +90,15 @@ class MainWindow(QWidget):
         self.button_detail_error.setFixedSize(20, 20)
         self.button_detail_error.setToolTip('Detail error')
         self.button_detail_error.clicked.connect(self.show_detail_error_massage)
+        self.button_detail_error.hide()
 
         self.last_error_message = None
         self.last_detail_error_message = None
 
         self.text_edit_input.textChanged.connect(self.input_text_changed)
+
+        self.label_input_number = QLabel()
+        self.label_output_number = QLabel()
 
         splitter = QSplitter()
         splitter.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -111,6 +116,9 @@ class MainWindow(QWidget):
         self.setLayout(layout)
 
     def show_detail_error_massage(self):
+        if not self.last_error_message or not self.last_detail_error_message:
+            return
+
         message = self.last_error_message + '\n\n' + self.last_detail_error_message
 
         mb = QErrorMessage()
@@ -149,6 +157,11 @@ class MainWindow(QWidget):
 
             self.text_edit_output.setPlainText(out_text)
 
+            self.setWindowTitle(
+                f'{self.TITLE} (number of characters: '
+                f'{len(self.text_edit_input.toPlainText())} -> '
+                f'{len(self.text_edit_output.toPlainText())})'
+            )
             print('Escape for {:.6f} secs'.format(time.clock() - t))
 
         except Exception as e:
