@@ -43,8 +43,14 @@ def search_video_list(text, short_name=True) -> List[str]:
         'story': text,
     }
 
+    # NOTE: tor должен быть запущен
+    # pip install -U requests[socks]
     import requests
-    rs = requests.post(url, data)
+    proxies = {
+        'http': 'socks5://localhost:9050',
+        'https': 'socks5://localhost:9050'
+    }
+    rs = requests.post(url, data, proxies=proxies)
 
     from bs4 import BeautifulSoup
     root = BeautifulSoup(rs.content, 'html.parser')
@@ -70,7 +76,6 @@ if __name__ == '__main__':
 
     items = search_video_list(text)
     print('Items ({}): {}'.format(len(items), items))
-
 
     import json
     json.dump(items, open('video_list.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=4)
