@@ -56,7 +56,7 @@ def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, 
         left = timeout_date - today
         left = str_timedelta(left)
 
-        print('\r' * 100, end='')
+        print('\r' + ' ' * 100 + '\r', end='')
         print('[{}] До следующего запуска осталось {}'.format(next(progress_bar), left), end='')
         sys.stdout.flush()
 
