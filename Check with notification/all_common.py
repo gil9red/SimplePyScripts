@@ -26,6 +26,12 @@ def make_backslashreplace_console():
 
 def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0):
     from datetime import timedelta, datetime
+    from itertools import cycle
+    import sys
+    import time
+
+    progress_bar = cycle('|/-\\|/-\\')
+
     today = datetime.today()
     timeout_date = today + timedelta(
         days=days, seconds=seconds, microseconds=microseconds,
@@ -33,11 +39,17 @@ def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, 
     )
 
     while today <= timeout_date:
-        def str_timedelta(td):
-            # Remove ms
+        def str_timedelta(td: timedelta) -> str:
             td = str(td)
+
+            # Remove ms
+            # 0:01:40.123000 -> 0:01:40
             if '.' in td:
-                td = td[:td.index('.')]
+                td = td[:td.rindex('.')]
+
+            # 0:01:40 -> 00:01:40
+            if td.startswith('0:'):
+                td = '00:' + td[2:]
 
             return td
 
@@ -45,13 +57,10 @@ def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, 
         left = str_timedelta(left)
 
         print('\r' * 100, end='')
-        print('До следующего запуска осталось {}'.format(left), end='')
-
-        import sys
+        print('[{}] До следующего запуска осталось {}'.format(next(progress_bar), left), end='')
         sys.stdout.flush()
 
         # Delay 1 seconds
-        import time
         time.sleep(1)
 
         today = datetime.today()
