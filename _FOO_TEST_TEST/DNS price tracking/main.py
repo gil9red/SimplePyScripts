@@ -20,15 +20,15 @@ def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, 
     import sys
     import time
 
-    progress_bar = cycle('|/-\\|/-\\')
+    try:
+        progress_bar = cycle('|/-\\|/-\\')
 
-    today = datetime.today()
-    timeout_date = today + timedelta(
-        days=days, seconds=seconds, microseconds=microseconds,
-        milliseconds=milliseconds, minutes=minutes, hours=hours, weeks=weeks
-    )
+        today = datetime.today()
+        timeout_date = today + timedelta(
+            days=days, seconds=seconds, microseconds=microseconds,
+            milliseconds=milliseconds, minutes=minutes, hours=hours, weeks=weeks
+        )
 
-    while today <= timeout_date:
         def str_timedelta(td: timedelta) -> str:
             td = str(td)
 
@@ -43,20 +43,24 @@ def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, 
 
             return td
 
-        left = timeout_date - today
-        left = str_timedelta(left)
+        while today <= timeout_date:
+            left = timeout_date - today
+            left = str_timedelta(left)
+
+            print('\r' + ' ' * 100 + '\r', end='')
+            print('[{}] Time left to wait: {}'.format(next(progress_bar), left), end='')
+            sys.stdout.flush()
+
+            # Delay 1 seconds
+            time.sleep(1)
+
+            today = datetime.today()
 
         print('\r' + ' ' * 100 + '\r', end='')
-        print('[{}] До следующего запуска осталось {}'.format(next(progress_bar), left), end='')
-        sys.stdout.flush()
 
-        # Delay 1 seconds
-        time.sleep(1)
-
-        today = datetime.today()
-
-    print('\r' * 100, end='')
-    print('\n')
+    except KeyboardInterrupt:
+        print()
+        print('Waiting canceled')
 
 
 def get_price(url: str) -> Optional[int]:
