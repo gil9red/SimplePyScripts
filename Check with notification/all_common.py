@@ -25,9 +25,10 @@ def make_backslashreplace_console():
 
 
 # Import https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py
+# Absolute path. Analog '../wait'
+import pathlib
 import sys
-sys.path.append('../wait')
-
+sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent / 'wait'))
 from wait import wait
 
 
