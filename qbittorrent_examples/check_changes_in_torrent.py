@@ -63,7 +63,7 @@ def remove_previous_torrent_from_qbittorrent(qb, new_info_hash):
         print("Предыдущие закачки не найдены")
 
         
-# Import https://github.com/gil9red/SimplePyScripts/blob/f75070a1d2066167a46e2f5b1e98e804101fdc14/wait/wait.py
+# Import https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py
 import sys
 sys.path.append('../wait')
 
