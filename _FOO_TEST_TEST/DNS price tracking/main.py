@@ -55,6 +55,9 @@ class Product(BaseModel):
 
         return last_price.value
 
+    def __str__(self):
+        return f'Product(title={repr(self.title)}, last_price={self.get_last_price()}, url={repr(self.url)})'
+
 
 class Price(BaseModel):
     value = DecimalField(null=True)
@@ -66,25 +69,29 @@ class Price(BaseModel):
             (("product_id", "date"), True),
         )
 
+    def __str__(self):
+        return f'Price(value={self.value}, date={self.date}, product_id={self.product.id})'
+
 
 db.connect()
 db.create_tables([Product, Price])
+
 
 while True:
     try:
         for product_data in json.load(open('tracked_products.json', encoding='utf-8')):
             product, _ = Product.get_or_create(title=product_data['title'], url=product_data['url'])
-            last_price = product.get_last_price()
+            print(product)
 
-            print(f'Product<title={repr(product.title)} last_price={last_price} url={repr(product.url)}>')
+            last_price = product.get_last_price()
 
             current_price = get_price(product.url)
             print('Current price:', current_price)
 
-            # Цена отличается или у продукта еще нет цен
+            # Добавляем новую цену, если цена отличается или у продукта еще нет цен
             if current_price != last_price or not product.prices.count():
-                print('Append price:', current_price)
-                Price.get_or_create(product=product, value=current_price)
+                print('Append new price:', current_price)
+                Price.create(product=product, value=current_price)
 
             print()
 
