@@ -55,6 +55,9 @@ class Product(BaseModel):
 
         return last_price.value
 
+    def append_price(self, value):
+        Price.create(product=self, value=value)
+
     def __str__(self):
         return f'Product(title={repr(self.title)}, last_price={self.get_last_price()}, url={repr(self.url)})'
 
@@ -91,7 +94,7 @@ while True:
             # Добавляем новую цену, если цена отличается или у продукта еще нет цен
             if current_price != last_price or not product.prices.count():
                 print('Append new price:', current_price)
-                Price.create(product=product, value=current_price)
+                product.append_price(current_price)
 
             print()
 
