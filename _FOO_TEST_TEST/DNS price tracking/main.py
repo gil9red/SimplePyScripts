@@ -80,23 +80,34 @@ db.connect()
 db.create_tables([Product, Price])
 
 
+checked_products = []
+
+
 while True:
+    checked_products.clear()
+
     try:
         for product_data in json.load(open('tracked_products.json', encoding='utf-8')):
+            if product_data in checked_products:
+                print(f"Duplicate: {repr(product_data['title'])}, url: {product_data['url']}\n")
+                continue
+
             product, _ = Product.get_or_create(title=product_data['title'], url=product_data['url'])
             print(product)
 
             last_price = product.get_last_price()
 
             current_price = get_price(product.url)
-            print('Current price:', current_price)
+            print(f'Current price: {current_price}')
 
             # Добавляем новую цену, если цена отличается или у продукта еще нет цен
             if current_price != last_price or not product.prices.count():
-                print('Append new price:', current_price)
+                print(f'Append new price: {current_price}')
                 product.append_price(current_price)
 
             print()
+
+            checked_products.append(product_data)
 
             time.sleep(5)  # 5 seconds
 
