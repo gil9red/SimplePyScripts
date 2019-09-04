@@ -4,20 +4,20 @@
 __author__ = 'ipetrash'
 
 
-import datetime as DT
 import json
 import time
 from typing import Optional
 
 from bs4 import BeautifulSoup
 import requests
-from peewee import *
 
 # Import https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py
 import sys
 sys.path.append('../../wait')
 
 from wait import wait
+
+from db import Product
 
 
 def get_price(url: str) -> Optional[int]:
@@ -33,51 +33,6 @@ def get_price(url: str) -> Optional[int]:
         return
 
     return int(price_value['data-price-value'])
-
-
-# Ensure foreign-key constraints are enforced.
-db = SqliteDatabase('tracked_products.sqlite', pragmas={'foreign_keys': 1})
-
-
-class BaseModel(Model):
-    class Meta:
-        database = db
-
-
-class Product(BaseModel):
-    title = TextField()
-    url = TextField(unique=True)
-
-    def get_last_price(self):
-        last_price = self.prices.order_by(Price.date.desc()).first()
-        if not last_price:
-            return
-
-        return last_price.value
-
-    def append_price(self, value):
-        Price.create(product=self, value=value)
-
-    def __str__(self):
-        return f'Product(title={repr(self.title)}, last_price={self.get_last_price()}, url={repr(self.url)})'
-
-
-class Price(BaseModel):
-    value = DecimalField(null=True)
-    date = DateField(default=DT.datetime.now)
-    product = ForeignKeyField(Product, backref='prices')
-
-    class Meta:
-        indexes = (
-            (("product_id", "date"), True),
-        )
-
-    def __str__(self):
-        return f'Price(value={self.value}, date={self.date}, product_id={self.product.id})'
-
-
-db.connect()
-db.create_tables([Product, Price])
 
 
 checked_products = []
