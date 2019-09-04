@@ -6,11 +6,11 @@ __author__ = 'ipetrash'
 
 # SOURCE: https://github.com/twbs/bootstrap
 # SOURCE: https://github.com/twbs/bootstrap/releases
-# SOURCE: https://getbootstrap.com/docs/4.3/content/tables/
+# SOURCE: https://www.w3schools.com/bootstrap4/bootstrap_grid_examples.asp
 
 
 from flask import Flask, render_template
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../static')
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
