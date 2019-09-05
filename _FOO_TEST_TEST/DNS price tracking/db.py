@@ -38,12 +38,12 @@ class Product(BaseModel):
 
 class Price(BaseModel):
     value = DecimalField(null=True)
-    date = DateField(default=DT.datetime.now)
+    date = DateTimeField(default=DT.datetime.now)
     product = ForeignKeyField(Product, backref='prices')
 
     class Meta:
         indexes = (
-            (("product_id", "date"), True),
+            (("product_id", "date", "value"), True),
         )
 
     def __str__(self):
