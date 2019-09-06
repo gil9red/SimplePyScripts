@@ -5,19 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.css') }}">
     <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='chart_js_2.8.0/Chart.bundle.min.js') }}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.css') }}">
+    <style>
+
+    </style>
 </head>
 <body>
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col">
+        <div class="col-8">
             <table id="product" class="table table-hover">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">#</th>
+                        <th style="display: none;" scope="col">#</th>
                         <th scope="col">Title</th>
                         <th scope="col">Last Price</th>
                         <th scope="col">URL</th>
@@ -26,8 +31,8 @@
                 <tbody>
                     {% for id, title, last_price, url in products %}
                      <tr product_id="{{ id }}">
-                        <th scope="row">{{ id }}</th>
-                        <td>{{ title }}</td>
+                        <th style="display: none;" scope="row">{{ id }}</th>
+                        <td class="text-truncate" style="max-width: 300px;" title="{{ title }}">{{ title }}</td>
                         <td>{{ last_price }}</td>
                         <td><a href="{{ url }}">link</a></td>
                     </tr>
@@ -36,27 +41,35 @@
             </table>
         </div>
 
-        <div class="col">
+        <div class="col-4">
             <table id="price" class="table table-hover">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">#</th>
+                        <th style="display: none;" scope="col">#</th>
                         <th scope="col">Datetime</th>
                         <th scope="col">Value</th>
-                        <th scope="col">Product ID</th>
+                        <th style="display: none;" scope="col">Product ID</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for id, date, value, product_id in prices %}
-                     <tr product_id="{{ product_id }}">
-                        <th scope="row">{{ id }}</th>
-                        <td>{{ date }}</td>
-                        <td>{{ value }}</td>
-                        <td>{{ product_id }}</td>
+                     <tr product_id="{{ product_id }}" style="display: none;" value="{{ value }}">
+                        <th style="display: none;" scope="row">{{ id }}</th>
+                        <td class="date" title="{{ date.strftime('%d/%m/%Y %H:%M:%S') }}" date_iso="{{ date.isoformat() }}">{{ date.strftime('%d/%m/%Y') }}</td>
+                        <td class="value">{{ value }}</td>
+                        <td style="display: none;">{{ product_id }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="container">
+              <canvas id="lineChart"></canvas>
+            </div>
         </div>
     </div>
 
@@ -75,11 +88,55 @@
                     row.addClass(selectClass).siblings().removeClass(selectClass);
                 }
 
+                let labels = [];
+                let data = [];
+
                 // Show current product prices
                 let product_id = row.attr('product_id');
                 $('#price > tbody > tr').each(function() {
                     tr = $(this);
-                    tr.toggle(tr.attr('product_id') == product_id);
+
+                    let found = tr.attr('product_id') == product_id;
+                    tr.toggle(found);
+
+                    if (found && tr.find('.value').text() != 'None') {
+                        let date_iso = tr.find('.date').attr('date_iso');
+                        let value = parseInt(tr.find('.value').text());
+
+                        labels.push(date_iso);
+                        data.push({
+                          x: date_iso,
+                          y: value
+                        });
+                    }
+                });
+
+                var ctx = document.getElementById("lineChart").getContext("2d");
+                var lineChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Price',
+                            borderColor: "#3e95cd",
+                            data: data,
+                        }],
+                    },
+                    options: {
+                        scales: {
+                            xAxes: [{
+                                type: 'time',
+                                time: {
+                                    unit: 'day',
+                                    tooltipFormat: 'DD/MM/YYYY HH:mm:ss',
+                                    displayFormats: {
+                                       day: 'DD/MM'
+                                    }
+                                },
+                                distribution: 'linear'
+                            }]
+                        }
+                    }
                 });
             });
         });
