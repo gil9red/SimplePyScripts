@@ -8,9 +8,13 @@ import datetime as DT
 
 from peewee import *
 
+# Absolute file name
+import pathlib
+DB_FILE_NAME = str(pathlib.Path(__file__).resolve().parent / 'tracked_products.sqlite')
+
 
 # Ensure foreign-key constraints are enforced.
-db = SqliteDatabase('tracked_products.sqlite', pragmas={'foreign_keys': 1})
+db = SqliteDatabase(DB_FILE_NAME, pragmas={'foreign_keys': 1})
 
 
 class BaseModel(Model):
