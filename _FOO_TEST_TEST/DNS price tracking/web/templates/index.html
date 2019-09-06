@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DNS price tracking</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.css') }}">
+    <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.js') }}"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <table id="product" class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Last Price</th>
+                        <th scope="col">URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for id, title, last_price, url in products %}
+                     <tr product_id="{{ id }}">
+                        <th scope="row">{{ id }}</th>
+                        <td>{{ title }}</td>
+                        <td>{{ last_price }}</td>
+                        <td><a href="{{ url }}">link</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col">
+            <table id="price" class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Datetime</th>
+                        <th scope="col">Value</th>
+                        <th scope="col">Product ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for id, date, value, product_id in prices %}
+                     <tr product_id="{{ product_id }}">
+                        <th scope="row">{{ id }}</th>
+                        <td>{{ date }}</td>
+                        <td>{{ value }}</td>
+                        <td>{{ product_id }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+    <script>
+        $(document).ready(function() {
+            $('#product > tbody > tr').click(function() {
+                let selectClass = 'table-primary';
+                let row = $(this);
+
+                // Highlight current row
+                if (row.hasClass(selectClass)) {
+                    row.removeClass(selectClass);
+                } else {
+                    row.addClass(selectClass).siblings().removeClass(selectClass);
+                }
+
+                // Show current product prices
+                let product_id = row.attr('product_id');
+                $('#price > tbody > tr').each(function() {
+                    tr = $(this);
+                    tr.toggle(tr.attr('product_id') == product_id);
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
