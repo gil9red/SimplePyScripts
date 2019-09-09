@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+import datetime as DT
 import json
 import time
 from typing import Optional
@@ -39,6 +40,8 @@ checked_products = []
 
 
 while True:
+    print(f'Started at {DT.datetime.now():%d/%m/%Y %H:%M:%S}\n')
+
     checked_products.clear()
 
     try:
@@ -76,3 +79,5 @@ while True:
 
         print('Wait 15 minutes')
         time.sleep(15 * 60)  # 15 minutes
+
+    print()
