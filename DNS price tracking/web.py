@@ -4,9 +4,6 @@
 __author__ = 'ipetrash'
 
 
-import sys
-sys.path.append('../')
-
 from db import Product, Price
 
 from flask import Flask, render_template

@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+import datetime as DT
 import json
 import time
 from typing import Optional
@@ -13,7 +14,7 @@ import requests
 
 # Import https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py
 import sys
-sys.path.append('../../wait')
+sys.path.append('../wait')
 
 from wait import wait
 
@@ -39,6 +40,8 @@ checked_products = []
 
 
 while True:
+    print(f'Started at {DT.datetime.now():%d/%m/%Y %H:%M:%S}\n')
+
     checked_products.clear()
 
     try:
@@ -76,3 +79,5 @@ while True:
 
         print('Wait 15 minutes')
         time.sleep(15 * 60)  # 15 minutes
+
+    print()
