@@ -9,6 +9,7 @@ __author__ = 'ipetrash'
 
 import struct
 import zlib
+from typing import Union
 
 
 def crc32_from_bytes(data: bytes) -> int:
@@ -23,9 +24,12 @@ def send_msg__with_crc32(sock, msg):
     sock.sendall(msg)
 
 
-def recv_msg__with_crc32(sock):
+def recv_msg__with_crc32(sock) -> Union[None, bytes]:
+    # 12-byte
+    payload_size = struct.calcsize(">QI")
+
     # Read message length and crc32
-    raw_msg_len = recv_all(sock, 12)
+    raw_msg_len = recv_all(sock, payload_size)
     if not raw_msg_len:
         return None
 
@@ -48,9 +52,12 @@ def send_msg(sock, msg):
     sock.sendall(msg)
 
 
-def recv_msg(sock):
+def recv_msg(sock) -> Union[None, bytes]:
+    # 8-byte
+    payload_size = struct.calcsize(">Q")
+
     # Read message length and unpack it into an integer
-    raw_msg_len = recv_all(sock, 8)
+    raw_msg_len = recv_all(sock, payload_size)
     if not raw_msg_len:
         return None
 
@@ -60,7 +67,7 @@ def recv_msg(sock):
     return recv_all(sock, msg_len)
 
 
-def recv_all(sock, n):
+def recv_all(sock, n) -> Union[None, bytes]:
     # Helper function to recv n bytes or return None if EOF is hit
     data = bytearray()
 
