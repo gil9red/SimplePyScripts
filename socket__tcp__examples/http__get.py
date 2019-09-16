@@ -14,13 +14,15 @@ sock.settimeout(60)  # Если за 60 секунд данные не прид�
 sock.connect((host, port))
 sock.send(request)
 
+SIZE = 1024
+
 try:
     while True:
         data = sock.recv(1024)
-        if not data:
-            break
-
         print(len(data), data)
+
+        if not data or len(data) <= SIZE:
+            break
 
 except socket.timeout:
     pass
