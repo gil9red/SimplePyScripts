@@ -10,6 +10,13 @@ from bs4 import BeautifulSoup
 from typing import NamedTuple, List
 
 
+# Import https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py
+import sys
+sys.path.append('../wait')
+
+from wait import wait
+
+
 class CrashStatistics(NamedTuple):
     date: str
     dtp: int

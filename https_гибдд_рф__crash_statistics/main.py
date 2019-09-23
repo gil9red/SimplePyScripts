@@ -4,9 +4,8 @@
 __author__ = 'ipetrash'
 
 
-import time
 import traceback
-from common import init_db, append_crash_statistics_db
+from common import init_db, append_crash_statistics_db, wait
 
 
 init_db()
@@ -16,11 +15,8 @@ while True:
     try:
         append_crash_statistics_db()
 
-        # Every 12 hours
-        time.sleep(12 * 60 * 60)
+        wait(hours=12)
 
     except Exception as e:
         print('ERROR: {}:\n\n{}'.format(e, traceback.format_exc()))
-        print('Wait 5 minutes.')
-
-        time.sleep(60 * 5)
+        wait(minutes=5)
