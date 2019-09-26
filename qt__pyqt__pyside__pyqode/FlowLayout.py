@@ -2,13 +2,11 @@
 # -*- coding: utf-8 -*-
 
 
-# SOURCE: https://github.com/baoboa/pyqt5/blob/25bdb92c38d9c0a915c6366769cc00a63a1f04b2/examples/layouts/flowlayout.py#L65
-
-
 from PyQt5.QtWidgets import QLayout, QSizePolicy
 from PyQt5.QtCore import Qt, QRect, QSize, QPoint
 
 
+# SOURCE: https://github.com/baoboa/pyqt5/blob/25bdb92c38d9c0a915c6366769cc00a63a1f04b2/examples/layouts/flowlayout.py#L65
 class FlowLayout(QLayout):
     def __init__(self, parent=None, margin=0, spacing=-1):
         super().__init__(parent)
