@@ -59,7 +59,7 @@ def parse(conn):  # Обработка соединения в отдельно�
 
 sock = socket.socket()
 sock.bind(("", 8080))
-sock.listen(5)
+sock.listen()
 
 try:
     # Работаем постоянно

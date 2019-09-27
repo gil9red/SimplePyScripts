@@ -77,7 +77,7 @@ if __name__ == '__main__':
     sock.bind((HOST, PORT))
     print('Socket bind complete')
 
-    sock.listen(5)
+    sock.listen()
     print('Socket now listening: http://{}:{}'.format(*sock.getsockname()))
     print()
 

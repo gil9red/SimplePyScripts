@@ -18,7 +18,7 @@ PORT = 9090
 
 with socket.socket() as sock:
     sock.bind(('', PORT))
-    sock.listen(1)
+    sock.listen()
 
     print('Server: {}'.format(sock.getsockname()))
 
