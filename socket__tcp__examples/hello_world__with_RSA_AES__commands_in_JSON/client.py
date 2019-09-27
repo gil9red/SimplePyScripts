@@ -4,40 +4,33 @@
 __author__ = 'ipetrash'
 
 
-from base64 import b64decode, b64encode
+from base64 import b64decode
 import json
 import socket
+from typing import Optional
 
 import sys
 sys.path.append('..')
 
 from common import send_msg, recv_msg
+from info_security import InfoSecurity
 from utils import CommandEnum
 import rsa
 
 
-def get_command(name: CommandEnum, data: str) -> str:
+def get_command(name: CommandEnum, data: str = None) -> str:
     return json.dumps({'command': name.name, 'data': data}, ensure_ascii=False)
 
 
-HOST, PORT = "localhost", 9090
-
-
-with socket.socket() as sock:
-    sock.connect((HOST, PORT))
-
-    key_AES = None
-
-    print(f'Performing RSA key generation!')
-
-    public_key, private_key = rsa.new_keys(key_size=2048)
-    print('Key generation completed successfully!')
-
-    public_key_text = public_key.exportKey('PEM').decode('utf-8')
-    data = get_command(CommandEnum.NEW_PUBLIC_KEY, public_key_text)
+def send_command(name: CommandEnum, data: str = None) -> Optional[dict]:
+    data = get_command(name, data)
 
     print(f'Sending ({len(data)}): {data}')
     data = bytes(data, 'utf-8')
+
+    # Публичный ключ передается в не зашифрованном виде
+    if name != CommandEnum.SEND_PUBLIC_KEY:
+        data = DATA['info_security'].encrypt(data)
     print()
 
     send_msg(sock, data)
@@ -45,16 +38,58 @@ with socket.socket() as sock:
     print('Receiving')
 
     response_data = recv_msg(sock)
-    if response_data:
-        print(f'Response ({len(response_data)}): {response_data}')
+    if not response_data:
+        return
 
-        rs = json.loads(response_data, encoding='utf-8')
+    # AES ключ, зашифрованный публичным ключом, передается в не зашифрованном виде
+    if name != CommandEnum.SEND_PUBLIC_KEY:
+        response_data = DATA['info_security'].decrypt(response_data)
 
-        command = CommandEnum[rs['command']]
-        if command == CommandEnum.NEW_PUBLIC_KEY:
-            key_AES = rsa.decrypt(b64decode(rs['data']), private_key)
-            print('key_AES:', key_AES)
+    print(f'Response ({len(response_data)}): {response_data}\n')
+    rs = json.loads(response_data, encoding='utf-8')
 
-        # TODO: more commands
+    command = CommandEnum[rs['command']]
+    if command != name:
+        raise Exception(f'Received response to another command. ')
 
-    print('Close\n')
+    return rs
+
+
+HOST, PORT = "localhost", 9090
+DATA = {
+    'info_security': None
+}
+
+
+with socket.socket() as sock:
+    sock.connect((HOST, PORT))
+
+    print(f'[+] Performing RSA key generation!')
+
+    public_key, private_key = rsa.new_keys(key_size=2048)
+    print('[+] Key generation completed successfully!')
+
+    public_key_text = public_key.exportKey('PEM').decode('utf-8')
+    rs = send_command(CommandEnum.SEND_PUBLIC_KEY, public_key_text)
+    if rs:
+        print(rs)
+
+        key = rsa.decrypt(b64decode(rs['data']), private_key)
+        print('[+] key_AES:', key)
+
+        DATA['info_security'] = InfoSecurity(key)
+
+    else:
+        print('[-] Need AES key from server!')
+        quit()
+
+    for command in [CommandEnum.CURRENT_DATETIME, CommandEnum.CURRENT_TIMESTAMP, CommandEnum.RANDOM,
+                    CommandEnum.RANDOM]:
+        rs = send_command(command)
+        if rs:
+            print(rs)
+            print(f"{command.name}: {rs['data']}")
+        else:
+            print('[-] No answer!')
+
+    print('[+] Close\n')

@@ -4,11 +4,14 @@
 __author__ = 'ipetrash'
 
 
-from base64 import b64decode, b64encode
+from base64 import b64encode
 import json
+import datetime as DT
 import secrets
 import socket
 import threading
+import random
+from info_security import InfoSecurity
 
 import sys
 sys.path.append('..')
@@ -24,22 +27,30 @@ CONNECTION_BY_KEY = dict()
 def process_command(data: bytes, conn, addr) -> bytes:
     rq = json.loads(data, encoding='utf-8')
 
-    command = CommandEnum[rq['command']]
+    command_name = rq['command']
+    command = CommandEnum[command_name]
 
-    if command == CommandEnum.NEW_PUBLIC_KEY:
+    if command == CommandEnum.SEND_PUBLIC_KEY:
         # Публичный ключ от клиента
         public_key = rsa.import_key(rq['data'])
 
         # Придумываем ключ для шифрования сообщений
         key_AES = secrets.token_bytes(32)
         print('key_AES:', key_AES)
-        CONNECTION_BY_KEY[conn] = key_AES
+        CONNECTION_BY_KEY[conn] = InfoSecurity(key_AES)
 
-        # Шифруем ключ сообщений публичным ключом клиента
+        # Шифруем ключ для сообщений публичным ключом клиента
         encrypted = b64encode(rsa.encrypt(key_AES, public_key)).decode('utf-8')
         rq['data'] = encrypted
 
-    # TODO: more commands
+    elif command == CommandEnum.CURRENT_DATETIME:
+        rq['data'] = DT.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+    elif command == CommandEnum.CURRENT_TIMESTAMP:
+        rq['data'] = str(DT.datetime.now().timestamp())
+
+    elif command == CommandEnum.RANDOM:
+        rq['data'] = str(random.randint(0, 1000000))
 
     else:
         rq['data'] = f'<Unsupported command="{command}">'
@@ -58,10 +69,23 @@ def process_connect(conn, addr):
 
             print(f'Receiving ({len(data)}): {data}')
 
+            # Проверка, что этот запрос уже не первый, т.к. то, что AES уже есть
+            # и что, нужно расшифровавывать запрос
+            is_existing_connect = conn in CONNECTION_BY_KEY
+            if is_existing_connect:
+                data = CONNECTION_BY_KEY[conn].decrypt(data)
+                print(f'Receiving raw ({len(data)}): {data}')
+
             rs = process_command(data, conn, addr)
+
+            if is_existing_connect:
+                print(f'Sending raw ({len(rs)}): {rs}')
+                rs = CONNECTION_BY_KEY[conn].encrypt(rs)
 
             print(f'Sending ({len(rs)}): {rs}')
             send_msg(conn, rs)
+
+            print()
 
     except:
         import traceback
