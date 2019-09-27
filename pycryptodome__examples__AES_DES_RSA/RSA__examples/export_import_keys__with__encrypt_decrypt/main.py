@@ -37,6 +37,9 @@ else:
     with open(FILE_NAME_PRIVATE_KEY, 'wb') as f:
         f.write(private_key.exportKey('PEM'))
 
+    print('Successfully save generated keys to files!')
+    print()
+
 
 print('private:', private_key.exportKey('PEM'))
 print('public:', public_key.exportKey('PEM'))
