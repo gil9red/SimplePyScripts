@@ -13,6 +13,7 @@ import threading
 import random
 from info_security import InfoSecurity
 
+# Для импорта common
 import sys
 sys.path.append('..')
 
@@ -59,7 +60,7 @@ def process_command(data: bytes, conn, addr) -> bytes:
 
 
 def process_connect(conn, addr):
-    print(f"New connection from {addr}")
+    print(f"[+] New connection from {addr}")
 
     try:
         while True:
@@ -67,22 +68,22 @@ def process_connect(conn, addr):
             if not data:
                 break
 
-            print(f'Receiving ({len(data)}): {data}')
+            print(f'[+] Receiving ({len(data)}): {data}')
 
             # Проверка, что этот запрос уже не первый, т.к. то, что AES уже есть
             # и что, нужно расшифровавывать запрос
             is_existing_connect = conn in CONNECTION_BY_KEY
             if is_existing_connect:
                 data = CONNECTION_BY_KEY[conn].decrypt(data)
-                print(f'Receiving raw ({len(data)}): {data}')
+                print(f'[*] Receiving raw ({len(data)}): {data}')
 
             rs = process_command(data, conn, addr)
 
             if is_existing_connect:
-                print(f'Sending raw ({len(rs)}): {rs}')
+                print(f'[*] Sending raw ({len(rs)}): {rs}')
                 rs = CONNECTION_BY_KEY[conn].encrypt(rs)
 
-            print(f'Sending ({len(rs)}): {rs}')
+            print(f'[+] Sending ({len(rs)}): {rs}')
             send_msg(conn, rs)
 
             print()
@@ -97,7 +98,7 @@ def process_connect(conn, addr):
         if conn in CONNECTION_BY_KEY:
             CONNECTION_BY_KEY.pop(conn)
 
-        print(f"Closed connection from {addr}")
+        print(f"[+] Closed connection from {addr}")
         print()
 
 
@@ -105,13 +106,13 @@ HOST, PORT = '', 9090
 
 
 with socket.socket() as sock:
-    print('Server created')
+    print('[+] Server created')
 
     sock.bind((HOST, PORT))
-    print('Server bind complete')
+    print('[+] Server bind complete')
 
     sock.listen()
-    print(f'Server now listening: {sock.getsockname()}')
+    print(f'[+] Server now listening: {sock.getsockname()}')
     print()
 
     while True:

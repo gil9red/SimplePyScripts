@@ -25,17 +25,16 @@ def get_command(name: CommandEnum, data: str = None) -> str:
 def send_command(name: CommandEnum, data: str = None) -> Optional[dict]:
     data = get_command(name, data)
 
-    print(f'Sending ({len(data)}): {data}')
+    print(f'[+] Sending ({len(data)}): {data}')
     data = bytes(data, 'utf-8')
 
     # Публичный ключ передается в не зашифрованном виде
     if name != CommandEnum.SEND_PUBLIC_KEY:
         data = DATA['info_security'].encrypt(data)
-    print()
 
     send_msg(sock, data)
 
-    print('Receiving')
+    print('[+] Receiving...')
 
     response_data = recv_msg(sock)
     if not response_data:
@@ -45,7 +44,7 @@ def send_command(name: CommandEnum, data: str = None) -> Optional[dict]:
     if name != CommandEnum.SEND_PUBLIC_KEY:
         response_data = DATA['info_security'].decrypt(response_data)
 
-    print(f'Response ({len(response_data)}): {response_data}\n')
+    print(f'[+] Response ({len(response_data)}): {response_data}')
     rs = json.loads(response_data, encoding='utf-8')
 
     command = CommandEnum[rs['command']]
@@ -91,5 +90,7 @@ with socket.socket() as sock:
             print(f"{command.name}: {rs['data']}")
         else:
             print('[-] No answer!')
+
+        print()
 
     print('[+] Close\n')
