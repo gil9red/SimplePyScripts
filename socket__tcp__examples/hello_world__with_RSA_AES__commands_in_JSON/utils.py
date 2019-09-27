@@ -12,6 +12,7 @@ class CommandEnum(enum.Enum):
     CURRENT_DATETIME = enum.auto()
     CURRENT_TIMESTAMP = enum.auto()
     RANDOM = enum.auto()
+    GUID = enum.auto()
 
 
 if __name__ == '__main__':

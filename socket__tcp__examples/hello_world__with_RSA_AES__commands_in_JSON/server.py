@@ -11,13 +11,14 @@ import secrets
 import socket
 import threading
 import random
-from info_security import InfoSecurity
+import uuid
 
 # Для импорта common
 import sys
 sys.path.append('..')
 
 from common import send_msg, recv_msg
+from info_security import InfoSecurity
 from utils import CommandEnum
 import rsa
 
@@ -52,6 +53,9 @@ def process_command(data: bytes, conn, addr) -> bytes:
 
     elif command == CommandEnum.RANDOM:
         rq['data'] = str(random.randint(0, 1000000))
+
+    elif command == CommandEnum.GUID:
+        rq['data'] = str(uuid.uuid4())
 
     else:
         rq['data'] = f'<Unsupported command="{command}">'

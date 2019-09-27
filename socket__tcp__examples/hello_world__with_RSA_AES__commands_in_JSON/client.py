@@ -25,12 +25,14 @@ def get_command(name: CommandEnum, data: str = None) -> str:
 def send_command(name: CommandEnum, data: str = None) -> Optional[dict]:
     data = get_command(name, data)
 
-    print(f'[+] Sending ({len(data)}): {data}')
     data = bytes(data, 'utf-8')
 
     # Публичный ключ передается в не зашифрованном виде
     if name != CommandEnum.SEND_PUBLIC_KEY:
+        print(f'[*] Sending raw ({len(data)}): {data}')
         data = DATA['info_security'].encrypt(data)
+
+    print(f'[+] Sending ({len(data)}): {data}')
 
     send_msg(sock, data)
 
@@ -40,11 +42,13 @@ def send_command(name: CommandEnum, data: str = None) -> Optional[dict]:
     if not response_data:
         return
 
+    print(f'[+] Response ({len(response_data)}): {response_data}')
+
     # AES ключ, зашифрованный публичным ключом, передается в не зашифрованном виде
     if name != CommandEnum.SEND_PUBLIC_KEY:
         response_data = DATA['info_security'].decrypt(response_data)
+        print(f'[*] Response raw ({len(response_data)}): {response_data}')
 
-    print(f'[+] Response ({len(response_data)}): {response_data}')
     rs = json.loads(response_data, encoding='utf-8')
 
     command = CommandEnum[rs['command']]
@@ -82,8 +86,10 @@ with socket.socket() as sock:
         print('[-] Need AES key from server!')
         quit()
 
+    print('\n')
+
     for command in [CommandEnum.CURRENT_DATETIME, CommandEnum.CURRENT_TIMESTAMP, CommandEnum.RANDOM,
-                    CommandEnum.RANDOM]:
+                    CommandEnum.RANDOM, CommandEnum.GUID, CommandEnum.GUID]:
         rs = send_command(command)
         if rs:
             print(rs)
