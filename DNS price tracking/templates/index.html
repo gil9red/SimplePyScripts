@@ -11,37 +11,42 @@
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.css') }}">
     <style>
-
+        div.middle-div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
     </style>
 </head>
 <body>
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-8">
+        <div class="col-5">
             <table id="product" class="table table-hover">
                 <thead class="thead-dark">
                     <tr>
                         <th style="display: none;" scope="col">#</th>
                         <th scope="col">Title</th>
-                        <th scope="col">Last Price</th>
-                        <th scope="col">URL</th>
+                        <th scope="col" class="col-2">Last Price</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for id, title, last_price, url in products %}
                      <tr product_id="{{ id }}">
                         <th style="display: none;" scope="row">{{ id }}</th>
-                        <td class="text-truncate" style="max-width: 300px;" title="{{ title }}">{{ title }}</td>
+                        <td class="text-truncate" style="max-width: 300px;" title="{{ title }}">
+                            <a href="{{ url }}" target="_blank">{{ title }}</a>
+                        </td>
                         <td>{{ last_price }}</td>
-                        <td><a href="{{ url }}">link</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
 
-        <div class="col-4">
+        <div class="col-2">
             <table id="price" class="table table-hover">
                 <thead class="thead-dark">
                     <tr>
@@ -63,83 +68,93 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col">
-            <div class="container">
+        <div class="col-5">
+            <div class="container middle-div">
               <canvas id="lineChart"></canvas>
             </div>
         </div>
     </div>
-
 </div>
 
     <script>
+        function highlight_row(row) {
+            let selectClass = 'table-primary';
+
+            if (row.hasClass(selectClass)) {
+                row.removeClass(selectClass);
+            } else {
+                row.addClass(selectClass).siblings().removeClass(selectClass);
+            }
+        }
+
+        function fill_chart(row) {
+            let labels = [];
+            let data = [];
+
+            // Show current product prices
+            let product_id = row.attr('product_id');
+
+            $('#price > tbody > tr').each(function() {
+                tr = $(this);
+
+                let found = tr.attr('product_id') == product_id;
+                tr.toggle(found);
+
+                if (found && tr.find('.value').text() != 'None') {
+                    let date_iso = tr.find('.date').attr('date_iso');
+                    let value = parseInt(tr.find('.value').text());
+
+                    labels.push(date_iso);
+                    data.push({
+                      x: date_iso,
+                      y: value
+                    });
+                }
+            });
+
+            var ctx = document.getElementById("lineChart").getContext("2d");
+            var lineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Price',
+                        lineTension: 0,
+                        borderColor: "#3e95cd",
+                        data: data,
+                    }],
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                tooltipFormat: 'DD/MM/YYYY HH:mm:ss',
+                                displayFormats: {
+                                   day: 'DD/MM'
+                                }
+                            },
+                            distribution: 'linear'
+                        }]
+                    }
+                }
+            });
+        }
+
         $(document).ready(function() {
             $('#product > tbody > tr').click(function() {
-                let selectClass = 'table-primary';
                 let row = $(this);
 
                 // Highlight current row
-                if (row.hasClass(selectClass)) {
-                    row.removeClass(selectClass);
-                } else {
-                    row.addClass(selectClass).siblings().removeClass(selectClass);
-                }
-
-                let labels = [];
-                let data = [];
-
-                // Show current product prices
-                let product_id = row.attr('product_id');
-                $('#price > tbody > tr').each(function() {
-                    tr = $(this);
-
-                    let found = tr.attr('product_id') == product_id;
-                    tr.toggle(found);
-
-                    if (found && tr.find('.value').text() != 'None') {
-                        let date_iso = tr.find('.date').attr('date_iso');
-                        let value = parseInt(tr.find('.value').text());
-
-                        labels.push(date_iso);
-                        data.push({
-                          x: date_iso,
-                          y: value
-                        });
-                    }
-                });
-
-                var ctx = document.getElementById("lineChart").getContext("2d");
-                var lineChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Price',
-                            lineTension: 0,
-                            borderColor: "#3e95cd",
-                            data: data,
-                        }],
-                    },
-                    options: {
-                        scales: {
-                            xAxes: [{
-                                type: 'time',
-                                time: {
-                                    unit: 'day',
-                                    tooltipFormat: 'DD/MM/YYYY HH:mm:ss',
-                                    displayFormats: {
-                                       day: 'DD/MM'
-                                    }
-                                },
-                                distribution: 'linear'
-                            }]
-                        }
-                    }
-                });
+                highlight_row(row);
+                fill_chart(row);
             });
+
+            let row = $('#product tr[product_id]:first');
+            highlight_row(row);
+            fill_chart(row);
         });
     </script>
 
