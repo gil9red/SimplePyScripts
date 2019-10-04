@@ -4,32 +4,35 @@
 __author__ = 'ipetrash'
 
 
-from PyQt5 import Qt
+from PyQt5.QtWidgets import QFrame
 
 
 def get_horizontal_line():
-    line = Qt.QFrame()
-    line.setFrameShape(Qt.QFrame.HLine)
-    line.setFrameShadow(Qt.QFrame.Sunken)
+    line = QFrame()
+    line.setFrameShape(QFrame.HLine)
+    line.setFrameShadow(QFrame.Sunken)
     line.setLineWidth(1)
 
     return line
 
 
-app = Qt.QApplication([])
+if __name__ == '__main__':
+    from PyQt5.QtWidgets import QApplication, QFormLayout, QLineEdit, QCheckBox, QWidget
 
-layout = Qt.QFormLayout()
-layout.addRow('First', Qt.QLineEdit())
-layout.addRow('Last', Qt.QLineEdit())
-layout.addRow(get_horizontal_line())
+    app = QApplication([])
 
-layout.addRow('Phone', Qt.QLineEdit())
-layout.addRow(get_horizontal_line())
+    layout = QFormLayout()
+    layout.addRow('First', QLineEdit())
+    layout.addRow('Last', QLineEdit())
+    layout.addRow(get_horizontal_line())
 
-layout.addRow('Ok?', Qt.QCheckBox())
+    layout.addRow('Phone', QLineEdit())
+    layout.addRow(get_horizontal_line())
 
-mw = Qt.QWidget()
-mw.setLayout(layout)
-mw.show()
+    layout.addRow('Ok?', QCheckBox())
 
-app.exec()
+    mw = QWidget()
+    mw.setLayout(layout)
+    mw.show()
+
+    app.exec()
