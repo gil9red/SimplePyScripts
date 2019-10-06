@@ -117,7 +117,7 @@ def append_list_games(games: [(str, bool)], notified_by_sms=True):
         for name, is_cracked in games:
             ok = insert(name, is_cracked)
 
-            # Игра уже есть в базе, нужно проверить ее статус is_cracked,  возможно, он поменялся и игру взломали
+            # Игра уже есть в базе, нужно проверить ее статус is_cracked, возможно, он поменялся и игру взломали
             if not ok:
                 rs_is_cracked = connect.execute('SELECT is_cracked FROM Game where name = ?', (name,)).fetchone()[0]
 
@@ -142,6 +142,56 @@ def append_list_games(games: [(str, bool)], notified_by_sms=True):
                 # При DEBUG = True, отправки смс не будет
                 if notified_by_sms and not DEBUG:
                     simple_send_sms(text, log)
+
+        connect.commit()
+
+    finally:
+        connect.close()
+
+
+def append_list_games_which_denuvo_is_removed(games: [str], notified_by_sms=True):
+    connect = create_connect()
+
+    def insert(name: str) -> bool:
+        # Для отсеивания дубликатов
+        has = connect.execute("SELECT 1 FROM Game WHERE name = ?", [name]).fetchone()
+        if has:
+            return False
+
+        log.debug('Добавляю игру с убранной защитой "%s"', name)
+        connect.execute("INSERT OR IGNORE INTO Game (name, is_cracked, append_date) VALUES (?, 1, date('now'))", [name])
+
+        return True
+
+    try:
+        for name in games:
+            ok = insert(name)
+
+            # Игра уже есть в базе, нужно проверить ее статус is_cracked, возможно, он поменялся и игру взломали
+            if ok:
+                text = 'Добавлена игра с убранной защитой "{}"'.format(name)
+                log.info(text)
+                log_cracked_games.debug(text)
+
+                # При DEBUG = True, отправки смс не будет
+                if notified_by_sms and not DEBUG:
+                    simple_send_sms(text, log)
+
+            else:
+                rs_is_cracked = connect.execute('SELECT is_cracked FROM Game where name = ?', (name,)).fetchone()[0]
+
+                # Если игра раньше имела статус is_cracked = False
+                if not rs_is_cracked:
+                    # Поменяем флаг у игры в базе
+                    connect.execute("UPDATE Game SET is_cracked = 1, crack_date = date('now') WHERE name = ?", (name,))
+
+                    text = 'Игре "{}" убрали защиту'.format(name)
+                    log.info(text)
+                    log_cracked_games.debug(text)
+
+                    # При DEBUG = True, отправки смс не будет
+                    if notified_by_sms and not DEBUG:
+                        simple_send_sms(text, log)
 
         connect.commit()
 
