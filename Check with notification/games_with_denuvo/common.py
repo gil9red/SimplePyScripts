@@ -159,7 +159,10 @@ def append_list_games_which_denuvo_is_removed(games: [str], notified_by_sms=True
             return False
 
         log.debug('Добавляю игру с убранной защитой "%s"', name)
-        connect.execute("INSERT OR IGNORE INTO Game (name, is_cracked, append_date) VALUES (?, 1, date('now'))", [name])
+
+        sql = "INSERT OR IGNORE INTO Game (name, is_cracked, append_date, crack_date) " \
+              "VALUES (?, 1, date('now'), date('now'))"
+        connect.execute(sql, [name])
 
         return True
 
