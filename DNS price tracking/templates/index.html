@@ -150,9 +150,19 @@
                 // Highlight current row
                 highlight_row(row);
                 fill_chart(row);
+
+                // Save current row
+                localStorage.product_id = row.attr('product_id');
             });
 
-            let row = $('#product tr[product_id]:first');
+            // Get last saved row
+            let row;
+            if (localStorage.product_id == null) {
+                row = $('#product tr[product_id]:first');
+            } else {
+                row = $('#product tr[product_id=' + localStorage.product_id + ']');
+            }
+
             highlight_row(row);
             fill_chart(row);
         });
