@@ -70,8 +70,15 @@
         </div>
 
         <div class="col-5">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="cb_show_none_price" onclick="set_visible_none_price($(this).is(':checked'))">
+                <label class="form-check-label" for="cb_show_none_price">
+                    Show non-existent prices
+                </label>
+            </div>
+
             <div class="container middle-div">
-              <canvas id="lineChart"></canvas>
+                <canvas id="lineChart"></canvas>
             </div>
         </div>
     </div>
@@ -96,7 +103,7 @@
             let product_id = row.attr('product_id');
 
             $('#price > tbody > tr').each(function() {
-                tr = $(this);
+                let tr = $(this);
 
                 let found = tr.attr('product_id') == product_id;
                 tr.toggle(found);
@@ -107,11 +114,13 @@
 
                     labels.push(date_iso);
                     data.push({
-                      x: date_iso,
-                      y: value
+                        x: date_iso,
+                        y: value
                     });
                 }
             });
+
+            set_visible_none_price();
 
             var ctx = document.getElementById("lineChart").getContext("2d");
             var lineChart = new Chart(ctx, {
@@ -139,6 +148,27 @@
                             distribution: 'linear'
                         }]
                     }
+                }
+            });
+        }
+
+        function set_visible_none_price(checked) {
+            if (checked == null) {
+                checked = $('#cb_show_none_price').is(':checked');
+            }
+
+            // Show current product prices
+            let product_id = $('#product .table-primary').attr('product_id');
+
+            $('#price > tbody > tr').each(function() {
+                let tr = $(this);
+
+                let found = tr.attr('product_id') == product_id;
+                tr.toggle(found);
+
+                if (tr.find('.value').text() == 'None' && checked == false) {
+                    console.log("hide! " + tr)
+                    tr.toggle(false);
                 }
             });
         }
