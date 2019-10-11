@@ -8,7 +8,7 @@ import socket
 
 
 def get_local_ip() -> str:
-    return socket.gethostbyname(socket.gethostname())
+    return socket.gethostbyname(socket.getfqdn())
 
 
 if __name__ == '__main__':
