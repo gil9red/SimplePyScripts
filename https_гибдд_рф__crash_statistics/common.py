@@ -108,9 +108,13 @@ def init_db():
 
 
 def db_create_backup(backup_dir='backup'):
+    import datetime as DT
+    import os
+    import shutil
+
     os.makedirs(backup_dir, exist_ok=True)
 
-    file_name = str(datetime.today().date()) + '.sqlite'
+    file_name = str(DT.datetime.today().date()) + '.sqlite'
     file_name = os.path.join(backup_dir, file_name)
 
     shutil.copy(DB_FILE_NAME, file_name)
