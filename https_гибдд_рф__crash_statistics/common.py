@@ -4,11 +4,14 @@
 __author__ = 'ipetrash'
 
 
+from datetime import datetime
+import os
+import shutil
 import sqlite3
-import requests
-from bs4 import BeautifulSoup
 from typing import NamedTuple, List
 
+from bs4 import BeautifulSoup
+import requests
 
 # Import https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py
 import sys
@@ -104,7 +107,18 @@ def init_db():
         connect.commit()
 
 
+def db_create_backup(backup_dir='backup'):
+    os.makedirs(backup_dir, exist_ok=True)
+
+    file_name = str(datetime.today().date()) + '.sqlite'
+    file_name = os.path.join(backup_dir, file_name)
+
+    shutil.copy(DB_FILE_NAME, file_name)
+
+
 def append_crash_statistics_db(crash_statistics: CrashStatistics=None):
+    db_create_backup()
+
     if not crash_statistics:
         crash_statistics = get_crash_statistics()
 
