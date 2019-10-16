@@ -18,7 +18,7 @@ sys.path.append('../wait')
 
 from wait import wait
 
-from db import Product
+from db import Product, db_create_backup
 
 
 def get_price(url: str) -> Optional[int]:
@@ -41,6 +41,8 @@ checked_products = []
 
 while True:
     print(f'Started at {DT.datetime.now():%d/%m/%Y %H:%M:%S}\n')
+
+    db_create_backup()
 
     checked_products.clear()
 

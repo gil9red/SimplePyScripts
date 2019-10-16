@@ -13,6 +13,19 @@ import pathlib
 DB_FILE_NAME = str(pathlib.Path(__file__).resolve().parent / 'tracked_products.sqlite')
 
 
+def db_create_backup(backup_dir='backup'):
+    import datetime as DT
+    import os
+    import shutil
+
+    os.makedirs(backup_dir, exist_ok=True)
+
+    file_name = str(DT.datetime.today().date()) + '.sqlite'
+    file_name = os.path.join(backup_dir, file_name)
+
+    shutil.copy(DB_FILE_NAME, file_name)
+
+
 # Ensure foreign-key constraints are enforced.
 db = SqliteDatabase(DB_FILE_NAME, pragmas={'foreign_keys': 1})
 
