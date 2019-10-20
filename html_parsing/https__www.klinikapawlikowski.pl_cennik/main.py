@@ -52,14 +52,14 @@ def parser(base_url, headers) -> dict:
 def files_writer(data: dict):
     with open('parsed_cennik.csv', 'a', encoding='utf-8', newline='') as file:
         a_pen = csv.writer(file)
-        a_pen.writerow(('Title_proedure', 'Opisanie_procedur', 'Ceny'))
+        a_pen.writerow(['Title', 'Title_proedure', 'Opisanie_procedur', 'Ceny'])
 
         # "Konsultacje", "Dermatologia kliniczna" и т.п.
         for header, procedures in data.items():
             # "Dermatolog", "Badanie histopatologiczne", и т.п.
             for procedure, items in procedures.items():
                 for title, price in items:
-                    a_pen.writerow((procedure, title, price))
+                    a_pen.writerow([header, procedure, title, price])
 
 
 if __name__ == '__main__':
