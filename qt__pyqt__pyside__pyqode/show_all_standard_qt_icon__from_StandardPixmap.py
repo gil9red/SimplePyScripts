@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from PyQt5.QtWidgets import QApplication, QMessageBox, QListWidget, QListWidgetItem, QStyle
+from PyQt5.QtWidgets import QApplication, QMessageBox, QGridLayout, QPushButton, QStyle, QWidget
 
 
 # Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
@@ -29,15 +29,23 @@ if __name__ == '__main__':
 
     enum_items_standard_pixmap = [x for x in dir(QStyle) if x.startswith('SP_')]
 
-    lw = QListWidget()
-    lw.setWindowTitle('show_all_standard_qt_icon__from_StandardPixmap')
+    mw = QWidget()
+    mw.setWindowTitle('show_all_standard_qt_icon__from_StandardPixmap')
 
-    for enum_name in enum_items_standard_pixmap:
+    layout = QGridLayout()
+
+    max_column = 4
+    for i, enum_name in enumerate(enum_items_standard_pixmap):
         enum_value = getattr(QStyle, enum_name)
         icon = style.standardIcon(enum_value)
 
-        lw.addItem(QListWidgetItem(icon, enum_name))
+        button = QPushButton(icon, enum_name)
 
-    lw.show()
+        row = i // max_column
+        col = i % max_column
+        layout.addWidget(button, row, col)
+
+    mw.setLayout(layout)
+    mw.show()
 
     app.exec()
