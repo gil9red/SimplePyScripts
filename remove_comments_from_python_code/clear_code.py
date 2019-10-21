@@ -5,6 +5,8 @@ __author__ = 'ipetrash'
 
 
 import ast
+import glob
+import shutil
 from typing import AnyStr
 
 # pip install astunparse
@@ -42,8 +44,24 @@ def clear_file(file_name: str, new_file_name: str = None, encoding='utf-8'):
         f.write(text)
 
 
+def clear_directory(dir_path: str):
+    new_dir_path = dir_path + '_copy_clear'
+
+    shutil.rmtree(new_dir_path, ignore_errors=True)
+    shutil.copytree(dir_path, new_dir_path)
+
+    for file_name in glob.glob(new_dir_path + '/**/*.py', recursive=True):
+        clear_file(file_name)
+
+
 if __name__ == '__main__':
     with open(__file__, 'rb') as f:
         print(clear_code(f.read()))
 
     clear_file(__file__, __file__ + '.clear.py')
+
+    import pathlib
+    path = pathlib.Path(__file__)
+    path_dir = str(path.parent.parent.absolute() / '_FOO_TEST_TEST')
+
+    clear_directory(path_dir)
