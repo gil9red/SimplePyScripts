@@ -4,7 +4,8 @@
 __author__ = 'ipetrash'
 
 
-from PyQt5.QtWidgets import QApplication, QMessageBox, QGridLayout, QPushButton, QStyle, QWidget
+from PyQt5.QtWidgets import QApplication, QMessageBox, QGridLayout, QPushButton, QStyle, QWidget, QToolTip
+from PyQt5.QtCore import QRect
 
 
 # Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
@@ -40,6 +41,12 @@ if __name__ == '__main__':
         icon = style.standardIcon(enum_value)
 
         button = QPushButton(icon, enum_name)
+        button.clicked.connect(
+            lambda checked, w=button: (
+                app.clipboard().setText(w.text()),
+                QToolTip.showText(mw.mapToGlobal(w.pos() + w.rect().topRight()), 'Saved to clipboard', w, QRect(), 2000)
+            )
+        )
 
         row = i // max_column
         col = i % max_column
