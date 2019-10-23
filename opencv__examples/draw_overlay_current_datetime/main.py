@@ -34,7 +34,10 @@ def draw_overlay(img, text: str, color_text=(255, 255, 255), max_text_height_per
     cv2.putText(img, text, (0, text_y), font, scale, color_text, thickness, lineType=cv2.LINE_AA)
 
 
-def draw_overlay_current_datetime(img, datetime_fmt='%d/%m/%y %H:%M:%S', color_text=(255, 255, 255), max_text_height_percent=5):
+def draw_overlay_current_datetime(
+        img, datetime_fmt='%d/%m/%y %H:%M:%S',
+        color_text=(255, 255, 255), max_text_height_percent=5
+):
     text = DT.datetime.now().strftime(datetime_fmt)
     draw_overlay(img, text, color_text, max_text_height_percent)
 
