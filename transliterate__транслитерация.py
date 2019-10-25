@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 def make_transliterate(text):
+    # SOURCE: https://github.com/barseghyanartur/transliterate
     import transliterate
 
     try:
