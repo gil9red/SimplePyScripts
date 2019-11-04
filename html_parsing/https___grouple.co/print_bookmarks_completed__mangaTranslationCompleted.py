@@ -43,13 +43,13 @@ for row in root.select('.bookmark-row'):
         (is_complete, title, url)
     )
 
-print(f'Total bookmarks {len(items)}:')
+print(f'Total bookmarks ({len(items)}):')
 for _, title, url in items:
     print(f'    {repr(title)}: {url}')
 
 print('\n')
 
 completed = [(title, url) for is_complete, title, url in items if is_complete]
-print(f'Total bookmarks completed {len(completed)}:')
+print(f'Total bookmarks completed ({len(completed)}):')
 for title, url in completed:
     print(f'    {repr(title)}: {url}')
