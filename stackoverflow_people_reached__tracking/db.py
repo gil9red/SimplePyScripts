@@ -49,10 +49,7 @@ class PeopleReached(BaseModel):
         )
 
     @staticmethod
-    def append(url: str, value_human: str, date=None) -> 'PeopleReached':
-        if date is None:
-            date = DT.datetime.now()
-
+    def append(url: str, value_human: str) -> 'PeopleReached':
         match = re.search('(\d+\.?\d*)([km])', value_human, flags=re.IGNORECASE)
         if not match:
             raise ValueError(f'Invalid value_human ({repr(value_human)}) argument value format!')
@@ -67,7 +64,7 @@ class PeopleReached(BaseModel):
         unit = match.group(2).lower()
         value = int(value * units[unit])
 
-        return PeopleReached.get_or_create(url=url, value_human=value_human, value=value, date=date)[0]
+        return PeopleReached.get_or_create(url=url, value_human=value_human, value=value)[0]
 
     def __str__(self):
         return f'PeopleReached(id={self.id}, url={repr(self.url)}, date={self.date}, ' \
@@ -85,10 +82,11 @@ if __name__ == '__main__':
     # PeopleReached.append(URL, '~414k')
     # PeopleReached.append(URL, '~415k')
     # PeopleReached.append(URL, '~416k')
-    PeopleReached.append(URL, '~413k', date=DT.datetime(2019, 1, 1))
-    PeopleReached.append(URL, '~414k', date=DT.datetime(2019, 2, 11))
-    PeopleReached.append(URL, '~415k', date=DT.datetime(2019, 3, 15))
-    PeopleReached.append(URL, '~416k', date=DT.datetime(2019, 4, 19))
+    # OR:
+    # PeopleReached.get_or_create(url=URL, value_human='~413k', value=413000, date=DT.datetime(2019, 1, 1))
+    # PeopleReached.get_or_create(url=URL, value_human='~414k', value=414000, date=DT.datetime(2019, 2, 11))
+    # PeopleReached.get_or_create(url=URL, value_human='~415k', value=415000, date=DT.datetime(2019, 3, 15))
+    # PeopleReached.get_or_create(url=URL, value_human='~416k', value=416000, date=DT.datetime(2019, 4, 19))
 
     for x in PeopleReached.select():
         print(x)

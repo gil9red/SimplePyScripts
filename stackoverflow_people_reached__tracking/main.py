@@ -27,7 +27,7 @@ while True:
 
     try:
         value = get_stackoverflow_people_reached(URL)
-        print(f'URL: {URL}\n    Value: {value}\n')
+        print(f'URL: {URL}\n     {value}\n')
 
         PeopleReached.append(URL, value)
 
