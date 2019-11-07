@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Stackoverflow people reached</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='chart_js_2.8.0/Chart.bundle.min.js') }}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.css') }}">
+    <style>
+        div.middle-div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2">
+            <table id="people_reacheds" class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        {#
+                        <th style="display: none;" scope="col">#</th>
+                        <th scope="col">URL</th>
+                        #}
+                        <th scope="col" class="col-1">DATE</th>
+                        <th scope="col" class="col-1">VALUE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in people_reacheds %}
+                     <tr item_id="{{ item.id }}">
+                         {#
+                         <td style="display: none;" scope="row">{{ item.id }}</td>
+                         <td class="text-truncate" style="max-width: 300px;" title="{{ item.url }}">
+                             <a href="{{ item.url }}" target="_blank">{{ item.url }}</a>
+                         </td>
+                         #}
+                         <td class="date" title="{{ item.date.strftime('%d/%m/%Y %H:%M:%S') }}" date_iso="{{ item.date.isoformat() }}">{{ item.date.strftime('%d/%m/%Y') }}</td>
+                         <td class="value" title="{{ item.value }}">{{ item.value_human }}</td>
+                     </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-8">
+            <div class="container middle-div">
+                <canvas id="lineChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+        window.value_by_human = new Map();
+
+        function fill_chart(row) {
+            window.value_by_human.clear();
+
+            let labels = [];
+            let data = [];
+
+            $('#people_reacheds > tbody > tr').each(function() {
+                let tr = $(this);
+
+                let date_iso = tr.find('.date').attr('date_iso');
+                let value = parseInt(tr.find('.value').attr('title'));
+
+                window.value_by_human[value] = tr.find('.value').text();
+
+                labels.push(date_iso);
+                data.push({
+                    x: date_iso,
+                    y: value
+                });
+            });
+
+            var ctx = document.getElementById("lineChart").getContext("2d");
+            var lineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Value',
+                        lineTension: 0,
+                        borderColor: "#3e95cd",
+                        data: data,
+                    }],
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                tooltipFormat: 'DD/MM/YYYY HH:mm:ss',
+                                displayFormats: {
+                                   day: 'DD/MM'
+                                }
+                            },
+                            distribution: 'linear'
+                        }]
+                    },
+                    tooltips: {
+                        callbacks: {
+                            afterLabel: function(tooltipItem, data) {
+                                return window.value_by_human[tooltipItem.yLabel];
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            fill_chart();
+        });
+    </script>
+
+</body>
+</html>
