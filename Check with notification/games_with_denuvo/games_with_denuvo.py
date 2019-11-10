@@ -74,7 +74,9 @@ def get_games_which_denuvo_is_removed() -> [str]:
         if '[' in name and ']' in name:
             name = name[:name.index('[')]
 
-        games.append(name)
+        # NOTE: В таблицу добавили пустую <tr><td> из-за чего: 'Добавляю игру с убранной защитой ""'
+        if name:
+            games.append(name)
 
     return games
 
