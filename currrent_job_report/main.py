@@ -33,19 +33,21 @@ from get_user_and_deviation_hours import (
 )
 
 
-from qtpy.QtWidgets import *
-from qtpy.QtGui import *
-from qtpy.QtCore import *
+from PyQt5.QtWidgets import (
+    QApplication, QWidget, QLabel, QToolButton, QPlainTextEdit, QVBoxLayout, QHBoxLayout, QSystemTrayIcon,
+    QMenu, QWidgetAction, QMessageBox
+)
+from PyQt5.QtGui import QColor, QPainter, QIcon
+from PyQt5.QtCore import Qt, pyqtSignal, QThread
 
 
 import time
 
 
 class CheckJobReportThread(QThread):
-    about_new_text = Signal(str)
-    about_ok = Signal(bool)
-
-    about_log = Signal(str)
+    about_new_text = pyqtSignal(str)
+    about_ok = pyqtSignal(bool)
+    about_log = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
