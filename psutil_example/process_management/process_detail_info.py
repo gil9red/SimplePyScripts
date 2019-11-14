@@ -64,7 +64,7 @@ def print_info(pid):
     # Error: AttributeError: module 'psutil' has no attribute 'IOPRIO_CLASS_IDLE'
     # print('ionice set:', process.ionice(psutil.IOPRIO_CLASS_IDLE))
 
-    print('ionice get:', process.nice())
+    print('ionice get:', process.ionice())
 
     # If Linux
     # print('rlimit set:', process.rlimit(psutil.RLIMIT_NOFILE, (5, 5)))
