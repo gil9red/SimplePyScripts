@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ title }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='chart_js_2.8.0/Chart.bundle.min.js') }}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.css') }}">
+    <script src="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.js') }}"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="container">
+                <ul>
+                    {% for x in items %}
+                    <li><a href="{{ x['url'] }}">{{ x['name'] }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col">
+            <div class="container middle-div">
+                <canvas id="radar_chart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+        function transparentize(color, opacity) {
+			var alpha = opacity === undefined ? 0.5 : 1 - opacity;
+			return Color(color).alpha(alpha).rgbString();
+		}
+
+        var labels = {{ labels|safe }};
+        var datasets = [
+            {% for x in items %}
+            {
+                // {{ x["url"] }}
+                backgroundColor: transparentize("{{ x["color"] }}"),
+                borderColor: "{{ x["color"] }}",
+                data: {{ x["stats"]|safe }},
+                label: '{{ x["name"] }}',
+                hidden: {{ x["hidden"] }},
+            },
+            {% endfor %}
+        ];
+        var options = {
+            legend: {
+                position: 'top',
+                labels: {
+                    fontSize: 16,
+                },
+            },
+            title: {
+                display: true,
+                text: '{{ title_chart }}',
+                fontSize: 18
+            },
+            scale: {
+                ticks: {
+                    beginAtZero: true
+                },
+                pointLabels: {
+                    fontSize: 18
+                }
+            },
+            // BUGFIX: https://github.com/chartjs/Chart.js/issues/6188
+            tooltips: {
+                enabled: true,
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        return data.datasets[tooltipItem.datasetIndex].label + ': ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                    },
+                }
+            }
+        };
+
+        var ctx = document.getElementById("radar_chart").getContext("2d");
+        var chart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: labels,
+                datasets: datasets,
+            },
+            options: options,
+        });
+    </script>
+
+</body>
+</html>
