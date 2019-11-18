@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>bootstrap_4__tags__badges__examples</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.css') }}">
+    <script src="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.js') }}"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+    <a href="https://getbootstrap.com/docs/4.3/components/badge/">https://getbootstrap.com/docs/4.3/components/badge/</a>
+
+    <br><br>
+
+    <div class="row">
+        <div class="col">
+            <h1>Example heading <span class="badge badge-secondary">New</span></h1>
+            <h2>Example heading <span class="badge badge-secondary">New</span></h2>
+            <h3>Example heading <span class="badge badge-secondary">New</span></h3>
+            <h4>Example heading <span class="badge badge-secondary">New</span></h4>
+            <h5>Example heading <span class="badge badge-secondary">New</span></h5>
+            <h6>Example heading <span class="badge badge-secondary">New</span></h6>
+        </div>
+        <div class="col">
+            <button type="button" class="btn btn-primary">
+            Notifications <span class="badge badge-light">4</span>
+            </button>
+
+            <br><br>
+
+            <button type="button" class="btn btn-primary">
+              Profile <span class="badge badge-light">9</span>
+              <span class="sr-only">unread messages</span>
+            </button>
+
+            <br><br>
+
+            <div>Contextual variations:</div>
+            <span class="badge badge-primary">Primary</span>
+            <span class="badge badge-secondary">Secondary</span>
+            <span class="badge badge-success">Success</span>
+            <span class="badge badge-danger">Danger</span>
+            <span class="badge badge-warning">Warning</span>
+            <span class="badge badge-info">Info</span>
+            <span class="badge badge-light">Light</span>
+            <span class="badge badge-dark">Dark</span>
+
+            <br><br>
+
+            <div>Pill badges:</div>
+            <span class="badge badge-pill badge-primary">Primary</span>
+            <span class="badge badge-pill badge-secondary">Secondary</span>
+            <span class="badge badge-pill badge-success">Success</span>
+            <span class="badge badge-pill badge-danger">Danger</span>
+            <span class="badge badge-pill badge-warning">Warning</span>
+            <span class="badge badge-pill badge-info">Info</span>
+            <span class="badge badge-pill badge-light">Light</span>
+            <span class="badge badge-pill badge-dark">Dark</span>
+
+            <br><br>
+
+            <div>Links:</div>
+            <a href="#" class="badge badge-primary">Primary</a>
+            <a href="#" class="badge badge-secondary">Secondary</a>
+            <a href="#" class="badge badge-success">Success</a>
+            <a href="#" class="badge badge-danger">Danger</a>
+            <a href="#" class="badge badge-warning">Warning</a>
+            <a href="#" class="badge badge-info">Info</a>
+            <a href="#" class="badge badge-light">Light</a>
+            <a href="#" class="badge badge-dark">Dark</a>
+
+        </div>
+    </div>
+
+    <br><br>
+
+    <div class="row">
+        <div class="col-6">
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        {% for column in columns %}
+                        <th scope="col">{{ column }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in items %}
+                    <tr>
+                        <td>{{ x["name"] }}</td>
+                        <td><a href="{{ x['url'] }}">link</a></td>
+                        <td>
+                            {% for genre in x["genres"] %}
+                                <a href="#" class="badge badge-primary" title="{{ genre.description }}">{{ genre.name }}</a>
+                            {% endfor%}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
