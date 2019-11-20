@@ -30,16 +30,25 @@
                         <th style="display: none;" scope="col">#</th>
                         <th scope="col">Title</th>
                         <th scope="col" class="col-2">Price</th>
+                        <th scope="col" class="col-2">Link</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for id, title, last_price, url in products %}
-                     <tr product_id="{{ id }}">
+                    {% for id, title, last_price, url_dns, url_technopoint  in products %}
+                    <tr product_id="{{ id }}">
                         <th style="display: none;" scope="row">{{ id }}</th>
                         <td class="text-truncate" style="max-width: 300px;" title="{{ title }}">
-                            <a href="{{ url }}" target="_blank">{{ title }}</a>
+                            {{ title }}
                         </td>
                         <td>{{ last_price }}</td>
+                        <td>
+                            <a href="{{ url_dns }}" target="_blank" title="{{ url_dns }}">
+                                <img src="{{ url_for('static', filename='img/dns.png') }}" alt="DNS">
+                            </a>
+                            <a href="{{ url_technopoint }}" target="_blank" title="{{ url_technopoint }}">
+                                <img src="{{ url_for('static', filename='img/technopoint.png') }}" alt="TechnoPoint">
+                            </a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

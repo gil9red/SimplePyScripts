@@ -15,7 +15,13 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/")
 def index():
-    products = [(p.id, p.title, p.get_last_price(), p.url) for p in Product.select()]
+    products = [
+        (
+            p.id, p.title, p.get_last_price(), p.url,
+            p.url.replace('www.dns-shop.ru', 'technopoint.ru')
+        )
+        for p in Product.select()
+    ]
     prices = [(p.id, p.date, p.value, p.product_id) for p in Price.select()]
     return render_template('index.html', products=products, prices=prices)
 
