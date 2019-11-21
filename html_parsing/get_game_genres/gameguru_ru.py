@@ -37,20 +37,16 @@ def get_game_genres(game_name: str) -> List[str]:
 
 
 if __name__ == '__main__':
-    name = 'Hellgate: London'
-    items = search_game_genres(name)
-    print(f'Items ({len(items)}:')
-    for game, genres in items:
-        print(f'    {game}: {genres}')
-    print()
-    print(f'Genres of {name!r}: {get_game_genres(name)}')
+    for name in [
+        'Hellgate: London',
+        'The Incredible Adventures of Van Helsing',
+        'Dark Souls: Prepare to Die Edition',
+    ]:
+        items = search_game_genres(name)
+        print(f'Items ({len(items)}:')
+        for game, genres in items:
+            print(f'    {game}: {genres}')
+        print()
+        print(f'Genres of {name!r}: {get_game_genres(name)}')
 
-    print('\n' + '-' * 20 + '\n')
-
-    name = 'The Incredible Adventures of Van Helsing'
-    items = search_game_genres(name)
-    print(f'Items ({len(items)}:')
-    for game, genres in items:
-        print(f'    {game}: {genres}')
-    print()
-    print(f'Genres of {name!r}: {get_game_genres(name)}')
+        print('\n' + '-' * 20 + '\n')
