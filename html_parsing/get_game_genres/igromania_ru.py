@@ -29,7 +29,7 @@ def search_game_genres(game_name: str) -> List[Tuple[str, List[str]]]:
     url = 'https://www.igromania.ru/-Engine-/AJAX/games.list.v2/index.php'
     rs = requests.post(url, headers=headers, data=form_data)
     if not rs.ok:
-        print('[-] rs.ok={rs.ok}')
+        print(f'[-] Something went wrong...: status_code: {rs.status_code}\n{rs.text}')
         return []
 
     root = BeautifulSoup(rs.content, 'html.parser')
