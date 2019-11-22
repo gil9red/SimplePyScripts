@@ -30,3 +30,12 @@ def smart_comparing_names(name_1, name_2):
     name_2 = remove_postfix(name_2)
 
     return clear_name(name_1) == clear_name(name_2)
+
+
+TEST_GAMES = [
+    'Hellgate: London',
+    'The Incredible Adventures of Van Helsing',
+    'Dark Souls: Prepare to Die Edition',
+    'Twin Sector',
+    'Call of Cthulhu: Dark Corners of the Earth',
+]
