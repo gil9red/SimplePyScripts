@@ -25,7 +25,7 @@ def search_game_genres(game_name: str) -> List[Tuple[str, List[str]]]:
 
     rs = requests.post('https://gamer-info.com/search-q/', headers=headers, data=form_data)
     if not rs.ok:
-        print('[-] rs.ok={rs.ok}')
+        print(f'[-] rs.ok={rs.ok}')
         return []
 
     root = BeautifulSoup(rs.content, 'html.parser')

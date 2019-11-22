@@ -18,6 +18,10 @@ def search_game_genres(game_name: str) -> List[Tuple[str, List[str]]]:
     }
 
     rs = requests.get(f'https://stopgame.ru/search/?s={game_name}&where=games&sort=name', headers=headers)
+    if not rs.ok:
+        print(f'[-] rs.ok={rs.ok}')
+        return []
+
     root = BeautifulSoup(rs.content, 'html.parser')
 
     items = []
