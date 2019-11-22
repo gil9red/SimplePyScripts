@@ -13,7 +13,11 @@ from common import smart_comparing_names
 
 
 def search_game_genres(game_name: str) -> List[Tuple[str, List[str]]]:
-    rs = requests.get(f'https://gameguru.ru/search/all.html?s={game_name}')
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0',
+    }
+
+    rs = requests.get(f'https://gameguru.ru/search/all.html?s={game_name}', headers=headers)
     root = BeautifulSoup(rs.content, 'html.parser')
 
     items = []
@@ -37,13 +41,55 @@ def get_game_genres(game_name: str) -> List[str]:
 
 
 if __name__ == '__main__':
-    from common import TEST_GAMES
-    for name in TEST_GAMES:
-        items = search_game_genres(name)
-        print(f'Items ({len(items)}:')
-        for game, genres in items:
-            print(f'    {game!r}: {genres}')
-        print()
-        print(f'Genres of {name!r}: {get_game_genres(name)}')
+    from common import _common_test
+    _common_test(search_game_genres, get_game_genres)
 
-        print('\n' + '-' * 20 + '\n')
+    # Search 'Hellgate: London'...
+    #   Result (3):
+    #     'Hellgate: London': ['RPG']
+    #     'London Detective Mysteria': ['Квест', 'Визуальный роман']
+    #     'Mario & Sonic at the London 2012 Olympic Games': ['Спорт']
+    #
+    # Genres: ['RPG']
+    #
+    # --------------------
+    #
+    # Search 'The Incredible Adventures of Van Helsing'...
+    #   Result (3):
+    #     'Incredible Adventures of Van Helsing, The': ['Экшен', 'RPG']
+    #     'Incredible Adventures of Van Helsing 2, The': ['Экшен', 'RPG']
+    #     'Incredible Adventures of Van Helsing: Final Cut, The': ['Экшен', 'RPG']
+    #
+    # Genres: ['Экшен', 'RPG']
+    #
+    # --------------------
+    #
+    # Search 'Dark Souls: Prepare to Die Edition'...
+    #   Result (3):
+    #     'Dark Souls: Prepare to Die Edition': ['RPG', 'aRPG']
+    #     'Dark Age of Camelot Platinum Edition': ['RPG', 'MMO']
+    #     'Dark Age of Camelot: Gold Edition': ['RPG', 'MMO']
+    #
+    # Genres: ['RPG', 'aRPG']
+    #
+    # --------------------
+    #
+    # Search 'Twin Sector'...
+    #   Result (3):
+    #     'Twin Sector': ['Экшен']
+    #     'Twin Mirror': ['Квест']
+    #     'Aragami': ['Экшен', 'Стелс']
+    #
+    # Genres: ['Экшен']
+    #
+    # --------------------
+    #
+    # Search 'Call of Cthulhu: Dark Corners of the Earth'...
+    #   Result (3):
+    #     'Call of Cthulhu: Dark Corners of the Earth': ['Экшен', 'Шутер', 'Квест']
+    #     'Call of Cthulhu': ['RPG']
+    #     'Call of Cthulhu: The Wasted Land': ['RPG', 'Стратегия']
+    #
+    # Genres: ['Экшен', 'Шутер', 'Квест']
+    #
+    # --------------------
