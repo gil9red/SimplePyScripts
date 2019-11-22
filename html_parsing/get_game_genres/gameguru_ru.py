@@ -41,11 +41,13 @@ if __name__ == '__main__':
         'Hellgate: London',
         'The Incredible Adventures of Van Helsing',
         'Dark Souls: Prepare to Die Edition',
+        'Twin Sector',
+        'Call of Cthulhu: Dark Corners of the Earth',
     ]:
         items = search_game_genres(name)
         print(f'Items ({len(items)}:')
         for game, genres in items:
-            print(f'    {game}: {genres}')
+            print(f'    {game!r}: {genres}')
         print()
         print(f'Genres of {name!r}: {get_game_genres(name)}')
 
