@@ -14,7 +14,8 @@ Point = namedtuple('Point', ['x', 'y'])
 # print(p)
 
 p = Point(1, 2)
-print(p)  # Point(x=1, y=2)
+print(p)            # Point(x=1, y=2)
+print(p._asdict())  # OrderedDict([('x', 1), ('y', 2)])
 print()
 
 
@@ -31,4 +32,5 @@ p = Point()
 print(p)  # Point(x=0, y=0)
 
 p = Point(1, 2)
-print(p)  # Point(x=1, y=2)
+print(p)            # Point(x=1, y=2)
+print(p._asdict())  # OrderedDict([('x', 1), ('y', 2)])
