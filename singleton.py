@@ -27,3 +27,4 @@ if __name__ == '__main__':
     x3 = MyClass()
 
     print(id(x1), id(x2), id(x3))
+    assert id(x1) == id(x2) == id(x3)
