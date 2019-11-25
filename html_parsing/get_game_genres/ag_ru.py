@@ -45,7 +45,7 @@ def search_game_genres(game_name: str) -> List[Tuple[str, List[str]]]:
     items = []
 
     for item in rs.json()['results']:
-        # Если игра была на PC
+        # Если игра не была на PC
         if not any(x['platform']['name'] == 'PC' for x in item.get('platforms', [])):
             continue
 
