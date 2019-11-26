@@ -4,16 +4,12 @@
 __author__ = 'ipetrash'
 
 
-import re
 from typing import List, Tuple
 
 from bs4 import BeautifulSoup
 import requests
 
 from common import smart_comparing_names
-
-
-
 
 
 def search_game_genres(game_name: str) -> List[Tuple[str, List[str]]]:
