@@ -30,7 +30,7 @@ closed = cv2.morphologyEx(edged, cv2.MORPH_CLOSE, kernel)
 # cv2.imshow('closed', closed)
 
 # Нахождение контуров в изображении и подсчет количества книг
-contours = cv2.findContours(closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[1]
+contours, _ = cv2.findContours(closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 total = 0
 
 image_result = image.copy()

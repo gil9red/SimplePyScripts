@@ -30,7 +30,7 @@ cv2.imshow("Original", image)
 
 # find contours in the image and initialize the mask that will be
 # used to remove the bad contours
-contours = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)[1]
+contours, _ = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 mask = np.ones(image.shape[:2], dtype="uint8") * 255
 
 # loop over the contours

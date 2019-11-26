@@ -40,7 +40,7 @@ def find_contours(image_source_hsv, hsv_min, hsv_max):
     )
 
     # Находим контуры
-    _, contours, hierarchy = cv2.findContours(
+    contours, _ = cv2.findContours(
         thresholded_image,
         cv2.RETR_EXTERNAL,
         cv2.CHAIN_APPROX_SIMPLE

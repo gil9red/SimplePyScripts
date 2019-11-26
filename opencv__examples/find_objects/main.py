@@ -14,7 +14,7 @@ gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 ret, thresh = cv2.threshold(gray_img, 0, 255, cv2.THRESH_BINARY)
 # cv2.imshow('thresh', thresh)
 
-image, contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 # cv2.imshow('image_', image)
 
 # img_with_contour = img.copy()
@@ -36,7 +36,7 @@ cv2.imshow('img_with_rect', img_with_rect)
 #
 cv2.drawContours(img_with_rect, contours, -1, (0, 255, 0), 10)
 gray_img = cv2.cvtColor(img_with_rect, cv2.COLOR_BGR2GRAY)
-image, contours, _ = cv2.findContours(gray_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+contours, _ = cv2.findContours(gray_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 # cv2.imshow('image_', image)
 
 img_with_rect_rect = img.copy()
