@@ -246,11 +246,11 @@ class MainWindow(Qt.QWidget):
                 mode = cv2.RETR_EXTERNAL if self.chOnlyExternal.isChecked() else cv2.RETR_TREE
 
                 # Находим контуры
-                contours = cv2.findContours(
+                contours, _ = cv2.findContours(
                     thresholded_image,
                     mode,
                     cv2.CHAIN_APPROX_SIMPLE
-                )[1]
+                )
 
                 result_img = self.image_source.copy()
 
