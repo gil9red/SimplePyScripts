@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 
 
 def get_baseboard_info() -> dict:
+    # Motherboard model
     cmd = 'wmic baseboard get product, Manufacturer, version, serialnumber /format:RAWXML'
     text = check_output(cmd)
 
