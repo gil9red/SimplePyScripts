@@ -91,7 +91,7 @@ def dump_covers(year: Union[str, int], out_dir='out', need_zip=False, remove_out
 
     if need_zip:
         print(f'Make archive from {out_dir!r}')
-        zip_name = shutil.make_archive(out_dir, 'zip')
+        zip_name = shutil.make_archive(out_dir, 'zip', root_dir=out_dir)
         print(f'Finish make archive to {zip_name!r}')
 
         if remove_out_covers:
