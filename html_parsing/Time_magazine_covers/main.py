@@ -55,7 +55,7 @@ def get_covers(year: Union[int, str]) -> List[Cover]:
 
         match = re.search('<script>Time\.bootstrap = ({.+})</script>', rs.text)
         if not match:
-            raise Exception(f'Not found "Time\.bootstrap = ...): status_code: {rs.status_code}'
+            raise Exception(f'Not found "Time.bootstrap = ...): status_code: {rs.status_code}'
                             f'\nUrl: {url}\nRs.Url: {rs.url}\n{rs.text}"')
 
         result = json.loads(match.group(1), encoding=rs.encoding)
