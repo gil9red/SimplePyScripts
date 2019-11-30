@@ -26,11 +26,14 @@ def get_achievements(url: str, reversed=False) -> List[Achievement]:
         "ajax_load": "yes",
         "start_from_page": 1,
     }
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0',
+    }
 
     items = []
 
     while True:
-        rs = requests.post(url, data=data)
+        rs = requests.post(url, data=data, headers=headers)
         rs.raise_for_status()
 
         root = BeautifulSoup(rs.content, 'html.parser')
