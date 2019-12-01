@@ -16,7 +16,7 @@ def get_products(search: str) -> list:
         'X-Requested-With': 'XMLHttpRequest',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0'
     }
-    url = f'https://www.dns-shop.ru/search/?q={search}&p=1'
+    url = f'https://www.dns-shop.ru/search/?q={search}&p=1&order=popular&stock=all'
     session = requests.session()
     session.headers.update(headers)
 
