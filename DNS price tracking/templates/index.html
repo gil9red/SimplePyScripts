@@ -16,6 +16,12 @@
             align-items: center;
             justify-content: center;
         }
+
+        /* Increase size bootstrap checkbox */
+        .custom-control-label::before ,.custom-control-label::after {
+            width:25px;
+            height:25px
+        }
     </style>
 </head>
 <body>
@@ -28,12 +34,13 @@
                     <tr>
                         <th style="display: none;" scope="col">#</th>
                         <th scope="col">Title</th>
-                        <th scope="col" class="col-2">Price</th>
-                        <th scope="col" class="col-2">Link</th>
+                        <th scope="col" class="col-1">Price</th>
+                        <th scope="col" class="col-1">Link</th>
+                        <th scope="col" class="col-1">Favorite</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for id, title, last_price, url_dns, url_technopoint  in products %}
+                    {% for id, title, last_price, url_dns, url_technopoint in products %}
                     <tr product_id="{{ id }}">
                         <th style="display: none;" scope="row">{{ id }}</th>
                         <td class="text-truncate" style="max-width: 300px;" title="{{ title }}">
@@ -47,6 +54,12 @@
                             <a href="{{ url_technopoint }}" target="_blank" title="{{ url_technopoint }}">
                                 <img src="{{ url_for('static', filename='img/technopoint.png') }}" alt="TechnoPoint">
                             </a>
+                        </td>
+                        <td>
+                            <div class="custom-control custom-checkbox text-center big-checkbox">
+                                <input type="checkbox" class="custom-control-input favorite" id="favorite_{{ id }}">
+                                <label class="custom-control-label" for="favorite_{{ id }}"></label>
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}
@@ -181,6 +194,7 @@
         $(document).ready(function() {
             $('#product > tbody > tr').click(function() {
                 let row = $(this);
+                console.log(row)
 
                 // Highlight current row
                 highlight_row(row);
@@ -188,6 +202,13 @@
 
                 // Save current row
                 localStorage.product_id = row.attr('product_id');
+
+                // Save favorite
+                let favorites = [];
+                $('input.favorite:checked').each(function() {
+                    favorites.push($(this).attr('id'))
+                });
+                localStorage.favorites = JSON.stringify(favorites);
             });
 
             // Get last saved row
@@ -196,6 +217,12 @@
                 row = $('#product tr[product_id]:first');
             } else {
                 row = $('#product tr[product_id=' + localStorage.product_id + ']');
+            }
+
+            // Checked favorite
+            if (localStorage.favorites != null) {
+                let favorites = JSON.parse(localStorage.favorites);
+                favorites.forEach(value => $('#' + value).prop('checked', true));
             }
 
             highlight_row(row);
