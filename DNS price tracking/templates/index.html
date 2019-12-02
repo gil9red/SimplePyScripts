@@ -46,7 +46,7 @@
                         <td class="text-truncate" style="max-width: 300px;" title="{{ title }}">
                             {{ title }}
                         </td>
-                        <td>{{ last_price }}</td>
+                        <td class="price">{{ last_price }}</td>
                         <td>
                             <a href="{{ url_dns }}" target="_blank" title="{{ url_dns }}">
                                 <img src="{{ url_for('static', filename='img/dns.png') }}" alt="DNS">
@@ -95,6 +95,11 @@
                 <input class="form-check-input" type="checkbox" value="" id="cb_show_none_price" onclick="set_visible_none_price($(this).is(':checked'))">
                 <label class="form-check-label" for="cb_show_none_price">Show non-existent prices</label>
             </div>
+            <br>
+            <div>
+                <span>Total DNS favorites prices: </span><span class="total_DNS_favorites_prices"></span>
+            </div>
+            <br>
             <div class="container middle-div">
                 <canvas id="lineChart"></canvas>
             </div>
@@ -185,16 +190,42 @@
                 tr.toggle(found);
 
                 if (tr.find('.value').text() == 'None' && checked == false) {
-                    console.log("hide! " + tr)
                     tr.toggle(false);
                 }
             });
         }
 
+        function counting_price_of_favorites() {
+            let prices = [];
+
+            $('#product > tbody > tr').each(function() {
+                let tr = $(this);
+
+                let favorite = tr.find('.favorite');
+                if (favorite != null && favorite.is(':checked')) {
+                    let price = tr.find('.price').text();
+                    if (price != 'None') {
+                        prices.push(parseInt(price));
+                    }
+                }
+            });
+
+            let total_DNS_favorites_prices = $('.total_DNS_favorites_prices');
+            total_DNS_favorites_prices.parent().toggle(prices.length > 0);
+
+            if (prices.length == 1) {
+                total_DNS_favorites_prices.text(prices[0]);
+
+            } else if (prices.length > 1) {
+                total_DNS_favorites_prices.text(
+                    prices.join(' + ') + ' = ' + prices.reduce((a, b) => a + b, 0)
+                );
+            }
+        }
+
         $(document).ready(function() {
             $('#product > tbody > tr').click(function() {
                 let row = $(this);
-                console.log(row)
 
                 // Highlight current row
                 highlight_row(row);
@@ -209,6 +240,8 @@
                     favorites.push($(this).attr('id'))
                 });
                 localStorage.favorites = JSON.stringify(favorites);
+
+                counting_price_of_favorites();
             });
 
             // Get last saved row
@@ -227,6 +260,7 @@
 
             highlight_row(row);
             fill_chart(row);
+            counting_price_of_favorites();
         });
     </script>
 
