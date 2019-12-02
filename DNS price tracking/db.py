@@ -40,7 +40,8 @@ class Product(BaseModel):
     url = TextField(unique=True)
 
     def get_last_price(self):
-        last_price = self.prices.order_by(Price.date.desc()).first()
+        # Возвращаем последнюю указанную цену (Price.value != null)
+        last_price = self.prices.where(Price.value.is_null(is_null=False)).order_by(Price.date.desc()).first()
         if not last_price:
             return
 
