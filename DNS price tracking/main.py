@@ -7,33 +7,16 @@ __author__ = 'ipetrash'
 import datetime as DT
 import json
 import time
-from typing import Optional
-
-from bs4 import BeautifulSoup
-import requests
 
 # Import https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py
 import sys
 sys.path.append('../wait')
+sys.path.append('../html_parsing/www_dns_shop_ru')
 
 from wait import wait
+from get_price import get_price
 
 from db import Product, db_create_backup
-
-
-def get_price(url: str) -> Optional[int]:
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0',
-    }
-
-    rs = requests.get(url, headers=headers)
-
-    root = BeautifulSoup(rs.content, 'html.parser')
-    price_value = root.select_one('.current-price-value')
-    if not price_value:
-        return
-
-    return int(price_value['data-price-value'])
 
 
 checked_products = []
