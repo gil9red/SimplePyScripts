@@ -45,12 +45,13 @@ def _common_test(search_game_genres, get_game_genres, sleep=1, max_number=len(TE
     import time
 
     for name in TEST_GAMES[:max_number]:
-        items = search_game_genres(name)
         print(f'Search {name!r}...')
-        print(f'  Result ({len(items)}):')
-        for game, genres in items:
-            print(f'    {game!r}: {genres}')
-        print()
+        if search_game_genres:
+            items = search_game_genres(name)
+            print(f'  Result ({len(items)}):')
+            for game, genres in items:
+                print(f'    {game!r}: {genres}')
+            print()
         print(f'Genres: {get_game_genres(name)}')
 
         print('\n' + '-' * 20 + '\n')
