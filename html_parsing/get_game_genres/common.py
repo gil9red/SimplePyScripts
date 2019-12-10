@@ -55,7 +55,10 @@ TEST_GAMES = [
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0'
 
 
-def _common_test(get_game_genres, sleep=1, max_number=len(TEST_GAMES)):
+def _common_test(get_game_genres, sleep=1, max_number=None):
+    if max_number is None:
+        max_number = len(TEST_GAMES)
+
     import time
 
     for name in TEST_GAMES[:max_number]:

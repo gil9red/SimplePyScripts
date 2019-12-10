@@ -43,10 +43,6 @@ def get_game_genres(game_name: str, need_logs=False) -> List[str]:
         return []
 
     for item in rs.json()['results']:
-        # Если игра не была на PC
-        if not any(x['platform']['name'] == 'PC' for x in item.get('platforms', [])):
-            continue
-
         title = item['name']
         if not smart_comparing_names(title, game_name):
             continue
@@ -65,4 +61,17 @@ if __name__ == '__main__':
     from common import _common_test
     _common_test(get_game_genres)
 
-    # TODO: добавить пример вывода
+    # Search 'Hellgate: London'...
+    #     Genres: ['Шутеры', 'Экшены', 'Ролевые']
+    #
+    # Search 'The Incredible Adventures of Van Helsing'...
+    #     Genres: []
+    #
+    # Search 'Dark Souls: Prepare to Die Edition'...
+    #     Genres: ['Экшены', 'Ролевые']
+    #
+    # Search 'Twin Sector'...
+    #     Genres: ['Приключения', 'Экшены']
+    #
+    # Search 'Call of Cthulhu: Dark Corners of the Earth'...
+    #     Genres: ['Шутеры']

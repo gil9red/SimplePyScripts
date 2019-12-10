@@ -39,10 +39,6 @@ def get_game_genres(game_name: str, need_logs=False) -> List[str]:
         if not smart_comparing_names(title, game_name):
             continue
 
-        # Если игра не была на PC
-        if not any('PC' in a.text.upper() for a in platforms_td.select('a')):
-            continue
-
         # <td>Adventure: Free Roaming<br/>Adventure: Survival Horror<br/></td>
         #   -> ['Adventure: Free Roaming', 'Adventure: Survival Horror']
         genres = list(genres_td.stripped_strings)
@@ -57,4 +53,17 @@ if __name__ == '__main__':
     from common import _common_test
     _common_test(get_game_genres)
 
-    # TODO: добавить пример вывода
+    # Search 'Hellgate: London'...
+    #     Genres: ['Adventure: Survival Horror']
+    #
+    # Search 'The Incredible Adventures of Van Helsing'...
+    #     Genres: ['Adventure: Role Playing']
+    #
+    # Search 'Dark Souls: Prepare to Die Edition'...
+    #     Genres: ['Adventure: Role Playing']
+    #
+    # Search 'Twin Sector'...
+    #     Genres: []
+    #
+    # Search 'Call of Cthulhu: Dark Corners of the Earth'...
+    #     Genres: ['Adventure: Survival Horror']

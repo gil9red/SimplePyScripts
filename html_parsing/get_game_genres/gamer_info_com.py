@@ -51,4 +51,17 @@ if __name__ == '__main__':
     from common import _common_test
     _common_test(get_game_genres)
 
-    # TODO: добавить пример вывода
+    # Search 'Hellgate: London'...
+    #     Genres: ['action', 'RPG']
+    #
+    # Search 'The Incredible Adventures of Van Helsing'...
+    #     Genres: []
+    #
+    # Search 'Dark Souls: Prepare to Die Edition'...
+    #     Genres: []
+    #
+    # Search 'Twin Sector'...
+    #     Genres: ['action', 'приключения']
+    #
+    # Search 'Call of Cthulhu: Dark Corners of the Earth'...
+    #     Genres: ['action', 'приключения']

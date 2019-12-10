@@ -64,6 +64,19 @@ def get_game_genres(game_name: str, need_logs=False) -> List[str]:
 
 if __name__ == '__main__':
     from common import _common_test
-    _common_test(False, get_game_genres)
+    _common_test(get_game_genres)
 
-    # TODO: добавить пример вывода
+    # Search 'Hellgate: London'...
+    #     Genres: ['Role-Playing']
+    #
+    # Search 'The Incredible Adventures of Van Helsing'...
+    #     Genres: ['Role-Playing', 'Action']
+    #
+    # Search 'Dark Souls: Prepare to Die Edition'...
+    #     Genres: []
+    #
+    # Search 'Twin Sector'...
+    #     Genres: ['Action', 'Adventure']
+    #
+    # Search 'Call of Cthulhu: Dark Corners of the Earth'...
+    #     Genres: ['Adventure', 'Survival', '3D', 'Action']

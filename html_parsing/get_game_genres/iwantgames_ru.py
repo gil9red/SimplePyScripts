@@ -26,10 +26,6 @@ def get_game_genres(game_name: str, need_logs=False) -> List[str]:
     root = BeautifulSoup(rs.content, 'html.parser')
 
     for game_block in root.select('.game__content'):
-        # Если игра не была на PC
-        if 'PC' not in game_block.select_one('.game__platforms').text.upper():
-            continue
-
         title = get_norm_text(game_block.h2.a)
         if not smart_comparing_names(title, game_name):
             continue
@@ -63,4 +59,20 @@ if __name__ == '__main__':
 
     _common_test(get_game_genres)
 
-    # TODO: добавить пример вывода
+    # Search 'Hellgate: London'...
+    #     Genres: []
+    #
+    # Search 'The Incredible Adventures of Van Helsing'...
+    #     Genres: []
+    #
+    # Search 'Dark Souls: Prepare to Die Edition'...
+    #     Genres: []
+    #
+    # Search 'Twin Sector'...
+    #     Genres: []
+    #
+    # Search 'Call of Cthulhu: Dark Corners of the Earth'...
+    #     Genres: []
+    #
+    # Search 'Dark Souls: Remastered'...
+    #     Genres: ['РПГ', 'Ужасы', 'Экшен']
