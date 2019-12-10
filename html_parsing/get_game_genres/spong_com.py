@@ -25,8 +25,6 @@ def get_game_genres(game_name: str, need_logs=False) -> List[str]:
 
     root = BeautifulSoup(rs.content, 'html.parser')
 
-    items = []
-
     # Первая таблица -- та, что нужна нам
     for game_block in root.select_one('table.searchResult').select('tr'):
         tds = game_block.select('td')
@@ -48,8 +46,6 @@ def get_game_genres(game_name: str, need_logs=False) -> List[str]:
         # <td>Adventure: Free Roaming<br/>Adventure: Survival Horror<br/></td>
         #   -> ['Adventure: Free Roaming', 'Adventure: Survival Horror']
         genres = list(genres_td.stripped_strings)
-        if not genres:
-            continue
 
         # Сойдет первый, совпадающий по имени, вариант
         return genres
