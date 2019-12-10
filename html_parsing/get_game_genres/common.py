@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+import unicodedata
+
+
 def smart_comparing_names(name_1, name_2):
     """
     Функция для сравнивания двух названий игр.
@@ -32,6 +35,15 @@ def smart_comparing_names(name_1, name_2):
     return clear_name(name_1) == clear_name(name_2)
 
 
+def get_norm_text(node) -> str:
+    if not node:
+        return ""
+
+    # https://ru.wikipedia.org/wiki/Юникод#NFKD
+    # unicodedata.normalize для удаления \xa0 и подобных символов-заменителей
+    return unicodedata.normalize("NFKD", node.get_text(strip=True))
+
+
 TEST_GAMES = [
     'Hellgate: London',
     'The Incredible Adventures of Van Helsing',
@@ -40,20 +52,14 @@ TEST_GAMES = [
     'Call of Cthulhu: Dark Corners of the Earth',
 ]
 
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0'
 
-def _common_test(search_game_genres, get_game_genres, sleep=1, max_number=len(TEST_GAMES)):
+
+def _common_test(get_game_genres, sleep=1, max_number=len(TEST_GAMES)):
     import time
 
     for name in TEST_GAMES[:max_number]:
         print(f'Search {name!r}...')
-        if search_game_genres:
-            items = search_game_genres(name)
-            print(f'  Result ({len(items)}):')
-            for game, genres in items:
-                print(f'    {game!r}: {genres}')
-            print()
-        print(f'Genres: {get_game_genres(name)}')
-
-        print('\n' + '-' * 20 + '\n')
+        print(f'    Genres: {get_game_genres(name)}\n')
 
         time.sleep(sleep)
