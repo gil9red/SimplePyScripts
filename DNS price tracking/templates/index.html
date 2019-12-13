@@ -28,25 +28,27 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-5">
+        <div class="col-6">
             <table id="product" class="table table-hover">
                 <thead class="thead-dark">
                     <tr>
                         <th style="display: none;" scope="col">#</th>
-                        <th scope="col">Title</th>
-                        <th scope="col" class="col-1">Price</th>
-                        <th scope="col" class="col-1">Link</th>
+                        <th scope="col" class="col">Title</th>
+                        <th scope="col" class="col-1">DNS</th>
+                        <th scope="col" class="col-1">TP</th>
+                        <th scope="col" style="min-width: 75px;">Link</th>
                         <th scope="col" class="col-1">Favorite</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for id, title, last_price, url_dns, url_technopoint in products %}
+                    {% for id, title, last_price_dns, last_price_techopoint, url_dns, url_technopoint in products %}
                     <tr product_id="{{ id }}">
                         <th style="display: none;" scope="row">{{ id }}</th>
                         <td class="text-truncate" style="max-width: 300px;" title="{{ title }}">
                             {{ title }}
                         </td>
-                        <td class="price">{{ last_price }}</td>
+                        <td class="price dns">{{ last_price_dns }}</td>
+                        <td class="price techopoint">{{ last_price_techopoint }}</td>
                         <td>
                             <a href="{{ url_dns }}" target="_blank" title="{{ url_dns }}">
                                 <img src="{{ url_for('static', filename='img/dns.png') }}" alt="DNS">
@@ -67,22 +69,24 @@
             </table>
         </div>
 
-        <div class="col-2">
+        <div class="col-2 shrink">
             <table id="price" class="table table-hover">
                 <thead class="thead-dark">
                     <tr>
                         <th style="display: none;" scope="col">#</th>
                         <th scope="col">Datetime</th>
-                        <th scope="col">Value</th>
+                        <th scope="col">DNS</th>
+                        <th scope="col">TP</th>
                         <th style="display: none;" scope="col">Product ID</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for id, date, value, product_id in prices %}
+                    {% for id, date, value_dns, value_technopoint, product_id in prices %}
                      <tr product_id="{{ product_id }}" style="display: none;" value="{{ value }}">
                         <th style="display: none;" scope="row">{{ id }}</th>
                         <td class="date" title="{{ date.strftime('%d/%m/%Y %H:%M:%S') }}" date_iso="{{ date.isoformat() }}">{{ date.strftime('%d/%m/%Y') }}</td>
-                        <td class="value">{{ value }}</td>
+                        <td class="value dns">{{ value_dns }}</td>
+                        <td class="value technopoint">{{ value_technopoint }}</td>
                         <td style="display: none;">{{ product_id }}</td>
                     </tr>
                     {% endfor %}
@@ -90,14 +94,22 @@
             </table>
         </div>
 
-        <div class="col-5">
+        <div class="col-4">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="cb_show_none_price" onclick="set_visible_none_price($(this).is(':checked'))">
                 <label class="form-check-label" for="cb_show_none_price">Show non-existent prices</label>
             </div>
             <br>
             <div>
-                <span>Total DNS favorites prices: </span><span class="total_DNS_favorites_prices"></span>
+                <div>
+                    <span>Total DNS favorites prices: </span><span class="total_DNS_favorites_prices"></span>
+                </div>
+                <div>
+                    <span>Total TechnoPoint favorites prices: </span><span class="total_tp_favorites_prices"></span>
+                </div>
+                <div>
+                    <span>Diff: </span><span class="total_diff"></span>
+                </div>
             </div>
             <br>
             <div class="container middle-div">
@@ -120,7 +132,8 @@
 
         function fill_chart(row) {
             let labels = [];
-            let data = [];
+            let data_dns = [];
+            let data_tp = [];
 
             // Show current product prices
             let product_id = row.attr('product_id');
@@ -131,14 +144,20 @@
                 let found = tr.attr('product_id') == product_id;
                 tr.toggle(found);
 
-                if (found && tr.find('.value').text() != 'None') {
+                if (found && tr.find('.value.dns').text() != 'None') {
                     let date_iso = tr.find('.date').attr('date_iso');
-                    let value = parseInt(tr.find('.value').text());
+                    let value_dns = parseInt(tr.find('.value.dns').text());
+                    let value_technopoint = parseInt(tr.find('.value.technopoint').text());
 
                     labels.push(date_iso);
-                    data.push({
+                    data_dns.push({
                         x: date_iso,
-                        y: value
+                        y: value_dns
+                    });
+
+                    data_tp.push({
+                        x: date_iso,
+                        y: value_technopoint
                     });
                 }
             });
@@ -150,12 +169,20 @@
                 type: 'line',
                 data: {
                     labels: labels,
-                    datasets: [{
-                        label: 'Price',
-                        lineTension: 0,
-                        borderColor: "#3e95cd",
-                        data: data,
-                    }],
+                    datasets: [
+                        {
+                            label: 'DNS',
+                            lineTension: 0,
+                            borderColor: "rgb(246, 139, 31)",
+                            data: data_dns,
+                        },
+                        {
+                            label: 'TP',
+                            lineTension: 0,
+                            borderColor: "rgb(68, 44, 110)",
+                            data: data_tp,
+                        },
+                    ],
                 },
                 options: {
                     scales: {
@@ -189,38 +216,66 @@
                 let found = tr.attr('product_id') == product_id;
                 tr.toggle(found);
 
-                if (tr.find('.value').text() == 'None' && checked == false) {
+                if (tr.find('.value.dns').text() == 'None' && checked == false) {
                     tr.toggle(false);
                 }
             });
         }
 
         function counting_price_of_favorites() {
-            let prices = [];
+            let prices_dns = [];
+            let prices_tp = [];
 
             $('#product > tbody > tr').each(function() {
                 let tr = $(this);
 
                 let favorite = tr.find('.favorite');
                 if (favorite != null && favorite.is(':checked')) {
-                    let price = tr.find('.price').text();
-                    if (price != 'None') {
-                        prices.push(parseInt(price));
+                    let price_dns = tr.find('.price.dns').text();
+                    if (price_dns != 'None') {
+                        prices_dns.push(parseInt(price_dns));
+                    }
+
+                    let price_tp = tr.find('.price.techopoint').text();
+                    if (price_tp != 'None') {
+                        prices_tp.push(parseInt(price_tp));
                     }
                 }
             });
 
+            // DNS
             let total_DNS_favorites_prices = $('.total_DNS_favorites_prices');
-            total_DNS_favorites_prices.parent().toggle(prices.length > 0);
+            total_DNS_favorites_prices.parent().toggle(prices_dns.length > 0);
 
-            if (prices.length == 1) {
-                total_DNS_favorites_prices.text(prices[0]);
+            if (prices_dns.length == 1) {
+                total_DNS_favorites_prices.text(prices_dns[0]);
 
-            } else if (prices.length > 1) {
+            } else if (prices_dns.length > 1) {
                 total_DNS_favorites_prices.text(
-                    prices.join(' + ') + ' = ' + prices.reduce((a, b) => a + b, 0)
+                    prices_dns.join(' + ') + ' = ' + prices_dns.reduce((a, b) => a + b, 0)
                 );
             }
+            //
+
+            // TechnoPoint
+            let total_tp_favorites_prices = $('.total_tp_favorites_prices');
+            total_tp_favorites_prices.parent().toggle(prices_tp.length > 0);
+
+            if (prices_tp.length == 1) {
+                total_tp_favorites_prices.text(prices_tp[0]);
+
+            } else if (prices_tp.length > 1) {
+                total_tp_favorites_prices.text(
+                    prices_tp.join(' + ') + ' = ' + prices_tp.reduce((a, b) => a + b, 0)
+                );
+            }
+            //
+
+            // Diff
+            let total_diff = $('.total_diff');
+            total_diff.parent().toggle(prices_dns.length > 0 || prices_tp.length > 0);
+            total_diff.text(prices_dns.reduce((a, b) => a + b, 0) - prices_tp.reduce((a, b) => a + b, 0));
+            //
         }
 
         $(document).ready(function() {

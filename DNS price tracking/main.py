@@ -38,15 +38,38 @@ while True:
             product, _ = Product.get_or_create(title=product_data['title'], url=product_data['url'])
             print(product)
 
-            last_price = product.get_last_price()
+            last_price_dns = product.get_last_price_dns(actual_price=False)
+            print(f'DNS: {last_price_dns} / '
+                  f'{product.get_last_price_dns(actual_price=True)} (actual)')
 
-            current_price = get_price(product.url)
-            print(f'Current price: {current_price}')
+            last_price_technopoint = product.get_last_price_technopoint(actual_price=False)
+            print(f'Technopoint: {last_price_technopoint} / '
+                  f'{product.get_last_price_technopoint(actual_price=True)} (actual)')
+
+            current_url_price_dns = get_price(product.url)
+            current_url_price_technopoint = get_price(product.get_technopoint_url())
+            print(f'Current url price: DNS={current_url_price_dns}, Technopoint={current_url_price_technopoint}')
+
+            is_change_dns = current_url_price_dns != last_price_dns
+            is_change_technopoint = current_url_price_technopoint != last_price_technopoint
+            is_first_price = not product.prices.count()
 
             # Добавляем новую цену, если цена отличается или у продукта еще нет цен
-            if current_price != last_price or not product.prices.count():
-                print(f'Append new price: {current_price}')
-                product.append_price(current_price)
+            if is_change_dns or is_change_technopoint or is_first_price:
+                text = f'Append new price: DNS={current_url_price_dns}, Technopoint={current_url_price_technopoint}.' \
+                       f' Reason: '
+                if is_first_price:
+                    text += 'First price'
+                else:
+                    if is_change_dns and is_change_technopoint:
+                        text += 'DNS and Technopoint'
+                    elif is_change_dns:
+                        text += 'DNS'
+                    else:
+                        text += 'Technopoint'
+                print(text)
+
+                product.append_price(current_url_price_dns, current_url_price_technopoint)
 
             print()
 

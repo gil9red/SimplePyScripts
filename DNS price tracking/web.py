@@ -17,12 +17,12 @@ logging.basicConfig(level=logging.DEBUG)
 def index():
     products = [
         (
-            p.id, p.title, p.get_last_price(), p.url,
-            p.url.replace('www.dns-shop.ru', 'technopoint.ru')
+            p.id, p.title, p.get_last_price_dns(), p.get_last_price_technopoint(),
+            p.url, p.get_technopoint_url()
         )
         for p in Product.select()
     ]
-    prices = [(p.id, p.date, p.value, p.product_id) for p in Price.select()]
+    prices = [(p.id, p.date, p.value_dns, p.value_technopoint, p.product_id) for p in Price.select()]
     return render_template('index.html', products=products, prices=prices)
 
 
