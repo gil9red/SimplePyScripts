@@ -281,6 +281,9 @@
         $(document).ready(function() {
             $('#product > tbody > tr').click(function() {
                 let row = $(this);
+                if (row.hasClass("table-primary")) {
+                    return;
+                }
 
                 // Highlight current row
                 highlight_row(row);
@@ -288,7 +291,9 @@
 
                 // Save current row
                 localStorage.product_id = row.attr('product_id');
+            });
 
+            $('.custom-control-input.favorite').click(function() {
                 // Save favorite
                 let favorites = [];
                 $('input.favorite:checked').each(function() {
