@@ -229,6 +229,10 @@
                 }
             });
 
+            // По умолчанию, цены технопоинта не показывать
+            lineChart.data.datasets[1].hidden = true;
+            lineChart.update();
+
             // Read from localStorage
             if (localStorage.legend_hidden != null) {
                 let legend_hidden = JSON.parse(localStorage.legend_hidden);
