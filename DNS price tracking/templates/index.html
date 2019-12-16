@@ -164,6 +164,31 @@
 
             set_visible_none_price();
 
+            // Save state legend to localStorage
+            var legendClickHandler = function(e, legendItem) {
+                // SOURCE: https://www.chartjs.org/docs/latest/configuration/legend.html
+                var index = legendItem.datasetIndex;
+                var ci = this.chart;
+                var meta = ci.getDatasetMeta(index);
+
+                // See controller.isDatasetVisible comment
+                meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
+
+                // We hid a dataset ... rerender the chart
+                ci.update();
+                //
+
+                // Save to localStorage
+                let legend_hidden;
+                if (localStorage.legend_hidden != null) {
+                    legend_hidden = JSON.parse(localStorage.legend_hidden);
+                } else {
+                    legend_hidden = {};
+                }
+                legend_hidden[index] = meta.hidden;
+                localStorage.legend_hidden = JSON.stringify(legend_hidden);
+            };
+
             var ctx = document.getElementById("lineChart").getContext("2d");
             var lineChart = new Chart(ctx, {
                 type: 'line',
@@ -197,9 +222,21 @@
                             },
                             distribution: 'linear'
                         }]
+                    },
+                    legend: {
+                        onClick: legendClickHandler,
                     }
                 }
             });
+
+            // Read from localStorage
+            if (localStorage.legend_hidden != null) {
+                let legend_hidden = JSON.parse(localStorage.legend_hidden);
+                for (const [key, value] of Object.entries(legend_hidden)) {
+                    lineChart.data.datasets[key].hidden = value;
+                }
+                lineChart.update();
+            }
         }
 
         function set_visible_none_price(checked) {
