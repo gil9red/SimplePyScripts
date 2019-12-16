@@ -96,8 +96,12 @@
 
         <div class="col-4">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="cb_show_none_price" onclick="set_visible_none_price($(this).is(':checked'))">
-                <label class="form-check-label" for="cb_show_none_price">Show non-existent prices</label>
+                <input class="form-check-input" type="checkbox" value="" id="cb_show_none_price_dns" onclick="set_visible_none_price()">
+                <label class="form-check-label" for="cb_show_none_price_dns">Show <b>none</b> prices DNS</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="cb_show_none_price_technopoint" onclick="set_visible_none_price()">
+                <label class="form-check-label" for="cb_show_none_price_technopoint">Show <b>none</b> prices TechnoPoint</label>
             </div>
             <br>
             <div>
@@ -144,21 +148,29 @@
                 let found = tr.attr('product_id') == product_id;
                 tr.toggle(found);
 
-                if (found && tr.find('.value.dns').text() != 'None') {
+                let value_str_dns = tr.find('.value.dns').text();
+                let value_str_technopoint = tr.find('.value.technopoint').text();
+
+                // Наличие хотя бы одной из двух цен будет причиной для добавление метки на графике
+                if (found && (value_str_dns != 'None' || value_str_technopoint != 'None')) {
                     let date_iso = tr.find('.date').attr('date_iso');
-                    let value_dns = parseInt(tr.find('.value.dns').text());
-                    let value_technopoint = parseInt(tr.find('.value.technopoint').text());
-
                     labels.push(date_iso);
-                    data_dns.push({
-                        x: date_iso,
-                        y: value_dns
-                    });
 
-                    data_tp.push({
-                        x: date_iso,
-                        y: value_technopoint
-                    });
+                    if (value_str_dns != 'None') {
+                        let value_dns = parseInt(value_str_dns);
+                        data_dns.push({
+                            x: date_iso,
+                            y: value_dns
+                        });
+                    }
+
+                    if (value_str_technopoint != 'None') {
+                        let value_technopoint = parseInt(value_str_technopoint);
+                        data_tp.push({
+                            x: date_iso,
+                            y: value_technopoint
+                        });
+                    }
                 }
             });
 
@@ -243,10 +255,9 @@
             }
         }
 
-        function set_visible_none_price(checked) {
-            if (checked == null) {
-                checked = $('#cb_show_none_price').is(':checked');
-            }
+        function set_visible_none_price() {
+            let checked_dns = $('#cb_show_none_price_dns').is(':checked');
+            let checked_technopoint = $('#cb_show_none_price_technopoint').is(':checked')
 
             // Show current product prices
             let product_id = $('#product .table-primary').attr('product_id');
@@ -254,10 +265,16 @@
             $('#price > tbody > tr').each(function() {
                 let tr = $(this);
 
+                // Показываем те цены, что относятся к товару
                 let found = tr.attr('product_id') == product_id;
                 tr.toggle(found);
 
-                if (tr.find('.value.dns').text() == 'None' && checked == false) {
+                // Настраиваем видимость none-цен для DNS и TechnoPoint
+                // Если цена None и флаг не стоит, то цену прячем
+                if (
+                    (tr.find('.value.dns').text() == 'None' && checked_dns == false)
+                    || (tr.find('.value.technopoint').text() == 'None' && checked_technopoint == false)
+                ) {
                     tr.toggle(false);
                 }
             });
