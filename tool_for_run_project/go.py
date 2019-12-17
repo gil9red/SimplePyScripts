@@ -172,7 +172,7 @@ def go_open(name: str, version: str = ""):
 
 def run_manager():
     dir_file_name = get_name_by_path('manager')
-    file_name = dir_file_name + '/manager/bin/manager64.exe'
+    file_name = dir_file_name + '/manager/bin/manager.cmd'
 
     print(f'Run: "{file_name}"')
 
