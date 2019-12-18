@@ -39,9 +39,14 @@ def get_norm_text(node) -> str:
     if not node:
         return ""
 
+    text = node.get_text(strip=True)
+
+    # NFKD ™ превратит в TM, что исказит текст, лучше удалить
+    text = text.replace('™', '').replace('©', '').replace('©', '®')
+
     # https://ru.wikipedia.org/wiki/Юникод#NFKD
     # unicodedata.normalize для удаления \xa0 и подобных символов-заменителей
-    return unicodedata.normalize("NFKD", node.get_text(strip=True))
+    return unicodedata.normalize("NFKD", text)
 
 
 TEST_GAMES = [
