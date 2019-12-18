@@ -15,8 +15,7 @@ if __name__ == '__main__':
     DIR_LOGO_IMAGES = 'logo_images'
 
     import os
-    if not os.path.exists(DIR_LOGO_IMAGES):
-        os.makedirs(DIR_LOGO_IMAGES)
+    os.makedirs(DIR_LOGO_IMAGES, exist_ok=True)
 
     from bs4 import BeautifulSoup
     root = BeautifulSoup(open(FILE_NAME_DICT_LOGO, 'rb'), 'lxml')

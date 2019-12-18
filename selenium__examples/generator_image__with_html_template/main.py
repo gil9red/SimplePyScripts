@@ -27,8 +27,7 @@ def img_to_src_base64(file_name: str) -> str:
 
 
 DIR_NAME = 'output'
-if not exists(DIR_NAME):
-    makedirs(DIR_NAME)
+makedirs(DIR_NAME, exist_ok=True)
 
 
 with open('input/template__index.html', encoding='utf-8') as f:

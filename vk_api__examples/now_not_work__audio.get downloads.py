@@ -123,8 +123,7 @@ if __name__ == '__main__':
     # print(albums)
 
     # Если не существует пути, создадим его
-    if not os.path.exists(DOWNLOAD_DIR):
-        os.makedirs(DOWNLOAD_DIR)
+    os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
     # Вывод списка всех аудиозаписей
     print('Всего песен: {}'.format(audio['count']))

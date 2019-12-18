@@ -67,8 +67,7 @@ if __name__ == '__main__':
 
         import os
         dirs = os.path.dirname(path)
-        if not os.path.exists(dirs):
-            os.makedirs(dirs)
+        os.makedirs(dirs, exist_ok=True)
 
         with open(path, 'w', encoding='utf-8') as f:
             content = get_content(url)

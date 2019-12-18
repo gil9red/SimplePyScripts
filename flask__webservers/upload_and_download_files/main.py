@@ -14,8 +14,7 @@ UPLOAD_FOLDER = os.path.abspath(UPLOAD_FOLDER)
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 @app.route('/', methods=['GET', 'POST'])

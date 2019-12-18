@@ -1219,8 +1219,8 @@ def main(namespace):
     print(u'Папка сохранения: %s' % path_save_dir)
 
     # Если папка сохранения не существует и мы намерены сохранять сгенерированные файлы, создаем ее
-    if os.path.exists(path_save_dir) is False and save is True:
-        os.makedirs(path_save_dir)
+    if save:
+        os.makedirs(path_save_dir, exist_ok=True)
 
     # Перебираем пути к файлам перечисления
     for enum in enums_param:

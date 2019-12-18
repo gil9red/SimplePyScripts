@@ -32,8 +32,7 @@ if __name__ == '__main__':
     path = r'1\11\22\33\44\55'
 
     # Создаем тестовые пустые папки
-    if not os.path.exists(path):
-        os.makedirs(path)
+    os.makedirs(path, exist_ok=True)
 
     root = '1'
     delete_of_empty_folders(root)

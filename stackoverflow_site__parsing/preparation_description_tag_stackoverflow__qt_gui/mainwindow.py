@@ -20,8 +20,7 @@ logger = get_logger('mainwindow')
 DIR = 'tags'
 DIR = 'tags3'
 
-if not os.path.exists(DIR):
-    os.makedirs(DIR)
+os.makedirs(DIR, exist_ok=True)
 
 
 class MainWindow(QMainWindow, QObject):

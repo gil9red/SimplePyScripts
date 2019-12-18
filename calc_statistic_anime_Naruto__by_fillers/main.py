@@ -6,8 +6,7 @@ __author__ = 'ipetrash'
 
 def get_html_by_url__from_cache(url, cache_dir='cache'):
     import os
-    if not os.path.exists(cache_dir):
-        os.makedirs(cache_dir)
+    os.makedirs(cache_dir, exist_ok=True)
 
     file_name = os.path.basename(url)
 

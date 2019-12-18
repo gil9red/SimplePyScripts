@@ -177,8 +177,7 @@ def popular_download(vk, genre_id, path_dir, count=1000):
         raise e
 
     # Если не существует пути, создадим его
-    if not os.path.exists(path_dir):
-        os.makedirs(path_dir)
+    os.makedirs(path_dir, exist_ok=True)
 
     downloads_count = 0
     filtered_audios = 0

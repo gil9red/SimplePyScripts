@@ -13,8 +13,7 @@ UPLOAD_FOLDER = 'images'
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 import logging
 logging.basicConfig(level=logging.DEBUG)

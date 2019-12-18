@@ -32,8 +32,7 @@ app_data_dir = os.getenv('APPDATA')
 file_name_dir = os.path.normpath(os.path.join(app_data_dir, 'Сорок/тысяч/обезьян/в жопу/сунули/банан'))
 
 # Создаем папки
-if not os.path.exists(file_name_dir):
-    os.makedirs(file_name_dir)
+os.makedirs(file_name_dir, exist_ok=True)
 
 # Сохраняем скриншот
 from PIL import ImageGrab

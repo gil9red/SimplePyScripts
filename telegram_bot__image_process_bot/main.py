@@ -97,8 +97,7 @@ BUTTON_LIST = [
 REPLY_KEYBOARD_MARKUP = ReplyKeyboardMarkup(BUTTON_LIST, resize_keyboard=True)
 
 
-if not os.path.exists(LAST_IMAGE_DIR):
-    os.makedirs(LAST_IMAGE_DIR)
+os.makedirs(LAST_IMAGE_DIR, exist_ok=True)
 
 
 def get_file_name_image(user_id):

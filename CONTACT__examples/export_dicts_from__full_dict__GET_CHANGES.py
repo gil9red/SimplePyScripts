@@ -28,8 +28,7 @@ if __name__ == '__main__':
     export_dir = 'mini_full_dict__CONTACT'
 
     import os
-    if not os.path.exists(export_dir):
-        os.makedirs(export_dir)
+    os.makedirs(export_dir, exist_ok=True)
 
     # Parsing
     from bs4 import BeautifulSoup

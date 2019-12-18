@@ -40,8 +40,7 @@ def save_attachment(msg):
     """
 
     file_name = get_current_lunch_file_name()
-    if not os.path.exists(os.path.dirname(file_name)):
-        os.makedirs(os.path.dirname(file_name))
+    os.makedirs(os.path.dirname(file_name), exist_ok=True)
 
     for part in msg.walk():
         if part.get_content_maintype() == 'multipart':

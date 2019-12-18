@@ -36,8 +36,7 @@ if __name__ == '__main__':
     import os
 
     output_dir = 'output'
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
 
     for fb2_file_name in glob.glob('input/*.fb2'):
         with open(fb2_file_name, encoding='utf-8') as f:

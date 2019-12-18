@@ -23,8 +23,7 @@ def get_example_from_de_brauwer(wakka):
 
 DIR_NAME = 'PyOpenGLExample'
 import os
-if not os.path.exists(DIR_NAME):
-    os.makedirs(DIR_NAME)
+os.makedirs(DIR_NAME, exist_ok=True)
 
 examples = [
     'PyOpenGLHelloWorld',
