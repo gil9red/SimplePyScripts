@@ -8,7 +8,7 @@ from typing import List
 
 import requests
 
-from common import smart_comparing_names, USER_AGENT
+from common import smart_comparing_names, USER_AGENT, get_uniques
 
 
 def get_game_genres(game_name: str, need_logs=False) -> List[str]:
@@ -48,11 +48,9 @@ def get_game_genres(game_name: str, need_logs=False) -> List[str]:
             continue
 
         genres = [x['name'] for x in item['genres']]
-        if not genres:
-            continue
 
         # Сойдет первый, совпадающий по имени, вариант
-        return genres
+        return get_uniques(genres)
 
     return []
 

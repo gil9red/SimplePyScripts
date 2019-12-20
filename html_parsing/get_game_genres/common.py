@@ -49,6 +49,10 @@ def get_norm_text(node) -> str:
     return unicodedata.normalize("NFKD", text)
 
 
+def get_uniques(items: list) -> list:
+    return list(set(items))
+
+
 TEST_GAMES = [
     'Hellgate: London',
     'The Incredible Adventures of Van Helsing',

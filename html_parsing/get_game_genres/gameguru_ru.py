@@ -9,7 +9,7 @@ from typing import List
 from bs4 import BeautifulSoup
 import requests
 
-from common import smart_comparing_names, USER_AGENT, get_norm_text
+from common import smart_comparing_names, USER_AGENT, get_norm_text, get_uniques
 
 
 def get_game_genres(game_name: str, need_logs=False) -> List[str]:
@@ -32,7 +32,7 @@ def get_game_genres(game_name: str, need_logs=False) -> List[str]:
         genres = [get_norm_text(a) for a in game_block.select('a') if '/genre/' in a['href']]
 
         # Сойдет первый, совпадающий по имени, вариант
-        return genres
+        return get_uniques(genres)
 
     return []
 
