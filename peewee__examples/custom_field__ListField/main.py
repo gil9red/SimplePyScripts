@@ -50,12 +50,16 @@ if __name__ == '__main__':
     if not KeyByList.get_or_none(key="c"):
         KeyByList.create(key="c", values=[1])
 
+    if not KeyByList.get_or_none(key="e"):
+        KeyByList.create(key="e", values=[])
+
     for x in KeyByList.select():
         print(x.key, x.values)
 
     # a [1, 2, 3]
     # b None
     # c [1]
+    # e []
 
     print()
 
