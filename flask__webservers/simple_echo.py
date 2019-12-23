@@ -13,6 +13,7 @@ def index():
     print('-' * 20)
     print(request.method)
     print(request.data)
+    print(request.form)
     print(dict(request.headers))
     print('-' * 20)
     return Response(
