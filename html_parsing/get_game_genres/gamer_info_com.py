@@ -9,10 +9,15 @@ from typing import List
 from bs4 import BeautifulSoup
 import requests
 
-from common import smart_comparing_names, USER_AGENT, get_norm_text, get_uniques
+from common import smart_comparing_names, USER_AGENT, get_norm_text, get_uniques, get_logger
+
+
+log = get_logger(__file__)
 
 
 def get_game_genres(game_name: str, need_logs=False) -> List[str]:
+    need_logs and log.info(f'Search {game_name!r}...')
+
     headers = {
         'User-Agent': USER_AGENT,
         'X-Requested-With': 'XMLHttpRequest',
@@ -25,7 +30,7 @@ def get_game_genres(game_name: str, need_logs=False) -> List[str]:
 
     rs = requests.post('https://gamer-info.com/search-q/', headers=headers, data=form_data)
     if not rs.ok:
-        need_logs and print(f'[-] Something went wrong...: status_code: {rs.status_code}\n{rs.text}')
+        need_logs and log.warning(f'Something went wrong...: status_code: {rs.status_code}\n{rs.text}')
         return []
 
     root = BeautifulSoup(rs.content, 'html.parser')
@@ -42,8 +47,12 @@ def get_game_genres(game_name: str, need_logs=False) -> List[str]:
         genres = g.text.replace('Жанр:', '').strip().split(', ')
 
         # Сойдет первый, совпадающий по имени, вариант
-        return get_uniques(genres)
+        genres = get_uniques(genres)
 
+        need_logs and log.info(f'Genres: {genres}')
+        return genres
+
+    need_logs and log.info(f'Not found game {game_name!r}')
     return []
 
 

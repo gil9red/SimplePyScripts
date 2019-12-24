@@ -53,6 +53,37 @@ def get_uniques(items: list) -> list:
     return list(set(items))
 
 
+# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/163c91d6882b548c904ad40703dac00c0a64e5a2/logger_example.py#L7
+def get_logger(file_name, encoding='utf-8'):
+    import os.path
+    site = os.path.splitext(os.path.basename(file_name))[0]
+
+    name = 'parser_' + site
+    file = 'logs/' + site + '.txt'
+
+    import logging
+    log = logging.getLogger(name)
+    log.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s')
+
+    dir_name = os.path.dirname(file)
+    if dir_name:
+        os.makedirs(dir_name, exist_ok=True)
+
+    from logging.handlers import RotatingFileHandler
+    fh = RotatingFileHandler(file, maxBytes=10_000_000, backupCount=5, encoding=encoding)
+    fh.setFormatter(formatter)
+    log.addHandler(fh)
+
+    import sys
+    sh = logging.StreamHandler(stream=sys.stdout)
+    sh.setFormatter(formatter)
+    log.addHandler(sh)
+
+    return log
+
+
 TEST_GAMES = [
     'Hellgate: London',
     'The Incredible Adventures of Van Helsing',
