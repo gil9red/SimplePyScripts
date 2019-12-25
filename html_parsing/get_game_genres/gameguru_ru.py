@@ -12,7 +12,7 @@ from common import smart_comparing_names, get_norm_text
 from base_parser import BaseParser
 
 
-class GameGuruRu_Parser(BaseParser):
+class GameguruRu_Parser(BaseParser):
     def get_site_name(self):
         import os.path
         return os.path.splitext(os.path.basename(__file__))[0]
@@ -36,7 +36,7 @@ class GameGuruRu_Parser(BaseParser):
 
 
 def get_game_genres(game_name: str, *args, **kwargs) -> List[str]:
-    return GameGuruRu_Parser(*args, **kwargs).get_game_genres(game_name)
+    return GameguruRu_Parser(*args, **kwargs).get_game_genres(game_name)
 
 
 if __name__ == '__main__':
