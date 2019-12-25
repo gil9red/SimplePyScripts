@@ -6,7 +6,6 @@ __author__ = 'ipetrash'
 
 from typing import List
 
-from common import smart_comparing_names
 from base_parser import BaseParser
 
 
@@ -41,7 +40,7 @@ class AgRu_Parser(BaseParser):
 
         for item in rs.json()['results']:
             title = item['name']
-            if not smart_comparing_names(title, self.game_name):
+            if not self.is_found_game(title):
                 continue
 
             genres = [x['name'] for x in item['genres']]

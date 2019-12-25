@@ -7,9 +7,7 @@ __author__ = 'ipetrash'
 from urllib.parse import urljoin
 from typing import List
 
-from bs4 import BeautifulSoup
-
-from common import smart_comparing_names, get_norm_text
+from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -20,8 +18,7 @@ class GamespotCom_Parser(BaseParser):
 
     def _parse(self) -> List[str]:
         url = f'https://www.gamespot.com/search/?i=site&q={self.game_name}'
-        rs = self.send_get(url)
-        root = BeautifulSoup(rs.content, 'html.parser')
+        root = self.send_get(url, return_html=True)
 
         for game_block_preview in root.select('.media-body'):
             if not game_block_preview.select_one('.media-date'):
@@ -29,19 +26,14 @@ class GamespotCom_Parser(BaseParser):
 
             a = game_block_preview.select_one('.media-title a')
             title = get_norm_text(a)
-
-            if not smart_comparing_names(title, self.game_name):
+            if not self.is_found_game(title):
                 continue
 
-            url_game = urljoin(rs.url, a['href'])
+            url_game = urljoin(url, a['href'])
             self.log_info(f'Load {url_game!r}')
 
-            rs = self.send_get(url_game)
-            if not rs.ok:
-                self.log_warning(f'Something went wrong...: status_code: {rs.status_code}\n{rs.text}')
-                continue
+            game_block = self.send_get(url_game, return_html=True)
 
-            game_block = BeautifulSoup(rs.content, 'html.parser')
             tag_object_stats = game_block.select_one('#object-stats-wrap')
             if not tag_object_stats:
                 return []

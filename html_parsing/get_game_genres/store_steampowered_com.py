@@ -7,9 +7,7 @@ __author__ = 'ipetrash'
 from urllib.parse import urljoin
 from typing import List
 
-from bs4 import BeautifulSoup
-
-from common import smart_comparing_names, get_norm_text
+from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -21,20 +19,18 @@ class StoreSteampoweredCom_Parser(BaseParser):
     def _parse(self) -> List[str]:
         # category1 = Игры
         url = f'https://store.steampowered.com/search/?term={self.game_name}&category1=998'
-        rs = self.send_get(url)
-        root = BeautifulSoup(rs.content, 'html.parser')
+        root = self.send_get(url, return_html=True)
 
         for game_block_preview in root.select('.search_result_row'):
             title = get_norm_text(game_block_preview.select_one('.search_name > .title'))
-            if not smart_comparing_names(title, self.game_name):
+            if not self.is_found_game(title):
                 continue
 
             href = game_block_preview['href']
-            url_game = urljoin(rs.url, href)
+            url_game = urljoin(url, href)
             self.log_info(f'Load {url_game!r}')
 
-            rs = self.send_get(url_game)
-            game_block = BeautifulSoup(rs.content, 'html.parser')
+            game_block = self.send_get(url_game, return_html=True)
             # <div class="details_block">
             #     <b>Title:</b> HELLGATE: London<br>
             #     <b>Genre:</b>

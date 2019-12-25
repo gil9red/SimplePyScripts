@@ -6,9 +6,7 @@ __author__ = 'ipetrash'
 
 from typing import List
 
-from bs4 import BeautifulSoup
-
-from common import smart_comparing_names, get_norm_text
+from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -19,8 +17,7 @@ class SpongCom_Parser(BaseParser):
 
     def _parse(self) -> List[str]:
         url = f'https://spong.com/search/index.jsp?q={self.game_name}'
-        rs = self.send_get(url)
-        root = BeautifulSoup(rs.content, 'html.parser')
+        root = self.send_get(url, return_html=True)
     
         # Первая таблица -- та, что нужна нам
         for game_block in root.select_one('table.searchResult').select('tr'):
@@ -31,7 +28,7 @@ class SpongCom_Parser(BaseParser):
             td_title, _, genres_td, platforms_td = tds
     
             title = get_norm_text(td_title.a)
-            if not smart_comparing_names(title, self.game_name):
+            if not self.is_found_game(title):
                 continue
 
             # <td>Adventure: Free Roaming<br/>Adventure: Survival Horror<br/></td>

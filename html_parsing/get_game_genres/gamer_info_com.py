@@ -6,9 +6,7 @@ __author__ = 'ipetrash'
 
 from typing import List
 
-from bs4 import BeautifulSoup
-
-from common import smart_comparing_names, get_norm_text
+from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -27,8 +25,8 @@ class GamerInfoCom_Parser(BaseParser):
             'page': '1',
         }
 
-        rs = self.send_post('https://gamer-info.com/search-q/', headers=headers, data=form_data)
-        root = BeautifulSoup(rs.content, 'html.parser')
+        url = 'https://gamer-info.com/search-q/'
+        root = self.send_post(url, headers=headers, data=form_data, return_html=True)
 
         for game_block in root.select('.games > .c2'):
             g = game_block.select_one('.g')
@@ -36,7 +34,7 @@ class GamerInfoCom_Parser(BaseParser):
                 continue
 
             title = get_norm_text(game_block.select_one('.n'))
-            if not smart_comparing_names(title, self.game_name):
+            if not self.is_found_game(title):
                 continue
 
             genres = g.text.replace('Жанр:', '').strip().split(', ')

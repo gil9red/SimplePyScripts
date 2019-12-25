@@ -6,9 +6,7 @@ __author__ = 'ipetrash'
 
 from typing import List
 
-from bs4 import BeautifulSoup
-
-from common import smart_comparing_names, get_norm_text
+from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -18,12 +16,12 @@ class StopgameRu_Parser(BaseParser):
         return os.path.splitext(os.path.basename(__file__))[0]
 
     def _parse(self) -> List[str]:
-        rs = self.send_get(f'https://stopgame.ru/search/?s={self.game_name}&where=games&sort=name')
-        root = BeautifulSoup(rs.content, 'html.parser')
+        url = f'https://stopgame.ru/search/?s={self.game_name}&where=games&sort=name'
+        root = self.send_get(url, return_html=True)
     
         for game_block in root.select('.game-block'):
             title = get_norm_text(game_block.select_one('.title'))
-            if not smart_comparing_names(title, self.game_name):
+            if not self.is_found_game(title):
                 continue
     
             genres = [get_norm_text(a) for a in game_block.select('.game-genre-value > a') if '?genre[]' in a['href']]

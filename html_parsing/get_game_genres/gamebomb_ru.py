@@ -7,9 +7,7 @@ __author__ = 'ipetrash'
 from urllib.parse import urljoin
 from typing import List
 
-from bs4 import BeautifulSoup
-
-from common import smart_comparing_names, get_norm_text
+from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -38,15 +36,13 @@ class GamebombRu_Parser(BaseParser):
                 continue
 
             title = game_block_preview['title']
-            if not smart_comparing_names(title, self.game_name):
+            if not self.is_found_game(title):
                 continue
 
             url_game = urljoin(rs.url, game_block_preview['url'])
             self.log_info(f'Load {url_game!r}')
 
-            rs = self.send_get(url_game)
-
-            game_block = BeautifulSoup(rs.content, 'html.parser')
+            game_block = self.send_get(url_game, return_html=True)
             # <tr>
             #     <td valign="top">Жанры</td>
             #     <td>

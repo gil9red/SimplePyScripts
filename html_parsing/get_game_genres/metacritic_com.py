@@ -7,9 +7,7 @@ __author__ = 'ipetrash'
 from urllib.parse import urljoin
 from typing import List
 
-from bs4 import BeautifulSoup
-
-from common import smart_comparing_names, get_norm_text
+from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -20,21 +18,18 @@ class MetacriticCom_Parser(BaseParser):
 
     def _parse(self) -> List[str]:
         url = f'https://www.metacritic.com/search/game/{self.game_name}/results'
-        rs = self.send_get(url)
-        root = BeautifulSoup(rs.content, 'html.parser')
+        root = self.send_get(url, return_html=True)
 
         for game_block_preview in root.select('.result'):
             a = game_block_preview.select_one('.product_title > a')
             title = get_norm_text(a)
-            if not smart_comparing_names(title, self.game_name):
+            if not self.is_found_game(title):
                 continue
 
-            url_game = urljoin(rs.url, a['href'])
+            url_game = urljoin(url, a['href'])
             self.log_info(f'Load {url_game!r}')
 
-            rs = self.send_get(url_game)
-
-            game_block = BeautifulSoup(rs.content, 'html.parser')
+            game_block = self.send_get(url_game, return_html=True)
             # <li class="summary_detail product_genre">
             #     <span class="label">Genre(s): </span>
             #     <span class="data">Role-Playing</span>,

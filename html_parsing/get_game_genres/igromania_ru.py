@@ -6,9 +6,7 @@ __author__ = 'ipetrash'
 
 from typing import List
 
-from bs4 import BeautifulSoup
-
-from common import smart_comparing_names, get_norm_text
+from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -31,12 +29,11 @@ class IgromaniaRu_Parser(BaseParser):
         }
 
         url = 'https://www.igromania.ru/-Engine-/AJAX/games.list.v2/index.php'
-        rs = self.send_post(url, headers=headers, data=form_data)
-        root = BeautifulSoup(rs.content, 'html.parser')
+        root = self.send_post(url, headers=headers, data=form_data, return_html=True)
 
         for game_block in root.select('.gamebase_box'):
             title = get_norm_text(game_block.select_one('.release_name'))
-            if not smart_comparing_names(title, self.game_name):
+            if not self.is_found_game(title):
                 continue
 
             genres = [get_norm_text(a) for a in game_block.select('.genre > a')]

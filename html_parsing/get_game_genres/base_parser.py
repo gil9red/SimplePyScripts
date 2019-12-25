@@ -5,13 +5,15 @@ __author__ = 'ipetrash'
 
 
 from abc import ABCMeta, abstractmethod
-from typing import List
+from typing import List, Union
 import os.path
 
+from bs4 import BeautifulSoup
 import requests
 
 from common import (
-    DIR_ERRORS, DIR_LOGS, NEED_LOGS, LOG_FORMAT, USER_AGENT, pretty_path, get_uniques, get_current_datetime_str
+    DIR_ERRORS, DIR_LOGS, NEED_LOGS, LOG_FORMAT, USER_AGENT,
+    pretty_path, get_uniques, get_current_datetime_str, smart_comparing_names
 )
 from utils import dump
 
@@ -43,14 +45,22 @@ class BaseParser(metaclass=Singleton):
     def instance(cls, *args, **kwargs):
         return cls(*args, **kwargs)
 
-    def send_get(self, url: str, **kwargs) -> requests.Response:
+    def send_get(self, url: str, return_html=False, **kwargs) -> Union[requests.Response, BeautifulSoup]:
         rs = self.session.get(url, **kwargs)
         self._on_check_response(rs)
+
+        if return_html:
+            return BeautifulSoup(rs.content, 'html.parser')
+
         return rs
 
-    def send_post(self, url: str, data=None, json=None, **kwargs) -> requests.Response:
+    def send_post(self, url: str, data=None, json=None, return_html=False, **kwargs) -> Union[requests.Response, BeautifulSoup]:
         rs = self.session.post(url, data=data, json=json, **kwargs)
         self._on_check_response(rs)
+
+        if return_html:
+            return BeautifulSoup(rs.content, 'html.parser')
+
         return rs
 
     def _save_error_response(self, rs: requests.Response):
@@ -94,6 +104,9 @@ class BaseParser(metaclass=Singleton):
     @abstractmethod
     def _parse(self) -> List[str]:
         pass
+
+    def is_found_game(self, game_name: str) -> bool:
+        return smart_comparing_names(self.game_name, game_name)
 
     def get_game_genres(self, game_name: str) -> List[str]:
         self.game_name = game_name
