@@ -8,64 +8,51 @@ from urllib.parse import urljoin
 from typing import List
 
 from bs4 import BeautifulSoup
-import requests
 
-from common import smart_comparing_names, USER_AGENT, get_norm_text, get_uniques, get_logger
-
-
-log = get_logger(__file__)
+from common import smart_comparing_names, get_norm_text
+from base_parser import BaseParser
 
 
-def get_game_genres(game_name: str, need_logs=False) -> List[str]:
-    need_logs and log.info(f'Search {game_name!r}...')
+class MobygamesCom_Parser(BaseParser):
+    def get_site_name(self):
+        import os.path
+        return os.path.splitext(os.path.basename(__file__))[0]
 
-    headers = {
-        'User-Agent': USER_AGENT,
-    }
+    def _parse(self) -> List[str]:
+        url = f'https://www.mobygames.com/search/quick?q={self.game_name}&p=3&search=Go&sFilter=1&sG=on'
+        rs = self.send_get(url)
 
-    session = requests.session()
-    session.headers.update(headers)
+        root = BeautifulSoup(rs.content, 'html.parser')
 
-    url = f'https://www.mobygames.com/search/quick?q={game_name}&p=3&search=Go&sFilter=1&sG=on'
-    rs = session.get(url)
-    if not rs.ok:
-        need_logs and log.warning(f'Something went wrong...: status_code: {rs.status_code}\n{rs.text}')
+        for game_block_preview in root.select('.searchTitle > a'):
+            title = get_norm_text(game_block_preview)
+
+            if not smart_comparing_names(title, self.game_name):
+                continue
+
+            href = game_block_preview['href']
+            url_game = urljoin(rs.url, href)
+
+            self.log_info(f'Load {url_game!r}')
+
+            rs = self.send_get(url_game)
+            game_block = BeautifulSoup(rs.content, 'html.parser')
+
+            genres = game_block\
+                .select_one('#coreGameGenre').find_next('div', text='Genre')\
+                .find_next_sibling('div').find_all('a')
+
+            genres = [get_norm_text(a) for a in genres]
+
+            # Сойдет первый, совпадающий по имени, вариант
+            return genres
+
+        self.log_info(f'Not found game {self.game_name!r}')
         return []
 
-    root = BeautifulSoup(rs.content, 'html.parser')
 
-    for game_block_preview in root.select('.searchTitle > a'):
-        title = get_norm_text(game_block_preview)
-
-        if not smart_comparing_names(title, game_name):
-            continue
-
-        href = game_block_preview['href']
-        url_game = urljoin(rs.url, href)
-
-        need_logs and log.info(f'Load {url_game!r}')
-
-        rs = session.get(url_game)
-        if not rs.ok:
-            need_logs and log.warning(f'Something went wrong...: status_code: {rs.status_code}\n{rs.text}')
-            return []
-
-        game_block = BeautifulSoup(rs.content, 'html.parser')
-
-        genres = game_block\
-            .select_one('#coreGameGenre').find_next('div', text='Genre')\
-            .find_next_sibling('div').find_all('a')
-
-        genres = [get_norm_text(a) for a in genres]
-
-        # Сойдет первый, совпадающий по имени, вариант
-        genres = get_uniques(genres)
-
-        need_logs and log.info(f'Genres: {genres}')
-        return genres
-
-    need_logs and log.info(f'Not found game {game_name!r}')
-    return []
+def get_game_genres(game_name: str, *args, **kwargs) -> List[str]:
+    return MobygamesCom_Parser(*args, **kwargs).get_game_genres(game_name)
 
 
 if __name__ == '__main__':

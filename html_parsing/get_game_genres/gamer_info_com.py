@@ -7,53 +7,49 @@ __author__ = 'ipetrash'
 from typing import List
 
 from bs4 import BeautifulSoup
-import requests
 
-from common import smart_comparing_names, USER_AGENT, get_norm_text, get_uniques, get_logger
-
-
-log = get_logger(__file__)
+from common import smart_comparing_names, get_norm_text
+from base_parser import BaseParser
 
 
-def get_game_genres(game_name: str, need_logs=False) -> List[str]:
-    need_logs and log.info(f'Search {game_name!r}...')
+class GamerInfoCom_Parser(BaseParser):
+    def get_site_name(self):
+        import os.path
+        return os.path.splitext(os.path.basename(__file__))[0]
 
-    headers = {
-        'User-Agent': USER_AGENT,
-        'X-Requested-With': 'XMLHttpRequest',
-    }
-    form_data = {
-        'search-query': game_name,
-        'search-obl': 'games',
-        'page': '1',
-    }
+    def _parse(self) -> List[str]:
+        headers = {
+            'X-Requested-With': 'XMLHttpRequest',
+        }
+        form_data = {
+            'search-query': self.game_name,
+            'search-obl': 'games',
+            'page': '1',
+        }
 
-    rs = requests.post('https://gamer-info.com/search-q/', headers=headers, data=form_data)
-    if not rs.ok:
-        need_logs and log.warning(f'Something went wrong...: status_code: {rs.status_code}\n{rs.text}')
+        rs = self.send_post('https://gamer-info.com/search-q/', headers=headers, data=form_data)
+        root = BeautifulSoup(rs.content, 'html.parser')
+
+        for game_block in root.select('.games > .c2'):
+            g = game_block.select_one('.g')
+            if 'Жанр:' not in g.text:
+                continue
+
+            title = get_norm_text(game_block.select_one('.n'))
+            if not smart_comparing_names(title, self.game_name):
+                continue
+
+            genres = g.text.replace('Жанр:', '').strip().split(', ')
+
+            # Сойдет первый, совпадающий по имени, вариант
+            return genres
+
+        self.log_info(f'Not found game {self.game_name!r}')
         return []
 
-    root = BeautifulSoup(rs.content, 'html.parser')
 
-    for game_block in root.select('.games > .c2'):
-        g = game_block.select_one('.g')
-        if 'Жанр:' not in g.text:
-            continue
-
-        title = get_norm_text(game_block.select_one('.n'))
-        if not smart_comparing_names(title, game_name):
-            continue
-
-        genres = g.text.replace('Жанр:', '').strip().split(', ')
-
-        # Сойдет первый, совпадающий по имени, вариант
-        genres = get_uniques(genres)
-
-        need_logs and log.info(f'Genres: {genres}')
-        return genres
-
-    need_logs and log.info(f'Not found game {game_name!r}')
-    return []
+def get_game_genres(game_name: str, *args, **kwargs) -> List[str]:
+    return GamerInfoCom_Parser(*args, **kwargs).get_game_genres(game_name)
 
 
 if __name__ == '__main__':

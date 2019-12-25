@@ -4,10 +4,12 @@
 __author__ = 'ipetrash'
 
 
+import datetime as DT
 import unicodedata
+import os.path
 
 
-def smart_comparing_names(name_1, name_2):
+def smart_comparing_names(name_1: str, name_2: str) -> bool:
     """
     Функция для сравнивания двух названий игр.
     Возвращает True, если совпадают, иначе -- False.
@@ -53,35 +55,24 @@ def get_uniques(items: list) -> list:
     return list(set(items))
 
 
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/163c91d6882b548c904ad40703dac00c0a64e5a2/logger_example.py#L7
-def get_logger(file_name, encoding='utf-8'):
-    import os.path
-    site = os.path.splitext(os.path.basename(file_name))[0]
+def pretty_path(path: str) -> str:
+    return os.path.normpath(
+        os.path.abspath(path)
+    )
 
-    name = 'parser_' + site
-    file = 'logs/' + site + '.txt'
 
-    import logging
-    log = logging.getLogger(name)
-    log.setLevel(logging.DEBUG)
+def get_current_datetime_str(fmt='%d%m%y%H%M%S') -> str:
+    return DT.datetime.now().strftime(fmt)
 
-    formatter = logging.Formatter('[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s')
 
-    dir_name = os.path.dirname(file)
-    if dir_name:
-        os.makedirs(dir_name, exist_ok=True)
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0'
 
-    from logging.handlers import RotatingFileHandler
-    fh = RotatingFileHandler(file, maxBytes=10_000_000, backupCount=5, encoding=encoding)
-    fh.setFormatter(formatter)
-    log.addHandler(fh)
+DIR_ERRORS = 'errors'
+DIR_LOGS = 'logs'
 
-    import sys
-    sh = logging.StreamHandler(stream=sys.stdout)
-    sh.setFormatter(formatter)
-    log.addHandler(sh)
+NEED_LOGS = True
 
-    return log
+LOG_FORMAT = '[%(asctime)s] %(levelname)-8s %(message)s'
 
 
 TEST_GAMES = [
@@ -91,8 +82,6 @@ TEST_GAMES = [
     'Twin Sector',
     'Call of Cthulhu: Dark Corners of the Earth',
 ]
-
-USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0'
 
 
 def _common_test(get_game_genres, sleep=1, max_number=None):

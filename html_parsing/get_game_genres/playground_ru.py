@@ -8,63 +8,49 @@ from urllib.parse import urljoin
 from typing import List
 
 from bs4 import BeautifulSoup
-import requests
 
-from common import smart_comparing_names, USER_AGENT, get_norm_text, get_uniques, get_logger
-
-
-log = get_logger(__file__)
+from common import smart_comparing_names, get_norm_text
+from base_parser import BaseParser
 
 
-def get_game_genres(game_name: str, need_logs=False) -> List[str]:
-    need_logs and log.info(f'Search {game_name!r}...')
+class PlaygroundRu_Parser(BaseParser):
+    def get_site_name(self):
+        import os.path
+        return os.path.splitext(os.path.basename(__file__))[0]
 
-    headers = {
-        'User-Agent': USER_AGENT,
-    }
+    def _parse(self) -> List[str]:
+        url = f'https://www.playground.ru/site-search/?q={self.game_name}&filter=game'
+        rs = self.send_get(url)
+        root = BeautifulSoup(rs.content, 'html.parser')
 
-    session = requests.session()
-    session.headers.update(headers)
+        for game_block_preview in root.select('.search-results .title'):
+            title = get_norm_text(game_block_preview)
+            if not smart_comparing_names(title, self.game_name):
+                continue
 
-    url = f'https://www.playground.ru/site-search/?q={game_name}&filter=game'
-    rs = session.get(url)
-    if not rs.ok:
-        need_logs and log.warning(f'Something went wrong...: status_code: {rs.status_code}\n{rs.text}')
+            url_game = urljoin(rs.url, game_block_preview['href'])
+            self.log_info(f'Load {url_game!r}')
+
+            rs = self.send_get(url_game)
+            game_block = BeautifulSoup(rs.content, 'html.parser')
+            # <div class="genres">
+            #     <a class="item" href="/games/action/">Экшен</a>
+            #     <meta itemprop="genre" content="Экшен">
+            #     <a class="item" href="/games/rpg/">Ролевая</a>
+            #     <meta itemprop="genre" content="Ролевая">
+            genres = [
+                get_norm_text(a) for a in game_block.select('.genres > .item')
+            ]
+
+            # Сойдет первый, совпадающий по имени, вариант
+            return genres
+
+        self.log_info(f'Not found game {self.game_name!r}')
         return []
 
-    root = BeautifulSoup(rs.content, 'html.parser')
 
-    for game_block_preview in root.select('.search-results .title'):
-        title = get_norm_text(game_block_preview)
-        if not smart_comparing_names(title, game_name):
-            continue
-
-        url_game = urljoin(rs.url, game_block_preview['href'])
-        need_logs and log.info(f'Load {url_game!r}')
-
-        rs = session.get(url_game)
-        if not rs.ok:
-            need_logs and log.warning(f'Something went wrong...: status_code: {rs.status_code}\n{rs.text}')
-            continue
-
-        game_block = BeautifulSoup(rs.content, 'html.parser')
-        # <div class="genres">
-        #     <a class="item" href="/games/action/">Экшен</a>
-        #     <meta itemprop="genre" content="Экшен">
-        #     <a class="item" href="/games/rpg/">Ролевая</a>
-        #     <meta itemprop="genre" content="Ролевая">
-        genres = [
-            get_norm_text(a) for a in game_block.select('.genres > .item')
-        ]
-
-        # Сойдет первый, совпадающий по имени, вариант
-        genres = get_uniques(genres)
-
-        need_logs and log.info(f'Genres: {genres}')
-        return genres
-
-    need_logs and log.info(f'Not found game {game_name!r}')
-    return []
+def get_game_genres(game_name: str, *args, **kwargs) -> List[str]:
+    return PlaygroundRu_Parser(*args, **kwargs).get_game_genres(game_name)
 
 
 if __name__ == '__main__':

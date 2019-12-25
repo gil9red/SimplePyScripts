@@ -8,87 +8,78 @@ from urllib.parse import urljoin
 from typing import List
 
 from bs4 import BeautifulSoup
-import requests
 
-from common import smart_comparing_names, USER_AGENT, get_norm_text, get_uniques, get_logger
-
-
-log = get_logger(__file__)
+from common import smart_comparing_names, get_norm_text
+from base_parser import BaseParser
 
 
-def get_game_genres(game_name: str, need_logs=False) -> List[str]:
-    need_logs and log.info(f'Search {game_name!r}...')
+class GameBombRu_Parser(BaseParser):
+    def get_site_name(self):
+        import os.path
+        return os.path.splitext(os.path.basename(__file__))[0]
 
-    headers = {
-        'User-Agent': USER_AGENT,
-        'X-Requested-With': 'XMLHttpRequest',
-        'Origin': 'http://gamebomb.ru',
-        'Referer': 'http://gamebomb.ru/games',
-        'Accept': 'application/json',
-    }
-    data = {
-        'query': game_name,
-        'type': '',
-    }
+    def _parse(self) -> List[str]:
+        headers = {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Origin': 'http://gamebomb.ru',
+            'Referer': 'http://gamebomb.ru/games',
+            'Accept': 'application/json',
+        }
+        data = {
+            'query': self.game_name,
+            'type': '',
+        }
 
-    session = requests.session()
-    session.headers.update(headers)
+        url = f'http://gamebomb.ru/base/ajaxSearch'
+        rs = self.send_post(url, data=data, headers=headers)
 
-    url = f'http://gamebomb.ru/base/ajaxSearch'
-    rs = session.post(url, data=data)
-    if not rs.ok:
-        need_logs and log.warning(f'Something went wrong...: status_code: {rs.status_code}\n{rs.text}')
-        return []
-
-    for game_block_preview in rs.json():
-        if game_block_preview['type'] != 'игра':
-            continue
-
-        title = game_block_preview['title']
-        if not smart_comparing_names(title, game_name):
-            continue
-
-        url_game = urljoin(rs.url, game_block_preview['url'])
-        need_logs and log.info(f'Load {url_game!r}')
-
-        rs = session.get(url_game)
-        if not rs.ok:
-            need_logs and log.warning(f'Something went wrong...: status_code: {rs.status_code}\n{rs.text}')
-            continue
-
-        game_block = BeautifulSoup(rs.content, 'html.parser')
-        # <tr>
-        #     <td valign="top">Жанры</td>
-        #     <td>
-        #         <div>
-        #             <input type="hidden" class="edit hidden" name="genres[18]" value="0">
-        #             <input type="checkbox" checked="checked" class="edit hidden" name="genres[18]" value="1">
-        #             Шутер от первого лица
-        #         </div>
-        #         <div>
-        #             <input type="hidden" class="edit hidden" name="genres[2]" value="0">
-        #             <input type="checkbox" checked="checked" class="edit hidden" name="genres[2]" value="1">
-        #             Боевик-приключения
-        #         </div>
-        game_block = game_block.find('td', text='Жанры')
-        if not game_block:
-            continue
-
-        genres = []
-        for div in game_block.find_next_sibling('td').find_all('div'):
-            if not div.select('input[name*="genres"]'):
+        for game_block_preview in rs.json():
+            if game_block_preview['type'] != 'игра':
                 continue
 
-            genres.append(get_norm_text(div))
+            title = game_block_preview['title']
+            if not smart_comparing_names(title, self.game_name):
+                continue
 
-        # Сойдет первый, совпадающий по имени, вариант
-        genres = get_uniques(genres)
+            url_game = urljoin(rs.url, game_block_preview['url'])
+            self.log_info(f'Load {url_game!r}')
 
-        need_logs and log.info(f'Genres: {genres}')
-        return genres
+            rs = self.send_get(url_game)
 
-    need_logs and log.info(f'Not found game {game_name!r}')
-    return []
+            game_block = BeautifulSoup(rs.content, 'html.parser')
+            # <tr>
+            #     <td valign="top">Жанры</td>
+            #     <td>
+            #         <div>
+            #             <input type="hidden" class="edit hidden" name="genres[18]" value="0">
+            #             <input type="checkbox" checked="checked" class="edit hidden" name="genres[18]" value="1">
+            #             Шутер от первого лица
+            #         </div>
+            #         <div>
+            #             <input type="hidden" class="edit hidden" name="genres[2]" value="0">
+            #             <input type="checkbox" checked="checked" class="edit hidden" name="genres[2]" value="1">
+            #             Боевик-приключения
+            #         </div>
+            game_block = game_block.find('td', text='Жанры')
+            if not game_block:
+                continue
+
+            genres = []
+            for div in game_block.find_next_sibling('td').find_all('div'):
+                if not div.select('input[name*="genres"]'):
+                    continue
+
+                genres.append(get_norm_text(div))
+
+            # Сойдет первый, совпадающий по имени, вариант
+            return genres
+
+        self.log_info(f'Not found game {self.game_name!r}')
+        return []
+
+
+def get_game_genres(game_name: str, *args, **kwargs) -> List[str]:
+    return GameBombRu_Parser(*args, **kwargs).get_game_genres(game_name)
 
 
 if __name__ == '__main__':
