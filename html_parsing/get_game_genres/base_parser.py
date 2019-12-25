@@ -114,6 +114,7 @@ class BaseParser(metaclass=Singleton):
 
         try:
             genres = self._parse()
+            genres = [x.strip() for x in genres]
             genres = get_uniques(genres)
 
         except BaseException as e:
