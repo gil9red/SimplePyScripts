@@ -45,9 +45,7 @@ class Game(BaseModel):
         )
 
     def __str__(self):
-        return f'Game(name={self.name!r}, ' \
-               f'site={self.site!r}, ' \
-               f'genres={self.genres})'
+        return f'Game(name={self.name!r}, site={self.site!r}, genres={self.genres})'
 
 
 db.connect()
