@@ -49,6 +49,7 @@ class Game(BaseModel):
                f'site={self.site!r}, ' \
                f'genres={self.genres})'
 
+
 db.connect()
 db.create_tables([Game])
 

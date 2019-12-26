@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+from db import db_create_backup, Game
 from utils_dump import get_parsers, get_funcs_parsers
 
 
