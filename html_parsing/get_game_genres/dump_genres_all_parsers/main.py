@@ -27,22 +27,3 @@ if __name__ == "__main__":
     # spong_com                : ['Adventure: Survival Horror']
     # stopgame_ru              : []
     # store_steampowered_com   : ['Action']
-
-    # print()
-    #
-    # for site, get_game_genres in get_funcs_parsers().items():
-    #     print(f"{site:<25}: {get_game_genres('Dead Space')}")
-    # # ag.ru                    : ['Шутеры', 'Экшены']
-    # # gamebomb.ru              : ['Боевик-приключения', 'Шутер']
-    # # gamefaqs.gamespot.com    : ['Arcade', 'Shooter', 'Action', 'Third-Person']
-    # # gameguru.ru              : ['Экшен', 'Шутер']
-    # # gamer.info.com           : ['ужасы', 'action']
-    # # gamespot.com             : ['3D', 'Shooter', 'Action', 'Third-Person']
-    # # igromania.ru             : ['Боевик', 'Ужасы', 'Боевик от третьего лица']
-    # # iwantgames.ru            : []
-    # # metacritic.com           : ['Arcade', 'Third-Person', 'Sci-Fi', 'Action', 'Shooter']
-    # # mobygames.com            : ['Action']
-    # # playground.ru            : ['Ужасы', 'От третьего лица', 'Космос', 'Экшен']
-    # # spong.com                : ['Adventure: Survival Horror']
-    # # stopgame.ru              : []
-    # # store.steampowered.com   : ['Action']
