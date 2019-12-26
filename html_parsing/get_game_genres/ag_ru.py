@@ -10,10 +10,6 @@ from base_parser import BaseParser
 
 
 class AgRu_Parser(BaseParser):
-    def get_site_name(self):
-        import os.path
-        return os.path.splitext(os.path.basename(__file__))[0]
-
     def _parse(self) -> List[str]:
         headers = {
             'Host': 'ag.ru',

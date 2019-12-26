@@ -12,10 +12,6 @@ from base_parser import BaseParser
 
 
 class MobygamesCom_Parser(BaseParser):
-    def get_site_name(self):
-        import os.path
-        return os.path.splitext(os.path.basename(__file__))[0]
-
     def _parse(self) -> List[str]:
         url = f'https://www.mobygames.com/search/quick?q={self.game_name}&p=3&search=Go&sFilter=1&sG=on'
         root = self.send_get(url, return_html=True)

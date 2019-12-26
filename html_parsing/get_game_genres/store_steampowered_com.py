@@ -12,10 +12,6 @@ from base_parser import BaseParser
 
 
 class StoreSteampoweredCom_Parser(BaseParser):
-    def get_site_name(self):
-        import os.path
-        return os.path.splitext(os.path.basename(__file__))[0]
-
     def _parse(self) -> List[str]:
         # category1 = Игры
         url = f'https://store.steampowered.com/search/?term={self.game_name}&category1=998'

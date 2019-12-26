@@ -97,9 +97,10 @@ class BaseParser(metaclass=Singleton):
     def log_exception(self, msg, *args, **kwargs):
         self._need_logs and self._log.exception(msg, *args, **kwargs)
 
-    @abstractmethod
-    def get_site_name(self) -> str:
-        pass
+    @classmethod
+    def get_site_name(cls) -> str:
+        import inspect
+        return os.path.splitext(os.path.basename(inspect.getfile(cls)))[0]
 
     @abstractmethod
     def _parse(self) -> List[str]:
