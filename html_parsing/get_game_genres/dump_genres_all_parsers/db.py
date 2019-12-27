@@ -40,8 +40,33 @@ class ListField(Field):
         return json.dumps(value, ensure_ascii=False)
 
 
-# Ensure foreign-key constraints are enforced.
-db = SqliteDatabase(DB_FILE_NAME, pragmas={'foreign_keys': 1})
+# TODO: remove this
+# db = SqliteDatabase(
+#     DB_FILE_NAME,
+#     pragmas={
+#         'foreign_keys': 1,        # Ensure foreign-key constraints are enforced.
+#         'journal_mode': 'wal',    # WAL-mode
+#         'cache_size': -32 * 1000  # 32MB page-cache
+#     }
+# )
+
+
+# SOURCE: http://docs.peewee-orm.com/en/latest/peewee/playhouse.html#sqliteq
+# TODO: this working with multithreading
+from playhouse.sqliteq import SqliteQueueDatabase
+
+db = SqliteQueueDatabase(
+    DB_FILE_NAME,
+    pragmas=(
+        ('foreign_keys', 1),
+        ('journal_mode', 'wal'),    # WAL-mode
+        ('cache_size', -32 * 1000)  # 32MB page-cache
+    ),
+    use_gevent=False,    # Use the standard library "threading" module.
+    autostart=True,
+    queue_max_size=64,   # Max. # of pending writes that can accumulate.
+    results_timeout=5.0  # Max. time to wait for query to be executed.
+)
 
 
 class BaseModel(Model):
@@ -86,16 +111,18 @@ db.create_tables([Game])
 
 
 if __name__ == '__main__':
-    Game.add(site='foo', name='123', genres=['RPG', 'Action'])
-    Game.add(site='foo', name='456', genres=['RPG'])
+    print(Game.select().count())
 
-    for game in Game.select():
-        print(game)
-
-    # Game(name='123', site='foo', genres=['RPG', 'Action'])
-    # Game(name='456', site='foo', genres=['RPG'])
-
-    print()
-
-    print(Game.get_games_by_site('foo'))
-    # [Game(name='123', site='foo', genres=['RPG', 'Action']), Game(name='456', site='foo', genres=['RPG'])]
+    # Game.add(site='foo', name='123', genres=['RPG', 'Action'])
+    # Game.add(site='foo', name='456', genres=['RPG'])
+    #
+    # for game in Game.select():
+    #     print(game)
+    #
+    # # Game(name='123', site='foo', genres=['RPG', 'Action'])
+    # # Game(name='456', site='foo', genres=['RPG'])
+    #
+    # print()
+    #
+    # print(Game.get_games_by_site('foo'))
+    # # [Game(name='123', site='foo', genres=['RPG', 'Action']), Game(name='456', site='foo', genres=['RPG'])]
