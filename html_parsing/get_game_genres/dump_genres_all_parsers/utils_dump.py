@@ -14,6 +14,9 @@ from typing import Dict, Callable
 sys.path.append('..')
 
 
+DIR_LOGS = 'logs'
+
+
 def module_from_file(file_path: str):
     module_name = os.path.splitext(os.path.basename(file_path))[0]
     spec = importlib.util.spec_from_file_location(module_name, file_path)
@@ -245,6 +248,31 @@ def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, 
     except KeyboardInterrupt:
         print()
         print('Waiting canceled')
+
+
+# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/163c91d6882b548c904ad40703dac00c0a64e5a2/logger_example.py#L7
+def get_logger(name=__file__, encoding='utf-8'):
+    os.makedirs(DIR_LOGS, exist_ok=True)
+
+    file = DIR_LOGS + '/dump.txt'
+
+    import logging
+    log = logging.getLogger(name)
+    log.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('[%(asctime)s] %(levelname)-8s %(message)s')
+
+    from logging.handlers import RotatingFileHandler
+    fh = RotatingFileHandler(file, maxBytes=10_000_000, backupCount=5, encoding=encoding)
+    fh.setFormatter(formatter)
+    log.addHandler(fh)
+
+    import sys
+    sh = logging.StreamHandler(stream=sys.stdout)
+    sh.setFormatter(formatter)
+    log.addHandler(sh)
+
+    return log
 
 
 if __name__ == "__main__":
