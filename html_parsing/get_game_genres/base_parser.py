@@ -13,7 +13,8 @@ import requests
 
 from common import (
     DIR_ERRORS, DIR_LOGS, NEED_LOGS, LOG_FORMAT, USER_AGENT,
-    pretty_path, get_uniques, get_current_datetime_str, smart_comparing_names
+    pretty_path, get_uniques, get_current_datetime_str, smart_comparing_names,
+    get_valid_filename
 )
 from utils import dump
 
@@ -67,7 +68,7 @@ class BaseParser(metaclass=Singleton):
         os.makedirs(self._dir_errors, exist_ok=True)
 
         file_name = pretty_path(
-            f'{self._dir_errors}/{self.get_site_name()}_{self.game_name}_{get_current_datetime_str()}.dump'
+            f'{self._dir_errors}/{self.get_site_name()}_{get_valid_filename(self.game_name)}_{get_current_datetime_str()}.dump'
         )
         self.log_debug(f'Save dump to {file_name}')
 

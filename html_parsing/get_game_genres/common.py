@@ -6,6 +6,7 @@ __author__ = 'ipetrash'
 
 import datetime as DT
 import unicodedata
+import re
 import os.path
 
 
@@ -63,6 +64,20 @@ def pretty_path(path: str) -> str:
 
 def get_current_datetime_str(fmt='%d%m%y%H%M%S') -> str:
     return DT.datetime.now().strftime(fmt)
+
+
+# SOURCE: https://github.com/django/django/blob/03dbdfd9bbbbd0b0172aad648c6bbe3f39541137/django/utils/text.py#L221
+def get_valid_filename(s):
+    """
+    Return the given string converted to a string that can be used for a clean
+    filename. Remove leading and trailing spaces; convert other spaces to
+    underscores; and remove anything that is not an alphanumeric, dash,
+    underscore, or dot.
+    >>> get_valid_filename("john's portrait in 2004.jpg")
+    'johns_portrait_in_2004.jpg'
+    """
+    s = str(s).strip().replace(' ', '_')
+    return re.sub(r'(?u)[^-\w.]', '', s)
 
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0'
