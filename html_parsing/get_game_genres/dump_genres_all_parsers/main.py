@@ -52,6 +52,9 @@ if __name__ == "__main__":
 
         threads = []
         for parser in get_parsers():
+            if parser.get_site_name() == 'gamefaqs_gamespot_com':
+                continue
+
             threads.append(
                 Thread(target=run_parser, args=[parser, games])
             )
