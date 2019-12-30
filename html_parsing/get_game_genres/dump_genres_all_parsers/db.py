@@ -10,6 +10,7 @@ import os.path
 
 # pip install peewee
 from peewee import *
+from playhouse.sqliteq import SqliteQueueDatabase
 
 DB_DIR_NAME = 'database'
 
@@ -49,7 +50,7 @@ class ListField(Field):
         return json.dumps(value, ensure_ascii=False)
 
 
-# TODO: remove this
+# Simple Sqlite
 # db = SqliteDatabase(
 #     DB_FILE_NAME,
 #     pragmas={
@@ -58,12 +59,9 @@ class ListField(Field):
 #         'cache_size': -32 * 1000  # 32MB page-cache
 #     }
 # )
-
-
+#
+# This working with multithreading
 # SOURCE: http://docs.peewee-orm.com/en/latest/peewee/playhouse.html#sqliteq
-# TODO: this working with multithreading
-from playhouse.sqliteq import SqliteQueueDatabase
-
 db = SqliteQueueDatabase(
     DB_FILE_NAME,
     pragmas=(
