@@ -8,6 +8,7 @@ from glob import glob
 import importlib.util
 import os
 import sys
+import threading
 from typing import Dict, Callable
 
 # For import common.py
@@ -273,6 +274,18 @@ def get_logger(name=__file__, encoding='utf-8'):
     log.addHandler(sh)
 
     return log
+
+
+# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/c06ff5fb6a0abfb5a41652f71d7adf7ee414e4c8/multithreading__threading__examples/atomic_counter.py#L14
+class AtomicCounter:
+    def __init__(self, initial=0):
+        self.value = initial
+        self._lock = threading.Lock()
+
+    def inc(self, num=1):
+        with self._lock:
+            self.value += num
+            return self.value
 
 
 if __name__ == "__main__":
