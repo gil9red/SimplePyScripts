@@ -9,23 +9,21 @@ __author__ = 'ipetrash'
 import xml.etree.ElementTree as ET
 
 
-# SOURCE: https://stackoverflow.com/a/4590052/5909792
+# SOURCE: http://effbot.org/zone/element-lib.htm#prettyprint
 def indent(elem, level=0):
     i = "\n" + level*"  "
-    j = "\n" + (level-1)*"  "
     if len(elem):
         if not elem.text or not elem.text.strip():
             elem.text = i + "  "
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
-        for subelem in elem:
-            indent(subelem, level+1)
+        for elem in elem:
+            indent(elem, level+1)
         if not elem.tail or not elem.tail.strip():
-            elem.tail = j
+            elem.tail = i
     else:
         if level and (not elem.tail or not elem.tail.strip()):
-            elem.tail = j
-    return elem
+            elem.tail = i
 
 
 if __name__ == '__main__':
