@@ -4,38 +4,68 @@
 __author__ = 'ipetrash'
 
 
-import datetime as DT
+from timeit import default_timer
 from threading import Thread
+import time
 
 from db import db_create_backup, Game, db
-from utils_dump import get_parsers, get_games_list, wait
+from utils_dump import get_parsers, get_games_list, wait, get_logger, AtomicCounter, seconds_to_str
 
 
-# Monkey patch
-def get_games_list():
-    import json
-    return json.load(open('games.json', encoding='utf-8'))
+log = get_logger()
+counter = AtomicCounter()
+
 
 def run_parser(parser, games: list):
-    # from threading import current_thread
-    # print(current_thread(), parser, games[:5])
-
     for game_name in games:
-        genres = ["RPG", "Action"]
-        Game.add(parser.get_site_name(), game_name, genres)
+        site_name = parser.get_site_name()
+        if Game.exists(site_name, game_name):
+            continue
+
+        log.info(f'Search genres for {game_name!r} ({site_name})')
+
+        while True:
+            try:
+                genres = parser.get_game_genres(game_name)
+                log.info(f'Found genres {game_name!r} ({site_name}): {genres}')
+
+                Game.add(parser.get_site_name(), game_name, genres)
+                counter.inc()
+
+                time.sleep(1)
+                break
+
+            except:
+                log.exception("Error")
+                wait(minutes=5)
 
 
 if __name__ == "__main__":
-    # while True:
-    #     print(f'Started at {DT.datetime.now():%d/%m/%Y %H:%M:%S}\n')
-    #
-    #     db_create_backup()
+    while True:
+        log.info(f'Started')
+        t = default_timer()
 
-    games = get_games_list()
+        db_create_backup()
 
-    for parser in get_parsers():
-        thread = Thread(target=run_parser, args=[parser, games])
-        thread.start()
+        games = get_games_list()
+        log.info(f'Total games: {len(games)}')
 
-        # parser._need_logs = False
-        # print(f"{parser.get_site_name():<25}: {parser.get_game_genres('Dead Space')}")
+        threads = []
+        for parser in get_parsers():
+            threads.append(
+                Thread(target=run_parser, args=[parser, games])
+            )
+        log.info(f'Total parsers/threads: {len(threads)}')
+
+        counter.value = 0
+
+        for thread in threads:
+            thread.start()
+
+        for thread in threads:
+            thread.join()
+
+        log.info(f'Finished. Processed games: {counter.value}. '
+                 f'Elapsed time: {seconds_to_str(default_timer() - t)}')
+
+        wait(days=1)
