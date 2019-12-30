@@ -16,23 +16,25 @@ class SpongCom_Parser(BaseParser):
         root = self.send_get(url, return_html=True)
     
         # Первая таблица -- та, что нужна нам
-        for game_block in root.select_one('table.searchResult').select('tr'):
-            tds = game_block.select('td')
-            if len(tds) != 4:  # Например, tr > th
-                continue
-    
-            td_title, _, genres_td, platforms_td = tds
-    
-            title = get_norm_text(td_title.a)
-            if not self.is_found_game(title):
-                continue
+        result = root.select_one('table.searchResult')
+        if result:
+            for game_block in result.select('tr'):
+                tds = game_block.select('td')
+                if len(tds) != 4:  # Например, tr > th
+                    continue
 
-            # <td>Adventure: Free Roaming<br/>Adventure: Survival Horror<br/></td>
-            #   -> ['Adventure: Free Roaming', 'Adventure: Survival Horror']
-            genres = list(genres_td.stripped_strings)
-    
-            # Сойдет первый, совпадающий по имени, вариант
-            return genres
+                td_title, _, genres_td, platforms_td = tds
+
+                title = get_norm_text(td_title.a)
+                if not self.is_found_game(title):
+                    continue
+
+                # <td>Adventure: Free Roaming<br/>Adventure: Survival Horror<br/></td>
+                #   -> ['Adventure: Free Roaming', 'Adventure: Survival Horror']
+                genres = list(genres_td.stripped_strings)
+
+                # Сойдет первый, совпадающий по имени, вариант
+                return genres
     
         self.log_info(f'Not found game {self.game_name!r}')
         return []
