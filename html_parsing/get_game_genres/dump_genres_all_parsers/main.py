@@ -42,33 +42,38 @@ def run_parser(parser, games: list):
 
 if __name__ == "__main__":
     while True:
-        log.info(f'Started')
-        t = default_timer()
+        try:
+            log.info(f'Started')
+            t = default_timer()
 
-        db_create_backup()
+            db_create_backup()
 
-        games = get_games_list()
-        log.info(f'Total games: {len(games)}')
+            games = get_games_list()
+            log.info(f'Total games: {len(games)}')
 
-        threads = []
-        for parser in get_parsers():
-            if parser.get_site_name() == 'gamefaqs_gamespot_com':
-                continue
+            threads = []
+            for parser in get_parsers():
+                if parser.get_site_name() == 'gamefaqs_gamespot_com':
+                    continue
 
-            threads.append(
-                Thread(target=run_parser, args=[parser, games])
-            )
-        log.info(f'Total parsers/threads: {len(threads)}')
+                threads.append(
+                    Thread(target=run_parser, args=[parser, games])
+                )
+            log.info(f'Total parsers/threads: {len(threads)}')
 
-        counter.value = 0
+            counter.value = 0
 
-        for thread in threads:
-            thread.start()
+            for thread in threads:
+                thread.start()
 
-        for thread in threads:
-            thread.join()
+            for thread in threads:
+                thread.join()
 
-        log.info(f'Finished. Processed games: {counter.value}. '
-                 f'Elapsed time: {seconds_to_str(default_timer() - t)}')
+            log.info(f'Finished. Processed games: {counter.value}. '
+                     f'Elapsed time: {seconds_to_str(default_timer() - t)}')
 
-        wait(days=1)
+            wait(days=1)
+
+        except:
+            log.exception('Error')
+            wait(minutes=15)
