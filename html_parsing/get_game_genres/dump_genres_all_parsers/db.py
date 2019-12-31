@@ -101,6 +101,15 @@ class Game(BaseModel):
     def get_games_by_site(cls, site: str) -> List['Game']:
         return list(cls.select().where(cls.site == site))
 
+    @classmethod
+    def get_all_genres(cls) -> List[str]:
+        items = []
+
+        for game in Game.select():
+            items += game.genres
+
+        return sorted(set(items))
+
     class Meta:
         indexes = (
             (("name", "site"), True),
@@ -119,6 +128,7 @@ db.create_tables([Game])
 
 if __name__ == '__main__':
     print(Game.select().count())
+    print(Game.get_all_genres())
 
     # Game.add(site='foo', name='123', genres=['RPG', 'Action'])
     # Game.add(site='foo', name='456', genres=['RPG'])

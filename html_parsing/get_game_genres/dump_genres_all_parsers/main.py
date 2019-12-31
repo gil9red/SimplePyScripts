@@ -15,7 +15,7 @@ from utils_dump import get_parsers, get_games_list, wait, get_logger, AtomicCoun
 IGNORE_SITE_NAMES = ['gamefaqs_gamespot_com']
 
 # Test
-USE_FAKE_PARSER = True
+USE_FAKE_PARSER = False
 if USE_FAKE_PARSER:
     class FakeParser:
         @classmethod
