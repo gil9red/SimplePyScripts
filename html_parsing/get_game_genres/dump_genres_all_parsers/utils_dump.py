@@ -301,7 +301,6 @@ if __name__ == "__main__":
     # Games (743): 35MM, 60 Seconds!, A Bird Story, A Plague Tale: Innocence, A Story About My Uncle...
 
     print()
-    quit()
 
     for parser in get_parsers():
         print(f"{parser.get_site_name():<25}: {parser.__class__}")
