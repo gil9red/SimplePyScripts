@@ -48,7 +48,7 @@ def run_parser(parser, games: list):
                 Game.add(site_name, game_name, genres)
                 counter.inc()
 
-                time.sleep(1)
+                time.sleep(2)
                 break
 
             except:
