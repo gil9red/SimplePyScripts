@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 from glob import glob
 import importlib.util
-import os
+from pathlib import Path
 import sys
 import threading
 from typing import Dict, Callable
@@ -19,7 +19,7 @@ DIR_LOGS = 'logs'
 
 
 def module_from_file(file_path: str):
-    module_name = os.path.splitext(os.path.basename(file_path))[0]
+    module_name = Path(file_path).stem
     spec = importlib.util.spec_from_file_location(module_name, file_path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -253,7 +253,7 @@ def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/163c91d6882b548c904ad40703dac00c0a64e5a2/logger_example.py#L7
 def get_logger(name=__file__, encoding='utf-8'):
-    os.makedirs(DIR_LOGS, exist_ok=True)
+    Path(DIR_LOGS).mkdir(parents=True, exist_ok=True)
 
     file = DIR_LOGS + '/dump.txt'
 

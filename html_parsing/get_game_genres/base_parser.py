@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 from abc import ABCMeta, abstractmethod
 from typing import List, Union
-import os.path
+from pathlib import Path
 
 from bs4 import BeautifulSoup
 import requests
@@ -67,7 +67,7 @@ class BaseParser(metaclass=Singleton):
         return rs
 
     def _save_error_response(self, rs: requests.Response):
-        os.makedirs(self._dir_errors, exist_ok=True)
+        Path(self._dir_errors).mkdir(parents=True, exist_ok=True)
 
         file_name = pretty_path(
             f'{self._dir_errors}/{self.get_site_name()}_{get_valid_filename(self.game_name)}_{get_current_datetime_str()}.dump'
@@ -104,7 +104,7 @@ class BaseParser(metaclass=Singleton):
     def get_site_name(cls) -> str:
         if not cls._site_name:
             import inspect
-            cls._site_name = os.path.splitext(os.path.basename(inspect.getfile(cls)))[0]
+            cls._site_name = Path(inspect.getfile(cls)).stem
         return cls._site_name
 
     @abstractmethod
@@ -132,7 +132,7 @@ class BaseParser(metaclass=Singleton):
 
     # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/163c91d6882b548c904ad40703dac00c0a64e5a2/logger_example.py#L7
     def _get_logger(self, log_format: str, encoding='utf-8'):
-        os.makedirs(self._dir_logs, exist_ok=True)
+        Path(self._dir_logs).mkdir(parents=True, exist_ok=True)
 
         site = self.get_site_name()
 

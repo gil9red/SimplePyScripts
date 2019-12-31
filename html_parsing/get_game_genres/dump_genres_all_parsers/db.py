@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 import json
 from typing import List, Iterable, Optional
-import os.path
+from pathlib import Path
 
 # pip install peewee
 from peewee import *
@@ -18,18 +18,18 @@ DB_DIR_NAME = 'database'
 import pathlib
 DB_FILE_NAME = str(pathlib.Path(__file__).resolve().parent / DB_DIR_NAME / 'games.sqlite')
 
-os.makedirs(DB_DIR_NAME, exist_ok=True)
+Path(DB_DIR_NAME).mkdir(parents=True, exist_ok=True)
 
 
 def db_create_backup(backup_dir='backup', date_fmt='%d%m%y'):
     import datetime as DT
-    import os
     import shutil
 
-    os.makedirs(backup_dir, exist_ok=True)
+    backup_path = Path(backup_dir)
+    backup_path.mkdir(parents=True, exist_ok=True)
 
     zip_name = DT.datetime.today().strftime(date_fmt)
-    zip_name = os.path.join(backup_dir, zip_name)
+    zip_name = backup_path / zip_name
 
     shutil.make_archive(
         zip_name,

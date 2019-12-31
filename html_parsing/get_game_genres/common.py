@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 import datetime as DT
 import unicodedata
 import re
-import os.path
+from pathlib import Path
 
 
 def smart_comparing_names(name_1: str, name_2: str) -> bool:
@@ -57,9 +57,7 @@ def get_uniques(items: list) -> list:
 
 
 def pretty_path(path: str) -> str:
-    return os.path.normpath(
-        os.path.abspath(path)
-    )
+    return str(Path(path).resolve())
 
 
 def get_current_datetime_str(fmt='%d%m%y%H%M%S') -> str:
@@ -86,7 +84,6 @@ DIR_ERRORS = 'errors'
 DIR_LOGS = 'logs'
 
 NEED_LOGS = True
-
 LOG_FORMAT = '[%(asctime)s] %(levelname)-8s %(message)s'
 
 
