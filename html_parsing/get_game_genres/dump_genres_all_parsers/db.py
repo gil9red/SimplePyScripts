@@ -21,7 +21,7 @@ DB_FILE_NAME = str(pathlib.Path(__file__).resolve().parent / DB_DIR_NAME / 'game
 os.makedirs(DB_DIR_NAME, exist_ok=True)
 
 
-def db_create_backup(backup_dir='backup', date_fmt='%d-%m-%Y'):
+def db_create_backup(backup_dir='backup', date_fmt='%d%m%y'):
     import datetime as DT
     import os
     import shutil
