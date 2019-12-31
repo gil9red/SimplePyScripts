@@ -30,6 +30,8 @@ class Singleton(ABCMeta):
 
 
 class BaseParser(metaclass=Singleton):
+    _site_name = ''
+
     def __init__(self, need_logs=NEED_LOGS, dir_errors=DIR_ERRORS, dir_logs=DIR_LOGS, log_format=LOG_FORMAT):
         self.session = requests.session()
         self.session.headers['User-Agent'] = USER_AGENT
@@ -100,8 +102,10 @@ class BaseParser(metaclass=Singleton):
 
     @classmethod
     def get_site_name(cls) -> str:
-        import inspect
-        return os.path.splitext(os.path.basename(inspect.getfile(cls)))[0]
+        if not cls._site_name:
+            import inspect
+            cls._site_name = os.path.splitext(os.path.basename(inspect.getfile(cls)))[0]
+        return cls._site_name
 
     @abstractmethod
     def _parse(self) -> List[str]:
