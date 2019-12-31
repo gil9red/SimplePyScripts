@@ -20,28 +20,48 @@ if USE_FAKE_PARSER:
     class FakeParser:
         @classmethod
         def get_site_name(cls): return "<test>"
-        def get_game_genres(self): raise Exception('Error')
+
+        @staticmethod
+        def get_game_genres(game_name):
+            if game_name == 'Foo':
+                raise Exception('Error')
+
+            return ['RGB-bar', 'Action-bar']
 
     # Monkey Patch
     def get_parsers():
         return [FakeParser]
+
+    def get_games_list(): return ['Foo', 'Bar', 'Zet']
 
 
 log = get_logger()
 counter = AtomicCounter()
 
 
-def run_parser(parser, games: list):
+def run_parser(parser, games: list, max_num_request=5):
+    pauses = [
+        ('15 minutes', 15 * 60),
+        ('30 minutes', 30 * 60),
+        ('45 minutes', 45 * 60),
+        ('1 hour',     60 * 60),
+    ]
     site_name = parser.get_site_name()
 
     for game_name in games:
         if Game.exists(site_name, game_name):
             continue
 
-        log.info(f'Search genres for {game_name!r} ({site_name})')
+        num_request = 0
 
         while True:
+            num_request += 1
             try:
+                if num_request == 1:
+                    log.info(f'Search genres for {game_name!r} ({site_name})')
+                else:
+                    log.info(f'Search genres for {game_name!r} ({site_name}). Attempts {num_request}/{max_num_request}')
+
                 genres = parser.get_game_genres(game_name)
                 log.info(f'Found genres {game_name!r} ({site_name}): {genres}')
 
@@ -52,8 +72,14 @@ def run_parser(parser, games: list):
                 break
 
             except:
-                log.exception('')
-                wait(minutes=5)
+                log.exception(f'Error on request {num_request}/{max_num_request}')
+                if num_request >= max_num_request:
+                    log.info(f'Attempts ended for {game_name!r} ({site_name})')
+                    break
+
+                pause_text, pause_secs = pauses[num_request - 1]
+                log.info(f'Pause: {pause_text}')
+                time.sleep(pause_secs)
 
 
 if __name__ == "__main__":
