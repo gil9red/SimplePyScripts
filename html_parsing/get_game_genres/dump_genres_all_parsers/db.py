@@ -12,11 +12,10 @@ from pathlib import Path
 from peewee import *
 from playhouse.sqliteq import SqliteQueueDatabase
 
-DB_DIR_NAME = 'database'
 
-# Absolute file name
-import pathlib
-DB_FILE_NAME = str(pathlib.Path(__file__).resolve().parent / DB_DIR_NAME / 'games.sqlite')
+DB_DIR_NAME = str(Path(__file__).resolve().parent / 'database')
+DB_FILE_NAME = str(Path(DB_DIR_NAME) / 'games.sqlite')
+
 
 Path(DB_DIR_NAME).mkdir(parents=True, exist_ok=True)
 
