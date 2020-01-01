@@ -6,10 +6,10 @@ __author__ = 'ipetrash'
 
 import json
 
-from db import Game
+from db import Dump
 
 json.dump(
-    dict.fromkeys(Game.get_all_genres()),
+    dict.fromkeys(Dump.get_all_genres()),
     open('genre_translate.json', 'w', encoding='utf-8'),
     ensure_ascii=False,
     indent=4

@@ -80,7 +80,7 @@ class BaseModel(Model):
         database = db
 
 
-class Game(BaseModel):
+class Dump(BaseModel):
     name = CharField()
     site = CharField()
     genres = ListField()
@@ -97,15 +97,15 @@ class Game(BaseModel):
             cls.create(site=site, name=name, genres=genres)
 
     @classmethod
-    def get_games_by_site(cls, site: str) -> List['Game']:
+    def get_games_by_site(cls, site: str) -> List['Dump']:
         return list(cls.select().where(cls.site == site))
 
     @classmethod
     def get_all_genres(cls) -> List[str]:
         items = []
 
-        for game in Game.select():
-            items += game.genres
+        for dump in Dump.select():
+            items += dump.genres
 
         return sorted(set(items))
 
@@ -115,30 +115,30 @@ class Game(BaseModel):
         )
 
     def __repr__(self):
-        return f'Game(name={self.name!r}, site={self.site!r}, genres={self.genres})'
+        return f'Dump(name={self.name!r}, site={self.site!r}, genres={self.genres})'
 
     def __str__(self):
         return repr(self)
 
 
 db.connect()
-db.create_tables([Game])
+db.create_tables([Dump])
 
 
 if __name__ == '__main__':
-    print(Game.select().count())
-    print(Game.get_all_genres())
+    print(Dump.select().count())
+    print(Dump.get_all_genres())
 
-    # Game.add(site='foo', name='123', genres=['RPG', 'Action'])
-    # Game.add(site='foo', name='456', genres=['RPG'])
+    # Dump.add(site='foo', name='123', genres=['RPG', 'Action'])
+    # Dump.add(site='foo', name='456', genres=['RPG'])
     #
-    # for game in Game.select():
-    #     print(game)
+    # for dump in Dump.select():
+    #     print(dump)
     #
-    # # Game(name='123', site='foo', genres=['RPG', 'Action'])
-    # # Game(name='456', site='foo', genres=['RPG'])
+    # # Dump(name='123', site='foo', genres=['RPG', 'Action'])
+    # # Dump(name='456', site='foo', genres=['RPG'])
     #
     # print()
     #
-    # print(Game.get_games_by_site('foo'))
-    # # [Game(name='123', site='foo', genres=['RPG', 'Action']), Game(name='456', site='foo', genres=['RPG'])]
+    # print(Dump.get_games_by_site('foo'))
+    # # [Dump(name='123', site='foo', genres=['RPG', 'Action']), Dump(name='456', site='foo', genres=['RPG'])]

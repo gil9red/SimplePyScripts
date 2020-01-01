@@ -8,7 +8,7 @@ from timeit import default_timer
 from threading import Thread
 import time
 
-from db import db_create_backup, Game, db
+from db import db_create_backup, Dump, db
 from utils_dump import get_parsers, get_games_list, wait, get_logger, AtomicCounter, seconds_to_str
 
 
@@ -49,7 +49,7 @@ def run_parser(parser, games: list, max_num_request=5):
     site_name = parser.get_site_name()
 
     for game_name in games:
-        if Game.exists(site_name, game_name):
+        if Dump.exists(site_name, game_name):
             continue
 
         num_request = 0
@@ -62,7 +62,7 @@ def run_parser(parser, games: list, max_num_request=5):
                 genres = parser.get_game_genres(game_name)
                 log.info(f'Found genres {game_name!r} ({site_name}): {genres}')
 
-                Game.add(site_name, game_name, genres)
+                Dump.add(site_name, game_name, genres)
                 counter.inc()
 
                 time.sleep(2)
