@@ -57,7 +57,10 @@ def run_parser(parser, games: list, max_num_request=5):
         while True:
             num_request += 1
             try:
-                log.info(f'Search genres for {game_name!r} ({site_name}). Attempts {num_request}/{max_num_request}')
+                if num_request == 1:
+                    log.info(f'Search genres for {game_name!r} ({site_name})')
+                else:
+                    log.info(f'Search genres for {game_name!r} ({site_name}). Attempts {num_request}/{max_num_request}')
 
                 genres = parser.get_game_genres(game_name)
                 log.info(f'Found genres {game_name!r} ({site_name}): {genres}')
