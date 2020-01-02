@@ -127,7 +127,9 @@ db.create_tables([Dump])
 
 if __name__ == '__main__':
     print(Dump.select().count())
-    print(Dump.get_all_genres())
+
+    genres = Dump.get_all_genres()
+    print(f'Genres ({len(genres)}): {genres}')
 
     # Dump.add(site='foo', name='123', genres=['RPG', 'Action'])
     # Dump.add(site='foo', name='456', genres=['RPG'])
