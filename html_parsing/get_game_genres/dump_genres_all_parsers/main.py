@@ -116,7 +116,7 @@ if __name__ == "__main__":
             for thread in threads:
                 thread.join()
 
-            log.info(f'Finished. Processed games: {counter.value}. Total games: {Dump.select().count()}. '
+            log.info(f'Finished. Added games: {counter.value}. Total games: {Dump.select().count()}. '
                      f'Elapsed time: {seconds_to_str(default_timer() - t)}')
 
             wait(days=1)
