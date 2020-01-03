@@ -83,6 +83,13 @@ def run_parser(parser, games: list, max_num_request=5):
 
 
 if __name__ == "__main__":
+    parsers = []
+    for parser in get_parsers():
+        if parser.get_site_name() in IGNORE_SITE_NAMES:
+            continue
+
+        parsers.append(parser)
+
     while True:
         try:
             log.info(f'Started')
@@ -94,10 +101,7 @@ if __name__ == "__main__":
             log.info(f'Total games: {len(games)}')
 
             threads = []
-            for parser in get_parsers():
-                if parser.get_site_name() in IGNORE_SITE_NAMES:
-                    continue
-
+            for parser in parsers:
                 threads.append(
                     Thread(target=run_parser, args=[parser, games])
                 )
@@ -112,7 +116,7 @@ if __name__ == "__main__":
             for thread in threads:
                 thread.join()
 
-            log.info(f'Finished. Processed games: {counter.value}. '
+            log.info(f'Finished. Processed games: {counter.value}. Total games: {Dump.select().count()}. '
                      f'Elapsed time: {seconds_to_str(default_timer() - t)}')
 
             wait(days=1)
