@@ -138,11 +138,35 @@ if __name__ == '__main__':
     genres = Dump.get_all_genres()
     print(f'Genres ({len(genres)}): {genres}')
 
+    # print()
+    #
+    # for x in Dump.get():
+    #     print(x)
+
     print()
 
-    for x in Dump.get():
-        print(x)
+    sites = [x.site for x in Dump.select(Dump.site).distinct()]
+    max_width = len(max(sites, key=len))
+    fmt_str = '    {:<%d} : {}' % max_width
 
+    from collections import defaultdict
+    game_by_dump = defaultdict(list)
+    for x in Dump.get():
+        game_by_dump[x.name].append(x)
+
+    for game, dumps in game_by_dump.items():
+        print(game)
+
+        for dump in dumps:
+            print(
+                fmt_str.format(dump.site, dump.genres)
+            )
+
+        print()
+
+    #
+    # For testing
+    #
     # Dump.add(site='foo', name='123', genres=['RPG', 'Action'])
     # Dump.add(site='foo', name='456', genres=['RPG'])
     #
