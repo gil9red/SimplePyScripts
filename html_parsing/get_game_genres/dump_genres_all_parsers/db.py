@@ -43,6 +43,9 @@ class ListField(Field):
 
     def db_value(self, value: Optional[Iterable]) -> str:
         if value is not None:
+            if isinstance(value, str):
+                return value
+
             if not isinstance(value, list):
                 raise Exception('Type must be a list')
 
@@ -97,6 +100,10 @@ class Dump(BaseModel):
             cls.create(site=site, name=name, genres=genres)
 
     @classmethod
+    def get(cls) -> List['Dump']:
+        return cls.select().where(cls.genres != '[]').order_by(cls.name)
+
+    @classmethod
     def get_games_by_site(cls, site: str) -> List['Dump']:
         return list(cls.select().where(cls.site == site))
 
@@ -130,6 +137,11 @@ if __name__ == '__main__':
 
     genres = Dump.get_all_genres()
     print(f'Genres ({len(genres)}): {genres}')
+
+    print()
+
+    for x in Dump.get():
+        print(x)
 
     # Dump.add(site='foo', name='123', genres=['RPG', 'Action'])
     # Dump.add(site='foo', name='456', genres=['RPG'])
