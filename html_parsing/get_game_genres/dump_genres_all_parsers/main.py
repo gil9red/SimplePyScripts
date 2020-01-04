@@ -9,7 +9,7 @@ from threading import Thread
 import time
 
 from db import db_create_backup, Dump, db
-from utils_dump import get_parsers, get_games_list, wait, get_logger, AtomicCounter, seconds_to_str
+from utils_dump import get_parsers, get_games_list, wait, get_logger, AtomicCounter, seconds_to_str, print_parsers
 
 
 IGNORE_SITE_NAMES = ['gamefaqs_gamespot_com']
@@ -83,12 +83,8 @@ def run_parser(parser, games: list, max_num_request=5):
 
 
 if __name__ == "__main__":
-    parsers = []
-    for parser in get_parsers():
-        if parser.get_site_name() in IGNORE_SITE_NAMES:
-            continue
-
-        parsers.append(parser)
+    parsers = [x for x in get_parsers() if x.get_site_name() not in IGNORE_SITE_NAMES]
+    print_parsers(parsers, log=lambda *args, **kwargs: log.info(*args, **kwargs))
 
     while True:
         try:

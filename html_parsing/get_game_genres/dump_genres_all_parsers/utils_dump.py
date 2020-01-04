@@ -295,6 +295,17 @@ def seconds_to_str(seconds: int) -> str:
     return "%02d:%02d:%02d" % (hh, mm, ss)
 
 
+def print_parsers(parsers: list, log=print):
+    max_width = len(max([x.get_site_name() for x in parsers], key=len))
+    fmt_str = '    {:<%d} : {}' % max_width
+    items = [
+        fmt_str.format(parser.get_site_name(), parser.__class__)
+        for parser in parsers
+    ]
+
+    log(f'Parsers ({len(parsers)}):\n' + "\n".join(items))
+
+
 if __name__ == "__main__":
     items = get_games_list()
     print(f'Games ({len(items)}): {", ".join(items[:5])}...')
@@ -302,23 +313,23 @@ if __name__ == "__main__":
 
     print()
 
-    for parser in get_parsers():
-        print(f"{parser.get_site_name():<25}: {parser.__class__}")
-
-    # ag_ru                    : <class 'ag_ru.AgRu_Parser'>
-    # gamebomb_ru              : <class 'gamebomb_ru.GamebombRu_Parser'>
-    # gamefaqs_gamespot_com    : <class 'gamefaqs_gamespot_com.GamefaqsGamespotCom_Parser'>
-    # gameguru_ru              : <class 'gameguru_ru.GameguruRu_Parser'>
-    # gamer_info_com           : <class 'gamer_info_com.GamerInfoCom_Parser'>
-    # gamespot_com             : <class 'gamespot_com.GamespotCom_Parser'>
-    # igromania_ru             : <class 'igromania_ru.IgromaniaRu_Parser'>
-    # iwantgames_ru            : <class 'iwantgames_ru.IwantgamesRu_Parser'>
-    # metacritic_com           : <class 'metacritic_com.MetacriticCom_Parser'>
-    # mobygames_com            : <class 'mobygames_com.MobygamesCom_Parser'>
-    # playground_ru            : <class 'playground_ru.PlaygroundRu_Parser'>
-    # spong_com                : <class 'spong_com.SpongCom_Parser'>
-    # stopgame_ru              : <class 'stopgame_ru.StopgameRu_Parser'>
-    # store_steampowered_com   : <class 'store_steampowered_com.StoreSteampoweredCom_Parser'>
+    parsers = get_parsers()
+    print_parsers(parsers)
+    # Parsers (14):
+    #     ag_ru                  : <class 'ag_ru.AgRu_Parser'>
+    #     gamebomb_ru            : <class 'gamebomb_ru.GamebombRu_Parser'>
+    #     gamefaqs_gamespot_com  : <class 'gamefaqs_gamespot_com.GamefaqsGamespotCom_Parser'>
+    #     gameguru_ru            : <class 'gameguru_ru.GameguruRu_Parser'>
+    #     gamer_info_com         : <class 'gamer_info_com.GamerInfoCom_Parser'>
+    #     gamespot_com           : <class 'gamespot_com.GamespotCom_Parser'>
+    #     igromania_ru           : <class 'igromania_ru.IgromaniaRu_Parser'>
+    #     iwantgames_ru          : <class 'iwantgames_ru.IwantgamesRu_Parser'>
+    #     metacritic_com         : <class 'metacritic_com.MetacriticCom_Parser'>
+    #     mobygames_com          : <class 'mobygames_com.MobygamesCom_Parser'>
+    #     playground_ru          : <class 'playground_ru.PlaygroundRu_Parser'>
+    #     spong_com              : <class 'spong_com.SpongCom_Parser'>
+    #     stopgame_ru            : <class 'stopgame_ru.StopgameRu_Parser'>
+    #     store_steampowered_com : <class 'store_steampowered_com.StoreSteampoweredCom_Parser'>
 
     for parser in get_parsers():
         parser._need_logs = False
