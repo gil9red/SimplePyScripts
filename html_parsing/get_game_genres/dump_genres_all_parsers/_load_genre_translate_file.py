@@ -7,21 +7,13 @@ __author__ = 'ipetrash'
 import json
 
 
-def dict_clean(items, default):
-    return {
-        k: default if v is None else v
-        for k, v in items
-    }
-
-
 FILE_NAME_GENRE_TRANSLATE = 'genre_translate.json'
 
 
 def load() -> dict:
     try:
         genre_translate = json.load(
-            open(FILE_NAME_GENRE_TRANSLATE, encoding='utf-8'),
-            object_pairs_hook=lambda items: dict_clean(items, default=[])
+            open(FILE_NAME_GENRE_TRANSLATE, encoding='utf-8')
         )
     except:
         genre_translate = dict()

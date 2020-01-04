@@ -11,7 +11,7 @@ from _load_genre_translate_file import FILE_NAME_GENRE_TRANSLATE, load
 from utils_dump import get_logger
 
 
-log = get_logger('genre_translate')
+log = get_logger('genre_translate.txt')
 
 log.info('Start.')
 log.info('Load genres')
