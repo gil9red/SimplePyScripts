@@ -252,10 +252,10 @@ def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, 
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/163c91d6882b548c904ad40703dac00c0a64e5a2/logger_example.py#L7
-def get_logger(name=__file__, encoding='utf-8'):
+def get_logger(name='dump.txt', encoding='utf-8'):
     Path(DIR_LOGS).mkdir(parents=True, exist_ok=True)
 
-    file = DIR_LOGS + '/dump.txt'
+    file = DIR_LOGS + '/' + name
 
     import logging
     log = logging.getLogger(name)
