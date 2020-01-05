@@ -29,9 +29,14 @@ shutil.copy(
 log.info('Load genres')
 
 genre_translate = load()
-log.info(f'Current genres: {len(genre_translate)}')
+log.info(
+    f'Current genres: {len(genre_translate)}. '
+    f'Null genres: {sum(1 for v in genre_translate.values() if v is None)}'
+)
 
 if genre_translate:
+    number = 0
+
     log.info('Load merge')
 
     merge_genre_translate = load(FILE_NAME_MERGE_GENRE_TRANSLATE)
@@ -41,7 +46,9 @@ if genre_translate:
         if v is not None and k in genre_translate and genre_translate.get(k) is None:
             log.info(f'Merge: {k!r} -> {v!r}')
             genre_translate[k] = v
+            number += 1
 
+    log.info(f'New merged: {number}')
     log.info('Save merged genres')
 
     json.dump(
