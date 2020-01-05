@@ -32,6 +32,7 @@ if __name__ == '__main__':
         for k, v in genre_translate.items()
         if v is None
     }
+    print(f'Genre null translate ({len(genre_null_translate)}):')
     json_text = json.dumps(genre_null_translate, ensure_ascii=False, indent=4)
     lines = json_text.splitlines()[1:-1]
     for i, line in enumerate(lines):
