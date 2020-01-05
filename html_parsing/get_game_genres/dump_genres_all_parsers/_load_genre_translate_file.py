@@ -10,10 +10,10 @@ import json
 FILE_NAME_GENRE_TRANSLATE = 'genre_translate.json'
 
 
-def load() -> dict:
+def load(file_name: str = FILE_NAME_GENRE_TRANSLATE) -> dict:
     try:
         genre_translate = json.load(
-            open(FILE_NAME_GENRE_TRANSLATE, encoding='utf-8')
+            open(file_name, encoding='utf-8')
         )
     except:
         genre_translate = dict()
