@@ -31,23 +31,26 @@ log.info('Load genres')
 genre_translate = load()
 log.info(f'Current genres: {len(genre_translate)}')
 
-log.info('Load merge')
+if genre_translate:
+    log.info('Load merge')
 
-merge_genre_translate = load(FILE_NAME_MERGE_GENRE_TRANSLATE)
-log.info(f'Current merged genres: {len(merge_genre_translate)}')
+    merge_genre_translate = load(FILE_NAME_MERGE_GENRE_TRANSLATE)
+    log.info(f'Current merged genres: {len(merge_genre_translate)}')
 
-for k, v in merge_genre_translate.items():
-    if v is not None and k in genre_translate and genre_translate.get(k) is None:
-        log.info(f'Merge: {k!r} -> {v!r}')
-        genre_translate[k] = v
+    for k, v in merge_genre_translate.items():
+        if v is not None and k in genre_translate and genre_translate.get(k) is None:
+            log.info(f'Merge: {k!r} -> {v!r}')
+            genre_translate[k] = v
 
-log.info('Save merged genres')
+    log.info('Save merged genres')
 
-json.dump(
-    genre_translate,
-    open(FILE_NAME_GENRE_TRANSLATE, 'w', encoding='utf-8'),
-    ensure_ascii=False,
-    indent=4
-)
+    json.dump(
+        genre_translate,
+        open(FILE_NAME_GENRE_TRANSLATE, 'w', encoding='utf-8'),
+        ensure_ascii=False,
+        indent=4
+    )
+else:
+    log.info('Empty genres. Skip.')
 
 log.info('Finish!')
