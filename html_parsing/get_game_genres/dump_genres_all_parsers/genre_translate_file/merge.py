@@ -23,7 +23,7 @@ log = get_logger('merge_genre_translate.txt')
 log.info('Start.')
 
 backup_file_name = 'backup/' + DT.datetime.today().strftime('%d%m%y-%H%M%S_') + Path(FILE_NAME_GENRE_TRANSLATE).name
-log.info(f'Save backup to: {backup_file_name!r}')
+log.info(f'Save backup to: {backup_file_name}')
 shutil.copy(
     FILE_NAME_GENRE_TRANSLATE,
     backup_file_name
