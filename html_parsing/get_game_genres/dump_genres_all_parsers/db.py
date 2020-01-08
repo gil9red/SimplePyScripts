@@ -111,10 +111,17 @@ class Dump(BaseModel):
     def get_all_genres(cls) -> List[str]:
         items = []
 
-        for dump in Dump.select():
+        for dump in cls.select():
             items += dump.genres
 
         return sorted(set(items))
+
+    @classmethod
+    def get_all_games(cls) -> List[str]:
+        return [
+            x.name
+            for x in cls.select(cls.name).order_by(cls.name).distinct()
+        ]
 
     class Meta:
         indexes = (
@@ -133,10 +140,13 @@ db.create_tables([Dump])
 
 
 if __name__ == '__main__':
-    print(Dump.select().count())
+    print('Total:', Dump.select().count())
 
     genres = Dump.get_all_genres()
     print(f'Genres ({len(genres)}): {genres}')
+
+    Games = Dump.get_all_games()
+    print(f'Games ({len(Games)}): {Games}')
 
     # print()
     #
