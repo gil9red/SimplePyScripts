@@ -16,7 +16,7 @@ from load import load, FILE_NAME_GENRE_TRANSLATE
 from utils_dump import get_logger
 
 
-FILE_NAME_MERGE_GENRE_TRANSLATE = 'data/merge_genre_translate.json'
+FILE_NAME_MERGE_GENRE_TRANSLATE = str(Path(__file__).parent.resolve() / 'data' / 'merge_genre_translate.json')
 
 log = get_logger('merge_genre_translate.txt')
 

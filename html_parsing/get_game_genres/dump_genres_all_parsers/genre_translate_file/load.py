@@ -5,9 +5,10 @@ __author__ = 'ipetrash'
 
 
 import json
+from pathlib import Path
 
 
-FILE_NAME_GENRE_TRANSLATE = 'data/genre_translate.json'
+FILE_NAME_GENRE_TRANSLATE = str(Path(__file__).parent.resolve() / 'data' / 'genre_translate.json')
 
 
 def load(file_name: str = FILE_NAME_GENRE_TRANSLATE) -> dict:
