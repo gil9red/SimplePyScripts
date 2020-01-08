@@ -4,8 +4,9 @@
 __author__ = 'ipetrash'
 
 
+from collections import defaultdict
 import json
-from typing import List, Iterable, Optional
+from typing import Dict, List, Iterable, Optional
 from pathlib import Path
 
 # pip install peewee
@@ -128,9 +129,21 @@ class Dump(BaseModel):
     @classmethod
     def get_all_games(cls) -> List[str]:
         return [
-            x.name
-            for x in cls.select(cls.name).order_by(cls.name).distinct()
+            dump.name
+            for dump in cls.select(cls.name).order_by(cls.name).distinct()
         ]
+
+    @classmethod
+    def dump(cls) -> Dict[str, List[str]]:
+        game_by_genres = defaultdict(list)
+
+        for dump in cls.select().order_by(cls.name):
+            game_by_genres[dump.name] += dump.genres
+
+        for k, v in game_by_genres.items():
+            game_by_genres[k] = sorted(set(v))
+
+        return game_by_genres
 
     class Meta:
         indexes = (
@@ -175,7 +188,6 @@ if __name__ == '__main__':
     max_width = len(max(sites, key=len))
     fmt_str = '    {:<%d} : {}' % max_width
 
-    from collections import defaultdict
     game_by_dump = defaultdict(list)
     for x in Dump.get():
         game_by_dump[x.name].append(x)
