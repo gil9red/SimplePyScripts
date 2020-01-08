@@ -105,7 +105,16 @@ class Dump(BaseModel):
 
     @classmethod
     def get_games_by_site(cls, site: str) -> List['Dump']:
-        return list(cls.select().where(cls.site == site))
+        return list(cls.select().where(cls.site == site).order_by(cls.name))
+
+    @classmethod
+    def get_genres_by_game(cls, game_name: str) -> List[str]:
+        items = []
+
+        for dump in cls.select().where(cls.name == game_name):
+            items += dump.genres
+
+        return sorted(set(items))
 
     @classmethod
     def get_all_genres(cls) -> List[str]:
@@ -147,6 +156,13 @@ if __name__ == '__main__':
 
     Games = Dump.get_all_games()
     print(f'Games ({len(Games)}): {Games}')
+
+    print()
+
+    print(Dump.get_genres_by_game('Dead Space'))
+    # ['3D', 'Action', 'Adventure: Survival Horror', 'Arcade', 'Sci-Fi', 'Shooter', 'Third-Person', 'action',
+    # 'Боевик', 'Боевик от третьего лица', 'Боевик-приключения', 'Космос', 'От третьего лица', 'Ужасы', 'Шутер',
+    # 'Шутеры', 'Экшен', 'Экшены', 'ужасы']
 
     # print()
     #
