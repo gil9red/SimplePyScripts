@@ -79,7 +79,6 @@ for game, genres in new_game_by_genres.items():
             new_genres.extend(tr_genres)
 
         else:
-            # TODO: log.warning
             log.warning(f'Unsupported type genres {tr_genres} from {x!r}')
 
     new_genres = sorted(set(new_genres))
@@ -92,7 +91,6 @@ for game, genres in new_game_by_genres.items():
     #
     #     # TODO: log.info
 
-    # TODO: log.info
     log.info(f'Successful translate genres: {genres} -> {new_genres}')
     game_by_genres[game] = new_genres
 
