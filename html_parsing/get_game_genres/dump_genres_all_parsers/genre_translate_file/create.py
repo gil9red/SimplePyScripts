@@ -6,8 +6,11 @@ __author__ = 'ipetrash'
 
 import json
 
+import sys
+sys.path.append('..')
+
 from db import Dump
-from _load_genre_translate_file import FILE_NAME_GENRE_TRANSLATE, load
+from load import FILE_NAME_GENRE_TRANSLATE, load
 from utils_dump import get_logger
 
 

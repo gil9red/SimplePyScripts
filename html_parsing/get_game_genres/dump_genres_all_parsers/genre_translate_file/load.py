@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 import json
 
 
-FILE_NAME_GENRE_TRANSLATE = 'genre_translate.json'
+FILE_NAME_GENRE_TRANSLATE = 'data/genre_translate.json'
 
 
 def load(file_name: str = FILE_NAME_GENRE_TRANSLATE) -> dict:

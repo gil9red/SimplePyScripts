@@ -7,19 +7,22 @@ __author__ = 'ipetrash'
 import datetime as DT
 import json
 import shutil
+from pathlib import Path
 
-from _load_genre_translate_file import load, FILE_NAME_GENRE_TRANSLATE
+import sys
+sys.path.append('..')
+
+from load import load, FILE_NAME_GENRE_TRANSLATE
 from utils_dump import get_logger
 
 
-FILE_NAME_MERGE_GENRE_TRANSLATE = 'merge_genre_translate.json'
-
+FILE_NAME_MERGE_GENRE_TRANSLATE = 'data/merge_genre_translate.json'
 
 log = get_logger('merge_genre_translate.txt')
 
 log.info('Start.')
 
-backup_file_name = 'backup/' + DT.datetime.today().strftime('%d%m%y-%H%M%S_') + FILE_NAME_GENRE_TRANSLATE
+backup_file_name = 'backup/' + DT.datetime.today().strftime('%d%m%y-%H%M%S_') + Path(FILE_NAME_GENRE_TRANSLATE).name
 log.info(f'Save backup to: {backup_file_name!r}')
 shutil.copy(
     FILE_NAME_GENRE_TRANSLATE,
