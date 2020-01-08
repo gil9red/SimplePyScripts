@@ -15,6 +15,10 @@ sys.path.append('..')
 
 from db import Dump
 from load import load
+from utils_dump import get_logger
+
+
+log = get_logger('generate_games.txt')
 
 
 DIR = Path(__file__).parent.resolve()
@@ -23,7 +27,7 @@ FILE_NAME_BACKUP = DIR / 'backup'
 
 FILE_NAME_BACKUP.mkdir(parents=True, exist_ok=True)
 
-print('Start.')
+log.info('Start.')
 
 if Path(FILE_NAME_GAMES).exists():
     backup_file_name = str(
@@ -33,24 +37,24 @@ if Path(FILE_NAME_GAMES).exists():
         FILE_NAME_GAMES,
         backup_file_name
     )
-    print(f'Save backup to: {backup_file_name}')
-    print()
+    log.info(f'Save backup to: {backup_file_name}')
+    log.info('')
 
-print('Loading cache...')
+log.info('Loading cache...')
 
 game_by_genres = load(FILE_NAME_GAMES)
-print(f'game_by_genres ({len(game_by_genres)}): {game_by_genres}')
+log.info(f'game_by_genres ({len(game_by_genres)}): {game_by_genres}')
 
 new_game_by_genres = Dump.dump()
-print(f'new_game_by_genres ({len(new_game_by_genres)}): {new_game_by_genres}')
+log.info(f'new_game_by_genres ({len(new_game_by_genres)}): {new_game_by_genres}')
 
 genre_translate = load()
-print(f'genre_translate ({len(genre_translate)}): {genre_translate}')
+log.info(f'genre_translate ({len(genre_translate)}): {genre_translate}')
 
-print('Finish loading cache.')
-print()
+log.info('Finish loading cache.')
+log.info('')
 
-print('Search games...')
+log.info('Search games...')
 
 number = 0
 
@@ -58,7 +62,7 @@ for game, genres in new_game_by_genres.items():
     if game in game_by_genres:
         continue
 
-    print(f'Added game {game!r} with genres: {genres}')
+    log.info(f'Added game {game!r} with genres: {genres}')
     number += 1
 
     new_genres = []
@@ -76,11 +80,11 @@ for game, genres in new_game_by_genres.items():
 
         else:
             # TODO: log.warning
-            print(f'Unsupported type genres {tr_genres} from {x!r}')
+            log.warning(f'Unsupported type genres {tr_genres} from {x!r}')
 
     new_genres = sorted(set(new_genres))
 
-    # TODO: так ли это нужно?
+    # TODO: needs?
     # # Replace: "Action", "Action-adventure", "Adventure" -> "Action-adventure"
     # if "Action" in new_genres and "Action-adventure" in new_genres and "Adventure" in new_genres:
     #     new_genres.remove("Action")
@@ -89,14 +93,14 @@ for game, genres in new_game_by_genres.items():
     #     # TODO: log.info
 
     # TODO: log.info
-    print(f'Successful translate genres: {genres} -> {new_genres}')
+    log.info(f'Successful translate genres: {genres} -> {new_genres}')
     game_by_genres[game] = new_genres
 
-    print()
+    log.info('')
 
-print(f'Finish search games. New games: {number}.')
+log.info(f'Finish search games. New games: {number}.')
 
-print(f'Saving to {FILE_NAME_GAMES}')
+log.info(f'Saving to {FILE_NAME_GAMES}')
 
 json.dump(
     game_by_genres,
@@ -105,4 +109,4 @@ json.dump(
     indent=4
 )
 
-print('Finish!')
+log.info('Finish!')
