@@ -38,7 +38,7 @@ def find_files_by_dir(root_dir: str, match_func) -> list:
             file_name = join(root, f)
             file_size = getsize(file_name)
             if match_func(file_name):
-                text = f'{file_name!r} {sizeof_fmt(file_size)} ({file_size} bytes)'
+                text = f'"{file_name}" {sizeof_fmt(file_size)} ({file_size} bytes)'
                 print(text)
                 items.append(text)
 
