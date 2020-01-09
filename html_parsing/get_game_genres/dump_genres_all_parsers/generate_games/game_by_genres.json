@@ -1,18 +1,13 @@
 {
     "35MM": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "First-person",
-        "Horror",
+        "FPS",
         "Post apocalypse",
         "Quest",
-        "Shooter",
-        "Survival"
+        "Survival horror"
     ],
     "60 Seconds!": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Casual",
         "Post apocalypse",
@@ -22,22 +17,18 @@
         "Survival"
     ],
     "A Bird Story": [
-        "Action",
-        "Adventure",
-        "RPG",
+        "Action-adventure",
+        "Action/RPG",
         "Retro"
     ],
     "A Plague Tale: Innocence": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "RPG",
+        "Action/RPG",
         "Stealth",
         "Third-person"
     ],
     "A Story About My Uncle": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Casual",
         "Platformer",
@@ -50,31 +41,23 @@
         "Puzzle"
     ],
     "Alan Wake": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
         "Shooter",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "Alan Wake's American Nightmare": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Horror",
         "Shooter",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "Alice: Madness Returns": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Arcade",
-        "Horror",
-        "RPG",
-        "Survival"
+        "Survival horror"
     ],
     "Alien Isolation: Crew Expendable (DLC)": [
         "DLC"
@@ -87,66 +70,48 @@
         "Shooter"
     ],
     "Alien: Isolation": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "FPS",
-        "First-person",
-        "Horror",
         "Sci-fi",
         "Shoot 'em up",
-        "Shooter",
-        "Survival"
+        "Survival horror"
     ],
     "Aliens vs. Predator (2010)": [
         "Action",
-        "First-person",
-        "Shooter"
+        "FPS"
     ],
     "Aliens: Colonial Marines": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Sci-fi",
         "Shoot 'em up",
-        "Shooter",
         "Tactical"
     ],
     "Aliens: Colonial Marines - Stasis Interrupted (DLC)": [
         "DLC"
     ],
     "Alone in the Dark (2008)": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "First-person",
-        "Horror",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "Amnesia: A Machine for Pigs": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "First-person",
-        "Horror",
         "Puzzle",
         "Quest",
-        "Survival"
+        "Survival horror"
     ],
     "Amnesia: The Dark Descent": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "First-person",
-        "Horror",
         "Quest",
-        "Survival"
+        "Survival horror"
     ],
     "Among The Sleep": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "First-person",
         "Horror",
         "Quest"
@@ -204,15 +169,13 @@
     ],
     "Armored Kitten": [
         "2D",
-        "Action",
+        "Action/RPG",
         "Arcade",
-        "RPG",
         "Shoot 'em up",
         "Shooter"
     ],
     "Ashes": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Casual"
     ],
@@ -243,12 +206,10 @@
         "Strategy"
     ],
     "Bastion": [
-        "Action",
         "Action/RPG",
         "Arcade",
         "Logic",
-        "Platformer",
-        "RPG"
+        "Platformer"
     ],
     "Batman: The Telltale Series": [
         "Adventure",
@@ -257,61 +218,46 @@
     "Battlefield 1": [
         "Action",
         "FPS",
-        "First-person",
         "MMOFPS",
-        "Shooter",
         "Tactic"
     ],
     "Battlefield 1942": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Shoot 'em up",
-        "Shooter",
         "Wargame"
     ],
     "Battlefield 4": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "MMOFPS",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Battlefield Hardline": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Shoot 'em up",
-        "Shooter",
         "Tactic"
     ],
     "Battlefield V": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "FPS",
-        "First-person",
         "MMO",
         "MMOFPS",
-        "Shooter",
         "Tactic"
     ],
     "Battlefield Vietnam": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Shoot 'em up",
-        "Shooter",
         "Wargame"
     ],
     "Bayonetta": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Shooter",
         "Slasher",
         "Third-person",
@@ -334,8 +280,7 @@
         "Quest"
     ],
     "Ben and Ed": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Platformer"
     ],
@@ -353,8 +298,7 @@
         "Wargame"
     ],
     "Beyond Good and Evil": [
-        "Action",
-        "Adventure"
+        "Action-adventure"
     ],
     "Binary Domain": [
         "Action",
@@ -368,39 +312,29 @@
         "Third-person"
     ],
     "BioShock": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Arcade",
         "FPS",
-        "First-person",
-        "RPG",
         "Sci-fi",
         "Shoot 'em up",
-        "Shooter",
         "Steampunk"
     ],
     "BioShock 2": [
-        "Action",
         "Action-adventure",
+        "Action/RPG",
         "Arcade",
         "FPS",
-        "First-person",
-        "RPG",
         "Sci-fi",
         "Shoot 'em up",
-        "Shooter",
         "Steampunk"
     ],
     "BioShock Infinite": [
-        "Action",
         "Action-adventure",
+        "Action/RPG",
         "Arcade",
         "FPS",
-        "First-person",
-        "RPG",
         "Sci-fi",
-        "Shooter",
         "Steampunk"
     ],
     "BioShock Infinite: Burial at Sea - Episode One (DLC)": [
@@ -416,9 +350,7 @@
     ],
     "Bionic Commando": [
         "2D",
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Platformer",
         "Quest",
         "Sci-fi",
@@ -427,27 +359,20 @@
         "Third-person"
     ],
     "Black Mesa": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "FPS",
-        "First-person",
-        "Sci-fi",
-        "Shooter"
+        "Sci-fi"
     ],
     "BlackSite: Area 51": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Blades of Time": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Beat 'em up",
         "Hack and slash",
         "Slasher",
@@ -458,14 +383,12 @@
         "DLC"
     ],
     "Blood Omen 2: Legacy of Kain": [
-        "Action",
-        "Adventure",
-        "RPG",
+        "Action-adventure",
+        "Action/RPG",
         "Third-person"
     ],
     "BloodRayne": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Fantasy",
         "Horror",
@@ -473,9 +396,7 @@
         "Third-person"
     ],
     "BloodRayne 2": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Fantasy",
         "Shooter",
@@ -483,9 +404,7 @@
     ],
     "BloodRayne: Betrayal": [
         "2D",
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Beat 'em up",
         "Fantasy",
@@ -496,8 +415,7 @@
     ],
     "Bloodbath kavkaz": [
         "2D",
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Shoot 'em up",
         "Shooter"
     ],
@@ -508,68 +426,54 @@
     "Blue Estate": [
         "Action",
         "Arcade",
-        "FPS",
-        "First-person",
-        "Shooter"
+        "FPS"
     ],
     "Blues and Bullets: Episode 1": [],
     "Blues and Bullets: Episode 2 (DLC)": [],
     "Boogeyman": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "First-person",
         "Strategy",
         "Survival"
     ],
     "Borderlands": [
-        "Action",
         "Action-adventure",
+        "Action/RPG",
         "Arcade",
         "FPS",
-        "First-person",
-        "RPG",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Borderlands 2": [
-        "Action",
+        "Action/RPG",
         "Arcade",
         "FPS",
-        "First-person",
         "Open-World",
-        "RPG",
         "Racing",
-        "Sci-fi",
-        "Shooter"
+        "Sci-fi"
     ],
     "Borderlands 2: Captain Scarlett and her Pirate's Booty (DLC)": [
-        "Action",
+        "Action/RPG",
         "DLC",
-        "RPG",
         "Shooter"
     ],
     "Borderlands 2: Headhunter 1: Bloody Harvest (DLC)": [],
     "Borderlands 2: Headhunter 2: Wattle Gobbler (DLC)": [],
     "Borderlands 2: Headhunter 3: Mercenary Day (DLC)": [],
     "Borderlands 2: Mr. Torgue’s Campaign of Carnage (DLC)": [
-        "Action",
+        "Action/RPG",
         "DLC",
-        "RPG",
         "Shooter"
     ],
     "Borderlands 2: Sir Hammerlock’s Big Game Hunt (DLC)": [
-        "Action",
+        "Action/RPG",
         "DLC",
-        "RPG",
         "Shooter"
     ],
     "Borderlands: Claptrap's New Robot Revolution (DLC)": [
-        "Action",
+        "Action/RPG",
         "Add-on",
         "DLC",
-        "RPG",
         "Shooter"
     ],
     "Borderlands: Mad Moxxi's Underdome Riot (DLC)": [
@@ -579,15 +483,12 @@
         "Shooter"
     ],
     "Borderlands: The Pre-Sequel!": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Arcade",
         "FPS",
-        "First-person",
-        "RPG",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Borderlands: The Pre-Sequel! - Claptastic Voyage and Ultimate Vault Hunter Upgrade Pack 2 (DLC)": [
         "DLC"
@@ -608,15 +509,12 @@
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Broforce": [
         "2D",
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Casual",
         "Platformer",
@@ -632,30 +530,24 @@
         "Third-person"
     ],
     "Brothers: A Tale Of Two Sons": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Fantasy",
         "Puzzle"
     ],
     "Brutal Legend": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Fantasy",
         "Open-World",
-        "RPG",
         "RTS",
         "Slasher",
         "Strategy",
         "Tactic"
     ],
     "Buff Knight Advanced": [
-        "Action",
         "Action/RPG",
         "Arcade",
         "Casual",
-        "RPG",
         "Runner"
     ],
     "Bulb Boy": [
@@ -669,121 +561,89 @@
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Call of Cthulhu (2018)": [],
     "Call of Cthulhu: Dark Corners of the Earth": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "FPS",
-        "First-person",
-        "Horror",
         "Quest",
-        "Shooter",
-        "Survival"
+        "Survival horror"
     ],
     "Call of Duty": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Shoot 'em up",
-        "Shooter",
         "Simulation"
     ],
     "Call of Duty 2": [
         "Action",
         "Arcade",
-        "FPS",
-        "First-person",
-        "Shooter"
+        "FPS"
     ],
     "Call of Duty 4: Modern Warfare": [
         "Action",
         "Arcade",
-        "FPS",
-        "First-person",
-        "Shooter"
+        "FPS"
     ],
     "Call of Duty: Advanced Warfare": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Sci-fi",
         "Shoot 'em up",
-        "Shooter",
         "Tactic"
     ],
     "Call of Duty: Black Ops": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Robot War",
-        "Shooter",
         "Zombie"
     ],
     "Call of Duty: Black Ops II": [
         "Action",
         "Arcade",
-        "FPS",
-        "First-person",
-        "Shooter"
+        "FPS"
     ],
     "Call of Duty: Black Ops III": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "FPS",
-        "First-person",
-        "MMO",
-        "Shooter"
+        "MMO"
     ],
     "Call of Duty: Ghosts": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Call of Duty: Infinite Warfare": [
         "Action",
         "FPS",
-        "First-person",
         "Sci-fi",
         "Shoot 'em up",
-        "Shooter",
         "Tactic"
     ],
     "Call of Duty: Modern Warfare 2": [
         "Action",
         "Arcade",
-        "FPS",
-        "First-person",
-        "Shooter"
+        "FPS"
     ],
     "Call of Duty: Modern Warfare 3": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Call of Duty: United Offensive": [
         "Action",
         "Arcade",
         "DLC",
         "FPS",
-        "First-person",
         "Shoot 'em up",
-        "Shooter",
         "Tactic",
         "Third-person",
         "Wargame"
@@ -792,17 +652,13 @@
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
-        "MMOFPS",
-        "Shooter"
+        "MMOFPS"
     ],
     "Call of Duty: World at War": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Canabalt": [
         "2D",
@@ -813,9 +669,7 @@
         "Runner"
     ],
     "Castlevania: Lords of Shadow": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Fantasy",
         "Quest",
         "Slasher",
@@ -829,9 +683,7 @@
         "Action"
     ],
     "Castlevania: Lords of Shadow 2": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Fantasy",
         "Quest",
         "Slasher",
@@ -839,24 +691,20 @@
     ],
     "Cat Mario": [],
     "Cat Quest": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
-        "Arcade",
-        "RPG"
+        "Arcade"
     ],
     "Child Of Light": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Arcade",
         "JRPG",
-        "Platformer",
-        "RPG"
+        "Platformer"
     ],
     "Children of Morta": [
-        "Action",
-        "Adventure",
-        "RPG",
+        "Action-adventure",
+        "Action/RPG",
         "Retro"
     ],
     "Choice Chamber": [
@@ -865,8 +713,7 @@
         "MMO"
     ],
     "Claire": [
-        "Action",
-        "Adventure"
+        "Action-adventure"
     ],
     "Clustertruck": [
         "Action",
@@ -877,73 +724,55 @@
         "Runner"
     ],
     "Cold Fear": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
         "Shooter",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "Costume Quest": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
         "Casual",
         "Fantasy",
-        "Humor",
-        "RPG"
+        "Humor"
     ],
     "Costume Quest 2": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
-        "Casual",
-        "RPG"
+        "Casual"
     ],
     "Costume Quest: Grubbins on Ice Part": [],
     "Cross of the Dutchman": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Fantasy",
-        "RPG",
         "Third-person"
     ],
     "Cry Of Fear": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "FPS",
-        "Horror",
-        "Survival"
+        "Survival horror"
     ],
     "Crysis": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Crysis 2": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Crysis Warhead": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Cube Escape: Arles": [
         "Adventure",
@@ -977,23 +806,19 @@
     ],
     "DOOM (2016)": [
         "Action",
-        "First-person",
-        "Horror",
-        "Shooter"
+        "FPS",
+        "Horror"
     ],
     "Dark Deception": [
-        "Action",
-        "Adventure",
-        "RPG"
+        "Action-adventure",
+        "Action/RPG"
     ],
     "Dark Messiah of Might and Magic": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Arcade",
+        "FPS",
         "Fantasy",
-        "First-person",
-        "RPG",
-        "Shooter",
         "Strategy"
     ],
     "Dark Sector": [
@@ -1007,164 +832,123 @@
         "Third-person"
     ],
     "Dark Souls II": [
-        "Action",
-        "Action/RPG",
-        "RPG"
+        "Action/RPG"
     ],
     "Dark Souls II: Scholar of the First Sin": [
-        "Action",
-        "Action/RPG",
-        "Adventure",
-        "RPG"
+        "Action-adventure",
+        "Action/RPG"
     ],
     "Dark Souls II: Scholar of the First Sin - Crown of the Ivory King (DLC)": [],
     "Dark Souls II: Scholar of the First Sin - Crown of the Old Iron King (DLC)": [],
     "Dark Souls II: Scholar of the First Sin - Crown of the Sunken King (DLC)": [],
     "Dark Souls III": [
-        "Action",
-        "Action/RPG",
-        "RPG"
+        "Action/RPG"
     ],
     "Dark Souls III: Ashes of Ariandel (DLC)": [
-        "Action",
-        "DLC",
-        "RPG"
+        "Action/RPG",
+        "DLC"
     ],
     "Dark Souls III: The Ringed City (DLC)": [
-        "Action",
-        "DLC",
-        "RPG"
+        "Action/RPG",
+        "DLC"
     ],
     "Dark Souls: Prepare to Die Edition": [
-        "Action",
-        "Action/RPG",
-        "Adventure",
-        "RPG"
+        "Action-adventure",
+        "Action/RPG"
     ],
     "Dark Souls: Prepare to Die Edition - Artorias of the Abyss (DLC)": [],
     "Dark Souls: Remastered": [
-        "Action",
         "Action/RPG",
-        "Horror",
-        "RPG"
+        "Horror"
     ],
     "Dark Souls: Remastered - Artorias of the Abyss (DLC)": [],
     "Darksiders": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Fantasy",
         "Open-World",
         "Slasher",
         "Third-person"
     ],
     "Darksiders Genesis": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
         "Hack and slash",
-        "RPG",
         "Shooter",
         "Slasher"
     ],
     "Darksiders II": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Fantasy",
-        "Open-World",
-        "RPG"
+        "Open-World"
     ],
     "Darksiders III": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Open-World",
-        "RPG"
+        "Action/RPG",
+        "Open-World"
     ],
     "Daylight": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Casual",
-        "Horror",
         "Quest",
-        "Survival"
+        "Survival horror"
     ],
     "Dead Island": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "FPS",
-        "First-person",
-        "Horror",
         "Open-World",
-        "RPG",
-        "Shooter",
-        "Survival"
+        "Survival horror"
     ],
     "Dead Island: Riptide": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Arcade",
-        "First-person",
-        "Horror",
-        "RPG",
+        "FPS",
         "Racing",
-        "Shooter",
-        "Survival"
+        "Survival horror"
     ],
     "Dead Island: Ryder White": [
         "Action",
         "Action-adventure",
         "DLC",
-        "Horror",
-        "Survival"
+        "Survival horror"
     ],
     "Dead Rising": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
         "Open-World",
         "Sandbox",
-        "Survival",
+        "Survival horror",
         "Third-person",
         "Zombie"
     ],
     "Dead Space": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Horror",
         "Sci-fi",
         "Shooter",
         "Space",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "Dead Space 2": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Horror",
         "Sci-fi",
         "Shooter",
         "Space",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "Dead Space 3": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Horror",
         "Sci-fi",
         "Shooter",
         "Space",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "Dead Space 3: Awakened (DLC)": [
@@ -1172,29 +956,21 @@
         "DLC"
     ],
     "Dead by Daylight": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "First-person",
-        "Horror",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "Deadlight": [
         "2D",
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
-        "Horror",
         "Platformer",
-        "Survival",
+        "Survival horror",
         "Zombie"
     ],
     "Deadpool": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Beat 'em up",
         "Humor",
@@ -1202,39 +978,31 @@
         "Third-person"
     ],
     "DeathSpank": [
-        "Action",
         "Action-adventure",
         "Action/RPG",
-        "Adventure",
         "Fighting",
-        "RPG",
         "Third-person"
     ],
     "DeathSpank: Thongs of Virtue": [
-        "Action",
         "Action-adventure",
         "Action/RPG",
-        "Adventure",
         "Puzzle",
-        "RPG",
         "Racing",
         "Third-person"
     ],
     "Deathtrap": [
-        "Action",
-        "Adventure",
-        "RPG",
+        "Action-adventure",
+        "Action/RPG",
         "RTS",
         "Strategy",
         "Tactic"
     ],
     "Demigod": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Beat 'em up",
         "Fantasy",
         "MOBA",
-        "RPG",
         "RTS",
         "Strategy",
         "Tactic"
@@ -1250,41 +1018,33 @@
     ],
     "Detention": [
         "Adventure",
-        "Horror",
         "Point-and-click",
         "Puzzle",
         "Quest",
-        "Survival"
+        "Survival horror"
     ],
     "Devil May Cry 3: Dante’s Awakening": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Shooter",
         "Slasher",
         "Third-person"
     ],
     "Devil May Cry 4": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Beat 'em up",
         "Fantasy",
         "Slasher",
         "Third-person"
     ],
     "Devil May Cry 5": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Slasher",
         "Third-person"
     ],
     "Diablo II": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
-        "Hack and slash",
-        "RPG"
+        "Hack and slash"
     ],
     "Diablo II: Lord of Destruction (DLC)": [
         "Adventure",
@@ -1292,25 +1052,20 @@
         "RPG"
     ],
     "Diablo III": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
-        "Hack and slash",
-        "RPG"
+        "Hack and slash"
     ],
     "Diablo III: Reaper of Souls (DLC)": [
-        "Action",
-        "Adventure",
-        "DLC",
-        "RPG"
+        "Action-adventure",
+        "Action/RPG",
+        "DLC"
     ],
     "Dig or Die": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Arcade",
         "Platformer",
-        "RPG",
         "Sandbox",
         "Strategy"
     ],
@@ -1332,12 +1087,9 @@
         "Wargame"
     ],
     "Dishonored": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "First-person",
-        "RPG",
-        "Shooter",
+        "Action/RPG",
+        "FPS",
         "Stealth",
         "Steampunk"
     ],
@@ -1365,9 +1117,7 @@
         "Visual Novel"
     ],
     "DmC: Devil May Cry": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Beat 'em up",
         "Fantasy",
         "Slasher",
@@ -1383,8 +1133,7 @@
         "Visual Novel"
     ],
     "Don't Knock Twice": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "First-person",
         "Horror"
     ],
@@ -1392,10 +1141,8 @@
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Horror",
-        "Sci-fi",
-        "Shooter"
+        "Sci-fi"
     ],
     "Double Dragon Neon": [
         "2D",
@@ -1421,17 +1168,13 @@
         "Quest"
     ],
     "Dragon Age II": [
-        "Action",
-        "Action/RPG",
-        "Adventure",
-        "RPG"
+        "Action-adventure",
+        "Action/RPG"
     ],
     "Dragon Age: Inquisition": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
         "Fantasy",
-        "RPG",
         "Third-person"
     ],
     "Dragon Age: Inquisition - Jaws of Hakkon (DLC)": [
@@ -1443,16 +1186,14 @@
         "DLC"
     ],
     "Dragon Age: Inquisition - Trespasser (DLC)": [
-        "Action",
+        "Action/RPG",
         "Add-on",
-        "DLC",
-        "RPG"
+        "DLC"
     ],
     "Dragon Age: Origins": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Fantasy",
-        "RPG",
         "Tactic",
         "Third-person",
         "Wargame"
@@ -1475,21 +1216,16 @@
         "DLC"
     ],
     "Dragon's Dogma: Dark Arisen": [
-        "Action",
-        "Action/RPG",
-        "Adventure",
-        "RPG"
+        "Action-adventure",
+        "Action/RPG"
     ],
     "Draw a Stickman: Episode 1": [],
     "Draw a Stickman: Episode 2": [
         "Adventure"
     ],
     "DreadOut": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "Dropsy": [
@@ -1500,8 +1236,7 @@
         "Quest"
     ],
     "Dude, Stop": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Casual",
         "Logic"
@@ -1510,27 +1245,19 @@
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Sci-fi",
         "Shoot 'em up",
-        "Shooter",
         "Third-person"
     ],
     "Dungeon Nightmares": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "First-person"
     ],
     "Dying Light": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "FPS",
-        "First-person",
-        "Horror",
         "Open-World",
-        "Shooter",
-        "Survival",
+        "Survival horror",
         "Zombie"
     ],
     "Dying Light: The Following (DLC)": [
@@ -1539,23 +1266,18 @@
         "Open-World"
     ],
     "Emily Wants To Play": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Casual",
         "First-person",
-        "Horror",
         "Puzzle",
         "Quest",
         "Simulation",
         "Strategy",
-        "Survival"
+        "Survival horror"
     ],
     "Escape Dead Island": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "Evil Defenders": [
@@ -1569,19 +1291,16 @@
         "Tower defense"
     ],
     "Evoland": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "JRPG",
-        "RPG",
         "Retro"
     ],
     "Evoland 2": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Arcade",
         "Fighting",
-        "RPG",
         "RTS"
     ],
     "Eyes The Horror Game": [
@@ -1591,183 +1310,139 @@
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Horror",
         "Shoot 'em up",
-        "Shooter",
         "Wargame"
     ],
     "F.E.A.R. 2: Project Origin": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "FPS",
-        "First-person",
         "Horror",
         "Shoot 'em up",
-        "Shooter",
-        "Survival"
+        "Survival horror"
     ],
     "F.E.A.R. 2: Reborn": [
         "Action",
         "Arcade",
         "DLC",
-        "First-person",
-        "Horror",
-        "Shooter"
+        "FPS",
+        "Horror"
     ],
     "F.E.A.R. 3": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Horror",
-        "Sci-fi",
-        "Shooter"
+        "Sci-fi"
     ],
     "F.E.A.R. Extraction Point": [
         "Action",
         "Arcade",
         "DLC",
         "FPS",
-        "First-person",
         "Horror",
         "Shoot 'em up",
-        "Shooter",
         "Wargame"
     ],
     "F.E.A.R. Perseus Mandate": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "FPS",
-        "First-person",
         "Horror",
-        "Shooter",
-        "Survival"
+        "Survival horror"
     ],
     "Fable (2004)": [],
     "Fable III": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "RPG"
+        "Action/RPG"
     ],
     "Fahrenheit": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Interactive movie",
         "Quest"
     ],
     "Failman": [],
     "Fallout 3": [
-        "Action",
         "Action-adventure",
+        "Action/RPG",
         "FPS",
-        "First-person",
         "Open-World",
         "Post apocalypse",
-        "RPG",
-        "Shooter",
         "Third-person"
     ],
     "Fallout 3 - Broken Steel (DLC)": [
-        "Action",
         "Action/RPG",
         "Add-on",
-        "DLC",
-        "RPG"
+        "DLC"
     ],
     "Fallout 3 - Mothership Zeta (DLC)": [
-        "Action",
-        "DLC",
-        "RPG"
+        "Action/RPG",
+        "DLC"
     ],
     "Fallout 3 - Operation: Anchorage (DLC)": [
-        "Action",
         "Action/RPG",
         "Add-on",
         "DLC",
-        "RPG",
         "Shooter"
     ],
     "Fallout 3 - Point Lookout (DLC)": [
-        "Action",
         "Action/RPG",
         "Add-on",
-        "DLC",
-        "RPG"
+        "DLC"
     ],
     "Fallout 3 - The Pitt (DLC)": [
-        "Action",
         "Action/RPG",
         "Add-on",
-        "DLC",
-        "RPG"
+        "DLC"
     ],
     "Fallout 4": [
-        "Action",
-        "Adventure",
-        "First-person",
-        "Open-World",
-        "Post apocalypse",
-        "RPG",
-        "Shooter",
-        "Third-person"
-    ],
-    "Fallout: New Vegas": [
-        "Action",
         "Action-adventure",
         "Action/RPG",
         "FPS",
-        "First-person",
         "Open-World",
         "Post apocalypse",
-        "RPG",
-        "Shooter",
+        "Third-person"
+    ],
+    "Fallout: New Vegas": [
+        "Action-adventure",
+        "Action/RPG",
+        "FPS",
+        "Open-World",
+        "Post apocalypse",
         "Third-person"
     ],
     "Family Trouble": [
         "Adventure"
     ],
     "Far Cry": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "FPS",
-        "First-person",
         "Open-World",
         "Robot War",
         "Sandbox",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Far Cry 2": [
         "Action",
         "Action-adventure",
         "Arcade",
         "FPS",
-        "First-person",
         "Open-World",
         "Sandbox",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Far Cry 3: Blood Dragon": [
-        "Action",
+        "Action-adventure",
         "Add-on",
-        "Adventure",
         "Arcade",
         "FPS",
-        "First-person",
         "Open-World",
         "Sandbox",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "FarSky": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Survival"
     ],
     "Final Fantasy III (Remake)": [],
@@ -1792,28 +1467,23 @@
     "Final Fantasy XIII-2 - Sazh's Story: Heads or Tails? (DLC)": [],
     "Final Fantasy XIII-2 - Snow's Story: Perpetual Battlefield (DLC)": [],
     "Final Fantasy XV": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
-        "JRPG",
-        "RPG"
+        "JRPG"
     ],
     "Final Fantasy XV: Ardyn (DLC)": [],
     "Final Fantasy XV: Comrades (DLC)": [],
     "Final Fantasy XV: Episode Gladiolus (DLC)": [
-        "Action",
-        "Adventure",
-        "RPG"
+        "Action-adventure",
+        "Action/RPG"
     ],
     "Final Fantasy XV: Episode Ignis (DLC)": [
-        "Action",
-        "Adventure",
-        "RPG"
+        "Action-adventure",
+        "Action/RPG"
     ],
     "Final Fantasy XV: Episode Prompto (DLC)": [
-        "Action",
-        "Adventure",
-        "RPG",
+        "Action-adventure",
+        "Action/RPG",
         "Shooter"
     ],
     "Firewatch": [
@@ -1832,32 +1502,25 @@
         "Puzzle"
     ],
     "Five Nights At Freddy's": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "First-person",
-        "Horror",
         "Quest",
         "Simulation",
         "Sport",
         "Strategy",
-        "Survival"
+        "Survival horror"
     ],
     "Five Nights At Freddy's 2": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "First-person",
-        "Horror",
         "Quest",
         "Simulation",
         "Strategy",
-        "Survival"
+        "Survival horror"
     ],
     "Five Nights At Freddy's 3": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "First-person",
         "Horror",
@@ -1865,14 +1528,11 @@
         "Simulation"
     ],
     "Five Nights At Freddy's 4": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "First-person",
-        "Horror",
         "Quest",
         "Strategy",
-        "Survival"
+        "Survival horror"
     ],
     "Five Nights at Freddy's 3D": [],
     "Five Nights in Anime v3": [],
@@ -1895,12 +1555,10 @@
         "Third-person"
     ],
     "GUN": [
-        "Action",
-        "Adventure",
-        "First-person",
+        "Action-adventure",
+        "FPS",
         "Quest",
         "Racing",
-        "Shooter",
         "Third-person",
         "Western"
     ],
@@ -1919,16 +1577,13 @@
         "Music/Rhythm"
     ],
     "Ghost of a Tale": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Fantasy",
-        "RPG",
         "Third-person"
     ],
     "Goat Simulator": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Casual",
         "Humor",
@@ -1937,18 +1592,14 @@
         "Simulation"
     ],
     "Grand Theft Auto III": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Racing",
         "Shooter",
         "Simulation",
         "Third-person"
     ],
     "Grand Theft Auto: San Andreas": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Open-World",
         "Racing",
@@ -1960,9 +1611,7 @@
         "Wargame"
     ],
     "Grand Theft Auto: Vice City": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Open-World",
         "Racing",
@@ -1974,26 +1623,21 @@
         "Wargame"
     ],
     "Grandpa": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Survival"
     ],
     "Grey": [
         "Action"
     ],
     "Grim Fandango Remastered": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Fantasy",
         "Puzzle",
         "Quest",
         "Third-person"
     ],
     "Grow Home": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Casual",
         "Open-World",
@@ -2002,9 +1646,7 @@
         "Sandbox"
     ],
     "Grow Up": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Casual",
         "Logic",
@@ -2034,91 +1676,70 @@
         "Action-adventure",
         "Arcade",
         "FPS",
-        "First-person",
         "Puzzle",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Half-Life 2": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "FPS",
-        "First-person",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Half-Life 2: Episode One": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Half-Life 2: Episode Two": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Logic",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Half-Life: Blue Shift": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Puzzle",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Half-Life: Opposing Force": [
         "Action",
         "Arcade",
         "DLC",
         "FPS",
-        "First-person",
-        "Sci-fi",
-        "Shooter"
+        "Sci-fi"
     ],
     "Half-Life: Paranoia": [],
     "Half-Life: The Xeno Project": [],
     "Halloween Stories: Invitation (Collector's Edition)": [],
     "Halo: Combat Evolved": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "FPS",
-        "First-person",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Hand of Fate": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Board game",
         "Cardgame",
         "Logic",
-        "RPG",
         "Strategy"
     ],
     "Hand of Fate 2": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Board game",
         "Cardgame",
         "Logic",
-        "RPG",
         "Strategy",
         "Wargame"
     ],
@@ -2139,10 +1760,8 @@
         "Arcade",
         "Cyberpunk",
         "FPS",
-        "First-person",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Hard Reset: Exile (DLC)": [
         "DLC"
@@ -2161,25 +1780,19 @@
         "Third-person"
     ],
     "Hellblade: Senua's Sacrifice": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Fantasy",
         "Open-World",
         "Slasher",
         "Third-person"
     ],
     "Hellgate: London": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "FPS",
         "Fantasy",
-        "First-person",
-        "Horror",
         "MMORPG",
-        "RPG",
-        "Shooter",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "Her Story": [
@@ -2238,19 +1851,14 @@
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Hotel Remorse": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "First-person"
     ],
     "Hotline Miami": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Retro",
         "Shoot 'em up",
@@ -2258,9 +1866,7 @@
         "Third-person"
     ],
     "Hotline Miami 2: Wrong Number": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Retro",
         "Shoot 'em up",
@@ -2274,16 +1880,13 @@
         "Strategy"
     ],
     "I Am Alive": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
         "Open-World",
         "Platformer",
         "Post apocalypse",
         "Quest",
         "Shooter",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "I am Setsuna": [
@@ -2297,21 +1900,17 @@
     ],
     "INSIDE": [
         "2D",
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Arcade",
         "Horror",
         "Logic",
         "Platformer",
-        "Puzzle",
-        "RPG"
+        "Puzzle"
     ],
     "Indivisible": [
-        "Action",
         "Action/RPG",
-        "Platformer",
-        "RPG"
+        "Platformer"
     ],
     "Injustice: Gods Among Us": [
         "2D",
@@ -2329,23 +1928,16 @@
         "Tactic"
     ],
     "Jade Empire": [
-        "Action",
         "Action-adventure",
         "Action/RPG",
-        "Adventure",
-        "Fighting",
-        "RPG"
+        "Fighting"
     ],
     "Jotun": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade"
     ],
     "Just Cause": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Open-World",
         "Quest",
@@ -2357,9 +1949,7 @@
         "Third-person"
     ],
     "Just Cause 2": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Open-World",
         "Quest",
         "Racing",
@@ -2376,9 +1966,7 @@
         "Third-person"
     ],
     "Killer is Dead: Nightmare Edition": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "First-person",
         "Sci-fi"
     ],
@@ -2435,37 +2023,28 @@
         "Tower defense"
     ],
     "Kingdom: Classic": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Simulation",
         "Strategy"
     ],
     "Kingdoms of Amalur: Reckoning": [
-        "Action",
         "Action-adventure",
         "Action/RPG",
-        "Adventure",
         "Fantasy",
         "Open-World",
-        "RPG",
         "Third-person"
     ],
     "Knock-Knock": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade"
     ],
     "Land of the Dead: Road to Fiddler's Green": [
         "Action",
         "Arcade",
-        "FPS",
-        "First-person",
-        "Shooter"
+        "FPS"
     ],
     "Lara Croft and the Guardian of Light": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Platformer",
         "Puzzle",
@@ -2474,9 +2053,7 @@
     ],
     "Lara Croft and the Temple of Osiris": [
         "2D",
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Logic",
         "Platformer",
@@ -2489,8 +2066,7 @@
         "Quest"
     ],
     "Layers of Fear": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "First-person",
         "Horror",
         "Quest",
@@ -2506,27 +2082,22 @@
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Horror",
         "Sci-fi",
-        "Shooter",
         "Zombie"
     ],
     "Left 4 Dead 2": [
         "Action",
         "FPS",
-        "First-person",
         "Horror",
         "Sci-fi",
-        "Shooter",
         "TPS",
         "Tactic",
         "Zombie"
     ],
     "Legend Hand of God": [
-        "Action",
-        "Fantasy",
-        "RPG"
+        "Action/RPG",
+        "Fantasy"
     ],
     "Legend of Grimrock": [
         "Adventure",
@@ -2536,15 +2107,12 @@
     "Legendary": [
         "Action",
         "FPS",
-        "First-person",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Life After Us: Shipwrecked": [],
     "Life Goes On: Done to Death": [
         "2D",
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Casual",
         "Logic",
@@ -2552,9 +2120,7 @@
         "Puzzle"
     ],
     "Life Is Strange": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Puzzle",
         "Quest",
         "Sci-fi",
@@ -2562,51 +2128,43 @@
     ],
     "Limbo": [
         "2D",
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Logic",
         "Platformer",
         "Puzzle"
     ],
     "Little Nightmares": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Horror",
         "Platformer",
         "Puzzle"
     ],
     "Little Nightmares - The Depths (DLC)": [
-        "Action",
+        "Action-adventure",
         "Add-on",
-        "Adventure",
         "Arcade",
         "DLC",
         "Platformer"
     ],
     "Little Nightmares - The Hideaway (DLC)": [
-        "Action",
+        "Action-adventure",
         "Add-on",
-        "Adventure",
         "Arcade",
         "DLC",
         "Platformer"
     ],
     "Loki: Heroes of Mythology": [
-        "Action",
-        "Hack and slash",
-        "RPG"
+        "Action/RPG",
+        "Hack and slash"
     ],
     "Lost Planet: Colonies": [
         "Action",
         "Shooter"
     ],
     "Lost: Via Domus": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Puzzle",
         "Quest"
@@ -2638,9 +2196,7 @@
     "MOTHERGUNSHIP": [
         "Action",
         "FPS",
-        "First-person",
-        "Sci-fi",
-        "Shooter"
+        "Sci-fi"
     ],
     "Machinarium": [
         "Adventure",
@@ -2654,8 +2210,7 @@
     ],
     "Magibot": [
         "2D",
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Fantasy",
         "Logic",
@@ -2664,29 +2219,24 @@
         "Strategy"
     ],
     "Magicka": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Arcade",
         "Fantasy",
-        "RPG",
         "Strategy"
     ],
     "Magicka 2": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Arcade",
-        "Fantasy",
-        "RPG"
+        "Fantasy"
     ],
     "Manual Samuel": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Arcade",
         "Humor",
-        "Quest",
-        "RPG"
+        "Quest"
     ],
     "Mario.EXE": [],
     "Marvel vs. Capcom: Infinite": [
@@ -2701,21 +2251,17 @@
         "Quest"
     ],
     "Masters of Anima": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
         "Arcade",
         "Fantasy",
         "MOBA",
-        "RPG",
         "RTS",
         "Strategy",
         "Tactic"
     ],
     "Max Payne": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Shoot 'em up",
         "Shooter",
@@ -2723,8 +2269,7 @@
         "Third-person"
     ],
     "Max Payne 2: The Fall of Max Payne": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Shoot 'em up",
         "Shooter",
@@ -2732,8 +2277,7 @@
         "Third-person"
     ],
     "Max Payne 3": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Shoot 'em up",
         "Shooter",
@@ -2741,25 +2285,20 @@
         "Third-person"
     ],
     "Max: The Curse Of Brotherhood": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Logic",
         "Platformer",
         "Puzzle"
     ],
     "McPixel": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Logic",
         "Puzzle"
     ],
     "Metal Gear Rising: Revengeance": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Sci-fi",
         "Shooter",
         "Slasher",
@@ -2775,67 +2314,52 @@
         "Wargame"
     ],
     "Metro 2033": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "FPS",
-        "First-person",
-        "Horror",
         "Post apocalypse",
         "Sci-fi",
-        "Shooter",
         "Stealth",
-        "Survival"
+        "Survival horror"
     ],
     "Metro 2033 Redux": [
         "Action",
         "Arcade",
-        "First-person",
-        "Sci-fi",
-        "Shooter"
+        "FPS",
+        "Sci-fi"
     ],
     "Metro Exodus": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "FPS",
-        "First-person",
-        "Horror",
         "Open-World",
         "Post apocalypse",
-        "Shooter",
         "Stealth",
-        "Survival"
+        "Survival horror"
     ],
     "Metro Last Light": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Post apocalypse",
         "Sci-fi",
-        "Shooter",
         "Stealth"
     ],
     "Metro Last Light Redux": [
         "Action",
         "Arcade",
-        "First-person",
-        "Sci-fi",
-        "Shooter"
+        "FPS",
+        "Sci-fi"
     ],
     "Metro Last Light Redux: Chronicles Pack (DLC)": [],
     "Metro Last Light Redux: Developer Pack (DLC)": [],
     "Metro Last Light Redux: Faction Pack (DLC)": [],
     "Metro Last Light Redux: Tower Pack (DLC)": [],
     "Middle-earth: Shadow of Mordor": [
-        "Action",
         "Action-adventure",
         "Action/RPG",
-        "Adventure",
         "Fantasy",
         "Open-World",
-        "RPG",
         "Third-person"
     ],
     "Might & Magic Heroes VI": [
@@ -2853,22 +2377,16 @@
         "Third-person"
     ],
     "Mini Ninjas": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Fantasy",
         "Quest",
         "Third-person"
     ],
     "Mirror's Edge": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "FPS",
-        "First-person",
         "Platformer",
-        "Shooter",
         "Simulation"
     ],
     "Monst": [],
@@ -2895,47 +2413,38 @@
         "Sport"
     ],
     "Mr. Robot": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Logic",
         "Platformer",
         "Puzzle",
-        "RPG",
         "Sci-fi",
         "Strategy",
         "Tactic"
     ],
     "Mr.President!": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Simulation"
     ],
     "Murdered: Soul Suspect": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
+        "Action/RPG",
         "Quest",
-        "RPG",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "Naruto Shippuden: Ultimate Ninja Storm 3 Full Burst": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Beat 'em up",
         "Fighting"
     ],
     "Naruto Shippuden: Ultimate Ninja Storm 4": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Fighting"
     ],
     "Naruto Shippuden: Ultimate Ninja Storm Revolution": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Beat 'em up",
         "Fighting"
@@ -2953,12 +2462,9 @@
         "Puzzle"
     ],
     "Neverending Nightmares": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
         "Quest",
-        "Survival"
+        "Survival horror"
     ],
     "Nevermind": [
         "Action-adventure",
@@ -2974,49 +2480,39 @@
         "RPG"
     ],
     "Neverwinter Nights 2": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Fantasy",
-        "RPG",
         "Third-person"
     ],
     "NieR: Automata": [
-        "Action",
         "Action/RPG",
         "Post apocalypse",
-        "RPG",
         "Robots",
         "Sci-fi",
         "Slasher"
     ],
     "Nightmare House 2": [],
     "Nosferatu: The Wrath of Malachi": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
+        "FPS",
         "Fantasy",
-        "First-person",
-        "Horror",
-        "Shooter"
+        "Horror"
     ],
     "Nox Timore": [],
     "Oceanhorn Monster of Uncharted Seas": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Arcade",
         "JRPG",
         "Open-World",
-        "Quest",
-        "RPG"
+        "Quest"
     ],
     "Omensight": [
-        "Action",
         "Action-adventure",
         "Action/RPG",
-        "Adventure",
-        "First-person",
-        "RPG"
+        "First-person"
     ],
     "One Hand Clapping (DEMO)": [],
     "One Night at Flumpty's": [
@@ -3031,8 +2527,7 @@
         "Fighting"
     ],
     "Orcs Must Die!": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "RTS",
         "Strategy",
         "Tactic",
@@ -3050,39 +2545,29 @@
         "Platformer"
     ],
     "Outlast": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "First-person",
-        "Horror",
-        "Survival"
+        "Survival horror"
     ],
     "Outlast: Whistleblower": [
-        "Action",
         "Action-adventure",
         "Add-on",
-        "Adventure",
         "DLC",
         "First-person",
-        "Horror",
-        "Survival"
+        "Survival horror"
     ],
     "Overlord": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Fantasy",
         "Quest",
-        "RPG",
         "Strategy"
     ],
     "Overlord: Raising Hell": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "DLC",
         "Fantasy",
-        "RPG",
         "Strategy"
     ],
     "Oxenfree": [
@@ -3094,16 +2579,12 @@
         "RPG"
     ],
     "Painkiller": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "FPS",
         "Fantasy",
-        "First-person",
-        "Horror",
         "Shoot 'em up",
-        "Shooter",
-        "Survival"
+        "Survival horror"
     ],
     "Painkiller: Battle Out of Hell": [
         "Action",
@@ -3111,18 +2592,14 @@
         "DLC",
         "FPS",
         "Fantasy",
-        "First-person",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Painkiller: Overdose": [
         "Action",
         "Arcade",
         "FPS",
         "Fantasy",
-        "First-person",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Paint the Town Red": [
         "Action",
@@ -3130,8 +2607,7 @@
         "Survival"
     ],
     "Panty Party": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Casual",
         "Humor",
@@ -3176,16 +2652,14 @@
         "RPG"
     ],
     "Pinstripe": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Casual",
         "Platformer",
         "Puzzle",
         "Quest"
     ],
     "Pirates of the Caribbean: At World’s End": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Quest"
     ],
     "Pizza Delivery 2": [],
@@ -3221,46 +2695,36 @@
         "Third-person"
     ],
     "Pony Island": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Logic",
         "Puzzle"
     ],
     "Portal": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
-        "First-person",
+        "FPS",
         "Logic",
         "Platformer",
         "Puzzle",
-        "Sci-fi",
-        "Shooter"
+        "Sci-fi"
     ],
     "Portal 2": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "FPS",
-        "First-person",
         "Logic",
         "Puzzle",
-        "Sci-fi",
-        "Shooter"
+        "Sci-fi"
     ],
     "Prey (2006)": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "FPS",
-        "First-person",
-        "Sci-fi",
-        "Shooter"
+        "Sci-fi"
     ],
     "Prince of Persia (2008)": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Fantasy",
         "Open-World",
@@ -3268,9 +2732,7 @@
         "Third-person"
     ],
     "Prince of Persia: The Two Thrones": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Fantasy",
         "Platformer",
         "Third-person"
@@ -3278,30 +2740,22 @@
     "Prospekt": [
         "Action",
         "Arcade",
-        "FPS",
-        "First-person",
-        "Shooter"
+        "FPS"
     ],
     "Prototype": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Open-World",
-        "RPG",
         "Sci-fi"
     ],
     "Prototype 2": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "First-person",
         "Open-World",
         "Sci-fi"
     ],
     "Psychonauts": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Humor",
         "Platformer",
@@ -3309,9 +2763,7 @@
     ],
     "PuniTy": [],
     "P·O·L·L·E·N": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "First-person",
         "Quest",
         "Space"
@@ -3320,20 +2772,15 @@
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
-        "Sci-fi",
-        "Shooter"
+        "Sci-fi"
     ],
     "Quantum Break": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Shooter",
         "Third-person"
     ],
     "Raft": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "First-person",
         "Open-World",
         "Simulation",
@@ -3344,39 +2791,32 @@
         "Arcade",
         "Beat 'em up",
         "FPS",
-        "First-person",
-        "Racing",
-        "Shooter"
+        "Racing"
     ],
     "Rampage Knights": [
         "2D",
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Arcade",
-        "Beat 'em up",
-        "RPG"
+        "Beat 'em up"
     ],
     "Rayman Legends": [
         "2D",
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Humor",
         "Platformer"
     ],
     "Rayman Origins": [
         "2D",
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Fantasy",
         "Humor",
         "Platformer"
     ],
     "Rayman Raving Rabbids": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Humor",
         "Platformer"
@@ -3388,23 +2828,18 @@
         "Platformer"
     ],
     "Real Horror Stories": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Point-and-click"
     ],
     "Redeemer": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Fighting"
     ],
     "Reign Of Kings": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "First-person",
         "Open-World",
-        "RPG",
         "Simulation",
         "Survival"
     ],
@@ -3433,39 +2868,28 @@
         "Strategy"
     ],
     "Resident Evil": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
-        "Survival",
+        "Survival horror",
         "Third-person",
         "Zombie"
     ],
     "Resident Evil / Biohazard HD REMASTER": [
-        "Action",
-        "Adventure"
+        "Action-adventure"
     ],
     "Resident Evil 0 / Biohazard 0 HD REMASTER": [
-        "Action",
-        "Adventure"
+        "Action-adventure"
     ],
     "Resident Evil 4": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
         "Shooter",
-        "Survival",
+        "Survival horror",
         "TPS",
         "Third-person"
     ],
     "Resident Evil 5": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
         "Shooter",
-        "Survival",
+        "Survival horror",
         "TPS",
         "Third-person",
         "Zombie"
@@ -3476,22 +2900,16 @@
         "Shooter"
     ],
     "Resident Evil 6": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
         "Shooter",
-        "Survival",
+        "Survival horror",
         "TPS",
         "Third-person"
     ],
     "Resident Evil 7: Biohazard": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
         "Shooter",
-        "Survival"
+        "Survival horror"
     ],
     "Resident Evil 7: Biohazard - Banned Footage Vol.1 (DLC)": [
         "Action",
@@ -3514,34 +2932,26 @@
         "DLC"
     ],
     "Resident Evil: Operation Raccoon City": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Horror",
         "Sci-fi",
         "Shoot 'em up",
         "Shooter",
-        "Survival",
+        "Survival horror",
         "Tactical",
         "Third-person",
         "Zombie"
     ],
     "Resident Evil: Revelations": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "Resident Evil: Revelations 2": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
         "Shooter",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "Reus": [
@@ -3563,9 +2973,7 @@
         "Tactic"
     ],
     "Rise of the Tomb Raider": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Open-World",
         "Platformer",
         "Third-person"
@@ -3585,12 +2993,9 @@
         "DLC"
     ],
     "Risen": [
-        "Action",
         "Action-adventure",
         "Action/RPG",
-        "Adventure",
         "Open-World",
-        "RPG",
         "Third-person"
     ],
     "Rock of Ages": [
@@ -3610,36 +3015,29 @@
         "Tower Defence"
     ],
     "Root Of Evil: The Tailor": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Casual",
         "First-person",
         "Horror",
         "Simulation"
     ],
     "Runic Rampage": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Arcade",
-        "Hack and slash",
-        "RPG"
+        "Hack and slash"
     ],
     "Rust": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "MMO",
         "MMOFPS",
         "Open-World",
-        "RPG",
         "Shooter",
         "Survival"
     ],
     "Ryse: Son of Rome": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Fantasy",
         "First-person",
         "Slasher",
@@ -3647,40 +3045,30 @@
         "Wargame"
     ],
     "S.T.A.L.K.E.R.: Shadow of Chernobyl": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Arcade",
         "FPS",
-        "First-person",
-        "Horror",
         "Open-World",
         "Post apocalypse",
-        "RPG",
         "Sci-fi",
         "Shoot 'em up",
-        "Shooter",
-        "Survival"
+        "Survival horror"
     ],
     "SCP-087": [
-        "Action",
-        "Adventure"
+        "Action-adventure"
     ],
     "SCP-087-B": [
         "Action"
     ],
     "SINNER: Sacrifice for Redemption": [
-        "Action",
         "Action-adventure",
-        "Action/RPG",
-        "Adventure",
-        "RPG"
+        "Action/RPG"
     ],
     "SWAT 4": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
-        "Shooter",
         "Simulation",
         "Strategy",
         "Tactic",
@@ -3707,26 +3095,19 @@
         "Casual"
     ],
     "Sacred": [
-        "Action",
-        "Action/RPG",
-        "Adventure",
-        "Fantasy",
-        "Open-World",
-        "RPG"
-    ],
-    "Sacred 3": [
-        "Action",
         "Action-adventure",
         "Action/RPG",
-        "Adventure",
-        "Hack and slash",
-        "RPG"
+        "Fantasy",
+        "Open-World"
+    ],
+    "Sacred 3": [
+        "Action-adventure",
+        "Action/RPG",
+        "Hack and slash"
     ],
     "Sacred Citadel": [
         "2D",
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Beat 'em up",
         "Platformer",
@@ -3736,19 +3117,15 @@
     "Saga of the Nine Worlds: The Gathering (Collector's Edition)": [],
     "Saga of the Nine Worlds: The Hunt (Collector's Edition)": [],
     "Saints Row IV": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Fighting",
         "Open-World",
         "Racing",
         "Shooter"
     ],
     "Saints Row: Gat out of Hell": [
-        "Action",
         "Action-adventure",
         "Add-on",
-        "Adventure",
         "DLC",
         "Open-World",
         "Racing",
@@ -3757,11 +3134,10 @@
     ],
     "Salt and Sanctuary": [
         "2D",
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Arcade",
         "Platformer",
-        "RPG",
         "TBS"
     ],
     "Samsara Room": [
@@ -3782,8 +3158,7 @@
     ],
     "Seasons after Fall": [
         "2D",
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Logic",
         "Platformer",
@@ -3802,9 +3177,8 @@
     "Serious Sam 3: BFE": [
         "Action",
         "Arcade",
-        "First-person",
-        "Sci-fi",
-        "Shooter"
+        "FPS",
+        "Sci-fi"
     ],
     "Serious Sam 3: Jewel of the Nile (DLC)": [
         "Action",
@@ -3818,19 +3192,14 @@
         "Action"
     ],
     "Shadow Warrior": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "FPS",
         "Fantasy",
-        "First-person",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Shadow of the Tomb Raider": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Open-World",
         "Third-person"
     ],
@@ -3842,20 +3211,17 @@
     ],
     "Shantae: Half-Genie Hero": [
         "2D",
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Platformer"
     ],
     "Shoot Your Nightmare Halloween Special": [
         "Action",
         "Arcade",
-        "First-person",
-        "Shooter"
+        "FPS"
     ],
     "Shovel Knight: Shovel of Hope": [
-        "Action",
-        "Adventure"
+        "Action-adventure"
     ],
     "Shrek 2: The Game": [
         "Arcade",
@@ -3864,24 +3230,18 @@
     "Silence on The Line": [],
     "Silent Hill: Alchemilla": [],
     "Silverfall": [
-        "Action",
-        "Action/RPG",
-        "Adventure",
-        "RPG"
+        "Action-adventure",
+        "Action/RPG"
     ],
     "Silverfall: Earth Awakening": [
-        "Action",
-        "Action/RPG",
-        "RPG"
+        "Action/RPG"
     ],
     "Singularity": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Slap-Man": [],
     "Slay the Spire": [
@@ -3892,32 +3252,27 @@
         "Tactic"
     ],
     "Sleeping Dogs": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Open-World",
         "Racing",
         "Shooter",
         "Third-person"
     ],
     "Slender: The Arrival": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "First-person",
         "Horror",
         "Quest"
     ],
     "Slendytubbies": [],
     "Slime Rancher": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Arcade",
-        "First-person",
+        "FPS",
         "Logic",
         "Open-World",
         "Quest",
-        "RPG",
-        "Shooter",
         "Simulation"
     ],
     "Sniper Elite": [
@@ -3932,11 +3287,8 @@
         "Third-person"
     ],
     "Sniper Elite 3": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "FPS",
-        "First-person",
-        "Shooter",
         "Stealth",
         "TPS",
         "Tactic",
@@ -3974,10 +3326,9 @@
         "RPG"
     ],
     "South Park: The Stick of Truth": [
-        "Action",
-        "Adventure",
-        "Humor",
-        "RPG"
+        "Action-adventure",
+        "Action/RPG",
+        "Humor"
     ],
     "Spirits of Mystery: Amber Maiden (Collector's Edition)": [
         "Adventure",
@@ -4011,43 +3362,33 @@
     ],
     "Spirits of Mystery: Whisper of the Past (Collector's Edition)": [],
     "Spooky's House of Jump Scares": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Horror"
     ],
     "Star Wars Jedi Knight: Jedi Academy": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Arcade",
         "FPS",
-        "First-person",
-        "RPG",
         "Sci-fi",
         "Shoot 'em up",
-        "Shooter",
         "Slasher",
         "Third-person"
     ],
     "Star Wars: The Force Unleashed": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Quest",
         "Shooter",
         "Third-person"
     ],
     "Star Wars: The Force Unleashed II": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Beat 'em up"
     ],
     "SteamWorld Dig": [
         "2D",
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Platformer",
         "Post apocalypse",
@@ -4057,19 +3398,16 @@
     ],
     "SteamWorld Dig 2": [
         "2D",
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Platformer",
         "Steampunk",
         "Western"
     ],
     "SteamWorld Heist": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Platformer",
-        "RPG",
         "Sci-fi",
         "Strategy",
         "TBS",
@@ -4092,11 +3430,9 @@
         "Wargame"
     ],
     "Stories: The Path of Destinies": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
-        "Platformer",
-        "RPG"
+        "Platformer"
     ],
     "Street Fighter X Tekken": [
         "2D",
@@ -4106,9 +3442,7 @@
         "Fighting"
     ],
     "Stubbs the Zombie in Rebel Without a Pulse": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Beat 'em up",
         "Sci-fi",
         "Shooter",
@@ -4119,52 +3453,42 @@
         "Quest"
     ],
     "Sudeki": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
-        "RPG",
         "Third-person"
     ],
     "Superhot": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Logic",
         "Puzzle",
-        "Shooter",
         "Tactic"
     ],
     "Surgeon Simulator": [
-        "Action",
-        "RPG",
+        "Action/RPG",
         "Simulation"
     ],
     "Tales from the Borderlands": [
         "Adventure"
     ],
     "Tales of Berseria": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
         "Fantasy",
         "JRPG",
-        "RPG",
         "Third-person"
     ],
     "Tales of Zestiria": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
-        "JRPG",
-        "RPG"
+        "JRPG"
     ],
     "Tales of Zestiria - Additional Chapter: Alisha's Story (DLC)": [
         "DLC"
     ],
     "Tasty Planet: Back for Seconds": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Casual",
         "Puzzle"
@@ -4182,16 +3506,14 @@
     ],
     "Tesla vs Lovecraft": [
         "2D",
-        "Action",
+        "Action/RPG",
         "Arcade",
-        "RPG",
         "Shoot 'em up",
         "Shooter"
     ],
     "Teslagrad": [
         "2D",
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Logic",
         "Platformer",
@@ -4211,35 +3533,29 @@
         "Tactic"
     ],
     "The Bard’s Tale (2004)": [
-        "Action",
-        "RPG"
+        "Action/RPG"
     ],
     "The Beginner's Guide": [
         "Adventure",
         "Humor"
     ],
     "The Binding of Isaac: Afterbirth (DLC)": [
-        "Action",
+        "Action/RPG",
         "Add-on",
         "Arcade",
-        "DLC",
-        "RPG"
+        "DLC"
     ],
     "The Binding of Isaac: Rebirth": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Arcade",
-        "Horror",
-        "RPG",
         "Roguelike",
         "Shoot 'em up",
         "Shooter",
-        "Survival"
+        "Survival horror"
     ],
     "The Bunker": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Point-and-click",
         "Quest",
         "Retro",
@@ -4251,31 +3567,24 @@
         "Quest"
     ],
     "The Council": [
-        "Action",
-        "Adventure",
-        "RPG",
+        "Action-adventure",
+        "Action/RPG",
         "Third-person"
     ],
     "The Curse of Blackwater": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Survival"
     ],
     "The Dark Pictures Anthology: Man of Medan": [
         "Adventure"
     ],
     "The Darkness II": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "FPS",
-        "First-person",
-        "Horror",
         "Sci-fi",
         "Shoot 'em up",
-        "Shooter",
-        "Survival"
+        "Survival horror"
     ],
     "The Elder Scrolls IV: Oblivion": [
         "Action-adventure",
@@ -4286,19 +3595,17 @@
     "The Elder Scrolls IV: Oblivion - Knights of the Nine (DLC)": [],
     "The Elder Scrolls IV: Oblivion - Shivering Isles (DLC)": [],
     "The Elder Scrolls V: Skyrim": [
-        "Action",
-        "Adventure",
-        "RPG"
+        "Action-adventure",
+        "Action/RPG"
     ],
     "The Elder Scrolls V: Skyrim - Dawnguard (DLC)": [
         "DLC",
         "RPG"
     ],
     "The Elder Scrolls V: Skyrim - Dragonborn (DLC)": [
-        "Action",
-        "Adventure",
-        "DLC",
-        "RPG"
+        "Action-adventure",
+        "Action/RPG",
+        "DLC"
     ],
     "The Elder Scrolls V: Skyrim - Falskaar (MOD)": [],
     "The Elder Scrolls V: Skyrim - Hearthfire (DLC)": [
@@ -4307,22 +3614,16 @@
         "RPG"
     ],
     "The Evil Within": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
         "Shooter",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "The Evil Within 2": [
-        "Action",
         "Action-adventure",
-        "Adventure",
-        "Horror",
         "Open-World",
         "Shooter",
-        "Survival",
+        "Survival horror",
         "Third-person"
     ],
     "The Evil Within: The Assignment (DLC)": [
@@ -4341,15 +3642,12 @@
         "DLC"
     ],
     "The Expendabros": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Platformer"
     ],
     "The Final Station": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Platformer",
         "Post apocalypse",
         "Quest",
@@ -4365,55 +3663,44 @@
         "Third-person"
     ],
     "The Forest": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "First-person",
-        "Horror",
         "Open-World",
         "Platformer",
         "Simulation",
         "Strategy",
-        "Survival"
+        "Survival horror"
     ],
     "The Hat Man Shadow Ward": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Casual",
         "Horror",
-        "RPG",
         "Racing",
         "Simulation",
         "Sport",
         "Strategy"
     ],
     "The Incredible Adventures of Van Helsing": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
-        "RPG",
         "Steampunk",
         "Third-person"
     ],
     "The Incredible Adventures of Van Helsing II": [
-        "Action",
-        "Action/RPG",
-        "Adventure",
-        "RPG"
+        "Action-adventure",
+        "Action/RPG"
     ],
     "The Incredible Adventures of Van Helsing III": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
         "Hack and slash",
-        "RPG",
         "Third-person"
     ],
     "The Last Remnant": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "JRPG",
-        "RPG",
         "Strategy"
     ],
     "The Mask Man": [],
@@ -4430,8 +3717,7 @@
     ],
     "The Slippery Slope": [],
     "The Stanley Parable": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "First-person",
         "Humor",
         "Quest",
@@ -4450,30 +3736,23 @@
         "Point-and-click"
     ],
     "The Witcher": [
-        "Action",
         "Action-adventure",
         "Action/RPG",
-        "Adventure",
         "Fantasy",
         "Open-World",
-        "RPG",
         "Third-person"
     ],
     "The Witcher 2: Assassins of Kings": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
         "Fantasy",
-        "RPG",
         "Third-person"
     ],
     "The Witcher 3: Wild Hunt": [
-        "Action",
         "Action-adventure",
         "Action/RPG",
         "Fantasy",
         "Open-World",
-        "RPG",
         "Third-person"
     ],
     "The Witcher 3: Wild Hunt - Blood and Wine (DLC)": [
@@ -4498,9 +3777,7 @@
         "Puzzle"
     ],
     "Thief": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Fantasy",
         "Stealth"
     ],
@@ -4518,48 +3795,38 @@
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "Sci-fi",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Titan Quest": [
-        "Action",
         "Action-adventure",
         "Action/RPG",
         "Fantasy",
-        "Hack and slash",
-        "RPG"
+        "Hack and slash"
     ],
     "Titan Quest Anniversary Edition": [
-        "Action",
-        "Action/RPG",
-        "RPG"
+        "Action/RPG"
     ],
     "Titan Quest: Ragnarök (DLC)": [],
     "Titan Quest: The Immortal Throne (DLC)": [
-        "Action",
+        "Action/RPG",
         "DLC",
-        "RPG",
         "Wargame"
     ],
     "Titan Souls": [
-        "Action",
-        "Adventure",
-        "Arcade",
-        "RPG"
+        "Action-adventure",
+        "Action/RPG",
+        "Arcade"
     ],
     "Titanfall 2": [
         "Action",
         "Arcade",
         "FPS",
-        "First-person",
         "MMO",
         "MMOFPS",
         "Robot War",
         "Robots",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "To The Moon": [
         "Adventure",
@@ -4569,31 +3836,23 @@
         "Visual Novel"
     ],
     "Tomb Raider": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Platformer",
         "Quest"
     ],
     "Torchlight": [
-        "Action",
         "Action/RPG",
         "Beat 'em up",
         "Fantasy",
-        "Hack and slash",
-        "RPG"
+        "Hack and slash"
     ],
     "Torchlight II": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
-        "Hack and slash",
-        "RPG"
+        "Hack and slash"
     ],
     "Toren": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Fantasy",
         "First-person",
@@ -4613,17 +3872,14 @@
         "Quest"
     ],
     "Total Overdose": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Open-World",
         "Shooter",
         "Third-person"
     ],
     "Transistor": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
-        "RPG",
         "Sci-fi",
         "Strategy",
         "TBS",
@@ -4631,9 +3887,7 @@
     ],
     "Trine": [
         "2D",
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Fantasy",
         "Logic",
@@ -4651,8 +3905,7 @@
     ],
     "Trine 3: The Artifacts of Power": [
         "2D",
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Logic",
         "Platformer",
@@ -4670,9 +3923,7 @@
     "Trollface Quest 7": [],
     "Trollface Quest: Video Memes": [],
     "Twin Sector": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "FPS",
         "First-person",
         "Logic",
@@ -4685,14 +3936,12 @@
         "Third-person"
     ],
     "Typical Nightmare": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "First-person",
         "Simulation"
     ],
     "Ultimate Epic Battle Simulator": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "RTS",
         "Simulation",
         "Strategy",
@@ -4706,10 +3955,9 @@
         "Fighting"
     ],
     "Undertale": [
-        "Action",
-        "Adventure",
-        "Arcade",
-        "RPG"
+        "Action-adventure",
+        "Action/RPG",
+        "Arcade"
     ],
     "Unfair Mario": [
         "2D",
@@ -4718,8 +3966,7 @@
     ],
     "Unmechanical": [
         "2D",
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Casual",
         "Logic",
@@ -4728,58 +3975,44 @@
         "Quest"
     ],
     "Unmechanical: Extended (DLC)": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Puzzle"
     ],
     "Until the last": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Survival"
     ],
     "Valiant Hearts: The Great War": [
         "2D",
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "Arcade",
         "Logic",
         "Platformer",
         "Puzzle",
-        "Quest",
-        "RPG"
+        "Quest"
     ],
     "Vanish": [
-        "Action",
-        "Adventure"
+        "Action-adventure"
     ],
     "Victor Vran": [
-        "Action",
-        "Action/RPG",
-        "Adventure",
-        "RPG"
+        "Action-adventure",
+        "Action/RPG"
     ],
     "Vikings: Wolves of Midgard": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
-        "Hack and slash",
-        "RPG"
+        "Hack and slash"
     ],
     "Visage": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "First-person",
-        "Horror",
         "Quest",
         "Simulation",
-        "Survival"
+        "Survival horror"
     ],
     "Wanted: Weapons of Fate": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Shoot 'em up",
         "Shooter",
@@ -4802,30 +4035,24 @@
         "Wargame"
     ],
     "Warhammer 40.000: Space Marine": [
-        "Action",
         "Action/RPG",
         "Arcade",
-        "RPG",
         "Sci-fi",
         "Shoot 'em up",
         "Shooter",
         "Third-person"
     ],
     "Warhammer: Chaosbane": [
-        "Action",
+        "Action-adventure",
         "Action/RPG",
-        "Adventure",
         "Fantasy",
-        "Hack and slash",
-        "RPG"
+        "Hack and slash"
     ],
     "We Happy Few": [
-        "Action",
         "Action-adventure",
-        "Adventure",
+        "Action/RPG",
         "FPS",
-        "Horror",
-        "RPG"
+        "Horror"
     ],
     "Whack The Thief": [],
     "Whack Your Boss": [],
@@ -4844,9 +4071,7 @@
         "Arcade",
         "FPS",
         "Fantasy",
-        "First-person",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Willy-Nilly Knight": [
         "Action/RPG",
@@ -4861,29 +4086,22 @@
         "Adventure"
     ],
     "Wizard of Legend": [
-        "Action",
         "Action-adventure",
         "Action/RPG",
-        "Adventure",
         "Arcade",
         "Dungeon",
         "Hack and slash",
-        "RPG",
         "Slasher"
     ],
     "Wolfenstein": [
         "Action",
         "FPS",
-        "First-person",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Wolfenstein II: The New Colossus": [
         "Action",
         "Arcade",
-        "FPS",
-        "First-person",
-        "Shooter"
+        "FPS"
     ],
     "Wolfenstein II: The New Colossus - The Freedom Chronicles: Episode Zero (DLC)": [],
     "Wolfenstein II: The New Colossus - The Freedom Chronicles: The Adventures of Gunslinger Joe (DLC)": [],
@@ -4894,23 +4112,17 @@
         "Action-adventure",
         "Arcade",
         "FPS",
-        "First-person",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Wolfenstein: The Old Blood": [
         "Action",
         "Add-on",
         "Arcade",
         "FPS",
-        "First-person",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Woolfe - The Red Hood Diaries": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "Platformer",
         "Slasher",
@@ -4940,8 +4152,7 @@
         "Tower defense"
     ],
     "Yandere School": [
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Simulation",
         "Third-person"
     ],
@@ -4954,16 +4165,11 @@
         "RPG"
     ],
     "ZOMBI": [
-        "Action",
         "Action-adventure",
-        "Adventure",
         "Arcade",
         "FPS",
-        "First-person",
-        "Horror",
         "Point-and-click",
-        "Shooter",
-        "Survival"
+        "Survival horror"
     ],
     "Zero Escape: Zero Time Dilemma": [
         "Adventure",
@@ -4973,14 +4179,11 @@
         "Visual Novel"
     ],
     "Ziggurat": [
-        "Action",
+        "Action/RPG",
         "Arcade",
         "FPS",
         "Fantasy",
-        "First-person",
-        "RPG",
-        "Shoot 'em up",
-        "Shooter"
+        "Shoot 'em up"
     ],
     "Zombie Driver HD": [
         "Action",
@@ -4990,17 +4193,15 @@
     ],
     "Zombie Party": [
         "2D",
-        "Action",
-        "Adventure",
+        "Action-adventure",
+        "Action/RPG",
         "Arcade",
-        "RPG",
         "Shoot 'em up",
         "Shooter"
     ],
     "Zombie Vikings": [
         "2D",
-        "Action",
-        "Adventure",
+        "Action-adventure",
         "Arcade",
         "Beat 'em up",
         "Hack and slash"
