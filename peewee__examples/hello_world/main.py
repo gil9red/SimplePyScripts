@@ -27,32 +27,33 @@ db.connect()
 db.create_tables([Info])
 
 
-# Вызываем в первый раз, чтобы заполнить таблицу
-if not Info.select().count():
-    for i in range(5):
-        Info.create(first_name="first_name_" + str(i), second_name="second_name_" + str(i), state=i)
+if __name__ == '__main__':
+    # Вызываем в первый раз, чтобы заполнить таблицу
+    if not Info.select().count():
+        for i in range(5):
+            Info.create(first_name="first_name_" + str(i), second_name="second_name_" + str(i), state=i)
 
-for info in Info.select():
-    print(info)
-#
-# Info<#1 first_name=first_name_0 second_name=second_name_0 state=0>
-# Info<#2 first_name=first_name_1 second_name=second_name_1 state=1>
-# Info<#3 first_name=first_name_2 second_name=second_name_2 state=2>
-# Info<#4 first_name=first_name_3 second_name=second_name_3 state=3>
-# Info<#5 first_name=first_name_4 second_name=second_name_4 state=4>
+    for info in Info.select():
+        print(info)
+    #
+    # Info<#1 first_name=first_name_0 second_name=second_name_0 state=0>
+    # Info<#2 first_name=first_name_1 second_name=second_name_1 state=1>
+    # Info<#3 first_name=first_name_2 second_name=second_name_2 state=2>
+    # Info<#4 first_name=first_name_3 second_name=second_name_3 state=3>
+    # Info<#5 first_name=first_name_4 second_name=second_name_4 state=4>
 
-for info in Info.select():
-    if info.state % 2 == 0:
-        info.first_name = "Четный state!"
-        info.save()
+    for info in Info.select():
+        if info.state % 2 == 0:
+            info.first_name = "Четный state!"
+            info.save()
 
-print()
+    print()
 
-for info in Info.select():
-    print(info)
-#
-# Info<#1 first_name=Четный state! second_name=second_name_0 state=0>
-# Info<#2 first_name=first_name_1 second_name=second_name_1 state=1>
-# Info<#3 first_name=Четный state! second_name=second_name_2 state=2>
-# Info<#4 first_name=first_name_3 second_name=second_name_3 state=3>
-# Info<#5 first_name=Четный state! second_name=second_name_4 state=4>
+    for info in Info.select():
+        print(info)
+    #
+    # Info<#1 first_name=Четный state! second_name=second_name_0 state=0>
+    # Info<#2 first_name=first_name_1 second_name=second_name_1 state=1>
+    # Info<#3 first_name=Четный state! second_name=second_name_2 state=2>
+    # Info<#4 first_name=first_name_3 second_name=second_name_3 state=3>
+    # Info<#5 first_name=Четный state! second_name=second_name_4 state=4>
