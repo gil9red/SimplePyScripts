@@ -134,6 +134,13 @@ class Dump(BaseModel):
         ]
 
     @classmethod
+    def get_all_sites(cls) -> List[str]:
+        return [
+            dump.site
+            for dump in cls.select(cls.site).order_by(cls.site).distinct()
+        ]
+
+    @classmethod
     def dump(cls) -> Dict[str, List[str]]:
         game_by_genres = defaultdict(list)
 
@@ -167,8 +174,11 @@ if __name__ == '__main__':
     genres = Dump.get_all_genres()
     print(f'Genres ({len(genres)}): {genres}')
 
-    Games = Dump.get_all_games()
-    print(f'Games ({len(Games)}): {Games}')
+    games = Dump.get_all_games()
+    print(f'Games ({len(games)}): {games}')
+
+    sites = Dump.get_all_sites()
+    print(f'Sites ({len(sites)}): {sites}')
 
     print()
 
