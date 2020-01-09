@@ -27,6 +27,33 @@ FILE_NAME_BACKUP = DIR / 'backup'
 
 FILE_NAME_BACKUP.mkdir(parents=True, exist_ok=True)
 
+# Example: "Action", "Adventure" -> "Action-adventure"
+GENRE_COMPRESSION = [
+    ("Action", "Adventure", "Action-adventure"),
+    ("Action", "RPG", "Action/RPG"),
+    ("First-person", "Shooter", "FPS"),
+    ("Survival", "Horror", "Survival horror"),
+]
+
+
+def do_genres_compression(genres: list) -> list:
+    genres = sorted(set(genres))
+    to_remove = set()
+
+    for src_1, src_2, target in GENRE_COMPRESSION:
+        if src_1 in genres and src_2 in genres:
+            to_remove.add(src_1)
+            to_remove.add(src_2)
+            genres.append(target)
+
+            log.info(f'Compress genres {src_1!r} and {src_2!r} -> {target!r}')
+
+    for x in to_remove:
+        genres.remove(x)
+
+    return sorted(set(genres))
+
+
 log.info('Start.')
 
 if Path(FILE_NAME_GAMES).exists():
@@ -81,15 +108,7 @@ for game, genres in new_game_by_genres.items():
         else:
             log.warning(f'Unsupported type genres {tr_genres} from {x!r}')
 
-    new_genres = sorted(set(new_genres))
-
-    # TODO: needs?
-    # # Replace: "Action", "Action-adventure", "Adventure" -> "Action-adventure"
-    # if "Action" in new_genres and "Action-adventure" in new_genres and "Adventure" in new_genres:
-    #     new_genres.remove("Action")
-    #     new_genres.remove("Adventure")
-    #
-    #     # TODO: log.info
+    new_genres = do_genres_compression(new_genres)
 
     log.info(f'Successful translate genres: {genres} -> {new_genres}')
     game_by_genres[game] = new_genres
