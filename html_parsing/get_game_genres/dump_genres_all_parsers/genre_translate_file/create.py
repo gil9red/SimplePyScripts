@@ -36,7 +36,7 @@ for genre in Dump.get_all_genres():
 
 # Если это первый запуск, то смс не отправляем
 if not is_first_run:
-    if NEED_SMS and number and number:
+    if NEED_SMS and number:
         send_sms(f"Added {number} genre(s)", log=log)
 
 log.info('Save genres')
