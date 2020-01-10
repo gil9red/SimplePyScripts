@@ -12,6 +12,7 @@ sys.path.append('..')
 from db import Dump
 from load import FILE_NAME_GENRE_TRANSLATE, load
 from utils_dump import get_logger
+from utils import send_sms
 
 
 log = get_logger('genre_translate.txt')
@@ -21,12 +22,22 @@ log.info('Load genres')
 
 genre_translate = load()
 
+NEED_SMS = True
+number = 0
+is_first_run = not genre_translate
+
 log.info(f'Current genres: {len(genre_translate)}')
 
 for genre in Dump.get_all_genres():
     if genre not in genre_translate:
         log.info(f'Added new genre: {genre!r}')
         genre_translate[genre] = None
+        number += 1
+
+# Если это первый запуск, то смс не отправляем
+if not is_first_run:
+    if NEED_SMS and number and number:
+        send_sms(f"Added {number} genre(s)", log=log)
 
 log.info('Save genres')
 
