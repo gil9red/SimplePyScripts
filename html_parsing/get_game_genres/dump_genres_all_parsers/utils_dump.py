@@ -11,8 +11,9 @@ import sys
 import threading
 from typing import Dict, Callable
 
-# For import common.py
+# For import common.py and parsers/
 sys.path.append('..')
+sys.path.append('../parsers')
 
 
 DIR_LOGS = 'logs'
@@ -33,7 +34,7 @@ def module_from_file(file_path: str):
 def get_funcs_parsers() -> Dict[str, Callable]:
     data = dict()
 
-    for file_name in glob('../*.py'):
+    for file_name in glob('../parsers/*.py'):
         module = module_from_file(file_name)
         if 'get_game_genres' not in dir(module):
             continue
@@ -46,7 +47,7 @@ def get_funcs_parsers() -> Dict[str, Callable]:
 def get_parsers() -> list:
     items = []
 
-    for file_name in glob('../*.py'):
+    for file_name in glob('../parsers/*.py'):
         module = module_from_file(file_name)
         for attr in dir(module):
             if not attr.endswith('_Parser'):
