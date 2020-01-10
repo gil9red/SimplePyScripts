@@ -24,7 +24,7 @@ def load(file_name: str = FILE_NAME_GENRE_TRANSLATE) -> dict:
 
 if __name__ == '__main__':
     genre_translate = load()
-    print(genre_translate)
+    print(f'Genre_translate ({len(genre_translate)}): {genre_translate}')
     print()
 
     # Print all undefined genres without '{' / '}' and indent
