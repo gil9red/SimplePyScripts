@@ -11,7 +11,7 @@ sys.path.append('..')
 
 from db import Dump
 from load import FILE_NAME_GENRE_TRANSLATE, load
-from utils_dump import get_logger
+from common_utils import get_logger
 from utils import send_sms
 
 

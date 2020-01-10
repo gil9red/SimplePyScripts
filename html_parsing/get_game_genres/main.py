@@ -9,7 +9,7 @@ from threading import Thread
 import time
 
 from db import db_create_backup, Dump, db
-from utils_dump import get_parsers, get_games_list, wait, get_logger, AtomicCounter, seconds_to_str, print_parsers
+from common_utils import get_parsers, get_games_list, wait, get_logger, AtomicCounter, seconds_to_str, print_parsers
 
 
 IGNORE_SITE_NAMES = ['gamefaqs_gamespot_com']

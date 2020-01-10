@@ -10,12 +10,12 @@ from pathlib import Path
 import shutil
 
 import sys
-sys.path.append('../genre_translate_file')
 sys.path.append('..')
+sys.path.append('../genre_translate_file')
 
 from db import Dump
 from load import load
-from utils_dump import get_logger
+from common_utils import get_logger
 
 
 log = get_logger('generate_games.txt')
