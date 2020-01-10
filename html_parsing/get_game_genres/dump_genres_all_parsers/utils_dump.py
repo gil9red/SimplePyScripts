@@ -332,9 +332,14 @@ if __name__ == "__main__":
     #     stopgame_ru            : <class 'stopgame_ru.StopgameRu_Parser'>
     #     store_steampowered_com : <class 'store_steampowered_com.StoreSteampoweredCom_Parser'>
 
+    print()
+
+    game = 'Dead Space'
+    print(f'Search genres for {game!r}:')
+
     for parser in get_parsers():
         parser._need_logs = False
-        print(f"{parser.get_site_name():<25}: {parser.get_game_genres('Dead Space')}")
+        print(f"    {parser.get_site_name():<25}: {parser.get_game_genres(game)}")
 
     # ag_ru                    : ['Экшены', 'Шутеры']
     # gamebomb_ru              : ['Боевик-приключения', 'Шутер']
