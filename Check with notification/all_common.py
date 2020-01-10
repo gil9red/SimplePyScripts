@@ -55,6 +55,10 @@ def get_logger(name, file='log.txt', encoding='utf-8', log_stdout=True, log_file
 
 
 def send_sms(api_id: str, to: str, text: str, log):
+    if not api_id or not to:
+        log.warning('Параметры api_id или to не указаны, отправка СМС невозможна!')
+        return
+
     log.info('Отправка sms: "%s"', text)
 
     # Отправляю смс на номер
