@@ -5,7 +5,6 @@ __author__ = 'ipetrash'
 
 
 import datetime as DT
-import unicodedata
 import re
 from pathlib import Path
 
@@ -36,20 +35,6 @@ def smart_comparing_names(name_1: str, name_2: str) -> bool:
     name_2 = remove_postfix(name_2)
 
     return clear_name(name_1) == clear_name(name_2)
-
-
-def get_norm_text(node) -> str:
-    if not node:
-        return ""
-
-    text = node.get_text(strip=True)
-
-    # NFKD ™ превратит в TM, что исказит текст, лучше удалить
-    text = text.replace('™', '').replace('©', '').replace('©', '®')
-
-    # https://ru.wikipedia.org/wiki/Юникод#NFKD
-    # unicodedata.normalize для удаления \xa0 и подобных символов-заменителей
-    return unicodedata.normalize("NFKD", text)
 
 
 def get_uniques(items: list) -> list:

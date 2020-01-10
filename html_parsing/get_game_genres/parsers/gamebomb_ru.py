@@ -7,7 +7,6 @@ __author__ = 'ipetrash'
 from urllib.parse import urljoin
 from typing import List
 
-from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -61,7 +60,7 @@ class GamebombRu_Parser(BaseParser):
                 if not div.select('input[name*="genres"]'):
                     continue
 
-                genres.append(get_norm_text(div))
+                genres.append(self.get_norm_text(div))
 
             # Сойдет первый, совпадающий по имени, вариант
             return genres

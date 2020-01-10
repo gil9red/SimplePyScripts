@@ -6,7 +6,6 @@ __author__ = 'ipetrash'
 
 from typing import List
 
-from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -16,11 +15,13 @@ class StopgameRu_Parser(BaseParser):
         root = self.send_get(url, return_html=True)
     
         for game_block in root.select('.game-block'):
-            title = get_norm_text(game_block.select_one('.title'))
+            title = self.get_norm_text(game_block.select_one('.title'))
             if not self.is_found_game(title):
                 continue
     
-            genres = [get_norm_text(a) for a in game_block.select('.game-genre-value > a') if '?genre[]' in a['href']]
+            genres = [
+                self.get_norm_text(a) for a in game_block.select('.game-genre-value > a') if '?genre[]' in a['href']
+            ]
     
             # Сойдет первый, совпадающий по имени, вариант
             return genres

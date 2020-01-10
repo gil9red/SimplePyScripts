@@ -6,7 +6,6 @@ __author__ = 'ipetrash'
 
 from typing import List
 
-from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -16,7 +15,7 @@ class IwantgamesRu_Parser(BaseParser):
         root = self.send_get(url, return_html=True)
 
         for game_block in root.select('.game__content'):
-            title = get_norm_text(game_block.h2.a)
+            title = self.get_norm_text(game_block.h2.a)
             if not self.is_found_game(title):
                 continue
 
@@ -35,7 +34,7 @@ class IwantgamesRu_Parser(BaseParser):
             if not dd:
                 continue
 
-            genres = [get_norm_text(a) for a in dd.find_all('a')]
+            genres = [self.get_norm_text(a) for a in dd.find_all('a')]
 
             # Сойдет первый, совпадающий по имени, вариант
             return genres

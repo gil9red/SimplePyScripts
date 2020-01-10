@@ -7,7 +7,6 @@ __author__ = 'ipetrash'
 from urllib.parse import urljoin
 from typing import List
 
-from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -18,7 +17,7 @@ class MetacriticCom_Parser(BaseParser):
 
         for game_block_preview in root.select('.result'):
             a = game_block_preview.select_one('.product_title > a')
-            title = get_norm_text(a)
+            title = self.get_norm_text(a)
             if not self.is_found_game(title):
                 continue
 
@@ -32,7 +31,7 @@ class MetacriticCom_Parser(BaseParser):
             #     <span class="data">Action RPG</span>
             # </li>
             genres = [
-                get_norm_text(a) for a in game_block.select('.summary_detail.product_genre > .data')
+                self.get_norm_text(a) for a in game_block.select('.summary_detail.product_genre > .data')
             ]
 
             # Сойдет первый, совпадающий по имени, вариант

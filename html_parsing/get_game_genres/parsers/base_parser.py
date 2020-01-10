@@ -7,6 +7,11 @@ __author__ = 'ipetrash'
 from abc import ABCMeta, abstractmethod
 from typing import List, Union
 from pathlib import Path
+import unicodedata
+
+# For common.py
+import sys
+sys.path.append('..')
 
 from bs4 import BeautifulSoup
 import requests
@@ -16,7 +21,7 @@ from common import (
     pretty_path, get_uniques, get_current_datetime_str, smart_comparing_names,
     get_valid_filename
 )
-from utils import dump
+import dump
 
 
 class Singleton(ABCMeta):
@@ -156,3 +161,17 @@ class BaseParser(metaclass=Singleton):
         log.addHandler(sh)
 
         return log
+
+    @classmethod
+    def get_norm_text(cls, node) -> str:
+        if not node:
+            return ""
+
+        text = node.get_text(strip=True)
+
+        # NFKD ™ превратит в TM, что исказит текст, лучше удалить
+        text = text.replace('™', '').replace('©', '').replace('©', '®')
+
+        # https://ru.wikipedia.org/wiki/Юникод#NFKD
+        # unicodedata.normalize для удаления \xa0 и подобных символов-заменителей
+        return unicodedata.normalize("NFKD", text)

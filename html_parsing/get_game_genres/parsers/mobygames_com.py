@@ -7,7 +7,6 @@ __author__ = 'ipetrash'
 from urllib.parse import urljoin
 from typing import List
 
-from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -17,7 +16,7 @@ class MobygamesCom_Parser(BaseParser):
         root = self.send_get(url, return_html=True)
 
         for game_block_preview in root.select('.searchTitle > a'):
-            title = get_norm_text(game_block_preview)
+            title = self.get_norm_text(game_block_preview)
             if not self.is_found_game(title):
                 continue
 
@@ -31,7 +30,7 @@ class MobygamesCom_Parser(BaseParser):
                 .select_one('#coreGameGenre').find_next('div', text='Genre')\
                 .find_next_sibling('div').find_all('a')
 
-            genres = [get_norm_text(a) for a in genres]
+            genres = [self.get_norm_text(a) for a in genres]
 
             # Сойдет первый, совпадающий по имени, вариант
             return genres

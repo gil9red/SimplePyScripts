@@ -7,7 +7,6 @@ __author__ = 'ipetrash'
 from urllib.parse import urljoin
 from typing import List
 
-from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -18,7 +17,7 @@ class StoreSteampoweredCom_Parser(BaseParser):
         root = self.send_get(url, return_html=True)
 
         for game_block_preview in root.select('.search_result_row'):
-            title = get_norm_text(game_block_preview.select_one('.search_name > .title'))
+            title = self.get_norm_text(game_block_preview.select_one('.search_name > .title'))
             if not self.is_found_game(title):
                 continue
 
@@ -33,7 +32,7 @@ class StoreSteampoweredCom_Parser(BaseParser):
             #     <a href="https://store.steampowered.com/genre/Action/?snr=1_5_9__408">Action</a>,
             #     <a href="https://store.steampowered.com/genre/RPG/?snr=1_5_9__408">RPG</a>
             genres = [
-                get_norm_text(a) for a in game_block.select('.details_block > a[href*="/genre/"]')
+                self.get_norm_text(a) for a in game_block.select('.details_block > a[href*="/genre/"]')
             ]
 
             # Сойдет первый, совпадающий по имени, вариант

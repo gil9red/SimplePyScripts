@@ -7,7 +7,6 @@ __author__ = 'ipetrash'
 from urllib.parse import urljoin
 from typing import List
 
-from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -21,7 +20,7 @@ class GamespotCom_Parser(BaseParser):
                 continue
 
             a = game_block_preview.select_one('.media-title a')
-            title = get_norm_text(a)
+            title = self.get_norm_text(a)
             if not self.is_found_game(title):
                 continue
 
@@ -34,7 +33,7 @@ class GamespotCom_Parser(BaseParser):
             if not tag_object_stats:
                 return []
 
-            genres = [get_norm_text(a) for a in tag_object_stats.select('a[href]') if '/genre/' in a['href']]
+            genres = [self.get_norm_text(a) for a in tag_object_stats.select('a[href]') if '/genre/' in a['href']]
 
             # Сойдет первый, совпадающий по имени, вариант
             return genres

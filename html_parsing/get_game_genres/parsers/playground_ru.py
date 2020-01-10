@@ -7,7 +7,6 @@ __author__ = 'ipetrash'
 from urllib.parse import urljoin
 from typing import List
 
-from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -17,7 +16,7 @@ class PlaygroundRu_Parser(BaseParser):
         root = self.send_get(url, return_html=True)
 
         for game_block_preview in root.select('.search-results .title'):
-            title = get_norm_text(game_block_preview)
+            title = self.get_norm_text(game_block_preview)
             if not self.is_found_game(title):
                 continue
 
@@ -31,7 +30,7 @@ class PlaygroundRu_Parser(BaseParser):
             #     <a class="item" href="/games/rpg/">Ролевая</a>
             #     <meta itemprop="genre" content="Ролевая">
             genres = [
-                get_norm_text(a) for a in game_block.select('.genres > .item')
+                self.get_norm_text(a) for a in game_block.select('.genres > .item')
             ]
 
             # Сойдет первый, совпадающий по имени, вариант

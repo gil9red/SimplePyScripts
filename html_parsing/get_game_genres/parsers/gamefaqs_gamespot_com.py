@@ -7,7 +7,6 @@ __author__ = 'ipetrash'
 from urllib.parse import urljoin
 from typing import List
 
-from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -18,7 +17,7 @@ class GamefaqsGamespotCom_Parser(BaseParser):
 
         for game_block_preview in root.select('.search_results_title > .search_result'):
             a = game_block_preview.select_one('.sr_name > a.log_search')
-            title = get_norm_text(a)
+            title = self.get_norm_text(a)
             if not self.is_found_game(title):
                 continue
 
@@ -37,7 +36,7 @@ class GamefaqsGamespotCom_Parser(BaseParser):
             # <a href="/pc/category/182-action-shooter-third-person-arcade">Arcade</a>
             # </li>
             genres = [
-                get_norm_text(a)
+                self.get_norm_text(a)
                 for a in game_info.select_one('li > b:contains("Genre:")').find_next_siblings('a')
             ]
 

@@ -6,7 +6,6 @@ __author__ = 'ipetrash'
 
 from typing import List
 
-from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -16,11 +15,11 @@ class GameguruRu_Parser(BaseParser):
         root = self.send_get(url, return_html=True)
 
         for game_block in root.select('.jointCard-result-game-unit'):
-            title = get_norm_text(game_block.select_one('.jointCard-result-game-list-title'))
+            title = self.get_norm_text(game_block.select_one('.jointCard-result-game-list-title'))
             if not self.is_found_game(title):
                 continue
 
-            genres = [get_norm_text(a) for a in game_block.select('a') if '/genre/' in a['href']]
+            genres = [self.get_norm_text(a) for a in game_block.select('a') if '/genre/' in a['href']]
 
             # Сойдет первый, совпадающий по имени, вариант
             return genres

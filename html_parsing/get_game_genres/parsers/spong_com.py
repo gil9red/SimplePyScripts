@@ -6,7 +6,6 @@ __author__ = 'ipetrash'
 
 from typing import List
 
-from common import get_norm_text
 from base_parser import BaseParser
 
 
@@ -25,7 +24,7 @@ class SpongCom_Parser(BaseParser):
 
                 td_title, _, genres_td, platforms_td = tds
 
-                title = get_norm_text(td_title.a)
+                title = self.get_norm_text(td_title.a)
                 if not self.is_found_game(title):
                     continue
 

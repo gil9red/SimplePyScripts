@@ -6,33 +6,33 @@ __author__ = 'ipetrash'
 
 from typing import List
 
-from common import get_norm_text
 from base_parser import BaseParser
 
 
-class IgromaniaRu_Parser(BaseParser):
+class GamerInfoCom_Parser(BaseParser):
     def _parse(self) -> List[str]:
         headers = {
             'X-Requested-With': 'XMLHttpRequest',
         }
         form_data = {
-            'mode': '11',
-            's': '1',
-            'p': '1',
-            'fg': 'all',
-            'fp': 'all',
-            'fn': self.game_name
+            'search-query': self.game_name,
+            'search-obl': 'games',
+            'page': '1',
         }
 
-        url = 'https://www.igromania.ru/-Engine-/AJAX/games.list.v2/index.php'
+        url = 'https://gamer-info.com/search-q/'
         root = self.send_post(url, headers=headers, data=form_data, return_html=True)
 
-        for game_block in root.select('.gamebase_box'):
-            title = get_norm_text(game_block.select_one('.release_name'))
+        for game_block in root.select('.games > .c2'):
+            g = game_block.select_one('.g')
+            if 'Жанр:' not in g.text:
+                continue
+
+            title = self.get_norm_text(game_block.select_one('.n'))
             if not self.is_found_game(title):
                 continue
 
-            genres = [get_norm_text(a) for a in game_block.select('.genre > a')]
+            genres = g.text.replace('Жанр:', '').strip().split(', ')
 
             # Сойдет первый, совпадающий по имени, вариант
             return genres
@@ -42,7 +42,7 @@ class IgromaniaRu_Parser(BaseParser):
 
 
 def get_game_genres(game_name: str, *args, **kwargs) -> List[str]:
-    return IgromaniaRu_Parser(*args, **kwargs).get_game_genres(game_name)
+    return GamerInfoCom_Parser(*args, **kwargs).get_game_genres(game_name)
 
 
 if __name__ == '__main__':
@@ -50,16 +50,16 @@ if __name__ == '__main__':
     _common_test(get_game_genres)
 
     # Search 'Hellgate: London'...
-    #     Genres: ['Боевик', 'Боевик от первого лица', 'Боевик от третьего лица', 'Ролевая игра']
+    #     Genres: ['action', 'RPG']
     #
     # Search 'The Incredible Adventures of Van Helsing'...
-    #     Genres: ['Ролевая игра', 'Боевик', 'Боевик от третьего лица']
+    #     Genres: []
     #
     # Search 'Dark Souls: Prepare to Die Edition'...
     #     Genres: []
     #
     # Search 'Twin Sector'...
-    #     Genres: ['Боевик', 'Боевик от первого лица']
+    #     Genres: ['action', 'приключения']
     #
     # Search 'Call of Cthulhu: Dark Corners of the Earth'...
-    #     Genres: ['Боевик', 'Ужасы', 'Боевик от первого лица', 'Приключение']
+    #     Genres: ['action', 'приключения']
