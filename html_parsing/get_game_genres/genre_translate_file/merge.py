@@ -18,11 +18,17 @@ from common_utils import get_logger
 
 FILE_NAME_MERGE_GENRE_TRANSLATE = str(Path(__file__).parent.resolve() / 'data' / 'merge_genre_translate.json')
 
+DIR = Path(__file__).parent.resolve()
+FILE_NAME_BACKUP = DIR / 'backup'
+FILE_NAME_BACKUP.mkdir(parents=True, exist_ok=True)
+
 log = get_logger('merge_genre_translate.txt')
 
 log.info('Start.')
 
-backup_file_name = 'backup/' + DT.datetime.today().strftime('%d%m%y-%H%M%S_') + Path(FILE_NAME_GENRE_TRANSLATE).name
+backup_file_name = (
+    FILE_NAME_BACKUP / (DT.datetime.today().strftime('%d%m%y-%H%M%S_') + Path(FILE_NAME_GENRE_TRANSLATE).name)
+)
 log.info(f'Save backup to: {backup_file_name}')
 shutil.copy(
     FILE_NAME_GENRE_TRANSLATE,
