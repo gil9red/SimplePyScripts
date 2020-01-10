@@ -80,8 +80,9 @@ def get_valid_filename(s):
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0'
 
-DIR_ERRORS = 'errors'
-DIR_LOGS = 'logs'
+DIR = Path(__file__).resolve().parent
+DIR_ERRORS = str(DIR / 'errors')
+DIR_LOGS = str(DIR / 'logs')
 
 NEED_LOGS = True
 LOG_FORMAT = '[%(asctime)s] %(levelname)-8s %(message)s'
