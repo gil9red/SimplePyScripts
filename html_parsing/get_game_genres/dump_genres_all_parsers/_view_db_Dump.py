@@ -21,8 +21,7 @@ print(f'Sites ({len(sites)}): {sites}')
 
 print()
 
-sites = [x.site for x in Dump.select(Dump.site).distinct()]
-max_width = len(max(sites, key=len))
+max_width = max(len(x.site) for x in Dump.select(Dump.site).distinct())
 fmt_str = '    {:<%d} : {}' % max_width
 
 game_by_dump = defaultdict(list)
