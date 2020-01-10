@@ -21,6 +21,7 @@ items = json.load(
     open(FILE_NAME_EXPORT_JSON, encoding='utf-8')
 )
 print('items:', len(items))
+print('Dump count before import:', Dump.select().count())
 
 for x in items:
     try:
@@ -32,4 +33,4 @@ for x in items:
         # Ignore error "UNIQUE constraint failed: dump.id"
         pass
 
-print('Dump count:', Dump.select().count())
+print('Current dump count:', Dump.select().count())
