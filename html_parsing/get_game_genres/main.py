@@ -101,7 +101,7 @@ if __name__ == "__main__":
             log.info(f'Total games: {len(games)}')
 
             threads = []
-            for parser in parsers:
+            for parser in parsers[:1]:
                 threads.append(
                     Thread(target=run_parser, args=[parser, games])
                 )
@@ -110,11 +110,11 @@ if __name__ == "__main__":
 
             counter.value = 0
 
-            # for thread in threads:
-            #     thread.start()
-            #
-            # for thread in threads:
-            #     thread.join()
+            for thread in threads:
+                thread.start()
+
+            for thread in threads:
+                thread.join()
 
             log.info(f'Finished. Added games: {counter.value}. Total games: {Dump.select().count()}. '
                      f'Elapsed time: {seconds_to_str(default_timer() - t)}')
