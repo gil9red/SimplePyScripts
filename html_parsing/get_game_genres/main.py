@@ -7,6 +7,10 @@ __author__ = 'ipetrash'
 from timeit import default_timer
 from threading import Thread
 import time
+import sys
+
+sys.path.append('genre_translate_file')
+import create as create_genre_translate
 
 from db import db_create_backup, Dump, db
 from common_utils import get_parsers, get_games_list, wait, get_logger, AtomicCounter, seconds_to_str, print_parsers
@@ -106,14 +110,16 @@ if __name__ == "__main__":
 
             counter.value = 0
 
-            for thread in threads:
-                thread.start()
-
-            for thread in threads:
-                thread.join()
+            # for thread in threads:
+            #     thread.start()
+            #
+            # for thread in threads:
+            #     thread.join()
 
             log.info(f'Finished. Added games: {counter.value}. Total games: {Dump.select().count()}. '
                      f'Elapsed time: {seconds_to_str(default_timer() - t)}')
+
+            create_genre_translate.run()
 
             wait(days=1)
 
