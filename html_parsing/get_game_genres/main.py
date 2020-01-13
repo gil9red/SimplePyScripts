@@ -101,7 +101,7 @@ if __name__ == "__main__":
             log.info(f'Total games: {len(games)}')
 
             threads = []
-            for parser in parsers[:1]:
+            for parser in parsers:
                 threads.append(
                     Thread(target=run_parser, args=[parser, games])
                 )
