@@ -36,23 +36,25 @@ def run():
             number += 1
 
     if number:
-        log.info(f"Added {number} genre(s)")
+        text = f"Added {number} genre(s)"
+        log.info(text)
+
+        # Если это первый запуск, то смс не отправляем
+        if not is_first_run:
+            if NEED_SMS:
+                send_sms(text, log=log)
+
+        log.info('Save genres')
+
+        json.dump(
+            genre_translate,
+            open(FILE_NAME_GENRE_TRANSLATE, 'w', encoding='utf-8'),
+            ensure_ascii=False,
+            indent=4
+        )
+
     else:
         log.info('No new genres')
-
-    # Если это первый запуск, то смс не отправляем
-    if not is_first_run:
-        if NEED_SMS and number:
-            send_sms(f"Added {number} genre(s)", log=log)
-
-    log.info('Save genres')
-
-    json.dump(
-        genre_translate,
-        open(FILE_NAME_GENRE_TRANSLATE, 'w', encoding='utf-8'),
-        ensure_ascii=False,
-        indent=4
-    )
 
     log.info('Finish!')
 
