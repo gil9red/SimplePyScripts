@@ -61,6 +61,10 @@ def send_sms(api_id: str, to: str, text: str, log):
 
     log.info('Отправка sms: "%s"', text)
 
+    if len(text) > 70:
+        text = text[:70]
+        log.info('Текст sms будет сокращено, т.к. слишком длинное (больше 70 символов): "%s"', text)
+
     # Отправляю смс на номер
     url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
         api_id=api_id,

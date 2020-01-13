@@ -32,6 +32,6 @@ run_notification_job(
     format_current_items='Текущий список глав (%s): %s',
     format_get_items='Запрос списка глав',
     format_items='Список глав (%s): %s',
-    format_new_item='Появилась новая глава Легендарного лунного скульптора: "%s"',
+    format_new_item='Глава "лунного скульптора": "%s"',
     format_no_new_items='Новых глав нет',
 )
