@@ -15,7 +15,7 @@ from typing import Dict, Callable
 sys.path.append('parsers')
 
 
-DIR_LOGS = 'logs'
+from common import DIR_LOGS
 
 
 def module_from_file(file_path: str):
