@@ -1,0 +1,59 @@
+<html>
+<head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+    <title>Load</title>
+    <script type="text/javascript" src="static/js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="static/js/parser.js"></script>
+    <style>
+    body {
+        padding: 1rem;
+        font-size: 16px;
+    }
+    textarea {
+        overflow: scroll;
+        white-space: pre;
+        width: 100%;
+        min-height: 30rem;
+        font-family: "Lucida Console", Monaco, monospace;
+        font-size: 0.8rem;
+        line-height: 1.2;
+    }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td ><textarea readonly="readonly" id="result_raw" cols="100" rows="10"></textarea></td>
+            <td ><textarea readonly="readonly" id="result_json" cols="100" rows="10"></textarea></td>
+        </tr>
+    </table>
+
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "https://gist.githubusercontent.com/gil9red/2f80a34fb601cd685353/raw/50ced7a94f094049da800f5989781e14e7ec1e90/gistfile1.txt",
+
+                success: function(data) {
+                    console.log("success");
+                    // console.log(data);
+
+                    $('#result_raw').text(data);
+
+                    let platforms = parse_played_games(data);
+                    $('#result_json').text(
+                        stringifyMap(platforms)
+                    );
+                },
+
+                error: function(data) {
+                    console.log("error");
+                    console.log(data);
+
+                    $('#result_raw').text("<error>");
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
