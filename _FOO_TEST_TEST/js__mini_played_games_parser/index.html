@@ -22,6 +22,7 @@
 </head>
 <body>
     <table>
+        <tr><td><div id="url_file_gist"></div></td></tr>
         <tr>
             <td style="vertical-align: top;"><textarea readonly="readonly" id="result_raw" cols="100" rows="10"></textarea></td>
             <td style="vertical-align: top;"><textarea readonly="readonly" id="result_json" cols="100" rows="10"></textarea></td>
@@ -57,6 +58,7 @@
                 }
                 let url_file_gist = new URL(match[0], url_gist).href;
                 console.log(url_file_gist);
+                $('#url_file_gist').text(url_file_gist);
 
                 $.get(url_file_gist, function(response) {
                     console.log("success");
