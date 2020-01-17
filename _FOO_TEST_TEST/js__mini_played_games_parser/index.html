@@ -5,19 +5,19 @@
     <script type="text/javascript" src="static/js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="static/js/parser.js"></script>
     <style>
-    body {
-        padding: 1rem;
-        font-size: 16px;
-    }
-    textarea {
-        overflow: scroll;
-        white-space: pre;
-        width: 100%;
-        min-height: 30rem;
-        font-family: "Lucida Console", Monaco, monospace;
-        font-size: 0.8rem;
-        line-height: 1.2;
-    }
+        body {
+            padding: 1rem;
+            font-size: 16px;
+        }
+        textarea {
+            overflow: scroll;
+            white-space: pre;
+            width: 100%;
+            min-height: 30rem;
+            font-family: "Lucida Console", Monaco, monospace;
+            font-size: 0.8rem;
+            line-height: 1.2;
+        }
     </style>
 </head>
 <body>
@@ -29,29 +29,49 @@
     </table>
 
     <script>
+        function process_error(jqXHR, textStatus, errorThrown) {
+            console.log("error: " + jqXHR + ", " + textStatus + ", " + errorThrown);
+            $('#result_raw').text("<error>");
+            alert("error: " + jqXHR + ", " + textStatus + ", " + errorThrown);
+        }
+
+        // Для обхода: "Запрос из постороннего источника заблокирован: Политика одного источника запрещает чтение удаленного ресурса"
+        $.ajaxPrefilter( function (options) {
+            if (options.crossDomain && jQuery.support.cors) {
+                var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
+                options.url = http + '//cors-anywhere.herokuapp.com/' + options.url;
+                //options.url = "http://cors.corsproxy.io/url=" + options.url;
+            }
+        });
+
+        const url_gist = "https://gist.github.com/gil9red/2f80a34fb601cd685353";
+
         $(document).ready(function() {
-            $.ajax({
-                url: "https://gist.githubusercontent.com/gil9red/2f80a34fb601cd685353/raw/50ced7a94f094049da800f5989781e14e7ec1e90/gistfile1.txt",
+            $.get(url_gist, function(response) {
+                console.log("success");
 
-                success: function(data) {
+                let match = response.match(new RegExp("/gil9red/2f80a34fb601cd685353/raw/.+/gistfile1.txt"));
+                if (match == null) {
+                    alert("No match url_file_gist!");
+                    return;
+                }
+                let url_file_gist = new URL(match[0], url_gist).href;
+                console.log(url_file_gist);
+
+                $.get(url_file_gist, function(response) {
                     console.log("success");
-                    // console.log(data);
+                    // console.log(response);
 
-                    $('#result_raw').text(data);
+                    $('#result_raw').text(response);
 
-                    let platforms = parse_played_games(data);
+                    let platforms = parse_played_games(response);
                     $('#result_json').text(
                         stringifyMap(platforms)
                     );
-                },
 
-                error: function(data) {
-                    console.log("error");
-                    console.log(data);
+                }).fail(process_error);
 
-                    $('#result_raw').text("<error>");
-                }
-            });
+            }).fail(process_error);
         });
     </script>
 
