@@ -126,3 +126,6 @@ if __name__ == "__main__":
         except:
             log.exception('')
             wait(minutes=15)
+
+        finally:
+            log.info('')
