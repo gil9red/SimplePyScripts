@@ -15,16 +15,18 @@
     <style>
         body {
             padding: 1rem;
+            margin: 0;
             font-size: 16px;
         }
         textarea {
             overflow: scroll;
             white-space: pre;
-            width: 100%;
-            min-height: 30rem;
             font-family: "Lucida Console", Monaco, monospace;
             font-size: 0.8rem;
             line-height: 1.2;
+
+            width: 100%;
+            height: 85vh;
         }
     </style>
 </head>
@@ -61,7 +63,7 @@
         $(document).ready(function() {
             // SOURCE: https://stackoverflow.com/a/21494906/5909792
             // SOURCE: https://stackoverflow.com/a/50423867/5909792
-
+            //
             // Значение href вкладки в URI является приоритетным. Если оно не задано, то берем из localStorage
             if (location.hash) {
                 $("a[href='" + location.hash + "']").tab("show");
@@ -80,7 +82,12 @@
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 let tab_href = $(e.target).attr('href');
                 localStorage.setItem('activeTab', tab_href);
-                location.hash = tab_href;
+
+                if (history.pushState) {
+                    history.pushState(null, null, tab_href);
+                } else {
+                    location.hash = tab_href;
+                }
             });
         });
 
