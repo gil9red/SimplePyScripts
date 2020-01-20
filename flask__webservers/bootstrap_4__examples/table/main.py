@@ -10,7 +10,7 @@ __author__ = 'ipetrash'
 
 
 from flask import Flask, render_template
-app = Flask(__name__, static_folder='../static')
+app = Flask(__name__, static_folder='../_static')
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
