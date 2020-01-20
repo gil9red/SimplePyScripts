@@ -2,8 +2,12 @@
 <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
     <title>js__mini_played_games_parser</title>
+
     <script type="text/javascript" src="static/js/jquery-3.1.1.min.js"></script>
+    <script src="static/bootstrap-4.3.1/bootstrap.min.js"></script>
     <script type="text/javascript" src="static/js/parser.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="static/bootstrap-4.3.1/bootstrap.min.css">
     <style>
         body {
             padding: 1rem;
@@ -21,15 +25,57 @@
     </style>
 </head>
 <body>
-    <table>
-        <tr><td><div id="url_file_gist"></div></td></tr>
-        <tr>
-            <td style="vertical-align: top;"><textarea readonly="readonly" id="result_raw" cols="100" rows="10"></textarea></td>
-            <td style="vertical-align: top;"><textarea readonly="readonly" id="result_json" cols="100" rows="10"></textarea></td>
-        </tr>
-    </table>
+    <div class="container-fluid">
+        <div id="url_file_gist"></div>
+        <br>
+
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-raw_text-tab" data-toggle="tab" href="#nav-raw_text" role="tab" aria-controls="nav-raw_text" aria-selected="true">Raw text</a>
+                <a class="nav-item nav-link" id="nav-as_json-tab" data-toggle="tab" href="#nav-as_json" role="tab" aria-controls="nav-as_json" aria-selected="false">Parsed as JSON</a>
+                <a class="nav-item nav-link" id="nav-as_tree-tab" data-toggle="tab" href="#nav-as_tree" role="tab" aria-controls="nav-as_tree" aria-selected="false">Parser as Tree</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-raw_text" role="tabpanel" aria-labelledby="nav-raw_text-tab">
+                <textarea readonly="readonly" id="result_raw" cols="100" rows="10"></textarea>
+            </div>
+            <div class="tab-pane fade" id="nav-as_json" role="tabpanel" aria-labelledby="nav-as_json-tab">
+                <textarea readonly="readonly" id="result_json" cols="100" rows="10"></textarea>
+            </div>
+            <div class="tab-pane fade" id="nav-as_tree" role="tabpanel" aria-labelledby="nav-as_tree-tab">
+                <p style="font-size: 200px">Parser as Tree</p>
+            </div>
+        </div>
+    </div>
 
     <script>
+        $(document).ready(function() {
+            // SOURCE: https://stackoverflow.com/a/21494906/5909792
+            // SOURCE: https://stackoverflow.com/a/50423867/5909792
+
+            // Значение href вкладки в URI является приоритетным. Если оно не задано, то берем из localStorage
+            if (location.hash) {
+                $("a[href='" + location.hash + "']").tab("show");
+            } else {
+                var activeTab = localStorage.getItem('activeTab');
+                if (activeTab){
+                    $('.nav-tabs a[href="' + activeTab + '"]').tab('show');
+                }
+            }
+
+            $(window).on("popstate", function() {
+                var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
+                $("a[href='" + anchor + "']").tab("show");
+            });
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                let tab_href = $(e.target).attr('href');
+                localStorage.setItem('activeTab', tab_href);
+                location.hash = tab_href;
+            });
+        });
+
         function process_error(jqXHR, textStatus, errorThrown) {
             console.log("error: " + jqXHR + ", " + textStatus + ", " + errorThrown);
             $('#result_raw').text("<error>");
