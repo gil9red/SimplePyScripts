@@ -3,11 +3,15 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
     <title>js__mini_played_games_parser</title>
 
+    <link rel="stylesheet" type="text/css" href="static/bootstrap-4.3.1/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="static/bootstrap-treeview-1.2.0/bootstrap-treeview.min.css">
+    <link rel="stylesheet" type="text/css" href="static/glyphicon/glyphicon.css">
+
     <script type="text/javascript" src="static/js/jquery-3.1.1.min.js"></script>
-    <script src="static/bootstrap-4.3.1/bootstrap.min.js"></script>
+    <script type="text/javascript" src="static/bootstrap-4.3.1/bootstrap.min.js"></script>
+    <script type="text/javascript" src="static/bootstrap-treeview-1.2.0/bootstrap-treeview.min.js"></script>
     <script type="text/javascript" src="static/js/parser.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="static/bootstrap-4.3.1/bootstrap.min.css">
     <style>
         body {
             padding: 1rem;
@@ -31,9 +35,10 @@
 
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" id="nav-raw_text-tab" data-toggle="tab" href="#nav-raw_text" role="tab" aria-controls="nav-raw_text" aria-selected="true">Raw text</a>
+                <a class="nav-item nav-link active" id="nav-raw_text-tab" data-toggle="tab" href="#nav-raw_text" role="tab" aria-controls="nav-raw_text" aria-selected="true">RAW text</a>
                 <a class="nav-item nav-link" id="nav-as_json-tab" data-toggle="tab" href="#nav-as_json" role="tab" aria-controls="nav-as_json" aria-selected="false">Parsed as JSON</a>
                 <a class="nav-item nav-link" id="nav-as_tree-tab" data-toggle="tab" href="#nav-as_tree" role="tab" aria-controls="nav-as_tree" aria-selected="false">Parser as Tree</a>
+                <a class="nav-item nav-link" id="nav-as_tree_raw-tab" data-toggle="tab" href="#nav-as_tree_raw" role="tab" aria-controls="nav-as_tree_raw" aria-selected="false">Parser as Tree (RAW)</a>
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
@@ -44,7 +49,10 @@
                 <textarea readonly="readonly" id="result_json" cols="100" rows="10"></textarea>
             </div>
             <div class="tab-pane fade" id="nav-as_tree" role="tabpanel" aria-labelledby="nav-as_tree-tab">
-                <p style="font-size: 200px">Parser as Tree</p>
+                <div id="tree"></div>
+            </div>
+            <div class="tab-pane fade" id="nav-as_tree_raw" role="tabpanel" aria-labelledby="nav-as_tree_raw-tab">
+                <textarea readonly="readonly" id="tree_raw" cols="100" rows="10"></textarea>
             </div>
         </div>
     </div>
@@ -116,6 +124,19 @@
                     $('#result_json').text(
                         stringifyMap(platforms)
                     );
+
+                    let tree_data = getJsonForTreeView(platforms);
+                    $('#tree_raw').text(
+                        JSON.stringify(tree_data, null, 4)
+                    );
+
+                    $('#tree').treeview({
+                        data: tree_data,
+                        expandIcon: 'glyphicon glyphicon-chevron-right',
+                        collapseIcon: 'glyphicon glyphicon-chevron-down',
+                        showTags: true,
+                        levels: 3,
+                    });
 
                 }).fail(process_error);
 

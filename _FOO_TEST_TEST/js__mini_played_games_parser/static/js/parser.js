@@ -138,12 +138,11 @@ function parse_played_games(text) {
         }
     }
 
-    return (platforms);
+    return platforms;
 }
 
 
-// SOURCE: https://stackoverflow.com/a/56646928/5909792
-function stringifyMap(myMap) {
+function getJsonObject(myMap) {
     function selfIterator(map) {
         return Array.from(map).reduce((acc, [key, value]) => {
             if (value instanceof Map) {
@@ -156,9 +155,44 @@ function stringifyMap(myMap) {
         }, {})
     }
 
-    const res = selfIterator(myMap)
-    return JSON.stringify(res, null, 4);
+    return selfIterator(myMap);
 }
+
+
+// SOURCE: https://stackoverflow.com/a/56646928/5909792
+function stringifyMap(myMap) {
+    return JSON.stringify(getJsonObject(myMap), null, 4);
+}
+
+
+function getJsonForTreeView(platforms) {
+    let data = [];
+
+    for (let [platform_name, categories] of platforms) {
+        platform = {
+            text: platform_name,
+            nodes: [],
+        };
+
+        for (let [category_name, games] of categories) {
+            category = {
+                text: category_name,
+                nodes: [],
+            };
+            platform.nodes.push(category);
+
+            for (let game_name of games) {
+                category.nodes.push({
+                    text: game_name,
+                });
+            }
+        }
+
+        data.push(platform);
+    }
+    return data;
+}
+
 
 //var fs = require('fs'),
 //    path = require('path'),
