@@ -172,12 +172,19 @@ function getJsonForTreeView(platforms) {
         platform = {
             text: platform_name,
             nodes: [],
+            tags: [],
         };
 
+        let total_games = 0;
+
         for (let [category_name, games] of categories) {
+            let total = games.length;
+            total_games += total;
+
             category = {
                 text: category_name,
                 nodes: [],
+                tags: [`(${total})`],
             };
             platform.nodes.push(category);
 
@@ -187,6 +194,8 @@ function getJsonForTreeView(platforms) {
                 });
             }
         }
+
+        platform.tags.push(`(${total_games})`);
 
         data.push(platform);
     }
