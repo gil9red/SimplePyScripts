@@ -4,12 +4,12 @@
     <title>js__mini_played_games_parser</title>
 
     <link rel="stylesheet" type="text/css" href="static/bootstrap-4.3.1/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="static/bootstrap-treeview-1.2.0/bootstrap-treeview.min.css">
+    <link rel="stylesheet" type="text/css" href="static/bootstrap-treeview-1.2.0/bootstrap-treeview.css">
     <link rel="stylesheet" type="text/css" href="static/glyphicon/glyphicon.css">
 
     <script type="text/javascript" src="static/js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="static/bootstrap-4.3.1/bootstrap.min.js"></script>
-    <script type="text/javascript" src="static/bootstrap-treeview-1.2.0/bootstrap-treeview.min.js"></script>
+    <script type="text/javascript" src="static/bootstrap-treeview-1.2.0/bootstrap-treeview.js"></script>
     <script type="text/javascript" src="static/js/parser.js"></script>
 
     <style>
@@ -51,6 +51,13 @@
                 <textarea readonly="readonly" id="result_json" cols="100" rows="10"></textarea>
             </div>
             <div class="tab-pane fade" id="nav-as_tree" role="tabpanel" aria-labelledby="nav-as_tree-tab">
+                <br/>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="tree-search" placeholder="Type to search..." aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" onclick="$('#tree-search').val(''); search();">Clear</button>
+                    </div>
+                </div>
                 <div id="tree"></div>
             </div>
             <div class="tab-pane fade" id="nav-as_tree_raw" role="tabpanel" aria-labelledby="nav-as_tree_raw-tab">
@@ -60,7 +67,19 @@
     </div>
 
     <script>
+        function search(e) {
+            var pattern = $('#tree-search').val().toLowerCase();
+            $("#tree .node-tree.game").each(function(index) {
+                let node = $(this);
+                node.toggle(
+                    node.text().toLowerCase().includes(pattern)
+                );
+            });
+        }
+
         $(document).ready(function() {
+            $('#tree-search').on('input', search);
+
             // SOURCE: https://stackoverflow.com/a/21494906/5909792
             // SOURCE: https://stackoverflow.com/a/50423867/5909792
             //
@@ -143,18 +162,9 @@
                         collapseIcon: 'glyphicon glyphicon-chevron-down',
                         showTags: true,
                         levels: 3,
-                        highlightSelected: false,
-/*
-                        allowReselect: false,
-                        onNodeSelected: function(event, node) {
-                            if (node.state.expanded) {
-                                $('#tree').treeview('collapseNode', [node]);
-                            } else {
-                                $('#tree').treeview('expandNode', [node]);
-                            }
-                        },
-*/
                     });
+
+                    search();
 
                 }).fail(process_error);
 
