@@ -143,6 +143,17 @@
                         collapseIcon: 'glyphicon glyphicon-chevron-down',
                         showTags: true,
                         levels: 3,
+                        highlightSelected: false,
+/*
+                        allowReselect: false,
+                        onNodeSelected: function(event, node) {
+                            if (node.state.expanded) {
+                                $('#tree').treeview('collapseNode', [node]);
+                            } else {
+                                $('#tree').treeview('expandNode', [node]);
+                            }
+                        },
+*/
                     });
 
                 }).fail(process_error);
