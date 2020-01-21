@@ -37,7 +37,11 @@
                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 75%;"></div>
         </div>
 
-        <div id="url_file_gist"></div>
+        <div>
+            <a target="_blank" id="url_gist"></a>
+            <br>
+            <a target="_blank" id="url_file_gist"></a>
+        </div>
         <br>
 
         <nav>
@@ -150,6 +154,7 @@
         });
 
         const url_gist = "https://gist.github.com/gil9red/2f80a34fb601cd685353";
+        $('#url_gist').attr('href', url_gist).text(url_gist);
 
         $(document).ready(function() {
             setProgress(1);
@@ -164,7 +169,7 @@
                 }
                 let url_file_gist = new URL(match[0], url_gist).href;
                 console.log(url_file_gist);
-                $('#url_file_gist').text(url_file_gist);
+                $('#url_file_gist').attr('href', url_file_gist).text(url_file_gist);
 
                 $.get(url_file_gist, function(response) {
                     setProgress(75);
