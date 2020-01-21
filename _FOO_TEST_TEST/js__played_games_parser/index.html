@@ -32,6 +32,11 @@
 </head>
 <body>
     <div class="container-fluid">
+        <div class="progress" style="display: none">
+          <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+               aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 75%;"></div>
+        </div>
+
         <div id="url_file_gist"></div>
         <br>
 
@@ -67,6 +72,25 @@
     </div>
 
     <script>
+        function setProgress(value) {
+            let progressBar = $("#progressBar");
+
+            if (value > 100) {
+                value = 100;
+            }
+            if (value < 0) {
+                value = 0;
+            }
+
+            progressBar
+                .css({"width": value + "%"})
+                .attr("aria-valuenow", value);
+
+            progressBar.parent().toggle(
+                !(value == 100 || value == 0)
+            );
+        }
+
         function search(e) {
             var pattern = $('#tree-search').val().toLowerCase();
             $("#tree .node-tree.game").each(function(index) {
@@ -128,8 +152,10 @@
         const url_gist = "https://gist.github.com/gil9red/2f80a34fb601cd685353";
 
         $(document).ready(function() {
+            setProgress(1);
+
             $.get(url_gist, function(response) {
-                console.log("success");
+                setProgress(50);
 
                 let match = response.match(new RegExp("/gil9red/2f80a34fb601cd685353/raw/.+/gistfile1.txt"));
                 if (match == null) {
@@ -141,6 +167,8 @@
                 $('#url_file_gist').text(url_file_gist);
 
                 $.get(url_file_gist, function(response) {
+                    setProgress(75);
+
                     console.log("success");
                     // console.log(response);
 
@@ -156,6 +184,8 @@
                         JSON.stringify(tree_data, null, 4)
                     );
 
+                    setProgress(90);
+
                     $('#tree').treeview({
                         data: tree_data,
                         expandIcon: 'glyphicon glyphicon-chevron-right',
@@ -165,6 +195,8 @@
                     });
 
                     search();
+
+                    setProgress(100);
 
                 }).fail(process_error);
 
