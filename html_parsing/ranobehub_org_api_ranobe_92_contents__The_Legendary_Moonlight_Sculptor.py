@@ -15,7 +15,7 @@ def get_chapters() -> List[str]:
 
     items = []
 
-    for volume in rs.json()['data']:
+    for volume in rs.json()['volumes']:
         for chapter in volume['chapters']:
             items.append(f'{volume["name"]} - {chapter["name"]}')
 
