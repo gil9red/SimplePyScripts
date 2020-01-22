@@ -183,7 +183,7 @@ function getJsonForTreeView(platforms) {
             total_games += total;
 
             category = {
-                class: 'category',
+                class: 'category ' + category_name,
                 text: category_name,
                 nodes: [],
                 tags: [`(${total})`],
@@ -192,7 +192,7 @@ function getJsonForTreeView(platforms) {
 
             for (let game_name of games) {
                 category.nodes.push({
-                    class: 'game',
+                    class: 'game ' + category_name,
                     text: game_name,
                 });
             }
