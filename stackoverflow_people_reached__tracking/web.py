@@ -15,7 +15,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/")
 def index():
-    return render_template('index.html', people_reacheds=PeopleReached.select())
+    items = PeopleReached.select().order_by(PeopleReached.id.desc())
+    return render_template('index.html', people_reacheds=items)
 
 
 if __name__ == '__main__':
