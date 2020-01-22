@@ -112,6 +112,18 @@
             });
         }
 
+        function processClickNode(event, node) {
+            if (node.nodes == undefined) {
+                // ignore
+                return;
+            }
+            if (node.state.expanded) {
+                $('#tree').treeview('collapseNode', [node.nodeId]);
+            } else {
+                $('#tree').treeview('expandNode', [node.nodeId]);
+            }
+        }
+
         $(document).ready(function() {
             $('#tree-search').on('input', search);
 
@@ -204,6 +216,10 @@
                         collapseIcon: 'glyphicon glyphicon-chevron-down',
                         showTags: true,
                         levels: 3,
+                        multiSelect: true,
+                        highlightSelected: false,
+                        onNodeSelected: processClickNode,
+                        onNodeUnselected: processClickNode,
                     });
 
                     search();
