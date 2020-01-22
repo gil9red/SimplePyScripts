@@ -31,6 +31,13 @@ const FLAG_BY_CATEGORY = new Map([
     ['@-', NOT_FINISHED_WATCHED],
 ]);
 
+const CATEGORY_BY_TITLE = new Map([
+    [FINISHED_GAME,        "Пройденные"],
+    [NOT_FINISHED_GAME,    "Не закончено прохождение"],
+    [FINISHED_WATCHED,     "Просмотренные"],
+    [NOT_FINISHED_WATCHED, "Не закончен просмотр"],
+]);
+
 
 // Регулярка вытаскивает выражения вида: 1, 2, 3 или 1-3, или римские цифры: III, IV
 const PARSE_GAME_NAME_PATTERN = new RegExp(
@@ -184,7 +191,7 @@ function getJsonForTreeView(platforms) {
 
             category = {
                 class: 'category ' + category_name,
-                text: category_name,
+                text: CATEGORY_BY_TITLE.get(category_name),
                 nodes: [],
                 tags: [`(${total})`],
             };
