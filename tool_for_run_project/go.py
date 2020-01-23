@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 import os
 import sys
 import re
-import pathlib
+from pathlib import Path
 from typing import Optional, List
 
 
@@ -120,7 +120,7 @@ def get_versions(alias: str) -> List[str]:
 
     dirs = []
 
-    for path in pathlib.Path(name).iterdir():
+    for path in Path(name).iterdir():
         if not path.is_dir():
             continue
 
