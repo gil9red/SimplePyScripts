@@ -19,40 +19,17 @@ def index():
     rows = get_crash_statistics_list_db()
     rows.reverse()
 
-    data_labels = []
-    data_dtp = []
-    data_died = []
-    data_children_died = []
-    data_wounded = []
-    data_wounded_children = []
+    data = []
 
     for date, dtp, died, children_died, wounded, wounded_children in rows:
-        x = DT.datetime.strptime(date, '%d.%m.%Y').date().isoformat()
-        data_labels.append(x)
-
-        data_dtp.append({
-            "x": x,
-            "y": int(dtp)
-        })
-
-        data_died.append({
-            "x": x,
-            "y": int(died)
-        })
-
-        data_children_died.append({
-            "x": x,
-            "y": int(children_died)
-        })
-
-        data_wounded.append({
-            "x": x,
-            "y": int(wounded)
-        })
-
-        data_wounded_children.append({
-            "x": x,
-            "y": int(wounded_children)
+        data.append({
+            'date': date,
+            'date_iso': DT.datetime.strptime(date, '%d.%m.%Y').date().isoformat(),
+            'dtp': int(dtp),
+            'died': int(died),
+            'children_died': int(children_died),
+            'wounded': int(wounded),
+            'wounded_children': int(wounded_children),
         })
 
     return render_template_string("""
@@ -82,15 +59,7 @@ def index():
                     {% endfor %}
                     </tr>
                 </thead>
-                <tbody>
-                {% for row in rows %}
-                    <tr>
-                        {% for value in row %}
-                        <td>{{ value }}</td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
         <div class="col">
@@ -99,18 +68,57 @@ def index():
     </div>
 </div>
 <script>
+    let data = {{ data | safe }};
+
     $(document).ready(function() {
-        let data_dtp = {{ data_dtp | safe }}
-        let data_died = {{ data_died | safe }};
-        let data_children_died = {{ data_children_died | safe }};
-        let data_wounded = {{ data_wounded | safe }};
-        let data_wounded_children = {{ data_wounded_children | safe }};
+        let labels = [];
+        let data_dtp = [];
+        let data_died = [];
+        let data_children_died = [];
+        let data_wounded = [];
+        let data_wounded_children = [];
+    
+        let table = $('table > tbody');
         
+        for (let x of data) {
+            let tr = $('<tr>')
+                .append($(`<td>${x.date}</td>`))
+                .append($(`<td>${x.dtp}</td>`))
+                .append($(`<td>${x.died}</td>`))
+                .append($(`<td>${x.children_died}</td>`))
+                .append($(`<td>${x.wounded}</td>`))
+                .append($(`<td>${x.wounded_children}</td>`))
+            ;
+            table.append(tr);
+            
+            labels.push(x.date_iso);
+            data_dtp.push({
+                x: x.date_iso,
+                y: x.dtp,
+            });
+            data_died.push({
+                x: x.date_iso,
+                y: x.died,
+            });
+            data_children_died.push({
+                x: x.date_iso,
+                y: x.children_died,
+            });
+            data_wounded.push({
+                x: x.date_iso,
+                y: x.wounded,
+            });
+            data_wounded_children.push({
+                x: x.date_iso,
+                y: x.wounded_children,
+            });
+        }
+    
         var ctx = document.getElementById("lineChart").getContext("2d");
         var lineChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: {{ data_labels | safe }},
+                labels: labels,
                 datasets: [
                     {
                         label: 'ДТП',
@@ -164,13 +172,7 @@ def index():
 </script>
 </body>
 </html>
-    """, title="АВАРИЙНОСТЬ НА ДОРОГАХ РОССИИ", headers=headers, rows=rows,
-    data_labels=data_labels,
-    data_dtp=data_dtp,
-    data_died=data_died,
-    data_children_died=data_children_died,
-    data_wounded=data_wounded,
-    data_wounded_children=data_wounded_children
+    """, title="АВАРИЙНОСТЬ НА ДОРОГАХ РОССИИ", headers=headers, data=data
 )
 
 
