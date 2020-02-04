@@ -77,7 +77,7 @@ while True:
 
     # Отмена атаки, кнопка L
     # https://gist.github.com/tracend/912308#file-gistfile1-cpp-L42
-    for _ in range(6):
+    for _ in range(4):
         write_key(DIK_L, pause=0.3)
 
     # 100 итераций должно хватить, чтобы докачать до 100% уровень оружия
