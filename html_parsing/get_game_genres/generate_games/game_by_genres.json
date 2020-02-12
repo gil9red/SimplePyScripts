@@ -4232,5 +4232,122 @@
     "ШХД: ЗИМА / IT'S WINTER": [
         "Casual",
         "Simulation"
+    ],
+    "Control": [
+        "Action-adventure",
+        "Shooter",
+        "Third-person"
+    ],
+    "Crysis 3": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "MMOFPS",
+        "Open-World",
+        "Sci-fi",
+        "Shoot 'em up"
+    ],
+    "007: Quantum of Solace": [
+        "Action",
+        "Arcade",
+        "FPS"
+    ],
+    "Borderlands 2: Tiny Tina's Assault on Dragon Keep (DLC)": [
+        "Action/RPG",
+        "DLC",
+        "Shooter"
+    ],
+    "Constantine": [
+        "Action-adventure",
+        "Horror",
+        "Sci-fi",
+        "Shooter",
+        "Third-person"
+    ],
+    "Devil May Cry": [
+        "Action-adventure",
+        "Fantasy",
+        "Shooter",
+        "Slasher",
+        "Third-person"
+    ],
+    "Devil May Cry 2": [
+        "Action-adventure",
+        "Fantasy",
+        "Shooter",
+        "Slasher",
+        "Third-person"
+    ],
+    "Devil May Cry HD Collection": [
+        "Action-adventure",
+        "Arcade",
+        "Horror",
+        "Slasher",
+        "Third-person"
+    ],
+    "Kholat": [
+        "Action-adventure",
+        "First-person",
+        "Horror",
+        "Quest",
+        "Survival horror"
+    ],
+    "Nihilumbra": [
+        "2D",
+        "Action-adventure",
+        "Arcade",
+        "Casual",
+        "Logic",
+        "Platformer",
+        "Puzzle"
+    ],
+    "Prey": [
+        "Action",
+        "Arcade",
+        "FPS"
+    ],
+    "Samorost 3": [
+        "Adventure",
+        "Casual",
+        "Logic",
+        "Point-and-click",
+        "Puzzle",
+        "Quest"
+    ],
+    "Terminator: Resistance": [
+        "Action-adventure",
+        "Action/RPG",
+        "Arcade",
+        "FPS",
+        "Sci-fi"
+    ],
+    "The Old City: Leviathan": [
+        "Adventure",
+        "Fantasy",
+        "First-person",
+        "Quest"
+    ],
+    "Unreal Tournament": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "Sci-fi",
+        "Shoot 'em up",
+        "Space"
+    ],
+    "You Are Empty": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "Post apocalypse",
+        "Shoot 'em up"
+    ],
+    "Rogue Warrior": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "Shoot 'em up",
+        "Stealth",
+        "Tactic"
     ]
 }
