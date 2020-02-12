@@ -278,10 +278,7 @@
     "инди": "",
     "карточные": "Cardgame",
     "квесты": "Quest",
-    "командные шутеры": [
-        "Tactical",
-        "Shooter"
-    ],
+    "командные шутеры": "Tactical Shooter",
     "логические": "Logic",
     "платформеры": "Platformer",
     "приключения": "Adventure",
@@ -291,5 +288,21 @@
     "тактика": "Tactic",
     "ужасы": "Horror",
     "файтинги": "Fighting",
-    "шутеры от 3-го лица": "TPS"
+    "шутеры от 3-го лица": "TPS",
+    "Beat 'em up": "Beat 'em up",
+    "Interactive Movie": "Interactive Movie",
+    "Platform Game": "Platform",
+    "Slasher": "Slasher",
+    "Survival Horror": "Survival horror",
+    "TPS": "TPS",
+    "Tactical FPS": "Tactical FPS",
+    "City Building": "City Building",
+    "JRPG": "JRPG",
+    "Management": "Time management",
+    "Point&Click": "Point-and-click",
+    "Scrolling Shooter": "Scrolling Shooter",
+    "Stealth": "Stealth",
+    "Tactical RPG": "TRPG",
+    "Text Game": "Text Game",
+    "Tower Defense": "Tower Defense"
 }
