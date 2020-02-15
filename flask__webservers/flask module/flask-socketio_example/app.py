@@ -4,6 +4,8 @@
 __author__ = 'ipetrash'
 
 
+# pip install flask
+# pip install flask-socketio
 from flask import Flask, render_template
 from flask.ext.socketio import SocketIO, emit
 
