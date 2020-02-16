@@ -34,7 +34,7 @@
     "Casual": "Casual",
     "Combat": "Wargame",
     "Combat Game": "Wargame",
-    "Combat Game: Infantry": "",
+    "Combat Game: Infantry": "Wargame",
     "Compilation": "",
     "Console-style RPG": "RPG",
     "DLC / add-on": "DLC",
@@ -304,5 +304,9 @@
     "Stealth": "Stealth",
     "Tactical RPG": "TRPG",
     "Text Game": "Text Game",
-    "Tower Defense": "Tower Defense"
+    "Tower Defense": "Tower Defense",
+    "Combat Game: Flying": [
+        "Wargame",
+        "Flying"
+    ]
 }

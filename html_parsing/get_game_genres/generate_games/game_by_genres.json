@@ -4349,5 +4349,22 @@
         "Shoot 'em up",
         "Stealth",
         "Tactic"
+    ],
+    "Counter-Strike": [
+        "Action",
+        "FPS",
+        "Shoot 'em up",
+        "Tactic",
+        "Tactical FPS",
+        "Wargame"
+    ],
+    "Dark Void": [
+        "Action-adventure",
+        "Flying",
+        "Shoot 'em up",
+        "Shooter",
+        "TPS",
+        "Third-person",
+        "Wargame"
     ]
 }
