@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Ajax vs Websocket. Test ajax</title>
+    <script type="text/javascript" src="{{url_for('static', filename='jquery.js') }}"></script>
+</head>
+<body>
+    <h1>Ajax vs Websocket. Test ajax</h1>
+    <div id="log"></div>
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            var MAX_NUMBER = 1000;
+
+            for (let i = 1; i <= MAX_NUMBER; i++) {
+                $.ajax({
+                    url: "/post_method",
+                    method: "POST",  // HTTP метод, по умолчанию GET
+                    data: JSON.stringify({number: i, max_number: MAX_NUMBER}),
+
+                    contentType: "application/json",
+                    dataType: "json",  // тип данных загружаемых с сервера
+
+                    success: function(data) {
+                        console.log("success");
+                        console.log(data);
+
+                        $('#log').prepend(
+                            '<br>' + $('<div/>').text(
+                                `Received #${data.number}, counter: ${data.count}, elapsed: ${data.elapsed} secs`
+                            ).html()
+                        );
+                    },
+                    error: function(data) {
+                        console.log("error");
+                        console.log(data);
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
