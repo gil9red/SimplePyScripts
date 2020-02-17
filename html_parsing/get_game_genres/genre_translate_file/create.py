@@ -24,7 +24,7 @@ def run():
     genre_translate = load()
 
     NEED_SMS = True
-    number = 0
+    new_genres = []
     is_first_run = not genre_translate
 
     log.info(f'Current genres: {len(genre_translate)}')
@@ -33,10 +33,10 @@ def run():
         if genre not in genre_translate:
             log.info(f'Added new genre: {genre!r}')
             genre_translate[genre] = None
-            number += 1
+            new_genres.append(genre)
 
-    if number:
-        text = f"Added {number} genre(s)"
+    if new_genres:
+        text = f"Added genres ({len(new_genres)}): {', '.join(new_genres)}"
         log.info(text)
 
         # Если это первый запуск, то смс не отправляем

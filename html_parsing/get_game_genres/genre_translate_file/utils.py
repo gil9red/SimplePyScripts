@@ -17,7 +17,11 @@ def send_sms(text: str, log):
         log.warning('Переменные окружения SMS_API_ID или SMS_SEND_TO не указаны, отправка СМС невозможна!')
         return
 
-    log.info('Отправка sms: "%s"', text)
+    log.info(f'Отправка sms: {text!r}')
+
+    if len(text) > 70:
+        text = text[:70-3] + '...'
+        log.info(f'Текст sms будет сокращено, т.к. слишком длинное (больше 70 символов): {text!r}')
 
     # Отправляю смс на номер
     url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
