@@ -1,277 +1,370 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+<head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!--
-        SOURCE: ttps://habr.com/company/google/blog/173861/
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-4.4.1/bootstrap.css') }}">
 
-        Чтобы переключить браузер в более удобный для чтения режим, необходимо использовать метаэлемент viewport:
-        -->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='bootstrap-4.4.1/bootstrap.bundle.js') }}"></script>
 
-        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+        .key_control_container {
+            height: 50%;
+        }
+        .cell {
+            width: 33%;
+        }
+        .key_control_container > .flex-row {
+            height: 33%;
+        }
+        .key_control {
+            width: 100%;
+            height: 100%;
+        }
+        .mouse_control_container {
+            height: 50%;
+        }
+        #mouse_area {
+            background: lightgray;
+        }
 
-        <style>
-            table {
-                width: 100%;
-                height: 100%;
-                table-layout: fixed; /* Фиксированная ширина ячеек */
-            }
+        #mouse_wheel > button {
+            font-family: "Arial";
+            font-size: 3em
+        }
 
-            .key_control {
-                width: 100%;
-                height: 100%;
+        #button_timer {
+            width: 10vw;
+            height: 10vw;
+        }
 
-                font-size: 1em;
-            }
-            .mouse_control {
-                width: 100%;
-                height: 100%;
+        body {
+          -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Safari */
+             -khtml-user-select: none; /* Konqueror HTML */
+               -moz-user-select: none; /* Old versions of Firefox */
+                -ms-user-select: none; /* Internet Explorer/Edge */
+                    user-select: none; /* Non-prefixed version, currently
+                                          supported by Chrome, Opera and Firefox */
+        }
+    </style>
+</head>
 
-                font-size: 1em;
-            }
-
-            .child {
-                float: left;
-            }
-
-
-            .mouse_area_container {
-                height: 40%;
-            }
-
-            .mouse_control_container {
-                height: 7%;
-            }
-
-            .mouse_control_container > button {
-                width: 50%;
-                height: 100%;
-            }
-
-            #mouse_area {
-                width: 80%;
-                height: 100%;
-                background: lightgray; /* Цвет фона */
-                border: 1px solid black; /* Рамка */
-
-                float: left;
-            }
-
-            #mouse_wheel {
-                width: 17%;
-                height: 100%;
-                border: 1px solid black; /* Рамка */
-
-                float: right;
-            }
-
-            #mouse_wheel > button {
-                width: 100%;
-                height: 50%;
-
-                font-size: 3em;
-            }
-
-            .noselect {
-              -webkit-touch-callout: none; /* iOS Safari */
-                -webkit-user-select: none; /* Safari */
-                 -khtml-user-select: none; /* Konqueror HTML */
-                   -moz-user-select: none; /* Old versions of Firefox */
-                    -ms-user-select: none; /* Internet Explorer/Edge */
-                        user-select: none; /* Non-prefixed version, currently
-                                              supported by Chrome, Opera and Firefox */
-
-            {#
-            /* Добавление сетки таблицы */
-            table {
-                border-collapse: collapse; /* Убираем двойные линии между ячейками */
-            }
-            td, th {
-                padding: 3px; /* Поля вокруг содержимого таблицы */
-                border: 1px solid black; /* Параметры рамки */
-            }
-            #}
-        </style>
-    </head>
-
-    <body>
-        <table>
-            <colgroup></colgroup>
-
-            <tr>
-                <td></td>
-                <td><button class="key_control noselect" value="up">UP</button></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><button class="key_control noselect" value="left">LEFT</button></td>
-                <td><button class="key_control noselect" value="space">SPACE</button></td>
-                <td><button class="key_control noselect" value="right">RIGHT</button></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><button class="key_control noselect" value="down">DOWN</button></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="mouse_area_container" colspan="3">
-                    <div id="mouse_area"></div>
-                    <div id="mouse_wheel">
-                        <button id="mouse_wheel_up" class="noselect">⬆</button>
-                        <button id="mouse_wheel_down" class="noselect">⬇</button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="mouse_control_container" colspan="3">
-                    <button id="mouse_left" class="noselect child">LEFT</button>
-                    <button id="mouse_right" class="noselect child">RIGHT</button>
-                </td>
-            </tr>
-        </table>
-
+<body>
+    <div id="modalTimer" class="modal" tabindex="-1" role="dialog">
         <script>
-            function send_ajax(method, data) {
-                console.log(data);
-                console.log(JSON.stringify(data));
+            function startTimerModel(duration) {
+                send_ajax("/set_timer", {value: duration});
 
-                $.ajax({
-                    url: method,
-                    method: "POST",
-                    data: JSON.stringify(data),
+                let timeoutFunc = function() {
+                    send_ajax("/get_timer", null, function (url, data, response) {
+                        let timer = response.value;
 
-                    contentType: "application/json",
-                    dataType: "json",  // тип данных загружаемых с сервера
+                        let minutes = parseInt(timer / 60);
+                        minutes = minutes < 10 ? "0" + minutes : minutes;
 
-                    success: function(data) {
-                        console.log(data);
-                        console.log(JSON.stringify(data));
-                    },
-                });
-            }
+                        let seconds = parseInt(timer % 60);
+                        seconds = seconds < 10 ? "0" + seconds : seconds;
 
-            function pointerEventToXY(e) {
-                var out = {
-                    x : 0,
-                    y : 0
+                        setProgressModel(Math.round(timer / duration * 100), minutes + ":" + seconds);
+
+                        if (timer <= 0) {
+                            setActiveTimerStates(false);
+                        }
+                    });
                 };
 
-                if (e.type.startsWith("touch")) {
-                    var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-                    out.x = touch.pageX;
-                    out.y = touch.pageY;
+                timeoutFunc();
+                window.timerId = setInterval(timeoutFunc, 1000);
+            }
+
+            function setActiveTimerStates(active) {
+                active = active == null ? true : active;
+
+                $('#modalTimer #start_timer').prop('disabled', active);
+                $('#modalTimer #stop_timer').prop('disabled', !active);
+
+                $('#button_timer > .spinner-border').toggle(active);
+                $('#button_timer > .icon').toggle(!active);
+
+                $("#modalTimer .progress").toggleClass("invisible", !active);
+
+                if (!active) {
+                    clearInterval(window.timerId);
+                }
+            }
+
+            function setProgressModel(value, text) {
+                if (value > 100) {
+                    value = 100;
+                }
+                if (value < 0) {
+                    value = 0;
                 }
 
-                if (e.type.startsWith("mouse")) {
-                    out.x = e.pageX;
-                    out.y = e.pageY;
-                }
-
-                return out;
-            };
+                $("#modalTimer .progress-bar")
+                    .css({"width": value + "%"})
+                    .attr("aria-valuenow", value)
+                    .text(text == null ? value + "%" : text)
+                ;
+            }
 
             $(document).ready(function() {
-                // Установка автоширины столбцов таблицы
-                var column_number = $("table tr:first td").length;
-                var colgroup = $("colgroup");
+                $('#modalTimer #start_timer').click(function() {
+                    let timeout = $('#select_timeout').find(":selected").val() * 60;
+                    startTimerModel(timeout);
 
-                for (var i = 0; i < column_number; i++) {
-                    colgroup.append(
-                        '<col span="1" style="width: ' + Math.floor(100 / column_number) + '%;">'
-                    );
-                }
-
-                $("#mouse_left").click(function() {
-                    var data = {"button": "left"};
-                    send_ajax("/mouse_click", data);
+                    setActiveTimerStates(true);
                 });
-
-                $("#mouse_right").click(function() {
-                    var data = {"button": "right"};
-                    send_ajax("/mouse_click", data);
-                });
-
-                $(".key_control").click(function() {
-                    var data = {"key": $(this).attr("value")};
-                    send_ajax("/key_click", data);
-                });
-
-                $("#mouse_wheel_up").click(function() {
-                    var data = {"down": false};
-                    send_ajax("/scroll", data);
-                });
-
-                $("#mouse_wheel_down").click(function() {
-                    var data = {"down": true};
-                    send_ajax("/scroll", data);
-                });
-
-                // Глобальная переменная-фдаг для работы c событиями touch
-                _is_touch = false;
-                _press_pos = null;
-
-                $("#mouse_area").on("touchstart touchmove touchend mousemove mousedown mouseup mouseout", function(e) {
-                    // https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Supporting_both_TouchEvent_and_MouseEvent
-                    if (_is_touch == false && e.type.startsWith("touch")) {
-                        _is_touch = true;
-                    }
-
-                    // События mouse тоже возможны при событиях touch, но нам желательно только с одним видом событий
-                    // работать, поэтому если были замечены touch-события, то mouse будут отменяться
-                    if (e.type.startsWith("mouse") && _is_touch) {
-                        e.preventDefault();
-                        return;
-                    }
-
-                    switch (e.type) {
-                        case "touchstart":
-                        case "mousedown": {
-                            _press_pos = pointerEventToXY(e);
-                            console.log(e.type, _press_pos);
-
-                            break;
-                        }
-
-                        case "touchend":
-                        case "mouseup": {
-                            if (_press_pos == null) {
-                                break;
-                            }
-
-                            var pos = pointerEventToXY(e);
-
-                            var relative_x = Math.floor(pos.x - _press_pos.x);
-                            var relative_y = Math.floor(pos.y - _press_pos.y);
-                            console.log(e.type, _press_pos, pos, (relative_x + 'x' + relative_y));
-
-                            var data = {"relative_x": relative_x, "relative_y": relative_y};
-                            send_ajax("/mouse_move", data);
-
-                            break;
-                        }
-
-                        /*
-                        case "touchmove":
-                        case "mousemove": {
-                            if (_on_press) {
-                                var out = pointerEventToXY(e);
-
-                                var tag = $(e.currentTarget);
-                                var x = Math.floor(out.x - tag.offset().left);
-                                var y = Math.floor(out.y - tag.offset().top);
-
-                                console.log(e.type, _on_press, (x + " x " + y), e);
-
-                                var data = {"x": x, "y": y};
-                                send_ajax("/mouse_move", data);
-                            }
-                            break;
-                        }
-                        */
-                    }
+                $('#modalTimer #stop_timer').click(function() {
+                    setActiveTimerStates(false);
+                    send_ajax("/set_timer", {value: 0});
                 });
             });
         </script>
-    </body>
+
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Timer Settings</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="progress invisible mb-1">
+                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0:0</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="select_timeout">Select timeout (minutes):</label>
+                        <select class="form-control" id="select_timeout">
+                            <option>1</option>
+                            <option>5</option>
+                            <option>10</option>
+                            <option selected>20</option>
+                            <option>30</option>
+                            <option>60</option>
+                        </select>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <button id="start_timer" type="button" class="btn btn-success btn-sm mr-1 w-100">Start</button>
+                        <button id="stop_timer" type="button" class="btn btn-primary btn-sm w-100" disabled>Stop</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid p-1 w-100 h-100">
+        <!-- Key control -->
+        <div class="d-flex flex-column key_control_container">
+            <div class="d-flex flex-row justify-content-center">
+                <div class="cell m-1"></div>
+                <div class="cell m-1">
+                    <button class="key_control" value="up">UP</button>
+                </div>
+                <div class="cell m-1">
+                    <button
+                            id="button_timer" type="button"
+                            class="btn btn-outline-primary float-right m-1 p-1"
+                            data-toggle="modal" data-target="#modalTimer"
+                    >
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none"></span>
+                        <div class="icon">⏰</div>
+                    </button>
+                </div>
+            </div>
+            <div class="d-flex flex-row justify-content-center">
+                <div class="cell m-1">
+                    <button class="key_control" value="left">LEFT</button>
+                </div>
+                <div class="cell m-1">
+                    <button class="key_control" value="space">SPACE</button>
+                </div>
+                <div class="cell m-1">
+                    <button class="key_control" value="right">RIGHT</button>
+                </div>
+            </div>
+            <div class="d-flex flex-row justify-content-center">
+                <div class="cell m-1"></div>
+                <div class="cell m-1">
+                    <button class="key_control" value="down">DOWN</button>
+                </div>
+                <div class="cell m-1"></div>
+            </div>
+        </div>
+
+        <!-- Mouse control -->
+        <div class="d-flex flex-column mouse_control_container">
+            <div class="d-flex flex-row m-1 h-100">
+                <div id="mouse_area" class="border border-dark w-100 mr-1"></div>
+                <div id="mouse_wheel" class="d-flex flex-column">
+                    <button id="mouse_wheel_up" class="border border-dark h-100">⬆</button>
+                    <button id="mouse_wheel_down" class="border border-dark h-100">⬇</button>
+                </div>
+            </div>
+            <div class="d-flex flex-row m-1 mouse_button_container">
+                <button id="mouse_left" class="h-100 w-100">LEFT</button>
+                <button id="mouse_right" class="h-100 w-100">RIGHT</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function send_ajax(url, data, callbackFunc) {
+            console.log(data);
+            console.log(JSON.stringify(data));
+
+            $.ajax({
+                url: url,
+                method: "POST",
+                data: JSON.stringify(data),
+
+                contentType: "application/json",
+                dataType: "json",  // тип данных загружаемых с сервера
+
+                success: function(response) {
+                    console.log(response);
+                    console.log(JSON.stringify(response));
+
+                    if (callbackFunc != null) {
+                        callbackFunc(url, data, response);
+                    }
+                },
+            });
+        }
+
+        function pointerEventToXY(e) {
+            var out = {
+                x : 0,
+                y : 0
+            };
+
+            if (e.type.startsWith("touch")) {
+                var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+                out.x = touch.pageX;
+                out.y = touch.pageY;
+            }
+
+            if (e.type.startsWith("mouse")) {
+                out.x = e.pageX;
+                out.y = e.pageY;
+            }
+
+            return out;
+        };
+
+        $(document).ready(function() {
+            // Установка автоширины столбцов таблицы
+            var column_number = $("table tr:first td").length;
+            var colgroup = $("colgroup");
+
+            for (var i = 0; i < column_number; i++) {
+                colgroup.append(
+                    '<col span="1" style="width: ' + Math.floor(100 / column_number) + '%;">'
+                );
+            }
+
+            $("#mouse_left").click(function() {
+                var data = {"button": "left"};
+                send_ajax("/mouse_click", data);
+            });
+
+            $("#mouse_right").click(function() {
+                var data = {"button": "right"};
+                send_ajax("/mouse_click", data);
+            });
+
+            $(".key_control").click(function() {
+                var data = {"key": $(this).attr("value")};
+                send_ajax("/key_click", data);
+            });
+
+            $("#mouse_wheel_up").click(function() {
+                var data = {"down": false};
+                send_ajax("/scroll", data);
+            });
+
+            $("#mouse_wheel_down").click(function() {
+                var data = {"down": true};
+                send_ajax("/scroll", data);
+            });
+
+            // Глобальная переменная-фдаг для работы c событиями touch
+            _is_touch = false;
+            _press_pos = null;
+
+            $("#mouse_area").on("touchstart touchmove touchend mousemove mousedown mouseup mouseout", function(e) {
+                // https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Supporting_both_TouchEvent_and_MouseEvent
+                if (_is_touch == false && e.type.startsWith("touch")) {
+                    _is_touch = true;
+                }
+
+                // События mouse тоже возможны при событиях touch, но нам желательно только с одним видом событий
+                // работать, поэтому если были замечены touch-события, то mouse будут отменяться
+                if (e.type.startsWith("mouse") && _is_touch) {
+                    e.preventDefault();
+                    return;
+                }
+
+                switch (e.type) {
+                    case "touchstart":
+                    case "mousedown": {
+                        _press_pos = pointerEventToXY(e);
+                        console.log(e.type, _press_pos);
+
+                        break;
+                    }
+
+                    case "touchend":
+                    case "mouseup": {
+                        if (_press_pos == null) {
+                            break;
+                        }
+
+                        var pos = pointerEventToXY(e);
+
+                        var relative_x = Math.floor(pos.x - _press_pos.x);
+                        var relative_y = Math.floor(pos.y - _press_pos.y);
+                        console.log(e.type, _press_pos, pos, (relative_x + 'x' + relative_y));
+
+                        var data = {"relative_x": relative_x, "relative_y": relative_y};
+                        send_ajax("/mouse_move", data);
+
+                        break;
+                    }
+
+                    /*
+                    case "touchmove":
+                    case "mousemove": {
+                        if (_on_press) {
+                            var out = pointerEventToXY(e);
+
+                            var tag = $(e.currentTarget);
+                            var x = Math.floor(out.x - tag.offset().left);
+                            var y = Math.floor(out.y - tag.offset().top);
+
+                            console.log(e.type, _on_press, (x + " x " + y), e);
+
+                            var data = {"x": x, "y": y};
+                            send_ajax("/mouse_move", data);
+                        }
+                        break;
+                    }
+                    */
+                }
+            });
+        });
+    </script>
+</body>
 </html>

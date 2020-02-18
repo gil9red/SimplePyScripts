@@ -4,9 +4,12 @@
 __author__ = 'ipetrash'
 
 
+import datetime as DT
+import threading
+import time
+
 import pyautogui
 pyautogui.FAILSAFE = False
-
 
 from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
@@ -15,9 +18,64 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 
+DATA = {
+    "END_TIME": None,
+}
+
+
+def timer():
+    while True:
+        try:
+            if not DATA["END_TIME"]:
+                continue
+
+            if DT.datetime.now() >= DATA["END_TIME"]:
+                print('Timer activate! Press "space"')
+                pyautogui.typewrite(['space'])
+                DATA["END_TIME"] = None
+
+        finally:
+            time.sleep(1)
+
+
+thread_timer = threading.Thread(target=timer)
+thread_timer.start()
+
+
 @app.route("/")
 def index():
     return render_template('index.html')
+
+
+@app.route("/set_timer", methods=['POST'])
+def set_timer():
+    print('set_timer')
+
+    data = request.get_json()
+    print('data:', data)
+
+    secs = int(data['value']) if data['value'] else 0
+    if secs:
+        DATA["END_TIME"] = DT.datetime.now() + DT.timedelta(seconds=secs)
+    else:
+        DATA["END_TIME"] = None
+
+    return jsonify({'text': 'ok'})
+
+
+@app.route("/get_timer", methods=['POST'])
+def get_timer():
+    print('get_timer')
+
+    now = DT.datetime.now()
+    end_time = DATA["END_TIME"]
+    
+    secs = 0
+    if end_time and end_time > now:
+        secs = int((end_time - now).total_seconds())
+
+    print(f'get_timer -> {secs}')
+    return jsonify({'value': secs})
 
 
 @app.route("/key_click", methods=['POST'])
@@ -93,8 +151,8 @@ if __name__ == "__main__":
         host='0.0.0.0',
         port=9999,
 
-        # # Включение поддержки множества подключений
-        # threaded=True,
+        # Пусть сервер будет однопоточным
+        threaded=False,
     )
 
     # # Public IP
