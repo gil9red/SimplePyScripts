@@ -28,10 +28,11 @@ run_notification_job(
     'New chapters The Legendary Moonlight Sculptor',
     'chapters',
     get_chapters,
+    timeout={'days': 2},
     notified_by_sms=True,
     format_current_items='Текущий список глав (%s): %s',
     format_get_items='Запрос списка глав',
     format_items='Список глав (%s): %s',
-    format_new_item='Глава "лунного скульптора": "%s"',
+    format_new_item='Лунный скульптор: "%s"',
     format_no_new_items='Новых глав нет',
 )
