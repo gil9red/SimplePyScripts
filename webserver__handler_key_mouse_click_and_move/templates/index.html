@@ -63,7 +63,7 @@
                 send_ajax("/set_timer", {value: duration});
 
                 let timeoutFunc = function() {
-                    send_ajax("/get_timer", null, function (url, data, response) {
+                    send_ajax("/get_timer", null, (url, data, response) => {
                         let timer = response.value;
 
                         let minutes = parseInt(timer / 60);
@@ -233,7 +233,7 @@
                 contentType: "application/json",
                 dataType: "json",  // тип данных загружаемых с сервера
 
-                success: function(response) {
+                success: (response) => {
                     console.log(response);
                     console.log(JSON.stringify(response));
 
@@ -304,7 +304,7 @@
             _is_touch = false;
             _press_pos = null;
 
-            $("#mouse_area").on("touchstart touchmove touchend mousemove mousedown mouseup mouseout", function(e) {
+            $("#mouse_area").on("touchstart touchmove touchend mousemove mousedown mouseup mouseout", (e) => {
                 // https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Supporting_both_TouchEvent_and_MouseEvent
                 if (_is_touch == false && e.type.startsWith("touch")) {
                     _is_touch = true;
