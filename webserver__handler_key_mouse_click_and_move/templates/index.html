@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-4.4.1/bootstrap.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap4-toggle-v3.5.0/bootstrap4-toggle.css') }}">
 
-    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='bootstrap-4.4.1/bootstrap.bundle.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap-4.4.1/bootstrap.bundle.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap4-toggle-v3.5.0/bootstrap4-toggle.js') }}"></script>
+    <script src="{{ url_for('static', filename='nipplejs/nipplejs.js') }}"></script>
 
     <style>
         html, body {
@@ -30,7 +33,7 @@
         .mouse_control_container {
             height: 50%;
         }
-        #mouse_area {
+        #mouse_area, #joystick_wrapper {
             background: lightgray;
         }
 
@@ -62,7 +65,7 @@
             function startTimerModel(duration) {
                 send_ajax("/set_timer", {value: duration});
 
-                let timeoutFunc = function() {
+                let timeoutFunc = () => {
                     send_ajax("/get_timer", null, (url, data, response) => {
                         let timer = response.value;
 
@@ -200,14 +203,27 @@
                 <div class="cell m-1">
                     <button class="key_control" value="down">DOWN</button>
                 </div>
-                <div class="cell m-1"></div>
+                <div class="cell m-1">
+                    <div class="d-flex align-items-end flex-column h-100">
+                        <div class="mt-auto">
+                            <input
+                                    id="switch_mouse_mode" type="checkbox" data-size="sm"
+                                    checked data-toggle="toggle" data-on="joystick" data-off="mouse"
+                                    data-onstyle="success" data-offstyle="primary"
+                            >
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Mouse control -->
         <div class="d-flex flex-column mouse_control_container">
             <div class="d-flex flex-row m-1 h-100">
-                <div id="mouse_area" class="border border-dark w-100 mr-1"></div>
+                <div id="mouse_area" class="border border-dark w-100 mr-1" style="display: none"></div>
+                <div id="joystick_wrapper" class="border border-dark w-100 mr-1">
+                    <div id="joystick" style="position: absolute"></div>
+                </div>
                 <div id="mouse_wheel" class="d-flex flex-column">
                     <button id="mouse_wheel_up" class="border border-dark h-100">⬆</button>
                     <button id="mouse_wheel_down" class="border border-dark h-100">⬇</button>
@@ -233,7 +249,7 @@
                 contentType: "application/json",
                 dataType: "json",  // тип данных загружаемых с сервера
 
-                success: (response) => {
+                success: function(response) {
                     console.log(response);
                     console.log(JSON.stringify(response));
 
@@ -263,6 +279,57 @@
 
             return out;
         };
+
+        function on_change_mouse_mode(is_joystick) {
+            $('#joystick_wrapper').toggle(is_joystick);
+            $('#mouse_area').toggle(!is_joystick);
+        }
+
+        $(document).ready(function() {
+            $('#switch_mouse_mode').change(function() {
+                let is_joystick = $(this).prop('checked');
+                on_change_mouse_mode(is_joystick);
+            });
+
+            let joystickEl = $('#joystick');
+            joystickEl.width(joystickEl.parent().width());
+            joystickEl.height(joystickEl.parent().height());
+
+            // Actualize mouse mode
+            on_change_mouse_mode($('#switch_mouse_mode').prop('checked'));
+
+            var joystick = nipplejs.create({
+                zone: joystickEl.get(0),
+                color: 'darkgreen',
+            });
+            _press_pos = null;
+            _last_pos = null;
+            _joystick_timer = null;
+            joystick.on('start end', function(e, data) {
+                _press_pos = data.position;
+                _last_pos = _press_pos;
+
+                clearInterval(_joystick_timer);
+
+                if (e.type == 'start') {
+                    _joystick_timer = setInterval(() => {
+                        let relative_x = Math.floor(_last_pos.x - _press_pos.x);
+                        let relative_y = Math.floor(_last_pos.y - _press_pos.y);
+                        if (relative_x == 0 && relative_y == 0) {
+                            return;
+                        }
+
+                        console.log("joystick", _press_pos, _last_pos, (relative_x + 'x' + relative_y));
+
+                        var data = {"relative_x": relative_x, "relative_y": relative_y};
+                        send_ajax("/mouse_move", data);
+
+                    }, 100);
+                }
+            }).on('move', function(e, data) {
+                _last_pos = data.position;
+            });
+        });
 
         $(document).ready(function() {
             // Установка автоширины столбцов таблицы
@@ -300,11 +367,11 @@
                 send_ajax("/scroll", data);
             });
 
-            // Глобальная переменная-фдаг для работы c событиями touch
+            // Глобальная переменная-флаг для работы c событиями touch
             _is_touch = false;
             _press_pos = null;
 
-            $("#mouse_area").on("touchstart touchmove touchend mousemove mousedown mouseup mouseout", (e) => {
+            $("#mouse_area").on("touchstart touchmove touchend mousemove mousedown mouseup mouseout", function(e) {
                 // https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Supporting_both_TouchEvent_and_MouseEvent
                 if (_is_touch == false && e.type.startsWith("touch")) {
                     _is_touch = true;
@@ -332,13 +399,13 @@
                             break;
                         }
 
-                        var pos = pointerEventToXY(e);
+                        let pos = pointerEventToXY(e);
 
-                        var relative_x = Math.floor(pos.x - _press_pos.x);
-                        var relative_y = Math.floor(pos.y - _press_pos.y);
+                        let relative_x = Math.floor(pos.x - _press_pos.x);
+                        let relative_y = Math.floor(pos.y - _press_pos.y);
                         console.log(e.type, _press_pos, pos, (relative_x + 'x' + relative_y));
 
-                        var data = {"relative_x": relative_x, "relative_y": relative_y};
+                        let data = {"relative_x": relative_x, "relative_y": relative_y};
                         send_ajax("/mouse_move", data);
 
                         break;
