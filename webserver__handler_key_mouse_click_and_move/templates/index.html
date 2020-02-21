@@ -281,6 +281,10 @@
         };
 
         function on_change_mouse_mode(is_joystick) {
+            if (is_joystick == null) {
+                is_joystick = $('#switch_mouse_mode').prop('checked');
+            }
+
             $('#joystick_wrapper').toggle(is_joystick);
             $('#mouse_area').toggle(!is_joystick);
         }
@@ -296,7 +300,7 @@
             joystickEl.height(joystickEl.parent().height());
 
             // Actualize mouse mode
-            on_change_mouse_mode($('#switch_mouse_mode').prop('checked'));
+            on_change_mouse_mode();
 
             var joystick = nipplejs.create({
                 zone: joystickEl.get(0),
