@@ -285,11 +285,19 @@
                 is_joystick = $('#switch_mouse_mode').prop('checked');
             }
 
+            localStorage.switch_mouse_mode = is_joystick;
+
             $('#joystick_wrapper').toggle(is_joystick);
             $('#mouse_area').toggle(!is_joystick);
         }
 
         $(document).ready(function() {
+            // NOTE: On android Chrome not auto restore checked value after refresh page
+            if (localStorage.switch_mouse_mode != null) {
+                let checked = localStorage.switch_mouse_mode == "true";
+                $('#switch_mouse_mode').bootstrapToggle(checked ? 'on' : 'off');
+            }
+
             $('#switch_mouse_mode').change(function() {
                 let is_joystick = $(this).prop('checked');
                 on_change_mouse_mode(is_joystick);
