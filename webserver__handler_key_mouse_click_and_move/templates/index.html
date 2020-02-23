@@ -437,6 +437,8 @@
                     case "touchstart":
                     case "mousedown": {
                         _press_pos = pos;
+                        _last_send_pos.x = null;
+                        _last_send_pos.y = null;
 
                         if (draw_bubble) {
                             $("#mouse_area").append(
@@ -480,10 +482,10 @@
                             );
                         }
 
-                        let relative_x = Math.floor(_last_send_pos.x - _press_pos.x);
-                        let relative_y = Math.floor(_last_send_pos.y - _press_pos.y);
+                        let relative_x = Math.floor(pos.x - _last_send_pos.x);
+                        let relative_y = Math.floor(pos.y - _last_send_pos.y);
                         if (debug) {
-                            console.log(e.type, _press_pos, _last_send_pos, (relative_x + 'x' + relative_y));
+                            console.log(e.type, _press_pos, pos, _last_send_pos, (relative_x + 'x' + relative_y));
                         }
 
                         _last_send_pos.x = pos.x;
