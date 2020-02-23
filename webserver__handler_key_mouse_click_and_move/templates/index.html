@@ -47,6 +47,20 @@
             height: 10vw;
         }
 
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgb(0, 123, 255);
+            box-shadow: 0 0 0 0 rgb(0, 123, 255);
+            animation: bubble_hide 2s ease forwards;
+        }
+        @keyframes bubble_hide {
+            to {
+                width: 0px;
+                height: 0px;
+            }
+        }
+
         body {
           -webkit-touch-callout: none; /* iOS Safari */
             -webkit-user-select: none; /* Safari */
@@ -277,6 +291,8 @@
                 out.y = e.pageY;
             }
 
+            out.x = Math.round(out.x);
+            out.y = Math.round(out.y);
             return out;
         };
 
@@ -314,9 +330,9 @@
                 zone: joystickEl.get(0),
                 color: 'darkgreen',
             });
-            _press_pos = null;
-            _last_pos = null;
-            _joystick_timer = null;
+            let _press_pos = null;
+            let _last_pos = null;
+            let _joystick_timer = null;
             joystick.on('start end', function(e, data) {
                 _press_pos = data.position;
                 _last_pos = _press_pos;
@@ -343,17 +359,21 @@
             });
         });
 
+        function create_bubble(pos, size) {
+            let bubble = $('<div class="bubble"></div>');
+            bubble.css({
+                left: pos.x - (size / 2),
+                top: pos.y - (size / 2),
+                width: size + 'px',
+                height: size + 'px',
+            });
+
+            setTimeout(() => bubble.remove(), 2000);
+
+            return bubble;
+        }
+
         $(document).ready(function() {
-            // Установка автоширины столбцов таблицы
-            var column_number = $("table tr:first td").length;
-            var colgroup = $("colgroup");
-
-            for (var i = 0; i < column_number; i++) {
-                colgroup.append(
-                    '<col span="1" style="width: ' + Math.floor(100 / column_number) + '%;">'
-                );
-            }
-
             $("#mouse_left").click(function() {
                 var data = {"button": "left"};
                 send_ajax("/mouse_click", data);
@@ -380,10 +400,20 @@
             });
 
             // Глобальная переменная-флаг для работы c событиями touch
-            _is_touch = false;
-            _press_pos = null;
+            let _is_touch = false;
+            let _press_pos = null;
+            let _last_send_pos = {x: null, y: null};
+            let _last_time_send_pos = null;
+            const _DELAY_BEFORE_SEND_POS = 75;
 
-            $("#mouse_area").on("touchstart touchmove touchend mousemove mousedown mouseup mouseout", function(e) {
+            let debug = false;
+            if (debug) {
+                let log = $("<div id='log'/>");
+                $("#mouse_area").append(log);
+            }
+            let draw_bubble = true;
+
+            $("#mouse_area").on("touchstart touchmove touchend mousemove mousedown mouseup mouseleave", function(e) {
                 // https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Supporting_both_TouchEvent_and_MouseEvent
                 if (_is_touch == false && e.type.startsWith("touch")) {
                     _is_touch = true;
@@ -396,51 +426,75 @@
                     return;
                 }
 
+                let pos = pointerEventToXY(e);
+
+                if (debug) {
+                    log.text(JSON.stringify(pos));
+                    console.log(e.type, pos);
+                }
+
                 switch (e.type) {
                     case "touchstart":
                     case "mousedown": {
-                        _press_pos = pointerEventToXY(e);
-                        console.log(e.type, _press_pos);
+                        _press_pos = pos;
 
+                        if (draw_bubble) {
+                            $("#mouse_area").append(
+                                create_bubble(pos, 40)
+                            );
+                        }
+
+                        if (debug) {
+                            console.log(e.type, _press_pos);
+                        }
                         break;
                     }
 
                     case "touchend":
-                    case "mouseup": {
+                    case "mouseup":
+                    case "mouseleave":
+                    case "mouseout": {
+                        _press_pos = null;
+                        break;
+                    }
+
+                    case "touchmove":
+                    case "mousemove": {
                         if (_press_pos == null) {
                             break;
                         }
 
-                        let pos = pointerEventToXY(e);
+                        if (_last_time_send_pos != null) {
+                            if ((new Date() - _last_time_send_pos) < _DELAY_BEFORE_SEND_POS) {
+                                break;
+                            }
+                        }
+                        if (_last_send_pos.x == null || _last_send_pos.y == null) {
+                            _last_send_pos.x = pos.x;
+                            _last_send_pos.y = pos.y;
+                        }
 
-                        let relative_x = Math.floor(pos.x - _press_pos.x);
-                        let relative_y = Math.floor(pos.y - _press_pos.y);
-                        console.log(e.type, _press_pos, pos, (relative_x + 'x' + relative_y));
+                        if (draw_bubble) {
+                            $("#mouse_area").append(
+                                create_bubble(pos, 40)
+                            );
+                        }
 
-                        let data = {"relative_x": relative_x, "relative_y": relative_y};
+                        let relative_x = Math.floor(_last_send_pos.x - _press_pos.x);
+                        let relative_y = Math.floor(_last_send_pos.y - _press_pos.y);
+                        if (debug) {
+                            console.log(e.type, _press_pos, _last_send_pos, (relative_x + 'x' + relative_y));
+                        }
+
+                        _last_send_pos.x = pos.x;
+                        _last_send_pos.y = pos.y;
+                        _last_time_send_pos = new Date();
+
+                        let data = {relative_x: relative_x, relative_y: relative_y};
                         send_ajax("/mouse_move", data);
 
                         break;
                     }
-
-                    /*
-                    case "touchmove":
-                    case "mousemove": {
-                        if (_on_press) {
-                            var out = pointerEventToXY(e);
-
-                            var tag = $(e.currentTarget);
-                            var x = Math.floor(out.x - tag.offset().left);
-                            var y = Math.floor(out.y - tag.offset().top);
-
-                            console.log(e.type, _on_press, (x + " x " + y), e);
-
-                            var data = {"x": x, "y": y};
-                            send_ajax("/mouse_move", data);
-                        }
-                        break;
-                    }
-                    */
                 }
             });
         });
