@@ -5,7 +5,7 @@ __author__ = 'ipetrash'
 
 
 from PyQt5.QtWidgets import QMessageBox, QWidget, QApplication
-from PyQt5 import QtGui
+from PyQt5.QtGui import QMouseEvent, QPaintEvent, QPainter, QColor
 from PyQt5.QtCore import Qt
 
 
@@ -30,30 +30,30 @@ class Widget(QWidget):
         self.pos = None
         self.pos_list = []
 
-    def mousePressEvent(self, event: QtGui.QMouseEvent):
+    def mousePressEvent(self, event: QMouseEvent):
         self.pos = event.pos()
 
         self.update()
 
-    def mouseMoveEvent(self, event: QtGui.QMouseEvent):
+    def mouseMoveEvent(self, event: QMouseEvent):
         self.pos = event.pos()
 
         self.update()
 
-    def mouseReleaseEvent(self, event: QtGui.QMouseEvent):
+    def mouseReleaseEvent(self, event: QMouseEvent):
         self.pos_list.append(self.pos)
         self.pos = None
 
         self.update()
 
-    def paintEvent(self, event: QtGui.QPaintEvent):
+    def paintEvent(self, event: QPaintEvent):
         if not self.pos and not self.pos_list:
             return
 
-        painter = QtGui.QPainter(self)
-        painter.setRenderHint(QtGui.QPainter.HighQualityAntialiasing)
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.HighQualityAntialiasing)
         painter.setPen(Qt.NoPen)
-        painter.setBrush(QtGui.QColor('#AAFF0000'))
+        painter.setBrush(QColor('#AAFF0000'))
 
         for pos in self.pos_list:
             painter.drawEllipse(pos, 40, 40)
