@@ -14,11 +14,11 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setStyleSheet("""
-            QTabBar::tab:disabled { width: 0; height: 0; margin: 0; padding: 0; border: none; }
+        self.tab_widget = QTabWidget()
+        self.tab_widget.tabBar().setStyleSheet("""
+            ::tab:disabled { width: 0; height: 0; margin: 0; padding: 0; border: none; }
         """)
 
-        self.tab_widget = QTabWidget()
         self.tab_widget.addTab(QPushButton('Tab 1'), 'Tab 1')
         self.tab_widget.addTab(QPushButton('Tab 2'), 'Tab 2')
         self.tab_widget.addTab(QPushButton('Tab 3'), 'Tab 3')
