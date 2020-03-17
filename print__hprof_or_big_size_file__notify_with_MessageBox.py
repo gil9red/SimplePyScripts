@@ -5,6 +5,9 @@ __author__ = 'ipetrash'
 
 
 import time
+from pathlib import Path
+import re
+
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
 from print__hprof_or_big_size_file import find_files_by_dirs, DIRS
@@ -15,7 +18,26 @@ if __name__ == '__main__':
 
     while True:
         result = find_files_by_dirs(DIRS)
-        if result:
-            QMessageBox.warning(None, 'Warn', '\n'.join(result))
+        if not result:
+            continue
+
+        text = f'Files .hprof ({len(result)}):\n' + '\n'.join(result)
+
+        msg_box = QMessageBox(QMessageBox.Information, 'Found .hprof!', text)
+        remove_all_files_button = msg_box.addButton("Remove all files", QMessageBox.DestructiveRole)
+        msg_box.addButton(QMessageBox.Ok)
+        msg_box.exec()
+
+        if msg_box.clickedButton() == remove_all_files_button:
+            for file_name in result:
+                # "C:\DEV\trunk\java_pid12636.hprof" 6.1 GB (6603419857 bytes) -> C:\DEV\trunk\java_pid12636.hprof
+                m = re.search('"(.+?)"', file_name)
+                if m:
+                    file_name = m.group(1)
+
+                try:
+                    Path(file_name).unlink()
+                except Exception as e:
+                    QMessageBox.warning(None, "Warning", f"Error while removed {file_name!r}: {e}")
 
         time.sleep(5 * 60 * 60)
