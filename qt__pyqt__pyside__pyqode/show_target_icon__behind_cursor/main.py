@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+import sys
 from pathlib2 import Path
 
 from PyQt5.Qt import QApplication, QWidget, QPixmap, QLabel, QTimer, QCursor, Qt
@@ -23,7 +24,11 @@ def move_window_to_cursor(widget: QWidget):
 
 
 if __name__ == '__main__':
-    app = QApplication([])
+    app = QApplication(sys.argv)
+
+    lifetime_ms = 3000
+    if len(sys.argv) == 2:
+        lifetime_ms = int(sys.argv[1])
 
     pix = QPixmap(FILE_NAME)
 
@@ -41,6 +46,6 @@ if __name__ == '__main__':
     timer.timeout.connect(lambda: move_window_to_cursor(mw))
     timer.start(33)
 
-    QTimer.singleShot(3000, app.quit)
+    QTimer.singleShot(lifetime_ms, app.quit)
 
     app.exec()
