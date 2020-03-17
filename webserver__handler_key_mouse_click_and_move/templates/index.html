@@ -17,6 +17,15 @@
             width: 100%;
             height: 100%;
         }
+
+        .icon {
+            width: 30px;
+            height: 30px;
+        }
+        .icon_target {
+            background-image: url("{{ url_for('static', filename='icons/bullseye-with-target-symbol-svgrepo-com.svg') }}");
+        }
+
         .key_control_container {
             height: 50%;
         }
@@ -189,7 +198,14 @@
         <!-- Key control -->
         <div class="d-flex flex-column key_control_container">
             <div class="d-flex flex-row justify-content-center">
-                <div class="cell m-1"></div>
+                <div class="cell m-1">
+                    <button
+                            id="button_show_cursor_as_target" type="button"
+                            class="btn btn-outline-primary float-left m-1 p-1"
+                    >
+                        <div class="icon icon_target"></div>
+                    </button>
+                </div>
                 <div class="cell m-1">
                     <button class="key_control" value="up">UP</button>
                 </div>
@@ -400,6 +416,10 @@
             $("#mouse_wheel_down").click(function() {
                 var data = {"down": true};
                 send_ajax("/scroll", data);
+            });
+
+            $("#button_show_cursor_as_target").click(function() {
+                send_ajax("/show_cursor_as_target");
             });
 
             // Глобальная переменная-флаг для работы c событиями touch

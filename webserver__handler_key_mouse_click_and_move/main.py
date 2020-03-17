@@ -18,6 +18,18 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 
+def show_cursor_as_target():
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    DIR = Path(__file__).resolve().parent
+
+    # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/a68e24eb391ed3c4a1ca37af2e09ecc7e0bd5c66/qt__pyqt__pyside__pyqode/show_target_icon__behind_cursor/main.py
+    script_file_name = str(DIR.parent / r'qt__pyqt__pyside__pyqode\show_target_icon__behind_cursor\main.py')
+    subprocess.Popen([sys.executable, script_file_name, '1000'])
+
+
 DATA = {
     "END_TIME": None,
 }
@@ -137,6 +149,15 @@ def scroll():
 
     value = -200 if down else 200
     pyautogui.scroll(value)
+
+    return jsonify({'text': 'ok'})
+
+
+@app.route("/show_cursor_as_target", methods=['POST'])
+def on_show_cursor_as_target():
+    print('show_cursor_as_target')
+
+    show_cursor_as_target()
 
     return jsonify({'text': 'ok'})
 
