@@ -25,7 +25,7 @@ def show_cursor_as_target():
 
     DIR = Path(__file__).resolve().parent
 
-    # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/a68e24eb391ed3c4a1ca37af2e09ecc7e0bd5c66/qt__pyqt__pyside__pyqode/show_target_icon__behind_cursor/main.py
+    # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/5e42dead5a522e1c128fb2fc611cca8a06986b4b/qt__pyqt__pyside__pyqode/show_target_icon__behind_cursor/main.py
     script_file_name = str(DIR.parent / r'qt__pyqt__pyside__pyqode\show_target_icon__behind_cursor\main.py')
     subprocess.Popen([sys.executable, script_file_name, '1000'])
 
