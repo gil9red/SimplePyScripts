@@ -5,7 +5,7 @@ __author__ = 'ipetrash'
 
 
 import sys
-from pathlib2 import Path
+from pathlib import Path
 
 from PyQt5.Qt import QApplication, QWidget, QPixmap, QLabel, QTimer, QCursor, Qt
 
