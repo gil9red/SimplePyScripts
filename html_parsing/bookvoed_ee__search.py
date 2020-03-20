@@ -13,7 +13,8 @@ import requests
 rs = requests.get('https://bookvoed.ee/search?q=white+fang')
 root = BeautifulSoup(rs.content, 'html.parser')
 
-for a in root.select('.o-row > a.title'):
+for row in root.select('.o-row'):
+    a = row.select_one('a.title')
     href = urljoin(rs.url, a.get('href'))
     title = a.get_text(strip=True)
     print(title, href)
