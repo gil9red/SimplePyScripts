@@ -232,7 +232,16 @@
                 </div>
             </div>
             <div class="d-flex flex-row justify-content-center">
-                <div class="cell m-1"></div>
+                <div class="cell m-1">
+                    <div class="d-flex align-items-end flex-column h-100">
+                        <button
+                                id="button_full_black_screen" type="button"
+                                class="btn btn-outline-primary mt-auto mr-auto p-1"
+                        >
+                            <div class="icon">🌙</div>
+                        </button>
+                    </div>
+                </div>
                 <div class="cell m-1">
                     <button class="key_control" value="down">DOWN</button>
                 </div>
@@ -420,6 +429,10 @@
 
             $("#button_show_cursor_as_target").click(function() {
                 send_ajax("/show_cursor_as_target");
+            });
+
+            $("#button_full_black_screen").click(function() {
+                send_ajax("/full_black_screen");
             });
 
             // Глобальная переменная-флаг для работы c событиями touch

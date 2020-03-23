@@ -7,6 +7,9 @@ __author__ = 'ipetrash'
 import datetime as DT
 import threading
 import time
+import subprocess
+import sys
+from pathlib import Path
 
 import pyautogui
 pyautogui.FAILSAFE = False
@@ -18,16 +21,19 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 
+DIR = Path(__file__).resolve().parent
+
+
 def show_cursor_as_target():
-    import subprocess
-    import sys
-    from pathlib import Path
-
-    DIR = Path(__file__).resolve().parent
-
     # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/5e42dead5a522e1c128fb2fc611cca8a06986b4b/qt__pyqt__pyside__pyqode/show_target_icon__behind_cursor/main.py
-    script_file_name = str(DIR.parent / r'qt__pyqt__pyside__pyqode\show_target_icon__behind_cursor\main.py')
+    script_file_name = str(DIR.parent / 'qt__pyqt__pyside__pyqode/show_target_icon__behind_cursor\main.py')
     subprocess.Popen([sys.executable, script_file_name, '1000'])
+
+
+def full_black_screen():
+    # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/69be0550dd64d3c40fe4f1851c6bce79fd582730/qt__pyqt__pyside__pyqode/full_black_screen.py
+    script_file_name = str(DIR.parent / 'qt__pyqt__pyside__pyqode/full_black_screen.py')
+    subprocess.Popen([sys.executable, script_file_name])
 
 
 DATA = {
@@ -158,6 +164,15 @@ def on_show_cursor_as_target():
     print('show_cursor_as_target')
 
     show_cursor_as_target()
+
+    return jsonify({'text': 'ok'})
+
+
+@app.route("/full_black_screen", methods=['POST'])
+def on_full_black_screen():
+    print('full_black_screen')
+
+    full_black_screen()
 
     return jsonify({'text': 'ok'})
 
