@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 from PyQt5.QtWidgets import (
     QGraphicsScene, QGraphicsView, QMainWindow, QApplication, QGraphicsRectItem
 )
-from PyQt5.QtCore import QRectF, QPointF
+from PyQt5.QtCore import QRectF, QPointF, Qt
 from PyQt5.QtGui import QColor, QPainter
 
 
@@ -58,6 +58,7 @@ class MainWindow(QMainWindow):
         self.view = QGraphicsView(self.scene)
         self.view.setRenderHint(QPainter.Antialiasing)
         self.view.setSceneRect(scene_rect)
+        self.view.setAlignment(Qt.AlignTop | Qt.AlignLeft)
 
         self.scene.addRect(0, 0, 200, 100)
         self.scene.addEllipse(100, 50, 200, 200)
