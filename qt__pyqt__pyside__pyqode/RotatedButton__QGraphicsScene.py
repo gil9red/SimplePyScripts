@@ -22,6 +22,7 @@ class Window(QWidget):
 
         self.view = QGraphicsView()
         self.view.setRenderHint(QPainter.HighQualityAntialiasing)
+        self.view.setAlignment(Qt.AlignLeft | Qt.AlignTop)
         self.view.setScene(self.scene)
 
         scene_layout = QGraphicsLinearLayout(Qt.Horizontal)
