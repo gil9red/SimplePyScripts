@@ -9,6 +9,7 @@ import sys
 
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGraphicsScene, \
     QGraphicsView, QGraphicsLinearLayout, QGraphicsWidget, QHBoxLayout
+from PyQt5.QtGui import QPainter
 from PyQt5.QtCore import Qt, QSize
 
 
@@ -20,6 +21,7 @@ class Window(QWidget):
         self.scene.setSceneRect(0, 0, 400, 400)
 
         self.view = QGraphicsView()
+        self.view.setRenderHint(QPainter.HighQualityAntialiasing)
         self.view.setScene(self.scene)
 
         scene_layout = QGraphicsLinearLayout(Qt.Horizontal)
