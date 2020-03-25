@@ -98,15 +98,15 @@ ITEMS = [
 root_acl = BeautifulSoup(open(FILE_NAME_ACL, 'rb'), 'xml')
 root_acl_str = str(root_acl)
 
-for license_name, prop_name, prop_id in ITEMS:
-    print(license_name, prop_name, prop_id)
+for license_name, license_id, prop_name, prop_id in ITEMS:
+    print(license_name, license_id, prop_name, prop_id)
 
     new_getter_src = TEMPLATE \
         .replace('{TEMPLATE_THIS_PROP}', TEMPLATE_THIS_PROP) \
         .replace('{prop_id}', prop_id) \
         .replace('{prop_name}', prop_name) \
         .replace('{license_path}', LICENSE_PATH) \
-        .replace('{license_name}', license_name) \
+        .replace('{license_name}', license_id) \
         .replace('{acl_id}', FILE_NAME_ACL.stem)
 
     prop_el = root_acl.select_one(f'[Id="{prop_id}"]')
