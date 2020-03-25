@@ -10,7 +10,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGraphicsScene, \
     QGraphicsView, QGraphicsLinearLayout, QGraphicsWidget, QHBoxLayout
 from PyQt5.QtGui import QPainter
-from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtCore import Qt
 
 
 class Window(QWidget):
@@ -18,7 +18,7 @@ class Window(QWidget):
         super().__init__()
 
         self.scene = QGraphicsScene()
-        self.scene.setSceneRect(0, 0, 400, 400)
+        self.scene.setSceneRect(0, 0, 200, 200)
 
         self.view = QGraphicsView()
         self.view.setRenderHint(QPainter.HighQualityAntialiasing)
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
 
     w = Window()
-    w.setMinimumSize(QSize(0, 400))
+    w.setMinimumSize(0, 200)
     w.show()
 
     sys.exit(app.exec_())
