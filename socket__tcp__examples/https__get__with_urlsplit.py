@@ -8,6 +8,7 @@ from urllib.parse import urlsplit
 import socket
 import ssl
 
+
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 url = 'https://www.coursera.org/robots.txt'
 
