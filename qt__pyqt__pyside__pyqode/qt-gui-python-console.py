@@ -15,9 +15,18 @@ from code import InteractiveConsole as _InteractiveConsole
 import sys
 
 try:
-    from PySideKick import QtCore, QtGui
-except ImportError:
-    from PySide import QtCore, QtGui
+    from PyQt5.QtWidgets import *
+    from PyQt5.QtGui import *
+    from PyQt5.QtCore import *
+
+except:
+    try:
+        from PyQt4.QtGui import *
+        from PyQt4.QtCore import *
+
+    except:
+        from PySide.QtGui import *
+        from PySide.QtCore import *
 
 try:
     from cStringIO import StringIO
@@ -61,30 +70,30 @@ class _QPythonConsoleUI(object):
 
     def __init__(self, parent):
         if parent.layout() is None:
-            parent.setLayout(QtGui.QHBoxLayout())
-        layout = QtGui.QVBoxLayout()
+            parent.setLayout(QHBoxLayout())
+        layout = QVBoxLayout()
         layout.setSpacing(0)
         #  Output console:  a fixed-pitch-font text area.
-        self.output = QtGui.QPlainTextEdit(parent)
+        self.output = QPlainTextEdit(parent)
         self.output.setReadOnly(True)
         self.output.setUndoRedoEnabled(False)
         self.output.setMaximumBlockCount(5000)
-        fmt = QtGui.QTextCharFormat()
+        fmt = QTextCharFormat()
         fmt.setFontFixedPitch(True)
         self.output.setCurrentCharFormat(fmt)
         layout.addWidget(self.output)
         parent.layout().addLayout(layout)
         #  Input console, a prompt displated next to a lineedit
-        layout2 = QtGui.QHBoxLayout()
-        self.prompt = QtGui.QLabel(parent)
+        layout2 = QHBoxLayout()
+        self.prompt = QLabel(parent)
         self.prompt.setText(">>> ")
         layout2.addWidget(self.prompt)
-        self.input = QtGui.QLineEdit(parent)
+        self.input = QLineEdit(parent)
         layout2.addWidget(self.input)
         layout.addLayout(layout2)
 
 
-class QPythonConsole(QtGui.QWidget):
+class QPythonConsole(QWidget):
     """A simple python console to embed in your GUI.
 
     This widget provides a simple interactive python console that you can
@@ -122,10 +131,10 @@ class QPythonConsole(QtGui.QWidget):
             self.ui.prompt.setText(">>> ")
 
     def eventFilter(self, obj, event):
-        if event.type() == QtCore.QEvent.KeyPress:
-            if event.key() == QtCore.Qt.Key_Up:
+        if event.type() == QEvent.KeyPress:
+            if event.key() == Qt.Key_Up:
                 self.go_history(-1)
-            elif event.key() == QtCore.Qt.Key_Down:
+            elif event.key() == Qt.Key_Down:
                 self.go_history(1)
         return False
 
@@ -142,8 +151,8 @@ class QPythonConsole(QtGui.QWidget):
 
 
 if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
-    win = QtGui.QMainWindow()
+    app = QApplication(sys.argv)
+    win = QMainWindow()
     win.setCentralWidget(QPythonConsole())
     win.show()
     app.exec_()
