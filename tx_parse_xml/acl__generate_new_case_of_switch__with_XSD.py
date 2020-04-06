@@ -41,9 +41,7 @@ TEMPLATE_CASE = """\
 #         {SWITCHES}
 #
 #         default: {
-#             String text = String.format("Operation \"%s\" is not yet supported", operationName);
-#             Radix::Explorer.Utils::Trace.warning(getEnvironment(), text);
-#             throw new UnsupportedOperationException(text);
+#             return null;
 #         }
 #     }
 TEMPLATE = """
@@ -53,31 +51,7 @@ TEMPLATE = """
 {SWITCHES}
     <xsc:Item><xsc:Java>
     default: {
-        String text = String.format(</xsc:Java>
-                    </xsc:Item>
-                    <xsc:Item>
-                      <xsc:LocalizedString StringId="mls3QUBDE5HFVFYTBPB2TMRTFX42Y"/>
-                    </xsc:Item>
-                    <xsc:Item>
-                      <xsc:Java>, operationName);
-        </xsc:Java>
-                    </xsc:Item>
-                    <xsc:Item>
-                      <xsc:TypeDeclaration TypeId="411" Path="apcSC2X2DZATHORDGZJABIFNQAABA">
-                        <xsc:Presentation>Radix::Explorer.Utils::Trace</xsc:Presentation>
-                      </xsc:TypeDeclaration>
-                    </xsc:Item>
-                    <xsc:Item>
-                      <xsc:Java>.</xsc:Java>
-                    </xsc:Item>
-                    <xsc:Item>
-                      <xsc:IdReference Path="apcSC2X2DZATHORDGZJABIFNQAABA mth7NHMFKQRS5B7HI3ABYPBZBNVPQ" Invoke="true">
-                        <xsc:Presentation>warning</xsc:Presentation>
-                      </xsc:IdReference>
-                    </xsc:Item>
-                    <xsc:Item>
-                      <xsc:Java>(getEnvironment(), text);
-        throw new UnsupportedOperationException(text);
+        return null;
     }
 }
 </xsc:Java></xsc:Item>
