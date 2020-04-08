@@ -13,7 +13,7 @@ class HttpProcessor(BaseHTTPRequestHandler):
         print(user_agent)
 
         self.send_response(200)
-        self.send_header('content-type', 'text/html')
+        self.send_header('content-type', 'text/html; charset=utf-8')
         self.end_headers()
 
         html = user_agent

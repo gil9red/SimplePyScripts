@@ -10,7 +10,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 class BaseServer(BaseHTTPRequestHandler):
     def _set_headers(self):
         self.send_response(200)
-        self.send_header('Content-type', 'text/html')
+        self.send_header('Content-type', 'text/html; charset=utf-8')
         self.end_headers()
 
     def do_GET(self):
