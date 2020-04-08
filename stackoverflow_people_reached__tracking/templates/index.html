@@ -10,14 +10,6 @@
     <script src="{{ url_for('static', filename='chart_js_2.8.0/Chart.bundle.min.js') }}"></script>
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.css') }}">
-    <style>
-        div.middle-div {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-        }
-    </style>
 </head>
 <body>
 
@@ -53,7 +45,7 @@
         </div>
 
         <div class="col-8">
-            <div class="container middle-div">
+            <div class="container">
                 <canvas id="lineChart"></canvas>
             </div>
         </div>
