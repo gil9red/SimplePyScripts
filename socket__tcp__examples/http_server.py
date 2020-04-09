@@ -69,7 +69,7 @@ try:
     # Работаем постоянно
     while True:
         conn, addr = sock.accept()
-        print("New connection from " + addr[0])
+        print(f"New connection from {addr[0]}:{addr[1]}")
 
         try:
             parse(conn)
