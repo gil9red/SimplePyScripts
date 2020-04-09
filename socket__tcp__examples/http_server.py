@@ -57,9 +57,13 @@ def parse(conn):  # Обработка соединения в отдельно�
     send_answer(conn, typ="text/html; charset=utf-8", data=answer)
 
 
+PORT = 8080
+
 sock = socket.socket()
-sock.bind(("", 8080))
+sock.bind(("", PORT))
 sock.listen()
+
+print(f'HTTP server running on http://127.0.0.1:{PORT}/time.html')
 
 try:
     # Работаем постоянно
