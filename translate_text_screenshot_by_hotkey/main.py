@@ -9,6 +9,7 @@ import datetime as DT
 import io
 import re
 import os
+import traceback
 
 # pip install googletrans
 from googletrans import Translator
@@ -26,44 +27,47 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 
 
 def run():
-    base_file_name = f'screenshot_{DT.datetime.now():%Y-%m-%d_%H%M%S}'
-    file_name = base_file_name + '.html'
-    print(file_name)
+    try:
+        file_name = f'screenshot_{DT.datetime.now():%Y-%m-%d_%H%M%S}.html'
+        print(file_name)
 
-    img = ImageGrab.grab()
-    bytes_io = io.BytesIO()
-    img.save(bytes_io, format='JPEG')
-    img_data = bytes_io.getvalue()
+        img = ImageGrab.grab()
+        bytes_io = io.BytesIO()
+        img.save(bytes_io, format='JPEG')
+        img_data = bytes_io.getvalue()
 
-    # Simple image to string
-    text = pytesseract.image_to_string(img, lang='eng')
-    text = re.sub(r'(\s){2,}', '\1', text)
+        # Simple image to string
+        text = pytesseract.image_to_string(img, lang='eng')
+        text = re.sub(r'(\s){2,}', '\1', text)
 
-    translator = Translator()
-    translation = translator.translate(text, src='en', dest='ru').text
-    print(translation)
+        translator = Translator()
+        translation = translator.translate(text, src='en', dest='ru').text
+        print(translation)
 
-    html_text = """
-    <body style="width: 100%; height: 100%">
-        <table  style="width: 100%; height: 100%">
-            <tr>
-                <td colspan="2"><img src="data:image/jpg;base64, {IMAGE_BASE64}" alt="Screenshot" />
-            </td></tr>
-            <tr>
-                <td><pre>{ORIGINAL_TEXT}</pre></td>
-                <td><pre>{TRANSLATED_TEXT}</td></pre>
-            </tr>
-        </table>
-    </body>
-    """\
-        .replace("{IMAGE_BASE64}", base64.b64encode(img_data).decode('ascii'))\
-        .replace("{ORIGINAL_TEXT}", text)\
-        .replace("{TRANSLATED_TEXT}", translation)
+        html_text = """
+        <body style="width: 100%; height: 100%">
+            <table  style="width: 100%; height: 100%">
+                <tr>
+                    <td colspan="2"><img src="data:image/jpg;base64, {IMAGE_BASE64}" alt="Screenshot" />
+                </td></tr>
+                <tr>
+                    <td><pre>{ORIGINAL_TEXT}</pre></td>
+                    <td><pre>{TRANSLATED_TEXT}</td></pre>
+                </tr>
+            </table>
+        </body>
+        """\
+            .replace("{IMAGE_BASE64}", base64.b64encode(img_data).decode('ascii'))\
+            .replace("{ORIGINAL_TEXT}", text)\
+            .replace("{TRANSLATED_TEXT}", translation)
 
-    with open(base_file_name + '.html', 'w', encoding='utf-8') as f:
-        f.write(html_text)
+        with open(file_name, 'w', encoding='utf-8') as f:
+            f.write(html_text)
 
-    os.startfile(file_name)
+        os.startfile(file_name)
+
+    except Exception as e:
+        print(traceback.format_exc())
 
 
 keyboard.add_hotkey('Ctrl + 1', run)
