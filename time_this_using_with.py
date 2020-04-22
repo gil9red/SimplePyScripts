@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-import time
+from timeit import default_timer
 
 
 class TimeThis:
@@ -13,14 +13,16 @@ class TimeThis:
         self.start_time = None
 
     def __enter__(self):
-        self.start_time = time.clock()
+        self.start_time = default_timer()
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
-        print('[{}] total time: {} sec'.format(self.title, time.clock() - self.start_time))
+        print('[{}] total time: {} sec'.format(self.title, default_timer() - self.start_time))
 
 
 if __name__ == '__main__':
+    import time
+
     with TimeThis():
         time.sleep(1)
 
