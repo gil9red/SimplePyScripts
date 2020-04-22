@@ -26,6 +26,13 @@ import pytesseract
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
+def error_sound():
+    import winsound
+    duration = 300  # milliseconds
+    freq = 1000     # Hz
+    winsound.Beep(freq, duration)
+
+
 def run():
     try:
         file_name = f'screenshot_{DT.datetime.now():%Y-%m-%d_%H%M%S}.html'
@@ -68,6 +75,7 @@ def run():
 
     except Exception as e:
         print(traceback.format_exc())
+        error_sound()
 
 
 keyboard.add_hotkey('Ctrl + 1', run)
