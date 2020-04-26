@@ -13,7 +13,7 @@ headers = {
 }
 
 rs = requests.get('https://www.techcult.ru/technology', headers=headers)
-root = BeautifulSoup(rs.text, "html.parser")
+root = BeautifulSoup(rs.content, "html.parser")
 
 for a in root.select('a.pad'):
     url = a['href']
