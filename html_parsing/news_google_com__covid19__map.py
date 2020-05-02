@@ -4,9 +4,10 @@
 __author__ = 'ipetrash'
 
 
-import requests
 import re
+
 from bs4 import BeautifulSoup
+import requests
 
 
 def parse():
@@ -15,7 +16,7 @@ def parse():
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0'
     }
     def _get_num(item) -> str:
-        return re.sub(r'\s', '.', item.get_text(strip=True))
+        return re.sub(r'\s+', '.', item.get_text(strip=True))
 
     rs = requests.get(url, headers=headers)
     soup = BeautifulSoup(rs.content, 'html.parser')
