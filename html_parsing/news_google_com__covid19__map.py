@@ -19,11 +19,11 @@ def parse():
         return re.sub(r'\s+', '.', item.get_text(strip=True))
 
     rs = requests.get(url, headers=headers)
-    soup = BeautifulSoup(rs.content, 'html.parser')
+    root = BeautifulSoup(rs.content, 'html.parser')
 
-    item = soup.select_one('div.tZjT9b')
+    item = root.select_one('div.tZjT9b')
     confirmed = _get_num(item.select_one('div.fNm5wd.qs41qe > div.UvMayb'))
-    deaths = _get_num(item.select_one('div.fNm5wd.ckqIZ > div.UvMayb'))
+    deaths    = _get_num(item.select_one('div.fNm5wd.ckqIZ > div.UvMayb'))
     recovered = _get_num(item.select_one('div.fNm5wd.gZvxhb > div.UvMayb'))
 
     print("Заболевших:   ", confirmed)
@@ -33,4 +33,6 @@ def parse():
     # Выздоровевших: 1.024.529
     # Умерших:       233.998
 
-parse()
+
+if __name__ == '__main__':
+    parse()
