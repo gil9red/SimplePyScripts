@@ -30,7 +30,7 @@ class MainWindow(QWidget):
 
         layout = QGridLayout()
 
-        items = ['0.3"', '1"', '0.56"', '0.25"', '0.56"', '0.81"', '0.69"', '3.25"']
+        items = ['0.3"', '1"', '0.56"', '0.25"', '0.56"', '0.81"', '0.75"', '3.25"']
 
         for i, x in enumerate(items, 1):
             button = QPushButton(x)
