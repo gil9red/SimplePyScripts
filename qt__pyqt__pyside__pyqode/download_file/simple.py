@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+import os.path
 from threading import Thread
 import traceback
 from urllib.request import urlretrieve
@@ -14,7 +15,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QForm
 def download_file(url: str, file_name: str):
     try:
         local_file_name, _ = urlretrieve(url, file_name)
-        print(local_file_name)
+        print(os.path.abspath(local_file_name))
     except:
         print(traceback.format_exc())
 
