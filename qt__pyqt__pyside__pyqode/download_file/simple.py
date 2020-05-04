@@ -24,7 +24,7 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.line_edit_url = QLineEdit('https://github.com/gil9red/SimplePyScripts/archive/master.zip')
+        self.line_edit_url = QLineEdit('https://codeload.github.com/gil9red/SimplePyScripts/zip/master')
         self.line_edit_file_name = QLineEdit('SimplePyScripts.zip')
 
         self.button_download = QPushButton('Download')

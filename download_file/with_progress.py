@@ -12,7 +12,7 @@ from threading import Thread
 def reporthook(blocknum, blocksize, totalsize):
     readsofar = blocknum * blocksize
     if totalsize > 0:
-        percent = readsofar * 1e2 / totalsize
+        percent = readsofar * 100.0 / totalsize
         if percent > 100:
             percent = 100
             readsofar = totalsize
@@ -43,7 +43,7 @@ def download(url: str, file_name: str = None, as_thread=False, callback_func=Non
 
 
 if __name__ == '__main__':
-    URL = 'https://github.com/gil9red/SimplePyScripts/archive/master.zip'
+    URL = 'https://codeload.github.com/gil9red/SimplePyScripts/zip/master'
     print(download(URL))
     print()
     print(download(URL, 'SimplePyScripts.zip'))

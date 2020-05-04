@@ -27,7 +27,7 @@ class ThreadDownload(QThread):
     def reporthook(self, blocknum, blocksize, totalsize):
         readsofar = blocknum * blocksize
         if totalsize > 0:
-            percent = readsofar * 1e2 / totalsize
+            percent = readsofar * 100.0 / totalsize
             if percent > 100:
                 percent = 100
                 readsofar = totalsize
@@ -53,7 +53,7 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.line_edit_url = QLineEdit('https://github.com/gil9red/SimplePyScripts/archive/master.zip')
+        self.line_edit_url = QLineEdit('https://codeload.github.com/gil9red/SimplePyScripts/zip/master')
         self.line_edit_file_name = QLineEdit('SimplePyScripts.zip')
 
         self.button_download = QPushButton('Download')
