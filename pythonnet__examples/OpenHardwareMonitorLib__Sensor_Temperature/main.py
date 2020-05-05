@@ -52,7 +52,7 @@ def fetch_stats(handle):
 
 
 def parse_sensor(sensor):
-    if sensor.Value is None or type(sensor).__module__ != 'OpenHardwareMonitor.Hardware':
+    if sensor.Value is None:
         return
 
     # If SensorType is Temperature
