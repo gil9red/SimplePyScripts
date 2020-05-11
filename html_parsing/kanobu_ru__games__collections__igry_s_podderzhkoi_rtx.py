@@ -19,17 +19,17 @@ URL = 'https://kanobu.ru/games/collections/igry-s-podderzhkoi-rtx/'
 
 @dataclass
 class Game:
-    title: str
+    name: str
     url: str
     img_base64: str
 
     def as_html_card(self) -> str:
         # SOURCE: https://www.w3schools.com/howto/howto_css_cards.asp
         return f"""
-            <div class="card" title="{self.title}">
-                <img src="{self.img_base64}" alt="{self.title}" style="width:100%">
+            <div class="card" title="{self.name}">
+                <img src="{self.img_base64}" alt="{self.name}" style="width:100%">
                 <div class="container">
-                    <h4 class="truncate"><b><a href="{self.url}">{self.title}</a></b></h4>
+                    <h4 class="truncate"><b><a href="{self.url}">{self.name}</a></b></h4>
                 </div>
             </div>
         """
@@ -134,7 +134,7 @@ if __name__ == '__main__':
     items = get_games()
     print(f'Games ({len(items)}):')
     for i, x in enumerate(items, 1):
-        print(f'    {i:2}: {x.title!r}')
+        print(f'    {i:2}: {x.name!r}')
     # Games (26):
     #      1: 'Minecraft'
     #      2: 'Cyberpunk 2077'
