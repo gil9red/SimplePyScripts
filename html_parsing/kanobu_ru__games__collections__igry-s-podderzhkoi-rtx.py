@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 import base64
 from dataclasses import dataclass
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urljoin
 from pathlib import Path
 from typing import List
 
@@ -14,9 +14,13 @@ from bs4 import BeautifulSoup
 import requests
 
 
+URL = 'https://kanobu.ru/games/collections/igry-s-podderzhkoi-rtx/'
+
+
 @dataclass
 class Game:
     title: str
+    url: str
     img_base64: str
 
     def as_html_card(self) -> str:
@@ -25,7 +29,7 @@ class Game:
             <div class="card" title="{self.title}">
                 <img src="{self.img_base64}" alt="{self.title}" style="width:100%">
                 <div class="container">
-                    <h4 class="truncate"><b>{self.title}</b></h4>
+                    <h4 class="truncate"><b><a href="{self.url}">{self.title}</a></b></h4>
                 </div>
             </div>
         """
@@ -40,21 +44,23 @@ def img_to_base64_html(rs: requests.Response) -> str:
 
 
 def get_games() -> List[Game]:
-    url = 'https://kanobu.ru/games/collections/igry-s-podderzhkoi-rtx/'
-
     session = requests.session()
-    rs = session.get(url)
+    rs = session.get(URL)
     root = BeautifulSoup(rs.content, 'html.parser')
 
     items = []
 
-    for game in root.select('li.c-game .c-game_image'):
-        title = game['title']
-        url_img = game.get('data-original') or game.get('src')
-        rs = session.get(url_img)
+    for game in root.select('li.c-game a.c-game__img'):
+        url_game = urljoin(rs.url, game['href'])
+
+        img = game.img
+        title = img['title']
+        url_img = img.get('data-original') or img.get('src')
+        rs_img = session.get(url_img)
+        img_base64 = img_to_base64_html(rs_img)
 
         items.append(
-            Game(title, img_to_base64_html(rs))
+            Game(title, url_game, img_base64)
         )
 
     return items
@@ -104,14 +110,16 @@ def save_as_html(file_name: str, items: List[Game], columns=4):
             </head>
             <body>
                 <div style="width: 800px; margin:0 auto;">
-                    <h1>{{ title }}</h1>
+                    <h1><a href="{{ URL }}">{{ title }}</a></h1>
                     <table cellspacing="5">
-        """.replace('{{ title }}', title))
+        """.replace('{{ title }}', title).replace('{{ URL }}', URL))
 
         for i in range(0, len(items), columns):
             f.write("<tr>")
-            for game in items[i:i + columns]:
+
+            for game in items[i: i+columns]:
                 f.write(f"<td>{game.as_html_card()}</td>")
+
             f.write("</tr>")
 
         f.write("""
