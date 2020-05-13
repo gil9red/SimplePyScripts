@@ -19,7 +19,7 @@ for i, torrent in enumerate(torrents, 1):
     torrent_size = torrent['total_size']
     total_size += torrent_size
 
-    print('{:<3} {} ({})'.format(i, torrent['name'], sizeof_fmt(torrent_size)))
+    print(f"{i:3}. {torrent['name']} ({sizeof_fmt(torrent_size)})")
 
 print()
-print('Total torrents: {}, total size: {} ({} bytes)'.format(len(torrents), sizeof_fmt(total_size), total_size))
+print(f'Total torrents: {len(torrents)}, total size: {sizeof_fmt(total_size)} ({total_size} bytes)')

@@ -16,4 +16,4 @@ counter = Counter(items)
 print('Save path:', sorted(counter.keys()))
 
 for name, number in counter.items():
-    print('"{}": {}'.format(name, number))
+    print(f'{name!r}: {number}')
