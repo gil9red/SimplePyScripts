@@ -4,10 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from common import get_client, sizeof_fmt
-
-
-qb = get_client()
+from common import get_client, print_torrents
 
 
 def get_torrents(qb, search_name='', **filters) -> list:
@@ -17,14 +14,6 @@ def get_torrents(qb, search_name='', **filters) -> list:
     return [torrent for torrent in qb.torrents(**filters) if match(torrent['name'])]
 
 
+qb = get_client()
 torrents = get_torrents(qb, search_name='.mkv')
-total_size = 0
-
-for i, torrent in enumerate(torrents, 1):
-    torrent_size = torrent['total_size']
-    total_size += torrent_size
-
-    print(f"{i:3}. {torrent['name']} ({sizeof_fmt(torrent_size)})")
-
-print()
-print(f'Total torrents: {len(torrents)}, total size: {sizeof_fmt(total_size)} ({total_size} bytes)')
+print_torrents(torrents)
