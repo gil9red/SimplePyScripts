@@ -30,13 +30,12 @@ class HttpProcessor(BaseHTTPRequestHandler):
             if not connections:
                 continue
 
-            connections.sort(key=lambda c: c.laddr.port)
-
+            ports = sorted(set(c.laddr.port for c in connections))
             processes.append({
                 'pid': proc.pid,
                 'name': proc.name(),
                 'path': os.path.normpath(proc.cmdline()[1]),
-                'ports': ', '.join(str(c.laddr.port) for c in connections),
+                'ports': ', '.join(map(str, ports)),
             })
 
         processes.sort(key=lambda p: int(''.join(c for c in p['ports'] if c.isdigit())))
