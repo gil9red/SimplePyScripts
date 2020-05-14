@@ -11,7 +11,7 @@ import psutil
 
 NEED_PROCESS = ['python.exe', 'pythonw.exe']
 TITLE = "Список запущенных серверов на python"
-HEADERS = ["PID", "Порт(ы)", "Путь"]
+HEADERS = ["#", "PID", "Порт(ы)", "Путь"]
 
 
 class HttpProcessor(BaseHTTPRequestHandler):
@@ -41,9 +41,10 @@ class HttpProcessor(BaseHTTPRequestHandler):
         processes.sort(key=lambda p: int(''.join(c for c in p['ports'] if c.isdigit())))
 
         table_rows = []
-        for p in processes:
+        for i, p in enumerate(processes, 1):
             table_rows.append(f'''
             <tr {'class="grayscale"' if p['pid'] == os.getpid() else ''}>
+                <td>{i}</td>
                 <td>{p['pid']}</td>
                 <td>{p['ports']}</td>
                 <td>{p['path']}</td>
