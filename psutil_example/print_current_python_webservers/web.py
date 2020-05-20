@@ -15,6 +15,10 @@ TITLE = "Список запущенных серверов на python"
 HEADERS = ["#", "PID", "Порт(ы)", "Путь"]
 
 
+def _port_to_tag_a(port: int) -> str:
+    return f'<a target="_blank" href="http://127.0.0.1:{port}">{port}</a>'
+
+
 class HttpProcessor(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -35,7 +39,7 @@ class HttpProcessor(BaseHTTPRequestHandler):
                 'pid': proc.pid,
                 'name': proc.name(),
                 'path': os.path.normpath(proc.cmdline()[1]),
-                'ports': ', '.join(map(str, ports)),
+                'ports': ', '.join(map(_port_to_tag_a, ports)),
             })
 
         processes.sort(key=lambda p: int(''.join(c for c in p['ports'] if c.isdigit())))
