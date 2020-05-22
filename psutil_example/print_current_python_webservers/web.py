@@ -10,6 +10,7 @@ import os
 # pip install psutil
 import psutil
 
+
 NEED_PROCESS = ['python.exe', 'pythonw.exe']
 TITLE = "Список запущенных серверов на python"
 HEADERS = ["#", "PID", "Порт(ы)", "Путь"]
