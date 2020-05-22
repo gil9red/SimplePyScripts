@@ -15,34 +15,38 @@ TITLE = "Список запущенных серверов"
 HEADERS = ["#", "PID", "Название", "Порт(ы)", "Путь"]
 
 
+def _get_processes() -> list:
+    processes = []
+    for proc in psutil.process_iter():
+        try:
+            connections = [c for c in proc.connections() if c.status == psutil.CONN_LISTEN and c.laddr]
+            if not connections:
+                continue
+
+            ports = sorted(set(c.laddr.port for c in connections))
+            processes.append({
+                'pid': proc.pid,
+                'name': proc.name(),
+                'path': ' '.join(os.path.normpath(x) for x in proc.cmdline()),
+                'ports': ', '.join(map(str, ports)),
+            })
+
+        except psutil.AccessDenied:
+            pass
+
+    processes.sort(key=lambda p: int(''.join(c for c in p['ports'] if c.isdigit())))
+
+    return processes
+
+
 class HttpProcessor(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         self.send_header('Content-Type', 'text/html; charset=utf-8')
         self.end_headers()
 
-        processes = []
-        for proc in psutil.process_iter():
-            try:
-                connections = [c for c in proc.connections() if c.status == psutil.CONN_LISTEN and c.laddr]
-                if not connections:
-                    continue
-
-                ports = sorted(set(c.laddr.port for c in connections))
-                processes.append({
-                    'pid': proc.pid,
-                    'name': proc.name(),
-                    'path': ' '.join(os.path.normpath(x) for x in proc.cmdline()),
-                    'ports': ', '.join(map(str, ports)),
-                })
-
-            except psutil.AccessDenied:
-                pass
-
-        processes.sort(key=lambda p: int(''.join(c for c in p['ports'] if c.isdigit())))
-
         table_rows = []
-        for i, p in enumerate(processes, 1):
+        for i, p in enumerate(_get_processes(), 1):
             table_rows.append(f'''
             <tr {'class="grayscale"' if p['pid'] == os.getpid() else ''}>
                 <td>{i}</td>
