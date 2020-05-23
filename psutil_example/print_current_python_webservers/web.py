@@ -6,6 +6,7 @@ __author__ = 'ipetrash'
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import os
+from urllib.parse import urlsplit
 
 # pip install psutil
 import psutil
@@ -45,9 +46,12 @@ def _port_to_tag_a(port: int) -> str:
 
 class HttpProcessor(BaseHTTPRequestHandler):
     def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-Type', 'text/html; charset=utf-8')
-        self.end_headers()
+        o = urlsplit(self.path)
+
+        # Only index
+        if o.path != '/':
+            self.send_error(404)
+            return
 
         table_rows = []
         for i, p in enumerate(_get_processes(), 1):
@@ -108,6 +112,11 @@ class HttpProcessor(BaseHTTPRequestHandler):
             .replace('{{ title }}', TITLE) \
             .replace('{{ headers }}', ''.join(f'<th>{x}</th>' for x in HEADERS)) \
             .replace('{{ table_rows }}', ''.join(table_rows))
+
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/html; charset=utf-8')
+        self.send_header('Connection', 'close')
+        self.end_headers()
 
         self.wfile.write(text.encode('utf-8'))
 
