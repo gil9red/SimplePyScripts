@@ -15,7 +15,7 @@ SQL_INSERT = "INSERT INTO Water (cold, hot) VALUES (?, ?)"
 SQL_UPDATE = "UPDATE Water SET date = date('now', 'localtime'), cold = ?, hot = ? WHERE id = ?"
 
 
-def create_connect():
+def create_connect() -> sqlite3.Connection:
     return sqlite3.connect(DB_FILE_NAME)
 
 
@@ -97,6 +97,8 @@ if __name__ == '__main__':
     # # Only for test
     # add(111, 222)
     # add(555, 666, forced=True)
+    # with create_connect() as connect:
+    #     connect.execute('DELETE FROM Water')
 
     for row in get_all():
         print(f"#{row['id']} date={row['date']} cold={row['cold']} hot={row['hot']}")
