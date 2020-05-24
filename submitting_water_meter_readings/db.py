@@ -79,6 +79,8 @@ def add(value_cold: int, value_hot: int, forced=False) -> bool:
 
             connect.execute(SQL_INSERT, (value_cold, value_hot))
 
+    db_create_backup()
+
     return True
 
 
