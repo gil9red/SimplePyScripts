@@ -178,24 +178,8 @@ def on_full_black_screen():
 
 
 if __name__ == "__main__":
-    # Localhost
     app.debug = True
     app.run(
-        # OR: host='127.0.0.1'
-        # host='127.0.0.1',
-        # host='192.168.0.102',
         host='0.0.0.0',
-        port=9999,
-
-        # Пусть сервер будет однопоточным
-        threaded=False,
+        port=9999
     )
-
-    # # Public IP
-    # app.run(
-    #     host='0.0.0.0',
-    #     port=9999,
-    #
-    #     # # Включение поддержки множества подключений
-    #     # threaded=True,
-    # )
