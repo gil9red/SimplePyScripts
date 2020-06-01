@@ -166,8 +166,8 @@ class MainWindow(QMainWindow):
 
     def search_gif(self):
         # TODO: replace on QListWidget
-        for c in reversed(range(self.gifs_layout.count())):
-            self.gifs_layout.itemAt(c).widget().setParent(None)
+        for i in range(self.gifs_layout.count()):
+            self.gifs_layout.itemAt(i).widget().deleteLater()
 
         self.search_gif_thread.name_gif = self.gif_edit.text()
         self.search_gif_thread.start()
