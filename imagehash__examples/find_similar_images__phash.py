@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: https://github.com/JohannesBuchner/imagehash
+
+
 from glob import glob
 import itertools
 
