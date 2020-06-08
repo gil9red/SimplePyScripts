@@ -14,4 +14,4 @@ def get_normal_form(word):
 
 
 print(get_normal_form('Иванова'))  # иванов
-print(get_normal_form('Иванов'))  # иванов
+print(get_normal_form('Иванов'))   # иванов
