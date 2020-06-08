@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-def pretty_table(data, cell_sep=' | ', header_separator=True) -> str:
+def pretty_table(data, cell_sep=' | ', header_separator=True, align='>') -> str:
     rows = len(data)
     cols = len(data[0])
 
@@ -13,7 +13,7 @@ def pretty_table(data, cell_sep=' | ', header_separator=True) -> str:
         columns = [str(data[row][col]) for row in range(rows)]
         col_width.append(len(max(columns, key=len)))
 
-    templates = ['{:>%d}' % width for width in col_width]
+    templates = ['{:' + align + '%d}' % width for width in col_width]
     separator = "-+-".join('-' * n for n in col_width)
 
     lines = []
@@ -32,8 +32,8 @@ def pretty_table(data, cell_sep=' | ', header_separator=True) -> str:
     return '\n'.join(lines)
 
 
-def print_pretty_table(data, cell_sep=' | ', header_separator=True):
-    print(pretty_table(data, cell_sep, header_separator))
+def print_pretty_table(data, cell_sep=' | ', header_separator=True, align='>'):
+    print(pretty_table(data, cell_sep, header_separator, align))
 
 
 if __name__ == '__main__':
