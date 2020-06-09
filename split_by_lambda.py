@@ -5,10 +5,16 @@ __author__ = 'ipetrash'
 
 
 from itertools import groupby
+from typing import Iterable, Callable
 
 
-items = '123-456-789'
+def split_by_func(items: Iterable, func: Callable) -> list:
+    return [list(x[1]) for x in groupby(items, func) if not x[0]]
 
-parts = [list(x[1]) for x in groupby(items, lambda x: x == '-') if not x[0]]
-print(parts)
-# [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9']]
+
+if __name__ == '__main__':
+    items = '123-456-789'
+
+    parts = split_by_func(items, lambda x: x == '-')
+    print(parts)
+    # [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9']]
