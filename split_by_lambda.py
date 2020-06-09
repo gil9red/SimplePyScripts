@@ -5,10 +5,10 @@ __author__ = 'ipetrash'
 
 
 from itertools import groupby
-from typing import Iterable, Callable
+from typing import Iterable, Callable, List
 
 
-def split_by_func(items: Iterable, func: Callable) -> list:
+def split_by_func(items: Iterable, func: Callable) -> List[List]:
     return [list(x[1]) for x in groupby(items, func) if not x[0]]
 
 
