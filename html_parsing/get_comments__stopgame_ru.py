@@ -38,7 +38,8 @@ def get_comments(url: str, no_quote=False) -> list:
 if __name__ == '__main__':
     for url in [
         'https://stopgame.ru/show/102770/atom_rpg_review',
-        'https://stopgame.ru/show/43787/project_dark_review'
+        'https://stopgame.ru/show/43787/project_dark_review',
+        'https://stopgame.ru/show/82379/dark_souls_iii_videoreview',
     ]:
         print(url)
 
