@@ -11,6 +11,10 @@ import nltk
 import pymorphy2
 
 
+# TODO: объединить функции is_ADJS_sing_* и is_VERB_sing_*,
+#       а проверку пола вынести в отдельую функцию
+
+
 def is_ADJS_sing_femn(parsed: pymorphy2.analyzer.Parse) -> bool:
     """
     Имя прилагательное (краткое) + единственное число + женский род
@@ -85,7 +89,7 @@ def is_femn(text: str) -> bool:
 
                 if has_NPRO_1per_sing:
                     # Если встретили в мужском роде, выходим
-                    if is_VERB_sing_masc(parsed):
+                    if is_ADJS_sing_masc(parsed) or is_VERB_sing_masc(parsed):
                         return False
 
                     if is_ADJS_sing_femn(parsed) or is_VERB_sing_femn(parsed):
