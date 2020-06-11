@@ -18,6 +18,13 @@ def is_ADJS_sing_femn(parsed: pymorphy2.analyzer.Parse) -> bool:
     return {'ADJS', 'sing', 'femn'} in parsed.tag
 
 
+def is_ADJS_sing_masc(parsed: pymorphy2.analyzer.Parse) -> bool:
+    """
+    Имя прилагательное (краткое) + единственное число + мужской род
+    """
+    return {'ADJS', 'sing', 'masc'} in parsed.tag
+
+
 def is_VERB_sing_femn(parsed: pymorphy2.analyzer.Parse) -> bool:
     """
     Глагол (личная форма) + единственное число + женский род
@@ -60,7 +67,7 @@ def is_femn(text: str) -> bool:
             if is_ADJS_sing_femn(parsed) or is_VERB_sing_femn(parsed):
                 return True
 
-            if is_VERB_sing_masc(parsed):
+            if is_ADJS_sing_masc(parsed) or is_VERB_sing_masc(parsed):
                 return False
 
             has_NPRO_1per_sing = False
