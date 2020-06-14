@@ -33,7 +33,8 @@ def _print_3(c: sqlite3.Cursor, sql: str):
     offset = 0
     while True:
         c.execute(
-            sql + ' LIMIT ? OFFSET ?', (BATCH_SIZE, offset))
+            sql + ' LIMIT ? OFFSET ?', (BATCH_SIZE, offset)
+        )
         batch = list(c)
         offset += BATCH_SIZE
         if not batch:
