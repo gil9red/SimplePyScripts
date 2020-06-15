@@ -4,14 +4,13 @@
 __author__ = 'ipetrash'
 
 
-from PyQt5.QtWidgets import (
-    QApplication, QListView, QWidget, QVBoxLayout
-)
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel
 from PyQt5.QtCore import Qt, QModelIndex
 from PyQt5.QtSql import QSqlDatabase, QSqlQueryModel, QSqlQuery
 
 from db import DB_FILE_NAME
-from utils.ThumbnailDelegate import ThumbnailDelegate
+from utils.FileListModel import FileListModel
+from utils.ListImagesWidget import ListImagesWidget
 
 
 ICON_WIDTH, ICON_HEIGHT = 128, 128
@@ -34,37 +33,51 @@ class MainWindow(QWidget):
 
         query = QSqlQuery("SELECT COUNT(*) FROM File")
         query.first()
-        self.total_rows = query.value(0)
+        self.total_rows_sql = query.value(0)
 
-        self.model = SqlQueryModel()
-        self.model.rowsInserted.connect(self._on_added_new_items)
-        self.model.modelReset.connect(self._on_added_new_items)
-        self.model.setQuery("SELECT id, file_name FROM File")
-        self.model.setHeaderData(0, Qt.Horizontal, "ID")
-        self.model.setHeaderData(1, Qt.Horizontal, "FILE_NAME")
+        self.model_sql = SqlQueryModel()
+        self.model_sql.rowsInserted.connect(self._on_added_new_items)
+        self.model_sql.modelReset.connect(self._on_added_new_items)
+        self.model_sql.setHeaderData(0, Qt.Horizontal, "ID")
+        self.model_sql.setHeaderData(1, Qt.Horizontal, "FILE_NAME")
 
-        self.list_view = QListView()
-        self.list_view.setMovement(QListView.Static)
-        self.list_view.setDragEnabled(False)
-        self.list_view.setDragDropMode(QListView.NoDragDrop)
-        self.list_view.setDropIndicatorShown(False)
-        self.list_view.setViewMode(QListView.IconMode)
-        self.list_view.setResizeMode(QListView.Adjust)
-        self.list_view.setSpacing(5)
-        self.list_view.setUniformItemSizes(True)
-        self.list_view.setItemDelegate(
-            ThumbnailDelegate(self.list_view, ICON_WIDTH, ICON_HEIGHT, IMAGE_CACHE)
+        self.list_view_sql = ListImagesWidget(
+            ICON_WIDTH, ICON_HEIGHT, IMAGE_CACHE, file_name_index=1
         )
-        self.list_view.setModel(self.model)
+        self.list_view_sql.setModel(self.model_sql)
+
+        list_files = []
+        query = QSqlQuery("SELECT file_name FROM File")
+        while query.next():
+            file_name = query.value(0)
+            list_files.append(file_name)
+
+        self.model_files = FileListModel(batch_size=256)
+        self.model_files.rowsInserted.connect(self._on_added_new_items)
+        self.model_files.modelReset.connect(self._on_added_new_items)
+        self.model_files.numberPopulated.connect(self._on_added_new_items)
+
+        self.list_view_files = ListImagesWidget(
+            ICON_WIDTH, ICON_HEIGHT, IMAGE_CACHE, file_name_index=0
+        )
+        self.list_view_files.setModel(self.model_files)
+
+        self.model_sql.setQuery("SELECT id, file_name FROM File")
+        self.model_files.setFileList(list_files)
 
         layout = QVBoxLayout()
-        layout.addWidget(self.list_view)
+        layout.addWidget(QLabel('SQL:'))
+        layout.addWidget(self.list_view_sql)
+        layout.addWidget(QLabel('FILES:'))
+        layout.addWidget(self.list_view_files)
 
         self.setLayout(layout)
 
     def _on_added_new_items(self):
         self.setWindowTitle(
-            f'Items: {self.model.rowCount()} / {self.total_rows} ({self.model.rowCount() / self.total_rows:.1%})'
+            f'Items. '
+            f'SQL: {self.model_sql.rowCount()} / {self.total_rows_sql} ({self.model_sql.rowCount() / self.total_rows_sql:.1%}) | '
+            f'FILES: {self.model_files.rowCount()} / {self.total_rows_sql} ({self.model_files.rowCount() / self.total_rows_sql:.1%})'
         )
 
 

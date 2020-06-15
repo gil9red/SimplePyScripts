@@ -25,7 +25,7 @@ def get_half_alpha(brush: QBrush) -> QBrush:
 class ThumbnailDelegate(QStyledItemDelegate):
     about_append_image = pyqtSignal(str)
 
-    def __init__(self, view: QAbstractItemView, width, height, image_cache: dict):
+    def __init__(self, view: QAbstractItemView, width, height, image_cache: dict, file_name_index=0):
         super().__init__()
 
         self.width = width
@@ -34,6 +34,7 @@ class ThumbnailDelegate(QStyledItemDelegate):
         self.title_margin = 5
         self.view = view
         self.image_cache = image_cache
+        self.file_name_index = file_name_index
 
     def _on_about_image(self, file_name: str, image: QImage, index: QModelIndex):
         self.image_cache[file_name] = image
@@ -43,7 +44,9 @@ class ThumbnailDelegate(QStyledItemDelegate):
         rect = opt.rect
         self.initStyleOption(opt, index)
 
-        file_name = str(index.model().data(index.model().index(index.row(), 1)))
+        file_name = str(index.model().data(
+            index.model().index(index.row(), self.file_name_index)
+        ))
         base_file_name = Path(file_name).name
         font_metrics = QFontMetrics(painter.font())
 
@@ -88,7 +91,9 @@ class ThumbnailDelegate(QStyledItemDelegate):
         rect_title.setRight(rect_title.right() - self.title_margin)
 
         painter.setPen(opt.palette.color(cg, QPalette.Text))
-        elided_text = font_metrics.elidedText(base_file_name, Qt.ElideRight, rect.width() - self.title_margin * 2)
+        elided_text = font_metrics.elidedText(
+            base_file_name, Qt.ElideRight, rect.width() - self.title_margin * 2
+        )
         painter.drawText(
             rect_title,
             Qt.AlignVCenter | Qt.AlignLeft,
