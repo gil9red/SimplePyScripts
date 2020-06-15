@@ -53,8 +53,6 @@ class MainWindow(QWidget):
             list_files.append(file_name)
 
         self.model_files = FileListModel(batch_size=256)
-        self.model_files.rowsInserted.connect(self._on_added_new_items)
-        self.model_files.modelReset.connect(self._on_added_new_items)
         self.model_files.numberPopulated.connect(self._on_added_new_items)
 
         self.list_view_files = ListImagesWidget(
