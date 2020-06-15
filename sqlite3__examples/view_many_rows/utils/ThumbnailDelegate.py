@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
+
+from pathlib import Path
+
+from PyQt5.QtWidgets import (
+    QApplication, QStyledItemDelegate, QStyleOptionViewItem, QStyle, QAbstractItemView
+)
+from PyQt5.QtGui import QPainter, QPalette, QFontMetrics, QImage, QBrush
+from PyQt5.QtCore import Qt, QSize, QRect, QModelIndex, QThreadPool, pyqtSignal
+
+from .ThumbnailWorker import ThumbnailWorker
+
+
+def get_half_alpha(brush: QBrush) -> QBrush:
+    color = brush.color()
+    color.setAlphaF(0.5)
+    brush.setColor(color)
+    return brush
+
+
+class ThumbnailDelegate(QStyledItemDelegate):
+    about_append_image = pyqtSignal(str)
+
+    def __init__(self, view: QAbstractItemView, width, height, image_cache: dict):
+        super().__init__()
+
+        self.width = width
+        self.height = height
+        self.title_height = 20
+        self.title_margin = 5
+        self.view = view
+        self.image_cache = image_cache
+
+    def _on_about_image(self, file_name: str, image: QImage, index: QModelIndex):
+        self.image_cache[file_name] = image
+        self.view.update(index)
+
+    def paint(self, painter: QPainter, opt: QStyleOptionViewItem, index: QModelIndex):
+        rect = opt.rect
+        self.initStyleOption(opt, index)
+
+        file_name = str(index.model().data(index.model().index(index.row(), 1)))
+        base_file_name = Path(file_name).name
+        font_metrics = QFontMetrics(painter.font())
+
+        # Draw correct background
+        opt.text = ""
+        style = opt.widget.style() if opt.widget else QApplication.style()
+        style.drawControl(QStyle.CE_ItemViewItem, opt, painter, opt.widget)
+
+        cg = QPalette.Normal if opt.state & QStyle.State_Enabled else QPalette.Disabled
+        if cg == QPalette.Normal and not (opt.state & QStyle.State_Active):
+            cg = QPalette.Inactive
+
+        # # Set pen color
+        # if opt.state & QStyle.State_Selected:
+        #     painter.setPen(opt.palette.color(cg, QPalette.HighlightedText))
+        # else:
+        #     painter.setPen(opt.palette.color(cg, QPalette.Text))
+
+        if file_name in self.image_cache:
+            img = self.image_cache[file_name]
+            if img and not img.isNull():
+                painter.drawImage(
+                    rect.topLeft(),
+                    # QRect(rect.left(), rect.top(), rect.width(), rect.height() - self.title_height),
+                    img
+                )
+        else:
+            self.image_cache[file_name] = None
+
+            worker = ThumbnailWorker(file_name, self.width, self.height)
+            worker.signals.about_image.connect(
+                lambda file_name, image: self._on_about_image(file_name, image, index)
+            )
+            QThreadPool.globalInstance().start(worker)
+
+        rect_title = QRect(
+            rect.left(), rect.top(),
+            rect.width(), rect.height()
+        )
+        rect_title.setLeft(rect_title.left() + self.title_margin)
+        rect_title.setTop(rect_title.top() + rect_title.height() - self.title_height)
+        rect_title.setRight(rect_title.right() - self.title_margin)
+
+        painter.setPen(opt.palette.color(cg, QPalette.Text))
+        elided_text = font_metrics.elidedText(base_file_name, Qt.ElideRight, rect.width() - self.title_margin * 2)
+        painter.drawText(
+            rect_title,
+            Qt.AlignVCenter | Qt.AlignLeft,
+            elided_text
+        )
+
+        if opt.state & QStyle.State_Selected:
+            painter.fillRect(rect, get_half_alpha(opt.palette.highlight()))
+
+        elif opt.state & QStyle.State_MouseOver:
+            painter.fillRect(rect, get_half_alpha(opt.palette.midlight()))
+
+        painter.drawRect(rect)
+
+    def sizeHint(self, option: QStyleOptionViewItem, index: QModelIndex) -> QSize:
+        return QSize(self.width, self.height + self.title_height)
