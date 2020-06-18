@@ -27,7 +27,8 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
     import logging
     logging.critical(text)
     QMessageBox.critical(None, 'Error', text)
-    quit()
+    sys.exit(1)
+
 
 import sys
 sys.excepthook = log_uncaught_exceptions
