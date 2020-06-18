@@ -7,20 +7,22 @@ __author__ = 'ipetrash'
 from PyQt5.QtWidgets import QFrame
 
 
-def get_horizontal_line() -> QFrame:
-    line = QFrame()
-    line.setFrameShape(QFrame.HLine)
-    line.setFrameShadow(QFrame.Sunken)
-    line.setLineWidth(1)
-    return line
+class HorizontalLineWidget(QFrame):
+    def __init__(self):
+        super().__init__()
+
+        self.setFrameShape(QFrame.HLine)
+        self.setFrameShadow(QFrame.Sunken)
+        self.setLineWidth(1)
 
 
-def get_vertical_line() -> QFrame:
-    line = QFrame()
-    line.setFrameShape(QFrame.VLine)
-    line.setFrameShadow(QFrame.Sunken)
-    line.setLineWidth(1)
-    return line
+class VerticalLineWidget(QFrame):
+    def __init__(self):
+        super().__init__()
+
+        self.setFrameShape(QFrame.VLine)
+        self.setFrameShadow(QFrame.Sunken)
+        self.setLineWidth(1)
 
 
 if __name__ == '__main__':
@@ -32,21 +34,21 @@ if __name__ == '__main__':
     layout = QFormLayout()
     layout.addRow('First', QLineEdit())
     layout.addRow('Last', QLineEdit())
-    layout.addRow(get_horizontal_line())
+    layout.addRow(HorizontalLineWidget())
 
     layout.addRow('Phone', QLineEdit())
-    layout.addRow(get_horizontal_line())
+    layout.addRow(HorizontalLineWidget())
 
     h_layout = QHBoxLayout()
     label = QLabel("1")
     label.setAlignment(Qt.AlignCenter)
     h_layout.addWidget(label)
-    h_layout.addWidget(get_vertical_line())
+    h_layout.addWidget(VerticalLineWidget())
 
     label = QLabel("2")
     label.setAlignment(Qt.AlignCenter)
     h_layout.addWidget(label)
-    h_layout.addWidget(get_vertical_line())
+    h_layout.addWidget(VerticalLineWidget())
 
     label = QLabel("3")
     label.setAlignment(Qt.AlignCenter)
