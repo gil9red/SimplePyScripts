@@ -18,7 +18,7 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
         with open('error.txt', 'w', encoding='utf-8') as f:
             f.write(text)
 
-    quit()
+    sys.exit(1)
 
 
 import sys

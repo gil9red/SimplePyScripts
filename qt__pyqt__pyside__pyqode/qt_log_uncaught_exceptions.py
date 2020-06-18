@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from PyQt5.QtWidgets import QApplication, QMessageBox, QPushButton
+from PyQt5.QtWidgets import QMessageBox
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
@@ -14,7 +14,7 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
 
     print(text)
     QMessageBox.critical(None, 'Error', text)
-    quit()
+    sys.exit(1)
 
 
 import sys
@@ -22,6 +22,8 @@ sys.excepthook = log_uncaught_exceptions
 
 
 if __name__ == '__main__':
+    from PyQt5.QtWidgets import QApplication, QPushButton
+
     app = QApplication([])
 
     button = QPushButton("DON'T PUSH ME!")

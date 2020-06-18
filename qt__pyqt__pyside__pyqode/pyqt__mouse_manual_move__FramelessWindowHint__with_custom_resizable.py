@@ -16,7 +16,7 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
     print(text)
     from PyQt5.QtWidgets import QMessageBox
     QMessageBox.critical(None, 'Error', text)
-    quit()
+    sys.exit(1)
 
 
 import sys
