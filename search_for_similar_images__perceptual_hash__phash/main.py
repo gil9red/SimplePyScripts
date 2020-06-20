@@ -491,7 +491,7 @@ class MainWindow(QMainWindow):
 
     def open_indexed_image_directory(self):
         file_name = self.list_indexed_images_widget.currentFileName()
-        explore(Path(file_name).parent)
+        explore(Path(file_name).parent, select=False)
 
     def run_indexed_image(self):
         file_name = self.list_indexed_images_widget.currentFileName()
@@ -503,7 +503,7 @@ class MainWindow(QMainWindow):
 
     def open_similar_image_directory(self):
         file_name = self.list_images_widget_similar.currentFileName()
-        explore(Path(file_name).parent)
+        explore(Path(file_name).parent, select=False)
 
     def run_similar_image(self):
         file_name = self.list_images_widget_similar.currentFileName()
