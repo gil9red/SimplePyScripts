@@ -12,10 +12,6 @@ import os.path
 # pip install selenium
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException, MoveTargetOutOfBoundsException
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 
 
@@ -23,29 +19,23 @@ def get_suffix(url: str) -> str:
     return os.path.splitext(url)[1]
 
 
-# TODO:
-# # get the Firefox profile object
-# firefox_profile = webdriver.FirefoxProfile()
-#
-# # Disable CSS
-# firefox_profile.set_preference('permissions.default.stylesheet', 2)
-#
-# # Disable images
-# firefox_profile.set_preference('permissions.default.image', 2)
-#
-# # Disable Flash
-# firefox_profile.set_preference('dom.ipc.plugins.enabled.libflashplayer.so', 'false')
-#
-# driver = webdriver.Firefox(firefox_profile=firefox_profile)
-
 url = 'https://pikabu.ru/story/ii_pobedil_5467581'
-url = 'https://pikabu.ru/story/v_nab_chelnakh_predpriimchivyiy_zhitel_doma_peredelal_arku_pod_garazh_7526529'
-
 post_name = url.rstrip('/').split('/')[-1]
 dir_name = Path(__file__).resolve().parent / post_name
 dir_name.mkdir(exist_ok=True)
 
-driver = webdriver.Firefox()
+firefox_profile = webdriver.FirefoxProfile()
+
+# Disable CSS
+firefox_profile.set_preference('permissions.default.stylesheet', 2)
+
+# Disable images
+firefox_profile.set_preference('permissions.default.image', 2)
+
+# Disable Flash
+firefox_profile.set_preference('dom.ipc.plugins.enabled.libflashplayer.so', 'false')
+
+driver = webdriver.Firefox(firefox_profile=firefox_profile)
 
 try:
     driver.set_page_load_timeout(10)
