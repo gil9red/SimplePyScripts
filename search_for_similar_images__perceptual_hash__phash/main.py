@@ -34,6 +34,7 @@ from ui.FlatProgressBar import FlatProgressBar
 from ui.IndexingSettingsWidget import IndexingSettingsWidget
 from ui.SearchForSimilarSettingsWidget import SearchForSimilarSettingsWidget
 from ui.AboutDialog import AboutDialog
+from ui.ImageHashDetailsDialog import ImageHashDetailsDialog
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
@@ -114,6 +115,10 @@ class MainWindow(QMainWindow):
         self.action_run_indexed_image = self.tool_bar_indexed_image_control.addAction('Run indexed image')
         self.action_run_indexed_image.setIcon(QIcon(DIR_IMAGES + '/run_image.svg'))
         self.action_run_indexed_image.triggered.connect(self.run_indexed_image)
+
+        self.action_view_details_indexed_image = self.tool_bar_indexed_image_control.addAction('View details')
+        self.action_view_details_indexed_image.setIcon(QIcon(DIR_IMAGES + '/view.svg'))
+        self.action_view_details_indexed_image.triggered.connect(self.view_details_indexed_image)
         # tool_bar_indexed_image_control
 
         # tool_bar_similar_image_control
@@ -130,6 +135,10 @@ class MainWindow(QMainWindow):
         self.action_run_similar_image = self.tool_bar_similar_image_control.addAction('Run similar image')
         self.action_run_similar_image.setIcon(QIcon(DIR_IMAGES + '/run_image.svg'))
         self.action_run_similar_image.triggered.connect(self.run_similar_image)
+
+        self.action_view_details_similar_image = self.tool_bar_similar_image_control.addAction('View details')
+        self.action_view_details_similar_image.setIcon(QIcon(DIR_IMAGES + '/view.svg'))
+        self.action_view_details_similar_image.triggered.connect(self.view_details_similar_image)
         # tool_bar_similar_image_control
 
     def _fill_dockwidgets(self):
@@ -233,6 +242,7 @@ class MainWindow(QMainWindow):
         self.action_select_indexed_image.setEnabled(has_index_list_images_widget)
         self.action_open_indexed_image_directory.setEnabled(has_index_list_images_widget)
         self.action_run_indexed_image.setEnabled(has_index_list_images_widget)
+        self.action_view_details_indexed_image.setEnabled(has_index_list_images_widget)
         if has_index_list_images_widget:
             self.status_bar_indexed_image.setText(file_name_indexed)
 
@@ -241,7 +251,7 @@ class MainWindow(QMainWindow):
         self.action_select_similar_image.setEnabled(has_index_list_images_widget_similar)
         self.action_open_similar_image_directory.setEnabled(has_index_list_images_widget_similar)
         self.action_run_similar_image.setEnabled(has_index_list_images_widget_similar)
-
+        self.action_view_details_similar_image.setEnabled(has_index_list_images_widget_similar)
         if has_index_list_images_widget_similar:
             self.status_bar_similar_image.setText(file_name_similar)
 
@@ -497,6 +507,11 @@ class MainWindow(QMainWindow):
         file_name = self.list_indexed_images_widget.currentFileName()
         explore(file_name, select=False)
 
+    def view_details_indexed_image(self):
+        file_name = self.list_indexed_images_widget.currentFileName()
+        data = self.image_by_hashes[file_name]
+        ImageHashDetailsDialog(file_name, data, parent=self).show()
+
     def select_similar_image(self):
         file_name = self.list_images_widget_similar.currentFileName()
         explore(file_name)
@@ -508,6 +523,11 @@ class MainWindow(QMainWindow):
     def run_similar_image(self):
         file_name = self.list_images_widget_similar.currentFileName()
         explore(file_name, select=False)
+
+    def view_details_similar_image(self):
+        file_name = self.list_images_widget_similar.currentFileName()
+        data = self.image_by_hashes[file_name]
+        ImageHashDetailsDialog(file_name, data, parent=self).show()
 
     def read_settings(self):
         ini = QSettings(SETTINGS_FILE_NAME, QSettings.IniFormat)
