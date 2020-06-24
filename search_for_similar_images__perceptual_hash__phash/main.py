@@ -69,7 +69,7 @@ class MainWindow(QMainWindow):
     def _fill_menus(self):
         self.menu_file = self.menuBar().addMenu('File')
         action_exit = self.menu_file.addAction('Exit')
-        action_exit.triggered.connect(QApplication.closeAllWindows)
+        action_exit.triggered.connect(self.close)
 
         self.menu_toolbars = self.menuBar().addMenu('Toolbars')
         self.menu_docks = self.menuBar().addMenu('Docks')
@@ -554,7 +554,7 @@ class MainWindow(QMainWindow):
     def closeEvent(self, event):
         self.write_settings()
 
-        super().closeEvent(event)
+        QApplication.closeAllWindows()
 
 
 if __name__ == '__main__':
