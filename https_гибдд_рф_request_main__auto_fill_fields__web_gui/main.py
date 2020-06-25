@@ -6,6 +6,8 @@ __author__ = 'ipetrash'
 
 from PyQt5.QtCore import QUrl, QEventLoop
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
+
+# pip install PyQtWebEngine
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 
 
