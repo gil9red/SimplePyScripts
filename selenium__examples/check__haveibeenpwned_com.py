@@ -4,14 +4,16 @@
 __author__ = 'ipetrash'
 
 
+import datetime as DT
 import time
+from pathlib import Path
 
 # pip install selenium
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
 
-def do_check(email: str) -> str:
+def do_check(email: str, dir_save_pwned_screenshots: str = None) -> str:
     options = Options()
     options.add_argument('--headless')
 
@@ -29,6 +31,14 @@ def do_check(email: str) -> str:
         pwned_website_banner = driver.find_element_by_css_selector('#pwnedWebsiteBanner .pwnTitle')
         if pwned_website_banner.is_displayed():
             result = pwned_website_banner.text
+
+            if dir_save_pwned_screenshots:
+                dir_screenshots = Path(dir_save_pwned_screenshots)
+                dir_screenshots.mkdir(parents=True, exist_ok=True)
+
+                file_name = str(dir_screenshots / DT.datetime.today().strftime('%d-%m-%Y %H%M%S.png'))
+                driver.save_screenshot(file_name)
+
         else:
             result = driver.find_element_by_css_selector('#noPwnage .pwnTitle').text
 
