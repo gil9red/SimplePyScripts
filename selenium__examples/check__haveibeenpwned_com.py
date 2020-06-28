@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
+
+import time
+
+# pip install selenium
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+
+
+def do_check(email: str) -> str:
+    options = Options()
+    options.add_argument('--headless')
+
+    driver = webdriver.Firefox(options=options)
+    try:
+        driver.implicitly_wait(20)
+        driver.get('https://haveibeenpwned.com/')
+        # print(f'Title: {driver.title!r}')
+
+        driver.find_element_by_id('Account').send_keys(email)
+        driver.find_element_by_id('searchPwnage').click()
+
+        time.sleep(20)
+
+        pwned_website_banner = driver.find_element_by_css_selector('#pwnedWebsiteBanner .pwnTitle')
+        if pwned_website_banner.is_displayed():
+            result = pwned_website_banner.text
+        else:
+            result = driver.find_element_by_css_selector('#noPwnage .pwnTitle').text
+
+        result = ' '.join(
+            result.strip().replace(' (subscribe to search sensitive breaches)', '').splitlines()
+        )
+        return result
+
+    finally:
+        driver.quit()
+
+
+if __name__ == '__main__':
+    print(do_check('ilya.petrash@inbox.ru'))
+    # Oh no — pwned! Pwned on 1 breached site and found no pastes
+
+    print(do_check('e0a545bd9f4a4267baebbba8102fa33a@gmail.com'))
+    # Good news — no pwnage found! No breached accounts and no pastes
+
+    print(do_check('foo@gmail.com'))
+    # Oh no — pwned! Pwned on 55 breached sites and found 12 pastes
