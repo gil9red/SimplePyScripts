@@ -35,15 +35,15 @@ class TreeItem:
         if isinstance(child, str):
             child = TreeItem([child])
 
-        if self.model():
-            self.model().beginInsertRows(self.index(), self.childCount(), self.childCount() + 1)
+        if self._model:
+            self._model.beginInsertRows(self.index(), self.childCount(), self.childCount() + 1)
 
         child._parentItem = self
-        child._model = self.model()
+        child._model = self._model
         self._childItems.append(child)
 
-        if self.model():
-            self.model().endInsertRows()
+        if self._model:
+            self._model.endInsertRows()
 
         return child
 
@@ -52,7 +52,13 @@ class TreeItem:
             self.appendChild(x)
 
     def clearChilren(self):
+        if self._model:
+            self._model.beginRemoveRows(self.index(), 0, self.childCount())
+
         self._childItems.clear()
+
+        if self._model:
+            self._model.endRemoveRows()
 
     def child(self, row: int) -> Optional['TreeItem']:
         if row < 0 or row >= len(self._childItems):
@@ -87,7 +93,7 @@ class TreeItem:
         if self._parentItem is None:
             return QModelIndex()
 
-        return self.model().createIndex(self.row(), column, self)
+        return self._model.createIndex(self.row(), column, self)
 
 
 class TreeModel(QAbstractItemModel):
