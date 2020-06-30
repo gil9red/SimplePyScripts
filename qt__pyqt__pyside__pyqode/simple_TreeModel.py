@@ -25,15 +25,15 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class TreeItem:
-    def __init__(self, data: list):
+    def __init__(self, *args):
         self._childItems: List[TreeItem] = []
-        self._itemData: list = data
+        self._itemData: list = args
         self._parentItem: Optional[TreeItem] = None
         self._model: Optional[QAbstractItemModel] = None
 
     def appendChild(self, child: Union['TreeItem', str]) -> 'TreeItem':
         if isinstance(child, str):
-            child = TreeItem([child])
+            child = TreeItem(child)
 
         if self._model:
             self._model.beginInsertRows(self.index(), self.childCount(), self.childCount() + 1)
@@ -102,7 +102,7 @@ class TreeModel(QAbstractItemModel):
     def __init__(self):
         super().__init__()
 
-        self._root_item = TreeItem(["ROOT"])
+        self._root_item = TreeItem("<ROOT>")
         self._root_item.setModel(self)
 
     def rootItem(self) -> TreeItem:
@@ -176,7 +176,7 @@ if __name__ == '__main__':
     t = default_timer()
     items = []
     for i in range(9999):
-        item = TreeItem([f'root_{i:04}'])
+        item = TreeItem(f'root_{i:04}')
         items.append(item)
 
         for j in range(10):
