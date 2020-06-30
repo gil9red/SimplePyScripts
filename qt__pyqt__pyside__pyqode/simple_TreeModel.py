@@ -27,7 +27,7 @@ sys.excepthook = log_uncaught_exceptions
 class TreeItem:
     def __init__(self, *args):
         self._childItems: List[TreeItem] = []
-        self._itemData: list = args
+        self._itemData = args
         self._parentItem: Optional[TreeItem] = None
         self._model: Optional[QAbstractItemModel] = None
 
