@@ -57,4 +57,6 @@ for file_name, similars in items:
     print(f'{i}. "{file_name}" ({len(similars)}):')
 
     for j, x in enumerate(similars, 1):
-        print(f'    {j}. "{x}"\n')
+        print(f'    {j}. "{x}"')
+
+    print()
