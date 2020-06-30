@@ -29,13 +29,21 @@ class TreeItem:
         self._childItems: List[TreeItem] = []
         self._itemData: list = data
         self._parentItem: Optional[TreeItem] = None
+        self._model: Optional[QAbstractItemModel] = None
 
     def appendChild(self, child: Union['TreeItem', str]) -> 'TreeItem':
         if isinstance(child, str):
             child = TreeItem([child])
 
+        if self.model():
+            self.model().beginInsertRows(self.index(), self.childCount(), self.childCount() + 1)
+
         child._parentItem = self
+        child._model = self.model()
         self._childItems.append(child)
+
+        if self.model():
+            self.model().endInsertRows()
 
         return child
 
@@ -69,6 +77,18 @@ class TreeItem:
     def parentItem(self) -> Optional['TreeItem']:
         return self._parentItem
 
+    def setModel(self, model: QAbstractItemModel):
+        self._model = model
+
+    def model(self) -> QAbstractItemModel:
+        return self._model
+
+    def index(self, column=0) -> QModelIndex:
+        if self._parentItem is None:
+            return QModelIndex()
+
+        return self.model().createIndex(self.row(), column, self)
+
 
 class TreeModel(QAbstractItemModel):
     column_names = ['File name']
@@ -77,6 +97,10 @@ class TreeModel(QAbstractItemModel):
         super().__init__()
 
         self._root_item = TreeItem(["ROOT"])
+        self._root_item.setModel(self)
+
+    def rootItem(self) -> TreeItem:
+        return self._root_item
 
     def setModelData(self, items: List[TreeItem]):
         self.beginResetModel()
@@ -144,7 +168,7 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
 
     items = []
-    for i in range(9999):
+    for i in range(9999)[:2]:
         item = TreeItem([f'root_{i:04}'])
         items.append(item)
 
