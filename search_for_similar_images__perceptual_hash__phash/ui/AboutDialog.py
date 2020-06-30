@@ -14,6 +14,7 @@ class AboutDialog(QDialog):
         self.setWindowTitle('About')
 
         text_browser = QTextBrowser()
+        text_browser.setOpenExternalLinks(True)
         text_browser.setStyleSheet("""
             QTextBrowser {
                 border: 0;
