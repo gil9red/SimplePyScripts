@@ -110,26 +110,24 @@ class TreeModel(QAbstractItemModel):
 
         self.endResetModel()
 
+    def item(self, index: QModelIndex) -> TreeItem:
+        if not index.isValid():
+            return self._root_item
+
+        return index.internalPointer()
+
     def columnCount(self, parent: QModelIndex = ...) -> int:
         return len(self.column_names)
 
     def rowCount(self, parent_index: QModelIndex = ...) -> int:
-        if parent_index.isValid():
-            item = parent_index.internalPointer()
-        else:
-            item = self._root_item
-
+        item = self.item(parent_index)
         return item.childCount()
 
     def index(self, row: int, column: int, parent: QModelIndex = ...) -> QModelIndex:
         if not self.hasIndex(row, column, parent):
             return QModelIndex()
 
-        if not parent.isValid():
-            parentItem = self._root_item
-        else:
-            parentItem = parent.internalPointer()
-
+        parentItem = self.item(parent)
         childItem = parentItem.child(row)
         if childItem:
             return self.createIndex(row, column, childItem)
@@ -165,10 +163,13 @@ class TreeModel(QAbstractItemModel):
 
 
 if __name__ == '__main__':
+    from timeit import default_timer
+
     app = QApplication(sys.argv)
 
+    t = default_timer()
     items = []
-    for i in range(9999)[:2]:
+    for i in range(9999):
         item = TreeItem([f'root_{i:04}'])
         items.append(item)
 
@@ -177,6 +178,7 @@ if __name__ == '__main__':
 
             for k in range(10):
                 child.appendChild(f'item__{i:04}/{j}/{k}')
+    print(f'Elapsed time: {default_timer() - t:.2f} secs')
 
     model = TreeModel()
     model.setModelData(items)
