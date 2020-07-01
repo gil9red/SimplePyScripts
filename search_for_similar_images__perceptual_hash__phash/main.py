@@ -7,6 +7,7 @@ __author__ = 'ipetrash'
 import datetime as DT
 from pathlib import Path
 from timeit import default_timer
+from typing import Dict
 import os
 
 # pip install imagehash
@@ -35,6 +36,7 @@ from ui.IndexingSettingsWidget import IndexingSettingsWidget
 from ui.SearchForSimilarSettingsWidget import SearchForSimilarSettingsWidget
 from ui.AboutDialog import AboutDialog
 from ui.ImageHashDetailsDialog import ImageHashDetailsDialog
+from ui.CrossSearchSimilarImagesDialog import CrossSearchSimilarImagesDialog
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
@@ -60,7 +62,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle(str(Path(__file__).parent.name))
 
-        self.image_by_hashes = dict()
+        self.image_by_hashes: Dict[str, dict] = dict()
 
         self._fill_ui()
 
@@ -96,6 +98,10 @@ class MainWindow(QMainWindow):
         self.action_search_for_similar = self.tool_bar_general.addAction('Search for similar')
         self.action_search_for_similar.setIcon(QIcon(DIR_IMAGES + '/search.svg'))
         self.action_search_for_similar.triggered.connect(self.start_search_for_similar)
+
+        self.action_cross_search_similar_images = self.tool_bar_general.addAction('Cross search similar images')
+        self.action_cross_search_similar_images.setIcon(QIcon(DIR_IMAGES + '/search-cross.svg'))
+        self.action_cross_search_similar_images.triggered.connect(self.cross_search_similar_images)
 
         # self.action_scroll_to_origin = self.tool_bar_general.addAction('Scroll to origin')
         # self.action_scroll_to_origin.triggered.connect(self.scroll_to_origin)
@@ -480,6 +486,16 @@ class MainWindow(QMainWindow):
             self.model_files.set_matched_files(file_name, results)
 
         self.model_similar_images.set_file_list(results)
+
+    def cross_search_similar_images(self):
+        hash_algo = self.search_for_similar_settings.cb_algo.currentText()
+        max_score = self.search_for_similar_settings.sb_max_score.value()
+
+        d = CrossSearchSimilarImagesDialog(self)
+        d.itemDoubleClicked.connect(
+            lambda file_name: explore(file_name, select=False)
+        )
+        d.start(self.image_by_hashes, hash_algo, max_score)
 
     # TODO: ...
     # def scroll_to_origin(self):
