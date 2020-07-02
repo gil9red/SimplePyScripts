@@ -50,8 +50,8 @@ class CrossSearchSimilarImagesThread(QThread):
 
             file_name_by_similars[file_name_1].append((file_name_2, score))
 
-        # Обратная сортировка по количеству элементов
-        items = sorted(file_name_by_similars.items(), key=lambda x: (len(x[1]), x[0]), reverse=True)
+        # Обратная сортировка по количеству элементов, а названия элементов сортируются по возрастанию
+        items = sorted(file_name_by_similars.items(), key=lambda x: (-len(x[1]), x[0]))
         for file_name, similars in items:
             if not similars:
                 continue
