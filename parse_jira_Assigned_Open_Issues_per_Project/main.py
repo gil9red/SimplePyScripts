@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+import datetime as DT
 from typing import Dict
 from pathlib import Path
 
@@ -13,8 +14,11 @@ from bs4 import BeautifulSoup
 # For import ascii_table__simple_pretty__ljust.py
 import sys
 sys.path.append('..')
+sys.path.append('../wait')
 
 from ascii_table__simple_pretty__ljust import print_pretty_table
+from wait import wait
+import db
 
 
 URL = 'https://jira.compassplus.ru/secure/ViewProfile.jspa?name=ipetrash'
@@ -43,18 +47,35 @@ def get_assigned_open_issues_per_project() -> Dict[str, int]:
 
 
 if __name__ == '__main__':
-    assigned_open_issues_per_project = get_assigned_open_issues_per_project()
-    # print(assigned_open_issues_per_project)
-    # # {'xxx': 1, 'yyy': 2, 'zzz': 3}
+    while True:
+        try:
+            print(f'Started as {DT.date.today()}\n')
 
-    print('Total issues:', sum(assigned_open_issues_per_project.values()))
+            assigned_open_issues_per_project = get_assigned_open_issues_per_project()
+            # print(assigned_open_issues_per_project)
+            # # {'xxx': 1, 'yyy': 2, 'zzz': 3}
 
-    print()
+            print('Total issues:', sum(assigned_open_issues_per_project.values()))
+            print()
 
-    data = [("PROJECT", 'Issues')] + list(assigned_open_issues_per_project.items())
-    print_pretty_table(data)
-    # PROJECT | Issues
-    # --------+-------
-    # xxx     | 1
-    # yyy     | 2
-    # zzz     | 3
+            data = [("PROJECT", 'Issues')] + list(assigned_open_issues_per_project.items())
+            print_pretty_table(data)
+            # PROJECT | Issues
+            # --------+-------
+            # xxx     | 1
+            # yyy     | 2
+            # zzz     | 3
+
+            db.add(assigned_open_issues_per_project)
+
+            print('\n' + '-' * 100 + '\n')
+
+            wait(weeks=1)
+
+        except Exception:
+            import traceback
+            print('Ошибка:')
+            print(traceback.format_exc())
+
+            print('Через 15 минут попробую снова...')
+            wait(minutes=15)
