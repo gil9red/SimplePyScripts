@@ -367,6 +367,7 @@ class MainWindow(QMainWindow):
 
         time_start = default_timer()
         start_datetime = DT.datetime.now()
+        number = 0
 
         for i, file_name in enumerate(file_names, 1):
             QApplication.processEvents()
@@ -393,6 +394,7 @@ class MainWindow(QMainWindow):
                 time = default_timer()
 
                 db_add_image(file_name)
+                number += 1
                 print(file_name, f'{default_timer() - time:.2f} secs', sizeof_fmt(os.path.getsize(file_name)))
 
                 progress.setFields({
@@ -407,7 +409,11 @@ class MainWindow(QMainWindow):
                 continue
 
         progress.setValue(number_file_names)
-        print(f'\nTotal: {default_timer() - time_start:.2f} secs')
+
+        if number:
+            db_create_backup()
+
+        print(f'\nTotal: {default_timer() - time_start:.2f} secs. Added: {number}')
 
     def start_search_for_similar(self):
         file_name = self.list_indexed_images_widget.currentFileName()
