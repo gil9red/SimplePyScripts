@@ -146,7 +146,7 @@ if __name__ == '__main__':
             print('Ошибка:')
             print(traceback.format_exc())
 
-            print('Через 5 минут попробую снова...')
+            print('Через 1 минуту попробую снова...')
 
             # Wait 1 minute before next attempt
             import time
