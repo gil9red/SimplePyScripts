@@ -22,7 +22,7 @@ while True:
         db.add(assigned_open_issues_per_project)
 
         print('\n' + '-' * 100 + '\n')
-        wait(weeks=1)
+        wait(days=1)
 
     except Exception:
         import traceback
