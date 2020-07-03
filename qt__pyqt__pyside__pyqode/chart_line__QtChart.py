@@ -22,11 +22,13 @@ class MainWindow(QMainWindow):
 
         chart = QChart()
         chart.setTitle("Line Chart Example")
+        chart.setAnimationOptions(QChart.SeriesAnimations)
+        chart.legend().hide()
         chart.addSeries(series)
         chart.createDefaultAxes()
-        chart.setAnimationOptions(QChart.SeriesAnimations)
 
-        chart_view = QChartView(chart)
+        chart_view = QChartView()
+        chart_view.setChart(chart)
         chart_view.setRenderHint(QPainter.Antialiasing)
 
         self.setCentralWidget(chart_view)
