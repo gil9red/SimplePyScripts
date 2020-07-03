@@ -11,10 +11,10 @@ from selenium import webdriver
 def get_attributes(driver, element) -> dict:
     return driver.execute_script(
         """
-        let el = arguments[0];
+        let attr = arguments[0].attributes;
         let items = {}; 
-        for (index = 0; index < el.attributes.length; index++) {
-            items[el.attributes[index].name] = el.attributes[index].value;
+        for (let i = 0; i < attr.length; i++) {
+            items[attr[i].name] = attr[i].value;
         }
         return items;
         """,
