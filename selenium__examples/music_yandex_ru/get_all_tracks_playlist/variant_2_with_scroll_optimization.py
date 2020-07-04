@@ -67,7 +67,7 @@ try:
                 title = track_el.find_element_by_css_selector('.d-track__title').text
                 artists = track_el.find_element_by_css_selector('.d-track__artists').text
                 length = track_el.find_element_by_css_selector('.d-track__info > span.typo-track.deco-typo-secondary').text
-                available = not any(x == 'd-track__unavailable' for x in track_el.get_attribute('class').split())
+                available = 'd-track__unavailable' not in track_el.get_attribute('class')
 
                 track = Track(title, artists, length, available)
 
