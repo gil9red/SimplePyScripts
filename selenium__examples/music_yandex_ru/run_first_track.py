@@ -42,6 +42,8 @@ def play_track(driver, track_title: str):
     else:
         print(f'Not result for: {track_title!r}')
 
+    return track_el
+
 
 if __name__ == '__main__':
     driver = None
