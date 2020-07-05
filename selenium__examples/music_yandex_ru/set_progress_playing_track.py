@@ -46,7 +46,6 @@ try:
         try:
             track_playing_el = driver.find_element_by_css_selector('.d-track_playing')
             track = get_track(track_playing_el)
-
         except (NoSuchElementException, StaleElementReferenceException):
             continue
 
