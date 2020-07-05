@@ -53,8 +53,6 @@ class MainWindow(QMainWindow):
         series.append(7, 4)
         series.append(10, 5)
 
-        tab_widget = QTabWidget()
-
         chart = QChart()
         chart.setTitle("Line Chart Example")
         chart.setAnimationOptions(QChart.SeriesAnimations)
