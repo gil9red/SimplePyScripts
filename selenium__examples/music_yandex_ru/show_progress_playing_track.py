@@ -32,8 +32,8 @@ try:
 
     play_track(driver, SEARCHING_TRACK)
 
-    # <div class="progress__line" style="transform: scaleX(0.4728);"></div>
-    progress__line_el = driver.find_element_by_css_selector('.player-progress .progress__bar.progress__progress > .progress__line')
+    player_progress_el = driver.find_element_by_css_selector('.player-progress')
+    progress__line_el = player_progress_el.find_element_by_css_selector('.progress__bar.progress__progress > .progress__line')
 
     while True:
         try:
