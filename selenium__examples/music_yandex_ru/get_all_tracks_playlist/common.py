@@ -17,10 +17,12 @@ from selenium.common.exceptions import MoveTargetOutOfBoundsException
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/f0403620f7948306ad9e34a373f2aabc0237fb2a/seconds_to_str.py
-def seconds_to_str(seconds: int) -> str:
+def seconds_to_str(seconds) -> str:
     hh, mm = divmod(seconds, 3600)
     mm, ss = divmod(mm, 60)
-    return "%02d:%02d:%02d" % (hh, mm, ss)
+    if hh:
+        return "%02d:%02d:%02d" % (hh, mm, ss)
+    return "%02d:%02d" % (mm, ss)
 
 
 @dataclass
