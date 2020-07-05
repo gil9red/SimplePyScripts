@@ -9,6 +9,9 @@ from dataclasses import dataclass, asdict
 from typing import List, Union
 from pathlib import Path
 
+from bs4 import Tag
+
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import MoveTargetOutOfBoundsException
 
@@ -42,6 +45,25 @@ class Track:
         if len(parts) != 2:
             return 0
         return int(parts[0]) * 60 + int(parts[1])
+
+
+def get_track(track_el) -> Track:
+    if not isinstance(track_el, (WebElement, Tag)):
+        raise ValueError(f'Not supported value with type {type(track_el)}')
+
+    if isinstance(track_el, WebElement):
+        title = track_el.find_element_by_css_selector('.d-track__title').text
+        artists = track_el.find_element_by_css_selector('.d-track__artists').text
+        length = track_el.find_element_by_css_selector('.d-track__info > span.typo-track.deco-typo-secondary').text
+        available = 'd-track__unavailable' not in track_el.get_attribute('class')
+
+    else:
+        title = track_el.select_one('.d-track__title').get_text(strip=True)
+        artists = track_el.select_one('.d-track__artists').get_text(strip=True)
+        length = track_el.select_one('.d-track__info > span.typo-track.deco-typo-secondary').get_text(strip=True)
+        available = 'd-track__unavailable' not in track_el['class']
+
+    return Track(title, artists, length, available)
 
 
 def print_statistic(tracks: List[Track]):

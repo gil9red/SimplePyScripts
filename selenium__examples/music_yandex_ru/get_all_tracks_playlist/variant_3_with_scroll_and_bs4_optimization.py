@@ -17,7 +17,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import MoveTargetOutOfBoundsException, StaleElementReferenceException, TimeoutException
 
-from common import Track, print_statistic, dump, is_displayed_in_viewport
+from common import Track, get_track, print_statistic, dump, is_displayed_in_viewport
 from config import profile, options_headless, url, DIR_DUMP
 
 
@@ -68,15 +68,10 @@ try:
             if data_b in data_by_track:
                 continue
 
-            title = root.select_one('.d-track__title').get_text(strip=True)
-            artists = root.select_one('.d-track__artists').get_text(strip=True)
-            length = root.select_one('.d-track__info > span.typo-track.deco-typo-secondary').get_text(strip=True)
-            available = 'd-track__unavailable' not in root['class']
-
-            track = Track(title, artists, length, available)
+            track = get_track(track_el)
 
             i += 1
-            DEBUG_LOG and print(f'{i}. {title}, {track_el.location}, {track_el.size}')
+            DEBUG_LOG and print(f'{i}. {track.title}, {track_el.location}, {track_el.size}')
             print(f'{i}. {track}')
 
             data_by_track[data_b] = track
