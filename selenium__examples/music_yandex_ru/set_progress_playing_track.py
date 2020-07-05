@@ -45,12 +45,9 @@ try:
     while True:
         try:
             track_playing_el = driver.find_element_by_css_selector('.d-track_playing')
-        except NoSuchElementException:
-            continue
-
-        try:
             track = get_track(track_playing_el)
-        except StaleElementReferenceException:
+
+        except (NoSuchElementException, StaleElementReferenceException):
             continue
 
         progress_value = next(progress_values)
