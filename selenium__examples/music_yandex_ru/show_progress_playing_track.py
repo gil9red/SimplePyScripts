@@ -23,6 +23,9 @@ SEARCHING_TRACK = 'Шишки-телепаты'
 
 driver = None
 try:
+    # Mute
+    profile.set_preference("media.volume_scale", "0.0")
+
     driver = webdriver.Firefox(profile)
     driver.implicitly_wait(2)
     driver.get(url)
