@@ -10,7 +10,7 @@ import sys
 
 # pip install selenium
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
 
 sys.path.append('get_all_tracks_playlist')
 from common import Track, get_track, seconds_to_str
@@ -32,7 +32,8 @@ try:
 
     play_track(driver, SEARCHING_TRACK)
 
-    progress__line__branding_el = driver.find_element_by_css_selector('.player-progress .progress__line__branding')
+    # <div class="progress__line" style="transform: scaleX(0.4728);"></div>
+    progress__line_el = driver.find_element_by_css_selector('.player-progress .progress__bar.progress__progress > .progress__line')
 
     while True:
         try:
@@ -40,19 +41,22 @@ try:
         except NoSuchElementException:
             continue
 
-        track = get_track(track_playing_el)
+        try:
+            track = get_track(track_playing_el)
+        except StaleElementReferenceException:
+            continue
+
         total_seconds = track.get_seconds()
+        value = progress__line_el.get_attribute('style')
 
-        value = progress__line__branding_el.get_attribute('style')
-
-        # Example: style="transform: translateX(-34.9234%);"
-        m = re.search(r'translateX\((.+?)%\);', value)
+        # Example: style="transform: scaleX(0.4728);"
+        m = re.search(r'scaleX\((.+?)\);', value)
         if m:
-            progress_percent = 100 + float(m.group(1))
-            progress_left = total_seconds * (progress_percent / 100)
+            progress_percent = float(m.group(1))
+            progress_left = total_seconds * progress_percent
             progress_left_str = seconds_to_str(progress_left)
             progress_right_str = seconds_to_str(total_seconds)
-            print(f'{track.title}. {progress_left_str} / {progress_right_str} ({progress_percent:.1f}%)')
+            print(f'{track.title}. {progress_left_str} / {progress_right_str} ({progress_percent:.1%})')
 
         time.sleep(1)
 
