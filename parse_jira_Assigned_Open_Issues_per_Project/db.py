@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 import datetime as DT
 import pathlib
-from typing import Dict
+from typing import Dict, Optional
 
 from peewee import *
 
@@ -43,6 +43,9 @@ class Run(BaseModel):
     def get_total_issues(self) -> int:
         return sum(x.value for x in self.issue_numbers)
 
+    def get_project_by_issue_numbers(self) -> Dict[str, int]:
+        return {issue.project.name: issue.value for issue in self.issue_numbers}
+
     def __str__(self):
         return f'{self.__class__.__name__}(id={self.id}, date={self.date}, total_issues={self.get_total_issues()})'
 
@@ -64,10 +67,14 @@ class IssueNumber(BaseModel):
                f'value={self.value}, run_id={self.run.id})'
 
 
-def add(assigned_open_issues_per_project: Dict[str, int]):
+def add(assigned_open_issues_per_project: Dict[str, int]) -> Optional[bool]:
+    last_run = Run.select().order_by(Run.id.desc()).get()
+    if assigned_open_issues_per_project == last_run.get_project_by_issue_numbers():
+        return
+
     run, created = Run.get_or_create(date=DT.date.today())
     if not created:
-        return
+        return False
 
     for project_name, issue_numbers in assigned_open_issues_per_project.items():
         project, _ = Project.get_or_create(name=project_name)
@@ -79,6 +86,8 @@ def add(assigned_open_issues_per_project: Dict[str, int]):
         )
 
     db_create_backup()
+
+    return True
 
 
 db.connect()

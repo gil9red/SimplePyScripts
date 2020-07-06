@@ -16,10 +16,14 @@ import db
 
 while True:
     try:
-        print(f'Started as {DT.date.today()}\n')
+        print(f'Начало в {DT.date.today()}\n')
 
         assigned_open_issues_per_project = get_and_prints()
-        db.add(assigned_open_issues_per_project)
+        print()
+
+        ok = db.add(assigned_open_issues_per_project)
+        if ok is None:
+            print("Количество открытых задач в проектах не поменялось. Пропускаю...")
 
         print('\n' + '-' * 100 + '\n')
         wait(days=1)
