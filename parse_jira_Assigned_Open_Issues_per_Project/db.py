@@ -104,4 +104,4 @@ if __name__ == '__main__':
         for x in run.issue_numbers:
             print(f'    {x.project.name!r}: {x.value}')
 
-        print()
+        print('\n' + '-' * 100 + '\n')
