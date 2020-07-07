@@ -4,8 +4,6 @@
 __author__ = 'ipetrash'
 
 
-import datetime as DT
-
 import sys
 sys.path.append('../wait')
 from wait import wait
