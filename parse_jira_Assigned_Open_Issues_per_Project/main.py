@@ -51,7 +51,6 @@ if __name__ == '__main__':
     import time
 
     schedule.every().day.at("20:00").do(run)
-    schedule.every().day.at("12:09").do(run)
 
     while True:
         schedule.run_pending()
