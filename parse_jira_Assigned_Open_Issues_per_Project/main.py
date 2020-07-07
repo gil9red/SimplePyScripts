@@ -10,35 +10,38 @@ import sys
 sys.path.append('../wait')
 from wait import wait
 
-from get_assigned_open_issues_per_project import get_and_prints
+from common import get_table, logger
+from get_assigned_open_issues_per_project import get_assigned_open_issues_per_project
 import db
 
 
 def run():
     while True:
         try:
-            print(f'Начало в {DT.date.today()}\n')
+            logger.info(f'Начало')
 
-            assigned_open_issues_per_project = get_and_prints()
-            print()
+            assigned_open_issues_per_project = get_assigned_open_issues_per_project()
+            logger.info(
+                'Всего задач: %s\n\n%s\n',
+                sum(assigned_open_issues_per_project.values()),
+                get_table(assigned_open_issues_per_project)
+            )
 
             ok = db.add(assigned_open_issues_per_project)
             if ok is None:
-                print("Количество открытых задач в проектах не поменялось. Пропускаю...")
+                logger.info("Количество открытых задач в проектах не поменялось. Пропускаю...")
             elif ok:
-                print("Добавляю запись")
+                logger.info("Добавляю запись")
             else:
-                print("Сегодня запись уже была добавлена. Пропускаю...")
+                logger.info("Сегодня запись уже была добавлена. Пропускаю...")
 
-            print('\n' + '-' * 100 + '\n')
+            logger.info('\n' + '-' * 100 + '\n')
             break
 
         except Exception:
-            import traceback
-            print('Ошибка:')
-            print(traceback.format_exc())
+            logger.exception('Ошибка:')
 
-            print('Через 15 минут попробую снова...')
+            logger.info('Через 15 минут попробую снова...')
             wait(minutes=15)
 
 
@@ -48,6 +51,7 @@ if __name__ == '__main__':
     import time
 
     schedule.every().day.at("20:00").do(run)
+    schedule.every().day.at("12:09").do(run)
 
     while True:
         schedule.run_pending()
