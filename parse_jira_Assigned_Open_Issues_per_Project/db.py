@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+from common import print_table
 import datetime as DT
 import pathlib
 from typing import Dict, Optional
@@ -95,13 +96,12 @@ db.create_tables([Run, Project, IssueNumber])
 
 
 if __name__ == '__main__':
-    print("Projects:", [p.name for p in Project.select()])
-    print()
+    projects = [p.name for p in Project.select()]
+    print(f"Projects ({len(projects)}): {projects}\n")
 
-    for run in Run.select():
-        print(run)
-
-        for x in run.issue_numbers:
-            print(f'    {x.project.name!r}: {x.value}')
+    # Print last rows
+    for run in Run.select().order_by(Run.id.desc()).limit(5):
+        print(run, '\n')
+        print_table(run.get_project_by_issue_numbers())
 
         print('\n' + '-' * 100 + '\n')
