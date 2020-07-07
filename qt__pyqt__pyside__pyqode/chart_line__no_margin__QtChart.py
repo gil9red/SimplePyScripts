@@ -35,7 +35,7 @@ if __name__ == '__main__':
     app = QApplication([])
 
     mw = create_QChartView()
-    mw.setWindowTitle("Show All Themes")
+    mw.setWindowTitle("No margin")
     mw.chart().setTheme(QChart.ChartThemeDark)
 
     # No margin
