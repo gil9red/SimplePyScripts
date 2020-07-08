@@ -95,6 +95,8 @@ class TableWidgetRun(QWidget):
             self.table_issues.removeRow(0)
 
         item = self.table_run.item(self.table_run.currentRow(), 0)
+        if not item:
+            return
 
         for i, (project_name, number) in enumerate(item.data(Qt.UserRole).items()):
             self.table_issues.setRowCount(self.table_issues.rowCount() + 1)
