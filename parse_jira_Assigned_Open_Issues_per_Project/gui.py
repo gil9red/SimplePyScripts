@@ -115,7 +115,6 @@ class CurrentAssignedOpenIssues(QWidget):
 
         self.label_total = QLabel()
         font = self.label_total.font()
-        print(font.pixelSize())
         font.setPixelSize(30)
         self.label_total.setFont(font)
 
