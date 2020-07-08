@@ -40,7 +40,7 @@ while True:
             sys.exit()
 
         if event.type == pygame.MOUSEMOTION:
-            rect2 = surf2.get_rect(center=(event.pos[0], event.pos[1]))
+            rect2 = surf2.get_rect(center=event.pos)
             break
 
     if rect2.colliderect(rect1):
