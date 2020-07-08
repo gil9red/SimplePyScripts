@@ -13,7 +13,7 @@ import pygame
 pygame.init()
 
 color = (0, 0, 0)
-sc = pygame.display.set_mode((600, 600))
+screen = pygame.display.set_mode((600, 600))
 clock = pygame.time.Clock()
 x, y = random.randrange(0, 500), random.randrange(0, 500)
 
@@ -30,10 +30,10 @@ rect2 = surf2.get_rect()
 while True:
     text = fnt.render("Collision!", True, color)
 
-    sc.fill((0, 0, 0))
-    sc.blit(surf1, rect1)
-    sc.blit(surf2, rect2)
-    sc.blit(text, (260, 20))
+    screen.fill((0, 0, 0))
+    screen.blit(surf1, rect1)
+    screen.blit(surf2, rect2)
+    screen.blit(text, (260, 20))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
