@@ -35,14 +35,13 @@ while True:
     sc.blit(surf2, rect2)
     sc.blit(text, (260, 20))
 
-    for i in pygame.event.get():
-        if i.type == pygame.QUIT:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
             sys.exit()
 
-        if i.type == pygame.MOUSEMOTION:
-            if pygame.mouse.get_focused():
-                rect2 = surf2.get_rect(center=(i.pos[0], i.pos[1]))
-                break
+        if event.type == pygame.MOUSEMOTION:
+            rect2 = surf2.get_rect(center=(event.pos[0], event.pos[1]))
+            break
 
     if rect2.colliderect(rect1):
         color = (200, 200, 200)
