@@ -28,13 +28,6 @@ surf2.fill((255, 255, 255))
 rect2 = surf2.get_rect()
 
 while True:
-    text = fnt.render("Collision!", True, color)
-
-    screen.fill((0, 0, 0))
-    screen.blit(surf1, rect1)
-    screen.blit(surf2, rect2)
-    screen.blit(text, (260, 20))
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
@@ -42,6 +35,13 @@ while True:
         elif event.type == pygame.MOUSEMOTION:
             rect2 = surf2.get_rect(center=event.pos)
             break
+
+    text = fnt.render("Collision!", True, color)
+
+    screen.fill((0, 0, 0))
+    screen.blit(surf1, rect1)
+    screen.blit(surf2, rect2)
+    screen.blit(text, (260, 20))
 
     if rect2.colliderect(rect1):
         color = (200, 200, 200)
