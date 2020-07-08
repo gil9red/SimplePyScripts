@@ -39,7 +39,7 @@ while True:
         if event.type == pygame.QUIT:
             sys.exit()
 
-        if event.type == pygame.MOUSEMOTION:
+        elif event.type == pygame.MOUSEMOTION:
             rect2 = surf2.get_rect(center=event.pos)
             break
 
