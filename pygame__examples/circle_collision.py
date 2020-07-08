@@ -31,7 +31,7 @@ class Ball(pygame.sprite.Sprite):
 
 pygame.init()
 
-color = (0, 0, 0)
+color = BLACK
 screen = pygame.display.set_mode((600, 600))
 clock = pygame.time.Clock()
 x, y = random.randrange(0, 500), random.randrange(0, 500)
