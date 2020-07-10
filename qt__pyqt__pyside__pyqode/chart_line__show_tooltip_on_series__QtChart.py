@@ -151,7 +151,7 @@ class ChartViewToolTips(QChartView):
             self._tooltip.hide()
 
     def keepCallout(self, point):
-        if not self.chart():
+        if not self.chart() or not self._tooltip:
             return
 
         self._tooltip.setAnchor(point)
