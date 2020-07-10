@@ -4,9 +4,9 @@
 __author__ = 'ipetrash'
 
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QGraphicsView, QGraphicsScene, QGraphicsItem, QGraphicsSceneMouseEvent
+from PyQt5.QtWidgets import QApplication, QGraphicsItem, QGraphicsSceneMouseEvent
 from PyQt5.QtGui import QPainter, QFont, QFontMetrics, QPainterPath, QColor
-from PyQt5.QtCore import Qt, QRectF, QPointF, QRect, QPoint
+from PyQt5.QtCore import Qt, QRectF, QPointF, QRect, QPoint, QSizeF
 from PyQt5.QtChart import QChart, QChartView, QLineSeries
 
 
@@ -15,7 +15,11 @@ class Callout(QGraphicsItem):
     def __init__(self, chart, parent=None):
         super().__init__(parent)
 
+        self.hide()
+
         self._chart = chart
+        self._chart.scene().addItem(self)
+
         self._text = ''
         self._textRect = QRectF()
         self._rect = QRectF()
@@ -115,6 +119,8 @@ class MainWindow(QChartView):
         series.setPointLabelsVisible(True)
         series.setPointLabelsFormat("(@xPoint, @yPoint)")
         series.hovered.connect(self.tooltip)
+        series.clicked.connect(self.keepCallout)
+
         series.append(0, 6)
         series.append(2, 4)
         series.append(3, 8)
@@ -132,11 +138,11 @@ class MainWindow(QChartView):
         self.setChart(self._chart)
 
         self._tooltip = None
+        self._callouts = []
 
     def tooltip(self, point, state: bool):
         if not self._tooltip:
             self._tooltip = Callout(self._chart)
-            self._chart.scene().addItem(self._tooltip)
 
         if state:
             self._tooltip.setText("X: {} \nY: {}".format(point.x(), point.y()))
@@ -146,6 +152,22 @@ class MainWindow(QChartView):
             self._tooltip.show()
         else:
             self._tooltip.hide()
+
+    def keepCallout(self):
+        self._callouts.append(self._tooltip)
+        self._tooltip = Callout(self._chart)
+
+    def resizeEvent(self, event):
+        if self.scene():
+            size = QSizeF(event.size())
+
+            self.scene().setSceneRect(QRectF(QPoint(0, 0), size))
+            self._chart.resize(size)
+
+            for callout in self._callouts:
+                callout.updateGeometry()
+
+        super().resizeEvent(event)
 
 
 if __name__ == '__main__':
