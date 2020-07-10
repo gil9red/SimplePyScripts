@@ -8,6 +8,9 @@ __author__ = 'ipetrash'
 import sys
 sys.path.append('..')
 
+from pathlib import Path
+
+import feedparser
 import requests
 
 from all_common import make_backslashreplace_console, get_logger, simple_send_sms, wait
@@ -21,8 +24,6 @@ log = get_logger('new_chapters_manga')
 
 def get_feeds_by_manga_chapters(url_rss: str) -> list:
     rss_text = requests.get(url_rss).text
-
-    import feedparser
     feed = feedparser.parse(rss_text)
 
     feeds = list()
@@ -42,7 +43,10 @@ def get_feeds_by_manga_chapters(url_rss: str) -> list:
 
 
 URL_USER_RSS = 'https://grouple.co/user/rss/315828?filter='
-FILE_NAME_LAST_FEED = 'last_feed'
+
+DIR = Path(__file__).resolve().parent
+FILE_NAME_LAST_FEED = DIR / 'last_feed'
+FILE_NAME_SKIP = DIR / 'skip'
 
 
 def save_last_feed(feed):
@@ -59,6 +63,11 @@ if __name__ == '__main__':
         last_feed = ""
 
     while True:
+        if FILE_NAME_SKIP.exists():
+            log.info('Обнаружен файл "%s", пропускаю проверку.', FILE_NAME_SKIP.name)
+            wait(days=7)
+            continue
+
         try:
             log.debug('get_feeds_by_manga_chapters')
             log.debug('Last feed: "%s"', last_feed)
@@ -94,19 +103,16 @@ if __name__ == '__main__':
                 else:
                     log.debug('Новых глав нет')
 
-            # wait(hours=6)
             wait(days=7)
 
         except requests.exceptions.ConnectionError as e:
             log.warning('Ошибка подключения к сети: %s', e)
             log.debug('Через минуту попробую снова...')
 
-            import time
-            time.sleep(60)
+            wait(minutes=1)
 
         except:
             log.exception('Непредвиденная ошибка:')
             log.debug('Через 5 минут попробую снова...')
 
-            import time
-            time.sleep(5 * 60)
+            wait(minutes=5)
