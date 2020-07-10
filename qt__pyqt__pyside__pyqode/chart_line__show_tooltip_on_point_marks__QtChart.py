@@ -55,10 +55,8 @@ class MainWindow(QChartView):
             for series in self._chart.series():
                 for p in series.pointsVector():
                     current_distance = math.sqrt(
-                        (p.x() - point.x())
-                        * (p.x() - point.x())
-                        + (p.y() - point.y())
-                        * (p.y() - point.y())
+                        (p.x() - point.x()) * (p.x() - point.x())
+                        + (p.y() - point.y()) * (p.y() - point.y())
                     )
                     if current_distance < distance:
                         self._tooltip.setText("X: {}\nY: {}".format(p.x(), p.y()))
