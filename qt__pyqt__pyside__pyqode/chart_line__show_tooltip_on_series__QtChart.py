@@ -119,7 +119,7 @@ class ChartViewToolTips(QChartView):
         self._callout_font_family = None
         self._callouts = []
 
-    def clear_all_callouts(self):
+    def clear_all_tooltips(self):
         if self._tooltip:
             self.scene().removeItem(self._tooltip)
 

@@ -282,7 +282,7 @@ class MainWindow(QMainWindow):
         chart.addAxis(axisY, Qt.AlignLeft)
         series.attachAxis(axisY)
 
-        self.chart_view.clear_all_callouts()
+        self.chart_view.clear_all_tooltips()
         self.chart_view.setChart(chart)
 
     def refresh(self):
