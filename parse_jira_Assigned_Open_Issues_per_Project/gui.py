@@ -6,19 +6,26 @@ __author__ = 'ipetrash'
 
 import calendar
 import datetime as DT
+import math
 from pathlib import Path
 from typing import List
+import sys
 
 from PyQt5.QtWidgets import (
     QApplication, QMessageBox, QMainWindow, QSystemTrayIcon, QTabWidget, QTableWidget,
-    QTableWidgetItem, QVBoxLayout, QWidget, QPushButton, QSplitter, QLabel, QGridLayout
+    QTableWidgetItem, QVBoxLayout, QWidget, QPushButton, QSplitter, QLabel, QGridLayout,
+    QHeaderView
 )
 from PyQt5.QtGui import QIcon, QPainter
 from PyQt5.QtCore import QEvent, QTimer, Qt
-from PyQt5.QtChart import QChart, QChartView, QLineSeries, QDateTimeAxis, QValueAxis
+from PyQt5.QtChart import QChart, QLineSeries, QDateTimeAxis, QValueAxis
 
+from common import get_table
 from get_assigned_open_issues_per_project import get_assigned_open_issues_per_project
 from db import Run
+
+sys.path.append('../qt__pyqt__pyside__pyqode')
+from chart_line__show_tooltip_on_series__QtChart import ChartViewToolTips
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
@@ -31,7 +38,6 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -59,7 +65,8 @@ class TableWidgetRun(QWidget):
         self.table_run.itemClicked.connect(self._on_table_run_item_clicked)
 
         self.table_issues = get_table_widget(['PROJECT', 'NUMBER'])
-        self.table_issues.setColumnWidth(0, 300)
+        self.table_run.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.table_issues.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
         splitter = QSplitter(Qt.Horizontal)
         splitter.addWidget(self.table_run)
@@ -110,7 +117,7 @@ class CurrentAssignedOpenIssues(QWidget):
         super().__init__()
 
         self.table = get_table_widget(['PROJECT', 'NUMBER'])
-        self.table.setColumnWidth(0, 300)
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
         self.pb_refresh = QPushButton('REFRESH')
         self.pb_refresh.clicked.connect(self.refresh)
@@ -156,6 +163,47 @@ class CurrentAssignedOpenIssues(QWidget):
         )
 
 
+class MyChartViewToolTips(ChartViewToolTips):
+    def __init__(self, timestamp_by_run: dict):
+        super().__init__()
+
+        self._callout_font_family = 'Courier'
+        self.timestamp_by_run = timestamp_by_run
+
+    def show_series_tooltip(self, point, state: bool):
+        # value -> pos
+        point = self.chart().mapToPosition(point)
+
+        if not self._tooltip:
+            self._tooltip = self._add_Callout()
+
+        if state:
+            distance = 25
+
+            for series in self.chart().series():
+                for p_value in series.pointsVector():
+                    p = self.chart().mapToPosition(p_value)
+
+                    current_distance = math.sqrt(
+                        (p.x() - point.x()) * (p.x() - point.x())
+                        + (p.y() - point.y()) * (p.y() - point.y())
+                    )
+
+                    if current_distance < distance:
+                        date_value = int(p_value.x())
+                        run = self.timestamp_by_run[date_value]
+                        text = f"Total issues: {run.get_total_issues()}\n\n" \
+                               f"{get_table(run.get_project_by_issue_numbers())}"
+
+                        self._tooltip.setText(text)
+                        self._tooltip.setAnchor(p_value)
+                        self._tooltip.setZValue(11)
+                        self._tooltip.updateGeometry()
+                        self._tooltip.show()
+        else:
+            self._tooltip.hide()
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -166,12 +214,14 @@ class MainWindow(QMainWindow):
         icon = QIcon(file_name)
         self.setWindowIcon(icon)
 
+        self.timestamp_by_run = dict()
+
         self.tray = QSystemTrayIcon(icon)
         self.tray.setToolTip(self.windowTitle())
         self.tray.activated.connect(self._on_tray_activated)
         self.tray.show()
 
-        self.chart_view = QChartView()
+        self.chart_view = MyChartViewToolTips(self.timestamp_by_run)
         self.chart_view.setRenderHint(QPainter.Antialiasing)
 
         self.table_run = TableWidgetRun()
@@ -196,10 +246,19 @@ class MainWindow(QMainWindow):
 
     def _fill_chart(self, items: List[Run]):
         series = QLineSeries()
+        series.setPointsVisible(True)
+        series.setPointLabelsVisible(True)
+        series.setPointLabelsFormat("@yPoint")
+        series.hovered.connect(self.chart_view.show_series_tooltip)
+
+        self.timestamp_by_run.clear()
 
         for run in items:
             date_value = calendar.timegm(run.date.timetuple()) * 1000
-            series.append(date_value, run.get_total_issues())
+            total_issues = run.get_total_issues()
+            series.append(date_value, total_issues)
+
+            self.timestamp_by_run[date_value] = run
 
         chart = QChart()
         chart.setTheme(QChart.ChartThemeDark)
@@ -227,7 +286,6 @@ class MainWindow(QMainWindow):
 
     def refresh(self):
         items = list(Run.select())
-
         self._fill_chart(items)
 
         items.reverse()
