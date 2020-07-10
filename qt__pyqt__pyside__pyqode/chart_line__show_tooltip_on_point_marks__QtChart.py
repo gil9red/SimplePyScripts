@@ -24,7 +24,7 @@ class MainWindow(QChartView):
         series.setPointsVisible(True)
         series.setPointLabelsVisible(True)
         series.setPointLabelsFormat("(@xPoint, @yPoint)")
-        series.hovered.connect(self.tooltip)
+        series.hovered.connect(self.show_series_tooltip)
         series.clicked.connect(self.keepCallout)
 
         series.append(0, 6)
@@ -46,7 +46,7 @@ class MainWindow(QChartView):
         self._tooltip = None
         self._callouts = []
 
-    def tooltip(self, point, state: bool):
+    def show_series_tooltip(self, point, state: bool):
         if not self._tooltip:
             self._tooltip = Callout(self._chart)
 
