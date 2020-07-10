@@ -25,7 +25,6 @@ class MainWindow(QChartView):
         series.setPointLabelsVisible(True)
         series.setPointLabelsFormat("(@xPoint, @yPoint)")
         series.hovered.connect(self.show_series_tooltip)
-        series.clicked.connect(self.keepCallout)
 
         series.append(0, 6)
         series.append(2, 4)
@@ -72,6 +71,13 @@ class MainWindow(QChartView):
         self._callouts.append(self._tooltip)
 
         self._tooltip = Callout(self._chart)
+
+    def mouseReleaseEvent(self, event):
+        pos = event.pos()
+        point = self._chart.mapToValue(pos)
+        self.keepCallout(point)
+
+        super().mouseReleaseEvent(event)
 
     def resizeEvent(self, event):
         if self.scene():
