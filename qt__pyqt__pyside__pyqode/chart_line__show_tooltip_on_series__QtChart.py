@@ -120,10 +120,11 @@ class ChartViewToolTips(QChartView):
         self._callouts = []
 
     def clear_all_callouts(self):
-        self._tooltip = None
-        self._callouts = []
+        if self._tooltip:
+            self.scene().removeItem(self._tooltip)
 
-        self.scene().clear()
+        for x in self._callouts:
+            self.scene().removeItem(x)
 
     def _add_Callout(self) -> Callout:
         callout = Callout(self.chart())
