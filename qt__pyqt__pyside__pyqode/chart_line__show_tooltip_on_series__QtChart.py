@@ -92,7 +92,8 @@ class Callout(QGraphicsItem):
             path.lineTo(anchor)
             path.lineTo(point2)
             path = path.simplified()
-        
+
+        painter.setFont(self._font)
         painter.setBrush(QColor(255, 255, 255))
         painter.drawPath(path)
         painter.drawText(self._textRect, self._text)
