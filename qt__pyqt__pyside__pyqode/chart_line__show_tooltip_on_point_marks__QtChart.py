@@ -11,14 +11,12 @@ from PyQt5.QtGui import QPainter
 from PyQt5.QtCore import QRectF, QPoint, QSizeF
 from PyQt5.QtChart import QChart, QChartView, QLineSeries
 
-from chart_line__show_tooltip_on_series__QtChart import Callout
+from chart_line__show_tooltip_on_series__QtChart import Callout, ChartViewToolTips
 
 
-class MainWindow(QChartView):
+class MainWindow(ChartViewToolTips):
     def __init__(self):
         super().__init__()
-
-        self.setRenderHint(QPainter.Antialiasing)
 
         series = QLineSeries()
         series.setPointsVisible(True)
@@ -42,9 +40,6 @@ class MainWindow(QChartView):
 
         self.setChart(self._chart)
 
-        self._tooltip = None
-        self._callouts = []
-
     def show_series_tooltip(self, point, state: bool):
         if not self._tooltip:
             self._tooltip = Callout(self._chart)
@@ -65,31 +60,6 @@ class MainWindow(QChartView):
                         self._tooltip.show()
         else:
             self._tooltip.hide()
-
-    def keepCallout(self, point):
-        self._tooltip.setAnchor(point)
-        self._callouts.append(self._tooltip)
-
-        self._tooltip = Callout(self._chart)
-
-    def mouseReleaseEvent(self, event):
-        pos = event.pos()
-        point = self._chart.mapToValue(pos)
-        self.keepCallout(point)
-
-        super().mouseReleaseEvent(event)
-
-    def resizeEvent(self, event):
-        if self.scene():
-            size = QSizeF(event.size())
-
-            self.scene().setSceneRect(QRectF(QPoint(0, 0), size))
-            self._chart.resize(size)
-
-            for callout in self._callouts:
-                callout.updateGeometry()
-
-        super().resizeEvent(event)
 
 
 if __name__ == '__main__':

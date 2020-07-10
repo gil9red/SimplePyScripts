@@ -109,11 +109,73 @@ class Callout(QGraphicsItem):
             event.setAccepted(False)
 
 
-class MainWindow(QChartView):
+class ChartViewToolTips(QChartView):
     def __init__(self):
         super().__init__()
 
         self.setRenderHint(QPainter.Antialiasing)
+
+        self._tooltip = None
+        self._callout_font_family = None
+        self._callouts = []
+
+    def _add_Callout(self) -> Callout:
+        callout = Callout(self.chart())
+
+        if self._callout_font_family:
+            callout._font.setFamily(self._callout_font_family)
+
+        return callout
+
+    def show_series_tooltip(self, point, state: bool):
+        if not self.chart():
+            return
+
+        if not self._tooltip:
+            self._tooltip = self._add_Callout()
+
+        if state:
+            self._tooltip.setText("X: {} \nY: {}".format(point.x(), point.y()))
+            self._tooltip.setAnchor(point)
+            self._tooltip.setZValue(11)
+            self._tooltip.updateGeometry()
+            self._tooltip.show()
+        else:
+            self._tooltip.hide()
+
+    def keepCallout(self, point):
+        if not self.chart():
+            return
+
+        self._tooltip.setAnchor(point)
+        self._callouts.append(self._tooltip)
+
+        self._tooltip = self._add_Callout()
+
+    def mouseReleaseEvent(self, event):
+        if self.chart():
+            pos = event.pos()
+            point = self.chart().mapToValue(pos)
+            self.keepCallout(point)
+
+        super().mouseReleaseEvent(event)
+
+    def resizeEvent(self, event):
+        if self.scene():
+            size = QSizeF(event.size())
+
+            self.scene().setSceneRect(QRectF(QPoint(0, 0), size))
+            self.chart().resize(size)
+
+            for callout in self._callouts:
+                callout.updateGeometry()
+
+        super().resizeEvent(event)
+
+
+class MainWindow(ChartViewToolTips):
+    def __init__(self):
+        super().__init__()
 
         series = QLineSeries()
         series.setPointsVisible(True)
@@ -136,47 +198,6 @@ class MainWindow(QChartView):
         self._chart.createDefaultAxes()
 
         self.setChart(self._chart)
-
-        self._tooltip = None
-        self._callouts = []
-
-    def show_series_tooltip(self, point, state: bool):
-        if not self._tooltip:
-            self._tooltip = Callout(self._chart)
-
-        if state:
-            self._tooltip.setText("X: {} \nY: {}".format(point.x(), point.y()))
-            self._tooltip.setAnchor(point)
-            self._tooltip.setZValue(11)
-            self._tooltip.updateGeometry()
-            self._tooltip.show()
-        else:
-            self._tooltip.hide()
-
-    def keepCallout(self, point):
-        self._tooltip.setAnchor(point)
-        self._callouts.append(self._tooltip)
-
-        self._tooltip = Callout(self._chart)
-
-    def mouseReleaseEvent(self, event):
-        pos = event.pos()
-        point = self._chart.mapToValue(pos)
-        self.keepCallout(point)
-
-        super().mouseReleaseEvent(event)
-
-    def resizeEvent(self, event):
-        if self.scene():
-            size = QSizeF(event.size())
-
-            self.scene().setSceneRect(QRectF(QPoint(0, 0), size))
-            self._chart.resize(size)
-
-            for callout in self._callouts:
-                callout.updateGeometry()
-
-        super().resizeEvent(event)
 
 
 if __name__ == '__main__':
