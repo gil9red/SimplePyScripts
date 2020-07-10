@@ -72,8 +72,10 @@ class MainWindow(QChartView):
         else:
             self._tooltip.hide()
 
-    def keepCallout(self):
+    def keepCallout(self, point):
+        self._tooltip.setAnchor(point)
         self._callouts.append(self._tooltip)
+
         self._tooltip = Callout(self._chart)
 
     def resizeEvent(self, event):
