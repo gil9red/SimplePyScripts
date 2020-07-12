@@ -62,7 +62,7 @@ def index():
                 <tbody></tbody>
             </table>
         </div>
-        <div class="col">
+        <div class="col-7">
             <canvas id="lineChart"></canvas>
         </div>
     </div>
