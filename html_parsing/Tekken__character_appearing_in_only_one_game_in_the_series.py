@@ -18,6 +18,7 @@ url = 'https://ru.wikipedia.org/wiki/Список_персонажей_Tekken'
 rs = requests.get(url)
 root = BeautifulSoup(rs.content, 'html.parser')
 
+number = 0
 items = []
 
 for tr in root.select_one('.wikitable').select('tbody > tr'):
@@ -28,6 +29,7 @@ for tr in root.select_one('.wikitable').select('tbody > tr'):
     for sub in tr.select('sup'):
         sub.decompose()
 
+    number += 1
     person_td, _, *games_td = td_list
 
     name = person_td.get_text(strip=True)
@@ -39,6 +41,9 @@ for tr in root.select_one('.wikitable').select('tbody > tr'):
     game = 'Tekken ' + ('' if num == 1 else str(num))
     items.append((name, game))
 
+
+print(f'Total: {number}, unique: {len(items)}\n')
+# Total: 87, unique: 39
 
 print_pretty_table([('PERSON', 'GAME')] + items)
 # PERSON              | GAME
