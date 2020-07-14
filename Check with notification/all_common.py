@@ -26,9 +26,9 @@ def make_backslashreplace_console():
 
 # Import https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py
 # Absolute path. Analog '../wait'
-import pathlib
+from pathlib import Path
 import sys
-sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent / 'wait'))
+sys.path.append(str(Path(__file__).resolve().parent.parent / 'wait'))
 from wait import wait
 
 
@@ -139,11 +139,18 @@ def run_notification_job(
         except:
             return []
 
+    FILE_NAME_SKIP = Path('skip')
+
     # Загрузка текущего списка из файла
     current_items = read_items()
     log.debug(format_current_items, len(current_items), current_items)
 
     while True:
+        if FILE_NAME_SKIP.exists():
+            log.info('Обнаружен файл "%s", пропускаю проверку.', FILE_NAME_SKIP.name)
+            wait(**timeout)
+            continue
+
         try:
             log.debug(format_get_items)
 
