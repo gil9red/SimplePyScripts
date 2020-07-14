@@ -5,80 +5,73 @@ __author__ = 'ipetrash'
 
 
 from typing import List
+import sys
+from pathlib import Path
+import re
+
+from bs4 import BeautifulSoup
 
 
-def get_shorted_name(name: str) -> str:
-    """
-    in = 'Богиня благословляет этот прекрасный мир / Kono Subarashii Sekai ni Shukufuku wo OVA-2'
-    out = 'Богиня благословляет этот прекрасный мир OVA-2'
-
-    in = 'Моя геройская академия ТВ-2 / Boku no Hero Academia TV-2 [25 из 25]'
-    out = 'Моя геройская академия ТВ-2 [25 из 25]'
-
-    """
-
-    import re
-
-    if '[' in name or 'OVA' in name:
-        first, last = map(str.strip, name.split('/'))
-
-        match = re.search('(\[.+?\])|(OVA.*)', last)
-        if match and not first.endswith(match.group(0)):
-            first += ' ' + match.group(0)
-
-        return first
-
-    return name
+DIR = Path(__file__).resolve().parent
+sys.path.append(str(DIR.parent / 'proxy'))
+import proxy_requests__upgraded
+ProxyRequests = proxy_requests__upgraded.ProxyRequests
 
 
-def search_video_list(text, short_name=True) -> List[str]:
+DEBUG_LOG = False
+proxy_requests__upgraded.DEBUG_LOG = DEBUG_LOG
+
+
+def _get_title(el) -> str:
+    title = el.get_text(strip=True)
+    return re.sub(r'\s{2,}', ' ', title)
+
+
+def search_video_list(text) -> List[str]:
     url = 'https://online.anidub.com/index.php?do=search'
 
     data = {
         'do': 'search',
         'subaction': 'search',
-        'search_start': '1',
+        'search_start': '0',
         'full_search': '0',
         'result_from': '1',
         'story': text,
     }
-
-    # NOTE: tor должен быть запущен
-    # pip install -U requests[socks]
-    import requests
-    proxies = {
-        'http': 'socks5://localhost:9050',
-        'https': 'socks5://localhost:9050'
+    headers = {
+        'Host': 'online.anidub.com',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
+        'Accept-Encoding': 'gzip, deflate',
+        'Origin': 'https://online.anidub.com',
+        'Referer': 'https://online.anidub.com/index.php?do=search',
     }
-    rs = requests.post(url, data, proxies=proxies)
 
-    from bs4 import BeautifulSoup
-    root = BeautifulSoup(rs.content, 'html.parser')
+    while True:
+        rq = ProxyRequests(url)
+        rs = rq.post(data=data, headers=headers)
 
-    items = []
+        content = rs.content
 
-    for a in root.select('.newstitle a'):
-        name = a.text.strip()
+        if b'Attention Required! | Cloudflare' in content \
+                or b'Access denied | online.anidub.com used Cloudflare to restrict access' in content:
+            DEBUG_LOG and print('Fail! Cloudflare!')
+            continue
 
-        if short_name:
-            name = get_shorted_name(name)
+        break
 
-        items.append(name)
-
-    return items
+    root = BeautifulSoup(content, 'html.parser')
+    return [_get_title(a) for a in root.select('.th-title')]
 
 
 if __name__ == '__main__':
     text = 'Моя геройская академия'
 
-    items = search_video_list(text, short_name=False)
-    print('Items ({}): {}'.format(len(items), items))
-
     items = search_video_list(text)
-    print('Items ({}): {}'.format(len(items), items))
+    print(f'Items ({len(items)}):')
+    for x in items:
+        print(f'    {x}')
 
     import json
     json.dump(items, open('video_list.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=4)
-
-    # items = search_video_list('Богиня благословляет этот прекрасный мир')
-    # print('Items ({}): {}'.format(len(items), items))
