@@ -4,10 +4,13 @@
 __author__ = 'ipetrash'
 
 
-import requests
+import datetime as DT
 import json
-from bs4 import BeautifulSoup
 import re
+import sys
+
+from bs4 import BeautifulSoup
+import requests
 
 
 JS_SHARED_DATA_PATTERN = re.compile('window._sharedData = ({.+});')
@@ -31,7 +34,15 @@ print(script_el)
 print(script_el.text)
 # window._sharedData = {"config":{"csrf_token":"RtSXgxK6b0Lh4Ag3 ...
 
-shared_data_text = JS_SHARED_DATA_PATTERN.search(script_el.text).group(1)
+m = JS_SHARED_DATA_PATTERN.search(script_el.text)
+if not m:
+    file_name_dump = str(DT.datetime.now()).replace(':', '') + '.html'
+    with open(file_name_dump, 'wb') as f:
+        f.write(rs.content)
+    print(f'Not found "window._sharedData = ", see: {file_name_dump}!')
+    sys.exit()
+
+shared_data_text = m.group(1)
 print(shared_data_text)
 # {"config":{"csrf_token":"RtSXgxK6b0Lh4Ag3wSFReb ...
 
