@@ -38,6 +38,7 @@ def full_black_screen():
 
 DATA = {
     "END_TIME": None,
+    "DURATION": None,
 }
 
 
@@ -75,15 +76,17 @@ def set_timer():
     secs = int(data['value']) if data['value'] else 0
     if secs:
         DATA["END_TIME"] = DT.datetime.now() + DT.timedelta(seconds=secs)
+        DATA["DURATION"] = secs
     else:
         DATA["END_TIME"] = None
+        DATA["DURATION"] = None
 
     return jsonify({'text': 'ok'})
 
 
 @app.route("/get_timer", methods=['POST'])
 def get_timer():
-    print('get_timer')
+    # print('get_timer')
 
     now = DT.datetime.now()
     end_time = DATA["END_TIME"]
@@ -92,8 +95,12 @@ def get_timer():
     if end_time and end_time > now:
         secs = int((end_time - now).total_seconds())
 
-    print(f'get_timer -> {secs}')
-    return jsonify({'value': secs})
+    duration = DATA["DURATION"]
+    if duration is None:
+        duration = 0
+
+    print(f'get_timer -> {secs} / {duration}')
+    return jsonify({'value': secs, 'duration': duration})
 
 
 @app.route("/key_click", methods=['POST'])

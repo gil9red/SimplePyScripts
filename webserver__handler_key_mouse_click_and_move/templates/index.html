@@ -87,27 +87,6 @@
         <script>
             function startTimerModel(duration) {
                 send_ajax("/set_timer", {value: duration});
-
-                let timeoutFunc = () => {
-                    send_ajax("/get_timer", null, (url, data, response) => {
-                        let timer = response.value;
-
-                        let minutes = parseInt(timer / 60);
-                        minutes = minutes < 10 ? "0" + minutes : minutes;
-
-                        let seconds = parseInt(timer % 60);
-                        seconds = seconds < 10 ? "0" + seconds : seconds;
-
-                        setProgressModel(Math.round(timer / duration * 100), minutes + ":" + seconds);
-
-                        if (timer <= 0) {
-                            setActiveTimerStates(false);
-                        }
-                    });
-                };
-
-                timeoutFunc();
-                window.timerId = setInterval(timeoutFunc, 1000);
             }
 
             function setActiveTimerStates(active) {
@@ -120,10 +99,6 @@
                 $('#button_timer > .icon').toggle(!active);
 
                 $("#modalTimer .progress").toggleClass("invisible", !active);
-
-                if (!active) {
-                    clearInterval(window.timerId);
-                }
             }
 
             function setProgressModel(value, text) {
@@ -152,6 +127,28 @@
                     setActiveTimerStates(false);
                     send_ajax("/set_timer", {value: 0});
                 });
+
+                let timeoutFunc = () => {
+                    send_ajax("/get_timer", null, (url, data, response) => {
+                        let timer = response.value;
+                        setActiveTimerStates(timer > 0);
+
+                        if (timer <= 0) {
+                            return;
+                        }
+
+                        let minutes = parseInt(timer / 60);
+                        minutes = minutes < 10 ? "0" + minutes : minutes;
+
+                        let seconds = parseInt(timer % 60);
+                        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                        setProgressModel(Math.round(timer / response.duration * 100), minutes + ":" + seconds);
+                    });
+                };
+
+                timeoutFunc();
+                window.timerId = setInterval(timeoutFunc, 1000);
             });
         </script>
 
