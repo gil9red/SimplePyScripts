@@ -29,7 +29,7 @@
             "VVVVVV"
         ]
     },
-    "only_ryujinx_perfect_games": {
+    "only_ryujinx_games": {
         "total": 410,
         "items": [
             "#RaceDieRun",
@@ -444,7 +444,7 @@
             "void tRrLM();  Void Terrarium"
         ]
     },
-    "only_yuzu_perfect_games": {
+    "only_yuzu_games": {
         "total": 76,
         "items": [
             "1917 - The Alien Invasion DX",

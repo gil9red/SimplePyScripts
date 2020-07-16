@@ -5,6 +5,11 @@ __author__ = 'ipetrash'
 
 
 import json
+from pathlib import Path
+
+
+def get_json_file_name(file_name: str) -> str:
+    return Path(file_name).name + '.json'
 
 
 def dump(file_name: str, games: list, playable_games: list, perfect_games: list):

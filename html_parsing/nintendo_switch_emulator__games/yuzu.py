@@ -52,4 +52,5 @@ if __name__ == '__main__':
     # ...
 
     import common
-    common.dump('yuzu.json', games, playable_games, perfect_games)
+    file_name = common.get_json_file_name(__file__)
+    common.dump(file_name, games, playable_games, perfect_games)
