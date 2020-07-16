@@ -37,15 +37,19 @@ if __name__ == '__main__':
 
     print()
 
-    print("Total perfect + great:", len([x for x in games if x[1] in ('Perfect', 'Great')]))
-    # Total perfect + great: 301
+    playable_games = [title for (title, compatibility) in games if compatibility in ('Perfect', 'Great')]
+    print("Total playable:", len(playable_games))
+    # Total playable: 301
 
     print()
 
-    perfect_games = [x for x in games if x[1] == 'Perfect']
+    perfect_games = [title for (title, compatibility) in games if compatibility == 'Perfect']
     print(f'Total perfect({len(perfect_games)}):')
-    for i, (game, _) in enumerate(perfect_games, 1):
-        print(f'{i}. {game}')
+    for i, title in enumerate(perfect_games, 1):
+        print(f'{i}. {title}')
 
     # Total perfect(101):
     # ...
+
+    import common
+    common.dump('yuzu.json', games, playable_games, perfect_games)
