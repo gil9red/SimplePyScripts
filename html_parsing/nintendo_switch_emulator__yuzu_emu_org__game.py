@@ -37,6 +37,11 @@ if __name__ == '__main__':
 
     print()
 
+    print("Total perfect + great:", len([x for x in games if x[1] in ('Perfect', 'Great')]))
+    # Total perfect + great: 301
+
+    print()
+
     perfect_games = [x for x in games if x[1] == 'Perfect']
     print(f'Total perfect({len(perfect_games)}):')
     for i, (game, _) in enumerate(perfect_games, 1):
