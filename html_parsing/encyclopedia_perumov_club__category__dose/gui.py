@@ -60,7 +60,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.filter_le = QLineEdit()
-        self.filter_le.setPlaceholderText('Enter for search...')
+        self.filter_le.setPlaceholderText('Enter for search regexp...')
         self.filter_le.textEdited.connect(self.fill)
 
         self.table_dossier = get_table_widget(["TITLE"])
