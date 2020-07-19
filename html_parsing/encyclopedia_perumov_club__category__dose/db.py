@@ -106,3 +106,16 @@ if __name__ == '__main__':
     # 3. QuestionAnswer(id=3, dossier_id=1, question_text='Ник, скажите, а вампир может о...') answer_text='Вампир без крови обходиться не...')
     # 4. QuestionAnswer(id=4, dossier_id=1, question_text='Николай Данилович! Вы писали, ...') answer_text='Эфраим, как и все вампиры И ТА...')
     # 5. QuestionAnswer(id=5, dossier_id=1, question_text='Тут у нас возник очень острый ...') answer_text='Предательство Эйвилль — это не...')
+
+    # print()
+    #
+    # search_text = "Спаситель".lower()
+    # result_items = QuestionAnswer.select().where(
+    #     fn.Lower(QuestionAnswer.question_text).contains(search_text)
+    #     | fn.Lower(QuestionAnswer.answer_text).contains(search_text)
+    # ).order_by(QuestionAnswer.dossier)
+    # print(result_items)
+    # print(f'Search for {search_text!r}, result: {len(result_items)}')
+    #
+    # for x in result_items:
+    #     print(x)
