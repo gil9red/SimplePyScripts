@@ -105,6 +105,13 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(QWidget())
         self.centralWidget().setLayout(main_layout)
 
+    def _get_search_pattern(self):
+        search_text = self.filter_le.text()
+        try:
+            return re.compile(search_text, flags=re.IGNORECASE)
+        except:
+            pass
+
     def fill(self):
         # Удаление строк таблицы
         while self.table_dossier.rowCount():
@@ -113,9 +120,8 @@ class MainWindow(QMainWindow):
         items = Dossier.select()
 
         search_text = self.filter_le.text()
-        if search_text:
-            pattern = re.compile(search_text, flags=re.IGNORECASE)
-
+        pattern = self._get_search_pattern()
+        if search_text and pattern:
             new_items = []
             for dossier in items:
                 found = False
@@ -126,8 +132,7 @@ class MainWindow(QMainWindow):
                 if found:
                     new_items.append(dossier)
 
-            if new_items:
-                items = new_items
+            items = new_items
 
         for i, dossier in enumerate(items):
             self.table_dossier.setRowCount(self.table_dossier.rowCount() + 1)
@@ -140,6 +145,13 @@ class MainWindow(QMainWindow):
         self._on_table_dossier_item_clicked()
 
     def _on_table_dossier_item_clicked(self):
+        # Удаление строк таблицы
+        while self.table_items.rowCount():
+            self.table_items.removeRow(0)
+
+        self.question_te.clear()
+        self.answer_te.clear()
+
         item = self.table_dossier.currentItem()
         if not item:
             return
@@ -151,14 +163,11 @@ class MainWindow(QMainWindow):
         self.dossier_date.setText(str(dossier.date))
         self.dossier_total_items.setText(str(len(dossier.items)))
 
-        # Удаление строк таблицы
-        while self.table_items.rowCount():
-            self.table_items.removeRow(0)
-
         items = dossier.items
+
         search_text = self.filter_le.text()
-        if search_text:
-            pattern = re.compile(search_text, flags=re.IGNORECASE)
+        pattern = self._get_search_pattern()
+        if search_text and pattern:
             items = [x for x in items if pattern.search(x.question_text) or pattern.search(x.answer_text)]
 
         for i, question_answer_pairs in enumerate(items):
@@ -185,8 +194,8 @@ class MainWindow(QMainWindow):
         answer_text = question_answer_pairs.answer_text
 
         search_text = self.filter_le.text()
-        if search_text:
-            pattern = re.compile(search_text, flags=re.IGNORECASE)
+        pattern = self._get_search_pattern()
+        if search_text and pattern:
             question_text = pattern.sub(lambda m: f'<b>{m.group()}</b>', question_text)
             answer_text = pattern.sub(lambda m: f'<b>{m.group()}</b>', answer_text)
 
