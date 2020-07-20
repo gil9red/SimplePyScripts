@@ -19,4 +19,4 @@ with sqlite3.connect(":memory:") as connect:
 text = '\n'.join(items)
 
 qr_code = pyqrcode.create(text)
-qr_code.png('sqlite3.png')
+qr_code.png('sqlite3.png', scale=6)
