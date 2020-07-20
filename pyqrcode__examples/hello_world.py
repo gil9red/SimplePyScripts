@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: https://pythonhosted.org/PyQRCode/
+
+
 # pip install pyqrcode
 # pip install pypng
 import pyqrcode
