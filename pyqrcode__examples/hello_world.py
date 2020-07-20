@@ -17,3 +17,5 @@ qr_code.png('img.png')
 
 qr_code = pyqrcode.create('Hello World!')
 qr_code.png('img_hello.png')
+
+qr_code.png('img_hello__scale=6.png', scale=6)
