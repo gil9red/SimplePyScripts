@@ -7,28 +7,31 @@ __author__ = 'ipetrash'
 """Скрипт для скачивания главы по указанному url."""
 
 
+import ast
+import re
+
+import requests
+
+PATTERN = re.compile(r'\.init\(.*(\[\[.+\]\]).*\)')
+
+
 def get_url_images(url):
     print('Start get_url_images with url:', url)
 
-    import requests
     rs = requests.get(url)
 
-    pattern = '\.init\(.*(\[\[.+\]\]).*\)'
+    match = PATTERN.search(rs.text)
+    if not match:
+        raise Exception('Не получилось из страницы вытащить список картинок главы. '
+                        'Используемое регулярное выражение: ', PATTERN.pattern)
 
-    import re
-    match = re.search(pattern, rs.text)
-    if match:
-        match = match.group(1)
-        print('Match:', match)
+    match = match.group(1)
+    print('Match:', match)
 
-        # NOTE: если погуглить у меня примеры то можно найти более лучшие чем eval: через json или ast
-        urls = eval(match)
-        print('After eval:', urls)
+    urls = ast.literal_eval(match)
+    print('After parse match:', urls)
 
-        return [i[1] + i[0] + i[2] for i in urls]
-
-    raise Exception('Не получилось из страницы вытащить список картинок главы. '
-                    'Используемое регулярное выражение: ', pattern)
+    return [i[0] + i[2] for i in urls]
 
 
 def save_urls_to_zip(zip_file_name, urls):
@@ -60,15 +63,17 @@ def save_urls_to_zip(zip_file_name, urls):
 
 
 if __name__ == '__main__':
-    url = 'http://readmanga.me/one__piece/vol60/591'
+    url = 'https://readmanga.live/one_punch_man__A1bc88e/vol1/1'
 
     try:
         urls = get_url_images(url)
-        print('Urls:', urls)
-        print('Images:', len(urls))
+        print(f'Urls ({len(urls)}):')
+        for i, x in enumerate(urls, 1):
+            print(f'{i}. {x}')
 
-        import os
-        file_name = os.path.basename(url) + '.zip'
+        from pathlib import Path
+        url_file_name = url.replace('http://', '').replace('https://', '').replace('/', '_')
+        file_name = Path(__file__).resolve().name + ' - ' + url_file_name + '.zip'
         save_urls_to_zip(file_name, urls)
         print('Save to filename:', file_name)
 
