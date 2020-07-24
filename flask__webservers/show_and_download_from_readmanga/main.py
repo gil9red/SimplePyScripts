@@ -24,13 +24,18 @@ from download_volume_readmanga import get_url_images, save_urls_to_zip
 
 NOT_ARGS_HTML = """\
 <h1>К url нужно добавить параметр url: адрес главы.</h1>
-<h2>Например: <a href="{0}">{0}</a></h2>"""
+<h2>Например: <a href="{0}">{0}</a></h2>
+"""
+
+DEFAULT_URL_MANGA = 'https://readmanga.live/one_punch_man__A1bc88e/vol1/1'
 
 
+# TODO: FIXED HTTP STATUS "402 Payment Required" on <img src="..."/>
+#       Как вариант, можно скачивать картинки в папку сервера и отображать их из него
 @app.route("/")
 def index():
     if not request.args:
-        return NOT_ARGS_HTML.format('/?url=http://readmanga.me/one_punch_man/vol0/9')
+        return NOT_ARGS_HTML.format(f'/?url={DEFAULT_URL_MANGA}')
 
     url = request.args.get('url')
     print('Url manga:', url)
@@ -62,7 +67,7 @@ def index():
 @app.route("/export")
 def export():
     if not request.args:
-        return NOT_ARGS_HTML.format('/export?http://readmanga.me/one_punch_man/vol0/9')
+        return NOT_ARGS_HTML.format(f'/export?{DEFAULT_URL_MANGA}')
 
     url = request.args.get('url')
     print('Url manga:', url)
