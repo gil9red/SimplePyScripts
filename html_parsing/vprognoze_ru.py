@@ -10,7 +10,6 @@ from selenium import webdriver
 URL = 'https://vprognoze.ru/'
 
 driver = webdriver.Firefox()
-
 try:
     driver.implicitly_wait(5)
     driver.get(URL)
