@@ -4,24 +4,39 @@
 __author__ = 'ipetrash'
 
 
+from urllib.request import urlopen, Request
+from urllib.parse import urljoin
+
+from bs4 import BeautifulSoup
+
+
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0'
+
+
 def get_random_quotes_list():
+    url = 'https://bash.im/random'
     quotes = []
 
-    import requests
-    rs = requests.get('http://bash.im/random')
+    try:
+        with urlopen(Request(url, headers={'User-Agent': USER_AGENT})) as f:
+            root = BeautifulSoup(f.read(), 'html.parser')
 
-    from lxml import etree
-    root = etree.HTML(rs.content)
+            # Remove comics
+            for x in root.select('.quote__strips'):
+                x.decompose()
 
-    for quote_el in root.xpath('//*[@class="quote"]'):
-        try:
-            text_el = quote_el.xpath('*[@class="text"]')[0]
-            quote_text = '\n'.join(text.encode('ISO8859-1').decode('cp1251') for text in text_el.itertext()).strip()
+            for quote_el in root.select('.quote'):
+                try:
+                    href = quote_el.select_one('.quote__header_permalink')['href']
+                    url = urljoin(url, href)
+                    quote_text = quote_el.select_one('.quote__body').get_text(separator='\n', strip=True)
+                    quotes.append((quote_text, url))
+                except IndexError:
+                    pass
 
-            quotes.append(quote_text)
-
-        except IndexError:
-            pass
+    except Exception as e:
+        import traceback
+        print(traceback.format_exc())
 
     return quotes
 
