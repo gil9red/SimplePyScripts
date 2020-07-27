@@ -90,13 +90,14 @@ def index():
                 <td>{{ name }}</td>
                 <td>{{ crack_date }}</td>
                 <td>
-                    <button onclick="window.open('https://rutracker.net/forum/tracker.php?nm={{ name|replace('"', '')|replace("'", "") }}')">rutracker</button>
-                    <button onclick="window.open('http://anti-tor.org/search/0/8/000/0/{{ name|replace('"', '')|replace("'", "") }}')">Rutor</button>
-                    <button onclick="open_nnm_club( '{{ name|replace('"', '')|replace("'", "") }}' )">NNM-Club</button>
-                    <button onclick="window.open('http://search.tfile.co/?q={{ name|replace('"', '')|replace("'", "") }}')">tFile</button>
-                    <button onclick="window.open('http://www.torrentino.me/search?type=games&search={{ name|replace('"', '')|replace("'", "") }}')">Torrentino</button>
-                    <button onclick="window.open('https://yandex.ru/yandsearch?text={{ name|replace('"', '')|replace("'", "") }}')">Yandex</button>
-                    <button onclick="window.open('https://www.google.ru/#newwindow=1&q={{ name|replace('"', '')|replace("'", "") }}')">Google</button>
+                    <button onclick="window.open(`https://rutracker.net/forum/tracker.php?nm={{ name }}`)">rutracker</button>
+                    <button onclick="window.open(`http://anti-tor.org/search/0/8/000/0/{{ name }}`)">Rutor</button>
+                    <button onclick="open_nnm_club(`{{ name }}`)">NNM-Club</button>
+                    <button onclick="window.open(`https://fitgirl-repacks.site/?s={{ name }}`)">fitgirl</button>
+                    <button onclick="window.open(`http://search.tfile.co/?q={{ name }}`)">tFile</button>
+                    <button onclick="window.open(`http://www.torrentino.me/search?type=games&search={{ name }}`)">Torrentino</button>
+                    <button onclick="window.open(`https://yandex.ru/yandsearch?text={{ name }}`)">Yandex</button>
+                    <button onclick="window.open(`https://www.google.ru/#newwindow=1&q={{ name }}`)">Google</button>
                 </td>
             </tr>
         {% endfor %}
