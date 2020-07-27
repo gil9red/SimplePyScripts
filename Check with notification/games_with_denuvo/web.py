@@ -90,6 +90,7 @@ def index():
                 <td>{{ name }}</td>
                 <td>{{ crack_date }}</td>
                 <td>
+                    <button onclick="window.open('https://rutracker.net/forum/tracker.php?nm={{ name|replace('"', '')|replace("'", "") }}')">rutracker</button>
                     <button onclick="window.open('http://anti-tor.org/search/0/8/000/0/{{ name|replace('"', '')|replace("'", "") }}')">Rutor</button>
                     <button onclick="open_nnm_club( '{{ name|replace('"', '')|replace("'", "") }}' )">NNM-Club</button>
                     <button onclick="window.open('http://search.tfile.co/?q={{ name|replace('"', '')|replace("'", "") }}')">tFile</button>
