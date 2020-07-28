@@ -27,6 +27,7 @@ class ScreenMain(Screen):
         self.add_widget(box_layout)
 
     def _on_press_button_new_pasword(self, *args):
+        self.manager.transition.direction = 'left'
         self.manager.current = 'len_password'
 
 
@@ -47,6 +48,7 @@ class ScreenLenPassword(Screen):
         self.add_widget(box_layout)
 
     def _on_press_button_new_pasword(self, *args):
+        self.manager.transition.direction = 'right'
         self.manager.current = 'main_screen'
 
 
