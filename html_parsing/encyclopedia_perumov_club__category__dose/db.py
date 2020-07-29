@@ -57,7 +57,7 @@ class QuestionAnswer(BaseModel):
 
     def __str__(self):
         return f'{self.__class__.__name__}(id={self.id}, dossier_id={self.dossier.id}, ' \
-               f'question_text={shorten(self.question_text)!r}) answer_text={shorten(self.answer_text)!r})'
+               f'question_text={shorten(self.question_text)!r}), answer_text={shorten(self.answer_text)!r})'
 
 
 def add(url: str, title: str, date: DT.date, question_answer_pairs) -> bool:
