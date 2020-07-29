@@ -10,6 +10,7 @@ from urllib.request import urlopen, Request
 from urllib.parse import urljoin
 from typing import List, Union
 import traceback
+from pathlib import Path
 import re
 
 
@@ -46,6 +47,29 @@ class Quote:
     def __post_init__(self):
         self._id = int(self.url.rstrip().split('/')[-1])
         self._date_str = self.date.strftime('%d.%m.%Y')
+
+    def download_comics(self, dir_name: Union[str, Path] = None) -> List[str]:
+        if isinstance(dir_name, str):
+            dir_name = Path(dir_name)
+
+        if dir_name is None:
+            dir_name = Path(f'comics/quote_{self.id}')
+
+        files = []
+
+        for url in self.comics_url:
+            dir_name.mkdir(parents=True, exist_ok=True)
+
+            comics_id = url.rstrip('/').split('/')[-1]
+            file_name = dir_name / f'{comics_id}.png'
+
+            if not file_name.exists():
+                with urlopen(Request(url, headers={'User-Agent': USER_AGENT})) as f:
+                    file_name.write_bytes(f.read())
+
+            files.append(str(file_name.resolve()))
+
+        return files
 
     @staticmethod
     def parse_from(url_or_el: Union[str, Tag]) -> 'Quote':
