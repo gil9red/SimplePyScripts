@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 from urllib.request import urlopen, Request
 from urllib.parse import urljoin
 from typing import List, Union
+import traceback
 import re
 import sys
 
@@ -91,12 +92,14 @@ def get_random_quotes_list() -> List[Quote]:
             root = BeautifulSoup(f.read(), 'html.parser')
 
             for quote_el in root.select('article.quote.quote'):
-                quotes.append(
-                    Quote.parse_from(quote_el)
-                )
+                try:
+                    quotes.append(
+                        Quote.parse_from(quote_el)
+                    )
+                except Exception:
+                    print(f'Error by parsing quote:\n\n{traceback.format_exc()}\n\nquote_el:\n{quote_el}')
 
-    except Exception as e:
-        import traceback
+    except Exception:
         print(traceback.format_exc())
 
     return quotes
