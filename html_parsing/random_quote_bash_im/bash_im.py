@@ -143,20 +143,20 @@ def get_random_quotes_list(logger=None) -> List[Quote]:
     quotes = []
 
     try:
-        with urlopen(Request(url, headers={'User-Agent': USER_AGENT})) as f:
-            root = BeautifulSoup(f.read(), 'html.parser')
+        rs = requests.get(url, headers={'User-Agent': USER_AGENT})
+        root = BeautifulSoup(rs.content, 'html.parser')
 
-            for quote_el in root.select('article.quote.quote'):
-                try:
-                    quotes.append(
-                        Quote.parse_from(quote_el)
-                    )
-                except Exception:
-                    msg = f'Error by parsing quote:\nquote_el:\n{quote_el}\n\n'
-                    if logger:
-                        logger.exception(msg)
-                    else:
-                        print(f'{msg}{traceback.format_exc()}')
+        for quote_el in root.select('article.quote'):
+            try:
+                quotes.append(
+                    Quote.parse_from(quote_el)
+                )
+            except Exception:
+                msg = f'Error by parsing quote:\nquote_el:\n{quote_el}\n\n'
+                if logger:
+                    logger.exception(msg)
+                else:
+                    print(f'{msg}{traceback.format_exc()}')
 
     except Exception:
         if logger:
