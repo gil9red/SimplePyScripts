@@ -6,7 +6,6 @@ __author__ = 'ipetrash'
 
 import datetime as DT
 from dataclasses import dataclass, field
-from urllib.request import urlopen, Request
 from urllib.parse import urljoin
 from typing import List, Union
 import traceback
