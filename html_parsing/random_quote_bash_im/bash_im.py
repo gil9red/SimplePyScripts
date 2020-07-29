@@ -93,7 +93,7 @@ class Quote:
                f'date={self.date_str}, rating={self.rating}, comics_url={self.comics_url})'
 
 
-def get_random_quotes_list() -> List[Quote]:
+def get_random_quotes_list(logger=None) -> List[Quote]:
     url = 'https://bash.im/random'
     quotes = []
 
@@ -107,10 +107,17 @@ def get_random_quotes_list() -> List[Quote]:
                         Quote.parse_from(quote_el)
                     )
                 except Exception:
-                    print(f'Error by parsing quote:\n\n{traceback.format_exc()}\n\nquote_el:\n{quote_el}')
+                    msg = f'Error by parsing quote:\nquote_el:\n{quote_el}\n\n'
+                    if logger:
+                        logger.exception(msg)
+                    else:
+                        print(f'{msg}{traceback.format_exc()}')
 
     except Exception:
-        print(traceback.format_exc())
+        if logger:
+            logger.exception('')
+        else:
+            print(traceback.format_exc())
 
     return quotes
 
