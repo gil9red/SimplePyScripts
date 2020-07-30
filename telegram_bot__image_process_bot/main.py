@@ -48,11 +48,11 @@ log = get_logger(__file__)
 
 def log_func(func):
     @functools.wraps(func)
-    def decorator(self, *args, **kwargs):
+    def decorator(*args, **kwargs):
         log.debug('Entering: %s', func.__name__)
 
         try:
-            result = func(self, *args, **kwargs)
+            result = func(*args, **kwargs)
 
         except TelegramError:
             raise
