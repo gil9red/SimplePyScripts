@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 import os
+import time
 from pathlib import Path
 
 # pip install python-telegram-bot
@@ -113,3 +114,7 @@ if __name__ == '__main__':
             main()
         except:
             log.exception('')
+
+            timeout = 15
+            log.info(f'Restarting the bot after {timeout} seconds')
+            time.sleep(timeout)
