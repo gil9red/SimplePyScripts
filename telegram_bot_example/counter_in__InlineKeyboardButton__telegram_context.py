@@ -37,13 +37,10 @@ def on_start(update: Update, context: CallbackContext):
 @run_async
 @log_func(log)
 def on_work(update: Update, context: CallbackContext):
-    keyboard = []
-    for i, (data, value) in enumerate(DATA_TEMPLATE.items()):
-        if i % 3 == 0:
-            keyboard.append([])
-        button = InlineKeyboardButton(str(value), callback_data=data)
-        keyboard[-1].append(button)
-
+    keyboard = [[
+        InlineKeyboardButton(str(value), callback_data=data)
+        for data, value in DATA_TEMPLATE.items()
+    ]]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     update.message.reply_text(
