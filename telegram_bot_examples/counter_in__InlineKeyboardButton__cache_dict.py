@@ -50,7 +50,7 @@ def on_start(update: Update, context: CallbackContext):
 
 @run_async
 @log_func(log)
-def on_work(update: Update, context: CallbackContext):
+def on_request(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     message_id = update.message.message_id
 
@@ -119,7 +119,7 @@ def main():
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler('start', on_start))
-    dp.add_handler(MessageHandler(Filters.text, on_work))
+    dp.add_handler(MessageHandler(Filters.text, on_request))
     dp.add_handler(CallbackQueryHandler(on_callback_query))
 
     # log all errors
