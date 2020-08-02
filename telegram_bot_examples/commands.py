@@ -98,9 +98,7 @@ def main():
     for commands in dp.handlers.values():
         for command in commands:
             if isinstance(command, CommandHandler):
-                ALL_COMMANDS.extend([
-                    f'{x} pass_args={command.pass_args}' for x in command.command
-                ])
+                ALL_COMMANDS.extend(command.command)
 
     # log all errors
     dp.add_error_handler(error_callback)
