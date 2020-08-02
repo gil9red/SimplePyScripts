@@ -6,14 +6,11 @@ __author__ = 'ipetrash'
 
 import os
 import time
-from typing import Dict
 from pathlib import Path
 
 # pip install python-telegram-bot
-from telegram import (
-    Update, InlineKeyboardButton, InlineKeyboardMarkup
-)
-from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler
+from telegram import Update
+from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext
 from telegram.ext.dispatcher import run_async
 
 import config
@@ -21,14 +18,6 @@ from common import get_logger, log_func
 
 
 log = get_logger(str(Path(__file__)) + '.log')
-
-
-def get_reply_markup(data: Dict[str, int]) -> InlineKeyboardMarkup:
-    keyboard = [[
-        InlineKeyboardButton(str(value), callback_data=data)
-        for data, value in data.items()
-    ]]
-    return InlineKeyboardMarkup(keyboard)
 
 
 @run_async
