@@ -42,13 +42,13 @@ print(number, DATA['number'])
 # Many threads
 number = DATA['number'] = 0
 pool = ThreadPool()
-results = pool.map(inc, range(max_number))
+pool.map(inc, range(max_number))
 print(number, DATA['number'])
 # 819903 459802
 
 # Many threads
 number = DATA['number'] = 0
 pool = ThreadPool()
-results = pool.map(inc_lock, range(max_number))
+pool.map(inc_lock, range(max_number))
 print(number, DATA['number'])
 # 1000000 1000000
