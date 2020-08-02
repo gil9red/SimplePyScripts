@@ -8,6 +8,7 @@ import os
 import time
 from typing import Dict
 from pathlib import Path
+import threading
 
 # pip install python-telegram-bot
 from telegram import (
@@ -23,6 +24,7 @@ from common import get_logger, log_func
 log = get_logger(str(Path(__file__)) + '.log')
 
 
+lock = threading.Lock()
 DATA_TEMPLATE = {
     'number_1': 0,
     'number_2': 0,
@@ -90,7 +92,9 @@ def on_callback_query(update: Update, context: CallbackContext):
         CACHE_NUMBERS[chat_id][message_id] = data
 
     data = CACHE_NUMBERS[chat_id][message_id]
-    data[query.data] += 1
+
+    with lock:
+        data[query.data] += 1
 
     query.message.edit_reply_markup(
         reply_markup=get_reply_markup(data)
