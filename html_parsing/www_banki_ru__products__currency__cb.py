@@ -15,9 +15,9 @@ root = BeautifulSoup(rs.content, 'html.parser')
 
 for tr in root.select('tbody > tr[data-currency-code]'):
     td_items = tr.select('td')
-    td_code, td_num, td_name, td_value, td_change = \
+    code, num, name, value, change = \
         map(lambda x: x.get_text(strip=True), td_items)
-    print(td_code, td_num, td_name, td_value, td_change)
+    print(code, num, name, value, change)
 
 # USD 1 Доллар США 73.4261 +0,0628
 # EUR 1 Евро 87.2889 +1,0357
