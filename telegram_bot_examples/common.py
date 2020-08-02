@@ -14,8 +14,7 @@ def get_logger(file_name: str, dir_name='logs'):
     dir_name = Path(dir_name).resolve()
     dir_name.mkdir(parents=True, exist_ok=True)
 
-    file_name = str(dir_name / Path(file_name).resolve().name) +'.log'
-    print(file_name)
+    file_name = str(dir_name / Path(file_name).resolve().name) + '.log'
 
     log = logging.getLogger(__name__)
     log.setLevel(logging.DEBUG)
