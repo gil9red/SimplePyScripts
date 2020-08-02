@@ -8,7 +8,6 @@ from multiprocessing.dummy import Pool as ThreadPool
 import threading
 
 
-# Without lock
 number = 0
 DATA = {
     'number': 0
