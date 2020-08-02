@@ -7,7 +7,6 @@ __author__ = 'ipetrash'
 import os
 import time
 from typing import Dict
-from pathlib import Path
 import threading
 
 # pip install python-telegram-bot
@@ -21,7 +20,7 @@ import config
 from common import get_logger, log_func
 
 
-log = get_logger(str(Path(__file__)) + '.log')
+log = get_logger(__file__)
 
 
 lock = threading.Lock()

@@ -17,7 +17,7 @@ import config
 from common import get_logger, log_func
 
 
-log = get_logger(str(Path(__file__)) + '.log')
+log = get_logger(__file__)
 
 
 @run_async

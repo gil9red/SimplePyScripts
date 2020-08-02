@@ -6,7 +6,6 @@ __author__ = 'ipetrash'
 
 import os
 import time
-from pathlib import Path
 
 # pip install python-telegram-bot
 from telegram import (
@@ -19,7 +18,7 @@ import config
 from common import get_logger, log_func
 
 
-log = get_logger(str(Path(__file__)) + '.log')
+log = get_logger(__file__)
 
 
 DATA_TEMPLATE = {
