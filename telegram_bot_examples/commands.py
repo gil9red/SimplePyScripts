@@ -35,7 +35,6 @@ def on_request(update: Update, context: CallbackContext):
     message = update.message
 
     text = 'Commands:\n' + '\n'.join(f'    /{x}' for x in ALL_COMMANDS)
-
     message.reply_text(text)
 
 
