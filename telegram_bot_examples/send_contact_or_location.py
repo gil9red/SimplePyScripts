@@ -16,9 +16,9 @@ import config
 from common import get_logger, log_func
 
 
-location_keyboard = KeyboardButton("Send location", request_location=True)
-contact_keyboard = KeyboardButton('Share contact', request_contact=True)
-custom_keyboard = [[location_keyboard, contact_keyboard]]
+contact_keyboard = KeyboardButton('Send contact', request_contact=True)
+location_keyboard = KeyboardButton('Send location', request_location=True)
+custom_keyboard = [[contact_keyboard, location_keyboard]]
 REPLY_KEYBOARD_MARKUP = ReplyKeyboardMarkup(custom_keyboard)
 
 
