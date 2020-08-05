@@ -6,6 +6,8 @@ __author__ = 'ipetrash'
 
 import random
 import sys
+import time
+import os
 from pathlib import Path
 
 from telegram import Update, InputMediaPhoto
@@ -195,9 +197,19 @@ def on_error(update: Update, context: CallbackContext):
     update.message.reply_text(config.ERROR_TEXT)
 
 
-if __name__ == '__main__':
+def main():
+    cpu_count = os.cpu_count()
+    workers = cpu_count
+    log.debug('System: CPU_COUNT=%s, WORKERS=%s', cpu_count, workers)
+
+    log.debug('Start')
+
     # Create the EventHandler and pass it your bot's token.
-    updater = Updater(config.TOKEN, use_context=True)
+    updater = Updater(
+        config.TOKEN,
+        workers=workers,
+        use_context=True
+    )
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
@@ -236,3 +248,15 @@ if __name__ == '__main__':
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
+
+
+if __name__ == '__main__':
+    while True:
+        try:
+            main()
+        except:
+            log.exception('')
+
+            timeout = 15
+            log.info(f'Restarting the bot after {timeout} seconds')
+            time.sleep(timeout)
