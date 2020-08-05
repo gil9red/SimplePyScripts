@@ -63,7 +63,7 @@ def on_contact_or_location(update: Update, context: CallbackContext):
     )
 
 
-def error_callback(update: Update, context: CallbackContext):
+def on_error(update: Update, context: CallbackContext):
     log.exception('Error: %s\nUpdate: %s', context.error, update)
     update.message.reply_text(config.ERROR_TEXT)
 
@@ -90,7 +90,7 @@ def main():
     dp.add_handler(MessageHandler(Filters.contact | Filters.location, on_contact_or_location))
 
     # log all errors
-    dp.add_error_handler(error_callback)
+    dp.add_error_handler(on_error)
 
     # Start the Bot
     updater.start_polling()
