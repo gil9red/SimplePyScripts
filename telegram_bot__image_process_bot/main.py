@@ -4,73 +4,27 @@
 __author__ = 'ipetrash'
 
 
-# pip install python-telegram-bot --upgrade
-from telegram import ReplyKeyboardMarkup, ChatAction, TelegramError
-from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
-
-from config import TOKEN, TIMEOUT, LAST_IMAGE_DIR
+import os
+import time
 
 import requests
-import os
 
 # pip install Pillow
 from PIL import Image
 
+# pip install python-telegram-bot --upgrade
+from telegram import ReplyKeyboardMarkup, ChatAction, Update
+from telegram.ext import Updater, MessageHandler, Filters, CommandHandler, CallbackContext
+from telegram.ext.dispatcher import run_async
 
-import functools
-
-
-def get_logger(name, file='log.txt', encoding='utf-8'):
-    import logging
-    log = logging.getLogger(name)
-    log.setLevel(logging.DEBUG)
-
-    formatter = logging.Formatter('[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s')
-
-    # Simple file handler
-    # fh = logging.FileHandler(file, encoding=encoding)
-    # or:
-    from logging.handlers import RotatingFileHandler
-    fh = RotatingFileHandler(file, maxBytes=10000000, backupCount=5, encoding=encoding)
-    fh.setFormatter(formatter)
-    log.addHandler(fh)
-
-    import sys
-    sh = logging.StreamHandler(stream=sys.stdout)
-    sh.setFormatter(formatter)
-    log.addHandler(sh)
-
-    return log
+import config
+from commands import invert, gray, invert_gray, pixelate, get_image_info, jackal_jpg, thumbnail, blur
+from common import get_logger, log_func
 
 
 log = get_logger(__file__)
 
 
-def log_func(func):
-    @functools.wraps(func)
-    def decorator(*args, **kwargs):
-        log.debug('Entering: %s', func.__name__)
-
-        try:
-            result = func(*args, **kwargs)
-
-        except TelegramError:
-            raise
-
-        except Exception as e:
-            log.exception('Error:')
-
-            raise TelegramError(str(e))
-
-        log.debug('Result: %s', result)
-        log.debug('Exiting: %s', func.__name__)
-
-        return result
-
-    return decorator
-
-
-from commands import invert, gray, invert_gray, pixelate, get_image_info, jackal_jpg, thumbnail, blur
 COMMANDS = {
     'invert': invert,
     'gray': gray,
@@ -97,39 +51,37 @@ BUTTON_LIST = [
 REPLY_KEYBOARD_MARKUP = ReplyKeyboardMarkup(BUTTON_LIST, resize_keyboard=True)
 
 
-os.makedirs(LAST_IMAGE_DIR, exist_ok=True)
+os.makedirs(config.LAST_IMAGE_DIR, exist_ok=True)
 
 
 def get_file_name_image(user_id):
-    return '{}/{}.jpg'.format(LAST_IMAGE_DIR, user_id)
+    return f'{config.LAST_IMAGE_DIR}/{user_id}.jpg'
 
 
-# Отправка сообщения на команду /start
-@log_func
-def start(bot, update):
+@run_async
+@log_func(log)
+def start(update: Update, context: CallbackContext):
     log.debug('chat: %s', update.message.chat)
 
     update.message.reply_text('Отправь мне картинку')
 
 
-@log_func
-def work_text(bot, update):
+@run_async
+@log_func(log)
+def on_request(update: Update, context: CallbackContext):
     chat_id = update.message.chat_id
-    log.debug('chat: %s', update.message.chat)
-
     text = update.message.text
     log.debug('text: %s', text)
 
     if text not in COMMANDS:
-        update.message.reply_text('Неизвестная команда "{}"'.format(text), timeout=TIMEOUT)
+        update.message.reply_text(f'Неизвестная команда {text!r}')
         return
 
-    bot.send_chat_action(chat_id, action=ChatAction.UPLOAD_PHOTO)
+    context.bot.send_chat_action(chat_id, action=ChatAction.UPLOAD_PHOTO)
 
     file_name = get_file_name_image(chat_id)
-
     if not os.path.exists(file_name):
-        update.message.reply_text('Нужно отправить мне картинку', timeout=TIMEOUT)
+        update.message.reply_text('Нужно отправить мне картинку')
         return
 
     img = Image.open(file_name)
@@ -140,67 +92,78 @@ def work_text(bot, update):
 
     if type(result) == str:
         log.debug('reply_text')
-
-        update.message.reply_text(result, timeout=TIMEOUT)
-
+        update.message.reply_text(result)
     else:
         log.debug('reply_photo')
 
-        file_name = get_file_name_image('out_{}'.format(chat_id))
+        file_name = get_file_name_image(f'out_{chat_id}')
         result.save(file_name, result.format)
 
-        update.message.reply_photo(open(file_name, 'rb'), timeout=TIMEOUT)
+        update.message.reply_photo(open(file_name, 'rb'))
 
         os.remove(file_name)
 
 
-@log_func
-def work_photo(bot, update):
+@run_async
+@log_func(log)
+def on_photo(update: Update, context: CallbackContext):
     chat_id = update.message.chat_id
     log.debug('chat: %s', update.message.chat)
 
-    log.debug('Скачиваю картинку...')
-    update.message.reply_text('Скачиваю картинку...', timeout=TIMEOUT)
+    msg = 'Скачиваю картинку...'
+    log.debug(msg)
+    progress_message = update.message.reply_text(msg + '\n⬜⬜⬜⬜⬜')
 
-    bot.send_chat_action(chat_id=chat_id, action=ChatAction.TYPING)
+    context.bot.send_chat_action(chat_id=chat_id, action=ChatAction.TYPING)
 
     url = update.message.photo[-1].get_file().file_path
 
     rs = requests.get(url)
 
+    progress_message.edit_text(msg + '\n⬛⬛⬛⬜⬜')
+
     file_name = get_file_name_image(chat_id)
     with open(file_name, 'wb') as f:
         f.write(rs.content)
 
-    log.debug('Картинка скачана!')
-    update.message.reply_text('Картинка скачана!', timeout=TIMEOUT)
+    msg = 'Картинка скачана!'
+    log.debug(msg)
+    progress_message.edit_text(msg + '\n⬛⬛⬛⬛⬛')
+    progress_message.delete()
 
     update.message.reply_text(
         "Теперь доступны команды над картинкой!",
-        reply_markup=REPLY_KEYBOARD_MARKUP,
-        timeout=TIMEOUT
+        reply_markup=REPLY_KEYBOARD_MARKUP
     )
 
 
-def error(bot, update, error):
-    log.warning('Error: "%s".\nUpdate: "%s"', error, update)
-    update.message.reply_text('Error: "{}"'.format(error), timeout=TIMEOUT)
+def on_error(update: Update, context: CallbackContext):
+    log.exception('Error: %s\nUpdate: %s', context.error, update)
+    update.message.reply_text(config.ERROR_TEXT)
 
 
-if __name__ == '__main__':
+def main():
+    cpu_count = os.cpu_count()
+    workers = cpu_count
+    log.debug('System: CPU_COUNT=%s, WORKERS=%s', cpu_count, workers)
+
     log.debug('Start')
 
     # Create the EventHandler and pass it your bot's token.
-    updater = Updater(TOKEN)
+    updater = Updater(
+        config.TOKEN,
+        workers=workers,
+        use_context=True
+    )
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('start', start))
-    dp.add_handler(MessageHandler(Filters.text, work_text))
-    dp.add_handler(MessageHandler(Filters.photo, work_photo))
+    dp.add_handler(MessageHandler(Filters.text, on_request))
+    dp.add_handler(MessageHandler(Filters.photo, on_photo))
 
     # log all errors
-    dp.add_error_handler(error)
+    dp.add_error_handler(on_error)
 
     # Start the Bot
     updater.start_polling()
@@ -211,3 +174,15 @@ if __name__ == '__main__':
     updater.idle()
 
     log.debug('Finish')
+
+
+if __name__ == '__main__':
+    while True:
+        try:
+            main()
+        except:
+            log.exception('')
+
+            timeout = 15
+            log.info(f'Restarting the bot after {timeout} seconds')
+            time.sleep(timeout)

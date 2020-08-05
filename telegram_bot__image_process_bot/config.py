@@ -6,5 +6,5 @@ __author__ = 'ipetrash'
 
 TOKEN = '<TOKEN>'
 
-TIMEOUT = 50
 LAST_IMAGE_DIR = 'last_image'
+ERROR_TEXT = '⚠ Возникла какая-то проблема. Попробуйте повторить запрос или попробовать чуть позже...'
