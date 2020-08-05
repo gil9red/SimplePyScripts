@@ -62,13 +62,13 @@ def pict2(update: Update, context: CallbackContext):
 
 
 def pict3(update: Update, context: CallbackContext):
-    MAX_PARTS = 10
+    max_parts = 10
     files = list(Path('files/readmanga.live_one_punch_man__A1bc88e_vol1_1').glob('*.*'))
 
     media_groups = []
-    for i in range(0, len(files), MAX_PARTS):
+    for i in range(0, len(files), max_parts):
         media = [
-            InputMediaPhoto(f.open('rb')) for f in files[i: i+MAX_PARTS]
+            InputMediaPhoto(f.open('rb')) for f in files[i: i+max_parts]
         ]
         media_groups.append(media)
 
