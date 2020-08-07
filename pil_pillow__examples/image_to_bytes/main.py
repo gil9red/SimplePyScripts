@@ -8,8 +8,15 @@ __author__ = 'ipetrash'
 from PIL import Image
 import io
 
+
 img = Image.open("input.jpg")
+
 bytes_io = io.BytesIO()
 img.save(bytes_io, img.format)
+
 img_data = bytes_io.getvalue()
 print(len(img_data), img_data)
+
+# NOTE: For read() need call seek
+bytes_io.seek(0)
+print(bytes_io.read(10))
