@@ -40,7 +40,7 @@ def run():
 
         img = ImageGrab.grab()
         bytes_io = io.BytesIO()
-        img.save(bytes_io, format='JPEG')
+        img.save(bytes_io, img.format)
         img_data = bytes_io.getvalue()
 
         # Simple image to string
