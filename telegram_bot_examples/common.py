@@ -40,17 +40,24 @@ def log_func(logger: logging.Logger):
     def actual_decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            update = args[0]
-            chat_id = None
-            user_id = None
-            if update.effective_chat:
-                chat_id = update.effective_chat.id
-            if update.effective_user:
-                user_id = update.effective_user.id
+            if args:
+                update = args[0]
+                if update:
+                    chat_id = user_id = first_name = last_name = None
 
-            logger.debug(func.__name__ + '[chat_id=%s, user_id=%s]', chat_id, user_id)
+                    if update.effective_chat:
+                        chat_id = update.effective_chat.id
+
+                    if update.effective_user:
+                        user_id = update.effective_user.id
+                        first_name = update.effective_user.first_name
+                        last_name = update.effective_user.last_name
+
+                    msg = f'[chat_id={chat_id}, user_id={user_id}, first_name={first_name!r}, last_name={last_name!r}]'
+                    logger.debug(func.__name__ + msg)
 
             return func(*args, **kwargs)
 
         return wrapper
     return actual_decorator
+
