@@ -233,7 +233,7 @@ def render_deepdream(t_obj, sess, img0=IMG_NOISE, iter_n=10, step=1.5, octave_n=
     return img
 
 
-def render_deepdream_from_layer_by_channel(sess, img0, name, layer, channel=None):
+def render_deepdream_from_layer_by_channel(img0, name, layer, channel=None):
     t = default_timer()
 
     # t_obj = tf.square(T(layer)[:, :, :, channel])
@@ -278,18 +278,18 @@ def main():
     img0 = np.float32(img0)
 
     # FROM NOISE
-    render_deepdream_from_layer_by_channel(sess, IMG_NOISE, 'noise', 'mixed4d_5x5_pre_relu', 61)
-    render_deepdream_from_layer_by_channel(sess, IMG_NOISE, 'noise', 'head1_bottleneck_pre_relu', 1)
+    render_deepdream_from_layer_by_channel(IMG_NOISE, 'noise', 'mixed4d_5x5_pre_relu', 61)
+    render_deepdream_from_layer_by_channel(IMG_NOISE, 'noise', 'head1_bottleneck_pre_relu', 1)
 
     # FROM FILENAME
-    render_deepdream_from_layer_by_channel(sess, img0, 'pilatus800', 'mixed4d_1x1_pre_relu', 39)
-    render_deepdream_from_layer_by_channel(sess, img0, 'pilatus800', 'mixed4d_5x5_pre_relu', 61)
-    render_deepdream_from_layer_by_channel(sess, img0, 'pilatus800', 'mixed4c_3x3_bottleneck_pre_relu', 64)
-    render_deepdream_from_layer_by_channel(sess, img0, 'pilatus800', 'mixed4c_3x3_bottleneck_pre_relu', 104)
+    render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4d_1x1_pre_relu', 39)
+    render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4d_5x5_pre_relu', 61)
+    render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4c_3x3_bottleneck_pre_relu', 64)
+    render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4c_3x3_bottleneck_pre_relu', 104)
 
     # Save to memory
     bytes_io = io.BytesIO()
-    render_deepdream_from_layer_by_channel(sess, IMG_NOISE, bytes_io, 'mixed4d_5x5_pre_relu', 61)
+    render_deepdream_from_layer_by_channel(IMG_NOISE, bytes_io, 'mixed4d_5x5_pre_relu', 61)
     bytes_io.seek(0)
     print(bytes_io.read(10))
     # b'\xff\xd8\xff\xe0\x00\x10JFIF'
@@ -298,7 +298,7 @@ def main():
     # # ['conv2d0_pre_relu', 'conv2d1_pre_relu', 'conv2d2_pre_relu', 'mixed3a_1x1_pre_relu', ...
     # t_obj_layers = [x.split('/')[1] for x in layers]
     # for name in t_obj_layers:
-    #     render_deepdream_from_layer_by_channel(sess, img0, name)
+    #     render_deepdream_from_layer_by_channel(img0, name)
     #     # t_obj = tf.square(T(layer))
     #     # img = render_deepdream(t_obj, sess, img0)
     #     # savearray(img / 255.0, '{}/{}_{}.png'.format(output_dir, 'pilatus800', layer))
