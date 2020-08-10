@@ -60,4 +60,3 @@ def log_func(logger: logging.Logger):
 
         return wrapper
     return actual_decorator
-
