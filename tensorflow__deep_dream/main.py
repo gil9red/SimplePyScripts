@@ -40,12 +40,18 @@ __author__ = 'ipetrash'
 # NOTE: "FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated"
 #       pip3 install h5py==2.8.0rc1
 
+import os
+import io
+from timeit import default_timer
+
+# pip install tensorflow==1.15
+# pip install tensorflow-gpu==1.15
 # pip install tensorflow
 import tensorflow as tf
 import numpy as np
 import PIL.Image
-import matplotlib.pyplot as plt
-import os
+# import matplotlib.pyplot as plt
+
 from common import download_tensorflow_model, IMG_NOISE, showarray, savearray
 
 
@@ -59,13 +65,13 @@ def main():
 
     # Step 2 - Creating Tensorflow session and loading the model
     graph = tf.Graph()
-    sess = tf.InteractiveSession(graph=graph)
+    sess = tf.compat.v1.InteractiveSession(graph=graph)
 
-    with tf.gfile.FastGFile(os.path.join(data_dir, model_fn), 'rb') as f:
-        graph_def = tf.GraphDef()
+    with tf.io.gfile.GFile(os.path.join(data_dir, model_fn), 'rb') as f:
+        graph_def = tf.compat.v1.GraphDef()
         graph_def.ParseFromString(f.read())
 
-    t_input = tf.placeholder(np.float32, name='input')  # define the input tensor
+    t_input = tf.compat.v1.placeholder(np.float32, name='input')  # define the input tensor
     imagenet_mean = 117.0
     t_preprocessed = tf.expand_dims(t_input - imagenet_mean, 0)
     tf.import_graph_def(graph_def, {'input': t_preprocessed})
@@ -136,7 +142,7 @@ def main():
         '''Helper that transforms TF-graph generating function into a regular one.
         See "resize" function below.
         '''
-        placeholders = list(map(tf.placeholder, argtypes))
+        placeholders = list(map(tf.compat.v1.placeholder, argtypes))
 
         def wrap(f):
             out = f(*placeholders)
@@ -150,7 +156,7 @@ def main():
 
     def resize(img, size):
         img = tf.expand_dims(img, 0)
-        return tf.image.resize_bilinear(img, size)[0, :, :, :]
+        return tf.compat.v1.image.resize_bilinear(img, size)[0, :, :, :]
 
     resize = tffunc(np.float32, np.int32)(resize)
 
@@ -239,8 +245,7 @@ def main():
     img0 = np.float32(img0)
 
     def render_deepdream_from_layer_by_channel(img0, name, layer, channel=None):
-        import time
-        t = time.clock()
+        t = default_timer()
 
         # t_obj = tf.square(T(layer)[:, :, :, channel])
         t_obj = T(layer)
@@ -248,17 +253,19 @@ def main():
             t_obj = t_obj[:, :, :, channel]
 
         # t_obj = tf.square(t_obj)
-
         img = render_deepdream(t_obj, sess, img0)
 
-        if channel:
-            file_name = '{}/{}__{}__{}.jpg'.format(output_dir, name, layer, channel)
+        if isinstance(name, str):
+            if channel:
+                file_name = f'{output_dir}/{name}__{layer}__{channel}.jpg'
+            else:
+                file_name = f'{output_dir}/{name}__{layer}.jpg'
         else:
-            file_name = '{}/{}__{}.jpg'.format(output_dir, name, layer)
+            file_name = name
 
         savearray(img / 255.0, file_name)
 
-        print('elapsed {} secs'.format(time.clock() - t))
+        print(f'Elapsed {default_timer() - t:.2f} secs')
         print()
 
     # FROM NOISE
@@ -267,25 +274,16 @@ def main():
 
     # FROM FILENAME
     render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4d_1x1_pre_relu', 39)
-
     render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4d_5x5_pre_relu', 61)
-    # render_deepdream_from_layer_by_channel(t_obj, img0, layer)
-    # img = render_deepdream(t_obj, sess, img0)
-    # savearray(img / 255.0, '{}/{}__{}.png'.format(output_dir, 'pilatus800', layer))
-
     render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4c_3x3_bottleneck_pre_relu', 64)
-    # layer = 'mixed4c_3x3_bottleneck_pre_relu'
-    # channel = 64
-    # t_obj = tf.square(T(layer)[:, :, :, channel])
-    # img = render_deepdream(t_obj, sess, img0)
-    # savearray(img / 255.0, '{}/{}__{}__{}.png'.format(output_dir, 'pilatus800', layer, channel))
-
     render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4c_3x3_bottleneck_pre_relu', 104)
-    # layer = 'mixed4c_3x3_bottleneck_pre_relu'
-    # channel = 104
-    # t_obj = tf.square(T(layer)[:, :, :, channel])
-    # img = render_deepdream(t_obj, sess, img0)
-    # savearray(img / 255.0, '{}/{}__{}__{}.png'.format(output_dir, 'pilatus800', layer, channel))
+
+    # Save to memory
+    bytes_io = io.BytesIO()
+    render_deepdream_from_layer_by_channel(IMG_NOISE, bytes_io, 'mixed4d_5x5_pre_relu', 61)
+    bytes_io.seek(0)
+    print(bytes_io.read(10))
+    # b'\xff\xd8\xff\xe0\x00\x10JFIF'
 
     # # PROCESS FROM ALL LAYERS
     # # ['conv2d0_pre_relu', 'conv2d1_pre_relu', 'conv2d2_pre_relu', 'mixed3a_1x1_pre_relu', ...

@@ -7,14 +7,18 @@ __author__ = 'ipetrash'
 # SOURCE: https://github.com/llSourcell/deep_dream_challenge
 
 
+import io
+import urllib.request
+import os
+import zipfile
+from typing import Union
+
+
 # pip install tensorflow
 # import tensorflow as tf
 import numpy as np
 import PIL.Image
 import matplotlib.pyplot as plt
-import urllib.request
-import os
-import zipfile
 
 
 # start with a gray image with a little noise
@@ -55,8 +59,8 @@ def showarray(a):
     plt.show()
 
 
-def savearray(a, file_name):
-    print('save:', file_name)
+def savearray(a, file_name: Union[io.BytesIO, str]):
+    print('Saving to:', file_name)
 
     a = np.uint8(np.clip(a, 0, 1) * 255)
-    PIL.Image.fromarray(a).save(file_name)
+    PIL.Image.fromarray(a).save(file_name, format='jpeg')
