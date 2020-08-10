@@ -20,6 +20,7 @@ with TelegramClient('my', API_ID, API_HASH) as client:
 
     @client.on(events.NewMessage(pattern='(?i).*Hello'))
     async def handler(event):
+        print(event.stringify())
         await event.reply('Hey!')
 
     client.run_until_disconnected()
