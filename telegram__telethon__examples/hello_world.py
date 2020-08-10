@@ -14,7 +14,7 @@ from telethon.sync import TelegramClient, events
 from config import API_ID, API_HASH
 
 
-with TelegramClient('name', API_ID, API_HASH) as client:
+with TelegramClient('my', API_ID, API_HASH) as client:
     client.send_message('me', 'Hello, myself!')
     print(client.download_profile_photo('me'))
 
