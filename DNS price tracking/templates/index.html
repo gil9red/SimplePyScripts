@@ -22,55 +22,68 @@
             width:25px;
             height:25px
         }
+
+        .table-responsive {
+            height: 90vh;
+            overflow: scroll;
+        }
+        thead > tr:nth-child(1) th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-6">
-            <table id="product" class="table table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th style="display: none;" scope="col">#</th>
-                        <th scope="col" class="col">Title</th>
-                        <th scope="col" class="col-1">DNS</th>
-                        <th scope="col" class="col-1">TP</th>
-                        <th scope="col" style="min-width: 75px;">Link</th>
-                        <th scope="col" class="col-1">Favorite</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for id, title, last_price_dns, last_price_techopoint, url_dns, url_technopoint in products %}
-                    <tr product_id="{{ id }}">
-                        <th style="display: none;" scope="row">{{ id }}</th>
-                        <td class="text-truncate" style="max-width: 300px;" title="{{ title }}">
-                            {{ title }}
-                        </td>
-                        <td class="price dns">{{ last_price_dns }}</td>
-                        <td class="price techopoint">{{ last_price_techopoint }}</td>
-                        <td>
-                            <a href="{{ url_dns }}" target="_blank" title="{{ url_dns }}">
-                                <img src="{{ url_for('static', filename='img/dns.png') }}" alt="DNS">
-                            </a>
-                            <a href="{{ url_technopoint }}" target="_blank" title="{{ url_technopoint }}">
-                                <img src="{{ url_for('static', filename='img/technopoint.png') }}" alt="TechnoPoint">
-                            </a>
-                        </td>
-                        <td>
-                            <div class="custom-control custom-checkbox text-center big-checkbox">
-                                <input type="checkbox" class="custom-control-input favorite" id="favorite_{{ id }}">
-                                <label class="custom-control-label" for="favorite_{{ id }}"></label>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="col-8">
+            <div class="table-responsive">
+                <table id="product" class="table table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th style="display: none;" scope="col">#</th>
+                            <th scope="col" class="col">Title</th>
+                            <th scope="col" class="col-1">DNS</th>
+                            <th scope="col" class="col-1">TP</th>
+                            <th scope="col" style="min-width: 75px;">Link</th>
+                            <th scope="col" class="col-1">Favorite</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for id, title, last_price_dns, last_price_techopoint, url_dns, url_technopoint in products %}
+                        <tr product_id="{{ id }}">
+                            <th style="display: none;" scope="row">{{ id }}</th>
+                            <td class="text-truncate" style="max-width: 300px;" title="{{ title }}">
+                                {{ title }}
+                            </td>
+                            <td class="price dns">{{ last_price_dns }}</td>
+                            <td class="price techopoint">{{ last_price_techopoint }}</td>
+                            <td>
+                                <a href="{{ url_dns }}" target="_blank" title="{{ url_dns }}">
+                                    <img src="{{ url_for('static', filename='img/dns.png') }}" alt="DNS">
+                                </a>
+                                <a href="{{ url_technopoint }}" target="_blank" title="{{ url_technopoint }}">
+                                    <img src="{{ url_for('static', filename='img/technopoint.png') }}" alt="TechnoPoint">
+                                </a>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox text-center big-checkbox">
+                                    <input type="checkbox" class="custom-control-input favorite" id="favorite_{{ id }}">
+                                    <label class="custom-control-label" for="favorite_{{ id }}"></label>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div class="col-2 shrink">
-            <table id="price" class="table table-hover">
+        <div class="col-4 shrink">
+            <div class="table-responsive">
+                <table id="price" class="table table-hover">
                 <thead class="thead-dark">
                     <tr>
                         <th style="display: none;" scope="col">#</th>
@@ -92,8 +105,11 @@
                     {% endfor %}
                 </tbody>
             </table>
+            </div>
         </div>
+    </div>
 
+    <div class="row mt-4">
         <div class="col-4">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="cb_show_none_price_dns" onclick="set_visible_none_price()">
@@ -103,7 +119,8 @@
                 <input class="form-check-input" type="checkbox" value="" id="cb_show_none_price_technopoint" onclick="set_visible_none_price()">
                 <label class="form-check-label" for="cb_show_none_price_technopoint">Show <b>none</b> prices TechnoPoint</label>
             </div>
-            <br>
+        </div>
+        <div class="col-4">
             <div>
                 <div>
                     <span>Total DNS favorites prices: </span><span class="total_DNS_favorites_prices"></span>
@@ -115,10 +132,12 @@
                     <span>Diff: </span><span class="total_diff"></span>
                 </div>
             </div>
-            <br>
-            <div class="container middle-div">
-                <canvas id="lineChart"></canvas>
-            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col middle-div">
+            <canvas id="lineChart"></canvas>
         </div>
     </div>
 </div>
