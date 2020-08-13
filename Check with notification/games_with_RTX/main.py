@@ -36,11 +36,14 @@ while True:
         log.debug(f'Обработка {len(games)} игр')
 
         for game in games:
-            _, created = Game.get_or_create(
+            game_db, created = Game.get_or_create(
                 name=game.name,
-                url=game.url,
-                img_base64=game.img_base64,
+                url=game.url
             )
+            if game_db.img_base64 != game.img_base64:
+                game_db.img_base64 = game.img_base64
+                game_db.save()
+
             if not created:
                 continue
 
