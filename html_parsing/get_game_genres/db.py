@@ -59,7 +59,7 @@ class ListField(Field):
 #     pragmas={
 #         'foreign_keys': 1,        # Ensure foreign-key constraints are enforced.
 #         'journal_mode': 'wal',    # WAL-mode
-#         'cache_size': -32 * 1000  # 32MB page-cache
+#         'cache_size': -1024 * 64  # 64MB page-cache
 #     }
 # )
 #
@@ -67,11 +67,11 @@ class ListField(Field):
 # SOURCE: http://docs.peewee-orm.com/en/latest/peewee/playhouse.html#sqliteq
 db = SqliteQueueDatabase(
     DB_FILE_NAME,
-    pragmas=(
-        ('foreign_keys', 1),
-        ('journal_mode', 'wal'),    # WAL-mode
-        ('cache_size', -32 * 1000)  # 32MB page-cache
-    ),
+    pragmas={
+        'foreign_keys': 1,
+        'journal_mode': 'wal',    # WAL-mode
+        'cache_size': -1024 * 64  # 64MB page-cache
+    },
     use_gevent=False,    # Use the standard library "threading" module.
     autostart=True,
     queue_max_size=64,   # Max. # of pending writes that can accumulate.
