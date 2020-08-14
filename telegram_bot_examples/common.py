@@ -40,25 +40,25 @@ def log_func(logger: logging.Logger):
     def actual_decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            if args:
+            if args and args[0]:
                 update = args[0]
-                if update:
-                    chat_id = user_id = first_name = last_name = username = language_code = None
 
-                    if update.effective_chat:
-                        chat_id = update.effective_chat.id
+                chat_id = user_id = first_name = last_name = username = language_code = None
 
-                    if update.effective_user:
-                        user_id = update.effective_user.id
-                        first_name = update.effective_user.first_name
-                        last_name = update.effective_user.last_name
-                        username = update.effective_user.username
-                        language_code = update.effective_user.language_code
+                if update.effective_chat:
+                    chat_id = update.effective_chat.id
 
-                    msg = f'[chat_id={chat_id}, user_id={user_id}, ' \
-                          f'first_name={first_name!r}, last_name={last_name!r}, ' \
-                          f'username={username!r}, language_code={language_code}]'
-                    logger.debug(func.__name__ + msg)
+                if update.effective_user:
+                    user_id = update.effective_user.id
+                    first_name = update.effective_user.first_name
+                    last_name = update.effective_user.last_name
+                    username = update.effective_user.username
+                    language_code = update.effective_user.language_code
+
+                msg = f'[chat_id={chat_id}, user_id={user_id}, ' \
+                      f'first_name={first_name!r}, last_name={last_name!r}, ' \
+                      f'username={username!r}, language_code={language_code}]'
+                logger.debug(func.__name__ + msg)
 
             return func(*args, **kwargs)
 
