@@ -52,8 +52,9 @@ def eval_expr(expr):
 
 
 if __name__ == '__main__':
-    print(eval_expr('2 + 2 * 2'))  # 6
-    print(eval_expr('10 * 10'))    # 100
-    print(eval_expr('100 / 10'))   # 10.0
-    print(eval_expr('100 // 10'))  # 10
-    print(eval_expr('2 ** 3'))     # 8
+    print(eval_expr('2 + 2 * 2'))    # 6
+    print(eval_expr('(2 + 2) * 2'))  # 8
+    print(eval_expr('10 * 10'))      # 100
+    print(eval_expr('100 / 10'))     # 10.0
+    print(eval_expr('100 // 10'))    # 10
+    print(eval_expr('2 ** 3'))       # 8
