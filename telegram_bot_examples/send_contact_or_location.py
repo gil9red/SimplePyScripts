@@ -19,7 +19,7 @@ from common import get_logger, log_func
 contact_keyboard = KeyboardButton('Send contact', request_contact=True)
 location_keyboard = KeyboardButton('Send location', request_location=True)
 custom_keyboard = [[contact_keyboard, location_keyboard]]
-REPLY_KEYBOARD_MARKUP = ReplyKeyboardMarkup(custom_keyboard)
+REPLY_KEYBOARD_MARKUP = ReplyKeyboardMarkup(custom_keyboard, resize_keyboard=True)
 
 
 log = get_logger(__file__)
