@@ -64,7 +64,7 @@ def main():
     dp.add_handler(CommandHandler('start', on_start))
     dp.add_handler(MessageHandler(Filters.text, on_request))
 
-    # log all errors
+    # Handle all errors
     dp.add_error_handler(on_error)
 
     # Start the Bot

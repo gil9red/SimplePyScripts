@@ -90,7 +90,7 @@ def main():
     dp.add_handler(MessageHandler(Filters.text, on_request))
     dp.add_handler(MessageHandler(Filters.contact | Filters.location, on_contact_or_location))
 
-    # log all errors
+    # Handle all errors
     dp.add_error_handler(on_error)
 
     # Start the Bot

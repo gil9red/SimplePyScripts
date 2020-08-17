@@ -100,7 +100,7 @@ def main():
             if isinstance(command, CommandHandler):
                 ALL_COMMANDS.extend(command.command)
 
-    # log all errors
+    # Handle all errors
     dp.add_error_handler(on_error)
 
     # Start the Bot
