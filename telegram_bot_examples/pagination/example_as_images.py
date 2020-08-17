@@ -21,7 +21,7 @@ sys.path.append('..')
 import config
 from common import get_logger, log_func
 from utils import is_equal_inline_keyboards
-from data import character_pages_image as character_pages
+from data import character_pages
 
 
 log = get_logger(__file__)
@@ -42,7 +42,7 @@ def on_request(update: Update, context: CallbackContext):
 
     message.reply_photo(
         photo=open(character['image'], 'rb'),
-        caption=character['title'],
+        caption="*{title}*".format(**character),
         reply_markup=paginator.markup,
         parse_mode=ParseMode.MARKDOWN
     )
@@ -72,10 +72,10 @@ def on_callback_query(update: Update, context: CallbackContext):
     query.message.edit_media(
         media=InputMediaPhoto(
             media=open(character['image'], 'rb'),
-            caption=character['title']
+            caption="*{title}*".format(**character),
+            parse_mode=ParseMode.MARKDOWN
         ),
-        reply_markup=paginator.markup,
-        parse_mode=ParseMode.MARKDOWN
+        reply_markup=paginator.markup
     )
 
 

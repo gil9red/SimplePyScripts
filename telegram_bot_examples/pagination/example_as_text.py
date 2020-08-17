@@ -21,7 +21,7 @@ sys.path.append('..')
 import config
 from common import get_logger, log_func
 from utils import is_equal_inline_keyboards
-from data import character_pages_text as character_pages
+from data import character_pages
 
 
 log = get_logger(__file__)
@@ -38,8 +38,10 @@ def on_request(update: Update, context: CallbackContext):
         data_pattern='character#{page}'
     )
 
+    character = character_pages[0]
+
     message.reply_text(
-        text=character_pages[0],
+        text='*{title}*\n{description}'.format(**character),
         reply_markup=paginator.markup,
         parse_mode=ParseMode.MARKDOWN
     )
@@ -64,8 +66,10 @@ def on_callback_query(update: Update, context: CallbackContext):
     if is_equal_inline_keyboards(paginator, query.message.reply_markup):
         return
 
+    character = character_pages[page - 1]
+
     query.message.edit_text(
-        text=character_pages[page - 1],
+        text='*{title}*\n{description}'.format(**character),
         reply_markup=paginator.markup,
         parse_mode=ParseMode.MARKDOWN
     )
