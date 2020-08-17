@@ -10,6 +10,7 @@ import os
 from threading import Thread
 import time
 import sys
+import re
 
 # pip install python-telegram-bot
 from telegram import Update, Bot
@@ -107,13 +108,16 @@ def on_get_reminders(update: Update, context: CallbackContext):
         .order_by(Reminder.finish_time)
     )
 
-    text = f'Напоминаний ({query.count()}):\n'
-    for x in query:
-        text += '    ' + get_pretty_datetime(x.finish_time) + '\n'
+    number = query.count()
 
-    message.reply_text(
-        text
-    )
+    if number:
+        text = f'Напоминаний ({number}):\n'
+        for x in query:
+            text += '    ' + get_pretty_datetime(x.finish_time) + '\n'
+    else:
+        text = 'Напоминаний нет'
+
+    message.reply_text(text)
 
 
 def on_error(update: Update, context: CallbackContext):
@@ -144,7 +148,7 @@ def main():
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler('start', on_start))
-    dp.add_handler(MessageHandler(Filters.regex('список'), on_get_reminders))
+    dp.add_handler(MessageHandler(Filters.regex(re.compile('^список$', flags=re.I)), on_get_reminders))
     dp.add_handler(MessageHandler(Filters.text, on_request))
 
     # Handle all errors
