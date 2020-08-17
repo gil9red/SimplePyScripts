@@ -1,0 +1,171 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
+
+import datetime as DT
+from typing import Optional
+from pathlib import Path
+import shutil
+
+# pip install peewee
+from peewee import *
+from playhouse.sqliteq import SqliteQueueDatabase
+
+# pip install python-telegram-bot
+import telegram
+
+
+DIR = Path(__file__).resolve().parent
+DB_DIR_NAME = DIR / 'database'
+DB_FILE_NAME = str(DB_DIR_NAME / 'database.sqlite')
+
+DB_DIR_NAME.mkdir(parents=True, exist_ok=True)
+
+
+def db_create_backup(backup_dir='backup', date_fmt='%d%m%y'):
+    backup_path = Path(backup_dir)
+    backup_path.mkdir(parents=True, exist_ok=True)
+
+    zip_name = DT.datetime.today().strftime(date_fmt)
+    zip_name = backup_path / zip_name
+
+    shutil.make_archive(
+        zip_name,
+        'zip',
+        DB_DIR_NAME
+    )
+
+
+# This working with multithreading
+# SOURCE: http://docs.peewee-orm.com/en/latest/peewee/playhouse.html#sqliteq
+db = SqliteQueueDatabase(
+    DB_FILE_NAME,
+    pragmas={
+        'foreign_keys': 1,
+        'journal_mode': 'wal',    # WAL-mode
+        'cache_size': -1024 * 64  # 64MB page-cache
+    },
+    use_gevent=False,    # Use the standard library "threading" module.
+    autostart=True,
+    queue_max_size=64,   # Max. # of pending writes that can accumulate.
+    results_timeout=5.0  # Max. time to wait for query to be executed.
+)
+
+
+class BaseModel(Model):
+    class Meta:
+        database = db
+
+    def __str__(self):
+        fields = []
+        for k, field in self._meta.fields.items():
+            v = getattr(self, k)
+            fields.append(
+                f'{k}={repr(v) if isinstance(field, TextField) else v}'
+            )
+        return self.__class__.__name__ + '(' + ', '.join(fields) + ')'
+
+
+# SOURCE: https://core.telegram.org/bots/api#user
+class User(BaseModel):
+    first_name = TextField()
+    last_name = TextField(null=True)
+    username = TextField(null=True)
+    language_code = TextField(null=True)
+    last_activity = DateTimeField(default=DT.datetime.now)
+
+    def update_last_activity(self):
+        self.last_activity = DT.datetime.now()
+        self.save()
+
+    @classmethod
+    def get_from(cls, user: Optional[telegram.User]) -> Optional['User']:
+        if not user:
+            return
+
+        user_db = cls.get_or_none(cls.id == user.id)
+        if not user_db:
+            user_db = cls.create(
+                id=user.id,
+                first_name=user.first_name,
+                last_name=user.last_name,
+                username=user.username,
+                language_code=user.language_code
+            )
+        return user_db
+
+
+# SOURCE: https://core.telegram.org/bots/api#chat
+class Chat(BaseModel):
+    type = TextField()
+    title = TextField(null=True)
+    username = TextField(null=True)
+    first_name = TextField(null=True)
+    last_name = TextField(null=True)
+    description = TextField(null=True)
+    last_activity = DateTimeField(default=DT.datetime.now)
+
+    def update_last_activity(self):
+        self.last_activity = DT.datetime.now()
+        self.save()
+
+    @classmethod
+    def get_from(cls, chat: Optional[telegram.Chat]) -> Optional['Chat']:
+        if not chat:
+            return
+
+        chat_db = cls.get_or_none(cls.id == chat.id)
+        if not chat_db:
+            chat_db = cls.create(
+                id=chat.id,
+                type=chat.type,
+                title=chat.title,
+                username=chat.username,
+                first_name=chat.first_name,
+                last_name=chat.last_name,
+                description=chat.description
+            )
+        return chat_db
+
+
+class Reminder(BaseModel):
+    date_time = DateTimeField(default=DT.datetime.now)
+    message_id = IntegerField()
+    command = TextField()
+    finish_time = DateTimeField(default=DT.datetime.now)
+    is_sent = BooleanField(default=False)
+    user = ForeignKeyField(User, backref='reminders')
+    chat = ForeignKeyField(Chat, backref='reminders')
+
+    def __str__(self):
+        return (
+            self.__class__.__name__ +
+            f'(date_time={self.date_time}, message_id={self.message_id}, command={self.command!r}, '
+            f'finish_time={self.finish_time}, is_sent={self.is_sent}, '
+            f'user_id={self.user.id}, chat_id={self.chat.id})'
+        )
+
+
+db.connect()
+db.create_tables([User, Chat, Reminder])
+
+
+if __name__ == '__main__':
+    print('Total users:', User.select().count())
+    print('Total chats:', Chat.select().count())
+
+    assert User.get_from(None) is None
+    assert Chat.get_from(None) is None
+
+    print()
+
+    first_user = User.select().first()
+    print('First user:', first_user)
+
+    first_chat = Chat.select().first()
+    print('First chat:', first_chat)
+    print()
+
+    print('Total reminders:', Reminder.select().count())
