@@ -75,6 +75,8 @@ def on_request(update: Update, context: CallbackContext):
     message = update.message
 
     command = message.text
+    log.debug(f'Command: {command!r}')
+
     finish_time = parse_command(command)
     if not finish_time:
         message.reply_text('Не получилось разобрать команду!')
