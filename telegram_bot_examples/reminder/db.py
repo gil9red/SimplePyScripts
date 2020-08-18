@@ -8,6 +8,7 @@ import datetime as DT
 from typing import Optional
 from pathlib import Path
 import shutil
+import sys
 
 # pip install peewee
 from peewee import *
@@ -15,6 +16,9 @@ from playhouse.sqliteq import SqliteQueueDatabase
 
 # pip install python-telegram-bot
 import telegram
+
+sys.path.append('../../')
+from shorten import shorten
 
 
 DIR = Path(__file__).resolve().parent
@@ -64,11 +68,13 @@ class BaseModel(Model):
             v = getattr(self, k)
 
             if isinstance(field, TextField):
-                v = repr(v)
+                if v:
+                    v = repr(shorten(v))
 
             elif isinstance(field, ForeignKeyField):
                 k = f'{k}_id'
-                v = v.id
+                if v:
+                    v = v.id
 
             fields.append(f'{k}={v}')
 
