@@ -62,9 +62,16 @@ class BaseModel(Model):
         fields = []
         for k, field in self._meta.fields.items():
             v = getattr(self, k)
-            fields.append(
-                f'{k}={repr(v) if isinstance(field, TextField) else v}'
-            )
+
+            if isinstance(field, TextField):
+                v = repr(v)
+
+            elif isinstance(field, ForeignKeyField):
+                k = f'{k}_id'
+                v = v.id
+
+            fields.append(f'{k}={v}')
+
         return self.__class__.__name__ + '(' + ', '.join(fields) + ')'
 
 
@@ -139,14 +146,6 @@ class Reminder(BaseModel):
     user = ForeignKeyField(User, backref='reminders')
     chat = ForeignKeyField(Chat, backref='reminders')
 
-    def __str__(self):
-        return (
-            self.__class__.__name__ +
-            f'(date_time={self.date_time}, message_id={self.message_id}, command={self.command!r}, '
-            f'finish_time={self.finish_time}, is_sent={self.is_sent}, '
-            f'user_id={self.user.id}, chat_id={self.chat.id})'
-        )
-
 
 db.connect()
 db.create_tables([User, Chat, Reminder])
@@ -169,3 +168,6 @@ if __name__ == '__main__':
     print()
 
     print('Total reminders:', Reminder.select().count())
+    print()
+
+    print('Last reminder:', Reminder.select().order_by(Reminder.id.desc()).first())
