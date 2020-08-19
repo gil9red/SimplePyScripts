@@ -4,15 +4,28 @@
 __author__ = 'ipetrash'
 
 
+import datetime as DT
+
 from flask import Flask, render_template_string
 app = Flask(__name__)
+
+from common import get_games
 
 
 @app.route('/')
 def index():
-    from common import get_games
     cracked_games = get_games(filter_by_is_cracked=True, sorted_by_crack_date=True)
-    not_cracked_games = get_games(filter_by_is_cracked=False, sorted_by_append_date=True)
+
+    not_cracked_games = []
+
+    for name, _, _, _, release_date_str in get_games(filter_by_is_cracked=False, sorted_by_append_date=True):
+        try:
+            release_date = DT.datetime.strptime(release_date_str, '%d/%m/%Y').date()
+            days_passed = (DT.date.today() - release_date).days
+        except:
+            days_passed = '-'
+
+        not_cracked_games.append((name, release_date_str, days_passed))
 
     return render_template_string("""
 <!DOCTYPE html>
@@ -84,7 +97,7 @@ def index():
             {% endfor %}
             </tr>
 
-        {% for name, _, _, crack_date in cracked_games %}
+        {% for name, _, _, crack_date, _ in cracked_games %}
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ name }}</td>
@@ -120,11 +133,12 @@ def index():
             {% endfor %}
             </tr>
 
-        {% for name, _, append_date, _ in not_cracked_games %}
+        {% for name, release_date, days_passed in not_cracked_games %}
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ name }}</td>
-                <td>{{ append_date }}</td>
+                <td>{{ release_date }}</td>
+                <td>{{ days_passed }}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -137,7 +151,7 @@ def index():
 </body>
 </html>
     """, cracked_headers=["№", "Название", "Дата взлома", "Поиск"], cracked_games=cracked_games,
-         not_cracked_headers=["№", "Название", "Дата добавления"], not_cracked_games=not_cracked_games
+         not_cracked_headers=["№", "Название", "Дата выхода", "Дней"], not_cracked_games=not_cracked_games
     )
 
 

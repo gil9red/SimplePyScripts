@@ -4,6 +4,8 @@
 __author__ = 'ipetrash'
 
 
+import datetime as DT
+
 # Чтобы можно было импортировать all_common.py, находящийся уровнем выше
 import sys
 sys.path.append('..')
@@ -48,6 +50,7 @@ def init_db():
                 is_cracked BOOLEAN NOT NULL,
                 
                 append_date TIMESTAMP DEFAULT NULL,
+                release_date TIMESTAMP DEFAULT NULL,
                 crack_date TIMESTAMP DEFAULT NULL,
 
                 CONSTRAINT name_unique UNIQUE (name)
@@ -64,12 +67,15 @@ def init_db():
         #         is_cracked BOOLEAN NOT NULL,
         #
         #         append_date TIMESTAMP DEFAULT NULL,
+        #         release_date TIMESTAMP DEFAULT NULL,
         #         crack_date TIMESTAMP DEFAULT NULL,
         #
         #         CONSTRAINT name_unique UNIQUE (name)
         #     );
         #
-        #     INSERT INTO Game2 SELECT id, name, is_cracked, date('now'), crack_date FROM Game;
+        #     -- INSERT INTO Game2 SELECT id, name, is_cracked, date('now'), crack_date FROM Game;
+        #     INSERT INTO Game2 (id, name, is_cracked, append_date, crack_date)
+        #         SELECT id, name, is_cracked, append_date, crack_date FROM Game;
         #
         #     DROP TABLE Game;
         #     ALTER TABLE Game2 RENAME TO Game;
@@ -95,38 +101,46 @@ def db_create_backup(backup_dir='backup'):
     shutil.copy(DB_FILE_NAME, file_name)
 
 
-def append_list_games(games: [(str, bool)], notified_by_sms=True):
+def update_release_date(connect, name: str, release_date: DT.date):
+    sql = "UPDATE Game SET release_date = ? WHERE name = ? AND release_date IS NULL"
+    connect.execute(sql, [release_date, name])
+
+
+def append_list_games(games: [(str, DT.date, bool)], notified_by_sms=True):
     connect = create_connect()
 
-    def insert(name: str, is_cracked: bool) -> bool:
+    def insert(name: str, release_date: DT.date, is_cracked: bool) -> bool:
         # Для отсеивания дубликатов
-        has = connect.execute("SELECT 1 FROM Game WHERE name = ?", (name,)).fetchone()
+        has = connect.execute("SELECT 1 FROM Game WHERE name = ?", [name]).fetchone()
         if has:
             return False
 
-        log.debug('Добавляю "%s" (%s)', name, is_cracked)
-        connect.execute("INSERT OR IGNORE INTO Game (name, is_cracked, append_date) VALUES (?, ?, date('now'))", (name, is_cracked))
+        log.debug(f'Добавляю {name!r} ({is_cracked})')
+        sql = "INSERT OR IGNORE INTO Game (name, is_cracked, append_date, release_date) VALUES (?, ?, date('now'), ?)"
+        connect.execute(sql, [name, release_date, is_cracked])
 
         # Если добавлена уже взломанная игра, указываем дату
         if is_cracked:
-            connect.execute("UPDATE Game SET crack_date = date('now') WHERE name = ?", (name,))
+            connect.execute("UPDATE Game SET crack_date = date('now') WHERE name = ?", [name])
 
         return True
 
     try:
-        for name, is_cracked in games:
-            ok = insert(name, is_cracked)
+        for name, release_date, is_cracked in games:
+            ok = insert(name, release_date, is_cracked)
+
+            update_release_date(connect, name, release_date)
 
             # Игра уже есть в базе, нужно проверить ее статус is_cracked, возможно, он поменялся и игру взломали
             if not ok:
-                rs_is_cracked = connect.execute('SELECT is_cracked FROM Game where name = ?', (name,)).fetchone()[0]
+                rs_is_cracked = connect.execute('SELECT is_cracked FROM Game where name = ?', [name]).fetchone()[0]
 
                 # Если игра раньше имела статус is_cracked = False, а теперь он поменялся на True:
                 if not rs_is_cracked and is_cracked:
                     # Поменяем флаг у игры в базе
-                    connect.execute("UPDATE Game SET is_cracked = 1, crack_date = date('now') WHERE name = ?", (name,))
+                    connect.execute("UPDATE Game SET is_cracked = 1, crack_date = date('now') WHERE name = ?", [name])
 
-                    text = 'Игру "{}" взломали'.format(name)
+                    text = f'Игру {name!r} взломали'
                     log.info(text)
                     log_cracked_games.debug(text)
 
@@ -135,7 +149,7 @@ def append_list_games(games: [(str, bool)], notified_by_sms=True):
                         simple_send_sms(text, log)
 
             elif is_cracked:
-                text = 'Добавлена взломанная игра "{}"'.format(name)
+                text = f'Добавлена взломанная игра {name!r}'
                 log.info(text)
                 log_cracked_games.debug(text)
 
@@ -149,30 +163,31 @@ def append_list_games(games: [(str, bool)], notified_by_sms=True):
         connect.close()
 
 
-def append_list_games_which_denuvo_is_removed(games: [str], notified_by_sms=True):
+def append_list_games_which_denuvo_is_removed(games: [str, DT.date], notified_by_sms=True):
     connect = create_connect()
 
-    def insert(name: str) -> bool:
+    def insert(name: str, release_date: DT.date) -> bool:
         # Для отсеивания дубликатов
         has = connect.execute("SELECT 1 FROM Game WHERE name = ?", [name]).fetchone()
         if has:
             return False
 
-        log.debug('Добавляю игру с убранной защитой "%s"', name)
+        log.debug(f'Добавляю игру с убранной защитой {name!r}')
 
-        sql = "INSERT OR IGNORE INTO Game (name, is_cracked, append_date, crack_date) " \
-              "VALUES (?, 1, date('now'), date('now'))"
-        connect.execute(sql, [name])
-
+        sql = "INSERT OR IGNORE INTO Game (name, is_cracked, append_date, crack_date, release_date) " \
+              "VALUES (?, 1, date('now'), date('now'), ?)"
+        connect.execute(sql, [name, release_date])
         return True
 
     try:
-        for name in games:
-            ok = insert(name)
+        for name, release_date in games:
+            ok = insert(name, release_date)
+
+            update_release_date(connect, name, release_date)
 
             # Игра уже есть в базе, нужно проверить ее статус is_cracked, возможно, он поменялся и игру взломали
             if ok:
-                text = 'Добавлена игра с убранной защитой "{}"'.format(name)
+                text = f'Добавлена игра с убранной защитой {name!r}'
                 log.info(text)
                 log_cracked_games.debug(text)
 
@@ -181,14 +196,14 @@ def append_list_games_which_denuvo_is_removed(games: [str], notified_by_sms=True
                     simple_send_sms(text, log)
 
             else:
-                rs_is_cracked = connect.execute('SELECT is_cracked FROM Game where name = ?', (name,)).fetchone()[0]
+                rs_is_cracked = connect.execute('SELECT is_cracked FROM Game where name = ?', [name]).fetchone()[0]
 
                 # Если игра раньше имела статус is_cracked = False
                 if not rs_is_cracked:
                     # Поменяем флаг у игры в базе
-                    connect.execute("UPDATE Game SET is_cracked = 1, crack_date = date('now') WHERE name = ?", (name,))
+                    connect.execute("UPDATE Game SET is_cracked = 1, crack_date = date('now') WHERE name = ?", [name])
 
-                    text = 'Игре "{}" убрали защиту'.format(name)
+                    text = f'Игре {name!r} убрали защиту'
                     log.info(text)
                     log_cracked_games.debug(text)
 
@@ -203,7 +218,7 @@ def append_list_games_which_denuvo_is_removed(games: [str], notified_by_sms=True
 
 
 def get_games(filter_by_is_cracked=None, sorted_by_name=True,
-              sorted_by_crack_date=False, sorted_by_append_date=False) -> [(str, bool, str, str)]:
+              sorted_by_crack_date=False, sorted_by_append_date=False) -> [(str, bool, str, str, str)]:
     """
     Функция возвращает из базы список вида:
         [('Monopoly Plus', 1, '12/09/2017', '07/10/2017 '), ('FIFA 18', 1, '18/09/2017', '03/10/2017 '), ...
@@ -235,7 +250,13 @@ def get_games(filter_by_is_cracked=None, sorted_by_name=True,
         sort = ' ORDER BY append_date DESC, name ASC'
 
     try:
-        sql = "SELECT name, is_cracked, strftime('%d/%m/%Y', append_date), strftime('%d/%m/%Y ', crack_date) FROM Game"
+        sql = """
+        SELECT name, is_cracked, 
+            strftime('%d/%m/%Y', append_date), 
+            strftime('%d/%m/%Y', crack_date), 
+            strftime('%d/%m/%Y', release_date) 
+        FROM Game
+        """
 
         if filter_by_is_cracked is not None:
             sql += ' WHERE is_cracked = ' + str(int(filter_by_is_cracked))
@@ -258,15 +279,19 @@ if __name__ == '__main__':
 
     games = get_games()
     print('Games:', len(games), games)
+    print('\n' + '-' * 100 + '\n')
 
     games = get_games(filter_by_is_cracked=True)
-    print('Cracked:', len(games), [name for name, _, _, _ in games])
+    print('Cracked:', len(games), [name for name, _, _, _, _ in games])
+    print('\n' + '-' * 100 + '\n')
 
     games = get_games(filter_by_is_cracked=False)
-    print('Not cracked:', len(games), [name for name, _, _, _ in games])
+    print('Not cracked:', len(games), [name for name, _, _, _, _ in games])
+    print('\n' + '-' * 100 + '\n')
 
     games = get_games(filter_by_is_cracked=True, sorted_by_crack_date=True)
-    print('Cracked and sorted:', len(games), [name for name, _, _, _ in games])
+    print('Cracked and sorted:', len(games), [name for name, _, _, _, _ in games])
+    print('\n' + '-' * 100 + '\n')
 
     games = get_games(filter_by_is_cracked=False, sorted_by_append_date=True)
-    print('Not cracked and sorted by append:', len(games), [name for name, _, _, _ in games])
+    print('Not cracked and sorted by append:', len(games), [name for name, _, _, _, _ in games])
