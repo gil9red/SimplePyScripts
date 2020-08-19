@@ -118,7 +118,7 @@ def index():
     </table>
     </td>
     
-    <td width="50px"></td>
+    <td width="10px"></td>
     
     <td style="vertical-align: top;">
     <table class="frame">
