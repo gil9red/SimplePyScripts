@@ -19,7 +19,7 @@ import db
 db.init_db()
 
 
-def open_web_page_mail(value_cold: int, value_hot: int) -> bool:
+def open_web_page_mail(value_cold: int, value_hot: int) -> (bool, str):
     # Example: 123 -> 00123
     value_cold = str(value_cold).zfill(5)
     value_hot = str(value_hot).zfill(5)
@@ -34,8 +34,9 @@ def open_web_page_mail(value_cold: int, value_hot: int) -> bool:
 
     items = [item for item in driver.find_elements_by_css_selector('.llc__item') if 'vodomer' in item.text]
     if not items:
-        print('Шаблон с "vodomer" не найден')
-        return False
+        text = 'Шаблон с "vodomer" не найден'
+        print(text)
+        return False, text
 
     items[0].click()
 
@@ -45,8 +46,9 @@ def open_web_page_mail(value_cold: int, value_hot: int) -> bool:
     template_text = editor.text
 
     if 'value_cold' not in template_text and 'value_hot' not in template_text:
-        print('В шаблоне не найдены "value_cold" и "value_hot"')
-        return False
+        text = 'В шаблоне не найдены "value_cold" и "value_hot"'
+        print(text)
+        return False, text
 
     mail_text = template_text \
         .replace('value_cold', value_cold) \
@@ -56,7 +58,7 @@ def open_web_page_mail(value_cold: int, value_hot: int) -> bool:
     editor.clear()
     editor.send_keys(mail_text)
 
-    return True
+    return True, ''
 
 
 TITLE = "Отправка показаний водомеров"
@@ -276,7 +278,10 @@ class HttpProcessor(BaseHTTPRequestHandler):
                 self.wfile.write(text.encode('utf-8'))
                 return
 
-            open_web_page_mail(value_cold, value_hot)
+            ok, err_text = open_web_page_mail(value_cold, value_hot)
+            if not ok:
+                db.delete_last()
+                self.send_error(500, explain=err_text)
 
             # Redirect to index
             self.send_response(302)

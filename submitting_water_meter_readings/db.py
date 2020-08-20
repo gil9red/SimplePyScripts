@@ -59,6 +59,12 @@ def get_last(date: DT.date = None) -> int:
     return -1 if result is None else result[0]
 
 
+def delete_last():
+    with create_connect() as connect:
+        last_id = get_last()
+        connect.execute("DELETE FROM Water WHERE id = ?", [last_id])
+
+
 def is_exist(date: DT.date = None) -> bool:
     return get_last(date) != -1
 
