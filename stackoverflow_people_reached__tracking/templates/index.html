@@ -14,37 +14,29 @@
 <body>
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-2">
+    <div class="row m-2">
+        <div class="col table-responsive">
             <table id="people_reacheds" class="table table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        {#
-                        <th style="display: none;" scope="col">#</th>
-                        <th scope="col">URL</th>
-                        #}
-                        <th scope="col" class="col-1">DATE</th>
-                        <th scope="col" class="col-1">VALUE</th>
-                    </tr>
-                </thead>
                 <tbody>
-                    {% for item in people_reacheds %}
-                     <tr item_id="{{ item.id }}">
-                         {#
-                         <td style="display: none;" scope="row">{{ item.id }}</td>
-                         <td class="text-truncate" style="max-width: 300px;" title="{{ item.url }}">
-                             <a href="{{ item.url }}" target="_blank">{{ item.url }}</a>
-                         </td>
-                         #}
-                         <td class="date" title="{{ item.date.strftime('%d/%m/%Y %H:%M:%S') }}" date_iso="{{ item.date.isoformat() }}">{{ item.date.strftime('%d/%m/%Y') }}</td>
-                         <td class="value" title="{{ item.value }}">{{ item.value_human }}</td>
-                     </tr>
-                    {% endfor %}
+                    <tr>
+                        <th scope="col" class="text-white bg-dark">DATE:</th>
+                        {% for item in people_reacheds %}
+                        <td class="date" title="{{ item.date.strftime('%d/%m/%Y %H:%M:%S') }}" date_iso="{{ item.date.isoformat() }}">{{ item.date.strftime('%d/%m/%Y') }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <th scope="col" class="text-white bg-dark">VALUE:</th>
+                        {% for item in people_reacheds %}
+                        <td class="value" title="{{ item.value }}">{{ item.value_human }}</td>
+                        {% endfor %}
+                    </tr>
                 </tbody>
             </table>
         </div>
+    </div>
 
-        <div class="col-10">
+    <div class="row">
+        <div class="col">
             <div class="container">
                 <canvas id="lineChart"></canvas>
             </div>
@@ -61,20 +53,24 @@
             let labels = [];
             let data = [];
 
-            $('#people_reacheds > tbody > tr').each(function() {
-                let tr = $(this);
+            let data_items = $('#people_reacheds > tbody > tr:nth-of-type(1) > td');
+            let value_items = $('#people_reacheds > tbody > tr:nth-of-type(2) > td');
 
-                let date_iso = tr.find('.date').attr('date_iso');
-                let value = parseInt(tr.find('.value').attr('title'));
+            for (let i = 0; i < data_items.length; i++) {
+                let td_data = $(data_items[i]);
+                let td_value = $(value_items[i]);
 
-                window.value_by_human[value] = tr.find('.value').text();
+                let date_iso = td_data.attr('date_iso');
+                let value = parseInt(td_value.attr('title'));
+
+                window.value_by_human[value] = td_value.text();
 
                 labels.push(date_iso);
                 data.push({
                     x: date_iso,
                     y: value
                 });
-            });
+            }
 
             var ctx = document.getElementById("lineChart").getContext("2d");
             var lineChart = new Chart(ctx, {
