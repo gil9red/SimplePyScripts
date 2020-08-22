@@ -23,7 +23,7 @@ log = get_logger(__file__)
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
     update.message.reply_text(
-        f'Введите что-нибудь'
+        'Введите что-нибудь'
     )
 
 
@@ -33,7 +33,7 @@ def on_request(update: Update, context: CallbackContext):
     message = update.message
 
     message.reply_text(
-        message.text
+        'Echo: ' + message.text
     )
 
 
