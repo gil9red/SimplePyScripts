@@ -283,14 +283,15 @@ def main():
 
     # layer = 'mixed4c'
     # t_obj = tf.square(T(layer))
-    img0 = PIL.Image.open('pilatus800.jpg')
-    img0 = np.float32(img0)
 
     # FROM NOISE
     render_deepdream_from_layer_by_channel(IMG_NOISE, 'noise', 'mixed4d_5x5_pre_relu', 61)
     render_deepdream_from_layer_by_channel(IMG_NOISE, 'noise', 'head1_bottleneck_pre_relu', 1)
 
     # FROM FILENAME
+    img0 = PIL.Image.open('pilatus800.jpg')
+    img0 = np.float32(img0)
+
     render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4d_1x1_pre_relu', 39)
     render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4d_5x5_pre_relu', 61)
     render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4c_3x3_bottleneck_pre_relu', 64)
