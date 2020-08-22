@@ -138,6 +138,14 @@ feature_nums = [int(graph.get_tensor_by_name(name + ':0').get_shape()[-1]) for n
 print('Number of layers', len(layers))
 print('Total number of feature channels:', sum(feature_nums))
 
+# import webbrowser
+# for layer in layers:
+#     # "import/conv2d0_pre_relu/conv" -> "conv2d0_pre_relu"
+#     name = layer.split('/')[1]
+#     url = f'http://storage.googleapis.com/deepdream/visualz/tensorflow_inception/{name}.html'
+#     webbrowser.open(url)
+
+
 output_dir = 'output'
 if not os.path.exists(output_dir):
     os.mkdir(output_dir)
@@ -266,8 +274,9 @@ def main():
     #     print(l, int(T(l).get_shape()[-1]))
     #
 
-    # Layer: mixed4d_1x1_pre_relu
-    # Url:   http://storage.googleapis.com/deepdream/visualz/tensorflow_inception/mixed4d_1x1_pre_relu.html
+    # Layer: mixed4d_5x5
+    # Url:   http://storage.googleapis.com/deepdream/visualz/tensorflow_inception/mixed4d_5x5_pre_relu.html
+    # Url:   https://microscope.openai.com/models/inceptionv1/mixed4d_5x5_0/1
 
     savearray(IMG_NOISE / 255.0, '{}/noise.png'.format(output_dir, 'noise'))
     print()
