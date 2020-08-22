@@ -104,7 +104,7 @@ def on_anketa_comment(update: Update, context: CallbackContext):
     context.user_data['comment'] = update.message.text
     text = ANKETA_TEXT_FORMAT.format(**context.user_data)
 
-    update.message.reply_text(text, parse_mode=ParseMode.HTML)
+    update.message.reply_html(text)
     update.message.reply_text(
         "Спасибо вам за комментарий!", reply_markup=REPLY_KEYBOARD_MARKUP
     )
@@ -117,7 +117,7 @@ def on_anketa_comment(update: Update, context: CallbackContext):
 def on_anketa_exit_comment(update: Update, context: CallbackContext):
     text = ANKETA_TEXT_FORMAT.format(**context.user_data)
 
-    update.message.reply_text(text, parse_mode=ParseMode.HTML)
+    update.message.reply_html(text)
     update.message.reply_text("Спасибо!", reply_markup=REPLY_KEYBOARD_MARKUP)
 
     return ConversationHandler.END  # выходим из диалог
