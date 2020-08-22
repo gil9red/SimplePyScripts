@@ -6,7 +6,6 @@ __author__ = 'ipetrash'
 
 import os
 import time
-from pathlib import Path
 
 # pip install python-telegram-bot
 from telegram import Update, ReplyKeyboardMarkup
