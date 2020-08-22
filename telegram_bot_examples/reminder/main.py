@@ -151,7 +151,7 @@ def main():
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler('start', on_start))
-    dp.add_handler(MessageHandler(Filters.regex(re.compile('^список$', flags=re.I)), on_get_reminders))
+    dp.add_handler(MessageHandler(Filters.regex('(?i)^список$'), on_get_reminders))
     dp.add_handler(MessageHandler(Filters.text, on_request))
 
     # Handle all errors
