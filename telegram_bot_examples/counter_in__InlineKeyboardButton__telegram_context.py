@@ -69,8 +69,9 @@ def on_callback_query(update: Update, context: CallbackContext):
 
 def on_error(update: Update, context: CallbackContext):
     log.exception('Error: %s\nUpdate: %s', context.error, update)
-    if update and update.message:
-        update.message.reply_text(config.ERROR_TEXT)
+    if update:
+        message = update.message or update.edited_message
+        message.reply_text(config.ERROR_TEXT)
 
 
 def main():
