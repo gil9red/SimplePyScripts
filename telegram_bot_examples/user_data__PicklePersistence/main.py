@@ -48,10 +48,7 @@ def on_set(update: Update, context: CallbackContext):
 def on_get(update: Update, context: CallbackContext):
     message = update.message
 
-    if 'text' not in context.user_data:
-        text = '<Not data, using command set>'
-    else:
-        text = context.user_data['text']
+    text = context.user_data.get('text', '<Not data, using command set>')
 
     message.reply_text(
         "get: " + text
