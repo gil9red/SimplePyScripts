@@ -43,6 +43,7 @@ __author__ = 'ipetrash'
 import os
 import io
 from timeit import default_timer
+from typing import Union
 
 # pip install tensorflow==1.15
 # pip install tensorflow-gpu==1.15
@@ -136,7 +137,7 @@ layers = [op.name for op in graph.get_operations() if op.type == 'Conv2D' and 'i
 feature_nums = [int(graph.get_tensor_by_name(name + ':0').get_shape()[-1]) for name in layers]
 
 print('Number of layers', len(layers))
-print('Total number of feature channels:', sum(feature_nums))
+print('Total number of feature units:', sum(feature_nums))
 
 # import webbrowser
 # for layer in layers:
@@ -144,6 +145,104 @@ print('Total number of feature channels:', sum(feature_nums))
 #     name = layer.split('/')[1]
 #     url = f'http://storage.googleapis.com/deepdream/visualz/tensorflow_inception/{name}.html'
 #     webbrowser.open(url)
+
+
+# NOTE: Interesting layers
+# layer = 'mixed3b_3x3_bottleneck_pre_relu'
+# unit = 109  # Other
+#
+# layer = 'mixed5a_3x3_pre_relu'
+# unit = 174  # Fear
+# unit = 190  # Fear
+# unit = 299  # Fear
+# unit = 304  # Fear
+# unit = 316  # Fear
+# unit = 317  # Fear
+#
+# layer = 'mixed4d_3x3_bottleneck_pre_relu'
+# unit = 65  # Building
+# unit = 66  # Building
+# unit = 88  # Fear
+# unit = 114  # Building
+# unit = 139  # Flowers
+#
+# layer = 'mixed5b_3x3_bottleneck_pre_relu'
+# unit = 91  # Birds
+# unit = 119  # Fear
+# unit = 166  # Birds
+# unit = 167  # Birds
+#
+# layer = 'mixed4a_pool_reduce_pre_relu'
+# unit = 49  # Fear
+#
+# layer = 'mixed4b_3x3_bottleneck_pre_relu'
+# unit = 33  # Fear
+#
+# layer = 'mixed4b_3x3_pre_relu'
+# unit = 95  # Building
+#
+# layer = 'mixed4b_5x5_pre_relu'
+# unit = 55  # Dogs
+#
+# layer = 'mixed4c_3x3_pre_relu'
+# unit = 83  # Flowers
+# unit = 230  # Flowers
+#
+# layer = 'mixed4d_5x5_bottleneck_pre_relu'
+# unit = 13  # Building
+#
+# layer = 'mixed5a_5x5_pre_relu'
+# unit = 11  # Animals
+# unit = 44  # Village
+#
+# layer = 'mixed4d_5x5_pre_relu'
+# unit = 1  # Cats
+#
+# layer = 'mixed4e_pool_reduce_pre_relu'
+# unit = 26  # Building
+# unit = 27  # Animals
+# unit = 29  # Dogs
+# unit = 50  # Birds
+# unit = 57  # Birds
+# unit = 68  # Flowers
+# unit = 101  # Fear
+# unit = 105  # Cats
+#
+# layer = 'mixed5a_3x3_bottleneck_pre_relu'
+# unit = 100  # Dogs
+#
+# layer = 'mixed5a_pool_reduce_pre_relu'
+# unit = 16  # Birds
+# unit = 53  # Monkeys
+#
+# layer = 'mixed5a_1x1_pre_relu'
+# unit = 0  # Animals
+# unit = 1  # Animals
+# unit = 3  # Fear
+# unit = 9  # Other
+# unit = 47  # Dogs
+# unit = 57  # Snakes
+# unit = 63  # Butterflies
+# unit = 81  # Animals
+# unit = 93  # Other
+# unit = 97  # Animals
+# unit = 158  # Fishes
+# unit = 175  # Dogs
+# unit = 224  # Birds
+#
+# layer = 'mixed4d_3x3_pre_relu'
+# unit = 88  # Flowers
+#
+# layer = 'mixed4c_pool_reduce_pre_relu'
+# unit = 1  # Other
+# unit = 23  # Animals
+# unit = 29  # Building
+# unit = 41  # Flowers
+# unit = 61  # Building
+#
+# layer = 'mixed4c_5x5_pre_relu'
+# unit = 14  # Cars
+# unit = 63  # Cars
 
 
 output_dir = 'output'
@@ -241,34 +340,35 @@ def render_deepdream(t_obj, sess, img0=IMG_NOISE, iter_n=10, step=1.5, octave_n=
     return img
 
 
-def render_deepdream_from_layer_by_channel(img0, name, layer, channel=None):
+def render_deepdream_from_layer_by_unit(img0, name: Union[str, io.BytesIO], layer, unit=None) -> Union[str, io.BytesIO]:
     t = default_timer()
 
-    # t_obj = tf.square(T(layer)[:, :, :, channel])
+    # t_obj = tf.square(T(layer)[:, :, :, unit])
     t_obj = T(layer)
-    if channel:
-        t_obj = t_obj[:, :, :, channel]
+    if unit:
+        t_obj = t_obj[:, :, :, unit]
 
     # t_obj = tf.square(t_obj)
     img = render_deepdream(t_obj, sess, img0)
 
     if isinstance(name, str):
-        if channel:
-            file_name = f'{output_dir}/{name}__{layer}__{channel}.jpg'
+        if unit:
+            name = f'{output_dir}/{name}__{layer}__{unit}.jpg'
         else:
-            file_name = f'{output_dir}/{name}__{layer}.jpg'
+            name = f'{output_dir}/{name}__{layer}.jpg'
     else:
-        file_name = name
+        name = name
 
-    savearray(img / 255.0, file_name)
+    savearray(img / 255.0, name)
 
-    print(f'Elapsed {default_timer() - t:.2f} secs')
-    print()
+    print(f'Elapsed {default_timer() - t:.2f} secs\n')
+
+    return name
 
 
 def main():
     #
-    # # PRINT: layer by channels
+    # # PRINT: layer by units
     # t_obj_layers = [x.split('/')[1] for x in layers]
     # for l in t_obj_layers:
     #     print(l, int(T(l).get_shape()[-1]))
@@ -285,21 +385,21 @@ def main():
     # t_obj = tf.square(T(layer))
 
     # FROM NOISE
-    render_deepdream_from_layer_by_channel(IMG_NOISE, 'noise', 'mixed4d_5x5_pre_relu', 61)
-    render_deepdream_from_layer_by_channel(IMG_NOISE, 'noise', 'head1_bottleneck_pre_relu', 1)
+    render_deepdream_from_layer_by_unit(IMG_NOISE, 'noise', 'mixed4d_5x5_pre_relu', 61)
+    render_deepdream_from_layer_by_unit(IMG_NOISE, 'noise', 'head1_bottleneck_pre_relu', 1)
 
     # FROM FILENAME
     img0 = PIL.Image.open('pilatus800.jpg')
     img0 = np.float32(img0)
 
-    render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4d_1x1_pre_relu', 39)
-    render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4d_5x5_pre_relu', 61)
-    render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4c_3x3_bottleneck_pre_relu', 64)
-    render_deepdream_from_layer_by_channel(img0, 'pilatus800', 'mixed4c_3x3_bottleneck_pre_relu', 104)
+    render_deepdream_from_layer_by_unit(img0, 'pilatus800', 'mixed4d_1x1_pre_relu', 39)
+    render_deepdream_from_layer_by_unit(img0, 'pilatus800', 'mixed4d_5x5_pre_relu', 61)
+    render_deepdream_from_layer_by_unit(img0, 'pilatus800', 'mixed4c_3x3_bottleneck_pre_relu', 64)
+    render_deepdream_from_layer_by_unit(img0, 'pilatus800', 'mixed4c_3x3_bottleneck_pre_relu', 104)
 
     # Save to memory
     bytes_io = io.BytesIO()
-    render_deepdream_from_layer_by_channel(IMG_NOISE, bytes_io, 'mixed4d_5x5_pre_relu', 61)
+    render_deepdream_from_layer_by_unit(IMG_NOISE, bytes_io, 'mixed4d_5x5_pre_relu', 61)
     bytes_io.seek(0)
     print(bytes_io.read(10))
     # b'\xff\xd8\xff\xe0\x00\x10JFIF'
@@ -308,7 +408,7 @@ def main():
     # # ['conv2d0_pre_relu', 'conv2d1_pre_relu', 'conv2d2_pre_relu', 'mixed3a_1x1_pre_relu', ...
     # t_obj_layers = [x.split('/')[1] for x in layers]
     # for name in t_obj_layers:
-    #     render_deepdream_from_layer_by_channel(img0, name)
+    #     render_deepdream_from_layer_by_unit(img0, name)
     #     # t_obj = tf.square(T(layer))
     #     # img = render_deepdream(t_obj, sess, img0)
     #     # savearray(img / 255.0, '{}/{}_{}.png'.format(output_dir, 'pilatus800', layer))
@@ -316,8 +416,8 @@ def main():
     # # FROM filters
     # layer = 'mixed4d_3x3_bottleneck_pre_relu'
     # filter_name = {'Tornado': 84, 'Flowers': 139, 'Fireworks': 50, 'Caves': 38, 'Mountains': 142, 'Van Gogh': 1}
-    # for name, channel in filter_name.items():
-    #     t_obj = tf.square(T(layer)[:, :, :, channel])
+    # for name, unit in filter_name.items():
+    #     t_obj = tf.square(T(layer)[:, :, :, unit])
     #     img = render_deepdream(t_obj, sess, img0)
     #     savearray(img / 255.0, '{}/{}_{}_{}.png'.format(output_dir, 'pilatus800', name, layer))
 
@@ -328,7 +428,7 @@ def main():
     #
     # # Step 3 - Pick a layer to enhance our image
     # layer = 'mixed4d_3x3_bottleneck_pre_relu'
-    # channel = 139  # picking some feature channel to visualize
+    # unit = 139  # picking some feature unit to visualize
     #
     # # img0 = img_noise
     #
@@ -341,7 +441,7 @@ def main():
     # # # # Step 4 - Apply gradient ascent to that layer
     # # # render_deepdream(tf.square(T('mixed4c')), img0)
     # # # t_obj = tf.square(T('mixed4c'))
-    # # t_obj = tf.square(T(layer)[:, :, :, channel])
+    # # t_obj = tf.square(T(layer)[:, :, :, unit])
     # # img = render_deepdream(t_obj, sess, img0)
     # # # img = render_deepdream(tf.square(T('mixed4c')), sess, img0)
     # # # showarray(img / 255.0)
