@@ -12,8 +12,7 @@ ping_res = Popen("ping ya.ru", stdout=PIPE, stderr=STDOUT)
 
 text = ''
 for line in ping_res.stdout.readlines():
-    line = line.decode('cp866')
-    text += line
+    text += line.decode('cp866')
 
 print(text)
 # Обмен пакетами с ya.ru [87.250.250.242] с 32 байтами данных:
