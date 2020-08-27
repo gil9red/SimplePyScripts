@@ -7,6 +7,9 @@ __author__ = 'ipetrash'
 # SOURCE: https://github.com/szabgab/slides/blob/914d15bb55cb0e335afcb72b6af0fa2aa9ed356f/python/examples/pil/draw_rectangle_with_rounded_corners.py
 
 
+# TODO: append alpha
+
+
 from PIL import Image, ImageDraw
 
 
