@@ -23,6 +23,7 @@ FAMILY_FONT = 'Courier New'  # Need monospaced
 
 def get_optimal_font(family_font: str, w, h, text: str) -> QFont:
     font = QFont(family_font)
+    font.setStyleHint(QFont.Courier, QFont.PreferAntialias)
     metrics = QFontMetrics(font)
 
     # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/add91e36e1ee59b3956b9fafdcffc9f4ff10ed3d/qt__pyqt__pyside__pyqode/pyqt__QPainter__draw_table.py#L98
