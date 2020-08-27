@@ -31,39 +31,48 @@ log = get_logger(__file__)
 # Define a few command handlers. These usually take the two arguments bot and
 # update. Error handlers also receive the raised TelegramError object in error.
 def start(update: Update, context: CallbackContext):
-    update.message.reply_text(text='Hi!')
+    message = update.message or update.edited_message
+    message.reply_text(text='Hi!')
 
 
 def help(update: Update, context: CallbackContext):
-    message = update.message
+    message = update.message or update.edited_message
 
     text = 'Commands:\n' + '\n'.join(f'    /{x}' for x in ALL_COMMANDS)
     message.reply_text(text)
 
 
 def echo(update: Update, context: CallbackContext):
-    update.message.reply_text(text=f'Echo: {update.message.text}')
+    message = update.message or update.edited_message
+    message.reply_text(text=f'Echo: {message.text}')
 
 
 def on_exchange_rates(update: Update, context: CallbackContext):
+    message = update.message or update.edited_message
+
     text = 'Курс:'
     for code in ['USD', 'EUR']:
         text += f'\n    {code}: {exchange_rate(code)[0]}'
 
     log.debug(text)
-    update.message.reply_text(text=text)
+    message.reply_text(text=text)
 
 
 def pict(update: Update, context: CallbackContext):
-    update.message.reply_photo('https://t8.mangas.rocks/auto/07/48/88/Onepunchman_t1_gl1_18.png')
+    message = update.message or update.edited_message
+    message.reply_photo('https://t8.mangas.rocks/auto/07/48/88/Onepunchman_t1_gl1_18.png')
 
 
 def pict2(update: Update, context: CallbackContext):
+    message = update.message or update.edited_message
+    
     with open('files/Onepunchman_t1_gl1_18.png', 'rb') as f:
-        update.message.reply_photo(f)
+        message.reply_photo(f)
 
 
 def pict3(update: Update, context: CallbackContext):
+    message = update.message or update.edited_message
+
     max_parts = 10
     files = list(Path('files/readmanga.live_one_punch_man__A1bc88e_vol1_1').glob('*.*'))
 
@@ -78,25 +87,27 @@ def pict3(update: Update, context: CallbackContext):
         if len(media_groups) > 1:
             media_groups[0][0].caption = f'Часть #{i}'
 
-        update.message.reply_media_group(media_group)
+        message.reply_media_group(media_group)
 
 
 # Поиск на YouTube
 def video(update: Update, context: CallbackContext):
+    message = update.message or update.edited_message
+
     args = context.args
     log.debug(args)
     if not args:
-        update.message.reply_text(text='К команде добавьте запрос.')
+        message.reply_text(text='К команде добавьте запрос.')
         return
 
     msg = ' '.join(args)
     search_results = search_youtube(msg)
     if not search_results:
-        update.message.reply_text(text='Ничего не найдено.')
+        message.reply_text(text='Ничего не найдено.')
         return
 
     url, title = random.choice(search_results)
-    update.message.reply_text(text=title + '\n' + url)
+    message.reply_text(text=title + '\n' + url)
 
 
 # NOTE: not work, source: https://github.com/gil9red/SimplePyScripts/blob/b366323934eb0ed9557ba7d40c3c64cf6a7b8c36/speak__[does_not_work]
@@ -159,7 +170,7 @@ def video(update: Update, context: CallbackContext):
 #         f.write(mp3_content)
 #
 #         with open('speak.mp3', 'rb') as f:
-#             update.message.reply_audio(update.message.chat_id, audio=f, title='Speak {} {}'.format(gender, locale))
+#             message.reply_audio(message.chat_id, audio=f, title='Speak {} {}'.format(gender, locale))
 #
 #
 # def speak_set_locale(update: Update, context: CallbackContext):
@@ -174,7 +185,7 @@ def video(update: Update, context: CallbackContext):
 #     last_locale = locale
 #     locale = args[0]
 #
-#     update.message.reply_text(text='Speak locale изменена: {} -> {}.'.format(last_locale, locale))
+#     message.reply_text(text='Speak locale изменена: {} -> {}.'.format(last_locale, locale))
 #
 #
 # def speak_set_gender(update: Update, context: CallbackContext):
@@ -189,13 +200,14 @@ def video(update: Update, context: CallbackContext):
 #     last_gender = gender
 #     gender = args[0]
 #
-#     update.message.reply_text(text='Speak gender изменена: {} -> {}.'.format(last_gender, gender))
+#     message.reply_text(text='Speak gender изменена: {} -> {}.'.format(last_gender, gender))
 
 
 def on_error(update: Update, context: CallbackContext):
     log.exception('Error: %s\nUpdate: %s', context.error, update)
-    if update and update.message:
-        update.message.reply_text(config.ERROR_TEXT)
+    if update:
+        message = update.message or update.edited_message
+        message.reply_text(config.ERROR_TEXT)
 
 
 def main():
