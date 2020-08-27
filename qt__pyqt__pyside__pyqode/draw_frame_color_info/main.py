@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+from typing import Union
 import sys
 
 sys.path.append('..')
@@ -11,7 +12,7 @@ sys.path.append('..')
 from Good_text_foreground_color_for_a_given_background_color import get_good_text_foreground_color
 
 from PyQt5.QtGui import QGuiApplication, QPainter, QImage, QColor, QFont, QFontMetrics
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QByteArray, QBuffer, QIODevice
 
 
 APP = QGuiApplication([])
@@ -81,7 +82,7 @@ def draw_rgb(painter: QPainter, size: int, color: QColor):
         painter.restore()
 
 
-def get_frame_color_info(color: QColor, size=SIZE, rounded=True) -> QImage:
+def get_frame_color_info(color: QColor, size=SIZE, rounded=True, as_bytes=False) -> Union[QImage, bytes]:
     image = QImage(size, size, QImage.Format_ARGB32)
     image.fill(Qt.transparent)
 
@@ -97,6 +98,15 @@ def get_frame_color_info(color: QColor, size=SIZE, rounded=True) -> QImage:
 
     draw_hex(painter, size, color)
     draw_rgb(painter, size, color)
+
+    painter.end()
+
+    if as_bytes:
+        ba = QByteArray()
+        buff = QBuffer(ba)
+        buff.open(QIODevice.WriteOnly)
+        image.save(buff, "PNG")
+        return ba.data()
 
     return image
 
