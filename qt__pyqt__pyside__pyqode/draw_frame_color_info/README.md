@@ -7,4 +7,4 @@
 
 ![images/green.png](images/green.png)
 
-![no_rounded_red.png](images/no_rounded_red.png)
+![no_rounded_#007396.png](images/no_rounded_%23007396.png)

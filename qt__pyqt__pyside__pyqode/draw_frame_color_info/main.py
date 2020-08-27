@@ -107,6 +107,6 @@ if __name__ == '__main__':
         image = get_frame_color_info(color)
         image.save(f'images/{name}.png')
 
-    name = 'red'
+    name = '#007396'
     image = get_frame_color_info(QColor(name), rounded=False)
     image.save(f'images/no_rounded_{name}.png')
