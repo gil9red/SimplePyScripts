@@ -83,7 +83,7 @@ def draw_rgb(painter: QPainter, size: int, color: QColor):
         painter.restore()
 
 
-def get_frame_color_info(color: QColor, size=SIZE, rounded=True, as_bytes=False) -> Union[QImage, bytes]:
+def get_frame_with_color_info(color: QColor, size=SIZE, rounded=True, as_bytes=False) -> Union[QImage, bytes]:
     image = QImage(size, size, QImage.Format_ARGB32)
     image.fill(Qt.transparent)
 
@@ -115,9 +115,9 @@ def get_frame_color_info(color: QColor, size=SIZE, rounded=True, as_bytes=False)
 if __name__ == '__main__':
     for name in ['#007396', '#ff8c69', 'green', '#a000ff00']:
         color = QColor(name)
-        image = get_frame_color_info(color)
+        image = get_frame_with_color_info(color)
         image.save(f'images/{name}.png')
 
     name = '#007396'
-    image = get_frame_color_info(QColor(name), rounded=False)
+    image = get_frame_with_color_info(QColor(name), rounded=False)
     image.save(f'images/no_rounded_{name}.png')
