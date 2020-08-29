@@ -37,6 +37,8 @@ class Window(QWidget):
 
 if __name__ == '__main__':
     app = QApplication([])
-    window = Window()
-    window.show()
+
+    mw = Window()
+    mw.show()
+
     app.exec()
