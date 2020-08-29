@@ -16,6 +16,8 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 
+# NOTE: It will probably be more functional to inherit
+# from RegexMatchingEventHandler or PatternMatchingEventHandler
 class CustomEventHandler(FileSystemEventHandler):
     def on_moved(self, event):
         super().on_moved(event)
