@@ -13,7 +13,6 @@ def get_good_text_foreground_color(color: QColor) -> QColor:
     _, r, g, b = color.getRgb()
 
     if (r * 0.299 + g * 0.587 + b * 0.114) > 186:
-        return QColor(Qt.white)
+        return QColor(Qt.black)
 
-    return QColor(Qt.black)
-
+    return QColor(Qt.white)
