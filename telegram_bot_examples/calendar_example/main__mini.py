@@ -10,6 +10,7 @@ import sys
 from telegram import Update, ReplyKeyboardRemove
 from telegram.ext import Updater, CommandHandler, CallbackContext, CallbackQueryHandler
 
+# https://github.com/unmonoqueteclea/calendar-telegram
 import telegramcalendar
 
 sys.path.append('..')

@@ -13,6 +13,7 @@ from telegram import Update, ReplyKeyboardRemove
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler
 from telegram.ext.dispatcher import run_async
 
+# https://github.com/unmonoqueteclea/calendar-telegram
 import telegramcalendar
 
 sys.path.append('..')
