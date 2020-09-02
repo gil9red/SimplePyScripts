@@ -41,6 +41,8 @@ def on_request(update: Update, context: CallbackContext):
     )
 
 
+@run_async
+@log_func(log)
 def on_calendar(update: Update, context: CallbackContext):
     update.message.reply_text(
         "Please select a date: ",
@@ -48,6 +50,8 @@ def on_calendar(update: Update, context: CallbackContext):
     )
 
 
+@run_async
+@log_func(log)
 def on_callback_query(update: Update, context: CallbackContext):
     query = update.callback_query
     query.answer()
