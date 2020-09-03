@@ -9,6 +9,11 @@ import logging
 import sys
 from pathlib import Path
 
+from telegram import Update
+from telegram.ext import CallbackContext
+
+import config
+
 
 def get_logger(file_name: str, dir_name='logs'):
     dir_name = Path(dir_name).resolve()
@@ -64,3 +69,9 @@ def log_func(logger: logging.Logger):
 
         return wrapper
     return actual_decorator
+
+
+def reply_error(log: logging.Logger, update: Update, context: CallbackContext):
+    log.exception('Error: %s\nUpdate: %s', context.error, update)
+    if update:
+        update.effective_message.reply_text(config.ERROR_TEXT)

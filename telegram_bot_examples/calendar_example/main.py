@@ -18,7 +18,7 @@ import telegramcalendar
 
 sys.path.append('..')
 import config
-from common import get_logger, log_func
+from common import get_logger, log_func, reply_error
 
 
 log = get_logger(__file__)
@@ -68,10 +68,7 @@ def on_callback_query(update: Update, context: CallbackContext):
 
 
 def on_error(update: Update, context: CallbackContext):
-    log.exception('Error: %s\nUpdate: %s', context.error, update)
-    if update:
-        message = update.message or update.edited_message
-        message.reply_text(config.ERROR_TEXT)
+    reply_error(log, update, context)
 
 
 def main():

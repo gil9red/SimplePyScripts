@@ -19,7 +19,7 @@ from telegram_bot_pagination import InlineKeyboardPaginator
 sys.path.append('..')
 
 import config
-from common import get_logger, log_func
+from common import get_logger, log_func, reply_error
 from utils import is_equal_inline_keyboards
 from data import character_pages
 
@@ -80,9 +80,7 @@ def on_callback_query(update: Update, context: CallbackContext):
 
 
 def on_error(update: Update, context: CallbackContext):
-    log.exception('Error: %s\nUpdate: %s', context.error, update)
-    if update and update.message:
-        update.message.reply_text(config.ERROR_TEXT)
+    reply_error(log, update, context)
 
 
 def main():

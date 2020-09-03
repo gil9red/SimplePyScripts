@@ -18,7 +18,7 @@ sys.path.append('../../html_parsing')
 sys.path.append('../../exchange_rates')
 
 import config
-from common import get_logger, log_func
+from common import get_logger, log_func, reply_error
 from cbr_ru import exchange_rate
 from youtube_com__results_search_query import search_youtube
 
@@ -31,47 +31,41 @@ log = get_logger(__file__)
 # Define a few command handlers. These usually take the two arguments bot and
 # update. Error handlers also receive the raised TelegramError object in error.
 def start(update: Update, context: CallbackContext):
-    message = update.message or update.edited_message
-    message.reply_text(text='Hi!')
+    update.effective_message.reply_text(text='Hi!')
 
 
 def help(update: Update, context: CallbackContext):
-    message = update.message or update.edited_message
-
     text = 'Commands:\n' + '\n'.join(f'    /{x}' for x in ALL_COMMANDS)
-    message.reply_text(text)
+    update.effective_message.reply_text(text)
 
 
 def echo(update: Update, context: CallbackContext):
-    message = update.message or update.edited_message
+    message = update.effective_message
     message.reply_text(text=f'Echo: {message.text}')
 
 
 def on_exchange_rates(update: Update, context: CallbackContext):
-    message = update.message or update.edited_message
-
     text = 'Курс:'
     for code in ['USD', 'EUR']:
         text += f'\n    {code}: {exchange_rate(code)[0]}'
 
     log.debug(text)
-    message.reply_text(text=text)
+    update.effective_message.reply_text(text=text)
 
 
 def pict(update: Update, context: CallbackContext):
-    message = update.message or update.edited_message
-    message.reply_photo('https://t8.mangas.rocks/auto/07/48/88/Onepunchman_t1_gl1_18.png')
+    update.effective_message.reply_photo('https://t8.mangas.rocks/auto/07/48/88/Onepunchman_t1_gl1_18.png')
 
 
 def pict2(update: Update, context: CallbackContext):
-    message = update.message or update.edited_message
+    message = update.effective_message
     
     with open('files/Onepunchman_t1_gl1_18.png', 'rb') as f:
         message.reply_photo(f)
 
 
 def pict3(update: Update, context: CallbackContext):
-    message = update.message or update.edited_message
+    message = update.effective_message
 
     max_parts = 10
     files = list(Path('files/readmanga.live_one_punch_man__A1bc88e_vol1_1').glob('*.*'))
@@ -92,7 +86,7 @@ def pict3(update: Update, context: CallbackContext):
 
 # Поиск на YouTube
 def video(update: Update, context: CallbackContext):
-    message = update.message or update.edited_message
+    message = update.effective_message
 
     args = context.args
     log.debug(args)
@@ -204,10 +198,7 @@ def video(update: Update, context: CallbackContext):
 
 
 def on_error(update: Update, context: CallbackContext):
-    log.exception('Error: %s\nUpdate: %s', context.error, update)
-    if update:
-        message = update.message or update.edited_message
-        message.reply_text(config.ERROR_TEXT)
+    reply_error(log, update, context)
 
 
 def main():
