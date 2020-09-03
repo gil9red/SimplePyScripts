@@ -25,7 +25,7 @@ ALL_COMMANDS = []
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
     update.message.reply_text(
-        f'Введите что-нибудь'
+        'Введите что-нибудь'
     )
 
 
