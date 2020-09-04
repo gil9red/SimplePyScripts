@@ -5,6 +5,9 @@ __author__ = 'ipetrash'
 
 
 def shorten(text: str, length=30) -> str:
+    if not text:
+        return text
+
     if len(text) > length:
         text = text[:length] + '...'
     return text
