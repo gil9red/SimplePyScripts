@@ -105,15 +105,19 @@ class Quote:
         return files
 
     @staticmethod
-    def parse_from(url_or_el: Union[str, Tag]) -> 'Quote':
-        if isinstance(url_or_el, str):
-            url = url_or_el
+    def parse_from(url__id__el: Union[str, int, Tag]) -> 'Quote':
+        if isinstance(url__id__el, int):
+            url__id__el = 'https://bash.im/quote/' + str(url__id__el)
+
+        if isinstance(url__id__el, str):
+            url = url__id__el
 
             rs = requests.get(url, headers={'User-Agent': USER_AGENT})
             root = BeautifulSoup(rs.content, 'html.parser')
             quote_el = root.select_one('article.quote')
+
         else:
-            quote_el = url_or_el
+            quote_el = url__id__el
 
         comics_url = []
         strips_el = quote_el.select_one('.quote__strips')
@@ -184,6 +188,9 @@ def get_random_quotes_list(logger=None) -> List[Quote]:
 if __name__ == '__main__':
     print(Quote.parse_from('https://bash.im/quote/414617'))
     # Quote(id=414617, url=https://bash.im/quote/414617, text(96)='zvizda: диета достигла той упо...', date=07.12.2011, rating=11843, comics_url=['https://bash.im/strip/20190828', 'https://bash.im/strip/20200408'])
+
+    print(Quote.parse_from(414617))
+    # Quote(id=414617, url=https://bash.im/quote/414617, text(96)='zvizda: диета достигла той упо...', date=07.12.2011, rating=11849, comics_url=['https://bash.im/strip/20190828', 'https://bash.im/strip/20200408'])
 
     print(Quote.parse_from('https://bash.im/quote/454588'))
     # Quote(id=454588, url=https://bash.im/quote/454588, text(97)='- К человеку с ножом обращаютс...', date=20.02.2019, rating=1351, comics_url=[])
