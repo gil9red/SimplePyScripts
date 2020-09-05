@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 import datetime as DT
 from dataclasses import dataclass, field
 from urllib.parse import urljoin
-from typing import List, Union
+from typing import List, Union, Optional
 import traceback
 from pathlib import Path
 import re
@@ -105,7 +105,7 @@ class Quote:
         return files
 
     @staticmethod
-    def parse_from(url__id__el: Union[str, int, Tag]) -> 'Quote':
+    def parse_from(url__id__el: Union[str, int, Tag]) -> Optional['Quote']:
         if isinstance(url__id__el, int):
             url__id__el = 'https://bash.im/quote/' + str(url__id__el)
 
@@ -113,6 +113,11 @@ class Quote:
             url = url__id__el
 
             rs = requests.get(url, headers={'User-Agent': USER_AGENT})
+
+            # Если был редирект на главную страницу, значит нет цитаты с указанным id
+            if rs.url.rstrip('/') == 'https://bash.im':
+                return
+
             root = BeautifulSoup(rs.content, 'html.parser')
             quote_el = root.select_one('article.quote')
 
@@ -229,3 +234,5 @@ if __name__ == '__main__':
     root = BeautifulSoup('123<br>abc<p>HEX</p><br><br>!!!', 'html.parser')
     text = get_plaintext(root)
     assert text == '123\nabc\nHEX\n\n!!!'
+
+    assert Quote.parse_from(0) is None
