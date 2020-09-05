@@ -26,6 +26,16 @@ def shorten(text: str, length=30) -> str:
     return text
 
 
+def get_plaintext(element: Tag) -> str:
+    items = []
+    for elem in element.descendants:
+        if isinstance(elem, str):
+            items.append(elem.strip())
+        elif elem.name in ['br', 'p']:
+            items.append('\n')
+    return ''.join(items)
+
+
 URL_BASE = 'https://bash.im'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0'
 
@@ -118,7 +128,9 @@ class Quote:
         href = quote_el.select_one('.quote__header_permalink')['href']
         url = urljoin(URL_BASE, href)
 
-        quote_text = quote_el.select_one('.quote__body').get_text(separator='\n', strip=True)
+        quote_text = get_plaintext(
+            quote_el.select_one('.quote__body')
+        )
 
         # У некоторых цитат не указан рейтинг, выглядит как: ...
         # Например, в https://bash.im/quote/416789
@@ -186,6 +198,8 @@ if __name__ == '__main__':
 
     for i, quote in enumerate(quotes, 1):
         print(f'  {i:2}. {quote}')
+        # print(quote.text)
+        # print('\n' + '-' * 100 + '\n')
     """
     Quotes(25):
       1. Quote(id=402770, url=https://bash.im/quote/402770, text(224)='Владивосток. Январь.\nНочь посл...', date=08.03.2009, rating=26693, comics_url=[])
@@ -204,3 +218,7 @@ if __name__ == '__main__':
     print(f'Files ({len(files)}):')
     for i, file_name in enumerate(files, 1):
         print(f'  {i:2}. {file_name}')
+
+    root = BeautifulSoup('123<br>abc<p>HEX</p><br><br>!!!', 'html.parser')
+    text = get_plaintext(root)
+    assert text == '123\nabc\nHEX\n\n!!!'
