@@ -16,8 +16,11 @@ from bs4 import BeautifulSoup, Tag
 import requests
 
 
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/9c9a5555e87d7a7475c2dc8feffb97f2906789ce/shorten.py#L7
+# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/cd5bf42742b2de4706a82aecb00e20ca0f043f8e/shorten.py#L7
 def shorten(text: str, length=30) -> str:
+    if not text:
+        return text
+
     if len(text) > length:
         text = text[:length] + '...'
     return text
