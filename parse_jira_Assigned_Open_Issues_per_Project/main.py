@@ -48,8 +48,12 @@ if __name__ == '__main__':
     import schedule
     import time
 
-    schedule.every().day.at("20:00").do(run)
+    # Каждую неделю, в субботу, в 12:00
+    schedule\
+        .every().week\
+        .saturday.at("12:00")\
+        .do(run)
 
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        time.sleep(60)
