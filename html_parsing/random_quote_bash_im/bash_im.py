@@ -161,7 +161,7 @@ class Quote:
                f'date={self.date_str}, rating={self.rating}, comics_url={self.comics_url})'
 
 
-def get_random_quotes_list(logger=None) -> List[Quote]:
+def get_random_quotes(logger=None) -> List[Quote]:
     url = 'https://bash.im/random'
     quotes = []
 
@@ -234,8 +234,8 @@ if __name__ == '__main__':
 
     print()
 
-    quotes = get_random_quotes_list()
-    print(f'Quotes({len(quotes)}):')
+    quotes = get_random_quotes()
+    print(f'Random quotes ({len(quotes)}):')
 
     for i, quote in enumerate(quotes, 1):
         print(f'  {i:2}. {quote}')
