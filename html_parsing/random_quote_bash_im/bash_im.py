@@ -39,6 +39,9 @@ def get_plaintext(element: Tag) -> str:
 URL_BASE = 'https://bash.im'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0'
 
+session = requests.session()
+session.headers['User-Agent'] = USER_AGENT
+
 
 @dataclass
 class Quote:
@@ -78,9 +81,6 @@ class Quote:
 
                 # Если нет файла, скачиваем
                 if not file_name.exists():
-                    session = requests.session()
-                    session.headers['User-Agent'] = USER_AGENT
-
                     # Страница комикса
                     rs = session.get(url)
                     root = BeautifulSoup(rs.content, 'html.parser')
@@ -166,7 +166,36 @@ def get_random_quotes_list(logger=None) -> List[Quote]:
     quotes = []
 
     try:
-        rs = requests.get(url, headers={'User-Agent': USER_AGENT})
+        rs = session.get(url)
+        root = BeautifulSoup(rs.content, 'html.parser')
+
+        for quote_el in root.select('article.quote'):
+            try:
+                quotes.append(
+                    Quote.parse_from(quote_el)
+                )
+            except Exception:
+                msg = f'Error by parsing quote:\nquote_el:\n{quote_el}\n\n'
+                if logger:
+                    logger.exception(msg)
+                else:
+                    print(f'{msg}{traceback.format_exc()}')
+
+    except Exception:
+        if logger:
+            logger.exception('')
+        else:
+            print(traceback.format_exc())
+
+    return quotes
+
+
+def get_main_page_quotes(logger=None) -> List[Quote]:
+    url = URL_BASE
+    quotes = []
+
+    try:
+        rs = session.get(url)
         root = BeautifulSoup(rs.content, 'html.parser')
 
         for quote_el in root.select('article.quote'):
@@ -223,6 +252,10 @@ if __name__ == '__main__':
      24. Quote(id=404924, url=https://bash.im/quote/404924, text(279)='Воланд: Дорогая Лиза, я понима...', date=30.10.2009, rating=8788, comics_url=[])
      25. Quote(id=417637, url=https://bash.im/quote/417637, text(166)='xxx: Блин. Нормальные люди, ко...', date=26.06.2012, rating=7810, comics_url=[])
     """
+    print()
+
+    quotes = get_main_page_quotes()
+    print(f'Main page quotes ({len(quotes)}), first #{quotes[0].id}, last #{quotes[-1].id}')
     print()
 
     quote = Quote.parse_from('https://bash.im/quote/414617')
