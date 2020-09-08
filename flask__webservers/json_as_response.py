@@ -4,23 +4,32 @@
 __author__ = 'ipetrash'
 
 
+import logging
+
 from flask import Flask, jsonify
 app = Flask(__name__)
 
-import logging
 logging.basicConfig(level=logging.DEBUG)
+
+
+DATA = {
+    'text': "Hello World!",
+    'ok': True,
+    'items': [
+        'Hello',
+        'World!',
+    ]
+}
 
 
 @app.route("/")
 def index():
-    return jsonify({
-        'text': "Hello World!",
-        'ok': True,
-        'items': [
-            'Hello',
-            'World!',
-        ]
-    })
+    return jsonify(DATA)
+
+
+@app.route("/v2")
+def index_v2():
+    return DATA
 
 
 if __name__ == '__main__':
