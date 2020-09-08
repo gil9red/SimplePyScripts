@@ -4,25 +4,47 @@
 __author__ = 'ipetrash'
 
 
-def makebold(fn):
+import functools
+
+
+def makebold(func):
+    @functools.wraps(func)
     def wrapped(*args, **kwargs):
-        return "<b>" + fn(*args, **kwargs) + "</b>"
+        return "<b>" + func(*args, **kwargs) + "</b>"
 
     return wrapped
 
 
-def makeitalic(fn):
+def makeitalic(func):
+    @functools.wraps(func)
     def wrapped(*args, **kwargs):
-        return "<i>" + fn(*args, **kwargs) + "</i>"
+        return "<i>" + func(*args, **kwargs) + "</i>"
 
     return wrapped
 
 
-def upper(fn):
+def upper(func):
+    @functools.wraps(func)
     def wrapped(*args, **kwargs):
-        return fn(*args, **kwargs).upper()
+        return func(*args, **kwargs).upper()
 
     return wrapped
+
+
+def composed(*decs):
+    def deco(f):
+        for dec in reversed(decs):
+            f = dec(f)
+        return f
+    return deco
+
+
+def multi(func):
+    return composed(
+        makebold,
+        makeitalic,
+        upper,
+    )(func)
 
 
 @makebold
@@ -32,4 +54,13 @@ def hello(text):
     return text
 
 
-print(hello('Hello World!'))  # <b><i>HELLO WORLD!</i></b>
+@multi
+def hello_2(text):
+    return text
+
+
+print(hello('Hello World!'))
+# <b><i>HELLO WORLD!</i></b>
+
+print(hello_2('Hello World!'))
+# <b><i>HELLO WORLD!</i></b>
