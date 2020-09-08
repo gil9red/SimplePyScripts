@@ -31,22 +31,6 @@ def upper(func):
     return wrapped
 
 
-def composed(*decs):
-    def deco(f):
-        for dec in reversed(decs):
-            f = dec(f)
-        return f
-    return deco
-
-
-def multi(func):
-    return composed(
-        makebold,
-        makeitalic,
-        upper,
-    )(func)
-
-
 @makebold
 @makeitalic
 @upper
@@ -54,13 +38,5 @@ def hello(text):
     return text
 
 
-@multi
-def hello_2(text):
-    return text
-
-
 print(hello('Hello World!'))
-# <b><i>HELLO WORLD!</i></b>
-
-print(hello_2('Hello World!'))
 # <b><i>HELLO WORLD!</i></b>
