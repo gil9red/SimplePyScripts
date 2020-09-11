@@ -50,7 +50,9 @@ class SettingState(enum.Enum):
 
 CHECKBOX_TEXT = '✅'
 EMPTY_CHECKBOX_TEXT = '⬜'
-INLINE_KEYBOARD_BUTTON_BACK = InlineKeyboardButton("<back>", callback_data=SettingState.MAIN.get_callback_data())
+INLINE_KEYBOARD_BUTTON_BACK = InlineKeyboardButton(
+    "<back>", callback_data=SettingState.MAIN.get_callback_data()
+)
 
 
 def _on_reply_debug(update: Update, context: CallbackContext):
