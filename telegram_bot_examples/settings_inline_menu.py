@@ -48,8 +48,11 @@ class SettingState(enum.Enum):
         )
 
 
-CHECKBOX_TEXT = '✅'
-EMPTY_CHECKBOX_TEXT = '⬜'
+CHECKBOX = '✅'
+CHECKBOX_EMPTY = '⬜'
+RADIOBUTTON = '🟢'
+RADIOBUTTON_EMPTY = '⚪'
+
 INLINE_KEYBOARD_BUTTON_BACK = InlineKeyboardButton(
     "<back>", callback_data=SettingState.MAIN.get_callback_data()
 )
@@ -70,7 +73,7 @@ def _on_reply_debug(update: Update, context: CallbackContext):
 
     buttons = [
         InlineKeyboardButton(
-            (CHECKBOX_TEXT + ' ' if debug == value else '') + value,
+            (RADIOBUTTON if debug == value else RADIOBUTTON_EMPTY) + ' ' + value,
             callback_data=data + '_' + value
         )
         for value in settings.value
@@ -120,7 +123,7 @@ def _on_reply_year(update: Update, context: CallbackContext):
 
             row.append(
                 InlineKeyboardButton(
-                    (CHECKBOX_TEXT if value else EMPTY_CHECKBOX_TEXT) + ' ' + key,
+                    (CHECKBOX if value else CHECKBOX_EMPTY) + ' ' + key,
                     callback_data=data + '_' + key
                 )
             )
@@ -154,7 +157,7 @@ def _on_reply_sex(update: Update, context: CallbackContext):
 
     buttons = [
         InlineKeyboardButton(
-            (CHECKBOX_TEXT + ' ' if sex == value else '') + value,
+            (RADIOBUTTON if sex == value else RADIOBUTTON_EMPTY) + ' ' + value,
             callback_data=data + '_' + value
         )
         for value in settings.value
