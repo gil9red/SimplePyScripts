@@ -195,25 +195,23 @@ def on_select_date(update: Update, context: CallbackContext):
     bot = context.bot
 
     selected, date = telegramcalendar.process_calendar_selection(bot, update)
-    if not selected:
-        return ConversationHandler.END
+    if selected:
+        user_data = context.user_data
+        text = date.strftime("%d/%m/%Y")
+        user_data['Дата'] = text
 
-    user_data = context.user_data
-    text = date.strftime("%d/%m/%Y")
-    user_data['Дата'] = text
+        keyboard = [[
+            InlineKeyboardButton("12:00", callback_data='12'),
+            InlineKeyboardButton("14:30", callback_data='14'),
+            InlineKeyboardButton("16:00", callback_data='16')
+        ]]
 
-    keyboard = [[
-        InlineKeyboardButton("12:00", callback_data='12'),
-        InlineKeyboardButton("14:30", callback_data='14'),
-        InlineKeyboardButton("16:00", callback_data='16')
-    ]]
+        reply_markup = InlineKeyboardMarkup(keyboard)
 
-    reply_markup = InlineKeyboardMarkup(keyboard)
-
-    query.message.reply_text(text='''Вы выбрали %s
+        query.message.reply_text(text='''Вы выбрали %s
 Выберите свободное время: ''' % text, reply_markup=reply_markup)
 
-    return STATE_SELECT_TIME
+        return STATE_SELECT_TIME
 
 
 @run_async
