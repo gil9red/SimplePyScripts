@@ -33,7 +33,7 @@ def get_plaintext(element: Tag) -> str:
             items.append(elem.strip())
         elif elem.name in ['br', 'p']:
             items.append('\n')
-    return ''.join(items)
+    return ''.join(items).strip()
 
 
 URL_BASE = 'https://bash.im'
