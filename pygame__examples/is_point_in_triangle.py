@@ -43,7 +43,7 @@ clock = pygame.time.Clock()
 mouse_pos = Point(0, 0)
 
 # Triangle
-a, b, c = Point(100, 100), Point(50, 200), Point(200, 200)
+a, b, c = Point(100, 100), Point(100, 400), Point(500, 500)
 
 fnt = pygame.font.Font(None, 40)
 
