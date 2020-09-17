@@ -58,13 +58,13 @@ while True:
     screen.fill(WHITE)
     balls.draw(screen)
 
-    text = fnt.render("Collision!", True, color)
-    screen.blit(text, (260, 20))
-
     if pygame.sprite.collide_circle(ball_1, ball_2):
         color = BLACK
     else:
         color = WHITE
+
+    text = fnt.render("Collision!", True, color)
+    screen.blit(text, (260, 20))
 
     pygame.display.update()
     clock.tick(60)

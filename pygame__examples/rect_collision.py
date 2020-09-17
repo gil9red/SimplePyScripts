@@ -36,17 +36,17 @@ while True:
             rect2 = surf2.get_rect(center=event.pos)
             break
 
+    if rect2.colliderect(rect1):
+        color = (200, 200, 200)
+    else:
+        color = (0, 0, 0)
+
     text = fnt.render("Collision!", True, color)
 
     screen.fill((0, 0, 0))
     screen.blit(surf1, rect1)
     screen.blit(surf2, rect2)
     screen.blit(text, (260, 20))
-
-    if rect2.colliderect(rect1):
-        color = (200, 200, 200)
-    else:
-        color = (0, 0, 0)
 
     pygame.display.update()
     clock.tick(60)

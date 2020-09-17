@@ -62,13 +62,13 @@ while True:
     # This draws a triangle using the polygon command
     pygame.draw.polygon(screen, BLACK, [[a.x, a.y], [b.x, b.y], [c.x, c.y]], 5)
 
-    text = fnt.render("Collision!", True, color)
-    screen.blit(text, (260, 20))
-
     if is_point_in_triangle(a, b, c, mouse_pos):
         color = BLACK
     else:
         color = WHITE
+
+    text = fnt.render("Collision!", True, color)
+    screen.blit(text, (260, 20))
 
     pygame.display.update()
     clock.tick(60)
