@@ -13,9 +13,9 @@ from github3 import GitHub
 from config import TOKEN
 
 
-g = GitHub(token=TOKEN)
+gh = GitHub(token=TOKEN)
 
-gist = g.gist('2f80a34fb601cd685353')
+gist = gh.gist('2f80a34fb601cd685353')
 
 for commit in gist.commits():
     # TODO: KeyError: 'gistfile1.txt'
