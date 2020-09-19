@@ -121,7 +121,7 @@ def parse_played_games(text: str, silence: bool=False) -> dict:
 
 
 # Get FULL database from: https://github.com/gil9red/SimplePyScripts/blob/2f50908d5c70fafa885db009bfe9570f8fc111e8/PyGithub_examples/gist_history_to_sqlite_db.py
-DB_FILE_NAME = 'gist_commits.sqlite'
+DB_FILE_NAME = '../PyGithub_examples/gist_commits.sqlite'
 
 
 def create_connect():
@@ -129,37 +129,30 @@ def create_connect():
     return sqlite3.connect(DB_FILE_NAME)
 
 
+FINISHED_GAME = 'FINISHED_GAME'
+FINISHED_WATCHED = 'FINISHED_WATCHED'
+NOT_FINISHED_GAME = 'NOT_FINISHED_GAME'
+NOT_FINISHED_WATCHED = 'NOT_FINISHED_WATCHED'
+CATEGORIES = [FINISHED_GAME, FINISHED_WATCHED, NOT_FINISHED_GAME, NOT_FINISHED_WATCHED]
+
+
 if __name__ == '__main__':
     from collections import defaultdict
     append_game_date = defaultdict(dict)
 
-    FINISHED_GAME = 'FINISHED_GAME'
-    FINISHED_WATCHED = 'FINISHED_WATCHED'
-    # NOT_FINISHED_GAME = 'NOT_FINISHED_GAME'
-    # NOT_FINISHED_WATCHED = 'NOT_FINISHED_WATCHED'
-
     with create_connect() as connect:
-        for committed_at, content in connect.execute('SELECT committed_at, content FROM GistFile'):
+        sql = 'SELECT committed_at, content FROM GistFile ORDER BY committed_at'
+
+        for committed_at, content in connect.execute(sql):
             platforms = parse_played_games(content, silence=True)
             for platform, categories in platforms.items():
                 if platform not in append_game_date:
                     append_game_date[platform] = defaultdict(dict)
 
-                for game in categories[FINISHED_GAME]:
-                    if game not in append_game_date[platform][FINISHED_GAME]:
-                        append_game_date[platform][FINISHED_GAME][game] = committed_at
-
-                for game in categories[FINISHED_WATCHED]:
-                    if game not in append_game_date[platform][FINISHED_WATCHED]:
-                        append_game_date[platform][FINISHED_WATCHED][game] = committed_at
-
-                # for game in categories[NOT_FINISHED_GAME]:
-                #     if game not in append_game_date[platform][NOT_FINISHED_GAME]:
-                #         append_game_date[platform][NOT_FINISHED_GAME][game] = committed_at
-                #
-                # for game in categories[NOT_FINISHED_WATCHED]:
-                #     if game not in append_game_date[platform][NOT_FINISHED_WATCHED]:
-                #         append_game_date[platform][NOT_FINISHED_WATCHED][game] = committed_at
+                for category in CATEGORIES:
+                    for game in categories[category]:
+                        if game not in append_game_date[platform][category]:
+                            append_game_date[platform][category][game] = committed_at
 
     # Check
     print('Ведьмак:', append_game_date['PC']['FINISHED_GAME']['Ведьмак'])
