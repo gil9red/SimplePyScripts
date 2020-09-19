@@ -4,8 +4,7 @@
 __author__ = 'ipetrash'
 
 
-LOGIN = None
-PASSWORD = None
+TOKEN = None
 
 # http://user:password@proxy_host:proxy_port
 PROXY = None

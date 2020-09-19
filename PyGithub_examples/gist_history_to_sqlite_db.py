@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from config import LOGIN, PASSWORD
+from config import TOKEN
 
 
 def create_connect():
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     # pip install pygithub
     from github import Github
-    gh = Github(LOGIN, PASSWORD)
+    gh = Github(TOKEN)
     # #
     # # OR:
     # # But: "github.GithubException.RateLimitExceededException: 403 {'message': "API rate limit exceeded for \
