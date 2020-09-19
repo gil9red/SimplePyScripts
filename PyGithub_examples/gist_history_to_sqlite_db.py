@@ -71,6 +71,3 @@ if __name__ == '__main__':
         except Exception as e:
             import traceback
             print('ERROR: {}:\n\n{}'.format(e, traceback.format_exc()))
-
-        finally:
-            connect.commit()
