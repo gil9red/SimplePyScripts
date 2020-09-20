@@ -32,7 +32,7 @@ def open_web_page_mail(value_cold: int, value_hot: int) -> (bool, str):
     driver.get('https://e.mail.ru/templates/')
     print(f'Title: {driver.title!r}')
 
-    items = [item for item in driver.find_elements_by_css_selector('.llc__item') if 'vodomer' in item.text]
+    items = [item for item in driver.find_elements_by_css_selector('a[href*="/templates/"]') if 'vodomer' in item.text]
     if not items:
         text = 'Шаблон с "vodomer" не найден'
         print(text)
