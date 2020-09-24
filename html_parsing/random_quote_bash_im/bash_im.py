@@ -190,8 +190,11 @@ def get_random_quotes(logger=None) -> List[Quote]:
     return quotes
 
 
-def get_main_page_quotes(logger=None) -> List[Quote]:
+def get_page_quotes(page=None, logger=None) -> List[Quote]:
     url = URL_BASE
+    if page:
+        url = urljoin(url, f'/index/{page}')
+
     quotes = []
 
     try:
@@ -217,6 +220,10 @@ def get_main_page_quotes(logger=None) -> List[Quote]:
             print(traceback.format_exc())
 
     return quotes
+
+
+def get_main_page_quotes(logger=None) -> List[Quote]:
+    return get_page_quotes(logger=logger)
 
 
 if __name__ == '__main__':
@@ -256,6 +263,10 @@ if __name__ == '__main__':
 
     quotes = get_main_page_quotes()
     print(f'Main page quotes ({len(quotes)}), first #{quotes[0].id}, last #{quotes[-1].id}')
+
+    page = 100
+    quotes = get_page_quotes(page=page)
+    print(f'Quotes from {page} page: ({len(quotes)}), first #{quotes[0].id}, last #{quotes[-1].id}')
     print()
 
     quote = Quote.parse_from('https://bash.im/quote/414617')
