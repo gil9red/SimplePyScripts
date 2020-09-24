@@ -190,7 +190,7 @@ def on_start(update: Update, context: CallbackContext):
 @run_async
 @log_func(log)
 def on_settings(update: Update, context: CallbackContext):
-    # Если функция вызывана из CallbackQueryHandler
+    # Если функция вызвана из CallbackQueryHandler
     query = update.callback_query
     if query:
         query.answer()
