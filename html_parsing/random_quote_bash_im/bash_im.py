@@ -16,6 +16,10 @@ from bs4 import BeautifulSoup, Tag
 import requests
 
 
+def parse(obj) -> BeautifulSoup:
+    return BeautifulSoup(obj, 'html.parser')
+
+
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/cd5bf42742b2de4706a82aecb00e20ca0f043f8e/shorten.py#L7
 def shorten(text: str, length=30) -> str:
     if not text:
@@ -83,7 +87,7 @@ class Quote:
                 if not file_name.exists():
                     # Страница комикса
                     rs = session.get(url)
-                    root = BeautifulSoup(rs.content, 'html.parser')
+                    root = parse(rs.content)
 
                     img_el = root.select_one('.quote__img')
                     url_src = img_el.get('src') or img_el.get('data-src')
@@ -118,7 +122,7 @@ class Quote:
             if rs.url.rstrip('/') == 'https://bash.im':
                 return
 
-            root = BeautifulSoup(rs.content, 'html.parser')
+            root = parse(rs.content)
             quote_el = root.select_one('article.quote')
 
         else:
@@ -167,7 +171,7 @@ def get_random_quotes(logger=None) -> List[Quote]:
 
     try:
         rs = session.get(url)
-        root = BeautifulSoup(rs.content, 'html.parser')
+        root = parse(rs.content)
 
         for quote_el in root.select('article.quote'):
             try:
@@ -199,7 +203,7 @@ def get_page_quotes(page=None, logger=None) -> List[Quote]:
 
     try:
         rs = session.get(url)
-        root = BeautifulSoup(rs.content, 'html.parser')
+        root = parse(rs.content)
 
         for quote_el in root.select('article.quote'):
             try:
@@ -226,7 +230,17 @@ def get_main_page_quotes(logger=None) -> List[Quote]:
     return get_page_quotes(logger=logger)
 
 
+def get_total_pages() -> int:
+    rs = session.get(URL_BASE)
+    root = parse(rs.content)
+
+    return int(root.select_one('.pager__input')['max'])
+
+
 if __name__ == '__main__':
+    print('Total pages:', get_total_pages())
+    print()
+
     print(Quote.parse_from('https://bash.im/quote/414617'))
     # Quote(id=414617, url=https://bash.im/quote/414617, text(96)='zvizda: диета достигла той упо...', date=07.12.2011, rating=11843, comics_url=['https://bash.im/strip/20190828', 'https://bash.im/strip/20200408'])
 
@@ -275,7 +289,7 @@ if __name__ == '__main__':
     for i, file_name in enumerate(files, 1):
         print(f'  {i:2}. {file_name}')
 
-    root = BeautifulSoup('123<br>abc<p>HEX</p><br><br>!!!', 'html.parser')
+    root = parse('123<br>abc<p>HEX</p><br><br>!!!')
     text = get_plaintext(root)
     assert text == '123\nabc\nHEX\n\n!!!'
 
