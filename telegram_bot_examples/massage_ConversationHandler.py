@@ -11,7 +11,7 @@ __author__ = 'ipetrash'
 import sys
 
 from telegram import (
-    Update, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton
+    Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton
 )
 from telegram.ext import (
     Updater, MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler, ConversationHandler
@@ -48,7 +48,7 @@ def facts_to_str(user_data: dict) -> str:
 @run_async
 @log_func(log)
 def on_main_menu(update: Update, context: CallbackContext):
-    # Если функция вызывана из CallbackQueryHandler
+    # Если функция вызвана из CallbackQueryHandler
     query = update.callback_query
     if query:
         query.answer()
