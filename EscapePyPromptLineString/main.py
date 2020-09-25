@@ -5,6 +5,10 @@
 __author__ = 'ipetrash'
 
 
+import traceback
+import time
+import sys
+
 try:
     from PyQt5.QtWidgets import *
     from PyQt5.QtCore import *
@@ -19,12 +23,8 @@ except:
         from PySide.QtCore import *
 
 
-import traceback
-
-
 def log_uncaught_exceptions(ex_cls, ex, tb):
     text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
     text += ''.join(traceback.format_tb(tb))
 
     print(text)
@@ -32,7 +32,6 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -98,8 +97,7 @@ class MainWindow(QWidget):
         self.last_detail_error_message = None
 
         try:
-            import time
-            t = time.clock()
+            t = time.perf_counter()
 
             out_text = self.text_edit_input.toPlainText()
 
@@ -114,7 +112,7 @@ class MainWindow(QWidget):
             out_text = '\n'.join(new_out_text)
             self.text_edit_output.setPlainText(out_text)
 
-            print('Escape for {:.6f} secs'.format(time.clock() - t))
+            print('Escape for {:.3f} secs'.format(time.perf_counter() - t))
 
         except Exception as e:
             # Выводим ошибку в консоль
