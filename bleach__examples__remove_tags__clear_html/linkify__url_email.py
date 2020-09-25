@@ -16,6 +16,8 @@ html = '''
 http://example.com
 hello_world@example.com
 '''.strip()
+
+# The default callback adds rel="nofollow"
 print(bleach.linkify(html, parse_email=True))
 # <a href="http://example.com" rel="nofollow">http://example.com</a>
 # <a href="mailto:hello_world@example.com">hello_world@example.com</a>
