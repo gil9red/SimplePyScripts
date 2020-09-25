@@ -104,7 +104,7 @@ class MainWindow(QWidget):
             new_out_text = []
 
             for line in out_text.splitlines():
-                if line.startswith('>>> ') or line.startswith('... '):
+                if line.startswith('>>> ') or line.startswith('... ') or line == '...':
                     line = line[4:]
 
                 new_out_text.append(line)
