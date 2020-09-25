@@ -44,6 +44,8 @@ print(
 )
 # <img alt="an example">
 
+print()
+
 #
 # Using functions
 #
