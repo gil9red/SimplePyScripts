@@ -34,3 +34,12 @@ print(linker.linkify('abc http://example.com def'))
 
 print(linker.linkify('abc models.py def'))
 # abc models.py def
+
+print()
+
+linker = Linker(skip_tags=['pre'])
+print(linker.linkify('a b c http://example.com d e f'))
+# a b c <a href="http://example.com" rel="nofollow">http://example.com</a> d e f
+
+print(linker.linkify('<pre>http://example.com</pre>'))
+# <pre>http://example.com</pre>
