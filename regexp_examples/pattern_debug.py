@@ -21,7 +21,7 @@ print(type(pattern), pattern)
 
 print('\n')
 
-pattern = re.compile("\d{2,6}", re.DEBUG)
+pattern = re.compile(r"\d{2,6}", re.DEBUG)
 # MAX_REPEAT 2 6
 #   IN
 #     CATEGORY CATEGORY_DIGI
