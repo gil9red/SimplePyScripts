@@ -9,7 +9,7 @@ __author__ = 'ipetrash'
 
 
 # pip install bleach
-from bleach.linkifier import Linker
+from bleach.linkifier import Linker, build_url_re, build_email_re
 
 
 # Preventing Links
@@ -35,7 +35,7 @@ print(linker.linkify('abc http://example.com def'))
 print(linker.linkify('abc models.py def'))
 # abc models.py def
 
-print()
+print('\n' + '-' * 100 + '\n')
 
 linker = Linker(skip_tags=['pre'])
 print(linker.linkify('a b c http://example.com d e f'))
@@ -43,3 +43,48 @@ print(linker.linkify('a b c http://example.com d e f'))
 
 print(linker.linkify('<pre>http://example.com</pre>'))
 # <pre>http://example.com</pre>
+
+print('\n' + '-' * 100 + '\n')
+
+only_fish_tld_url_re = build_url_re(tlds=['fish'])
+linker = Linker(url_re=only_fish_tld_url_re)
+
+print(linker.linkify('com TLD does not link https://example.com'))
+# com TLD does not link https://example.com
+
+print(linker.linkify('fish TLD links https://example.fish'))
+# fish TLD links <a href="https://example.fish" rel="nofollow">https://example.fish</a>
+
+print('\n' + '-' * 100 + '\n')
+
+only_https_url_re = build_url_re(protocols=['https'])
+linker = Linker(url_re=only_https_url_re)
+
+print(linker.linkify('gopher does not link gopher://example.link'))
+# gopher does not link gopher://example.link
+
+print(linker.linkify('https links https://example.com/'))
+# https links <a href="https://example.com/" rel="nofollow">https://example.com/</a>
+
+print('\n' + '-' * 100 + '\n')
+
+html = 'https://xn--80aaksdi3bpu.xn--p1ai/ https://дайтрафик.рф/'
+
+linker = Linker(url_re=build_url_re(tlds=['рф']))
+print(linker.linkify(html))
+# https://xn--80aaksdi3bpu.xn--p1ai/ <a href="https://дайтрафик.рф/" rel="nofollow">https://дайтрафик.рф/</a>
+
+puny_linker = Linker(url_re=build_url_re(tlds=['рф', 'xn--p1ai']))
+print(puny_linker.linkify(html))
+# <a href="https://xn--80aaksdi3bpu.xn--p1ai/" rel="nofollow">https://xn--80aaksdi3bpu.xn--p1ai/</a> <a href="https://дайтрафик.рф/" rel="nofollow">https://дайтрафик.рф/</a>
+
+print('\n' + '-' * 100 + '\n')
+
+only_fish_tld_url_re = build_email_re(tlds=['fish'])
+linker = Linker(email_re=only_fish_tld_url_re, parse_email=True)
+
+print(linker.linkify('does not link email: foo@example.com'))
+# does not link email: foo@example.com
+
+print(linker.linkify('links email foo@example.fish'))
+# links email <a href="mailto:foo@example.fish">foo@example.fish</a>
