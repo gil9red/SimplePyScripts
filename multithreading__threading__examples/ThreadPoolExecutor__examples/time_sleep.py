@@ -9,15 +9,15 @@ __author__ = 'ipetrash'
 
 import concurrent.futures
 import time
+from random import randint
 
 
 MAX_WORKERS = 5
 
 
-# Retrieve a single page and report the URL and contents
 def run(name):
-    print('name:', name)
-    time.sleep(2)
+    print(f'name: {name}')
+    time.sleep(randint(1, 4))
 
 
 executor = concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS)
