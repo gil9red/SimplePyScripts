@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-# SOURCE: https://docs.python.org/dev/library/concurrent.futures.html#threadpoolexecutor-example
+# SOURCE: https://docs.python.org/3/library/concurrent.futures.html#threadpoolexecutor-example
 
 
 import concurrent.futures
