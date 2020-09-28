@@ -28,6 +28,9 @@ def load_url(url, timeout):
         return conn.read()
 
 
+# NOTE: max_workers is optional
+# with concurrent.futures.ThreadPoolExecutor() as executor:
+
 # We can use a with statement to ensure threads are cleaned up promptly
 with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
     # Start the load operations and mark each future with its URL
