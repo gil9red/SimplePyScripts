@@ -10,6 +10,7 @@ __author__ = 'ipetrash'
 import concurrent.futures
 import urllib.request
 
+
 URLS = [
     'http://www.foxnews.com/',
     'http://www.cnn.com/',
