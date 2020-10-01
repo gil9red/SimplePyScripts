@@ -5,7 +5,7 @@ __author__ = 'ipetrash'
 
 
 import json
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 import re
 
 # pip install dpath
@@ -18,18 +18,32 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefo
 PATTERN = re.compile(r'window\["ytInitialData"\] = (\{.+?\});')
 
 
-def search_youtube(text: str) -> List[Tuple[str, str]]:
-    url = f'https://www.youtube.com/results?search_query={text}'
+session = requests.Session()
+session.headers['User-Agent'] = USER_AGENT
+
+
+def get_ytInitialData(url: str) -> Optional[dict]:
+    rs = session.get(url)
+    m = PATTERN.search(rs.text)
+    if not m:
+        return
+
+    data_str = m.group(1)
+    return json.loads(data_str)
+
+
+def search_youtube(text_or_url: str) -> List[Tuple[str, str]]:
+    if text_or_url.startswith('http'):
+        url = text_or_url
+    else:
+        text = text_or_url
+        url = f'https://www.youtube.com/results?search_query={text}'
 
     items = []
 
-    rs = requests.get(url, headers={'User-Agent': USER_AGENT})
-    m = PATTERN.search(rs.text)
-    if not m:
+    data = get_ytInitialData(url)
+    if not data:
         return items
-
-    data_str = m.group(1)
-    data = json.loads(data_str)
 
     result = dpath.util.values(data, '**/videoRenderer')
     for video in result:
