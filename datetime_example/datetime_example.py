@@ -5,16 +5,17 @@ __author__ = 'ipetrash'
 # https://docs.python.org/3.4/library/datetime.html
 # http://pythonworld.ru/moduli/modul-datetime.html
 
+
 from datetime import date
 
 
 if __name__ == '__main__':
-    # dates are easily constructed and formatted
+    # Dates are easily constructed and formatted
     now = date.today()
     print(now)
     print(now.strftime("%m-%d-%y. %d %b %Y is a %A on the %d day of %B."))
 
-    # dates support calendar arithmetic
+    # Dates support calendar arithmetic
     birthday = date(1964, 7, 31)
     age = now - birthday
     print(age.days)
