@@ -25,10 +25,8 @@ make_backslashreplace_console()
 
 
 def my_get_video_list():
-    text = 'История серии Diablo'
-    url = 'https://www.youtube.com/user/StopGameRu/search?query=' + text
-
-    return get_video_list(url, filter_func=lambda name: text.lower() in name.lower())
+    url = 'https://www.youtube.com/playlist?list=PLZfhqd1-Hl3DtfKRjleAWB-zYJ-pj7apK'
+    return get_video_list(url)
 
 
 if __name__ == '__main__':

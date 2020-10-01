@@ -45,8 +45,11 @@ def search_youtube(text_or_url: str) -> List[Tuple[str, str]]:
     if not data:
         return items
 
-    result = dpath.util.values(data, '**/videoRenderer')
-    for video in result:
+    videos = dpath.util.values(data, '**/videoRenderer')
+    if not videos:
+        videos = dpath.util.values(data, '**/playlistVideoRenderer')
+
+    for video in videos:
         if 'videoId' not in video:
             continue
 
