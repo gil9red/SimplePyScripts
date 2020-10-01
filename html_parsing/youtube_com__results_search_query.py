@@ -51,7 +51,10 @@ def search_youtube(text_or_url: str) -> List[Tuple[str, str]]:
             continue
 
         url = 'https://www.youtube.com/watch?v=' + video['videoId']
-        title = dpath.util.get(video, 'title/runs/0/text')
+        try:
+            title = dpath.util.get(video, 'title/runs/0/text')
+        except KeyError:
+            title = dpath.util.get(video, 'title/simpleText')
 
         items.append((url, title))
 
