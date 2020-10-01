@@ -1,15 +1,17 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
 
 import os
 import glob
 
 
-from PIL import Image #pip install Pillow
+for file_name in glob.glob("*.txt"):
+    img = file_name.split('.')[0] + ".png"
+    if os.path.isfile(img):
+        continue
 
-for f in glob.glob("*.txt"):
-
-	img = str(f.split('.')[0])+".png"
-	
-	if os.path.isfile(img) == False:
-		print("{0} bad".format(f))
-		os.remove(f)
+    print(f"{file_name} bad")
+    os.remove(file_name)

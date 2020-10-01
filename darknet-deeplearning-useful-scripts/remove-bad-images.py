@@ -1,19 +1,24 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
 
 import os
 import glob
 
-from PIL import Image #pip install Pillow
+# pip install pillow
+from PIL import Image
 
-for f in glob.glob("*.png"):
-    try:   
-        image = Image.open(f)
-        if image.verify() == False:
-            raise ValueError('bad img {0}'.format(f))
+
+for file_name in glob.glob("*.png"):
+    try:
+        image = Image.open(file_name)
+        if not image.verify():
+            raise ValueError(f'bad img {file_name}')
     except:
-        print("{0} looks bad".format(f))
+        print(f"{file_name} looks bad")
         try:
-            os.remove(f)
+            os.remove(file_name)
         except:
-            print("{0} looks unremovable".format(f))
-			
+            print(f"{file_name} looks unremovable")

@@ -1,13 +1,19 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
 
 import os
 import glob
+from os.path import basename
 
-templates = []
 
 print("reading")
-for f in glob.glob("*.png"):
-    templates.append(int(os.path.basename(f).split('.')[0]))
+templates = [
+    int(basename(f).split('.')[0])
+    for f in glob.glob("*.png")
+]
 
 print("sorting")
 templates.sort()
@@ -18,12 +24,10 @@ print("renaming")
 for i in templates:
     try:
         if i != index:
-            os.rename('{0}.txt'.format(i), '{0}.txt'.format(index))
-            os.rename('{0}.png'.format(i), '{0}.png'.format(index))
+            os.rename(f'{i}.txt', f'{index}.txt')
+            os.rename(f'{i}.png', f'{index}.png')
     except OSError as err:
-        print('bad index {0}'.format(i))
+        print(f'bad index {i}')
         raise err
-    index = index + 1
 
-
-	
+    index += 1
