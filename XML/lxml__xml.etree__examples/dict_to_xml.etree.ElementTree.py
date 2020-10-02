@@ -4,23 +4,24 @@
 __author__ = 'ipetrash'
 
 
+import xml.etree.ElementTree as ET
+
+
 items = [
     {"first_name": "Ivan", "last_name": "Ivanov", "city": "Moscow"},
     {"first_name": "Sergey", "last_name": "Sidorov", "city": "Sochi"},
 ]
 
-
-import xml.etree.ElementTree as ET
 root = ET.Element('root')
 
 for i, item in enumerate(items, 1):
-    person = ET.SubElement(root, 'person' + str(i))
-    ET.SubElement(person, 'first_name').text = item['first_name']
-    ET.SubElement(person, 'last_name').text = item['last_name']
-    ET.SubElement(person, 'city').text = item['city']
+    person = ET.SubElement(root, f'person{i}')
+
+    for k, v in item.items():
+        ET.SubElement(person, k).text = v
 
 tree = ET.ElementTree(root)
-tree.write('xmlf.xml')
+tree.write('person.xml')
 # <root>
 #     <person1>
 #         <first_name>Ivan</first_name>
