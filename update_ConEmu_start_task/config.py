@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
+
+import re
+from pathlib import Path
+
+
+DIR = Path(__file__).resolve().parent
+GIST_URL = (DIR / 'GIST_URL.txt').read_text('utf-8')
+
+DIR_GIST_FILES = DIR / 'gists'
+DIR_GIST_FILES.mkdir(parents=True, exist_ok=True)
+
+DIR_LNKS = DIR / 'lnks'
+DIR_LNKS.mkdir(parents=True, exist_ok=True)
+
+FILE_NAME_CONEMU_SETTINGS = DIR / 'conemu_settings.xml'
+
+PATTERN_NAME_TASK = 'My startup python scripts {}'
+RE_PATTERN_CONEMU_TASK = re.compile(r'^{My startup python scripts \d+}$', flags=re.IGNORECASE)
+
+RE_PATTERN_FILE_TASK = re.compile(r'^group(\d+)$')
