@@ -43,16 +43,11 @@ def create_task(tasks_el: ET.Element, name: str, commands: List[str]):
     ET.SubElement(task_el, 'value', name='Flags', type='dword', data='00000004')
     ET.SubElement(task_el, 'value', name='Hotkey', type='dword', data='00000000')
     ET.SubElement(task_el, 'value', name='GuiArgs', type='string', data='')
+    ET.SubElement(task_el, 'value', name='Active', type='long', data='0')
     ET.SubElement(task_el, 'value', name='Count', type='long', data=f'{len(commands)}')
 
-    active_num = 0
     for i, cmd in enumerate(commands, 1):
         ET.SubElement(task_el, 'value', name=f'Cmd{i}', type='string', data=cmd)
-
-        if cmd.startswith('>'):
-            active_num = i
-
-    ET.SubElement(task_el, 'value', name='Active', type='long', data=f'{active_num}')
 
 
 tree = ET.parse(FILE_NAME_CONEMU_SETTINGS)
