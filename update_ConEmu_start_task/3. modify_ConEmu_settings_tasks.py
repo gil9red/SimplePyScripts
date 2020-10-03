@@ -6,7 +6,11 @@ __author__ = 'ipetrash'
 
 import datetime as DT
 import xml.etree.ElementTree as ET
+import sys
 from typing import List
+
+sys.path.append(r'../XML/xml.etree.ElementTree__examples')
+from pretty_print import indent
 
 from config import (
     DIR_GIST_FILES, FILE_NAME_CONEMU_SETTINGS, RE_PATTERN_FILE_TASK,
@@ -76,5 +80,7 @@ for file_name in DIR_GIST_FILES.glob('*'):
 
 # Актуализация счетчика задач
 update_tasks(tasks_el)
+
+indent(root)
 
 tree.write(FILE_NAME_CONEMU_SETTINGS)
