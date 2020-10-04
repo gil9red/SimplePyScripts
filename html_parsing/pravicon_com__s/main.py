@@ -199,7 +199,7 @@ def dump_icon(dir_dump: Path, url: str, title: str = None):
     if not title:
         title = get_plaintext(root.select_one('#content > h1'))
 
-    path_main_image = dir_icon / 'Главное изображение.jpg'
+    path_main_image = dir_icon / f'{secure_filename(title)}.jpg'
     path_info = dir_icon / 'Информация.json'
     path_description = dir_icon / 'Описания иконы.txt'
     path_liturgical_texts = dir_icon / 'Богослужебные тексты.txt'
