@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 import re
 import shutil
 
-from main import DIR_DUMP
+from config import DIR_DUMP
 
 
 DIR_DUMP_IMAGES = DIR_DUMP.parent / 'DUMP_images'

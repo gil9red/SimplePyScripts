@@ -14,13 +14,12 @@ from typing import Optional, Union
 import requests
 from bs4 import BeautifulSoup, Tag
 
+from config import DIR_DUMP
+
 
 URL = 'http://pravicon.com/s'
 TIMEOUT_BETWEEN_REQUESTS = 0.010
 DEBUG = False
-
-DIR_DUMP = Path(__file__).resolve().parent / 'DUMP_pravicon_com__s'
-DIR_DUMP.mkdir(parents=True, exist_ok=True)
 
 SESSION = requests.session()
 SESSION.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0'
