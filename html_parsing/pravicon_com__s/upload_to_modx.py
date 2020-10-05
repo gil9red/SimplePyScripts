@@ -11,7 +11,6 @@ import traceback
 # pip install selenium
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.common.action_chains import ActionChains
 
 from config import DIR_DUMP, URL_MODIX, LOGIN, PASSWORD
 from main import secure_filename
