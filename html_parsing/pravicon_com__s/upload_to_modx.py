@@ -12,7 +12,7 @@ import traceback
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
-from config import DIR_DUMP, URL_MODIX, LOGIN, PASSWORD
+from config import DIR_DUMP, URL_MODIX_BASE, URL_MODIX_CREATE, LOGIN, PASSWORD
 from main import secure_filename
 
 
@@ -23,7 +23,7 @@ driver = webdriver.Firefox(options=options)
 try:
     driver.implicitly_wait(5)
 
-    driver.get(URL_MODIX)
+    driver.get(URL_MODIX_BASE)
     print(f'Title: {driver.title!r}')
 
     driver.find_element_by_id('modx-login-username').send_keys(LOGIN)
@@ -39,7 +39,7 @@ try:
         if path_ignore.exists():
             continue
 
-        driver.get(URL_MODIX)
+        driver.get(URL_MODIX_CREATE)
 
         path_info = path_dir / 'Информация.json'
         data_info = json.loads(path_info.read_text('utf-8'))
