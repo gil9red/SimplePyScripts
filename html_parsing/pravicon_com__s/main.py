@@ -7,6 +7,7 @@ __author__ = 'ipetrash'
 import json
 import re
 import time
+from html import unescape
 from urllib.parse import urljoin
 from pathlib import Path
 from typing import Optional, Union
@@ -48,7 +49,7 @@ def get_plaintext(element: Tag) -> Optional[str]:
             items.append(elem.strip())
         elif elem.name in ['br', 'p']:
             items.append('\n')
-    return ''.join(items).strip()
+    return unescape(''.join(items).strip())
 
 
 def get(url: str, as_html=True) -> Union[BeautifulSoup, requests.Response]:
