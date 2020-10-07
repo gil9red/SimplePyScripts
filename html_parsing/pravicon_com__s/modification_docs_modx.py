@@ -41,19 +41,28 @@ try:
         driver.get(url)
         print(f'Title: {driver.title!r}')
 
+        need_save = False
+
         published_el = driver.find_element_by_id('modx-resource-published')
         if not published_el.get_attribute('checked'):
             published_el.click()
+            need_save = True
 
         # Replaced html entities
         description_el = driver.find_element_by_id('ta')
         description = description_el.get_attribute('value')
+
         new_description = unescape(description)
+        new_description = new_description.replace('"', "'")
+        new_description = new_description.replace('\n', '')
+
         if description != new_description:
             description_el.clear()
             description_el.send_keys(new_description)
+            need_save = True
 
-        driver.find_element_by_id('modx-abtn-save').click()
+        if need_save:
+            driver.find_element_by_id('modx-abtn-save').click()
 
         time.sleep(5)
 
