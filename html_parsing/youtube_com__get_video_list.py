@@ -38,3 +38,9 @@ if __name__ == '__main__':
 
     items = get_video_list(url, filter_func=lambda name: text in name and 'эпизод' in name.lower())
     print(f'Filtered items ({len(items)}): {items}')
+
+    print()
+
+    url = 'https://www.youtube.com/playlist?list=PLZfhqd1-Hl3DtfKRjleAWB-zYJ-pj7apK'
+    items = get_video_list(url)
+    print(f'Items ({len(items)}): {items}')
