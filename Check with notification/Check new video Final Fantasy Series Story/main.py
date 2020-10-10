@@ -37,6 +37,7 @@ if __name__ == '__main__':
         'video',
         my_get_video_list,
         notified_by_sms=True,
+        timeout={'days': 3},
         format_current_items='Текущий список видео (%s): %s',
         format_get_items='Запрос видео',
         format_items='Список видео (%s): %s',
