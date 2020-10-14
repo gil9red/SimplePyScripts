@@ -4,6 +4,15 @@
 __author__ = 'ipetrash'
 
 
+import sys
+
+import requests
+from flask import Flask, jsonify, render_template_string, redirect, request
+
+sys.path.append('..')
+from common import sizeof_fmt
+
+
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/master/print_exif/main.py
 def get_exif_tags(file_object_or_file_name, as_category=True):
     if type(file_object_or_file_name) == str:
@@ -96,17 +105,6 @@ def img_to_base64_html(file_name__or__bytes__or__file_object):
     return 'data:image/{};base64,'.format(img.format.lower()) + img_base64
 
 
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/master/human_byte_size.py
-def sizeof_fmt(num):
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-
-        num /= 1024.0
-
-    return "%3.1f %s" % (num, 'TB')
-
-
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/84651cfefaee768851170ec4ba7d025bbaae622d/get_image_info/main.py#L84
 def get_image_info(file_name__or__bytes__or__bytes_io, pretty_json_str=False):
     data = file_name__or__bytes__or__bytes_io
@@ -155,9 +153,6 @@ def get_image_info(file_name__or__bytes__or__bytes_io, pretty_json_str=False):
     return info
 
 
-import requests
-
-from flask import Flask, jsonify, render_template_string, redirect, request
 app = Flask(__name__)
 
 # http://flask.pocoo.org/docs/0.12/config/#config

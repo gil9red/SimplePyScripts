@@ -4,22 +4,16 @@
 __author__ = 'ipetrash'
 
 
+import sys
+
 from flask import Flask, request, redirect, render_template_string, jsonify
 app = Flask(__name__)
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
-
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/master/human_byte_size.py
-def sizeof_fmt(num):
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-
-        num /= 1024.0
-
-    return "%3.1f %s" % (num, 'TB')
+sys.path.append('..')
+from common import sizeof_fmt
 
 
 @app.route('/')

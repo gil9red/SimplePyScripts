@@ -4,26 +4,20 @@
 __author__ = 'ipetrash'
 
 
-def sizeof_fmt(num):
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
+import os
+import sys
 
-        num /= 1024.0
-
-    return "%3.1f %s" % (num, 'TB')
+sys.path.append('..')
+from common import sizeof_fmt
 
 
 def progress(count, block_size, total_size):
     percent = count * block_size * 100.0 / total_size
-    print("Download: %s/%s(%3.1f%%)" % (sizeof_fmt(count * block_size), sizeof_fmt(total_size), percent) + ' ' * 20,
-          end='\r')
+    print(f"Download: {sizeof_fmt(count * block_size)}/{sizeof_fmt(total_size)}({percent:.1f}%)" + ' ' * 20, end='\r')
 
 
 def create_test_file():
     file_name = 'uploads/bigfile'
-
-    import os
     if os.path.exists(file_name):
         return
 
@@ -31,6 +25,7 @@ def create_test_file():
     with open(file_name, 'wb') as f:
         for i in range(1024 * 1024 * 600):
             f.write(b'0')
+
 
 if __name__ == '__main__':
     create_test_file()
