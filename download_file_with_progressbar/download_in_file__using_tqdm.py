@@ -13,15 +13,7 @@ from tqdm import tqdm
 # pip install requests
 import requests
 
-
-def sizeof_fmt(num):
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-
-        num /= 1024.0
-
-    return "%3.1f %s" % (num, 'TB')
+from utils import sizeof_fmt
 
 
 url = 'https://github.com/gil9red/NotesManager/raw/master/bin.rar'
