@@ -4,19 +4,17 @@
 __author__ = 'ipetrash'
 
 
-import typing
+import os
+import sys
 
+from typing import Optional
+from pathlib import Path
 
-def sizeof_fmt(num, suffix='B'):
-    for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
-        if abs(num) < 1024.0:
-            return "%3.1f%s%s" % (num, unit, suffix)
-        num /= 1024.0
-    return "%.1f%s%s" % (num, 'Yi', suffix)
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+from human_byte_size import sizeof_fmt
 
 
 def get_file_name_from_binary(binary_id: str, binary_content_type: str) -> str:
-    import os
     fmt = os.path.splitext(binary_id)[-1].lower()
 
     # Если формат файла есть, хорошо
@@ -27,11 +25,11 @@ def get_file_name_from_binary(binary_id: str, binary_content_type: str) -> str:
     return binary_id + '.' + {'jpeg': 'jpg', 'png': 'png'}[content_type]
 
 
-def get_attribute_value_by_local_name(node, attr_name: str) -> typing.Optional[str]:
+def get_attribute_value_by_local_name(node, attr_name: str) -> Optional[str]:
     for name, value in node.attrs.items():
         # Получаем имя атрибута
         name = name.split(':')[-1]
         if name == attr_name:
             return value
 
-    return None
+    return
