@@ -7,21 +7,16 @@ __author__ = 'ipetrash'
 import io
 import sys
 
+from pathlib import Path
+
 # pip install tqdm
 from tqdm import tqdm
 
 # pip install requests
 import requests
 
-
-def sizeof_fmt(num):
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-
-        num /= 1024.0
-
-    return "%3.1f %s" % (num, 'TB')
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
+from human_byte_size import sizeof_fmt
 
 
 url = 'https://github.com/gil9red/NotesManager/raw/master/bin.rar'
