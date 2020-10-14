@@ -4,7 +4,10 @@
 __author__ = 'ipetrash'
 
 
-def sizeof_fmt(num):
+from typing import Union
+
+
+def sizeof_fmt(num: Union[int, float]) -> str:
     for x in ['bytes', 'KB', 'MB', 'GB']:
         if num < 1024.0:
             return "%.1f %s" % (num, x)
