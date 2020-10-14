@@ -9,7 +9,7 @@
 import re
 
 
-def tokenize(text, match=re.compile("([idel])|(\d+):|(-?\d+)").match):
+def tokenize(text, match=re.compile(r"([idel])|(\d+):|(-?\d+)").match):
     i = 0
     while i < len(text):
         m = match(text, i)
@@ -50,7 +50,7 @@ def decode(text):
     try:
         src = tokenize(text)
         data = decode_item(src.__next__, next(src))
-        for token in src: # look for more tokens
+        for token in src:  # look for more tokens
             raise SyntaxError("trailing junk")
     except (AttributeError, ValueError, StopIteration):
         raise SyntaxError("syntax error")
