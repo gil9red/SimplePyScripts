@@ -5,6 +5,18 @@
 __author__ = 'ipetrash'
 
 
+import json
+import io
+import sys
+
+from pathlib import Path
+
+from PIL import Image
+
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+from human_byte_size import sizeof_fmt
+
+
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/master/print_exif/main.py
 def get_exif_tags(file_object_or_file_name, as_category=True):
     if type(file_object_or_file_name) == str:
@@ -70,17 +82,6 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
     return tags_by_value
 
 
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/master/human_byte_size.py
-def sizeof_fmt(num):
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-
-        num /= 1024.0
-
-    return "%3.1f %s" % (num, 'TB')
-
-
 def get_image_info(file_name__or__bytes__or__bytes_io, pretty_json_str=False):
     data = file_name__or__bytes__or__bytes_io
     type_data = type(data)
@@ -91,21 +92,19 @@ def get_image_info(file_name__or__bytes__or__bytes_io, pretty_json_str=False):
             data = f.read()
 
     if type(data) == bytes:
-        import io
         data = io.BytesIO(data)
 
     length = len(data.getvalue())
     exif = get_exif_tags(data)
 
-    from PIL import Image
     img = Image.open(data)
 
     # Save order
-    from collections import OrderedDict
-    info = OrderedDict()
-    info['length'] = OrderedDict()
-    info['length']['value'] = length
-    info['length']['text'] = sizeof_fmt(length)
+    info = dict()
+    info['length'] = {
+        'value': length,
+        'text': sizeof_fmt(length),
+    }
 
     info['format'] = img.format
     info['mode'] = img.mode
@@ -115,14 +114,14 @@ def get_image_info(file_name__or__bytes__or__bytes_io, pretty_json_str=False):
         'CMYK': 32, 'YCbCr': 24, 'I': 32, 'F': 32
     }[img.mode]
 
-    info['size'] = OrderedDict()
-    info['size']['width'] = img.width
-    info['size']['height'] = img.height
+    info['size'] = {
+        'width': img.width,
+        'height': img.height,
+    }
 
     info['exif'] = exif
 
     if pretty_json_str:
-        import json
         info = json.dumps(info, indent=4, ensure_ascii=False)
 
     return info
@@ -132,8 +131,6 @@ if __name__ == '__main__':
     file_name = 'exif_this.jpg'
 
     data = open(file_name, 'rb').read()
-
-    import io
     data_io = io.BytesIO(data)
 
     info_1 = get_image_info(file_name)
