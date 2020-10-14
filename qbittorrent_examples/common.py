@@ -4,25 +4,20 @@
 __author__ = 'ipetrash'
 
 
-from typing import List, Dict, Union
-
+import sys
+from typing import List, Dict
+from pathlib import Path
 
 # pip install tabulate
 from tabulate import tabulate
 
 # pip install python-qbittorrent
 from qbittorrent import Client
+
 from config import IP_HOST, USER, PASSWORD
 
-
-def sizeof_fmt(num: Union[int, float]) -> str:
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-
-        num /= 1024.0
-
-    return "%3.1f %s" % (num, 'TB')
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+from human_byte_size import sizeof_fmt
 
 
 def print_table(rows: List[List[str]], headers: List[str], show_index=True):
