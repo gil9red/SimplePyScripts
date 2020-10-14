@@ -5,8 +5,10 @@ __author__ = 'ipetrash'
 
 
 import os
-from os.path import join
 import time
+from os.path import join
+
+from human_byte_size import sizeof_fmt
 
 
 def get_files_info(dir_name):
@@ -15,16 +17,6 @@ def get_files_info(dir_name):
             abs_file_name = join(root, file_name)
 
             yield abs_file_name, os.stat(abs_file_name)
-
-
-def sizeof_fmt(num):
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-
-        num /= 1024.0
-
-    return "%3.1f %s" % (num, 'TB')
 
 
 def get_date_as_string(dt):

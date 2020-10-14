@@ -9,15 +9,7 @@ from os.path import join, getsize
 from timeit import default_timer
 from multiprocessing.dummy import Pool as ThreadPool
 
-
-def sizeof_fmt(num):
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-
-        num /= 1024.0
-
-    return "%3.1f %s" % (num, 'TB')
+from human_byte_size import sizeof_fmt
 
 
 DIRS = [r'C:\DEV__TX', r'C:\DEV__OPTT', r'C:\DEV__RADIX']

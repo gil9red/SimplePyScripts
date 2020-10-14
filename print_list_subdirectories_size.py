@@ -4,18 +4,10 @@
 __author__ = 'ipetrash'
 
 
-def sizeof_fmt(num):
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-
-        num /= 1024.0
-
-    return "%3.1f %s" % (num, 'TB')
-
-
 import os
 from os.path import getsize, join
+
+from human_byte_size import sizeof_fmt
 
 
 # Словарь нужен чтобы помнить размер папки. Когда итератор дойдет до родительской папки
