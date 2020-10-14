@@ -7,11 +7,11 @@ __author__ = 'ipetrash'
 def sizeof_fmt(num):
     for x in ['bytes', 'KB', 'MB', 'GB']:
         if num < 1024.0:
-            return "%3.1f %s" % (num, x)
+            return "%.1f %s" % (num, x)
 
         num /= 1024.0
 
-    return "%3.1f %s" % (num, 'TB')
+    return "%.1f %s" % (num, 'TB')
 
 
 if __name__ == '__main__':
