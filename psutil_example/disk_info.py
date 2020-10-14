@@ -4,18 +4,15 @@
 __author__ = 'ipetrash'
 
 
-def sizeof_fmt(num):
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-
-        num /= 1024.0
-
-    return "%3.1f %s" % (num, 'TB')
-
+import sys
+from pathlib import Path
 
 # pip install psutil
 import psutil
+
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+from human_byte_size import sizeof_fmt
+
 
 print('Disk partitions:')
 for disk in psutil.disk_partitions():

@@ -4,21 +4,16 @@
 __author__ = 'ipetrash'
 
 
+import sys
+from pathlib import Path
+
 from collections import defaultdict
 
 # pip install psutil
 import psutil
 
-
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/9007628099adb5964fdbf827f14cc872ba35f8ad/human_byte_size.py
-def sizeof_fmt(num):
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-
-        num /= 1024.0
-
-    return "%3.1f %s" % (num, 'TB')
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+from human_byte_size import sizeof_fmt
 
 
 column_width = defaultdict(int)
