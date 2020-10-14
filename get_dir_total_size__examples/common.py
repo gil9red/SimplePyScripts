@@ -4,11 +4,12 @@
 __author__ = 'ipetrash'
 
 
-def sizeof_fmt(num):
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
+import sys
+from pathlib import Path
 
-        num /= 1024.0
 
-    return "%3.1f %s" % (num, 'TB')
+DIR = Path(__file__).resolve().parent
+
+sys.path.append(str(DIR.parent))
+
+from human_byte_size import sizeof_fmt
