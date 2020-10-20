@@ -20,6 +20,9 @@ if __name__ == '__main__':
     foo()
 
     def bar():
+        print(caller_name())
+        assert caller_name() == 'bar'
+
         def zoo():
             print(caller_name())
             assert caller_name() == 'zoo'
