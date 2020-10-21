@@ -14,7 +14,7 @@ from typing import Optional
 
 
 def github_io_git_repo_url(github_io_url: str) -> Optional[str]:
-    match = re.search('https?://(.+)\.github\.io/(.+)', github_io_url)
+    match = re.search(r'https?://(.+)\.github\.io/(.+)', github_io_url)
     if match:
         user = match.group(1)
         repo = match.group(2).split('/')[0]
