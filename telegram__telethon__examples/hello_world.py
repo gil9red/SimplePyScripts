@@ -16,7 +16,8 @@ from config import API_ID, API_HASH
 
 with TelegramClient('my', API_ID, API_HASH) as client:
     client.send_message('me', 'Hello, myself!')
-    print(client.download_profile_photo('me'))
+    print('Picture big:', client.download_profile_photo('me'))
+    print('Picture small:', client.download_profile_photo('me', download_big=False))
 
     @client.on(events.NewMessage(pattern='(?i).*Hello'))
     async def handler(event):
