@@ -117,7 +117,7 @@ def append_list_games(games: [(str, DT.date, bool)], notified_by_sms=True):
 
         log.debug(f'Добавляю {name!r} ({is_cracked})')
         sql = "INSERT OR IGNORE INTO Game (name, is_cracked, append_date, release_date) VALUES (?, ?, date('now'), ?)"
-        connect.execute(sql, [name, release_date, is_cracked])
+        connect.execute(sql, [name, is_cracked, release_date])
 
         # Если добавлена уже взломанная игра, указываем дату
         if is_cracked:
