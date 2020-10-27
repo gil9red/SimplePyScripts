@@ -35,5 +35,8 @@ for i in range(0, width // max_width_text):
 
         drawer.text((x, y), text, font=font, fill=color)
 
+    # NOTE: aligned column
+    # next(it)
+
 img.save("output.png")
 img.show()
