@@ -15,8 +15,10 @@ import requests
 
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0'
-PATTERN = re.compile(r'window\["ytInitialData"\] = (\{.+?\});')
-
+PATTERNS = [
+    re.compile(r'window\["ytInitialData"\] = (\{.+?\});'),
+    re.compile(r'var ytInitialData = (\{.+?\});'),
+]
 
 session = requests.Session()
 session.headers['User-Agent'] = USER_AGENT
@@ -24,12 +26,12 @@ session.headers['User-Agent'] = USER_AGENT
 
 def get_ytInitialData(url: str) -> Optional[dict]:
     rs = session.get(url)
-    m = PATTERN.search(rs.text)
-    if not m:
-        return
 
-    data_str = m.group(1)
-    return json.loads(data_str)
+    for pattern in PATTERNS:
+        m = pattern.search(rs.text)
+        if m:
+            data_str = m.group(1)
+            return json.loads(data_str)
 
 
 def search_youtube(text_or_url: str) -> List[Tuple[str, str]]:
