@@ -1,8 +1,6 @@
 ![PyScripts](README_logo.svg)
 
-RU: Набор скриптов Python.
-
-EN: A set of Python scripts.
+Collection of various python script's.
 
 ##
 
