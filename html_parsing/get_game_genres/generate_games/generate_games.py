@@ -70,13 +70,13 @@ if Path(FILE_NAME_GAMES).exists():
 log.info('Loading cache...')
 
 game_by_genres = load(FILE_NAME_GAMES)
-log.info(f'game_by_genres ({len(game_by_genres)}): {game_by_genres}')
+log.info(f'game_by_genres ({len(game_by_genres)})')
 
 new_game_by_genres = Dump.dump()
-log.info(f'new_game_by_genres ({len(new_game_by_genres)}): {new_game_by_genres}')
+log.info(f'new_game_by_genres ({len(new_game_by_genres)})')
 
 genre_translate = load()
-log.info(f'genre_translate ({len(genre_translate)}): {genre_translate}')
+log.info(f'genre_translate ({len(genre_translate)})')
 
 log.info('Finish loading cache.')
 log.info('')
