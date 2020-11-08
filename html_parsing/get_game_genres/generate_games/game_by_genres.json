@@ -4366,5 +4366,729 @@
         "TPS",
         "Third-person",
         "Wargame"
+    ],
+    "Agatha Knife": [
+        "Adventure",
+        "Arcade",
+        "Point-and-click",
+        "Quest"
+    ],
+    "Ancestors: The Humankind Odyssey": [
+        "Action-adventure",
+        "Action/RPG",
+        "Simulation",
+        "Survival",
+        "Third-person"
+    ],
+    "Anna's Quest": [
+        "Adventure",
+        "Point-and-click",
+        "Puzzle",
+        "Quest"
+    ],
+    "BDSM: Big Drunk Satanic Massacre": [
+        "Action-adventure",
+        "Action/RPG",
+        "FPS",
+        "Shoot 'em up",
+        "Shooter"
+    ],
+    "Barn Finders": [
+        "Adventure",
+        "Casual",
+        "Simulation",
+        "Time management"
+    ],
+    "Batman: Arkham VR": [
+        "Action-adventure",
+        "Arcade",
+        "Shooter",
+        "Simulation"
+    ],
+    "Battle Chasers: Nightwar": [
+        "Action/RPG",
+        "JRPG",
+        "Strategy"
+    ],
+    "Battletoads (2020)": [
+        "Action-adventure",
+        "Arcade",
+        "Beat 'em up",
+        "Fighting",
+        "Platform",
+        "Platformer"
+    ],
+    "Borderlands 3": [
+        "Action-adventure",
+        "Action/RPG",
+        "Arcade",
+        "FPS"
+    ],
+    "Borderlands 3: Bounty of Blood (DLC)": [],
+    "Borderlands 3: Guns, Love, and Tentacles (DLC)": [
+        "Action/RPG",
+        "Add-on",
+        "DLC",
+        "Shooter"
+    ],
+    "Borderlands 3: Moxxi's Heist of the Handsome Jackpot (DLC)": [
+        "Action-adventure",
+        "Action/RPG",
+        "Add-on",
+        "DLC",
+        "Shooter"
+    ],
+    "Borderlands 3: Psycho Krieg and the Fantastic Fustercluck (DLC)": [
+        "Action/RPG",
+        "Add-on",
+        "Shooter"
+    ],
+    "Bright Memory": [
+        "Action-adventure",
+        "FPS",
+        "Shooter",
+        "Slasher"
+    ],
+    "Call of Duty: Modern Warfare 2 Campaign Remastered": [
+        "Action",
+        "Arcade",
+        "FPS"
+    ],
+    "Call of Duty: Modern Warfare Remastered": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "Tactic"
+    ],
+    "Carrion": [
+        "2D",
+        "Action-adventure",
+        "Horror",
+        "Platformer"
+    ],
+    "Code Vein": [
+        "Action/RPG"
+    ],
+    "Colt Canyon": [
+        "Action/RPG",
+        "Casual",
+        "Shoot 'em up",
+        "Shooter"
+    ],
+    "Command & Conquer: Renegade": [
+        "Action",
+        "FPS",
+        "TPS"
+    ],
+    "Control: AWE (DLC)": [
+        "Action-adventure",
+        "Add-on",
+        "Shooter"
+    ],
+    "Control: The Foundation (DLC)": [
+        "Action",
+        "Add-on",
+        "Shooter"
+    ],
+    "Crash Bandicoot N. Sane Trilogy": [
+        "Action",
+        "Arcade",
+        "Platform",
+        "Platformer"
+    ],
+    "Creepy Tale": [
+        "Adventure",
+        "Horror",
+        "Platform",
+        "Platformer",
+        "Puzzle"
+    ],
+    "Cuphead": [
+        "2D",
+        "Action",
+        "Arcade",
+        "Platform",
+        "Platformer",
+        "Shoot 'em up"
+    ],
+    "DOOM Eternal": [
+        "Action",
+        "Arcade",
+        "FPS"
+    ],
+    "Dear Esther": [
+        "Adventure",
+        "Casual",
+        "Fantasy",
+        "First-person",
+        "Point-and-click",
+        "Quest"
+    ],
+    "Desire": [
+        "Adventure",
+        "Point-and-click",
+        "Quest"
+    ],
+    "Destroy All Humans!": [
+        "Action-adventure",
+        "Arcade",
+        "Open-World",
+        "Shooter"
+    ],
+    "Diablo": [
+        "Action/RPG",
+        "Hack and slash",
+        "Puzzle"
+    ],
+    "Diablo: Hellfire": [
+        "Action-adventure",
+        "Action/RPG",
+        "Hack and slash"
+    ],
+    "Dishonored 2": [
+        "Action-adventure",
+        "Action/RPG",
+        "FPS",
+        "Stealth"
+    ],
+    "Dishonored: Death of the Outsider": [
+        "Action-adventure",
+        "Action/RPG",
+        "Add-on",
+        "FPS",
+        "Stealth"
+    ],
+    "Doorways: Holy Mountains of Flesh": [
+        "Action-adventure",
+        "First-person",
+        "Horror",
+        "Quest"
+    ],
+    "Doorways: Prelude": [
+        "Action-adventure"
+    ],
+    "Doorways: The Underworld": [
+        "Action-adventure",
+        "First-person",
+        "Horror",
+        "Quest"
+    ],
+    "Earthlock": [
+        "Adventure",
+        "RPG",
+        "Strategy"
+    ],
+    "Fallout 4: Automatron (DLC)": [
+        "Action/RPG",
+        "Add-on",
+        "DLC",
+        "Shooter"
+    ],
+    "Fallout 4: Far Harbor (DLC)": [
+        "Action/RPG",
+        "Add-on",
+        "DLC",
+        "Shooter"
+    ],
+    "Fallout 4: Nuka-World (DLC)": [
+        "Action/RPG",
+        "Add-on",
+        "DLC",
+        "Shooter"
+    ],
+    "Fallout: New Vegas - Dead Money (DLC)": [
+        "Action/RPG",
+        "DLC"
+    ],
+    "Fallout: New Vegas - Honest Hearts (DLC)": [
+        "Action/RPG",
+        "DLC"
+    ],
+    "Fallout: New Vegas - Lonesome Road (DLC)": [
+        "Action/RPG",
+        "DLC"
+    ],
+    "Fallout: New Vegas - Old World Blues (DLC)": [
+        "Action/RPG",
+        "DLC"
+    ],
+    "Forgotten Realms: Demon Stone": [
+        "Action-adventure",
+        "Action/RPG",
+        "Beat 'em up",
+        "Fighting",
+        "Third-person"
+    ],
+    "Gears of War": [
+        "Action-adventure",
+        "Arcade",
+        "Sci-fi",
+        "Shooter",
+        "Survival horror",
+        "TPS",
+        "Third-person"
+    ],
+    "Granny": [
+        "Action-adventure",
+        "Arcade",
+        "Casual",
+        "Survival"
+    ],
+    "Granny: Chapter Two": [
+        "Action-adventure",
+        "Arcade",
+        "Casual",
+        "Survival"
+    ],
+    "Grim Dawn": [
+        "Action-adventure",
+        "Action/RPG",
+        "Hack and slash"
+    ],
+    "Grim Dawn: Ashes of Malmouth (DLC)": [
+        "DLC"
+    ],
+    "Grim Dawn: Forgotten Gods (DLC)": [
+        "Action/RPG",
+        "Add-on",
+        "DLC",
+        "RPG"
+    ],
+    "Grim Tales 9: Threads Of Destiny (Collector's Edition)": [],
+    "Half-Life 2: Lost Coast (MOD)": [],
+    "Half-Life: Alyx": [
+        "Action-adventure",
+        "Arcade",
+        "FPS"
+    ],
+    "House on the Hill": [
+        "Action-adventure",
+        "First-person",
+        "Puzzle"
+    ],
+    "Inmost": [
+        "Action-adventure",
+        "Platformer",
+        "Puzzle"
+    ],
+    "Journey": [
+        "Action-adventure",
+        "Arcade",
+        "Platform",
+        "Platformer",
+        "Puzzle",
+        "Quest"
+    ],
+    "Kane & Lynch: Dead Men": [
+        "Action",
+        "FPS",
+        "Shoot 'em up",
+        "Shooter",
+        "TPS",
+        "Tactic",
+        "Third-person"
+    ],
+    "Lost Planet 2": [
+        "Action-adventure",
+        "Action/RPG",
+        "Arcade",
+        "FPS",
+        "Platformer",
+        "Robot War",
+        "Sci-fi",
+        "Shoot 'em up",
+        "Shooter",
+        "TPS",
+        "Third-person"
+    ],
+    "Lost Planet 3": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "Robot War",
+        "Sci-fi",
+        "Shoot 'em up",
+        "Shooter",
+        "TPS",
+        "Third-person"
+    ],
+    "Lost in Vivo": [
+        "Action",
+        "Arcade",
+        "FPS"
+    ],
+    "MechaNika": [
+        "Adventure",
+        "Point-and-click",
+        "Puzzle",
+        "Quest"
+    ],
+    "Metro Exodus: Sam's Story (DLC)": [
+        "Action",
+        "Add-on",
+        "DLC",
+        "Open-World",
+        "Shooter"
+    ],
+    "Metro Exodus: The Two Colonels (DLC)": [
+        "Action",
+        "Add-on",
+        "DLC",
+        "Open-World",
+        "Shooter"
+    ],
+    "Middle-earth: Shadow of Mordor - Lord of the Hunt (DLC)": [
+        "DLC"
+    ],
+    "Middle-earth: Shadow of Mordor - The Bright Lord (DLC)": [
+        "Action",
+        "Add-on",
+        "DLC",
+        "Open-World"
+    ],
+    "Middle-earth: Shadow of War": [
+        "Action-adventure",
+        "Action/RPG",
+        "Open-World",
+        "Stealth"
+    ],
+    "Middle-earth: Shadow of War - The Blade of Galadriel (DLC)": [
+        "Action/RPG",
+        "Add-on",
+        "DLC",
+        "Open-World",
+        "RPG"
+    ],
+    "Middle-earth: Shadow of War - The Desolation of Mordor (DLC)": [
+        "Action/RPG",
+        "Add-on",
+        "DLC",
+        "Open-World",
+        "RPG"
+    ],
+    "Minecraft Dungeons": [
+        "Action-adventure",
+        "Action/RPG",
+        "Open-World"
+    ],
+    "Mortal Kombat 11": [
+        "Action-adventure",
+        "Fighting"
+    ],
+    "Mortal Kombat 11: Aftermath (DLC)": [
+        "DLC"
+    ],
+    "Neverwinter Nights 2: Mask of the Betrayer (DLC)": [
+        "Adventure",
+        "DLC",
+        "RPG"
+    ],
+    "Neverwinter Nights 2: Mysteries of Westgate (DLC)": [
+        "Adventure",
+        "DLC",
+        "Point-and-click",
+        "RPG"
+    ],
+    "Neverwinter Nights 2: Storm of Zehir (DLC)": [
+        "Adventure",
+        "DLC",
+        "RPG"
+    ],
+    "Of Orcs And Men": [
+        "Action-adventure",
+        "Action/RPG"
+    ],
+    "Ori and the Will of the Wisps": [
+        "2D",
+        "Action-adventure",
+        "Arcade",
+        "Platform",
+        "Platformer",
+        "Puzzle"
+    ],
+    "Outlast 2": [
+        "Action-adventure",
+        "Survival horror"
+    ],
+    "Outlast: Whistleblower (DLC)": [
+        "Action",
+        "Add-on",
+        "DLC"
+    ],
+    "Painkiller: Hell & Damnation": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "Fantasy",
+        "Shoot 'em up"
+    ],
+    "Painkiller: Hell & Damnation - City Critters (DLC)": [
+        "Action",
+        "DLC",
+        "Shooter"
+    ],
+    "Painkiller: Hell & Damnation - Demonic Vacation at the Blood Sea (DLC)": [
+        "DLC"
+    ],
+    "Painkiller: Hell & Damnation - Operation \"Zombie Bunker\" (DLC)": [
+        "Action",
+        "DLC"
+    ],
+    "Painkiller: Hell & Damnation - The Clock Strikes Meat Night (DLC)": [
+        "Action",
+        "DLC"
+    ],
+    "Painkiller: Recurring Evil": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "Fantasy"
+    ],
+    "Painkiller: Redemption": [
+        "Action",
+        "Arcade",
+        "FPS"
+    ],
+    "Painkiller: Resurrection": [
+        "Action",
+        "Action-adventure",
+        "Arcade",
+        "FPS",
+        "Fantasy",
+        "Shoot 'em up"
+    ],
+    "Postal": [
+        "2D",
+        "Action",
+        "Arcade",
+        "Shoot 'em up",
+        "Shooter",
+        "TPS",
+        "Third-person"
+    ],
+    "Postal 2": [
+        "Action-adventure",
+        "Arcade",
+        "FPS",
+        "Shoot 'em up"
+    ],
+    "Postal 2: Apocalypse Weekend (DLC)": [
+        "Action",
+        "DLC",
+        "Shooter"
+    ],
+    "Prince of Persia: The Sands of Time": [
+        "Action-adventure",
+        "Fantasy",
+        "Platformer"
+    ],
+    "Prince of Persia: Warrior Within": [
+        "Action-adventure",
+        "Fantasy"
+    ],
+    "Resident Evil 2 / Biohazard RE:2": [
+        "Action",
+        "Horror"
+    ],
+    "Resident Evil 2 / Biohazard RE:2: The 4th Survivor (DLC)": [],
+    "Resident Evil 2 / Biohazard RE:2: The Ghost Survivors (DLC)": [],
+    "Resident Evil 2 Remake / Biohazard RE:2": [],
+    "Resident Evil 2 Remake / Biohazard RE:2 - The 4th Survivor (DLC)": [],
+    "Resident Evil 2 Remake / Biohazard RE:2 - The Ghost Survivors (DLC)": [],
+    "Resident Evil 3 Remake": [
+        "Action-adventure",
+        "Survival horror"
+    ],
+    "Resident Evil 4 - Ultimate HD Edition": [
+        "Action-adventure",
+        "Shooter",
+        "Survival horror"
+    ],
+    "Rock of Ages 3: Make & Break": [
+        "Action",
+        "Arcade",
+        "RTS",
+        "Racing",
+        "Strategy"
+    ],
+    "RollerCoaster Legends": [
+        "Adventure",
+        "Arcade"
+    ],
+    "S.T.A.L.K.E.R.: Call of Pripyat": [
+        "Action/RPG",
+        "Arcade",
+        "FPS",
+        "Sci-fi",
+        "Shoot 'em up"
+    ],
+    "S.T.A.L.K.E.R.: Clear Sky": [
+        "Action-adventure",
+        "Action/RPG",
+        "Arcade",
+        "FPS",
+        "Sci-fi",
+        "Shoot 'em up",
+        "Survival"
+    ],
+    "Sally Face": [
+        "Adventure",
+        "Horror",
+        "Platformer",
+        "Quest"
+    ],
+    "Sekiro: Shadows Die Twice": [
+        "Action-adventure",
+        "Action/RPG",
+        "Open-World",
+        "Slasher"
+    ],
+    "Serious Sam 3: BFE - Jewel of the Nile (DLC)": [],
+    "Serious Sam 4": [
+        "Action-adventure",
+        "Arcade",
+        "FPS"
+    ],
+    "Sherlock Holmes: Crimes and Punishments": [
+        "Adventure"
+    ],
+    "Sherlock Holmes: The Devil's Daughter": [
+        "Action-adventure",
+        "Open-World",
+        "Quest"
+    ],
+    "Sniper Elite 4": [
+        "Action-adventure",
+        "FPS",
+        "Stealth",
+        "TPS",
+        "Tactic"
+    ],
+    "Star Wars Jedi: Fallen Order": [
+        "Action-adventure",
+        "Quest"
+    ],
+    "Star Wars: Knights of the Old Republic II – The Sith Lords": [
+        "Action-adventure",
+        "Action/RPG",
+        "Third-person"
+    ],
+    "Stela": [
+        "2D",
+        "Action-adventure",
+        "Arcade",
+        "Platform",
+        "Platformer",
+        "Puzzle"
+    ],
+    "Styx: Master of Shadows": [
+        "Action-adventure",
+        "Action/RPG",
+        "Puzzle",
+        "Sci-fi",
+        "Stealth"
+    ],
+    "Sublustrum": [
+        "Adventure",
+        "Quest"
+    ],
+    "Super Cloudbuilt": [
+        "Action-adventure",
+        "Platformer",
+        "Racing"
+    ],
+    "Superhot: Mind Control Delete": [
+        "Action",
+        "FPS",
+        "Tactic"
+    ],
+    "Swords & Souls: Neverseen": [
+        "Action-adventure",
+        "Action/RPG"
+    ],
+    "Terminator Salvation": [
+        "Action",
+        "FPS",
+        "Shoot 'em up",
+        "Shooter",
+        "TPS"
+    ],
+    "The Corridor": [
+        "Adventure",
+        "Puzzle"
+    ],
+    "The Light Remake": [
+        "Adventure",
+        "Simulation"
+    ],
+    "The Outer Worlds": [
+        "Action/RPG",
+        "First-person"
+    ],
+    "The Outer Worlds: Peril on Gorgon (DLC)": [
+        "Action/RPG",
+        "Add-on",
+        "RPG"
+    ],
+    "The Story of Henry Bishop": [
+        "Action-adventure",
+        "Survival"
+    ],
+    "The Unfinished Swan": [
+        "Action-adventure",
+        "First-person",
+        "Puzzle",
+        "Quest"
+    ],
+    "This Is the Police": [
+        "Adventure",
+        "Quest",
+        "RTS",
+        "Simulation",
+        "Strategy",
+        "Tactic",
+        "Time management"
+    ],
+    "Torchlight III": [
+        "Action-adventure",
+        "Action/RPG"
+    ],
+    "Tyranny": [
+        "Action/RPG",
+        "Adventure",
+        "RPG"
+    ],
+    "Vanquish": [
+        "Action",
+        "Arcade",
+        "Robots",
+        "Shooter",
+        "TPS",
+        "Third-person"
+    ],
+    "Violett Remastered": [
+        "Adventure"
+    ],
+    "Wolfenstein: Youngblood": [
+        "Action",
+        "Arcade",
+        "FPS"
+    ],
+    "XCOM: Chimera Squad": [
+        "Strategy",
+        "TBS",
+        "Tactic"
+    ],
+    "Zenith": [
+        "Action-adventure",
+        "Action/RPG",
+        "Strategy"
+    ],
+    "Анабиоз: Сон разума | Cryostasis: Sleep of Reason": [
+        "FPS"
+    ],
+    "Вивисектор: зверь внутри": [
+        "Action",
+        "Shooter"
     ]
 }
