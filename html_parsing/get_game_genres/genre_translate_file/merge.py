@@ -16,6 +16,11 @@ from load import load, FILE_NAME_GENRE_TRANSLATE
 from common_utils import get_logger
 
 
+# Инструкция:
+# Из <genre_translate.json> скопировать в <merge_genre_translate.json> жанры, что еще не
+# определены и в значение указать стандартизированное название жанра
+# При выполнении скрипта значения из <merge_genre_translate.json> обновят <genre_translate.json>
+
 FILE_NAME_MERGE_GENRE_TRANSLATE = str(Path(__file__).parent.resolve() / 'data' / 'merge_genre_translate.json')
 
 DIR = Path(__file__).parent.resolve()
