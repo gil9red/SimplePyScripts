@@ -309,14 +309,20 @@
         "Wargame",
         "Flying"
     ],
-    "On-Rails": null,
-    "Add-on": null,
-    "Entertainment": null,
-    "Isometric": null,
-    "Shoot 'Em Up: Sniper": null,
-    "Combat Game: Space": null,
-    "Паззл": null,
-    "Хоррор": null,
-    "Пошаговые": null,
-    "Space": null
+    "On-Rails": "",
+    "Add-on": "",
+    "Entertainment": "",
+    "Isometric": "Isometric",
+    "Shoot 'Em Up: Sniper": [
+        "Shoot 'em up",
+        "Sniper"
+    ],
+    "Combat Game: Space": [
+        "Wargame",
+        "Space"
+    ],
+    "Паззл": "Puzzle",
+    "Хоррор": "Horror",
+    "Пошаговые": "TBS",
+    "Space": "Space"
 }
