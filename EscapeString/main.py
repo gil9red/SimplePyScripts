@@ -73,6 +73,12 @@ class MainWindow(QWidget):
 
         button_layout.addStretch()
 
+        self.cb_string_literal = QCheckBox('String literal')
+        self.cb_string_literal.setChecked(True)
+        self.cb_string_literal.clicked.connect(self.input_text_changed)
+
+        button_layout.addWidget(self.cb_string_literal)
+
         layout = QVBoxLayout()
         layout.addLayout(button_layout)
 
@@ -153,6 +159,9 @@ class MainWindow(QWidget):
                 new_out_text.append(self.char_by_escape[char])
 
             out_text = ''.join(new_out_text)
+
+            if self.cb_string_literal.isChecked():
+                out_text = f'"{out_text}";'
 
             self.text_edit_output.setPlainText(out_text)
 
