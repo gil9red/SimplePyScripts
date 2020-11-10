@@ -57,7 +57,7 @@ template = jinja2.Template("""\
 """)
 
 html_tab = template.render(
-    dates=dates,
+    dates=sorted(dates),
     result=result,
 )
 print(html_tab)
