@@ -5,6 +5,8 @@ __author__ = 'ipetrash'
 
 
 import datetime
+from collections import defaultdict
+
 import jinja2
 
 
@@ -19,47 +21,43 @@ array1 = [
     [datetime.datetime(2020, 10, 27, 12, 54), 'Саша']
 ]
 
-result = dict()
+result = defaultdict(dict)
+dates = set()
+
 for dt, name in array1:
     date = dt.date()
-    if date not in result:
-        result[date] = dict()
-    result[date][name] = result[date].get(name, 0) + 1
 
-name_by_results = dict()
-for i, (date, name_by_number) in enumerate(result.items()):
-    for name, number in name_by_number.items():
-        if name not in name_by_results:
-            name_by_results[name] = [""] * len(result)
+    if name not in result:
+        result[name] = dict()
 
-        name_by_results[name][i] = number
+    if date not in result[name]:
+        result[name][date] = 0
+
+    result[name][date] += 1
+    dates.add(date)
 
 
 template = jinja2.Template("""\
 <table class="table-2">
   <tr>
     <td>Отчет</td>
-  {% for x in header %}
-    <td>{{ x }}</td>
+  {% for date in dates %}
+    <td>{{ date }}</td>
   {% endfor %}
   </tr>
-  {% for row in rows %}
+  {% for name, date_by_number in result.items() %}
     <tr>
-        {% for x in row %}        
-        <td>{{ x }}</td>
-        {% endfor %}
+        <td>{{ name }}</td>
+      {% for date in dates %}
+        <td>{{ date_by_number.get(date, "") }}</td>
+      {% endfor %}
     </tr>
   {% endfor %}
 </table>
 """)
 
-unique_name = sorted(name_by_results)
-rows = []
-for name in unique_name:
-    rows.append([name] + name_by_results[name])
-
 html_tab = template.render(
-    header=result.keys(),
-    rows=rows,
+    dates=dates,
+    result=result,
 )
 print(html_tab)
