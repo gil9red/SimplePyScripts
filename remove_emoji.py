@@ -4,7 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# pip install emoji
 import emoji
+
 
 text = "😌😌😌🤤😋😇😝🤑😍😚😙😐🤓😴😌🤗🙂😁🤑🤥😔🥺🤯💩😹😸👨‍🦰👨‍🦲👩‍❤‍💋‍👨👐🏻🖖🏻✋🏻🦵🏻Какой прекрасный день!"
 new_text = ''.join(char for char in text if char not in emoji.UNICODE_EMOJI)
