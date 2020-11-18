@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 from config import GIST_URL, DIR_GIST_FILES
 
 
+# Clear directory
 for file_name in DIR_GIST_FILES.glob('*'):
     file_name.unlink()
 
