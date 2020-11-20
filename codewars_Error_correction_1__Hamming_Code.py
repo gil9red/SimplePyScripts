@@ -29,7 +29,7 @@ def chunks(l, n):
 #     --> "000111111000111000000000000111111000000111000111000111111111111000000111"  // concatenated
 def encode(text: str) -> str:
     return ''.join(
-        ''.join(b * 3 for b in f"{ord(c):08b}")
+        ''.join(b * 3 for b in f"{ord(c):08b}")  # Tripled bits
         for c in text
     )
 
@@ -61,7 +61,7 @@ def decode(bits: str) -> str:
     for tripled_bits in chunks(bits, 3):
         sums = sum(map(int, tripled_bits))
 
-        # Example: 110 or 111 -> 1 and 001 -> 0
+        # Example: 110 or 111 -> 1 and 000 -> 0 or 001 -> 0
         bit_items.append('1' if sums == 2 or sums == 3 else '0')
 
     binary = ''.join(bit_items)
