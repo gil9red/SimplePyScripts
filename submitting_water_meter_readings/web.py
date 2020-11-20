@@ -5,60 +5,15 @@ __author__ = 'ipetrash'
 
 
 import cgi
-from http.server import BaseHTTPRequestHandler, HTTPServer, ThreadingHTTPServer, DEFAULT_ERROR_MESSAGE
 import traceback
-import os.path
+from http.server import BaseHTTPRequestHandler, HTTPServer, ThreadingHTTPServer, DEFAULT_ERROR_MESSAGE
 from urllib.parse import urlsplit, parse_qs
 
-# pip install selenium
-from selenium import webdriver
-
 import db
+from utils import open_web_page_mail, run_auto_ping_logon
 
 
 db.init_db()
-
-
-def open_web_page_mail(value_cold: int, value_hot: int) -> (bool, str):
-    # Example: 123 -> 00123
-    value_cold = str(value_cold).zfill(5)
-    value_hot = str(value_hot).zfill(5)
-
-    profile_directory = r'%AppData%\Mozilla\Firefox\Profiles\p75l82q1.for_mail__selenium'
-    profile = webdriver.FirefoxProfile(os.path.expandvars(profile_directory))
-
-    driver = webdriver.Firefox(profile)
-    driver.implicitly_wait(20)  # seconds
-    driver.get('https://e.mail.ru/templates/')
-    print(f'Title: {driver.title!r}')
-
-    items = [item for item in driver.find_elements_by_css_selector('a[href*="/templates/"]') if 'vodomer' in item.text]
-    if not items:
-        text = 'Шаблон с "vodomer" не найден'
-        print(text)
-        return False, text
-
-    items[0].click()
-
-    print(f'Title: {driver.title!r}')
-
-    editor = driver.find_element_by_css_selector('[role="textbox"]')
-    template_text = editor.text
-
-    if 'value_cold' not in template_text and 'value_hot' not in template_text:
-        text = 'В шаблоне не найдены "value_cold" и "value_hot"'
-        print(text)
-        return False, text
-
-    mail_text = template_text \
-        .replace('value_cold', value_cold) \
-        .replace('value_hot', value_hot)
-
-    # Заполнение текста письма
-    editor.clear()
-    editor.send_keys(mail_text)
-
-    return True, ''
 
 
 TITLE = "Отправка показаний водомеров"
@@ -303,6 +258,8 @@ def run(server_class=HTTPServer, handler_class=HttpProcessor, host='127.0.0.1', 
 
 
 if __name__ == '__main__':
+    run_auto_ping_logon()
+
     run(
         server_class=ThreadingHTTPServer,
         host='0.0.0.0', port=10014
