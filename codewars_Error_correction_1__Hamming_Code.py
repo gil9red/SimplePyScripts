@@ -6,6 +6,13 @@ __author__ = 'ipetrash'
 
 # SOURCE: https://www.codewars.com/kata/5ef9ca8b76be6d001d5e1c3e/train/python
 
+
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i: i + n]
+
+
 # Task 1: Encode function
 #
 # Implement the encode function, using the following steps:
@@ -21,14 +28,10 @@ __author__ = 'ipetrash'
 #     --> 000111111000111000000000 000111111000000111000111 000111111111111000000111  // tripled
 #     --> "000111111000111000000000000111111000000111000111000111111111111000000111"  // concatenated
 def encode(text: str) -> str:
-    items = []
-
-    for c in text:
-        bits = bin(ord(c))[2:].zfill(8)
-        tripled_bits = ''.join(x * 3 for x in bits)
-        items.append(tripled_bits)
-
-    return ''.join(items)
+    return ''.join(
+        ''.join(b * 3 for b in f"{ord(c):08b}")
+        for c in text
+    )
 
 
 # Task 2: Decode function:
@@ -55,16 +58,16 @@ def encode(text: str) -> str:
 #     --> "hey"
 def decode(bits: str) -> str:
     bit_items = []
-    for i in range(0, len(bits), 3):
-        tripled_bits = bits[i: i + 3]
+    for tripled_bits in chunks(bits, 3):
         sums = sum(map(int, tripled_bits))
 
         # Example: 110 or 111 -> 1 and 001 -> 0
         bit_items.append('1' if sums == 2 or sums == 3 else '0')
 
+    binary = ''.join(bit_items)
+
     items = []
-    for i in range(0, len(bit_items), 8):
-        byte = ''.join(bit_items[i: i + 8])
+    for byte in chunks(binary, 8):
         items.append(chr(int(byte, 2)))
 
     return ''.join(items)
