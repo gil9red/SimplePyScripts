@@ -104,7 +104,7 @@ def run_auto_ping_logon():
                 continue
 
             # Between 3 - 6 hours
-            time.sleep(random.randint(3 * 60, 6 * 60))
+            time.sleep(random.randint(3 * 3600, 6 * 3600))
 
     thread = Thread(target=run)
     thread.start()
