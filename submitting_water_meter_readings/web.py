@@ -10,7 +10,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer, ThreadingHTTPServer,
 from urllib.parse import urlsplit, parse_qs
 
 import db
-from utils import open_web_page_mail, run_auto_ping_logon
+from utils import open_web_page_mail, run_auto_ping_logon, log
 
 
 db.init_db()
@@ -250,7 +250,7 @@ class HttpProcessor(BaseHTTPRequestHandler):
 
 
 def run(server_class=HTTPServer, handler_class=HttpProcessor, host='127.0.0.1', port=8080):
-    print(f"HTTP server running on http://{'127.0.0.1' if host == '0.0.0.0' else host}:{port}")
+    log.info(f"HTTP server running on http://{'127.0.0.1' if host == '0.0.0.0' else host}:{port}")
     server_address = (host, port)
 
     httpd = server_class(server_address, handler_class)

@@ -14,6 +14,24 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
 
+def get_logger(name=__file__):
+    import logging
+    log = logging.getLogger(name)
+    log.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('[%(asctime)s] %(message)s')
+
+    import sys
+    sh = logging.StreamHandler(stream=sys.stdout)
+    sh.setFormatter(formatter)
+    log.addHandler(sh)
+
+    return log
+
+
+log = get_logger()
+
+
 def get_driver(headless=False) -> webdriver.Firefox:
     if headless:
         options = Options()
@@ -37,24 +55,24 @@ def open_web_page_mail(value_cold: int, value_hot: int) -> (bool, str):
 
     driver = get_driver()
     driver.get('https://e.mail.ru/templates/')
-    print(f'Title: {driver.title!r}')
+    log.info(f'Title: {driver.title!r}')
 
     items = [item for item in driver.find_elements_by_css_selector('a[href*="/templates/"]') if 'vodomer' in item.text]
     if not items:
         text = 'Шаблон с "vodomer" не найден'
-        print(text)
+        log.info(text)
         return False, text
 
     items[0].click()
 
-    print(f'Title: {driver.title!r}')
+    log.info(f'Title: {driver.title!r}')
 
     editor = driver.find_element_by_css_selector('[role="textbox"]')
     template_text = editor.text
 
     if 'value_cold' not in template_text and 'value_hot' not in template_text:
         text = 'В шаблоне не найдены "value_cold" и "value_hot"'
-        print(text)
+        log.info(text)
         return False, text
 
     mail_text = template_text \
@@ -76,12 +94,12 @@ def run_auto_ping_logon():
             try:
                 driver = get_driver(headless=True)
                 driver.get('https://e.mail.ru/inbox/')
-                print(f'[{prefix}] Title: {driver.title!r}')
+                log.info(f'[{prefix}] Title: {driver.title!r}')
 
                 driver.quit()
 
             except Exception as e:
-                print(f'[{prefix}] Error: {e}')
+                log.info(f'[{prefix}] Error: {e}')
                 time.sleep(60)
                 continue
 
