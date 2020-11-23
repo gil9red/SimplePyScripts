@@ -9,12 +9,13 @@ import threading
 import time
 import subprocess
 import sys
+import os.path
 from pathlib import Path
 
 import pyautogui
 pyautogui.FAILSAFE = False
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 app = Flask(__name__)
 
 import logging
@@ -182,6 +183,14 @@ def on_full_black_screen():
     full_black_screen()
 
     return jsonify({'text': 'ok'})
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(
+        os.path.join(app.root_path, 'static/icons'),
+        'favicon.png'
+    )
 
 
 if __name__ == "__main__":
