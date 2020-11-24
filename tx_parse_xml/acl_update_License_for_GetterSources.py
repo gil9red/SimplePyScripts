@@ -37,19 +37,6 @@ TEMPLATE = """
             </xsc:Item>
             <xsc:Item>
               <xsc:Java>
-    } catch (java.lang.Exception e) {
-        </xsc:Java>
-            </xsc:Item>
-            <xsc:Item>
-              <xsc:IdReference Path="{acl_id} mth2RFXBXTZBJDNXOF7NNNNX4GO3Y" Invoke="true">
-                <xsc:Presentation>handleErrorWithReadLicense</xsc:Presentation>
-              </xsc:IdReference>
-            </xsc:Item>
-            <xsc:Item>
-              <xsc:Java>(e);
-    }
-    
-    try {
         </xsc:Java>
             </xsc:Item>
             <xsc:Item>
@@ -57,11 +44,13 @@ TEMPLATE = """
             </xsc:Item>
             <xsc:Item>
               <xsc:Java>
+        
         </xsc:Java>
             </xsc:Item>
             {TEMPLATE_THIS_PROP}
             <xsc:Item>
               <xsc:Java> = true;
+        
     } catch (java.lang.Exception e) {
         </xsc:Java>
             </xsc:Item>
