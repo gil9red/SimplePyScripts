@@ -64,9 +64,9 @@ if __name__ == '__main__':
     PORT = 12001
     print(f'http://{HOST}:{PORT}')
 
+    app.debug = True
     socketio.run(
         app,
-        debug=True,
         host=HOST,
         port=PORT,
     )
