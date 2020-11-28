@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 import datetime as DT
+import logging
 import threading
 import time
 import subprocess
@@ -13,16 +14,26 @@ import os.path
 from pathlib import Path
 
 import pyautogui
-pyautogui.FAILSAFE = False
 
 from flask import Flask, render_template, request, jsonify, send_from_directory
-app = Flask(__name__)
+from flask_socketio import SocketIO
+from engineio.payload import Payload
 
-import logging
-logging.basicConfig(level=logging.DEBUG)
+Payload.max_decode_packets = 1000
 
+# Set this variable to "threading", "eventlet" or "gevent" to test the
+# different async modes, or leave it set to None for the application to choose
+# the best option based on installed packages.
+async_mode = None
 
 DIR = Path(__file__).resolve().parent
+
+
+pyautogui.FAILSAFE = False
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(app, async_mode=async_mode)
 
 
 def show_cursor_as_target():
@@ -43,6 +54,18 @@ DATA = {
 }
 
 
+def send_about_timer(secs, duration):
+    if duration is None:
+        duration = 0
+
+    socketio.emit(
+        'about_timer',
+        {'value': secs, 'duration': duration},
+        namespace='/test'
+    )
+    # print(f'get_timer -> {secs} / {duration}')
+
+
 def timer():
     while True:
         try:
@@ -53,6 +76,16 @@ def timer():
                 print('Timer activate! Press "space"')
                 pyautogui.typewrite(['space'])
                 DATA["END_TIME"] = None
+                continue
+
+            now = DT.datetime.now()
+            end_time = DATA["END_TIME"]
+
+            secs = 0
+            if end_time and end_time > now:
+                secs = int((end_time - now).total_seconds())
+
+            send_about_timer(secs, DATA["DURATION"])
 
         finally:
             time.sleep(1)
@@ -82,26 +115,10 @@ def set_timer():
         DATA["END_TIME"] = None
         DATA["DURATION"] = None
 
+    # Понадобится, например, при отмене таймера
+    send_about_timer(secs, DATA["DURATION"])
+
     return jsonify({'text': 'ok'})
-
-
-@app.route("/get_timer", methods=['POST'])
-def get_timer():
-    # print('get_timer')
-
-    now = DT.datetime.now()
-    end_time = DATA["END_TIME"]
-    
-    secs = 0
-    if end_time and end_time > now:
-        secs = int((end_time - now).total_seconds())
-
-    duration = DATA["DURATION"]
-    if duration is None:
-        duration = 0
-
-    print(f'get_timer -> {secs} / {duration}')
-    return jsonify({'value': secs, 'duration': duration})
 
 
 @app.route("/key_click", methods=['POST'])
@@ -194,8 +211,17 @@ def favicon():
 
 
 if __name__ == "__main__":
-    app.debug = True
-    app.run(
-        host='0.0.0.0',
-        port=9999
+    HOST = '0.0.0.0'
+    PORT = 9999
+
+    # app.debug = True
+    if app.debug:
+        logging.basicConfig(level=logging.DEBUG)
+
+    print(f'HTTP server running on http://{HOST}:{PORT}')
+
+    socketio.run(
+        app,
+        host=HOST,
+        port=PORT
     )

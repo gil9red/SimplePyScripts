@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap4-toggle-v3.5.0/bootstrap4-toggle.css') }}">
 
     <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/socket.io.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap-4.4.1/bootstrap.bundle.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap4-toggle-v3.5.0/bootstrap4-toggle.js') }}"></script>
     <script src="{{ url_for('static', filename='nipplejs/nipplejs.js') }}"></script>
@@ -131,27 +132,41 @@
                     send_ajax("/set_timer", {value: 0});
                 });
 
-                let timeoutFunc = () => {
-                    send_ajax("/get_timer", null, (url, data, response) => {
-                        let timer = response.value;
-                        setActiveTimerStates(timer > 0);
+                // Use a "/test" namespace.
+                // An application can open a connection on multiple namespaces, and
+                // Socket.IO will multiplex all those connections on a single
+                // physical channel. If you don't care about multiple channels, you
+                // can set the namespace to an empty string.
+                namespace = '/test';
 
-                        if (timer <= 0) {
-                            return;
-                        }
+                // Connect to the Socket.IO server.
+                // The connection URL has the following format, relative to the current page:
+                //     http[s]://<domain>:<port>[/<namespace>]
+                var socket = io(namespace);
 
+                // Event handler for server sent data.
+                // The callback function is invoked whenever the server emits data
+                // to the client. The data is then displayed in the "Received"
+                // section of the page.
+                socket.on('about_timer', function(msg, cb) {
+                    console.log("about_timer", msg);
+
+                    let timer = msg.value;
+                    setActiveTimerStates(timer > 0);
+
+                    if (timer > 0) {
                         let minutes = parseInt(timer / 60);
                         minutes = minutes < 10 ? "0" + minutes : minutes;
 
                         let seconds = parseInt(timer % 60);
                         seconds = seconds < 10 ? "0" + seconds : seconds;
 
-                        setProgressModel(Math.round(timer / response.duration * 100), minutes + ":" + seconds);
-                    });
-                };
+                        setProgressModel(Math.round(timer / msg.duration * 100), minutes + ":" + seconds);
+                    }
 
-                timeoutFunc();
-                window.timerId = setInterval(timeoutFunc, 1000);
+                    if (cb)
+                        cb();
+                });
             });
         </script>
 
