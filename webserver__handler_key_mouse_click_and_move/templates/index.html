@@ -4,8 +4,13 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- For android -->
-    <link type="image/png" sizes="192x192" rel="icon" href="{{ url_for('static', filename='icons/favicon.png') }}">
+    <title>Веб-пульт</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='icons/favicon.ico') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icons/favicon/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='icons/favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='icons/favicon/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='icons/favicon/site.webmanifest') }}">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-4.4.1/bootstrap.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap4-toggle-v3.5.0/bootstrap4-toggle.css') }}">
