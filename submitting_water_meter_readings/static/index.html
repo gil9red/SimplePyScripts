@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+
+    <link rel="shortcut icon" type="image/x-icon" href="static/favicon/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="static/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/favicon/favicon-16x16.png">
+    <link rel="manifest" href="static/favicon/site.webmanifest">
+
+    <title>{{ title }}</title>
+
+    <style type="text/css">
+    {{ HTML_CSS }}
+    </style>
+</head>
+<body>
+    <div>
+        <h3 align="center">{{ title }}</h3>
+
+        <form method="post">
+            <fieldset>
+                <legend>Данные по воде:</legend>
+                <div>
+                    <label>Холодная:
+                    <input type="number" min="0" max="99999" name="value_cold" id="value_cold" required>
+                    </label>
+                </div>
+                <div>
+                    <label>Горячая:
+                    <input type="number" min="0" max="99999" name="value_hot" id="value_hot" required>
+                    </label>
+                </div>
+                <div>
+                    <button>Отправить</button>
+                </div>
+            </fieldset>
+        </form>
+
+        <br><hr><br>
+
+        <table class="frame">
+            <colgroup>
+                <col span="1">
+            </colgroup>
+            <tbody>
+                <tr>
+                    {{ headers }}
+                </tr>
+                {{ table_rows }}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

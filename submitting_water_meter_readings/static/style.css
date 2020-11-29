@@ -1,0 +1,30 @@
+table {
+    border-collapse: collapse; /* Убираем двойные линии между ячейками */
+    width: 100%;
+}
+    .frame th {
+        font-size: 110%;
+    }
+    .frame td, .frame th {
+        border: 1px double #333; /* Рамка таблицы */
+        padding: 5px;
+    }
+
+form label {
+    clear: both;
+}
+form input {
+    width: 100%;
+    margin-bottom: 10px;
+}
+form button {
+    width: 100%;
+}
+
+.error_message {
+    font-size: 120%;
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    padding: 6px;
+}

@@ -7,7 +7,9 @@ __author__ = 'ipetrash'
 import cgi
 import traceback
 from http.server import BaseHTTPRequestHandler, HTTPServer, ThreadingHTTPServer, DEFAULT_ERROR_MESSAGE
-from urllib.parse import urlsplit, parse_qs
+from urllib.parse import urlsplit, urlparse, parse_qs
+from os.path import splitext
+from pathlib import Path
 
 import db
 from utils import open_web_page_mail, run_auto_ping_logon, log
@@ -16,133 +18,45 @@ from utils import open_web_page_mail, run_auto_ping_logon, log
 db.init_db()
 
 
+DIR = Path(__file__).parent
+PATH_STATIC = DIR / 'static'
+
+MIME_BY_CONTENTYPE = {
+    '.png': 'image/png',
+    '.ico': 'image/x-icon',
+    '.webmanifest': 'application/manifest+json',
+}
+
+ALLOW_LIST = [
+    '/static/favicon/android-chrome-192x192.png',
+    '/static/favicon/android-chrome-512x512.png',
+    '/static/favicon/apple-touch-icon.png',
+    '/static/favicon/favicon.ico',
+    '/static/favicon/favicon-16x16.png',
+    '/static/favicon/favicon-32x32.png',
+    '/static/favicon/site.webmanifest',
+]
+
 TITLE = "Отправка показаний водомеров"
 HEADERS = ["#", "Дата", "Холодная", "Горячая"]
 
-HTML_CSS = """\
-    <style type="text/css">
-        table {
-            border-collapse: collapse; /* Убираем двойные линии между ячейками */
-            width: 100%;
-        }
-            .frame th {
-                font-size: 110%;
-            }
-            .frame td, .frame th {
-                border: 1px double #333; /* Рамка таблицы */
-                padding: 5px;
-            }
+HTML_CSS = (PATH_STATIC / 'style.css').read_text('utf-8')
 
-        form label {
-            clear: both;
-        }
-        form input {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        form button {
-            width: 100%;
-        }
-        
-        .error_message {
-            font-size: 120%;
-            color: red;
-            font-weight: bold;
-            text-align: center;
-            padding: 6px;
-        }
-    </style>
-"""
-HTML_TEMPLATE_INDEX = """\
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
-    <title>{{ title }}</title>
-    {{ HTML_CSS }}
-</head>
-<body>
-    <div>
-        <h3 align="center">{{ title }}</h3>
-
-        <form method="post">
-            <fieldset>
-                <legend>Данные по воде:</legend>
-                <div>
-                    <label>Холодная:
-                    <input type="number" min="0" max="99999" name="value_cold" id="value_cold" required>
-                    </label>
-                </div>
-                <div>
-                    <label>Горячая:
-                    <input type="number" min="0" max="99999" name="value_hot" id="value_hot" required>
-                    </label>
-                </div>
-                <div>
-                    <button>Отправить</button>
-                </div>
-            </fieldset>
-        </form>
-
-        <br><hr><br>
-        
-        <table class="frame">
-            <colgroup>
-                <col span="1">
-            </colgroup>
-            <tbody>
-                <tr>
-                    {{ headers }}
-                </tr>
-                {{ table_rows }}
-            </tbody>
-        </table>
-    </div>
-</body>
-</html>
-""".replace('{{ HTML_CSS }}', HTML_CSS).replace('{{ title }}', TITLE)\
+HTML_TEMPLATE_INDEX = (PATH_STATIC / 'index.html').read_text('utf-8')\
+    .replace('{{ HTML_CSS }}', HTML_CSS)\
+    .replace('{{ title }}', TITLE)\
     .replace('{{ headers }}', ''.join(f'<th>{x}</th>' for x in HEADERS)) \
 
-HTML_TEMPLATE_SEND_AGAIN = """\
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
-    <title>{{ title }}</title>
-    {{ HTML_CSS }}
-</head>
-<body>
-    <div>
-        <h3 align="center">{{ title }}</h3>
-        <div class="error_message">{{ error_message }}</div>
+HTML_TEMPLATE_SEND_AGAIN = (PATH_STATIC / 'send_again.html').read_text('utf-8')\
+    .replace('{{ HTML_CSS }}', HTML_CSS)\
+    .replace('{{ title }}', TITLE)
 
-        <form method="post">
-            <fieldset>
-                <legend>Данные по воде:</legend>
-                <div>
-                    <label>Холодная:
-                    <input type="number" min="0" max="99999" name="value_cold" id="value_cold" value="{{ value_cold }}" required>
-                    </label>
-                </div>
-                <div>
-                    <label>Горячая:
-                    <input type="number" min="0" max="99999" name="value_hot" id="value_hot" value="{{ value_hot }}" required>
-                    </label>
-                </div>
-                <input id="forced" name="forced" type="hidden" value="">
-                <div>
-                    <button style="font-size: 130%; font-weight: bold">Все равно отправить?</button>
-                    <div style="height: 10px"></div>
-                    <button type="button" onclick="window.location.href='/'">Вернуться на главную страницу</button>
-                </div>
-            </fieldset>
-        </form>
-    </div>
-</body>
-</html>
-""".replace('{{ HTML_CSS }}', HTML_CSS).replace('{{ title }}', TITLE)
+
+def get_ext(url: str) -> str:
+    """Return the filename extension from url, or ''."""
+    parsed = urlparse(url)
+    root, ext = splitext(parsed.path)
+    return ext  # or ext[1:] if you don't want the leading '.'
 
 
 class HttpProcessor(BaseHTTPRequestHandler):
@@ -167,9 +81,24 @@ class HttpProcessor(BaseHTTPRequestHandler):
     def do_GET(self):
         o = urlsplit(self.path)
 
-        # Only index
-        if o.path != '/':
+        # Only index and ALLOW_LIST
+        if o.path != '/' and o.path not in ALLOW_LIST:
             self.send_error(404)
+            return
+
+        if o.path in ALLOW_LIST:
+            print('[o.path]', o.path)
+            ext = get_ext(o.path)
+
+            f = DIR / o.path.lstrip('/')
+            data = f.read_bytes()
+
+            self.send_response(200)
+            self.send_header('Content-Type', MIME_BY_CONTENTYPE[ext])
+            self.send_header('Content-length', len(data))
+            self.end_headers()
+
+            self.wfile.write(data)
             return
 
         table_rows = []
