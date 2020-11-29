@@ -218,7 +218,7 @@ if __name__ == "__main__":
     if app.debug:
         logging.basicConfig(level=logging.DEBUG)
 
-    print(f'HTTP server running on http://{HOST}:{PORT}')
+    print(f'HTTP server running on http://{"127.0.0.1" if HOST == "0.0.0.0" else HOST}:{PORT}')
 
     socketio.run(
         app,
