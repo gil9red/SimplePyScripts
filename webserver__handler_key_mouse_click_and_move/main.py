@@ -36,6 +36,22 @@ app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, async_mode=async_mode)
 
 
+def get_logger(name=__file__):
+    log = logging.getLogger(name)
+    log.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('[%(asctime)s] %(message)s')
+
+    sh = logging.StreamHandler(stream=sys.stdout)
+    sh.setFormatter(formatter)
+    log.addHandler(sh)
+
+    return log
+
+
+log = get_logger()
+
+
 def show_cursor_as_target():
     # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/5e42dead5a522e1c128fb2fc611cca8a06986b4b/qt__pyqt__pyside__pyqode/show_target_icon__behind_cursor/main.py
     script_file_name = str(DIR.parent / 'qt__pyqt__pyside__pyqode/show_target_icon__behind_cursor\main.py')
@@ -63,7 +79,21 @@ def send_about_timer(secs, duration):
         {'value': secs, 'duration': duration},
         namespace='/test'
     )
-    # print(f'get_timer -> {secs} / {duration}')
+    # log.info(f'get_timer -> {secs} / {duration}')
+
+
+def get_secs() -> int:
+    if not DATA["END_TIME"]:
+        return 0
+
+    now = DT.datetime.now()
+    end_time = DATA["END_TIME"]
+
+    secs = 0
+    if end_time and end_time > now:
+        secs = int((end_time - now).total_seconds())
+
+    return secs
 
 
 def timer():
@@ -73,19 +103,12 @@ def timer():
                 continue
 
             if DT.datetime.now() >= DATA["END_TIME"]:
-                print('Timer activate! Press "space"')
+                log.info('Timer activate! Press "space"')
                 pyautogui.typewrite(['space'])
                 DATA["END_TIME"] = None
                 continue
 
-            now = DT.datetime.now()
-            end_time = DATA["END_TIME"]
-
-            secs = 0
-            if end_time and end_time > now:
-                secs = int((end_time - now).total_seconds())
-
-            send_about_timer(secs, DATA["DURATION"])
+            send_about_timer(get_secs(), DATA["DURATION"])
 
         finally:
             time.sleep(1)
@@ -102,10 +125,10 @@ def index():
 
 @app.route("/set_timer", methods=['POST'])
 def set_timer():
-    print('set_timer')
+    log.info('set_timer')
 
     data = request.get_json()
-    print('data:', data)
+    log.info(f'data: {data}')
 
     secs = int(data['value']) if data['value'] else 0
     if secs:
@@ -121,12 +144,20 @@ def set_timer():
     return jsonify({'text': 'ok'})
 
 
+@socketio.on('connect')
+def on_connect():
+    user_agent = request.headers.get('User-Agent')
+
+    log.info(f'on_connect: {user_agent}')
+    send_about_timer(get_secs(), DATA["DURATION"])
+
+
 @app.route("/key_click", methods=['POST'])
 def key_click():
-    print('key_click')
+    log.info('key_click')
 
     data = request.get_json()
-    print('data:', data)
+    log.info(f'data: {data}')
 
     key = data['key']
     pyautogui.typewrite([key])
@@ -136,17 +167,17 @@ def key_click():
 
 @app.route("/mouse_click", methods=['POST'])
 def mouse_click():
-    print('mouse_click')
+    log.info('mouse_click')
 
     data = request.get_json()
-    print('data:', data)
+    log.info(f'data: {data}')
 
     possible_values = ('left', 'right')
 
     button = data.get('button')
     if button not in possible_values:
         text = f'Unsupported mouse button: {button}. Possible values: {", ".join(possible_values)}'
-        print(text)
+        log.info(text)
         return jsonify({'text': text})
 
     pyautogui.click(button=button)
@@ -156,10 +187,10 @@ def mouse_click():
 
 @app.route("/mouse_move", methods=['POST'])
 def mouse_move():
-    print('mouse_move')
+    log.info('mouse_move')
 
     data = request.get_json()
-    print('data:', data)
+    log.info(f'data: {data}')
 
     relative_x = data['relative_x']
     relative_y = data['relative_y']
@@ -171,10 +202,10 @@ def mouse_move():
 
 @app.route("/scroll", methods=['POST'])
 def scroll():
-    print('scroll')
+    log.info('scroll')
 
     data = request.get_json()
-    print('data:', data)
+    log.info(f'data: {data}')
 
     down = data['down']
 
@@ -186,7 +217,7 @@ def scroll():
 
 @app.route("/show_cursor_as_target", methods=['POST'])
 def on_show_cursor_as_target():
-    print('show_cursor_as_target')
+    log.info('show_cursor_as_target')
 
     show_cursor_as_target()
 
@@ -195,7 +226,7 @@ def on_show_cursor_as_target():
 
 @app.route("/full_black_screen", methods=['POST'])
 def on_full_black_screen():
-    print('full_black_screen')
+    log.info('full_black_screen')
 
     full_black_screen()
 
@@ -214,11 +245,14 @@ if __name__ == "__main__":
     HOST = '0.0.0.0'
     PORT = 9999
 
+    # TODO: вебсокеты почему то не работают при app.debug = True
     # app.debug = True
-    if app.debug:
-        logging.basicConfig(level=logging.DEBUG)
+    # if app.debug:
+    #     logging.basicConfig(level=logging.DEBUG)
 
-    print(f'HTTP server running on http://{"127.0.0.1" if HOST == "0.0.0.0" else HOST}:{PORT}')
+    # logging.basicConfig(level=logging.DEBUG)
+
+    log.info(f'HTTP server running on http://{"127.0.0.1" if HOST == "0.0.0.0" else HOST}:{PORT}')
 
     socketio.run(
         app,
