@@ -77,7 +77,7 @@ def send_about_timer(secs, duration):
     socketio.emit(
         'about_timer',
         {'value': secs, 'duration': duration},
-        namespace='/test'
+        broadcast=True,
     )
     # log.info(f'get_timer -> {secs} / {duration}')
 
@@ -148,8 +148,11 @@ def set_timer():
 def on_connect():
     user_agent = request.headers.get('User-Agent')
 
-    log.info(f'on_connect: {user_agent}')
-    send_about_timer(get_secs(), DATA["DURATION"])
+    secs = get_secs()
+    duration = DATA["DURATION"]
+
+    log.info(f'on_connect: {user_agent}\n    secs: {secs}, duration: {duration}')
+    send_about_timer(secs, duration)
 
 
 @app.route("/key_click", methods=['POST'])
