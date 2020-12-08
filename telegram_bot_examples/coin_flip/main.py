@@ -69,8 +69,8 @@ def on_callback_coin_flip(update: Update, context: CallbackContext):
     query.answer()
 
     reply_markup = InlineKeyboardMarkup.from_row([
-        InlineKeyboardButton('Повторить', callback_data=fill_string_pattern(PATTERN_COIN_FLIP)),
-        InlineKeyboardButton('Убрать', callback_data=fill_string_pattern(PATTERN_HIDE_COIN_FLIP)),
+        InlineKeyboardButton('🔁 Повторить', callback_data=fill_string_pattern(PATTERN_COIN_FLIP)),
+        InlineKeyboardButton('❌ Убрать', callback_data=fill_string_pattern(PATTERN_HIDE_COIN_FLIP)),
     ])
 
     value = random.choice(list(COIN_VARIANTS))
@@ -80,7 +80,7 @@ def on_callback_coin_flip(update: Update, context: CallbackContext):
     if is_new:
         message.reply_photo(
             f,
-            caption=f"Бросок: {value}",
+            caption=f"🍀 Бросок: {value}",
             reply_markup=reply_markup
         )
     else:
