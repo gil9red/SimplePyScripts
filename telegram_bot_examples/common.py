@@ -7,6 +7,7 @@ __author__ = 'ipetrash'
 import functools
 import logging
 import sys
+import re
 from pathlib import Path
 
 from telegram import Update
@@ -86,3 +87,9 @@ def reply_error(log: logging.Logger, update: Update, context: CallbackContext):
     log.exception('Error: %s\nUpdate: %s', context.error, update)
     if update:
         update.effective_message.reply_text(config.ERROR_TEXT)
+
+
+def fill_string_pattern(pattern: re.Pattern, *args) -> str:
+    pattern = pattern.pattern
+    pattern = pattern.strip('^$')
+    return re.sub(r'\(.+?\)', '{}', pattern).format(*args)
