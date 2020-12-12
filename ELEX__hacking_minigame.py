@@ -19,8 +19,6 @@ keys = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 eval_template = 'a == b and (a > c < d)'
 eval_template = 'a > b > c < d'
-eval_template = '6 > b > 1 < d'
-eval_template = 'a < b > c < d'
 eval_template = 'a > b < c > d'
 
 fixed_values = [_, _, _, _]
