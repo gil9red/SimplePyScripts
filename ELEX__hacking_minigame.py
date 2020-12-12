@@ -7,10 +7,10 @@ __author__ = 'ipetrash'
 import random
 
 
-keys = [2, 3, 7, 8]
 keys = [1, 2, 3, 4, 5, 6, 7, 8, 9] * 2
 keys = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 keys = [2, 3, 5, 7] * 2
+keys = [2, 3, 7, 8]
 
 eval_template = 'a == b and (a > c < d)'
 eval_template = 'a > b < c > d'
