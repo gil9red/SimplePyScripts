@@ -25,25 +25,28 @@ from selenium.webdriver.common.by import By
 #
 # OR: driver = webdriver.Firefox(executable_path=r"C:\Program Files\geckodriver\geckodriver.exe")
 driver = webdriver.Firefox()
-driver.get('https://yahoo.com')
-print('Title: "{}"'.format(driver.title))
 
-search_box = driver.find_element_by_id('uh-search-box')
-search_box.send_keys('Hello World!' + Keys.RETURN)
+try:
+    driver.get('https://yahoo.com')
+    print(f'Title: "{driver.title}"')
 
-# Делаем скриншот результата
-driver.save_screenshot('before_search.png')
+    search_box = driver.find_element_by_id('ybar-sbq')
+    search_box.send_keys('Hello World!' + Keys.RETURN)
 
-wait = WebDriverWait(driver, timeout=10)
+    # Делаем скриншот результата
+    driver.save_screenshot('before_search.png')
 
-elem = wait.until(
-    EC.presence_of_element_located((By.ID, 'web'))
-)
-elem.screenshot('search_content.png')
+    wait = WebDriverWait(driver, timeout=10)
 
-print('Title: "{}"'.format(driver.title))
+    elem = wait.until(
+        EC.presence_of_element_located((By.ID, 'web'))
+    )
+    elem.screenshot('search_content.png')
 
-# Делаем скриншот результата
-driver.save_screenshot('after_search.png')
+    print(f'Title: "{driver.title}"')
 
-driver.quit()
+    # Делаем скриншот результата
+    driver.save_screenshot('after_search.png')
+
+finally:
+    driver.quit()
