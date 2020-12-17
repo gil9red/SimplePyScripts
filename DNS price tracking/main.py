@@ -16,6 +16,7 @@ sys.path.append('../html_parsing/www_dns_shop_ru')
 from wait import wait
 from get_price import get_price
 
+from common import get_tracked_products
 from db import Product, db_create_backup
 
 
@@ -30,7 +31,7 @@ while True:
     checked_products.clear()
 
     try:
-        for product_data in json.load(open('tracked_products.json', encoding='utf-8')):
+        for product_data in get_tracked_products():
             if product_data in checked_products:
                 print(f"Duplicate: {repr(product_data['title'])}, url: {product_data['url']}\n")
                 continue
