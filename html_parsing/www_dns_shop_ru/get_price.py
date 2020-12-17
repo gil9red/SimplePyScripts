@@ -4,25 +4,31 @@
 __author__ = 'ipetrash'
 
 
+import re
 from typing import Optional
 
-from bs4 import BeautifulSoup
 import requests
 
 
+session = requests.session()
+session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0'
+
+
 def get_price(url: str) -> Optional[int]:
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0',
-    }
+    rs = session.get(url)
 
-    rs = requests.get(url, headers=headers)
-
-    root = BeautifulSoup(rs.content, 'html.parser')
-    price_value = root.select_one('.current-price-value')
-    if not price_value:
+    m = re.search(r'"price":(\d+)', rs.text)
+    if not m:
+        print('[#] price not found from regex!')
         return
 
-    return int(price_value['data-price-value'])
+    price = int(m.group(1))
+
+    # При отсутствии цены, значением у нее будет 0
+    if price == 0:
+        return
+
+    return price
 
 
 if __name__ == '__main__':
