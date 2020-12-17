@@ -4,13 +4,16 @@
 __author__ = 'ipetrash'
 
 
+import logging
+import os.path
+
+from flask import Flask, render_template, send_from_directory
+
 from common import get_tracked_products
 from db import Product, Price
 
-from flask import Flask, render_template
-app = Flask(__name__)
 
-import logging
+app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -27,6 +30,14 @@ def index():
     ]
     prices = [(p.id, p.date, p.value_dns, p.value_technopoint, p.product_id) for p in Price.select()]
     return render_template('index.html', products=products, prices=prices)
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(
+        os.path.join(app.root_path, 'static/img'),
+        'favicon.png'
+    )
 
 
 if __name__ == '__main__':
