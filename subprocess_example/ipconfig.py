@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 from subprocess import Popen, PIPE
 
-if __name__ == '__main__':
-    ipconfig_res = Popen("ipconfig", universal_newlines=True, stdout=PIPE)
-    for line in ipconfig_res.stdout:
-        print(line, end='')
+
+p = Popen("ipconfig", stdout=PIPE)
+for line in p.stdout:
+    print(line.decode('cp866'), end='')
