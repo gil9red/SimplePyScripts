@@ -435,8 +435,7 @@ $(function () {
                 legend: {
                     onClick: legendClickHandler,
                 }
-            },
-            lineAtIndex: [1,2,3, 4],
+            }
         });
 
         // По умолчанию, цены технопоинта не показывать
