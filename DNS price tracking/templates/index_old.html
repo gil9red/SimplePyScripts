@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DNS price tracking</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='chart_js_2.8.0/Chart.bundle.min.js') }}"></script>
+
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.css') }}">
+    <style>
+        div.middle-div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Increase size bootstrap checkbox */
+        .custom-control-label::before ,.custom-control-label::after {
+            width:25px;
+            height:25px
+        }
+
+        .table-responsive {
+            height: 50vh;
+            overflow: scroll;
+        }
+        thead > tr:nth-child(1) th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-8">
+            <div class="table-responsive">
+                <table id="product" class="table table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th style="display: none;" scope="col">#</th>
+                            <th scope="col" class="col">Title</th>
+                            <th scope="col" class="col-1">DNS</th>
+                            <th scope="col" class="col-1">TP</th>
+                            <th scope="col" style="min-width: 75px;">Link</th>
+                            <th scope="col" class="col-1">Favorite</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for id, title, last_price_dns, last_price_techopoint, url_dns, url_technopoint in products %}
+                        <tr product_id="{{ id }}">
+                            <th style="display: none;" scope="row">{{ id }}</th>
+                            <td class="text-truncate" style="max-width: 300px;" title="{{ title }}">
+                                {{ title }}
+                            </td>
+                            <td class="price dns">{{ last_price_dns }}</td>
+                            <td class="price techopoint">{{ last_price_techopoint }}</td>
+                            <td>
+                                <a href="{{ url_dns }}" target="_blank" title="{{ url_dns }}">
+                                    <img src="{{ url_for('static', filename='img/dns.png') }}" alt="DNS">
+                                </a>
+                                <a href="{{ url_technopoint }}" target="_blank" title="{{ url_technopoint }}">
+                                    <img src="{{ url_for('static', filename='img/technopoint.png') }}" alt="TechnoPoint">
+                                </a>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox text-center big-checkbox">
+                                    <input type="checkbox" class="custom-control-input favorite" id="favorite_{{ id }}">
+                                    <label class="custom-control-label" for="favorite_{{ id }}"></label>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-4 shrink">
+            <div class="table-responsive">
+                <table id="price" class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th style="display: none;" scope="col">#</th>
+                        <th scope="col">Datetime</th>
+                        <th scope="col">DNS</th>
+                        <th scope="col">TP</th>
+                        <th style="display: none;" scope="col">Product ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for id, date, value_dns, value_technopoint, product_id in prices %}
+                     <tr product_id="{{ product_id }}" style="display: none;" value="{{ value }}">
+                        <th style="display: none;" scope="row">{{ id }}</th>
+                        <td class="date" title="{{ date.strftime('%d/%m/%Y %H:%M:%S') }}" date_iso="{{ date.isoformat() }}">{{ date.strftime('%d/%m/%Y') }}</td>
+                        <td class="value dns">{{ value_dns }}</td>
+                        <td class="value technopoint">{{ value_technopoint }}</td>
+                        <td style="display: none;">{{ product_id }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="cb_show_none_price_dns" onclick="set_visible_none_price()">
+                <label class="form-check-label" for="cb_show_none_price_dns">Show <b>none</b> prices DNS</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="cb_show_none_price_technopoint" onclick="set_visible_none_price()">
+                <label class="form-check-label" for="cb_show_none_price_technopoint">Show <b>none</b> prices TechnoPoint</label>
+            </div>
+        </div>
+        <div class="col">
+            <div>
+                <div>
+                    <span>Total DNS favorites prices: </span><span class="total_DNS_favorites_prices"></span>
+                </div>
+                <div>
+                    <span>Total TechnoPoint favorites prices: </span><span class="total_tp_favorites_prices"></span>
+                </div>
+                <div>
+                    <span>Diff: </span><span class="total_diff"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col middle-div">
+            <canvas id="lineChart"></canvas>
+        </div>
+    </div>
+</div>
+
+    <script>
+        function highlight_row(row) {
+            let selectClass = 'table-primary';
+
+            if (row.hasClass(selectClass)) {
+                row.removeClass(selectClass);
+            } else {
+                row.addClass(selectClass).siblings().removeClass(selectClass);
+            }
+        }
+
+        function fill_chart(row) {
+            let labels = [];
+            let data_dns = [];
+            let data_tp = [];
+
+            // Show current product prices
+            let product_id = row.attr('product_id');
+
+            $('#price > tbody > tr').each(function() {
+                let tr = $(this);
+
+                let found = tr.attr('product_id') == product_id;
+                tr.toggle(found);
+
+                let value_str_dns = tr.find('.value.dns').text();
+                let value_str_technopoint = tr.find('.value.technopoint').text();
+
+                // Наличие хотя бы одной из двух цен будет причиной для добавление метки на графике
+                if (found && (value_str_dns != 'None' || value_str_technopoint != 'None')) {
+                    let date_iso = tr.find('.date').attr('date_iso');
+                    labels.push(date_iso);
+
+                    if (value_str_dns != 'None') {
+                        let value_dns = parseInt(value_str_dns);
+                        data_dns.push({
+                            x: date_iso,
+                            y: value_dns
+                        });
+                    }
+
+                    if (value_str_technopoint != 'None') {
+                        let value_technopoint = parseInt(value_str_technopoint);
+                        data_tp.push({
+                            x: date_iso,
+                            y: value_technopoint
+                        });
+                    }
+                }
+            });
+
+            set_visible_none_price();
+
+            // Save state legend to localStorage
+            var legendClickHandler = function(e, legendItem) {
+                // SOURCE: https://www.chartjs.org/docs/latest/configuration/legend.html
+                var index = legendItem.datasetIndex;
+                var ci = this.chart;
+                var meta = ci.getDatasetMeta(index);
+
+                // See controller.isDatasetVisible comment
+                meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
+
+                // We hid a dataset ... rerender the chart
+                ci.update();
+                //
+
+                // Save to localStorage
+                let legend_hidden;
+                if (localStorage.legend_hidden != null) {
+                    legend_hidden = JSON.parse(localStorage.legend_hidden);
+                } else {
+                    legend_hidden = {};
+                }
+                legend_hidden[index] = meta.hidden;
+                localStorage.legend_hidden = JSON.stringify(legend_hidden);
+            };
+
+            var ctx = document.getElementById("lineChart").getContext("2d");
+            var lineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'DNS',
+                            lineTension: 0,
+                            borderColor: "rgb(246, 139, 31)",
+                            data: data_dns,
+                        },
+                        {
+                            label: 'TP',
+                            lineTension: 0,
+                            borderColor: "rgb(68, 44, 110)",
+                            data: data_tp,
+                        },
+                    ],
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                tooltipFormat: 'DD/MM/YYYY HH:mm:ss',
+                                displayFormats: {
+                                   day: 'DD/MM'
+                                }
+                            },
+                            distribution: 'linear'
+                        }]
+                    },
+                    legend: {
+                        onClick: legendClickHandler,
+                    }
+                }
+            });
+
+            // По умолчанию, цены технопоинта не показывать
+            lineChart.data.datasets[1].hidden = true;
+            lineChart.update();
+
+            // Read from localStorage
+            if (localStorage.legend_hidden != null) {
+                let legend_hidden = JSON.parse(localStorage.legend_hidden);
+                for (const [key, value] of Object.entries(legend_hidden)) {
+                    lineChart.data.datasets[key].hidden = value;
+                }
+                lineChart.update();
+            }
+        }
+
+        function set_visible_none_price() {
+            let checked_dns = $('#cb_show_none_price_dns').is(':checked');
+            let checked_technopoint = $('#cb_show_none_price_technopoint').is(':checked')
+
+            // Show current product prices
+            let product_id = $('#product .table-primary').attr('product_id');
+
+            $('#price > tbody > tr').each(function() {
+                let tr = $(this);
+
+                // Показываем те цены, что относятся к товару
+                let found = tr.attr('product_id') == product_id;
+                tr.toggle(found);
+
+                // Настраиваем видимость none-цен для DNS и TechnoPoint
+                // Если цена None и флаг не стоит, то цену прячем
+                if (
+                    (tr.find('.value.dns').text() == 'None' && checked_dns == false)
+                    || (tr.find('.value.technopoint').text() == 'None' && checked_technopoint == false)
+                ) {
+                    tr.toggle(false);
+                }
+            });
+        }
+
+        function counting_price_of_favorites() {
+            let prices_dns = [];
+            let prices_tp = [];
+
+            $('#product > tbody > tr').each(function() {
+                let tr = $(this);
+
+                let favorite = tr.find('.favorite');
+                if (favorite != null && favorite.is(':checked')) {
+                    let price_dns = tr.find('.price.dns').text();
+                    if (price_dns != 'None') {
+                        prices_dns.push(parseInt(price_dns));
+                    }
+
+                    let price_tp = tr.find('.price.techopoint').text();
+                    if (price_tp != 'None') {
+                        prices_tp.push(parseInt(price_tp));
+                    }
+                }
+            });
+
+            // DNS
+            let total_DNS_favorites_prices = $('.total_DNS_favorites_prices');
+            total_DNS_favorites_prices.parent().toggle(prices_dns.length > 0);
+
+            if (prices_dns.length == 1) {
+                total_DNS_favorites_prices.text(prices_dns[0]);
+
+            } else if (prices_dns.length > 1) {
+                total_DNS_favorites_prices.text(
+                    prices_dns.join(' + ') + ' = ' + prices_dns.reduce((a, b) => a + b, 0)
+                );
+            }
+            //
+
+            // TechnoPoint
+            let total_tp_favorites_prices = $('.total_tp_favorites_prices');
+            total_tp_favorites_prices.parent().toggle(prices_tp.length > 0);
+
+            if (prices_tp.length == 1) {
+                total_tp_favorites_prices.text(prices_tp[0]);
+
+            } else if (prices_tp.length > 1) {
+                total_tp_favorites_prices.text(
+                    prices_tp.join(' + ') + ' = ' + prices_tp.reduce((a, b) => a + b, 0)
+                );
+            }
+            //
+
+            // Diff
+            let total_diff = $('.total_diff');
+            total_diff.parent().toggle(prices_dns.length > 0 || prices_tp.length > 0);
+            total_diff.text(prices_dns.reduce((a, b) => a + b, 0) - prices_tp.reduce((a, b) => a + b, 0));
+            //
+        }
+
+        $(document).ready(function() {
+            $('#product > tbody > tr').click(function() {
+                let row = $(this);
+                if (row.hasClass("table-primary")) {
+                    return;
+                }
+
+                // Highlight current row
+                highlight_row(row);
+                fill_chart(row);
+
+                // Save current row
+                localStorage.product_id = row.attr('product_id');
+            });
+
+            $('.custom-control-input.favorite').click(function() {
+                // Save favorite
+                let favorites = [];
+                $('input.favorite:checked').each(function() {
+                    favorites.push($(this).attr('id'))
+                });
+                localStorage.favorites = JSON.stringify(favorites);
+
+                counting_price_of_favorites();
+            });
+
+            // Get last saved row
+            let row;
+            if (localStorage.product_id == null) {
+                row = $('#product tr[product_id]:first');
+            } else {
+                row = $('#product tr[product_id=' + localStorage.product_id + ']');
+            }
+
+            // Checked favorite
+            if (localStorage.favorites != null) {
+                let favorites = JSON.parse(localStorage.favorites);
+                favorites.forEach(value => $('#' + value).prop('checked', true));
+            }
+
+            highlight_row(row);
+            fill_chart(row);
+            counting_price_of_favorites();
+        });
+    </script>
+
+</body>
+</html>

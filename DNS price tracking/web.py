@@ -6,10 +6,11 @@ __author__ = 'ipetrash'
 
 import logging
 import os.path
+from decimal import Decimal
+from typing import Optional
 
 from flask import Flask, render_template, send_from_directory
 
-from common import get_tracked_products
 from db import Product, Price
 
 
@@ -17,18 +18,37 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 
+def get_float(value: Decimal) -> Optional[float]:
+    if value is None:
+        return
+    return float(value)
+
+
 @app.route("/")
 def index():
-    titles = [p['title'] for p in get_tracked_products() if p.get('visible')]
+    products = []
+    for p in Product.select():
+        products.append({
+            "recid": p.id,
+            "title": p.title,
+            "price_dns": get_float(p.get_last_price_dns()),
+            "price_techopoint": get_float(p.get_last_price_technopoint()),
+            "link_dns": p.url,
+            "link_techopoint": p.get_technopoint_url(),
+        })
 
-    products = [
-        (
-            p.id, p.title, p.get_last_price_dns(), p.get_last_price_technopoint(),
-            p.url, p.get_technopoint_url()
-        )
-        for p in Product.select().where(Product.title.in_(titles))
-    ]
-    prices = [(p.id, p.date, p.value_dns, p.value_technopoint, p.product_id) for p in Price.select()]
+    prices = dict()
+    for p in Price.select():
+        if p.product_id not in prices:
+            prices[p.product_id] = []
+
+        prices[p.product_id].append({
+            "recid": p.id,
+            "datetime": p.date.isoformat(),
+            "price_dns": get_float(p.value_dns),
+            "price_techopoint": get_float(p.value_technopoint),
+        })
+
     return render_template('index.html', products=products, prices=prices)
 
 
@@ -43,17 +63,8 @@ def favicon():
 if __name__ == '__main__':
     app.debug = True
 
-    # Localhost
-    # port=0 -- random free port
-    # app.run(port=0)
     app.run(
-        port=10010,
-
-        # :param threaded: should the process handle each request in a separate
-        #                  thread?
-        # :param processes: if greater than 1 then handle each request in a new process
-        #                   up to this maximum number of concurrent processes.
-        threaded=True,
+        port=10010
     )
 
     # # Public IP
