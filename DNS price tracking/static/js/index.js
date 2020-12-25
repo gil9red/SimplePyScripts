@@ -261,7 +261,7 @@ $(function () {
         panels: [
             { type: 'main', style: pstyle, content: 'products', resizable: true },
             { type: 'right', size: '280px', style: pstyle, content: 'prices' },
-            { type: 'bottom', size: '30%', style: pstyle, content: 'bottom', resizable: true },
+            { type: 'bottom', size: '1000px', style: pstyle, content: 'bottom', resizable: true },
         ],
         onRender: function(event) {
             if (localStorage.layout_sizes == null) {
