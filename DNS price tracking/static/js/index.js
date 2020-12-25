@@ -296,7 +296,7 @@ $(function () {
                 <label for="cb_favorite">Show favorite</label>
 
                 <input type="checkbox" id="cb_visible" autocomplete="off">
-                <label for="cb_visible">Visibility setting</label>
+                <label for="cb_visible">Visibility settings</label>
             </div>
 
             <div id="cb_toggle" style="float: left; display: none">
