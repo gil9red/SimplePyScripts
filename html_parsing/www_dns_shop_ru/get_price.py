@@ -5,17 +5,43 @@ __author__ = 'ipetrash'
 
 
 import re
+from http.cookies import SimpleCookie
 from typing import Optional
+from urllib.parse import urljoin
 
 import requests
 
 
 session = requests.session()
-session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0'
+session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0'
 
 
 def get_price(url: str) -> Optional[int]:
-    rs = session.get(url)
+    cookies = None
+    attempts = 30
+
+    while True:
+        attempts -= 1
+        if attempts <= 0:
+            raise Exception('Too many redirects!')
+
+        rs = session.get(url, allow_redirects=False, cookies=cookies)
+
+        # TODO: bug fix (https://github.com/psf/requests/issues/5709)
+        redirect_url = rs.headers.get('Location')
+        if redirect_url:
+            url = urljoin(rs.url, redirect_url)
+            if rs.cookies:
+                cookies = rs.cookies
+                continue
+
+            cookies = rs.headers.get('Set-Cookie')
+            if cookies:
+                cookies = {key: value.value for key, value in SimpleCookie(cookies).items()}
+
+            continue
+
+        break
 
     m = re.search(r'"price":(\d+)', rs.text)
     if not m:
