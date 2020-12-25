@@ -291,13 +291,23 @@ $(function () {
     w2ui.layout.content('right', w2ui.prices);
     w2ui.layout.content('bottom', `
         <div id="bottom">
-            <input type="checkbox" id="cb_favorite" autocomplete="off">
-            <label for="cb_favorite">Show favorite</label>
+            <div style="float: left; margin-right: 20px;">
+                <input type="checkbox" id="cb_favorite" autocomplete="off">
+                <label for="cb_favorite">Show favorite</label>
 
-            <input type="checkbox" id="cb_visible" autocomplete="off">
-            <label for="cb_visible">Visibility setting</label>
+                <input type="checkbox" id="cb_visible" autocomplete="off">
+                <label for="cb_visible">Visibility setting</label>
+            </div>
 
-            <div id="favorite_totals" style="display: none">
+            <div id="cb_toggle" style="float: left; display: none">
+                <input type="checkbox" id="cb_toggle_favorite" autocomplete="off">
+                <label for="cb_toggle_favorite">Toggle favorite</label>
+
+                <input type="checkbox" id="cb_toggle_visible" autocomplete="off">
+                <label for="cb_toggle_visible">Toggle visibility</label>
+            </div>
+
+            <div id="favorite_totals" style="float: left; display: none">
                 <table>
                     <tr><td><b>Total DNS prices:</b></td><td class="dns_prices"></td></tr>
                     <tr><td><b>Total Technopoint prices:</b></td><td class="techopoint_prices"></td></tr>
@@ -330,13 +340,23 @@ $(function () {
             w2ui.products.showColumn('visible', 'favorite');
             w2ui.products.searchReset();
             selectLastProduct();
+            $('#cb_toggle').show();
 
         } else {
             w2ui.products.hideColumn('visible', 'favorite');
             w2ui.products.save();
             showOnlyVisibleProducts();
             selectLastProduct();
+            $('#cb_toggle').hide();
         }
+    });
+
+    $('#cb_toggle_favorite').change(function() {
+        w2ui.products.set({ favorite: this.checked });
+    });
+
+    $('#cb_toggle_visible').change(function() {
+        w2ui.products.set({ visible: this.checked });
     });
 
     // Save state legend to localStorage
