@@ -157,7 +157,7 @@ def index():
                     xAxes: [{
                         type: 'time',
                         time: {
-                            unit: 'day',
+                            unit: 'month',
                             tooltipFormat: 'DD/MM/YYYY',
                             displayFormats: {
                                day: 'DD/MM/YY'
