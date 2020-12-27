@@ -15,8 +15,10 @@ import requests
 session = requests.session()
 session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0'
 
+PATTERN_PRICE = re.compile(r'"price":(\d+)')
 
-def get_price_selenium(url: str) -> Optional[int]:
+
+def get_page_text(url: str) -> Optional[str]:
     # pip install selenium
     from selenium import webdriver
     from selenium.webdriver.firefox.options import Options
@@ -30,7 +32,7 @@ def get_price_selenium(url: str) -> Optional[int]:
         driver.get(url)
         print(f'Title: {driver.title!r}')
 
-        return driver.find_element_by_css_selector('.product-card-price__current').text
+        return driver.page_source
 
     except Exception as e:
         print(e)
@@ -68,11 +70,16 @@ def get_price(url: str) -> Optional[int]:
 
         break
 
-    m = re.search(r'"price":(\d+)', rs.text)
+    m = PATTERN_PRICE.search(rs.text)
     if not m:
         print('[#] price not found from regex!')
         print('[+] Trying through selenium!')
-        return get_price_selenium(url)
+
+        text = get_page_text(url)
+        m = PATTERN_PRICE.search(text)
+        if not m:
+            print('[#] price not found from regex [selenium]!')
+            return
 
     price = int(m.group(1))
 
