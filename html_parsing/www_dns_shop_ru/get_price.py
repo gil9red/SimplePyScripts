@@ -16,6 +16,31 @@ session = requests.session()
 session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0'
 
 
+def get_price_selenium(url: str) -> Optional[int]:
+    # pip install selenium
+    from selenium import webdriver
+    from selenium.webdriver.firefox.options import Options
+
+    options = Options()
+    options.add_argument('--headless')
+
+    driver = webdriver.Firefox(options=options)
+    try:
+        driver.implicitly_wait(20)
+        driver.get(url)
+        print(f'Title: {driver.title!r}')
+
+        return driver.find_element_by_css_selector('.product-card-price__current').text
+
+    except Exception as e:
+        print(e)
+
+    finally:
+        driver.quit()
+
+    return
+
+
 def get_price(url: str) -> Optional[int]:
     cookies = None
     attempts = 30
@@ -46,7 +71,8 @@ def get_price(url: str) -> Optional[int]:
     m = re.search(r'"price":(\d+)', rs.text)
     if not m:
         print('[#] price not found from regex!')
-        return
+        print('[+] Trying through selenium!')
+        return get_price_selenium(url)
 
     price = int(m.group(1))
 
