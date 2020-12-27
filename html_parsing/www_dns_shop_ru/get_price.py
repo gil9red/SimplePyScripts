@@ -72,13 +72,13 @@ def get_price(url: str) -> Optional[int]:
 
     m = PATTERN_PRICE.search(rs.text)
     if not m:
-        print('[#] price not found from regex!')
+        print('[#] Price not found from regex!')
         print('[+] Trying through selenium!')
 
         text = get_page_text(url)
         m = PATTERN_PRICE.search(text)
         if not m:
-            print('[#] price not found from regex [selenium]!')
+            print('[#] Price not found from regex [selenium]!')
             return
 
     price = int(m.group(1))
