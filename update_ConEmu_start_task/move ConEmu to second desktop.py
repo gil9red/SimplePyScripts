@@ -41,7 +41,7 @@ for proc in psutil.process_iter():
     hwnd = get_hwnd_for_pid(proc.pid)
 
     # If the window is already on the desired desktop
-    if pyvda.GetWindowDesktopNumber(hwnd) == NEED_WINDOW_DESKTOP_NUMBER:
+    if hwnd == -1 or pyvda.GetWindowDesktopNumber(hwnd) == NEED_WINDOW_DESKTOP_NUMBER:
         continue
 
     print(f'Moved window (pid={proc.pid}) to window desktop #{NEED_WINDOW_DESKTOP_NUMBER}')
