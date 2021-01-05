@@ -114,10 +114,6 @@ try:
                     if rep_desc_title == 'голос против данного сообщения был отозван':
                         total_negative_rep += rep_up
 
-                    # Если минус был отозван, то плюсуем в сумму минусов
-                    if rep_desc_title == 'голос против данного сообщения был отозван':
-                        total_negative_rep += rep_up
-
                     total_negative_rep += rep_down
                     sum_negative_rep += rep_down
 
@@ -155,11 +151,10 @@ try:
     print('    Total negative reputation (user is deleted):', total_negative_rep_by_user_is_deleted)
     print('    Total negative reputation (bounty):', total_negative_rep_by_bounty)
     print('Max negative reputation by day:', max_negative_rep_by_day)
-
-    # Elapsed 2297 secs
+    # Elapsed 2299 secs
     #
-    # Current reputation: 52884
-    # Total negative reputation: -1705 (3.12%)
+    # Current reputation: 52894
+    # Total negative reputation: -1711 (3.13%)
     #     Total negative reputation (user is deleted): -686
     #     Total negative reputation (bounty): -300
     # Max negative reputation by day: -180
