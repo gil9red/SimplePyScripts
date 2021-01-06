@@ -23,6 +23,12 @@ import schedule
 
 pyautogui.FAILSAFE = False
 
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s',
+    stream=sys.stdout,
+)
+
 
 def is_exists_rdp_process() -> bool:
     for process in psutil.process_iter():
@@ -30,13 +36,6 @@ def is_exists_rdp_process() -> bool:
             return True
 
     return False
-
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s',
-    stream=sys.stdout,
-)
 
 
 def get_pos_rdp_task_icon() -> Optional[Tuple[int, int]]:
