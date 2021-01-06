@@ -106,7 +106,8 @@ def update_release_date(connect, name: str, release_date: DT.date):
     connect.execute(sql, [release_date, name])
 
 
-def append_list_games(games: [(str, DT.date, bool)], notified_by_sms=True):
+def append_list_games(games: [(str, DT.date, bool)], notified_by_sms=True) -> bool:
+    changed = False
     connect = create_connect()
 
     def insert(name: str, release_date: DT.date, is_cracked: bool) -> bool:
@@ -143,6 +144,7 @@ def append_list_games(games: [(str, DT.date, bool)], notified_by_sms=True):
                     text = f'Игру {name!r} взломали'
                     log.info(text)
                     log_cracked_games.debug(text)
+                    changed = True
 
                     # При DEBUG = True, отправки смс не будет
                     if notified_by_sms and not DEBUG:
@@ -152,6 +154,7 @@ def append_list_games(games: [(str, DT.date, bool)], notified_by_sms=True):
                 text = f'Добавлена взломанная игра {name!r}'
                 log.info(text)
                 log_cracked_games.debug(text)
+                changed = True
 
                 # При DEBUG = True, отправки смс не будет
                 if notified_by_sms and not DEBUG:
@@ -162,8 +165,11 @@ def append_list_games(games: [(str, DT.date, bool)], notified_by_sms=True):
     finally:
         connect.close()
 
+    return changed
 
-def append_list_games_which_denuvo_is_removed(games: [str, DT.date], notified_by_sms=True):
+
+def append_list_games_which_denuvo_is_removed(games: [str, DT.date], notified_by_sms=True) -> bool:
+    changed = False
     connect = create_connect()
 
     def insert(name: str, release_date: DT.date) -> bool:
@@ -190,6 +196,7 @@ def append_list_games_which_denuvo_is_removed(games: [str, DT.date], notified_by
                 text = f'Добавлена игра с убранной защитой {name!r}'
                 log.info(text)
                 log_cracked_games.debug(text)
+                changed = True
 
                 # При DEBUG = True, отправки смс не будет
                 if notified_by_sms and not DEBUG:
@@ -206,6 +213,7 @@ def append_list_games_which_denuvo_is_removed(games: [str, DT.date], notified_by
                     text = f'Игре {name!r} убрали защиту'
                     log.info(text)
                     log_cracked_games.debug(text)
+                    changed = True
 
                     # При DEBUG = True, отправки смс не будет
                     if notified_by_sms and not DEBUG:
@@ -215,6 +223,8 @@ def append_list_games_which_denuvo_is_removed(games: [str, DT.date], notified_by
 
     finally:
         connect.close()
+
+    return changed
 
 
 def get_games(filter_by_is_cracked=None, sorted_by_name=True,
