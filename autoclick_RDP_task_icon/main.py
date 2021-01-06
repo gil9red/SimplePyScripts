@@ -24,7 +24,7 @@ import schedule
 pyautogui.FAILSAFE = False
 
 
-def exist_rdp_process() -> bool:
+def is_exists_rdp_process() -> bool:
     for process in psutil.process_iter():
         if process.name() == 'mstsc.exe':
             return True
@@ -54,7 +54,7 @@ def run():
         logging.info("Today is a weekend, skip")
         return
 
-    if not exist_rdp_process():
+    if not is_exists_rdp_process():
         logging.info("RDP is not running!")
         return
 
