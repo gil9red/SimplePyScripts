@@ -6,6 +6,7 @@ __author__ = 'ipetrash'
 
 from typing import Union
 import sys
+from pathlib import Path
 
 sys.path.append('..')
 
@@ -113,10 +114,13 @@ def get_frame_with_color_info(color: QColor, size=SIZE, rounded=True, as_bytes=F
 
 
 if __name__ == '__main__':
-    for name in ['#007396', '#ff8c69', 'green', '#a000ff00']:
+    path = Path('.') / 'images'
+    path.mkdir(parents=True, exist_ok=True)
+
+    for name in ['#007396', '#ff8c69', 'green', '#a000ff00', '#333']:
         color = QColor(name)
         image = get_frame_with_color_info(color)
-        image.save(f'images/{name}.png')
+        image.save(f'{path}/{name}.png')
 
     name = '#007396'
     image = get_frame_with_color_info(QColor(name), rounded=False)
