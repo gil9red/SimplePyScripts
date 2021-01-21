@@ -28,6 +28,8 @@ class StackOverFlowBotThread(QThread):
     def __init__(self):
         super().__init__()
 
+        self.is_running = False
+
         options = Options()
         # options.add_argument('--headless')
 
@@ -40,13 +42,15 @@ class StackOverFlowBotThread(QThread):
         self._search = text
 
     def run(self):
+        self.is_running = True
+
         self.driver.get(URL)
         print(f'Title: "{self.driver.title}"')
         self.about_change_title.emit(self.driver.title)
 
         try:
             # Чтобы поток не завершился
-            while self.driver:
+            while self.is_running:
                 if self._search:
                     search_el = self.driver.find_element_by_css_selector('#search .s-input__search')
                     search_el.clear()
@@ -67,12 +71,11 @@ class StackOverFlowBotThread(QThread):
                 time.sleep(0.05)
 
         finally:
-            if self.driver:
-                self.driver.quit()
+            self.driver.quit()
 
     def quit(self):
         self.driver.quit()
-        self.driver = None
+        self.is_running = False
 
         super().quit()
 
