@@ -69,6 +69,12 @@ class StackOverFlowBotThread(QThread):
         finally:
             self.driver.quit()
 
+    def quit(self):
+        self.driver.quit()
+        self.driver = None
+
+        super().quit()
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -108,6 +114,9 @@ class MainWindow(QMainWindow):
 
     def on_search_result(self, title, url):
         self.result.append(f'<a href="{url}">{title}</a>')
+
+    def closeEvent(self, event):
+        self.bot_thread.quit()
 
 
 if __name__ == '__main__':
