@@ -67,7 +67,8 @@ class StackOverFlowBotThread(QThread):
                 time.sleep(0.05)
 
         finally:
-            self.driver.quit()
+            if self.driver:
+                self.driver.quit()
 
     def quit(self):
         self.driver.quit()
