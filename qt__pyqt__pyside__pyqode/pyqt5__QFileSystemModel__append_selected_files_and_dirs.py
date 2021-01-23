@@ -4,10 +4,11 @@
 __author__ = 'ipetrash'
 
 
-from PyQt5.Qt import (
-    QWidget, QDir, QFileSystemModel, QTreeView, QListWidget,
-    QPushButton, QSplitter, Qt, QVBoxLayout, QApplication
+from PyQt5.QtWidgets import (
+    QWidget, QFileSystemModel, QTreeView, QListWidget, QPushButton, QSplitter,
+    QVBoxLayout, QApplication
 )
+from PyQt5.QtCore import QDir, Qt
 
 
 class Widget(QWidget):
