@@ -17,8 +17,8 @@ FONTS = "fonts"
 
 
 def set_text(template, texts):
-    font_upper = ImageFont.truetype(f"{FONTS}/times.ttf", 64)
-    font_lower = ImageFont.truetype(f"{FONTS}/times.ttf", 46)
+    font_upper = ImageFont.truetype(f"{FONTS}/times.ttf", 64, encoding='utf-8')
+    font_lower = ImageFont.truetype(f"{FONTS}/times.ttf", 46, encoding='utf-8')
 
     draw_upper_text = ImageDraw.Draw(template)
     upper_text_width, _ = draw_upper_text.textsize(texts[0], font_upper)
