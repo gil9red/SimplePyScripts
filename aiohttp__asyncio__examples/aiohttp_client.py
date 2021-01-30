@@ -11,13 +11,24 @@ import aiohttp
 
 
 async def main():
+    url = 'https://python.org'
+
     async with aiohttp.ClientSession() as session:
-        async with session.get('https://python.org') as rs:
+        async with session.get(url) as rs:
             print("Status:", rs.status)
-            print("Content-type:", rs.headers['content-type'])
+            print("Content-type:", rs.headers['Content-Type'])
 
             html = await rs.text()
             print("Body:", html[:15], "...")
+
+    print()
+
+    async with aiohttp.request("GET", url) as rs:
+        print("Status:", rs.status)
+        print("Content-type:", rs.headers['Content-Type'])
+
+        html = await rs.text()
+        print("Body:", html[:15], "...")
 
 
 if __name__ == '__main__':
