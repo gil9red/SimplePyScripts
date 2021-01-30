@@ -4,8 +4,10 @@
 __author__ = 'ipetrash'
 
 
-import aiohttp
 import asyncio
+
+# pip install aiohttp
+import aiohttp
 
 
 async def main():
