@@ -12,7 +12,7 @@ import aiohttp
 
 async def main():
     async with aiohttp.ClientSession() as session:
-        async with session.get('http://python.org') as rs:
+        async with session.get('https://python.org') as rs:
             print("Status:", rs.status)
             print("Content-type:", rs.headers['content-type'])
 
