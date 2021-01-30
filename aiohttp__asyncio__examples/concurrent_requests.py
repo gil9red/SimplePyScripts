@@ -33,6 +33,11 @@ async def main():
 
 
 if __name__ == '__main__':
+    import time
+    t = time.perf_counter()
+
     loop = asyncio.get_event_loop()
     ignore_aiohttp_ssl_error(loop)
     loop.run_until_complete(main())
+
+    print(f'Elapsed {time.perf_counter() - t:.2f} secs')
