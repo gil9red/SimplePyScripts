@@ -24,13 +24,12 @@ re_no_digits = re.compile(r'\D')
 
 
 def download(url: str, directory=DIR) -> str:
-    parts = url.split('/')
-    chapter = '_'.join(parts[5:8]) + '.zip'
-
-    file_name = directory / chapter
-
     rs = session.get(url)
     root = BeautifulSoup(rs.content, 'html.parser')
+
+    chapter = root.select_one('select[name=chapter] > option[selected]').get_text(strip=True)
+    chapter = chapter + '.zip'
+    file_name = directory / chapter
 
     with zipfile.ZipFile(file_name, mode='w', compression=zipfile.ZIP_DEFLATED) as f:
         for a in root.select('a.gallery[href]'):
