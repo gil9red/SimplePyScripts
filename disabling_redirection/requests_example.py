@@ -8,11 +8,9 @@ import requests
 
 
 rs = requests.get('http://ya.ru/')
-print(rs)      # <Response [200]>
-print(rs.url)  # https://ya.ru/ - автоматически перенаправлено на https
-
-print()
+print(rs.status_code, rs.url)
+# 200 https://ya.ru/
 
 rs = requests.get('http://ya.ru/', allow_redirects=False)
-print(rs)      # <Response [302]>
-print(rs.url)  # http://ya.ru/
+print(rs.status_code, rs.url)
+# 302 http://ya.ru/
