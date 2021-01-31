@@ -46,7 +46,6 @@ class CheckUrlThread(QThread):
         for url in self.urls:
             try:
                 rs = session.get(url)
-                rs.raise_for_status()
                 code = rs.status_code
 
             except Exception as e:
