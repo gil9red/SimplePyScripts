@@ -41,7 +41,7 @@ print()
 print('Награды (по убыванию):')
 
 # Вывод с сортировкой по наградам:
-items.sort(key=lambda x: int(re.sub('\D', '', x[-1])), reverse=True)
+items.sort(key=lambda x: int(re.sub(r'\D', '', x[-1])), reverse=True)
 
 for row, x in enumerate(items, 1):
     print('{:2}. {}'.format(row, x))
