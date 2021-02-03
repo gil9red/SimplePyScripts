@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-def plural_days(n):
+def plural_days(n: int) -> str:
     days = ['день', 'дня', 'дней']
 
     if n % 10 == 1 and n % 100 != 11:
