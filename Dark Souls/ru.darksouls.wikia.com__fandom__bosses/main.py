@@ -4,8 +4,16 @@
 __author__ = 'ipetrash'
 
 
+import json
+import sqlite3
 import os
+
+from collections import defaultdict
 from typing import Dict, List, NamedTuple
+from urllib.parse import urljoin
+
+import requests
+from bs4 import BeautifulSoup
 
 
 class Boss(NamedTuple):
@@ -14,15 +22,9 @@ class Boss(NamedTuple):
 
 
 def get_bosses(url: str) -> Dict[str, List[Boss]]:
-    from urllib.parse import urljoin
-
-    import requests
     rs = requests.get(url)
-
-    from bs4 import BeautifulSoup
     root = BeautifulSoup(rs.content, 'html.parser')
 
-    from collections import defaultdict
     bosses_by_category = defaultdict(list)
 
     category_name = None
@@ -69,8 +71,7 @@ def print_bosses(url: str, bosses: Dict[str, List[Boss]]):
 
 
 def convert_bosses_to_only_name(bosses: Dict[str, List[Boss]]) -> Dict[str, List[str]]:
-    from collections import OrderedDict
-    bosses_only_name = OrderedDict()
+    bosses_only_name = dict()
     for category, bosses_list in bosses.items():
         bosses_only_name[category] = [boss.name for boss in bosses_list]
 
@@ -81,7 +82,6 @@ def export_to_json(file_name, bosses):
     dir_name = os.path.dirname(file_name)
     os.makedirs(dir_name, exist_ok=True)
 
-    import json
     json.dump(bosses, open(file_name, 'w', encoding='utf-8'), ensure_ascii=False, indent=4)
 
 
@@ -89,7 +89,6 @@ def export_to_sqlite(file_name: str, bosses_ds123: Dict[str, Dict[str, List[Boss
     dir_name = os.path.dirname(file_name)
     os.makedirs(dir_name, exist_ok=True)
 
-    import sqlite3
     connect = sqlite3.connect(file_name)
 
     connect.executescript('''
@@ -156,7 +155,6 @@ if __name__ == '__main__':
     export_to_sqlite(sql_file_name, bosses_ds123)
 
     # TEST
-    import sqlite3
     connect = sqlite3.connect(sql_file_name)
     print('Total boss:',     connect.execute('SELECT count(*) FROM BOSS').fetchone()[0])
     print('Total boss DS1:', connect.execute('SELECT count(*) FROM BOSS WHERE game = "Dark Souls"').fetchone()[0])
