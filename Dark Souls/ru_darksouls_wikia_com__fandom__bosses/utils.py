@@ -9,7 +9,7 @@ import sqlite3
 import os
 
 from collections import defaultdict
-from typing import Dict, List, NamedTuple
+from typing import Dict, List, NamedTuple, Tuple
 from urllib.parse import urljoin
 
 import requests
@@ -24,10 +24,33 @@ class Boss(NamedTuple):
     name: str
     url: str
 
+    def get_boss_items(self) -> Dict[str, List[str]]:
+        _, root = parse(self.url)
+
+        key_by_values = dict()
+        for table in root.select('table.pi-horizontal-group'):
+            el_items = table.select_one('tbody td[data-source]')
+            if not el_items:
+                continue
+
+            data_source = el_items['data-source']
+            items = [
+                x.strip()
+                for x in el_items.get_text(strip=True, separator='\n').split('\n')
+            ]
+
+            key_by_values[data_source] = items
+
+        return key_by_values
+
+
+def parse(url: str) -> Tuple[requests.Response, BeautifulSoup]:
+    rs = session.get(url)
+    return rs, BeautifulSoup(rs.content, 'html.parser')
+
 
 def get_bosses(url: str) -> Dict[str, List[Boss]]:
-    rs = requests.get(url)
-    root = BeautifulSoup(rs.content, 'html.parser')
+    rs, root = parse(url)
 
     bosses_by_category = defaultdict(list)
 
@@ -64,10 +87,10 @@ def print_bosses(url: str, bosses: Dict[str, List[Boss]]):
     print('{} ({}):'.format(url, sum(len(i) for i in bosses.values())))
 
     for category, bosses in bosses.items():
-        print('{} ({}):'.format(category, len(bosses)))
+        print(f'{category} ({len(bosses)}):')
 
         for i, boss in enumerate(bosses, 1):
-            print('    {}. "{}": {}'.format(i, boss.name, boss.url))
+            print(f'    {i}. "{boss.name}": {boss.url}')
 
         print()
 

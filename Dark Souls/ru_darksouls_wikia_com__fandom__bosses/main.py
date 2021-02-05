@@ -5,27 +5,26 @@ __author__ = 'ipetrash'
 
 
 import sqlite3
+
+from config import URL_DS1, URL_DS2, URL_DS3
 from utils import (
     get_bosses, print_bosses, convert_bosses_to_only_name,
     export_to_json, export_to_sqlite,
 )
 
 
-url = 'http://ru.darksouls.wikia.com/wiki/Боссы'
-bosses_ds1 = get_bosses(url)
-print_bosses(url, bosses_ds1)
+bosses_ds1 = get_bosses(URL_DS1)
+print_bosses(URL_DS1, bosses_ds1)
 export_to_json('dumps/ds1/bosses.json', bosses_ds1)
 export_to_json('dumps/ds1/bosses__only_name.json', convert_bosses_to_only_name(bosses_ds1))
 
-url = 'http://ru.darksouls.wikia.com/wiki/Боссы_(Dark_Souls_II)'
-bosses_ds2 = get_bosses(url)
-print_bosses(url, bosses_ds2)
+bosses_ds2 = get_bosses(URL_DS2)
+print_bosses(URL_DS2, bosses_ds2)
 export_to_json('dumps/ds2/bosses.json', bosses_ds2)
 export_to_json('dumps/ds2/bosses__only_name.json', convert_bosses_to_only_name(bosses_ds2))
 
-url = 'http://ru.darksouls.wikia.com/wiki/Боссы_(Dark_Souls_III)'
-bosses_ds3 = get_bosses(url)
-print_bosses(url, bosses_ds3)
+bosses_ds3 = get_bosses(URL_DS3)
+print_bosses(URL_DS3, bosses_ds3)
 export_to_json('dumps/ds3/bosses.json', bosses_ds3)
 export_to_json('dumps/ds3/bosses__only_name.json', convert_bosses_to_only_name(bosses_ds3))
 
