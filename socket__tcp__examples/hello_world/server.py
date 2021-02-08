@@ -19,16 +19,20 @@ with socket.socket() as sock:
     sock.bind(('', PORT))
     sock.listen()
 
-    print('Server: {}'.format(sock.getsockname()))
+    print(f'Server: {sock.getsockname()}')
 
     while True:
         conn, addr = sock.accept()
         print('Connected:', addr)
 
-        data = recv_msg(conn)
-        print('Receiving ({}): {}'.format(len(data), data))
+        while True:
+            data = recv_msg(conn)
+            if not data:
+                break
 
-        print('Sending')
-        send_msg(conn, data.upper())
+            print(f'Receiving ({len(data)}): {data}')
+
+            print('Sending')
+            send_msg(conn, data.upper())
 
         print('Close\n')
