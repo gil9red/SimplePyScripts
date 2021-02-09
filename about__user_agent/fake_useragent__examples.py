@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: https://github.com/hellysmile/fake-useragent
+
+
 # pip install fake-useragent
 from fake_useragent import UserAgent
 ua = UserAgent()
