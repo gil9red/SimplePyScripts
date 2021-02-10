@@ -86,7 +86,7 @@ class CalcParser(Parser):
         return p.expr
 
     @_('NUMBER')
-    def expr(self, p):
+    def expr(self, p) -> int:
         return int(p.NUMBER)
 
     @_('NAME')
