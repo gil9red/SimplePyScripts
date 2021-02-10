@@ -162,12 +162,12 @@ if __name__ == '__main__':
 
     print()
 
-    # while True:
-    #     try:
-    #         text = input('calc > ')
-    #     except EOFError:
-    #         break
-    #     if text:
-    #         value = parser.parse(lexer.tokenize(text))
-    #         if value is not None:
-    #             print(value)
+    while True:
+        try:
+            text = input('calc > ')
+        except EOFError:
+            break
+        if text:
+            value = parser.parse(lexer.tokenize(text))
+            if value is not None:
+                print(value)
