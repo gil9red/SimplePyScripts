@@ -4,6 +4,10 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: https://github.com/dabeaz/sly/
+# SOURCE: https://sly.readthedocs.io/en/latest/sly.html
+
+
 # pip install sly
 from sly import Lexer, Parser
 
