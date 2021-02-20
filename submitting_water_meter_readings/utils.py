@@ -78,7 +78,6 @@ def open_web_page_water_meter(value_cold: int, value_hot: int) -> (bool, str):
             time.sleep(5)
 
         driver.get(url)
-        time.sleep(5)
 
     input_cold = driver.find_element_by_id('inputModel_InputCounters_0__newVal')
     input_cold.clear()
