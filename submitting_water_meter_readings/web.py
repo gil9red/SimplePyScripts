@@ -12,7 +12,7 @@ from os.path import splitext
 from pathlib import Path
 
 import db
-from utils import open_web_page_mail, run_auto_ping_logon, log
+from utils import open_web_page_water_meter, log
 
 
 db.init_db()
@@ -146,7 +146,7 @@ class HttpProcessor(BaseHTTPRequestHandler):
                 self.send_error(400, explain='Параметры запроса value_cold и value_hot должны быть числами')
                 return
 
-            # Проверка находится после open_web_page_mail, чтобы была возможность отправить письмо
+            # Проверка находится после open_web_page_water_meter, чтобы была возможность отправить письмо
             if not db.add(value_cold, value_hot, forced):
                 message = 'Попытка повторной отправки показания за тот же месяц'
                 text = HTML_TEMPLATE_SEND_AGAIN\
@@ -162,7 +162,7 @@ class HttpProcessor(BaseHTTPRequestHandler):
                 self.wfile.write(text.encode('utf-8'))
                 return
 
-            ok, err_text = open_web_page_mail(value_cold, value_hot)
+            ok, err_text = open_web_page_water_meter(value_cold, value_hot)
             if not ok:
                 db.delete_last()
                 self.send_error(500, explain=err_text)
@@ -187,8 +187,6 @@ def run(server_class=HTTPServer, handler_class=HttpProcessor, host='127.0.0.1', 
 
 
 if __name__ == '__main__':
-    run_auto_ping_logon()
-
     run(
         server_class=ThreadingHTTPServer,
         host='0.0.0.0', port=10014

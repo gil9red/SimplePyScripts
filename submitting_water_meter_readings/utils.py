@@ -6,12 +6,16 @@ __author__ = 'ipetrash'
 
 import os.path
 import time
-import random
-from threading import Thread
+from pathlib import Path
 
 # pip install selenium
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
+
+
+TOKEN = Path(__file__).resolve().parent / 'TOKEN'
+LOGIN, PASSWORD = TOKEN.read_text().splitlines()
 
 
 def get_logger(name=__file__):
@@ -48,63 +52,44 @@ def get_driver(headless=False) -> webdriver.Firefox:
     return driver
 
 
-def open_web_page_mail(value_cold: int, value_hot: int) -> (bool, str):
-    # Example: 123 -> 00123
-    value_cold = str(value_cold).zfill(5)
-    value_hot = str(value_hot).zfill(5)
+def open_web_page_water_meter(value_cold: int, value_hot: int) -> (bool, str):
+    url = 'https://lk.erkc-info.ru/Input/InputData'
+
+    value_cold = str(value_cold)
+    value_hot = str(value_hot)
 
     driver = get_driver()
-    driver.get('https://e.mail.ru/templates/')
+    driver.get(url)
     log.info(f'Title: {driver.title!r}')
 
-    items = [item for item in driver.find_elements_by_css_selector('a[href*="/templates/"]') if 'vodomer' in item.text]
-    if not items:
-        text = 'Шаблон с "vodomer" не найден'
-        log.info(text)
-        return False, text
+    time.sleep(5)
 
-    items[0].click()
+    if '/Account/LogOn' in driver.current_url:
+        log.info('Go auth')
 
-    log.info(f'Title: {driver.title!r}')
+        input_login = driver.find_element_by_id('m_phone')
+        input_login.send_keys(LOGIN)
 
-    editor = driver.find_element_by_css_selector('[role="textbox"]')
-    template_text = editor.text
+        input_password = driver.find_element_by_id('m_password')
+        input_password.send_keys(PASSWORD)
 
-    if 'value_cold' not in template_text and 'value_hot' not in template_text:
-        text = 'В шаблоне не найдены "value_cold" и "value_hot"'
-        log.info(text)
-        return False, text
+        while '/Account/LogOn' in driver.current_url:
+            input_password.send_keys(Keys.RETURN)
+            time.sleep(5)
 
-    mail_text = template_text \
-        .replace('value_cold', value_cold) \
-        .replace('value_hot', value_hot)
+        driver.get(url)
+        time.sleep(5)
 
-    # Заполнение текста письма
-    editor.clear()
-    editor.send_keys(mail_text)
+    input_cold = driver.find_element_by_id('inputModel_InputCounters_0__newVal')
+    input_cold.clear()
+    input_cold.send_keys(value_cold)
+
+    input_hot = driver.find_element_by_id('inputModel_InputCounters_1__newVal')
+    input_hot.clear()
+    input_hot.send_keys(value_hot)
 
     return True, ''
 
 
-def run_auto_ping_logon():
-    prefix = run_auto_ping_logon.__name__
-
-    def run():
-        while True:
-            try:
-                driver = get_driver(headless=True)
-                driver.get('https://e.mail.ru/inbox/')
-                log.info(f'[{prefix}] Title: {driver.title!r}')
-
-                driver.quit()
-
-            except Exception as e:
-                log.info(f'[{prefix}] Error: {e}')
-                time.sleep(60)
-                continue
-
-            # Between 3 - 6 hours
-            time.sleep(random.randint(3 * 3600, 6 * 3600))
-
-    thread = Thread(target=run)
-    thread.start()
+if __name__ == '__main__':
+    open_web_page_water_meter(123, 456)
