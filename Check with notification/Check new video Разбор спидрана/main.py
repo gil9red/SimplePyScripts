@@ -5,7 +5,7 @@ __author__ = 'ipetrash'
 
 
 """
-Скрипт для уведомления о появлении новых видео "Страшно, вырубай!".
+Скрипт для уведомления о появлении новых видео "Разбор спидрана".
 
 """
 
@@ -31,7 +31,7 @@ def my_get_video_list():
 
 if __name__ == '__main__':
     run_notification_job(
-        'Check new video "Страшно, вырубай!"',
+        'Check new video "Разбор спидрана!"',
         'video',
         my_get_video_list,
         notified_by_sms=True,
