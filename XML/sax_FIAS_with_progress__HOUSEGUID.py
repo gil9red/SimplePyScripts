@@ -5,6 +5,10 @@ __author__ = 'ipetrash'
 
 
 import xml.sax
+import sys
+
+from itertools import cycle
+
 from tqdm import tqdm
 
 
@@ -13,9 +17,17 @@ all_house_guid = set()
 
 
 class AttrHandler(xml.sax.handler.ContentHandler):
+    progress_bar = cycle('|/-\\|/-\\')
+
     def startElement(self, name, attrs):
         if 'HOUSEGUID' in attrs:
             all_house_guid.add(attrs['HOUSEGUID'])
+
+        print('\r' + next(self.progress_bar), end='')
+        sys.stdout.flush()
+
+    def endDocument(self):
+        print('\r', end='')
 
 
 print('Сбор HOUSEGUID')
