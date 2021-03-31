@@ -25,8 +25,8 @@ class MainWindow(QWidget):
 
     def _do_tick(self):
         self.angle += 5
-        self.x += 5
 
+        self.x += 5
         if self.x > self.width():
             self.x = 0
 
