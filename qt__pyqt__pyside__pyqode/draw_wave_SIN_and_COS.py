@@ -25,6 +25,11 @@ class MainWindow(QWidget):
 
         painter.setPen(QPen(Qt.white, 2))
         for x in range(self.width()):
+            y = y0 + amplitude / 2
+            painter.drawPoint(x, y)
+
+        painter.setPen(QPen(Qt.red, 2))
+        for x in range(self.width()):
             y = y0 + math.sin(x * frequency) * amplitude / 2 + amplitude / 2
             painter.drawPoint(x, y)
 
