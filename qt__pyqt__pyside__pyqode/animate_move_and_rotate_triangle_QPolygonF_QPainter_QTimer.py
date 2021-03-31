@@ -17,7 +17,6 @@ class MainWindow(QWidget):
 
         self.angle = 0
         self.x = 0
-        self.S = 0
 
         self.timer = QTimer()
         self.timer.setInterval(50)
@@ -31,7 +30,7 @@ class MainWindow(QWidget):
         if self.x > self.width():
             self.x = 0
 
-        # Перерисования окна
+        # Перерисование окна
         self.update()
 
     def paintEvent(self, event):
