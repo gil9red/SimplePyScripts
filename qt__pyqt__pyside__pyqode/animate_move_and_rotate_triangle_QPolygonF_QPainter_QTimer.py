@@ -39,7 +39,7 @@ class MainWindow(QWidget):
 
         y0 = self.height() / 4
         amplitude = self.height() / 2
-        frequency = .01
+        frequency = 0.02
 
         painter.save()
         painter.setPen(QPen(Qt.black, 2))
