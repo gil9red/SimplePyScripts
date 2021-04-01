@@ -18,6 +18,7 @@ data_year = {
 }
 
 
+# SOURCE: https://ru.stackoverflow.com/questions/1264757
 def func(message):
     text = message.text
     result = data_year.get(text, "В этот день праздников нет. Иди работать!")
