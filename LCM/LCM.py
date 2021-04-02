@@ -18,3 +18,6 @@ def gcd(a, b):
 if __name__ == '__main__':
     a, b = 7006652, 112307574
     print("LCM: %s" % ((a * b) / gcd(a, b)))
+
+    import math
+    print("LCM: %s" % ((a * b) / math.gcd(a, b)))
