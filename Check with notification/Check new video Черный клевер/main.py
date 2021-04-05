@@ -78,6 +78,8 @@ if __name__ == '__main__':
                 else:
                     log.debug('Значение не изменился')
 
+            log.debug('')
+
             wait(days=1)
 
         except requests.exceptions.ConnectionError as e:
