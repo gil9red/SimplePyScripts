@@ -80,15 +80,15 @@ def get_bit_values(number, size=32):
     True
 
     >>> get_bit_values(0xDEADBEEF)
-    [1L, 1L, 0L, 1L, 1L, 1L, 1L, 0L, 1L, 0L, 1L, 0L, 1L, 1L, 0L, 1L, 1L, 0L, 1L, 1L, 1L, 1L, 1L, 0L, 1L, 1L, 1L, 0L, 1L, 1L, 1L, 1L]
+    [1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1]
 
     You may override the default word size of 32-bits to match your actual
     application.
     >>> get_bit_values(0x3, 2)
-    [1L, 1L]
+    [1, 1]
 
     >>> get_bit_values(0x3, 4)
-    [0L, 0L, 1L, 1L]
+    [0, 0, 1, 1]
     """
     res = list(gen_bit_values(number))
     res.reverse()
