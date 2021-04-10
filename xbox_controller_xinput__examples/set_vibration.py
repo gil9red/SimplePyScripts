@@ -21,7 +21,6 @@ if not joysticks:
     sys.exit(0)
 
 j = joysticks[0]
-print(j)
 
 j.set_vibration(100, 100)
 
