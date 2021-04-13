@@ -4,19 +4,18 @@
 __author__ = 'ipetrash'
 
 
-import requests
-rs = requests.get('http://www.7english.ru/dictionary.php?id=2000&letter=all')
+import json
 
+import requests
 from bs4 import BeautifulSoup
+
+
+rs = requests.get('http://www.7english.ru/dictionary.php?id=2000&letter=all')
 root = BeautifulSoup(rs.content, 'html.parser')
 
 en_ru_items = []
 
-for tr in root.select('tr'):
-    # У строк в таблице перевода есть аттрибут onmouseover
-    if 'onmouseover' not in tr.attrs:
-        continue
-
+for tr in root.select('tr[onmouseover]'):
     td_list = [td.text.strip() for td in tr.select('td')]
 
     # Количество ячеек в таблице со словами -- 9
@@ -25,7 +24,8 @@ for tr in root.select('tr'):
 
     en = td_list[1]
 
-    # Русские слова могут быть перечислены через запятую 'ты, вы', а нам достаточно одного слова
+    # Русские слова могут быть перечислены через запятую 'ты, вы',
+    # а нам достаточно одного слова
     # 'ты, вы' -> 'ты'
     ru = td_list[5].split(', ')[0]
 
@@ -33,5 +33,4 @@ for tr in root.select('tr'):
 
 print(len(en_ru_items), en_ru_items)
 
-import json
 json.dump(en_ru_items, open('en_ru.json', 'w', encoding='utf-8'), indent=4, ensure_ascii=False)
