@@ -7,6 +7,7 @@ __author__ = 'ipetrash'
 
 import datetime as DT
 import os.path
+import re
 
 from lxml import etree
 
@@ -18,11 +19,15 @@ class NotFoundReport(Exception):
     pass
 
 
-URL = 'https://confluence.compassplus.ru/reports/index.jsp'
+URL = 'https://jira.compassplus.ru/pa-reports/'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0'
 
 # NOTE: Get <PEM_FILE_NAME>: openssl pkcs12 -nodes -out key.pem -in file.p12
 PEM_FILE_NAME = os.path.abspath('ipetrash.pem')
+
+
+def clear_hours(hours: str) -> str:
+    return re.sub(r'[^\d:-]', '', hours)
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/4e4efd7467795aa5881c8b22a5829314ba71f409/get_quarter.py#L10
@@ -72,7 +77,7 @@ def _send_data(data: dict) -> str:
 def get_report_context() -> str:
     today = DT.datetime.today()
     data = {
-        'dep': 'dep12',
+        'dep': 'dep4',
         'rep': 'rep1',
         'period': today.strftime('%Y-%m'),
         'v': int(today.timestamp() * 1000),
@@ -125,7 +130,7 @@ def parse_current_user_deviation_hours(html: str) -> (str, str):
         deviation_tr = deviation_tr.getnext()
 
     deviation_hours = deviation_tr.getchildren()[-1].text.strip()
-    return name, deviation_hours
+    return name, clear_hours(deviation_hours)
 
 
 def parse_user_deviation_hours(html: str, user_name: str = 'Петраш') -> (str, str):
@@ -159,7 +164,7 @@ def parse_user_deviation_hours(html: str, user_name: str = 'Петраш') -> (s
         deviation_tr = deviation_tr.getnext()
 
     deviation_hours = deviation_tr.getchildren()[-1].text.strip()
-    return name, deviation_hours
+    return name, clear_hours(deviation_hours)
 
 
 def get_user_and_deviation_hours() -> (str, str):

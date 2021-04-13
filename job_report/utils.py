@@ -17,7 +17,7 @@ from bs4 import BeautifulSoup
 from job_report.report_person import ReportPerson
 
 
-URL = 'https://confluence.compassplus.ru/reports/index.jsp'
+URL = 'https://jira.compassplus.ru/pa-reports/'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0'
 
 LOGGING_DEBUG = False
