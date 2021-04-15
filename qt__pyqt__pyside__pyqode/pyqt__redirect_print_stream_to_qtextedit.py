@@ -4,6 +4,8 @@
 __author__ = 'ipetrash'
 
 
+import sys
+
 from PyQt5.QtWidgets import QMainWindow, QTextEdit, QMenuBar, QApplication
 from PyQt5.QtCore import QObject
 from PyQt5.QtCore import pyqtSignal as Signal
@@ -30,7 +32,6 @@ class OutputLogger(QObject):
         self.io_stream.flush()
 
 
-import sys
 OUTPUT_LOGGER_STDOUT = OutputLogger(sys.stdout, OutputLogger.Severity.DEBUG)
 OUTPUT_LOGGER_STDERR = OutputLogger(sys.stderr, OutputLogger.Severity.ERROR)
 
@@ -59,9 +60,9 @@ class MainWindow(QMainWindow):
         text = repr(text)
 
         if severity == OutputLogger.Severity.ERROR:
-            self.text_edit.append('<b>{}</b>'.format(text))
-        else:
-            self.text_edit.append(text)
+            text = '<b>{}</b>'.format(text)
+
+        self.text_edit.append(text)
 
 
 if __name__ == '__main__':
