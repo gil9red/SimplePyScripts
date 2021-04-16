@@ -219,7 +219,7 @@ if __name__ == '__main__':
 
     if argc == 0:
         print(ABOUT_TEXT)
-        quit()
+        sys.exit()
 
     elif argc == 1:
         name = argv[0]
