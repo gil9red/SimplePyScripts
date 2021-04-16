@@ -8,17 +8,18 @@ import os
 import sys
 import re
 from pathlib import Path
-from typing import Optional, List
-
+from typing import Optional, List, Tuple
 
 NAME_BY_PATH = {
     'optt':    'C:/DEV__OPTT',
     'tx':      'C:/DEV__TX',
     'manager': 'C:/manager_1_2_11_23_8',
+    'doc':     'C:/Program Files (x86)/DocFetcher',
 }
 NAME_BY_PATH['щзее'] = NAME_BY_PATH['optt']
 NAME_BY_PATH['еч'] = NAME_BY_PATH['tx']
 NAME_BY_PATH['ьфтфпук'] = NAME_BY_PATH['manager']
+NAME_BY_PATH['вщс'] = NAME_BY_PATH['doc']
 
 WHAT_BY_FILE = {
     'designer': '!!designer.cmd',
@@ -115,24 +116,41 @@ def get_what_by_file(alias: str) -> str:
     return WHAT_BY_FILE[key]
 
 
-def get_versions(alias: str) -> List[str]:
+def get_versions(alias: str) -> List[Tuple[str, str]]:
     name = get_name_by_path(alias)
 
     dirs = []
 
-    for path in Path(name).iterdir():
-        if not path.is_dir():
+    for disc in 'CD':
+        if not Path(disc + name[1:]).exists():
             continue
 
-        path = path.name
+        for path in Path(disc + name[1:]).iterdir():
+            if not path.is_dir():
+                continue
 
-        if path.startswith('trunk_') or re.search('\d+(\.\d+)+', path):
-            dirs.append(path)
+            if path.name.startswith('trunk_') or re.search(r'\d+(\.\d+)+', path.name):
+                dirs.append((path.name, str(path)))
 
     return dirs
 
 
 def get_similar_version(name: str, alias: str) -> str:
+    # Monkey patch
+    def get_similar_value(alias: str, items: list) -> Optional[str]:
+        for [base_dir, full_dir] in items:
+            if alias == base_dir:
+                return full_dir
+
+        # Ищем похожие ключи по начальной строке
+        keys = [full_dir for [base_dir, full_dir] in items if base_dir.startswith(alias)]
+
+        # Нашли одну вариацию -- подходит
+        if len(keys) == 1:
+            return keys[0]
+
+        return
+
     versions = get_versions(name)
     key = get_similar_value(alias, versions)
     if not key:
@@ -141,11 +159,9 @@ def get_similar_version(name: str, alias: str) -> str:
     return key
 
 
-def go_run(name: str, version: str, what: str):
-    version = get_similar_version(name, version)
-
-    dir_file_name = get_name_by_path(name) + '/' + version
-    file_name = dir_file_name + '/' + get_what_by_file(what)
+def _run_file(file_name: str):
+    dir_file_name = os.path.dirname(file_name)
+    file_name = os.path.normpath(file_name)
 
     print(f'Run: "{file_name}"')
 
@@ -154,6 +170,16 @@ def go_run(name: str, version: str, what: str):
 
     # Run
     os.startfile(file_name)
+
+
+def go_run(name: str, version: str, what: str):
+    dir_file_name = get_similar_version(name, version)
+
+    for what in what.split('+'):
+        what = what.strip()
+
+        file_name = dir_file_name + '/' + get_what_by_file(what)
+        _run_file(file_name)
 
 
 def go_open(name: str, version: str = ""):
@@ -173,14 +199,13 @@ def go_open(name: str, version: str = ""):
 def run_manager():
     dir_file_name = get_name_by_path('manager')
     file_name = dir_file_name + '/manager/bin/manager.cmd'
+    _run_file(file_name)
 
-    print(f'Run: "{file_name}"')
 
-    # Move to active dir
-    os.chdir(dir_file_name)
-
-    # Run
-    os.startfile(file_name)
+def run_doc():
+    dir_file_name = get_name_by_path('doc')
+    file_name = dir_file_name + '/DocFetcher-8192_64-bit-Java.exe'
+    _run_file(file_name)
 
 
 def go_print_versions(alias: str):
@@ -200,8 +225,12 @@ if __name__ == '__main__':
         name = argv[0]
 
         # У менеджера версий не бывает
-        if 'manager'.startswith(name):
+        if 'manager'.startswith(name) or 'ьфтфпук'.startswith(name):
             run_manager()
+
+        if 'doc'.startswith(name) or 'вщс'.startswith(name):
+            run_doc()
+
         else:
             go_print_versions(name)
 
