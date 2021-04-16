@@ -18,7 +18,7 @@ NAME_BY_PATH = {
     'optt':    'C:/DEV__OPTT',
     'tx':      'C:/DEV__TX',
     'manager': 'C:/manager_1_2_11_23_8',
-    'doc':     'C:/Program Files (x86)/DocFetcher',
+    'doc':     'C:/Program Files (x86)/DocFetcher/DocFetcher-8192_64-bit-Java.exe',
 }
 for k, v in list(NAME_BY_PATH.items()):
     NAME_BY_PATH[from_ghbdtn(k)] = v
@@ -206,8 +206,7 @@ def run_manager():
 
 
 def run_doc():
-    dir_file_name = get_name_by_path('doc')
-    file_name = dir_file_name + '/DocFetcher-8192_64-bit-Java.exe'
+    file_name = get_name_by_path('doc')
     _run_file(file_name)
 
 
