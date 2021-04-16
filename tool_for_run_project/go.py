@@ -10,25 +10,26 @@ import re
 from pathlib import Path
 from typing import Optional, List, Tuple
 
+sys.path.append('..')
+from from_ghbdtn import from_ghbdtn
+
+
 NAME_BY_PATH = {
     'optt':    'C:/DEV__OPTT',
     'tx':      'C:/DEV__TX',
     'manager': 'C:/manager_1_2_11_23_8',
     'doc':     'C:/Program Files (x86)/DocFetcher',
 }
-NAME_BY_PATH['щзее'] = NAME_BY_PATH['optt']
-NAME_BY_PATH['еч'] = NAME_BY_PATH['tx']
-NAME_BY_PATH['ьфтфпук'] = NAME_BY_PATH['manager']
-NAME_BY_PATH['вщс'] = NAME_BY_PATH['doc']
+for k, v in list(NAME_BY_PATH.items()):
+    NAME_BY_PATH[from_ghbdtn(k)] = v
 
 WHAT_BY_FILE = {
     'designer': '!!designer.cmd',
     'explorer': '!!explorer.cmd',
     'server':   '!!server.cmd',
 }
-WHAT_BY_FILE['вуышптук'] = WHAT_BY_FILE['designer']
-WHAT_BY_FILE['учздщкук'] = WHAT_BY_FILE['explorer']
-WHAT_BY_FILE['ыукмук'] = WHAT_BY_FILE['server']
+for k, v in list(WHAT_BY_FILE.items()):
+    WHAT_BY_FILE[from_ghbdtn(k)] = v
 
 ABOUT_TEXT = '''\
 RUN:
@@ -107,7 +108,7 @@ def has_what_by_file(alias: str):
 
 
 # For WHAT_BY_FILE
-def get_what_by_file(alias: str) -> str:
+def get_file_by_what(alias: str) -> str:
     keys = list(WHAT_BY_FILE)
     key = get_similar_value(alias, keys)
     if not key:
@@ -178,7 +179,7 @@ def go_run(name: str, version: str, what: str):
     for what in what.split('+'):
         what = what.strip()
 
-        file_name = dir_file_name + '/' + get_what_by_file(what)
+        file_name = dir_file_name + '/' + get_file_by_what(what)
         _run_file(file_name)
 
 
@@ -241,7 +242,7 @@ if __name__ == '__main__':
         if name == 'open':
             go_open(name=alias)
         else:
-            go_run(name, 'trunk', what=alias)
+            go_run(name, version, what=alias)
 
     elif argc == 3:
         name, version, what = argv
