@@ -28,7 +28,8 @@ WHAT_BY_FILE = {
     'explorer': '!!explorer.cmd',
     'server':   '!!server.cmd',
     'build':    '!build_tx_kernel__pause.cmd',
-    'update':   ('svn update', r'start /b "" TortoiseProc /command:update /path:"%s"')
+    'update':   ('svn update', r'start /b "" TortoiseProc /command:update /path:"%s"'),
+    'log':      ('svn log', r'start /b "" TortoiseProc /command:log /path:"%s"'),
 }
 for k, v in list(WHAT_BY_FILE.items()):
     WHAT_BY_FILE[from_ghbdtn(k)] = v
