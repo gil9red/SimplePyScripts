@@ -28,7 +28,6 @@ WHAT_BY_FILE = {
     'explorer': '!!explorer.cmd',
     'server':   '!!server.cmd',
     'build':    '!build_tx_kernel__pause.cmd',
-    'b':        '!build_tx_kernel__pause.cmd',
 }
 for k, v in list(WHAT_BY_FILE.items()):
     WHAT_BY_FILE[from_ghbdtn(k)] = v
