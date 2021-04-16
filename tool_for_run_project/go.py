@@ -8,7 +8,7 @@ import os
 import sys
 import re
 from pathlib import Path
-from typing import Optional, List, Tuple
+from typing import Optional, List, Tuple, Union
 
 sys.path.append('..')
 from from_ghbdtn import from_ghbdtn
@@ -28,6 +28,7 @@ WHAT_BY_FILE = {
     'explorer': '!!explorer.cmd',
     'server':   '!!server.cmd',
     'build':    '!build_tx_kernel__pause.cmd',
+    'update':   ('svn update', r'start /b "" TortoiseProc /command:update /path:"%s"')
 }
 for k, v in list(WHAT_BY_FILE.items()):
     WHAT_BY_FILE[from_ghbdtn(k)] = v
@@ -104,12 +105,7 @@ def get_similar_name(alias: str) -> str:
 
 
 # For WHAT_BY_FILE
-def has_what_by_file(alias: str):
-    return has_similar_value(alias, list(WHAT_BY_FILE.keys()))
-
-
-# For WHAT_BY_FILE
-def get_file_by_what(alias: str) -> str:
+def get_file_by_what(alias: str) -> Union[str, Tuple[str, str]]:
     keys = list(WHAT_BY_FILE)
     key = get_similar_value(alias, keys)
     if not key:
@@ -180,8 +176,16 @@ def go_run(name: str, version: str, what: str):
     for what in what.split('+'):
         what = what.strip()
 
-        file_name = dir_file_name + '/' + get_file_by_what(what)
-        _run_file(file_name)
+        value = get_file_by_what(what)
+        if isinstance(value, str):
+            file_name = dir_file_name + '/' + value
+            _run_file(file_name)
+        else:
+            description, command = value
+            command = command % dir_file_name
+
+            print(f'Run: {description}')
+            os.system(command)
 
 
 def go_open(name: str, version: str = ""):
