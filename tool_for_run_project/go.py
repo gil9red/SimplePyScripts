@@ -27,17 +27,19 @@ WHAT_BY_FILE = {
     'designer': '!!designer.cmd',
     'explorer': '!!explorer.cmd',
     'server':   '!!server.cmd',
+    'build':    '!build_tx_kernel__pause.cmd',
+    'b':    '!build_tx_kernel__pause.cmd',
 }
 for k, v in list(WHAT_BY_FILE.items()):
     WHAT_BY_FILE[from_ghbdtn(k)] = v
 
 ABOUT_TEXT = '''\
 RUN:
-  <name> <version> <what>  -- Run tool
-  <name> <what>            -- Run tool (trunk version)
-  open <name> <version>    -- Open dir version
-  open <name>              -- Open dir
-  <name>                   -- Print versions
+  go <name> <version> <what> - Run tool
+  go <name> <what>           - Run tool (trunk version)
+  go open <name> <version>   - Open dir version
+  go open <name>             - Open dir
+  go <name>                  - Print versions
 
 SUPPORTED NAMES:
 {}
@@ -46,22 +48,22 @@ SUPPORTED WHATS:
 {}
 
 EXAMPLES:
-  > optt trunk designer
+  > go optt trunk designer
     Run: "C:/DEV__OPTT/trunk_optt/!!designer.cmd"
     
-  > tx 3.2.6.10 server
+  > go tx 3.2.6.10 server
     Run: "C:/DEV__TX/3.2.6.10/!!server.cmd"
   
-  > go tx designer
+  > go go tx designer
     Run: "C:/DEV__TX/trunk_tx/!!designer.cmd"
   
-  > open optt trunk
+  > go open optt trunk
     Open: "C:/DEV__OPTT/trunk_optt"
    
-  > open optt
+  > go open optt
     Open: "C:/DEV__OPTT"
     
-  > optt
+  > go optt
     Version: ['2.1.7.1', 'trunk_optt']
 '''.format(
         '\n'.join('  {:<10} {}'.format(k, v) for k, v in sorted(NAME_BY_PATH.items())),
