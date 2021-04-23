@@ -30,6 +30,7 @@ WHAT_BY_FILE = {
     'build':    '!build_tx_kernel__pause.cmd',
     'update':   ('svn update', r'start /b "" TortoiseProc /command:update /path:"%s"'),
     'log':      ('svn log', r'start /b "" TortoiseProc /command:log /path:"%s"'),
+    'cleanup':  ('svn cleanup', 'start /b "" TortoiseProc /command:cleanup /path:"%s" /cleanup /nodlg /closeonend:2'),
 }
 for k, v in list(WHAT_BY_FILE.items()):
     WHAT_BY_FILE[from_ghbdtn(k)] = v
