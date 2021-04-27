@@ -9,8 +9,10 @@ __author__ = 'ipetrash'
 # SOURCE: https://refactoring.guru/ru/design-patterns/template-method/java/example
 
 
-from abc import ABC, abstractmethod
 import time
+import sys
+
+from abc import ABC, abstractmethod
 
 
 # Базовый класс социальной сети.
@@ -59,12 +61,12 @@ class Facebook(Network):
         return True
 
     def send_data(self, data: bytes) -> bool:
-        messagePosted = True
-        if messagePosted:
+        message_posted = True
+        if message_posted:
             print("Message: '" + data.decode() + "' was posted on Facebook")
             return True
-        else:
-            return False
+
+        return False
 
     def log_out(self):
         print("User: '" + self.user_name + "' was logged out from Facebook")
@@ -99,12 +101,12 @@ class Twitter(Network):
         return True
 
     def send_data(self, data: bytes) -> bool:
-        messagePosted = True
-        if messagePosted:
+        message_posted = True
+        if message_posted:
             print("Message: '" + data.decode() + "' was posted on Twitter")
             return True
-        else:
-            return False
+
+        return False
 
     def log_out(self):
         print("User: '" + self.user_name + "' was logged out from Twitter")
@@ -142,6 +144,6 @@ if __name__ == '__main__':
 
     else:
         print('Unknown network!')
-        quit()
+        sys.exit()
     
     network.post(message)
