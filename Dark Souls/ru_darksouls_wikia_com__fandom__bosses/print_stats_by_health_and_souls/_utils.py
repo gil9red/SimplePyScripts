@@ -223,7 +223,7 @@ def parse(url: str, debug_log=False) -> List[Tuple[str, int, int]]:
                 debug_log and print(boss.name)
                 debug_log and print(items['Здоровье'])
                 debug_log and print(items['Души'])
-                debug_log and quit()
+                debug_log and sys.exit()
 
         debug_log and print()
 
