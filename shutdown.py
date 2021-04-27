@@ -4,13 +4,14 @@
 __author__ = 'ipetrash'
 
 
-def shutdown(off_pc=19):
-    import time
+import time
+import sys
+import os
 
+
+def shutdown(off_pc=19):
     while time.localtime().tm_hour != off_pc:
         time.sleep(60)  # Ожидание 1 минута
-
-    import sys
 
     if sys.platform == 'win32':
         import ctypes
@@ -28,7 +29,7 @@ def shutdown(off_pc=19):
 
         if ctypes.GetLastError() != winerror.ERROR_SUCCESS:
             print(ctypes.WinError(), file=sys.stderr)
-            quit()
+            sys.exit()
 
         user32 = ctypes.WinDLL('user32')
 
@@ -37,10 +38,9 @@ def shutdown(off_pc=19):
 
         if ctypes.GetLastError() != winerror.ERROR_SUCCESS:
             print(ctypes.WinError(), file=sys.stderr)
-            quit()
+            sys.exit()
 
     else:
-        import os
         os.system('sudo shutdown now')
 
 
