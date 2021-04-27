@@ -4,7 +4,16 @@
 __author__ = 'ipetrash'
 
 
-def get_bytes_from_base64_zlib(text_or_tag_or_bytes) -> bytes:
+import base64
+import zlib
+import sys
+
+from typing import Union
+
+from bs4 import BeautifulSoup, Tag
+
+
+def get_bytes_from_base64_zlib(text_or_tag_or_bytes: Union[str, bytes, Tag]) -> bytes:
     """
     Декодирует данные из текста или элемента XML из формата BASE64, после разжимает их алгоритмом zlib,
     парсит и возвращает как объект XML.
@@ -16,10 +25,7 @@ def get_bytes_from_base64_zlib(text_or_tag_or_bytes) -> bytes:
     else:
         text = text_or_tag_or_bytes
 
-    import base64
     compress_data = base64.b64decode(text)
-
-    import zlib
     return zlib.decompress(compress_data)
 
 
@@ -31,16 +37,13 @@ if __name__ == '__main__':
     os.makedirs(export_dir, exist_ok=True)
 
     # Parsing
-    from bs4 import BeautifulSoup
     root = BeautifulSoup(open(file_name_full_dict, 'rb'), 'lxml')
-    # print(root)
-
     response = root.select_one('response')
 
     # Если ошибка
     if response['re'] != '0':
         print('Error text: "{}"'.format(response['err_text']))
-        quit()
+        sys.exit()
 
     print('Справочник полный?:', response['full'] == '1')
     print('Версия справочника:', response['version'])
