@@ -7,10 +7,24 @@ __author__ = 'ipetrash'
 """Скрипт собирает цитаты сайта bash.im"""
 
 
-def get_logger(name, file='log.txt', encoding='utf8'):
-    import logging
-    import sys
+import logging
+import sys
+import time
+import traceback
 
+from datetime import datetime
+
+
+import requests
+
+import sqlalchemy.exc
+from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, DateTime
+from sqlalchemy.orm import mapper, sessionmaker
+
+from bs4 import BeautifulSoup
+
+
+def get_logger(name, file='log.txt', encoding='utf8'):
     log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
 
@@ -31,18 +45,6 @@ def get_logger(name, file='log.txt', encoding='utf8'):
 
 
 logger = get_logger('collector_bash_im')
-
-
-from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, DateTime
-from sqlalchemy.orm import mapper, sessionmaker
-import sqlalchemy.exc
-
-import time
-import traceback
-
-import grab
-
-from datetime import datetime
 
 
 class Quote:
@@ -92,19 +94,8 @@ query = session.query(Quote)
 
 
 if __name__ == '__main__':
-    # http://bash.im
-
-    # g = grab.Grab()
-    # g.go('http://bash.im')
-    #
-    # print(g.response.body_as_bytes())
-
-    import requests
     rs = requests.get('http://bash.im')
-    # print(rs.text)
-
-    from bs4 import BeautifulSoup
-    soup = BeautifulSoup(rs.text, "lxml")
+    soup = BeautifulSoup(rs.content, "lxml")
     # print(soup)
     i = 0
     for quote in soup.find_all(attrs={"class": "quote"}):
@@ -115,27 +106,26 @@ if __name__ == '__main__':
         i += 1
         # print(quote.find(attrs={"class": "text"}).contents)
         print(i, text)
-        # quit()
 
-    quit()
+    sys.exit()
 
-    xpath = '//*[@class="current"]/*[@class="page"]/@value'
-    current_page = int(g.doc.select(xpath).text())
-    print(current_page)
-
-    xpath = '//*[@class="quote"]'
-    i = 0
-    for quote in g.doc.select(xpath):
-        print(quote.text())
-        nodes = quote.node.find_class('id')
-        if nodes:
-            i += 1
-            quote_id = int(nodes[0].text.replace('#', ''))
-            date = datetime.strptime(quote.node.find_class('date')[0].text, '%Y-%m-%d %H:%M')
-            rating = int(quote.node.find_class('rating')[0].text)
-            text = quote.node.find_class('text')[0]
-            print(dir(text))
-            print(text.text_content())
-            quit()
-            # print(i, Column(quote_id, date, rating, text))
-            print(i, quote_id, date, rating, text)
+    # xpath = '//*[@class="current"]/*[@class="page"]/@value'
+    # current_page = int(g.doc.select(xpath).text())
+    # print(current_page)
+    #
+    # xpath = '//*[@class="quote"]'
+    # i = 0
+    # for quote in g.doc.select(xpath):
+    #     print(quote.text())
+    #     nodes = quote.node.find_class('id')
+    #     if nodes:
+    #         i += 1
+    #         quote_id = int(nodes[0].text.replace('#', ''))
+    #         date = datetime.strptime(quote.node.find_class('date')[0].text, '%Y-%m-%d %H:%M')
+    #         rating = int(quote.node.find_class('rating')[0].text)
+    #         text = quote.node.find_class('text')[0]
+    #         print(dir(text))
+    #         print(text.text_content())
+    #         sys.exit()
+    #         # print(i, Column(quote_id, date, rating, text))
+    #         print(i, quote_id, date, rating, text)
