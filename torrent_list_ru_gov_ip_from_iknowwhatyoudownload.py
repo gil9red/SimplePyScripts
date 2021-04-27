@@ -20,7 +20,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def get_torrents_by_ip(ip, append_torrent_size=False):
+def get_torrents_by_ip(ip: str, append_torrent_size=False) -> list:
     url = 'http://iknowwhatyoudownload.com/ru/peer/?ip=' + ip
 
     rs = requests.get(url, headers={'User-Agent': '-'})
