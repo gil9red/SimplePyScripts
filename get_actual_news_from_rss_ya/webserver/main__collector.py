@@ -77,7 +77,7 @@ if __name__ == '__main__':
     #         connect.close()
 
 
-    quit()
+    sys.exit()
 
 
     while True:
