@@ -4,100 +4,111 @@
 __author__ = 'ipetrash'
 
 
-# source: http://stackoverflow.com/a/5910078/5909792
-def ascii_table(rows, headers):
-    lens = list()
-    for i in range(len(headers)):
-        lens.append(
-            len(
-                max(
-                    [str(x[i]) for x in rows] + [headers[i]],
-                    key=lambda x: len(str(x))
-                )
-            )
-        )
+import sys
+import time
+import re
 
-    formats = ["%%-%ds" % col_len for col_len in lens]
+# pip install selenium
+from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.firefox.options import Options
+from selenium.common.exceptions import MoveTargetOutOfBoundsException
+from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
+from selenium.webdriver.remote.webdriver import WebElement
 
-    pattern = " | ".join(formats)
-    hpattern = " | ".join(formats)
-    separator = "-+-".join(['-' * n for n in lens])
-
-    text_lines = [hpattern % tuple(headers), separator]
-    for line in rows:
-        text_lines.append(pattern % tuple(t for t in line))
-
-    return '\n'.join(text_lines)
+sys.path.append('..')
+from ascii_table import ascii_table
 
 
-def print_the_most_profitable_dish(url):
+DEBUG_LOG = False
+
+
+def do_page_down(driver: RemoteWebDriver, footer: WebElement):
+    y_position = 0
+
+    while True:
+        DEBUG_LOG and print('y_position:', y_position)
+        try:
+            ActionChains(driver).move_to_element(footer).perform()
+            break
+        except MoveTargetOutOfBoundsException:
+            y_position += 250
+            driver.execute_script(f'window.scrollTo(0, {y_position});')
+            time.sleep(1)
+
+
+def print_the_most_profitable_dish(url: str):
     print(url)
 
-    import requests
-    rs = requests.get(url)
-    print(rs)
-
-    from bs4 import BeautifulSoup
-    root = BeautifulSoup(rs.content, 'lxml')
+    options = Options()
+    options.add_argument('--headless')
 
     unknown_metrics_items = []
     items = []
 
-    import re
+    driver = None
+    try:
+        driver = webdriver.Firefox(options=options)
+        driver.implicitly_wait(2)
+        driver.get(url)
 
-    for i, product in enumerate(root.select('.CardContent'), 1):
-        title = product.select_one('.CardText__title').text.strip()
+        # Пролистывание страницы до низа
+        footer_el = driver.find_element_by_css_selector('footer')
+        do_page_down(driver, footer_el)
 
-        price = product.select_one('.ProductParams__price').text
-        price = int(re.sub('\D', '', price))
+        for i, product_el in enumerate(driver.find_elements_by_css_selector('.product-card'), 1):
+            title = product_el.find_element_by_css_selector('.card-title').text.strip()
 
-        try:
-            tag_subtitle = product.select_one('.CardText__subtitle > span > b').text.strip()
-            weight, metrics = tag_subtitle.split()
+            price = product_el.find_element_by_css_selector('.price-value').text
+            price = int(re.sub(r'\D', '', price))
 
-        except Exception:
-            unknown_metrics_items.append((title, price))
-            continue
+            try:
+                tag_subtitle = product_el.find_element_by_css_selector('.parameters > .param-size').text.strip()
+                weight, metrics = tag_subtitle.split()
 
-        # Ignore
-        if metrics not in ['кг.', 'гр.']:
-            unknown_metrics_items.append((title, tag_subtitle, price))
-            continue
+            except Exception:
+                unknown_metrics_items.append((title, price))
+                continue
 
-        weight = float(weight)
-        if metrics == 'кг.':
-            weight *= 1000
+            # Определение метрики
+            if metrics not in ['кг.', 'гр.', 'г.']:
+                unknown_metrics_items.append((title, tag_subtitle, price))
+                continue
 
-        # print('{}. "{}": {} гр., {} -> {:.3f}'.format(i, title, weight, price, weight / price))
-        items.append((title, weight, price, weight / price))
+            weight = float(weight)
+            if metrics == 'кг.':
+                weight *= 1000
 
-    print('Самые выгодные по количеству грамм за единицу цены:')
-    print()
+            DEBUG_LOG and print(f'{i}. "{title}": {weight} г., {price} -> {weight / price:.3f}')
+            items.append((title, weight, price, weight / price))
 
-    items.sort(key=lambda x: x[3], reverse=True)
-    items = [(title, weight, price, '{:.3f}'.format(rate)) for title, weight, price, rate in items]
+        print('Самые выгодные по количеству грамм за единицу цены:\n')
 
-    columns = ['Название', 'Вес (гр.)', 'Цена', 'Коэффициент']
-    print(ascii_table(items, columns))
-    #
-    # OR:
-    # for i, (title, weight, price, rate) in enumerate(sorted(items, key=lambda x: x[3], reverse=True), 1):
-    #     print('  {}. "{}": {} гр., {} -> {:.3f}'.format(i, title, weight, price, rate))
+        items.sort(key=lambda x: x[3], reverse=True)
+        items = [(title, weight, price, f'{rate:.3f}') for title, weight, price, rate in items]
 
-    if unknown_metrics_items:
-        print()
-        print('Неудалось обработать:')
-        for i, item in enumerate(unknown_metrics_items, 1):
-            print('  {}. {}'.format(i, ', '.join(map(str, item))))
+        columns = ['Название', 'Вес (г.)', 'Цена', 'Коэффициент']
+        items.insert(0, columns)
+        print(ascii_table(items))
+
+        if unknown_metrics_items:
+            print('\nНеудалось обработать:')
+            for i, item in enumerate(unknown_metrics_items, 1):
+                print('  {}. {}'.format(i, ', '.join(map(str, item))))
+
+        print('\n')
+
+    finally:
+        if driver:
+            driver.quit()
 
 
 if __name__ == '__main__':
     urls = [
-        'http://sushivkusno.com/category/nabory-siety',
-        'http://sushivkusno.com/category/goriachiie-zakuski',
-        'http://sushivkusno.com/category/salaty',
+        'https://sushivkusno.com/nabory-sety',
+        # 'https://sushivkusno.com/goryachie-zakuski',
+        # 'https://sushivkusno.com/salaty',
     ]
 
     for url in urls:
         print_the_most_profitable_dish(url)
-        print('\n')
