@@ -4,11 +4,14 @@
 __author__ = 'ipetrash'
 
 
+import sys
+import requests
+
+
 text = 'titan quest'
 url = 'https://www.gog.com/games/ajax/filtered?language=en&mediaType=game&page=1&sort=bestselling' \
       '&system=windows_10,windows_7,windows_8,windows_vista,windows_xp&search=' + text
 
-import requests
 rs = requests.get(url)
 print(rs)
 
@@ -17,7 +20,7 @@ print(data)
 
 if not data['totalGamesFound']:
     print('Not found game')
-    quit()
+    sys.exit()
 
 for game in data['products']:
     print(game['title'], game['price']['amount'] + game['price']['symbol'])
