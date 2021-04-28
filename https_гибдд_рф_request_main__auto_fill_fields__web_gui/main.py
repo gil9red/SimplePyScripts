@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+import sys
+import traceback
+
 from PyQt5.QtCore import QUrl, QEventLoop
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 
@@ -13,15 +16,13 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
     text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
     text += ''.join(traceback.format_tb(tb))
 
     print(text)
     QMessageBox.critical(None, 'Error', text)
-    quit()
+    sys.exit()
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
