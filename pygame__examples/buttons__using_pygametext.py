@@ -4,6 +4,8 @@
 __author__ = 'ipetrash'
 
 
+import sys
+
 # pip install pygame
 # pip install pygametext
 import pygame
@@ -34,7 +36,7 @@ def update():  # Update & Eventd
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
-            quit()
+            sys.exit()
 
 
 def draw():
