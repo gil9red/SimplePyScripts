@@ -5,12 +5,14 @@ __author__ = 'ipetrash'
 
 
 import datetime as DT
+import sys
 
 # pip install opencv-python
 import cv2
+import numpy
 
 
-def draw_overlay(img, text: str, color_text=(255, 255, 255), max_text_height_percent=5):
+def draw_overlay(img: numpy.ndarray, text: str, color_text=(255, 255, 255), max_text_height_percent=5):
     h, w, _ = img.shape
 
     max_text_height = (h / 100) * max_text_height_percent
@@ -35,7 +37,7 @@ def draw_overlay(img, text: str, color_text=(255, 255, 255), max_text_height_per
 
 
 def draw_overlay_current_datetime(
-        img, datetime_fmt='%d/%m/%y %H:%M:%S',
+        img: numpy.ndarray, datetime_fmt='%d/%m/%y %H:%M:%S',
         color_text=(255, 255, 255), max_text_height_percent=5
 ):
     text = DT.datetime.now().strftime(datetime_fmt)
@@ -52,4 +54,4 @@ if __name__ == '__main__':
         cv2.imshow('With overlay', img_overlay)
 
         if cv2.waitKey(25) == 27:  # Esc to quit
-            quit()
+            sys.exit()
