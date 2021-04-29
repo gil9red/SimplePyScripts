@@ -4,17 +4,19 @@
 __author__ = 'ipetrash'
 
 
-from datetime import datetime
 import json
-import lxml.html
 import logging
 import time
-from urllib.parse import urljoin
-from random import randint
 import sys
 
+from datetime import datetime
+from random import randint
+
+import lxml.html
 import requests
 import vk_api
+
+from urllib.parse import urljoin
 
 
 def get_logger(name, file='log.txt', encoding='utf8', fmt=None):
@@ -63,7 +65,7 @@ def vk_auth(login, password):
         vk.authorization()
     except Exception as e:
         logger.exception("При авторизации произошла ошибка:")
-        quit()
+        sys.exit()
 
     logger.debug('Удачная авторизация.')
 
@@ -99,7 +101,7 @@ if __name__ == '__main__':
 
     if not login or not password:
         logger.error('Логин/пароль не указаны.')
-        quit()
+        sys.exit()
 
     # Авторизируемся
     vk = vk_auth(login, password)
