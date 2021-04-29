@@ -1,13 +1,16 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from operator import itemgetter
-import sys
+__author__ = 'ipetrash'
+
+
 import datetime
+import sys
+
+from operator import itemgetter
 
 import vk_api
 
-
-__author__ = 'ipetrash'
 
 """Скрипт выводит список друзей пользователя и показывает сколько дней
 осталось до их дней рождения.
@@ -75,7 +78,7 @@ if __name__ == '__main__':
     sorted_by_bdate_list = sorted(filtered_friends, key=itemgetter('remained_days'))
     if not sorted_by_bdate_list:
         print('В этом году у всех друзей уже были дни рождения.')
-        quit()
+        sys.exit()
 
     # Выведем отсортированный список друзей
     for i, friend in enumerate(sorted_by_bdate_list, 1):
@@ -84,9 +87,5 @@ if __name__ == '__main__':
         last_name = friend.get('last_name')
         remained_days = friend.get('remained_days')
 
-        print("{}. {} (id{}) до дня рождения осталось {} дней".format(
-            i,
-            first_name + " " + last_name,
-            id_user,
-            remained_days,
-        ))
+        name = first_name + " " + last_name
+        print(f"{i}. {name} (id{id_user}) до дня рождения осталось {remained_days} дней")
