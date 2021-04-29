@@ -6,10 +6,12 @@ __author__ = 'ipetrash'
 
 # SOURCE: http://www.nerdparadise.com/programming/pygame/part1
 
-# pip install pygame
-import pygame
 
 import math
+import sys
+
+# pip install pygame
+import pygame
 
 
 pygame.init()
@@ -22,7 +24,7 @@ if joystick_count:
 else:
     # No joysticks!
     print("Error, I didn't find any joysticks.")
-    quit()
+    sys.exit()
 
 screen = pygame.display.set_mode((400, 300))
 
