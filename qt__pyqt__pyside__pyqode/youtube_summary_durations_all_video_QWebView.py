@@ -10,6 +10,10 @@ Summary durations all video.
 """
 
 
+import sys
+
+from bs4 import BeautifulSoup
+
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from PyQt4.QtWebKit import *
@@ -53,8 +57,6 @@ def load_finished_handler(ok):
         global url_video_by_time_dict
 
         html = doc.toOuterXml()
-
-        from bs4 import BeautifulSoup
         root = BeautifulSoup(html, 'lxml')
 
         for item in root.select('.channels-content-item'):
@@ -113,7 +115,7 @@ def load_finished_handler(ok):
     print('  Summary duration (secs): {}'.format(sum_seconds))
     print('  Summary duration: {}'.format(sum_time_str))
 
-    quit()
+    sys.exit()
 
 
 if __name__ == '__main__':
