@@ -7,18 +7,16 @@ __author__ = 'ipetrash'
 # SOURCE: https://github.com/coleifer/peewee/blob/afdf7b752dcadbf440faaa91a7fb0f403eac9a69/examples/diary.py
 
 
-from collections import OrderedDict
 import datetime as DT
 import hashlib
+import sys
+
 from getpass import getpass
 
 # pip install peewee
 from peewee import *
 
-# For search utils
-import sys
 sys.path.append('../hello_world__diary__encryption_all_in_one_AES')
-
 from utils.security import CryptoAES, AuthenticationError
 from utils.utils import shorten
 
@@ -44,7 +42,7 @@ if not ENCRYPT_MASTER_KEY:
     password = getpass()
     if not password:
         print('Required password!')
-        quit()
+        sys.exit()
 
     ENCRYPT_MASTER_KEY = hashlib.sha256(bytes(password, 'utf-8')).hexdigest().upper()
 
@@ -147,11 +145,11 @@ def view_diaries(master_key: str = ENCRYPT_MASTER_KEY):
             break
 
 
-MENU = OrderedDict([
-    ('a', add_diary),
-    ('v', view_diaries),
-    ('p', Diary.print_table),
-])
+MENU = {
+    'a': add_diary,
+    'v': view_diaries,
+    'p': Diary.print_table,
+}
 
 
 def menu_loop():
