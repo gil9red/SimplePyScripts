@@ -4,9 +4,12 @@
 __author__ = 'ipetrash'
 
 
+import datetime as DT
+import random
 import socket
-
 import sys
+
+
 sys.path.append('..')
 
 from common import send_msg, recv_msg
@@ -17,15 +20,12 @@ PORT = 9090
 
 def execute_command(command: str) -> str:
     if command == 'CURRENT_DATETIME':
-        import datetime as DT
         return DT.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
     elif command == 'CURRENT_TIMESTAMP':
-        import datetime as DT
         return str(DT.datetime.now().timestamp())
 
     elif command == 'RANDOM':
-        import random
         return str(random.randint(0, 1000000))
 
     elif command == 'EXIT':
@@ -56,6 +56,6 @@ with socket.socket() as sock:
         send_msg(conn, response_data)
 
         if command == 'EXIT':
-            quit()
+            sys.exit()
 
         print('Close\n')
