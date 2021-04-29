@@ -10,19 +10,21 @@ __author__ = 'ipetrash'
 """
 
 
+import sys
+import time
+import traceback
+
 from PyQt5.QtWidgets import QWidget, QListWidget, QApplication, QVBoxLayout
 from PyQt5.QtCore import QThread, pyqtSignal
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
     text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-
-    import traceback
     text += ''.join(traceback.format_tb(tb))
 
     print('Error: ', text)
 
-import sys
+
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -46,7 +48,6 @@ class MyThread(QThread):
                 print(i)
 
                 # Задержка в 5 миллисекунд
-                import time
                 time.sleep(0.005)
 
         finally:
@@ -87,7 +88,7 @@ class Widget(QWidget):
 
     def closeEvent(self, event):
         # После закрытия окна приложение не завершится пока список работает
-        quit()
+        sys.exit()
 
 
 if __name__ == '__main__':
@@ -98,4 +99,3 @@ if __name__ == '__main__':
     w.fill()
 
     app.exec_()
-
