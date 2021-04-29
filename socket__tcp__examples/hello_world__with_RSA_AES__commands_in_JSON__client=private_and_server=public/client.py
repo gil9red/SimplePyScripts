@@ -4,12 +4,13 @@
 __author__ = 'ipetrash'
 
 
-from base64 import b64decode
 import json
 import socket
+import sys
+
+from base64 import b64decode
 from typing import Optional
 
-import sys
 sys.path.append('..')
 
 from common import send_msg, recv_msg
@@ -33,11 +34,9 @@ def send_command(name: CommandEnum, data: str = None) -> Optional[dict]:
         data = DATA['info_security'].encrypt(data)
 
     print(f'[+] Sending ({len(data)}): {data}')
-
     send_msg(sock, data)
 
     print('[+] Receiving...')
-
     response_data = recv_msg(sock)
     if not response_data:
         return
@@ -84,7 +83,7 @@ with socket.socket() as sock:
 
     else:
         print('[-] Need AES key from server!')
-        quit()
+        sys.exit()
 
     print('\n')
 
