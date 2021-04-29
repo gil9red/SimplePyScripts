@@ -4,10 +4,11 @@
 __author__ = 'ipetrash'
 
 
+import hashlib
 import pickle
-import shutil
 import os
-import traceback
+import shutil
+import sys
 
 from PySide.QtGui import *
 from PySide.QtCore import *
@@ -23,7 +24,7 @@ DIR = 'tags3'
 os.makedirs(DIR, exist_ok=True)
 
 
-class MainWindow(QMainWindow, QObject):
+class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -49,7 +50,7 @@ class MainWindow(QMainWindow, QObject):
         # TODO: при изменении тега менять и окно с его содержимым -- plain_text_edit_tag_info
         # TODO: заменить модель комбобокса нашим списком
         self.tags_dict = dict()
-        self.modified_tags = list()
+        self.modified_tags = []
 
         # Словарь, ключом, которого id тега, а значением -- элемент списка
         self.tag_id_item_dict = dict()
@@ -179,7 +180,6 @@ class MainWindow(QMainWindow, QObject):
     def hash_tag(tag):
         text = tag['ref_guide'] + tag['description']
 
-        import hashlib
         md5 = hashlib.md5()
         md5.update(text.encode())
         return md5.hexdigest()
@@ -343,7 +343,7 @@ class MainWindow(QMainWindow, QObject):
             self.save_tag(self.modified_tags[0])
 
     def read_settings(self):
-        # TODO: при сложных настройках, лучше перейти на json или yaml
+        # NOTE: при сложных настройках, лучше перейти на json или yaml
         config = QSettings(CONFIG_FILE, QSettings.IniFormat)
         self.restoreState(config.value('MainWindow_State'))
         self.restoreGeometry(config.value('MainWindow_Geometry'))
@@ -359,4 +359,4 @@ class MainWindow(QMainWindow, QObject):
 
     def closeEvent(self, event):
         self.write_settings()
-        quit()
+        sys.exit()
