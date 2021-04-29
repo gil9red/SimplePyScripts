@@ -10,10 +10,12 @@ __author__ = 'ipetrash'
 
 # https://vk.com/wall-37473310_377390
 
+
 from collections import defaultdict
 
 import time
 import traceback
+import sys
 
 import vk_api
 
@@ -31,7 +33,7 @@ if __name__ == '__main__':
         vk.auth()
     except Exception as e:
         print(e)
-        quit()
+        sys.exit()
 
     user_comment_count_dict = defaultdict(int)
 
@@ -41,11 +43,8 @@ if __name__ == '__main__':
 
     while True:
         try:
-            print('Запрашиваю порцию данных: offset: {}, '
-                  'count: {}, count_comments: {}.'.format(
-                offset,
-                count,
-                'unknown' if count_comments is None else count_comments))
+            count_comments_title = 'unknown' if count_comments is None else count_comments
+            print(f'Запрашиваю порцию данных: offset={offset}, count={count}, count_comments={count_comments_title}.')
 
             data = {
                 'owner_id': OWNER_ID,
@@ -68,11 +67,11 @@ if __name__ == '__main__':
             time.sleep(0.4)
 
         except Exception as e:
-            print('Ошибка:\n{}'.format(traceback.format_exc()))
+            print(f'Ошибка:\n{traceback.format_exc()}')
             print('Ждем 60 секунд.')
             time.sleep(60)
 
-    print('Закончено получение данных. Всего пользователей комментировало: {}.'.format(len(user_comment_count_dict)))
+    print(f'Закончено получение данных. Всего пользователей комментировало: {len(user_comment_count_dict)}.')
     print('Вывожу пользователей и количество их комментариев:')
 
     # TODO: по id вывести имя/фамилию/пол/url-страницы
