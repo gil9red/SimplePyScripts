@@ -4,12 +4,15 @@
 __author__ = 'ipetrash'
 
 
+import time
+import requests
+import sys
+
+from bs4 import BeautifulSoup
+
 from PyQt5 import QtWidgets as qtw
 from PyQt5.QtTest import QTest
 
-import time
-import requests
-from bs4 import BeautifulSoup
 
 from console import get_inherited_children, ROOT_URL
 
@@ -77,7 +80,7 @@ class MainWindow(qtw.QMainWindow):
         )
 
     def closeEvent(self, e):
-        quit()
+        sys.exit()
 
 
 if __name__ == '__main__':
