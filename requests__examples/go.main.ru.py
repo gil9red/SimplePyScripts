@@ -4,9 +4,12 @@
 __author__ = 'ipetrash'
 
 
-import requests
-import re
 import json
+import re
+import sys
+
+import requests
+
 
 rs = requests.get('https://go.mail.ru/search?q=cats')
 print(rs)
@@ -14,7 +17,7 @@ print(rs)
 data = re.search('go.dataJson = (.+);', rs.text)
 if not data:
     print('Not data!')
-    quit()
+    sys.exit()
 
 data = data.group(1)
 
