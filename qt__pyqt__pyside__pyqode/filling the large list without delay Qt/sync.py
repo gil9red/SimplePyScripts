@@ -10,25 +10,25 @@ __author__ = 'ipetrash'
 """
 
 
+import traceback
+import sys
+
 from PyQt5.QtWidgets import QWidget, QListWidget, QApplication, QVBoxLayout
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
     text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-
-    import traceback
     text += ''.join(traceback.format_tb(tb))
 
     print('Error: ', text)
 
-import sys
+
 sys.excepthook = log_uncaught_exceptions
 
 
 def generator_large_list():
     for i in range(1000000):
         QApplication.processEvents()
-
         yield i
 
 
@@ -51,7 +51,7 @@ class Widget(QWidget):
 
     def closeEvent(self, event):
         # После закрытия окна приложение не завершится пока список работает
-        quit()
+        sys.exit()
 
 
 if __name__ == '__main__':
