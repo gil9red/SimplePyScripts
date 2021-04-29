@@ -4,7 +4,8 @@
 __author__ = 'ipetrash'
 
 
-from PyQt5.QtWidgets import *
+import sys
+from PyQt5.QtWidgets import QMainWindow, QApplication, QInputDialog, QMessageBox, QLabel, QLineEdit
 
 
 class Example(QMainWindow):
@@ -21,11 +22,11 @@ if __name__ == '__main__':
     password, ok = QInputDialog.getText(None, 'Auth', 'Input password:', QLineEdit.Password)
     if not ok:
         QMessageBox.warning(None, 'Warning', 'Need input password!')
-        quit()
+        sys.exit()
 
     if password != '123':
         QMessageBox.warning(None, 'Warning', 'Invalid password!')
-        quit()
+        sys.exit()
 
     w = Example()
     w.show()
