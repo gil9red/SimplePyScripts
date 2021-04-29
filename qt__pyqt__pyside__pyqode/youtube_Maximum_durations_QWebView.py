@@ -10,6 +10,9 @@ Maximum durations.
 """
 
 
+import sys
+from bs4 import BeautifulSoup
+
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from PyQt4.QtWebKit import *
@@ -52,16 +55,12 @@ def load_finished_handler(ok):
 
     def get_video_time_list():
         html = doc.toOuterXml()
-
-        from bs4 import BeautifulSoup
         root = BeautifulSoup(html, 'lxml')
 
         return [title.text for title in root.select('.video-time')]
 
     def get_video_link_list():
         html = doc.toOuterXml()
-
-        from bs4 import BeautifulSoup
         root = BeautifulSoup(html, 'lxml')
 
         return {a['href'] for a in root.select('.yt-uix-tile-link')}
@@ -125,7 +124,7 @@ def load_finished_handler(ok):
 
     print('  Max durations: {}'.format(max_time_str))
 
-    quit()
+    sys.exit()
 
 
 if __name__ == '__main__':
