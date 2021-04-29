@@ -5,8 +5,16 @@
 __author__ = 'ipetrash'
 
 
+import sys
+
+import vk_api
+
+# Логин, пароль к аккаунту и id человека, на стену которого будем постить сообщения
+from config import LOGIN, PASSWORD
+OWNER_ID = None
+
+
 def vk_auth(login, password):
-    import vk_api
     vk = vk_api.VkApi(login, password)
 
     try:
@@ -14,14 +22,9 @@ def vk_auth(login, password):
         vk.auth()
     except vk_api.AuthError as e:
         print(e)  # В случае ошибки выведем сообщение
-        quit()
+        sys.exit()
 
     return vk
-
-
-# Логин, пароль к аккаунту и id человека, на стену которого будем постить сообщения
-from config import LOGIN, PASSWORD
-OWNER_ID = None
 
 
 if __name__ == '__main__':
