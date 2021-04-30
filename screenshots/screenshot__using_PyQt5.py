@@ -11,16 +11,18 @@ import datetime as DT
 
 from PyQt5.QtWidgets import QApplication
 
+from config import DIR_OUTPUT
 
-PATTERN = 'PyQt5__screenshot'
+
+PATTERN = DIR_OUTPUT / f'PyQt5__screenshot'
 
 
 app = QApplication([])
 
 
 img = app.primaryScreen().grabWindow(QApplication.desktop().winId())
-img.save(PATTERN + '.png')
-img.save(PATTERN + '.jpg')
+img.save(f'{PATTERN}.png')
+img.save(f'{PATTERN}.jpg')
 
 # Filename with datetime
 file_name = f'{PATTERN}_{DT.datetime.now():%Y-%m-%d_%H%M%S}.jpg'

@@ -12,8 +12,10 @@ import datetime as DT
 # pip install pyscreenshot
 import pyscreenshot as ImageGrab
 
+from config import DIR_OUTPUT
 
-PATTERN = 'pyscreenshot__screenshot'
+
+PATTERN = DIR_OUTPUT / f'pyscreenshot__screenshot'
 
 
 img = ImageGrab.grab()

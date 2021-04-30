@@ -12,8 +12,10 @@ import datetime as DT
 # pip install pillow
 from PIL import ImageGrab
 
+from config import DIR_OUTPUT
 
-PATTERN = 'PIL__screenshot'
+
+PATTERN = DIR_OUTPUT / f'PIL__screenshot'
 
 
 img = ImageGrab.grab()
