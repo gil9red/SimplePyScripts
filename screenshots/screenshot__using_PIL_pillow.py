@@ -14,12 +14,12 @@ from PIL import ImageGrab
 
 
 im = ImageGrab.grab()
-im.save('screenshot.png')
-im.save('screenshot.jpg')
+im.save('PIL__screenshot.png')
+im.save('PIL__screenshot.jpg')
 im.show()
 
 # Filename with datetime
-file_name = f'screenshot_{DT.datetime.now():%Y-%m-%d_%H%M%S}.jpg'
+file_name = f'PIL__screenshot_{DT.datetime.now():%Y-%m-%d_%H%M%S}.jpg'
 print(file_name)
 
 im.save(file_name)
