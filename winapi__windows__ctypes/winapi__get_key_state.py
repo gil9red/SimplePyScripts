@@ -7,13 +7,15 @@ __author__ = 'ipetrash'
 """Ловим нажатие кнопки и выходим."""
 
 
-if __name__ == '__main__':
-    import time
-    import win32api
+import time
+import sys
 
-    while True:
-        if win32api.GetAsyncKeyState(ord('Q')):
-            print('press Q')
-            quit()
+import win32api
 
-        time.sleep(0.01)
+
+while True:
+    if win32api.GetAsyncKeyState(ord('Q')):
+        print('Press Q')
+        sys.exit()
+
+    time.sleep(0.01)
