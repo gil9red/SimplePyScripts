@@ -4,15 +4,16 @@
 __author__ = 'ipetrash'
 
 
-from datetime import datetime, timedelta
 import json
-import lxml.html
 import logging
 import time
-from urllib.parse import urljoin
-from random import randint
 import sys
 
+from datetime import datetime, timedelta
+from urllib.parse import urljoin
+from random import randint
+
+import lxml.html
 import requests
 import vk_api
 import schedule
@@ -47,8 +48,7 @@ def bash_quote(url='http://bash.im/', count=1):
     html = lxml.html.fromstring(rs.text)
     quotes = html.xpath('//div[@class="quote"]//a[@class="id"]')
 
-    hrefs = list()
-
+    hrefs = []
     for quote_href in quotes[:count]:
         quote_href = quote_href.attrib['href']
         quote_href = urljoin(rs.url, quote_href)
@@ -65,10 +65,9 @@ def vk_auth(login, password):
         vk.authorization()
     except vk_api.AuthorizationError as e:
         logger.error('При авторизации произошла ошибка: %s.', e)
-        quit()
+        sys.exit()
 
     logger.debug('Удачная авторизация.')
-
     return vk
 
 
@@ -102,7 +101,7 @@ if __name__ == '__main__':
 
     if not login or not password:
         logger.error('Логин/пароль не указаны.')
-        quit()
+        sys.exit()
 
     # Авторизируемся
     vk = vk_auth(login, password)
