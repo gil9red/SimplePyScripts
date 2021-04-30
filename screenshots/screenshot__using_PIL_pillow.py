@@ -13,13 +13,16 @@ import datetime as DT
 from PIL import ImageGrab
 
 
-im = ImageGrab.grab()
-im.save('PIL__screenshot.png')
-im.save('PIL__screenshot.jpg')
-im.show()
+PATTERN = 'PIL__screenshot'
+
+
+img = ImageGrab.grab()
+img.save(PATTERN + '.png')
+img.save(PATTERN + 'PIL__screenshot.jpg')
+img.show()
 
 # Filename with datetime
-file_name = f'PIL__screenshot_{DT.datetime.now():%Y-%m-%d_%H%M%S}.jpg'
+file_name = f'{PATTERN}_{DT.datetime.now():%Y-%m-%d_%H%M%S}.jpg'
 print(file_name)
 
-im.save(file_name)
+img.save(file_name)
