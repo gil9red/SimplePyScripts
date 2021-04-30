@@ -17,8 +17,8 @@ PATTERN = 'PIL__screenshot'
 
 
 img = ImageGrab.grab()
-img.save(PATTERN + '.png')
-img.save(PATTERN + 'PIL__screenshot.jpg')
+img.save(f'{PATTERN}.png')
+img.save(f'{PATTERN}.jpg')
 img.show()
 
 # Filename with datetime
