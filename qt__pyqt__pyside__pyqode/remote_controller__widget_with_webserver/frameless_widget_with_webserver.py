@@ -91,17 +91,14 @@ class MainWindow(QWidget):
         geometry = self.geometry()
         x, y, w, h = geometry.x(), geometry.y(), geometry.width(), geometry.height()
 
-        # t = time.perf_counter()
         pixmap = QApplication.instance().primaryScreen().grabWindow(
             QApplication.desktop().winId(),
             x, y, w, h
         )
-        # print(pixmap.size())
 
         cursor_pos = QCursor.pos()
         local_pos = self.mapFromGlobal(cursor_pos)
-        # print(cursor_pos, self.mapFromGlobal(cursor_pos))
-        # if geometry.contains(cursor_pos):
+
         if self.rect().contains(local_pos):
             painter = QPainter()
             painter.begin(pixmap)
@@ -112,29 +109,8 @@ class MainWindow(QWidget):
         buffer = QBuffer(data)
         buffer.open(QBuffer.WriteOnly)
         pixmap.save(buffer, "PNG")
-        # print(data)
 
         self.thread_command.set_pixmap(bytes(data))
-        # self.about_data.emit(bytes(data))
-        # print(time.perf_counter() - t)
-        #
-        # print()
-
-        # pixmap = QApplication.instance().primaryScreen().grabWindow(
-        #     QApplication.desktop().winId()
-        # )
-        # self.thread.pixmap = pixmap
-
-        # cursor_pos = QCursor.pos()
-        # painter = QPainter()
-        # painter.begin(pixmap)
-        # painter.drawPixmap(cursor_pos, self.DEFAULT_MOUSE_PIXMAP)
-        # painter.end()
-
-    # def setVisible(self, visible: bool):
-    #     super().setVisible(visible)
-    #
-    #     print(visible)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
