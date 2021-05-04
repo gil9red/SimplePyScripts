@@ -22,8 +22,8 @@ class MainWindow(QWidget):
 
         button_left = self._create_button('LEFT')
         button_right = self._create_button('RIGHT')
-        button_top = self._create_button('TOP')
-        button_bottom = self._create_button('BOTTOM')
+        button_top = self._create_button('UP')
+        button_bottom = self._create_button('DOWN')
 
         layout = QGridLayout(self)
         layout.setSpacing(0)
