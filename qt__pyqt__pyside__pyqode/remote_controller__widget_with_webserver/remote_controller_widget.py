@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+from pathlib import Path
 from threading import Thread
 
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGridLayout, QPushButton, QSizePolicy
@@ -21,6 +22,8 @@ URL = 'http://127.0.0.1:%s/command/{}' % PORT
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
+
+        self.setWindowTitle(Path(__file__).name)
 
         button_left = self._create_button('LEFT')
         button_right = self._create_button('RIGHT')
