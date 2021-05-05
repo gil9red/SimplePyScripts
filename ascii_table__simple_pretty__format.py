@@ -17,14 +17,14 @@ def pretty_table(data, cell_sep=' | ', header_separator=True, align='>') -> str:
     separator = "-+-".join('-' * n for n in col_width)
 
     lines = []
-
     for i, row in enumerate(range(rows)):
         if i == 1 and header_separator:
             lines.append(separator)
 
         result = []
         for col in range(cols):
-            item = templates[col].format(data[row][col])
+            value = str(data[row][col])
+            item = templates[col].format(value)
             result.append(item)
 
         lines.append(cell_sep.join(result))
