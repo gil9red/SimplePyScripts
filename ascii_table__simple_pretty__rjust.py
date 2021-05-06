@@ -18,15 +18,15 @@ def pretty_table(data, cell_sep=' | ', header_separator=True) -> str:
     lines = []
 
     for i, row in enumerate(range(rows)):
-        if i == 1 and header_separator:
-            lines.append(separator)
-
         result = []
         for col in range(cols):
             item = str(data[row][col]).rjust(col_width[col])
             result.append(item)
 
         lines.append(cell_sep.join(result))
+
+        if i == 0 and header_separator:
+            lines.append(separator)
 
     return '\n'.join(lines)
 
@@ -60,3 +60,7 @@ if __name__ == '__main__':
     #  oranges |    Bob |   cats
     # cherries |  Carol |  moose
     #   banana |  David |  goose
+
+    print()
+
+    print_pretty_table([['FRUIT', 'PERSON', 'ANIMAL']])
