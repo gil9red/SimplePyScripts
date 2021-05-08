@@ -51,7 +51,11 @@ class MainWindow(QWidget):
 
         self.setWindowTitle(Path(__file__).name)
 
-        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setWindowFlags(
+            self.windowFlags()
+            | Qt.FramelessWindowHint
+            | Qt.WindowStaysOnTopHint
+        )
         self.setAttribute(Qt.WA_TranslucentBackground)
 
         self.DEFAULT_MOUSE_PIXMAP = QPixmap(PATH_DEFAULT_MOUSE).scaledToWidth(16)
