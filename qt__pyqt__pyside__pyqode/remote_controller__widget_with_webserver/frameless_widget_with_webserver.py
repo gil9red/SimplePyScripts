@@ -12,16 +12,16 @@ from pathlib import Path
 from flask import Flask, jsonify
 
 from PyQt5.QtWidgets import QWidget, QApplication, QHBoxLayout, QVBoxLayout, QPushButton
-from PyQt5.QtCore import Qt, QPoint, QThread, pyqtSignal, QTimer, QByteArray, QBuffer, QRect
+from PyQt5.QtCore import Qt, QPoint, QThread, pyqtSignal, QTimer, QByteArray, QBuffer
 from PyQt5.QtGui import QPainter, QPen, QColor, QPixmap, QCursor
 
-from config import PORT
+from config import PORT, PATH_DEFAULT_MOUSE
 
 
 class CommandServerThread(QThread):
     about_command = pyqtSignal(str)
 
-    def __init__(self, parent=None, port=20000):
+    def __init__(self, parent=None, port=PORT):
         super().__init__(parent)
 
         self.port = port
@@ -46,7 +46,7 @@ class CommandServerThread(QThread):
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self, port=PORT):
         super().__init__()
 
         self.setWindowTitle(Path(__file__).name)
@@ -54,7 +54,7 @@ class MainWindow(QWidget):
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
 
-        self.DEFAULT_MOUSE_PIXMAP = QPixmap('default_mouse.png').scaledToWidth(16)
+        self.DEFAULT_MOUSE_PIXMAP = QPixmap(PATH_DEFAULT_MOUSE).scaledToWidth(16)
 
         self._old_pos = None
         self.frame_color = Qt.red
@@ -73,7 +73,7 @@ class MainWindow(QWidget):
         main_layout.addStretch()
         main_layout.addLayout(layout)
 
-        self.thread_command = CommandServerThread(self, port=PORT)
+        self.thread_command = CommandServerThread(self, port=port)
         self.thread_command.about_command.connect(self.process_command)
         self.thread_command.start()
 
@@ -174,11 +174,17 @@ class MainWindow(QWidget):
         painter.drawRect(self.rect())
 
 
-if __name__ == '__main__':
+def main(port=PORT, is_visible=True, width=800, height=600):
     app = QApplication([])
 
-    w = MainWindow()
-    w.resize(800, 600)
-    w.show()
+    w = MainWindow(port)
+    w.resize(width, height)
+
+    if is_visible:
+        w.show()
 
     app.exec()
+
+
+if __name__ == '__main__':
+    main()
