@@ -62,20 +62,21 @@ class MainWindow(QWidget):
 
         self._old_pos = None
         self.frame_color = Qt.red
+        self.frame_size = 15
 
-        button_hide = QPushButton("Hide")
-        button_hide.clicked.connect(self.hide)
+        self.button_hide = QPushButton("Hide")
+        self.button_hide.clicked.connect(self.hide)
 
-        button_close = QPushButton("Close")
-        button_close.clicked.connect(self.close)
+        self.button_close = QPushButton("Close")
+        self.button_close.clicked.connect(self.close)
 
-        layout = QHBoxLayout()
-        layout.addWidget(button_hide)
-        layout.addWidget(button_close)
+        self.layout_buttons = QHBoxLayout()
+        self.layout_buttons.addWidget(self.button_hide)
+        self.layout_buttons.addWidget(self.button_close)
 
         main_layout = QVBoxLayout(self)
         main_layout.addStretch()
-        main_layout.addLayout(layout)
+        main_layout.addLayout(self.layout_buttons)
 
         self.thread_command = CommandServerThread(self, port=port)
         self.thread_command.about_command.connect(self.process_command)
@@ -94,6 +95,13 @@ class MainWindow(QWidget):
 
         geometry = self.geometry()
         x, y, w, h = geometry.x(), geometry.y(), geometry.width(), geometry.height()
+
+        # Корректировка области скриншота, чтобы не захватывать рамку и кнопки
+        correct_frame_size = self.frame_size / 2 + 1
+        x += correct_frame_size
+        y += correct_frame_size
+        h = self.layout_buttons.geometry().y() - correct_frame_size
+        w -= correct_frame_size * 2
 
         pixmap = QApplication.instance().primaryScreen().grabWindow(
             QApplication.desktop().winId(),
@@ -173,7 +181,7 @@ class MainWindow(QWidget):
         painter = QPainter(self)
 
         painter.setBrush(QColor(0, 0, 0, 1))
-        painter.setPen(QPen(self.frame_color, 15))
+        painter.setPen(QPen(self.frame_color, self.frame_size))
 
         painter.drawRect(self.rect())
 
