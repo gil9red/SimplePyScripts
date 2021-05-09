@@ -58,6 +58,7 @@ function on_change_mouse_mode(is_joystick) {
 
 function init_switch_stream_mode() {
     var CURRENT_URL_OR_DATA = null;
+    var CURRENT_SCREENSHOT_TIME = 0;
 
     function set_stream_mode(value) {
         send_ajax('/set_stream_mode', {'value': value});
@@ -92,6 +93,14 @@ function init_switch_stream_mode() {
             let is_checked = switch_stream_mode.prop('checked');
             if (is_checked) {
                 send_ajax('/get_screenshot', null, (url, data, response) => {
+                    // Контроль последовательности скриншотов, показываем всегда последний
+                    // Это нужно из-за гонки потоков, из-за которой возможно получить старый
+                    // скриншот позже текущего
+                    if (response.time <= CURRENT_SCREENSHOT_TIME) {
+                        return;
+                    }
+                    CURRENT_SCREENSHOT_TIME = response.time;
+
                     set_screenshot_canvas(response.img_base64);
                 });
             } else {

@@ -307,7 +307,10 @@ def get_screenshot():
 
     rs = send_command_frameless_widget_with_webserver("SCREENSHOT")
 
-    return jsonify({'img_base64': get_img_base64(rs.content)})
+    return jsonify({
+        'time': int(time.time()),
+        'img_base64': get_img_base64(rs.content)
+    })
 
 
 @app.route("/show_cursor_as_target", methods=['POST'])
