@@ -167,6 +167,10 @@ class MainWindow(QWidget):
             self.hide()
         elif command == 'SHOW':
             self.show()
+        elif command == 'MOVE_TO_CURSOR':
+            rect = self.geometry()
+            rect.moveCenter(QCursor.pos())
+            self.setGeometry(rect)
 
     def keyReleaseEvent(self, event: QKeyEvent):
         if event.key() == Qt.Key_Left:

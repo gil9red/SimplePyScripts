@@ -32,13 +32,14 @@ class MainWindow(QWidget):
 
         button_hide = self._create_button('HIDE', False)
         button_show = self._create_button('SHOW', False)
+        button_move_to_cursor = self._create_button('MOVE_TO_CURSOR', False)
 
         self.label_image = QLabel()
         self.label_image.setFrameStyle(QLabel.Box)
         self.label_image.setFixedSize(400, 400)
 
         layout = QGridLayout(self)
-        layout.setSpacing(0)
+        layout.setSpacing(5)
         layout.addWidget(button_hide, 0, 0, Qt.AlignTop | Qt.AlignLeft)
         layout.addWidget(button_show, 0, 2, Qt.AlignTop | Qt.AlignRight)
         layout.addWidget(button_left, 1, 0)
@@ -46,6 +47,7 @@ class MainWindow(QWidget):
         layout.addWidget(button_top, 0, 1)
         layout.addWidget(button_bottom, 2, 1)
         layout.addWidget(self.label_image, 3, 0, 3, 3)
+        layout.addWidget(button_move_to_cursor, 2, 0, Qt.AlignBottom | Qt.AlignLeft)
 
         self.timer = QTimer()
         self.timer.timeout.connect(self._on_tick)
