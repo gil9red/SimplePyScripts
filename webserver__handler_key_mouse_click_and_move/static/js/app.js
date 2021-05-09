@@ -101,7 +101,10 @@ function init_switch_stream_mode() {
                     }
                     CURRENT_SCREENSHOT_TIME = response.time;
 
-                    set_screenshot_canvas(response.img_base64);
+                    // Если на этом моменте флаг еще стоит
+                    if (switch_stream_mode.prop('checked')) {
+                        set_screenshot_canvas(response.img_base64);
+                    }
                 });
             } else {
                 set_screenshot_canvas('');
