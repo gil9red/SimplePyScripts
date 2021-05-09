@@ -51,7 +51,7 @@
         .mouse_control_container {
             height: 50%;
         }
-        #mouse_area, #joystick_wrapper {
+        #screenshot_canvas {
             background: lightgray;
         }
 
@@ -75,13 +75,12 @@
         }
 
         body {
-          -webkit-touch-callout: none; /* iOS Safari */
-            -webkit-user-select: none; /* Safari */
-             -khtml-user-select: none; /* Konqueror HTML */
-               -moz-user-select: none; /* Old versions of Firefox */
-                -ms-user-select: none; /* Internet Explorer/Edge */
-                    user-select: none; /* Non-prefixed version, currently
-                                          supported by Chrome, Opera and Firefox */
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select:   none; /* Safari */
+            -khtml-user-select:    none; /* Konqueror HTML */
+            -moz-user-select:      none; /* Old versions of Firefox */
+            -ms-user-select:       none; /* Internet Explorer/Edge */
+            user-select:           none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
         }
     </style>
 </head>
@@ -210,20 +209,25 @@
             <div class="d-flex flex-row justify-content-center">
                 <div class="cell m-1">
                     <button
-                            id="button_show_cursor_as_target" type="button"
-                            class="btn btn-outline-primary float-left m-1 p-1"
+                        id="button_show_cursor_as_target" type="button"
+                        class="btn btn-outline-primary float-left m-0 mr-1 p-1"
                     >
                         <div class="icon icon_target"></div>
                     </button>
+                    <input
+                        id="switch_stream_mode" type="checkbox" data-size="sm"
+                        data-toggle="toggle" data-on="☑️🎥" data-off="🚫🎥"
+                        data-onstyle="success" data-offstyle="primary"
+                    >
                 </div>
                 <div class="cell m-1">
                     <button class="key_control" value="up">UP</button>
                 </div>
                 <div class="cell m-1">
                     <button
-                            id="button_timer" type="button"
-                            class="btn btn-outline-primary float-right m-1 p-1"
-                            data-toggle="modal" data-target="#modalTimer"
+                        id="button_timer" type="button"
+                        class="btn btn-outline-primary float-right m-1 p-1"
+                        data-toggle="modal" data-target="#modalTimer"
                     >
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none"></span>
                         <div class="icon">⏰</div>
@@ -245,8 +249,8 @@
                 <div class="cell m-1">
                     <div class="d-flex align-items-end flex-column h-100">
                         <button
-                                id="button_full_black_screen" type="button"
-                                class="btn btn-outline-primary mt-auto mr-auto p-1"
+                            id="button_full_black_screen" type="button"
+                            class="btn btn-outline-primary mt-auto mr-auto p-1"
                         >
                             <div class="icon">🌙</div>
                         </button>
@@ -259,9 +263,9 @@
                     <div class="d-flex align-items-end flex-column h-100">
                         <div class="mt-auto">
                             <input
-                                    id="switch_mouse_mode" type="checkbox" data-size="sm"
-                                    checked data-toggle="toggle" data-on="🎮" data-off="🖱️"
-                                    data-onstyle="success" data-offstyle="primary"
+                                id="switch_mouse_mode" type="checkbox" data-size="sm"
+                                checked data-toggle="toggle" data-on="🎮" data-off="🖱️"
+                                data-onstyle="success" data-offstyle="primary"
                             >
                         </div>
                     </div>
@@ -272,9 +276,11 @@
         <!-- Mouse control -->
         <div class="d-flex flex-column mouse_control_container">
             <div class="d-flex flex-row m-1 h-100">
-                <div id="mouse_area" class="border border-dark w-100 mr-1" style="display: none"></div>
-                <div id="joystick_wrapper" class="border border-dark w-100 mr-1">
-                    <div id="joystick" style="position: absolute"></div>
+                <div id="screenshot_canvas" class="w-100 h-100 border border-dark mr-1">
+                    <div id="mouse_area" class="w-100 h-100" style="display: none"></div>
+                    <div id="joystick_wrapper" class="w-100 h-100">
+                        <div id="joystick" style="position: absolute"></div>
+                    </div>
                 </div>
                 <div id="mouse_wheel" class="d-flex flex-column">
                     <button id="mouse_wheel_up" class="border border-dark h-100">⬆</button>
@@ -288,264 +294,6 @@
         </div>
     </div>
 
-    <script>
-        function send_ajax(url, data, callbackFunc) {
-            console.log(data);
-            console.log(JSON.stringify(data));
-
-            $.ajax({
-                url: url,
-                method: "POST",
-                data: JSON.stringify(data),
-
-                contentType: "application/json",
-                dataType: "json",  // тип данных загружаемых с сервера
-
-                success: function(response) {
-                    console.log(response);
-                    console.log(JSON.stringify(response));
-
-                    if (callbackFunc != null) {
-                        callbackFunc(url, data, response);
-                    }
-                },
-            });
-        }
-
-        function pointerEventToXY(e) {
-            var out = {
-                x : 0,
-                y : 0
-            };
-
-            if (e.type.startsWith("touch")) {
-                var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-                out.x = touch.pageX;
-                out.y = touch.pageY;
-            }
-
-            if (e.type.startsWith("mouse")) {
-                out.x = e.pageX;
-                out.y = e.pageY;
-            }
-
-            out.x = Math.round(out.x);
-            out.y = Math.round(out.y);
-            return out;
-        };
-
-        function on_change_mouse_mode(is_joystick) {
-            if (is_joystick == null) {
-                is_joystick = $('#switch_mouse_mode').prop('checked');
-            }
-
-            localStorage.switch_mouse_mode = is_joystick;
-
-            $('#joystick_wrapper').toggle(is_joystick);
-            $('#mouse_area').toggle(!is_joystick);
-        }
-
-        $(document).ready(function() {
-            // NOTE: On android Chrome not auto restore checked value after refresh page
-            if (localStorage.switch_mouse_mode != null) {
-                let checked = localStorage.switch_mouse_mode == "true";
-                $('#switch_mouse_mode').bootstrapToggle(checked ? 'on' : 'off');
-            }
-
-            $('#switch_mouse_mode').change(function() {
-                let is_joystick = $(this).prop('checked');
-                on_change_mouse_mode(is_joystick);
-            });
-
-            let joystickEl = $('#joystick');
-            joystickEl.width(joystickEl.parent().width());
-            joystickEl.height(joystickEl.parent().height());
-
-            // Actualize mouse mode
-            on_change_mouse_mode();
-
-            var joystick = nipplejs.create({
-                zone: joystickEl.get(0),
-                color: 'darkgreen',
-            });
-            let _press_pos = null;
-            let _last_pos = null;
-            let _joystick_timer = null;
-            joystick.on('start end', function(e, data) {
-                _press_pos = data.position;
-                _last_pos = _press_pos;
-
-                clearInterval(_joystick_timer);
-
-                if (e.type == 'start') {
-                    _joystick_timer = setInterval(() => {
-                        let relative_x = Math.floor(_last_pos.x - _press_pos.x);
-                        let relative_y = Math.floor(_last_pos.y - _press_pos.y);
-                        if (relative_x == 0 && relative_y == 0) {
-                            return;
-                        }
-
-                        console.log("joystick", _press_pos, _last_pos, (relative_x + 'x' + relative_y));
-
-                        var data = {"relative_x": relative_x, "relative_y": relative_y};
-                        send_ajax("/mouse_move", data);
-
-                    }, 100);
-                }
-            }).on('move', function(e, data) {
-                _last_pos = data.position;
-            });
-        });
-
-        function create_bubble(pos, size) {
-            let bubble = $('<div class="bubble"></div>');
-            bubble.css({
-                left: pos.x - (size / 2),
-                top: pos.y - (size / 2),
-                width: size + 'px',
-                height: size + 'px',
-            });
-
-            setTimeout(() => bubble.remove(), 2000);
-
-            return bubble;
-        }
-
-        $(document).ready(function() {
-            $("#mouse_left").click(function() {
-                var data = {"button": "left"};
-                send_ajax("/mouse_click", data);
-            });
-
-            $("#mouse_right").click(function() {
-                var data = {"button": "right"};
-                send_ajax("/mouse_click", data);
-            });
-
-            $(".key_control").click(function() {
-                var data = {"key": $(this).attr("value")};
-                send_ajax("/key_click", data);
-            });
-
-            $("#mouse_wheel_up").click(function() {
-                var data = {"down": false};
-                send_ajax("/scroll", data);
-            });
-
-            $("#mouse_wheel_down").click(function() {
-                var data = {"down": true};
-                send_ajax("/scroll", data);
-            });
-
-            $("#button_show_cursor_as_target").click(function() {
-                send_ajax("/show_cursor_as_target");
-            });
-
-            $("#button_full_black_screen").click(function() {
-                send_ajax("/full_black_screen");
-            });
-
-            // Глобальная переменная-флаг для работы c событиями touch
-            let _is_touch = false;
-            let _press_pos = null;
-            let _last_send_pos = {x: null, y: null};
-            let _last_time_send_pos = null;
-            const _DELAY_BEFORE_SEND_POS = 75;
-
-            let debug = false;
-            if (debug) {
-                let log = $("<div id='log'/>");
-                $("#mouse_area").append(log);
-            }
-            let draw_bubble = true;
-
-            $("#mouse_area").on("touchstart touchmove touchend mousemove mousedown mouseup mouseleave", function(e) {
-                // https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Supporting_both_TouchEvent_and_MouseEvent
-                if (_is_touch == false && e.type.startsWith("touch")) {
-                    _is_touch = true;
-                }
-
-                // События mouse тоже возможны при событиях touch, но нам желательно только с одним видом событий
-                // работать, поэтому если были замечены touch-события, то mouse будут отменяться
-                if (e.type.startsWith("mouse") && _is_touch) {
-                    e.preventDefault();
-                    return;
-                }
-
-                let pos = pointerEventToXY(e);
-
-                if (debug) {
-                    log.text(JSON.stringify(pos));
-                    console.log(e.type, pos);
-                }
-
-                switch (e.type) {
-                    case "touchstart":
-                    case "mousedown": {
-                        _press_pos = pos;
-                        _last_send_pos.x = null;
-                        _last_send_pos.y = null;
-
-                        if (draw_bubble) {
-                            $("#mouse_area").append(
-                                create_bubble(pos, 40)
-                            );
-                        }
-
-                        if (debug) {
-                            console.log(e.type, _press_pos);
-                        }
-                        break;
-                    }
-
-                    case "touchend":
-                    case "mouseup":
-                    case "mouseleave":
-                    case "mouseout": {
-                        _press_pos = null;
-                        break;
-                    }
-
-                    case "touchmove":
-                    case "mousemove": {
-                        if (_press_pos == null) {
-                            break;
-                        }
-
-                        if (_last_time_send_pos != null) {
-                            if ((new Date() - _last_time_send_pos) < _DELAY_BEFORE_SEND_POS) {
-                                break;
-                            }
-                        }
-                        if (_last_send_pos.x == null || _last_send_pos.y == null) {
-                            _last_send_pos.x = pos.x;
-                            _last_send_pos.y = pos.y;
-                        }
-
-                        if (draw_bubble) {
-                            $("#mouse_area").append(
-                                create_bubble(pos, 40)
-                            );
-                        }
-
-                        let relative_x = Math.floor(pos.x - _last_send_pos.x);
-                        let relative_y = Math.floor(pos.y - _last_send_pos.y);
-                        if (debug) {
-                            console.log(e.type, _press_pos, pos, _last_send_pos, (relative_x + 'x' + relative_y));
-                        }
-
-                        _last_send_pos.x = pos.x;
-                        _last_send_pos.y = pos.y;
-                        _last_time_send_pos = new Date();
-
-                        let data = {relative_x: relative_x, relative_y: relative_y};
-                        send_ajax("/mouse_move", data);
-
-                        break;
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

@@ -4,20 +4,27 @@
 __author__ = 'ipetrash'
 
 
+import base64
 import datetime as DT
 import logging
-import threading
 import time
 import subprocess
 import sys
 import os.path
+
 from pathlib import Path
+from threading import Thread
+from multiprocessing import Process
 
 import pyautogui
+
+import requests
+from requests.exceptions import ConnectionError
 
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from flask_socketio import SocketIO
 from engineio.payload import Payload
+
 
 Payload.max_decode_packets = 1000
 
@@ -28,12 +35,46 @@ async_mode = None
 
 DIR = Path(__file__).resolve().parent
 
+PORT_REMOTE_SCREENSHOT = 19999
+URL_REMOTE_SCREENSHOT = 'http://127.0.0.1:%s/command/{}' % PORT_REMOTE_SCREENSHOT
+
+
+def run_frameless_widget_with_webserver():
+    # Запуск виджета-рамки для передачи скриншотов, по умолчанию скрыт
+    Process(
+        target=frameless_widget_with_webserver.main,
+        args=(PORT_REMOTE_SCREENSHOT, DATA["STREAM_MODE"])
+    ).start()
+
+
+def send_command_frameless_widget_with_webserver(command: str) -> requests.Response:
+    url = URL_REMOTE_SCREENSHOT.format(command)
+
+    # Попробуем отправить команду и если окно закрыто, переоткрыть его
+    try:
+        rs = requests.post(url)
+    except ConnectionError:
+        run_frameless_widget_with_webserver()
+        rs = requests.post(url)
+
+    return rs
+
 
 pyautogui.FAILSAFE = False
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, async_mode=async_mode)
+
+
+# Для импорта frameless_widget_with_webserver
+sys.path.append(r'..\qt__pyqt__pyside__pyqode\remote_controller__widget_with_webserver')
+import frameless_widget_with_webserver
+
+
+def get_img_base64(data: bytes) -> str:
+    img_base64 = base64.standard_b64encode(data).decode('utf-8')
+    return "data:image/png;base64," + img_base64
 
 
 def get_logger(name=__file__):
@@ -67,6 +108,7 @@ def full_black_screen():
 DATA = {
     "END_TIME": None,
     "DURATION": None,
+    "STREAM_MODE": False,
 }
 
 
@@ -114,7 +156,7 @@ def timer():
             time.sleep(1)
 
 
-thread_timer = threading.Thread(target=timer)
+thread_timer = Thread(target=timer)
 thread_timer.start()
 
 
@@ -163,7 +205,25 @@ def key_click():
     log.info(f'data: {data}')
 
     key = data['key']
-    pyautogui.typewrite([key])
+
+    # Если включен режим, то перемещаться будет курсор мышки
+    # Кнопками удобнее точно целиться курсором мышки
+    if DATA["STREAM_MODE"]:
+        relative_x = relative_y = 0
+
+        if key == 'up':
+            relative_y = -5
+        elif key == 'down':
+            relative_y = 5
+        elif key == 'left':
+            relative_x = -5
+        elif key == 'right':
+            relative_x = 5
+
+        pyautogui.moveRel(xOffset=relative_x, yOffset=relative_y)
+
+    else:
+        pyautogui.typewrite([key])
 
     return jsonify({'text': 'ok'})
 
@@ -200,6 +260,10 @@ def mouse_move():
 
     pyautogui.moveRel(xOffset=relative_x, yOffset=relative_y)
 
+    # Если включен режим, то вместе с курсором перемещаться будет окно-рамка
+    if DATA["STREAM_MODE"]:
+        send_command_frameless_widget_with_webserver('MOVE_TO_CURSOR')
+
     return jsonify({'text': 'ok'})
 
 
@@ -216,6 +280,34 @@ def scroll():
     pyautogui.scroll(value)
 
     return jsonify({'text': 'ok'})
+
+
+@app.route("/set_stream_mode", methods=['POST'])
+def set_stream_mode():
+    log.info('set_stream_mode')
+
+    data = request.get_json()
+    log.info(f'data: {data}')
+
+    value = data['value']
+    DATA["STREAM_MODE"] = value
+
+    command = 'SHOW' if value else 'HIDE'
+    send_command_frameless_widget_with_webserver(command)
+
+    return jsonify({'text': 'ok'})
+
+
+@app.route("/get_screenshot", methods=['POST'])
+def get_screenshot():
+    log.info('get_screenshot')
+
+    data = request.get_json()
+    log.info(f'data: {data}')
+
+    rs = send_command_frameless_widget_with_webserver("SCREENSHOT")
+
+    return jsonify({'img_base64': get_img_base64(rs.content)})
 
 
 @app.route("/show_cursor_as_target", methods=['POST'])
@@ -247,6 +339,8 @@ def favicon():
 if __name__ == "__main__":
     HOST = '0.0.0.0'
     PORT = 9999
+
+    run_frameless_widget_with_webserver()
 
     # TODO: вебсокеты почему то не работают при app.debug = True
     # app.debug = True
