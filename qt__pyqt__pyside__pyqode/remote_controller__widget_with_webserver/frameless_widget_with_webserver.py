@@ -13,7 +13,7 @@ from flask import Flask, jsonify
 
 from PyQt5.QtWidgets import QWidget, QApplication, QHBoxLayout, QVBoxLayout, QPushButton
 from PyQt5.QtCore import Qt, QPoint, QThread, pyqtSignal, QTimer, QByteArray, QBuffer
-from PyQt5.QtGui import QPainter, QPen, QColor, QPixmap, QCursor
+from PyQt5.QtGui import QPainter, QPen, QColor, QPixmap, QCursor, QMouseEvent, QKeyEvent, QPaintEvent
 
 from config import PORT, PATH_DEFAULT_MOUSE
 
@@ -46,7 +46,7 @@ class CommandServerThread(QThread):
 
 
 class MainWindow(QWidget):
-    def __init__(self, port=PORT):
+    def __init__(self, port=PORT, mouse_permeability=True):
         super().__init__()
 
         self.setWindowTitle(Path(__file__).name)
@@ -63,6 +63,7 @@ class MainWindow(QWidget):
         self._old_pos = None
         self.frame_color = Qt.red
         self.frame_size = 15
+        self.mouse_permeability = mouse_permeability
 
         self.button_hide = QPushButton("Hide")
         self.button_hide.clicked.connect(self.hide)
@@ -124,15 +125,15 @@ class MainWindow(QWidget):
 
         self.thread_command.set_pixmap(bytes(data))
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event: QMouseEvent):
         if event.button() == Qt.LeftButton:
             self._old_pos = event.pos()
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event: QMouseEvent):
         if event.button() == Qt.LeftButton:
             self._old_pos = None
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event: QMouseEvent):
         if not self._old_pos:
             return
 
@@ -167,7 +168,7 @@ class MainWindow(QWidget):
         elif command == 'SHOW':
             self.show()
 
-    def keyReleaseEvent(self, event):
+    def keyReleaseEvent(self, event: QKeyEvent):
         if event.key() == Qt.Key_Left:
             self.move_left()
         elif event.key() == Qt.Key_Right:
@@ -177,19 +178,19 @@ class MainWindow(QWidget):
         elif event.key() == Qt.Key_Down:
             self.move_down()
 
-    def paintEvent(self, event):
+    def paintEvent(self, event: QPaintEvent):
         painter = QPainter(self)
 
-        painter.setBrush(QColor(0, 0, 0, 1))
+        painter.setBrush(QColor(0, 0, 0, 0 if self.mouse_permeability else 1))
         painter.setPen(QPen(self.frame_color, self.frame_size))
 
         painter.drawRect(self.rect())
 
 
-def main(port=PORT, is_visible=True, width=800, height=600):
+def main(port=PORT, is_visible=True, width=800, height=600, mouse_permeability=True):
     app = QApplication([])
 
-    w = MainWindow(port)
+    w = MainWindow(port, mouse_permeability)
     w.resize(width, height)
 
     if is_visible:
@@ -199,4 +200,4 @@ def main(port=PORT, is_visible=True, width=800, height=600):
 
 
 if __name__ == '__main__':
-    main()
+    main(mouse_permeability=False)
