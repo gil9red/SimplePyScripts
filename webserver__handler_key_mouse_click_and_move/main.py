@@ -294,6 +294,8 @@ def set_stream_mode():
 
     command = 'SHOW' if value else 'HIDE'
     send_command_frameless_widget_with_webserver(command)
+    if command == 'SHOW':
+        send_command_frameless_widget_with_webserver('MOVE_TO_CURSOR')
 
     return jsonify({'text': 'ok'})
 
