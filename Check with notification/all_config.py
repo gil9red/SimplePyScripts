@@ -4,5 +4,14 @@
 __author__ = 'ipetrash'
 
 
-API_ID = '<API_ID>'
-TO = '<TO>'
+import os
+from pathlib import Path
+
+
+DIR = Path(__file__).resolve().parent
+
+SMS_TOKEN_FILE_NAME = DIR / 'SMS_TOKEN.txt'
+SMS_TOKEN = os.environ.get('SMS_TOKEN') or SMS_TOKEN_FILE_NAME.read_text('utf-8').strip()
+
+# <API_ID>:<PHONE>
+API_ID, TO = SMS_TOKEN.split(':')

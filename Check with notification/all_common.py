@@ -4,17 +4,32 @@
 __author__ = 'ipetrash'
 
 
+import codecs
+import json
+import logging
+import sys
+import time
+
+from logging.handlers import RotatingFileHandler
 from typing import Callable, List, Union
+from pathlib import Path
+
+import requests
+
+from all_config import API_ID, TO
+
+# Import https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py
+# Absolute path. Analog '../wait'
+sys.path.append(str(Path(__file__).resolve().parent.parent / 'wait'))
+
+from wait import wait
 
 
 def make_backslashreplace_console():
     # При выводе юникодных символов в консоль винды
     # Возможно, не только для винды, но и для любой платформы стоит использовать
     # эту настройку -- мало какие проблемы могут встретиться
-    import sys
     if sys.platform == 'win32':
-        import codecs
-
         try:
             sys.stdout = codecs.getwriter(sys.stdout.encoding)(sys.stdout.detach(), 'backslashreplace')
             sys.stderr = codecs.getwriter(sys.stderr.encoding)(sys.stderr.detach(), 'backslashreplace')
@@ -24,29 +39,18 @@ def make_backslashreplace_console():
             pass
 
 
-# Import https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py
-# Absolute path. Analog '../wait'
-from pathlib import Path
-import sys
-sys.path.append(str(Path(__file__).resolve().parent.parent / 'wait'))
-from wait import wait
-
-
 def get_logger(name, file='log.txt', encoding='utf-8', log_stdout=True, log_file=True) -> 'logging.Logger':
-    import logging
     log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter('[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s')
 
     if log_file:
-        from logging.handlers import RotatingFileHandler
         fh = RotatingFileHandler(file, maxBytes=10000000, backupCount=5, encoding=encoding)
         fh.setFormatter(formatter)
         log.addHandler(fh)
 
     if log_stdout:
-        import sys
         sh = logging.StreamHandler(stream=sys.stdout)
         sh.setFormatter(formatter)
         log.addHandler(sh)
@@ -78,10 +82,8 @@ def send_sms(api_id: str, to: str, text: str, log):
 
     while True:
         try:
-            import requests
             rs = requests.get(url)
             log.debug(repr(rs.text))
-
             break
 
         except:
@@ -89,7 +91,6 @@ def send_sms(api_id: str, to: str, text: str, log):
             log.debug('Через 5 минут попробую снова...')
 
             # Wait 5 minutes before next attempt
-            import time
             time.sleep(5 * 60)
 
 
@@ -98,7 +99,6 @@ def simple_send_sms(text: str, log=None):
     if not log:
         log = get_logger('all_common', log_file=False)
 
-    from all_config import API_ID, TO
     return send_sms(API_ID, TO, text, log)
 
 
@@ -124,13 +124,11 @@ def run_notification_job(
 
     def save_items(items: List[str]):
         with open(file_name_items, mode='w', encoding='utf-8') as f:
-            import json
             json.dump(items, f, ensure_ascii=False, indent=4)
 
     def read_items() -> List[str]:
         try:
             with open(file_name_items, encoding='utf-8') as f:
-                import json
                 obj = json.load(f)
 
                 # Должен быть список, но если в файле будет что-то другое -- это будет неправильно
@@ -190,5 +188,4 @@ def run_notification_job(
             log.debug(format_on_exception_next_attempt)
 
             # Wait <timeout_exception_seconds> before next attempt
-            import time
             time.sleep(timeout_exception_seconds)
