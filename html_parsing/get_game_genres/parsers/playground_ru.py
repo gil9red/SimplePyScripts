@@ -26,13 +26,8 @@ class PlaygroundRu_Parser(BaseParser):
             self.log_info(f'Load {url_game!r}')
 
             game_block = self.send_get(url_game, return_html=True)
-            # <div class="genres">
-            #     <a class="item" href="/games/action/">Экшен</a>
-            #     <meta itemprop="genre" content="Экшен">
-            #     <a class="item" href="/games/rpg/">Ролевая</a>
-            #     <meta itemprop="genre" content="Ролевая">
             genres = [
-                self.get_norm_text(a) for a in game_block.select('.genres > .item')
+                x['content'] for x in game_block.select('.genres > [itemprop="genre"]')
             ]
 
             # Сойдет первый, совпадающий по имени, вариант
