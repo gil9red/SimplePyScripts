@@ -11,16 +11,18 @@ from base_parser import BaseParser
 
 
 class PlaygroundRu_Parser(BaseParser):
-    def _parse(self) -> List[str]:
-        url = f'https://www.playground.ru/search/?q={self.game_name}&filter=game'
-        root = self.send_get(url, return_html=True)
+    base_url = 'https://www.playground.ru'
 
-        for game_block_preview in root.select('.search-results .title'):
-            title = self.get_norm_text(game_block_preview)
+    def _parse(self) -> List[str]:
+        url = f'{self.base_url}/api/game.search?query={self.game_name}&include_addons=1'
+        data = self.send_get(url).json()
+
+        for game in data:
+            title = game['name']
             if not self.is_found_game(title):
                 continue
 
-            url_game = urljoin(url, game_block_preview['href'])
+            url_game = urljoin(self.base_url, game['slug'])
             self.log_info(f'Load {url_game!r}')
 
             game_block = self.send_get(url_game, return_html=True)
