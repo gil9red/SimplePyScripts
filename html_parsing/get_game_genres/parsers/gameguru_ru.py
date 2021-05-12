@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+import re
 from typing import List
 
 from base_parser import BaseParser
@@ -11,18 +12,36 @@ from base_parser import BaseParser
 
 class GameguruRu_Parser(BaseParser):
     def _parse(self) -> List[str]:
-        url = f'https://gameguru.ru/search/all.html?s={self.game_name}'
-        root = self.send_get(url, return_html=True)
+        url_search = f'https://gameguru.ru/games/?search={self.game_name}'
 
-        for game_block in root.select('.jointCard-result-game-unit'):
-            title = self.get_norm_text(game_block.select_one('.jointCard-result-game-list-title'))
-            if not self.is_found_game(title):
-                continue
+        page = last_page = 1
+        while page <= last_page:
+            url = url_search
+            if page > 1:
+                url = f'{url_search}&page={page}'
 
-            genres = [self.get_norm_text(a) for a in game_block.select('a') if '/genre/' in a['href']]
+            self.log_info(f'Load {url!r}')
+            root = self.send_get(url, return_html=True)
 
-            # Сойдет первый, совпадающий по имени, вариант
-            return genres
+            for game_block in root.select('#publications-wrap .short-news-content'):
+                title = self.get_norm_text(game_block.select_one('.short-news-title'))
+                if not self.is_found_game(title):
+                    continue
+
+                for info in game_block.select('.short-news-play-info'):
+                    if 'Жанр'.upper() not in self.get_norm_text(info).upper():
+                        continue
+
+                    return [self.get_norm_text(x) for x in info.select('div > span')]
+
+            # Обновление номера последней страницы
+            pages = root.select('.pagination a.page-link[href]')
+            if pages:
+                href = pages[-1]['href']
+                m = re.search(r'&page=(\d+)', href)
+                last_page = int(m.group(1))
+
+            page += 1
 
         self.log_info(f'Not found game {self.game_name!r}')
         return []
