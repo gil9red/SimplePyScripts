@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+import re
 from typing import List
 
 from base_parser import BaseParser
@@ -18,7 +19,11 @@ class AgRu_Parser(BaseParser):
         }
 
         # Для правдоподобности сделаем запрос на страницу с играми
-        self.send_get('https://ag.ru/games/pc', headers=headers)
+        rs = self.send_get('https://ag.ru/games/pc', headers=headers)
+        m = re.search(r'"rawgApiKey"\s*:\s*"(.+?)"', rs.text)
+        if not m:
+            raise Exception('Не удалось найти на странице ключ для API (rawgApiKey)!')
+        key = m.group(1)
 
         # Заголовки, что отправляются вместе с запросом к API
         headers.update({
@@ -30,9 +35,8 @@ class AgRu_Parser(BaseParser):
             'X-API-Client': 'website',
         })
 
-        # По умолчанию, page_size=20, но столько результатов не нужно. По хорошему, можно page_size=1, но есть
-        # шанс, что игра, что ищем сервером вернется не в первых позициях
-        rs = self.send_get(f'https://ag.ru/api/games?page_size=5&search={self.game_name}&page=1', headers=headers)
+        url = f'https://ag.ru/api/games?page_size=20&search={self.game_name}&page=1&key={key}'
+        rs = self.send_get(url, headers=headers)
 
         for item in rs.json()['results']:
             title = item['name']
