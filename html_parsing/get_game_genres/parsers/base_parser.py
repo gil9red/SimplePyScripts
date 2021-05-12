@@ -128,6 +128,9 @@ class BaseParser(metaclass=Singleton):
             genres = [x.strip() for x in genres]
             genres = get_uniques(genres)
 
+        except SystemExit as e:
+            raise e
+
         except BaseException as e:
             self.log_exception('Parsing error:')
             raise e
