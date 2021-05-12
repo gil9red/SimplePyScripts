@@ -12,7 +12,7 @@ from base_parser import BaseParser
 
 class PlaygroundRu_Parser(BaseParser):
     def _parse(self) -> List[str]:
-        url = f'https://www.playground.ru/site-search/?q={self.game_name}&filter=game'
+        url = f'https://www.playground.ru/search/?q={self.game_name}&filter=game'
         root = self.send_get(url, return_html=True)
 
         for game_block_preview in root.select('.search-results .title'):
