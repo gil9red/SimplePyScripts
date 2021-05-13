@@ -43,7 +43,7 @@ def index():
 
     <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='chart_js_2.8.0/Chart.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='chart_js_2.9.3/Chart.bundle.min.js') }}"></script>
 </head>
 <body>
 <div class="container-fluid">
