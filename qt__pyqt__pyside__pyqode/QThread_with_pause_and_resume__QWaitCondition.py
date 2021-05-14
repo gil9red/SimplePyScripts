@@ -83,7 +83,8 @@ class MainWindow(QWidget):
         self._update_states()
 
     def _update_states(self):
-        self.setWindowTitle(f'Threads: {self.combobox_thread.count()}')
+        threads_num = self.combobox_thread.count()
+        self.setWindowTitle(f'Threads: {threads_num}')
 
         idx = self.combobox_thread.currentIndex()
         ok = idx != -1
@@ -95,6 +96,9 @@ class MainWindow(QWidget):
             title = self.combobox_thread.itemText(idx)
             self.button_pause.setText(f'Pause - {title!r}')
             self.button_resume.setText(f'Resume - {title!r}')
+
+        self.button_pause_all.setEnabled(threads_num)
+        self.button_resume_all.setEnabled(threads_num)
 
     def get_thread(self, idx: int) -> Thread:
         return self.combobox_thread.itemData(idx)
