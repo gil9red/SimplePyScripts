@@ -22,6 +22,9 @@ class Thread(QThread):
         self.mutex = QMutex()
         self.sum = 0
 
+    def is_pause(self) -> bool:
+        return self._is_pause
+
     def pause(self):
         self._is_pause = True
 
@@ -44,7 +47,7 @@ class MainWindow(QWidget):
         super().__init__()
 
         self.combobox_thread = QComboBox()
-        self.combobox_thread.currentIndexChanged.connect(self._update_buttons)
+        self.combobox_thread.currentIndexChanged.connect(self._update_states)
 
         self.label_result = QLabel()
 
@@ -77,26 +80,27 @@ class MainWindow(QWidget):
         self.timer.timeout.connect(self.update_info)
         self.timer.start(1000)
 
-        self._update_window_title()
-        self._update_buttons()
+        self._update_states()
 
-    def _update_buttons(self):
+    def _update_states(self):
+        self.setWindowTitle(f'Threads: {self.combobox_thread.count()}')
+
         idx = self.combobox_thread.currentIndex()
         ok = idx != -1
 
-        self.button_pause.setEnabled(ok)
-        self.button_resume.setEnabled(ok)
+        self.button_pause.setEnabled(ok and not self.get_thread(idx).is_pause())
+        self.button_resume.setEnabled(ok and self.get_thread(idx).is_pause())
 
         if ok:
             title = self.combobox_thread.itemText(idx)
             self.button_pause.setText(f'Pause - {title!r}')
             self.button_resume.setText(f'Resume - {title!r}')
 
-    def _update_window_title(self):
-        self.setWindowTitle(f'Threads: {self.combobox_thread.count()}')
+    def get_thread(self, idx: int) -> Thread:
+        return self.combobox_thread.itemData(idx)
 
     def get_all_thread(self) -> List[Thread]:
-        return [self.combobox_thread.itemData(i) for i in range(self.combobox_thread.count())]
+        return [self.get_thread(i) for i in range(self.combobox_thread.count())]
 
     def update_info(self):
         total = sum(thread.sum for thread in self.get_all_thread())
@@ -104,28 +108,36 @@ class MainWindow(QWidget):
 
     def add(self):
         thread = Thread(self)
-        self.combobox_thread.addItem(f'Thread #{self.combobox_thread.count() + 1}', thread)
         thread.start()
 
-        self._update_window_title()
+        self.combobox_thread.addItem(f'Thread #{self.combobox_thread.count() + 1}', thread)
+        self._update_states()
 
     def pause(self):
         thread = self.combobox_thread.currentData()
         if thread:
             thread.pause()
 
+        self._update_states()
+
     def pause_all(self):
         for thread in self.get_all_thread():
             thread.pause()
+
+        self._update_states()
 
     def resume(self):
         thread = self.combobox_thread.currentData()
         if thread:
             thread.resume()
 
+        self._update_states()
+
     def resume_all(self):
         for thread in self.get_all_thread():
             thread.resume()
+
+        self._update_states()
 
 
 if __name__ == '__main__':
