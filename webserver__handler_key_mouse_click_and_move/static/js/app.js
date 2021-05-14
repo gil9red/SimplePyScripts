@@ -87,31 +87,24 @@ function init_switch_stream_mode() {
         set_stream_mode(this.checked);
     });
 
-    // Периодический запрос скриншота при включенном режиме
-    setInterval(
-        () => {
-            let is_checked = switch_stream_mode.prop('checked');
-            if (is_checked) {
-                send_ajax('/get_screenshot', null, (url, data, response) => {
-                    // Контроль последовательности скриншотов, показываем всегда последний
-                    // Это нужно из-за гонки потоков, из-за которой возможно получить старый
-                    // скриншот позже текущего
-                    if (response.time <= CURRENT_SCREENSHOT_TIME) {
-                        return;
-                    }
-                    CURRENT_SCREENSHOT_TIME = response.time;
+    // NOTE: socket инициализируется в index.html
+    document.socket.on('about_screenshot', function(msg, cb) {
+        if (DEBUG) {
+            console.log("about_screenshot", msg);
+        } else {
+            console.log("about_screenshot");
+        }
 
-                    // Если на этом моменте флаг еще стоит
-                    if (switch_stream_mode.prop('checked')) {
-                        set_screenshot_canvas(response.img_base64);
-                    }
-                });
-            } else {
-                set_screenshot_canvas('');
-            }
-        },
-        100
-    );
+        let is_checked = switch_stream_mode.prop('checked');
+        if (is_checked) {
+            set_screenshot_canvas(msg.img_base64);
+        } else {
+            set_screenshot_canvas('');
+        }
+
+        if (cb)
+            cb();
+    });
 }
 
 function init_control_switch_mouse_mode() {

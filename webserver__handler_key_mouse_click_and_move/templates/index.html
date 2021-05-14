@@ -135,6 +135,7 @@
                 // The connection URL has the following format, relative to the current page:
                 //     http[s]://<domain>:<port>[/<namespace>]
                 var socket = io();
+                document.socket = socket;
 
                 // Event handler for server sent data.
                 // The callback function is invoked whenever the server emits data

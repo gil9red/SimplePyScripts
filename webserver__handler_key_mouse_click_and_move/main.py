@@ -124,6 +124,18 @@ def send_about_timer(secs, duration):
     # log.info(f'get_timer -> {secs} / {duration}')
 
 
+def send_about_screenshot():
+    log.info(f'send_about_screenshot')
+
+    rs = send_command_frameless_widget_with_webserver("SCREENSHOT")
+
+    socketio.emit(
+        'about_screenshot',
+        {'img_base64': get_img_base64(rs.content)},
+        broadcast=True,
+    )
+
+
 def get_secs() -> int:
     if not DATA["END_TIME"]:
         return 0
@@ -156,8 +168,23 @@ def timer():
             time.sleep(1)
 
 
+def send_screenshot(timeout=0.050):
+    while True:
+        try:
+            if not DATA["STREAM_MODE"]:
+                continue
+
+            send_about_screenshot()
+
+        finally:
+            time.sleep(timeout)
+
+
 thread_timer = Thread(target=timer)
 thread_timer.start()
+
+thread_screenshot = Thread(target=send_screenshot)
+thread_screenshot.start()
 
 
 @app.route("/")
@@ -298,21 +325,6 @@ def set_stream_mode():
         send_command_frameless_widget_with_webserver('MOVE_TO_CURSOR')
 
     return jsonify({'text': 'ok'})
-
-
-@app.route("/get_screenshot", methods=['POST'])
-def get_screenshot():
-    log.info('get_screenshot')
-
-    data = request.get_json()
-    log.info(f'data: {data}')
-
-    rs = send_command_frameless_widget_with_webserver("SCREENSHOT")
-
-    return jsonify({
-        'time': int(time.time()),
-        'img_base64': get_img_base64(rs.content)
-    })
 
 
 @app.route("/show_cursor_as_target", methods=['POST'])
