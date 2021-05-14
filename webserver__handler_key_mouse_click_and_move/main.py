@@ -235,7 +235,8 @@ def key_click():
 
     # Если включен режим, то перемещаться будет курсор мышки
     # Кнопками удобнее точно целиться курсором мышки
-    if DATA["STREAM_MODE"]:
+    # Пробелом можно пользоваться
+    if DATA["STREAM_MODE"] and key != 'space':
         relative_x = relative_y = 0
 
         if key == 'up':
