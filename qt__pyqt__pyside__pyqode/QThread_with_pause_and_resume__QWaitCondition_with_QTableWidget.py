@@ -17,6 +17,10 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import QThread, QTimer, QWaitCondition, QMutex, pyqtSignal, Qt
 
 
+def get_pretty_int(num: int) -> str:
+    return f'{num:,}'.replace(',', ' ')
+
+
 class Thread(QThread):
     about_pause = pyqtSignal(bool)
     about_sum = pyqtSignal(int)
@@ -168,14 +172,13 @@ class MainWindow(QWidget):
             self._sum = 0
 
         self._sum += sum(thread.sum for thread in self.get_all_thread())
-        number_str = f'{self._sum:,}'.replace(',', ' ')
-        self.label_result.setText(f"TOTAL SUM: <b>{number_str}</b>")
+        self.label_result.setText(f"TOTAL SUM: <b>{get_pretty_int(self._sum)}</b>")
 
     def _on_thread_changed(self, thread: Thread):
         for row in range(self.table_thread.rowCount()):
             if thread == self.get_thread(row):
                 self.table_thread.item(row, 1).setText(thread.get_state())
-                self.table_thread.item(row, 2).setText(str(thread.sum))
+                self.table_thread.item(row, 2).setText(get_pretty_int(thread.sum))
 
     def add(self):
         if not self.started:
