@@ -4,4 +4,12 @@
 __author__ = 'ipetrash'
 
 
-LOGIN, PASSWORD = '', ''
+import os
+from pathlib import Path
+
+
+DIR = Path(__file__).resolve().parent
+TOKEN_FILE_NAME = DIR / 'TOKEN.txt'
+
+TOKEN = os.environ.get('TOKEN') or TOKEN_FILE_NAME.read_text('utf-8').strip()
+LOGIN, PASSWORD = TOKEN.splitlines()
