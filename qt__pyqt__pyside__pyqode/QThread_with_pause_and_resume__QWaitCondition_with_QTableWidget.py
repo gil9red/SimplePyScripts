@@ -37,7 +37,7 @@ class Thread(QThread):
         self.about_sum.emit(value)
 
     def get_state(self) -> str:
-        return 'PAUSED' if self._is_pause else 'WORKED'
+        return 'PAUSED' if self._is_pause else 'WORKING'
 
     def set_pause(self, pause: bool):
         self._is_pause = pause
