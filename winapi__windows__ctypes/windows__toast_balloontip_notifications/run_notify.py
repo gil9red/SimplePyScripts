@@ -12,7 +12,7 @@ def run(title: str, text: str, duration: int = 20):
     WindowsBalloonTip.balloon_tip(title, text, duration)
 
 
-def run_in_process(title: str, text: str, duration: int):
+def run_in_process(title: str, text: str, duration: int = 20):
     Process(target=run, args=(title, text, duration), daemon=True).start()
 
 
