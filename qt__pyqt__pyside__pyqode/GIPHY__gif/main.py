@@ -126,12 +126,11 @@ class MainWindow(QMainWindow):
         gif_data_layout = QHBoxLayout()
         gif_data_layout.setAlignment(Qt.AlignTop)
         self.gif_data_frame = QFrame()
+
         self.gif_edit = QLineEdit()
         self.gif_edit.returnPressed.connect(self.search_gif)
-        regex = QRegExp('[a-z-A-Z]+')
-        validator = QRegExpValidator(regex)
-        self.gif_edit.setValidator(validator)
         self.gif_edit.setPlaceholderText('Enter name gif')
+
         gif_search_button = QPushButton('Search gif')
         gif_search_button.clicked.connect(self.search_gif)
         gif_data_layout.addWidget(self.gif_edit)
