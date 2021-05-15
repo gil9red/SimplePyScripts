@@ -138,8 +138,6 @@ class MainWindow(QWidget):
             self.setWindowTitle(f'Threads: {threads_num}')
 
     def _update_states(self):
-        threads_num = self.table_thread.rowCount()
-
         self._update_window_title()
 
         row = self.table_thread.currentRow()
@@ -153,6 +151,7 @@ class MainWindow(QWidget):
             self.button_pause.setText(f'Pause - {title!r}')
             self.button_resume.setText(f'Resume - {title!r}')
 
+        threads_num = self.table_thread.rowCount()
         self.button_pause_all.setEnabled(threads_num)
         self.button_resume_all.setEnabled(threads_num)
 
