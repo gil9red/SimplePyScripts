@@ -159,7 +159,8 @@ class MainWindow(QWidget):
             self._sum = 0
 
         self._sum += sum(thread.sum for thread in self.get_all_thread())
-        self.label_result.setText(f"TOTAL SUM: <b>{self._sum}</b>")
+        number_str = f'{self._sum:,}'.replace(',', ' ')
+        self.label_result.setText(f"TOTAL SUM: <b>{number_str}</b>")
 
     def _on_thread_changed(self, thread: Thread):
         for row in range(self.table_thread.rowCount()):
