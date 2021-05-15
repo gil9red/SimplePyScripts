@@ -10,7 +10,8 @@ import time
 from typing import List
 
 from PyQt5.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QTableWidget, QTableWidgetItem, QPushButton, QLabel
+    QApplication, QWidget, QVBoxLayout, QHBoxLayout, QGridLayout,
+    QTableWidget, QTableWidgetItem, QPushButton, QLabel, QCheckBox
 )
 from PyQt5.QtCore import QThread, QTimer, QWaitCondition, QMutex, pyqtSignal, Qt
 
@@ -71,6 +72,8 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
+        self._sum = 0
+
         self.table_thread = QTableWidget()
         self.table_thread.setColumnCount(len(self.headers))
         self.table_thread.setHorizontalHeaderLabels(self.headers)
@@ -80,6 +83,9 @@ class MainWindow(QWidget):
         self.table_thread.setSelectionMode(QTableWidget.SingleSelection)
         self.table_thread.setMinimumHeight(250)
         self.table_thread.itemClicked.connect(self._update_states)
+
+        from PyQt5.QtWidgets import QSizePolicy
+        self.table_thread.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         self.label_result = QLabel()
 
@@ -98,10 +104,12 @@ class MainWindow(QWidget):
         self.button_resume_all = QPushButton('Resume all')
         self.button_resume_all.clicked.connect(self.resume_all)
 
+        self.cb_reset_sum = QCheckBox('Reset sum')
+        self.cb_reset_sum.setChecked(True)
+
         left_layout = QVBoxLayout()
         left_layout.addWidget(self.table_thread)
         left_layout.addWidget(self.label_result)
-        left_layout.addStretch()
 
         right_layout = QGridLayout()
         right_layout.addWidget(self.button_add, 0, 0, 1, 2)
@@ -109,6 +117,7 @@ class MainWindow(QWidget):
         right_layout.addWidget(self.button_pause_all, 1, 1)
         right_layout.addWidget(self.button_resume, 2, 0)
         right_layout.addWidget(self.button_resume_all, 2, 1)
+        right_layout.addWidget(self.cb_reset_sum, 3, 0, 1, 2)
         right_layout.setRowStretch(right_layout.rowCount(), 1)
 
         main_layout = QHBoxLayout(self)
@@ -146,8 +155,11 @@ class MainWindow(QWidget):
         return [self.get_thread(row) for row in range(self.table_thread.rowCount())]
 
     def update_info(self):
-        total = sum(thread.sum for thread in self.get_all_thread())
-        self.label_result.setText(f"TOTAL SUM: <b>{total}</b>")
+        if self.cb_reset_sum.isChecked():
+            self._sum = 0
+
+        self._sum += sum(thread.sum for thread in self.get_all_thread())
+        self.label_result.setText(f"TOTAL SUM: <b>{self._sum}</b>")
 
     def _on_thread_changed(self, thread: Thread):
         for row in range(self.table_thread.rowCount()):
@@ -211,7 +223,7 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
 
     mw = MainWindow()
-    mw.resize(650, 300)
+    mw.resize(800, 300)
     mw.show()
 
     sys.exit(app.exec_())
