@@ -82,7 +82,7 @@ class MainWindow(QWidget):
         self.table_thread.setSelectionBehavior(QTableWidget.SelectRows)
         self.table_thread.setSelectionMode(QTableWidget.SingleSelection)
         self.table_thread.setMinimumHeight(250)
-        self.table_thread.itemClicked.connect(self._update_states)
+        self.table_thread.selectionModel().currentRowChanged.connect(self._update_states)
 
         from PyQt5.QtWidgets import QSizePolicy
         self.table_thread.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
