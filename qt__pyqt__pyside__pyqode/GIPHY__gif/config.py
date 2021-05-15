@@ -13,3 +13,6 @@ TOKEN_FILE_NAME = DIR / 'TOKEN.txt'
 
 # SOURCE: https://developers.giphy.com/dashboard/
 GIPHY_API_KEY = os.environ.get('TOKEN') or TOKEN_FILE_NAME.read_text('utf-8').strip()
+
+TEMP_DIR = DIR / 'temp'
+TEMP_DIR.mkdir(exist_ok=True)

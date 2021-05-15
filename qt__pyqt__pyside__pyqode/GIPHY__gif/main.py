@@ -7,10 +7,9 @@ __author__ = 'ipetrash'
 # SOURCE: https://ru.stackoverflow.com/q/1134473/201445
 
 
-import json
 import time
 import sys
-from pathlib import Path
+import traceback
 
 import requests
 
@@ -18,19 +17,14 @@ from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QFrame, QMessageBox,
     QLineEdit, QPushButton, QLabel, QScrollArea, QWidget, QGridLayout
 )
-from PyQt5.QtCore import QThread, pyqtSignal, Qt, QRegExp
-from PyQt5.QtGui import QRegExpValidator, QMovie
+from PyQt5.QtCore import QThread, pyqtSignal, Qt
+from PyQt5.QtGui import QMovie
 
-from config import GIPHY_API_KEY
-
-# Absolute file name
-TEMP_DIR = Path(__file__).resolve().parent / 'temp'
-TEMP_DIR.mkdir(exist_ok=True)
+from config import GIPHY_API_KEY, TEMP_DIR
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
     text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
     text += ''.join(traceback.format_tb(tb))
 
     print(text)
@@ -58,18 +52,15 @@ class SearchGifThread(QThread):
             rs = requests.get(url)
             rs.raise_for_status()
 
-            data = json.loads(rs.content.decode('utf-8'))['data']
-            if not data:
-                # TODO: emit 'not found' to MainWindow
-                data = {'error': True}
+            data = rs.json()['data']
+            if data:
                 return data
 
-            return data
-
-        except Exception as err:
+        except Exception as e:
             # TODO: emit error to MainWindow
-            print(err)
+            print(e)
 
+        # TODO: emit 'not found' to MainWindow
         return {'error': True}
 
     def _process_gif(self, img: dict, index: int) -> dict:
@@ -141,14 +132,13 @@ class MainWindow(QMainWindow):
         self.scroll.setWidgetResizable(True)
         self.scroll.setWidget(scrollWidget)
 
-        root_layout = QVBoxLayout()
+        root_widget = QWidget()
+        self.setCentralWidget(root_widget)
+
+        root_layout = QVBoxLayout(root_widget)
         root_layout.addWidget(self.gif_data_frame)
         root_layout.addWidget(self.info_label)
         root_layout.addWidget(self.scroll)
-
-        root_widget = QWidget()
-        root_widget.setLayout(root_layout)
-        self.setCentralWidget(root_widget)
 
     def on_finish(self):
         self.gif_data_frame.setEnabled(True)
