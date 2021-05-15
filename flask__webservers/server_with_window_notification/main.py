@@ -14,7 +14,7 @@ from flask import Flask, request, redirect
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.append(str(ROOT / 'winapi__windows__ctypes/windows__toast_balloontip_notifications'))
-from run_notify import run_in_process
+from run_notify import run_in_thread
 
 
 app = Flask(__name__)
@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 def show(text):
     title = str(threading.current_thread())
-    run_in_process(title, text, duration=20)
+    run_in_thread(title, text, duration=20)
 
 
 @app.route("/")
