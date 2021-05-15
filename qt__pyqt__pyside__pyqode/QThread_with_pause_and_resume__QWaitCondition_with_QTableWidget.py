@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+import datetime as DT
 import sys
 import time
 
@@ -72,6 +73,7 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.started: DT.datetime = None
         self._sum = 0
 
         self.table_thread = QTableWidget()
@@ -83,9 +85,6 @@ class MainWindow(QWidget):
         self.table_thread.setSelectionMode(QTableWidget.SingleSelection)
         self.table_thread.setMinimumHeight(250)
         self.table_thread.selectionModel().currentRowChanged.connect(self._update_states)
-
-        from PyQt5.QtWidgets import QSizePolicy
-        self.table_thread.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         self.label_result = QLabel()
 
@@ -130,9 +129,18 @@ class MainWindow(QWidget):
 
         self._update_states()
 
+    def _update_window_title(self):
+        threads_num = self.table_thread.rowCount()
+        if self.started:
+            elapsed = str(DT.datetime.now() - self.started).split('.')[0]
+            self.setWindowTitle(f'Threads: {threads_num}. Elapsed: {elapsed}')
+        else:
+            self.setWindowTitle(f'Threads: {threads_num}')
+
     def _update_states(self):
         threads_num = self.table_thread.rowCount()
-        self.setWindowTitle(f'Threads: {threads_num}')
+
+        self._update_window_title()
 
         row = self.table_thread.currentRow()
         ok = row != -1
@@ -155,6 +163,8 @@ class MainWindow(QWidget):
         return [self.get_thread(row) for row in range(self.table_thread.rowCount())]
 
     def update_info(self):
+        self._update_window_title()
+
         if self.cb_reset_sum.isChecked():
             self._sum = 0
 
@@ -169,6 +179,9 @@ class MainWindow(QWidget):
                 self.table_thread.item(row, 2).setText(str(thread.sum))
 
     def add(self):
+        if not self.started:
+            self.started = DT.datetime.now()
+
         thread = Thread(self)
         thread.about_sum.connect(lambda _, thread=thread: self._on_thread_changed(thread))
         thread.about_pause.connect(lambda _, thread=thread: self._on_thread_changed(thread))
