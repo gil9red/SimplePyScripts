@@ -44,7 +44,7 @@ sys.excepthook = log_uncaught_exceptions
 class SearchGifThread(QThread):
     SITE_URL = 'https://api.giphy.com/v1'
 
-    about_add_gif = pyqtSignal(dict)
+    about_add_gif = pyqtSignal(dict, int, int)
 
     def __init__(self, name_gif=None):
         super().__init__()
@@ -52,7 +52,7 @@ class SearchGifThread(QThread):
         self.name_gif = name_gif
 
     def get_gif(self) -> dict:
-        url = f'{SearchGifThread.SITE_URL}/gifs/search?api_key={GIPHY_API_KEY}&q={self.name_gif}'
+        url = f'{self.SITE_URL}/gifs/search?api_key={GIPHY_API_KEY}&q={self.name_gif}'
 
         try:
             rs = requests.get(url)
@@ -61,7 +61,7 @@ class SearchGifThread(QThread):
             data = json.loads(rs.content.decode('utf-8'))['data']
             if not data:
                 # TODO: emit 'not found' to MainWindow
-                data = {'error': 1}
+                data = {'error': True}
                 return data
 
             return data
@@ -70,10 +70,10 @@ class SearchGifThread(QThread):
             # TODO: emit error to MainWindow
             print(err)
 
-        return {'error': 1}
+        return {'error': True}
 
-    def _process_gif(self, data: dict, index: int) -> dict:
-        url_gif = data[index]['images']['fixed_width']['url']
+    def _process_gif(self, img: dict, index: int) -> dict:
+        url_gif = img['images']['fixed_width']['url']
         image_rs = requests.get(url_gif)
         image_rs.raise_for_status()
 
@@ -90,9 +90,9 @@ class SearchGifThread(QThread):
             # TODO: emit error to MainWindow
             return
 
-        for i in range(20):
-            data_gif = self._process_gif(data, i)
-            self.about_add_gif.emit(data_gif)
+        for i, img in enumerate(data):
+            data_gif = self._process_gif(img, i)
+            self.about_add_gif.emit(data_gif, i+1, len(data))
 
             time.sleep(1)
 
@@ -101,67 +101,62 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.width = self.size().width()
-        self.height = self.size().height()
-        self.left = 200
-        self.top = 300
         self.title = 'Gif Manager'
+        self.setWindowTitle(self.title)
 
         self.search_gif_thread = SearchGifThread()
         self.search_gif_thread.started.connect(self.on_start)
         self.search_gif_thread.finished.connect(self.on_finish)
         self.search_gif_thread.about_add_gif.connect(self.add_gif)
 
-        self.init_window()
         self.init_ui()
 
-        self.gif_edit.setText('cat')
-
-    def init_window(self):
-        self.setGeometry(self.left, self.top, self.width, self.height)
-        self.setWindowTitle(self.title)
-
     def init_ui(self):
-        root_layout = QVBoxLayout()
-        gif_data_layout = QHBoxLayout()
-        gif_data_layout.setAlignment(Qt.AlignTop)
-        self.gif_data_frame = QFrame()
-
         self.gif_edit = QLineEdit()
         self.gif_edit.returnPressed.connect(self.search_gif)
         self.gif_edit.setPlaceholderText('Enter name gif')
 
         gif_search_button = QPushButton('Search gif')
         gif_search_button.clicked.connect(self.search_gif)
+
+        gif_data_layout = QHBoxLayout()
+        gif_data_layout.setContentsMargins(0, 0, 0, 0)
         gif_data_layout.addWidget(self.gif_edit)
         gif_data_layout.addWidget(gif_search_button)
+
+        self.gif_data_frame = QFrame()
         self.gif_data_frame.setLayout(gif_data_layout)
-        root_layout.addWidget(self.gif_data_frame)
-        self.info_label = QLabel('Something went wrong. Check that the request was made correctly.')
+
+        self.info_label = QLabel(
+            '<font color="red">Something went wrong. Check that the request was made correctly.</font>'
+        )
         self.info_label.setAlignment(Qt.AlignHCenter)
         self.info_label.hide()
-        root_layout.addWidget(self.info_label)
+
+        scrollWidget = QWidget()
+        self.gifs_layout = QGridLayout(scrollWidget)
+
         self.scroll = QScrollArea()
-        self.scroll.setStyleSheet('background: rgba(255, 255, 255, 30%);')
-        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scroll.setWidgetResizable(True)
-        scrollWidget = QWidget()
-        self.gifs_layout = QGridLayout()
-        scrollWidget.setLayout(self.gifs_layout)
         self.scroll.setWidget(scrollWidget)
+
+        root_layout = QVBoxLayout()
+        root_layout.addWidget(self.gif_data_frame)
+        root_layout.addWidget(self.info_label)
         root_layout.addWidget(self.scroll)
+
         root_widget = QWidget()
         root_widget.setLayout(root_layout)
         self.setCentralWidget(root_widget)
 
     def on_finish(self):
-        self.gif_data_frame.show()
+        self.gif_data_frame.setEnabled(True)
 
     def on_start(self):
         self.info_label.hide()
         self.scroll.show()
-        self.gif_data_frame.hide()
+        self.gif_data_frame.setEnabled(False)
 
     def search_gif(self):
         # TODO: replace on QListWidget
@@ -171,9 +166,11 @@ class MainWindow(QMainWindow):
         self.search_gif_thread.name_gif = self.gif_edit.text()
         self.search_gif_thread.start()
 
-    def add_gif(self, data):
+    def add_gif(self, data: dict, num: int, total: int):
+        self.setWindowTitle(f'{self.title}. {num} / {total}')
+
         if data['error']:
-            self.gif_data_frame.show()
+            self.gif_data_frame.setEnabled(True)
             self.scroll.hide()
             self.info_label.show()
             return
@@ -193,6 +190,9 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     mw = MainWindow()
+    mw.resize(800, 600)
     mw.show()
+
+    mw.gif_edit.setText('cat')
 
     sys.exit(app.exec_())
