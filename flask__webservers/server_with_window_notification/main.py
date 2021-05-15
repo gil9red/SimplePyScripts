@@ -4,21 +4,26 @@
 __author__ = 'ipetrash'
 
 
-from flask import Flask, request, redirect
-app = Flask(__name__)
-
 import logging
-logging.basicConfig(level=logging.DEBUG)
-
 import threading
+import sys
+
+from pathlib import Path
+
+from flask import Flask, request, redirect
+
+ROOT = Path(__file__).resolve().parent.parent.parent
+sys.path.append(str(ROOT / 'winapi__windows__ctypes/windows__toast_balloontip_notifications'))
+from run_notify import run_in_process
+
+
+app = Flask(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 
 def show(text):
     title = str(threading.current_thread())
-
-    # Copy from: SimplePyScripts\windows__toast_balloontip_notifications\main.py
-    from notifications import WindowsBalloonTip
-    WindowsBalloonTip.balloon_tip(title, text, duration=20)
+    run_in_process(title, text, duration=20)
 
 
 @app.route("/")
