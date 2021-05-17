@@ -83,11 +83,7 @@ if __name__ == "__main__":
     app.debug = True
 
     # Localhost
-    app.run(
-        # Включение поддержки множества подключений
-        threaded=True,
-        port=15555,
-    )
+    app.run(port=15555)
 
     # # Public IP
     # app.run(host='0.0.0.0')
