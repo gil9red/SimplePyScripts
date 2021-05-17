@@ -3,27 +3,26 @@
 
 __author__ = 'ipetrash'
 
+
+import json
+import logging
+import sys
+
 from flask import Flask, render_template_string
+
+# Для импорта common.py
+sys.path.append('..')
+from common import generate_table
+
 
 app = Flask(__name__)
 
-import logging
-
 logging.basicConfig(level=logging.DEBUG)
-
-# Для импорта common.py
-import sys
-
-sys.path.append('..')
-
-from common import generate_table
 
 
 @app.route("/")
 def index():
     items = generate_table(10)
-
-    import json
     items = json.dumps(items, ensure_ascii=False)
 
     return render_template_string("""\
@@ -94,15 +93,7 @@ if __name__ == '__main__':
     # Localhost
     # port=0 -- random free port
     # app.run(port=0)
-    app.run(
-        port=5000,
-
-        # :param threaded: should the process handle each request in a separate
-        #                  thread?
-        # :param processes: if greater than 1 then handle each request in a new process
-        #                   up to this maximum number of concurrent processes.
-        threaded=True,
-    )
+    app.run(port=5000)
 
     # # Public IP
     # app.run(host='0.0.0.0')

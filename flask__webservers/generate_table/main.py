@@ -4,10 +4,12 @@
 __author__ = 'ipetrash'
 
 
+import logging
 from flask import Flask, render_template_string
+
+
 app = Flask(__name__)
 
-import logging
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -81,15 +83,7 @@ if __name__ == '__main__':
     # Localhost
     # port=0 -- random free port
     # app.run(port=0)
-    app.run(
-        port=5000,
-
-        # :param threaded: should the process handle each request in a separate
-        #                  thread?
-        # :param processes: if greater than 1 then handle each request in a new process
-        #                   up to this maximum number of concurrent processes.
-        threaded=True,
-    )
+    app.run(port=5000)
 
     # # Public IP
     # app.run(host='0.0.0.0')

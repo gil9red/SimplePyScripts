@@ -4,8 +4,14 @@
 __author__ = 'ipetrash'
 
 
+import hashlib
+import logging
 import os
+
 from flask import Flask, request, jsonify, render_template_string, send_from_directory, url_for, redirect
+
+# pip install qrcode
+import qrcode
 
 
 UPLOAD_FOLDER = 'images'
@@ -15,7 +21,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-import logging
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -110,7 +115,6 @@ def generate_qrcode():
         <a href="{{ example_uri }}&as_image">{{ example_uri }}&as_image<a>
         """, example_uri='/generate_qrcode?text=Hello World!')
 
-    import hashlib
     algo = hashlib.md5(text.encode())
     hash_data = algo.hexdigest()
 
@@ -119,8 +123,6 @@ def generate_qrcode():
     abs_file_name = os.path.join(upload_folder, file_name)
 
     if not os.path.exists(abs_file_name):
-        # pip install qrcode
-        import qrcode
         img = qrcode.make(text)
         img.save(abs_file_name)
 
@@ -155,14 +157,10 @@ if __name__ == "__main__":
     app.debug = True
 
     # Localhost
-    app.run(
-        port=5001,
-        threaded=True,
-    )
+    app.run(port=5001)
 
     # # Public IP
     # app.run(
     #     host='0.0.0.0',
-    #     port=5000,
-    #     threaded=True,
+    #     port=5000
     # )

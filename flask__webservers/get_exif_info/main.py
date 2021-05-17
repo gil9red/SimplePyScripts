@@ -4,6 +4,15 @@
 __author__ = 'ipetrash'
 
 
+import base64
+import logging
+
+from flask import Flask, jsonify, render_template_string, redirect, request
+
+# pip install exifread
+import exifread
+
+
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/master/print_exif/main.py
 def get_exif_tags(file_object_or_file_name, as_category=True):
     if type(file_object_or_file_name) == str:
@@ -11,8 +20,6 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
         file_object_or_file_name = open(file_object_or_file_name, mode='rb')
 
     # Return Exif tags
-    # pip install exifread
-    import exifread
     tags = exifread.process_file(file_object_or_file_name)
     tags_by_value = dict()
 
@@ -43,7 +50,6 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
         except:
             # Example tag JPEGThumbnail
             if type(value) == bytes:
-                import base64
                 value = base64.b64encode(value).decode()
 
         print('  "{}": {}'.format(tag, value))
@@ -70,10 +76,8 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
     return tags_by_value
 
 
-from flask import Flask, jsonify, render_template_string, redirect, request
 app = Flask(__name__)
 
-import logging
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -233,15 +237,7 @@ if __name__ == '__main__':
     # Localhost
     # port=0 -- random free port
     # app.run(port=0)
-    app.run(
-        port=5000,
-
-        # :param threaded: should the process handle each request in a separate
-        #                  thread?
-        # :param processes: if greater than 1 then handle each request in a new process
-        #                   up to this maximum number of concurrent processes.
-        threaded=True,
-    )
+    app.run(port=5000)
 
     # # Public IP
     # app.run(host='0.0.0.0')
