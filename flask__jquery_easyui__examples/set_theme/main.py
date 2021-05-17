@@ -115,21 +115,14 @@ def get_datalist_data():
         {"productid": "AV-CB-01", "productname": "Amazon Parrot", "unitcost": "92.00", "status": "P", "listprice": "63.50", "attr1": "Adult Male", "itemid": "EST-18"}
     ]})
 
+
 if __name__ == '__main__':
     app.debug = True
 
     # Localhost
     # port=0 -- random free port
     # app.run(port=0)
-    app.run(
-        port=5000,
-
-        # :param threaded: should the process handle each request in a separate
-        #                  thread?
-        # :param processes: if greater than 1 then handle each request in a new process
-        #                   up to this maximum number of concurrent processes.
-        threaded=True,
-    )
+    app.run(port=5000)
 
     # # Public IP
     # app.run(host='0.0.0.0')
