@@ -4,10 +4,19 @@
 __author__ = 'ipetrash'
 
 
+import base64
+import io
+import json
+import logging
 import sys
 
+# pip install exifread
+import exifread
+
 import requests
+
 from flask import Flask, jsonify, render_template_string, redirect, request
+from PIL import Image
 
 sys.path.append('..')
 from common import sizeof_fmt
@@ -20,8 +29,6 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
         file_object_or_file_name = open(file_object_or_file_name, mode='rb')
 
     # Return Exif tags
-    # pip install exifread
-    import exifread
     tags = exifread.process_file(file_object_or_file_name)
     tags_by_value = dict()
 
@@ -52,7 +59,6 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
         except:
             # Example tag JPEGThumbnail
             if type(value) == bytes:
-                import base64
                 value = base64.b64encode(value).decode()
 
         # print('  "{}": {}'.format(tag, value))
@@ -92,13 +98,9 @@ def img_to_base64_html(file_name__or__bytes__or__file_object):
     else:
         img_bytes = arg.read()
 
-    import io
     bytes_io = io.BytesIO(img_bytes)
-
-    from PIL import Image
     img = Image.open(bytes_io)
 
-    import base64
     img_base64 = base64.b64encode(img_bytes).decode('utf-8')
     # print(img_base64)
 
@@ -116,19 +118,15 @@ def get_image_info(file_name__or__bytes__or__bytes_io, pretty_json_str=False):
             data = f.read()
 
     if type(data) == bytes:
-        import io
         data = io.BytesIO(data)
 
     length = len(data.getvalue())
     exif = get_exif_tags(data)
 
-    from PIL import Image
     img = Image.open(data)
 
-    # Save order
-    from collections import OrderedDict
-    info = OrderedDict()
-    info['length'] = OrderedDict()
+    info = dict()
+    info['length'] = dict()
     info['length']['value'] = length
     info['length']['text'] = sizeof_fmt(length)
 
@@ -140,14 +138,13 @@ def get_image_info(file_name__or__bytes__or__bytes_io, pretty_json_str=False):
         'CMYK': 32, 'YCbCr': 24, 'I': 32, 'F': 32
     }[img.mode]
 
-    info['size'] = OrderedDict()
+    info['size'] = dict()
     info['size']['width'] = img.width
     info['size']['height'] = img.height
 
     info['exif'] = exif
 
     if pretty_json_str:
-        import json
         info = json.dumps(info, indent=4, ensure_ascii=False)
 
     return info
@@ -162,7 +159,6 @@ app = Flask(__name__)
 # you a performance improvement on the cost of cacheability.
 app.config['JSON_SORT_KEYS'] = False
 
-import logging
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -402,15 +398,7 @@ if __name__ == '__main__':
     # Localhost
     # port=0 -- random free port
     # app.run(port=0)
-    app.run(
-        port=5000,
-
-        # :param threaded: should the process handle each request in a separate
-        #                  thread?
-        # :param processes: if greater than 1 then handle each request in a new process
-        #                   up to this maximum number of concurrent processes.
-        threaded=True,
-    )
+    app.run(port=5000)
 
     # # Public IP
     # app.run(host='0.0.0.0')

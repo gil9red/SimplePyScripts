@@ -4,8 +4,19 @@
 __author__ = 'ipetrash'
 
 
+import base64
+import logging
+import io
+
+import requests
+
+from flask import Flask, jsonify, render_template_string, redirect, request
+from PIL import Image
+
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/4516206d6e29608a732b7c096cd557b11c7ce67b/telegram_bot__image_process_bot/commands.py
 from commands import invert, gray, invert_gray, pixelate, jackal_jpg, thumbnail, blur
+
+
 COMMANDS = {
     'invert': invert,
     'gray': gray,
@@ -37,22 +48,15 @@ def img_to_base64_html(file_name__or__bytes__or__file_object):
     else:
         img_bytes = arg.read()
 
-    import io
     bytes_io = io.BytesIO(img_bytes)
-
-    from PIL import Image
     img = Image.open(bytes_io)
 
-    import base64
     img_base64 = base64.b64encode(img_bytes).decode('utf-8')
     # print(img_base64)
 
     return 'data:image/{};base64,'.format(img.format.lower()) + img_base64
 
 
-import requests
-
-from flask import Flask, jsonify, render_template_string, redirect, request
 app = Flask(__name__)
 
 # http://flask.pocoo.org/docs/0.12/config/#config
@@ -62,7 +66,6 @@ app = Flask(__name__)
 # you a performance improvement on the cost of cacheability.
 app.config['JSON_SORT_KEYS'] = False
 
-import logging
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -322,11 +325,7 @@ def image_process():
     command = request.form['command']
 
     img_original = load_last_image()
-
-    import io
     data_io = io.BytesIO(img_original)
-
-    from PIL import Image
     img = Image.open(data_io).convert('RGB')
 
     # Получение и вызов функции
@@ -349,15 +348,7 @@ if __name__ == '__main__':
     # Localhost
     # port=0 -- random free port
     # app.run(port=0)
-    app.run(
-        port=5000,
-
-        # :param threaded: should the process handle each request in a separate
-        #                  thread?
-        # :param processes: if greater than 1 then handle each request in a new process
-        #                   up to this maximum number of concurrent processes.
-        threaded=True,
-    )
+    app.run(port=5000)
 
     # # Public IP
     # app.run(host='0.0.0.0')
