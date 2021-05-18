@@ -5,11 +5,12 @@ __author__ = 'ipetrash'
 
 
 import hashlib
+import logging
+
 from flask import Flask, request, jsonify, render_template_string
 
-import logging
-logging.basicConfig(level=logging.DEBUG)
 
+logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
 
@@ -165,7 +166,7 @@ def do_hash():
     }
 
     if algo not in SUPPORTED_HASH_ALGOS:
-        result['error'] = f'Unsupported algorithm "{algo}"'
+        result['error'] = f'Unsupported algorithm {algo!r}'
     else:
         if file:
             digest = hashlib.new(algo)
@@ -187,14 +188,10 @@ if __name__ == "__main__":
     app.debug = True
 
     # Localhost
-    app.run(
-        port=5001,
-        threaded=True,
-    )
+    app.run(port=5001)
 
     # # Public IP
     # app.run(
     #     host='0.0.0.0',
-    #     port=5000,
-    #     threaded=True,
+    #     port=5000
     # )

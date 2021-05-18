@@ -4,7 +4,13 @@
 __author__ = 'ipetrash'
 
 
+from collections import defaultdict
+
 from flask import Flask, jsonify, redirect, request
+
+from common import get_news_list, get_news_list_and_mark_as_read, reset_all_is_read
+
+
 app = Flask(__name__)
 
 
@@ -29,10 +35,7 @@ def get_news_list(interest=None):
     if last:
         last = int(last)
 
-    from common import get_news_list
     news_list, total = get_news_list(interest, last)
-
-    from collections import defaultdict
     interest_by_news_list = defaultdict(list)
 
     for title, url, interest in news_list:
@@ -62,10 +65,7 @@ def get_news_list_and_mark_as_read(interest=None):
     if count:
         count = int(count)
 
-    from common import get_news_list_and_mark_as_read
     news_list, total = get_news_list_and_mark_as_read(interest, count)
-
-    from collections import defaultdict
     interest_by_news_list = defaultdict(list)
 
     for title, url, interest in news_list:
@@ -89,7 +89,6 @@ def reset_all_is_read():
     :return:
     """
 
-    from common import reset_all_is_read
     reset_all_is_read()
 
     return jsonify({'status': 'ok'})
@@ -99,10 +98,7 @@ if __name__ == "__main__":
     app.debug = True
 
     # Localhost
-    app.run(
-        # Включение поддержки множества подключений
-        threaded=True,
-    )
+    app.run()
 
     # # Public IP
     # app.run(host='0.0.0.0')

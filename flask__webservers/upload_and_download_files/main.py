@@ -5,8 +5,10 @@ __author__ = 'ipetrash'
 
 
 import os
+
 from flask import Flask, request, redirect, url_for, flash, send_from_directory
 from werkzeug.utils import secure_filename
+
 
 UPLOAD_FOLDER = 'uploads'
 UPLOAD_FOLDER = os.path.abspath(UPLOAD_FOLDER)
@@ -63,5 +65,4 @@ def uploaded_file(filename):
 
 if __name__ == '__main__':
     # Localhost
-    # Включение поддержки множества подключений
-    app.run(threaded=True)
+    app.run()

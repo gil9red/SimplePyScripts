@@ -4,18 +4,20 @@
 __author__ = 'ipetrash'
 
 
+import binascii
+import logging
+
 from flask import Flask, request
+
+
 app = Flask(__name__)
 
-import logging
 logging.basicConfig(level=logging.DEBUG)
 
 
 @app.route("/", methods=['POST'])
 def index():
     data = request.data
-
-    import binascii
     print(binascii.hexlify(data), data)
 
     return "Ok"
@@ -24,7 +26,4 @@ def index():
 if __name__ == '__main__':
     app.debug = True
 
-    app.run(
-        port=33333,
-        threaded=True,
-    )
+    app.run(port=33333)

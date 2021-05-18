@@ -4,16 +4,20 @@
 __author__ = 'ipetrash'
 
 
-from flask import Flask, render_template_string, request, jsonify
-app = Flask(__name__)
-
 import logging
-logging.basicConfig(level=logging.DEBUG)
-
-
+import time
+import threading
 import sys
+
+from flask import Flask, render_template_string, request, jsonify
+
 sys.path.append('..')
 from rumble import set_vibration
+
+
+app = Flask(__name__)
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 @app.route("/")
@@ -207,21 +211,17 @@ def get_status():
 def vibration_tick():
     while True:
         if DEBUG:
-            print('ENABLED: {} ({}), LEFT_MOTOR: {}, RIGHT_MOTOR: {}'.format(
-                ENABLED, type(ENABLED), LEFT_MOTOR, RIGHT_MOTOR,
-            ))
+            print(f'ENABLED: {ENABLED} ({type(ENABLED)}), LEFT_MOTOR: {LEFT_MOTOR}, RIGHT_MOTOR: {RIGHT_MOTOR}')
 
         if ENABLED:
             set_vibration(LEFT_MOTOR, RIGHT_MOTOR)
         else:
             set_vibration(0, 0)
 
-        import time
         time.sleep(0.1)
 
 
 if __name__ == "__main__":
-    import threading
     t = threading.Thread(target=vibration_tick)
     t.start()
 
@@ -230,10 +230,7 @@ if __name__ == "__main__":
     # app.run(
     #     # OR: host='127.0.0.1'
     #     host='192.168.0.102',
-    #     port=10000,
-    #
-    #     # # Включение поддержки множества подключений
-    #     # threaded=True,
+    #     port=10000
     # )
 
     # # Public IP

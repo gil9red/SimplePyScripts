@@ -20,7 +20,6 @@ def index():
     rows.reverse()
 
     data = []
-
     for date, dtp, died, children_died, wounded, wounded_children in rows:
         data.append({
             'date': date,
@@ -180,11 +179,7 @@ if __name__ == "__main__":
     app.debug = True
 
     # Localhost
-    app.run(
-        # Включение поддержки множества подключений
-        threaded=True,
-        port=10009,
-    )
+    app.run(port=10009)
 
     # # Public IP
     # app.run(host='0.0.0.0')
