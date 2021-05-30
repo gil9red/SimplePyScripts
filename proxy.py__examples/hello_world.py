@@ -19,7 +19,7 @@ from proxy.plugin import FilterByUpstreamHostPlugin
 from proxy.http.proxy import HttpProxyBasePlugin
 
 
-# NOTE: Analog https://github.com/gil9red/SimplePyScripts/blob/f0f5e96a2ddf768ec8e02fc41365226a334ee354/http.server__examples/simple_http_proxy_server/main.py#L18
+# NOTE: Analog https://github.com/gil9red/SimplePyScripts/blob/3d8afdec07c2cfbc94fcb3fd792721e1e8565a42/http.server__examples/simple_http_proxy_server/main.py#L18
 class AddHeadersPlugin(HttpProxyBasePlugin):
     def before_upstream_connection(self, request: HttpParser) -> Optional[HttpParser]:
         return request
@@ -27,7 +27,7 @@ class AddHeadersPlugin(HttpProxyBasePlugin):
     def handle_client_request(self, request: HttpParser) -> Optional[HttpParser]:
         # NOTE: Add custom header
         request.add_header(b'x-my-proxy', b'hell yeah!')
-        request.add_header(b'x-client-ip', bytes_(self.client.addr[0]))
+        request.add_header(b'x-my-client-ip', bytes_(self.client.addr[0]))
 
         return request
 
@@ -38,13 +38,19 @@ class AddHeadersPlugin(HttpProxyBasePlugin):
         pass
 
 
-if __name__ == '__main__':
+def main(*args, **kwargs):
     proxy.main(
+        *args,
         hostname=ipaddress.ip_address('127.0.0.1'),
         port=33333,
         plugins=[
             'proxy.plugin.CacheResponsesPlugin',  # Adding plugin v1
             FilterByUpstreamHostPlugin,           # Adding plugin v2
             AddHeadersPlugin,                     # Adding custom plugin
-        ]
+        ],
+        **kwargs
     )
+
+
+if __name__ == '__main__':
+    main()
