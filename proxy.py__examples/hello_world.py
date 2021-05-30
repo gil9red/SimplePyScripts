@@ -4,10 +4,14 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: https://github.com/abhinavsingh/proxy.py
+
+
 import ipaddress
 
 from typing import Optional
 
+# pip install --upgrade proxy.py
 import proxy
 from proxy.common.utils import bytes_
 from proxy.http.parser import HttpParser
