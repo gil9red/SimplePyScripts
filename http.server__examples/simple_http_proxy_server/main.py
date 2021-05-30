@@ -16,7 +16,7 @@ class ProxyHandler(SimpleHTTPRequestHandler):
 
         # NOTE: Add custom header
         self.headers.add_header('x-my-proxy', 'hell yeah!')
-        self.headers.add_header('x-client-ip', self.client_address[0])
+        self.headers.add_header('x-my-client-ip', self.client_address[0])
 
         rs = requests.get(self.path, headers=self.headers)
 

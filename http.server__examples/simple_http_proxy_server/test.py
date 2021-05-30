@@ -18,10 +18,9 @@ print(rs)
 print(rs.headers)
 print(rs.content)
 for header, value in rs.json()['headers'].items():
-    if header.lower().startswith('x-'):
+    if header.lower().startswith('x-my'):
         print(f'{header}: {value!r}')
 """
 ...
-X-Client-Ip: '127.0.0.1'
 X-My-Proxy: 'hell yeah!'
 """
