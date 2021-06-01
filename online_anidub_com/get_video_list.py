@@ -12,8 +12,10 @@ import re
 from bs4 import BeautifulSoup
 
 
-DIR = Path(__file__).resolve().parent
-sys.path.append(str(DIR.parent / 'proxy'))
+ROOT_DIR = Path(__file__).resolve().parent
+
+
+sys.path.append(str(ROOT_DIR.parent / 'using_proxy'))
 import proxy_requests__upgraded
 ProxyRequests = proxy_requests__upgraded.ProxyRequests
 
@@ -27,7 +29,7 @@ def _get_title(el) -> str:
     return re.sub(r'\s{2,}', ' ', title)
 
 
-def search_video_list(text) -> List[str]:
+def search_video_list(text: str) -> List[str]:
     url = 'https://online.anidub.com/index.php?do=search'
 
     data = {
