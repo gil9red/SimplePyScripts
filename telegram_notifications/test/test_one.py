@@ -22,7 +22,8 @@ if __name__ == '__main__':
     except:
         name = 'test'
 
-    for i in range(random.randrange(2, 5+2)):
-        text = f'Rand #{i}'
+    N = random.randrange(2, 5+2)
+    for i in range(N):
+        text = f'Rand: {i+1} / {N}'
         print(name, text)
         add_notify(name=name, message=text)
