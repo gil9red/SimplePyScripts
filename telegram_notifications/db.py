@@ -151,6 +151,8 @@ if __name__ == '__main__':
         print(x)
     #     print(x.get_html())
 
+    print('Unsent:', len(Notification.get_unsent()))
+
     # print()
     #
     # for x in Notification.get_unsent():
