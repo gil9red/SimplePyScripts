@@ -33,17 +33,19 @@ log = get_logger(__file__)
 def sending_notifications():
     while True:
         try:
-            if not DATA['IS_WORKING']:
-                continue
-
             bot: Bot = DATA['BOT']
             if not bot or not config.CHAT_ID:
                 continue
 
-            for notif in db.Notification.get_unsent():
-                text = notif.get_html()
+            for notify in db.Notification.get_unsent():
+                # Пауза, если IS_WORKING = False
+                while not DATA['IS_WORKING']:
+                    time.sleep(0.001)
+                    continue
+
+                text = notify.get_html()
                 bot.send_message(config.CHAT_ID, text, parse_mode=ParseMode.HTML)
-                notif.set_as_send()
+                notify.set_as_send()
 
                 time.sleep(1)
 
