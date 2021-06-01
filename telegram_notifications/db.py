@@ -16,8 +16,8 @@ from peewee import (
 )
 from playhouse.sqliteq import SqliteQueueDatabase
 
-from config import DIR
-from common import TypeEnum
+from telegram_notifications.config import DIR
+from telegram_notifications.common import TypeEnum
 
 # Для импортирования shorten
 sys.path.append(str(DIR.parent))

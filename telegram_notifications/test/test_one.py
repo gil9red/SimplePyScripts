@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).resolve().parent.parent
 
 sys.path.append(str(ROOT_DIR))
-from add_notify import add_notify
+from telegram_notifications.add_notify import add_notify
 
 
 if __name__ == '__main__':

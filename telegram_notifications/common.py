@@ -14,7 +14,7 @@ from pathlib import Path
 from telegram import Update
 from telegram.ext import CallbackContext
 
-import config
+from telegram_notifications import config
 
 
 class AutoName(enum.Enum):

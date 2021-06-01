@@ -6,9 +6,9 @@ __author__ = 'ipetrash'
 
 from typing import Union
 
-from db import Notification
-from config import CHAT_ID
-from common import TypeEnum
+from telegram_notifications.db import Notification
+from telegram_notifications.config import CHAT_ID
+from telegram_notifications.common import TypeEnum
 
 
 def add_notify(name: str, message: str, type: Union[TypeEnum, str] = TypeEnum.INFO):
