@@ -5,12 +5,16 @@ __author__ = 'ipetrash'
 
 
 import os
+import sys
 
 from pathlib import Path
 from typing import Optional
 
 
 DIR = Path(__file__).resolve().parent
+
+# NOTE: хак для помощи импортирования из telegram_notifications
+sys.path.append(str(DIR.parent))
 
 TOKEN_PATH = DIR / 'TOKEN.txt'
 TOKEN = os.environ.get('TOKEN') or TOKEN_PATH.read_text('utf-8').strip()
