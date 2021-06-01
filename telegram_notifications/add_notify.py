@@ -11,7 +11,7 @@ from config import CHAT_ID
 from common import TypeEnum
 
 
-def add(name: str, message: str, type: Union[TypeEnum, str] = TypeEnum.INFO):
+def add_notify(name: str, message: str, type: Union[TypeEnum, str] = TypeEnum.INFO):
     if not CHAT_ID:
         raise Exception('Нужно заполнить "CHAT_ID.txt"!')
 
@@ -27,5 +27,5 @@ def add(name: str, message: str, type: Union[TypeEnum, str] = TypeEnum.INFO):
 
 
 if __name__ == '__main__':
-    add('TEST', 'Hello World! Привет мир!')
-    add('', 'Hello World! Привет мир!')
+    add_notify('TEST', 'Hello World! Привет мир!')
+    add_notify('', 'Hello World! Привет мир!')
