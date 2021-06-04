@@ -1,6 +1,8 @@
 ### Environment
 
-* Win10, game in windowed mode (DXWnd)
+* Win10
+* Game in windowed mode (DXWnd)
+* Game in fullscreen
 
 ### HOTKEYS
 
