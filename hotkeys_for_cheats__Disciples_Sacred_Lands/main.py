@@ -25,6 +25,7 @@ HOTKEY_BY_COMMAND = {
     'M': 'MAKEMESTRONGER',
     'L': 'LETMEMOVE',
     'R': 'GIVEMEANOTHERCHANCE',
+    'W': 'NOBODYCANBEATME',
 }
 
 for hotkey, text in HOTKEY_BY_COMMAND.items():

@@ -15,3 +15,4 @@
 |**M**|MAKEMESTRONGER|Recover health|
 |**L**|LETMEMOVE|Able to move again|
 |**R**|GIVEMEANOTHERCHANCE|Revives dead units|
+|**W**|NOBODYCANBEATME|Win instantly|
