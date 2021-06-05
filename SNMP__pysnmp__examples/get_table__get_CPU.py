@@ -32,11 +32,10 @@ print(f"Number CPU cores: {len(items)}\n")
 
 for i, (errorIndication, errorStatus, errorIndex, varBinds) in enumerate(items, 1):
     if errorIndication:
-        print(errorIndication)
+        print(f'Error indication: {errorIndication}')
 
     elif errorStatus:
-        print('%s at %s' % (errorStatus.prettyPrint(),
-                            errorIndex and varBinds[int(errorIndex) - 1][0] or '?'))
+        print(f'Error status {errorStatus.prettyPrint()!r} at {errorIndex and varBinds[int(errorIndex) - 1][0] or "?"}')
 
     else:
         for varBind in varBinds:
