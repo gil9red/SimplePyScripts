@@ -8,7 +8,7 @@ import datetime as DT
 import sys
 
 import enum
-from typing import List, Any
+from typing import List, Any, Type
 
 # pip install peewee
 from peewee import (
@@ -51,10 +51,10 @@ class EnumField(CharField):
     This class enable an Enum like field for Peewee
     """
 
-    def __init__(self, choices: enum.Enum, *args: Any, **kwargs: Any) -> None:
+    def __init__(self, choices: Type[enum.Enum], *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
-        self.choices: enum.Enum = choices
+        self.choices: Type[enum.Enum] = choices
         self.max_length = 255
 
     def db_value(self, value: Any) -> Any:
@@ -147,8 +147,9 @@ if __name__ == '__main__':
     #     type=TypeEnum.INFO,
     # )
 
-    for x in Notification.select():
-        print(x)
+    print('Total:', len(Notification.select()))
+    # for x in Notification.select():
+    #     print(x)
     #     print(x.get_html())
 
     print('Unsent:', len(Notification.get_unsent()))
