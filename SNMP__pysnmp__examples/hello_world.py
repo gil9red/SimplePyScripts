@@ -21,18 +21,22 @@ iterator = getCmd(
     ObjectType(ObjectIdentity('.1.3.6.1.2.1.1.1.0')),  # OID, same as above
 )
 
-errorIndication, errorStatus, errorIndex, varBinds = next(iterator)
+error_indication, error_status, error_index, var_binds = next(iterator)
 
-if errorIndication:
-    print(f'Error indication: {errorIndication}')
+if error_indication:
+    print(f'Error indication: {error_indication}')
 
-elif errorStatus:
-    print(f'Error status {errorStatus.prettyPrint()!r} at {errorIndex and varBinds[int(errorIndex) - 1][0] or "?"}')
+elif error_status:
+    at = '?'
+    if error_index:
+        at = var_binds[int(error_index) - 1][0]
+    print(f'Error status {error_status.prettyPrint()!r} at {at}')
 
 else:
-    for varBind in varBinds:
-        var, value = varBind
-        print(varBind)
+    for var_bind in var_binds:
+        var, value = var_bind
+        print(var_bind)
         print(f'{var} = {value}')
+        print(f'{var.getOid()} = {value}')
         print(f'{var.prettyPrint()} = {value.prettyPrint()}')
         print()

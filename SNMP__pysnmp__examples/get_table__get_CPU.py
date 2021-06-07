@@ -30,18 +30,21 @@ iterator = get_iterator('localhost', 161, 'public')
 items = list(iterator)
 print(f"Number CPU cores: {len(items)}\n")
 
-for i, (errorIndication, errorStatus, errorIndex, varBinds) in enumerate(items, 1):
-    if errorIndication:
-        print(f'Error indication: {errorIndication}')
+for i, (error_indication, error_status, error_index, var_binds) in enumerate(items, 1):
+    if error_indication:
+        print(f'Error indication: {error_indication}')
 
-    elif errorStatus:
-        print(f'Error status {errorStatus.prettyPrint()!r} at {errorIndex and varBinds[int(errorIndex) - 1][0] or "?"}')
+    elif error_status:
+        at = '?'
+        if error_index:
+            at = var_binds[int(error_index) - 1][0]
+        print(f'Error status {error_status.prettyPrint()!r} at {at}')
 
     else:
-        for varBind in varBinds:
-            var, value = varBind
-            print(f'CPU Core #{i}')
-            print(varBind)
+        for var_bind in var_binds:
+            var, value = var_bind
+            print(var_bind)
             print(f'{var} = {value}')
+            print(f'{var.getOid()} = {value}')
             print(f'{var.prettyPrint()} = {value.prettyPrint()}')
             print()
