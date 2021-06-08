@@ -41,9 +41,7 @@ for i, (error_indication, error_status, error_index, var_binds) in enumerate(ite
         print(f'Error status {error_status.prettyPrint()!r} at {at}')
 
     else:
-        for var_bind in var_binds:
-            var, value = var_bind
-            print(var_bind)
+        for var, value in var_binds:
             print(f'{var} = {value}')
             print(f'{var.getOid()} = {value}')
             print(f'{var.prettyPrint()} = {value.prettyPrint()}')
