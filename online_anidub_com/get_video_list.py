@@ -4,10 +4,11 @@
 __author__ = 'ipetrash'
 
 
-from typing import List
 import sys
-from pathlib import Path
 import re
+
+from typing import List
+from pathlib import Path
 
 from bs4 import BeautifulSoup
 
