@@ -4,11 +4,11 @@
 __author__ = 'ipetrash'
 
 
-import typing
+from typing import List
 from get_all_games import get_all_games
 
 
-def get_games() -> typing.List[str]:
+def get_games() -> List[str]:
     prefix = "Saga of the Nine Worlds"
     postfix = "Collector's Edition"
 
@@ -17,7 +17,7 @@ def get_games() -> typing.List[str]:
 
 if __name__ == '__main__':
     games = get_games()
-    print('Games ({}):'.format(len(games)))
+    print(f'Games ({len(games)}):')
 
     for game in games:
         print('    ' + game)
