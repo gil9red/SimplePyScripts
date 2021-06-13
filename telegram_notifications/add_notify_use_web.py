@@ -4,12 +4,16 @@
 __author__ = 'ipetrash'
 
 
+import sys
+
+from pathlib import Path
 from typing import Union
 
 import requests
 
-from common import TypeEnum
-from config import HOST, PORT
+sys.path.append(str(Path(__file__).parent.parent))
+from telegram_notifications.common import TypeEnum
+from telegram_notifications.config import HOST, PORT
 
 
 URL = f'http://{HOST}:{PORT}/add_notify'

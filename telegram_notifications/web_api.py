@@ -4,12 +4,17 @@
 __author__ = 'ipetrash'
 
 
+import sys
+
+from pathlib import Path
+
 # pip install aiohttp
 from aiohttp import web
 
-from add_notify import add_notify
-from config import HOST, PORT
-from common import TypeEnum
+sys.path.append(str(Path(__file__).parent.parent))
+from telegram_notifications.add_notify import add_notify
+from telegram_notifications.config import HOST, PORT
+from telegram_notifications.common import TypeEnum
 
 
 routes = web.RouteTableDef()
