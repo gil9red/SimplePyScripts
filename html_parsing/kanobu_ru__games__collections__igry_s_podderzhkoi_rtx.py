@@ -50,14 +50,20 @@ def get_games() -> List[Game]:
 
     items = []
 
-    for game in root.select('li.c-game a.c-game__img'):
-        url_game = urljoin(rs.url, game['href'])
+    for game in root.select('.knb-grid-cell'):
+        url_game = urljoin(rs.url, game.a['href'])
 
-        img = game.img
-        title = img['title']
+        # Example: <span class="style_title__f2mz_">
+        title = game.select_one('[class^=style_title]').get_text(strip=True)
+
+        img = game.select_one('.knb-card--image')
         url_img = img.get('data-original') or img.get('src')
-        rs_img = session.get(url_img)
-        img_base64 = img_to_base64_html(rs_img)
+
+        if url_img.startswith('data:image/'):
+            img_base64 = url_img
+        else:
+            rs_img = session.get(url_img)
+            img_base64 = img_to_base64_html(rs_img)
 
         items.append(
             Game(title, url_game, img_base64)
