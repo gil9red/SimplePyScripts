@@ -53,10 +53,15 @@ def get_games() -> List[Game]:
     for game in root.select('.knb-grid-cell'):
         url_game = urljoin(rs.url, game.a['href'])
 
+        # Игнорирование списков, например "Гонки по локальной сети на ПК":
+        # https://kanobu.ru/games/collections/gonki-po-lokalnoi-seti-na-pk/
+        if '/collections/' in url_game:
+            continue
+
         # Example: <span class="style_title__f2mz_">
         title = game.select_one('[class^=style_title]').get_text(strip=True)
 
-        img = game.select_one('.knb-card--image')
+        img = game.select_one('noscript > img')
         url_img = img.get('data-original') or img.get('src')
 
         if url_img.startswith('data:image/'):
