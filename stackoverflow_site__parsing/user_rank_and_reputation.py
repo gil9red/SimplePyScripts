@@ -4,15 +4,19 @@
 __author__ = 'ipetrash'
 
 
-def get_user_rank_and_reputation() -> (str, str):
+import re
+from typing import Tuple
+
+import requests
+
+
+def get_user_rank_and_reputation() -> Tuple[str, str]:
     url = 'https://stackexchange.com/leagues/filter-users/609/AllTime/2015-03-27/?filter=gil9red&sort=reputationchange'
 
-    import requests
     rs = requests.get(url)
     text = rs.text
     # print(text)
 
-    import re
     match = re.search('>#(.+)</span> all time rank', text)
     rank = match.group(1)
 
