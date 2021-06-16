@@ -22,7 +22,7 @@ log = get_logger(__file__)
 @run_async
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
-    update.message.reply_text(
+    update.effective_message.reply_text(
         'Введите что-нибудь'
     )
 
@@ -30,7 +30,7 @@ def on_start(update: Update, context: CallbackContext):
 @run_async
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
-    message = update.message
+    message = update.effective_message
 
     message.reply_text(
         message.text,
