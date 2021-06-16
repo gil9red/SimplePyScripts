@@ -15,11 +15,7 @@ except:
         from PySide.QtGui import *
 
 
-# Функцию parse_playlist_time можно получить из:
-#   main__using__grab
-#   main__using__requests_bs4
-#   main__using__requests_re_json
-from main__using__requests_re_json import parse_playlist_time
+from main import parse_playlist_time
 from common import seconds_to_str
 
 
@@ -55,11 +51,10 @@ class MainWindow(QMainWindow):
             total_seconds, items = parse_playlist_time(url)
 
             text = 'Playlist:\n'
-
             for i, (title, time) in enumerate(items, 1):
-                text += '  {}. {} ({})\n'.format(i, title, time)
+                text += f'  {i}. {title} ({time})\n'
 
-            text += '\nTotal time: {} ({} total seconds).'.format(seconds_to_str(total_seconds), total_seconds)
+            text += f'\nTotal time: {seconds_to_str(total_seconds)} ({total_seconds} total seconds).'
 
             self.result_text.setPlainText(text)
 
