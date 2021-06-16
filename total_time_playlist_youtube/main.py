@@ -4,12 +4,11 @@
 __author__ = 'ipetrash'
 
 
+import sys
 from typing import List, Tuple
 
-import re
-import json
-import requests
-
+sys.path.append('../html_parsing')
+from youtube_com__results_search_query import get_ytInitialData
 from common import seconds_to_str
 
 
@@ -18,32 +17,16 @@ def get_video_list(data: dict) -> list:
     return [video['playlistVideoRenderer'] for video in video_list]
 
 
-def get_ytInitialData(text: str) -> dict:
-    m = re.search('window\["ytInitialData"\] = ({.+?});', text)
-    if not m:
-        raise Exception("""Не получилось найти 'window["ytInitialData"] = {...'""")
-
-    text = m.group(1)
-    return json.loads(text)
-
-
-# TODO: возможно, если роликов будет слишком много, не все вернутся из запроса
 def parse_playlist_time(url: str) -> (int, List[Tuple[str, str]]):
     """Функция парсит страницу плейлиста и подсчитывает сумму продолжительности роликов."""
 
-    # Передаю User-Agent чтобы ютуб вернул страницу с скриптом -- данные будут как объект javacript
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:64.0) Gecko/20100101 Firefox/64.0',
-    }
-
-    rs = requests.get(url, headers=headers)
-    data = get_ytInitialData(rs.text)
+    data = get_ytInitialData(url)
 
     total_seconds = 0
     items = []
 
     for video in get_video_list(data):
-        title = video['title']['simpleText']
+        title = video['title']['runs'][0]['text']
         duration_text = video['lengthText']['simpleText']
         duration_secs = int(video['lengthSeconds'])
 
@@ -59,9 +42,21 @@ if __name__ == '__main__':
     total_seconds, items = parse_playlist_time(url)
 
     print('Playlist:')
-
     for i, (title, time) in enumerate(items, 1):
-        print('  {}. {} ({})'.format(i, title, time))
+        print(f'  {i}. {title} ({time})')
 
     print()
-    print('Total time: {} ({} total seconds)'.format(seconds_to_str(total_seconds), total_seconds))
+    print(f'Total time: {seconds_to_str(total_seconds)} ({total_seconds} total seconds)')
+
+    """
+    Playlist:
+      1. Горит от чатика - Dark Souls #1 (6:41:58)
+      2. Нашествие Альтруистов - Dark Souls #2 (5:26:41)
+      3. ГОРИТ ОЧАГ - Dark Souls #3 (7:53:18)
+      4. БОЛЬШЕ ТУПЫХ СОВЕТОВ - Dark Souls #4 (8:27:04)
+      5. ДА НАЧНЕТСЯ ГОРЕНИЕ - Dark Souls #5 (7:12:00)
+      6. ЖАРЬ СОСИСКИ НА МОЕМ ПЕРДАКЕ - Dark Souls #6 (6:34:32)
+      7. НАКОНЕЦ-ТО! - Dark Souls #7 [ФИНАЛ] (7:35:55)
+    
+    Total time: 49:51:28 (179488 total seconds)
+    """
