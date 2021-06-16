@@ -4,6 +4,8 @@
 __author__ = 'ipetrash'
 
 
+import traceback
+
 try:
     from PyQt5.QtWidgets import *
 
@@ -59,9 +61,7 @@ class MainWindow(QMainWindow):
             self.result_text.setPlainText(text)
 
         except Exception as e:
-            import traceback
-            text = str(e) + '\n\n' + traceback.format_exc()
-
+            text = f'{e}\n\n{traceback.format_exc()}'
             self.result_text.setPlainText(text)
 
 
