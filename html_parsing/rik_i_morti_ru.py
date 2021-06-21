@@ -4,23 +4,22 @@
 __author__ = 'ipetrash'
 
 
-import json
 import time
-from typing import Dict
+from typing import Dict, List
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 import requests
 
 
-def parse() -> Dict[str, int]:
+def get_season_by_series() -> Dict[str, List[str]]:
     url = 'http://rik-i-morti.ru/'
 
     s = requests.session()
     rs = s.get(url)
     root = BeautifulSoup(rs.content, 'html.parser')
 
-    season_by_series_num = dict()
+    season_by_series = dict()
 
     for cell in root.select_one('.alltable').select('.cell'):
         title = cell.p.get_text(strip=True)
@@ -28,17 +27,22 @@ def parse() -> Dict[str, int]:
 
         rs_season = s.get(season_url)
         root = BeautifulSoup(rs_season.content, 'html.parser')
-        season_by_series_num[title] = len(root.select('#dle-content > .short-item'))
+        season_by_series[title] = [
+            x.get_text(strip=True) for x in root.select('#dle-content > .short-item h3')
+        ]
 
         # Не нужно напрягать сайт
         time.sleep(1)
 
-    return season_by_series_num
+    return season_by_series
 
 
 if __name__ == '__main__':
-    season_by_series_num = parse()
-    print('Total seasons:', len(season_by_series_num))
-    print('Total episodes:', sum(season_by_series_num.values()))
+    season_by_series = get_season_by_series()
+    print('Total seasons:', len(season_by_series))
+    print('Total episodes:', sum(map(len, season_by_series.values())))
     # Total seasons: 4
     # Total episodes: 41
+
+    print(season_by_series)
+    # {'Сезон 1': ['1 сезон 1 серия: Пилотный эпизод', '1 сезон 2 серия: Пёс-газонокосильщик', '1 сезон 3 серия: Анатомический парк', '1 сезон 4 серия: М. Найт Шьямал-Инопланетяне!', '1 сезон 5 серия: Мисикс и разрушение', '1 сезон 6 серия: Вакцина Рика #9', '1 сезон 7 серия: Взрослеющий газорпазорп', '1 сезон 8 серия: Рикдцать минут', '1 сезон 9 серия: Надвигается нечто риканутое', '1 сезон 10 серия: Поймать рикоразновидности рода Рика', '1 сезон 11 серия: Риксованное дело'], 'Сезон 2': ['2 сезон 1 серия: Рик во времени', '2 сезон 2 серия: Успеть до Мортиночи', '2 сезон 3 серия: Аутоэротическая ассимиляция', '2 сезон 4 серия: Вспомрикнуть всё', '2 сезон 5 серия: Пора швифтануться', '2 сезон 6 серия: Рики, наверное, сошли с ума', '2 сезон 7 серия: Большой переполох в маленьком Санчезе', '2 сезон 8 серия: Межпространственный кабель 2: Искушение судьбы', '2 сезон 9 серия: Посмотрите кто сейчас зачищает', '2 сезон 10 серия: Свадебные сквончеры'], 'Сезон 3': ['3 сезон 1 серия: Побег из Рикшенка', '3 сезон 2 серия: Рикман с камнем', '3 сезон 3 серия: Огурчик Рик', '3 сезон 4 серия: Заступники 3: Возвращение Губителя Миров', '3 сезон 5 серия: Запутанный грязный заговор', '3 сезон 6 серия: Отдых и Риклаксация', '3 сезон 7 серия: Риклантидическая путаница', '3 сезон 8 серия: Проветренный мозг Морти', '3 сезон 9 серия: Азбука Бет', '3 сезон 10 серия: Рикчжурский Мортидат'], 'Сезон 4': ['4 сезон 1 серия: Грань мортущего: Рикви́. Умри. И рикнова', '4 сезон 2 серия: Старик и сиденье', '4 сезон 3 серия: Командуя над гнездом рикушки', '4 сезон 4 серия: Закоготь и подрядок - Специальный Рикпус', '4 сезон 5 серия: Рикный рикейсер Рикактика', '4 сезон 6 серия: БесРиконечный Морти', '4 сезон 7 серия: Промортей', '4 сезон 8 серия: Эпизод с чаном кислоты', '4 сезон 9 серия: Рикя Мортивеческое', '4 сезон 10 серия: Звёздные Морти: Рикращение Джерраев']}
