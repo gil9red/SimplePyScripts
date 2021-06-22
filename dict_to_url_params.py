@@ -8,14 +8,12 @@ def dict_to_url_params(json_data, root):
     def deep(node, root, items):
         if isinstance(node, list):
             for i, value in enumerate(node):
-                node_root = root + '[{}]'.format(i)
-
+                node_root = root + f'[{i}]'
                 deep(value, node_root, items)
 
         elif isinstance(node, dict):
             for key, value in node.items():
-                node_root = root + '[{}]'.format(key)
-
+                node_root = root + f'[{key}]'
                 deep(value, node_root, items)
 
         else:
