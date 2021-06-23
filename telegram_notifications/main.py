@@ -26,6 +26,7 @@ DATA = {
     'IS_WORKING': True,
 }
 
+MESS_MAX_LENGTH = 4096
 
 log = get_logger(__file__)
 
@@ -44,16 +45,18 @@ def sending_notifications():
                     continue
 
                 text = notify.get_html()
-                bot.send_message(config.CHAT_ID, text, parse_mode=ParseMode.HTML)
+                for n in range(0, len(text), MESS_MAX_LENGTH):
+                    mess = text[n: n + MESS_MAX_LENGTH]
+                    bot.send_message(config.CHAT_ID, mess, parse_mode=ParseMode.HTML)
                 notify.set_as_send()
 
                 time.sleep(1)
 
-        except:
+        except Exception as e:
             log.exception('')
 
             if config.CHAT_ID:
-                text = f'⚠ При отправке уведомления возникла ошибка:\n{traceback.format_exc()}'
+                text = f'⚠ При отправке уведомления возникла ошибка: {e}'
                 bot.send_message(config.CHAT_ID, text)
                 time.sleep(60)
 
