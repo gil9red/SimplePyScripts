@@ -5,4 +5,4 @@
 setlocal
 cd /d %~dp0
 
-call python go_v2.py %*
+call python go_old.py %*
