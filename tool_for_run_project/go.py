@@ -413,17 +413,21 @@ def parse_cmd_args(arguments: List[str]) -> List[Command]:
         name = arguments.pop(0).lower()
         name = resolve_name(name)
 
+    options = get_settings(name)['options']
+    maybe_version = options['version'] != AvailabilityEnum.PROHIBITED
+    maybe_what = options['what'] != AvailabilityEnum.PROHIBITED
+
     # Второй аргумент это или <version>, или <what>
-    if arguments:
+    if (maybe_version or maybe_what) and arguments:
         alias = arguments.pop(0).lower()
 
-        if is_like_a_version(alias):
+        if is_like_a_version(alias) and options['version'] != AvailabilityEnum.PROHIBITED:
             version = resolve_version(name, alias)
-        else:
+        elif options['what'] != AvailabilityEnum.PROHIBITED:
             whats = resolve_whats(name, alias)
 
     # Третий аргумент <what>
-    if arguments and not whats:
+    if maybe_what and arguments and not whats:
         whats = arguments.pop(0).lower()
         whats = resolve_whats(name, whats)
 
