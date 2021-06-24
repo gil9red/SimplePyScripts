@@ -87,7 +87,7 @@ class Command:
         settings = SETTINGS[self.name]
 
         value = getattr(self, param)
-        settings_param = settings[param]
+        settings_param = settings['options'][param]
         if settings_param == AvailabilityEnum.REQUIRED:
             if not value:
                 raise ParameterAvailabilityException(self, param, settings_param)
@@ -99,9 +99,9 @@ class Command:
     def run(self):
         settings = SETTINGS[self.name]
 
-        settings_version = settings['version']
+        settings_version = settings['options']['version']
         if settings_version == AvailabilityEnum.OPTIONAL and not self.version:
-            self.version = resolve_version(self.name, settings['default_version'])
+            self.version = resolve_version(self.name, settings['options']['default_version'])
 
         self._check_parameter('version')
         self._check_parameter('what')
@@ -174,7 +174,7 @@ def settings_preprocess(settings: Dict[str, Dict]) -> Dict[str, Dict]:
 
         merge_dicts(values, new_settings[name])
 
-        if 'path' in new_settings[name] and new_settings[name]['version'] != AvailabilityEnum.PROHIBITED:
+        if 'path' in new_settings[name] and new_settings[name]['options']['version'] != AvailabilityEnum.PROHIBITED:
             path = new_settings[name]['path']
             new_settings[name]['versions'] = get_versions_by_path(path)
 
@@ -188,10 +188,12 @@ def settings_preprocess(settings: Dict[str, Dict]) -> Dict[str, Dict]:
 
 SETTINGS = {
     '__radix_base': {
-        'version': AvailabilityEnum.OPTIONAL,
-        'what': AvailabilityEnum.REQUIRED,
-        'args': AvailabilityEnum.OPTIONAL,
-        'default_version': 'trunk',
+        'options': {
+            'version': AvailabilityEnum.OPTIONAL,
+            'what': AvailabilityEnum.REQUIRED,
+            'args': AvailabilityEnum.OPTIONAL,
+            'default_version': 'trunk',
+        },
         'whats': {
             'designer': '!!designer.cmd',
             'explorer': '!!explorer.cmd',
@@ -212,15 +214,19 @@ SETTINGS = {
     },
     'manager': {
         'path': 'C:/manager_1_2_11_23_8/manager/bin/manager.cmd',
-        'version': AvailabilityEnum.PROHIBITED,
-        'what': AvailabilityEnum.PROHIBITED,
-        'args': AvailabilityEnum.PROHIBITED,
+        'options': {
+            'version': AvailabilityEnum.PROHIBITED,
+            'what': AvailabilityEnum.PROHIBITED,
+            'args': AvailabilityEnum.PROHIBITED,
+        }
     },
     'doc': {
         'path': 'C:/Program Files (x86)/DocFetcher/DocFetcher-8192_64-bit-Java.exe',
-        'version': AvailabilityEnum.PROHIBITED,
-        'what': AvailabilityEnum.PROHIBITED,
-        'args': AvailabilityEnum.PROHIBITED,
+        'options': {
+            'version': AvailabilityEnum.PROHIBITED,
+            'what': AvailabilityEnum.PROHIBITED,
+            'args': AvailabilityEnum.PROHIBITED,
+        }
     },
 }
 
@@ -455,9 +461,9 @@ def run(arguments: List[str]):
             settings = get_settings(name)
 
             # Если для сущности параметр версии возможен
-            if settings['version'] != AvailabilityEnum.PROHIBITED:
+            if settings['options']['version'] != AvailabilityEnum.PROHIBITED:
                 # Если не задана version и what, показываем доступные версии
-                if (not e.command.version or settings['default_version'] in e.command.version) and not e.command.what:
+                if (not e.command.version or settings['options']['default_version'] in e.command.version) and not e.command.what:
                     supported = settings['versions']
                     print(f'{name!r} supports versions: {", ".join(sorted(supported))}')
                     continue
