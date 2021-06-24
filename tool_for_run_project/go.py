@@ -110,6 +110,19 @@ class Command:
         go_run(self.name, self.version, self.what, self.args)
 
 
+# SOURCE: https://stackoverflow.com/a/20666342/5909792
+def merge_dicts(source: Dict, destination: Dict) -> Dict:
+    for key, value in source.items():
+        if isinstance(value, dict):
+            # Get node or create one
+            node = destination.setdefault(key, dict())
+            merge_dicts(value, node)
+        else:
+            destination[key] = value
+
+    return destination
+
+
 def is_like_a_version(value: str) -> bool:
     return bool(
         'trunk' in value or re.search(r'\d+(\.\d+)+', value)
@@ -156,16 +169,12 @@ def settings_preprocess(settings: Dict[str, Dict]) -> Dict[str, Dict]:
             base_values = settings[base_name]
             new_settings[name] = copy.deepcopy(base_values)
 
-        for prop, value in values.items():
-            if name not in new_settings:
-                new_settings[name] = dict()
+        if name not in new_settings:
+            new_settings[name] = dict()
 
-            if isinstance(new_settings[name].get(prop), dict) and isinstance(value, dict):
-                new_settings[name][prop].update(value)
-            else:
-                new_settings[name][prop] = value
+        merge_dicts(values, new_settings[name])
 
-        if 'path' in new_settings[name]:
+        if 'path' in new_settings[name] and new_settings[name]['version'] != AvailabilityEnum.PROHIBITED:
             path = new_settings[name]['path']
             new_settings[name]['versions'] = get_versions_by_path(path)
 
@@ -216,6 +225,7 @@ SETTINGS = {
 }
 
 SETTINGS = settings_preprocess(SETTINGS)
+# _print_pretty_SETTINGS()
 
 ABOUT_TEXT = '''\
 RUN:
