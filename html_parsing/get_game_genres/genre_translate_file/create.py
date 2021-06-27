@@ -5,30 +5,34 @@ __author__ = 'ipetrash'
 
 
 import json
-
 import sys
-sys.path.append('..')
+
+from pathlib import Path
+
+DIR = Path(__file__).resolve().parent.parent
+ROOT_DIR = DIR.parent.parent
+
+sys.path.append(str(DIR))
+sys.path.append(str(ROOT_DIR))
 
 from db import Dump
 from load import FILE_NAME_GENRE_TRANSLATE, load
 from common_utils import get_logger
-from utils import send_sms
+from telegram_notifications.add_notify import add_notify
 
 
 log = get_logger('genre_translate.txt')
 
 
-def run():
+def run(need_notify=True):
     log.info('Start load genres.')
 
     genre_translate = load()
-
-    NEED_SMS = True
-    new_genres = []
     is_first_run = not genre_translate
 
     log.info(f'Current genres: {len(genre_translate)}')
 
+    new_genres = []
     for genre in Dump.get_all_genres():
         if genre not in genre_translate:
             log.info(f'Added new genre: {genre!r}')
@@ -40,9 +44,8 @@ def run():
         log.info(text)
 
         # Если это первый запуск, то смс не отправляем
-        if not is_first_run:
-            if NEED_SMS:
-                send_sms(text, log=log)
+        if not is_first_run and need_notify:
+            add_notify(log.name, text)
 
         log.info('Save genres')
 
