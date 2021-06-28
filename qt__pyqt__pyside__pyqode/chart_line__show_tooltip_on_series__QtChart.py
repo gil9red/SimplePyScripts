@@ -12,7 +12,7 @@ from PyQt5.QtChart import QChart, QChartView, QLineSeries
 
 # SOURCE: https://doc-snapshots.qt.io/qt5-5.12/qtcharts-callout-callout-h.html
 class Callout(QGraphicsItem):
-    def __init__(self, chart, parent=None):
+    def __init__(self, chart: QChart, parent=None):
         super().__init__(parent)
 
         self.hide()
@@ -26,7 +26,7 @@ class Callout(QGraphicsItem):
         self._anchor = QPointF()
         self._font = QFont()
 
-    def setText(self, text):
+    def setText(self, text: str):
         self._text = text
         metrics = QFontMetrics(self._font)
         self._textRect = QRectF(metrics.boundingRect(
@@ -36,12 +36,30 @@ class Callout(QGraphicsItem):
         self.prepareGeometryChange()
         self._rect = QRectF(self._textRect.adjusted(-5, -5, 5, 5))
 
-    def setAnchor(self, point):
+    def setAnchor(self, point: QPointF):
         self._anchor = point
 
     def updateGeometry(self):
         self.prepareGeometryChange()
         self.setPos(self._chart.mapToPosition(self._anchor) + QPoint(10, -50))
+
+        rect = self.sceneBoundingRect()
+
+        # Correction position by top
+        if rect.top() < 0:
+            self.setY(0)
+
+        # Correction position by right
+        view_width = self._chart.rect().width()
+        if rect.right() > view_width:
+            rect.moveRight(view_width)
+            self.setX(rect.x())
+
+        # Correction position by bottom
+        view_height = self._chart.rect().height()
+        if rect.bottom() > view_height:
+            rect.moveBottom(view_height)
+            self.setY(rect.y())
 
     def boundingRect(self):
         anchor = self.mapFromParent(self._chart.mapToPosition(self._anchor))
@@ -52,7 +70,7 @@ class Callout(QGraphicsItem):
         rect.setBottom(max(self._rect.bottom(), anchor.y()))
         return rect
 
-    def paint(self, painter: QPainter, option, widget = None):
+    def paint(self, painter: QPainter, option, widget=None):
         path = QPainterPath()
         path.addRoundedRect(self._rect, 5, 5)
     
