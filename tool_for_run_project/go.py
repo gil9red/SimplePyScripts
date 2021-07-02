@@ -467,7 +467,7 @@ def run(arguments: List[str]):
             # Если для сущности параметр версии возможен
             if settings['options']['version'] != AvailabilityEnum.PROHIBITED:
                 # Если не задана version и what, показываем доступные версии
-                if (not e.command.version or settings['options']['default_version'] in e.command.version) and not e.command.what:
+                if (not e.command.version or e.command.version in settings['options']['default_version']) and not e.command.what:
                     supported = settings['versions']
                     print(f'{name!r} supports versions: {", ".join(sorted(supported))}')
                     continue
