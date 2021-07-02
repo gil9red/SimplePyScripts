@@ -440,7 +440,7 @@ def parse_cmd_args(arguments: List[str]) -> List[Command]:
 
 
 def run(arguments: List[str]):
-    if 'open' == arguments[0]:
+    if arguments[0] in ['open', from_ghbdtn('open')]:
         arguments.pop(0)
 
         if len(arguments) == 1:
