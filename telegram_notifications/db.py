@@ -5,9 +5,10 @@ __author__ = 'ipetrash'
 
 
 import datetime as DT
+import enum
+import html
 import sys
 
-import enum
 from typing import List, Any, Type
 
 # pip install peewee
@@ -130,7 +131,8 @@ class Notification(BaseModel):
         Функция возвращает текст для отправки запроса в формате HTML
         """
 
-        return f'{self.type.emoji} <b>{self.name}</b>\n{self.message}'
+        text = html.escape(self.message)
+        return f'{self.type.emoji} <b>{self.name}</b>\n{text}'
 
 
 db.connect()
