@@ -131,8 +131,9 @@ class Notification(BaseModel):
         Функция возвращает текст для отправки запроса в формате HTML
         """
 
+        title = html.escape(self.name)
         text = html.escape(self.message)
-        return f'{self.type.emoji} <b>{self.name}</b>\n{text}'
+        return f'{self.type.emoji} <b>{title}</b>\n{text}'
 
 
 db.connect()
