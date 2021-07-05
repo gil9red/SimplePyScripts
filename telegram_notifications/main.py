@@ -6,7 +6,6 @@ __author__ = 'ipetrash'
 
 import os
 import time
-import traceback
 
 from threading import Thread
 
