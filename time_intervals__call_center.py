@@ -30,8 +30,8 @@ class Interval:
     def is_contains(self, datetime: DT.datetime) -> bool:
         return self.start <= datetime <= self.end
 
-    def __str__(self):
-        return f'<{self.start} - {self.end}>'
+    def __repr__(self) -> str:
+        return f'<{self.start:%H:%M:%S} - {self.end:%H:%M:%S}>'
 
 
 def find_max_intersection(items: List[Interval]) -> int:
