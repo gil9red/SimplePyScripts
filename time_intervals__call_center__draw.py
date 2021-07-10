@@ -4,19 +4,16 @@
 __author__ = 'ipetrash'
 
 
-import datetime as DT
-
 from PyQt5.QtGui import QGuiApplication, QPainter, QImage, QPen
 from PyQt5.QtCore import Qt
 
 from time_intervals__call_center import Interval, find_max_intersection
 
-
 items = [
-    Interval(DT.datetime(2021, 4, 21, 12, 0, 0),  20 * 60),
-    Interval(DT.datetime(2021, 4, 21, 12, 10, 0), 10 * 60),
-    Interval(DT.datetime(2021, 4, 21, 12, 15, 0), 30 * 60),
-    Interval(DT.datetime(2021, 4, 21, 13, 0, 0),  30 * 60),
+    Interval('12:00:00', 20 * 60),
+    Interval('12:10:00', 10 * 60),
+    Interval('12:15:00', 30 * 60),
+    Interval('13:00:00', 30 * 60),
 ]
 items.sort(key=lambda x: x.start)
 print(find_max_intersection(items))
