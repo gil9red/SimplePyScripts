@@ -16,7 +16,7 @@ def get_parsed_two_column_wikitable() -> List[Tuple[str, str]]:
     rs = requests.get(url)
     root = BeautifulSoup(rs.content, 'html.parser')
 
-    table = root.select_one('.wikitable.release_timeline')
+    table = root.select_one('.wikitable.release-timeline')
 
     items = []
     year = None
