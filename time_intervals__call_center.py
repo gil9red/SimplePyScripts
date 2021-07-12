@@ -50,10 +50,10 @@ def find_max_intersection(items: List[Interval]) -> int:
 
 if __name__ == '__main__':
     items = [
-        Interval('12:00:00',  20 * 60),
+        Interval('12:00:00', 20 * 60),
         Interval('12:10:00', 10 * 60),
         Interval('12:15:00', 30 * 60),
-        Interval('13:00:00',  30 * 60),
+        Interval('13:00:00', 30 * 60),
     ]
     print(find_max_intersection(items))
     # 3
