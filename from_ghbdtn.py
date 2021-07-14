@@ -17,3 +17,5 @@ if __name__ == '__main__':
     print(text)
     print(from_ghbdtn(text))
     assert from_ghbdtn(text) == 'И были проблемы с гостевой вроде бы, посмотри '
+
+    assert from_ghbdtn('Привет! Ghbdtn! Hello!') == 'Привет! Привет! Руддщ!'
