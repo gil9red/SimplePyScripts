@@ -212,21 +212,24 @@ SETTINGS = {
         'base': '__radix_base',
         'path': 'C:/DEV__OPTT',
     },
-    'manager': {
-        'path': 'C:/manager_1_2_11_23_8/manager/bin/manager.cmd',
+    '__simple_base': {
         'options': {
             'version': AvailabilityEnum.PROHIBITED,
             'what': AvailabilityEnum.PROHIBITED,
             'args': AvailabilityEnum.PROHIBITED,
         }
     },
+    'manager': {
+        'base': '__simple_base',
+        'path': 'C:/manager_1_2_11_23_8/manager/bin/manager.cmd',
+    },
     'doc': {
+        'base': '__simple_base',
         'path': 'C:/Program Files (x86)/DocFetcher/DocFetcher-8192_64-bit-Java.exe',
-        'options': {
-            'version': AvailabilityEnum.PROHIBITED,
-            'what': AvailabilityEnum.PROHIBITED,
-            'args': AvailabilityEnum.PROHIBITED,
-        }
+    },
+    'спека': {
+        'base': '__simple_base',
+        'path': 'D:/DOC/Specifications',
     },
 }
 
@@ -281,6 +284,15 @@ def get_similar_value(alias: str, items: Iterable) -> Optional[str]:
 
 def has_similar_value(alias: str, items: list) -> bool:
     return get_similar_value(alias, items) is not None
+
+
+def all_options_is_prohibited(name: str) -> bool:
+    options = get_settings(name)['options']
+    return (
+        options['version'] == AvailabilityEnum.PROHIBITED
+        and options['what'] == AvailabilityEnum.PROHIBITED
+        and options['args'] == AvailabilityEnum.PROHIBITED
+    )
 
 
 def resolve_name(alias: str) -> str:
@@ -378,7 +390,7 @@ def go_run(name: str, version: Optional[str] = None, what: Optional[str] = None,
 
     # Если по <name> указывается файл, то сразу его и запускаем
     path = get_path_by_name(name)
-    if os.path.isfile(path):
+    if os.path.isfile(path) or all_options_is_prohibited(name):
         _run_file(path)
         return
 
