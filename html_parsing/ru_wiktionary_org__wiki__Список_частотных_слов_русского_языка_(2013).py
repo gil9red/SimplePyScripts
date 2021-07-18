@@ -18,7 +18,7 @@ def get_words() -> List[str]:
 
     return [
         x.text
-        for x in root.select_one('.wikitable').select('tbody > tr > td:nth-child(2)')
+        for x in root.select('.wikitable > tbody > tr > td:nth-child(2)')
     ]
 
 
