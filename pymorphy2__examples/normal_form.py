@@ -9,9 +9,10 @@ import pymorphy2
 morph = pymorphy2.MorphAnalyzer()
 
 
-def get_normal_form(word):
+def get_normal_form(word: str) -> str:
     return morph.parse(word)[0].normal_form
 
 
-print(get_normal_form('Иванова'))  # иванов
-print(get_normal_form('Иванов'))   # иванов
+if __name__ == '__main__':
+    print(get_normal_form('Иванова'))  # иванов
+    print(get_normal_form('Иванов'))   # иванов
