@@ -113,7 +113,7 @@ if __name__ == '__main__':
     print()
 
     items = Word2Emoji.get_unprocessed_words()
-    print(f'Unprocessed words ({len(items)}): {items[:100]}')
+    print(f'Unprocessed words ({len(items)}): [{", ".join(map(repr, items[:10]))}, ...]')
 
     print()
 
