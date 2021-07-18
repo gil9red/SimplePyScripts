@@ -21,8 +21,6 @@ from config import DIR
 sys.path.append(str(DIR.parent))
 from shorten import shorten
 
-from pymorphy2__examples.normal_form import get_normal_form
-
 
 DB_DIR_NAME = DIR / 'database'
 DB_DIR_NAME.mkdir(parents=True, exist_ok=True)
@@ -75,7 +73,6 @@ class Word2Emoji(BaseModel):
 
     @classmethod
     def add(cls, word: str, emoji: str = None):
-        word = get_normal_form(word)
         obj = cls.get_or_none(cls.word == word)
         if obj:
             if emoji:
