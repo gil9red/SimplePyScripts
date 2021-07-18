@@ -118,5 +118,5 @@ if __name__ == '__main__':
 
     print()
 
-    for x in Word2Emoji.select().limit(10):
+    for x in Word2Emoji.select().limit(5):
         print(x)
