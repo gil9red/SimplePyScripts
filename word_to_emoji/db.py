@@ -87,6 +87,7 @@ class Word2Emoji(BaseModel):
 
     @classmethod
     def get_emoji(cls, word: str) -> Optional[str]:
+        word = get_normal_form(word)
         val = cls.select().where(cls.word == word).first()
         if val:
             return val.emoji
