@@ -14,5 +14,6 @@ def get_normal_form(word: str) -> str:
 
 
 if __name__ == '__main__':
+    print(get_normal_form('ИВАНОВА'))  # иванов
     print(get_normal_form('Иванова'))  # иванов
     print(get_normal_form('Иванов'))   # иванов
