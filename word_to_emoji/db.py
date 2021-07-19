@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+import re
 import sys
 import time
 
@@ -46,6 +47,13 @@ db = SqliteQueueDatabase(
 )
 
 
+def preprocess_emoji(emoji: str) -> str:
+    if not emoji:
+        return emoji
+
+    return re.sub(r'\s{2,}', '', emoji.strip())
+
+
 class BaseModel(Model):
     class Meta:
         database = db
@@ -75,9 +83,11 @@ class Word2Emoji(BaseModel):
 
     @classmethod
     def add(cls, word: str, emoji: str = None):
+        word = word.strip()
         word = get_normal_form(word)
         obj = cls.get_or_none(cls.word == word)
         if obj:
+            emoji = preprocess_emoji(emoji)
             if emoji:
                 obj.emoji = emoji
                 obj.save()
@@ -87,6 +97,7 @@ class Word2Emoji(BaseModel):
 
     @classmethod
     def get_emoji(cls, word: str) -> Optional[str]:
+        word = word.strip()
         word = get_normal_form(word)
         val = cls.select().where(cls.word == word).first()
         if val:
