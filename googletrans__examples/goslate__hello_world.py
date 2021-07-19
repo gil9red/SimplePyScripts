@@ -4,7 +4,10 @@
 __author__ = 'ipetrash'
 
 
+# pip install goslate
 import goslate
+
+
 gs = goslate.Goslate()
 
 
