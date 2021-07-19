@@ -11,7 +11,7 @@ from typing import List
 import pymorphy2
 from pymorphy2.tokenizers import simple_word_tokenize
 
-import db
+from word_to_emoji import db
 
 
 morph = pymorphy2.MorphAnalyzer()

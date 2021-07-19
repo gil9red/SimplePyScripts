@@ -13,7 +13,7 @@ from translate import Translator
 # pip install goslate
 import goslate
 
-import db
+from word_to_emoji import db
 from html_parsing.emojipedia_org__search import get_emoji
 
 

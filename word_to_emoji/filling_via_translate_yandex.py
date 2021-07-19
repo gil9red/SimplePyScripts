@@ -11,7 +11,7 @@ import traceback
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
-import db
+from word_to_emoji import db
 
 
 URL = 'https://translate.yandex.ru/?lang=ru-emj&text='

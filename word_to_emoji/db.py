@@ -16,7 +16,7 @@ from peewee import (
 )
 from playhouse.sqliteq import SqliteQueueDatabase
 
-from config import DIR
+from word_to_emoji.config import DIR
 
 # Для импортирования shorten
 sys.path.append(str(DIR.parent))
