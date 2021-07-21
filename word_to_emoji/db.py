@@ -82,9 +82,10 @@ class Word2Emoji(BaseModel):
     emoji = TextField(null=True)
 
     @classmethod
-    def add(cls, word: str, emoji: str = None):
+    def add(cls, word: str, emoji: str = None, convert_to_normal_form=True):
         word = word.strip()
-        word = get_normal_form(word)
+        if convert_to_normal_form:
+            word = get_normal_form(word)
         obj = cls.get_or_none(cls.word == word)
         if obj:
             emoji = preprocess_emoji(emoji)
