@@ -29,7 +29,7 @@ def text_to_emoji(text: str) -> str:
         word = token.word
         emoji = db.Word2Emoji.get_emoji(word)
         if emoji:
-            text = re.sub(rf'\b{re.escape(word)}\b', emoji, text)
+            text = re.sub(rf'\b{re.escape(word)}\b', emoji, text, flags=re.IGNORECASE)
 
     return text
 
@@ -44,3 +44,5 @@ if __name__ == '__main__':
     text = 'xxx: у мальчиков есть воображаемые друзья, а у девочек - воображаемый жыр )))'
     text = text_to_emoji(text)
     print(text)
+
+    print(text_to_emoji('Собака хочет есть'))
