@@ -18,5 +18,9 @@ from html_parsing.ru_wiktionary_org__wiki__Список_частотных_сл�
 import db
 
 
+print('Before count:', db.Word2Emoji.select().count())
+
 for word in get_words():
     db.Word2Emoji.add(word)
+
+print('After count:', db.Word2Emoji.select().count())
