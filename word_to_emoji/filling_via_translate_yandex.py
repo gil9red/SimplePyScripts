@@ -22,7 +22,10 @@ driver.implicitly_wait(5)
 
 try:
     while True:
-        for word in db.Word2Emoji.get_unprocessed_words():
+        words = db.Word2Emoji.get_unprocessed_words()
+        print('Unprocessed words:', len(words))
+
+        for word in words:
             # Если эмодзи уже есть
             if db.Word2Emoji.get_emoji(word):
                 continue
