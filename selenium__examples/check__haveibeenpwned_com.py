@@ -20,13 +20,10 @@ def do_check(email: str, dir_save_pwned_screenshots: str = None) -> str:
     driver = webdriver.Firefox(options=options)
     try:
         driver.implicitly_wait(20)
-        driver.get('https://haveibeenpwned.com/')
+        driver.get('https://haveibeenpwned.com/account/' + email)
         # print(f'Title: {driver.title!r}')
 
-        driver.find_element_by_id('Account').send_keys(email)
-        driver.find_element_by_id('searchPwnage').click()
-
-        time.sleep(20)
+        time.sleep(5)
 
         pwned_website_banner = driver.find_element_by_css_selector('#pwnedWebsiteBanner .pwnTitle')
         if pwned_website_banner.is_displayed():
