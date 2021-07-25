@@ -4,18 +4,28 @@
 __author__ = 'ipetrash'
 
 
-text = 'Котята'
-url = 'http://yandex.ru/images/search?text=' + text
+from urllib.parse import urljoin
+from typing import List
 
 import requests
-rs = requests.get(url)
-print(rs)
-
 from bs4 import BeautifulSoup
-root = BeautifulSoup(rs.content, 'lxml')
 
-from urllib.parse import urljoin
 
-for img in root.select('img.serp-item__thumb'):
-    url_img = urljoin(url, img['src'])
-    print(url_img)
+def get_images(text: str) -> List[str]:
+    url = 'https://yandex.ru/images/search?text=' + text
+
+    rs = requests.get(url)
+    root = BeautifulSoup(rs.content, 'html.parser')
+
+    return [
+        urljoin(rs.url, img['src'])
+        for img in root.select('img.serp-item__thumb')
+    ]
+
+
+if __name__ == '__main__':
+    text = 'Котята'
+    urls = get_images(text)
+    print(f'Urls ({len(urls)})')
+    for i, url in enumerate(urls, 1):
+        print(f'{i}. {url}')
