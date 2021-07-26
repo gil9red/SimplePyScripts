@@ -5,12 +5,17 @@ __author__ = 'ipetrash'
 
 
 import sys
-sys.path.append('../wait')
-from wait import wait
+import time
 
-from common import get_table, logger
-from get_assigned_open_issues_per_project import get_assigned_open_issues_per_project
+# pip install schedule
+import schedule
+
 import db
+from common import DIR, get_table, logger
+from get_assigned_open_issues_per_project import get_assigned_open_issues_per_project
+
+sys.path.append(str(DIR.parent / 'wait'))
+from wait import wait
 
 
 def run():
@@ -44,10 +49,6 @@ def run():
 
 
 if __name__ == '__main__':
-    # pip install schedule
-    import schedule
-    import time
-
     # Каждую неделю, в субботу, в 12:00
     schedule\
         .every().week\

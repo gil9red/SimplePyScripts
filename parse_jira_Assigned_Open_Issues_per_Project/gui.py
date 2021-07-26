@@ -7,11 +7,10 @@ __author__ = 'ipetrash'
 import calendar
 import datetime as DT
 import math
+import sys
 import time
 import traceback
-import sys
 
-from pathlib import Path
 from typing import List, Dict
 
 from PyQt5.QtWidgets import (
@@ -23,16 +22,16 @@ from PyQt5.QtGui import QIcon, QPainter
 from PyQt5.QtCore import QEvent, QTimer, Qt, QThread, pyqtSignal
 from PyQt5.QtChart import QChart, QLineSeries, QDateTimeAxis, QValueAxis
 
-from common import get_table
+from common import DIR, get_table
 from get_assigned_open_issues_per_project import get_assigned_open_issues_per_project
 from db import Run
 
-sys.path.append('../qt__pyqt__pyside__pyqode')
+sys.path.append(str(DIR.parent / 'qt__pyqt__pyside__pyqode'))
 from chart_line__show_tooltip_on_series__QtChart import ChartViewToolTips
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+    text = f'{ex_cls.__name__}: {ex}:\n'
     text += ''.join(traceback.format_tb(tb))
 
     print(text)
@@ -43,8 +42,7 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
 sys.excepthook = log_uncaught_exceptions
 
 
-CURRENT_DIR = Path(__file__).resolve().parent
-WINDOW_TITLE = CURRENT_DIR.name
+WINDOW_TITLE = DIR.name
 
 
 def get_table_widget(header_labels: list) -> QTableWidget:
@@ -80,7 +78,7 @@ class TableWidgetRun(QWidget):
         super().__init__()
 
         self.table_run = get_table_widget(['DATE', 'TOTAL ISSUES'])
-        self.table_run.itemClicked.connect(self._on_table_run_item_clicked)
+        self.table_run.selectionModel().selectionChanged.connect(self._on_table_run_item_clicked)
 
         self.table_issues = get_table_widget(['PROJECT', 'NUMBER'])
         self.table_run.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
@@ -232,8 +230,8 @@ class MyChartViewToolTips(ChartViewToolTips):
                     if current_distance < distance:
                         date_value = int(p_value.x())
                         run = self.timestamp_by_run[date_value]
-                        text = f"Total issues: {run.get_total_issues()}\n\n" \
-                               f"{get_table(run.get_project_by_issue_numbers())}"
+                        table = get_table(run.get_project_by_issue_numbers())
+                        text = f"Total issues: {run.get_total_issues()}\n\n{table}"
 
                         self._tooltip.setText(text)
                         self._tooltip.setAnchor(p_value)
@@ -250,7 +248,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle(WINDOW_TITLE)
 
-        file_name = str(CURRENT_DIR / 'favicon.ico')
+        file_name = str(DIR / 'favicon.ico')
         icon = QIcon(file_name)
         self.setWindowIcon(icon)
 
@@ -351,9 +349,7 @@ class MainWindow(QMainWindow):
         items.reverse()
         self.table_run.refresh(items)
 
-        self.setWindowTitle(
-            WINDOW_TITLE + ". Last refresh date: " + DT.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
-        )
+        self.setWindowTitle(f"{WINDOW_TITLE}. Last refresh date: {DT.datetime.now():%d/%m/%Y %H:%M:%S}")
 
     def _on_tray_activated(self, reason):
         self.setVisible(not self.isVisible())

@@ -4,23 +4,27 @@
 __author__ = 'ipetrash'
 
 
-from common import print_table
 import datetime as DT
-import pathlib
+import os
+import shutil
+import sys
+
+from pathlib import Path
 from typing import Dict, Optional
 
 from peewee import *
 
+from common import DIR, print_table
+
+# Для импортирования shorten
+sys.path.append(str(DIR.parent))
+from shorten import shorten
 
 # Absolute file name
-DB_FILE_NAME = str(pathlib.Path(__file__).resolve().parent / 'database.sqlite')
+DB_FILE_NAME = str(DIR / 'database.sqlite')
 
 
-def db_create_backup(backup_dir='backup'):
-    import datetime as DT
-    import os
-    import shutil
-
+def db_create_backup(backup_dir=DIR / 'backup'):
     os.makedirs(backup_dir, exist_ok=True)
 
     file_name = str(DT.datetime.today().date()) + '.sqlite'
@@ -36,6 +40,24 @@ db = SqliteDatabase(DB_FILE_NAME, pragmas={'foreign_keys': 1})
 class BaseModel(Model):
     class Meta:
         database = db
+
+    def __str__(self):
+        fields = []
+        for k, field in self._meta.fields.items():
+            v = getattr(self, k)
+
+            if isinstance(field, (TextField, CharField)):
+                if v:
+                    v = repr(shorten(v))
+
+            elif isinstance(field, ForeignKeyField):
+                k = f'{k}_id'
+                if v:
+                    v = v.id
+
+            fields.append(f'{k}={v}')
+
+        return self.__class__.__name__ + '(' + ', '.join(fields) + ')'
 
 
 class Run(BaseModel):
@@ -54,18 +76,11 @@ class Run(BaseModel):
 class Project(BaseModel):
     name = TextField()
 
-    def __str__(self):
-        return f'{self.__class__.__name__}(id={self.id}, name={self.name})'
-
 
 class IssueNumber(BaseModel):
     value = IntegerField()
     run = ForeignKeyField(Run, backref='issue_numbers')
     project = ForeignKeyField(Project, backref='issue_numbers')
-
-    def __str__(self):
-        return f'{self.__class__.__name__}(id={self.id}, project={self.project.name!r}, ' \
-               f'value={self.value}, run_id={self.run.id})'
 
 
 def add(assigned_open_issues_per_project: Dict[str, int]) -> Optional[bool]:

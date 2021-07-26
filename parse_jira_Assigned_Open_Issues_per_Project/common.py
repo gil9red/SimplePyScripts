@@ -5,12 +5,16 @@ __author__ = 'ipetrash'
 
 
 import logging
-from typing import Dict
-
-# For import ascii_table__simple_pretty__ljust.py
 import sys
 
-sys.path.append('..')
+from logging.handlers import RotatingFileHandler
+from pathlib import Path
+from typing import Dict
+
+DIR = Path(__file__).resolve().parent
+
+# For import ascii_table__simple_pretty__ljust.py
+sys.path.append(str(DIR.parent))
 from ascii_table__simple_pretty__ljust import pretty_table
 
 
@@ -35,13 +39,11 @@ def get_logger(name, file='log.txt', encoding='utf-8', log_stdout=True, log_file
     formatter = logging.Formatter('[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s')
 
     if log_file:
-        from logging.handlers import RotatingFileHandler
         fh = RotatingFileHandler(file, maxBytes=10000000, backupCount=5, encoding=encoding)
         fh.setFormatter(formatter)
         log.addHandler(fh)
 
     if log_stdout:
-        import sys
         sh = logging.StreamHandler(stream=sys.stdout)
         sh.setFormatter(formatter)
         log.addHandler(sh)
