@@ -30,7 +30,7 @@ def get_quarter(month_or_date=None) -> int:
         return 4
 
     else:
-        raise Exception('Invalid "month": {}'.format(month))
+        raise Exception(f'Invalid "month": {month}')
 
 
 def get_quarter_num(month_or_date=None) -> str:
