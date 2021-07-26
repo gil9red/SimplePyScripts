@@ -12,7 +12,6 @@ import webbrowser
 
 from contextlib import redirect_stdout
 from datetime import datetime
-from pathlib import Path
 
 from PyQt5.Qt import (
     QApplication, QMessageBox, QThread, pyqtSignal, QMainWindow, QPushButton, QCheckBox, QPlainTextEdit,
