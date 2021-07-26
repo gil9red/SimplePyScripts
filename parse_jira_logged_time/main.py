@@ -4,29 +4,31 @@
 __author__ = 'ipetrash'
 
 
-from bs4 import BeautifulSoup
-from datetime import datetime, timezone
 import re
+import sys
+
+from collections import defaultdict
+from datetime import datetime, timezone
+from pathlib import Path
 from typing import Dict, List, Tuple
 
-import sys
-sys.path.append('..')
+import requests
+from bs4 import BeautifulSoup
 
+DIR = Path(__file__).resolve().parent
+
+sys.path.append(str(DIR.parent))
 from logged_human_time_to_seconds import logged_human_time_to_seconds
 from seconds_to_str import seconds_to_str
+
 
 URL = 'https://jira.compassplus.ru/activity?maxResults=100&streams=user+IS+ipetrash&os_authType=basic&title=undefined'
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0',
 }
 
-# NOTE. Get <PEM_FILE_NAME>: openssl pkcs12 -nodes -out key.pem -in file.p12
-PEM_FILE_NAME = 'ipetrash.pem'
-
-from pathlib import Path
-
-# CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
-PEM_FILE_NAME = str(Path(__file__).resolve().parent / PEM_FILE_NAME)
+# NOTE: Get <PEM_FILE_NAME>: openssl pkcs12 -nodes -out ipetrash.pem -in ipetrash.p12
+PEM_FILE_NAME = str(DIR / 'ipetrash.pem')
 
 
 # SOURCE: https://stackoverflow.com/a/13287083/5909792
@@ -35,15 +37,12 @@ def utc_to_local(utc_dt: datetime) -> datetime:
 
 
 def get_rss_jira_log() -> bytes:
-    import requests
     rs = requests.get(URL, headers=HEADERS, cert=PEM_FILE_NAME)
-    # print(rs)
-
+    rs.raise_for_status()
     return rs.content
 
 
 def get_logged_dict(root) -> Dict[str, List[Dict]]:
-    from collections import defaultdict
     logged_dict = defaultdict(list)
 
     for entry in root.select('entry'):
@@ -51,28 +50,6 @@ def get_logged_dict(root) -> Dict[str, List[Dict]]:
         match = re.search("logged '(.+?)'", entry.text, flags=re.IGNORECASE)
         if not match:
             continue
-
-        # TODO: удалить
-        # title = entry.title
-        #
-        # # Содержимое тега title -- экранированное html
-        # title_node = BeautifulSoup(title.text, 'html.parser')
-        #
-        # title_text = title_node.text.strip()
-        # title_text = re.sub('\s{2,}', ' ', title_text)
-        #
-        # # Ищем в <title>
-        # # Пример: "Ilya A. Petrash logged '30 minutes' on ..."
-        # match = re.search("Ilya A. Petrash logged '(.+?)'", title_text, flags=re.IGNORECASE)
-        # if not match:
-        #     if not entry.content:
-        #         continue
-        #
-        #     # Если в <title> не нашли, ищем в <content>
-        #     # Пример: &lt;li>Logged '30 minutes'
-        #     match = re.search("logged '(.+?)'", entry.content.text, flags=re.IGNORECASE)
-        #     if not match:
-        #         continue
 
         logged_human_time = match.group(1)
         logged_seconds = logged_human_time_to_seconds(logged_human_time)
@@ -148,7 +125,6 @@ if __name__ == '__main__':
 
     # Для красоты выводим результат в табличном виде
     lines = []
-
     for date_str, logged_list in get_sorted_logged(logged_dict):
         total_seconds = get_logged_total_seconds(logged_list)
         lines.append((date_str, total_seconds, seconds_to_str(total_seconds)))

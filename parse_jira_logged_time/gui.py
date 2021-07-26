@@ -4,6 +4,16 @@
 __author__ = 'ipetrash'
 
 
+import json
+import io
+import sys
+import traceback
+import webbrowser
+
+from contextlib import redirect_stdout
+from datetime import datetime
+from pathlib import Path
+
 from PyQt5.Qt import (
     QApplication, QMessageBox, QThread, pyqtSignal, QMainWindow, QPushButton, QCheckBox, QPlainTextEdit,
     QVBoxLayout, QHBoxLayout, QTextOption, QTableWidget, QWidget, QSizePolicy, QSplitter, Qt, QTableWidgetItem,
@@ -11,14 +21,13 @@ from PyQt5.Qt import (
 )
 
 from main import (
-    get_rss_jira_log, parse_logged_dict, get_logged_list_by_now_utc_date, get_logged_total_seconds,
+    DIR, get_rss_jira_log, parse_logged_dict, get_logged_list_by_now_utc_date, get_logged_total_seconds,
     get_sorted_logged, seconds_to_str
 )
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
+    text = f'{ex_cls.__name__}: {ex}:\n'
     text += ''.join(traceback.format_tb(tb))
 
     print(text)
@@ -26,7 +35,6 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -51,8 +59,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle(WINDOW_TITLE)
 
-        from pathlib import Path
-        file_name = str(Path(__file__).resolve().parent / 'favicon.ico')
+        file_name = str(DIR / 'favicon.ico')
         icon = QIcon(file_name)
 
         self.setWindowIcon(icon)
@@ -130,11 +137,7 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(splitter)
 
     def _fill_tables(self, xml_data: bytes):
-        import io
         buffer_io = io.StringIO()
-
-        from contextlib import redirect_stdout
-
         try:
             with redirect_stdout(buffer_io):
                 print(len(xml_data), repr(xml_data[:50]))
@@ -146,7 +149,6 @@ class MainWindow(QMainWindow):
                 if not self.logged_dict:
                     return
 
-                import json
                 print(json.dumps(self.logged_dict, indent=4, ensure_ascii=False))
                 print()
 
@@ -212,7 +214,6 @@ class MainWindow(QMainWindow):
         progress_dialog.setRange(0, 0)
         progress_dialog.exec()
 
-        from datetime import datetime
         self.setWindowTitle(WINDOW_TITLE + ". Last refresh date: " + datetime.now().strftime('%d/%m/%Y %H:%M:%S'))
 
     def _on_table_logged_item_clicked(self, item: QTableWidgetItem):
@@ -240,8 +241,6 @@ class MainWindow(QMainWindow):
         jira_id = self.table_logged_info.item(row, 2).text()
 
         url = 'https://jira.compassplus.ru/browse/' + jira_id
-
-        import webbrowser
         webbrowser.open(url)
 
     def _on_tray_activated(self, reason):
