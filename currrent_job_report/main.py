@@ -10,10 +10,22 @@ import time
 import traceback
 import os.path
 
+from PyQt5.QtWidgets import (
+    QApplication, QWidget, QLabel, QToolButton, QPlainTextEdit, QVBoxLayout, QHBoxLayout, QSystemTrayIcon,
+    QMenu, QWidgetAction, QMessageBox
+)
+from PyQt5.QtGui import QColor, QPainter, QIcon
+from PyQt5.QtCore import Qt, pyqtSignal, QThread
+
+from get_user_and_deviation_hours import (
+    get_user_and_deviation_hours, get_quarter_user_and_deviation_hours, get_quarter_num,
+    NotFoundReport
+)
+
 
 # Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+    text = f'{ex_cls.__name__}: {ex}:\n'
     text += ''.join(traceback.format_tb(tb))
 
     print('Error: ', text)
@@ -24,19 +36,6 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
 sys.excepthook = log_uncaught_exceptions
 
 TRAY_ICON = os.path.join(os.path.dirname(__file__), 'favicon.ico')
-
-from get_user_and_deviation_hours import (
-    get_user_and_deviation_hours, get_quarter_user_and_deviation_hours, get_quarter_num,
-    NotFoundReport
-)
-
-
-from PyQt5.QtWidgets import (
-    QApplication, QWidget, QLabel, QToolButton, QPlainTextEdit, QVBoxLayout, QHBoxLayout, QSystemTrayIcon,
-    QMenu, QWidgetAction, QMessageBox
-)
-from PyQt5.QtGui import QColor, QPainter, QIcon
-from PyQt5.QtCore import Qt, pyqtSignal, QThread
 
 
 class CheckJobReportThread(QThread):
@@ -56,7 +55,7 @@ class CheckJobReportThread(QThread):
             return 'Переработка' if ok else 'Недоработка'
 
         today = datetime.datetime.today().strftime('%d/%m/%Y %H:%M:%S')
-        self.about_log.emit('Check for {}'.format(today))
+        self.about_log.emit(f'Check for {today}')
 
         text = ""
         deviation_hours = None
