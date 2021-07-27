@@ -5,16 +5,21 @@ __author__ = 'ipetrash'
 
 
 import sys
-import vk_api
-from PySide.QtGui import *
+import traceback
+
+from PyQt5.QtWidgets import (
+    QApplication, QWidget, QLineEdit, QSpinBox, QPushButton, QTextEdit, QFormLayout, QVBoxLayout, QMessageBox
+)
+
+from root_common import vk_auth, LOGIN, PASSWORD
 
 
 class Widget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.line_edit_login = QLineEdit()
-        self.line_edit_password = QLineEdit()
+        self.line_edit_login = QLineEdit(LOGIN)
+        self.line_edit_password = QLineEdit(PASSWORD)
         self.line_edit_password.setEchoMode(QLineEdit.Password)
 
         self.spibox_count_newsfeed = QSpinBox()
@@ -39,22 +44,21 @@ class Widget(QWidget):
 
     def get_newsfeed(self):
         try:
-            vk = vk_api.VkApi(self.line_edit_login.text(), self.line_edit_password.text())
-            vk.authorization()  # Авторизируемся
-
-            text = ''
-
-            newsfeed = vk.method('newsfeed.get', values={
+            vk_session = vk_auth(self.line_edit_login.text(), self.line_edit_password.text())
+            newsfeed = vk_session.method('newsfeed.get', values={
                 'filters': 'post',
                 'count': self.spibox_count_newsfeed.value()
             })
-            for i, feed in enumerate(newsfeed['items'], 1):
-                text += '{}. {source_id} {date}: {text}\n'.format(i, **feed)
 
-            self.newsfeed.setText(text)
+            items = []
+            for i, feed in enumerate(newsfeed['items'], 1):
+                items.append(f"{i}. {feed['source_id']} {feed['date']}: {feed['text']}")
+
+            self.newsfeed.setText('\n'.join(items))
 
         except Exception as e:
-            QMessageBox.warning(None, None, str(e))
+            print('Error:', traceback.format_exc())
+            QMessageBox.warning(self, None, str(e))
 
 
 if __name__ == '__main__':

@@ -1,10 +1,14 @@
-import datetime as dt
-import sys
-import time
-import vk_api
-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 __author__ = 'ipetrash'
+
+
+import datetime as dt
+import time
+from collections import defaultdict
+
+from root_common import get_vk_session
 
 
 # Скрипт выполняет поиск в вк по заданным критериям и после фильтрует тех,
@@ -18,28 +22,17 @@ __author__ = 'ipetrash'
 # http://vk.com/dev/fields_2
 
 
-def vk_auth(login, password):
-    vk = vk_api.VkApi(login, password)
-
-    try:
-        vk.auth()  # Авторизируемся
-    except vk_api.AuthError as e:
-        print(e)  # В случае ошибки выведем сообщение
-        sys.exit()
-
-    return vk
-
-
-def get_title_relation(relation):
+def get_title_relation(relation: int) -> str:
     # http://vk.com/dev/fields_2
     # relation:
-    # 1 — не женат/не замужем;
-    # 2 — есть друг/есть подруга;
-    # 3 — помолвлен/помолвлена;
-    # 4 — женат/замужем:
-    # 5 — всё сложно;
-    # 6 — в активном поиске;
-    # 7 — влюблён/влюблена.
+    # 1 — не женат/не замужем
+    # 2 — есть друг/есть подруга
+    # 3 — помолвлен/помолвлена
+    # 4 — женат/замужем
+    # 5 — всё сложно
+    # 6 — в активном поиске
+    # 7 — влюблён/влюблена
+    # 8 — в гражданском браке
 
     if relation == 0 or relation is None:
         return 'Не указано семейное положение'
@@ -65,20 +58,17 @@ def get_title_relation(relation):
     elif relation == 7:
         return 'Влюблён/влюблена'
 
+    elif relation == 8:
+        return 'В гражданском браке'
+
     else:
-        return 'Error! Unknown relation!'
-
-
-# Логин и пароль к аккаунту
-LOGIN = ''
-PASSWORD = ''
+        return f'Error! Unknown relation = {relation}!'
 
 
 if __name__ == '__main__':
-    # Авторизируемся
-    vk = vk_auth(LOGIN, PASSWORD)
+    vk_session = get_vk_session()
 
-    server_time = vk.method('utils.getServerTime')
+    server_time = vk_session.method('utils.getServerTime')
     server_time = dt.datetime.fromtimestamp(server_time)
 
     params = {
@@ -87,7 +77,7 @@ if __name__ == '__main__':
         'age_to': 25,  # Возраст до
         'hometown': 'Магнитогорск',  # Город
         'city': 82,  # id города
-        'status': 0,  # 0 -- любое семейное положение
+        'status': 0,  # 0 - любое семейное положение
 
         # Дополнительные поля, которые вернутся в ответе
         'fields': ','.join([
@@ -100,14 +90,14 @@ if __name__ == '__main__':
         'count': 1000,  # Количество возвращаемых пользователей (1000 это максимум)
     }
 
-    rs = vk.method('users.search', params)
+    rs = vk_session.method('users.search', params)
 
     # Список id пользователей
     user_list_id = []
 
     # При первом запросе, настроен поиск пользователей с любым семейным положением,
     # поэтому отфильтруем его и оставим только пользователей с нужным нам семейным положением
-    for user in rs.get('items'):
+    for user in rs['items']:
         # Семейное положение
         relation = user.get('relation')
 
@@ -121,7 +111,7 @@ if __name__ == '__main__':
 
     # Теперь ищем тех, у кого статус "не женат/не замужем"
     params['status'] = 1
-    rs = vk.method('users.search', params)
+    rs = vk_session.method('users.search', params)
     user_list_id.extend(rs.get('items'))
 
     # На всякий случай подождем немного (вк не разрешает обращаться чаще 3 раза в секунду)
@@ -129,7 +119,7 @@ if __name__ == '__main__':
 
     # Теперь ищем тех, у кого статус "всё сложно"
     params['status'] = 5
-    rs = vk.method('users.search', params)
+    rs = vk_session.method('users.search', params)
     user_list_id.extend(rs.get('items'))
 
     # На всякий случай подождем немного (вк не разрешает обращаться чаще 3 раза в секунду)
@@ -137,7 +127,7 @@ if __name__ == '__main__':
 
     # Теперь ищем тех, у кого статус "в активном поиске"
     params['status'] = 6
-    rs = vk.method('users.search', params)
+    rs = vk_session.method('users.search', params)
     user_list_id.extend(rs.get('items'))
 
     # Отфильтрованный список id юзеров
@@ -145,7 +135,7 @@ if __name__ == '__main__':
 
     # Группирование по семейному положению:
     # ключом является семейное положение, а его значением список id пользователей
-    relation_group_users = {}
+    relation_group_users = defaultdict(list)
 
     for user in user_list_id:
         user_id = user['id']
@@ -155,8 +145,8 @@ if __name__ == '__main__':
         if user_id in filtered_users_id:
             continue
 
-        # Личка закрыта
-        if user['can_write_private_message'] == 0:
+        # Личка закрыта или неизвестна дата последнего посещения
+        if not user['can_write_private_message'] or 'last_seen' not in user:
             continue
 
         # Дата последнего посещения
@@ -164,33 +154,24 @@ if __name__ == '__main__':
         last_seen = dt.datetime.fromtimestamp(last_seen)
 
         # Нет онлайн 7 или больше дней
-        if not server_time - last_seen >= dt.timedelta(days=7):
+        if server_time - last_seen >= dt.timedelta(days=7):
             continue
 
         # Добавим пользователя, прошедшего фильтр, в список
         filtered_users_id.append(user_id)
 
-        relation = user.get('relation')
         # По сути, если relation = 0, или если relation не было возвращено
-        # означает одно и тоже -- семейное положение не указано
-        if relation is None:
-            relation = 0
-
-        # Сгруппируем пользователя по семейному положению
-        # Если relation нет в словаре, добавим
-        if not relation in relation_group_users:
-            relation_group_users[relation] = []
+        # означает одно и тоже - семейное положение не указано
+        relation = user.get('relation', 0)
 
         relation_group_users[relation].append(user_id)
 
-
-    message = 'Всего найдено: {}\n'.format(len(filtered_users_id))
+    print(f'Всего найдено: {len(filtered_users_id)}\n')
 
     for relation, users in relation_group_users.items():
-        message += '\n'
-        message += get_title_relation(relation) + ':\n'
+        print(f'{get_title_relation(relation)} ({len(users)}):')
 
         for i, user_id in enumerate(users, 1):
-            message += '{}. https://vk.com/id{}\n'.format(i, str(user_id))
+            print(f'{i}. https://vk.com/id{user_id}')
 
-    print(message)
+        print()

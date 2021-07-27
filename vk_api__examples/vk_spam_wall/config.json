@@ -1,8 +1,7 @@
 {
     "login": "",
     "password": "",
-    "to": null,
-    "at": "16:10",
-    "quote_count": 5,
-    "logging_format": "[%(asctime)s] %(message)s"
+    "to_owner_id": null,
+    "at": "18:00",
+    "quote_count": 3
 }
