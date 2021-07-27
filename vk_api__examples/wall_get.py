@@ -23,5 +23,6 @@ tools = VkTools(vk_session)
 data = {
     'domain': DOMAIN,
 }
-for i, item in enumerate(tools.get_all_iter('wall.get', 100, data), 1):
+wall_it = tools.get_all_iter('wall.get', 100, data)
+for i, item in enumerate(wall_it, 1):
     print(i, item)
