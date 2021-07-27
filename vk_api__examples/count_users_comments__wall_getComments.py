@@ -6,12 +6,12 @@ __author__ = 'ipetrash'
 
 """
 Скрипт перебираем все комментарии и подсчитывает количество комментариев людей. Получится словарь
-у которого ключом будет id пользователя, а значением -- количество его комментариев.
+у которого ключом будет id пользователя, а значением - количество его комментариев.
 """
 
 
 from collections import defaultdict
-import vk_api
+from vk_api import VkTools
 from root_common import get_vk_session
 
 
@@ -22,7 +22,7 @@ POST_ID = 49200
 
 if __name__ == '__main__':
     vk_session = get_vk_session()
-    tools = vk_api.VkTools(vk_session)
+    tools = VkTools(vk_session)
 
     user_comment_count_dict = defaultdict(int)
 
