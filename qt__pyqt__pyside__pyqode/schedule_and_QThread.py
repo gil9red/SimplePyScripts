@@ -59,9 +59,7 @@ class ScheduleThread(QThread):
     about_time = pyqtSignal(str)
 
     def add_time(self, time: str):
-        schedule.every().day.at(time).do(
-            lambda: self.about_time.emit(time)
-        )
+        schedule.every().day.at(time).do(self.about_time.emit, time)
 
     def run(self):
         while True:
@@ -74,6 +72,9 @@ class Example(QMainWindow, Ui_MainWindow):
         super().__init__()
 
         self.setupUi(self)
+
+        self.lineEdit.setText('18:00')
+        
         self.pushButton.clicked.connect(self.go)
 
         self.thread = ScheduleThread()
@@ -88,6 +89,7 @@ class Example(QMainWindow, Ui_MainWindow):
             t = self.lineEdit.text()
             datetime_object = datetime.strptime(t, '%H:%M')
             time_str = str(datetime_object.time())
+            print(time_str)
 
             self.thread.add_time(time_str)
 
