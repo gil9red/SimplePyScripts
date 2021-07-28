@@ -4,14 +4,23 @@
 __author__ = 'ipetrash'
 
 
+import time
+import sys
+import traceback
+import re
+
+from pathlib import Path
+
+# pip install schedule
+import schedule
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
+    text = f'{ex_cls.__name__}: {ex}:\n'
     text += ''.join(traceback.format_tb(tb))
 
     print(text)
@@ -19,18 +28,17 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
 # 60 * 1000 * 10 -- 10 minutes
 def show_message(text, timeout=60 * 1000 * 10):
-    print('show_message: "{}"'.format(text))
+    print(f'show_message: {text!r}')
 
     msg = QMessageBox()
     msg.setWindowFlags(msg.windowFlags() | Qt.WindowStaysOnTopHint)
     msg.setWindowTitle("Информация")
-    msg.setText("<p align='center'>{}<.p>".format(text))
+    msg.setText(f"<p align='center'>{text}<.p>")
     msg.setIcon(QMessageBox.Information)
     msg.setStandardButtons(QMessageBox.Ok)
 
@@ -51,13 +59,12 @@ class RunSchedulerThread(QThread):
     about_description = pyqtSignal(str)
 
     def run(self):
-        # pip install schedule
-        import schedule
-        schedule.every().day.at("11:00").do(lambda: self.about_show_message.emit("Пора в столовку"))
-        schedule.every().day.at("13:00").do(lambda: self.about_show_message.emit("Иди прогуляйся"))
-        schedule.every().day.at("15:00").do(lambda: self.about_show_message.emit("Иди прогуляйся"))
-        schedule.every().day.at("17:00").do(lambda: self.about_show_message.emit("Иди прогуляйся"))
-        schedule.every().day.at("19:00").do(lambda: self.about_show_message.emit("Вали домой"))
+        schedule.every().day.at("11:00").do(self.about_show_message.emit, "Пора в столовку")
+        schedule.every().day.at("13:00").do(self.about_show_message.emit, "Иди прогуляйся")
+        schedule.every().day.at("15:00").do(self.about_show_message.emit, "Иди прогуляйся")
+        schedule.every().day.at("17:00").do(self.about_show_message.emit, "Иди прогуляйся")
+        schedule.every().day.at("17:09").do(self.about_show_message.emit, "Иди прогуляйся")
+        schedule.every().day.at("19:00").do(self.about_show_message.emit, "Вали домой")
 
         description = 'Jobs:\n'
         description_gui = ''
@@ -66,7 +73,6 @@ class RunSchedulerThread(QThread):
             description_gui += str(job) + "\n"
 
         # Костыль для показа сообщения вида "Every 1 day at 11:00:00"
-        import re
         pattern = re.compile(r' do <lambda>\(\) \(last run: .+?, next run: .+?\)')
         description = pattern.sub('', description)
         description_gui = pattern.sub('', description_gui)
@@ -75,8 +81,6 @@ class RunSchedulerThread(QThread):
 
         while True:
             schedule.run_pending()
-
-            import time
             time.sleep(1)
 
             next_job_time = schedule.next_run().time()
@@ -84,12 +88,12 @@ class RunSchedulerThread(QThread):
 
             local_description_gui = description_gui
             local_description_gui += '\n\n'
-            local_description_gui += 'Следующий перерыв будет в {}, осталось {} секунд'.format(next_job_time, idle_secs)
+            local_description_gui += f'Следующий перерыв будет в {next_job_time}, осталось {idle_secs} секунд'
             self.about_description.emit(local_description_gui)
 
 
-import os.path
-TRAY_ICON = os.path.join(os.path.dirname(__file__), 'rest_32x32.png')
+DIR = Path(__file__).resolve().parent
+TRAY_ICON = str(DIR / 'rest_32x32.png')
 
 
 if __name__ == '__main__':
