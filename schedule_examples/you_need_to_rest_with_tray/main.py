@@ -31,27 +31,11 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
 sys.excepthook = log_uncaught_exceptions
 
 
-# 60 * 1000 * 10 -- 10 minutes
-def show_message(text, timeout=60 * 1000 * 10):
-    print(f'show_message: {text!r}')
+DIR = Path(__file__).resolve().parent
+TRAY_ICON = str(DIR / 'rest_32x32.png')
 
-    msg = QMessageBox()
-    msg.setWindowFlags(msg.windowFlags() | Qt.WindowStaysOnTopHint)
-    msg.setWindowTitle("Информация")
-    msg.setText(f"<p align='center'>{text}<.p>")
-    msg.setIcon(QMessageBox.Information)
-    msg.setStandardButtons(QMessageBox.Ok)
-
-    # font = msg.font()
-    # or:
-    font = QFont()
-    font.setFamily('Times')
-    font.setPointSize(50)
-    msg.setFont(font)
-
-    QTimer.singleShot(timeout, msg.close)
-
-    msg.exec()
+sys.path.append(str(DIR.parent))
+from you_need_to_rest import show_message
 
 
 class RunSchedulerThread(QThread):
@@ -63,7 +47,6 @@ class RunSchedulerThread(QThread):
         schedule.every().day.at("13:00").do(self.about_show_message.emit, "Иди прогуляйся")
         schedule.every().day.at("15:00").do(self.about_show_message.emit, "Иди прогуляйся")
         schedule.every().day.at("17:00").do(self.about_show_message.emit, "Иди прогуляйся")
-        schedule.every().day.at("17:09").do(self.about_show_message.emit, "Иди прогуляйся")
         schedule.every().day.at("19:00").do(self.about_show_message.emit, "Вали домой")
 
         description = 'Jobs:\n'
@@ -90,10 +73,6 @@ class RunSchedulerThread(QThread):
             local_description_gui += '\n\n'
             local_description_gui += f'Следующий перерыв будет в {next_job_time}, осталось {idle_secs} секунд'
             self.about_description.emit(local_description_gui)
-
-
-DIR = Path(__file__).resolve().parent
-TRAY_ICON = str(DIR / 'rest_32x32.png')
 
 
 if __name__ == '__main__':
