@@ -4,12 +4,16 @@
 __author__ = 'ipetrash'
 
 
+import time
+import os
+
+from datetime import date
+
+
 def job():
-    from datetime import date
     print(date.today())
 
     try:
-        import os
         os.mkdir(r'T:\ipetrash')
 
     except FileExistsError:
@@ -23,6 +27,4 @@ if __name__ == '__main__':
 
     while True:
         schedule.run_pending()
-
-        import time
         time.sleep(1)
