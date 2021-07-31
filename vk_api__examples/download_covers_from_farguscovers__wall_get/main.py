@@ -48,65 +48,66 @@ def get_authors(text: str) -> List[Dict[str, str]]:
 DOMAIN = 'farguscovers'
 
 
-vk_session = get_vk_session()
-tools = VkTools(vk_session)
+if __name__ == '__main__':
+    vk_session = get_vk_session()
+    tools = VkTools(vk_session)
 
-dump = []
+    dump = []
 
-data = {
-    'domain': DOMAIN,
-}
-wall_it = tools.get_all_iter('wall.get', 100, data)
-for i, post in enumerate(wall_it, 1):
-    post_id = post['id']
-    owner_id = post["owner_id"]
-    post_url = f'https://vk.com/farguscovers?w=wall{owner_id}_{post_id}'
+    data = {
+        'domain': DOMAIN,
+    }
+    wall_it = tools.get_all_iter('wall.get', 100, data)
+    for i, post in enumerate(wall_it, 1):
+        post_id = post['id']
+        owner_id = post["owner_id"]
+        post_url = f'https://vk.com/farguscovers?w=wall{owner_id}_{post_id}'
 
-    post_text = post['text']
-    authors = get_authors(post_text)
+        post_text = post['text']
+        authors = get_authors(post_text)
 
-    try:
-        if 'copy_history' in post:
-            attachments = post['copy_history'][0].get('attachments', [])
-        else:
-            attachments = post.get('attachments', [])
+        try:
+            if 'copy_history' in post:
+                attachments = post['copy_history'][0].get('attachments', [])
+            else:
+                attachments = post.get('attachments', [])
 
-        photo_list = [x['photo'] for x in attachments if 'photo' in x]
-        if not photo_list:
-            continue
+            photo_list = [x['photo'] for x in attachments if 'photo' in x]
+            if not photo_list:
+                continue
 
-        for photo_idx, photo in enumerate(photo_list, 1):
-            photo_text = photo['text']
-            photo_id = photo['id']
+            for photo_idx, photo in enumerate(photo_list, 1):
+                photo_text = photo['text']
+                photo_id = photo['id']
 
-            size = max(photo['sizes'], key=lambda x: (x['height'], x['width']))
-            url_raw_photo = size['url']
-            photo_post_url = f'https://vk.com/farguscovers?z=photo{owner_id}_{photo_id}%2Fwall{owner_id}_{post_id}'
+                size = max(photo['sizes'], key=lambda x: (x['height'], x['width']))
+                url_raw_photo = size['url']
+                photo_post_url = f'https://vk.com/farguscovers?z=photo{owner_id}_{photo_id}%2Fwall{owner_id}_{post_id}'
 
-            print(f'{i} {post_id} {photo_idx} {post_text!r} {photo_text!r} {authors} {url_raw_photo}')
+                print(f'{i} {post_id} {photo_idx} {post_text!r} {photo_text!r} {authors} {url_raw_photo}')
 
-            file_name = DIR_IMAGES / f'{post_id}_{photo_idx}.jpg'
-            if not file_name.exists():
-                urlretrieve(url_raw_photo, file_name)
-                time.sleep(2)
+                file_name = DIR_IMAGES / f'{post_id}_{photo_idx}.jpg'
+                if not file_name.exists():
+                    urlretrieve(url_raw_photo, file_name)
+                    time.sleep(2)
 
-            dump.append({
-                'post_id': post_id,
-                'post_url': post_url,
-                'post_text': post_text,
-                'photo_file_name': str(file_name.relative_to(DIR)),
-                'photo_post_url': photo_post_url,
-                'authors': authors,
-                'cover_text': '',
-                'game_name': photo_text,  # Часто название игры присутствует к подписи к картинке
-            })
+                dump.append({
+                    'post_id': post_id,
+                    'post_url': post_url,
+                    'post_text': post_text,
+                    'photo_file_name': str(file_name.relative_to(DIR)),
+                    'photo_post_url': photo_post_url,
+                    'authors': authors,
+                    'cover_text': '',
+                    'game_name': photo_text,  # Часто название игры присутствует к подписи к картинке
+                })
 
-    except Exception as e:
-        print(i, post_id, post_url, repr(e), post)
+        except Exception as e:
+            print(i, post_id, post_url, repr(e), post)
 
-    print()
+        print()
 
-json.dump(
-    dump, open(FILE_NAME_DUMP, 'w', encoding='utf-8'),
-    indent=4, ensure_ascii=False
-)
+    json.dump(
+        dump, open(FILE_NAME_DUMP, 'w', encoding='utf-8'),
+        indent=4, ensure_ascii=False
+    )
