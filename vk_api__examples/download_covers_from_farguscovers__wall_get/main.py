@@ -13,16 +13,20 @@ __author__ = 'ipetrash'
 import json
 import re
 import time
+import sys
 
 from typing import List, Dict
 from pathlib import Path
 from urllib.request import urlretrieve
 
 from vk_api import VkTools
-from root_common import get_vk_session
 
 
 DIR = Path(__file__).resolve().parent
+
+sys.path.append(str(DIR.parent))
+from root_common import get_vk_session
+
 
 DIR_IMAGES = DIR / 'images'
 DIR_IMAGES.mkdir(parents=True, exist_ok=True)
