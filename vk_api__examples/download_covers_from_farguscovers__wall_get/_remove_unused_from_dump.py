@@ -24,7 +24,7 @@ for x in dump:
     if file_name.exists():
         new_dump.append(x)
     else:
-        print(f"Дамп с photo_file_name={photo_file_name} удален")
+        print(f"Дамп с photo_file_name={photo_file_name} удален. Ссылка на пост: {x['post_url']}")
 
 if len(new_dump) == len(dump):
     print('В дампе ничего не поменялось')
