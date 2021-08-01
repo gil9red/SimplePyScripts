@@ -27,7 +27,7 @@ for x in dump:
         print(f"Дамп с photo_file_name={photo_file_name} удален. Ссылка на пост: {x['post_url']}")
 
 if len(new_dump) == len(dump):
-    print('В дампе ничего не поменялось')
+    print('Все файлы на месте, дамп обновлять не нужно')
 else:
     json.dump(
         new_dump, open(FILE_NAME_DUMP, 'w', encoding='utf-8'),
