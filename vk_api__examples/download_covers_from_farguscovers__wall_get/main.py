@@ -37,11 +37,10 @@ FILE_NAME_DUMP = DIR / 'dump.json'
 def get_authors(text: str) -> List[Dict[str, str]]:
     return [
         {
-            'id': user_id,
+            'id': int(user_id),
             'name': user_name,
-            'url': f'https://vk.com/{user_id}',
         }
-        for user_id, user_name in re.findall(r'\[(id\d+)\|(.+?)]', text)
+        for user_id, user_name in re.findall(r'\[id(\d+)\|(.+?)]', text)
     ]
 
 
@@ -60,7 +59,7 @@ if __name__ == '__main__':
     wall_it = tools.get_all_iter('wall.get', 100, data)
     for i, post in enumerate(wall_it, 1):
         post_id = post['id']
-        owner_id = post["owner_id"]
+        owner_id = post['owner_id']
         post_url = f'https://vk.com/farguscovers?w=wall{owner_id}_{post_id}'
 
         post_text = post['text']
@@ -100,6 +99,7 @@ if __name__ == '__main__':
                     'authors': authors,
                     'cover_text': '',
                     'game_name': photo_text,  # Часто название игры присутствует к подписи к картинке
+                    'game_series': '',        # Будет полезно знать серию игры
                 })
 
         except Exception as e:
