@@ -3,6 +3,7 @@
 
 __author__ = 'ipetrash'
 
+
 from PyQt5.QtWidgets import QSplashScreen
 from PyQt5.QtGui import QMovie, QMouseEvent
 
@@ -10,8 +11,6 @@ from PyQt5.QtGui import QMovie, QMouseEvent
 class GifSplashScreen(QSplashScreen):
     def __init__(self, file_name: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        self._old_pos = None
 
         self.movie = QMovie(file_name, parent=self)
         self.movie.frameChanged.connect(self._on_frame_changed)
@@ -26,10 +25,9 @@ class GifSplashScreen(QSplashScreen):
         self.movie.stop()
 
     def mousePressEvent(self, event: QMouseEvent):
-        """
-        Переопределенный метод, используется, чтобы при клике окно не скрывалось
-        """
+        # Ignoring "hide" on click
         # https://code.woboq.org/qt5/qtbase/src/widgets/widgets/qsplashscreen.cpp.html#_ZN13QSplashScreen15mousePressEventEP11QMouseEvent
+        pass
 
 
 if __name__ == '__main__':
