@@ -42,7 +42,7 @@ def get_seasons() -> Dict[str, List[str]]:
 def get_all_series() -> List[str]:
     return [
         f'{season}. {series}'
-        for season, series_list in season_by_series.items()
+        for season, series_list in get_seasons().items()
         for series in series_list
     ]
 
