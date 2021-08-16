@@ -46,10 +46,10 @@ def parse() -> List[Season]:
     items = []
     for tr in root.select_one('.wikitable').select('tr'):
         td_list = tr.select('td')
-        if not td_list:
+        if len(td_list) != 4:
             continue
 
-        _, td_season, td_num_episodes, td_start_date, td_end_date = td_list
+        td_season, td_num_episodes, td_start_date, td_end_date = td_list
 
         season = int(
             td_season.get_text(strip=True)
