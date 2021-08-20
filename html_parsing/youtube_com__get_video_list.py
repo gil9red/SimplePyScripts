@@ -9,8 +9,8 @@ from typing import List, Callable, Any
 from youtube_com__results_search_query import search_youtube
 
 
-def get_video_list(url: str, sort=False, filter_func: Callable[[Any], bool] = None) -> List[str]:
-    video_title_list = [title for url, title in search_youtube(url)]
+def get_video_list_with_filter(url: str, sort=False, filter_func: Callable[[Any], bool] = None) -> List[str]:
+    video_title_list = [video.title for video in search_youtube(url)]
     if sort:
         video_title_list.sort()
 
@@ -23,24 +23,24 @@ def get_video_list(url: str, sort=False, filter_func: Callable[[Any], bool] = No
 if __name__ == '__main__':
     text = 'Gorgeous Freeman -'
     url = 'https://www.youtube.com/user/antoine35DeLak/search?query=' + text
-    items = get_video_list(url)
+    items = get_video_list_with_filter(url)
     print(f'Items ({len(items)}): {items}')
 
-    items = get_video_list(url, filter_func=lambda name: text in name)
+    items = get_video_list_with_filter(url, filter_func=lambda name: text in name)
     print(f'Filtered items ({len(items)}): {items}')
 
     print()
 
     text = 'Sally Face'
     url = 'https://www.youtube.com/user/HellYeahPlay/search?query=' + text
-    items = get_video_list(url)
+    items = get_video_list_with_filter(url)
     print(f'Items ({len(items)}): {items}')
 
-    items = get_video_list(url, filter_func=lambda name: text in name and 'эпизод' in name.lower())
+    items = get_video_list_with_filter(url, filter_func=lambda name: text in name and 'эпизод' in name.lower())
     print(f'Filtered items ({len(items)}): {items}')
 
     print()
 
     url = 'https://www.youtube.com/playlist?list=PLZfhqd1-Hl3DtfKRjleAWB-zYJ-pj7apK'
-    items = get_video_list(url)
+    items = get_video_list_with_filter(url)
     print(f'Items ({len(items)}): {items}')
