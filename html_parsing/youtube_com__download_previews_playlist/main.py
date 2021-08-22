@@ -22,8 +22,9 @@ PATTERN_URL_VIDEO_PREVIEW = 'https://i.ytimg.com/vi/{video_id}/maxresdefault.jpg
 
 def download_playlist_video_previews(playlist_id: str):
     url = PATTERN_URL_PLAYLIST.format(playlist_id=playlist_id)
+    rs = session.get(url)
 
-    data = get_ytInitialData(url)
+    data = get_ytInitialData(rs.text)
     if not data:
         print('Not found "ytInitialData"!')
         return
