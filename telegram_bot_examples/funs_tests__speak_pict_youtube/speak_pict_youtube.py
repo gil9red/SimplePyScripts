@@ -85,7 +85,7 @@ def pict3(update: Update, context: CallbackContext):
 
 
 # Поиск на YouTube
-def video(update: Update, context: CallbackContext):
+def on_video(update: Update, context: CallbackContext):
     message = update.effective_message
 
     args = context.args
@@ -95,13 +95,13 @@ def video(update: Update, context: CallbackContext):
         return
 
     msg = ' '.join(args)
-    search_results = search_youtube(msg)
+    search_results = search_youtube(msg, maximum_items=10)
     if not search_results:
         message.reply_text(text='Ничего не найдено.')
         return
 
-    url, title = random.choice(search_results)
-    message.reply_text(text=title + '\n' + url)
+    video = random.choice(search_results)
+    message.reply_text(text=video.title + '\n' + video.url)
 
 
 # NOTE: not work, source: https://github.com/gil9red/SimplePyScripts/blob/b366323934eb0ed9557ba7d40c3c64cf6a7b8c36/speak__[does_not_work]
@@ -227,7 +227,7 @@ def main():
     dp.add_handler(CommandHandler("pict", pict))
     dp.add_handler(CommandHandler("pict2", pict2))
     dp.add_handler(CommandHandler("pict3", pict3))
-    dp.add_handler(CommandHandler("yt", video))
+    dp.add_handler(CommandHandler("yt", on_video))
 
     # NOTE: not work
     # dp.add_handler(CommandHandler("speak", speak))
