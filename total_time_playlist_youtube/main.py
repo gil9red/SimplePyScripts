@@ -7,27 +7,23 @@ __author__ = 'ipetrash'
 import sys
 from typing import List, Tuple
 
+# pip install dpath
+import dpath.util
+
 sys.path.append('../html_parsing')
-from youtube_com__results_search_query import get_ytInitialData
+from youtube_com__results_search_query import get_generator_raw_video_list
 from common import seconds_to_str
-
-
-def get_video_list(data: dict) -> list:
-    video_list = data['contents']['twoColumnBrowseResultsRenderer']['tabs'][0]['tabRenderer']['content']['sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents'][0]['playlistVideoListRenderer']['contents']
-    return [video['playlistVideoRenderer'] for video in video_list]
 
 
 def parse_playlist_time(url: str) -> (int, List[Tuple[str, str]]):
     """Функция парсит страницу плейлиста и подсчитывает сумму продолжительности роликов."""
 
-    data = get_ytInitialData(url)
-
     total_seconds = 0
     items = []
 
-    for video in get_video_list(data):
-        title = video['title']['runs'][0]['text']
-        duration_text = video['lengthText']['simpleText']
+    for video in get_generator_raw_video_list(url):
+        title = dpath.util.get(video, 'title/runs/0/text')
+        duration_text = dpath.util.get(video, 'lengthText/simpleText')
         duration_secs = int(video['lengthSeconds'])
 
         total_seconds += duration_secs
