@@ -9,7 +9,7 @@ import json
 import re
 
 from dataclasses import dataclass
-from typing import List, Optional, Dict, Generator
+from typing import List, Optional, Dict, Generator, Callable, Any
 from urllib.parse import urljoin
 
 # pip install tzlocal
@@ -195,17 +195,19 @@ def get_ytInitialData(html: str) -> Optional[dict]:
             return json.loads(data_str)
 
 
-USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'
 
 session = requests.Session()
 session.headers['User-Agent'] = USER_AGENT
 
 
 def get_raw_video_renderer_items(data: Dict) -> List[Dict]:
-    items = dpath.util.values(data, '**/videoRenderer')
-    if not items:
-        items = dpath.util.values(data, '**/playlistVideoRenderer')
-    return items
+    for render in ['**/gridVideoRenderer', '**/videoRenderer', '**/playlistVideoRenderer']:
+        items = dpath.util.values(data, render)
+        if items:
+            return items
+
+    return []
 
 
 def get_generator_raw_video_list(url: str) -> Generator[Dict, None, None]:
@@ -266,6 +268,17 @@ def search_youtube(text_or_url: str, *args, **kwargs) -> List[Video]:
     return get_video_list(url, *args, **kwargs)
 
 
+def search_youtube_with_filter(url: str, sort=False, filter_func: Callable[[Any], bool] = None) -> List[str]:
+    video_title_list = [video.title for video in search_youtube(url)]
+    if sort:
+        video_title_list.sort()
+
+    if callable(filter_func):
+        video_title_list = list(filter(filter_func, video_title_list))
+
+    return video_title_list
+
+
 if __name__ == '__main__':
     def __print_video_list(items: List[Video]):
         print(f'Items ({len(items)}):')
@@ -289,7 +302,7 @@ if __name__ == '__main__':
     print('\n' + '-' * 100 + '\n')
 
     url_playlist = 'https://www.youtube.com/playlist?list=PLWKjhJtqVAbnRT_hue-3zyiuIYj0OlpyG'
-    items = get_video_list(url_playlist)
+    items = search_youtube(url_playlist)
     __print_video_list(items)
     """
     Items (7):
@@ -301,6 +314,16 @@ if __name__ == '__main__':
         6. 'Spring Boot and Angular Tutorial - Build a Reddit Clone (Coding Project)': https://www.youtube.com/watch?v=DKlTBBuc32c&list=PLWKjhJtqVAbnRT_hue-3zyiuIYj0OlpyG&index=6
         7. 'Android Development for Beginners - Full Course': https://www.youtube.com/watch?v=fis26HvvDII&list=PLWKjhJtqVAbnRT_hue-3zyiuIYj0OlpyG&index=7
     """
+
+    print('\n' + '-' * 100 + '\n')
+
+    # Testing for: youtube, channel, channel videos
+    print(len(get_video_list('https://www.youtube.com/')))
+    print(len(get_video_list('https://www.youtube.com/c/TheBadComedian')))
+    print(len(get_video_list('https://www.youtube.com/c/TheBadComedian/videos')))
+    # 247
+    # 45
+    # 190
 
     print('\n' + '-' * 100 + '\n')
 
@@ -331,3 +354,34 @@ if __name__ == '__main__':
        49. 'Slipknot - Orphan (Audio)': https://www.youtube.com/watch?v=dvLp3XPNAZ0
        50. 'Slipknot - Spit It Out [OFFICIAL VIDEO]': https://www.youtube.com/watch?v=ZPUZwriSX4M
     """
+
+    print('\n' + '-' * 100 + '\n')
+
+    url = 'https://www.youtube.com/playlist?list=PLZfhqd1-Hl3DtfKRjleAWB-zYJ-pj7apK'
+    items = search_youtube_with_filter(url)
+    print(f'Items ({len(items)}): {items}')
+    # Items (3): ['История серии Diablo. Акт I', 'История серии Diablo. Акт II', 'История серии Diablo. Акт III']
+
+    print('\n' + '-' * 100 + '\n')
+
+    text = 'Gorgeous Freeman -'
+    url = 'https://www.youtube.com/user/antoine35DeLak/search?query=' + text
+    items = search_youtube_with_filter(url)
+    print(f'Items ({len(items)}): {items}')
+    # Items (46): ['Gorgeous Freeman - Episode 1 - The Suit', ..., 'The Epileptic Seizure [Gmod]']
+
+    items = search_youtube_with_filter(url, filter_func=lambda name: text in name)
+    print(f'Filtered items ({len(items)}): {items}')
+    # Filtered items (3): ['Gorgeous Freeman - Episode 1 - The Suit', 'Gorgeous Freeman - Episode 3 - The Part 1', 'Gorgeous Freeman - Episode 2 - The Crowbar']
+
+    print('\n' + '-' * 100 + '\n')
+
+    text = 'Sally Face'
+    url = 'https://www.youtube.com/user/HellYeahPlay/search?query=' + text
+    items = search_youtube_with_filter(url)
+    print(f'Items ({len(items)}): {items}')
+    # Items (244): ['ТВОРЕНИЯ ВЕЛЬЗЕВУЛА - Sally Face [ЭПИЗОД 4] #9', ..., 'ЛЕСБИЙСКИЙ ТРЭШНЯК - Love Is Strange']
+
+    items = search_youtube_with_filter(url, filter_func=lambda name: text in name and 'эпизод' in name.lower())
+    print(f'Filtered items ({len(items)}): {items}')
+    # Filtered items (14): ['ТВОРЕНИЯ ВЕЛЬЗЕВУЛА - Sally Face [ЭПИЗОД 4] #9', ..., 'ПОИСК МЕРТВЫХ ЛЮДЕЙ ☠️ Sally Face [ЭПИЗОД 2] #4']
