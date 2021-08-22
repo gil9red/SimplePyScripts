@@ -16,13 +16,22 @@ def get_stackoverflow_people_reached(url: str) -> Optional[str]:
     rs.raise_for_status()
 
     root = BeautifulSoup(rs.content, 'html.parser')
-    return root.find(text=re.compile('^~\d+\.?\d*'))
+    profile_avatar_el = root.select_one('#user-card .profile-avatar')
+    if not profile_avatar_el:
+        return
+
+    text = profile_avatar_el.get_text(strip=True, separator='\n')
+    m = re.search(r'(\d+\.?\d*[km]?)\s*(затронуто|reached)', text)
+    if not m:
+        raise Exception('Reached not found!')
+
+    return m.group(1)
 
 
 if __name__ == '__main__':
     url = 'https://ru.stackoverflow.com/users/201445/gil9red'
     print(get_stackoverflow_people_reached(url))
-    # ~412k
+    # 1.4m
 
     url = 'https://ru.stackoverflow.com'
     print(get_stackoverflow_people_reached(url))
@@ -40,9 +49,11 @@ if __name__ == '__main__':
     ]
     for url in urls:
         print(get_stackoverflow_people_reached(url))
-    # ~215k
-    # ~750k
-    # ~1.4m
-    # ~112.5m
-    # ~40.5m
-    # ~4.7m
+    """
+    513k
+    1.1m
+    1.7m
+    148.1m
+    50.3m
+    5.5m
+    """
