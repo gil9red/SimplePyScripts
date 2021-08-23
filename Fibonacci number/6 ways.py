@@ -34,10 +34,8 @@ print()
 
 
 # Example 3: Using generators
-a, b = 0, 1
-
 def fib_generator():
-    global a, b
+    a, b = 0, 1
     while True:
         a, b = b, a + b
         yield a
