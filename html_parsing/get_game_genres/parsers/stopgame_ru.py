@@ -14,17 +14,15 @@ class StopgameRu_Parser(BaseParser):
         url = f'https://stopgame.ru/search/?s={self.game_name}&where=games&sort=name'
         root = self.send_get(url, return_html=True)
     
-        for game_block in root.select('.game-block'):
-            title = self.get_norm_text(game_block.select_one('.title'))
+        for game_block in root.select('.game-summary'):
+            title = self.get_norm_text(game_block.select_one('.caption'))
             if not self.is_found_game(title):
                 continue
-    
-            genres = [
-                self.get_norm_text(a) for a in game_block.select('.game-genre-value > a') if '?genre[]' in a['href']
-            ]
-    
+
             # Сойдет первый, совпадающий по имени, вариант
-            return genres
+            return [
+                self.get_norm_text(a) for a in game_block.select('a[href*="?genre[]"]')
+            ]
     
         self.log_info(f'Not found game {self.game_name!r}')
         return []
