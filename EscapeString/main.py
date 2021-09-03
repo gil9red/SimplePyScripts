@@ -7,6 +7,7 @@ __author__ = 'ipetrash'
 
 import time
 import traceback
+import sys
 
 try:
     from PyQt5.QtWidgets import *
@@ -23,8 +24,7 @@ except:
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
+    text = f'{ex_cls.__name__}: {ex}:\n'
     text += ''.join(traceback.format_tb(tb))
 
     print(text)
@@ -32,7 +32,6 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -48,8 +47,8 @@ class MainWindow(QWidget):
     ]
     TITLE = 'EscapeString'
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent)
 
         self.setWindowTitle(self.TITLE)
 
@@ -73,10 +72,14 @@ class MainWindow(QWidget):
 
         button_layout.addStretch()
 
+        self.cb_save_multiline = QCheckBox('Save multiline')
+        self.cb_save_multiline.setChecked(False)
+        self.cb_save_multiline.clicked.connect(self.input_text_changed)
+        button_layout.addWidget(self.cb_save_multiline)
+
         self.cb_string_literal = QCheckBox('String literal')
         self.cb_string_literal.setChecked(True)
         self.cb_string_literal.clicked.connect(self.input_text_changed)
-
         button_layout.addWidget(self.cb_string_literal)
 
         layout = QVBoxLayout()
@@ -136,6 +139,21 @@ class MainWindow(QWidget):
 
         mb.exec_()
 
+    def _escape(self, in_text: str, ignored='') -> str:
+        out_text = []
+        for char in in_text:
+            # Если char нет в словаре экранирования, или флаг экранирования для char выключен,
+            # или char среди игнорируемых
+            if char not in self.escape_char_by_checkbox \
+                    or not self.escape_char_by_checkbox[char].isChecked()\
+                    or char in ignored:
+                out_text.append(char)
+                continue
+
+            out_text.append(self.char_by_escape[char])
+
+        return ''.join(out_text)
+
     def input_text_changed(self):
         self.label_error.clear()
         self.button_detail_error.hide()
@@ -146,22 +164,25 @@ class MainWindow(QWidget):
         try:
             t = time.perf_counter()
 
-            out_text = self.text_edit_input.toPlainText()
+            in_text = self.text_edit_input.toPlainText()
 
-            new_out_text = []
+            if self.cb_save_multiline.isChecked():
+                lines = []
+                for line in in_text.splitlines():
+                    line = self._escape(line)
+                    lines.append(f'"{line}"')
 
-            for char in out_text:
-                # Если char нет в словаре экранирования или флаг экранирования для char выключен
-                if char not in self.escape_char_by_checkbox or not self.escape_char_by_checkbox[char].isChecked():
-                    new_out_text.append(char)
-                    continue
+                out_text = ' +\n'.join(lines)
 
-                new_out_text.append(self.char_by_escape[char])
-
-            out_text = ''.join(new_out_text)
+            else:
+                out_text = self._escape(in_text)
 
             if self.cb_string_literal.isChecked():
-                out_text = f'"{out_text}";'
+                if not out_text.startswith('"'):
+                    out_text += '"' + out_text
+                if not out_text.endswith('"'):
+                    out_text += '"'
+                out_text += ';'
 
             self.text_edit_output.setPlainText(out_text)
 
