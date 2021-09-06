@@ -29,11 +29,11 @@ while True:
         break
 
     else:
-        print('Неправильный формат числа: "{}"\n'.format(num))
+        print(f'Неправильный формат числа: "{num}"\n')
 
 
 trying = N // 10
-print('Количество попыток: {}\n'.format(trying))
+print(f'Количество попыток: {trying}\n')
 
 hidden_num = random.randint(1, N)
 print('Я загадал число "?"\n')
@@ -47,7 +47,7 @@ while True:
         continue
 
     if not num.isdecimal():
-        print('Неправильный формат числа: "{}"\n'.format(num))
+        print(f'Неправильный формат числа: "{num}"\n')
         continue
 
     num = int(num)
@@ -60,15 +60,15 @@ while True:
         break
 
     elif num > hidden_num:
-        print('Неа, "?" < "{}"'.format(num))
+        print(f'Неа, "?" < "{num}"')
 
     else:
-        print('Неа, "?" > "{}"'.format(num))
+        print(f'Неа, "?" > "{num}"')
 
     trying -= 1
 
     if trying == 0:
-        print('Закончились попытки. Проирыш!\nЗагаданное число: ' + hidden_num)
+        print(f'Закончились попытки. Проирыш!\nЗагаданное число: {hidden_num}')
         break
 
-    print('Осталось попыток: {}\n'.format(trying))
+    print(f'Осталось попыток: {trying}\n')
