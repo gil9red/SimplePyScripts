@@ -35,9 +35,10 @@ for game in game_names:
             'text': time_obj.text,
             'seconds': time_obj.seconds,
         }
-        changed = True
     else:
         cache[game] = None
+
+    changed = True
 
     time.sleep(1)
 
