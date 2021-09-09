@@ -225,7 +225,7 @@ SETTINGS = {
     },
     'doc': {
         'base': '__simple_base',
-        'path': 'C:/Program Files (x86)/DocFetcher/DocFetcher-8192_64-bit-Java.exe',
+        'path': 'C:/Program Files (x86)/DocFetcher/DocFetcher.exe',
     },
     'specifications': {
         'base': '__simple_base',
