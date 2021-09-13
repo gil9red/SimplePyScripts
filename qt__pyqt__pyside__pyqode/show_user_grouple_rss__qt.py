@@ -4,13 +4,18 @@
 __author__ = 'ipetrash'
 
 
+import traceback
+import sys
+
+import feedparser
+import requests
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
+    text = f'{ex_cls.__name__}: {ex}:\n'
     text += ''.join(traceback.format_tb(tb))
 
     print(text)
@@ -18,15 +23,15 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
 def get_feeds_by_manga_chapters(url_rss: str) -> list:
-    import requests
-    rss_text = requests.get(url_rss).text
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0',
+    }
 
-    import feedparser
+    rss_text = requests.get(url_rss, headers=headers).text
     feed = feedparser.parse(rss_text)
 
     return [(entry.title, entry.link) for entry in feed.entries]
@@ -81,7 +86,7 @@ class MainWindow(QMainWindow):
 
     def _on_line_edit_id_user_text_changed(self, text):
         id_user = text.strip()
-        self.line_edit_rss_user.setText('https://grouple.co/user/rss/{}?filter='.format(id_user))
+        self.line_edit_rss_user.setText(f'https://grouple.co/user/rss/{id_user}?filter=')
 
     def _start(self):
         self.list_widget_feeds.clear()
