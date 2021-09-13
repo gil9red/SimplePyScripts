@@ -41,7 +41,7 @@ def get_plaintext(element: Tag) -> str:
 
 
 URL_BASE = 'https://bash.im'
-USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'
 
 session = requests.session()
 session.headers['User-Agent'] = USER_AGENT
