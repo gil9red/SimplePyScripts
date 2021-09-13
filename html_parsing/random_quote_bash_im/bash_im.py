@@ -53,7 +53,7 @@ class Quote:
     text: str
     date: DT.date
     rating: int
-    comics_url: List[str] = field(default_factory=list)
+    comics_urls: List[str] = field(default_factory=list)
 
     @property
     def id(self) -> int:
@@ -76,7 +76,7 @@ class Quote:
 
         files = []
 
-        for url in self.comics_url:
+        for url in self.comics_urls:
             try:
                 dir_name.mkdir(parents=True, exist_ok=True)
 
@@ -128,10 +128,10 @@ class Quote:
         else:
             quote_el = url__id__el
 
-        comics_url = []
+        comics_urls = []
         strips_el = quote_el.select_one('.quote__strips')
         if strips_el:
-            comics_url += [
+            comics_urls += [
                 urljoin(URL_BASE, a['href']) for a in strips_el.select('.quote__strips_link')
             ]
 
@@ -157,12 +157,12 @@ class Quote:
         day, month, year = map(int, m.groups())
         date = DT.date(year, month, day)
 
-        return Quote(url, quote_text, date, rating, comics_url)
+        return Quote(url, quote_text, date, rating, comics_urls)
 
     def __str__(self):
         return f'{self.__class__.__name__}(id={self.id}, url={self.url}, ' \
                f'text({len(self.text)})={shorten(self.text)!r}, ' \
-               f'date={self.date_str}, rating={self.rating}, comics_url={self.comics_url})'
+               f'date={self.date_str}, rating={self.rating}, comics_urls={self.comics_urls})'
 
 
 def get_random_quotes(logger=None) -> List[Quote]:
@@ -242,16 +242,16 @@ if __name__ == '__main__':
     print()
 
     print(Quote.parse_from('https://bash.im/quote/414617'))
-    # Quote(id=414617, url=https://bash.im/quote/414617, text(96)='zvizda: диета достигла той упо...', date=07.12.2011, rating=11843, comics_url=['https://bash.im/strip/20190828', 'https://bash.im/strip/20200408'])
+    # Quote(id=414617, url=https://bash.im/quote/414617, text(96)='zvizda: диета достигла той упо...', date=07.12.2011, rating=11843, comics_urls=['https://bash.im/strip/20190828', 'https://bash.im/strip/20200408'])
 
     print(Quote.parse_from(414617))
-    # Quote(id=414617, url=https://bash.im/quote/414617, text(96)='zvizda: диета достигла той упо...', date=07.12.2011, rating=11849, comics_url=['https://bash.im/strip/20190828', 'https://bash.im/strip/20200408'])
+    # Quote(id=414617, url=https://bash.im/quote/414617, text(96)='zvizda: диета достигла той упо...', date=07.12.2011, rating=11849, comics_urls=['https://bash.im/strip/20190828', 'https://bash.im/strip/20200408'])
 
     print(Quote.parse_from('https://bash.im/quote/454588'))
-    # Quote(id=454588, url=https://bash.im/quote/454588, text(97)='- К человеку с ножом обращаютс...', date=20.02.2019, rating=1351, comics_url=[])
+    # Quote(id=454588, url=https://bash.im/quote/454588, text(97)='- К человеку с ножом обращаютс...', date=20.02.2019, rating=1351, comics_urls=[])
 
     print(Quote.parse_from('https://bash.im/quote/443711'))
-    # Quote(id=443711, url=https://bash.im/quote/443711, text(402)='Звонит щас абонент, говорит ин...', date=28.02.2017, rating=5410, comics_url=[])
+    # Quote(id=443711, url=https://bash.im/quote/443711, text(402)='Звонит щас абонент, говорит ин...', date=28.02.2017, rating=5410, comics_urls=[])
 
     print()
 
@@ -264,14 +264,14 @@ if __name__ == '__main__':
         # print('\n' + '-' * 100 + '\n')
     """
     Quotes(25):
-      1. Quote(id=402770, url=https://bash.im/quote/402770, text(224)='Владивосток. Январь.\nНочь посл...', date=08.03.2009, rating=26693, comics_url=[])
-      2. Quote(id=411254, url=https://bash.im/quote/411254, text(159)='marikus: :(...\nazon: чё рожа к...', date=23.05.2011, rating=8145, comics_url=[])
-      3. Quote(id=439536, url=https://bash.im/quote/439536, text(179)='<Faumi> Guest42, мне как-то ка...', date=31.05.2016, rating=3950, comics_url=[])
+      1. Quote(id=402770, url=https://bash.im/quote/402770, text(224)='Владивосток. Январь.\nНочь посл...', date=08.03.2009, rating=26693, comics_urls=[])
+      2. Quote(id=411254, url=https://bash.im/quote/411254, text(159)='marikus: :(...\nazon: чё рожа к...', date=23.05.2011, rating=8145, comics_urls=[])
+      3. Quote(id=439536, url=https://bash.im/quote/439536, text(179)='<Faumi> Guest42, мне как-то ка...', date=31.05.2016, rating=3950, comics_urls=[])
       ...
-     22. Quote(id=397851, url=https://bash.im/quote/397851, text(193)='~lotos~:Ржунимагу, стою в мага...', date=15.07.2008, rating=21320, comics_url=['https://bash.im/strip/20081022'])
-     23. Quote(id=217468, url=https://bash.im/quote/217468, text(687)='*****:\nНастроил в квартире сет...', date=13.05.2007, rating=5847, comics_url=[])
-     24. Quote(id=404924, url=https://bash.im/quote/404924, text(279)='Воланд: Дорогая Лиза, я понима...', date=30.10.2009, rating=8788, comics_url=[])
-     25. Quote(id=417637, url=https://bash.im/quote/417637, text(166)='xxx: Блин. Нормальные люди, ко...', date=26.06.2012, rating=7810, comics_url=[])
+     22. Quote(id=397851, url=https://bash.im/quote/397851, text(193)='~lotos~:Ржунимагу, стою в мага...', date=15.07.2008, rating=21320, comics_urls=['https://bash.im/strip/20081022'])
+     23. Quote(id=217468, url=https://bash.im/quote/217468, text(687)='*****:\nНастроил в квартире сет...', date=13.05.2007, rating=5847, comics_urls=[])
+     24. Quote(id=404924, url=https://bash.im/quote/404924, text(279)='Воланд: Дорогая Лиза, я понима...', date=30.10.2009, rating=8788, comics_urls=[])
+     25. Quote(id=417637, url=https://bash.im/quote/417637, text(166)='xxx: Блин. Нормальные люди, ко...', date=26.06.2012, rating=7810, comics_urls=[])
     """
     print()
 
