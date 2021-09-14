@@ -238,7 +238,8 @@ def get_total_pages() -> int:
 
 
 if __name__ == '__main__':
-    print('Total pages:', get_total_pages())
+    total_pages = get_total_pages()
+    print('Total pages:', total_pages)
     print()
 
     print(Quote.parse_from('https://bash.im/quote/414617'))
@@ -275,8 +276,13 @@ if __name__ == '__main__':
     """
     print()
 
-    quotes = get_main_page_quotes()
-    print(f'Main page quotes ({len(quotes)}), first #{quotes[0].id}, last #{quotes[-1].id}')
+    quotes_main = get_main_page_quotes()
+    print(f'Main page quotes ({len(quotes_main)}), first #{quotes_main[0].id}, last #{quotes_main[-1].id}')
+
+    quotes_first_page = get_page_quotes(page=total_pages)
+    print(f'Main page quotes v2 ({len(quotes_first_page)}), first #{quotes_first_page[0].id}, last #{quotes_first_page[-1].id}')
+    assert quotes_main[0].id == quotes_first_page[0].id
+    assert quotes_main[-1].id == quotes_first_page[-1].id
 
     page = 100
     quotes = get_page_quotes(page=page)
