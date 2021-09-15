@@ -23,39 +23,35 @@ except:
 DIR_GAMES = Path(os.path.expanduser(r'~\Desktop\Пройти'))
 game_names = [p.stem for p in DIR_GAMES.glob('*.lnk')]
 
+games = []
 changed = False
 for game in game_names:
-    if game in cache:
-        continue
+    if game not in cache:
+        data = find(game)
+        if data:
+            time_obj = data['Основной сюжет']
+            cache[game] = {
+                'text': time_obj.text,
+                'seconds': time_obj.seconds,
+            }
+        else:
+            cache[game] = None
 
-    data = find(game)
-    if data:
-        time_obj = data['Основной сюжет']
-        cache[game] = {
-            'text': time_obj.text,
-            'seconds': time_obj.seconds,
-        }
-    else:
-        cache[game] = None
+        changed = True
+        time.sleep(1)
 
-    changed = True
-
-    time.sleep(1)
+    time_obj = cache[game]
+    if time_obj:
+        games.append((game, time_obj['text'], time_obj['seconds']))
 
 if changed:
     json.dump(cache, open(DIR_CACHE, 'w', encoding='utf-8'), indent=4, ensure_ascii=False)
 
-items = [
-    (game, time_obj['text'], time_obj['seconds'])
-    for game, time_obj in cache.items()
-    if time_obj
-]
-
 # Сортировка по возрастанию времени прохождения
-items.sort(key=lambda x: x[2])
+games.sort(key=lambda x: x[2])
 
 print('Первые 10 игр с минимум времени прохождения:')
-for i, (game, time_text, _) in enumerate(items[:10], 1):
+for i, (game, time_text, _) in enumerate(games[:10], 1):
     print(f'{i:2}. {game!r}: {time_text}')
 """
 Первые 10 игр с минимум времени прохождения:
