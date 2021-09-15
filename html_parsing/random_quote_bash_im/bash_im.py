@@ -309,8 +309,8 @@ def parser_health_check() -> Optional[str]:
 
 
 if __name__ == '__main__':
-    result = parser_health_check()
-    assert not result, f'Обнаружена проблема: {result!r}'
+    error_text = parser_health_check()
+    assert not error_text, f'Обнаружена проблема: {error_text!r}'
 
     total_pages = get_total_pages()
     print('Total pages:', total_pages)
