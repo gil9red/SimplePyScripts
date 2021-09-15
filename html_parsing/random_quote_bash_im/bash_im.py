@@ -5,15 +5,17 @@ __author__ = 'ipetrash'
 
 
 import datetime as DT
+import traceback
+import re
+import shutil
+
 from dataclasses import dataclass, field
+from pathlib import Path
 from urllib.parse import urljoin
 from typing import List, Union, Optional
-import traceback
-from pathlib import Path
-import re
 
-from bs4 import BeautifulSoup, Tag
 import requests
+from bs4 import BeautifulSoup, Tag
 
 
 def parse(obj) -> BeautifulSoup:
@@ -39,6 +41,8 @@ def get_plaintext(element: Tag) -> str:
             items.append('\n')
     return ''.join(items).strip()
 
+
+DIR = Path(__file__).resolve().parent
 
 URL_BASE = 'https://bash.im'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'
@@ -72,7 +76,7 @@ class Quote:
             dir_name = Path(dir_name)
 
         if dir_name is None:
-            dir_name = Path(f'comics')
+            dir_name = DIR / 'comics'
 
         files = []
 
@@ -87,6 +91,7 @@ class Quote:
                 if not file_name.exists():
                     # Страница комикса
                     rs = session.get(url)
+                    rs.raise_for_status()
                     root = parse(rs.content)
 
                     img_el = root.select_one('.quote__img')
@@ -95,6 +100,7 @@ class Quote:
 
                     # Картинка комикса
                     rs = session.get(url_img)
+                    rs.raise_for_status()
                     file_name.write_bytes(rs.content)
 
                 files.append(str(file_name.resolve()))
@@ -111,15 +117,16 @@ class Quote:
     @staticmethod
     def parse_from(url__id__el: Union[str, int, Tag]) -> Optional['Quote']:
         if isinstance(url__id__el, int):
-            url__id__el = 'https://bash.im/quote/' + str(url__id__el)
+            url__id__el = f'{URL_BASE}/quote/{url__id__el}'
 
         if isinstance(url__id__el, str):
             url = url__id__el
 
-            rs = requests.get(url, headers={'User-Agent': USER_AGENT})
+            rs = session.get(url)
+            rs.raise_for_status()
 
             # Если был редирект на главную страницу, значит нет цитаты с указанным id
-            if rs.url.rstrip('/') == 'https://bash.im':
+            if rs.url.rstrip('/') == URL_BASE:
                 return
 
             root = parse(rs.content)
@@ -166,11 +173,12 @@ class Quote:
 
 
 def get_random_quotes(logger=None) -> List[Quote]:
-    url = 'https://bash.im/random'
+    url = f'{URL_BASE}/random'
     quotes = []
 
     try:
         rs = session.get(url)
+        rs.raise_for_status()
         root = parse(rs.content)
 
         for quote_el in root.select('article.quote'):
@@ -203,6 +211,7 @@ def get_page_quotes(page=None, logger=None) -> List[Quote]:
 
     try:
         rs = session.get(url)
+        rs.raise_for_status()
         root = parse(rs.content)
 
         for quote_el in root.select('article.quote'):
@@ -232,12 +241,77 @@ def get_main_page_quotes(logger=None) -> List[Quote]:
 
 def get_total_pages() -> int:
     rs = session.get(URL_BASE)
+    rs.raise_for_status()
     root = parse(rs.content)
 
     return int(root.select_one('.pager__input')['max'])
 
 
+def parser_health_check() -> Optional[str]:
+    """
+    Функция проверяет работу парсера.
+    Если функция вернет None, значит проблем нет, иначе вернется строка с описанием проблемы.
+    """
+
+    def _test_quote(quote: Quote, expected_id: int):
+        assert quote, f'Цитата с #{expected_id} должна существовать!'
+        assert quote.id == expected_id, f'Id цитаты #{quote.id} не совпадает с ожидаемым #{expected_id}!'
+
+        assert quote.url, f'Поле url цитаты #{expected_id} должно быть заполнено!'
+        assert isinstance(quote.url, str), f'Поле url цитаты #{expected_id} должно иметь тип str!'
+
+        assert quote.text, f'Поле text цитаты #{expected_id} должно быть заполнено!'
+        assert isinstance(quote.text, str), f'Поле text цитаты #{expected_id} должно иметь тип str!'
+
+        assert quote.date, f'Поле date цитаты #{expected_id} должно быть заполнено!'
+        assert isinstance(quote.date, DT.date), f'Поле date цитаты #{expected_id} должно иметь тип date!'
+
+        assert quote.rating, f'Поле rating цитаты #{expected_id} должно быть заполнено!'
+        assert isinstance(quote.rating, int), f'Поле rating цитаты #{expected_id} должно иметь тип int!'
+
+        assert quote.comics_urls, f'Поле comics_urls цитаты #{expected_id} должно быть заполнено!'
+
+        # Скачаем комиксы
+        dir_comics = DIR / '_test__comics'
+        files = quote.download_comics(dir_comics)
+
+        assert files, f'Не найдены файлы комиксов цитаты #{expected_id}!'
+        assert len(files) == len(quote.comics_urls), \
+            f'Количество файлов комиксов (={len(files)}) не совпадает с количеством ссылок ' \
+            f'на комиксы (={len(quote.comics_urls)}) в цитате #{expected_id}!'
+
+        # Проверим размеры файлов комиксов
+        for file in files:
+            file_size = Path(file).stat().st_size
+            assert file_size > 0, f'Файл комикса {file!r} в цитате #{expected_id} пустой!'
+
+        # Удаляем папку комиксов
+        shutil.rmtree(dir_comics)
+
+    try:
+        # Цитата с комиксами
+        quote_id = 414617
+
+        quote = Quote.parse_from(quote_id)
+        _test_quote(quote, quote_id)
+
+        quote = Quote.parse_from(f'https://bash.im/quote/{quote_id}')
+        _test_quote(quote, quote_id)
+
+    except requests.exceptions.HTTPError as e:
+        return f'Сетевая проблема: {str(e)!r}'
+
+    except AssertionError as e:
+        return f'Обнаружена проблема: {str(e)!r}'
+
+    except Exception as e:
+        return f'Неизвестная проблема: {str(e)!r}'
+
+
 if __name__ == '__main__':
+    result = parser_health_check()
+    assert not result, f'Обнаружена проблема: {result!r}'
+
     total_pages = get_total_pages()
     print('Total pages:', total_pages)
     print()
