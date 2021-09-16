@@ -247,7 +247,7 @@ def get_total_pages() -> int:
     return int(root.select_one('.pager__input')['max'])
 
 
-def parser_health_check() -> Tuple[Optional[str], Optional[Exception]]:
+def parser_health_check(raise_error=False) -> Optional[str]:
     """
     Функция проверяет работу парсера.
     Если функция вернет None, значит проблем нет, иначе вернется строка с описанием проблемы.
@@ -299,19 +299,23 @@ def parser_health_check() -> Tuple[Optional[str], Optional[Exception]]:
         _test_quote(quote, quote_id)
 
     except requests.exceptions.HTTPError as e:
-        return f'Сетевая проблема: {str(e)!r}', e
+        if raise_error:
+            raise e
+        return f'Сетевая проблема: {str(e)!r}'
 
     except AssertionError as e:
-        return f'Обнаружена проблема: {str(e)!r}', e
+        if raise_error:
+            raise e
+        return f'Обнаружена проблема: {str(e)!r}'
 
     except Exception as e:
-        return f'Неизвестная проблема: {str(e)!r}', e
-
-    return None, None
+        if raise_error:
+            raise e
+        return f'Неизвестная проблема: {str(e)!r}'
 
 
 if __name__ == '__main__':
-    error_text, _ = parser_health_check()
+    error_text = parser_health_check()
     assert not error_text, f'Обнаружена проблема: {error_text!r}'
 
     total_pages = get_total_pages()
