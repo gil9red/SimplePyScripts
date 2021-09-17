@@ -16,7 +16,7 @@ def get_stackoverflow_people_reached(url: str) -> Optional[str]:
     rs.raise_for_status()
 
     root = BeautifulSoup(rs.content, 'html.parser')
-    profile_avatar_el = root.select_one('#user-card .profile-avatar')
+    profile_avatar_el = root.select_one('#main-content .s-card')
     if not profile_avatar_el:
         return
 
@@ -31,7 +31,7 @@ def get_stackoverflow_people_reached(url: str) -> Optional[str]:
 if __name__ == '__main__':
     url = 'https://ru.stackoverflow.com/users/201445/gil9red'
     print(get_stackoverflow_people_reached(url))
-    # 1.4m
+    # 1.5m
 
     url = 'https://ru.stackoverflow.com'
     print(get_stackoverflow_people_reached(url))
@@ -50,10 +50,10 @@ if __name__ == '__main__':
     for url in urls:
         print(get_stackoverflow_people_reached(url))
     """
-    513k
+    525k
     1.1m
     1.7m
-    148.1m
-    50.3m
+    149.5m
+    50.8m
     5.5m
     """
