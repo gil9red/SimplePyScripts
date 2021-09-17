@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 import sys
+import time
 
 from pathlib import Path
 from typing import Union
@@ -26,8 +27,22 @@ def add_notify(name: str, message: str, type: Union[TypeEnum, str] = TypeEnum.IN
         'type': type.value,
     }
 
-    rs = requests.post(URL, json=data)
-    rs.raise_for_status()
+    # Попытки
+    attempts_timeouts = [1, 5, 10, 30, 60]
+
+    while True:
+        try:
+            rs = requests.post(URL, json=data)
+            rs.raise_for_status()
+            return
+
+        except Exception as e:
+            # Если закончились попытки
+            if not attempts_timeouts:
+                raise e
+
+            timeout = attempts_timeouts.pop(0)
+            time.sleep(timeout)
 
 
 if __name__ == '__main__':
