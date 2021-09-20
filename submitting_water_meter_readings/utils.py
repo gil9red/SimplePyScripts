@@ -67,10 +67,10 @@ def open_web_page_water_meter(value_cold: int, value_hot: int) -> (bool, str):
     if '/Account/LogOn' in driver.current_url:
         log.info('Go auth')
 
-        input_login = driver.find_element_by_id('m_phone')
+        input_login = driver.find_element_by_id('m_phone_log')
         input_login.send_keys(LOGIN)
 
-        input_password = driver.find_element_by_id('m_password')
+        input_password = driver.find_element_by_id('m_password_pas')
         input_password.send_keys(PASSWORD)
 
         while '/Account/LogOn' in driver.current_url:
