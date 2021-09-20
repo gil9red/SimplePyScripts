@@ -36,16 +36,16 @@ def get_current_user_startup_path() -> Tuple[Path, Path]:
 
 
 if __name__ == '__main__':
-    abs_path_startup, abs_path_startup_disabled = get_common_startup_path()
-    print(abs_path_startup.exists(), abs_path_startup)
-    print(abs_path_startup_disabled.exists(), abs_path_startup_disabled)
+    abs_path_common_startup, abs_path_common_startup_disabled = get_common_startup_path()
+    print(abs_path_common_startup.exists(), abs_path_common_startup)
+    print(abs_path_common_startup_disabled.exists(), abs_path_common_startup_disabled)
     # True C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
     # False C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\SystemExplorerDisabled
 
     print()
 
-    abs_path_startup, abs_path_startup_disabled = get_current_user_startup_path()
-    print(abs_path_startup.exists(), abs_path_startup)
-    print(abs_path_startup_disabled.exists(), abs_path_startup_disabled)
+    abs_path_current_user_startup, abs_path_current_user_startup_disabled = get_current_user_startup_path()
+    print(abs_path_current_user_startup.exists(), abs_path_current_user_startup)
+    print(abs_path_current_user_startup_disabled.exists(), abs_path_current_user_startup_disabled)
     # True C:\Users\IPetrash\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
     # True C:\Users\IPetrash\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\SystemExplorerDisabled
