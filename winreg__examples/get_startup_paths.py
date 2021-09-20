@@ -8,11 +8,10 @@ import os
 
 from pathlib import Path
 from typing import Tuple
-from winreg import HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, ConnectRegistry, OpenKey, QueryValueEx
+from winreg import HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, OpenKey, QueryValueEx
 
 
 def get_registry_path(registry_key: int, key: str, name: str) -> Path:
-    registry_key = ConnectRegistry(None, registry_key)
     key = OpenKey(registry_key, key)
     value = QueryValueEx(key, name)[0]
     return Path(os.path.expandvars(value))
