@@ -5,23 +5,37 @@ __author__ = 'ipetrash'
 
 
 import os
+import winreg
 
 from fnmatch import fnmatch
 from pathlib import Path
-from typing import Tuple, List
-from winreg import HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, OpenKey, QueryValueEx
+from typing import Tuple, List, Optional
+from winreg import OpenKey, QueryValueEx, HKEYType
 
 
-def get_registry_path(registry_key: int, key: str, name: str) -> Path:
-    key = OpenKey(registry_key, key)
+def get_key(path: str) -> Optional[HKEYType]:
+    # Example:
+    #     path = r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
+    #     registry_key_name = "HKEY_LOCAL_MACHINE"
+    #     relative_path = r"Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
+    registry_key_name, relative_path = path.split('\\', maxsplit=1)
+    registry_key = getattr(winreg, registry_key_name)
+
+    try:
+        return OpenKey(registry_key, relative_path)
+    except:
+        return
+
+
+def get_registry_path(path: str, name: str) -> Path:
+    key = get_key(path)
     value = QueryValueEx(key, name)[0]
     return Path(os.path.expandvars(value))
 
 
 def get_common_startup_path() -> Tuple[Path, Path]:
     abs_path_startup = get_registry_path(
-        HKEY_LOCAL_MACHINE,
-        r"Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders",
+        r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders",
         'Common Startup'
     )
     return abs_path_startup, abs_path_startup / 'SystemExplorerDisabled'
@@ -29,8 +43,7 @@ def get_common_startup_path() -> Tuple[Path, Path]:
 
 def get_current_user_startup_path() -> Tuple[Path, Path]:
     abs_path_startup = get_registry_path(
-        HKEY_CURRENT_USER,
-        r"Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders",
+        r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders",
         'Startup'
     )
     return abs_path_startup, abs_path_startup / 'SystemExplorerDisabled'
@@ -59,6 +72,9 @@ def get_current_user_startup_files() -> Tuple[List[Path], List[Path]]:
 
 
 if __name__ == '__main__':
+    assert get_key(r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders")
+    assert get_key(r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders")
+
     abs_path_common_startup, abs_path_common_startup_disabled = get_common_startup_path()
     print(f'Exists={abs_path_common_startup.exists()} {abs_path_common_startup}')
     print(f'Exists={abs_path_common_startup_disabled.exists()} {abs_path_common_startup_disabled}')
