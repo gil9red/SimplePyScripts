@@ -40,11 +40,10 @@ def get_files(path: Path, ignored_by_mask=('*.ini',)) -> List[Path]:
     items = []
     if path.exists():
         for file in path.iterdir():
-            if any(fnmatch(file.name, mask) for mask in ignored_by_mask):
+            if not file.is_file() or any(fnmatch(file.name, mask) for mask in ignored_by_mask):
                 continue
 
-            if file.is_file():
-                items.append(file)
+            items.append(file)
 
     return items
 
@@ -61,10 +60,10 @@ def get_current_user_startup_files() -> Tuple[List[Path], List[Path]]:
 
 if __name__ == '__main__':
     abs_path_common_startup, abs_path_common_startup_disabled = get_common_startup_path()
-    print(abs_path_common_startup.exists(), abs_path_common_startup)
-    print(abs_path_common_startup_disabled.exists(), abs_path_common_startup_disabled)
-    # True C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
-    # False C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\SystemExplorerDisabled
+    print(f'Exists={abs_path_common_startup.exists()} {abs_path_common_startup}')
+    print(f'Exists={abs_path_common_startup_disabled.exists()} {abs_path_common_startup_disabled}')
+    # Exists=True C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
+    # Exists=False C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\SystemExplorerDisabled
 
     common_startup_files, common_startup_disabled_files = get_common_startup_files()
     print(
@@ -79,10 +78,10 @@ if __name__ == '__main__':
     print()
 
     abs_path_current_user_startup, abs_path_current_user_startup_disabled = get_current_user_startup_path()
-    print(abs_path_current_user_startup.exists(), abs_path_current_user_startup)
-    print(abs_path_current_user_startup_disabled.exists(), abs_path_current_user_startup_disabled)
-    # True C:\Users\IPetrash\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
-    # True C:\Users\IPetrash\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\SystemExplorerDisabled
+    print(f'Exists={abs_path_current_user_startup.exists()} {abs_path_current_user_startup}')
+    print(f'Exists={abs_path_current_user_startup_disabled.exists()} {abs_path_current_user_startup_disabled}')
+    # Exists=True C:\Users\IPetrash\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+    # Exists=False C:\Users\IPetrash\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\SystemExplorerDisabled
 
     current_user_startup_files, current_user_startup_disabled_files = get_current_user_startup_files()
     print(
