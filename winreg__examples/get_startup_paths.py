@@ -6,6 +6,7 @@ __author__ = 'ipetrash'
 
 import os
 
+from fnmatch import fnmatch
 from pathlib import Path
 from typing import Tuple, List
 from winreg import HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, OpenKey, QueryValueEx
@@ -35,11 +36,14 @@ def get_current_user_startup_path() -> Tuple[Path, Path]:
     return abs_path_startup, abs_path_startup / 'SystemExplorerDisabled'
 
 
-def get_files(path: Path, ignored=('desktop.ini',)) -> List[Path]:
+def get_files(path: Path, ignored_by_mask=('*.ini',)) -> List[Path]:
     items = []
     if path.exists():
         for file in path.iterdir():
-            if file.is_file() and file.name not in ignored:
+            if any(fnmatch(file.name, mask) for mask in ignored_by_mask):
+                continue
+
+            if file.is_file():
                 items.append(file)
 
     return items
