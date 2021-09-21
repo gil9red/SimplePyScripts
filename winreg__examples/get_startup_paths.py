@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 import os
 
 from pathlib import Path
-from typing import Tuple
+from typing import Tuple, List
 from winreg import HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, OpenKey, QueryValueEx
 
 
@@ -35,12 +35,42 @@ def get_current_user_startup_path() -> Tuple[Path, Path]:
     return abs_path_startup, abs_path_startup / 'SystemExplorerDisabled'
 
 
+def get_files(path: Path, ignored=('desktop.ini',)) -> List[Path]:
+    items = []
+    if path.exists():
+        for file in path.iterdir():
+            if file.is_file() and file.name not in ignored:
+                items.append(file)
+
+    return items
+
+
+def get_common_startup_files() -> Tuple[List[Path], List[Path]]:
+    path_startup, path_startup_disabled = get_common_startup_path()
+    return get_files(path_startup), get_files(path_startup_disabled)
+
+
+def get_current_user_startup_files() -> Tuple[List[Path], List[Path]]:
+    path_startup, path_startup_disabled = get_current_user_startup_path()
+    return get_files(path_startup), get_files(path_startup_disabled)
+
+
 if __name__ == '__main__':
     abs_path_common_startup, abs_path_common_startup_disabled = get_common_startup_path()
     print(abs_path_common_startup.exists(), abs_path_common_startup)
     print(abs_path_common_startup_disabled.exists(), abs_path_common_startup_disabled)
     # True C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
     # False C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\SystemExplorerDisabled
+
+    common_startup_files, common_startup_disabled_files = get_common_startup_files()
+    print(
+        f'common_startup_files ({len(common_startup_files)}):',
+        [file.name for file in common_startup_files]
+    )
+    print(
+        f'common_startup_disabled_files ({len(common_startup_disabled_files)}):',
+        [file.name for file in common_startup_disabled_files]
+    )
 
     print()
 
@@ -49,3 +79,13 @@ if __name__ == '__main__':
     print(abs_path_current_user_startup_disabled.exists(), abs_path_current_user_startup_disabled)
     # True C:\Users\IPetrash\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
     # True C:\Users\IPetrash\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\SystemExplorerDisabled
+
+    current_user_startup_files, current_user_startup_disabled_files = get_current_user_startup_files()
+    print(
+        f'current_user_startup_files ({len(current_user_startup_files)}):',
+        [file.name for file in current_user_startup_files]
+    )
+    print(
+        f'current_user_startup_disabled_files ({len(current_user_startup_disabled_files)}):',
+        [file.name for file in current_user_startup_disabled_files]
+    )
