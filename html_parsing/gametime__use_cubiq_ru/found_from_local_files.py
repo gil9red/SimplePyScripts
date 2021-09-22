@@ -34,8 +34,11 @@ for game in game_names:
                 'text': time_obj.text,
                 'seconds': time_obj.seconds,
             }
+            print(f'{game}: {time_obj.text}')
+
         else:
             cache[game] = None
+            print(f'{game}: <not found>')
 
         changed = True
         time.sleep(1)
@@ -46,6 +49,7 @@ for game in game_names:
 
 if changed:
     json.dump(cache, open(DIR_CACHE, 'w', encoding='utf-8'), indent=4, ensure_ascii=False)
+    print()
 
 # Сортировка по возрастанию времени прохождения
 games.sort(key=lambda x: x[2])
