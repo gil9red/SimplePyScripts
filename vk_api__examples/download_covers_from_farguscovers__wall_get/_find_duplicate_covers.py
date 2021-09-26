@@ -9,7 +9,7 @@ import hashlib
 from collections import defaultdict
 from pathlib import Path
 
-from main import DIR, FILE_NAME_DUMP, DIR_IMAGES
+from main import DIR_IMAGES
 
 
 def get_file_digest(file_name: Path) -> str:
