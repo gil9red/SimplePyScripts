@@ -46,18 +46,18 @@ PATHS = [
 
 
 @dataclass
-class RegistryValue:
+class Entry:
     name: str
     value: str
     type: int
 
 
-def get_run_paths(expand_vars=True) -> Dict[str, List[RegistryValue]]:
-    path_by_values = dict()
+def get_run_paths(expand_vars=True) -> Dict[str, List[Entry]]:
+    path_by_entries = dict()
 
     for path in PATHS:
-        if path not in path_by_values:
-            path_by_values[path] = []
+        if path not in path_by_entries:
+            path_by_entries[path] = []
 
         key = get_key(path)
         if not key:
@@ -70,20 +70,20 @@ def get_run_paths(expand_vars=True) -> Dict[str, List[RegistryValue]]:
             if expand_vars:
                 value = os.path.expandvars(value)
 
-            path_by_values[path].append(
-                RegistryValue(name, value, type_value)
+            path_by_entries[path].append(
+                Entry(name, value, type_value)
             )
 
-    return path_by_values
+    return path_by_entries
 
 
 if __name__ == '__main__':
     run_paths = get_run_paths()
-    for path, values in run_paths.items():
+    for path, entries in run_paths.items():
         print(path)
 
-        for i, value in enumerate(values, 1):
-            print(f'    {i}. {value.name}: {value.value}')
+        for i, entry in enumerate(entries, 1):
+            print(f'    {i}. {entry.name}: {entry.value}')
 
         print()
     r"""
