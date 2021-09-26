@@ -9,7 +9,6 @@ import sys
 import re
 
 from collections import defaultdict
-from pathlib import Path
 
 from main import DIR, FILE_NAME_DUMP, DIR_IMAGES
 
