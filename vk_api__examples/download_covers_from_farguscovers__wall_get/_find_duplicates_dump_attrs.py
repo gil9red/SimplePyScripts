@@ -10,7 +10,7 @@ import re
 
 from collections import defaultdict
 
-from main import DIR, FILE_NAME_DUMP, DIR_IMAGES
+from main import FILE_NAME_DUMP
 
 
 def clear_text(text: str) -> str:
