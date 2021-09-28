@@ -13,12 +13,21 @@ from typing import Tuple, List, Optional
 from winreg import OpenKey, QueryValueEx, HKEYType
 
 
+def expand_registry_key(key: str) -> str:
+    return {
+        'HKCU': 'HKEY_CURRENT_USER',
+        'HKLM': 'HKEY_LOCAL_MACHINE',
+    }.get(key, key)
+
+
 def get_key(path: str) -> Optional[HKEYType]:
     # Example:
     #     path = r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
     #     registry_key_name = "HKEY_LOCAL_MACHINE"
     #     relative_path = r"Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
     registry_key_name, relative_path = path.split('\\', maxsplit=1)
+    registry_key_name = expand_registry_key(registry_key_name)
+
     registry_key = getattr(winreg, registry_key_name)
 
     try:
@@ -73,7 +82,10 @@ def get_current_user_startup_files() -> Tuple[List[Path], List[Path]]:
 
 if __name__ == '__main__':
     assert get_key(r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders")
+    assert get_key(r"HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders")
+
     assert get_key(r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders")
+    assert get_key(r"HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders")
 
     abs_path_common_startup, abs_path_common_startup_disabled = get_common_startup_path()
     print(f'Exists={abs_path_common_startup.exists()} {abs_path_common_startup}')
