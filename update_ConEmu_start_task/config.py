@@ -17,6 +17,10 @@ DIR_GIST_FILES.mkdir(parents=True, exist_ok=True)
 DIR_LNKS = DIR / 'lnks'
 DIR_LNKS.mkdir(parents=True, exist_ok=True)
 
+PATH_CONEMU = Path(r'C:\Program Files (x86)\ConEmu\ConEmu.exe')
+if not PATH_CONEMU.exists():
+    raise FileNotFoundError(PATH_CONEMU)
+
 FILE_NAME_CONEMU_SETTINGS = DIR / 'conemu_settings.xml'
 
 PATTERN_NAME_TASK = 'My python {}'
