@@ -11,13 +11,15 @@ __author__ = 'ipetrash'
 from natasha import Segmenter, NewsEmbedding, NewsMorphTagger, Doc
 
 
-tt = 'Появление ООН было обусловлено целым рядом объективных факторов'
-
 segmenter = Segmenter()
 
 emb = NewsEmbedding()
 morph_tagger = NewsMorphTagger(emb)
-doc = Doc(tt)
+
+
+text = 'Появление ООН было обусловлено целым рядом объективных факторов'
+
+doc = Doc(text)
 doc.segment(segmenter)
 doc.tag_morph(morph_tagger)
 
@@ -48,4 +50,26 @@ DocToken(start=43, stop=54, text='объективных', pos='ADJ', feats=<Gen
 
 [55:63] NOUN 'факторов'
 DocToken(start=55, stop=63, text='факторов', pos='NOUN', feats=<Inan,Gen,Masc,Plur>)
+"""
+
+print('\n' + '-' * 10 + '\n')
+
+text = 'Hello World!'
+
+doc = Doc(text)
+doc.segment(segmenter)
+doc.tag_morph(morph_tagger)
+
+for token in doc.tokens:
+    print(f'[{token.start}:{token.stop}] {token.pos} {token.text!r}\n{token}\n')
+
+"""
+[0:5] X 'Hello'
+DocToken(stop=5, text='Hello', pos='X', feats=<Yes>)
+
+[6:11] X 'World'
+DocToken(start=6, stop=11, text='World', pos='X', feats=<Yes>)
+
+[11:12] PUNCT '!'
+DocToken(start=11, stop=12, text='!', pos='PUNCT')
 """
