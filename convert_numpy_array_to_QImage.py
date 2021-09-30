@@ -45,7 +45,7 @@ if __name__ == '__main__':
     img = convert_numpy_array_to_QImage(print_screen_numpy)
     print(img.size())
 
-    file_name = f"print_screen_{DT.datetime.now().strftime('%d%m%y_%H%M%S')}.png"
+    file_name = f"print_screen_{DT.datetime.now():%Y-%m-%d_%H%M%S}.png"
     print(file_name)
 
     img.save(file_name)
