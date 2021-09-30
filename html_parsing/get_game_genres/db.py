@@ -4,8 +4,11 @@
 __author__ = 'ipetrash'
 
 
-from collections import defaultdict
+import datetime as DT
 import json
+import shutil
+
+from collections import defaultdict
 from typing import Dict, List, Iterable, Optional
 from pathlib import Path
 
@@ -21,10 +24,7 @@ DB_FILE_NAME = str(Path(DB_DIR_NAME) / 'games.sqlite')
 Path(DB_DIR_NAME).mkdir(parents=True, exist_ok=True)
 
 
-def db_create_backup(backup_dir='backup', date_fmt='%d%m%y'):
-    import datetime as DT
-    import shutil
-
+def db_create_backup(backup_dir='backup', date_fmt='%Y-%m-%d'):
     backup_path = Path(backup_dir)
     backup_path.mkdir(parents=True, exist_ok=True)
 

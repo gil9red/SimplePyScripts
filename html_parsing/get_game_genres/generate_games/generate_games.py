@@ -16,13 +16,14 @@ sys.path.append('../genre_translate_file')
 from db import Dump
 from load import load
 from common_utils import get_logger
+from common import get_current_datetime_str
 
 
 log = get_logger('generate_games.txt')
 
 
 DIR = Path(__file__).parent.resolve()
-FILE_NAME_GAMES = str(DIR / 'game_by_genres.json')
+FILE_NAME_GAMES = DIR / 'game_by_genres.json'
 FILE_NAME_BACKUP = DIR / 'backup'
 
 FILE_NAME_BACKUP.mkdir(parents=True, exist_ok=True)
@@ -56,9 +57,9 @@ def do_genres_compression(genres: list) -> list:
 
 log.info('Start.')
 
-if Path(FILE_NAME_GAMES).exists():
+if FILE_NAME_GAMES.exists():
     backup_file_name = str(
-        FILE_NAME_BACKUP / (DT.datetime.today().strftime('%d%m%y-%H%M%S_') + Path(FILE_NAME_GAMES).name)
+        FILE_NAME_BACKUP / f'{get_current_datetime_str()}_{FILE_NAME_GAMES.name}'
     )
     shutil.copy(
         FILE_NAME_GAMES,

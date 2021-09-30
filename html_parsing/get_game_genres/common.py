@@ -45,7 +45,7 @@ def pretty_path(path: str) -> str:
     return str(Path(path).resolve())
 
 
-def get_current_datetime_str(fmt='%d%m%y%H%M%S') -> str:
+def get_current_datetime_str(fmt='%Y-%m-%d_%H%M%S') -> str:
     return DT.datetime.now().strftime(fmt)
 
 

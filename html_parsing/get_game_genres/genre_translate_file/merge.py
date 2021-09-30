@@ -4,7 +4,6 @@
 __author__ = 'ipetrash'
 
 
-import datetime as DT
 import json
 import shutil
 from pathlib import Path
@@ -14,6 +13,7 @@ sys.path.append('..')
 
 from load import load, FILE_NAME_GENRE_TRANSLATE
 from common_utils import get_logger
+from common import get_current_datetime_str
 
 
 # Инструкция:
@@ -32,7 +32,7 @@ log = get_logger('merge_genre_translate.txt')
 log.info('Start.')
 
 backup_file_name = (
-    FILE_NAME_BACKUP / (DT.datetime.today().strftime('%d%m%y-%H%M%S_') + Path(FILE_NAME_GENRE_TRANSLATE).name)
+    FILE_NAME_BACKUP / f'{get_current_datetime_str()}_{Path(FILE_NAME_GENRE_TRANSLATE).name}'
 )
 log.info(f'Save backup to: {backup_file_name}')
 shutil.copy(
