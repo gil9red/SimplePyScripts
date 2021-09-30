@@ -5,10 +5,11 @@ __author__ = 'ipetrash'
 
 
 import datetime as DT
-from typing import Optional
-from pathlib import Path
 import shutil
 import sys
+
+from typing import Optional
+from pathlib import Path
 
 # pip install peewee
 from peewee import *
@@ -28,7 +29,7 @@ DB_FILE_NAME = str(DB_DIR_NAME / 'database.sqlite')
 DB_DIR_NAME.mkdir(parents=True, exist_ok=True)
 
 
-def db_create_backup(backup_dir='backup', date_fmt='%d%m%y'):
+def db_create_backup(backup_dir='backup', date_fmt='%Y-%m-%d'):
     backup_path = Path(backup_dir)
     backup_path.mkdir(parents=True, exist_ok=True)
 
