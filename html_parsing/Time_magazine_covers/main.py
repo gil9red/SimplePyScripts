@@ -6,12 +6,14 @@ __author__ = 'ipetrash'
 
 import datetime as DT
 import json
-from typing import List, Union, NamedTuple
 import re
+import shutil
+import traceback
+
 from os import makedirs
 from os.path import abspath, normpath
 from urllib.request import urlretrieve
-import shutil
+from typing import List, Union, NamedTuple
 
 import requests
 
@@ -53,7 +55,7 @@ def get_covers(year: Union[int, str]) -> List[Cover]:
             raise Exception(f'Something went wrong...: status_code: {rs.status_code}'
                             f'\nUrl: {url}\nRs.Url: {rs.url}\n{rs.text}')
 
-        match = re.search('<script>Time\.bootstrap = ({.+})</script>', rs.text)
+        match = re.search(r'<script>Time\.bootstrap = ({.+})</script>', rs.text)
         if not match:
             raise Exception(f'Not found "Time.bootstrap = ...): status_code: {rs.status_code}'
                             f'\nUrl: {url}\nRs.Url: {rs.url}\n{rs.text}"')
@@ -65,15 +67,15 @@ def get_covers(year: Union[int, str]) -> List[Cover]:
                             f'\nResult: {result}\nHtml:\n{rs.text}')
 
         for vault in result['vault']:
+            cover_date = parse_date(vault['date'])
             items.append(
                 Cover(
-                    title=f"Cover_{parse_date(vault['date']):%d%m%y}",
+                    title=f"Cover_{cover_date:%Y-%m-%d}",
                     url=vault['hero']['src']['large']
                 )
             )
 
     except Exception:
-        import traceback
         print(f'[-] {traceback.format_exc()}')
 
     return items
@@ -100,10 +102,10 @@ def dump_covers(year: Union[str, int], out_dir='out', need_zip=False, remove_out
 
 
 if __name__ == '__main__':
-    YEAR = 2019
+    YEAR = DT.datetime.now().year
 
     items = get_covers(YEAR)
-    print(f'Covers ({len(items)}):')
+    print(f'Covers for {YEAR} year ({len(items)}):')
 
     for x in items:
         print(f'    {x.title}: {x.url}')
