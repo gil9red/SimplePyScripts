@@ -4,6 +4,11 @@
 __author__ = 'ipetrash'
 
 
+import pathlib
+from urllib.parse import urlparse
+from datetime import datetime
+
+
 URL = 'https://jira.compassplus.ru/sr/jira.issueviews:searchrequest-xml/24381/SearchRequest-24381.xml?tempMax=1000'
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0',
@@ -19,22 +24,17 @@ FILE_NAME_FULL = 'jira_log.xml'
 def generate_file_name(url: str) -> str:
     """
     'https://jira.foobar.ru/sr/jira.issueviews:searchrequest-xml/24381/SearchRequest-24381.xml?tempMax=1000' ->
-    'SearchRequest-24381.xml__tempMax=1000__07112017.xml'
+    'SearchRequest-24381.xml__tempMax=1000__2017-11-07.xml'
 
     :param url:
     :return:
     """
 
-    from urllib.parse import urlparse
     result = urlparse(url)
-
-    import pathlib
     path = pathlib.Path(result.path)
+    current_date_str = datetime.now().date().strftime('%Y-%m-%d')
 
-    from datetime import datetime
-    current_date_str = datetime.now().date().strftime('%d%m%Y')
-
-    return '{}__{}__{}.xml'.format(path.name, result.query, current_date_str)
+    return f'{path.name}__{result.query}__{current_date_str}.xml'
 
 
 def clear_jira_xml(xml_content: bytes) -> bytes:
