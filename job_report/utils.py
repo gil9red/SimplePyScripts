@@ -4,9 +4,10 @@
 __author__ = 'ipetrash'
 
 
+import os.path
+
 from datetime import datetime
 from collections import defaultdict
-import os.path
 from itertools import chain
 
 import requests
@@ -63,13 +64,13 @@ def get_report_context(pem_file_name):
 
 
 def get_report_persons_info(pem_file_name):
-    today = datetime.today().strftime('%d%m%y')
-    report_file_name = 'report_{}.html'.format(today)
+    today = datetime.today().strftime('%Y-%m-%d')
+    report_file_name = f'report_{today}.html'
 
     # Если кэш-файл отчета не существует, загружаем новые данные и сохраняем в кэш-файл
     if not os.path.exists(report_file_name):
         if LOGGING_DEBUG:
-            print('{} not exist'.format(report_file_name))
+            print(f'{report_file_name} not exist')
 
         context = get_report_context(pem_file_name)
 
@@ -77,7 +78,7 @@ def get_report_persons_info(pem_file_name):
             f.write(context)
     else:
         if LOGGING_DEBUG:
-            print('{} exist'.format(report_file_name))
+            print(f'{report_file_name} exist')
 
         with open(report_file_name, encoding='utf-8') as f:
             context = f.read()
