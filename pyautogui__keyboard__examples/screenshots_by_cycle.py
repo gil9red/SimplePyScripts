@@ -4,21 +4,23 @@
 __author__ = 'ipetrash'
 
 
+import datetime as DT
 import time
-from datetime import datetime
+from pathlib import Path
+
 import pyautogui
 
-DIR = 'screenshots'
 
-import os
-if not os.path.exists(DIR):
-    os.mkdir(DIR)
+DIR = Path(__file__).resolve().parent
+
+DIR_SCREENSHOTS = DIR / 'screenshots'
+DIR_SCREENSHOTS.mkdir(parents=True, exist_ok=True)
+
 
 while True:
-    file_name = DIR + '/screenshot_{}.png'.format(datetime.now().strftime('%d%m%y %H%M%S.%f'))
+    file_name = str(DIR_SCREENSHOTS / f'{DT.datetime.now():%Y-%m-%d_%H%M%S.%f}.png')
     print(file_name)
 
-    im = pyautogui.screenshot(file_name)  # save file
-    # print(im)
+    pyautogui.screenshot(file_name)  # Save file
 
     time.sleep(0.5)
