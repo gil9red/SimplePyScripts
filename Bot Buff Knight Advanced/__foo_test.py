@@ -5,12 +5,14 @@
 __author__ = 'ipetrash'
 
 
+import glob
+from timeit import default_timer as timer
+
 import cv2
 import numpy as np
-from timeit import default_timer as timer
-from datetime import datetime
 
 from main import find_rect_contours, filter_button, filter_fairy, filter_fairy_and_button
+from common import get_current_datetime_str
 
 
 def draw_rects(img, contours_rects, color=(0, 255, 0)):
@@ -33,7 +35,6 @@ ORANGE_HSV_MAX = 20, 255, 255
 FAIRY_HSV_MIN = 73, 101, 101
 FAIRY_HSV_MAX = 95, 143, 255
 
-import glob
 
 for file_name in glob.glob('screenshots__Buff Knight Advanced/*.png'):
     print(file_name)
@@ -90,7 +91,7 @@ for file_name in glob.glob('screenshots__Buff Knight Advanced/*.png'):
             continue
 
         if len(rects_fairy) > 1:
-            file_name = 'many_fairy__{}.png'.format(datetime.now().strftime('%d%m%y %H%M%S.%f'))
+            file_name = f'many_fairy__{get_current_datetime_str()}.png'
             print(file_name)
             cv2.imwrite(file_name, img_with_rect)
             continue
@@ -102,7 +103,7 @@ for file_name in glob.glob('screenshots__Buff Knight Advanced/*.png'):
 
         # Если одновременно обе кнопки
         if rects_blue and rects_orange:
-            file_name = 'many_buttons__{}.png'.format(datetime.now().strftime('%d%m%y %H%M%S.%f'))
+            file_name = f'many_buttons__{get_current_datetime_str()}.png'
             print(file_name)
             cv2.imwrite(file_name, img_with_rect)
             continue
@@ -110,9 +111,9 @@ for file_name in glob.glob('screenshots__Buff Knight Advanced/*.png'):
         if not rects_blue and not rects_orange:
             continue
 
-        print('rects_blue({}): {}'.format(len(rects_blue), rects_blue))
-        print('rects_orange({}): {}'.format(len(rects_orange), rects_orange))
-        print('rects_fairy({}): {}'.format(len(rects_fairy), rects_fairy))
+        print(f'rects_blue({len(rects_blue)}): {rects_blue}')
+        print(f'rects_orange({len(rects_orange)}): {rects_orange}')
+        print(f'rects_fairy({len(rects_fairy)}): {rects_fairy}')
 
         draw_rects(img_with_rect, rects_blue, (255, 0, 0))
         draw_rects(img_with_rect, rects_orange, (0, 0, 255))
@@ -123,7 +124,7 @@ for file_name in glob.glob('screenshots__Buff Knight Advanced/*.png'):
         cv2.putText(img_with_rect, 'fairy ' + str(rects_fairy), (10, 500 + 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
     finally:
-        print('Elapsed: {} secs'.format(timer() - t))
+        print(f'Elapsed: {timer() - t} secs')
         print()
 
         cv2.imshow('img_with_rect ' + file_name, img_with_rect)

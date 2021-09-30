@@ -31,8 +31,8 @@ def get_logger(name, file='log.txt', encoding='utf-8', log_stdout=True, log_file
     return log
 
 
-def get_current_datetime_str():
-    return datetime.now().strftime('%d%m%y %H%M%S.%f')
+def get_current_datetime_str() -> str:
+    return datetime.now().strftime('%Y-%m-%d %H%M%S.%f')
 
 
 def find_contours(image_source_hsv, hsv_min, hsv_max):

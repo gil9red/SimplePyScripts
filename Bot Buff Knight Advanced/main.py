@@ -7,18 +7,17 @@ __author__ = 'ipetrash'
 
 import threading
 import os
-from timeit import default_timer as timer
 import time
+
+from timeit import default_timer as timer
 
 # pip install opencv-python
 import cv2
 import numpy as np
 import pyautogui
+import keyboard
 
 from common import get_logger, get_current_datetime_str, find_rect_contours
-
-
-log = get_logger('Bot Buff Knight Advanced')
 
 
 def filter_button(rect):
@@ -58,14 +57,17 @@ def filter_fairy_and_button(rect_fairy, rect_button):
     return abs(x2 - x) <= 50 and abs(y2 + h2 - y) <= 50
 
 
-DIR = 'saved_screenshots'
-
-
 def save_screenshot(prefix, img_hsv):
     file_name = DIR + '/{}__{}.png'.format(prefix, get_current_datetime_str())
     log.debug(file_name)
     cv2.imwrite(file_name, cv2.cvtColor(np.array(img_hsv), cv2.COLOR_HSV2BGR))
 
+
+log = get_logger('Bot Buff Knight Advanced')
+
+DIR = 'saved_screenshots'
+if not os.path.exists(DIR):
+    os.mkdir(DIR)
 
 BLUE_HSV_MIN = 105, 175, 182
 BLUE_HSV_MAX = 121, 255, 255
@@ -102,16 +104,6 @@ log.debug('Press "%s" for QUIT', QUIT_COMBINATION)
 log.debug('Press "%s" for AUTO_ATTACK', AUTO_ATTACK_COMBINATION)
 
 
-if not os.path.exists(DIR):
-    os.mkdir(DIR)
-
-
-import keyboard
-keyboard.add_hotkey(QUIT_COMBINATION, lambda: log.debug('Quit by Escape') or os._exit(0))
-keyboard.add_hotkey(AUTO_ATTACK_COMBINATION, change_auto_attack)
-keyboard.add_hotkey(RUN_COMBINATION, change_start)
-
-
 def process_auto_attack():
     while True:
         if not BOT_DATA['START']:
@@ -123,10 +115,6 @@ def process_auto_attack():
             pyautogui.typewrite('C')
 
         time.sleep(0.01)
-
-# Запуск потока для автоатаки
-thread_auto_attack = threading.Thread(target=process_auto_attack)
-thread_auto_attack.start()
 
 
 def process_find_fairy(img_hsv):
@@ -189,25 +177,34 @@ def process_find_fairy(img_hsv):
         pyautogui.typewrite('A')
 
 
-while True:
-    if not BOT_DATA['START']:
-        time.sleep(0.01)
-        continue
+if __name__ == '__main__':
+    keyboard.add_hotkey(QUIT_COMBINATION, lambda: log.debug('Quit by Escape') or os._exit(0))
+    keyboard.add_hotkey(AUTO_ATTACK_COMBINATION, change_auto_attack)
+    keyboard.add_hotkey(RUN_COMBINATION, change_start)
 
-    t = timer()
+    # Запуск потока для автоатаки
+    thread_auto_attack = threading.Thread(target=process_auto_attack)
+    thread_auto_attack.start()
 
-    try:
-        img_screenshot = pyautogui.screenshot()
-        log.debug('img_screenshot: %s', img_screenshot)
+    while True:
+        if not BOT_DATA['START']:
+            time.sleep(0.01)
+            continue
 
-        img = cv2.cvtColor(np.array(img_screenshot), cv2.COLOR_RGB2HSV)
+        t = timer()
 
-        # Поиск феи
-        process_find_fairy(img)
+        try:
+            img_screenshot = pyautogui.screenshot()
+            log.debug('img_screenshot: %s', img_screenshot)
 
-        # TODO: возможность автоматического использования хилок и восстановления маны
+            img = cv2.cvtColor(np.array(img_screenshot), cv2.COLOR_RGB2HSV)
 
-    finally:
-        log.debug('Elapsed: {} secs'.format(timer() - t))
+            # Поиск феи
+            process_find_fairy(img)
 
-        time.sleep(0.01)
+            # TODO: возможность автоматического использования хилок и восстановления маны
+
+        finally:
+            log.debug(f'Elapsed: {timer() - t} secs')
+
+            time.sleep(0.01)
