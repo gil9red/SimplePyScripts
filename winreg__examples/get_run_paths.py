@@ -11,7 +11,7 @@ __author__ = 'ipetrash'
 
 from typing import Dict, List
 
-from common import get_key, get_entry, Entry, get_entries
+from common import get_key, Entry, get_entries
 
 
 PATHS = [
@@ -42,10 +42,6 @@ PATHS = [
     r"HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsNT\CurrentVersion\Winlogon\Userinit",
     r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnceEx",
 ]
-
-
-
-
 
 # SOURCE: https://www.microsoftpressstore.com/articles/article.aspx?p=2762082&seqNum=2
 r"""
@@ -112,49 +108,6 @@ HKLM\Software\Microsoft\Windows CE Services\AutoStartOnDisconnect
 HKLM\Software\Wow6432Node\Microsoft\Windows CE Services\AutoStartOnConnect
 HKLM\Software\Wow6432Node\Microsoft\Windows CE Services\AutoStartOnDisconnect
 """
-
-
-
-
-
-# TODO: не использовать, пусть такие пути описываются как кортеж, где вторым элементом будет имя значения
-# def get_value_for_full_path(path_with_value: str, expand_vars=True) -> Optional[Entry]:
-#     path, value = path_with_value.split(', ')
-#     return get_value(path, value, expand_vars)
-
-
-for path, value in [
-    # r'HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows, Load',
-    # r'HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows, Run',
-    # r'HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows, Shell',
-    # r'HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer, Run',
-    # r'HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer, Shell',
-    # r'HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer, Run',
-    # r'HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer, Shell',
-
-    (r'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders', 'Common Startup'),
-    (r'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders', 'Common AltStartup'),
-    (r'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders', 'Common Startup'),
-    (r'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders', 'Common AltStartup'),
-
-    (r'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders', 'Startup'),
-    (r'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders', 'AltStartup'),
-    (r'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders', 'Startup'),
-    (r'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders', 'AltStartup'),
-]:
-    print(f'{path}/{value} =', get_entry(path, value))
-
-quit()
-
-# path = r'HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon'
-# print(get_values(path))
-# print(get_values(path + r'\123'))
-# print(get_value(path, 'Shell'))
-# print(get_value(path, 'Shell123'))
-#
-# path_with_value = r'HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon, Shell'
-# print(get_value_for_full_path(path_with_value))
-# print()
 
 
 def get_run_paths(expand_vars=True) -> Dict[str, List[Entry]]:
