@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from PyQt5.QtWidgets import QApplication, QWidget, QToolButton, QSizePolicy
+from PyQt5.QtWidgets import QApplication, QWidget, QToolButton
 from PyQt5.QtGui import QResizeEvent
 
 
@@ -26,7 +26,6 @@ class MainWindow(QWidget):
 
         self.button_close = QToolButton(self)
         self.button_close.setText('ЗАКРЫТЬ')
-        self.button_close.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         self.button_close.clicked.connect(self.close)
 
     def resizeEvent(self, event: QResizeEvent):
