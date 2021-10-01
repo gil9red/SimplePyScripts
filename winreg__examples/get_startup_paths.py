@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 from fnmatch import fnmatch
 from pathlib import Path
-from typing import Tuple, List, Optional
+from typing import List
 
 from common import get_entry_path
 
