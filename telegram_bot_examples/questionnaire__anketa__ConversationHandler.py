@@ -10,7 +10,6 @@ import time
 # pip install python-telegram-bot
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext, ConversationHandler
-from telegram.ext.dispatcher import run_async
 
 import config
 from common import get_logger, log_func, reply_error
@@ -42,7 +41,6 @@ ANKETA_TEXT_FORMAT = """\
 log = get_logger(__file__)
 
 
-@run_async
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
     update.message.reply_text(
@@ -50,7 +48,6 @@ def on_start(update: Update, context: CallbackContext):
     )
 
 
-@run_async
 @log_func(log)
 def on_anketa_start(update: Update, context: CallbackContext):
     context.user_data['name'] = ''
@@ -62,7 +59,6 @@ def on_anketa_start(update: Update, context: CallbackContext):
     return STATE_USER_NAME
 
 
-@run_async
 @log_func(log)
 def on_anketa_set_name(update: Update, context: CallbackContext):
     context.user_data['name'] = update.message.text
@@ -71,7 +67,6 @@ def on_anketa_set_name(update: Update, context: CallbackContext):
     return STATE_USER_AGE
 
 
-@run_async
 @log_func(log)
 def on_anketa_set_age(update: Update, context: CallbackContext):
     context.user_data['age'] = update.message.text
@@ -83,7 +78,6 @@ def on_anketa_set_age(update: Update, context: CallbackContext):
     return STATE_RATING
 
 
-@run_async
 @log_func(log)
 def on_anketa_set_rating(update: Update, context: CallbackContext):
     context.user_data['rating'] = update.message.text
@@ -98,7 +92,6 @@ def on_anketa_set_rating(update: Update, context: CallbackContext):
     return STATE_COMMENT
 
 
-@run_async
 @log_func(log)
 def on_anketa_comment(update: Update, context: CallbackContext):
     context.user_data['comment'] = update.message.text
@@ -112,7 +105,6 @@ def on_anketa_comment(update: Update, context: CallbackContext):
     return ConversationHandler.END
 
 
-@run_async
 @log_func(log)
 def on_anketa_exit_comment(update: Update, context: CallbackContext):
     text = ANKETA_TEXT_FORMAT.format(**context.user_data)
@@ -123,7 +115,6 @@ def on_anketa_exit_comment(update: Update, context: CallbackContext):
     return ConversationHandler.END  # выходим из диалог
 
 
-@run_async
 @log_func(log)
 def on_anketa_invalid_set_rating(update: Update, context: CallbackContext):
     update.message.reply_text(
@@ -132,7 +123,6 @@ def on_anketa_invalid_set_rating(update: Update, context: CallbackContext):
     )
 
 
-@run_async
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
     message = update.message
@@ -154,33 +144,33 @@ def main():
 
     log.debug('Start')
 
-    # Create the EventHandler and pass it your bot's token.
     updater = Updater(
         config.TOKEN,
         workers=workers,
         use_context=True
     )
 
-    # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler('start', on_start))
 
     dp.add_handler(
         ConversationHandler(
-            entry_points=[MessageHandler(Filters.regex(BUTTON_START_ANKETA), on_anketa_start)],
+            entry_points=[MessageHandler(Filters.regex(BUTTON_START_ANKETA), on_anketa_start, run_async=True)],
             states={
-                STATE_USER_NAME: [MessageHandler(Filters.text, on_anketa_set_name)],
-                STATE_USER_AGE: [MessageHandler(Filters.text, on_anketa_set_age)],
-                STATE_RATING: [MessageHandler(Filters.regex('1|2|3|4|5'), on_anketa_set_rating)],
+                STATE_USER_NAME: [MessageHandler(Filters.text, on_anketa_set_name, run_async=True)],
+                STATE_USER_AGE: [MessageHandler(Filters.text, on_anketa_set_age, run_async=True)],
+                STATE_RATING: [MessageHandler(Filters.regex('1|2|3|4|5'), on_anketa_set_rating, run_async=True)],
                 STATE_COMMENT: [
-                    MessageHandler(Filters.regex('Пропустить'), on_anketa_exit_comment),
-                    MessageHandler(Filters.text, on_anketa_comment)
+                    MessageHandler(Filters.regex('Пропустить'), on_anketa_exit_comment, run_async=True),
+                    MessageHandler(Filters.text, on_anketa_comment, run_async=True)
                 ],
             },
             fallbacks=[
                 MessageHandler(
-                    Filters.text | Filters.video | Filters.photo | Filters.document, on_anketa_invalid_set_rating
+                    Filters.text | Filters.video | Filters.photo | Filters.document,
+                    on_anketa_invalid_set_rating,
+                    run_async=True
                 )
             ]
         )
@@ -188,15 +178,9 @@ def main():
 
     dp.add_handler(MessageHandler(Filters.text, on_request))
 
-    # Handle all errors
     dp.add_error_handler(on_error)
 
-    # Start the Bot
     updater.start_polling()
-
-    # Run the bot until the you presses Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
     log.debug('Finish')

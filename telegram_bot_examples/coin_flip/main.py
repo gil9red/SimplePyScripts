@@ -13,7 +13,6 @@ import re
 # pip install python-telegram-bot
 from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton, InputMediaPhoto
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler
-from telegram.ext.dispatcher import run_async
 
 sys.path.append('..')
 import config
@@ -32,7 +31,6 @@ COIN_VARIANTS = {
 log = get_logger(__file__)
 
 
-@run_async
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
     reply_markup = ReplyKeyboardMarkup.from_button(
@@ -45,7 +43,6 @@ def on_start(update: Update, context: CallbackContext):
     )
 
 
-@run_async
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
     message = update.effective_message
@@ -60,7 +57,6 @@ def on_request(update: Update, context: CallbackContext):
     )
 
 
-@run_async
 @log_func(log)
 def on_callback_coin_flip(update: Update, context: CallbackContext):
     message = update.effective_message
@@ -91,7 +87,6 @@ def on_callback_coin_flip(update: Update, context: CallbackContext):
         )
 
 
-@run_async
 @log_func(log)
 def on_callback_hide_coin_flip(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -119,11 +114,11 @@ def main():
 
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('start', on_start))
-    dp.add_handler(MessageHandler(Filters.text, on_request))
+    dp.add_handler(CommandHandler('start', on_start, run_async=True))
+    dp.add_handler(MessageHandler(Filters.text, on_request, run_async=True))
 
-    dp.add_handler(CallbackQueryHandler(on_callback_coin_flip, pattern=PATTERN_COIN_FLIP))
-    dp.add_handler(CallbackQueryHandler(on_callback_hide_coin_flip, pattern=PATTERN_HIDE_COIN_FLIP))
+    dp.add_handler(CallbackQueryHandler(on_callback_coin_flip, pattern=PATTERN_COIN_FLIP, run_async=True))
+    dp.add_handler(CallbackQueryHandler(on_callback_hide_coin_flip, pattern=PATTERN_HIDE_COIN_FLIP, run_async=True))
 
     dp.add_error_handler(on_error)
 

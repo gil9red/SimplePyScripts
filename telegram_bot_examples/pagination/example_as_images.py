@@ -11,7 +11,6 @@ import sys
 # pip install python-telegram-bot
 from telegram import Update, ParseMode, InputMediaPhoto
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler
-from telegram.ext.dispatcher import run_async
 
 # pip install python-telegram-bot-pagination
 from telegram_bot_pagination import InlineKeyboardPaginator
@@ -27,7 +26,6 @@ from data import character_pages
 log = get_logger(__file__)
 
 
-@run_async
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
     message = update.message
@@ -48,7 +46,6 @@ def on_request(update: Update, context: CallbackContext):
     )
 
 
-@run_async
 @log_func(log)
 def on_callback_query(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -90,29 +87,21 @@ def main():
 
     log.debug('Start')
 
-    # Create the EventHandler and pass it your bot's token.
     updater = Updater(
         config.TOKEN,
         workers=workers,
         use_context=True
     )
 
-    # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('start', on_request))
-    dp.add_handler(MessageHandler(Filters.text, on_request))
-    dp.add_handler(CallbackQueryHandler(on_callback_query, pattern='^character#'))
+    dp.add_handler(CommandHandler('start', on_request, run_async=True))
+    dp.add_handler(MessageHandler(Filters.text, on_request, run_async=True))
+    dp.add_handler(CallbackQueryHandler(on_callback_query, pattern='^character#', run_async=True))
 
-    # Handle all errors
     dp.add_error_handler(on_error)
 
-    # Start the Bot
     updater.start_polling()
-
-    # Run the bot until the you presses Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
     log.debug('Finish')

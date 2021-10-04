@@ -9,8 +9,7 @@ import time
 
 # pip install python-telegram-bot
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
-from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext, ConversationHandler
-from telegram.ext.dispatcher import run_async
+from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext
 
 import config
 from common import get_logger, log_func, reply_error
@@ -44,7 +43,6 @@ ANKETA_TEXT_FORMAT = """\
 log = get_logger(__file__)
 
 
-@run_async
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
     update.message.reply_text(
@@ -52,7 +50,6 @@ def on_start(update: Update, context: CallbackContext):
     )
 
 
-@run_async
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
     message = update.message
@@ -124,18 +121,16 @@ def main():
 
     log.debug('Start')
 
-    # Create the EventHandler and pass it your bot's token.
     updater = Updater(
         config.TOKEN,
         workers=workers,
         use_context=True
     )
 
-    # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('start', on_start))
-    dp.add_handler(MessageHandler(Filters.text, on_request))
+    dp.add_handler(CommandHandler('start', on_start, run_async=True))
+    dp.add_handler(MessageHandler(Filters.text, on_request, run_async=True))
 
     dp.add_error_handler(on_error)
 

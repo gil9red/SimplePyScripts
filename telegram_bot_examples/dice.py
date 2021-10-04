@@ -11,7 +11,6 @@ import re
 # pip install python-telegram-bot
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Dice
 from telegram.ext import Updater, CommandHandler, CallbackContext, CallbackQueryHandler
-from telegram.ext.dispatcher import run_async
 
 import config
 from common import get_logger, log_func, reply_error
@@ -27,7 +26,6 @@ REPLY_MARKUP = InlineKeyboardMarkup.from_row([
 ])
 
 
-@run_async
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
     update.message.reply_text(
@@ -36,7 +34,6 @@ def on_start(update: Update, context: CallbackContext):
     )
 
 
-@run_async
 @log_func(log)
 def on_callback_query_dice(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -59,7 +56,6 @@ def main():
 
     log.debug('Start')
 
-    # Create the EventHandler and pass it your bot's token.
     updater = Updater(
         config.TOKEN,
         workers=workers,
@@ -68,8 +64,8 @@ def main():
 
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('start', on_start))
-    dp.add_handler(CallbackQueryHandler(on_callback_query_dice, pattern=PATTERN_DICE))
+    dp.add_handler(CommandHandler('start', on_start, run_async=True))
+    dp.add_handler(CallbackQueryHandler(on_callback_query_dice, pattern=PATTERN_DICE, run_async=True))
 
     dp.add_error_handler(on_error)
 

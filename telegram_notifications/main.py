@@ -12,7 +12,6 @@ from threading import Thread
 # pip install python-telegram-bot
 from telegram import Update, Bot, ParseMode
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext
-from telegram.ext.dispatcher import run_async
 
 import config
 import db
@@ -63,14 +62,12 @@ def sending_notifications():
             time.sleep(1)
 
 
-@run_async
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
     if not config.CHAT_ID:
         update.message.reply_text('Введите что-нибудь для получения chat_id')
 
 
-@run_async
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
     message = update.message
@@ -114,8 +111,8 @@ def main():
 
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('start', on_start))
-    dp.add_handler(MessageHandler(Filters.text, on_request))
+    dp.add_handler(CommandHandler('start', on_start, run_async=True))
+    dp.add_handler(MessageHandler(Filters.text, on_request, run_async=True))
 
     dp.add_error_handler(on_error)
 

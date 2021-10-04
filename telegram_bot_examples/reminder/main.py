@@ -5,17 +5,16 @@ __author__ = 'ipetrash'
 
 
 import datetime as DT
-from logging import Logger
 import os
-from threading import Thread
 import time
 import sys
-import re
+
+from logging import Logger
+from threading import Thread
 
 # pip install python-telegram-bot
 from telegram import Update, Bot
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext
-from telegram.ext.dispatcher import run_async
 
 sys.path.append('..')
 
@@ -60,7 +59,6 @@ def do_checking_reminders(log: Logger, bot: Bot):
 log = get_logger(__file__)
 
 
-@run_async
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
     update.message.reply_text(
@@ -69,7 +67,6 @@ def on_start(update: Update, context: CallbackContext):
     )
 
 
-@run_async
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
     message = update.message
@@ -93,7 +90,6 @@ def on_request(update: Update, context: CallbackContext):
     message.reply_text(f'Напоминание установлено на {get_pretty_datetime(finish_time)}')
 
 
-@run_async
 @log_func(log)
 def on_get_reminders(update: Update, context: CallbackContext):
     message = update.message
@@ -134,7 +130,6 @@ def main():
 
     log.debug('Start')
 
-    # Create the EventHandler and pass it your bot's token.
     updater = Updater(
         config.TOKEN,
         workers=workers,
@@ -145,22 +140,15 @@ def main():
     thread = Thread(target=do_checking_reminders, args=[log, updater.bot])
     thread.start()
 
-    # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('start', on_start))
-    dp.add_handler(MessageHandler(Filters.regex('(?i)^список$'), on_get_reminders))
-    dp.add_handler(MessageHandler(Filters.text, on_request))
+    dp.add_handler(CommandHandler('start', on_start, run_async=True))
+    dp.add_handler(MessageHandler(Filters.regex('(?i)^список$'), on_get_reminders, run_async=True))
+    dp.add_handler(MessageHandler(Filters.text, on_request, run_async=True))
 
-    # Handle all errors
     dp.add_error_handler(on_error)
 
-    # Start the Bot
     updater.start_polling()
-
-    # Run the bot until the you presses Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
     log.debug('Finish')

@@ -12,7 +12,6 @@ from telegram import (
     Update, InlineKeyboardButton, InlineKeyboardMarkup
 )
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler
-from telegram.ext.dispatcher import run_async
 
 import config
 from common import get_logger, log_func, reply_error
@@ -28,13 +27,11 @@ DATA_TEMPLATE = {
 }
 
 
-@run_async
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
     update.message.reply_text('Введите что-нибудь')
 
 
-@run_async
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
     keyboard = [[
@@ -49,7 +46,6 @@ def on_request(update: Update, context: CallbackContext):
     )
 
 
-@run_async
 @log_func(log)
 def on_callback_query(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -78,29 +74,21 @@ def main():
 
     log.debug('Start')
 
-    # Create the EventHandler and pass it your bot's token.
     updater = Updater(
         config.TOKEN,
         workers=workers,
         use_context=True
     )
 
-    # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('start', on_start))
-    dp.add_handler(MessageHandler(Filters.text, on_request))
-    dp.add_handler(CallbackQueryHandler(on_callback_query))
+    dp.add_handler(CommandHandler('start', on_start, run_async=True))
+    dp.add_handler(MessageHandler(Filters.text, on_request, run_async=True))
+    dp.add_handler(CallbackQueryHandler(on_callback_query, run_async=True))
 
-    # Handle all errors
     dp.add_error_handler(on_error)
 
-    # Start the Bot
     updater.start_polling()
-
-    # Run the bot until the you presses Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
     log.debug('Finish')

@@ -14,7 +14,6 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     Updater, MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler
 )
-from telegram.ext.dispatcher import run_async
 
 import config
 from common import get_logger, log_func, reply_error
@@ -179,7 +178,6 @@ def _on_reply_sex(update: Update, context: CallbackContext):
 log = get_logger(__file__)
 
 
-@run_async
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
     update.message.reply_text(
@@ -187,7 +185,6 @@ def on_start(update: Update, context: CallbackContext):
     )
 
 
-@run_async
 @log_func(log)
 def on_settings(update: Update, context: CallbackContext):
     # Если функция вызвана из CallbackQueryHandler
@@ -213,7 +210,6 @@ def on_settings(update: Update, context: CallbackContext):
         message.reply_text(text, reply_markup=reply_markup)
 
 
-@run_async
 @log_func(log)
 def on_debug(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -222,7 +218,6 @@ def on_debug(update: Update, context: CallbackContext):
     _on_reply_debug(update, context)
 
 
-@run_async
 @log_func(log)
 def on_year(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -231,7 +226,6 @@ def on_year(update: Update, context: CallbackContext):
     _on_reply_year(update, context)
 
 
-@run_async
 @log_func(log)
 def on_sex(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -240,7 +234,6 @@ def on_sex(update: Update, context: CallbackContext):
     _on_reply_sex(update, context)
 
 
-@run_async
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
     message = update.message
@@ -261,35 +254,28 @@ def main():
 
     log.debug('Start')
 
-    # Create the EventHandler and pass it your bot's token.
     updater = Updater(
         config.TOKEN,
         workers=workers,
         use_context=True
     )
 
-    # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('start', on_start))
+    dp.add_handler(CommandHandler('start', on_start, run_async=True))
 
-    dp.add_handler(CommandHandler('settings', on_settings))
-    dp.add_handler(CallbackQueryHandler(on_settings, pattern=SettingState.MAIN.get_pattern_full()))
+    dp.add_handler(CommandHandler('settings', on_settings, run_async=True))
+    dp.add_handler(CallbackQueryHandler(on_settings, pattern=SettingState.MAIN.get_pattern_full(), run_async=True))
 
-    dp.add_handler(CallbackQueryHandler(on_debug, pattern=SettingState.DEBUG.get_pattern_full()))
-    dp.add_handler(CallbackQueryHandler(on_year, pattern=SettingState.YEAR.get_pattern_full()))
-    dp.add_handler(CallbackQueryHandler(on_sex, pattern=SettingState.SEX.get_pattern_full()))
+    dp.add_handler(CallbackQueryHandler(on_debug, pattern=SettingState.DEBUG.get_pattern_full(), run_async=True))
+    dp.add_handler(CallbackQueryHandler(on_year, pattern=SettingState.YEAR.get_pattern_full(), run_async=True))
+    dp.add_handler(CallbackQueryHandler(on_sex, pattern=SettingState.SEX.get_pattern_full(), run_async=True))
 
-    dp.add_handler(MessageHandler(Filters.text, on_request))
+    dp.add_handler(MessageHandler(Filters.text, on_request, run_async=True))
 
     dp.add_error_handler(on_error)
 
-    # Start the Bot
     updater.start_polling()
-
-    # Run the bot until the you presses Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
     log.debug('Finish')

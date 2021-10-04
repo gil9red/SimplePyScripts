@@ -16,8 +16,6 @@ from telegram import (
 from telegram.ext import (
     Updater, MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler, ConversationHandler
 )
-from telegram.ext.dispatcher import run_async
-
 
 from config import TOKEN
 from common import get_logger, log_func
@@ -45,7 +43,6 @@ def facts_to_str(user_data: dict) -> str:
     return "\n".join(facts).join(['\n', '\n'])
 
 
-@run_async
 @log_func(log)
 def on_main_menu(update: Update, context: CallbackContext):
     # Если функция вызвана из CallbackQueryHandler
@@ -81,7 +78,6 @@ C моей помощью Вы можете узнать о видах масс�
         message.reply_text(text, reply_markup=reply_markup)
 
 
-@run_async
 @log_func(log)
 def on_sing_up(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -106,7 +102,6 @@ def on_sing_up(update: Update, context: CallbackContext):
     return STATE_SELECT_MASSAGE
 
 
-@run_async
 @log_func(log)
 def on_massage_klassik(update: Update, context: CallbackContext):
     user_data = context.user_data
@@ -122,7 +117,6 @@ def on_massage_klassik(update: Update, context: CallbackContext):
     return STATE_SELECT_DATE
 
 
-@run_async
 @log_func(log)
 def on_massage_lechebny(update: Update, context: CallbackContext):
     user_data = context.user_data
@@ -138,7 +132,6 @@ def on_massage_lechebny(update: Update, context: CallbackContext):
     return STATE_SELECT_DATE
 
 
-@run_async
 @log_func(log)
 def on_massage_medovy(update: Update, context: CallbackContext):
     user_data = context.user_data
@@ -154,7 +147,6 @@ def on_massage_medovy(update: Update, context: CallbackContext):
     return STATE_SELECT_DATE
 
 
-@run_async
 @log_func(log)
 def on_massage_limfo(update: Update, context: CallbackContext):
     user_data = context.user_data
@@ -170,7 +162,6 @@ def on_massage_limfo(update: Update, context: CallbackContext):
     return STATE_SELECT_DATE
 
 
-@run_async
 @log_func(log)
 def on_massage_anti(update: Update, context: CallbackContext):
     user_data = context.user_data
@@ -186,7 +177,6 @@ def on_massage_anti(update: Update, context: CallbackContext):
     return STATE_SELECT_DATE
 
 
-@run_async
 @log_func(log)
 def on_select_date(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -214,7 +204,6 @@ def on_select_date(update: Update, context: CallbackContext):
         return STATE_SELECT_TIME
 
 
-@run_async
 @log_func(log)
 def on_time_12(update: Update, context: CallbackContext):
     user_data = context.user_data
@@ -230,7 +219,6 @@ def on_time_12(update: Update, context: CallbackContext):
     return STATE_SELECT_USER
 
 
-@run_async
 @log_func(log)
 def on_time_14(update: Update, context: CallbackContext):
     user_data = context.user_data
@@ -246,7 +234,6 @@ def on_time_14(update: Update, context: CallbackContext):
     return STATE_SELECT_USER
 
 
-@run_async
 @log_func(log)
 def on_time_16(update: Update, context: CallbackContext):
     user_data = context.user_data
@@ -262,7 +249,6 @@ def on_time_16(update: Update, context: CallbackContext):
     return STATE_SELECT_USER
 
 
-@run_async
 @log_func(log)
 def on_sing_name(update: Update, context: CallbackContext):
     user_data = context.user_data
@@ -280,7 +266,6 @@ def on_sing_name(update: Update, context: CallbackContext):
     return STATE_SELECT_PHONE
 
 
-@run_async
 @log_func(log)
 def on_sing_contact(update: Update, context: CallbackContext):
     user_data = context.user_data
@@ -304,7 +289,6 @@ _Ваши данные:_
     return STATE_FINISH
 
 
-@run_async
 @log_func(log)
 def on_finish(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -317,7 +301,6 @@ def on_finish(update: Update, context: CallbackContext):
     return ConversationHandler.END
 
 
-@run_async
 @log_func(log)
 def on_recording(update: Update, context: CallbackContext):
     return on_sing_up(update, context)
@@ -329,53 +312,51 @@ def on_error(update, context):
 
 
 def main():
-    # Create the EventHandler and pass it your bot's token.
     updater = Updater(
         token=TOKEN,
         use_context=True
     )
 
-    # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('start', on_main_menu))
+    dp.add_handler(CommandHandler('start', on_main_menu, run_async=True))
 
     dp.add_handler(ConversationHandler(
         entry_points=[
-            CommandHandler('start', on_main_menu),
-            CallbackQueryHandler(on_sing_up, pattern='sing_up')
+            CommandHandler('start', on_main_menu, run_async=True),
+            CallbackQueryHandler(on_sing_up, pattern='sing_up', run_async=True)
         ],
         states={
             STATE_SELECT_MASSAGE: [
-                CallbackQueryHandler(on_massage_klassik, pattern='klass'),
-                CallbackQueryHandler(on_massage_lechebny, pattern='lech'),
-                CallbackQueryHandler(on_massage_medovy, pattern='med'),
-                CallbackQueryHandler(on_massage_limfo, pattern='limfo'),
-                CallbackQueryHandler(on_massage_anti, pattern='anti'),
-                CallbackQueryHandler(on_main_menu, pattern='main_menu'),
+                CallbackQueryHandler(on_massage_klassik, pattern='klass', run_async=True),
+                CallbackQueryHandler(on_massage_lechebny, pattern='lech', run_async=True),
+                CallbackQueryHandler(on_massage_medovy, pattern='med', run_async=True),
+                CallbackQueryHandler(on_massage_limfo, pattern='limfo', run_async=True),
+                CallbackQueryHandler(on_massage_anti, pattern='anti', run_async=True),
+                CallbackQueryHandler(on_main_menu, pattern='main_menu', run_async=True),
             ],
 
             STATE_SELECT_DATE: [
-                CallbackQueryHandler(on_select_date)
+                CallbackQueryHandler(on_select_date, run_async=True)
             ],
 
             STATE_SELECT_TIME: [
-                CallbackQueryHandler(on_time_12, pattern='12'),
-                CallbackQueryHandler(on_time_14, pattern='14'),
-                CallbackQueryHandler(on_time_16, pattern='16')
+                CallbackQueryHandler(on_time_12, pattern='12', run_async=True),
+                CallbackQueryHandler(on_time_14, pattern='14', run_async=True),
+                CallbackQueryHandler(on_time_16, pattern='16', run_async=True)
             ],
 
             STATE_SELECT_USER: [
-                MessageHandler(Filters.text, on_sing_name)
+                MessageHandler(Filters.text, on_sing_name, run_async=True)
             ],
 
             STATE_SELECT_PHONE: [
-                MessageHandler(Filters.text | Filters.contact, on_sing_contact)
+                MessageHandler(Filters.text | Filters.contact, on_sing_contact, run_async=True)
             ],
 
             STATE_FINISH: [
-                CallbackQueryHandler(on_finish, pattern='okay'),
-                CallbackQueryHandler(on_recording, pattern='recording')
+                CallbackQueryHandler(on_finish, pattern='okay', run_async=True),
+                CallbackQueryHandler(on_recording, pattern='recording', run_async=True)
             ]
         },
         fallbacks=[
@@ -383,6 +364,7 @@ def main():
         ],
         # allow_reentry=True,
         # per_message=True,
+        run_async=True
     ))
 
     dp.add_error_handler(on_error)
