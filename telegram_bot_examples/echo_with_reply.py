@@ -32,10 +32,7 @@ def on_start(update: Update, context: CallbackContext):
 def on_request(update: Update, context: CallbackContext):
     message = update.effective_message
 
-    message.reply_text(
-        message.text,
-        reply_to_message_id=message.message_id
-    )
+    message.reply_text(message.text, quote=True)
 
 
 def on_error(update: Update, context: CallbackContext):

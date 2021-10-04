@@ -41,12 +41,11 @@ def on_request(update: Update, context: CallbackContext):
     img = qrcode.make(message.text)
     img.save(bytes_io, format='PNG')
 
+    # После выполнения save внутренний указатель будет в конце данных,
+    # а для работы с bytes_io нужно вернуть в начало
     bytes_io.seek(0)
 
-    message.reply_photo(
-        photo=bytes_io,
-        reply_to_message_id=message.message_id,
-    )
+    message.reply_photo(photo=bytes_io, quote=True)
 
 
 def on_error(update: Update, context: CallbackContext):
