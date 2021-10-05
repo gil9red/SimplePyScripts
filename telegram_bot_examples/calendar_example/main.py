@@ -5,7 +5,6 @@ __author__ = 'ipetrash'
 
 
 import os
-import time
 import sys
 
 # pip install python-telegram-bot
@@ -17,7 +16,7 @@ import telegramcalendar
 
 sys.path.append('..')
 import config
-from common import get_logger, log_func, reply_error
+from common import get_logger, log_func, reply_error, run_main
 
 
 log = get_logger(__file__)
@@ -95,12 +94,4 @@ def main():
 
 
 if __name__ == '__main__':
-    while True:
-        try:
-            main()
-        except:
-            log.exception('')
-
-            timeout = 15
-            log.info(f'Restarting the bot after {timeout} seconds')
-            time.sleep(timeout)
+    run_main(main, log)

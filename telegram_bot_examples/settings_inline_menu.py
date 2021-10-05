@@ -6,7 +6,6 @@ __author__ = 'ipetrash'
 
 import enum
 import os
-import time
 import re
 
 # pip install python-telegram-bot
@@ -16,7 +15,7 @@ from telegram.ext import (
 )
 
 import config
-from common import get_logger, log_func, reply_error
+from common import get_logger, log_func, reply_error, run_main
 
 
 def is_equal_inline_keyboards(keyboard_1: InlineKeyboardMarkup, keyboard_2: InlineKeyboardMarkup) -> bool:
@@ -282,12 +281,4 @@ def main():
 
 
 if __name__ == '__main__':
-    while True:
-        try:
-            main()
-        except:
-            log.exception('')
-
-            timeout = 15
-            log.info(f'Restarting the bot after {timeout} seconds')
-            time.sleep(timeout)
+    run_main(main, log)

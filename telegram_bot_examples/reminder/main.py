@@ -19,7 +19,7 @@ from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, Callb
 sys.path.append('..')
 
 import config
-from common import get_logger, log_func, reply_error
+from common import get_logger, log_func, reply_error, run_main
 from db import Reminder, User, Chat
 from utils import parse_command, get_pretty_datetime
 
@@ -155,12 +155,4 @@ def main():
 
 
 if __name__ == '__main__':
-    while True:
-        try:
-            main()
-        except:
-            log.exception('')
-
-            timeout = 15
-            log.info(f'Restarting the bot after {timeout} seconds')
-            time.sleep(timeout)
+    run_main(main, log)

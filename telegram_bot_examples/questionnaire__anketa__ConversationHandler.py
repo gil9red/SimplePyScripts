@@ -5,14 +5,13 @@ __author__ = 'ipetrash'
 
 
 import os
-import time
 
 # pip install python-telegram-bot
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext, ConversationHandler
 
 import config
-from common import get_logger, log_func, reply_error
+from common import get_logger, log_func, reply_error, run_main
 
 
 BUTTON_START_ANKETA = 'Заполнить анкету'
@@ -187,12 +186,4 @@ def main():
 
 
 if __name__ == '__main__':
-    while True:
-        try:
-            main()
-        except:
-            log.exception('')
-
-            timeout = 15
-            log.info(f'Restarting the bot after {timeout} seconds')
-            time.sleep(timeout)
+    run_main(main, log)

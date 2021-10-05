@@ -6,7 +6,6 @@ __author__ = 'ipetrash'
 
 import random
 import sys
-import time
 import os
 from pathlib import Path
 
@@ -18,7 +17,7 @@ sys.path.append('../../html_parsing')
 sys.path.append('../../exchange_rates')
 
 import config
-from common import get_logger, log_func, reply_error
+from common import get_logger, log_func, reply_error, run_main
 from cbr_ru import exchange_rate
 from youtube_com__results_search_query import search_youtube
 
@@ -255,12 +254,4 @@ def main():
 
 
 if __name__ == '__main__':
-    while True:
-        try:
-            main()
-        except:
-            log.exception('')
-
-            timeout = 15
-            log.info(f'Restarting the bot after {timeout} seconds')
-            time.sleep(timeout)
+    run_main(main, log)

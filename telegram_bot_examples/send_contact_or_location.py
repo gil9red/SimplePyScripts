@@ -5,14 +5,13 @@ __author__ = 'ipetrash'
 
 
 import os
-import time
 
 # pip install python-telegram-bot
 from telegram import Update, ReplyKeyboardMarkup, KeyboardButton
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext
 
 import config
-from common import get_logger, log_func, reply_error
+from common import get_logger, log_func, reply_error, run_main
 
 
 contact_keyboard = KeyboardButton('Send contact', request_contact=True)
@@ -91,12 +90,4 @@ def main():
 
 
 if __name__ == '__main__':
-    while True:
-        try:
-            main()
-        except:
-            log.exception('')
-
-            timeout = 15
-            log.info(f'Restarting the bot after {timeout} seconds')
-            time.sleep(timeout)
+    run_main(main, log)

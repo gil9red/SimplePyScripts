@@ -5,7 +5,6 @@ __author__ = 'ipetrash'
 
 
 import os
-import time
 import sys
 import random
 import re
@@ -16,7 +15,7 @@ from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, Callb
 
 sys.path.append('..')
 import config
-from common import get_logger, log_func, reply_error, fill_string_pattern
+from common import get_logger, log_func, reply_error, fill_string_pattern, run_main
 
 
 PATTERN_COIN_FLIP = re.compile(r'^coin_flip$')
@@ -129,12 +128,4 @@ def main():
 
 
 if __name__ == '__main__':
-    while True:
-        try:
-            main()
-        except:
-            log.exception('')
-
-            timeout = 15
-            log.info(f'Restarting the bot after {timeout} seconds')
-            time.sleep(timeout)
+    run_main(main, log)
