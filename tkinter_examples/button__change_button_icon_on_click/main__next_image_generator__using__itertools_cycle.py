@@ -31,7 +31,7 @@ panel = tk.Label(root, image=get_next_image())
 panel.pack()
 
 button = tk.Button(root, text="ClickMe!")
-button.config(command=lambda: _on_button_click())
+button.config(command=_on_button_click)
 button.pack()
 
 root.mainloop()
