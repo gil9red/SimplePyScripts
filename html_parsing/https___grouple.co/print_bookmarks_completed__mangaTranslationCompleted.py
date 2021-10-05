@@ -16,6 +16,8 @@ FORM_DATA = {
 }
 
 session = requests.Session()
+session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0'
+
 rs = session.post('https://grouple.co/login/authenticate', data=FORM_DATA)
 rs.raise_for_status()
 
