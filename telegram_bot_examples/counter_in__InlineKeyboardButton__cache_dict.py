@@ -43,8 +43,8 @@ def get_reply_markup(data: Dict[str, int]) -> InlineKeyboardMarkup:
 
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
-    update.message.reply_text(
-        'Введите что-нибудь'
+    update.effective_message.reply_text(
+        'Write something'
     )
 
 

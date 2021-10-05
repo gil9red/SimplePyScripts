@@ -29,7 +29,7 @@ DATA_TEMPLATE = {
 
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
-    update.message.reply_text('Введите что-нибудь')
+    update.message.reply_text('Write something')
 
 
 @log_func(log)

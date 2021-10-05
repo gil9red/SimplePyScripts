@@ -8,7 +8,10 @@ import functools
 import logging
 import sys
 import re
+import time
+
 from pathlib import Path
+from typing import Callable
 
 from telegram import Update
 from telegram.ext import CallbackContext
@@ -93,3 +96,14 @@ def fill_string_pattern(pattern: re.Pattern, *args) -> str:
     pattern = pattern.pattern
     pattern = pattern.strip('^$')
     return re.sub(r'\(.+?\)', '{}', pattern).format(*args)
+
+
+def run_main(main_func: Callable, log: logging.Logger, timeout=15):
+    while True:
+        try:
+            main_func()
+        except:
+            log.exception('')
+
+            log.info(f'Restarting the bot after {timeout} seconds')
+            time.sleep(timeout)
