@@ -6,15 +6,16 @@ __author__ = 'ipetrash'
 
 import functools
 import logging
+import os
 import sys
 import re
 import time
 
 from pathlib import Path
-from typing import Callable
+from typing import Callable, List
 
 from telegram import Update
-from telegram.ext import CallbackContext
+from telegram.ext import Updater, CallbackContext, Handler
 
 import config
 
@@ -96,6 +97,42 @@ def fill_string_pattern(pattern: re.Pattern, *args) -> str:
     pattern = pattern.pattern
     pattern = pattern.strip('^$')
     return re.sub(r'\(.+?\)', '{}', pattern).format(*args)
+
+
+def start_bot(
+        log: logging.Logger,
+        handlers: List[Handler]
+):
+    cpu_count = os.cpu_count()
+    workers = cpu_count
+    log.debug(f'System: CPU_COUNT={cpu_count}, WORKERS={workers}')
+
+    log.debug('Start')
+
+    # Create the EventHandler and pass it your bot's token.
+    updater = Updater(
+        config.TOKEN,
+        workers=workers,
+    )
+
+    # Get the dispatcher to register handlers
+    dp = updater.dispatcher
+
+    for handler in handlers:
+        dp.add_handler(handler)
+
+    # Handle all errors
+    dp.add_error_handler(lambda update, context: reply_error(log, update, context))
+
+    # Start the Bot
+    updater.start_polling()
+
+    # Run the bot until the you presses Ctrl-C or the process receives SIGINT,
+    # SIGTERM or SIGABRT. This should be used most of the time, since
+    # start_polling() is non-blocking and will stop the bot gracefully.
+    updater.idle()
+
+    log.debug('Finish')
 
 
 def run_main(main_func: Callable, log: logging.Logger, timeout=15):
