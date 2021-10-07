@@ -11,7 +11,7 @@ from threading import Thread
 
 # pip install python-telegram-bot
 from telegram import Update, Bot, ParseMode
-from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext
+from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext, Defaults
 
 import config
 import db
@@ -70,7 +70,7 @@ def on_start(update: Update, context: CallbackContext):
 
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
-    message = update.message
+    message = update.effective_message
 
     if not config.CHAT_ID:
         text = f'CHAT_ID: {update.effective_chat.id}'
@@ -105,14 +105,14 @@ def main():
     updater = Updater(
         config.TOKEN,
         workers=workers,
-        use_context=True
+        defaults=Defaults(run_async=True),
     )
     DATA['BOT'] = updater.bot
 
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('start', on_start, run_async=True))
-    dp.add_handler(MessageHandler(Filters.text, on_request, run_async=True))
+    dp.add_handler(CommandHandler('start', on_start))
+    dp.add_handler(MessageHandler(Filters.text, on_request))
 
     dp.add_error_handler(on_error)
 
