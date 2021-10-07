@@ -8,8 +8,7 @@ import threading
 
 # pip install python-telegram-bot
 from telegram import Update
-from telegram.ext import Updater, MessageHandler, Filters, CallbackContext
-from telegram.ext.defaults import Defaults
+from telegram.ext import Updater, MessageHandler, Filters, CallbackContext, Defaults
 
 import config
 
