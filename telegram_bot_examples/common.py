@@ -103,6 +103,7 @@ def start_bot(
         log: logging.Logger,
         handlers: List[Handler],
         before_start_func: Callable[[Updater], None] = None,
+        **updater_kwargs,
 ):
     cpu_count = os.cpu_count()
     workers = cpu_count
@@ -115,6 +116,7 @@ def start_bot(
         config.TOKEN,
         workers=workers,
         defaults=Defaults(run_async=True),
+        **updater_kwargs,
     )
 
     # Get the dispatcher to register handlers
