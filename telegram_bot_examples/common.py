@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Callable, List
 
 from telegram import Update
-from telegram.ext import Updater, CallbackContext, Handler
+from telegram.ext import Updater, CallbackContext, Handler, Defaults
 
 import config
 
@@ -113,6 +113,7 @@ def start_bot(
     updater = Updater(
         config.TOKEN,
         workers=workers,
+        defaults=Defaults(run_async=True),
     )
 
     # Get the dispatcher to register handlers

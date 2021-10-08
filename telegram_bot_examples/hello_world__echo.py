@@ -32,8 +32,8 @@ def on_request(update: Update, context: CallbackContext):
 
 def main():
     handlers = [
-        CommandHandler('start', on_start, run_async=True),
-        MessageHandler(Filters.text, on_request, run_async=True),
+        CommandHandler('start', on_start),
+        MessageHandler(Filters.text, on_request),
     ]
     start_bot(log, handlers)
 
