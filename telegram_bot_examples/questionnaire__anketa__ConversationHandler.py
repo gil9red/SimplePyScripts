@@ -4,14 +4,11 @@
 __author__ = 'ipetrash'
 
 
-import os
-
 # pip install python-telegram-bot
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
-from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext, ConversationHandler
+from telegram.ext import MessageHandler, CommandHandler, Filters, CallbackContext, ConversationHandler
 
-import config
-from common import get_logger, log_func, reply_error, run_main
+from common import get_logger, log_func, start_bot, run_main
 
 
 BUTTON_START_ANKETA = 'Заполнить анкету'
@@ -132,57 +129,30 @@ def on_request(update: Update, context: CallbackContext):
     )
 
 
-def on_error(update: Update, context: CallbackContext):
-    reply_error(log, update, context)
-
-
 def main():
-    cpu_count = os.cpu_count()
-    workers = cpu_count
-    log.debug('System: CPU_COUNT=%s, WORKERS=%s', cpu_count, workers)
-
-    log.debug('Start')
-
-    updater = Updater(
-        config.TOKEN,
-        workers=workers,
-        use_context=True
-    )
-
-    dp = updater.dispatcher
-
-    dp.add_handler(CommandHandler('start', on_start))
-
-    dp.add_handler(
+    handlers = [
+        CommandHandler('start', on_start),
         ConversationHandler(
-            entry_points=[MessageHandler(Filters.regex(BUTTON_START_ANKETA), on_anketa_start, run_async=True)],
+            entry_points=[MessageHandler(Filters.regex(BUTTON_START_ANKETA), on_anketa_start)],
             states={
-                STATE_USER_NAME: [MessageHandler(Filters.text, on_anketa_set_name, run_async=True)],
-                STATE_USER_AGE: [MessageHandler(Filters.text, on_anketa_set_age, run_async=True)],
-                STATE_RATING: [MessageHandler(Filters.regex('1|2|3|4|5'), on_anketa_set_rating, run_async=True)],
+                STATE_USER_NAME: [MessageHandler(Filters.text, on_anketa_set_name)],
+                STATE_USER_AGE: [MessageHandler(Filters.text, on_anketa_set_age)],
+                STATE_RATING: [MessageHandler(Filters.regex('1|2|3|4|5'), on_anketa_set_rating)],
                 STATE_COMMENT: [
-                    MessageHandler(Filters.regex('Пропустить'), on_anketa_exit_comment, run_async=True),
-                    MessageHandler(Filters.text, on_anketa_comment, run_async=True)
+                    MessageHandler(Filters.regex('Пропустить'), on_anketa_exit_comment),
+                    MessageHandler(Filters.text, on_anketa_comment)
                 ],
             },
             fallbacks=[
                 MessageHandler(
                     Filters.text | Filters.video | Filters.photo | Filters.document,
                     on_anketa_invalid_set_rating,
-                    run_async=True
                 )
             ]
-        )
-    )
-
-    dp.add_handler(MessageHandler(Filters.text, on_request))
-
-    dp.add_error_handler(on_error)
-
-    updater.start_polling()
-    updater.idle()
-
-    log.debug('Finish')
+        ),
+        MessageHandler(Filters.text, on_request),
+    ]
+    start_bot(log, handlers)
 
 
 if __name__ == '__main__':

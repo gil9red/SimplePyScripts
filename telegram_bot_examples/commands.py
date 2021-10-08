@@ -4,14 +4,11 @@
 __author__ = 'ipetrash'
 
 
-import os
-
 # pip install python-telegram-bot
 from telegram import Update
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext
 
-import config
-from common import get_logger, log_func, reply_error, run_main
+from common import get_logger, log_func, start_bot, run_main
 
 
 log = get_logger(__file__)
@@ -59,42 +56,22 @@ def on_cmd(update: Update, context: CallbackContext):
     message.reply_text(f'Args: {context.args}')
 
 
-def on_error(update: Update, context: CallbackContext):
-    reply_error(log, update, context)
-
-
 def main():
-    cpu_count = os.cpu_count()
-    workers = cpu_count
-    log.debug('System: CPU_COUNT=%s, WORKERS=%s', cpu_count, workers)
+    handlers = [
+        CommandHandler('start', on_start),
+        CommandHandler('say_hello', on_say_hello),
+        CommandHandler('say_hello_world', on_say_hello_world),
+        CommandHandler('cmd', on_cmd),
+        MessageHandler(Filters.text, on_request),
+    ]
 
-    log.debug('Start')
+    def before_start_func(updater: Updater):
+        for commands in updater.dispatcher.handlers.values():
+            for command in commands:
+                if isinstance(command, CommandHandler):
+                    ALL_COMMANDS.extend(command.command)
 
-    updater = Updater(
-        config.TOKEN,
-        workers=workers,
-        use_context=True
-    )
-
-    dp = updater.dispatcher
-
-    dp.add_handler(CommandHandler('start', on_start, run_async=True))
-    dp.add_handler(CommandHandler('say_hello', on_say_hello, run_async=True))
-    dp.add_handler(CommandHandler('say_hello_world', on_say_hello_world, run_async=True))
-    dp.add_handler(CommandHandler('cmd', on_cmd, run_async=True))
-    dp.add_handler(MessageHandler(Filters.text, on_request, run_async=True))
-
-    for commands in dp.handlers.values():
-        for command in commands:
-            if isinstance(command, CommandHandler):
-                ALL_COMMANDS.extend(command.command)
-
-    dp.add_error_handler(on_error)
-
-    updater.start_polling()
-    updater.idle()
-
-    log.debug('Finish')
+    start_bot(log, handlers, before_start_func)
 
 
 if __name__ == '__main__':

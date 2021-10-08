@@ -14,7 +14,8 @@ from telegram import (
     Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton
 )
 from telegram.ext import (
-    Updater, MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler, ConversationHandler
+    Updater, MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler,
+    ConversationHandler, Defaults
 )
 
 from config import TOKEN
@@ -314,49 +315,49 @@ def on_error(update, context):
 def main():
     updater = Updater(
         token=TOKEN,
-        use_context=True
+        defaults=Defaults(run_async=True),
     )
 
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('start', on_main_menu, run_async=True))
+    dp.add_handler(CommandHandler('start', on_main_menu))
 
     dp.add_handler(ConversationHandler(
         entry_points=[
-            CommandHandler('start', on_main_menu, run_async=True),
-            CallbackQueryHandler(on_sing_up, pattern='sing_up', run_async=True)
+            CommandHandler('start', on_main_menu),
+            CallbackQueryHandler(on_sing_up, pattern='sing_up')
         ],
         states={
             STATE_SELECT_MASSAGE: [
-                CallbackQueryHandler(on_massage_klassik, pattern='klass', run_async=True),
-                CallbackQueryHandler(on_massage_lechebny, pattern='lech', run_async=True),
-                CallbackQueryHandler(on_massage_medovy, pattern='med', run_async=True),
-                CallbackQueryHandler(on_massage_limfo, pattern='limfo', run_async=True),
-                CallbackQueryHandler(on_massage_anti, pattern='anti', run_async=True),
-                CallbackQueryHandler(on_main_menu, pattern='main_menu', run_async=True),
+                CallbackQueryHandler(on_massage_klassik, pattern='klass'),
+                CallbackQueryHandler(on_massage_lechebny, pattern='lech'),
+                CallbackQueryHandler(on_massage_medovy, pattern='med'),
+                CallbackQueryHandler(on_massage_limfo, pattern='limfo'),
+                CallbackQueryHandler(on_massage_anti, pattern='anti'),
+                CallbackQueryHandler(on_main_menu, pattern='main_menu'),
             ],
 
             STATE_SELECT_DATE: [
-                CallbackQueryHandler(on_select_date, run_async=True)
+                CallbackQueryHandler(on_select_date)
             ],
 
             STATE_SELECT_TIME: [
-                CallbackQueryHandler(on_time_12, pattern='12', run_async=True),
-                CallbackQueryHandler(on_time_14, pattern='14', run_async=True),
-                CallbackQueryHandler(on_time_16, pattern='16', run_async=True)
+                CallbackQueryHandler(on_time_12, pattern='12'),
+                CallbackQueryHandler(on_time_14, pattern='14'),
+                CallbackQueryHandler(on_time_16, pattern='16')
             ],
 
             STATE_SELECT_USER: [
-                MessageHandler(Filters.text, on_sing_name, run_async=True)
+                MessageHandler(Filters.text, on_sing_name)
             ],
 
             STATE_SELECT_PHONE: [
-                MessageHandler(Filters.text | Filters.contact, on_sing_contact, run_async=True)
+                MessageHandler(Filters.text | Filters.contact, on_sing_contact)
             ],
 
             STATE_FINISH: [
-                CallbackQueryHandler(on_finish, pattern='okay', run_async=True),
-                CallbackQueryHandler(on_recording, pattern='recording', run_async=True)
+                CallbackQueryHandler(on_finish, pattern='okay'),
+                CallbackQueryHandler(on_recording, pattern='recording')
             ]
         },
         fallbacks=[
@@ -364,7 +365,6 @@ def main():
         ],
         # allow_reentry=True,
         # per_message=True,
-        run_async=True
     ))
 
     dp.add_error_handler(on_error)

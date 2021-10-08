@@ -5,17 +5,13 @@ __author__ = 'ipetrash'
 
 
 import enum
-import os
 import re
 
 # pip install python-telegram-bot
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import (
-    Updater, MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler
-)
+from telegram.ext import MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler
 
-import config
-from common import get_logger, log_func, reply_error, run_main
+from common import get_logger, log_func, start_bot, run_main
 
 
 def is_equal_inline_keyboards(keyboard_1: InlineKeyboardMarkup, keyboard_2: InlineKeyboardMarkup) -> bool:
@@ -233,51 +229,20 @@ def on_sex(update: Update, context: CallbackContext):
     _on_reply_sex(update, context)
 
 
-@log_func(log)
-def on_request(update: Update, context: CallbackContext):
-    message = update.message
-
-    message.reply_text(
-        'Echo: ' + message.text
-    )
-
-
-def on_error(update: Update, context: CallbackContext):
-    reply_error(log, update, context)
-
-
 def main():
-    cpu_count = os.cpu_count()
-    workers = cpu_count
-    log.debug('System: CPU_COUNT=%s, WORKERS=%s', cpu_count, workers)
+    handlers = [
+        CommandHandler('start', on_start),
 
-    log.debug('Start')
+        CommandHandler('settings', on_settings),
+        CallbackQueryHandler(on_settings, pattern=SettingState.MAIN.get_pattern_full()),
 
-    updater = Updater(
-        config.TOKEN,
-        workers=workers,
-        use_context=True
-    )
+        CallbackQueryHandler(on_debug, pattern=SettingState.DEBUG.get_pattern_full()),
+        CallbackQueryHandler(on_year, pattern=SettingState.YEAR.get_pattern_full()),
+        CallbackQueryHandler(on_sex, pattern=SettingState.SEX.get_pattern_full()),
 
-    dp = updater.dispatcher
-
-    dp.add_handler(CommandHandler('start', on_start, run_async=True))
-
-    dp.add_handler(CommandHandler('settings', on_settings, run_async=True))
-    dp.add_handler(CallbackQueryHandler(on_settings, pattern=SettingState.MAIN.get_pattern_full(), run_async=True))
-
-    dp.add_handler(CallbackQueryHandler(on_debug, pattern=SettingState.DEBUG.get_pattern_full(), run_async=True))
-    dp.add_handler(CallbackQueryHandler(on_year, pattern=SettingState.YEAR.get_pattern_full(), run_async=True))
-    dp.add_handler(CallbackQueryHandler(on_sex, pattern=SettingState.SEX.get_pattern_full(), run_async=True))
-
-    dp.add_handler(MessageHandler(Filters.text, on_request, run_async=True))
-
-    dp.add_error_handler(on_error)
-
-    updater.start_polling()
-    updater.idle()
-
-    log.debug('Finish')
+        MessageHandler(Filters.text, on_start),
+    ]
+    start_bot(log, handlers)
 
 
 if __name__ == '__main__':

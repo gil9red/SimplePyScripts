@@ -5,7 +5,6 @@ __author__ = 'ipetrash'
 
 
 import datetime as DT
-import os
 import time
 import sys
 
@@ -18,8 +17,7 @@ from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, Callb
 
 sys.path.append('..')
 
-import config
-from common import get_logger, log_func, reply_error, run_main
+from common import get_logger, log_func, start_bot, run_main
 from db import Reminder, User, Chat
 from utils import parse_command, get_pretty_datetime
 
@@ -119,39 +117,20 @@ def on_get_reminders(update: Update, context: CallbackContext):
     message.reply_text(text)
 
 
-def on_error(update: Update, context: CallbackContext):
-    reply_error(log, update, context)
-
-
 def main():
-    cpu_count = os.cpu_count()
-    workers = cpu_count
-    log.debug('System: CPU_COUNT=%s, WORKERS=%s', cpu_count, workers)
+    handlers = [
+        CommandHandler('start', on_start),
+        MessageHandler(Filters.regex('(?i)^список$'), on_get_reminders),
+        MessageHandler(Filters.text, on_request),
+    ]
 
-    log.debug('Start')
+    def before_start_func(updater: Updater):
+        # TODO: When the bot crashes, it is possible to create duplicate thread
+        #       Need using global variable for getting bot
+        thread = Thread(target=do_checking_reminders, args=[log, updater.bot])
+        thread.start()
 
-    updater = Updater(
-        config.TOKEN,
-        workers=workers,
-        use_context=True
-    )
-
-    # TODO: When the bot crashes, it is possible to create duplicate thread
-    thread = Thread(target=do_checking_reminders, args=[log, updater.bot])
-    thread.start()
-
-    dp = updater.dispatcher
-
-    dp.add_handler(CommandHandler('start', on_start, run_async=True))
-    dp.add_handler(MessageHandler(Filters.regex('(?i)^список$'), on_get_reminders, run_async=True))
-    dp.add_handler(MessageHandler(Filters.text, on_request, run_async=True))
-
-    dp.add_error_handler(on_error)
-
-    updater.start_polling()
-    updater.idle()
-
-    log.debug('Finish')
+    start_bot(log, handlers, before_start_func)
 
 
 if __name__ == '__main__':

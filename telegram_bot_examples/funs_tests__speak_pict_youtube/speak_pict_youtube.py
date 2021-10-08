@@ -10,14 +10,14 @@ import os
 from pathlib import Path
 
 from telegram import Update, InputMediaPhoto
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, Defaults
 
 sys.path.append('..')
 sys.path.append('../../html_parsing')
 sys.path.append('../../exchange_rates')
 
 import config
-from common import get_logger, log_func, reply_error, run_main
+from common import get_logger, log_func, reply_error, start_bot, run_main
 from cbr_ru import exchange_rate
 from youtube_com__results_search_query import search_youtube
 
@@ -211,7 +211,7 @@ def main():
     updater = Updater(
         config.TOKEN,
         workers=workers,
-        use_context=True
+        defaults=Defaults(run_async=True),
     )
 
     # Get the dispatcher to register handlers

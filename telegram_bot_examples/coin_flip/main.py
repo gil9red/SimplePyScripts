@@ -4,18 +4,16 @@
 __author__ = 'ipetrash'
 
 
-import os
 import sys
 import random
 import re
 
 # pip install python-telegram-bot
 from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton, InputMediaPhoto
-from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler
+from telegram.ext import MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler
 
 sys.path.append('..')
-import config
-from common import get_logger, log_func, reply_error, fill_string_pattern, run_main
+from common import get_logger, log_func, fill_string_pattern, start_bot, run_main
 
 
 PATTERN_COIN_FLIP = re.compile(r'^coin_flip$')
@@ -94,37 +92,14 @@ def on_callback_hide_coin_flip(update: Update, context: CallbackContext):
     query.message.delete()
 
 
-def on_error(update: Update, context: CallbackContext):
-    reply_error(log, update, context)
-
-
 def main():
-    cpu_count = os.cpu_count()
-    workers = cpu_count
-    log.debug('System: CPU_COUNT=%s, WORKERS=%s', cpu_count, workers)
-
-    log.debug('Start')
-
-    updater = Updater(
-        config.TOKEN,
-        workers=workers,
-        use_context=True
-    )
-
-    dp = updater.dispatcher
-
-    dp.add_handler(CommandHandler('start', on_start, run_async=True))
-    dp.add_handler(MessageHandler(Filters.text, on_request, run_async=True))
-
-    dp.add_handler(CallbackQueryHandler(on_callback_coin_flip, pattern=PATTERN_COIN_FLIP, run_async=True))
-    dp.add_handler(CallbackQueryHandler(on_callback_hide_coin_flip, pattern=PATTERN_HIDE_COIN_FLIP, run_async=True))
-
-    dp.add_error_handler(on_error)
-
-    updater.start_polling()
-    updater.idle()
-
-    log.debug('Finish')
+    handlers = [
+        CommandHandler('start', on_start),
+        MessageHandler(Filters.text, on_request),
+        CallbackQueryHandler(on_callback_coin_flip, pattern=PATTERN_COIN_FLIP),
+        CallbackQueryHandler(on_callback_hide_coin_flip, pattern=PATTERN_HIDE_COIN_FLIP),
+    ]
+    start_bot(log, handlers)
 
 
 if __name__ == '__main__':
