@@ -101,7 +101,8 @@ def fill_string_pattern(pattern: re.Pattern, *args) -> str:
 
 def start_bot(
         log: logging.Logger,
-        handlers: List[Handler]
+        handlers: List[Handler],
+        before_start_func: Callable[[Updater], None] = None,
 ):
     cpu_count = os.cpu_count()
     workers = cpu_count
@@ -124,6 +125,9 @@ def start_bot(
 
     # Handle all errors
     dp.add_error_handler(lambda update, context: reply_error(log, update, context))
+
+    if before_start_func:
+        before_start_func(updater)
 
     # Start the Bot
     updater.start_polling()
