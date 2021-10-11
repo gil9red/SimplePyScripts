@@ -79,10 +79,12 @@ def reply_error(log: logging.Logger, update: Update, context: CallbackContext):
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
     message = update.effective_message
+    user = update.effective_user
+    chat = update.effective_chat
 
     message.reply_text(
-        f'Current user id: {message.from_user.id}\n'
-        f'Current chat id: {message.chat_id}\n'
+        f'Current user id: {user.id}\n'
+        f'Current chat id: {chat.id}\n'
         f'Current mode: {DATA["MODE"]}.\nSelect mode and error:',
         reply_markup=REPLY_KEYBOARD_MARKUP
     )
