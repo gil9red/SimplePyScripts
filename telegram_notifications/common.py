@@ -102,6 +102,6 @@ def log_func(log: logging.Logger):
 
 
 def reply_error(log: logging.Logger, update: Update, context: CallbackContext):
-    log.exception('Error: %s\nUpdate: %s', context.error, update, exc_info=context.error)
+    log.error('Error: %s\nUpdate: %s', context.error, update, exc_info=context.error)
     if update:
         update.effective_message.reply_text(config.ERROR_TEXT)
