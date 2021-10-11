@@ -85,7 +85,8 @@ def on_request(update: Update, context: CallbackContext):
     message.reply_text(
         f'Current user id: {user.id}\n'
         f'Current chat id: {chat.id}\n'
-        f'Current mode: {DATA["MODE"]}.\nSelect mode and error:',
+        f'Current mode: {DATA["MODE"]}.\n'
+        f'Select mode and error:',
         reply_markup=REPLY_KEYBOARD_MARKUP
     )
 
