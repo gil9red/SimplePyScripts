@@ -23,7 +23,6 @@ from common import log_func, get_logger
 
 MESS_MAX_LENGTH = 4096
 DEVELOPER_CHAT_ID = ...
-DEVELOPER_CHAT_ID = 257199860
 
 
 class ErrorHandlingMode(enum.Enum):
