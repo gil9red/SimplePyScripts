@@ -179,7 +179,7 @@ class MainWindow(QWidget):
 
             if self.cb_string_literal.isChecked():
                 if not out_text.startswith('"'):
-                    out_text += '"' + out_text
+                    out_text = '"' + out_text
                 if not out_text.endswith('"'):
                     out_text += '"'
                 out_text += ';'
