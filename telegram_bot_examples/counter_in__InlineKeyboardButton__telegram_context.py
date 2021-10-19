@@ -25,7 +25,7 @@ DATA_TEMPLATE = {
 
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
-    update.message.reply_text('Write something')
+    update.effective_message.reply_text('Write something')
 
 
 @log_func(log)
@@ -36,7 +36,7 @@ def on_request(update: Update, context: CallbackContext):
     ]]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    update.message.reply_text(
+    update.effective_message.reply_text(
         'Ok',
         reply_markup=reply_markup
     )

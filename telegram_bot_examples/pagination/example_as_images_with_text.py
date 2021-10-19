@@ -25,7 +25,7 @@ log = get_logger(__file__)
 
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
-    message = update.message
+    message = update.effective_message
 
     paginator = InlineKeyboardPaginator(
         page_count=len(character_pages),

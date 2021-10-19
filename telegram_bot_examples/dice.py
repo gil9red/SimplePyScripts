@@ -25,7 +25,7 @@ REPLY_MARKUP = InlineKeyboardMarkup.from_row([
 
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
-    update.message.reply_text(
+    update.effective_message.reply_text(
         "Select dice:",
         reply_markup=REPLY_MARKUP
     )

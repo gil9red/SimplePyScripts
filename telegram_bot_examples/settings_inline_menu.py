@@ -175,7 +175,7 @@ log = get_logger(__file__)
 
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
-    update.message.reply_text(
+    update.effective_message.reply_text(
         'Enter /settings'
     )
 

@@ -16,6 +16,8 @@ log = get_logger(__file__)
 
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
+    message = update.effective_message
+
     reply_markup = InlineKeyboardMarkup([
         [
             InlineKeyboardButton("dog", callback_data='dog'),
@@ -24,8 +26,8 @@ def on_start(update: Update, context: CallbackContext):
         ],
     ])
 
-    update.effective_message.reply_text(
-        f'Hello {update.message.chat.first_name}!', reply_markup=reply_markup
+    message.reply_text(
+        f'Hello {message.chat.first_name}!', reply_markup=reply_markup
     )
 
 

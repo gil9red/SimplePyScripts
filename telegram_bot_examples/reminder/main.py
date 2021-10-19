@@ -59,7 +59,7 @@ log = get_logger(__file__)
 
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
-    update.message.reply_text(
+    update.effective_message.reply_text(
         'Введите что-нибудь, например: "напомни через 1 час".\n'
         'Для получения списка напоминаний, напишите: "список"'
     )
@@ -67,7 +67,7 @@ def on_start(update: Update, context: CallbackContext):
 
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
-    message = update.message
+    message = update.effective_message
 
     command = message.text
     log.debug(f'Command: {command!r}')
@@ -90,7 +90,7 @@ def on_request(update: Update, context: CallbackContext):
 
 @log_func(log)
 def on_get_reminders(update: Update, context: CallbackContext):
-    message = update.message
+    message = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
 

@@ -19,14 +19,14 @@ log = get_logger(__file__)
 
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
-    update.message.reply_text(
+    update.effective_message.reply_text(
         'Commands: set and get.'
     )
 
 
 @log_func(log)
 def on_set(update: Update, context: CallbackContext):
-    message = update.message
+    message = update.effective_message
 
     end = context.match.span()[1]
     text = message.text[end:].strip()
@@ -38,7 +38,7 @@ def on_set(update: Update, context: CallbackContext):
 
 @log_func(log)
 def on_get(update: Update, context: CallbackContext):
-    message = update.message
+    message = update.effective_message
 
     text = context.user_data.get('text', '<Not data, using command set>')
 
@@ -49,7 +49,7 @@ def on_get(update: Update, context: CallbackContext):
 
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
-    message = update.message
+    message = update.effective_message
 
     message.reply_text(
         'Echo: ' + message.text

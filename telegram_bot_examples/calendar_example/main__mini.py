@@ -18,7 +18,7 @@ import config
 
 
 def on_calendar(update: Update, context: CallbackContext):
-    update.message.reply_text(
+    update.effective_message.reply_text(
         "Please select a date: ",
         reply_markup=telegramcalendar.create_calendar()
     )

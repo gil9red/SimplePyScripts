@@ -220,8 +220,8 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
-    dp.add_handler(CommandHandler("hi", lambda update, context: update.message.reply_text(text='hi')))
-    dp.add_handler(CommandHandler("say", lambda update, context: update.message.reply_text(text=f'''I say: "{" ".join(context.args)}".''')))
+    dp.add_handler(CommandHandler("hi", lambda update, context: update.effective_message.reply_text(text='hi')))
+    dp.add_handler(CommandHandler("say", lambda update, context: update.effective_message.reply_text(text=f'''I say: "{" ".join(context.args)}".''')))
     dp.add_handler(CommandHandler("exchange_rates", on_exchange_rates))
     dp.add_handler(CommandHandler("pict", pict))
     dp.add_handler(CommandHandler("pict2", pict2))

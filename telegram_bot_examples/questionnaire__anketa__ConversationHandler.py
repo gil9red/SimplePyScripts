@@ -39,7 +39,7 @@ log = get_logger(__file__)
 
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
-    update.message.reply_text(
+    update.effective_message.reply_text(
         'Введите что-нибудь', reply_markup=REPLY_KEYBOARD_MARKUP
     )
 
@@ -51,23 +51,24 @@ def on_anketa_start(update: Update, context: CallbackContext):
     context.user_data['rating'] = ''
     context.user_data['comment'] = ''
 
-    update.message.reply_text('Как вас зовут?', reply_markup=ReplyKeyboardRemove())
+    update.effective_message.reply_text('Как вас зовут?', reply_markup=ReplyKeyboardRemove())
     return STATE_USER_NAME
 
 
 @log_func(log)
 def on_anketa_set_name(update: Update, context: CallbackContext):
-    context.user_data['name'] = update.message.text
+    context.user_data['name'] = update.effective_message.text
 
-    update.message.reply_text("Сколько вам лет?")
+    update.effective_message.reply_text("Сколько вам лет?")
     return STATE_USER_AGE
 
 
 @log_func(log)
 def on_anketa_set_age(update: Update, context: CallbackContext):
-    context.user_data['age'] = update.message.text
+    message = update.effective_message
+    context.user_data['age'] = message.text
 
-    update.message.reply_text(
+    message.reply_text(
         "Оцените статью от 1 до 5",
         reply_markup=REPLY_KEYBOARD_MARKUP_SET_RATING
     )
@@ -76,9 +77,10 @@ def on_anketa_set_age(update: Update, context: CallbackContext):
 
 @log_func(log)
 def on_anketa_set_rating(update: Update, context: CallbackContext):
-    context.user_data['rating'] = update.message.text
+    message = update.effective_message
+    context.user_data['rating'] = message.text
 
-    update.message.reply_text(
+    message.reply_text(
         "Напишите отзыв или нажмите кнопку пропустить этот шаг.",
         reply_markup=ReplyKeyboardMarkup(
             [["Пропустить"]],
@@ -90,11 +92,12 @@ def on_anketa_set_rating(update: Update, context: CallbackContext):
 
 @log_func(log)
 def on_anketa_comment(update: Update, context: CallbackContext):
-    context.user_data['comment'] = update.message.text
+    message = update.effective_message
+    context.user_data['comment'] = message.text
     text = ANKETA_TEXT_FORMAT.format(**context.user_data)
 
-    update.message.reply_html(text)
-    update.message.reply_text(
+    message.reply_html(text)
+    message.reply_text(
         "Спасибо вам за комментарий!", reply_markup=REPLY_KEYBOARD_MARKUP
     )
 
@@ -103,17 +106,18 @@ def on_anketa_comment(update: Update, context: CallbackContext):
 
 @log_func(log)
 def on_anketa_exit_comment(update: Update, context: CallbackContext):
+    message = update.effective_message
     text = ANKETA_TEXT_FORMAT.format(**context.user_data)
 
-    update.message.reply_html(text)
-    update.message.reply_text("Спасибо!", reply_markup=REPLY_KEYBOARD_MARKUP)
+    message.reply_html(text)
+    message.reply_text("Спасибо!", reply_markup=REPLY_KEYBOARD_MARKUP)
 
     return ConversationHandler.END  # выходим из диалог
 
 
 @log_func(log)
 def on_anketa_invalid_set_rating(update: Update, context: CallbackContext):
-    update.message.reply_text(
+    update.effective_message.reply_text(
         'Я вас не понимаю, выберите оценку на клавиатуре!',
         reply_markup=REPLY_KEYBOARD_MARKUP_SET_RATING
     )
@@ -121,7 +125,7 @@ def on_anketa_invalid_set_rating(update: Update, context: CallbackContext):
 
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
-    message = update.message
+    message = update.effective_message
 
     message.reply_text(
         'Echo: ' + message.text,

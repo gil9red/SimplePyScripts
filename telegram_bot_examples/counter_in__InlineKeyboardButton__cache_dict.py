@@ -48,7 +48,7 @@ def on_start(update: Update, context: CallbackContext):
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
-    message_id = update.message.message_id
+    message_id = update.effective_message.message_id
 
     if chat_id not in CACHE_NUMBERS:
         CACHE_NUMBERS[chat_id] = dict()
@@ -57,7 +57,7 @@ def on_request(update: Update, context: CallbackContext):
 
     data = CACHE_NUMBERS[chat_id][message_id]
 
-    update.message.reply_text(
+    update.effective_message.reply_text(
         'Ok',
         reply_markup=get_reply_markup(data)
     )

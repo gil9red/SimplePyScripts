@@ -22,14 +22,14 @@ log = get_logger(__file__)
 
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
-    message = update.message
+    message = update.effective_message
 
     message.reply_text('Use: /calendar')
 
 
 @log_func(log)
 def on_calendar(update: Update, context: CallbackContext):
-    update.message.reply_text(
+    update.effective_message.reply_text(
         "Please select a date: ",
         reply_markup=telegramcalendar.create_calendar()
     )

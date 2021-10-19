@@ -41,14 +41,14 @@ log = get_logger(__file__)
 
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
-    update.message.reply_text(
+    update.effective_message.reply_text(
         'Введите что-нибудь', reply_markup=REPLY_KEYBOARD_MARKUP
     )
 
 
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
-    message = update.message
+    message = update.effective_message
 
     state = context.user_data.get('state')
 
@@ -59,7 +59,7 @@ def on_request(update: Update, context: CallbackContext):
         context.user_data['rating'] = ''
         context.user_data['comment'] = ''
 
-        update.message.reply_text('Как вас зовут?', reply_markup=ReplyKeyboardRemove())
+        message.reply_text('Как вас зовут?', reply_markup=ReplyKeyboardRemove())
         context.user_data['state'] = STATE_USER_NAME
         return
 
@@ -84,7 +84,7 @@ def on_request(update: Update, context: CallbackContext):
         context.user_data['rating'] = message.text
         context.user_data['state'] = STATE_COMMENT
 
-        update.message.reply_text(
+        message.reply_text(
             "Напишите отзыв или нажмите кнопку пропустить этот шаг.",
             reply_markup=ReplyKeyboardMarkup(
                 [[SKIP]],

@@ -25,14 +25,14 @@ def on_start(update: Update, context: CallbackContext):
         # https://t.me/<bot>?start=<start_argument>
         start_argument = context.args[0]
 
-    update.message.reply_text(
+    update.effective_message.reply_text(
         'Start argument: ' + start_argument
     )
 
 
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
-    message = update.message
+    message = update.effective_message
 
     message.reply_text(
         message.text

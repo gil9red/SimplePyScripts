@@ -22,7 +22,7 @@ log = get_logger(__file__)
 
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
-    update.message.reply_text(
+    update.effective_message.reply_text(
         'Write something',
         reply_markup=REPLY_KEYBOARD_MARKUP
     )
@@ -30,7 +30,7 @@ def on_start(update: Update, context: CallbackContext):
 
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
-    message = update.message
+    message = update.effective_message
 
     message.reply_text(
         'Echo: ' + message.text,
@@ -40,7 +40,7 @@ def on_request(update: Update, context: CallbackContext):
 
 @log_func(log)
 def on_contact_or_location(update: Update, context: CallbackContext):
-    message = update.message
+    message = update.effective_message
 
     text = ''
     if message.contact:

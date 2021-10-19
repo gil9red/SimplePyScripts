@@ -65,7 +65,7 @@ def sending_notifications():
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
     if not config.CHAT_ID:
-        update.message.reply_text('Введите что-нибудь для получения chat_id')
+        update.effective_message.reply_text('Введите что-нибудь для получения chat_id')
 
 
 @log_func(log)

@@ -254,7 +254,7 @@ def on_time_16(update: Update, context: CallbackContext):
 def on_sing_name(update: Update, context: CallbackContext):
     user_data = context.user_data
     category = 'Имя Фамилия'
-    user_name = update.message.text
+    user_name = update.effective_message.text
     user_data[category] = user_name
     print('Сохранено имя: ' + user_name)
 
@@ -262,16 +262,17 @@ def on_sing_name(update: Update, context: CallbackContext):
     custom_keyboard = [[contact_keyboard]]
     markup = ReplyKeyboardMarkup(custom_keyboard, resize_keyboard=True, one_time_keyboard=True)
 
-    update.message.reply_text('''*Введите свой номер телефона*''', parse_mode='Markdown', reply_markup=markup)
+    update.effective_message.reply_text('''*Введите свой номер телефона*''', parse_mode='Markdown', reply_markup=markup)
 
     return STATE_SELECT_PHONE
 
 
 @log_func(log)
 def on_sing_contact(update: Update, context: CallbackContext):
+    message = update.effective_message
     user_data = context.user_data
     category = 'Телефон'
-    phone = update.message.text or update.message.contact.phone_number
+    phone = message.text or message.contact.phone_number
     user_data[category] = phone
     print('Сохранен номер: ' + phone)
 
@@ -282,7 +283,7 @@ def on_sing_contact(update: Update, context: CallbackContext):
 
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    update.message.reply_text('''*Вы зарегистрированы!*
+    message.reply_text('''*Вы зарегистрированы!*
 
 _Ваши данные:_ 
 {}'''.format(facts_to_str(user_data)), parse_mode='Markdown', reply_markup=reply_markup)
