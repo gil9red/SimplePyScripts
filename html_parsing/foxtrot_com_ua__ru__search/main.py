@@ -61,7 +61,7 @@ def parse(url_search: str) -> List[Tuple[str, str, str]]:
 
             # Обновление номера последней страницы
             try:
-                pages_count_el = driver.find_element_by_css_selector('.listing__pagination[data-pages-count]')
+                pages_count_el = driver.find_element_by_css_selector('*[data-pages-count]')
                 last_page = int(pages_count_el.get_attribute('data-pages-count'))
 
             except NoSuchElementException:
