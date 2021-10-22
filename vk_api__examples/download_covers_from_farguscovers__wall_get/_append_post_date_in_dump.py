@@ -7,6 +7,7 @@ __author__ = 'ipetrash'
 import datetime as DT
 import json
 import sys
+from collections import defaultdict
 
 from main import FILE_NAME_DUMP, get_wall_it
 
@@ -16,15 +17,21 @@ if not FILE_NAME_DUMP.exists():
     sys.exit()
 
 dump = json.load(open(FILE_NAME_DUMP, encoding='utf-8'))
-id_by_dump = {x['post_id']: x for x in dump}
+
+id_by_dumps = defaultdict(list)
+for x in dump:
+    post_id = x['post_id']
+    id_by_dumps[post_id].append(x)
 
 for post in get_wall_it():
     post_id = post['id']
-    if post_id not in id_by_dump:
+    if post_id not in id_by_dumps:
         continue
 
     date_time = DT.datetime.fromtimestamp(post['date'])
-    id_by_dump[post_id]['date_time'] = str(date_time)
+
+    for x in id_by_dumps[post_id]:
+        x['date_time'] = str(date_time)
 
 print('Дамп перезаписан')
 
