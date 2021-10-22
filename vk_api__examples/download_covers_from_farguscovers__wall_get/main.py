@@ -10,12 +10,13 @@ __author__ = 'ipetrash'
 """
 
 
+import datetime as DT
 import json
 import re
 import time
 import sys
 
-from typing import List, Dict
+from typing import List, Dict, Generator
 from pathlib import Path
 from urllib.request import urlretrieve
 
@@ -47,20 +48,26 @@ def get_authors(text: str) -> List[Dict[str, str]]:
 DOMAIN = 'farguscovers'
 
 
-if __name__ == '__main__':
+def get_wall_it() -> Generator:
     vk_session = get_vk_session()
     tools = VkTools(vk_session)
-
-    dump = []
 
     data = {
         'domain': DOMAIN,
     }
-    wall_it = tools.get_all_iter('wall.get', 100, data)
-    for i, post in enumerate(wall_it, 1):
+    return tools.get_all_iter('wall.get', 100, data)
+
+
+if __name__ == '__main__':
+    dump = []
+
+    for i, post in enumerate(get_wall_it(), 1):
         post_id = post['id']
         owner_id = post['owner_id']
         post_url = f'https://vk.com/farguscovers?w=wall{owner_id}_{post_id}'
+
+        date_time = DT.datetime.fromtimestamp(post['date'])
+        date_time_str = str(date_time)
 
         post_text = post['text']
         authors = get_authors(post_text)
@@ -92,6 +99,7 @@ if __name__ == '__main__':
 
                 dump.append({
                     'post_id': post_id,
+                    'date_time': date_time_str,
                     'post_url': post_url,
                     'post_text': post_text,
                     'photo_file_name': str(file_name.relative_to(DIR)),
