@@ -12,13 +12,14 @@ try:
 except ImportError:
     import _thread as thread
 import time
+from typing import Optional
 
 
 # pip install websocket-client
 import websocket
 
 
-def on_open(ws):
+def on_open(ws: websocket.WebSocketApp):
     print(f'[on_open]')
 
     def run(*args):
@@ -34,15 +35,15 @@ def on_open(ws):
     thread.start_new_thread(run, ())
 
 
-def on_message(ws, message):
+def on_message(ws: websocket.WebSocketApp, message: str):
     print(f'[on_message] {message}')
 
 
-def on_error(ws, error):
+def on_error(ws: websocket.WebSocketApp, error: Exception):
     print(f'[on_error] {error}')
 
 
-def on_close(ws):
+def on_close(ws: websocket.WebSocketApp, close_status_code: Optional[int], close_msg: Optional[str]):
     print(f'[on_close]')
 
 
