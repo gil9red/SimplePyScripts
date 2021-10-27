@@ -44,7 +44,7 @@ def on_error(ws: websocket.WebSocketApp, error: Exception):
 
 
 def on_close(ws: websocket.WebSocketApp, close_status_code: Optional[int], close_msg: Optional[str]):
-    print(f'[on_close]')
+    print(f'[on_close] close_status_code={close_status_code} close_msg={close_msg}')
 
 
 if __name__ == "__main__":
