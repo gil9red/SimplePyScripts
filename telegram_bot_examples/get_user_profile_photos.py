@@ -31,6 +31,7 @@ def on_request(update: Update, context: CallbackContext):
     user_id = update.effective_user.id
 
     result = context.bot.get_user_profile_photos(user_id)
+
     photos = result['photos']
     if not photos:
         message.reply_text('No profile photos!')
@@ -38,7 +39,8 @@ def on_request(update: Update, context: CallbackContext):
 
     for photo_sizes in photos:
         photo = max(photo_sizes, key=lambda x: x['width'])
-        message.reply_photo(photo['file_id'])
+        file_id = photo['file_id']
+        message.reply_photo(file_id, caption=file_id)
 
 
 def main():
