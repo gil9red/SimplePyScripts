@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 import re
+from dataclasses import dataclass
 from typing import List, Tuple, Union
 
 import requests
@@ -19,6 +20,15 @@ session = requests.session()
 session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0'
 
 URL = 'https://ncse.ngo/list-steves'
+
+
+@dataclass
+class Steve:
+    name: str
+    description: str
+
+    def get_text(self) -> str:
+        return f'{self.name}\n{self.description}'
 
 
 def get_number_from_description() -> int:
@@ -47,7 +57,7 @@ def _remove_postfix(text: str) -> str:
     return text.replace('*', '').replace('†', '').strip()
 
 
-def get_Steves() -> List[Tuple[str, str]]:
+def get_Steves() -> List[Steve]:
     items = []
 
     rs = session.get(URL)
@@ -72,7 +82,7 @@ def get_Steves() -> List[Tuple[str, str]]:
         description = _get_stripped_text(p.text)
         description = _remove_postfix(description)
 
-        items.append((name, description))
+        items.append(Steve(name, description))
 
     return items
 
@@ -88,12 +98,10 @@ if __name__ == '__main__':
 
     print(f'''
 First:
-{items[0][0]}
-{items[0][1]}
+{items[0].get_text()}
 
 Last:
-{items[-1][0]}
-{items[-1][1]}
+{items[-1].get_text()}
 ''')
     """
     First:
