@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 import re
+from typing import List, Tuple
 
 import requests
 
@@ -20,43 +21,57 @@ def get_url_img(media: dict) -> str:
     return f"{media['base_url']}/img/orig/work/{media['data']['version_orig']}/{media['media_id']}.webp"
 
 
-rs = session.get('https://artchive.ru/hansruedigiger/works')
-rs.raise_for_status()
+def get_url_images(url: str) -> List[Tuple[str, str]]:
+    rs = session.get(url)
+    rs.raise_for_status()
 
-m = re.search(r' artist_id="(\d+)"', rs.text)
-if not m:
-    raise Exception('Not found artist_id!')
+    m = re.search(r' artist_id="(\d+)"', rs.text)
+    if not m:
+        raise Exception('Not found artist_id!')
 
-artist_id = m.group(1)
+    artist_id = m.group(1)
 
-url_api = f'https://artchive.ru/action/vue/works/search'
-params = {
-    'p': 1,
-    'artist': artist_id,
-}
+    items = []
 
-rs = session.get(url_api, params=params)
-rs.raise_for_status()
+    # TODO: iterate by all pages
+    params = {
+        'p': 1,
+        'artist': artist_id,
+    }
 
-data = rs.json()
+    url_api = 'https://artchive.ru/action/vue/works/search'
 
-for work in data['works']:
-    url_img = get_url_img(work['media'])
-    print(work['name'])
-    print(url_img)
-    print()
-"""
-Чужой - Иероглифика
-https://arthive.net/res/media/img/orig/work/0f0/611262.webp
+    rs = session.get(url_api, params=params)
+    rs.raise_for_status()
 
-Чужой - монстр
-https://arthive.net/res/media/img/orig/work/520/602973.webp
+    data = rs.json()
+    for work in data['works']:
+        items.append((
+            work['name'],
+            get_url_img(work['media'])
+        ))
 
-Альфа
-https://arthive.net/res/media/img/orig/work/250/611263.webp
+    return items
 
-...
 
-Биомеханический гуманоид
-https://arthive.net/res/media/img/orig/work/efb/611280.webp
-"""
+if __name__ == '__main__':
+    url = 'https://artchive.ru/hansruedigiger/works'
+    for name, url_img in get_url_images(url):
+        print(name)
+        print(url_img)
+        print()
+    """
+    Чужой - Иероглифика
+    https://arthive.net/res/media/img/orig/work/0f0/611262.webp
+    
+    Чужой - монстр
+    https://arthive.net/res/media/img/orig/work/520/602973.webp
+    
+    Альфа
+    https://arthive.net/res/media/img/orig/work/250/611263.webp
+    
+    ...
+    
+    Биомеханический гуманоид
+    https://arthive.net/res/media/img/orig/work/efb/611280.webp
+    """
