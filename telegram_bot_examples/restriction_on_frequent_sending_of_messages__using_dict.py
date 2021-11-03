@@ -31,7 +31,7 @@ def on_request(update: Update, context: CallbackContext):
     message = update.effective_message
 
     text = 'Получено!'
-    seconds = 5
+    need_seconds = 50
     current_time = DT.datetime.now()
     last_datetime = CHAT_BY_DATETIME.get(message.chat_id)
 
@@ -39,9 +39,15 @@ def on_request(update: Update, context: CallbackContext):
     if not last_datetime:
         CHAT_BY_DATETIME[message.chat_id] = current_time
     else:
+        # Разница в секундах между текущим временем и временем последнего сообщения
+        delta_seconds = (current_time - last_datetime).total_seconds()
+
+        # Осталось ждать секунд перед отправкой
+        seconds_left = int(need_seconds - delta_seconds)
+
         # Если с последнего сообщения прошло не больше секунд, чем задано
-        if (current_time - last_datetime).total_seconds() <= seconds:
-            text = f'Подождите {seconds} секунд перед выполнение этой команды'
+        if seconds_left > 0:
+            text = f'Подождите {seconds_left} секунд перед выполнение этой команды'
         else:
             CHAT_BY_DATETIME[message.chat_id] = current_time
 
