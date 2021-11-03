@@ -39,7 +39,7 @@ def on_request(update: Update, context: CallbackContext):
     if not last_datetime:
         CHAT_BY_DATETIME[message.chat_id] = current_time
     else:
-        # Если с последнего сообщения прошло меньше секунд, чем задано
+        # Если с последнего сообщения прошло не больше секунд, чем задано
         if (current_time - last_datetime).total_seconds() <= seconds:
             text = f'Подождите {seconds} секунд перед выполнение этой команды'
         else:
