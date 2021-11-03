@@ -45,7 +45,7 @@ def on_request(update: Update, context: CallbackContext):
         # Осталось ждать секунд перед отправкой
         seconds_left = int(need_seconds - delta_seconds)
 
-        # Если с последнего сообщения прошло не больше секунд, чем задано
+        # Если время ожидания не закончилось
         if seconds_left > 0:
             text = f'Подождите {seconds_left} секунд перед выполнение этой команды'
         else:
