@@ -4,20 +4,24 @@
 __author__ = 'ipetrash'
 
 
-def search_game_price_list(name):
+import re
+
+import requests
+from bs4 import BeautifulSoup
+
+
+def search_game_price_list(name: str) -> list:
     # category1 = 998 (Game)
-    url = 'http://store.steampowered.com/search/?category1=998&os=win&supportedlang=english&term=' + name
+    url = 'https://store.steampowered.com/search/?category1=998&os=win&supportedlang=english&term=' + name
 
-    game_price_list = list()
+    game_price_list = []
 
-    import requests
     rs = requests.get(url)
     if not rs.ok:
-        print('Что-то пошло не так: {}\n{}'.format(rs.status_code, rs.text))
+        print(f'Что-то пошло не так: {rs.status_code}\n{rs.text}')
         return game_price_list
 
-    from bs4 import BeautifulSoup
-    root = BeautifulSoup(rs.content, 'lxml')
+    root = BeautifulSoup(rs.content, 'html.parser')
 
     for div in root.select('.search_result_row'):
         name = div.select_one('.title').text.strip()
@@ -33,7 +37,6 @@ def search_game_price_list(name):
             price = None
         else:
             # Если в цене нет цифры считаем что это "Free To Play" или что-то подобное
-            import re
             match = re.search(r'\d', price)
             if not match:
                 price = 0

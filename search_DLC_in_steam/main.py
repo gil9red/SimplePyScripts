@@ -4,19 +4,21 @@
 __author__ = 'ipetrash'
 
 
-def is_dlc(game):
-    def steam_search_DLC(name):
-        url = 'http://store.steampowered.com/search/?category1=21&term=' + name
+import re
 
-        game_price_list = list()
+import requests
+from bs4 import BeautifulSoup
+
+
+def is_dlc(game: str) -> bool:
+    def steam_search_DLC(name: str) -> list:
+        url = 'https://store.steampowered.com/search/?category1=21&term=' + name
+
+        game_price_list = []
 
         while True:
-            import requests
             rs = requests.get(url)
-
-            from bs4 import BeautifulSoup
-            root = BeautifulSoup(rs.content, 'lxml')
-
+            root = BeautifulSoup(rs.content, 'html.parser')
             break
 
         for div in root.select('.search_result_row'):
@@ -32,7 +34,7 @@ def is_dlc(game):
 
         return game_price_list
 
-    def smart_comparing_names(name_1, name_2):
+    def smart_comparing_names(name_1: str, name_2: str) -> bool:
         """
         Функция для сравнивания двух названий игр.
         Возвращает True, если совпадают, иначе -- False.
@@ -43,8 +45,7 @@ def is_dlc(game):
         name_1 = name_1.lower()
         name_2 = name_2.lower()
 
-        def clear_name(name):
-            import re
+        def clear_name(name: str) -> str:
             return re.sub(r'[^\w]', '', name).replace('_', '')
 
         # Удаление символов кроме буквенных и цифр: "the witcher®3:___ вася! wild hunt" -> "thewitcher3васяwildhunt"
@@ -68,8 +69,8 @@ def is_dlc(game):
     return False
 
 
-# Parser from https://github.com/gil9red/played_games/blob/f23777a1368f9124450bedac036791068d8ca099/mini_played_games_parser.py#L7
-def parse_played_games(text: str, silence: bool=False) -> dict:
+# SOURCE: Parser from https://github.com/gil9red/played_games/blob/f23777a1368f9124450bedac036791068d8ca099/mini_played_games_parser.py#L7
+def parse_played_games(text: str, silence: bool = False) -> dict:
     """
     Функция для парсинга списка игр.
     """
@@ -185,14 +186,15 @@ def parse_played_games(text: str, silence: bool=False) -> dict:
 
 
 if __name__ == '__main__':
+    import time
+
     with open('gistfile1.txt', encoding='utf-8') as f:
         text = f.read()
 
     platforms = parse_played_games(text)
     print('Platforms:', len(platforms))
 
-    games = list()
-
+    games = []
     for categories in platforms['PC'].values():
         games += categories
 
@@ -204,5 +206,4 @@ if __name__ == '__main__':
         if is_dlc(game):
             print('    ' + game)
 
-        import time
         time.sleep(10)
