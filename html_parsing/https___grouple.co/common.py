@@ -5,8 +5,9 @@ __author__ = 'ipetrash'
 
 
 import enum
+import time
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Dict
 
 import requests
 from bs4 import BeautifulSoup
@@ -60,6 +61,8 @@ def load(url: str) -> requests.Response:
         rs = session.get(url)
         rs.raise_for_status()
 
+        time.sleep(1)
+
         # Если нужно авторизоваться
         if '/login/auth' in rs.url:
             do_auth()
@@ -95,6 +98,13 @@ def get_bookmarks_by_status(status: Status) -> List[Bookmark]:
     return get_bookmarks(f'https://grouple.co/private/bookmarks?status={status.value}')
 
 
+def get_all_bookmarks() -> Dict[Status, List[Bookmark]]:
+    return {
+        status: get_bookmarks_by_status(status)
+        for status in Status
+    }
+
+
 if __name__ == '__main__':
     assert Status.WATCHING.name == Status.WATCHING.value
     assert Status.WATCHING.name == "WATCHING"
@@ -103,7 +113,46 @@ if __name__ == '__main__':
     print(do_auth())
     print(session.cookies)
 
-    print()
+    print('\n' + '-' * 50 + '\n')
+
+    status_by_bookmarks = get_all_bookmarks()
+    print('Total bookmarks:', sum(len(bookmarks) for bookmarks in status_by_bookmarks.values()))
+    # Total bookmarks: 143
+
+    for status, bookmarks in status_by_bookmarks.items():
+        print(f'{status.value}. Bookmarks ({len(bookmarks)}):')
+        for i, bookmark in enumerate(bookmarks, 1):
+            print(f'{i}. {bookmark}')
+
+        print()
+
+    """
+    WATCHING. Bookmarks (28):
+    1. Bookmark(title='Башня Бога', url='https://readmanga.io/bashnia_boga__A339d2', tags=[])
+    ...
+    28. Bookmark(title='Фейри Тейл. Начало', url='https://readmanga.io/feiri_teil__nachalo', tags=['переведено', 'без глав'])
+    
+    USER_DEFINED. Bookmarks (0):
+    
+    ON_HOLD. Bookmarks (4):
+    1. Bookmark(title='Д.Грэй-мен', url='https://readmanga.io/d_grei_men__A5327', tags=[])
+    ...
+    4. Bookmark(title='Четыре рыцаря', url='https://readmanga.io/chetyre_rycaria__A5327', tags=[])
+    
+    PLANED. Bookmarks (56):
+    1. Bookmark(title='"Сверхъестественное" для чайников', url='https://readmanga.io/_sverhestestvennoe__dlia_chainikov', tags=['сингл'])
+    ...
+    56. Bookmark(title='Энигма', url='https://readmanga.io/enigma__A5274', tags=['переведено'])
+    
+    COMPLETED. Bookmarks (55):
+    1. Bookmark(title='666 Сатана', url='https://readmanga.io/666_satana__A533b', tags=['переведено'])
+    ...
+    55. Bookmark(title='Я — герой!', url='https://mintmanga.live/ia___geroi___A5327', tags=['переведено'])
+    
+    FAVORITE. Bookmarks (0):
+    """
+
+    print('\n' + '-' * 50 + '\n')
 
     bookmarks = get_bookmarks_by_status(Status.WATCHING)
     print(f'Bookmarks ({len(bookmarks)}):')
