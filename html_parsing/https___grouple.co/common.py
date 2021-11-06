@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from typing import List, Dict
 
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 
 from config import LOGIN, PASSWORD
 
@@ -71,31 +71,43 @@ def load(url: str) -> requests.Response:
         return rs
 
 
+def parse_bookmark(el: Tag) -> Bookmark:
+    tags = []
+    if el.sup:
+        tags += [x.get_text(strip=True).lower() for x in el.sup.select('span[class]')]
+
+        # Удаление сноски ("Выпуск завершен", "переведено" и т.п.), чтобы в title она не попала
+        el.sup.decompose()
+
+    title = el.get_text(strip=True)
+    url = el['href']
+
+    return Bookmark(title=title, url=url, tags=tags)
+
+
 def get_bookmarks(url: str) -> List[Bookmark]:
     rs = load(url)
     root = BeautifulSoup(rs.content, 'html.parser')
 
-    items = []
-    for row in root.select('.bookmark-row a.site-element'):
-        tags = []
-        if row.sup:
-            tags += [x.get_text(strip=True).lower() for x in row.sup.select('span[class]')]
-
-            # Удаление сноски ("Выпуск завершен", "переведено" и т.п.), чтобы в title она не попала
-            row.sup.decompose()
-
-        title = row.get_text(strip=True)
-        url = row['href']
-
-        items.append(
-            Bookmark(title=title, url=url, tags=tags)
-        )
-
-    return items
+    return [
+        parse_bookmark(row)
+        for row in root.select('.bookmark-row a.site-element')
+    ]
 
 
 def get_bookmarks_by_status(status: Status) -> List[Bookmark]:
     return get_bookmarks(f'https://grouple.co/private/bookmarks?status={status.value}')
+
+
+def get_plain_all_bookmarks_from_user(user_id: int) -> List[Bookmark]:
+    url = f'https://grouple.co/user/{user_id}/bookmarks'
+    rs = load(url)
+    root = BeautifulSoup(rs.content, 'html.parser')
+
+    return [
+        parse_bookmark(row)
+        for row in root.select('a.site-element')
+    ]
 
 
 def get_all_bookmarks() -> Dict[Status, List[Bookmark]]:
