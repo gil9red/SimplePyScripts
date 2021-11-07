@@ -31,11 +31,7 @@ logging.basicConfig(
 
 
 def is_exists_rdp_process() -> bool:
-    for process in psutil.process_iter():
-        if process.name() == 'mstsc.exe':
-            return True
-
-    return False
+    return any(process.name() == 'mstsc.exe' for process in psutil.process_iter())
 
 
 def get_pos_rdp_task_icon() -> Optional[Tuple[int, int]]:
@@ -84,21 +80,21 @@ def run():
             pyautogui.click(*pos)
             logging.info("Click")
 
-    except Exception as e:
+    except Exception:
         print(traceback.format_exc())
 
 
 if __name__ == '__main__':
     logging.info("Started...")
 
-    # Каждый день в 07:00
+    # Каждый день в 08:30
     schedule \
-        .every().day.at("07:00") \
+        .every().day.at("08:30") \
         .do(run)
 
     logging.info('Jobs:')
     for job in schedule.jobs:
-        logging.info(f'    {job}')
+        logging.info(f'    {job!r}')
 
     logging.info('')
 
