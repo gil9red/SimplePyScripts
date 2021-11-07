@@ -31,5 +31,4 @@ if __name__ == '__main__':
 
     # Dota 2
     assert is_exists(570)
-
     assert is_exists('570')
