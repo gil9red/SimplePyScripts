@@ -21,6 +21,9 @@ def is_exists(app_id: Union[int, str]) -> bool:
 
 
 if __name__ == '__main__':
+    # Half-Life 2: Remastered Collection
+    print(is_exists(600680))
+
     assert not is_exists(1)
 
     # DARK SOULS™: Prepare To Die Edition
