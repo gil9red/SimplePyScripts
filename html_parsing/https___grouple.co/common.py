@@ -21,6 +21,9 @@ class Bookmark:
     url: str
     tags: List[str] = field(default_factory=list)
 
+    def get_title_with_tags(self) -> str:
+        return self.title + (f" [{', '.join(self.tags)}]" if self.tags else '')
+
 
 class AutoName(enum.Enum):
     def _generate_next_value_(name, start, count, last_values):
