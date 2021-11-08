@@ -418,7 +418,7 @@ def go_run(name: str, version: Optional[str] = None, what: Optional[str] = None,
             value = args.pop(0) if args else ''
             command = command.replace('%s', value, 1)
 
-        print(f'Run: {description}')
+        print(f'Run: {description} in {dir_file_name}')
         os.system(command)
 
 
