@@ -449,9 +449,12 @@ def parse_cmd_args(arguments: List[str]) -> List[Command]:
 
             elif '-' in alias:  # Например, "3.2.23-trunk"
                 start, end = alias.split('-')
+                start = resolve_version(name, start)
+                end = resolve_version(name, end)
+
                 found = False
                 for version in get_settings(name)['versions']:
-                    if start in version:
+                    if start == version:
                         found = True
 
                     if not found:
