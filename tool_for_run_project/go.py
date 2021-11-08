@@ -477,6 +477,9 @@ def parse_cmd_args(arguments: List[str]) -> List[Command]:
         whats = arguments.pop(0).lower()
         whats = resolve_whats(name, whats)
 
+    if not versions:
+        versions = [None]
+
     if not whats:
         whats = [None]
 
