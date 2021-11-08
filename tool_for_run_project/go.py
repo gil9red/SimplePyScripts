@@ -79,9 +79,9 @@ class ParameterAvailabilityException(GoException):
 @dataclass
 class Command:
     name: str
-    version: str = None
-    what: str = None
-    args: List[str] = None
+    version: Optional[str] = None
+    what: Optional[str] = None
+    args: Optional[List[str]] = None
 
     def _check_parameter(self, param: str):
         settings = SETTINGS[self.name]
@@ -254,6 +254,12 @@ EXAMPLES:
   > go tx 3.2.6.10 server
     Run: "C:/DEV__TX/3.2.6.10/!!server.cmd"
 
+  > go tx 3.2.6,3.2.7,trunk server
+    Run: "C:/DEV__TX/3.2.6.10/!!server.cmd"
+
+  > go tx 3.2.6-trunk server
+    Run: "C:/DEV__TX/3.2.6.10/!!server.cmd"
+
   > go tx designer
     Run: "C:/DEV__TX/trunk_tx/!!designer.cmd"
 
@@ -418,7 +424,8 @@ def go_run(name: str, version: Optional[str] = None, what: Optional[str] = None,
 
 def parse_cmd_args(arguments: List[str]) -> List[Command]:
     arguments = arguments.copy()
-    name, version, whats, args = [None] * 4
+    name, whats, args = [None] * 3
+    versions = []
 
     # Первый аргумент <name>
     if arguments:
@@ -434,7 +441,31 @@ def parse_cmd_args(arguments: List[str]) -> List[Command]:
         alias = arguments.pop(0).lower()
 
         if is_like_a_version(alias) and options['version'] != AvailabilityEnum.PROHIBITED:
-            version = resolve_version(name, alias)
+            # Например, "3.2.23,3.2.24,3.2.25,trunk"
+            if ',' in alias:
+                for x in alias.split(','):
+                    version = resolve_version(name, x)
+                    versions.append(version)
+
+            elif '-' in alias:  # Например, "3.2.23-trunk"
+                start, end = alias.split('-')
+                found = False
+                for version in get_settings(name)['versions']:
+                    if start in version:
+                        found = True
+
+                    if not found:
+                        continue
+
+                    versions.append(version)
+
+                    if end in version:
+                        break
+
+            else:
+                version = resolve_version(name, alias)
+                versions.append(version)
+
         elif options['what'] != AvailabilityEnum.PROHIBITED:
             whats = resolve_whats(name, alias)
 
@@ -448,7 +479,11 @@ def parse_cmd_args(arguments: List[str]) -> List[Command]:
 
     args = arguments
 
-    return [Command(name, version, what, args) for what in whats]
+    commands = []
+    for version in versions:
+        for what in whats:
+            commands.append(Command(name, version, what, args))
+    return commands
 
 
 def run(arguments: List[str]):
