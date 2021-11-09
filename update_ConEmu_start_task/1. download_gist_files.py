@@ -50,6 +50,9 @@ for line in rs.text.splitlines():
     m = re.search(r'[a-z]:[^:]+\.py', line, flags=re.IGNORECASE)
     script_dir_path = Path(m.group()).parent
 
+    if script_dir_path.name.startswith('-'):
+        print(f'[#] Do you really need to run "{script_dir_path}"?')
+
     line = line.replace('d:_', f'd:{script_dir_path}').replace('t:_', f't:[{group}]')
     DEBUG_LOG and print(line)
 
