@@ -6,6 +6,7 @@ __author__ = 'ipetrash'
 
 import re
 
+from collections import defaultdict
 from urllib.parse import urljoin
 from pathlib import Path
 
@@ -30,21 +31,18 @@ url_all = urljoin(rs.url, a_all['href'])
 
 rs = requests.get(url_all)
 
-lines = []
-group = 1
+group: str = ''
+group_by_lines = defaultdict(list)
 for line in rs.text.splitlines():
     if not line:
         continue
     elif line.startswith('# IGNORED'):
         break
-    elif line.startswith('# SEPARATOR'):
-        gist_file = DIR_GIST_FILES / f'group{group}'
-        gist_file.write_text('\n'.join(lines), 'utf-8')
-        lines.clear()
-
-        group += 1
+    elif m := re.search(r'# GROUP (\d+)', line):
+        group = m.group(1)
+        if group in group_by_lines:
+            raise Exception(f'Duplicate of group = {group!r}')
         continue
-
     elif line.startswith('#'):
         continue
 
@@ -54,6 +52,14 @@ for line in rs.text.splitlines():
 
     line = line.replace('d:_', f'd:{script_dir_path}').replace('t:_', f't:[{group}]')
     DEBUG_LOG and print(line)
-    lines.append(line + '\n')
 
+    if not group:
+        raise Exception('"# GROUP" must be defined!')
+
+    group_by_lines[group].append(line + '\n')
     DEBUG_LOG and print()
+
+# Save to files
+for group, lines in group_by_lines.items():
+    gist_file = DIR_GIST_FILES / f'group{group}'
+    gist_file.write_text('\n'.join(lines), 'utf-8')
