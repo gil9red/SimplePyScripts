@@ -18,7 +18,7 @@ def get_seasons() -> Dict[str, List[str]]:
 
     season_by_series = dict()
 
-    for season_title_el in root.select('h2 > span[id ^= "Сезон"]'):
+    for season_title_el in root.select('span[id ^= "Сезон"]'):
         season_title = season_title_el.get_text(strip=True)
 
         table_series = season_title_el.parent.find_next_sibling('table', attrs={'class': 'wikitable'})
