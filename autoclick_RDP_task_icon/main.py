@@ -12,6 +12,7 @@ import sys
 from typing import Optional, Tuple
 
 # pip install pyautogui
+# pip install pillow
 import pyautogui
 
 # pip install psutil
