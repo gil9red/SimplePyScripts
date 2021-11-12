@@ -519,19 +519,13 @@ def run(arguments: List[str]):
 
             # Если для сущности параметр версии возможен
             if settings['options']['version'] != AvailabilityEnum.PROHIBITED:
-                # Если не задана version и what, показываем доступные версии
-                if (not e.command.version or e.command.version in settings['options']['default_version']) and not e.command.what:
-                    supported = settings['versions']
-                    print(f'{name!r} supports versions: {", ".join(sorted(supported))}')
-                    continue
+                supported_versions = ", ".join(sorted(settings['versions']))
+                print(f'Supported versions: {supported_versions}')
 
-                # Если только what не задано
-                elif not e.command.what:
-                    supported = settings['whats']
-                    print(f'Supported <what>: {", ".join(sorted(supported))}')
-                    continue
-
-            raise
+            # Если для сущности параметр what возможен
+            if settings['options']['what'] != AvailabilityEnum.PROHIBITED:
+                supported_whats = ", ".join(sorted(settings['whats']))
+                print(f'Supported <what>: {supported_whats}')
 
 
 def _print_help():
