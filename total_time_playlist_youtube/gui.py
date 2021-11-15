@@ -56,6 +56,9 @@ class MainWindow(QMainWindow):
     def go(self):
         try:
             url = self.url_line_edit.text()
+            if not url.startswith('http'):
+                url = f'https://www.youtube.com/playlist?list={url}'
+
             total_seconds, items = parse_playlist_time(url)
 
             text = 'Playlist:\n'
