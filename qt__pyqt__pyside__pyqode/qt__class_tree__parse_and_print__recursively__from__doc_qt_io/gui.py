@@ -47,7 +47,7 @@ class MainWindow(qtw.QMainWindow):
         inherited_children = get_inherited_children(url, root)
         number_inherited_children = len(inherited_children)
         if number_inherited_children > 0:
-            name_class = '{} ({})'.format(name_class, number_inherited_children)
+            name_class = f'{name_class} ({number_inherited_children})'
             print(indent + name_class + ':')
         else:
             print(indent + name_class)
@@ -69,14 +69,14 @@ class MainWindow(qtw.QMainWindow):
         self.number_total_class = 0
         self.tree.clear()
 
-        t = time.clock()
+        t = time.perf_counter()
 
         self._fill_root(None, ROOT_URL, global_number)
 
         qtw.QMessageBox.information(
             self,
             'Complete!',
-            'Items: {}.\nElapsed: {:.3f} sec'.format(self.number_total_class, time.clock() - t)
+            f'Items: {self.number_total_class}.\nElapsed: {time.perf_counter() - t:.3f} sec'
         )
 
     def closeEvent(self, e):
