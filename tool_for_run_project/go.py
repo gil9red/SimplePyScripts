@@ -402,6 +402,9 @@ def go_run(name: str, version: Optional[str] = None, what: Optional[str] = None,
 
     dir_file_name = get_similar_version_path(name, version)
 
+    # Move to active dir
+    os.chdir(dir_file_name)
+
     value = get_file_by_what(name, what)
     if isinstance(value, str):
         file_name = dir_file_name + '/' + value
