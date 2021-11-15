@@ -7,14 +7,20 @@ __author__ = 'ipetrash'
 import traceback
 
 try:
-    from PyQt5.QtWidgets import *
+    from PyQt5.QtWidgets import (
+        QApplication, QMainWindow, QLineEdit, QPushButton, QTextEdit, QHBoxLayout, QVBoxLayout, QWidget
+    )
 
 except:
     try:
-        from PyQt4.QtGui import *
+        from PyQt4.QtGui import (
+           QApplication, QMainWindow, QLineEdit, QPushButton, QTextEdit, QHBoxLayout, QVBoxLayout, QWidget
+        )
 
     except:
-        from PySide.QtGui import *
+        from PySide.QtGui import (
+            QApplication, QMainWindow, QLineEdit, QPushButton, QTextEdit, QHBoxLayout, QVBoxLayout, QWidget
+        )
 
 
 from main import parse_playlist_time
@@ -74,4 +80,4 @@ if __name__ == '__main__':
     # Пусть хоть что-то будет по умолчанию
     mw.url_line_edit.setText('https://www.youtube.com/playlist?list=PLndO6DOY2cLyxQYX7pkDspTJ42JWx07AO')
 
-    app.exec_()
+    app.exec()
