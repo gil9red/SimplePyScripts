@@ -198,6 +198,7 @@ SETTINGS = {
             'designer': '!!designer.cmd',
             'explorer': '!!explorer.cmd',
             'server':   '!!server.cmd',
+            'compile':  '!build_ads__pause.bat',
             'build':    '!build_kernel__pause.cmd',
             'update':   ('svn update', r'start /b "" TortoiseProc /command:update /path:"%s"'),
             'log':      ('svn log', r'start /b "" TortoiseProc /command:log /path:"%s" /findstring:"%s"'),
