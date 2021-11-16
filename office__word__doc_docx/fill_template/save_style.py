@@ -103,8 +103,8 @@ if __name__ == '__main__':
     to_filename = 'save_style.docx'
 
     REPLACING = {
-        '${title}': 'My pretty title!',
-        '${datetime}': DT.datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
+        'title': 'My pretty title!',
+        'date_time': DT.datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
     }
 
     doc = docx.Document(from_filename)

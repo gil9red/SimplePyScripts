@@ -16,7 +16,7 @@ to_filename = 'simple.docx'
 
 REPLACING = {
     '${title}': 'My pretty title!',
-    '${datetime}': DT.datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
+    '${date_time}': DT.datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
 }
 
 doc = docx.Document(from_filename)
