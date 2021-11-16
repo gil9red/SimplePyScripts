@@ -200,9 +200,9 @@ SETTINGS = {
             'server':   '!!server.cmd',
             'compile':  '!build_ads__pause.bat',
             'build':    '!build_kernel__pause.cmd',
-            'update':   ('svn update', r'start /b "" TortoiseProc /command:update /path:"%s"'),
-            'log':      ('svn log', r'start /b "" TortoiseProc /command:log /path:"%s" /findstring:"%s"'),
-            'cleanup':  ('svn cleanup', 'start /b "" TortoiseProc /command:cleanup /path:"%s" /cleanup /nodlg /closeonend:2'),
+            'update':   ('svn update', r'start /b "" TortoiseProc /command:update /path:"{path}"'),
+            'log':      ('svn log', r'start /b "" TortoiseProc /command:log /path:"{path}" /findstring:"{find_string}"'),
+            'cleanup':  ('svn cleanup', 'start /b "" TortoiseProc /command:cleanup /path:"{path}" /cleanup /nodlg /closeonend:2'),
         },
     },
     'tx': {
@@ -413,14 +413,8 @@ def go_run(name: str, version: Optional[str] = None, what: Optional[str] = None,
     else:
         description, command = value
 
-        args = [' '.join(args)]
-        if '/path:"%s"' in command:
-            args.insert(0, dir_file_name)
-
-        # Замена %s на аргументы, если аргументов нет, то на пустые строки
-        while command.count('%s'):
-            value = args.pop(0) if args else ''
-            command = command.replace('%s', value, 1)
+        find_string = '' if not args else args[0]
+        command = command.format(path=dir_file_name, find_string=find_string)
 
         print(f'Run: {description} in {dir_file_name}')
         os.system(command)
