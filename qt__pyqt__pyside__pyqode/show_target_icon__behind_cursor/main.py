@@ -17,8 +17,8 @@ FILE_NAME = str(Path(__file__).resolve().parent / 'target.png')
 def move_window_to_cursor(widget: QWidget):
     width, height = widget.width(), widget.height()
     pos = QCursor.pos()
-    pos.setX(pos.x() - width / 2)
-    pos.setY(pos.y() - height / 2)
+    pos.setX(int(pos.x() - width / 2))
+    pos.setY(int(pos.y() - height / 2))
 
     widget.move(pos)
 
