@@ -71,7 +71,6 @@ if __name__ == '__main__':
             print(f'{path} ({len(components)}):')
             for component in components:
                 print(f'    {component}')
-                print([(k, v) for k, v in component.other_fields.items() if ' ' in k])
 
             print()
 
