@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from PyQt5.Qt import *
+from PyQt5.Qt import QApplication, QWidget, QVBoxLayout, QPushButton, QColorDialog, QFont
 
 
 class MainWindow(QWidget):
@@ -30,9 +30,7 @@ class MainWindow(QWidget):
         red, green, blue = 255 - red, 255 - green, 255 - blue
 
         self.button.setStyleSheet(
-            'background: {}; color: rgb({}, {}, {});'.format(
-                dialog.currentColor().name(), red, green, blue
-            )
+            f'background: {dialog.currentColor().name()}; color: rgb({red}, {green}, {blue});'
         )
 
 
