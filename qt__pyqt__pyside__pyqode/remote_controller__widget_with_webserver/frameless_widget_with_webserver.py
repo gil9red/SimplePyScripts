@@ -7,15 +7,29 @@ __author__ = 'ipetrash'
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/00b9e4ec67e3413ffefa436a98381a75b99af6d3/qt__pyqt__pyside__pyqode/pyqt__frameless_window_with_part_transparent_body.py
 
 
+import traceback
+import sys
 from pathlib import Path
 
 from flask import Flask, jsonify
 
-from PyQt5.QtWidgets import QWidget, QApplication, QHBoxLayout, QVBoxLayout, QPushButton
+from PyQt5.QtWidgets import QWidget, QApplication, QHBoxLayout, QVBoxLayout, QPushButton, QMessageBox
 from PyQt5.QtCore import Qt, QPoint, QThread, pyqtSignal, QTimer, QByteArray, QBuffer
 from PyQt5.QtGui import QPainter, QPen, QColor, QPixmap, QCursor, QMouseEvent, QKeyEvent, QPaintEvent
 
 from config import PORT, PATH_DEFAULT_MOUSE
+
+
+def log_uncaught_exceptions(ex_cls, ex, tb):
+    text = f'{ex_cls.__name__}: {ex}:\n'
+    text += ''.join(traceback.format_tb(tb))
+
+    print(text)
+    QMessageBox.critical(None, 'Error', text)
+    sys.exit(1)
+
+
+sys.excepthook = log_uncaught_exceptions
 
 
 class CommandServerThread(QThread):
@@ -98,7 +112,7 @@ class MainWindow(QWidget):
         x, y, w, h = geometry.x(), geometry.y(), geometry.width(), geometry.height()
 
         # Корректировка области скриншота, чтобы не захватывать рамку и кнопки
-        correct_frame_size = self.frame_size / 2 + 1
+        correct_frame_size = self.frame_size // 2 + 1
         x += correct_frame_size
         y += correct_frame_size
         h = self.layout_buttons.geometry().y() - correct_frame_size
