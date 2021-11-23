@@ -123,9 +123,16 @@ def merge_dicts(source: Dict, destination: Dict) -> Dict:
     return destination
 
 
+def is_like_a_short_version(value: str) -> bool:
+    # Вариант .isdigit() для коротких версий, не 3.2.25, а 25
+    return value.isdigit()
+
+
 def is_like_a_version(value: str) -> bool:
-    return bool(
-        'trunk' in value or re.search(r'\d+(\.\d+)+', value)
+    return (
+            'trunk' in value
+            or bool(re.search(r'\d+(\.\d+)+', value))
+            or is_like_a_short_version(value)
     )
 
 
@@ -208,10 +215,12 @@ SETTINGS = {
     'tx': {
         'base': '__radix_base',
         'path': 'C:/DEV__TX',
+        'base_version': '3.2.',
     },
     'optt': {
         'base': '__radix_base',
         'path': 'C:/DEV__OPTT',
+        'base_version': '2.1.',
     },
     '__simple_base': {
         'options': {
@@ -255,6 +264,9 @@ EXAMPLES:
   > go tx 3.2.6.10 server
     Run: "C:/DEV__TX/3.2.6.10/!!server.cmd"
 
+  > go tx 6 server
+    Run: "C:/DEV__TX/3.2.6.10/!!server.cmd"
+
   > go tx 3.2.6,3.2.7,trunk server
     Run: "C:/DEV__TX/3.2.6.10/!!server.cmd"
 
@@ -271,7 +283,8 @@ EXAMPLES:
     Open: "C:/DEV__OPTT"
 
   > go optt
-    Version: ['2.1.7.1', 'trunk_optt']
+    Supported versions: 2.1.10, trunk_optt
+    Supported <what>: build, cleanup, compile, designer, explorer, log, server, update
 '''.format(
     ', '.join(SETTINGS.keys()),
 )
@@ -343,9 +356,22 @@ def resolve_whats(name: str, alias: str) -> List[str]:
 
 
 def resolve_version(name: str, alias: str, versions: List[str] = None) -> str:
+    settings = get_settings(name)
+
     supported = versions
     if not supported:
-        supported = get_settings(name)['versions']
+        supported = settings['versions']
+
+    # Если короткая версия, нужно ее расширить, добавив основание версии
+    if is_like_a_short_version(alias):
+        base_version = settings.get('base_version')
+        if not base_version:
+            text = f'Attribute "base_settings", using with short versions (="{alias}"), ' \
+                   f'must be defined in SETTINGS for "{name}"'
+            raise GoException(text)
+
+        # Составление полной версии
+        alias = base_version + alias
 
     # Поиск среди списка
     version = get_similar_value(alias, supported)
