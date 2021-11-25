@@ -99,7 +99,7 @@ class MainWindow(QWidget):
 
         self.timer = QTimer()
         self.timer.timeout.connect(self._on_tick)
-        self.timer.start(50)
+        self.timer.start(30)
 
     def _on_stats_query(self):
         self.thread_screenshot.set_stats(self.geometry(), self.isVisible())
