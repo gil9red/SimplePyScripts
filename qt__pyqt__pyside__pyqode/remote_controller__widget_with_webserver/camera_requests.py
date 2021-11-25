@@ -29,8 +29,11 @@ class Camera(BaseCamera):
         counter = 0
 
         while True:
-            rs = requests.post(URL_SCREENSHOT)
-            yield rs.content
+            try:
+                rs = requests.post(URL_SCREENSHOT)
+                yield rs.content
+            except requests.RequestException:
+                pass
 
             # Ограничение работы по FPS
             while now < next_frame:
