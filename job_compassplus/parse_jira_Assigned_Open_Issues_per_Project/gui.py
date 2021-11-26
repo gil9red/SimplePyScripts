@@ -255,13 +255,9 @@ class MainWindow(QMainWindow):
         self.timestamp_by_run = dict()
 
         menu = QMenu()
-        action_show = menu.addAction('Show / hide')
-        action_show.triggered.connect(lambda: self.setVisible(not self.isVisible()))
-
+        menu.addAction('Show / hide', (lambda: self.setVisible(not self.isVisible())))
         menu.addSeparator()
-
-        action_quit = menu.addAction('Quit')
-        action_quit.triggered.connect(QApplication.instance().quit)
+        menu.addAction('Quit', QApplication.instance().quit)
 
         self.tray = QSystemTrayIcon(icon)
         self.tray.setContextMenu(menu)
