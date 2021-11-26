@@ -133,8 +133,8 @@ def is_like_a_version(value: str) -> bool:
             'trunk' in value
             or bool(re.search(r'\d+(\.\d+)+', value))
             or is_like_a_short_version(value)
-            or bool(re.search(r'\d+-\d+', value))     # Example: 23-25
-            or bool(re.search(r'\d+(,\d+)+', value))  # Example: 23,24,25
+            or bool(re.search(r'\d+-.+', value))     # Example: "23-25" or "23-trunk"
+            or bool(re.search(r'\d+(,.+)+', value))  # Example: "23,24,25" or "23,24,25,trunk"
     )
 
 
