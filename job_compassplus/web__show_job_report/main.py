@@ -7,32 +7,26 @@ __author__ = 'ipetrash'
 """Вывод переработки текущего (или конкретного) пользователя"""
 
 
+import logging
+import sys
+from pathlib import Path
+
 from flask import Flask
+
+
 app = Flask(__name__)
 
-import logging
 logging.basicConfig(level=logging.DEBUG)
 
 
-# Добавление пути основной папки репозитория, чтобы импортировать из job_report.utils
-import os
-dir = os.path.dirname(__file__)
-dir = os.path.dirname(dir)
-dir = os.path.dirname(dir)
-
-import sys
-sys.path.append(dir)
-
-
-from job_report.utils import get_report_persons_info, get_person_info
-
-
-PEM_FILE_NAME = 'ipetrash.pem'
+DIR = Path(__file__).resolve().parent
+sys.path.append(str(DIR.parent / 'job_report'))
+from utils import get_report_persons_info, get_person_info
 
 
 @app.route("/")
 def index():
-    report_dict = get_report_persons_info(PEM_FILE_NAME)
+    report_dict = get_report_persons_info()
 
     try:
         person = report_dict['Текущий пользователь'][0]
@@ -40,7 +34,7 @@ def index():
         person = None
 
     if person is None:
-        person = get_person_info(PEM_FILE_NAME, second_name='Петраш', report_dict=report_dict)
+        person = get_person_info(second_name='Петраш', report_dict=report_dict)
 
     if person:
         return '{} {}'.format(person.full_name, person.deviation_of_time)
