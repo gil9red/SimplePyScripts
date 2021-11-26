@@ -8,6 +8,7 @@ __author__ = 'ipetrash'
 import datetime as DT
 import re
 import sys
+import ssl
 
 from pathlib import Path
 from typing import Tuple
@@ -24,6 +25,14 @@ sys.path.append(str(DIR.parent))
 from get_quarter import get_quarter, get_quarter_num
 
 
+class TLSAdapter(requests.adapters.HTTPAdapter):
+    def init_poolmanager(self, *args, **kwargs):
+        ctx = ssl.create_default_context()
+        ctx.set_ciphers('DEFAULT@SECLEVEL=1')
+        kwargs['ssl_context'] = ctx
+        return super(TLSAdapter, self).init_poolmanager(*args, **kwargs)
+
+
 class NotFoundReport(Exception):
     pass
 
@@ -35,16 +44,18 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefo
 PEM_FILE_NAME = str(DIR / 'ipetrash.pem')
 
 
+session = requests.session()
+session.cert = PEM_FILE_NAME
+session.mount('https://', TLSAdapter())
+session.headers['User-Agent'] = USER_AGENT
+
+
 def clear_hours(hours: str) -> str:
     return re.sub(r'[^\d:-]', '', hours)
 
 
 def _send_data(data: dict) -> str:
-    headers = {
-        'User-Agent': USER_AGENT,
-    }
-
-    rs = requests.post(URL, data=data, headers=headers, cert=PEM_FILE_NAME, verify=False)
+    rs = session.post(URL, data=data)
     if not rs.ok:
         raise NotFoundReport(f"HTTP status is {rs.status_code}")
 
