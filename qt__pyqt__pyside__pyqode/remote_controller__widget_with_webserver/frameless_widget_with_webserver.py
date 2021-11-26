@@ -135,7 +135,7 @@ class MainWindow(QWidget):
         data = QByteArray()
         buffer = QBuffer(data)
         buffer.open(QBuffer.WriteOnly)
-        pixmap.save(buffer, "PNG")
+        pixmap.save(buffer, "JPG")
 
         self.thread_command.set_pixmap(bytes(data))
 
