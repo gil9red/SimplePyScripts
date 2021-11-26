@@ -9,15 +9,14 @@ import os
 import shutil
 import sys
 
-from pathlib import Path
 from typing import Dict, Optional
 
-from peewee import *
+from peewee import SqliteDatabase, Model, TextField, CharField, ForeignKeyField, DateField, IntegerField
 
-from common import DIR, print_table
+from common import ROOT_DIR, DIR, print_table
 
 # Для импортирования shorten
-sys.path.append(str(DIR.parent))
+sys.path.append(str(ROOT_DIR.parent))
 from shorten import shorten
 
 # Absolute file name

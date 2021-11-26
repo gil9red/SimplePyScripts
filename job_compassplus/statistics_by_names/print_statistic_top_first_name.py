@@ -29,16 +29,18 @@ __author__ = 'ipetrash'
 """
 
 
+from collections import Counter
 from print_statistic_all_names import get_all_names
+
+
 first_name_list = [name[1] for name in get_all_names(split_name=True)]
 total = len(first_name_list)
 print('Total:', total)
 print()
 
 print('Top 15:')
-from collections import Counter
 counter = Counter(first_name_list)
 
 # Сортировка по количеству
 for name, number in sorted(counter.items(), key=lambda x: x[1], reverse=True)[:15]:
-    print('    {}: {} ({:.1f}%)'.format(name, number, number * 100 / total))
+    print(f'    {name}: {number} ({number * 100 / total:.1f}%)')

@@ -16,17 +16,17 @@ from typing import List, Dict
 from PyQt5.QtWidgets import (
     QApplication, QMessageBox, QMainWindow, QSystemTrayIcon, QTabWidget, QTableWidget,
     QTableWidgetItem, QVBoxLayout, QWidget, QPushButton, QSplitter, QLabel, QGridLayout,
-    QHeaderView, QProgressBar
+    QHeaderView, QProgressBar, QMenu
 )
-from PyQt5.QtGui import QIcon, QPainter
+from PyQt5.QtGui import QIcon, QPainter, QCloseEvent
 from PyQt5.QtCore import QEvent, QTimer, Qt, QThread, pyqtSignal
 from PyQt5.QtChart import QChart, QLineSeries, QDateTimeAxis, QValueAxis
 
-from common import DIR, get_table
+from common import ROOT_DIR, DIR, get_table
 from get_assigned_open_issues_per_project import get_assigned_open_issues_per_project
 from db import Run
 
-sys.path.append(str(DIR.parent / 'qt__pyqt__pyside__pyqode'))
+sys.path.append(str(ROOT_DIR.parent / 'qt__pyqt__pyside__pyqode'))
 from chart_line__show_tooltip_on_series__QtChart import ChartViewToolTips
 
 
@@ -254,7 +254,17 @@ class MainWindow(QMainWindow):
 
         self.timestamp_by_run = dict()
 
+        menu = QMenu()
+        action_show = menu.addAction('Show / hide')
+        action_show.triggered.connect(lambda: self.setVisible(not self.isVisible()))
+
+        menu.addSeparator()
+
+        action_quit = menu.addAction('Quit')
+        action_quit.triggered.connect(QApplication.instance().quit)
+
         self.tray = QSystemTrayIcon(icon)
+        self.tray.setContextMenu(menu)
         self.tray.setToolTip(self.windowTitle())
         self.tray.activated.connect(self._on_tray_activated)
         self.tray.show()
@@ -351,7 +361,11 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle(f"{WINDOW_TITLE}. Last refresh date: {DT.datetime.now():%d/%m/%Y %H:%M:%S}")
 
-    def _on_tray_activated(self, reason):
+    def _on_tray_activated(self, reason: QSystemTrayIcon.ActivationReason):
+        # Если запрошено меню
+        if reason == QSystemTrayIcon.Context:
+            return
+
         self.setVisible(not self.isVisible())
 
         if self.isVisible():
@@ -365,9 +379,14 @@ class MainWindow(QMainWindow):
                 # Прячем окно с панели задач
                 QTimer.singleShot(0, self.hide)
 
+    def closeEvent(self, event: QCloseEvent):
+        self.hide()
+        event.ignore()
+
 
 if __name__ == '__main__':
     app = QApplication([])
+    app.setQuitOnLastWindowClosed(False)
 
     mw = MainWindow()
     mw.resize(1200, 800)

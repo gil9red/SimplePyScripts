@@ -5,14 +5,15 @@ __author__ = 'ipetrash'
 
 
 from functools import total_ordering
+from typing import List
 
 
 class ReportPerson:
     """Класс для описания сотрудника в отчете."""
 
-    def __init__(self, tags):
+    def __init__(self, tags: List[str]):
         # ФИО
-        self.second_name, self.first_name, self.middle_name = tags[0].split()
+        self.second_name, self.first_name, self.middle_name = tags[0].split(maxsplit=2)
 
         # Невыходов на работу
         self.absence_from_work = int(tags[1])
@@ -43,11 +44,12 @@ class ReportPerson:
     class Time:
         """Простой класс для хранения даты работы."""
 
-        def __init__(self, time_str):
-            self._hours, self._minutes = map(int, time_str.split(':'))
+        def __init__(self, time_str: str):
+            # TODO: supports self._seconds
+            self._hours, self._minutes, self._seconds = map(int, time_str.split(':'))
 
         @property
-        def total(self):
+        def total(self) -> int:
             """Всего минут"""
 
             return self._hours * 60 + self._minutes
@@ -72,13 +74,7 @@ class ReportPerson:
         return self.full_name == other.full_name
 
     def __repr__(self):
-        return "{}. Невыходов на работу: {}. По календарю ({} смен / {} ч:мин). " \
-               "Фактически ({} смен / {} ч:мин) Отклонение ({} смен / {} ч:мин)".format(self.full_name,
-                                                                                        self.absence_from_work,
-                                                                                        self.need_to_work_days,
-                                                                                        self.need_to_work_on_time,
-                                                                                        self.worked_days,
-                                                                                        self.worked_time,
-                                                                                        self.deviation_of_day,
-                                                                                        self.deviation_of_time,
-                                                                                        )
+        return (
+            f"{self.full_name}. Невыходов на работу: {self.absence_from_work}. По календарю ({self.need_to_work_days} смен / {self.need_to_work_on_time} ч:мин). "
+            f"Фактически ({self.worked_days} смен / {self.worked_time} ч:мин) Отклонение ({self.deviation_of_day} смен / {self.deviation_of_time} ч:мин)"
+        )

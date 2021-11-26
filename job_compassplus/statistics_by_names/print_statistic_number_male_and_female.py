@@ -10,14 +10,17 @@ __author__ = 'ipetrash'
 """
 
 
+# pip install pymorphy2
+import pymorphy2
+
 from print_statistic_all_names import get_all_names
+
+
 name_list = get_all_names(split_name=True)
 total = len(name_list)
 print('Total:', total)
 print()
 
-# pip install pymorphy2
-import pymorphy2
 morph = pymorphy2.MorphAnalyzer()
 
 masc_name_list = []
@@ -53,5 +56,5 @@ for _, first_name, _ in name_list:
 masc_name_list.sort()
 femn_name_list.sort()
 
-print('Masc ({}): {}'.format(len(masc_name_list), masc_name_list))
-print('Femn ({}): {}'.format(len(femn_name_list), femn_name_list))
+print(f'Masc ({len(masc_name_list)}): {masc_name_list}')
+print(f'Femn ({len(femn_name_list)}): {femn_name_list}')

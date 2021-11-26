@@ -12,9 +12,10 @@ from pathlib import Path
 from typing import Dict
 
 DIR = Path(__file__).resolve().parent
+ROOT_DIR = DIR.parent
 
 # For import ascii_table__simple_pretty__ljust.py
-sys.path.append(str(DIR.parent))
+sys.path.append(str(ROOT_DIR.parent))
 from ascii_table__simple_pretty__ljust import pretty_table
 
 

@@ -4,6 +4,16 @@
 __author__ = 'ipetrash'
 
 
+import sys
+from pathlib import Path
+
+from bs4 import BeautifulSoup
+
+DIR = Path(__file__).resolve().parent
+sys.path.append(str(DIR.parent))
+from current_job_report.get_user_and_deviation_hours import get_report_context
+
+
 def get_all_names(split_name=False):
     """
     split_name = False: ["<Фамилия> <Имя> <Отчество>", ...]
@@ -11,17 +21,14 @@ def get_all_names(split_name=False):
 
     """
 
-    from get_user_and_deviation_hours import get_report_context
     text = get_report_context()
-
-    from bs4 import BeautifulSoup
     root = BeautifulSoup(text, 'html.parser')
 
     # Имена описаны как "<Фамилия> <Имя> <Отчество>"
     items = sorted({' '.join(report.text.split()) for report in root.select('#report .person')})
 
     if split_name:
-        return [x.split() for x in items]
+        return [x.split(maxsplit=2) for x in items]
 
     return items
 

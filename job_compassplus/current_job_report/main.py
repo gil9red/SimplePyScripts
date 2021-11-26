@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-import datetime
+import datetime as DT
 import sys
 import time
 import traceback
@@ -54,7 +54,7 @@ class CheckJobReportThread(QThread):
             ok = deviation_hours[0] != '-'
             return 'Переработка' if ok else 'Недоработка'
 
-        today = datetime.datetime.today().strftime('%d/%m/%Y %H:%M:%S')
+        today = DT.datetime.today().strftime('%d/%m/%Y %H:%M:%S')
         self.about_log.emit(f'Check for {today}')
 
         text = ""

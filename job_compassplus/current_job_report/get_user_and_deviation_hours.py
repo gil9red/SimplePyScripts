@@ -8,13 +8,9 @@ __author__ = 'ipetrash'
 import datetime as DT
 import re
 import sys
-import ssl
 
 from pathlib import Path
 from typing import Tuple
-
-import requests
-requests.packages.urllib3.disable_warnings()
 
 from lxml import etree
 
@@ -22,15 +18,10 @@ from lxml import etree
 DIR = Path(__file__).resolve().parent
 
 sys.path.append(str(DIR.parent))
-from get_quarter import get_quarter, get_quarter_num
+from root_common import session
 
-
-class TLSAdapter(requests.adapters.HTTPAdapter):
-    def init_poolmanager(self, *args, **kwargs):
-        ctx = ssl.create_default_context()
-        ctx.set_ciphers('DEFAULT@SECLEVEL=1')
-        kwargs['ssl_context'] = ctx
-        return super(TLSAdapter, self).init_poolmanager(*args, **kwargs)
+sys.path.append(str(DIR.parent.parent))
+from get_quarter import get_quarter, get_quarter_num  # NOTE: оставить get_quarter_num для main.py
 
 
 class NotFoundReport(Exception):
@@ -38,16 +29,6 @@ class NotFoundReport(Exception):
 
 
 URL = 'https://jira.compassplus.ru/pa-reports/'
-USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0'
-
-# NOTE: Get <PEM_FILE_NAME>: openssl pkcs12 -nodes -out ipetrash.pem -in ipetrash.p12
-PEM_FILE_NAME = str(DIR / 'ipetrash.pem')
-
-
-session = requests.session()
-session.cert = PEM_FILE_NAME
-session.mount('https://', TLSAdapter())
-session.headers['User-Agent'] = USER_AGENT
 
 
 def clear_hours(hours: str) -> str:
@@ -65,7 +46,7 @@ def _send_data(data: dict) -> str:
 def get_report_context() -> str:
     today = DT.datetime.today()
     data = {
-        'dep': 'dep4',
+        'dep': 'all',
         'rep': 'rep1',
         'period': today.strftime('%Y-%m'),
         'v': int(today.timestamp() * 1000),
@@ -77,7 +58,7 @@ def get_report_context() -> str:
 def get_quarter_report_context() -> str:
     today = DT.datetime.today()
     data = {
-        'dep': 'dep12',
+        'dep': 'all',
         'rep': 'rep1',
         'quarter': 'quarter',
         'period': f'{today.year}-q{get_quarter(today)}',

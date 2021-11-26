@@ -5,21 +5,25 @@ __author__ = 'ipetrash'
 
 
 import os.path
+import sys
 
 from datetime import datetime
 from collections import defaultdict
 from itertools import chain
+from pathlib import Path
+from typing import Dict, Set
 
-import requests
-requests.packages.urllib3.disable_warnings()
+
+DIR = Path(__file__).resolve().parent
+
+sys.path.append(str(DIR.parent))
+from root_common import session
+from current_job_report.get_user_and_deviation_hours import get_report_context
 
 from bs4 import BeautifulSoup
 
-from job_report.report_person import ReportPerson
+from report_person import ReportPerson
 
-
-URL = 'https://jira.compassplus.ru/pa-reports/'
-USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0'
 
 LOGGING_DEBUG = False
 
@@ -29,41 +33,7 @@ if LOGGING_DEBUG:
     logging.basicConfig(level=logging.DEBUG)
 
 
-def get_report_context(pem_file_name):
-    headers = {
-        'User-Agent': USER_AGENT
-    }
-
-    rs = requests.get(URL, headers=headers, cert=pem_file_name, verify=False)
-    if LOGGING_DEBUG:
-        print('rs=', rs)
-        print('rs.request.headers=', rs.request.headers)
-        print('rs.headers=', rs.headers)
-
-    today = datetime.today()
-    data = {
-        'dep': 'all',
-        'rep': 'rep3',
-        'period': today.strftime('%Y-%m'),
-        'v': int(today.timestamp() * 1000),
-        'type': 'normal',
-    }
-
-    headers = {
-        'cookie': rs.headers['set-cookie'],
-        'User-Agent': USER_AGENT,
-    }
-
-    rs = requests.post(URL, data=data, headers=headers, cert=pem_file_name, verify=False)
-    if LOGGING_DEBUG:
-        print('rs=', rs)
-        print('rs.request.headers=', rs.request.headers)
-        print('rs.headers=', rs.headers)
-
-    return rs.text
-
-
-def get_report_persons_info(pem_file_name):
+def get_report_persons_info() -> Dict[str, Set[ReportPerson]]:
     today = datetime.today().strftime('%Y-%m-%d')
     report_file_name = f'report_{today}.html'
 
@@ -72,7 +42,7 @@ def get_report_persons_info(pem_file_name):
         if LOGGING_DEBUG:
             print(f'{report_file_name} not exist')
 
-        context = get_report_context(pem_file_name)
+        context = get_report_context()
 
         with open(report_file_name, mode='w', encoding='utf-8') as f:
             f.write(context)
@@ -87,7 +57,6 @@ def get_report_persons_info(pem_file_name):
     report = html.select('#report tbody tr')
 
     current_dep = None
-
     report_dict = defaultdict(set)
 
     for row in report:
@@ -98,16 +67,18 @@ def get_report_persons_info(pem_file_name):
 
         if children[0].has_attr('class') and children[0].attrs['class'][0] == 'person':
             person_tags = [children[0].text] + [i.text for i in row.nextSibling.select('td')[1:]]
-            person = ReportPerson(person_tags)
+            if len(person_tags) != 8:
+                continue
 
+            person = ReportPerson(person_tags)
             report_dict[current_dep].add(person)
 
     return report_dict
 
 
-def get_person_info(pem_file_name, second_name, first_name=None, middle_name=None, report_dict=None):
-    if report_dict is None:
-        report_dict = get_report_persons_info(pem_file_name)
+def get_person_info(second_name, first_name=None, middle_name=None, report_dict=None):
+    if not report_dict:
+        report_dict = get_report_persons_info()
 
     # Вывести всех сотрудников, отсортировав их по количеству переработанных часов
     for person in list(chain(*report_dict.values())):
@@ -121,3 +92,17 @@ def get_person_info(pem_file_name, second_name, first_name=None, middle_name=Non
 
         if found:
             return person
+
+
+if __name__ == '__main__':
+    report_dict = get_report_persons_info()
+    print(len(report_dict))
+    print(sum(map(len, report_dict.values())))
+    print()
+
+    for dep, persons in report_dict.items():
+        print(f'{dep} ({len(persons)})')
+        for p in persons:
+            print(f'    {p}')
+
+        print()
