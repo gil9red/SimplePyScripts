@@ -1,4 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'ipetrash'
+
+
 # SOURCE: https://github.com/miguelgrinberg/flask-video-streaming/blob/599e2a582dfdde9a7d7f730518cc61a8b1fcb5de/base_camera.py
+
 
 import time
 import threading
@@ -102,9 +109,9 @@ class BaseCamera(object):
 
             # if there hasn't been any clients asking for frames in
             # the last 10 seconds then stop the thread
-            if BaseCamera.STOPPING_IF_IDLE and (time.time() - BaseCamera.last_access > 10):
+            if cls.STOPPING_IF_IDLE and (time.time() - cls.last_access > 10):
                 frames_iterator.close()
                 print('Stopping camera thread due to inactivity.')
                 break
 
-        BaseCamera.thread = None
+        cls.thread = None
