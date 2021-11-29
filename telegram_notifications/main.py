@@ -107,7 +107,10 @@ def main():
         workers=workers,
         defaults=Defaults(run_async=True),
     )
-    DATA['BOT'] = updater.bot
+    bot = updater.bot
+    log.debug(f'Bot name {bot.first_name!r} ({bot.name})')
+
+    DATA['BOT'] = bot
 
     dp = updater.dispatcher
 
