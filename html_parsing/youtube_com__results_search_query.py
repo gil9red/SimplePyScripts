@@ -21,6 +21,9 @@ import dpath.util
 import requests
 
 
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'
+
+
 @dataclass
 class Video:
     title: str
@@ -75,7 +78,7 @@ def get_data_for_next_page(url: str, ytcfg_data: dict, continuation_item: dict) 
                 "deviceMake": "",
                 "deviceModel": "",
                 "visitorData": "",
-                "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0,gzip(gfe)",
+                "userAgent": f"{USER_AGENT},gzip(gfe)",
                 "clientName": "WEB",
                 "clientVersion": "2.20210816.01.00",
                 "osName": "Windows",
@@ -194,8 +197,6 @@ def get_ytInitialData(html: str) -> Optional[dict]:
             data_str = m.group(1)
             return json.loads(data_str)
 
-
-USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'
 
 session = requests.Session()
 session.headers['User-Agent'] = USER_AGENT
