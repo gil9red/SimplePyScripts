@@ -215,7 +215,7 @@ def get_generator_raw_video_list(url: str) -> Generator[Dict, None, None]:
 
     data = get_ytInitialData(rs.text)
     if not data:
-        raise Exception('Не удалось найти ytInitialData!')
+        raise Exception('Could not find ytInitialData!')
 
     ytcfg_data = get_ytcfg_data(rs.text)
     innertube_api_key = ytcfg_data['INNERTUBE_API_KEY']
