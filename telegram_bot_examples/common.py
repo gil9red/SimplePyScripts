@@ -105,11 +105,11 @@ def start_bot(
         before_start_func: Callable[[Updater], None] = None,
         **updater_kwargs,
 ):
+    log.debug('Start')
+
     cpu_count = os.cpu_count()
     workers = cpu_count
     log.debug(f'System: CPU_COUNT={cpu_count}, WORKERS={workers}')
-
-    log.debug('Start')
 
     # Create the EventHandler and pass it your bot's token.
     updater = Updater(
@@ -118,6 +118,8 @@ def start_bot(
         defaults=Defaults(run_async=True),
         **updater_kwargs,
     )
+    bot_info = updater.bot.get_me()
+    log.debug(f'Bot name: {bot_info.first_name!r} (@{bot_info.username})')
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
