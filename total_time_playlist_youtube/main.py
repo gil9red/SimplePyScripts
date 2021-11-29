@@ -15,8 +15,13 @@ from youtube_com__results_search_query import get_generator_raw_video_list
 from common import seconds_to_str
 
 
-def parse_playlist_time(url: str) -> (int, List[Tuple[str, str]]):
+def parse_playlist_time(url_or_id: str) -> (int, List[Tuple[str, str]]):
     """Функция парсит страницу плейлиста и подсчитывает сумму продолжительности роликов."""
+
+    if url_or_id.startswith('http'):
+        url = url_or_id
+    else:
+        url = f'https://www.youtube.com/playlist?list={url_or_id}'
 
     total_seconds = 0
     items = []
