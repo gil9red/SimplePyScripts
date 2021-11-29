@@ -118,8 +118,8 @@ def start_bot(
         defaults=Defaults(run_async=True),
         **updater_kwargs,
     )
-    bot_info = updater.bot.get_me()
-    log.debug(f'Bot name: {bot_info.first_name!r} (@{bot_info.username})')
+    bot = updater.bot
+    log.debug(f'Bot name {bot.first_name!r} ({bot.name})')
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
