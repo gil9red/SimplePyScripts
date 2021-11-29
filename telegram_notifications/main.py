@@ -95,12 +95,12 @@ def on_error(update: Update, context: CallbackContext):
 
 
 def main():
+    log.debug('Start')
+
     cpu_count = os.cpu_count()
     workers = cpu_count
     log.debug('System: CPU_COUNT=%s, WORKERS=%s', cpu_count, workers)
     log.debug('CHAT_ID=%s', config.CHAT_ID)
-
-    log.debug('Start')
 
     updater = Updater(
         config.TOKEN,
