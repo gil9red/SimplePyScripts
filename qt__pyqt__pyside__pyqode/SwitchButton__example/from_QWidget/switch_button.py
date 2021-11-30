@@ -38,11 +38,11 @@ class SwitchButton(QtWidgets.QWidget):
         self.__labelon.move(l1, 5)
         self.__labeloff.move(l2, 5)
 
-    def checked(self) -> bool:
+    def isChecked(self) -> bool:
         return self.__value
 
     def valueText(self) -> str:
-        return self.__labelon.text() if self.checked() else self.__labeloff.text()
+        return self.__labelon.text() if self.isChecked() else self.__labeloff.text()
 
     def setDuration(self, time):
         self.__duration = time
@@ -79,7 +79,7 @@ class SwitchButton(QtWidgets.QWidget):
         self.__ellipsemove.start()
         self.__value = not self.__value
 
-        self.clicked.emit(self.checked())
+        self.clicked.emit(self.isChecked())
 
     def paintEvent(self, event):
         s = self.size()
