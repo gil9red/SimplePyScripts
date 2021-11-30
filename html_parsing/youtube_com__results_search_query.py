@@ -7,10 +7,11 @@ __author__ = 'ipetrash'
 import datetime as DT
 import json
 import re
+import time
 
-from dataclasses import dataclass
-from typing import List, Optional, Dict, Generator, Callable, Any
-from urllib.parse import urljoin
+from dataclasses import dataclass, field
+from typing import List, Optional, Dict, Generator, Callable, Any, Tuple
+from urllib.parse import urljoin, urlparse, parse_qs
 
 # pip install tzlocal
 import tzlocal
@@ -24,10 +25,27 @@ import requests
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'
 
 
+session = requests.Session()
+session.headers['User-Agent'] = USER_AGENT
+
+
+@dataclass
+class Context:
+    data: dict = None
+    yt_initial_data: dict = None
+    yt_cfg_data: dict = None
+    rs: requests.Response = None
+
+
 @dataclass
 class Video:
-    title: str
+    id: str
     url: str
+    title: str
+    duration_secs: int = None
+    duration_text: str = None
+    seq: int = None
+    context: Context = field(default=None, repr=False, compare=False)
 
     @classmethod
     def get_from(cls, video: Dict, url: str) -> 'Video':
@@ -39,10 +57,82 @@ class Video:
         url_video = dpath.util.get(video, 'navigationEndpoint/commandMetadata/webCommandMetadata/url')
         url_video = urljoin(url, url_video)
 
-        return cls(title=title, url=url_video)
+        try:
+            duration_secs = int(video['lengthSeconds'])
+            duration_text = dpath.util.get(video, 'lengthText/simpleText')
+        except:
+            duration_secs = None
+            duration_text = None
+
+        try:
+            seq = int(video['index']['simpleText'])
+        except:
+            seq = None
+
+        return cls(
+            id=video['videoId'],
+            url=url_video,
+            title=title,
+            duration_secs=duration_secs,
+            duration_text=duration_text,
+            seq=seq,
+            context=Context(data=video)
+        )
 
 
-def get_ytcfg_data(html: str) -> dict:
+@dataclass
+class Playlist:
+    id: str
+    url: str
+    title: str
+    video_list: List[Video] = field(default_factory=list, repr=False)
+    context: Context = field(default=None, repr=False, compare=False)
+
+    @classmethod
+    def get_id_from_url(cls, url: str) -> str:
+        parsed_url = urlparse(url)
+        return parse_qs(parsed_url.query)['list'][0]
+
+    @classmethod
+    def get_playlist_title(cls, yt_initial_data: dict) -> str:
+        return dpath.util.get(yt_initial_data, '**/metadata/playlistMetadataRenderer/title')
+
+    @classmethod
+    def get_from(cls, url_or_id: str) -> 'Playlist':
+        if url_or_id.startswith('http'):
+            url = url_or_id
+            playlist_id = cls.get_id_from_url(url)
+        else:
+            playlist_id = url_or_id
+            url = f'https://www.youtube.com/playlist?list={playlist_id}'
+
+        rs, yt_initial_data = load(url)
+
+        # NOTE: Оригинальный url может поменяться, лучше брать тот, что будет после запроса
+        url = rs.url
+
+        title = cls.get_playlist_title(yt_initial_data)
+
+        # TODO: подсчитать общее время плейлиста
+        # TODO: сделать поля как у Video
+        video_list = [
+            Video.get_from(video, url)
+            for video in get_generator_raw_video_list_from_data(yt_initial_data, rs)
+        ]
+
+        return cls(
+            id=playlist_id,
+            url=url,
+            title=title,
+            video_list=video_list,
+            context=Context(
+                yt_initial_data=yt_initial_data,
+                rs=rs,
+            )
+        )
+
+
+def get_yt_cfg_data(html: str) -> dict:
     m = re.search(r'ytcfg.set\((\{.+?\})\);', html)
     if not m:
         raise Exception('Не удалось найти на странице ytcfg.set!')
@@ -58,10 +148,10 @@ def dict_merge(d1: dict, d2: dict):
             d1[k] = v
 
 
-def get_data_for_next_page(url: str, ytcfg_data: dict, continuation_item: dict) -> dict:
-    innertube_context = ytcfg_data.get('INNERTUBE_CONTEXT')
+def get_data_for_next_page(url: str, yt_cfg_data: dict, continuation_item: dict) -> dict:
+    innertube_context = yt_cfg_data.get('INNERTUBE_CONTEXT')
     if not innertube_context:
-        raise Exception('Значение INNERTUBE_CONTEXT должно быть задано в ytcfg_data!')
+        raise Exception('Значение INNERTUBE_CONTEXT должно быть задано в yt_cfg_data!')
 
     local_zone = tzlocal.get_localzone()
     utc_offset_minutes = local_zone.utcoffset(DT.datetime.now()).total_seconds() // 60
@@ -198,34 +288,38 @@ def get_ytInitialData(html: str) -> Optional[dict]:
             return json.loads(data_str)
 
 
-session = requests.Session()
-session.headers['User-Agent'] = USER_AGENT
-
-
-def get_raw_video_renderer_items(data: Dict) -> List[Dict]:
-    for render in ['**/gridVideoRenderer', '**/videoRenderer', '**/playlistVideoRenderer']:
-        items = dpath.util.values(data, render)
-        if items:
-            return items
-
-    return []
-
-
-def get_generator_raw_video_list(url: str) -> Generator[Dict, None, None]:
+def load(url: str) -> Tuple[requests.Response, dict]:
     rs = session.get(url)
 
     data = get_ytInitialData(rs.text)
     if not data:
         raise Exception('Could not find ytInitialData!')
 
-    ytcfg_data = get_ytcfg_data(rs.text)
-    innertube_api_key = ytcfg_data['INNERTUBE_API_KEY']
+    return rs, data
+
+
+def get_raw_video_renderer_items(yt_initial_data: Dict) -> List[Dict]:
+    for render in ['**/gridVideoRenderer', '**/videoRenderer', '**/playlistVideoRenderer']:
+        items = dpath.util.values(yt_initial_data, render)
+        if items:
+            return items
+
+    return []
+
+
+def get_generator_raw_video_list_from_data(yt_initial_data: dict, rs: requests.Response) -> Generator[Dict, None, None]:
+    yt_cfg_data = get_yt_cfg_data(rs.text)
+    innertube_api_key = yt_cfg_data['INNERTUBE_API_KEY']
 
     # Первая порция видео будет в самой странице
-    yield from get_raw_video_renderer_items(data)
+    yield from get_raw_video_renderer_items(yt_initial_data)
+
+    data = yt_initial_data
 
     # Подгрузка следующих видео
     while True:
+        time.sleep(0.5)
+
         try:
             continuation_item = dpath.util.get(data, '**/continuationItemRenderer')
         except KeyError:
@@ -234,11 +328,16 @@ def get_generator_raw_video_list(url: str) -> Generator[Dict, None, None]:
         url_next_page_data = urljoin(rs.url, dpath.util.get(continuation_item, '**/webCommandMetadata/apiUrl'))
         url_next_page_data += '?key=' + innertube_api_key
 
-        next_page_data = get_data_for_next_page(rs.url, ytcfg_data, continuation_item)
+        next_page_data = get_data_for_next_page(rs.url, yt_cfg_data, continuation_item)
         rs = session.post(url_next_page_data, json=next_page_data)
         data = rs.json()
 
         yield from get_raw_video_renderer_items(data)
+
+
+def get_generator_raw_video_list(url: str) -> Generator[Dict, None, None]:
+    rs, data = load(url)
+    yield from get_generator_raw_video_list_from_data(data, rs)
 
 
 def get_raw_video_list(url: str, maximum_items=1000) -> List[Dict]:
@@ -281,12 +380,48 @@ def search_youtube_with_filter(url: str, sort=False, filter_func: Callable[[Any]
 
 
 if __name__ == '__main__':
+    url = 'https://www.youtube.com/playlist?list=PLWKjhJtqVAbknyJ7hSrf1WKh_Xnv9RL1r'
+    assert Playlist.get_id_from_url(url) == 'PLWKjhJtqVAbknyJ7hSrf1WKh_Xnv9RL1r'
+
+    url = 'http://www.youtube.com/playlist?list=PLWKjhJtqVAbknyJ7hSrf1WKh_Xnv9RL1r&feature=applinks'
+    assert Playlist.get_id_from_url(url) == 'PLWKjhJtqVAbknyJ7hSrf1WKh_Xnv9RL1r'
+
+    url_playlist = 'https://www.youtube.com/playlist?list=PLWKjhJtqVAbknyJ7hSrf1WKh_Xnv9RL1r'
+    rs = session.get(url_playlist)
+    data = get_ytInitialData(rs.text)
+    playlist_title = Playlist.get_playlist_title(data)
+    print(f'Playlist title: {playlist_title!r}')
+    # Playlist title: 'Live Coding with Jesse'
+
+    print()
+
+    playlist_v1 = Playlist.get_from('PLWKjhJtqVAbknyJ7hSrf1WKh_Xnv9RL1r')
+    print(
+        f'playlist_v1. Video ({len(playlist_v1.video_list)}):\n'
+        f'    First: {playlist_v1.video_list[0]}\n'
+        f'    Last:  {playlist_v1.video_list[-1]}'
+    )
+
+    playlist_v2 = Playlist.get_from(url_playlist)
+    print(
+        f'playlist_v2. Video ({len(playlist_v2.video_list)}):\n'
+        f'    First: {playlist_v2.video_list[0]}\n'
+        f'    Last:  {playlist_v2.video_list[-1]}'
+    )
+
+    assert playlist_v1.title == playlist_v2.title
+    assert playlist_v1.id == playlist_v2.id
+    assert len(playlist_v1.video_list) == len(playlist_v2.video_list)
+    assert playlist_v1.video_list == playlist_v2.video_list
+
+    print()
+
     def __print_video_list(items: List[Video]):
         print(f'Items ({len(items)}):')
         for i, video in enumerate(items, 1):
             print(f'  {i:3}. {video.title!r}: {video.url}')
 
-    url_playlist = 'https://www.youtube.com/playlist?list=PLWKjhJtqVAbknyJ7hSrf1WKh_Xnv9RL1r'
+
     items = get_video_list(url_playlist)
     __print_video_list(items)
     """
