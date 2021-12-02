@@ -22,6 +22,28 @@ import dpath.util
 import requests
 
 
+# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/f0403620f7948306ad9e34a373f2aabc0237fb2a/seconds_to_str.py
+def seconds_to_str(seconds: int) -> str:
+    hh, mm = divmod(seconds, 3600)
+    mm, ss = divmod(mm, 60)
+    return "%02d:%02d:%02d" % (hh, mm, ss)
+
+
+def time_to_seconds(time_str: str) -> int:
+    time_split = list(map(int, time_str.split(':')))
+
+    if len(time_split) == 3:
+        h, m, s = time_split
+        return h * 60 * 60 + m * 60 + s
+
+    elif len(time_split) == 2:
+        m, s = time_split
+        return m * 60 + s
+
+    else:
+        return time_split[0]
+
+
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'
 
 
@@ -45,10 +67,22 @@ class Video:
     duration_secs: int = None
     duration_text: str = None
     seq: int = None
+    is_live_now: bool = False
     context: Context = field(default=None, repr=False, compare=False)
 
     @classmethod
-    def get_from(cls, video: Dict, url: str) -> 'Video':
+    def get_is_live_now(cls, video: dict) -> bool:
+        # Стримы имеют значок BADGE_STYLE_TYPE_LIVE_NOW
+        try:
+            badges = dpath.util.values(video, '**/metadataBadgeRenderer/style')
+            return 'BADGE_STYLE_TYPE_LIVE_NOW' in badges
+        except KeyError:
+            pass
+
+        return False
+
+    @classmethod
+    def get_from(cls, video: Dict, url: str, parent_context: Context = None) -> 'Video':
         try:
             title = dpath.util.get(video, 'title/runs/0/text')
         except KeyError:
@@ -57,17 +91,31 @@ class Video:
         url_video = dpath.util.get(video, 'navigationEndpoint/commandMetadata/webCommandMetadata/url')
         url_video = urljoin(url, url_video)
 
+        # Если есть продолжительность в секундах
         try:
             duration_secs = int(video['lengthSeconds'])
-            duration_text = dpath.util.get(video, 'lengthText/simpleText')
-        except:
-            duration_secs = None
-            duration_text = None
+        except KeyError:
+            # Если есть продолжительность в секундах в виде текста, пробуем распарсить
+            try:
+                text = dpath.util.get(video, 'lengthText/simpleText')
+                duration_secs = time_to_seconds(text)
+            except KeyError:
+                duration_secs = None
+
+        duration_text = None
+        if duration_secs:
+            duration_text = seconds_to_str(duration_secs)
 
         try:
             seq = int(video['index']['simpleText'])
         except:
             seq = None
+
+        context = Context(data=video)
+        if parent_context:
+            context.yt_initial_data = parent_context.yt_initial_data
+            context.yt_cfg_data = parent_context.yt_cfg_data
+            context.rs = parent_context.rs
 
         return cls(
             id=video['videoId'],
@@ -76,7 +124,8 @@ class Video:
             duration_secs=duration_secs,
             duration_text=duration_text,
             seq=seq,
-            context=Context(data=video)
+            is_live_now=cls.get_is_live_now(video),
+            context=context
         )
 
 
@@ -86,6 +135,8 @@ class Playlist:
     url: str
     title: str
     video_list: List[Video] = field(default_factory=list, repr=False)
+    duration_secs: int = None
+    duration_text: str = None
     context: Context = field(default=None, repr=False, compare=False)
 
     @classmethod
@@ -111,24 +162,30 @@ class Playlist:
         # NOTE: Оригинальный url может поменяться, лучше брать тот, что будет после запроса
         url = rs.url
 
+        context = Context(
+            yt_initial_data=yt_initial_data,
+            rs=rs,
+        )
+
         title = cls.get_playlist_title(yt_initial_data)
 
-        # TODO: подсчитать общее время плейлиста
-        # TODO: сделать поля как у Video
-        video_list = [
-            Video.get_from(video, url)
-            for video in get_generator_raw_video_list_from_data(yt_initial_data, rs)
-        ]
+        total_seconds = 0
+        video_list = []
+        for data_video in get_generator_raw_video_list_from_data(yt_initial_data, rs):
+            video = Video.get_from(data_video, url, context)
+            video_list.append(video)
+
+            if video.duration_secs:
+                total_seconds += video.duration_secs
 
         return cls(
             id=playlist_id,
             url=url,
             title=title,
             video_list=video_list,
-            context=Context(
-                yt_initial_data=yt_initial_data,
-                rs=rs,
-            )
+            duration_secs=total_seconds,
+            duration_text=seconds_to_str(total_seconds),
+            context=context
         )
 
 
@@ -396,25 +453,31 @@ if __name__ == '__main__':
     print()
 
     playlist_v1 = Playlist.get_from('PLWKjhJtqVAbknyJ7hSrf1WKh_Xnv9RL1r')
+    print(f'playlist_v1: {playlist_v1}')
     print(
         f'playlist_v1. Video ({len(playlist_v1.video_list)}):\n'
         f'    First: {playlist_v1.video_list[0]}\n'
         f'    Last:  {playlist_v1.video_list[-1]}'
     )
 
+    print()
+
     playlist_v2 = Playlist.get_from(url_playlist)
+    print(f'playlist_v2: {playlist_v1}')
     print(
         f'playlist_v2. Video ({len(playlist_v2.video_list)}):\n'
         f'    First: {playlist_v2.video_list[0]}\n'
         f'    Last:  {playlist_v2.video_list[-1]}'
     )
 
-    assert playlist_v1.title == playlist_v2.title
     assert playlist_v1.id == playlist_v2.id
+    assert playlist_v1.title == playlist_v2.title
+    assert playlist_v1.duration_secs == playlist_v2.duration_secs
+    assert playlist_v1.duration_text == playlist_v2.duration_text
     assert len(playlist_v1.video_list) == len(playlist_v2.video_list)
     assert playlist_v1.video_list == playlist_v2.video_list
 
-    print()
+    print('\n' + '-' * 100 + '\n')
 
     def __print_video_list(items: List[Video]):
         print(f'Items ({len(items)}):')
@@ -460,6 +523,17 @@ if __name__ == '__main__':
     # 247
     # 45
     # 190
+
+    print('\n' + '-' * 100 + '\n')
+
+    is_live_now_video_list = [
+        video
+        for video in get_video_list('https://www.youtube.com/')
+        if video.is_live_now
+    ]
+    print(f'Is live now ({len(is_live_now_video_list)}):')
+    for i, video in enumerate(is_live_now_video_list, 1):
+        print(f'{i}. {video.title!r}: {video.url}')
 
     print('\n' + '-' * 100 + '\n')
 
