@@ -64,7 +64,7 @@ class Video:
     id: str
     url: str
     title: str
-    duration_secs: int = None
+    duration_seconds: int = None
     duration_text: str = None
     seq: int = None
     is_live_now: bool = False
@@ -93,18 +93,18 @@ class Video:
 
         # Если есть продолжительность в секундах
         try:
-            duration_secs = int(video['lengthSeconds'])
+            duration_seconds = int(video['lengthSeconds'])
         except KeyError:
             # Если есть продолжительность в секундах в виде текста, пробуем распарсить
             try:
                 text = dpath.util.get(video, 'lengthText/simpleText')
-                duration_secs = time_to_seconds(text)
+                duration_seconds = time_to_seconds(text)
             except KeyError:
-                duration_secs = None
+                duration_seconds = None
 
         duration_text = None
-        if duration_secs:
-            duration_text = seconds_to_str(duration_secs)
+        if duration_seconds:
+            duration_text = seconds_to_str(duration_seconds)
 
         try:
             seq = int(video['index']['simpleText'])
@@ -121,7 +121,7 @@ class Video:
             id=video['videoId'],
             url=url_video,
             title=title,
-            duration_secs=duration_secs,
+            duration_seconds=duration_seconds,
             duration_text=duration_text,
             seq=seq,
             is_live_now=cls.get_is_live_now(video),
@@ -135,7 +135,7 @@ class Playlist:
     url: str
     title: str
     video_list: List[Video] = field(default_factory=list, repr=False)
-    duration_secs: int = None
+    duration_seconds: int = None
     duration_text: str = None
     context: Context = field(default=None, repr=False, compare=False)
 
@@ -175,15 +175,15 @@ class Playlist:
             video = Video.get_from(data_video, url, context)
             video_list.append(video)
 
-            if video.duration_secs:
-                total_seconds += video.duration_secs
+            if video.duration_seconds:
+                total_seconds += video.duration_seconds
 
         return cls(
             id=playlist_id,
             url=url,
             title=title,
             video_list=video_list,
-            duration_secs=total_seconds,
+            duration_seconds=total_seconds,
             duration_text=seconds_to_str(total_seconds),
             context=context
         )
@@ -472,7 +472,7 @@ if __name__ == '__main__':
 
     assert playlist_v1.id == playlist_v2.id
     assert playlist_v1.title == playlist_v2.title
-    assert playlist_v1.duration_secs == playlist_v2.duration_secs
+    assert playlist_v1.duration_seconds == playlist_v2.duration_seconds
     assert playlist_v1.duration_text == playlist_v2.duration_text
     assert len(playlist_v1.video_list) == len(playlist_v2.video_list)
     assert playlist_v1.video_list == playlist_v2.video_list
