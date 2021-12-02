@@ -53,7 +53,7 @@ session.headers['User-Agent'] = USER_AGENT
 
 @dataclass
 class Context:
-    data: dict = None
+    data_video: dict = None
     yt_initial_data: dict = None
     yt_cfg_data: dict = None
     rs: requests.Response = None
@@ -111,7 +111,7 @@ class Video:
         except:
             seq = None
 
-        context = Context(data=video)
+        context = Context(data_video=video)
         if parent_context:
             context.yt_initial_data = parent_context.yt_initial_data
             context.yt_cfg_data = parent_context.yt_cfg_data
