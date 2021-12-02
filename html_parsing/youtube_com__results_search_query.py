@@ -51,12 +51,25 @@ session = requests.Session()
 session.headers['User-Agent'] = USER_AGENT
 
 
+def download_url_as_bytes(url: str) -> bytes:
+    rs = session.get(url)
+    rs.raise_for_status()
+    return rs.content
+
+
 @dataclass
 class Context:
     data_video: dict = None
     yt_initial_data: dict = None
     yt_cfg_data: dict = None
     rs: requests.Response = None
+
+
+@dataclass
+class Thumbnail:
+    url: str
+    width: str
+    height: str
 
 
 @dataclass
@@ -68,7 +81,31 @@ class Video:
     duration_text: str = None
     seq: int = None
     is_live_now: bool = False
+    thumbnails: List[Thumbnail] = field(default_factory=list, repr=False, compare=False)
     context: Context = field(default=None, repr=False, compare=False)
+
+    def get_url_thumbnail_by_max_size(self) -> str:
+        return max(self.thumbnails, key=lambda x: (x.width, x.height)).url
+
+    def get_url_thumbnail_for_maxresdefault(self) -> str:
+        url = self.get_url_thumbnail_by_max_size()
+
+        # Replacing last part from path on maxresdefault.jpg
+        # https://i.ytimg.com/vi/4ewTMva83tQ/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLA8lXazyahcoE7chGgA-ZjYZQ6wcw
+        #   -> https://i.ytimg.com/vi/4ewTMva83tQ/maxresdefault.jpg
+        parsed_url = urlparse(url)
+        path_parts = parsed_url.path.split('/')
+        path_parts[-1] = 'maxresdefault.jpg'
+        new_path = '/'.join(path_parts)
+        parsed_url = parsed_url._replace(query='', path=new_path)
+
+        return parsed_url.geturl()
+
+    def get_thumbnail_by_max_size(self) -> bytes:
+        return download_url_as_bytes(self.get_url_thumbnail_by_max_size())
+
+    def get_thumbnail_for_maxresdefault(self) -> bytes:
+        return download_url_as_bytes(self.get_url_thumbnail_for_maxresdefault())
 
     @classmethod
     def get_is_live_now(cls, video: dict) -> bool:
@@ -82,22 +119,22 @@ class Video:
         return False
 
     @classmethod
-    def get_from(cls, video: Dict, url: str, parent_context: Context = None) -> 'Video':
+    def get_from(cls, data_video: Dict, url: str, parent_context: Context = None) -> 'Video':
         try:
-            title = dpath.util.get(video, 'title/runs/0/text')
+            title = dpath.util.get(data_video, 'title/runs/0/text')
         except KeyError:
-            title = dpath.util.get(video, 'title/simpleText')
+            title = dpath.util.get(data_video, 'title/simpleText')
 
-        url_video = dpath.util.get(video, 'navigationEndpoint/commandMetadata/webCommandMetadata/url')
+        url_video = dpath.util.get(data_video, 'navigationEndpoint/commandMetadata/webCommandMetadata/url')
         url_video = urljoin(url, url_video)
 
         # Если есть продолжительность в секундах
         try:
-            duration_seconds = int(video['lengthSeconds'])
+            duration_seconds = int(data_video['lengthSeconds'])
         except KeyError:
             # Если есть продолжительность в секундах в виде текста, пробуем распарсить
             try:
-                text = dpath.util.get(video, 'lengthText/simpleText')
+                text = dpath.util.get(data_video, 'lengthText/simpleText')
                 duration_seconds = time_to_seconds(text)
             except KeyError:
                 duration_seconds = None
@@ -107,24 +144,34 @@ class Video:
             duration_text = seconds_to_str(duration_seconds)
 
         try:
-            seq = int(video['index']['simpleText'])
+            seq = int(data_video['index']['simpleText'])
         except:
             seq = None
 
-        context = Context(data_video=video)
+        thumbnails = [
+            Thumbnail(
+                url=thumbnail['url'],
+                width=thumbnail['width'],
+                height=thumbnail['height'],
+            )
+            for thumbnail in dpath.util.values(data_video, 'thumbnail/thumbnails/*')
+        ]
+
+        context = Context(data_video=data_video)
         if parent_context:
             context.yt_initial_data = parent_context.yt_initial_data
             context.yt_cfg_data = parent_context.yt_cfg_data
             context.rs = parent_context.rs
 
         return cls(
-            id=video['videoId'],
+            id=data_video['videoId'],
             url=url_video,
             title=title,
             duration_seconds=duration_seconds,
             duration_text=duration_text,
             seq=seq,
-            is_live_now=cls.get_is_live_now(video),
+            is_live_now=cls.get_is_live_now(data_video),
+            thumbnails=thumbnails,
             context=context
         )
 
