@@ -24,7 +24,6 @@ except:
 
 
 from main import parse_playlist_time
-from common import seconds_to_str
 
 
 class MainWindow(QMainWindow):
@@ -56,13 +55,12 @@ class MainWindow(QMainWindow):
     def go(self):
         try:
             url = self.url_line_edit.text()
-            total_seconds, items = parse_playlist_time(url)
+            title, total_seconds, total_seconds_text, items = parse_playlist_time(url)
 
-            text = 'Playlist:\n'
+            text = f'Playlist {title!r}:\n'
             for i, (title, time) in enumerate(items, 1):
-                text += f'  {i}. {title} ({time})\n'
-
-            text += f'\nTotal time: {seconds_to_str(total_seconds)} ({total_seconds} total seconds).'
+                text += f'  {i}. {title!r} ({time})\n'
+            text += f'\nTotal time: {total_seconds_text} ({total_seconds} total seconds).'
 
             self.result_text.setPlainText(text)
 
