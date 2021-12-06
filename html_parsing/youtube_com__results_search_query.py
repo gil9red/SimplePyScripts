@@ -8,6 +8,7 @@ import datetime as DT
 import json
 import re
 import time
+import traceback
 
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Generator, Callable, Any, Tuple
@@ -193,7 +194,12 @@ class Playlist:
 
     @classmethod
     def get_playlist_title(cls, yt_initial_data: dict) -> str:
-        return dpath.util.get(yt_initial_data, '**/metadata/playlistMetadataRenderer/title')
+        try:
+            # Playlist
+            return dpath.util.get(yt_initial_data, '**/metadata/playlistMetadataRenderer/title')
+        except KeyError:
+            # Mix
+            return dpath.util.get(yt_initial_data, '**/playlist/playlist/title')
 
     @classmethod
     def get_from(cls, url_or_id: str) -> 'Playlist':
@@ -403,7 +409,9 @@ def load(url: str) -> Tuple[requests.Response, dict]:
 
 
 def get_raw_video_renderer_items(yt_initial_data: Dict) -> List[Dict]:
-    for render in ['**/gridVideoRenderer', '**/videoRenderer', '**/playlistVideoRenderer']:
+    for render in [
+        '**/gridVideoRenderer', '**/videoRenderer', '**/playlistVideoRenderer', '**/playlistPanelVideoRenderer',
+    ]:
         items = dpath.util.values(yt_initial_data, render)
         if items:
             return items
@@ -427,6 +435,11 @@ def get_generator_raw_video_list_from_data(yt_initial_data: dict, rs: requests.R
         try:
             continuation_item = dpath.util.get(data, '**/continuationItemRenderer')
         except KeyError:
+            break
+        except ValueError:
+            # TODO: fix it for "Mix"
+            # Ignore
+            print("Warning:\n" + traceback.format_exc())
             break
 
         url_next_page_data = urljoin(rs.url, dpath.util.get(continuation_item, '**/webCommandMetadata/apiUrl'))
@@ -642,3 +655,11 @@ if __name__ == '__main__':
     items = search_youtube_with_filter(url, filter_func=lambda name: text in name and 'эпизод' in name.lower())
     print(f'Filtered items ({len(items)}): {items}')
     # Filtered items (14): ['ТВОРЕНИЯ ВЕЛЬЗЕВУЛА - Sally Face [ЭПИЗОД 4] #9', ..., 'ПОИСК МЕРТВЫХ ЛЮДЕЙ ☠️ Sally Face [ЭПИЗОД 2] #4']
+
+    print('\n' + '-' * 100 + '\n')
+
+    # Test for MIX
+    playlist = Playlist.get_from('https://www.youtube.com/watch?v=QKEjrOIrCBI&list=RDQKEjrOIrCBI&start_radio=1')
+    print(playlist)
+    print(len(playlist.video_list))
+    __print_video_list(playlist.video_list)
