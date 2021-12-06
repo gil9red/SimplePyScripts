@@ -193,6 +193,10 @@ class Playlist:
         return parse_qs(parsed_url.query)['list'][0]
 
     @classmethod
+    def get_url(cls, playlist_id: str) -> str:
+        return f'https://www.youtube.com/playlist?list={playlist_id}'
+
+    @classmethod
     def get_playlist_title(cls, yt_initial_data: dict) -> str:
         try:
             # Playlist
@@ -206,9 +210,14 @@ class Playlist:
         if url_or_id.startswith('http'):
             url = url_or_id
             playlist_id = cls.get_id_from_url(url)
+
+            # Extracting playlist url from url video
+            if '/watch?' in url:
+                url = cls.get_url(playlist_id)
+
         else:
             playlist_id = url_or_id
-            url = f'https://www.youtube.com/playlist?list={playlist_id}'
+            url = cls.get_url(playlist_id)
 
         rs, yt_initial_data = load(url)
 
@@ -536,6 +545,13 @@ if __name__ == '__main__':
     assert playlist_v1.duration_text == playlist_v2.duration_text
     assert len(playlist_v1.video_list) == len(playlist_v2.video_list)
     assert playlist_v1.video_list == playlist_v2.video_list
+
+    print('\n' + '-' * 100 + '\n')
+
+    # Getting "playlist" from url video
+    url_video = 'https://www.youtube.com/watch?v=m1bPr3FRV1w&list=PLgqDz7CZ-6NbDjtcYuPFW2wb2LS7BQJMb&index=3'
+    print('From url video:')
+    print(Playlist.get_from(url_video))
 
     print('\n' + '-' * 100 + '\n')
 
