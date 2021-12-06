@@ -23,6 +23,10 @@ import dpath.util
 import requests
 
 
+class AlertError(Exception):
+    pass
+
+
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/f0403620f7948306ad9e34a373f2aabc0237fb2a/seconds_to_str.py
 def seconds_to_str(seconds: int) -> str:
     hh, mm = divmod(seconds, 3600)
@@ -56,6 +60,39 @@ def download_url_as_bytes(url: str) -> bytes:
     rs = session.get(url)
     rs.raise_for_status()
     return rs.content
+
+
+def raise_if_error(yt_initial_data: dict):
+    # NOTE: Example:
+    """
+    ...
+    "alerts": [
+        {
+            "alertRenderer": {
+                "type": "ERROR",
+                "text": {
+                    "runs": [
+                        {
+                            "text": "Этот тип плейлиста недоступен для просмотра."
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    ...
+    """
+
+    try:
+        for alert in dpath.util.values(yt_initial_data, '**/alertRenderer'):
+            if alert['type'] != 'ERROR':
+                continue
+
+            text = dpath.util.get(alert, 'text/runs/0/text')
+            raise AlertError(text)
+
+    except KeyError:
+        pass
 
 
 @dataclass
@@ -121,6 +158,9 @@ class Video:
 
     @classmethod
     def get_from(cls, data_video: Dict, url: str, parent_context: Context = None) -> 'Video':
+        if parent_context and parent_context.yt_initial_data:
+            raise_if_error(parent_context.yt_initial_data)
+
         try:
             title = dpath.util.get(data_video, 'title/runs/0/text')
         except KeyError:
@@ -220,6 +260,8 @@ class Playlist:
             url = cls.get_url(playlist_id)
 
         rs, yt_initial_data = load(url)
+
+        raise_if_error(yt_initial_data)
 
         # NOTE: Оригинальный url может поменяться, лучше брать тот, что будет после запроса
         url = rs.url
@@ -675,7 +717,11 @@ if __name__ == '__main__':
     print('\n' + '-' * 100 + '\n')
 
     # Test for MIX
-    playlist = Playlist.get_from('https://www.youtube.com/watch?v=QKEjrOIrCBI&list=RDQKEjrOIrCBI&start_radio=1')
-    print(playlist)
-    print(len(playlist.video_list))
-    __print_video_list(playlist.video_list)
+    try:
+        url = 'https://www.youtube.com/watch?v=QKEjrOIrCBI&list=RDQKEjrOIrCBI&start_radio=1'
+        playlist = Playlist.get_from(url)
+        print(playlist)
+        print(len(playlist.video_list))
+        __print_video_list(playlist.video_list)
+    except AlertError as e:
+        print(f'Error: {str(e)!r} for {url}')
