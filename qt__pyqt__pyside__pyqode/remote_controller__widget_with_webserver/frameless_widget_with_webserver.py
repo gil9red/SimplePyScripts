@@ -21,6 +21,10 @@ from config import PORT, PATH_DEFAULT_MOUSE
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
+    # Если было запрошено прерывание
+    if isinstance(ex, KeyboardInterrupt):
+        sys.exit()
+
     text = f'{ex_cls.__name__}: {ex}:\n'
     text += ''.join(traceback.format_tb(tb))
 
