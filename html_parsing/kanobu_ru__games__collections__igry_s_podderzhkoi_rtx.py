@@ -6,15 +6,20 @@ __author__ = 'ipetrash'
 
 import base64
 from dataclasses import dataclass
-from urllib.parse import urlsplit, urljoin
+from urllib.parse import urlsplit
 from pathlib import Path
 from typing import List
 
-from bs4 import BeautifulSoup
 import requests
 
 
-URL = 'https://kanobu.ru/games/collections/igry-s-podderzhkoi-rtx/'
+session = requests.session()
+session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0'
+
+COLLECTION = 'igry-s-podderzhkoi-rtx'
+URL_BASE = 'https://kanobu.ru'
+URL = f'{URL_BASE}/games/collections/{COLLECTION}/'
+URL_API = f'{URL_BASE}/api/v2/games/?collection={COLLECTION}&limit=12&order=-release_date'
 
 
 @dataclass
@@ -44,35 +49,30 @@ def img_to_base64_html(rs: requests.Response) -> str:
 
 
 def get_games() -> List[Game]:
-    session = requests.session()
-    rs = session.get(URL)
-    root = BeautifulSoup(rs.content, 'html.parser')
-
     items = []
 
-    for game in root.select('.knb-grid-cell'):
-        url_game = urljoin(rs.url, game.a['href'])
+    # Соберем куки и прочее полезное
+    rs = session.get(URL)
+    rs.raise_for_status()
 
-        # Игнорирование списков, например "Гонки по локальной сети на ПК":
-        # https://kanobu.ru/games/collections/gonki-po-lokalnoi-seti-na-pk/
-        if '/collections/' in url_game:
-            continue
+    url = URL_API
+    while url:
+        rs = session.get(url)
+        rs.raise_for_status()
 
-        # Example: <span class="style_title__f2mz_">
-        title = game.select_one('[class^=style_title]').get_text(strip=True)
+        data = rs.json()
+        for data_game in data['results']:
+            title = data_game['name']
+            url_game = f'{URL_BASE}/games/{data_game["slug"]}/'
 
-        img = game.select_one('noscript > img')
-        url_img = img.get('data-original') or img.get('src')
-
-        if url_img.startswith('data:image/'):
-            img_base64 = url_img
-        else:
-            rs_img = session.get(url_img)
+            rs_img = session.get(data_game['image']['origin'])
             img_base64 = img_to_base64_html(rs_img)
 
-        items.append(
-            Game(title, url_game, img_base64)
-        )
+            items.append(
+                Game(title, url_game, img_base64)
+            )
+
+        url = data.get('next')
 
     return items
 
