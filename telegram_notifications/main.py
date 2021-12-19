@@ -16,7 +16,7 @@ from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, Callb
 import config
 import db
 
-from common import get_logger, log_func, reply_error
+from common import get_logger, log_func, reply_error, TypeEnum
 
 
 DATA = {
@@ -27,6 +27,10 @@ DATA = {
 MESS_MAX_LENGTH = 4096
 
 log = get_logger(__file__)
+
+
+def get_chat_id(update: Update) -> int:
+    return update.effective_chat.id
 
 
 def sending_notifications():
@@ -69,11 +73,20 @@ def on_start(update: Update, context: CallbackContext):
 
 
 @log_func(log)
+def on_show_notification_count(update: Update, context: CallbackContext):
+    message = update.effective_message
+    chat_id = get_chat_id(update)
+    count = db.Notification.select().where(db.Notification.chat_id == chat_id).count()
+
+    message.reply_text(f'{TypeEnum.INFO.emoji} Было отправлено {count} уведомлений', quote=True)
+
+
+@log_func(log)
 def on_request(update: Update, context: CallbackContext):
     message = update.effective_message
 
     if not config.CHAT_ID:
-        text = f'CHAT_ID: {update.effective_chat.id}'
+        text = f'CHAT_ID: {get_chat_id(update)}'
     else:
         command = message.text.lower()
         if command == 'start':
@@ -115,6 +128,7 @@ def main():
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler('start', on_start))
+    dp.add_handler(CommandHandler('show_notification_count', on_show_notification_count))
     dp.add_handler(MessageHandler(Filters.text, on_request))
 
     dp.add_error_handler(on_error)
