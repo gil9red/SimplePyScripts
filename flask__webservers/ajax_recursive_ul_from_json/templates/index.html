@@ -12,10 +12,10 @@
 
     <script>
     function process_children(children, parent_element) {
-        let ul = $('<ul>');
-        parent_element.append(ul);
-
         if (children) {
+            let ul = $('<ul>');
+            parent_element.append(ul);
+
             children.forEach(child_data => {
                 process_data(child_data, ul);
             });
