@@ -18,7 +18,7 @@ sys.path.append(str(ROOT_DIR))
 from db import Dump
 from load import FILE_NAME_GENRE_TRANSLATE, load
 from common_utils import get_logger
-from telegram_notifications.add_notify import add_notify
+from third_party.add_notify_telegram import add_notify
 
 
 log = get_logger('genre_translate.txt')
@@ -43,7 +43,7 @@ def run(need_notify=True):
         text = f"Added genres ({len(new_genres)}): {', '.join(new_genres)}"
         log.info(text)
 
-        # Если это первый запуск, то смс не отправляем
+        # Если это первый запуск, то сообщение не отправляем
         if not is_first_run and need_notify:
             add_notify(log.name, text)
 
