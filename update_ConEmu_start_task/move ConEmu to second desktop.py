@@ -35,7 +35,7 @@ def get_hwnd_for_pid(pid: int):
 
 
 for proc in psutil.process_iter():
-    if not proc.is_running() or proc.name() != 'ConEmu.exe':
+    if not proc.is_running() or proc.name() not in ['ConEmu.exe', 'ConEmu64.exe']:
         continue
 
     hwnd = get_hwnd_for_pid(proc.pid)
