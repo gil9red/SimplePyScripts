@@ -14,14 +14,15 @@ import requests
 from bs4 import BeautifulSoup
 
 from config import GIST_URL, DIR_GIST_FILES
+from common import PATTERN_FILE_TASK, fill_string_pattern, get_gist_files
 
 
 DEBUG_LOG = False
 
 
 # Clear directory
-for file_name in DIR_GIST_FILES.glob('*'):
-    file_name.unlink()
+for f in get_gist_files():
+    f.unlink()
 
 rs = requests.get(GIST_URL)
 root = BeautifulSoup(rs.content, 'html.parser')
@@ -64,5 +65,6 @@ for line in rs.text.splitlines():
 
 # Save to files
 for group, lines in group_by_lines.items():
-    gist_file = DIR_GIST_FILES / f'group{group}'
+    file_name = fill_string_pattern(PATTERN_FILE_TASK, group)
+    gist_file = DIR_GIST_FILES / file_name
     gist_file.write_text('\n'.join(lines), 'utf-8')

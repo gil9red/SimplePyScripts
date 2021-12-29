@@ -12,10 +12,8 @@ from typing import List
 sys.path.append(r'../XML/xml.etree.ElementTree__examples')
 from pretty_print import indent
 
-from config import (
-    DIR_GIST_FILES, FILE_NAME_CONEMU_SETTINGS, RE_PATTERN_FILE_TASK,
-    PATTERN_NAME_TASK, RE_PATTERN_CONEMU_TASK
-)
+from config import FILE_NAME_CONEMU_SETTINGS
+from common import PATTERN_CONEMU_TASK, PATTERN_FILE_TASK, fill_string_pattern, get_gist_files
 
 
 def get_current_datetime() -> str:
@@ -58,19 +56,19 @@ tasks_el = root.find('.//key[@name="Tasks"]')
 # Удаление старых задач
 for task_el in tasks_el.findall('key[@name]'):
     name = task_el.find('value[@name="Name"]').attrib['data']
-    if RE_PATTERN_CONEMU_TASK.search(name):
+    if PATTERN_CONEMU_TASK.search(name):
         tasks_el.remove(task_el)
 
 # Добавление новых задач
-for file_name in DIR_GIST_FILES.glob('*'):
-    m = RE_PATTERN_FILE_TASK.search(file_name.stem)
+for file_name in get_gist_files():
+    m = PATTERN_FILE_TASK.search(file_name.stem)
     if not m:
         continue
 
     lines = file_name.read_text('utf-8').splitlines()
     lines = list(filter(None, lines))  # Remove empty lines
 
-    task_name = PATTERN_NAME_TASK.format(m.group(1))
+    task_name = fill_string_pattern(PATTERN_CONEMU_TASK, m.group(1))
     create_task(tasks_el, task_name, lines)
 
 # Актуализация счетчика задач
