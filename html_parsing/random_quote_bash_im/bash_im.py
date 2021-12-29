@@ -12,7 +12,7 @@ import shutil
 from dataclasses import dataclass, field
 from pathlib import Path
 from urllib.parse import urljoin
-from typing import List, Union, Optional, Tuple
+from typing import List, Union, Optional
 
 import requests
 from bs4 import BeautifulSoup, Tag
@@ -44,6 +44,8 @@ def get_plaintext(element: Tag) -> str:
 
 DIR = Path(__file__).resolve().parent
 
+DATE_TIME_QUOTE = '%d.%m.%Y'
+
 URL_BASE = 'https://bash.im'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'
 
@@ -69,7 +71,7 @@ class Quote:
 
     def __post_init__(self):
         self._id = int(self.url.rstrip().split('/')[-1])
-        self._date_str = self.date.strftime('%d.%m.%Y')
+        self._date_str = self.date.strftime(DATE_TIME_QUOTE)
 
     def download_comics(self, dir_name: Union[str, Path] = None, logger=None) -> List[str]:
         if isinstance(dir_name, str):
