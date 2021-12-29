@@ -28,8 +28,9 @@ def fill_string_pattern(pattern: re.Pattern, *args) -> str:
     return re.sub(r'\(.+?\)', '{}', pattern).format(*args)
 
 
-PATTERN_CONEMU_TASK = re.compile(r'My python (\d+)', flags=re.IGNORECASE)
-PATTERN_FILE_TASK = re.compile(r'^group (\d+)$', flags=re.IGNORECASE)
+PATTERN_GIST_GROUP = re.compile(r'^# GROUP (.+?)$', flags=re.IGNORECASE)
+PATTERN_CONEMU_TASK = re.compile(r'My python (.+?)', flags=re.IGNORECASE)
+PATTERN_FILE_TASK = re.compile(r'^group (.+?)$', flags=re.IGNORECASE)
 
 
 if __name__ == '__main__':

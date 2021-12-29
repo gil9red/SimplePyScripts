@@ -3,6 +3,7 @@
 
 __author__ = 'ipetrash'
 
+
 from pathlib import Path
 
 
@@ -15,7 +16,7 @@ DIR_GIST_FILES.mkdir(parents=True, exist_ok=True)
 DIR_LNKS = DIR / 'lnks'
 DIR_LNKS.mkdir(parents=True, exist_ok=True)
 
-PATH_CONEMU = Path(r'C:\Program Files (x86)\ConEmu\ConEmu.exe')
+PATH_CONEMU = Path(r'C:\Program Files\ConEmu\ConEmu64.exe')
 if not PATH_CONEMU.exists():
     raise FileNotFoundError(PATH_CONEMU)
 

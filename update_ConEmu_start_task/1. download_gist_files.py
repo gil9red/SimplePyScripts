@@ -14,7 +14,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from config import GIST_URL, DIR_GIST_FILES
-from common import PATTERN_FILE_TASK, fill_string_pattern, get_gist_files
+from common import PATTERN_FILE_TASK, PATTERN_GIST_GROUP, fill_string_pattern, get_gist_files
 
 
 DEBUG_LOG = False
@@ -39,7 +39,7 @@ for line in rs.text.splitlines():
         continue
     elif line.startswith('# IGNORED'):
         break
-    elif m := re.search(r'# GROUP (\d+)', line):
+    elif m := PATTERN_GIST_GROUP.search(line):
         group = m.group(1)
         if group in group_by_lines:
             raise Exception(f'Duplicate of group = {group!r}')
