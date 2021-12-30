@@ -4,10 +4,11 @@
 __author__ = 'ipetrash'
 
 
-import sqlite3
-import re
-from collections import OrderedDict
 import json
+import re
+import sqlite3
+
+from collections import OrderedDict
 
 
 def process_title(title: str) -> str:
@@ -25,7 +26,7 @@ def process_title(title: str) -> str:
     return title
 
 
-tracked_products = list()
+tracked_products = []
 
 # C:\Users\<user>\AppData\Roaming\Mozilla\Firefox\Profiles\<profile>\places.sqlite
 with sqlite3.connect('places.sqlite') as connect:
@@ -40,7 +41,7 @@ with sqlite3.connect('places.sqlite') as connect:
         if not url.startswith('https://www.dns-shop.ru/product/'):
             continue
 
-        if not re.fullmatch('https://www\.dns-shop\.ru/product/\w+/[^/]+/', url):
+        if not re.fullmatch(r'https://www\.dns-shop\.ru/product/\w+/[^/]+/', url):
             continue
 
         title = process_title(title)
