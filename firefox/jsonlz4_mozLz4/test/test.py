@@ -21,31 +21,6 @@ import mozlz4a
 FILE_TEST = DIR / 'recovery.jsonlz4'
 
 
-# f_lz4 = open(file_name_session_lz4, 'rb')
-# data = mozlz4a.decompress(f_lz4)
-# print(data)
-#
-# compressed_data = open(file_name_session_lz4, 'rb').read()
-# print(len(compressed_data))
-# data = mozlz4a.decompress_data(compressed_data)
-# print(len(data), data)
-# print(str(data, 'utf-8'))
-#
-# import json
-# # json_data = json.loads(data)
-# json_data = mozlz4a.load_json(file_name_session_lz4)
-# print(json_data)
-# assert json.loads(data) == json_data
-# print()
-#
-# for w in json_data['windows']:
-#     for t in w['tabs']:
-#         i = t['index'] - 1
-#         # t['entries'][i]['title'],
-#         print(i, t['entries'][i]['url'])
-#
-
-
 class TestAll(unittest.TestCase):
     def test_exists_file(self):
         self.assertTrue(FILE_TEST.exists())
