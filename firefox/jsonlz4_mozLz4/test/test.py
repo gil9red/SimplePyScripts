@@ -22,7 +22,7 @@ FILE_TEST = DIR / 'recovery.jsonlz4'
 
 
 class TestAll(unittest.TestCase):
-    def test_exists_file(self):
+    def test_1_exists_file(self):
         self.assertTrue(FILE_TEST.exists())
         self.assertTrue(FILE_TEST.read_bytes())
 
