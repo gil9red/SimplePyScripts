@@ -37,8 +37,7 @@
 import json
 import sys
 
-from pathlib import Path
-from typing import BinaryIO, Union
+from typing import BinaryIO
 
 # pip install lz4
 import lz4.block
