@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 import logging
+import sqlite3
 
 from collections import Counter
 from pathlib import Path
@@ -87,3 +88,29 @@ def close_duplicate_tabs(
         log.info(f'Saved: {file_name_session}')
         with open(file_name_session, 'wb') as f:
             mozlz4a.dumps_json(f, json_data)
+
+
+def get_bookmark_urls(
+        file_name_places: Path
+) -> List[str]:
+    connect = sqlite3.connect(file_name_places)
+    sql = 'SELECT p.url FROM moz_bookmarks b, moz_places p WHERE p.id = b.fk'
+    return [place_url for place_url, in connect.execute(sql)]
+
+
+def close_bookmarks(
+        file_name_places: Path,
+        urls: List[str],
+        log: logging.Logger,
+):
+    with sqlite3.connect(file_name_places) as connect:
+        for url in urls:
+            sql = 'SELECT id FROM moz_bookmarks WHERE fk = (SELECT id FROM moz_places WHERE url = ?)'
+            result = connect.execute(sql, [url]).fetchone()
+            if not result:
+                continue
+
+            log.info(f"Deleted bookmark for url: {url}")
+            sql = 'DELETE FROM moz_bookmarks WHERE id = ?'
+            bookmark_id = result[0]
+            connect.execute(sql, [bookmark_id])
