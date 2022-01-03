@@ -55,7 +55,6 @@ def close_tabs(
                 modified = True
 
     if modified:
-        log.info(f'Saved: {file_name_session}')
         with open(file_name_session, 'wb') as f:
             mozlz4a.dumps_json(f, json_data)
 
@@ -85,7 +84,6 @@ def close_duplicate_tabs(
                 log.info(f'Removed duplicate: {tab_url}')
 
     if need_to_delete:
-        log.info(f'Saved: {file_name_session}')
         with open(file_name_session, 'wb') as f:
             mozlz4a.dumps_json(f, json_data)
 
