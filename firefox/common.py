@@ -13,7 +13,6 @@ from pathlib import Path
 DIR = Path(__file__).resolve().parent
 
 DIR_LOGS = DIR / 'logs'
-DIR_LOGS.mkdir(parents=True, exist_ok=True)
 
 
 def get_logger(file_name: str, dir_name=DIR_LOGS):
