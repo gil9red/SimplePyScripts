@@ -8,7 +8,7 @@ __author__ = 'ipetrash'
 import psutil
 
 win_service_list = list(psutil.win_service_iter())
-print('Win service list ({}):'.format(len(win_service_list)))
+print(f'Win service list ({len(win_service_list)}):')
 
 win_service_list.sort(key=lambda x: x.status())
 
@@ -35,7 +35,7 @@ if win_service_list:
 
 print()
 name = win_service_list[0].name()
-print('Windows service info: {}'.format(name))
+print(f'Windows service info: {name}')
 win_service = psutil.win_service_get(name)
 print('  win_service:', win_service)
 print('  win_service info:', win_service.as_dict())
