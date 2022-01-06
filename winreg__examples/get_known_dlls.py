@@ -8,7 +8,7 @@ from typing import Dict
 from common import get_entries_as_dict
 
 
-PATH = r'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\KnownDLLs'
+PATH = r'HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\KnownDLLs'
 
 
 def get_known_dlls() -> Dict[str, str]:
