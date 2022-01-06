@@ -11,10 +11,11 @@ from typing import Dict, List
 from common import get_entry
 
 
+ROOT_PATH = r"HKLM\SYSTEM\CurrentControlSet\Control\Session Manager"
 PATHS = [
-    (r"HKLM\SYSTEM\CurrentControlSet\Control\Session Manager", "BootExecute"),
-    (r"HKLM\SYSTEM\CurrentControlSet\Control\Session Manager", "Execute"),
-    (r"HKLM\SYSTEM\CurrentControlSet\Control\Session Manager", "SetupExecute"),
+    (ROOT_PATH, "BootExecute"),
+    (ROOT_PATH, "Execute"),
+    (ROOT_PATH, "SetupExecute"),
 ]
 
 
@@ -28,4 +29,3 @@ def get_boot_execute() -> Dict[str, List[str]]:
 
 if __name__ == '__main__':
     print(get_boot_execute())
-
