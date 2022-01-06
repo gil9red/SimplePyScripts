@@ -17,21 +17,21 @@ from common import expand_path, get_key, Entry, get_entries, get_entry
 PATHS = [
     r"HKCU\Software\Microsoft\Windows\CurrentVersion\Run",
     r"HKLM\Software\Microsoft\Windows\CurrentVersion\Run",
-    r"HKCU\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run",
-    r"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run",
+    r"HKCU\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Run",
+    r"HKLM\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Run",
 
     r"HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce",
     r"HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce",
-    r"HKCU\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnce",
-    r"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnce",
+    r"HKCU\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnce",
+    r"HKLM\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnce",
 
     r"HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run",
     r"HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run",
 
-    r"HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnceEx",
+    r"HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnceEx",
     r"HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnceEx",
-    r"HKCU\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnceEx",
-    r"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnceEx",
+    r"HKCU\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnceEx",
+    r"HKLM\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnceEx",
 
     r"HKCU\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Run",
     r"HKCU\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Runonce",
@@ -58,7 +58,7 @@ PATHS = [
     (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Shell"),
     (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Taskman"),
     (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Userinit"),
-    (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "VmApplet"),
+    (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "VMApplet"),
     r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\AlternateShells\AvailableShells",
 
     (r"HKLM\SYSTEM\CurrentControlSet\Control\SafeBoot", "AlternateShell"),
@@ -74,6 +74,9 @@ PATHS = [
 
     r"HKLM\Software\Wow6432Node\Microsoft\Windows CE Services\AutoStartOnConnect",
     r"HKLM\Software\Wow6432Node\Microsoft\Windows CE Services\AutoStartOnDisconnect",
+
+    (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Windows", "AppInit_DLLs"),
+    (r"HKLM\Software\Wow6432Node\Microsoft\Windows NT\CurrentVersion\Windows", "AppInit_DLLs"),
 ]
 
 # SOURCE: https://www.microsoftpressstore.com/articles/article.aspx?p=2762082&seqNum=2
