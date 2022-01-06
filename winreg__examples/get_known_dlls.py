@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# SOURCE: https://www.saule-spb.ru/library/autorun.html
+
+
 from typing import Dict
 from common import get_entries_as_dict
 
