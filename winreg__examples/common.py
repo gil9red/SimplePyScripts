@@ -82,9 +82,9 @@ def get_entries_as_dict(path: Union[str, HKEYType], raw_value=False, expand_vars
     }
 
 
-def get_entry(path: str, value: str, expand_vars=True) -> Optional[Entry]:
+def get_entry(path: str, name: str, expand_vars=True) -> Optional[Entry]:
     for entry in get_entries(path, expand_vars):
-        if entry.name == value:
+        if entry.name.upper() == name.upper():
             return entry
 
 
