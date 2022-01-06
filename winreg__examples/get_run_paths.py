@@ -11,62 +11,69 @@ __author__ = 'ipetrash'
 
 from typing import Dict, List
 
-from common import get_key, Entry, get_entries, get_entry
+from common import expand_path, get_key, Entry, get_entries, get_entry
 
 
 PATHS = [
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run",
-    r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run",
-    r"HKEY_CURRENT_USER\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run",
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run",
+    r"HKCU\Software\Microsoft\Windows\CurrentVersion\Run",
+    r"HKLM\Software\Microsoft\Windows\CurrentVersion\Run",
+    r"HKCU\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run",
+    r"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run",
 
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce",
-    r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce",
-    r"HKEY_CURRENT_USER\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnce",
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnce",
+    r"HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce",
+    r"HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce",
+    r"HKCU\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnce",
+    r"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnce",
 
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run",
-    r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run",
+    r"HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run",
+    r"HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run",
 
-    r"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnceEx",
-    r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnceEx",
-    r"HKEY_CURRENT_USER\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnceEx",
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnceEx",
+    r"HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnceEx",
+    r"HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnceEx",
+    r"HKCU\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnceEx",
+    r"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnceEx",
 
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Run",
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Runonce",
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\RunonceEx",
+    r"HKCU\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Run",
+    r"HKCU\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Runonce",
+    r"HKCU\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\RunonceEx",
 
-    r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Run",
-    r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Runonce",
-    r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\RunonceEx",
+    r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Run",
+    r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Runonce",
+    r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\RunonceEx",
 
-    (r"HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp", "InitialProgram"),
-    (r"HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Terminal Server\Wds\rdpwd", "StartupPrograms"),
+    (r"HKLM\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp", "InitialProgram"),
+    (r"HKLM\System\CurrentControlSet\Control\Terminal Server\Wds\rdpwd", "StartupPrograms"),
 
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce\Setup",
-    r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce\Setup",
+    r"HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce\Setup",
+    r"HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce\Setup",
 
-    (r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Windows", "IconServiceLib"),
+    (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Windows", "IconServiceLib"),
 
-    (r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows", "Load"),
-    (r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows", "Run"),
+    (r"HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows", "Load"),
+    (r"HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows", "Run"),
 
-    (r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Shell"),
+    (r"HKCU\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Shell"),
 
-    (r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "AppSetup"),
-    (r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Shell"),
-    (r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Taskman"),
-    (r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Userinit"),
-    (r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "VmApplet"),
+    (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "AppSetup"),
+    (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Shell"),
+    (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Taskman"),
+    (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Userinit"),
+    (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "VmApplet"),
+    r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\AlternateShells\AvailableShells",
 
-    (r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SafeBoot", "AlternateShell"),
+    (r"HKLM\SYSTEM\CurrentControlSet\Control\SafeBoot", "AlternateShell"),
 
-    (r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System", "Shell"),
-    (r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System", "Shell"),
+    (r"HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System", "Shell"),
+    (r"HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System", "Shell"),
 
-    (r"HKEY_CURRENT_USER\Environment", "UserInitMprLogonScript"),
-    (r"HKEY_LOCAL_MACHINE\Environment", "UserInitMprLogonScript"),
+    (r"HKCU\Environment", "UserInitMprLogonScript"),
+    (r"HKLM\Environment", "UserInitMprLogonScript"),
+
+    r"HKLM\Software\Microsoft\Windows CE Services\AutoStartOnConnect",
+    r"HKLM\Software\Microsoft\Windows CE Services\AutoStartOnDisconnect",
+
+    r"HKLM\Software\Wow6432Node\Microsoft\Windows CE Services\AutoStartOnConnect",
+    r"HKLM\Software\Wow6432Node\Microsoft\Windows CE Services\AutoStartOnDisconnect",
 ]
 
 # SOURCE: https://www.microsoftpressstore.com/articles/article.aspx?p=2762082&seqNum=2
@@ -75,9 +82,6 @@ r"""
 HKCU\Software\Policies\Microsoft\Windows\System\Scripts\Logon
 HKCU\Software\Policies\Microsoft\Windows\System\Scripts\Logoff
 
-# Systemwide ASEPs in the registry
-HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\AlternateShells\AvailableShells
-
 # Systemwide ASEPs in the registry, intended to be controlled through Group Policy
 HKLM\Software\Policies\Microsoft\Windows\System\Scripts\Logon
 HKLM\Software\Policies\Microsoft\Windows\System\Scripts\Logoff
@@ -85,14 +89,6 @@ HKLM\Software\Policies\Microsoft\Windows\System\Scripts\Startup
 HKLM\Software\Policies\Microsoft\Windows\System\Scripts\Shutdown
 HKLM\Software\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Startup
 HKLM\Software\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Shutdown
-
-# Systemwide ActiveSync ASEPs in the registry
-HKLM\Software\Microsoft\Windows CE Services\AutoStartOnConnect
-HKLM\Software\Microsoft\Windows CE Services\AutoStartOnDisconnect
-
-# Systemwide ActiveSync ASEPs in the registry—64-bit only
-HKLM\Software\Wow6432Node\Microsoft\Windows CE Services\AutoStartOnConnect
-HKLM\Software\Wow6432Node\Microsoft\Windows CE Services\AutoStartOnDisconnect
 """
 
 
@@ -101,6 +97,7 @@ def get_run_paths(expand_vars=True) -> Dict[str, List[Entry]]:
 
     for path in PATHS:
         if isinstance(path, str):
+            path = expand_path(path)
             key = get_key(path)
             if not key:
                 continue
@@ -109,6 +106,7 @@ def get_run_paths(expand_vars=True) -> Dict[str, List[Entry]]:
 
         elif isinstance(path, tuple):
             path, name = path
+            path = expand_path(path)
             entry = get_entry(path, name)
             if entry:
                 if path not in path_by_entries:
