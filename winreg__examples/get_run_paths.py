@@ -28,13 +28,24 @@ PATHS = [
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run",
     r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run",
 
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce\Setup",
-    r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce\Setup",
-
     r"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnceEx",
     r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnceEx",
     r"HKEY_CURRENT_USER\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnceEx",
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnceEx",
+
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Run",
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Runonce",
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\RunonceEx",
+
+    r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Run",
+    r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Runonce",
+    r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\RunonceEx",
+
+    (r"HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp", "InitialProgram"),
+    (r"HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Terminal Server\Wds\rdpwd", "StartupPrograms"),
+
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce\Setup",
+    r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce\Setup",
 
     (r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows", "Load"),
     (r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows", "Run"),
@@ -50,28 +61,21 @@ PATHS = [
 
     (r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System", "Shell"),
     (r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System", "Shell"),
+
+    (r"HKEY_CURRENT_USER\Environment", "UserInitMprLogonScript"),
+    (r"HKEY_LOCAL_MACHINE\Environment", "UserInitMprLogonScript"),
 ]
 
 # SOURCE: https://www.microsoftpressstore.com/articles/article.aspx?p=2762082&seqNum=2
 r"""
-# Per-user ASEPs under HKCU\Software
-HKCU\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Run
-HKCU\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Runonce
-HKCU\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\RunonceEx
-
 # Per-user ASEPs under HKCU\Software intended to be controlled through Group Policy
 HKCU\Software\Policies\Microsoft\Windows\System\Scripts\Logon
 HKCU\Software\Policies\Microsoft\Windows\System\Scripts\Logoff
 
 # Systemwide ASEPs in the registry
-HKLM\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Run
-HKLM\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\Runonce
-HKLM\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\Install\Software\Microsoft\Windows\CurrentVersion\RunonceEx
 HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\IconServiceLib
 HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\AlternateShells\AvailableShells
 HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\AppSetup
-HKLM\System\CurrentControlSet\Control\Terminal Server\Wds\rdpwd\StartupPrograms
-HKLM\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp\InitialProgram
 
 # Systemwide ASEPs in the registry, intended to be controlled through Group Policy
 HKLM\Software\Policies\Microsoft\Windows\System\Scripts\Logon
