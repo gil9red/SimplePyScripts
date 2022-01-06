@@ -47,11 +47,14 @@ PATHS = [
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce\Setup",
     r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce\Setup",
 
+    (r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Windows", "IconServiceLib"),
+
     (r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows", "Load"),
     (r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows", "Run"),
 
     (r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Shell"),
 
+    (r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "AppSetup"),
     (r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Shell"),
     (r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Taskman"),
     (r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Userinit"),
@@ -73,9 +76,7 @@ HKCU\Software\Policies\Microsoft\Windows\System\Scripts\Logon
 HKCU\Software\Policies\Microsoft\Windows\System\Scripts\Logoff
 
 # Systemwide ASEPs in the registry
-HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\IconServiceLib
 HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\AlternateShells\AvailableShells
-HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\AppSetup
 
 # Systemwide ASEPs in the registry, intended to be controlled through Group Policy
 HKLM\Software\Policies\Microsoft\Windows\System\Scripts\Logon
