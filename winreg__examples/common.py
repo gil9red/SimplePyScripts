@@ -22,8 +22,10 @@ class Entry:
 
 def expand_registry_key(key: str) -> str:
     return {
+        'HKCR': 'HKEY_CLASSES_ROOT',
         'HKCU': 'HKEY_CURRENT_USER',
         'HKLM': 'HKEY_LOCAL_MACHINE',
+        'HCU': 'HKEY_USERS',
     }.get(key, key)
 
 
