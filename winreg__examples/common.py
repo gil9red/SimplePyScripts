@@ -27,6 +27,13 @@ def expand_registry_key(key: str) -> str:
     }.get(key, key)
 
 
+def expand_path(path: str) -> str:
+    registry_key_name, relative_path = path.split('\\', maxsplit=1)
+    registry_key_name = expand_registry_key(registry_key_name)
+
+    return fr'{registry_key_name}\{relative_path}'
+
+
 def get_key(path: str) -> Optional[HKEYType]:
     # Example:
     #     path = r"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
@@ -112,3 +119,6 @@ if __name__ == '__main__':
 
     assert get_key(r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders")
     assert get_key(r"HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders")
+
+    assert expand_path(r"HKCU\Software\Microsoft\Windows\CurrentVersion\Run") \
+           == r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run"
