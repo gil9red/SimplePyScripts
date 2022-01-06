@@ -55,13 +55,17 @@ PATHS = [
     (r"HKCU\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Shell"),
 
     (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "AppSetup"),
+    (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "GinaDLL"),
     (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Shell"),
+    (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "System"),
     (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Taskman"),
+    (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "UIHost"),
     (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "Userinit"),
     (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "VMApplet"),
     r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\AlternateShells\AvailableShells",
 
     (r"HKLM\SYSTEM\CurrentControlSet\Control\SafeBoot", "AlternateShell"),
+    (r"HKLM\SYSTEM\CurrentControlSet\Control\BootVerificationProgram", "ImageName"),
 
     (r"HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System", "Shell"),
     (r"HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System", "Shell"),
@@ -77,6 +81,9 @@ PATHS = [
 
     (r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Windows", "AppInit_DLLs"),
     (r"HKLM\Software\Wow6432Node\Microsoft\Windows NT\CurrentVersion\Windows", "AppInit_DLLs"),
+
+    (r"HKCU\Control Panel\Desktop", "SCRNSAVE.EXE"),
+    (r"HKLM\SYSTEM\Setup", "CmdLine"),
 ]
 
 # SOURCE: https://www.microsoftpressstore.com/articles/article.aspx?p=2762082&seqNum=2
