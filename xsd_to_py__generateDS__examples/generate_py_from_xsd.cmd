@@ -1,0 +1,1 @@
+python generateDS.py -o task.py task.xsd
