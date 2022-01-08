@@ -20,3 +20,4 @@ def get_reg(reg_path, name):
 if __name__ == '__main__':
     reg_path = r"Control Panel\Mouse"
     print(get_reg(reg_path, 'MouseSensitivity'))
+    # 10
