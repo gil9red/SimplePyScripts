@@ -86,7 +86,7 @@ PATHS = [
 ]
 
 
-def get_run_paths() -> dict[str, dict[str, str]]:
+def get_key_by_values() -> dict[str, dict[str, str]]:
     path_by_values = defaultdict(dict)
 
     for path in PATHS:
@@ -110,9 +110,17 @@ def get_run_paths() -> dict[str, dict[str, str]]:
     return path_by_values
 
 
+def get_run_paths() -> dict[str, str]:
+    run_paths = dict()
+    for path, name_by_value in get_key_by_values().items():
+        for name, value in name_by_value.items():
+            run_paths[f'{path}, {name}'] = value
+
+    return run_paths
+
+
 if __name__ == '__main__':
-    run_paths = get_run_paths()
-    for path, name_by_value in run_paths.items():
+    for path, name_by_value in get_key_by_values().items():
         if not name_by_value:
             continue
 
@@ -146,3 +154,6 @@ if __name__ == '__main__':
         1. AlternateShell: cmd.exe
     
     """
+
+    run_paths = get_run_paths()
+    print(len(run_paths), run_paths)
