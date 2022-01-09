@@ -86,21 +86,6 @@ PATHS = [
     (r"HKLM\SYSTEM\Setup", "CmdLine"),
 ]
 
-# SOURCE: https://www.microsoftpressstore.com/articles/article.aspx?p=2762082&seqNum=2
-r"""
-# Per-user ASEPs under HKCU\Software intended to be controlled through Group Policy
-HKCU\Software\Policies\Microsoft\Windows\System\Scripts\Logon
-HKCU\Software\Policies\Microsoft\Windows\System\Scripts\Logoff
-
-# Systemwide ASEPs in the registry, intended to be controlled through Group Policy
-HKLM\Software\Policies\Microsoft\Windows\System\Scripts\Logon
-HKLM\Software\Policies\Microsoft\Windows\System\Scripts\Logoff
-HKLM\Software\Policies\Microsoft\Windows\System\Scripts\Startup
-HKLM\Software\Policies\Microsoft\Windows\System\Scripts\Shutdown
-HKLM\Software\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Startup
-HKLM\Software\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Shutdown
-"""
-
 
 def get_run_paths(expand_vars=True) -> Dict[str, List[Entry]]:
     path_by_entries = dict()
