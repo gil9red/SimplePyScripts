@@ -8,8 +8,7 @@ __author__ = 'ipetrash'
 # SOURCE: http://datadump.ru/virus-detection/
 
 
-from typing import Dict
-from common import get_entry, get_subkeys
+from common import RegistryKey
 
 
 PATHS = [
@@ -18,18 +17,16 @@ PATHS = [
 ]
 
 
-def get_image_file_execution_options() -> Dict[str, str]:
+def get_image_file_execution_options() -> dict[str, str]:
     path_by_debuggers = dict()
     for path in PATHS:
-        for sub_key_name, sub_key in get_subkeys(path):
-            path_exe = fr'{path}\{sub_key_name}'
-            debugger = get_entry(path_exe, 'debugger')
-            if debugger and debugger.value:
-                path_by_debuggers[path_exe] = debugger.value
+        for sub_key in RegistryKey(path).subkeys():
+            if debugger := sub_key.get_str_value('debugger'):
+                path_by_debuggers[sub_key.path] = debugger
 
     return path_by_debuggers
 
 
 if __name__ == '__main__':
     print(get_image_file_execution_options())
-    # {'HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\taskmgr.exe': '"C:\\Program Files (x86)\\System Explorer\\SystemExplorer.exe"', 'HKLM\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\taskmgr.exe': '"C:\\Program Files (x86)\\System Explorer\\SystemExplorer.exe"'}
+    # {'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\taskmgr.exe': '"C:\\Program Files (x86)\\System Explorer\\SystemExplorer.exe"', 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\taskmgr.exe': '"C:\\Program Files (x86)\\System Explorer\\SystemExplorer.exe"'}

@@ -10,9 +10,7 @@ __author__ = 'ipetrash'
 
 
 from collections import defaultdict
-from typing import Dict, List
-
-from common import expand_path, get_key, Entry, get_entries, get_entry
+from common import RegistryKey
 
 
 PATHS = [
@@ -88,37 +86,40 @@ PATHS = [
 ]
 
 
-def get_run_paths(expand_vars=True) -> Dict[str, List[Entry]]:
-    path_by_entries = defaultdict(list)
+def get_run_paths() -> dict[str, dict[str, str]]:
+    path_by_values = defaultdict(dict)
 
     for path in PATHS:
-        if isinstance(path, str):
-            path = expand_path(path)
-            if not get_key(path):
-                continue
-
-            path_by_entries[path] += get_entries(path, expand_vars)
-
-        elif isinstance(path, tuple):
+        if isinstance(path, tuple):
             path, name = path
-            path = expand_path(path)
-            entry = get_entry(path, name)
-            if entry and entry.value:
-                path_by_entries[path].append(entry)
+        else:
+            name = None
 
-    return path_by_entries
+        key = RegistryKey.get_or_none(path)
+        if not key:
+            continue
+
+        path = key.path
+
+        if name:
+            if value := key.get_str_value(name):
+                path_by_values[path][name] = value
+        else:
+            path_by_values[path].update(key.get_str_values_as_dict())
+
+    return path_by_values
 
 
 if __name__ == '__main__':
     run_paths = get_run_paths()
-    for path, entries in run_paths.items():
-        if not entries:
+    for path, name_by_value in run_paths.items():
+        if not name_by_value:
             continue
 
         print(path)
 
-        for i, entry in enumerate(entries, 1):
-            print(f'    {i}. {entry.name}: {entry.value}')
+        for i, (name, value) in enumerate(name_by_value.items(), 1):
+            print(f'    {i}. {name}: {value}')
 
         print()
     r"""

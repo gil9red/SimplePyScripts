@@ -8,8 +8,7 @@ __author__ = 'ipetrash'
 # SOURCE: http://datadump.ru/virus-detection/
 
 
-from typing import Dict
-from common import get_entry, get_subkeys
+from common import RegistryKey
 
 
 PATHS = [
@@ -18,18 +17,24 @@ PATHS = [
 ]
 
 
-def get_winsock_providers() -> Dict[str, str]:
+def get_winsock_providers() -> dict[str, str]:
     path_by_value = dict()
     for path, name in PATHS:
         for catalog in ['Catalog_Entries', 'Catalog_Entries64']:
-            for sub_key_name, sub_key in get_subkeys(fr'{path}\{catalog}'):
-                abs_path = fr'{path}\{catalog}\{sub_key_name}'
-                entry = get_entry(abs_path, name)
-                if entry and entry.value:
-                    path_by_value[abs_path] = entry.value
+            key = RegistryKey(path) / catalog
+            for sub_key in key.subkeys():
+                if value := sub_key.get_str_value(name):
+                    path_by_value[sub_key.path] = value
 
     return path_by_value
 
 
 if __name__ == '__main__':
-    print(get_winsock_providers())
+    path_by_value = get_winsock_providers()
+    print(path_by_value)
+    print()
+
+    for path, value in path_by_value.items():
+        print(path, value)
+        break
+    # HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WinSock2\Parameters\NameSpace_Catalog5\Catalog_Entries\000000000001 @%SystemRoot%\system32\napinsp.dll,-1000

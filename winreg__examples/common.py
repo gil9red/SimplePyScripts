@@ -4,20 +4,15 @@
 __author__ = 'ipetrash'
 
 
-import os
+import datetime as DT
 import winreg
 
-from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple, Union, Any
+from typing import Dict, List, Optional, Any
 from pathlib import Path
-from winreg import QueryInfoKey, EnumKey, EnumValue, OpenKey, HKEYType
+from winreg import QueryInfoKey, EnumKey, EnumValue, OpenKey, HKEYType, REG_EXPAND_SZ, ExpandEnvironmentStrings
 
-
-@dataclass
-class Entry:
-    name: str
-    value: Any
-    type: int
+import exceptions
+from constants import VALUE_BY_TYPE
 
 
 def expand_registry_key(key: str) -> str:
@@ -52,67 +47,125 @@ def get_key(path: str) -> Optional[HKEYType]:
         return
 
 
-def get_entries(path: Union[str, HKEYType], expand_vars=True) -> List[Entry]:
-    items = []
+class RegistryValue:
+    def __init__(self, name: str, value_type: int, value: Any):
+        self.name: str = name
 
-    if isinstance(path, HKEYType):
-        key = path
-    else:
-        key = get_key(path)
+        self.value_type: int = value_type
+        self.value_type_str: str = VALUE_BY_TYPE[value_type]
 
-    if not key:
+        if self.value_type == REG_EXPAND_SZ:
+            value = ExpandEnvironmentStrings(value)
+
+        self.value: Any = value
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(name='{self.name}', type={self.value_type_str}, value={self.value})"
+
+
+class RegistryKey:
+    def __init__(self, path: str):
+        path = expand_path(path)
+
+        self.hkey: HKEYType = get_key(path)
+        if not self.hkey:
+            raise exceptions.RegistryKeyNotFoundException(path)
+
+        self.path: str = path
+        self.name: str = path.split('\\')[-1]
+
+        number_of_keys, number_of_values, last_modified_timestamp = QueryInfoKey(self.hkey)
+        self.number_of_keys: int = number_of_keys
+        self.number_of_values: int = number_of_values
+        self.last_modified_timestamp: int = last_modified_timestamp
+
+        delta = DT.timedelta(seconds=self.last_modified_timestamp / 1e7)
+        self.last_modified: DT.datetime = DT.datetime(1601, 1, 1) + delta
+
+    def __getitem__(self, name: str) -> RegistryValue:
+        return self.value(name)
+
+    def __truediv__(self, sub_key_name: str) -> 'RegistryKey':
+        return self.subkey(sub_key_name)
+
+    def __eq__(self, other: 'RegistryKey') -> bool:
+        return hash(self.path) == hash(other.path)
+
+    def __hash__(self) -> int:
+        return hash(self.path)
+
+    @classmethod
+    def get_subkey(cls, path: str, sub_key_name: str) -> 'RegistryKey':
+        return cls(fr'{path}\{sub_key_name}')
+
+    @classmethod
+    def get_or_none(cls, path: str) -> Optional['RegistryKey']:
+        try:
+            return cls(path)
+        except exceptions.RegistryKeyNotFoundException:
+            return
+
+    def subkeys(self) -> List['RegistryKey']:
+        items = []
+        for i in range(self.number_of_keys):
+            sub_key_name = EnumKey(self.hkey, i)
+            items.append(RegistryKey.get_subkey(self.path, sub_key_name))
         return items
 
-    _, number_of_values, _ = QueryInfoKey(key)
-    for i in range(number_of_values):
-        name, value, type_value = EnumValue(key, i)
+    def subkey(self, name: str) -> 'RegistryKey':
+        for k in self.subkeys():
+            if k.name.upper() == name.upper():
+                return k
+        raise exceptions.RegistryKeyNotFoundException(fr'{path}\{name}')
 
-        if expand_vars and isinstance(value, str):
-            value = os.path.expandvars(value)
+    def values(self) -> List[RegistryValue]:
+        items = []
+        for i in range(self.number_of_values):
+            name, value, value_type = EnumValue(self.hkey, i)
+            items.append(
+                RegistryValue(name=name, value_type=value_type, value=value)
+            )
+        return items
 
-        items.append(
-            Entry(name, value, type_value)
+    def value(self, name: str) -> RegistryValue:
+        for v in self.values():
+            if v.name.upper() == name.upper():
+                return v
+        raise exceptions.RegistryValueNotFoundException(self.path, name)
+
+    def get_raw_value(self, name: str, default: Any = None) -> Any:
+        try:
+            return self.value(name).value
+        except exceptions.RegistryValueNotFoundException:
+            return default
+
+    def get_str_value(self, name: str, default: str = '') -> str:
+        return str(self.get_raw_value(name, default))
+
+    def get_path_value(self, name: str) -> Optional[Path]:
+        path = self.get_str_value(name)
+        if not path:
+            return
+
+        return Path(path)
+
+    def get_raw_values_as_dict(self, default: Any = None) -> Dict[str, Any]:
+        return {
+            v.name: v.value if v.value else default
+            for v in self.values()
+        }
+
+    def get_str_values_as_dict(self, default: str = '') -> Dict[str, str]:
+        return {
+            name: str(value) if value else default
+            for name, value in self.get_raw_values_as_dict().items()
+        }
+
+    def __repr__(self) -> str:
+        return (
+            f"{self.__class__.__name__}(path='{self.path}', "
+            f"number_of_keys={self.number_of_keys}, number_of_values={self.number_of_values})"
         )
-
-    return items
-
-
-def get_entries_as_dict(path: Union[str, HKEYType], raw_value=False, expand_vars=True) -> Dict[str, Union[Entry, Any]]:
-    return {
-        entry.name: entry.value if raw_value else entry
-        for entry in get_entries(path, expand_vars)
-    }
-
-
-def get_entry(path: str, name: str, expand_vars=True) -> Optional[Entry]:
-    for entry in get_entries(path, expand_vars):
-        if entry.name.upper() == name.upper():
-            return entry
-
-
-def get_subkeys(path: str) -> List[Tuple[str, HKEYType]]:
-    items = []
-
-    key = get_key(path)
-    if not key:
-        return items
-
-    number_of_subkeys, _, _ = QueryInfoKey(key)
-    for i in range(number_of_subkeys):
-        sub_key_name = EnumKey(key, i)
-        sub_key = OpenKey(key, sub_key_name)
-
-        items.append((sub_key_name, sub_key))
-
-    return items
-
-
-def get_entry_path(path: str, name: str) -> Optional[Path]:
-    entry = get_entry(path, name)
-    if not entry:
-        return
-
-    return Path(entry.value)
 
 
 if __name__ == '__main__':
@@ -124,3 +177,34 @@ if __name__ == '__main__':
 
     assert expand_path(r"HKCU\Software\Microsoft\Windows\CurrentVersion\Run") \
            == r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run"
+
+    path = r'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders'
+    key = RegistryKey(path)
+    print(key == RegistryKey(path))
+    print(hash(key))
+    print(hash(RegistryKey(path)))
+    print({
+        key: '111'
+    })
+    print(key)
+    print(key.path)  # TODO: добавить проверку
+    print(key.name)  # TODO: добавить проверку
+    print(key.hkey)
+    print(key.number_of_keys)
+    print(key.number_of_values)
+    print(key.last_modified_timestamp)
+    print(key.last_modified)
+    print(len(key.subkeys()), key.subkeys())
+    print(len(key.values()), key.values())
+    print(key.value('Common Programs'))
+    print(key['Common Programs'])
+    print(key.subkey('Backup'))
+    print(key / 'Backup')
+    print(key.subkey('BACKUP'))
+    print(key.value('COMMON PROGRAMS'))
+
+    # TODO: catch exception, use uuid
+    # print(key.subkey('111'))
+    # print(key / '111')
+    # print(key.value('111'))
+    # print(key['111'])

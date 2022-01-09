@@ -8,8 +8,7 @@ __author__ = 'ipetrash'
 # SOURCE: http://datadump.ru/virus-detection/
 
 
-from typing import Dict, Optional
-from common import get_entry
+from common import RegistryKey
 
 
 PATHS = [
@@ -18,11 +17,12 @@ PATHS = [
 ]
 
 
-def get_command_processor() -> Dict[str, Optional[str]]:
+def get_command_processor() -> dict[str, str]:
     path_by_value = dict()
     for path, name in PATHS:
-        entry = get_entry(path, name)
-        path_by_value[fr'{path}\{name}'] = entry.value if entry else None
+        key = RegistryKey(path)
+        if value := key.get_str_value(name):
+            path_by_value[fr'{key.path}, {name}'] = value
 
     return path_by_value
 

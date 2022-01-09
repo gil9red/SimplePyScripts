@@ -9,9 +9,9 @@ __author__ = 'ipetrash'
 
 
 from dataclasses import dataclass, field
-from typing import Dict, Any, List
+from typing import Any
 
-from common import get_subkeys, get_entries_as_dict
+from common import RegistryKey
 
 
 PATHS = [
@@ -30,10 +30,10 @@ class Component:
     locale: str = ''
     stub_path: str = ''
     version: str = ''
-    other_fields: Dict[str, Any] = field(default_factory=dict)
+    other_fields: dict[str, Any] = field(default_factory=dict)
 
     @classmethod
-    def create(cls, guid: str, fields: Dict[str, Any]) -> 'Component':
+    def create(cls, guid: str, fields: dict[str, Any]) -> 'Component':
         return cls(
             guid=guid,
             default=fields.pop('', ''),
@@ -45,16 +45,21 @@ class Component:
         )
 
 
-def get_active_setup_components(exists_stub_path=True) -> Dict[str, List[Component]]:
+def get_active_setup_components(exists_stub_path=True) -> dict[str, list[Component]]:
     path_by_items = dict()
 
     for path in PATHS:
+        key = RegistryKey(path)
+        path = key.path
+
         if path not in path_by_items:
             path_by_items[path] = []
 
-        for sub_key_name, sub_key in get_subkeys(path):
-            entries = get_entries_as_dict(sub_key, raw_value=True)
-            component = Component.create(sub_key_name, entries)
+        for sub_key in key.subkeys():
+            component = Component.create(
+                sub_key.name,
+                sub_key.get_str_values_as_dict()
+            )
 
             # Если задана проверка наличия stub_path и он пустой
             if exists_stub_path and not component.stub_path.strip():
@@ -66,7 +71,7 @@ def get_active_setup_components(exists_stub_path=True) -> Dict[str, List[Compone
 
 
 if __name__ == '__main__':
-    def _print_this(path_by_components: Dict[str, List[Component]]):
+    def _print_this(path_by_components: dict[str, list[Component]]):
         for path, components in path_by_components.items():
             print(f'{path} ({len(components)}):')
             for component in components:

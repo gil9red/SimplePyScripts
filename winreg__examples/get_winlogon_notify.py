@@ -10,17 +10,19 @@ __author__ = 'ipetrash'
 # SOURCE: https://www.saule-spb.ru/library/vx/look2mereg.html
 
 
-from typing import Dict
-from common import get_entries_as_dict, get_subkeys
+from common import RegistryKey
 
 
 PATH = r'HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify'
 
 
-def get_winlogon_notify() -> Dict[str, Dict[str, str]]:
+def get_winlogon_notify() -> dict[str, dict[str, str]]:
+    key = RegistryKey.get_or_none(PATH)
+    subkeys = key.subkeys() if key else []
+
     return {
-        sub_key_name: get_entries_as_dict(sub_key, raw_value=True)
-        for sub_key_name, sub_key in get_subkeys(PATH)
+        sub_key.path: sub_key.get_str_values_as_dict()
+        for sub_key in subkeys
     }
 
 
