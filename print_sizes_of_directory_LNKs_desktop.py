@@ -24,7 +24,7 @@ def get_dir_total_size(dir_name: str) -> (int, str):
                 total_size += os.path.getsize(file_name)
 
         except Exception as e:
-            print('File: "{}", error: "{}"'.format(file_name, e))
+            print(f'File: "{file_name}", error: "{e}"')
 
     return total_size, sizeof_fmt(total_size)
 
@@ -53,7 +53,7 @@ paths = sorted(set(paths))
 
 for file_name in paths:
     size, size_str = get_dir_total_size(file_name)
-    print('{:<15} {:10} {}'.format(size, size_str, file_name))
+    print(f'{size:<15} {size_str:10} {file_name}')
 
     total_size += size
     disc = file_name[0]
@@ -63,22 +63,22 @@ for file_name in paths:
     disc_by_total_items[disc].append((size, size_str, file_name))
 
 print()
-print('Total size:', total_size, sizeof_fmt(total_size))
+print(f'Total size: {total_size} {sizeof_fmt(total_size)}')
 
 for disc in sorted(total_size_by_disc):
     size = total_size_by_disc[disc]
-    print('    {} {:<15} {}'.format(disc, size, sizeof_fmt(size)))
+    print(f'    {disc} {size:<15} {sizeof_fmt(size)}')
 
 print()
 print('Top all:')
 for size, size_str, file_name in sorted(total_items, key=lambda x: x[0], reverse=True)[:5]:
-    print('    {:<15} bytes {:10} {}'.format(size, size_str, file_name))
+    print(f'    {size:<15} bytes {size_str:10} {file_name}')
 
 print()
 
 for disc, total_items in disc_by_total_items.items():
-    print('Top of {}:'.format(disc))
+    print(f'Top of {disc}:')
     for size, size_str, file_name in sorted(total_items, key=lambda x: x[0], reverse=True)[:3]:
-        print('    {:<15} bytes {:10} {}'.format(size, size_str, file_name))
+        print(f'    {size:<15} bytes {size_str:10} {file_name}')
 
     print()
