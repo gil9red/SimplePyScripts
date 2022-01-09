@@ -9,6 +9,7 @@ __author__ = 'ipetrash'
 # SOURCE: https://www.saule-spb.ru/library/autorun.html
 
 
+from collections import defaultdict
 from typing import Dict, List
 
 from common import expand_path, get_key, Entry, get_entries, get_entry
@@ -88,25 +89,21 @@ PATHS = [
 
 
 def get_run_paths(expand_vars=True) -> Dict[str, List[Entry]]:
-    path_by_entries = dict()
+    path_by_entries = defaultdict(list)
 
     for path in PATHS:
         if isinstance(path, str):
             path = expand_path(path)
-            key = get_key(path)
-            if not key:
+            if not get_key(path):
                 continue
 
-            path_by_entries[path] = get_entries(path, expand_vars)
+            path_by_entries[path] += get_entries(path, expand_vars)
 
         elif isinstance(path, tuple):
             path, name = path
             path = expand_path(path)
             entry = get_entry(path, name)
-            if entry:
-                if path not in path_by_entries:
-                    path_by_entries[path] = []
-
+            if entry and entry.value:
                 path_by_entries[path].append(entry)
 
     return path_by_entries
