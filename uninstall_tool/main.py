@@ -44,9 +44,9 @@ for path in UNINSTALL_PATH_LIST:
                 pass
 
 
-for number, name in enumerate(sorted(programs_dict.keys()), 1):
+for i, name in enumerate(sorted(programs_dict.keys()), 1):
     subkey_dict = programs_dict[name]
-    print(f'{number}. {name}:')
+    print(f'{i}. {name}:')
     print(f'    DisplayVersion: {subkey_dict.get("DisplayVersion", "")}')
     print(f'    Publisher: {subkey_dict.get("Publisher", "")}')
     print(f'    InstallDate: {subkey_dict.get("InstallDate", "")}')
