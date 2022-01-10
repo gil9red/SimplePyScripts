@@ -107,3 +107,6 @@ docs/_build/
 # PyBuilder
 target/
 
+# Current project
+TOKEN.txt
+LOGIN_PASSWORD.txt
