@@ -34,6 +34,7 @@ def is_dlc(game: str) -> bool:
 
         return game_price_list
 
+    # SOURCE: https://github.com/gil9red/price_of_games/blob/9311f9cbc6b9e57d0308436e3dbf3e524f23ef74/app_parser/utils.py
     def smart_comparing_names(name_1: str, name_2: str) -> bool:
         """
         Функция для сравнивания двух названий игр.
@@ -45,12 +46,21 @@ def is_dlc(game: str) -> bool:
         name_1 = name_1.lower()
         name_2 = name_2.lower()
 
-        def clear_name(name: str) -> str:
-            return re.sub(r'[^\w]', '', name).replace('_', '')
+        def remove_postfix(text: str) -> str:
+            for postfix in ('dlc', 'expansion'):
+                if text.endswith(postfix):
+                    return text[:-len(postfix)]
+            return text
 
-        # Удаление символов кроме буквенных и цифр: "the witcher®3:___ вася! wild hunt" -> "thewitcher3васяwildhunt"
+        # Удаление символов кроме буквенных, цифр и _: "the witcher®3:___ вася! wild hunt" -> "thewitcher3___васяwildhunt"
+        def clear_name(name: str) -> str:
+            return re.sub(r'\W', '', name)
+
         name_1 = clear_name(name_1)
+        name_1 = remove_postfix(name_1)
+
         name_2 = clear_name(name_2)
+        name_2 = remove_postfix(name_2)
 
         return name_1 == name_2
 

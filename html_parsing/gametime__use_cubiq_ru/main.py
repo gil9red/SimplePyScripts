@@ -46,7 +46,7 @@ def to_seconds(time_str: str) -> int:
     return seconds
 
 
-# SOURCE: # SOURCE: https://github.com/gil9red/price_of_games/blob/a0c3138bd09a751cd8efda8b93c2f7a7f0841e6f/app_parser/utils.py#L143
+# SOURCE: https://github.com/gil9red/price_of_games/blob/9311f9cbc6b9e57d0308436e3dbf3e524f23ef74/app_parser/utils.py
 def smart_comparing_names(name_1: str, name_2: str) -> bool:
     """
     Функция для сравнивания двух названий игр.
@@ -54,15 +54,27 @@ def smart_comparing_names(name_1: str, name_2: str) -> bool:
 
     """
 
-    # Удаление символов кроме буквенных, цифр и _: "the witcher®3:___ вася! wild hunt" -> "thewitcher3___васяwildhunt"
-    def clear_name(name):
-        return re.sub(r'\W', '', name)
-
     # Приведение строк к одному регистру
     name_1 = name_1.lower()
     name_2 = name_2.lower()
 
-    return clear_name(name_1) == clear_name(name_2)
+    def remove_postfix(text: str) -> str:
+        for postfix in ('dlc', 'expansion'):
+            if text.endswith(postfix):
+                return text[:-len(postfix)]
+        return text
+
+    # Удаление символов кроме буквенных, цифр и _: "the witcher®3:___ вася! wild hunt" -> "thewitcher3___васяwildhunt"
+    def clear_name(name: str) -> str:
+        return re.sub(r'\W', '', name)
+
+    name_1 = clear_name(name_1)
+    name_1 = remove_postfix(name_1)
+
+    name_2 = clear_name(name_2)
+    name_2 = remove_postfix(name_2)
+
+    return name_1 == name_2
 
 
 def get(url: str) -> Dict[str, Dict[str, Time]]:
