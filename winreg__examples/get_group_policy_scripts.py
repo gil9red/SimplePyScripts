@@ -8,8 +8,11 @@ from common import RegistryKey
 
 
 PATHS = [
-    r'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\Scripts',
-    r'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\Scripts',
+    r'HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy\Scripts',
+    r'HKLM\Software\Microsoft\Windows\CurrentVersion\Group Policy\Scripts',
+
+    r'HKCU\Software\Policies\Microsoft\Windows\System\Scripts',
+    r'HKLM\Software\Policies\Microsoft\Windows\System\Scripts',
 ]
 
 
