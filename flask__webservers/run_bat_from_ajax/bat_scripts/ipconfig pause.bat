@@ -1,0 +1,2 @@
+cmd /C ipconfig
+pause

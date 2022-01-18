@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+    <title>run_bat_from_ajax</title>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+</head>
+<body>
+    <br>
+    <div>
+        <p>os_startfile:</p>
+        {% for script_name in scripts %}
+        <button class="os_startfile">{{ script_name }}</button>
+        {% endfor %}
+    </div>
+    <hr>
+    <div>
+        <p>subprocess (return output):</p>
+        {% for script_name in scripts %}
+        <button class="subprocess">{{ script_name }}</button>
+        {% endfor %}
+        <br>
+        <code id="subprocess_result"></code>
+    </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+</html>
