@@ -4,16 +4,13 @@
 __author__ = 'ipetrash'
 
 
-import logging
 import os.path
-import sys
 import time
 from pathlib import Path
-from typing import Tuple
 
 # pip install selenium
 from selenium import webdriver
-from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
 
 
@@ -22,11 +19,13 @@ LOGIN, PASSWORD = TOKEN.read_text().splitlines()
 
 
 def get_logger(name=__file__):
+    import logging
     log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter('[%(asctime)s] %(message)s')
 
+    import sys
     sh = logging.StreamHandler(stream=sys.stdout)
     sh.setFormatter(formatter)
     log.addHandler(sh)
@@ -38,21 +37,23 @@ log = get_logger()
 
 
 def get_driver(headless=False) -> webdriver.Firefox:
-    options = Options()
     if headless:
+        options = Options()
         options.add_argument('--headless')
+    else:
+        options = None
 
     profile_directory = r'%AppData%\Mozilla\Firefox\Profiles\p75l82q1.for_mail__selenium'
-    profile_directory = os.path.expandvars(profile_directory)
+    profile = webdriver.FirefoxProfile(os.path.expandvars(profile_directory))
 
-    driver = webdriver.Firefox(firefox_profile=profile_directory, options=options)
-    # driver.implicitly_wait(5)  # seconds
+    driver = webdriver.Firefox(profile, options=options)
+    driver.implicitly_wait(20)  # seconds
 
     return driver
 
 
-def open_web_page_water_meter(value_cold: int, value_hot: int) -> Tuple[bool, str]:
-    url = 'https://mgn-city.ru/'
+def open_web_page_water_meter(value_cold: int, value_hot: int) -> (bool, str):
+    url = 'https://lk.erkc-info.ru/Input/InputData'
 
     value_cold = str(value_cold)
     value_hot = str(value_hot)
@@ -63,21 +64,27 @@ def open_web_page_water_meter(value_cold: int, value_hot: int) -> Tuple[bool, st
 
     time.sleep(5)
 
-    try:
-        driver.find_element(By.CSS_SELECTOR, '.profile-username')
-    except Exception:
-        raise Exception('Похоже, нужно авторизоваться!')
+    if '/Account/LogOn' in driver.current_url:
+        log.info('Go auth')
 
-    url = 'https://mgn-city.ru/SN/YourIndications'
-    driver.get(url)
-    log.info(f'Title: {driver.title!r}')
+        input_login = driver.find_element_by_id('m_phone_log')
+        input_login.send_keys(LOGIN)
 
-    time.sleep(5)
+        input_password = driver.find_element_by_id('m_password_pas')
+        input_password.send_keys(PASSWORD)
 
-    input_cold = driver.find_element(By.CSS_SELECTOR, 'input[data-service="Холодное водоснабжение"]')
+        while '/Account/LogOn' in driver.current_url:
+            input_password.send_keys(Keys.RETURN)
+            time.sleep(5)
+
+        driver.get(url)
+
+    input_cold = driver.find_element_by_id('inputModel_InputCounters_0__newVal')
+    input_cold.clear()
     input_cold.send_keys(value_cold)
 
-    input_hot = driver.find_element(By.CSS_SELECTOR, 'input[data-service="ГВС (компонент х/в)"]')
+    input_hot = driver.find_element_by_id('inputModel_InputCounters_1__newVal')
+    input_hot.clear()
     input_hot.send_keys(value_hot)
 
     return True, ''
