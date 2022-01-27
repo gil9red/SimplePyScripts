@@ -19,10 +19,9 @@ def fill_world(world: list[list[int]], world_seed: str):
     bits = get_bits_world_seed(world_seed)
     bits = cycle(bits)
 
-    N = len(world)
-    for i in range(N * N):
-        row, col = divmod(i, N)
-        world[row][col] = next(bits)
+    for row in range(len(world)):
+        for col in range(len(world[0])):
+            world[row][col] = next(bits)
 
 
 if __name__ == '__main__':
