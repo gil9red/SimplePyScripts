@@ -21,7 +21,8 @@ items = [
     el.text
     for el in root.select('.article-page > h2 > strong')
 ]
-print(*items[::-1], sep='\n')
+items.reverse()
+print(*items, sep='\n')
 assert len(items) == 100
 """
 1. The Legend of Zelda: Breath of the Wild
