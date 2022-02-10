@@ -20,7 +20,10 @@ PATHS = [
 def get_command_processor() -> dict[str, str]:
     path_by_value = dict()
     for path, name in PATHS:
-        key = RegistryKey(path)
+        key = RegistryKey.get_or_none(path)
+        if not key:
+            continue
+
         if value := key.get_str_value(name):
             path_by_value[fr'{key.path}, {name}'] = value
 
