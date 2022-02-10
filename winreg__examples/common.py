@@ -11,7 +11,7 @@ from typing import Dict, List, Optional, Any
 from pathlib import Path
 from winreg import QueryInfoKey, EnumKey, EnumValue, OpenKey, HKEYType, REG_EXPAND_SZ, ExpandEnvironmentStrings
 
-import exceptions
+from exceptions import RegistryKeyNotFoundException, RegistryValueNotFoundException
 from constants import VALUE_BY_TYPE
 
 
@@ -69,7 +69,7 @@ class RegistryKey:
 
         self.hkey: HKEYType = get_key(path)
         if not self.hkey:
-            raise exceptions.RegistryKeyNotFoundException(path)
+            raise RegistryKeyNotFoundException(path)
 
         self.path: str = path
         self.name: str = path.split('\\')[-1]
@@ -102,7 +102,7 @@ class RegistryKey:
     def get_or_none(cls, path: str) -> Optional['RegistryKey']:
         try:
             return cls(path)
-        except exceptions.RegistryKeyNotFoundException:
+        except RegistryKeyNotFoundException:
             return
 
     def subkeys(self) -> List['RegistryKey']:
@@ -116,7 +116,7 @@ class RegistryKey:
         for k in self.subkeys():
             if k.name.upper() == name.upper():
                 return k
-        raise exceptions.RegistryKeyNotFoundException(fr'{path}\{name}')
+        raise RegistryKeyNotFoundException(fr'{path}\{name}')
 
     def values(self) -> List[RegistryValue]:
         items = []
@@ -131,12 +131,12 @@ class RegistryKey:
         for v in self.values():
             if v.name.upper() == name.upper():
                 return v
-        raise exceptions.RegistryValueNotFoundException(self.path, name)
+        raise RegistryValueNotFoundException(self.path, name)
 
     def get_raw_value(self, name: str, default: Any = None) -> Any:
         try:
             return self.value(name).value
-        except exceptions.RegistryValueNotFoundException:
+        except RegistryValueNotFoundException:
             return default
 
     def get_str_value(self, name: str, default: str = '') -> str:
