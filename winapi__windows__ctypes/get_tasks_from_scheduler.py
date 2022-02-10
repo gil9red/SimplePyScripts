@@ -16,6 +16,7 @@ import enum
 from dataclasses import dataclass, field
 from typing import List, TypeVar
 
+# pip install pywin32
 import pywintypes
 import win32com.client
 
