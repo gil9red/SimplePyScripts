@@ -6,6 +6,7 @@ __author__ = 'ipetrash'
 
 # SOURCE: https://helgeklein.com/blog/active-setup-explained/
 #         https://windowsnotes.ru/registry-2/active-setup/
+#         https://ru.stackoverflow.com/a/1351313/201445
 
 
 from dataclasses import dataclass, field
