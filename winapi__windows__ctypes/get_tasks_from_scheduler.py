@@ -17,7 +17,6 @@ from dataclasses import dataclass, field
 from typing import List, TypeVar
 
 # pip install pywin32
-import pywintypes
 import win32com.client
 
 
@@ -133,13 +132,14 @@ class Task:
     def get_from(cls, task: win32com.client.CDispatch) -> 'Task':
         try:
             hidden = task.Definition.Settings.Hidden
-        except pywintypes.com_error:
+        except:
             hidden = False
 
         try:
             def_actions = task.Definition.Actions
-        except pywintypes.com_error:
+        except:
             def_actions = []
+
         actions = []
 
         for action_com_obj in def_actions:
