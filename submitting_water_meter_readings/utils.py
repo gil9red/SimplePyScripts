@@ -7,8 +7,11 @@ __author__ = 'ipetrash'
 import logging
 import os.path
 import sys
+import random
 import time
+
 from pathlib import Path
+from threading import Thread
 from typing import Tuple
 
 # pip install selenium
@@ -19,6 +22,8 @@ from selenium.webdriver.firefox.options import Options
 
 TOKEN = Path(__file__).resolve().parent / 'TOKEN'
 LOGIN, PASSWORD = TOKEN.read_text().splitlines()
+
+URL = 'https://mgn-city.ru/'
 
 
 def get_logger(name=__file__):
@@ -52,13 +57,11 @@ def get_driver(headless=False) -> webdriver.Firefox:
 
 
 def open_web_page_water_meter(value_cold: int, value_hot: int) -> Tuple[bool, str]:
-    url = 'https://mgn-city.ru/'
-
     value_cold = str(value_cold)
     value_hot = str(value_hot)
 
     driver = get_driver()
-    driver.get(url)
+    driver.get(URL)
     log.info(f'Title: {driver.title!r}')
 
     time.sleep(5)
@@ -81,6 +84,30 @@ def open_web_page_water_meter(value_cold: int, value_hot: int) -> Tuple[bool, st
     input_hot.send_keys(value_hot)
 
     return True, ''
+
+
+def run_auto_ping_logon():
+    prefix = run_auto_ping_logon.__name__
+
+    def run():
+        while True:
+            try:
+                driver = get_driver(headless=True)
+                driver.get(URL)
+                log.info(f'[{prefix}] Title: {driver.title!r}')
+
+                driver.quit()
+
+            except Exception as e:
+                log.info(f'[{prefix}] Error: {e}')
+                time.sleep(60)
+                continue
+
+            # Between 3 - 6 hours
+            time.sleep(random.randint(3 * 3600, 6 * 3600))
+
+    thread = Thread(target=run)
+    thread.start()
 
 
 if __name__ == '__main__':

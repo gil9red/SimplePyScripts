@@ -12,7 +12,7 @@ from os.path import splitext
 from pathlib import Path
 
 import db
-from utils import open_web_page_water_meter, log
+from utils import open_web_page_water_meter, log, run_auto_ping_logon
 
 
 db.init_db()
@@ -187,6 +187,8 @@ def run(server_class=HTTPServer, handler_class=HttpProcessor, host='127.0.0.1', 
 
 
 if __name__ == '__main__':
+    run_auto_ping_logon()
+
     run(
         server_class=ThreadingHTTPServer,
         host='0.0.0.0', port=10014
