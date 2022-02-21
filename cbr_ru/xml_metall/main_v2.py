@@ -46,13 +46,34 @@ def get_date_str(date: DT.date) -> str:
     return date.strftime('%d/%m/%Y')
 
 
+def get_pair_dates(start_date: DT.date, end_date: DT.date = None) -> list[tuple[DT.date, DT.date]]:
+    if not end_date:
+        end_date = DT.date.today()
+
+    items = []
+    date_req1 = start_date
+
+    while True:
+        date_req1 = date_req1.replace(day=1)
+        date_req2 = get_next_date(date_req1)
+        items.append((date_req1, date_req2))
+
+        if date_req2 > end_date:
+            break
+
+        date_req1 = date_req2
+
+    return items
+
+
 # TODO: ...
-START_DATE_REQ1 = DT.date(year=2000, month=1, day=1)
+START_DATE = DT.date(year=2000, month=1, day=1)
+print(f'START_DATE: {START_DATE}')
+print('\n'.join(f'{date_req1} - {date_req2}' for date_req1, date_req2 in get_pair_dates(START_DATE)))
+quit()
+
 
 # TODO: db.py
-
-# TODO: нужен код, который возьмет последнюю загруженную дату и составит список пар date_req1 и date_req2 по месяцам
-#       т.е. из api всегда берем только за 1 месяц
 
 date_req1 = DT.date.today().replace(day=1)
 date_req2 = get_next_date(date_req1)
