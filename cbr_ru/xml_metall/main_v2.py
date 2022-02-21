@@ -56,10 +56,10 @@ def get_pair_dates(start_date: DT.date, end_date: DT.date = None) -> list[tuple[
     while True:
         date_req1 = date_req1.replace(day=1)
         date_req2 = get_next_date(date_req1)
-        items.append((date_req1, date_req2))
-
         if date_req2 > end_date:
             break
+
+        items.append((date_req1, date_req2))
 
         date_req1 = date_req2
 
