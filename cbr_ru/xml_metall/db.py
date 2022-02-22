@@ -113,11 +113,15 @@ class BaseModel(Model):
         return sorted(cls.__subclasses__(), key=lambda x: x.__name__)
 
     @classmethod
+    def count(cls) -> int:
+        return cls.select().count()
+
+    @classmethod
     def print_count_of_tables(cls):
         items = []
         for sub_cls in cls.get_inherited_models():
             name = sub_cls.__name__
-            count = sub_cls.select().count()
+            count = sub_cls.count()
             items.append(f'{name}: {count}')
 
         print(', '.join(items))
