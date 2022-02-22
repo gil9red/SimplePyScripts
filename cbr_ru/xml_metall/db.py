@@ -189,7 +189,8 @@ time.sleep(0.050)
 
 if __name__ == '__main__':
     BaseModel.print_count_of_tables()
-    # MetalRate: 0
+    # MetalRate: 21830
     print()
 
     print(MetalRate.get_last_date())
+    # 2022-02-01
