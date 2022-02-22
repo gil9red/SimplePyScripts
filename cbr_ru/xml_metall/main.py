@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 def gen_plot(dates, numbers, label=None, file_name='plot.png', show_plot=True):
+    # pip install matplotlib
     import matplotlib.pyplot as plt
 
     from matplotlib import rcParams
