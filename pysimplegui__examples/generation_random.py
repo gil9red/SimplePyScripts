@@ -22,12 +22,8 @@ layout = [
 window = sg.Window('Generator', layout)
 
 
-def generate(values: dict) -> str:
-    items = [
-        randint(int(values['Min']), int(values['Max']))
-        for _ in range(int(values['ND']))
-    ]
-    return ''.join(str(d) for d in items)
+def generate(number: int, min_number: int, max_number: int) -> str:
+    return ''.join(str(randint(min_number, max_number)) for _ in range(number))
 
 
 while True:
@@ -36,7 +32,8 @@ while True:
         break
 
     if event == 'Generate':
-        text = generate(values)
+        number, min_number, max_number = int(values['ND']), int(values['Min']), int(values['Max'])
+        text = generate(number, min_number, max_number)
         print(text)
         window['OUT'].update(f'Result: {text}')
 
