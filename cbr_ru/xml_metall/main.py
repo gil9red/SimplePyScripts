@@ -50,4 +50,4 @@ while True:
 
     log.info("Завершено.\n")
 
-    time.sleep(60 * 8)
+    time.sleep(3600 * 8)
