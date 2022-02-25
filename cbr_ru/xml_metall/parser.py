@@ -73,10 +73,10 @@ def get_pair_dates(start_date: DT.date, end_date: DT.date = None) -> list[tuple[
     while True:
         date_req1 = date_req1.replace(day=1)
         date_req2 = get_next_date(date_req1)
+        items.append((date_req1, date_req2))
+
         if date_req2 > end_date:
             break
-
-        items.append((date_req1, date_req2))
 
         date_req1 = date_req2
 
@@ -112,5 +112,5 @@ if __name__ == '__main__':
     date_req2 = get_next_date(date_req1)
 
     metal_rates = get_metal_rates(date_req1, date_req2)
-    print(f'Metal rates ({len(metal_rates)}):')
+    print(f'Metal rates {date_req1} - {date_req2} ({len(metal_rates)}):')
     print(*metal_rates, sep='\n')
