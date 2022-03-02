@@ -36,7 +36,7 @@ while True:
 
                 except Exception:
                     log.exception('Ошибка:')
-                    time.sleep(60 * 5)
+                    time.sleep(3600 * 4)  # Wait 4 hours
                     continue
 
                 break
