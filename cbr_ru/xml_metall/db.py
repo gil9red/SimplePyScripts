@@ -180,8 +180,15 @@ class MetalRate(BaseModel):
 
     @classmethod
     def get_last_date(cls) -> DT.date:
-        obj = cls.select(cls.date).order_by(cls.date.desc()).first()
-        return obj.date if obj else START_DATE
+        return cls.get_last_dates(number=1)[0]
+
+    @classmethod
+    def get_last_dates(cls, number: int) -> list[DT.date]:
+        query = cls.select(cls.date).distinct().limit(number).order_by(cls.date.desc())
+        items = [x.date for x in query]
+        if not items:
+            items.append(START_DATE)
+        return items
 
 
 db.connect()
@@ -196,5 +203,9 @@ if __name__ == '__main__':
     # MetalRate: 21830
     print()
 
-    print(MetalRate.get_last_date())
-    # 2022-02-01
+    print('Last date:', MetalRate.get_last_date())
+    # Last date: 2022-03-03
+
+    dates = MetalRate.get_last_dates(number=7)
+    print('Last 7 dates:', [str(d) for d in dates])
+    # Last 7 dates: ['2022-03-03', '2022-03-02', '2022-03-01', '2022-02-26', '2022-02-25', '2022-02-23', '2022-02-22']
