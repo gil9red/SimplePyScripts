@@ -190,6 +190,20 @@ class MetalRate(BaseModel):
             items.append(START_DATE)
         return items
 
+    @classmethod
+    def get_last_rates_as_dict(cls, number: int) -> dict[DT.date, dict[MetalEnum, Decimal]]:
+        date_by_rates = dict()
+
+        dates = cls.get_last_dates(number)
+        query = cls.select().where(cls.date.in_(dates)).order_by(cls.date.asc(), cls.metal.asc())
+        for rate in query:
+            if rate.date not in date_by_rates:
+                date_by_rates[rate.date] = dict()
+
+            date_by_rates[rate.date][rate.metal] = rate.amount
+
+        return date_by_rates
+
 
 db.connect()
 db.create_tables(BaseModel.get_inherited_models())
@@ -209,3 +223,33 @@ if __name__ == '__main__':
     dates = MetalRate.get_last_dates(number=7)
     print('Last 7 dates:', [str(d) for d in dates])
     # Last 7 dates: ['2022-03-03', '2022-03-02', '2022-03-01', '2022-02-26', '2022-02-25', '2022-02-23', '2022-02-22']
+
+    print()
+
+    date_by_rates = MetalRate.get_last_rates_as_dict(number=3)
+    for date, metal_by_amount in date_by_rates.items():
+        print(f'{date}:')
+
+        for metal, amount in metal_by_amount.items():
+            print(f'    {metal.name}: {amount}')
+
+        print()
+    """
+    2022-03-01:
+        Gold: 5725.1
+        Palladium: 7492.89
+        Platinum: 3197.49
+        Silver: 72.82
+    
+    2022-03-02:
+        Gold: 5664.73
+        Palladium: 7565.96
+        Platinum: 3123.72
+        Silver: 71.82
+    
+    2022-03-03:
+        Gold: 6393.4
+        Palladium: 8800.05
+        Platinum: 3531.97
+        Silver: 81.79
+    """
