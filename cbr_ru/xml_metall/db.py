@@ -185,7 +185,7 @@ class MetalRate(BaseModel):
     @classmethod
     def get_last_dates(cls, number: int) -> list[DT.date]:
         query = cls.select(cls.date).distinct().limit(number).order_by(cls.date.desc())
-        items = [x.date for x in query]
+        items = [rate.date for rate in query]
         if not items:
             items.append(START_DATE)
         return items
