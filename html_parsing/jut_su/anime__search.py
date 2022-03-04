@@ -5,11 +5,11 @@ __author__ = 'ipetrash'
 
 
 from dataclasses import dataclass
-from urllib.parse import urljoin
 from typing import List
+from urllib.parse import urljoin
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 
 @dataclass
