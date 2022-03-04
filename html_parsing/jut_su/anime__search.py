@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 from dataclasses import dataclass
 from urllib.parse import urljoin
-from typing import List, Tuple
+from typing import List
 
 from bs4 import BeautifulSoup
 import requests
