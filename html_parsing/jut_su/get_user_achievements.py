@@ -5,15 +5,22 @@ __author__ = 'ipetrash'
 
 
 import re
-from urllib.parse import urljoin
-from typing import List, NamedTuple
 import time
 
-from bs4 import BeautifulSoup
+from dataclasses import dataclass
+from typing import List
+from urllib.parse import urljoin
+
 import requests
+from bs4 import BeautifulSoup
 
 
-class Achievement(NamedTuple):
+session = requests.session()
+session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0'
+
+
+@dataclass
+class Achievement:
     icon_url: str
     title: str
     description: str
@@ -26,17 +33,14 @@ def get_achievements(url: str, reversed=False) -> List[Achievement]:
         "ajax_load": "yes",
         "start_from_page": 1,
     }
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0',
-    }
 
     items = []
 
     while True:
-        rs = requests.post(url, data=data, headers=headers)
+        rs = session.post(url, data=data)
         rs.raise_for_status()
 
-        root = BeautifulSoup(rs.content, 'html.parser')
+        root = BeautifulSoup(rs.text, 'html.parser')
 
         achiv_items = root.select('.achiv_all_in')
         if not achiv_items:
