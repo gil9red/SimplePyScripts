@@ -12,12 +12,11 @@ session = requests.session()
 session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0'
 
 
-rs = session.get('https://gamicus.fandom.com/wiki/Denuvo')
-rs.raise_for_status()
-
-
 def get_games() -> list[tuple[str, bool]]:
     items = []
+
+    rs = session.get('https://gamicus.fandom.com/wiki/Denuvo')
+    rs.raise_for_status()
 
     root = BeautifulSoup(rs.content, 'html.parser')
     for tr_el in root.select('#yesdenuvo tr'):
