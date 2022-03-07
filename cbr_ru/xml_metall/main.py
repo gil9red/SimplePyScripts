@@ -26,7 +26,7 @@ while True:
                     rates = get_metal_rates(date_req1, date_req2)
 
                     log.info(f'Найдено: {len(rates)}')
-                    if not rates:
+                    if not rates:  # TODO: move logic to get_metal_rates?
                         log.info('Ничего не вернулось, похоже на ошибку сервиса. Нужно повторить')
                         time.sleep(60)
                         continue
