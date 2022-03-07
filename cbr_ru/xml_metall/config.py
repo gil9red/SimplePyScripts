@@ -17,6 +17,8 @@ DIR = Path(__file__).resolve().parent
 DIR_LOGS = DIR / 'logs'
 DIR_LOGS.mkdir(parents=True, exist_ok=True)
 
+FILE_COOKIES = DIR / 'cookies.txt'
+
 # TOKEN_FILE_NAME = DIR / 'TOKEN.txt'
 #
 # try:

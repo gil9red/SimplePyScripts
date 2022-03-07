@@ -12,10 +12,25 @@ from dataclasses import dataclass
 import requests
 from bs4 import BeautifulSoup, Tag
 
-from config import START_DATE
+from config import START_DATE, FILE_COOKIES
 
 
 decimal.getcontext().prec = 2
+
+session = requests.session()
+
+# NOTE: Зачем-то сайт с API добавил проверку на роботов, возможно, много запросов, а менять
+#       работу сайта, добавляя API-key было сложно или много по времени
+#       Example:
+#       __ddgid=r6nn<...>4W; __ddg2=u5rq<...>wV9; __ddg1=gzBn<...>82mir; __ddgmark=W6X<...>owfI; __ddg5=ocM<...>tvM
+if FILE_COOKIES.exists():
+    try:
+        cookies_text = FILE_COOKIES.read_text('utf-8')
+        for x in cookies_text.split('; '):
+            name, value = x.split('=', maxsplit=1)
+            session.cookies.set(name, value)
+    except:
+        pass
 
 
 class AutoName(enum.Enum):
@@ -88,7 +103,7 @@ def get_metal_rates(date_req1: DT.date, date_req2: DT.date) -> list[MetalRate]:
         'date_req1': get_date_str(date_req1),
         'date_req2': get_date_str(date_req2),
     }
-    rs = requests.get('http://www.cbr.ru/scripts/xml_metall.asp', params=params)
+    rs = session.get('http://www.cbr.ru/scripts/xml_metall.asp', params=params)
     rs.raise_for_status()
 
     root = BeautifulSoup(rs.content, 'html.parser')
