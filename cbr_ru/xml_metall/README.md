@@ -1,0 +1,1 @@
+Moved to https://github.com/gil9red/get_metal_rates
