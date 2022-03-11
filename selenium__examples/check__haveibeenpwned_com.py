@@ -13,6 +13,9 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
 
+URL = 'https://haveibeenpwned.com'
+
+
 def do_check(email: str, dir_save_pwned_screenshots: str = None, file_format: str = '%Y-%m-%d %H-%M-%S.png') -> str:
     options = Options()
     options.add_argument('--headless')
@@ -20,7 +23,7 @@ def do_check(email: str, dir_save_pwned_screenshots: str = None, file_format: st
     driver = webdriver.Firefox(options=options)
     try:
         driver.implicitly_wait(20)
-        driver.get('https://haveibeenpwned.com/account/' + email)
+        driver.get(f'{URL}/account/{email}')
         # print(f'Title: {driver.title!r}')
 
         time.sleep(5)
