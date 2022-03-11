@@ -4,9 +4,6 @@
 __author__ = 'ipetrash'
 
 
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/38857704e0821002c21e6840015cc3c0d1dd9b57/telegram_notifications/add_notify_use_web.py
-
-
 import time
 import requests
 
@@ -17,11 +14,19 @@ PORT = 10016
 URL = f'http://{HOST}:{PORT}/add_notify'
 
 
-def add_notify(name: str, message: str, type='INFO'):
+def add_notify(
+        name: str,
+        message: str,
+        type: str = 'INFO',
+        url: str = None,
+        has_delete_button: bool = False,
+):
     data = {
         'name': name,
         'message': message,
         'type': type,
+        'url': url,
+        'has_delete_button': has_delete_button,
     }
 
     # Попытки
@@ -46,3 +51,6 @@ if __name__ == '__main__':
     add_notify('TEST', 'Hello World! Привет мир!')
     add_notify('', 'Hello World! Привет мир!')
     add_notify('Ошибка!', 'Hello World! Привет мир!', 'ERROR')
+    add_notify('TEST', 'With url-button!', url='https://example.com/')
+    add_notify('TEST', 'With delete-button!', has_delete_button=True)
+    add_notify('TEST', 'With url and delete buttons!', url='https://example.com/', has_delete_button=True)
