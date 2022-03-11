@@ -28,7 +28,7 @@ def get_optimal_font(family_font: str, w, h, text: str) -> QFont:
     metrics = QFontMetrics(font)
 
     # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/add91e36e1ee59b3956b9fafdcffc9f4ff10ed3d/qt__pyqt__pyside__pyqode/pyqt__QPainter__draw_table.py#L98
-    factor = w / metrics.boundingRect(0, 0, w, h, Qt.AlignCenter, text).width()
+    factor = w / metrics.boundingRect(0, 0, int(w), int(h), Qt.AlignCenter, text).width()
     if factor < 1 or factor > 1.25:
         font.setPointSizeF(font.pointSizeF() * factor)
 
@@ -49,7 +49,7 @@ def draw_hex(painter: QPainter, size: int, color: QColor):
     painter.setPen(text_color)
     painter.setFont(font)
 
-    painter.drawText(x, y, w_hex, h_hex, Qt.AlignCenter, value)
+    painter.drawText(int(x), int(y), int(w_hex), int(h_hex), Qt.AlignCenter, value)
 
     painter.restore()
 
@@ -70,6 +70,7 @@ def draw_rgb(painter: QPainter, size: int, color: QColor):
 
     for i, value in enumerate(rgb):
         x = indent + indent * i + w_rgb * i
+        x, y, w_rgb, h_rgb = map(int, (x, y, w_rgb, h_rgb))
 
         painter.save()
         painter.setPen(Qt.NoPen)
