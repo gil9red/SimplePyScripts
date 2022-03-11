@@ -12,11 +12,12 @@ from bs4 import BeautifulSoup
 import requests
 
 
-def get_season_by_series() -> Dict[str, List[str]]:
-    url = 'https://rick-i-morty.online/'
+URL = 'https://rick-i-morty.online/'
 
+
+def get_season_by_series() -> Dict[str, List[str]]:
     s = requests.session()
-    rs = s.get(url)
+    rs = s.get(URL)
     root = BeautifulSoup(rs.content, 'html.parser')
 
     season_by_series = dict()
