@@ -53,8 +53,10 @@ for line in rs.text.splitlines():
 
     if script_dir_path.name.startswith('-'):
         print(f'[#] Do you really need to run "{script_dir_path}"?')
+    else:
+        assert script_dir_path.exists(), f'{script_dir_path} not exists!'
 
-    line = line.replace('d:_', f'd:{script_dir_path}').replace('t:_', f't:[{group}]')
+    line = line.format(root_dir=script_dir_path.parent, dir=script_dir_path, group=group)
     DEBUG_LOG and print(line)
 
     if not group:
