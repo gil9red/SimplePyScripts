@@ -13,7 +13,7 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
 
-def do_check(email: str, dir_save_pwned_screenshots: str = None) -> str:
+def do_check(email: str, dir_save_pwned_screenshots: str = None, file_format: str = '%Y-%m-%d %H-%M-%S.png') -> str:
     options = Options()
     options.add_argument('--headless')
 
@@ -33,7 +33,7 @@ def do_check(email: str, dir_save_pwned_screenshots: str = None) -> str:
                 dir_screenshots = Path(dir_save_pwned_screenshots)
                 dir_screenshots.mkdir(parents=True, exist_ok=True)
 
-                file_name = str(dir_screenshots / DT.datetime.today().strftime('%d-%m-%Y %H%M%S.png'))
+                file_name = str(dir_screenshots / DT.datetime.today().strftime(file_format))
                 driver.save_screenshot(file_name)
 
         else:
