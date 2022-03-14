@@ -7,14 +7,14 @@ __author__ = 'ipetrash'
 # pip install psutil
 import psutil
 
-# pip install pyvda
-from pyvda import AppView, VirtualDesktop
-
 # pip install win32gui
 import win32gui
 
 # pip install pywin32
 import win32process
+
+# pip install pyvda
+from pyvda import AppView, VirtualDesktop
 
 
 NEED_WINDOW_DESKTOP_NUMBER = 2
