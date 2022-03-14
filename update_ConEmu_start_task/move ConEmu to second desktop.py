@@ -8,7 +8,7 @@ __author__ = 'ipetrash'
 import psutil
 
 # pip install pyvda
-import pyvda
+from pyvda import AppView, VirtualDesktop
 
 # pip install win32gui
 import win32gui
@@ -39,10 +39,11 @@ for proc in psutil.process_iter():
         continue
 
     hwnd = get_hwnd_for_pid(proc.pid)
+    app_view = AppView(hwnd)
 
     # If the window is already on the desired desktop
-    if hwnd == -1 or pyvda.GetWindowDesktopNumber(hwnd) == NEED_WINDOW_DESKTOP_NUMBER:
+    if hwnd == -1 or app_view.desktop.number == NEED_WINDOW_DESKTOP_NUMBER:
         continue
 
     print(f'Moved window (pid={proc.pid}) to window desktop #{NEED_WINDOW_DESKTOP_NUMBER}')
-    pyvda.MoveWindowToDesktopNumber(hwnd, NEED_WINDOW_DESKTOP_NUMBER)
+    app_view.move(VirtualDesktop(NEED_WINDOW_DESKTOP_NUMBER))
