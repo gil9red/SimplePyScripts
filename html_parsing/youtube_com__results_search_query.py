@@ -460,14 +460,14 @@ def load(url: str) -> Tuple[requests.Response, dict]:
 
 
 def get_raw_video_renderer_items(yt_initial_data: Dict) -> List[Dict]:
+    items = []
     for render in [
-        '**/gridVideoRenderer', '**/videoRenderer', '**/playlistVideoRenderer', '**/playlistPanelVideoRenderer',
+        '**/gridVideoRenderer', '**/videoRenderer',
+        '**/playlistVideoRenderer', '**/playlistPanelVideoRenderer', '**/playlistRenderer',
     ]:
-        items = dpath.util.values(yt_initial_data, render)
-        if items:
-            return items
+        items += dpath.util.values(yt_initial_data, render)
 
-    return []
+    return items
 
 
 def get_generator_raw_video_list_from_data(yt_initial_data: dict, rs: requests.Response) -> Generator[Dict, None, None]:
@@ -523,6 +523,7 @@ def get_video_list(url: str, *args, **kwargs) -> List[Video]:
     return [
         Video.get_from(video, url)
         for video in get_raw_video_list(url, *args, **kwargs)
+        if 'videoId' in video  # NOTE: У плейлистов будет playlistId
     ]
 
 
