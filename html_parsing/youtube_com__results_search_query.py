@@ -242,8 +242,11 @@ class Playlist:
             # Playlist
             return dpath.util.get(yt_initial_data, '**/metadata/playlistMetadataRenderer/title')
         except KeyError:
-            # Mix
-            return dpath.util.get(yt_initial_data, '**/playlist/playlist/title')
+            try:
+                # Mix
+                return dpath.util.get(yt_initial_data, '**/playlist/playlist/title')
+            except KeyError:
+                return dpath.util.get(yt_initial_data, 'title/simpleText')
 
     @classmethod
     def get_from(cls, url_or_id: str) -> 'Playlist':
