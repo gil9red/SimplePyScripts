@@ -44,7 +44,10 @@ def search_game_playlist(
 def search_game(
         game_name: str,
         channels: list[tuple[str, str]],
-) -> dict[tuple[str, str], list[tuple[str, str]]]:
+) -> dict[
+    tuple[str, str],
+    list[tuple[str, str]]
+]:
     channel_by_playlists = defaultdict(list)
 
     for channel_name, channel_url in channels:
