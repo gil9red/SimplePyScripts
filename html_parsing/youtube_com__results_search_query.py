@@ -51,6 +51,7 @@ def time_to_seconds(time_str: str) -> int:
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'
 
+BASE_URL = 'https://www.youtube.com'
 
 session = requests.Session()
 session.headers['User-Agent'] = USER_AGENT
@@ -122,6 +123,18 @@ class Video:
     thumbnails: List[Thumbnail] = field(default_factory=list, repr=False, compare=False)
     context: Context = field(default=None, repr=False, compare=False)
 
+    @classmethod
+    def get_url(cls, data_video: dict) -> str:
+        url_video = dpath.util.get(data_video, 'navigationEndpoint/commandMetadata/webCommandMetadata/url')
+        return urljoin(BASE_URL, url_video)
+
+    @classmethod
+    def get_title(cls, data_video: dict) -> str:
+        try:
+            return dpath.util.get(data_video, 'title/runs/0/text')
+        except KeyError:
+            return dpath.util.get(data_video, 'title/simpleText')
+
     def get_url_thumbnail_by_max_size(self) -> str:
         return max(self.thumbnails, key=lambda x: (x.width, x.height)).url
 
@@ -157,17 +170,12 @@ class Video:
         return False
 
     @classmethod
-    def get_from(cls, data_video: Dict, url: str, parent_context: Context = None) -> 'Video':
+    def get_from(cls, data_video: Dict, parent_context: Context = None) -> 'Video':
         if parent_context and parent_context.yt_initial_data:
             raise_if_error(parent_context.yt_initial_data)
 
-        try:
-            title = dpath.util.get(data_video, 'title/runs/0/text')
-        except KeyError:
-            title = dpath.util.get(data_video, 'title/simpleText')
-
-        url_video = dpath.util.get(data_video, 'navigationEndpoint/commandMetadata/webCommandMetadata/url')
-        url_video = urljoin(url, url_video)
+        title = cls.get_title(data_video)
+        url_video = cls.get_url(data_video)
 
         # Если есть продолжительность в секундах
         try:
@@ -234,10 +242,10 @@ class Playlist:
 
     @classmethod
     def get_url(cls, playlist_id: str) -> str:
-        return f'https://www.youtube.com/playlist?list={playlist_id}'
+        return urljoin(BASE_URL, f'playlist?list={playlist_id}')
 
     @classmethod
-    def get_playlist_title(cls, yt_initial_data: dict) -> str:
+    def get_title(cls, yt_initial_data: dict) -> str:
         try:
             # Playlist
             return dpath.util.get(yt_initial_data, '**/metadata/playlistMetadataRenderer/title')
@@ -274,12 +282,12 @@ class Playlist:
             rs=rs,
         )
 
-        title = cls.get_playlist_title(yt_initial_data)
+        title = cls.get_title(yt_initial_data)
 
         total_seconds = 0
         video_list = []
         for data_video in get_generator_raw_video_list_from_data(yt_initial_data, rs):
-            video = Video.get_from(data_video, url, context)
+            video = Video.get_from(data_video, context)
             video_list.append(video)
 
             if video.duration_seconds:
@@ -524,7 +532,7 @@ def get_raw_video_list(url: str, maximum_items=1000) -> List[Dict]:
 
 def get_video_list(url: str, *args, **kwargs) -> List[Video]:
     return [
-        Video.get_from(video, url)
+        Video.get_from(video)
         for video in get_raw_video_list(url, *args, **kwargs)
         if 'videoId' in video  # NOTE: У плейлистов будет playlistId
     ]
@@ -535,7 +543,7 @@ def search_youtube(text_or_url: str, *args, **kwargs) -> List[Video]:
         url = text_or_url
     else:
         text = text_or_url
-        url = f'https://www.youtube.com/results?search_query={text}'
+        url = urljoin(BASE_URL, f'results?search_query={text}')
 
     return get_video_list(url, *args, **kwargs)
 
@@ -561,7 +569,7 @@ if __name__ == '__main__':
     url_playlist = 'https://www.youtube.com/playlist?list=PLWKjhJtqVAbknyJ7hSrf1WKh_Xnv9RL1r'
     rs = session.get(url_playlist)
     data = get_ytInitialData(rs.text)
-    playlist_title = Playlist.get_playlist_title(data)
+    playlist_title = Playlist.get_title(data)
     print(f'Playlist title: {playlist_title!r}')
     # Playlist title: 'Live Coding with Jesse'
 
