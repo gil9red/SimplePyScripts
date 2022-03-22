@@ -9,6 +9,7 @@ import keyboard
 
 
 def write(text: str):
+    # Удаление символа, который мог попасть при вводе хоткея, например Z, X, C или V
     keyboard.send('backspace')
     keyboard.write(text)
 
