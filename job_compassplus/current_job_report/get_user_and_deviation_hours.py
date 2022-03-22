@@ -36,7 +36,12 @@ def clear_hours(hours: str) -> str:
 
 
 def _send_data(data: dict) -> str:
-    rs = session.post(URL, data=data)
+    # В какой-то момент адрес временно поменялся, тогда предварительный GET поможет получить актуальный адрес
+    rs = session.get(URL)
+    if not rs.ok:
+        raise NotFoundReport(f"HTTP status is {rs.status_code}")
+
+    rs = session.post(rs.url, data=data)
     if not rs.ok:
         raise NotFoundReport(f"HTTP status is {rs.status_code}")
 
