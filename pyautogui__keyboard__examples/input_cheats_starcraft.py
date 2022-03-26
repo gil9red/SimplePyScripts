@@ -4,6 +4,9 @@
 __author__ = 'ipetrash'
 
 
+# В игре: нажать Enter, ввести комбинацию для чита, нажать Enter
+
+
 # pip install keyboard
 import keyboard
 
