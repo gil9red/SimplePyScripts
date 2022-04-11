@@ -40,3 +40,5 @@ def hello(text):
 
 print(hello('Hello World!'))
 # <b><i>HELLO WORLD!</i></b>
+
+assert hello('Hello World!') == '<b><i>HELLO WORLD!</i></b>'
