@@ -64,7 +64,6 @@ class InfinityProgressIndicatorThread(threading.Thread):
         return self._stop.is_set()
 
 
-# SOURCE: https://github.com/gil9red/total_time_playlist_youtube_telegram_bot/blob/2bed7e473b73cac984e62b5ba8a47923a8a8c0ba/bot/common.py#L123
 class show_temp_message:
     def __init__(
             self,
