@@ -115,8 +115,6 @@ class show_temp_message:
         if self.message:
             self.message.delete()
 
-        return True
-
 
 def show_temp_message_decorator(
         text: str = 'In progress...',
