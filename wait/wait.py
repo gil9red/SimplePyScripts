@@ -4,22 +4,24 @@
 __author__ = 'ipetrash'
 
 
+import datetime as DT
+import sys
+import time
+
+from itertools import cycle
+
+
 def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0):
-    from datetime import timedelta, datetime
-    from itertools import cycle
-    import sys
-    import time
-
     try:
-        progress_bar = cycle('|/-\\|/-\\')
+        progress_bar = cycle(('|', '/', '-', '\\'))
 
-        today = datetime.today()
-        timeout_date = today + timedelta(
+        today = DT.datetime.today()
+        timeout_date = today + DT.timedelta(
             days=days, seconds=seconds, microseconds=microseconds,
             milliseconds=milliseconds, minutes=minutes, hours=hours, weeks=weeks
         )
 
-        def str_timedelta(td: timedelta) -> str:
+        def str_timedelta(td: DT.timedelta) -> str:
             td = str(td)
 
             # Remove ms
@@ -44,7 +46,7 @@ def wait(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, 
             # Delay 1 seconds
             time.sleep(1)
 
-            today = datetime.today()
+            today = DT.datetime.today()
 
         print('\r' + ' ' * 100 + '\r', end='')
 
@@ -62,7 +64,6 @@ if __name__ == '__main__':
     wait(seconds=1)
     print('Finish wait')
 
-    import datetime as DT
     while True:
         print()
         print('Current datetime:', DT.datetime.now())
