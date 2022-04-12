@@ -110,11 +110,11 @@ class show_temp_message:
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        if self.message:
-            self.message.delete()
-
         if self.thread_progress:
             self.thread_progress.stop()
+
+        if self.message:
+            self.message.delete()
 
         return True
 
