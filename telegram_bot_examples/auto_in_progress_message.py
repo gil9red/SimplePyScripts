@@ -24,19 +24,29 @@ class ProgressValue(enum.Enum):
     SPINNER = '◜', '◝', '◞', '◟'
     POINTS = '.', '..', '...'
     MOON_PHASES = '🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'
-    BLOCKS = '█▒▒▒▒', '██▒▒▒', '███▒▒', '████▒', '█████'
-    RECTS_LARGE = '■▢▢▢▢', '■■▢▢▢', '■■■▢▢', '■■■■▢', '■■■■■'
-    RECTS_SMALL = '■□□□□', '■■□□□', '■■■□□', '■■■■□', '■■■■■'
-    PARALLELOGRAMS = '▰▱▱▱▱', '▰▰▱▱▱', '▰▰▰▱▱', '▰▰▰▰▱', '▰▰▰▰▰'
-    CIRCLES = '⚫⚪⚪⚪⚪', '⚫⚫⚪⚪⚪', '⚫⚫⚫⚪⚪', '⚫⚫⚫⚫⚪', '⚫⚫⚫⚫⚫'
+    BLOCKS = '▒▒▒▒▒', '█▒▒▒▒', '██▒▒▒', '███▒▒', '████▒', '█████'
+    RECTS_LARGE = '▢▢▢▢▢', '■▢▢▢▢', '■■▢▢▢', '■■■▢▢', '■■■■▢', '■■■■■'
+    RECTS_SMALL = '□□□□□', '■□□□□', '■■□□□', '■■■□□', '■■■■□', '■■■■■'
+    PARALLELOGRAMS = '▱', '▰▱▱▱▱', '▰▰▱▱▱', '▰▰▰▱▱', '▰▰▰▰▱', '▰▰▰▰▰'
+    CIRCLES = '⚪⚪⚪⚪⚪', '⚫⚪⚪⚪⚪', '⚫⚫⚪⚪⚪', '⚫⚫⚫⚪⚪', '⚫⚫⚫⚫⚪', '⚫⚫⚫⚫⚫'
 
     @classmethod
-    def get_text(cls, value: str, text_fmt: str = 'In progress {value}') -> str:
-        return text_fmt.format(value=value)
+    def get_text(
+            cls,
+            text_fmt: str = 'In progress {value} ({seconds} seconds)',
+            value: str = '',
+            seconds: int = 0,
+    ) -> str:
+        return text_fmt.format(value=value, seconds=seconds)
 
-    def get_init_text(self, text_fmt: str = 'In progress {value}') -> str:
+    def get_init_text(
+            self,
+            text_fmt: str = 'In progress {value} ({seconds} seconds)',
+            seconds: int = 0,
+    ) -> str:
         return self.get_text(
             value=self.value[0],
+            seconds=seconds,
             text_fmt=text_fmt
         )
 
@@ -49,7 +59,8 @@ class InfinityProgressIndicatorThread(threading.Thread):
             progress_value: ProgressValue = ProgressValue.POINTS,
             parse_mode: ParseMode = None,
             reply_markup: ReplyMarkup = None,
-            skip_first: bool = True,
+            skip_progress: int = 1,
+            init_seconds: int = 0,
             *args,
             **kwargs
     ):
@@ -60,7 +71,7 @@ class InfinityProgressIndicatorThread(threading.Thread):
         self._stop = threading.Event()
         self._progress_bar = cycle(progress_value.value)
 
-        if skip_first:
+        for _ in range(skip_progress):
             next(self._progress_bar)
 
         self.text_fmt = text_fmt
@@ -68,15 +79,23 @@ class InfinityProgressIndicatorThread(threading.Thread):
         self.parse_mode = parse_mode
         self.reply_markup = reply_markup
 
+        self._seconds: int = init_seconds
+        self.init_seconds: int = init_seconds
+
     def run(self):
+        self._seconds = self.init_seconds
+
         while True:
             time.sleep(1)
             if self.is_stopped():
                 break
 
+            self._seconds += 1
+
             text = ProgressValue.get_text(
-                value=next(self._progress_bar),
                 text_fmt=self.text_fmt,
+                value=next(self._progress_bar),
+                seconds=self._seconds,
             )
 
             try:
@@ -332,7 +351,10 @@ def on_animation_circles(update: Update, context: CallbackContext):
 
 @log_func(log)
 @show_temp_message_decorator(
-    text='{value}\n<b>Пожалуйста</b>, подождите...\n{value}\n😊',
+    text='{value}\n'
+         '<b>Пожалуйста</b>, подождите...\n'
+         '{value}\n'
+         'Прошло {seconds} с 😊',
     progress_value=ProgressValue.RECTS_SMALL,
     parse_mode=ParseMode.HTML,
     quote=False,
