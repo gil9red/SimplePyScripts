@@ -49,6 +49,7 @@ class InfinityProgressIndicatorThread(threading.Thread):
             progress_value: ProgressValue = ProgressValue.POINTS,
             parse_mode: ParseMode = None,
             reply_markup: ReplyMarkup = None,
+            skip_first: bool = True,
             *args,
             **kwargs
     ):
@@ -59,13 +60,20 @@ class InfinityProgressIndicatorThread(threading.Thread):
         self._stop = threading.Event()
         self._progress_bar = cycle(progress_value.value)
 
+        if skip_first:
+            next(self._progress_bar)
+
         self.text_fmt = text_fmt
         self.message = message
         self.parse_mode = parse_mode
         self.reply_markup = reply_markup
 
     def run(self):
-        while not self.is_stopped():
+        while True:
+            time.sleep(1)
+            if self.is_stopped():
+                break
+
             text = ProgressValue.get_text(
                 value=next(self._progress_bar),
                 text_fmt=self.text_fmt,
@@ -79,8 +87,6 @@ class InfinityProgressIndicatorThread(threading.Thread):
                 )
             except BadRequest:
                 pass
-
-            time.sleep(1)
 
     def stop(self):
         self._stop.set()
