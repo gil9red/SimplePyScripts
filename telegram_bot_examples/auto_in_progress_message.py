@@ -303,19 +303,23 @@ def on_animation_circles(update: Update, context: CallbackContext):
 def main():
     handlers = [
         CommandHandler('start', on_start),
+
         CommandHandler('simple', on_simple),
+
         CommandHandler('in_progress', on_in_progress),
         CommandHandler('custom_in_progress', on_custom_in_progress),
         CommandHandler('custom_all_in_progress', on_custom_all_in_progress),
-        CommandHandler('animation_points', on_animation_points),
-        CommandHandler('animation_spinner', on_animation_spinner),
+
         CommandHandler('animation_lines', on_animation_lines),
+        CommandHandler('animation_spinner', on_animation_spinner),
+        CommandHandler('animation_points', on_animation_points),
         CommandHandler('animation_moon_phases', on_animation_moon_phases),
         CommandHandler('animation_blocks', on_animation_blocks),
         CommandHandler('animation_rects_large', on_animation_rects_large),
         CommandHandler('animation_rects_small', on_animation_rects_small),
         CommandHandler('animation_parallelograms', on_animation_parallelograms),
         CommandHandler('animation_circles', on_animation_circles),
+
         MessageHandler(Filters.text, on_request),
     ]
 
