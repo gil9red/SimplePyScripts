@@ -21,8 +21,14 @@ from common import get_logger, log_func, start_bot, run_main
 
 class ProgressValue(enum.Enum):
     LINES = '|', '/', '-', '\\'
+    SPINNER = '◜', '◝', '◞', '◟'
     POINTS = '.', '..', '...'
     MOON_PHASES = '🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'
+    BLOCKS = '█▒▒▒▒', '██▒▒▒', '███▒▒', '████▒', '█████'
+    RECTS_LARGE = '■▢▢▢▢', '■■▢▢▢', '■■■▢▢', '■■■■▢', '■■■■■'
+    RECTS_SMALL = '■□□□□', '■■□□□', '■■■□□', '■■■■□', '■■■■■'
+    PARALLELOGRAMS = '▰▱▱▱▱', '▰▰▱▱▱', '▰▰▰▱▱', '▰▰▰▰▱', '▰▰▰▰▰'
+    CIRCLES = '⚫⚪⚪⚪⚪', '⚫⚫⚪⚪⚪', '⚫⚫⚫⚪⚪', '⚫⚫⚫⚫⚪', '⚫⚫⚫⚫⚫'
 
 
 class InfinityProgressIndicatorThread(threading.Thread):
@@ -205,10 +211,10 @@ def on_custom_all_in_progress(update: Update, context: CallbackContext):
 
 @log_func(log)
 @show_temp_message_decorator(
-    text='Please, wait',
-    progress_value=ProgressValue.POINTS,
+    text='Выполняется работа',
+    progress_value=ProgressValue.LINES,
 )
-def on_in_progress_with_animation1(update: Update, context: CallbackContext):
+def on_animation_lines(update: Update, context: CallbackContext):
     message = update.effective_message
     run_command(message)
 
@@ -216,9 +222,19 @@ def on_in_progress_with_animation1(update: Update, context: CallbackContext):
 @log_func(log)
 @show_temp_message_decorator(
     text='Выполняется работа',
-    progress_value=ProgressValue.LINES,
+    progress_value=ProgressValue.SPINNER,
 )
-def on_in_progress_with_animation2(update: Update, context: CallbackContext):
+def on_animation_spinner(update: Update, context: CallbackContext):
+    message = update.effective_message
+    run_command(message)
+
+
+@log_func(log)
+@show_temp_message_decorator(
+    text='Please, wait',
+    progress_value=ProgressValue.POINTS,
+)
+def on_animation_points(update: Update, context: CallbackContext):
     message = update.effective_message
     run_command(message)
 
@@ -229,7 +245,57 @@ def on_in_progress_with_animation2(update: Update, context: CallbackContext):
     parse_mode=ParseMode.HTML,
     progress_value=ProgressValue.MOON_PHASES,
 )
-def on_in_progress_with_animation3(update: Update, context: CallbackContext):
+def on_animation_moon_phases(update: Update, context: CallbackContext):
+    message = update.effective_message
+    run_command(message)
+
+
+@log_func(log)
+@show_temp_message_decorator(
+    text='Loading',
+    progress_value=ProgressValue.BLOCKS,
+)
+def on_animation_blocks(update: Update, context: CallbackContext):
+    message = update.effective_message
+    run_command(message)
+
+
+@log_func(log)
+@show_temp_message_decorator(
+    text='Loading',
+    progress_value=ProgressValue.RECTS_LARGE,
+)
+def on_animation_rects_large(update: Update, context: CallbackContext):
+    message = update.effective_message
+    run_command(message)
+
+
+@log_func(log)
+@show_temp_message_decorator(
+    text='Loading',
+    progress_value=ProgressValue.RECTS_SMALL,
+)
+def on_animation_rects_small(update: Update, context: CallbackContext):
+    message = update.effective_message
+    run_command(message)
+
+
+@log_func(log)
+@show_temp_message_decorator(
+    text='Loading',
+    progress_value=ProgressValue.PARALLELOGRAMS,
+)
+def on_animation_parallelograms(update: Update, context: CallbackContext):
+    message = update.effective_message
+    run_command(message)
+
+
+@log_func(log)
+@show_temp_message_decorator(
+    text='Loading',
+    progress_value=ProgressValue.CIRCLES,
+)
+def on_animation_circles(update: Update, context: CallbackContext):
     message = update.effective_message
     run_command(message)
 
@@ -241,9 +307,15 @@ def main():
         CommandHandler('in_progress', on_in_progress),
         CommandHandler('custom_in_progress', on_custom_in_progress),
         CommandHandler('custom_all_in_progress', on_custom_all_in_progress),
-        CommandHandler('in_progress_with_animation1', on_in_progress_with_animation1),
-        CommandHandler('in_progress_with_animation2', on_in_progress_with_animation2),
-        CommandHandler('in_progress_with_animation3', on_in_progress_with_animation3),
+        CommandHandler('animation_points', on_animation_points),
+        CommandHandler('animation_spinner', on_animation_spinner),
+        CommandHandler('animation_lines', on_animation_lines),
+        CommandHandler('animation_moon_phases', on_animation_moon_phases),
+        CommandHandler('animation_blocks', on_animation_blocks),
+        CommandHandler('animation_rects_large', on_animation_rects_large),
+        CommandHandler('animation_rects_small', on_animation_rects_small),
+        CommandHandler('animation_parallelograms', on_animation_parallelograms),
+        CommandHandler('animation_circles', on_animation_circles),
         MessageHandler(Filters.text, on_request),
     ]
 
