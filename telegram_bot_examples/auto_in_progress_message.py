@@ -342,6 +342,16 @@ def on_custom_all_animation(update: Update, context: CallbackContext):
     run_command(message)
 
 
+@log_func(log)
+@show_temp_message_decorator(
+    text='{value} x {value}',
+    progress_value=ProgressValue.RECTS_SMALL,
+)
+def on_custom_no_text_animation(update: Update, context: CallbackContext):
+    message = update.effective_message
+    run_command(message)
+
+
 def main():
     handlers = [
         CommandHandler('start', on_start),
@@ -361,7 +371,9 @@ def main():
         CommandHandler('animation_rects_small', on_animation_rects_small),
         CommandHandler('animation_parallelograms', on_animation_parallelograms),
         CommandHandler('animation_circles', on_animation_circles),
+
         CommandHandler('custom_all_animation', on_custom_all_animation),
+        CommandHandler('custom_no_text_animation', on_custom_no_text_animation),
 
         MessageHandler(Filters.text, on_request),
     ]
