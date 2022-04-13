@@ -30,14 +30,25 @@ class ProgressValue(enum.Enum):
     PARALLELOGRAMS = '▰▱▱▱▱', '▰▰▱▱▱', '▰▰▰▱▱', '▰▰▰▰▱', '▰▰▰▰▰'
     CIRCLES = '⚫⚪⚪⚪⚪', '⚫⚫⚪⚪⚪', '⚫⚫⚫⚪⚪', '⚫⚫⚫⚫⚪', '⚫⚫⚫⚫⚫'
 
+    @classmethod
+    def get_text(cls, value: str, text_fmt: str = 'In progress {value}') -> str:
+        return text_fmt.format(value=value)
+
+    def get_init_text(self, text_fmt: str = 'In progress {value}') -> str:
+        return self.get_text(
+            value=self.value[0],
+            text_fmt=text_fmt
+        )
+
 
 class InfinityProgressIndicatorThread(threading.Thread):
     def __init__(
             self,
-            text: str,
+            text_fmt: str,
             message: Message,
             progress_value: ProgressValue = ProgressValue.POINTS,
             parse_mode: ParseMode = None,
+            reply_markup: ReplyMarkup = None,
             *args,
             **kwargs
     ):
@@ -48,18 +59,26 @@ class InfinityProgressIndicatorThread(threading.Thread):
         self._stop = threading.Event()
         self._progress_bar = cycle(progress_value.value)
 
-        self.text = text
+        self.text_fmt = text_fmt
         self.message = message
         self.parse_mode = parse_mode
+        self.reply_markup = reply_markup
 
     def run(self):
         while not self.is_stopped():
-            text = f'{self.text} {next(self._progress_bar)}'
+            text = ProgressValue.get_text(
+                value=next(self._progress_bar),
+                text_fmt=self.text_fmt,
+            )
 
             try:
-                self.message.edit_text(text, parse_mode=self.parse_mode)
+                self.message.edit_text(
+                    text=text,
+                    parse_mode=self.parse_mode,
+                    reply_markup=self.reply_markup,
+                )
             except BadRequest:
-                return
+                pass
 
             time.sleep(1)
 
@@ -76,18 +95,18 @@ class show_temp_message:
             text: str,
             update: Update,
             context: CallbackContext,
+            parse_mode: ParseMode = None,
             reply_markup: ReplyMarkup = None,
             quote: bool = True,
-            parse_mode: ParseMode = None,
             progress_value: ProgressValue = None,
             **kwargs,
     ):
         self.text = text
         self.update = update
         self.context = context
+        self.parse_mode = parse_mode
         self.reply_markup = reply_markup
         self.quote = quote
-        self.parse_mode = parse_mode
         self.kwargs: dict = kwargs
         self.message: Message = None
 
@@ -95,20 +114,25 @@ class show_temp_message:
         self.thread_progress: InfinityProgressIndicatorThread = None
 
     def __enter__(self):
+        text = self.text
+        if self.progress_value:
+            text = self.progress_value.get_init_text(self.text)
+
         self.message = self.update.effective_message.reply_text(
-            text=self.text,
+            text=text,
+            parse_mode=self.parse_mode,
             reply_markup=self.reply_markup,
             quote=self.quote,
-            parse_mode=self.parse_mode,
             **self.kwargs,
         )
 
         if self.progress_value:
             self.thread_progress = InfinityProgressIndicatorThread(
-                text=self.text,
+                text_fmt=self.text,
                 message=self.message,
                 progress_value=self.progress_value,
                 parse_mode=self.parse_mode,
+                reply_markup=self.reply_markup,
             )
             self.thread_progress.start()
 
@@ -124,8 +148,8 @@ class show_temp_message:
 
 def show_temp_message_decorator(
         text: str = 'In progress...',
-        reply_markup: ReplyMarkup = None,
         parse_mode: ParseMode = None,
+        reply_markup: ReplyMarkup = None,
         progress_value: ProgressValue = None,
         **kwargs,
 ):
@@ -211,7 +235,7 @@ def on_custom_all_in_progress(update: Update, context: CallbackContext):
 
 @log_func(log)
 @show_temp_message_decorator(
-    text='Выполняется работа',
+    text='Выполняется работа {value}',
     progress_value=ProgressValue.LINES,
 )
 def on_animation_lines(update: Update, context: CallbackContext):
@@ -221,7 +245,7 @@ def on_animation_lines(update: Update, context: CallbackContext):
 
 @log_func(log)
 @show_temp_message_decorator(
-    text='Выполняется работа',
+    text='Выполняется работа {value}',
     progress_value=ProgressValue.SPINNER,
 )
 def on_animation_spinner(update: Update, context: CallbackContext):
@@ -231,7 +255,7 @@ def on_animation_spinner(update: Update, context: CallbackContext):
 
 @log_func(log)
 @show_temp_message_decorator(
-    text='Please, wait',
+    text='Please, wait {value}',
     progress_value=ProgressValue.POINTS,
 )
 def on_animation_points(update: Update, context: CallbackContext):
@@ -241,7 +265,7 @@ def on_animation_points(update: Update, context: CallbackContext):
 
 @log_func(log)
 @show_temp_message_decorator(
-    text='Всё зависит от <b>лунных</b> циклов',
+    text='Всё зависит от <b>лунных</b> циклов {value} 😊',
     parse_mode=ParseMode.HTML,
     progress_value=ProgressValue.MOON_PHASES,
 )
@@ -252,7 +276,7 @@ def on_animation_moon_phases(update: Update, context: CallbackContext):
 
 @log_func(log)
 @show_temp_message_decorator(
-    text='Loading',
+    text='Loading {value}',
     progress_value=ProgressValue.BLOCKS,
 )
 def on_animation_blocks(update: Update, context: CallbackContext):
@@ -262,7 +286,7 @@ def on_animation_blocks(update: Update, context: CallbackContext):
 
 @log_func(log)
 @show_temp_message_decorator(
-    text='Loading',
+    text='Loading {value}',
     progress_value=ProgressValue.RECTS_LARGE,
 )
 def on_animation_rects_large(update: Update, context: CallbackContext):
@@ -272,7 +296,7 @@ def on_animation_rects_large(update: Update, context: CallbackContext):
 
 @log_func(log)
 @show_temp_message_decorator(
-    text='Loading',
+    text='Loading {value}',
     progress_value=ProgressValue.RECTS_SMALL,
 )
 def on_animation_rects_small(update: Update, context: CallbackContext):
@@ -282,7 +306,7 @@ def on_animation_rects_small(update: Update, context: CallbackContext):
 
 @log_func(log)
 @show_temp_message_decorator(
-    text='Loading',
+    text='Loading {value}',
     progress_value=ProgressValue.PARALLELOGRAMS,
 )
 def on_animation_parallelograms(update: Update, context: CallbackContext):
@@ -292,10 +316,28 @@ def on_animation_parallelograms(update: Update, context: CallbackContext):
 
 @log_func(log)
 @show_temp_message_decorator(
-    text='Loading',
+    text='Loading {value}',
     progress_value=ProgressValue.CIRCLES,
 )
 def on_animation_circles(update: Update, context: CallbackContext):
+    message = update.effective_message
+    run_command(message)
+
+
+@log_func(log)
+@show_temp_message_decorator(
+    text='{value}\n<b>Пожалуйста</b>, подождите...\n{value}\n😊',
+    progress_value=ProgressValue.RECTS_SMALL,
+    parse_mode=ParseMode.HTML,
+    quote=False,
+    reply_markup=InlineKeyboardMarkup.from_button(
+        InlineKeyboardButton(
+            text='Посмотреть другие примеры',
+            url='https://github.com/gil9red/SimplePyScripts/tree/815f366f8a7813cbdfdd2214241bab93b2914c10/telegram_bot_examples',
+        )
+    )
+)
+def on_custom_all_animation(update: Update, context: CallbackContext):
     message = update.effective_message
     run_command(message)
 
@@ -319,6 +361,7 @@ def main():
         CommandHandler('animation_rects_small', on_animation_rects_small),
         CommandHandler('animation_parallelograms', on_animation_parallelograms),
         CommandHandler('animation_circles', on_animation_circles),
+        CommandHandler('custom_all_animation', on_custom_all_animation),
 
         MessageHandler(Filters.text, on_request),
     ]
