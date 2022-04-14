@@ -4,53 +4,53 @@
 __author__ = 'ipetrash'
 
 
+import re
+
+
 class SirenaRecord:
-    def __init__(self, line):
-        self.values = list()
+    def __init__(self, line: str):
+        self.values: list[str] = []
         self.type = line[0]
 
         data = line[1:]
-
-        import re
         raw = re.split(r'\s+', data)
 
-        for i in range(len(raw)):
-            part = raw[i]
+        for i, part in enumerate(raw):
+            match self.type:
+                case '1' if i == 0:
+                    self.values.append(part[0:6])
+                    self.values.append(part[6:10])
+                    self.values.append(part[10:13])
+                    self.values.append(part[13:17])
+                    self.values.append(part[17:27])
+                    self.values.append(part[27:])
 
-            if self.type == '1' and i == 0:
-                self.values.append(part[0: 6])
-                self.values.append(part[6: 10])
-                self.values.append(part[10: 13])
-                self.values.append(part[13: 17])
-                self.values.append(part[17: 27])
-                self.values.append(part[27:])
+                case '2' if i == 5:
+                    self.values.append(part[0:2])
+                    self.values.append(part[2:])
 
-            elif self.type == '2' and i == 5:
-                self.values.append(part[0: 2])
-                self.values.append(part[2:])
+                case '4' if i == 0:
+                    self.values += part.split("/")
 
-            elif self.type == '4' and i == 0:
-                self.values += part.split("/")
+                case '6' if i == 0:
+                    self.values.append(part[0:6])
+                    self.values.append(part[6:])
 
-            elif self.type == '6' and i == 0:
-                self.values.append(part[0: 6])
-                self.values.append(part[6:])
+                case '7' if i == 0:
+                    self.values.append(part[0:6])
+                    self.values.append(part[6:])
 
-            elif self.type == '7' and i == 0:
-                self.values.append(part[0: 6])
-                self.values.append(part[6:])
+                case '9' if i in [0, 1]:
+                    self.values += part.split("/")
 
-            elif self.type == '9' and (i == 0 or i == 1):
-                self.values += part.split("/")
-
-            else:
-                self.values.append(part)
+                case _:
+                    self.values.append(part)
 
 
 class SirenaMessage:
-    def __init__(self, queue_lines):
-        self.lines = list()
-        self.records = list()
+    def __init__(self, queue_lines: list[str]):
+        self.lines: list[str] = []
+        self.records: list[SirenaRecord] = []
 
         while queue_lines:
             line = queue_lines[0]
@@ -65,17 +65,18 @@ class SirenaMessage:
                 break
 
         for l in self.lines:
-            self.records.append(SirenaRecord(l))
+            self.records.append(
+                SirenaRecord(l)
+            )
 
 
 class SirenaFile:
-    def __init__(self, file_name):
-        self.lines = list()
-        self.queue_lines = list()
+    def __init__(self, file_name: str):
+        self.lines: list[str] = []
+        self.queue_lines: list[str] = []
+        self.messages: list[SirenaMessage] = []
 
-        self.messages = list()
-
-        with open(file_name, mode='r', encoding='cp1251') as f:
+        with open(file_name, encoding='cp1251') as f:
             for line in f:
                 line = line.strip()
                 if not line:
@@ -84,9 +85,10 @@ class SirenaFile:
                 self.lines.append(line)
                 self.queue_lines.append(line)
 
-        self.messages = list()
         while self.queue_lines:
-            self.messages.append(SirenaMessage(self.queue_lines))
+            self.messages.append(
+                SirenaMessage(self.queue_lines)
+            )
 
 
 if __name__ == '__main__':
@@ -95,15 +97,12 @@ if __name__ == '__main__':
 
     sirena_file = SirenaFile(in_file_name)
 
-    f = open(out_file_name, 'w', encoding='cp1251', newline='\n')
+    with open(out_file_name, 'w', encoding='cp1251', newline='\n') as f:
+        for message in sirena_file.messages:
+            for record in message.records:
+                for value in record.values:
+                    f.write(value + ";")
+                    print(value + ";", end='')
 
-    for message in sirena_file.messages:
-        for record in message.records:
-            for value in record.values:
-                f.write(value + ";")
-                print(value + ";", end='')
-
-            f.write('\n')
-            print()
-
-    f.close()
+                f.write('\n')
+                print()
