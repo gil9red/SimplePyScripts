@@ -23,7 +23,8 @@ class ProgressValue(enum.Enum):
     LINES = '|', '/', '-', '\\'
     SPINNER = '◜', '◝', '◞', '◟'
     POINTS = '.', '..', '...'
-    MOON_PHASES = '🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'
+    MOON_PHASES_1 = '🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'
+    MOON_PHASES_2 = '🌑', '🌘', '🌗', '🌖', '🌕', '🌔', '🌓', '🌒'
     BLOCKS = '▒▒▒▒▒', '█▒▒▒▒', '██▒▒▒', '███▒▒', '████▒', '█████'
     RECTS_LARGE = '▢▢▢▢▢', '■▢▢▢▢', '■■▢▢▢', '■■■▢▢', '■■■■▢', '■■■■■'
     RECTS_SMALL = '□□□□□', '■□□□□', '■■□□□', '■■■□□', '■■■■□', '■■■■■'
@@ -292,9 +293,20 @@ def on_animation_points(update: Update, context: CallbackContext):
 @show_temp_message_decorator(
     text='Всё зависит от <b>лунных</b> циклов {value} 😊',
     parse_mode=ParseMode.HTML,
-    progress_value=ProgressValue.MOON_PHASES,
+    progress_value=ProgressValue.MOON_PHASES_1,
 )
-def on_animation_moon_phases(update: Update, context: CallbackContext):
+def on_animation_moon_phases1(update: Update, context: CallbackContext):
+    message = update.effective_message
+    run_command(message)
+
+
+@log_func(log)
+@show_temp_message_decorator(
+    text='Всё зависит от <b>лунных</b> циклов {value} 😊',
+    parse_mode=ParseMode.HTML,
+    progress_value=ProgressValue.MOON_PHASES_2,
+)
+def on_animation_moon_phases2(update: Update, context: CallbackContext):
     message = update.effective_message
     run_command(message)
 
@@ -393,7 +405,8 @@ def main():
         CommandHandler('animation_lines', on_animation_lines),
         CommandHandler('animation_spinner', on_animation_spinner),
         CommandHandler('animation_points', on_animation_points),
-        CommandHandler('animation_moon_phases', on_animation_moon_phases),
+        CommandHandler('animation_moon_phases1', on_animation_moon_phases1),
+        CommandHandler('animation_moon_phases2', on_animation_moon_phases2),
         CommandHandler('animation_blocks', on_animation_blocks),
         CommandHandler('animation_rects_large', on_animation_rects_large),
         CommandHandler('animation_rects_small', on_animation_rects_small),
