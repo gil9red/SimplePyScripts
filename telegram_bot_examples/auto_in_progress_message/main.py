@@ -27,8 +27,8 @@ log = get_logger(__file__)
 ALL_COMMANDS = []
 
 
-def run_command(message: Message):
-    time.sleep(10)
+def run_command(message: Message, sleep_seconds: int = 10):
+    time.sleep(sleep_seconds)
     message.reply_text('Hello World!')
 
 
@@ -224,7 +224,7 @@ def on_custom_no_text_animation(update: Update, context: CallbackContext):
 )
 def on_sub_animation_chickens(update: Update, context: CallbackContext):
     message = update.effective_message
-    run_command(message)
+    run_command(message, sleep_seconds=30)
 
 
 @log_func(log)
@@ -234,7 +234,7 @@ def on_sub_animation_chickens(update: Update, context: CallbackContext):
 )
 def on_sub_animation_faces(update: Update, context: CallbackContext):
     message = update.effective_message
-    run_command(message)
+    run_command(message, sleep_seconds=30)
 
 
 def main():
