@@ -4,197 +4,22 @@
 __author__ = 'ipetrash'
 
 
-import enum
-import functools
-import threading
+import sys
 import time
 
-from itertools import cycle
+from pathlib import Path
+
+
+DIR = Path(__file__).parent.resolve()
+sys.path.append(str(DIR.parent))
+
 
 # pip install python-telegram-bot
-from telegram import Update, ReplyMarkup, Message, ParseMode, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import Update, Message, ParseMode, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext
-from telegram.error import BadRequest
 
 from common import get_logger, log_func, start_bot, run_main
-
-
-class ProgressValue(enum.Enum):
-    LINES = '|', '/', '-', '\\'
-    SPINNER = '◜', '◝', '◞', '◟'
-    POINTS = '.', '..', '...'
-    MOON_PHASES_1 = '🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'
-    MOON_PHASES_2 = '🌑', '🌘', '🌗', '🌖', '🌕', '🌔', '🌓', '🌒'
-    BLOCKS = '▒▒▒▒▒', '█▒▒▒▒', '██▒▒▒', '███▒▒', '████▒', '█████'
-    RECTS_LARGE = '▢▢▢▢▢', '■▢▢▢▢', '■■▢▢▢', '■■■▢▢', '■■■■▢', '■■■■■'
-    RECTS_SMALL = '□□□□□', '■□□□□', '■■□□□', '■■■□□', '■■■■□', '■■■■■'
-    PARALLELOGRAMS = '▱▱▱▱▱', '▰▱▱▱▱', '▰▰▱▱▱', '▰▰▰▱▱', '▰▰▰▰▱', '▰▰▰▰▰'
-    CIRCLES = '⚪⚪⚪⚪⚪', '⚫⚪⚪⚪⚪', '⚫⚫⚪⚪⚪', '⚫⚫⚫⚪⚪', '⚫⚫⚫⚫⚪', '⚫⚫⚫⚫⚫'
-
-    @classmethod
-    def get_text(
-            cls,
-            text_fmt: str = 'In progress {value} ({seconds} seconds)',
-            value: str = '',
-            seconds: int = 0,
-    ) -> str:
-        return text_fmt.format(value=value, seconds=seconds)
-
-    def get_init_text(
-            self,
-            text_fmt: str = 'In progress {value} ({seconds} seconds)',
-            seconds: int = 0,
-    ) -> str:
-        return self.get_text(
-            value=self.value[0],
-            seconds=seconds,
-            text_fmt=text_fmt
-        )
-
-
-class InfinityProgressIndicatorThread(threading.Thread):
-    def __init__(
-            self,
-            text_fmt: str,
-            message: Message,
-            progress_value: ProgressValue = ProgressValue.POINTS,
-            parse_mode: ParseMode = None,
-            reply_markup: ReplyMarkup = None,
-            skip_progress: int = 1,
-            init_seconds: int = 0,
-            *args,
-            **kwargs
-    ):
-        super().__init__(*args, **kwargs)
-
-        self.daemon = True
-
-        self._stop = threading.Event()
-        self._progress_bar = cycle(progress_value.value)
-
-        for _ in range(skip_progress):
-            next(self._progress_bar)
-
-        self.text_fmt = text_fmt
-        self.message = message
-        self.parse_mode = parse_mode
-        self.reply_markup = reply_markup
-
-        self._seconds: int = init_seconds
-        self.init_seconds: int = init_seconds
-
-    def run(self):
-        self._seconds = self.init_seconds
-
-        while True:
-            time.sleep(1)
-            if self.is_stopped():
-                break
-
-            self._seconds += 1
-
-            text = ProgressValue.get_text(
-                text_fmt=self.text_fmt,
-                value=next(self._progress_bar),
-                seconds=self._seconds,
-            )
-
-            try:
-                self.message.edit_text(
-                    text=text,
-                    parse_mode=self.parse_mode,
-                    reply_markup=self.reply_markup,
-                )
-            except BadRequest:
-                pass
-
-    def stop(self):
-        self._stop.set()
-
-    def is_stopped(self) -> bool:
-        return self._stop.is_set()
-
-
-class show_temp_message:
-    def __init__(
-            self,
-            text: str,
-            update: Update,
-            context: CallbackContext,
-            parse_mode: ParseMode = None,
-            reply_markup: ReplyMarkup = None,
-            quote: bool = True,
-            progress_value: ProgressValue = None,
-            **kwargs,
-    ):
-        self.text = text
-        self.update = update
-        self.context = context
-        self.parse_mode = parse_mode
-        self.reply_markup = reply_markup
-        self.quote = quote
-        self.kwargs: dict = kwargs
-        self.message: Message = None
-
-        self.progress_value = progress_value
-        self.thread_progress: InfinityProgressIndicatorThread = None
-
-    def __enter__(self):
-        text = self.text
-        if self.progress_value:
-            text = self.progress_value.get_init_text(self.text)
-
-        self.message = self.update.effective_message.reply_text(
-            text=text,
-            parse_mode=self.parse_mode,
-            reply_markup=self.reply_markup,
-            quote=self.quote,
-            **self.kwargs,
-        )
-
-        if self.progress_value:
-            self.thread_progress = InfinityProgressIndicatorThread(
-                text_fmt=self.text,
-                message=self.message,
-                progress_value=self.progress_value,
-                parse_mode=self.parse_mode,
-                reply_markup=self.reply_markup,
-            )
-            self.thread_progress.start()
-
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        if self.thread_progress:
-            self.thread_progress.stop()
-
-        if self.message:
-            self.message.delete()
-
-
-def show_temp_message_decorator(
-        text: str = 'In progress...',
-        parse_mode: ParseMode = None,
-        reply_markup: ReplyMarkup = None,
-        progress_value: ProgressValue = None,
-        **kwargs,
-):
-    def actual_decorator(func):
-        @functools.wraps(func)
-        def wrapper(update: Update, context: CallbackContext):
-            with show_temp_message(
-                text=text,
-                update=update,
-                context=context,
-                reply_markup=reply_markup,
-                parse_mode=parse_mode,
-                progress_value=progress_value,
-                **kwargs,
-            ):
-                return func(update, context)
-
-        return wrapper
-    return actual_decorator
+from auto_in_progress_message.core import show_temp_message_decorator, ProgressValue
 
 
 log = get_logger(__file__)
@@ -392,6 +217,26 @@ def on_custom_no_text_animation(update: Update, context: CallbackContext):
     run_command(message)
 
 
+@log_func(log)
+@show_temp_message_decorator(
+    text='KFC {value}',
+    progress_value=ProgressValue.CHICKENS,
+)
+def on_sub_animation_chickens(update: Update, context: CallbackContext):
+    message = update.effective_message
+    run_command(message)
+
+
+@log_func(log)
+@show_temp_message_decorator(
+    text='Faces {value}',
+    progress_value=ProgressValue.FACES,
+)
+def on_sub_animation_faces(update: Update, context: CallbackContext):
+    message = update.effective_message
+    run_command(message)
+
+
 def main():
     handlers = [
         CommandHandler('start', on_start),
@@ -415,6 +260,9 @@ def main():
 
         CommandHandler('custom_all_animation', on_custom_all_animation),
         CommandHandler('custom_no_text_animation', on_custom_no_text_animation),
+
+        CommandHandler('sub_animation_chickens', on_sub_animation_chickens),
+        CommandHandler('sub_animation_faces', on_sub_animation_faces),
 
         MessageHandler(Filters.text, on_request),
     ]
