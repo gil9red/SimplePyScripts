@@ -9,6 +9,7 @@ from pathlib import Path
 import re
 
 from PyQt5.QtWidgets import QApplication, QMessageBox
+from PyQt5.QtCore import Qt
 
 from print__hprof_or_big_size_file import find_files_by_dirs, DIRS
 
@@ -24,6 +25,7 @@ if __name__ == '__main__':
         text = f'Files .hprof ({len(result)}):\n' + '\n'.join(result)
 
         msg_box = QMessageBox(QMessageBox.Information, 'Found .hprof!', text)
+        msg_box.setTextInteractionFlags(Qt.TextSelectableByMouse)
         remove_all_files_button = msg_box.addButton("Remove all files", QMessageBox.DestructiveRole)
         msg_box.addButton(QMessageBox.Ok)
         msg_box.exec()
