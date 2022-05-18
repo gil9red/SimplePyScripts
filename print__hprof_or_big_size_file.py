@@ -16,7 +16,7 @@ DIRS = [r'C:\DEV__TX', r'C:\DEV__OPTT', r'C:\DEV__RADIX']
 
 
 def is_hprof_and_more_1GB(file_name: str) -> bool:
-    return '.hprof' in file_name or getsize(file_name) >= 1_000_000_000  # 1 GB
+    return '.hprof' in file_name and getsize(file_name) >= 1_000_000_000  # 1 GB
 
 
 def find_files_by_dir(root_dir: str, match_func) -> list:
