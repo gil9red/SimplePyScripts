@@ -19,7 +19,7 @@ from figure import Figure
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+    text = f'{ex_cls.__name__}: {ex}:\n'
     text += ''.join(traceback.format_tb(tb))
 
     logger.error(text)
@@ -30,7 +30,6 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
 sys.excepthook = log_uncaught_exceptions
 
 
-# TODO: Показывать следующую фигуру
 class MainWindow(QWidget):
     ROWS = 20
     COLS = 10
@@ -47,6 +46,7 @@ class MainWindow(QWidget):
             for _ in range(self.ROWS)
         ]
         self.current_figure: Optional[Figure] = None
+        self.next_figure: Optional[Figure] = None
 
         self.timer = QTimer()
         self.timer.timeout.connect(self._on_tick)
@@ -59,7 +59,16 @@ class MainWindow(QWidget):
 
     def _on_logic(self):
         if not self.current_figure:
-            self.current_figure = Figure.get_random(
+            if self.next_figure:
+                self.current_figure = self.next_figure
+            else:
+                self.current_figure = Figure.get_random(
+                    x=self.COLS // 2,  # По-умолчанию, по центру
+                    y=0,
+                    parent=self,
+                )
+
+            self.next_figure = Figure.get_random(
                 x=self.COLS // 2,  # По-умолчанию, по центру
                 y=0,
                 parent=self,
@@ -135,6 +144,11 @@ class MainWindow(QWidget):
         # Рисуем центр фигуры
         if DEBUG:
             self._draw_cell_board(painter, self.current_figure.x, self.current_figure.y, Qt.black)
+
+        x_next = self.COLS + 3
+        y_next = 1
+        for x, y in self.next_figure.get_points_for_state(x=x_next, y=y_next):
+            self._draw_cell_board(painter, x, y, self.next_figure.get_color())
 
         painter.restore()
 

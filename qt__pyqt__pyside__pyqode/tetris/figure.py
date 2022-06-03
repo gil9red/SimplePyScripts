@@ -34,7 +34,7 @@ class Figure(abc.ABC):
         self.parent = parent
 
         self.current_state: int = 1
-        self.points: list[tuple[int, int]] = self._get_points_for_state()
+        self.points: list[tuple[int, int]] = self.get_points_for_state()
 
     @classmethod
     def get_random(cls, x: int, y: int, parent: 'MainWindow', rand_x: bool = True) -> 'Figure':
@@ -58,7 +58,7 @@ class Figure(abc.ABC):
     def _get_all_states(self) -> list[list[str]]:
         pass
 
-    def _get_points_for_state(self, state: int = None, x: int = None, y: int = None) -> list[tuple[int, int]]:
+    def get_points_for_state(self, state: int = None, x: int = None, y: int = None) -> list[tuple[int, int]]:
         if state is None:
             state = self.current_state
 
@@ -129,7 +129,7 @@ class Figure(abc.ABC):
 
     def move_left(self) -> bool:
         x = self.x - 1
-        points = self._get_points_for_state(x=x)
+        points = self.get_points_for_state(x=x)
         if self.is_collapse(points):
             return False
 
@@ -139,7 +139,7 @@ class Figure(abc.ABC):
 
     def move_right(self) -> bool:
         x = self.x + 1
-        points = self._get_points_for_state(x=x)
+        points = self.get_points_for_state(x=x)
         if self.is_collapse(points):
             return False
 
@@ -149,7 +149,7 @@ class Figure(abc.ABC):
 
     def move_down(self) -> bool:
         y = self.y + 1
-        points = self._get_points_for_state(y=y)
+        points = self.get_points_for_state(y=y)
         if self.is_collapse(points):
             return False
 
@@ -158,7 +158,7 @@ class Figure(abc.ABC):
         return True
 
     def _on_turn_right(self, for_state: int = None) -> list[tuple[int, int]]:
-        return self._get_points_for_state(for_state)
+        return self.get_points_for_state(for_state)
 
     def turn_right(self) -> bool:
         state = self.STATES[self.current_state]
