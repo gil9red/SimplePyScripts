@@ -15,7 +15,7 @@ from PyQt5.QtCore import Qt, QTimer
 
 from config import DEBUG
 from common import logger
-from figure import Figure
+from piece import Piece
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
@@ -45,8 +45,8 @@ class MainWindow(QWidget):
             [None for _ in range(self.COLS)]
             for _ in range(self.ROWS)
         ]
-        self.current_figure: Optional[Figure] = None
-        self.next_figure: Optional[Figure] = None
+        self.current_piece: Optional[Piece] = None
+        self.next_piece: Optional[Piece] = None
 
         self.timer = QTimer()
         self.timer.timeout.connect(self._on_tick)
@@ -58,31 +58,31 @@ class MainWindow(QWidget):
         QMessageBox.information(self, "Информация", "Проигрыш!")
 
     def _on_logic(self):
-        if not self.current_figure:
-            if self.next_figure:
-                self.current_figure = self.next_figure
+        if not self.current_piece:
+            if self.next_piece:
+                self.current_piece = self.next_piece
             else:
-                self.current_figure = Figure.get_random(
+                self.current_piece = Piece.get_random(
                     x=self.COLS // 2,  # По-умолчанию, по центру
                     y=0,
                     parent=self,
                 )
 
-            self.next_figure = Figure.get_random(
+            self.next_piece = Piece.get_random(
                 x=self.COLS // 2,  # По-умолчанию, по центру
                 y=0,
                 parent=self,
             )
 
             # Если сразу после создания столкновение
-            if self.current_figure.is_collapse():
+            if self.current_piece.is_collapse():
                 self.abort_game()
 
             return
 
-        if not self.current_figure.move_down():
-            self.current_figure.add_to_board()
-            self.current_figure = None
+        if not self.current_piece.move_down():
+            self.current_piece.add_to_board()
+            self.current_piece = None
 
             # TODO: В метод
             to_delete = []
@@ -132,23 +132,23 @@ class MainWindow(QWidget):
 
         painter.restore()
 
-    def _draw_current_figure(self, painter: QPainter):
-        if not self.current_figure:
+    def _draw_current_piece(self, painter: QPainter):
+        if not self.current_piece:
             return
 
         painter.save()
 
-        for x, y in self.current_figure.get_points():
-            self._draw_cell_board(painter, x, y, self.current_figure.get_color())
+        for x, y in self.current_piece.get_points():
+            self._draw_cell_board(painter, x, y, self.current_piece.get_color())
 
         # Рисуем центр фигуры
         if DEBUG:
-            self._draw_cell_board(painter, self.current_figure.x, self.current_figure.y, Qt.black)
+            self._draw_cell_board(painter, self.current_piece.x, self.current_piece.y, Qt.black)
 
         x_next = self.COLS + 3
         y_next = 1
-        for x, y in self.next_figure.get_points_for_state(x=x_next, y=y_next):
-            self._draw_cell_board(painter, x, y, self.next_figure.get_color())
+        for x, y in self.next_piece.get_points_for_state(x=x_next, y=y_next):
+            self._draw_cell_board(painter, x, y, self.next_piece.get_color())
 
         painter.restore()
 
@@ -159,24 +159,24 @@ class MainWindow(QWidget):
         # Рисование таблицы
         self._draw_board(painter)
 
-        self._draw_current_figure(painter)
+        self._draw_current_piece(painter)
 
     def keyReleaseEvent(self, event: QKeyEvent):
         match event.key():
-            case Qt.Key_Left if self.current_figure:
-                if self.current_figure.move_left():
+            case Qt.Key_Left if self.current_piece:
+                if self.current_piece.move_left():
                     self.update()
 
-            case Qt.Key_Right if self.current_figure:
-                if self.current_figure.move_right():
+            case Qt.Key_Right if self.current_piece:
+                if self.current_piece.move_right():
                     self.update()
 
-            case Qt.Key_Up if self.current_figure:
-                if self.current_figure.turn_right():
+            case Qt.Key_Up if self.current_piece:
+                if self.current_piece.turn_right():
                     self.update()
 
-            case Qt.Key_Down if self.current_figure:
-                while self.current_figure.move_down():
+            case Qt.Key_Down if self.current_piece:
+                while self.current_piece.move_down():
                     self.update()
 
 

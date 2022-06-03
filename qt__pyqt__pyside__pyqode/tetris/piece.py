@@ -18,7 +18,7 @@ from common import logger
 #       View - виджет для отрисовки данных
 
 
-class Figure(abc.ABC):
+class Piece(abc.ABC):
     STATES: dict[int, int] = {
         1: 2,
         2: 3,
@@ -37,7 +37,7 @@ class Figure(abc.ABC):
         self.points: list[tuple[int, int]] = self.get_points_for_state()
 
     @classmethod
-    def get_random(cls, x: int, y: int, parent: 'MainWindow', rand_x: bool = True) -> 'Figure':
+    def get_random(cls, x: int, y: int, parent: 'MainWindow', rand_x: bool = True) -> 'Piece':
         clazz = choice(cls.__subclasses__())
         obj = clazz(x=x, y=y, parent=parent)
 
@@ -200,7 +200,7 @@ class Figure(abc.ABC):
         return False
 
 
-class FigureO(Figure):
+class PieceO(Piece):
     _ = [
         [
             '0000',
@@ -217,7 +217,7 @@ class FigureO(Figure):
         return QColor(Qt.yellow)
 
 
-class FigureI(Figure):
+class PieceI(Piece):
     _ = [
         [
             '0000',
@@ -240,7 +240,7 @@ class FigureI(Figure):
         return QColor(Qt.cyan)
 
 
-class FigureS(Figure):
+class PieceS(Piece):
     _ = [
         [
             '0000',
@@ -263,7 +263,7 @@ class FigureS(Figure):
         return QColor(Qt.green)
 
 
-class FigureZ(Figure):
+class PieceZ(Piece):
     _ = [
         [
             '0000',
@@ -286,7 +286,7 @@ class FigureZ(Figure):
         return QColor(Qt.red)
 
 
-class FigureL(Figure):
+class PieceL(Piece):
     _ = [
         [
             '0000',
@@ -321,7 +321,7 @@ class FigureL(Figure):
         return QColor(Qt.blue)
 
 
-class FigureJ(Figure):
+class PieceJ(Piece):
     _ = [
         [
             '0000',
@@ -356,7 +356,7 @@ class FigureJ(Figure):
         return QColor(Qt.darkGreen)
 
 
-class FigureT(Figure):
+class PieceT(Piece):
     _ = [
         [
             '0000',
