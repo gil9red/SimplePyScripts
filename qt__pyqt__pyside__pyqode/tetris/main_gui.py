@@ -168,7 +168,7 @@ if __name__ == '__main__':
     app = QApplication([])
 
     mw = MainWindow()
-    mw.resize(320, 480)
+    mw.resize(360, 480)
     mw.show()
 
     app.exec()
