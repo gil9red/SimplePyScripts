@@ -13,11 +13,6 @@ from PyQt5.QtGui import QColor
 from common import logger
 
 
-# TODO: Можно попробовать через модель + view сделать приложение
-#       Модель - это доска
-#       View - виджет для отрисовки данных
-
-
 class Piece(abc.ABC):
     STATES: dict[int, int] = {
         1: 2,
@@ -26,9 +21,7 @@ class Piece(abc.ABC):
         4: 1,
     }
 
-    # TODO: Сделать класс доски чисто с данными, как модель
-    # TODO: Вынести модель доски
-    def __init__(self, x: int, y: int, parent: 'MainWindow' = None):
+    def __init__(self, x: int, y: int, parent: 'Board' = None):
         self.x = x
         self.y = y
         self.parent = parent
@@ -37,7 +30,7 @@ class Piece(abc.ABC):
         self.points: list[tuple[int, int]] = self.get_points_for_state()
 
     @classmethod
-    def get_random(cls, x: int, y: int, parent: 'MainWindow', rand_x: bool = True) -> 'Piece':
+    def get_random(cls, x: int, y: int, parent: 'Board', rand_x: bool = False) -> 'Piece':
         clazz = choice(cls.__subclasses__())
         obj = clazz(x=x, y=y, parent=parent)
 
@@ -97,7 +90,7 @@ class Piece(abc.ABC):
         points = []
         for i, row in enumerate(points_board):
             for j, value in enumerate(row):
-                if value != '0':
+                if value != '.':
                     points.append((
                         # Рассчитываем разницу между X и остальными значениями
                         # и прибавляем текущие координаты центра фигуры
@@ -170,11 +163,6 @@ class Piece(abc.ABC):
         self.set_points(points)
         return True
 
-    def add_to_board(self):
-        logger.debug('[add_to_board]')
-        for x, y in self.get_points():
-            self.parent.board_matrix[y][x] = self.get_color()
-
     def is_collapse(self, points: list[tuple[int, int]] = None) -> bool:
         if not points:
             points = self.get_points()
@@ -186,10 +174,10 @@ class Piece(abc.ABC):
                     return True
 
                 # Если ячейка занята или выход за пределы
-                if self.parent.board_matrix[y][x]:
+                if self.parent.matrix[y][x]:
                     logger.debug(
                         f'[is_collapse] self.parent.board_matrix[y][x]. x={x}, y={y}, '
-                        f'value={self.parent.board_matrix[y][x]}'
+                        f'value={self.parent.matrix[y][x]}'
                     )
                     return True
 
@@ -203,10 +191,10 @@ class Piece(abc.ABC):
 class PieceO(Piece):
     _ = [
         [
-            '0000',
-            '01X0',
-            '0110',
-            '0000',
+            '....',
+            '.1X.',
+            '.11.',
+            '....',
         ],
     ]
 
@@ -220,16 +208,16 @@ class PieceO(Piece):
 class PieceI(Piece):
     _ = [
         [
-            '0000',
+            '....',
             '11X1',
-            '0000',
-            '0000',
+            '....',
+            '....',
         ],
         [
-            '0010',
-            '00X0',
-            '0010',
-            '0010',
+            '..1.',
+            '..X.',
+            '..1.',
+            '..1.',
         ],
     ]
 
@@ -243,16 +231,16 @@ class PieceI(Piece):
 class PieceS(Piece):
     _ = [
         [
-            '0000',
-            '00X1',
-            '0110',
-            '0000',
+            '....',
+            '..X1',
+            '.11.',
+            '....',
         ],
         [
-            '0010',
-            '00X1',
-            '0001',
-            '0000',
+            '..1.',
+            '..X1',
+            '...1',
+            '....',
         ],
     ]
 
@@ -266,16 +254,16 @@ class PieceS(Piece):
 class PieceZ(Piece):
     _ = [
         [
-            '0000',
-            '01X0',
-            '0011',
-            '0000',
+            '....',
+            '.1X.',
+            '..11',
+            '....',
         ],
         [
-            '0001',
-            '00X1',
-            '0010',
-            '0000',
+            '...1',
+            '..X1',
+            '..1.',
+            '....',
         ],
     ]
 
@@ -289,28 +277,28 @@ class PieceZ(Piece):
 class PieceL(Piece):
     _ = [
         [
-            '0000',
-            '01X1',
-            '0100',
-            '0000',
+            '....',
+            '.1X1',
+            '.1..',
+            '....',
         ],
         [
-            '0010',
-            '00X0',
-            '0011',
-            '0000',
+            '..1.',
+            '..X.',
+            '..11',
+            '....',
         ],
         [
-            '0001',
-            '01X1',
-            '0000',
-            '0000',
+            '...1',
+            '.1X1',
+            '....',
+            '....',
         ],
         [
-            '0110',
-            '00X0',
-            '0010',
-            '0000',
+            '.11.',
+            '..X.',
+            '..1.',
+            '....',
         ]
     ]
 
@@ -324,28 +312,28 @@ class PieceL(Piece):
 class PieceJ(Piece):
     _ = [
         [
-            '0000',
-            '01X1',
-            '0001',
-            '0000',
+            '....',
+            '.1X1',
+            '...1',
+            '....',
         ],
         [
-            '0011',
-            '00X0',
-            '0010',
-            '0000',
+            '..11',
+            '..X.',
+            '..1.',
+            '....',
         ],
         [
-            '0100',
-            '01X1',
-            '0000',
-            '0000',
+            '.1..',
+            '.1X1',
+            '....',
+            '....',
         ],
         [
-            '0010',
-            '00X0',
-            '0110',
-            '0000',
+            '..1.',
+            '..X.',
+            '.11.',
+            '....',
         ]
     ]
 
@@ -359,28 +347,28 @@ class PieceJ(Piece):
 class PieceT(Piece):
     _ = [
         [
-            '0000',
-            '01X1',
-            '0010',
-            '0000',
+            '....',
+            '.1X1',
+            '..1.',
+            '....',
         ],
         [
-            '0010',
-            '00X1',
-            '0010',
-            '0000',
+            '..1.',
+            '..X1',
+            '..1.',
+            '....',
         ],
         [
-            '0010',
-            '01X1',
-            '0000',
-            '0000',
+            '..1.',
+            '.1X1',
+            '....',
+            '....',
         ],
         [
-            '0010',
-            '01X0',
-            '0010',
-            '0000',
+            '..1.',
+            '.1X.',
+            '..1.',
+            '....',
         ]
     ]
 

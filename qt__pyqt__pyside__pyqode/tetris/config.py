@@ -4,4 +4,4 @@
 __author__ = 'ipetrash'
 
 
-DEBUG = True
+DEBUG = False
