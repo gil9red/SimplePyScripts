@@ -156,7 +156,7 @@ class MainWindow(QWidget):
                     self.update()
 
             case Qt.Key_Up if self.current_piece:
-                if self.current_piece.turn_right():
+                if self.current_piece.turn():
                     self.update()
 
             case Qt.Key_Down if self.current_piece:

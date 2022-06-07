@@ -153,7 +153,7 @@ class Piece(abc.ABC):
     def _on_turn_right(self, for_state: int = None) -> list[tuple[int, int]]:
         return self.get_points_for_state(for_state)
 
-    def turn_right(self) -> bool:
+    def turn(self) -> bool:
         state = self.STATES[self.current_state]
         points = self._on_turn_right(for_state=state)
         if self.is_collapse(points):
@@ -377,5 +377,3 @@ class PieceT(Piece):
 
     def get_color(self) -> QColor:
         return QColor(Qt.darkCyan)
-
-
