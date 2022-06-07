@@ -5,6 +5,8 @@ __author__ = 'ipetrash'
 
 
 import sys
+import time
+from threading import Thread
 
 from asciimatics.effects import Print
 from asciimatics.renderers import FigletText
@@ -50,11 +52,21 @@ class BoardWidget(Frame):
         self.set_theme('monochrome')
         self.board = board
         self.current_piece = self.board.current_piece
+        self.is_fail = False
+
+        self.thread = Thread(target=self._run_timer)
+        self.thread.start()
+
+    def _run_timer(self):
+        while self.board.do_step():
+            time.sleep(0.3)
+
+        self.is_fail = True
 
     def update(self, frame_no: int):
         super().update(frame_no)
 
-        if not self.board.do_step():
+        if self.is_fail:
             raise NextScene('LOSE')
 
         self.current_piece = self.board.current_piece
@@ -195,7 +207,7 @@ def demo(screen: Screen, scene: Scene):
             [
                 Print(
                     screen,
-                    FigletText("YOU LOSE!", "standard"),
+                    FigletText(f"YOU LOSE!\nScore: {board.score}", "standard"),
                     y=screen.height // 3 - 3
                 ),
             ],
@@ -203,10 +215,9 @@ def demo(screen: Screen, scene: Scene):
         )
     ]
 
-    screen.play(scenes, stop_on_resize=True, start_scene=scene, allow_int=True)
+    screen.play(scenes, stop_on_resize=True, start_scene=scene)
 
 
-# TODO: Скрипт реагирует на движение мышки и происходит ускорение анимаций
 last_scene = None
 while True:
     try:
