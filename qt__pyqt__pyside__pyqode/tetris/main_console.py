@@ -166,7 +166,6 @@ class ScoreWidget(Frame):
         )
         self.set_theme('monochrome')
         self.board = board
-        self.next_piece = self.board.next_piece
 
     def update(self, frame_no: int):
         super().update(frame_no)
