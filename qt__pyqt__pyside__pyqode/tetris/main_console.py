@@ -80,11 +80,13 @@ class BoardWidget(Frame):
                     continue
 
                 color = PIECE_BY_COLOR[cell_color.name()]
+                # TODO: Рисовать квадратами, а не линиями
                 self.screen.print_at(' ', x + 1, y + 1, bg=color)
 
         if self.current_piece:
             color = PIECE_BY_COLOR[self.current_piece.get_color().name()]
             for x, y in self.current_piece.get_points():
+                # TODO: Рисовать квадратами, а не линиями
                 self.screen.print_at(' ', x + 1, y + 1, bg=color)
 
     def process_event(self, event: Event):
@@ -150,6 +152,7 @@ class NextPieceWidget(Frame):
             y_next = self.y
             color = PIECE_BY_COLOR[self.next_piece.get_color().name()]
             for x, y in self.next_piece.get_points_for_state(x=x_next, y=y_next):
+                # TODO: Рисовать квадратами, а не линиями
                 self.screen.print_at(' ', x + 1, y + 1, bg=color)
 
     def process_event(self, event: Event):
