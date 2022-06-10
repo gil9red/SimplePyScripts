@@ -47,38 +47,32 @@ class Board(QObject):
         self.__generation_number = value
         self.on_update_generation.emit(self.generation_number)
 
+    def _check_value(self, row: int, col: int) -> bool:
+        if row < 0:
+            row = len(self.matrix) - 1
+
+        if row > len(self.matrix) - 1:
+            row = 0
+
+        if col < 0:
+            col = len(self.matrix[row]) - 1
+
+        if col > len(self.matrix[row]) - 1:
+            col = 0
+
+        return self.matrix[row][col]
+
     def count_neighbors(self, row: int, col: int) -> int:
-        # TODO: Нужно закольцевать доску при проверке соседей
-        field_width = self.COLS
-        field_height = self.ROWS
-
-        count = 0
-
-        if col - 1 >= 0 and self.matrix[row][col - 1]:
-            count += 1
-
-        if row - 1 >= 0 and col - 1 >= 0 and self.matrix[row - 1][col - 1]:
-            count += 1
-
-        if row - 1 >= 0 and self.matrix[row - 1][col]:
-            count += 1
-
-        if row - 1 >= 0 and col + 1 < field_width and self.matrix[row - 1][col + 1]:
-            count += 1
-
-        if col + 1 < field_width and self.matrix[row][col + 1]:
-            count += 1
-
-        if row + 1 < field_height and col + 1 < field_width and self.matrix[row + 1][col + 1]:
-            count += 1
-
-        if row + 1 < field_height and self.matrix[row + 1][col]:
-            count += 1
-
-        if row + 1 < field_height and col - 1 >= 0 and self.matrix[row + 1][col - 1]:
-            count += 1
-
-        return count
+        return sum((
+            self._check_value(row, col - 1),
+            self._check_value(row - 1, col - 1),
+            self._check_value(row - 1, col),
+            self._check_value(row - 1, col + 1),
+            self._check_value(row, col + 1),
+            self._check_value(row + 1, col + 1),
+            self._check_value(row + 1, col),
+            self._check_value(row + 1, col - 1),
+        ))
 
     def do_step(self) -> bool:
         self.generation_number += 1
