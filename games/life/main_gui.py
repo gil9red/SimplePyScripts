@@ -73,7 +73,7 @@ class BoardWidget(QWidget):
 
 
 class MainWindow(QWidget):
-    SPEED_MS = 500
+    SPEED_MS = 50
 
     TITLE = 'Life'
 
