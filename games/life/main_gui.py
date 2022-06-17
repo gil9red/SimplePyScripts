@@ -124,6 +124,7 @@ class MainWindow(QWidget):
         prefix = '[IS PAUSED] ' if is_paused else ''
         self.setWindowTitle(
             f'{prefix}{self.TITLE}. '
+            f'Board: {self.board.ROWS}x{self.board.COLS}. '
             f'Generation: {self.board.generation_number}. '
             f'Living cells: {self.board.count_living_cells}'
         )
