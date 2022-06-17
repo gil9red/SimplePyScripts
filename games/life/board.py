@@ -4,33 +4,35 @@
 __author__ = 'ipetrash'
 
 
+import enum
 import random
 
 from PyQt5.QtCore import QObject, pyqtSignal
 
 
+class StepResultEnum(enum.Enum):
+    OK = enum.auto()
+    NO_CELLS = enum.auto()
+    NO_CHANGE = enum.auto()
+    REPEATS = enum.auto()
+
+
 class Board(QObject):
-    ROWS = 300
-    COLS = 300
+    ROWS = 200
+    COLS = 200
 
     on_update_generation = pyqtSignal(int)
 
     def __init__(self):
         super().__init__()
 
-        # TODO:
+        # TODO: use seed
         self.matrix: list[list[bool]] = [
             [random.randrange(10) == 0 for _ in range(self.COLS)]
-            # TODO:
-            # [False for _ in range(self.COLS)]
             for _ in range(self.ROWS)
         ]
-        # TODO:
-        # x = y = 0
-        # self.matrix[x + 0][y + 0] = True
-        # self.matrix[x + 0][y + 1] = True
-        # self.matrix[x + 1][y + 0] = True
-        # # self.matrix[x + 1][y + 1] = True
+
+        self.matrix_digest_list: list[int] = []
 
         self.__generation_number = 0
 
@@ -74,7 +76,17 @@ class Board(QObject):
             self._check_value(row + 1, col - 1),
         ))
 
-    def do_step(self) -> bool:
+    @classmethod
+    def get_matrix_digest(cls, matrix: list[list[bool]]) -> int:
+        items = []
+        for i, row in enumerate(matrix):
+            for j, cell in enumerate(row):
+                if cell:
+                    items.append(f'{i}x{j}')
+
+        return hash(','.join(items))
+
+    def do_step(self) -> StepResultEnum:
         self.generation_number += 1
 
         new_matrix = [
@@ -92,8 +104,20 @@ class Board(QObject):
                 elif cell and count in (2, 3):
                     new_matrix[i][j] = True
 
-        # TODO: Нужно помнить предыдущие состояния или их слепки
         self.matrix = new_matrix
 
-        # TODO: Возвращать False если состояние не поменялось
-        return self.count_living_cells > 0
+        if self.count_living_cells <= 0:
+            return StepResultEnum.NO_CELLS
+
+        digest = self.get_matrix_digest(self.matrix)
+
+        if self.matrix_digest_list:
+            if self.matrix_digest_list[-1] == digest:
+                return StepResultEnum.NO_CHANGE
+
+            if digest in self.matrix_digest_list:
+                return StepResultEnum.REPEATS
+
+        self.matrix_digest_list.append(digest)
+
+        return StepResultEnum.OK

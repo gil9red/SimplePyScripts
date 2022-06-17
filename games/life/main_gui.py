@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import QPainter, QPaintEvent, QColor
 from PyQt5.QtCore import Qt, QTimer
 
-from board import Board
+from board import Board, StepResultEnum
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
@@ -127,15 +127,27 @@ class MainWindow(QWidget):
 
         self.button_timer.setChecked(self.timer.isActive())
 
-    def abort_game(self):
+    def abort_game(self, reason: str):
         self.timer.stop()
         self._update_states()
-        QMessageBox.information(self, "Информация", "Проигрыш!")
+        QMessageBox.information(self, "Информация", f"Проигрыш! {reason}")
 
     def _on_logic(self):
-        if not self.board.do_step():
-            self.abort_game()
+        result = self.board.do_step()
+        if result == StepResultEnum.OK:
             return
+
+        match result:
+            case StepResultEnum.NO_CELLS:
+                reason = 'Закончили клетки'
+            case StepResultEnum.NO_CHANGE:
+                reason = 'Мир перестал меняться'
+            case StepResultEnum.REPEATS:
+                reason = 'Мир зациклен'
+            case _:
+                raise Exception(f'Неизвестный результат {result}')
+
+        self.abort_game(reason)
 
     def _on_tick(self):
         self._on_logic()
