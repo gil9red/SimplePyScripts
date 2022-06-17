@@ -20,6 +20,9 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
     text = f'{ex_cls.__name__}: {ex}:\n'
     text += ''.join(traceback.format_tb(tb))
 
+    if isinstance(ex, KeyboardInterrupt):
+        sys.exit(0)
+
     print(text)
     QMessageBox.critical(None, 'Error', text)
     sys.exit(1)
