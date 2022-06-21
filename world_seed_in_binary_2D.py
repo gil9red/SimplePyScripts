@@ -37,7 +37,7 @@ def fill_world(world: list[list[int]], seed: str):
 
     for row in range(len(world)):
         for col in range(len(world[0])):
-            world[row][col] = next(bits)
+            world[row][col] = int(next(bits))
 
 
 if __name__ == '__main__':
