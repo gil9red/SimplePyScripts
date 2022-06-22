@@ -8,12 +8,13 @@ import sys
 import traceback
 
 from PyQt5.QtWidgets import (
-    QWidget, QApplication, QMessageBox, QVBoxLayout, QGridLayout, QPushButton, QSpinBox, QLabel, QLineEdit
+    QWidget, QApplication, QMessageBox, QVBoxLayout, QGridLayout, QPushButton, QSpinBox, QLabel, QLineEdit, QStyle
 )
 from PyQt5.QtGui import QPainter, QPaintEvent, QColor
 from PyQt5.QtCore import Qt, QTimer
 
 from board import Board, StepResultEnum
+from world_seed_in_binary_2D import get_random_seed
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
@@ -87,7 +88,9 @@ class MainWindow(QWidget):
         self.timer = QTimer()
         self.timer.timeout.connect(self._on_tick)
         self.timer.setInterval(self.SPEED_MS)
-        self.timer.start()
+
+        self.button_start = QPushButton('Start')
+        self.button_start.clicked.connect(self.start)
 
         self.button_timer = QPushButton('Start/Pause')
         self.button_timer.setCheckable(True)
@@ -98,18 +101,36 @@ class MainWindow(QWidget):
         self.sb_timer_interval.setValue(self.SPEED_MS)
         self.sb_timer_interval.valueChanged.connect(lambda value: self.timer.setInterval(value))
 
-        timer_layout = QGridLayout()
-        timer_layout.addWidget(self.button_timer, 0, 0, 1, 2)
-        timer_layout.addWidget(QLabel('Timer (ms):'), 1, 0)
-        timer_layout.addWidget(self.sb_timer_interval, 1, 1)
+        self.le_seed = QLineEdit(get_random_seed())
+        self.le_seed.returnPressed.connect(self.start)
+        action_rand_seed = self.le_seed.addAction(
+            self.style().standardIcon(QStyle.SP_BrowserReload), QLineEdit.TrailingPosition
+        )
+        action_rand_seed.triggered.connect(self._do_rand_seed)
+
+        grid_layout = QGridLayout()
+        grid_layout.addWidget(self.button_timer, 0, 0, 1, 2)
+        grid_layout.addWidget(QLabel('Timer (ms):'), 1, 0)
+        grid_layout.addWidget(self.sb_timer_interval, 1, 1)
+        grid_layout.addWidget(QLabel('Seed:'), 2, 0)
+        grid_layout.addWidget(self.le_seed, 2, 1)
 
         main_layout = QVBoxLayout()
-        main_layout.addLayout(timer_layout)
+        main_layout.addLayout(grid_layout)
+        main_layout.addWidget(self.button_start)
         main_layout.addWidget(self.board_widget)
 
         self.setLayout(main_layout)
-
         self._update_states()
+
+    def _do_rand_seed(self):
+        self.le_seed.setText(get_random_seed())
+
+    def start(self):
+        self.board.generate(seed=self.le_seed.text())
+
+        self.timer.stop()
+        self.start_pause_timer()
 
     def start_pause_timer(self):
         if self.timer.isActive():
@@ -125,6 +146,7 @@ class MainWindow(QWidget):
         self.setWindowTitle(
             f'{prefix}{self.TITLE}. '
             f'Board: {self.board.ROWS}x{self.board.COLS}. '
+            f'Seed: {self.board.seed}. '
             f'Generation: {self.board.generation_number}. '
             f'Living cells: {self.board.count_living_cells}'
         )
@@ -163,7 +185,7 @@ if __name__ == '__main__':
     app = QApplication([])
 
     mw = MainWindow()
-    mw.resize(1000, 1000)
+    mw.resize(600, 600)
     mw.show()
 
     app.exec()

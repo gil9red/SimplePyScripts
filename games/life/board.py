@@ -5,9 +5,12 @@ __author__ = 'ipetrash'
 
 
 import enum
-import random
+from itertools import cycle
+from typing import Iterator
 
 from PyQt5.QtCore import QObject, pyqtSignal
+
+from world_seed_in_binary_2D import get_bits_seed, get_random_seed
 
 
 class StepResultEnum(enum.Enum):
@@ -18,22 +21,33 @@ class StepResultEnum(enum.Enum):
 
 
 class Board(QObject):
-    ROWS = 200
-    COLS = 200
+    ROWS = 100
+    COLS = 100
 
     on_update_generation = pyqtSignal(int)
 
     def __init__(self):
         super().__init__()
 
-        # TODO: use seed
-        self.matrix: list[list[bool]] = [
-            [random.randrange(10) == 0 for _ in range(self.COLS)]
+        self.seed = ''
+        self.matrix: list[list[bool]] = []
+        self.matrix_digest_list: list[int] = []
+        self.__generation_number = 0
+
+    def generate(self, seed: str = ''):
+        self.seed = seed
+        if not self.seed:
+            self.seed = get_random_seed()
+
+        bits: str = get_bits_seed(self.seed)
+        seqs: Iterator[str] = cycle(bits + bits[::-1])
+
+        self.matrix = [
+            [next(seqs) == '1' for _ in range(self.COLS)]
             for _ in range(self.ROWS)
         ]
 
-        self.matrix_digest_list: list[int] = []
-
+        self.matrix_digest_list.clear()
         self.__generation_number = 0
 
     @property
