@@ -13,8 +13,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import QPainter, QPaintEvent, QColor
 from PyQt5.QtCore import Qt, QTimer
 
-from board import Board, StepResultEnum
-from world_seed_in_binary_2D import get_random_seed
+from board import Board, StepResultEnum, get_random_seed
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):

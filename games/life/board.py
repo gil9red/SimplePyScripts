@@ -6,10 +6,13 @@ __author__ = 'ipetrash'
 
 import enum
 import random
+import string
 
 from PyQt5.QtCore import QObject, pyqtSignal
 
-from world_seed_in_binary_2D import get_random_seed
+
+def get_random_seed(length: int = 8) -> str:
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
 
 class StepResultEnum(enum.Enum):
