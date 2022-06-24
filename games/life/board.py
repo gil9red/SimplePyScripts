@@ -23,13 +23,13 @@ class StepResultEnum(enum.Enum):
 
 
 class Board(QObject):
-    ROWS = 100
-    COLS = 100
-
     on_update_generation = pyqtSignal(int)
 
     def __init__(self):
         super().__init__()
+
+        self.rows = 100
+        self.cols = 100
 
         self.seed = ''
         self.matrix: list[list[bool]] = []
@@ -44,8 +44,8 @@ class Board(QObject):
         random.seed(self.seed)
 
         self.matrix = [
-            [random.randrange(5) == 0 for _ in range(self.COLS)]
-            for _ in range(self.ROWS)
+            [random.randrange(5) == 0 for _ in range(self.cols)]
+            for _ in range(self.rows)
         ]
 
         self.matrix_digest_list.clear()
@@ -105,8 +105,8 @@ class Board(QObject):
         self.generation_number += 1
 
         new_matrix = [
-            [False for _ in range(self.COLS)]
-            for _ in range(self.ROWS)
+            [False for _ in range(self.cols)]
+            for _ in range(self.rows)
         ]
 
         for i, row in enumerate(self.matrix):

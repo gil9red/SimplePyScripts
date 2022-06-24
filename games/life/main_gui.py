@@ -41,7 +41,7 @@ class BoardWidget(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
 
-        self.cell_size = min(self.width(), self.height()) // min(self.board.ROWS, self.board.COLS)
+        self.cell_size = min(self.width(), self.height()) // min(self.board.rows, self.board.cols)
         if self.cell_size < 1:
             self.cell_size = 1
 
@@ -144,7 +144,7 @@ class MainWindow(QWidget):
         prefix = '[IS PAUSED] ' if is_paused else ''
         self.setWindowTitle(
             f'{prefix}{self.TITLE}. '
-            f'Board: {self.board.ROWS}x{self.board.COLS}. '
+            f'Board: {self.board.rows}x{self.board.cols}. '
             f'Seed: {self.board.seed}. '
             f'Generation: {self.board.generation_number}. '
             f'Living cells: {self.board.count_living_cells}'
