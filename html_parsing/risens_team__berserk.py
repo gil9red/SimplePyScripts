@@ -9,12 +9,14 @@ from typing import List
 
 # pip install selenium
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 
 
-def get_chapters() -> List[str]:
-    URL = 'https://risens.team/title/28/berserk-manga/4333'
+URL = 'https://risens.team/title/28/berserk-manga/4333'
 
+
+def get_chapters() -> List[str]:
     options = Options()
     options.add_argument('--headless')
 
@@ -24,10 +26,11 @@ def get_chapters() -> List[str]:
         driver.get(URL)
         print(f'Title: {driver.title!r}')
 
-        time.sleep(5)
+        # Ожидание прогрузки страницы
+        time.sleep(10)
 
-        driver.find_element_by_id('vs2__combobox').click()
-        return [x.text for x in driver.find_elements_by_css_selector('ul#vs2__listbox > li')]
+        driver.find_element(By.ID, 'vs2__combobox').click()
+        return [x.text for x in driver.find_elements(By.CSS_SELECTOR, 'ul#vs2__listbox > li')]
 
     finally:
         driver.quit()
@@ -38,4 +41,4 @@ def get_chapters() -> List[str]:
 if __name__ == '__main__':
     items = get_chapters()
     print(len(items))
-    # 380
+    # 383
