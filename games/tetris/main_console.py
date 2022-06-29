@@ -214,7 +214,8 @@ def demo(screen: Screen, scene: Scene):
                     y=screen.height // 3 - 3
                 ),
             ],
-            duration=-1, name='LOSE'
+            duration=-1,
+            name='LOSE'
         )
     ]
 
