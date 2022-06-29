@@ -34,7 +34,7 @@ PIECE_BY_COLOR = {
 
 
 class BoardWidget(Frame):
-    def __init__(self, board: Board, screen: Screen, y: int, x: int, height: int, width: int):
+    def __init__(self, board: Board, screen: Screen, y: int, x: int, height: int, width: int, next_scene: str):
         self.y = y
         self.x = x
         self.height = height
@@ -54,6 +54,8 @@ class BoardWidget(Frame):
         self.current_piece = self.board.current_piece
         self.is_fail = False
 
+        self.next_scene = next_scene
+
         self.thread = Thread(target=self._run_timer)
         self.thread.start()
 
@@ -67,7 +69,7 @@ class BoardWidget(Frame):
         super().update(frame_no)
 
         if self.is_fail:
-            raise NextScene('LOSE')
+            raise NextScene(self.next_scene)
 
         self.current_piece = self.board.current_piece
 
@@ -200,7 +202,11 @@ def demo(screen: Screen, scene: Scene):
     scenes = [
         Scene(
             [
-                BoardWidget(board, screen, y=0, x=0, width=board.COLS + 2, height=board.ROWS + 2),
+                BoardWidget(
+                    board, screen,
+                    y=0, x=0, width=board.COLS + 2, height=board.ROWS + 2,
+                    next_scene='LOSE'
+                ),
                 NextPieceWidget(board, screen, y=0, x=board.COLS + 2, width=8, height=6),
                 ScoreWidget(board, screen, y=6, x=board.COLS + 2, width=8, height=2),
             ],
