@@ -56,7 +56,7 @@ class BoardWidget(Frame):
 
         self.next_scene = next_scene
 
-        self.thread = Thread(target=self._run_timer)
+        self.thread = Thread(target=self._run_timer, daemon=True)
         self.thread.start()
 
     def _run_timer(self):
