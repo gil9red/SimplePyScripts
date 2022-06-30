@@ -10,13 +10,29 @@ from threading import Thread
 from typing import Callable
 
 from asciimatics.effects import Print
-from asciimatics.renderers import FigletText
+from asciimatics.renderers import FigletText, StaticRenderer
 from asciimatics.screen import Screen
 from asciimatics.scene import Scene
 from asciimatics.widgets import Frame, Layout, Text, Button
 from asciimatics.exceptions import NextScene, ResizeScreenError
 
 from board import Board, StepResultEnum, get_random_seed
+
+
+class MyLateFigletText(StaticRenderer):
+    def __init__(self, rendered_text_func: Callable[[], str], **kwargs):
+        super().__init__()
+
+        self.rendered_text_func = rendered_text_func
+        self.kwargs = kwargs
+
+    @property
+    def rendered_text(self):
+        renderer = FigletText(
+            text=self.rendered_text_func(),
+            **self.kwargs,
+        )
+        return renderer.rendered_text
 
 
 class BoardWidget(Frame):
@@ -53,6 +69,7 @@ class BoardWidget(Frame):
         self.board.cols = self.width - 2
         self.board.generate(seed)
 
+        # TODO: RuntimeError: threads can only be started once
         self.thread.start()
 
     def _run_timer(self):
@@ -180,10 +197,8 @@ def demo(screen: Screen, scene: Scene):
             [
                 Print(
                     screen,
-                    # TODO: Писать reason
-                    # TODO: Не работает
-                    FigletText(f"YOU LOSE!\nResult: {board.last_step_result}", "standard"),
-                    y=screen.height // 3 - 3
+                    MyLateFigletText(lambda: f"YOU LOSE!\nResult: {board.last_step_result.name}", font="standard"),
+                    x=0, y=screen.height // 3 - 3,
                 ),
             ],
             duration=-1,

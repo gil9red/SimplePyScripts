@@ -7,9 +7,10 @@ __author__ = 'ipetrash'
 import sys
 import time
 from threading import Thread
+from typing import Callable
 
 from asciimatics.effects import Print
-from asciimatics.renderers import FigletText
+from asciimatics.renderers import FigletText, StaticRenderer
 from asciimatics.event import Event, KeyboardEvent
 from asciimatics.screen import Screen
 from asciimatics.scene import Scene
@@ -31,6 +32,22 @@ PIECE_BY_COLOR = {
     PieceJ(0, 0).get_color().name(): Screen.COLOUR_MAGENTA,
     PieceT(0, 0).get_color().name(): Screen.COLOUR_WHITE,
 }
+
+
+class MyLateFigletText(StaticRenderer):
+    def __init__(self, rendered_text_func: Callable[[], str], **kwargs):
+        super().__init__()
+
+        self.rendered_text_func = rendered_text_func
+        self.kwargs = kwargs
+
+    @property
+    def rendered_text(self):
+        renderer = FigletText(
+            text=self.rendered_text_func(),
+            **self.kwargs,
+        )
+        return renderer.rendered_text
 
 
 class BoardWidget(Frame):
@@ -216,8 +233,8 @@ def demo(screen: Screen, scene: Scene):
             [
                 Print(
                     screen,
-                    FigletText(f"YOU LOSE!\nScore: {board.score}", "standard"),
-                    y=screen.height // 3 - 3
+                    MyLateFigletText(lambda: f"YOU LOSE!\nScore: {board.score}", font="standard"),
+                    x=0, y=screen.height // 3 - 3,
                 ),
             ],
             duration=-1,
