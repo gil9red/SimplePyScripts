@@ -36,6 +36,8 @@ class Board(QObject):
         self.matrix_digest_list: list[int] = []
         self.__generation_number = 0
 
+        self.last_step_result: StepResultEnum = None
+
     def generate(self, seed: str = ''):
         self.seed = seed
         if not self.seed:
@@ -122,17 +124,21 @@ class Board(QObject):
         self.matrix = new_matrix
 
         if self.count_living_cells <= 0:
-            return StepResultEnum.NO_CELLS
+            self.last_step_result = StepResultEnum.NO_CELLS
+            return self.last_step_result
 
         digest = self.get_matrix_digest(self.matrix)
 
         if self.matrix_digest_list:
             if self.matrix_digest_list[-1] == digest:
-                return StepResultEnum.NO_CHANGE
+                self.last_step_result = StepResultEnum.NO_CHANGE
+                return self.last_step_result
 
             if digest in self.matrix_digest_list:
-                return StepResultEnum.REPEATS
+                self.last_step_result = StepResultEnum.REPEATS
+                return self.last_step_result
 
         self.matrix_digest_list.append(digest)
 
-        return StepResultEnum.OK
+        self.last_step_result = StepResultEnum.OK
+        return self.last_step_result
