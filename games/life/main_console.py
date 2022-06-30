@@ -58,9 +58,7 @@ class BoardWidget(Frame):
     def _run_timer(self):
         while self.board.do_step() == StepResultEnum.OK:
             time.sleep(self.timer_secs)
-            print(self.board.last_step_result)
 
-        print(self.board.last_step_result)
         self.is_fail = True
 
     def update(self, frame_no: int):
