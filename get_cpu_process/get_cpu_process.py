@@ -24,7 +24,7 @@ def get_pid(provided_process_name: str) -> int:
     return "Process not found"
 
 
-def get_process_run_time(provided_process_name: str):
+def get_process_run_time(provided_process_name: str) -> str:
     """
     Takes the name of a process and
     returns the process runtime"""
@@ -38,7 +38,11 @@ def get_process_run_time(provided_process_name: str):
             hours, remainder = divmod(time_elapsed.seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
             if time_elapsed.days != 0:
-                return f"{time_elapsed.days} day/s {hours} hour/s {minutes}minute/s"
+                return (
+                        f"{time_elapsed.days} day/s"
+                        f"{hours} hour/s"
+                        f"{minutes}minute/s"
+                )
             else:
                 return f"{hours} hour/s {minutes} minute/s"
     return "Process not found"
