@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+
+from sys import argv
+from sys import exit
+from get_cpu_process import *
+
+def help():
+    print("")
+    print("Simple CPU related script written by Zac the Wise utilising psutil")
+    print("")
+    print("Basic usage: cpu \"<process-name>\"")
+    print("")
+    print("Example: cpu \"amethyst\"")
+    print("Returns 'running' or 'not running'")
+    print("")
+    print("")
+    print("Advanced usage: cpu <option> <arguement>")
+    print("")
+    print("     --get-pid \"<process-name>\"         returns the process id")
+    print("")
+    print("     --run-time \"<process-name>\">       returns the process running time")
+    print("")
+
+
+try:
+    first_arg = argv[1]
+except IndexError:
+    print("Incorrect usage. Refer to help command cpu --help")
+    exit()
+else:
+    if first_arg == "--help":
+        help()
+        exit()
+    elif first_arg == "--get-pid":
+        # if this errors that means you didn't include the process name
+        second_arg = argv[2]
+        print(get_pid(provided_process_name=second_arg))
+        exit()
+    elif first_arg == "--run-time":
+        # if this errors that means you didn't include the process name
+        second_arg = argv[2]
+        print(get_process_run_time(provided_process_name=second_arg))
+        exit()
+    else:
+        # this means first_arg is the process name with no extra options
+        print(is_running(provided_process_name=first_arg))
+        exit()
