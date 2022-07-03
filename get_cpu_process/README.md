@@ -1,6 +1,6 @@
 # Get CPU Process
 
-Functional utility that returns some basic process related info to the user, using psutil.  
+Functional utility and CLI tool that returns some basic process-related info to the user, using psutil.  
 
 
 ```sh
@@ -18,5 +18,5 @@ Advanced usage: cpu <option> <arguement>
 
      --get-pid "<process-name>"         returns the process id
 
-     --run-time "<process-name>">       returns the process running time
+     --run-time "<process-name>">       returns the process running-time
 ``` 

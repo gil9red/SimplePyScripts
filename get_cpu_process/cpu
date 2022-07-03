@@ -2,7 +2,10 @@
 
 from sys import argv
 from sys import exit
-from get_cpu_process import *
+from get_cpu_process import get_pid
+from get_cpu_process import get_process_run_time
+from get_cpu_process import is_running
+
 
 def help():
     print("")
@@ -18,7 +21,7 @@ def help():
     print("")
     print("     --get-pid \"<process-name>\"         returns the process id")
     print("")
-    print("     --run-time \"<process-name>\">       returns the process running time")
+    print("     --run-time \"<process-name>\">       returns the process running-time")
     print("")
 
 
