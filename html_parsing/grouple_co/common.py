@@ -59,9 +59,9 @@ def do_auth() -> requests.Response:
     return rs
 
 
-def load(url: str) -> requests.Response:
+def load(url: str, **kwargs) -> requests.Response:
     while True:
-        rs = session.get(url)
+        rs = session.get(url, **kwargs)
         rs.raise_for_status()
 
         time.sleep(1)
@@ -88,18 +88,67 @@ def parse_bookmark(el: Tag) -> Bookmark:
     return Bookmark(title=title, url=url, tags=tags)
 
 
-def get_bookmarks(url: str) -> List[Bookmark]:
-    rs = load(url)
-    root = BeautifulSoup(rs.content, 'html.parser')
-
-    return [
-        parse_bookmark(row)
-        for row in root.select('.bookmark-row a.site-element')
-    ]
-
-
 def get_bookmarks_by_status(status: Status) -> List[Bookmark]:
-    return get_bookmarks(f'https://grouple.co/private/bookmarks?status={status.value}')
+    items: list[Bookmark] = []
+
+    limit = 50
+    offset = 0
+
+    while True:
+        data = {
+            "bookmarkSort": "NAME",
+            "query": "",
+            "elementFilter": [],
+            "statusFilter": [
+                status.value
+            ],
+            "limit": limit,
+            "offset": offset
+        }
+        headers = {
+            'Authorization': f'Bearer {session.cookies["gwt"]}',
+            'Referer': 'https://grouple.co/private/bookmarks',
+        }
+        rs = session.post(
+            'https://grouple.co/api/bookmark/list',
+            json=data,
+            headers=headers
+        )
+        rs.raise_for_status()
+
+        result = rs.json()
+        for item in result['list']:
+            title = item['element']['name']
+
+            # Example:
+            #   resume_url = "https://readmanga.io/ohotnik_x_ohotnik__A5327/vol37/39"
+            #   element_url = "/ohotnik_x_ohotnik__A5327"
+            #   url = "https://readmanga.io/ohotnik_x_ohotnik__A5327"
+            resume_url = item['resume']['url']
+            element_url = item['element']['elementUrl']
+            host = resume_url.split(element_url)[0]
+            url = host + element_url
+
+            # Example:
+            #   tags_str = " <span class='mangaSingle'>Сборник</span><span class='mangaEmpty'>Online</span>"
+            #   tags = ['Сборник', 'Online']
+            tags_str = item['element']['tagsString']
+            tags = [
+                el.get_text(strip=True)
+                for el in BeautifulSoup(tags_str, 'html.parser').select('span')
+            ]
+
+            items.append(
+                Bookmark(title=title, url=url, tags=tags)
+            )
+
+        if result['offset'] + result['limit'] >= result['total']:
+            break
+
+        offset += limit
+        time.sleep(2)
+
+    return items
 
 
 def get_plain_all_bookmarks_from_user(user_id: int) -> List[Bookmark]:
@@ -127,6 +176,10 @@ if __name__ == '__main__':
     print(session.cookies)
     print(do_auth())
     print(session.cookies)
+
+    print('\n' + '-' * 50 + '\n')
+
+    print(get_plain_all_bookmarks_from_user(315828))
 
     print('\n' + '-' * 50 + '\n')
 
