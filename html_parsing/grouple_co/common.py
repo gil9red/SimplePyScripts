@@ -144,7 +144,7 @@ def get_bookmarks_by_status(status: Status) -> List[Bookmark]:
             #   tags = ['Сборник', 'Online']
             tags_str = item['element']['tagsString']
             tags = [
-                el.get_text(strip=True)
+                el.get_text(strip=True).lower()
                 for el in BeautifulSoup(tags_str, 'html.parser').select('span')
             ]
 
