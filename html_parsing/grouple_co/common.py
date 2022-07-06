@@ -5,7 +5,10 @@ __author__ = 'ipetrash'
 
 
 import enum
+import json
+import re
 import time
+
 from dataclasses import dataclass, field
 from typing import List, Dict
 
@@ -89,6 +92,18 @@ def parse_bookmark(el: Tag) -> Bookmark:
 
 
 def get_bookmarks_by_status(status: Status) -> List[Bookmark]:
+    url_bookmarks = 'https://grouple.co/private/bookmarks'
+    rs = load(url_bookmarks)
+
+    m = re.search(r'var SITES = (\[.+]);', rs.text)
+    if not m:
+        raise Exception('Не удалось найти "var SITES = "!')
+
+    # Example: var SITES = [{"id":1,"title":"ReadManga","url":"https://readmanga.io"}, ...
+    sites_str = m.group(1)
+    sites = json.loads(sites_str)
+    site_id_by_url = {x['id']: x['url'] for x in sites}
+
     items: list[Bookmark] = []
 
     limit = 50
@@ -107,7 +122,7 @@ def get_bookmarks_by_status(status: Status) -> List[Bookmark]:
         }
         headers = {
             'Authorization': f'Bearer {session.cookies["gwt"]}',
-            'Referer': 'https://grouple.co/private/bookmarks',
+            'Referer': url_bookmarks,
         }
         rs = session.post(
             'https://grouple.co/api/bookmark/list',
@@ -120,14 +135,9 @@ def get_bookmarks_by_status(status: Status) -> List[Bookmark]:
         for item in result['list']:
             title = item['element']['name']
 
-            # Example:
-            #   resume_url = "https://readmanga.io/ohotnik_x_ohotnik__A5327/vol37/39"
-            #   element_url = "/ohotnik_x_ohotnik__A5327"
-            #   url = "https://readmanga.io/ohotnik_x_ohotnik__A5327"
-            resume_url = item['resume']['url']
+            site_id = item['element']['elementId']['siteId']
             element_url = item['element']['elementUrl']
-            host = resume_url.split(element_url)[0]
-            url = host + element_url
+            url = site_id_by_url[site_id] + element_url
 
             # Example:
             #   tags_str = " <span class='mangaSingle'>Сборник</span><span class='mangaEmpty'>Online</span>"
