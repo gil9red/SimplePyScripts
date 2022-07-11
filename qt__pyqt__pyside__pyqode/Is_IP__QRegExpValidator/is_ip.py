@@ -9,7 +9,7 @@ import re
 
 # SOURCE: https://stackoverflow.com/a/23166561/5909792
 IP_RANGE = "(?:[0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])"
-IP_REGEXP = f'^{IP_RANGE}\.{IP_RANGE}\.{IP_RANGE}\.{IP_RANGE}$'
+IP_REGEXP = fr'^{IP_RANGE}\.{IP_RANGE}\.{IP_RANGE}\.{IP_RANGE}$'
 
 
 def is_ip(ip: str) -> bool:
