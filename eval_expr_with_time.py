@@ -31,7 +31,7 @@ def eval_expr_with_time(text: str) -> str:
 
 
 if __name__ == '__main__':
-    text = '08:53:11 + 08:56:12 - 07:15:00'
+    text = '08:53:11 - 07:15:00 + 08:56:12'
 
     print(eval_expr_with_time(text))
     # 10:34:23
