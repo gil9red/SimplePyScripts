@@ -10,6 +10,7 @@ import re
 
 # pip install selenium
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.firefox.options import Options
 from selenium.common.exceptions import MoveTargetOutOfBoundsException
@@ -53,17 +54,17 @@ def print_the_most_profitable_dish(url: str):
         driver.get(url)
 
         # Пролистывание страницы до низа
-        footer_el = driver.find_element_by_css_selector('footer')
+        footer_el = driver.find_element(By.CSS_SELECTOR, 'footer')
         do_page_down(driver, footer_el)
 
-        for i, product_el in enumerate(driver.find_elements_by_css_selector('.product-card'), 1):
-            title = product_el.find_element_by_css_selector('.card-title').text.strip()
+        for i, product_el in enumerate(driver.find_elements(By.CSS_SELECTOR, '.product-card'), 1):
+            title = product_el.find_element(By.CSS_SELECTOR, '.card-title').text.strip()
 
-            price = product_el.find_element_by_css_selector('.price-value').text
+            price = product_el.find_element(By.CSS_SELECTOR, '.price-value').text
             price = int(re.sub(r'\D', '', price))
 
             try:
-                tag_subtitle = product_el.find_element_by_css_selector('.parameters > .param-size').text.strip()
+                tag_subtitle = product_el.find_element(By.CSS_SELECTOR, '.parameters > .param-size').text.strip()
                 weight, metrics = tag_subtitle.split()
 
             except Exception:
@@ -84,17 +85,22 @@ def print_the_most_profitable_dish(url: str):
 
         print('Самые выгодные по количеству грамм за единицу цены:\n')
 
+        # Сортировка по коэффициенту
         items.sort(key=lambda x: x[3], reverse=True)
-        items = [(title, weight, price, f'{rate:.3f}') for title, weight, price, rate in items]
+
+        items = [
+            [title, weight, price, f'{rate:.3f}']
+            for title, weight, price, rate in items
+        ]
 
         columns = ['Название', 'Вес (г.)', 'Цена', 'Коэффициент']
         items.insert(0, columns)
         print(ascii_table(items))
 
         if unknown_metrics_items:
-            print('\nНеудалось обработать:')
+            print('\nНе удалось обработать:')
             for i, item in enumerate(unknown_metrics_items, 1):
-                print('  {}. {}'.format(i, ', '.join(map(str, item))))
+                print(f'  {i}. {", ".join(map(str, item))}')
 
         print('\n')
 
