@@ -10,6 +10,7 @@ from pathlib import Path
 
 # pip install selenium
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 
 
@@ -21,14 +22,17 @@ def do_check(email: str, dir_save_pwned_screenshots: str = None, file_format: st
     options.add_argument('--headless')
 
     driver = webdriver.Firefox(options=options)
+    driver.implicitly_wait(20)
     try:
-        driver.implicitly_wait(20)
-        driver.get(f'{URL}/account/{email}')
-        # print(f'Title: {driver.title!r}')
+        url = f'{URL}/account/{email}'
+        print(f'Load {url}')
+
+        driver.get(url)
+        print(f'Title: {driver.title!r}')
 
         time.sleep(5)
 
-        pwned_website_banner = driver.find_element_by_css_selector('#pwnedWebsiteBanner .pwnTitle')
+        pwned_website_banner = driver.find_element(By.CSS_SELECTOR, '#pwnedWebsiteBanner .pwnTitle')
         if pwned_website_banner.is_displayed():
             result = pwned_website_banner.text
 
@@ -40,7 +44,7 @@ def do_check(email: str, dir_save_pwned_screenshots: str = None, file_format: st
                 driver.save_screenshot(file_name)
 
         else:
-            result = driver.find_element_by_css_selector('#noPwnage .pwnTitle').text
+            result = driver.find_element(By.CSS_SELECTOR, '#noPwnage .pwnTitle').text
 
         result = ' '.join(
             result.strip().replace(' (subscribe to search sensitive breaches)', '').splitlines()
