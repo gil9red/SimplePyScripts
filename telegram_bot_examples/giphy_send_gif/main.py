@@ -7,6 +7,7 @@ __author__ = 'ipetrash'
 import os
 import random
 import sys
+
 from pathlib import Path
 from typing import Optional
 
@@ -30,6 +31,8 @@ GIPHY_API_KEY = os.environ.get('TOKEN_GIPHY') or TOKEN_GIPHY_FILE_NAME.read_text
 
 URL_API = f'https://api.giphy.com/v1/gifs/search?api_key={GIPHY_API_KEY}'
 
+SAMPLE_GIF_FILE_NAME = DIR / 'sample.gif'
+
 
 def get_random_gif_url(query: str) -> Optional[str]:
     rs = requests.get(URL_API, params=dict(q=query))
@@ -48,7 +51,16 @@ log = get_logger(__file__)
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
     update.effective_message.reply_text(
-        'Write something'
+        'Write something or /get_local_file_gif'
+    )
+
+
+@log_func(log)
+def on_get_local_file_gif(update: Update, context: CallbackContext):
+    message = update.effective_message
+    message.reply_document(
+        document=open(SAMPLE_GIF_FILE_NAME, 'rb'),
+        quote=True
     )
 
 
@@ -58,7 +70,10 @@ def on_request(update: Update, context: CallbackContext):
 
     url = get_random_gif_url(message.text)
     if url:
-        message.reply_document(document=url, quote=True)
+        try:
+            message.reply_document(document=url, quote=True)
+        except Exception as e:
+            message.reply_text(text=f'Error {str(e)!r} for url={url}', quote=True)
     else:
         message.reply_text(text='Not found!', quote=True)
 
@@ -66,6 +81,7 @@ def on_request(update: Update, context: CallbackContext):
 def main():
     handlers = [
         CommandHandler('start', on_start),
+        CommandHandler('get_local_file_gif', on_get_local_file_gif),
         MessageHandler(Filters.text, on_request),
     ]
     start_bot(log, handlers)
