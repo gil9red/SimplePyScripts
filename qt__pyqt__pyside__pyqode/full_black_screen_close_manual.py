@@ -18,7 +18,7 @@ class MainWindow(QWidget):
             }
             
             QToolButton {
-                color : white;
+                color: white;
                 background-color: black;
                 border: 1px solid darkgray;
             }
