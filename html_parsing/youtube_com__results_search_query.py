@@ -85,7 +85,7 @@ def raise_if_error(yt_initial_data: dict):
     """
 
     try:
-        for alert in dpath.util.values(yt_initial_data, '**/alertRenderer'):
+        for alert in dpath.util.values(yt_initial_data, 'alerts/*/alertRenderer'):
             if alert['type'] != 'ERROR':
                 continue
 
