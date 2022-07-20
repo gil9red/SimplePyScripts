@@ -47,7 +47,7 @@ def get_driver(headless=False) -> webdriver.Firefox:
     if headless:
         options.add_argument('--headless')
 
-    profile_directory = r'%AppData%\Mozilla\Firefox\Profiles\p75l82q1.for_mail__selenium'
+    profile_directory = r'%AppData%\Mozilla\Firefox\Profiles\fnlm82kd.default-release'
     profile_directory = os.path.expandvars(profile_directory)
 
     driver = webdriver.Firefox(firefox_profile=profile_directory, options=options)
@@ -64,12 +64,16 @@ def open_web_page_water_meter(value_cold: int, value_hot: int) -> Tuple[bool, st
     driver.get(URL)
     log.info(f'Title: {driver.title!r}')
 
-    time.sleep(5)
+    while True:
+        time.sleep(5)
 
-    try:
-        driver.find_element(By.CSS_SELECTOR, '.profile-username')
-    except Exception:
-        raise Exception('Похоже, нужно авторизоваться!')
+        try:
+            driver.find_element(By.CSS_SELECTOR, '.profile-username')
+            break
+        except Exception:
+            # TODO: delete
+            # raise Exception('Похоже, нужно авторизоваться!')
+            print('Похоже, нужно авторизоваться!')
 
     url = 'https://mgn-city.ru/SN/YourIndications'
     driver.get(url)
