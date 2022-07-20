@@ -56,6 +56,7 @@ class MainWindow(QWidget):
         animation2.setEndValue(start_value)
 
         self.animation_group = QSequentialAnimationGroup()
+        self.animation_group.setLoopCount(-1)
         self.animation_group.addAnimation(animation1)
         self.animation_group.addAnimation(animation2)
         self.animation_group.start()
