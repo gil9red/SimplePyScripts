@@ -55,11 +55,11 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.text_edit)
 
-    def append_log(self, text, severity):
+    def append_log(self, text: str, severity: OutputLogger.Severity):
         text = repr(text)
 
         if severity == OutputLogger.Severity.ERROR:
-            text = '<b>{}</b>'.format(text)
+            text = f'<b>{text}</b>'
 
         self.text_edit.append(text)
 
