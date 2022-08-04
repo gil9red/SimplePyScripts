@@ -7,12 +7,11 @@ __author__ = 'ipetrash'
 import sys
 
 from PyQt5.QtWidgets import QMainWindow, QTextEdit, QMenuBar, QApplication
-from PyQt5.QtCore import QObject
-from PyQt5.QtCore import pyqtSignal as Signal
+from PyQt5.QtCore import QObject, pyqtSignal
 
 
 class OutputLogger(QObject):
-    emit_write = Signal(str, int)
+    emit_write = pyqtSignal(str, int)
 
     class Severity:
         DEBUG = 0
