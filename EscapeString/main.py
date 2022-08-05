@@ -38,10 +38,10 @@ sys.excepthook = log_uncaught_exceptions
 class MainWindow(QWidget):
     ESCAPE_RULES = [
         ('"', '"', r'\"', True),
-        ("'", "'", r"\'", True),
+        ("'", "'", r"\'", False),
         (r'\n', "\n", r'\n', True),
-        (r'\t', "\t", r'\t', True),
-        (r'\b', "\b", r'\b', True),
+        (r'\t', "\t", r'\t', False),
+        (r'\b', "\b", r'\b', False),
         (r'\f', "\f", r'\f', False),
         ('\\', "\\", '\\\\', False),
     ]
@@ -168,7 +168,7 @@ class MainWindow(QWidget):
 
             if self.cb_save_multiline.isChecked():
                 lines = []
-                for line in in_text.splitlines():
+                for line in in_text.splitlines(keepends=True):
                     line = self._escape(line)
                     lines.append(f'"{line}"')
 
