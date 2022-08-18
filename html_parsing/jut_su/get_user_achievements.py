@@ -11,12 +11,9 @@ from dataclasses import dataclass
 from typing import List
 from urllib.parse import urljoin
 
-import requests
 from bs4 import BeautifulSoup
 
-
-session = requests.session()
-session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0'
+from common import session
 
 
 @dataclass
@@ -84,16 +81,13 @@ if __name__ == '__main__':
     for item in items:
         print(f'    {item}')
 
-    # Achievements (102):
-    #     Achievement(icon_url='https://jut.su/uploads/achievements/icons/1706.jpg', title='Шпага и пистолет', description='Хол Хорс атакует Польнареффа', date_str='сегодня в 01:48', video_url='https://jut.su/jojo-bizarre-adventure/season-2/episode-10.html')
-    #     Achievement(icon_url='https://jut.su/uploads/achievements/icons/1705.jpg', title='Мачо-ковбой', description='Вы познакомились с Хол Хорсом', date_str='сегодня в 01:42', video_url='https://jut.su/jojo-bizarre-adventure/season-2/episode-10.html')
-    #     Achievement(icon_url='https://jut.su/uploads/achievements/icons/1704.jpg', title='Местные нравы', description='Польнарефф и туалеты', date_str='сегодня в 01:34', video_url='https://jut.su/jojo-bizarre-adventure/season-2/episode-10.html')
-    #     Achievement(icon_url='https://jut.su/uploads/achievements/icons/1703.jpg', title='Любитель вишенок', description='Не пугайся, Джотаро', date_str='сегодня в 01:27', video_url='https://jut.su/jojo-bizarre-adventure/season-2/episode-9.html')
-    #     Achievement(icon_url='https://jut.su/uploads/achievements/icons/1702.jpg', title='Вишенка на торте', description='Rerorerorerorero', date_str='сегодня в 01:11', video_url='https://jut.su/jojo-bizarre-adventure/season-2/episode-9.html')
-    # ...
-    #     Achievement(icon_url='https://jut.su/uploads/achievements/icons/1610.jpg', title='Sono Chi no Sadame', description='Посмотрите 1 опенинг', date_str='2 ноября', video_url='https://jut.su/jojo-bizarre-adventure/season-1/episode-2.html')
-    #     Achievement(icon_url='https://jut.su/uploads/achievements/icons/1609.jpg', title='Загадочный артефакт', description='Что скрывает маска?', date_str='2 ноября', video_url='https://jut.su/jojo-bizarre-adventure/season-1/episode-1.html')
-    #     Achievement(icon_url='https://jut.su/uploads/achievements/icons/1608.jpg', title='Это был я, Дио!', description='Гость Джостаров творит бесчинства', date_str='2 ноября', video_url='https://jut.su/jojo-bizarre-adventure/season-1/episode-1.html')
-    #     Achievement(icon_url='https://jut.su/uploads/achievements/icons/1607.jpg', title='Сага начинается', description='Джонатан встречает Дио', date_str='2 ноября', video_url='https://jut.su/jojo-bizarre-adventure/season-1/episode-1.html')
-    #     Achievement(icon_url='https://jut.su/uploads/achievements/icons/1606.jpg', title='Юноша из низов', description='Вы познакомились с Дио', date_str='2 ноября', video_url='https://jut.su/jojo-bizarre-adventure/season-1/episode-1.html')
-    #     Achievement(icon_url='https://jut.su/uploads/achievements/icons/1605.jpg', title='Благородный ДжоДжо', description='Вы познакомились с Джонатаном', date_str='2 ноября', video_url='https://jut.su/jojo-bizarre-adventure/season-1/episode-1.html')
+    """
+    Achievements (2690):
+        Achievement(icon_url='https://gen.jut.su/uploads/achievements/icons/5699.jpg', title='Сильнее, чем он', description='Нойтора против Ичиго', date_str='сегодня в 14:07', video_url='https://jut.su/bleach/episode-190.html')
+        Achievement(icon_url='https://gen.jut.su/uploads/achievements/icons/5698.jpg', title='Velonica', description='Посмотрите 9 опенинг', date_str='сегодня в 13:54', video_url='https://jut.su/bleach/episode-190.html')
+        Achievement(icon_url='https://gen.jut.su/uploads/achievements/icons/5664.jpg', title='Chu-Bura', description='Посмотрите 8 опенинг', date_str='сегодня в 13:27', video_url='https://jut.su/bleach/episode-168.html')
+        ...
+        Achievement(icon_url='https://gen.jut.su/uploads/achievements/icons/1607.jpg', title='Сага начинается', description='Джонатан встречает Дио', date_str='2 ноября 2019', video_url='https://jut.su/jojo-bizarre-adventure/season-1/episode-1.html')
+        Achievement(icon_url='https://gen.jut.su/uploads/achievements/icons/1606.jpg', title='Юноша из низов', description='Вы познакомились с Дио', date_str='2 ноября 2019', video_url='https://jut.su/jojo-bizarre-adventure/season-1/episode-1.html')
+        Achievement(icon_url='https://gen.jut.su/uploads/achievements/icons/1605.jpg', title='Благородный ДжоДжо', description='Вы познакомились с Джонатаном', date_str='2 ноября 2019', video_url='https://jut.su/jojo-bizarre-adventure/season-1/episode-1.html')
+    """
