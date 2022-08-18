@@ -25,10 +25,15 @@ class Achievement:
     video_url: str
 
 
-def get_achievements(url: str, reversed=False) -> List[Achievement]:
+def get_achievements(
+        url: str,
+        start_page: int = 1,
+        need_total_items: int = None,
+        reversed: bool = False,
+) -> List[Achievement]:
     data = {
         "ajax_load": "yes",
-        "start_from_page": 1,
+        "start_from_page": start_page,
     }
 
     items = []
@@ -62,6 +67,10 @@ def get_achievements(url: str, reversed=False) -> List[Achievement]:
             items.append(
                 Achievement(icon_url, title, description, date_str, video_url)
             )
+
+        if need_total_items and len(items) >= need_total_items:
+            items = items[:need_total_items]
+            break
 
         data["start_from_page"] += 1
 
