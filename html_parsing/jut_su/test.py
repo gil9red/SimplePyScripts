@@ -114,6 +114,7 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
 class SearchTestCase(unittest.TestCase):
     def test_search(self):
         self.assertFalse(search(text='21331231ваываыва'))
+
         self.assertTrue(search(text='bleach'))
 
         text = 'Чёрный'
