@@ -4,13 +4,13 @@
 __author__ = 'ipetrash'
 
 
+import time
 import unittest
 
+import get_possible_achievements
+import get_user_achievements
+
 from search import search
-from get_possible_achievements import parse_this_anime_achievement, parse_this_anime_achievements, get_achievements
-
-
-# TODO: Добавить тесты других скриптов
 
 
 class GetPossibleAchievementsTestCase(unittest.TestCase):
@@ -24,7 +24,7 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
         id: "5703",
         hash: "11560c9068571116"
         """
-        actual = parse_this_anime_achievement(text)
+        actual = get_possible_achievements.parse_this_anime_achievement(text)
         expected = {
             'category': 'events',
             'time_start': '704',
@@ -58,7 +58,7 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
         hash: "dc3acd1d8af21525"
         });
         """
-        actual = parse_this_anime_achievements(text)
+        actual = get_possible_achievements.parse_this_anime_achievements(text)
         expected = [
             {
                 'category': 'events',
@@ -82,7 +82,9 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_get_achievements(self):
-        actual = get_achievements('https://jut.su/bleeach/episode-193.html')
+        actual = get_possible_achievements.get_achievements('https://jut.su/bleeach/episode-193.html')
+        self.assertTrue(actual)
+
         expected = [
             {
                 'category': 'events',
@@ -109,6 +111,61 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
             achievement.pop('hash')
 
         self.assertEqual(actual, expected)
+
+
+class GetUserAchievementsTestCase(unittest.TestCase):
+    def test_get_achievements(self):
+        url = 'https://jut.su/user/gil9red/achievements/'
+
+        get_achievements = get_user_achievements.get_achievements
+
+        items_1_50 = get_achievements(url, need_total_items=50)
+        time.sleep(1)  # Задержка перед следующим запросом
+
+        items_1_1 = get_achievements(url, need_total_items=1)
+        time.sleep(1)
+
+        with self.subTest(msg='Проверка reversed'):
+            expected = get_achievements(url, reversed=False, need_total_items=50)
+            self.assertEqual(items_1_50, expected)
+
+        time.sleep(1)
+
+        with self.subTest(msg='Проверка need_total_items'):
+            self.assertTrue(1, len(items_1_1))
+
+            items_1_51 = get_achievements(url, need_total_items=51)
+            self.assertTrue(51, len(items_1_51))
+
+        time.sleep(1)
+
+        with self.subTest(msg='Проверка start_page=1'):
+            self.assertEqual(
+                items_1_1,
+                get_achievements(url, start_page=1, need_total_items=1),
+            )
+
+        time.sleep(1)
+
+        with self.subTest(msg='Проверка start_page и need_total_items'):
+            self.assertTrue(50, len(items_1_50))
+
+            items_2_50 = get_achievements(url, start_page=2, need_total_items=50)
+            self.assertTrue(50, len(items_2_50))
+
+            time.sleep(1)
+
+            items_1_100 = get_achievements(url, need_total_items=100)
+            self.assertTrue(100, len(items_1_100))
+
+            self.assertEqual(items_1_50 + items_2_50, items_1_100)
+
+        time.sleep(1)
+
+        with self.subTest(msg='Проверка reversed=True'):
+            items_1_50_reversed = get_achievements(url, need_total_items=50, reversed=True)
+            expected = items_1_50_reversed[::-1]
+            self.assertEqual(items_1_50, expected)
 
 
 class SearchTestCase(unittest.TestCase):
