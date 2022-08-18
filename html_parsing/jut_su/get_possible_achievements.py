@@ -183,23 +183,24 @@ if __name__ == '__main__':
         'https://jut.su/bleeach/episode-215.html',
         'https://jut.su/bleeach/episode-216.html',
     ]:
-        print(url)
         achievements = get_achievements(url)
+        print(f'{url} ({len(achievements)}):')
+
         for achievement in achievements:
             print(f'    {achievement}')
 
         print()
     """
-    https://jut.su/bleeach/episode-214.html
+    https://jut.su/bleeach/episode-214.html (2):
         {'category': 'humor', 'time_start': '206', 'title': 'Супергеройское вступление', 'description': 'Вы не то аниме смотрите!', 'icon': 'js_preres_url + "/uploads/achievements/icons/5737.jpg"', 'id': '5737', 'hash': '1378bb852797397a'}
         {'category': 'events', 'time_start': '1303', 'title': 'Чужики руками', 'description': 'Подготовка к битве завершена', 'icon': 'js_preres_url + "/uploads/achievements/icons/5738.jpg"', 'id': '5738', 'hash': '5af18fa5d9a6df67'}
     
-    https://jut.su/bleeach/episode-215.html
+    https://jut.su/bleeach/episode-215.html (3):
         {'category': 'credits', 'time_start': '89', 'title': 'Shojo S', 'description': 'Посмотрите 10 опенинг', 'icon': 'js_preres_url + "/uploads/achievements/icons/5739.jpg"', 'id': '5739', 'hash': '0f2454a59ffe8e5a'}
         {'category': 'events', 'time_start': '576', 'title': 'Командир ходит первым', 'description': 'Ямамото против Айзена', 'icon': 'js_preres_url + "/uploads/achievements/icons/5740.jpg"', 'id': '5740', 'hash': 'f3cb561798275cd0'}
         {'category': 'events', 'time_start': '1303', 'title': 'Монолог о душе', 'description': 'Улькиорра и Орихиме', 'icon': 'js_preres_url + "/uploads/achievements/icons/5741.jpg"', 'id': '5741', 'hash': '877333633f784067'}
     
-    https://jut.su/bleeach/episode-216.html
+    https://jut.su/bleeach/episode-216.html (2):
         {'category': 'events', 'time_start': '468', 'title': 'Наравне?', 'description': 'Новый бой с Улькиоррой', 'icon': 'js_preres_url + "/uploads/achievements/icons/5742.jpg"', 'id': '5742', 'hash': '07ada1f2b8b84316'}
         {'category': 'events', 'time_start': '635', 'title': 'План Бараггана', 'description': 'Вернуть настоящую Каракуру', 'icon': 'js_preres_url + "/uploads/achievements/icons/5743.jpg"', 'id': '5743', 'hash': 'd36c534e102ba3d0'}
     """
