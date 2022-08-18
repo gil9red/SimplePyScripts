@@ -103,7 +103,7 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
             }
         ]
 
-        # Хеш может отличаться, поэтому нужно убрать его
+        # Хеш может отличаться (думаю, от пользователя к пользователю), поэтому нужно убрать его
         for achievement in actual:
             achievement.pop('hash')
 
