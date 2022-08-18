@@ -6,6 +6,7 @@ __author__ = 'ipetrash'
 
 import unittest
 
+from search import search
 from get_possible_achievements import parse_this_anime_achievement, parse_this_anime_achievements, get_achievements
 
 
@@ -108,6 +109,19 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
             achievement.pop('hash')
 
         self.assertEqual(actual, expected)
+
+
+class SearchTestCase(unittest.TestCase):
+    def test_search(self):
+        self.assertFalse(search(text='21331231ваываыва'))
+        self.assertTrue(search(text='bleach'))
+
+        text = 'Чёрный'
+        items = [x.title for x in search(text=text)]
+        self.assertTrue(
+            any(text in title for title in items),
+            f'{text!r} не найден в {items}'
+        )
 
 
 if __name__ == '__main__':
