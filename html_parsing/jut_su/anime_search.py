@@ -4,11 +4,10 @@
 __author__ = 'ipetrash'
 
 
-from typing import List
 from anime import Anime, send_post, parse_anime_list
 
 
-def search(text: str) -> List[Anime]:
+def search(text: str) -> list[Anime]:
     rs = send_post(show_search=text)
     return parse_anime_list(rs)
 
