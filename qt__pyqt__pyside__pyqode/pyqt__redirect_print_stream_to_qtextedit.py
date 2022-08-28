@@ -7,12 +7,11 @@ __author__ = 'ipetrash'
 import sys
 
 from PyQt5.QtWidgets import QMainWindow, QTextEdit, QMenuBar, QApplication
-from PyQt5.QtCore import QObject
-from PyQt5.QtCore import pyqtSignal as Signal
+from PyQt5.QtCore import QObject, pyqtSignal
 
 
 class OutputLogger(QObject):
-    emit_write = Signal(str, int)
+    emit_write = pyqtSignal(str, int)
 
     class Severity:
         DEBUG = 0
@@ -56,11 +55,11 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.text_edit)
 
-    def append_log(self, text, severity):
+    def append_log(self, text: str, severity: OutputLogger.Severity):
         text = repr(text)
 
         if severity == OutputLogger.Severity.ERROR:
-            text = '<b>{}</b>'.format(text)
+            text = f'<b>{text}</b>'
 
         self.text_edit.append(text)
 

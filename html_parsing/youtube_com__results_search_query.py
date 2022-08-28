@@ -85,8 +85,15 @@ def raise_if_error(yt_initial_data: dict):
     """
 
     try:
-        for alert in dpath.util.values(yt_initial_data, '**/alertRenderer'):
-            if alert['type'] != 'ERROR':
+        # NOTE: Старый вариант с dpath.util.values занимал в разы больше времени - на плейлисте с 150 видео
+        #       уходило ~40 секунд, с новым вариантом ~4.5 секунды
+        alerts = yt_initial_data.get('alerts')
+        if not alerts:
+            return
+
+        for alert_obj in alerts:
+            alert = alert_obj.get('alertRenderer')
+            if not alert or alert['type'] != 'ERROR':
                 continue
 
             text = dpath.util.get(alert, 'text/runs/0/text')
