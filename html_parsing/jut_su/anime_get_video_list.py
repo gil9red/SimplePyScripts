@@ -10,7 +10,10 @@ from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 
-from common import session
+try:
+    from .common import session
+except ImportError:
+    from common import session
 
 
 @dataclass
