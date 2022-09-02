@@ -1,50 +1,44 @@
 #!/usr/bin/env python3
-
-from sys import argv
-from sys import exit
-from get_cpu_process import get_pid
-from get_cpu_process import get_process_run_time
-from get_cpu_process import is_running
+# -*- coding: utf-8 -*-
 
 
-def help():
-    print("")
-    print("Simple CPU related script written by Zac the Wise utilising psutil")
-    print("")
-    print("Basic usage: cpu \"<process-name>\"")
-    print("")
-    print("Example: cpu \"amethyst\"")
-    print("Returns 'running' or 'not running'")
-    print("")
-    print("")
-    print("Advanced usage: cpu <option> <arguement>")
-    print("")
-    print("     --get-pid \"<process-name>\"         returns the process id")
-    print("")
-    print("     --run-time \"<process-name>\">       returns the process running-time")
-    print("")
+# SOURCE: https://thispointer.com/python-check-if-a-process-is-running-by-name-and-find-its-process-id-pid/
 
+# pip install psutil
 
-try:
-    first_arg = argv[1]
-except IndexError:
-    print("Incorrect usage. Refer to help command cpu --help")
-    exit()
-else:
-    if first_arg == "--help":
-        help()
-        exit()
-    elif first_arg == "--get-pid":
-        # if this errors that means you didn't include the process name
-        second_arg = argv[2]
-        print(get_pid(provided_process_name=second_arg))
-        exit()
-    elif first_arg == "--run-time":
-        # if this errors that means you didn't include the process name
-        second_arg = argv[2]
-        print(get_process_run_time(provided_process_name=second_arg))
-        exit()
-    else:
-        # this means first_arg is the process name with no extra options
-        print(is_running(provided_process_name=first_arg))
-        exit()
+import sys
+import argparse
+from get_cpu_process import get_pid, get_process_run_time, is_running
+
+parser = argparse.ArgumentParser(
+    description="Simple CPU related script written by Zac the Wise utilising psutil"
+)
+
+# set arguements
+parser.add_argument(
+    "--get-pid", action='store_true',
+    help="returns PID of process name"
+)
+parser.add_argument(
+    "--run-time", action='store_true',
+    help="returns run time of process name"
+)
+parser.add_argument(
+    "process_name",
+    help="when used alone, returns True if process is running"
+)
+
+# parse args
+args = parser.parse_args()
+
+if args.get_pid:
+    print(get_pid(provided_process_name=args.process_name))
+    sys.exit()
+
+if args.run_time:
+    print(get_process_run_time(provided_process_name=args.process_name))
+    sys.exit()
+
+if args.process_name:
+    print(is_running(provided_process_name=args.process_name))
+    sys.exit()

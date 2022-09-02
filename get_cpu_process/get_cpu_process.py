@@ -1,12 +1,17 @@
 import psutil
-# https://thispointer.com/python-check-if-a-process-is-running-by-name-and-find-its-process-id-pid/
+import datetime as DT
+
+# SOURCE: https://thispointer.com/python-check-if-a-process-is-running-by-name-and-find-its-process-id-pid/
+
+# pip install psutil
 
 
 def is_running(provided_process_name: str) -> bool:
     """
     Takes the name of a process and
     returns True if it is running,
-    False if it isn't"""
+    False if it isn't
+    """
     for process in psutil.process_iter():
         if provided_process_name.lower() == process.name().lower():
             return True
@@ -17,7 +22,8 @@ def get_pid(provided_process_name: str) -> int:
     """
     Takes the name of a process and
     returns the process id if it
-    is running"""
+    is running
+    """
     for process in psutil.process_iter():
         if provided_process_name.lower() == process.name().lower():
             return process.pid
@@ -27,22 +33,12 @@ def get_pid(provided_process_name: str) -> int:
 def get_process_run_time(provided_process_name: str) -> str:
     """
     Takes the name of a process and
-    returns the process runtime"""
-    from datetime import datetime
+    returns the process runtime
+    """
     for process in psutil.process_iter():
         if provided_process_name.lower() == process.name().lower():
             epoch_created_time = process.create_time()
-            dt_created_time = datetime.fromtimestamp(epoch_created_time)
-            time_elapsed = datetime.now() - dt_created_time
-            # https://stackoverflow.com/a/10981895
-            hours, remainder = divmod(time_elapsed.seconds, 3600)
-            minutes, seconds = divmod(remainder, 60)
-            if time_elapsed.days != 0:
-                return (
-                        f"{time_elapsed.days} day/s"
-                        f"{hours} hour/s"
-                        f"{minutes}minute/s"
-                )
-            else:
-                return f"{hours} hour/s {minutes} minute/s"
+            dt_created_time = DT.datetime.fromtimestamp(epoch_created_time)
+            time_elapsed = DT.datetime.now() - dt_created_time
+            return str(time_elapsed).rsplit('.')[0]
     return "Process not found"
