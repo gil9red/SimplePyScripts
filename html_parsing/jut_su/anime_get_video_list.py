@@ -10,7 +10,10 @@ from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 
-from common import session
+try:
+    from .common import session
+except ImportError:
+    from common import session
 
 
 @dataclass
@@ -19,7 +22,7 @@ class Video:
     url: str
 
 
-def get_video(url: str) -> dict[str, list[Video]]:
+def get_video_list(url: str) -> dict[str, list[Video]]:
     season_by_video_list = defaultdict(list)
 
     rs = session.get(url)
@@ -61,7 +64,7 @@ if __name__ == '__main__':
         'https://jut.su/overlord/',
     ]:
         print(url)
-        for season, video_list in get_video(url).items():
+        for season, video_list in get_video_list(url).items():
             print(f'"{season}" ({len(video_list)}):')
             for video in video_list:
                 print(f'    {video}')
