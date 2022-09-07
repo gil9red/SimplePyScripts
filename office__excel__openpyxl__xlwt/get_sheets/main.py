@@ -8,8 +8,8 @@ import openpyxl
 
 
 wb = openpyxl.load_workbook('excel.xlsx')
-print(wb.get_sheet_names())  # ['Sheet', 'auto', 'Students', 'Students1']
+print(wb.sheetnames)  # ['Sheet', 'auto', 'Students', 'Students1']
 
-for name in wb.get_sheet_names():
-    ws = wb.get_sheet_by_name(name)
+for name in wb.sheetnames:
+    ws = wb[name]
     print(name, ws)
