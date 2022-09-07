@@ -6,9 +6,10 @@ __author__ = 'ipetrash'
 
 import openpyxl
 
+
 wb = openpyxl.Workbook()
 
-ws = wb.get_active_sheet()
+ws = wb.active
 ws.title = '10'
 ws.sheet_view.zoomScale = 10
 

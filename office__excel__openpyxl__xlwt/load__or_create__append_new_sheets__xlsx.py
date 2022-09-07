@@ -24,8 +24,8 @@ except:
 
     # Удаление листа, создаваемого по умолчанию, при создании документа
     for sheet_name in wb.sheetnames:
-        sheet = wb.get_sheet_by_name(sheet_name)
-        wb.remove_sheet(sheet)
+        sheet = wb[sheet_name]
+        wb.remove(sheet)
 
 # Создание нового листа, названия новых листов будут инкрементироваться: Students, Students1, Students2, и т.п.
 ws = wb.create_sheet('Students')

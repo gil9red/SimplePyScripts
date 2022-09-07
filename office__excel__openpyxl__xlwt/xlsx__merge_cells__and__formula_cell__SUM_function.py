@@ -15,7 +15,7 @@ rows = [
 ]
 
 wb = openpyxl.Workbook()
-ws = wb.get_active_sheet()
+ws = wb.active
 
 for i, value in enumerate(columns, 1):
     ws.cell(row=1, column=i).value = value

@@ -20,8 +20,8 @@ wb = openpyxl.Workbook()
 
 # Remove default sheet
 for sheet_name in wb.sheetnames:
-    sheet = wb.get_sheet_by_name(sheet_name)
-    wb.remove_sheet(sheet)
+    sheet = wb[sheet_name]
+    wb.remove(sheet)
 
 ws = wb.create_sheet('Students')
 

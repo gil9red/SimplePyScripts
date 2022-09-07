@@ -9,7 +9,7 @@ from openpyxl.styles import PatternFill
 
 
 wb = openpyxl.Workbook()
-ws = wb.get_active_sheet()
+ws = wb.active
 
 ws.cell(row=1, column=1).fill = PatternFill(fgColor='FF0000', fill_type="solid")
 ws.cell(row=2, column=1).fill = PatternFill(fgColor='00FF00', fill_type="solid")

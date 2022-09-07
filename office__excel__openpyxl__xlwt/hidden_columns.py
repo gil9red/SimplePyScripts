@@ -12,7 +12,7 @@ import openpyxl
 
 wb = openpyxl.Workbook()
 
-ws = wb.get_active_sheet()
+ws = wb.active
 ws.column_dimensions.group('B', 'D', hidden=True)
 
 wb.save('excel.xlsx')

@@ -12,7 +12,7 @@ from openpyxl.drawing.image import Image
 
 
 wb = openpyxl.Workbook()
-ws = wb.get_active_sheet()
+ws = wb.active
 
 ws['A1'] = 'You should see three logos below'
 

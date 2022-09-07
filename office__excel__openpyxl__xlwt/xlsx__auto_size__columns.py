@@ -5,23 +5,25 @@ __author__ = 'ipetrash'
 
 
 import openpyxl
+from openpyxl.worksheet.worksheet import Worksheet
 
 
-def set_column_size(worksheet):
-    dims = dict()
+def set_column_size(ws: Worksheet):
+    dims: dict[str, int] = dict()
 
-    for row in worksheet.rows:
+    for row in ws.rows:
         for cell in row:
             if not cell.value:
                 continue
 
-            dims[cell.column] = max(dims.get(cell.column, 0), len(str(cell.value)))
+            column = cell.column_letter
+            dims[column] = max(dims.get(column, 0), len(str(cell.value)))
 
     for col, value in dims.items():
-        worksheet.column_dimensions[col].width = value * 1.15  # Append 15%
+        ws.column_dimensions[col].width = value * 1.15  # Append 15%
 
 
-def fill_sheet(ws):
+def fill_sheet(ws: Worksheet):
     columns = ['Language', 'Text']
     rows = [
         ['python', '-' * 10],
@@ -40,13 +42,13 @@ def fill_sheet(ws):
 
 
 wb = openpyxl.Workbook()
-ws = wb.get_active_sheet()
+ws = wb.active
 
 # Sheet 1
 fill_sheet(ws)
 
 # Sheet 2
-ws = wb.create_sheet('auto')
+ws = wb.create_sheet('set_column_size')
 fill_sheet(ws)
 set_column_size(ws)
 

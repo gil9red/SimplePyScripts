@@ -5,9 +5,10 @@ __author__ = 'ipetrash'
 
 
 import openpyxl
+from openpyxl.worksheet.worksheet import Worksheet
 
 
-def set_row_column_size(ws):
+def set_row_column_size(ws: Worksheet):
     # SOURCE: excel__openpyxl__xlwt\excel\xl\worksheets\sheet1.xml
     # <sheetFormatPr defaultColWidth="1.77734375" defaultRowHeight="6.6" customHeight="1" x14ac:dyDescent="0.3"/>
     ws.sheet_format.defaultColWidth = 1.77734375
@@ -16,7 +17,6 @@ def set_row_column_size(ws):
 
 
 wb = openpyxl.Workbook()
-ws = wb.get_active_sheet()
 
 # Sheet 2
 ws = wb.create_sheet()

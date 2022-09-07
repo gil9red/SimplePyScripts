@@ -24,8 +24,8 @@ if __name__ == '__main__':
 
     # Remove default sheet
     for sheet_name in wb.sheetnames:
-        sheet = wb.get_sheet_by_name(sheet_name)
-        wb.remove_sheet(sheet)
+        sheet = wb[sheet_name]
+        wb.remove(sheet)
 
     # Append images
     for file_name in glob.glob('images/*.jpg') + glob.glob('images/*.png'):

@@ -58,7 +58,7 @@ def draw_image(ws, img):
 
 if __name__ == '__main__':
     wb = openpyxl.Workbook()
-    ws = wb.get_active_sheet()
+    ws = wb.active
 
     # Масштаб 10%
     ws.sheet_view.zoomScale = 10
