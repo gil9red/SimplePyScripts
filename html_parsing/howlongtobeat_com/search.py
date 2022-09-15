@@ -31,7 +31,7 @@ class Game:
     duration_all_title: str = field(init=False)
 
     release_world: int
-    profile_platforms: list[str] = field(default_factory=list)
+    profile_platforms: list[str]
 
     def __post_init__(self):
         self.duration_main_title = seconds_to_str(self.duration_main_seconds)
