@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 import time
 import unittest
 
-import get_possible_achievements
+import get_possible_achievements_from_video
 import get_user_achievements
 
 from anime_search import search
@@ -24,11 +24,11 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
         id: "5703",
         hash: "11560c9068571116"
         """
-        actual = get_possible_achievements.parse_raw_anime_achievement(text)
+        actual = get_possible_achievements_from_video.parse_raw_anime_achievement(text)
         expected = {
             'category': 'events',
             'time_start': 704,
-            'time_start_pretty': get_possible_achievements.seconds_to_str(704),
+            'time_start_pretty': get_possible_achievements_from_video.seconds_to_str(704),
             'title': 'Ядовитый бутон',
             'description': 'Высвобождение Заэльаппоро',
             'icon': 'js_preres_url + "/uploads/achievements/icons/5703.jpg"',
@@ -59,12 +59,12 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
         hash: "dc3acd1d8af21525"
         });
         """
-        actual = get_possible_achievements.parse_raw_anime_achievements(text)
+        actual = get_possible_achievements_from_video.parse_raw_anime_achievements(text)
         expected = [
             {
                 'category': 'events',
                 'time_start': 704,
-                'time_start_pretty': get_possible_achievements.seconds_to_str(704),
+                'time_start_pretty': get_possible_achievements_from_video.seconds_to_str(704),
                 'title': 'Ядовитый бутон',
                 'description': 'Высвобождение Заэльаппоро',
                 'icon': 'js_preres_url + "/uploads/achievements/icons/5703.jpg"',
@@ -74,7 +74,7 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
             {
                 'category': 'events',
                 'time_start': 1286,
-                'time_start_pretty': get_possible_achievements.seconds_to_str(1286),
+                'time_start_pretty': get_possible_achievements_from_video.seconds_to_str(1286),
                 'title': 'Не изменилась',
                 'description': 'Нелл не думает сдаваться',
                 'icon': 'js_preres_url + "/uploads/achievements/icons/5704.jpg"',
@@ -85,14 +85,14 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_get_raw_achievements(self):
-        actual = get_possible_achievements.get_raw_achievements('https://jut.su/bleeach/episode-193.html')
+        actual = get_possible_achievements_from_video.get_raw_achievements('https://jut.su/bleeach/episode-193.html')
         self.assertTrue(actual)
 
         expected = [
             {
                 'category': 'events',
                 'time_start': 704,
-                'time_start_pretty': get_possible_achievements.seconds_to_str(704),
+                'time_start_pretty': get_possible_achievements_from_video.seconds_to_str(704),
                 'title': 'Ядовитый бутон',
                 'description': 'Высвобождение Заэльаппоро',
                 'icon': 'js_preres_url + "/uploads/achievements/icons/5703.jpg"',
@@ -102,7 +102,7 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
             {
                 'category': 'events',
                 'time_start': 1286,
-                'time_start_pretty': get_possible_achievements.seconds_to_str(1286),
+                'time_start_pretty': get_possible_achievements_from_video.seconds_to_str(1286),
                 'title': 'Не изменилась',
                 'description': 'Нелл не думает сдаваться',
                 'icon': 'js_preres_url + "/uploads/achievements/icons/5704.jpg"',
