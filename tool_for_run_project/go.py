@@ -212,6 +212,7 @@ SETTINGS = {
             'update':   ('svn update', r'start /b "" TortoiseProc /command:update /path:"{path}"'),
             'log':      ('svn log', r'start /b "" TortoiseProc /command:log /path:"{path}" /findstring:"{find_string}"'),
             'cleanup':  ('svn cleanup', 'start /b "" TortoiseProc /command:cleanup /path:"{path}" /cleanup /nodlg /closeonend:2'),
+            'revert':  ('svn revert', 'start /b "" TortoiseProc /command:revert /path:"{path}"'),
         },
     },
     'tx': {
