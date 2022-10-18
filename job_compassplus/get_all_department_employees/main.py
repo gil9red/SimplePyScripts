@@ -63,7 +63,9 @@ def get_employees(boss_username: str) -> list[Employee]:
 
 
 if __name__ == '__main__':
-    boss_username = r'CP\nvayner'
+    from base64 import b64decode
+    boss_username = b64decode('Q1BcbnZheW5lcg==').decode('utf-8')
+
     employees = get_employees(boss_username)
     print(f'Employees ({len(employees)}):')
     for i, employee in enumerate(employees, 1):
