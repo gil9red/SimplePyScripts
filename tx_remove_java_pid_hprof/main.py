@@ -13,6 +13,8 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Union
 
+DIR = Path(__file__).resolve().parent
+sys.path.append(str(DIR.parent))
 from human_byte_size import sizeof_fmt
 
 
@@ -41,8 +43,6 @@ def get_logger(
 
     return log
 
-
-DIR = Path(__file__).resolve().parent
 
 log = get_logger(
     file=DIR / 'deleted.txt',
