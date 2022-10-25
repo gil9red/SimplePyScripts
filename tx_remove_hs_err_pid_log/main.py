@@ -59,6 +59,8 @@ def run(dirs: list[Union[str, Path]]):
         for file_name in Path(dir_path).glob('*/hs_err_pid*.log'):
             ctime_timestamp = file_name.stat().st_ctime
             ctime = DT.datetime.fromtimestamp(ctime_timestamp)
+            ctime = ctime.replace(microsecond=0)
+
             text = f'{file_name} (date creation: {ctime})'
             print(text)
 
