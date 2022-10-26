@@ -8,7 +8,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 
 
-FILE_NAME_ACL = Path(...)
+FILE_NAME_ACL = Path(r'C:\DEV__TX\trunk_tx\com.tranzaxis\ads\Interfacing.W4\src\aclTJQ2GCOP7NFZPERU23FQA76GXQ.xml')
 
 ITEMS = [
     ...

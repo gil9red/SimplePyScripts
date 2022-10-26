@@ -10,8 +10,8 @@ import re
 from bs4 import BeautifulSoup
 
 
-FILE_NAME_ACL = Path(r'C:\<...>\ads\<...>\src\<...>.xml')
-LICENSE_PATH = "<...>/<...>/<...>/"
+FILE_NAME_ACL = Path(r'C:\DEV__TX\trunk_tx\com.tranzaxis\ads\Interfacing.W4\src\aclTJQ2GCOP7NFZPERU23FQA76GXQ.xml')
+LICENSE_PATH = "com.tranzaxis/Interface/Online/W4/"
 
 TEMPLATE_THIS_PROP = """
     <xsc:Item>
@@ -52,15 +52,6 @@ TEMPLATE = """
               <xsc:Java> = true;
         
     } catch (java.lang.Exception e) {
-        </xsc:Java>
-            </xsc:Item>
-            <xsc:Item>
-              <xsc:IdReference Path="{acl_id} mth7M2ITEYXHBAVRLUEALT3VHXFAQ" Invoke="true">
-                <xsc:Presentation>handleErrorWithCheckLicense</xsc:Presentation>
-              </xsc:IdReference>
-            </xsc:Item>
-            <xsc:Item>
-              <xsc:Java>(e);
         </xsc:Java>
             </xsc:Item>
             {TEMPLATE_THIS_PROP}
