@@ -239,7 +239,7 @@ class MainWindow(QMainWindow):
         row = item.row()
         jira_id = self.table_logged_info.item(row, 2).text()
 
-        url = 'https://jira.compassplus.ru/browse/' + jira_id
+        url = 'https://helpdesk.compassluxe.com/browse/' + jira_id
         webbrowser.open(url)
 
     def _on_tray_activated(self, reason):

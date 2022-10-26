@@ -15,7 +15,7 @@ sys.path.append(str(ROOT_DIR))
 from root_common import session
 
 
-URL = 'https://jira.compassplus.ru/secure/ViewProfile.jspa?name=ipetrash'
+URL = 'https://helpdesk.compassluxe.com/secure/ViewProfile.jspa?name=ipetrash'
 
 
 def get_assigned_open_issues_per_project() -> Dict[str, int]:

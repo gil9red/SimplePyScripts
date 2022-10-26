@@ -9,7 +9,7 @@ from urllib.parse import urlparse
 from datetime import datetime
 
 
-URL = 'https://jira.compassplus.ru/sr/jira.issueviews:searchrequest-xml/24381/SearchRequest-24381.xml?tempMax=1000'
+URL = 'https://helpdesk.compassluxe.com/sr/jira.issueviews:searchrequest-xml/24381/SearchRequest-24381.xml?tempMax=1000'
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0',
 }

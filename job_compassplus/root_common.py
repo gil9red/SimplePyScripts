@@ -30,5 +30,5 @@ session.headers['User-Agent'] = USER_AGENT
 
 if __name__ == '__main__':
     # Check
-    rs = session.get('https://jira.compassplus.ru/pa-reports/')
+    rs = session.get('https://helpdesk.compassluxe.com/pa-reports/')
     print(rs)

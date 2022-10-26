@@ -28,7 +28,7 @@ class NotFoundReport(Exception):
     pass
 
 
-URL = 'https://jira.compassplus.ru/pa-reports/'
+URL = 'https://helpdesk.compassluxe.com/pa-reports/'
 
 
 def clear_hours(hours: str) -> str:

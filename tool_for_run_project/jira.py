@@ -16,7 +16,7 @@ if len(sys.argv) == 1:
 for number in sys.argv[1:]:
     number = number.strip()
 
-    url = 'https://jira.compassplus.ru/browse/' + number
+    url = 'https://helpdesk.compassluxe.com/browse/' + number
     print('Open url:', url)
 
     webbrowser.open(url)
