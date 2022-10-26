@@ -6,7 +6,7 @@
 
 
 import argparse
-from get_cpu_process import get_pid, get_process_run_time, is_running
+from get_cpu_process import get_pid, get_process_run_time, is_running, ProcessNotFound
 
 
 if __name__ == '__main__':
@@ -31,14 +31,18 @@ if __name__ == '__main__':
     # parse args
     args = parser.parse_args()
 
-    if args.get_pid:
-        print(get_pid(provided_process_name=args.process_name))
+    try:
+        if args.get_pid:
+            print(get_pid(provided_process_name=args.process_name))
 
-    elif args.run_time:
-        print(get_process_run_time(provided_process_name=args.process_name))
+        elif args.run_time:
+            print(get_process_run_time(provided_process_name=args.process_name))
 
-    elif args.process_name:
-        print(is_running(provided_process_name=args.process_name))
+        elif args.process_name:
+            print(is_running(provided_process_name=args.process_name))
 
-    else:
-        parser.print_help()
+        else:
+            parser.print_help()
+
+    except ProcessNotFound as e:
+        print(str(e))
