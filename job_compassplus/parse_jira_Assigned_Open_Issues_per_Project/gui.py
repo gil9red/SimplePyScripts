@@ -327,11 +327,10 @@ class MainWindow(QMainWindow):
         chart.setBackgroundRoundness(0)
 
         axisX = QDateTimeAxis()
-        # TODO: Не уверен, что это нужно...
-        # axisX.setRange(
-        #     self._get_datetime(items[0].date, DT.timedelta(weeks=-1)),
-        #     self._get_datetime(items[-1].date, DT.timedelta(weeks=1))
-        # )
+        axisX.setRange(
+            self._get_datetime(items[0].date, DT.timedelta(days=-30)),
+            self._get_datetime(items[-1].date, DT.timedelta(days=30))
+        )
         axisX.setFormat("dd/MM/yyyy")
         axisX.setTitleText('Date')
         chart.addAxis(axisX, Qt.AlignBottom)
