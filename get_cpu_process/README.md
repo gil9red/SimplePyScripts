@@ -4,7 +4,7 @@ Functional utility and CLI tool that returns some basic process-related info to 
 
 
 ```sh
-$ ./cpu --help
+$ ./cpu.py --help
 
 Simple CPU related script written by Zac the Wise utilising psutil
 
