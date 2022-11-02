@@ -49,12 +49,12 @@ def get_owner_by_modules(project_dir: Union[str, Path]) -> dict[str, list[str]]:
     owner_by_modules = defaultdict(list)
 
     for module in root.select('moduleinfo'):
+        layer_url = module.layerurl.text
+        module_id = module.moduleid.text
+
         owner_emails = [el.text for el in module.select('owneremail')]
         for email in owner_emails:
-            layer_url = module.layerurl.text
             layer_name = layer_url_by_name[layer_url]
-
-            module_id = module.moduleid.text
             module_name = layer_module_id_by_name[layer_url, module_id]
 
             owner_by_modules[email].append(
