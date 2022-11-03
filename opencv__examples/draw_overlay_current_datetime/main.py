@@ -45,7 +45,7 @@ def draw_overlay_current_datetime(
 
 
 if __name__ == '__main__':
-    img = cv2.imread('example.jpg')
+    img = cv2.imread('../gaussian_blur/example.jpg')
 
     while True:
         img_overlay = img.copy()
