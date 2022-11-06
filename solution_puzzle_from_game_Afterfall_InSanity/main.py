@@ -63,3 +63,4 @@ INIT_BUTTONS = [Button(value=False), Button(value=True), Button(value=False)]
 
 if __name__ == '__main__':
     run(INIT_BUTTONS)
+    # [2, 0]
