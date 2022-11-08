@@ -1,0 +1,1 @@
+Scripts that I did to solve puzzles in games
