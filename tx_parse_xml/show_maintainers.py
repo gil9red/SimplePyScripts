@@ -50,16 +50,24 @@ def get_owner_by_modules(project_dir: Union[str, Path]) -> dict[str, list[str]]:
 
     for module in root.select('moduleinfo'):
         layer_url = module.layerurl.text
+        layer_name = layer_url_by_name[layer_url]
+
         module_id = module.moduleid.text
+        module_name = layer_module_id_by_name[layer_url, module_id]
+
+        definition_path_id = None
+        if module.definition:
+            definition_path_id = module.definition.get('path')
+
+        if definition_path_id and definition_path_id != module_id:
+            title = f'{layer_name}::{module_name}/{definition_path_id} ({module_id}/{definition_path_id})'
+        else:
+            title = f'{layer_name}::{module_name} ({module_id})'
 
         owner_emails = [el.text for el in module.select('owneremail')]
         for email in owner_emails:
-            layer_name = layer_url_by_name[layer_url]
-            module_name = layer_module_id_by_name[layer_url, module_id]
-
-            owner_by_modules[email].append(
-                f'{layer_name}::{module_name} ({module_id})'
-            )
+            if title not in owner_by_modules[email]:
+                owner_by_modules[email].append(title)
 
     return owner_by_modules
 
