@@ -1,43 +1,41 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-__author__ = 'ipetrash'
-
-
-def bin2str(bin_str: str) -> str:
+def bin2str(bin_str: str, encoding: str = 'utf-8') -> str:
     # Удаление всех символов кроме 0 и 1
     bin_str = ''.join(c for c in bin_str if c in '01')
 
-    length = len(bin_str)
-    if length % 8 != 0:
-        raise Exception('Bad length')
-
-    items = []
-    for i in range(length // 8):
-        end = i * 8 + 8
-
-        b = bin_str[i * 8: end]
-        c = chr(int(b, 2))
-        items.append(c)
-
-    return ''.join(items)
+    h = hex(int(bin_str, 2))[2:]
+    return bytes.fromhex(h).decode(encoding)
 
 
-def str2bin(text: str) -> str:
-    bin_words = [bin(ord(c))[2:].rjust(8, '0') for c in text]
-    return ' '.join(bin_words)
+def str2bin(text: str, sep=' ', encoding: str = 'utf-8') -> str:
+    data: bytes = text.encode(encoding)
+
+    # Example: 'You' -> '10110010110111101110101'
+    bin_str = f'{int(data.hex(), 16):08b}'
+
+    # Example: '10110010110111101110101 -> '01011001 01101111 01110101'
+    bin_str = bin_str[::-1]
+    items = [
+        bin_str[i: i + 8][::-1].zfill(8)
+        for i in range(0, len(bin_str), 8)
+    ]
+    items.reverse()
+
+    return sep.join(items)
 
 
 if __name__ == '__main__':
+    assert str2bin('You') == '01011001 01101111 01110101'
+    assert str2bin(bin2str('01011001 01101111 01110101')) == '01011001 01101111 01110101'
+    assert str2bin(bin2str('010110010110111101110101')) == '01011001 01101111 01110101'
+
     assert bin2str('01011001 01101111 01110101') == 'You'
     assert bin2str('010110010110111101110101') == 'You'
     assert bin2str('01011001-01101111-01110101') == 'You'
     assert bin2str('BIN: 01011001-01101111-01110101') == 'You'
-    assert str2bin(bin2str('01011001 01101111 01110101')) == '01011001 01101111 01110101'
-    assert str2bin(bin2str('010110010110111101110101')) == '01011001 01101111 01110101'
 
-    assert str2bin('You') == '01011001 01101111 01110101'
     assert bin2str(str2bin('You')) == 'You'
+
+    assert bin2str(str2bin('Привет')) == 'Привет'
 
     print('Bin to text:')
     text = (
