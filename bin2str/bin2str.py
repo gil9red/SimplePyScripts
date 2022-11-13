@@ -5,22 +5,22 @@ __author__ = 'ipetrash'
 
 
 def bin2str(bin_str: str) -> str:
-    bin_str = bin_str.replace(' ', '')
-    length = len(bin_str)
+    # Удаление всех символов кроме 0 и 1
+    bin_str = ''.join(c for c in bin_str if c in '01')
 
+    length = len(bin_str)
     if length % 8 != 0:
         raise Exception('Bad length')
 
-    text = ''
-
+    items = []
     for i in range(length // 8):
         end = i * 8 + 8
 
         b = bin_str[i * 8: end]
         c = chr(int(b, 2))
-        text += c
+        items.append(c)
 
-    return text
+    return ''.join(items)
 
 
 def str2bin(text: str) -> str:
@@ -31,6 +31,8 @@ def str2bin(text: str) -> str:
 if __name__ == '__main__':
     assert bin2str('01011001 01101111 01110101') == 'You'
     assert bin2str('010110010110111101110101') == 'You'
+    assert bin2str('01011001-01101111-01110101') == 'You'
+    assert bin2str('BIN: 01011001-01101111-01110101') == 'You'
     assert str2bin(bin2str('01011001 01101111 01110101')) == '01011001 01101111 01110101'
     assert str2bin(bin2str('010110010110111101110101')) == '01011001 01101111 01110101'
 
