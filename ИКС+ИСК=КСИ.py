@@ -31,3 +31,7 @@ for i in range(10):
 
             if iks + isk == ksi:
                 print(f'{iks}+{isk}={ksi}')
+
+"""
+495+459=954
+"""
