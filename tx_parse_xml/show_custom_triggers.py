@@ -9,12 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Union
 
-from lxml import etree
-
-
-NSMAP = dict(
-    dds='http://schemas.radixware.org/ddsdef.xsd',
-)
+import xml.etree.ElementTree as ET
 
 
 @dataclass
@@ -25,10 +20,14 @@ class Trigger:
 
 
 def get_triggers(model_path: Path) -> list[Trigger]:
+    ns = dict(
+        dds='http://schemas.radixware.org/ddsdef.xsd',
+    )
+
     items = []
-    model = etree.parse(str(model_path))
-    for table in model.xpath('//dds:Tables/dds:Table', namespaces=NSMAP):
-        for trigger in table.xpath('dds:Triggers/dds:Trigger', namespaces=NSMAP):
+    model = ET.fromstring(model_path.read_text(encoding='utf-8'))
+    for table in model.findall('.//dds:Tables/dds:Table', namespaces=ns):
+        for trigger in table.findall('./dds:Triggers/dds:Trigger', namespaces=ns):
             if trigger.attrib.get('Type'):  # При True - триггер был создан автоматически радиксом
                 continue
 
