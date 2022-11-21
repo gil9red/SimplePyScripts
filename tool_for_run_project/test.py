@@ -4,7 +4,7 @@
 __author__ = 'ipetrash'
 
 
-from go_v2 import (
+from go import (
     from_ghbdtn, SETTINGS, resolve_name, resolve_whats, resolve_version,
     get_similar_version_path, is_like_a_version
 )
