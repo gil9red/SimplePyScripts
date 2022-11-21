@@ -36,10 +36,18 @@ assert resolve_version('tx', 'trunk') == 'trunk_tx'
 assert resolve_version('еч', 'trunk') == 'trunk_tx'
 assert resolve_version('optt', 'trunk') == 'trunk_optt'
 assert resolve_version('щзе', 'trunk') == 'trunk_optt'
+assert resolve_version('tx', 'екгтл') == 'trunk_tx'
+assert resolve_version('tx', 'ек') == 'trunk_tx'
 
 assert get_similar_version_path('tx', 'trunk')
 assert get_similar_version_path('еч', 'trunk')
 
 assert is_like_a_version('trunk')
+assert is_like_a_version('екгтл')
+assert is_like_a_version('екг')
+assert is_like_a_version('trunk-екгтл')
+assert is_like_a_version('trunk,екгтл')
+assert is_like_a_version('3.2.22-trunk')
+assert is_like_a_version('3.2.22-екгтл')
 assert is_like_a_version('3.2.22')
 assert is_like_a_version('3.2.22.10')

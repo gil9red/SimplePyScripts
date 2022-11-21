@@ -123,14 +123,33 @@ def merge_dicts(source: Dict, destination: Dict) -> Dict:
     return destination
 
 
+def get_similar_value(alias: str, items: Iterable) -> Optional[str]:
+    if alias in items:
+        return alias
+
+    # Ищем похожие ключи по начальной строке
+    keys = [key for key in items if key.startswith(alias)]
+
+    # Нашли одну вариацию - подходит
+    if len(keys) == 1:
+        return keys[0]
+
+
+def has_similar_value(alias: str, items: list) -> bool:
+    return get_similar_value(alias, items) is not None
+
+
 def is_like_a_short_version(value: str) -> bool:
     # Вариант .isdigit() для коротких версий, не 3.2.25, а 25
     return value.isdigit()
 
 
 def is_like_a_version(value: str) -> bool:
+    trunk = 'trunk'
+    trunk_invert = from_ghbdtn(trunk)  # from_ghbdtn('trunk') = 'екгтл'
     return (
-        'trunk' in value
+        trunk in value  # Для файлов
+        or bool(get_similar_value(value, [trunk, trunk_invert]))
         or bool(re.search(r'\d+(\.\d+)+', value))
         or is_like_a_short_version(value)
         or '-' in value  # Example: "23-25" or "23-trunk"
@@ -293,22 +312,6 @@ EXAMPLES:
 )
 
 
-def get_similar_value(alias: str, items: Iterable) -> Optional[str]:
-    if alias in items:
-        return alias
-
-    # Ищем похожие ключи по начальной строке
-    keys = [key for key in items if key.startswith(alias)]
-
-    # Нашли одну вариацию - подходит
-    if len(keys) == 1:
-        return keys[0]
-
-
-def has_similar_value(alias: str, items: list) -> bool:
-    return get_similar_value(alias, items) is not None
-
-
 def all_options_is_prohibited(name: str) -> bool:
     options = get_settings(name)['options']
     return (
@@ -365,6 +368,8 @@ def resolve_version(name: str, alias: str, versions: List[str] = None) -> str:
     if not supported:
         supported = settings['versions']
 
+    shadow_supported = {from_ghbdtn(x): x for x in supported}
+
     # Если короткая версия, нужно ее расширить, добавив основание версии
     if is_like_a_short_version(alias):
         base_version = settings.get('base_version')
@@ -379,7 +384,13 @@ def resolve_version(name: str, alias: str, versions: List[str] = None) -> str:
     # Поиск среди списка
     version = get_similar_value(alias, supported)
     if not version:
-        raise UnknownVersionException(alias, supported)
+        # Попробуем найти среди транслитерованных
+        version = get_similar_value(alias, shadow_supported)
+        if not version:
+            raise UnknownNameException(alias, supported)
+
+        # Если удалось найти
+        version = shadow_supported[version]
 
     return version
 
@@ -494,6 +505,7 @@ def parse_cmd_args(arguments: List[str]) -> List[Command]:
 
             else:
                 version = resolve_version(name, alias)
+                print(version)
                 versions.append(version)
 
         elif options['what'] != AvailabilityEnum.PROHIBITED:
