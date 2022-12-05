@@ -46,10 +46,7 @@ def get_price() -> str:
 
         print(f'Title: "{driver.title}", url: {driver.current_url}')
 
-        css_path = (
-            '[services="services.internet"][account="selectedAccount"] '
-            '[ng-show="services[selectedService].tariffPrice"]'
-        )
+        css_path = '[services="services.internet"][account="selectedAccount"] [ng-show*="tariffPrice"]'
         price_internet_el = wait.until(
             EC.presence_of_element_located((By.CSS_SELECTOR, css_path))
         )
@@ -78,4 +75,4 @@ def get_price() -> str:
 
 if __name__ == '__main__':
     print(get_price())
-    # 425
+    # 300
