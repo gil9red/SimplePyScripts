@@ -9,7 +9,7 @@ sys.path.append('..')
 
 from win_create_shortcut_lnk import create_shortcut
 
-from config import DIR_LNKS, PATH_CONEMU
+from config import DIR_LNKS, PATH_CONEMU, PREFIX_LINK
 from common import PATTERN_FILE_TASK, PATTERN_CONEMU_TASK, fill_string_pattern, get_gist_files
 
 
@@ -23,7 +23,7 @@ for f in get_gist_files():
         continue
 
     name = fill_string_pattern(PATTERN_CONEMU_TASK, m.group(1))
-    file_name_lnk = str(DIR_LNKS / f"ConEmu start task '{name}'.lnk")
+    file_name_lnk = str(DIR_LNKS / f"{PREFIX_LINK} '{name}'.lnk")
     create_shortcut(
         file_name=file_name_lnk,
         target=str(PATH_CONEMU),

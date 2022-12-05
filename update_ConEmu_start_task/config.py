@@ -21,3 +21,5 @@ if not PATH_CONEMU.exists():
     raise FileNotFoundError(PATH_CONEMU)
 
 FILE_NAME_CONEMU_SETTINGS = DIR / 'conemu_settings.xml'
+
+PREFIX_LINK = 'ConEmu start task'
