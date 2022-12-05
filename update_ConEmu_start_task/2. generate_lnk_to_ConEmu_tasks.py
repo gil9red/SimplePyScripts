@@ -9,12 +9,11 @@ sys.path.append('..')
 
 from win_create_shortcut_lnk import create_shortcut
 
-from config import DIR_LNKS, PATH_CONEMU, PREFIX_LINK
+from config import DIR_STARTUP, PATH_CONEMU, PREFIX_LINK
 from common import PATTERN_FILE_TASK, PATTERN_CONEMU_TASK, fill_string_pattern, get_gist_files
 
 
-# Clear directory
-for f in DIR_LNKS.glob('*'):
+for f in DIR_STARTUP.glob(f'{PREFIX_LINK}*.lnk'):
     f.unlink()
 
 for f in get_gist_files():
@@ -23,7 +22,9 @@ for f in get_gist_files():
         continue
 
     name = fill_string_pattern(PATTERN_CONEMU_TASK, m.group(1))
-    file_name_lnk = str(DIR_LNKS / f"{PREFIX_LINK} '{name}'.lnk")
+    file_name_lnk = str(DIR_STARTUP / f"{PREFIX_LINK} '{name}'.lnk")
+    print(f'Saving to "{file_name_lnk}"')
+
     create_shortcut(
         file_name=file_name_lnk,
         target=str(PATH_CONEMU),
