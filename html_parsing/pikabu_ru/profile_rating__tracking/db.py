@@ -5,7 +5,6 @@ __author__ = 'ipetrash'
 
 
 import datetime as DT
-import os
 import shutil
 
 from pathlib import Path
