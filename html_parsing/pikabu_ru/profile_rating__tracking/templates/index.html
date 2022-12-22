@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Pikabu profile rating</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='chart_js_2.9.3/Chart.bundle.min.js') }}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.css') }}">
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row m-2">
+        <div class="col table-responsive">
+            <table id="items" class="table table-hover">
+                <tbody>
+                    <tr>
+                        <th scope="col" class="text-white bg-dark">DATE:</th>
+                        {% for item in items %}
+                        <td class="date" title="{{ item.date.strftime('%d/%m/%Y %H:%M:%S') }}" date_iso="{{ item.date.isoformat() }}">{{ item.date.strftime('%d/%m/%Y') }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <th scope="col" class="text-white bg-dark">VALUE:</th>
+                        {% for item in items %}
+                        <td class="value" title="{{ item.value }}">{{ item.value }}</td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="container">
+                <canvas id="lineChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function fill_chart(row) {
+        let labels = [];
+        let data = [];
+
+        let data_items = $('#items > tbody > tr:nth-of-type(1) > td');
+        let value_items = $('#items > tbody > tr:nth-of-type(2) > td');
+
+        for (let i = 0; i < data_items.length; i++) {
+            let td_data = $(data_items[i]);
+            let td_value = $(value_items[i]);
+
+            let date_iso = td_data.attr('date_iso');
+            let value = parseInt(td_value.attr('title'));
+
+            labels.push(date_iso);
+            data.push({
+                x: date_iso,
+                y: value
+            });
+        }
+
+        var ctx = document.getElementById("lineChart").getContext("2d");
+        var lineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Value',
+                    lineTension: 0,
+                    borderColor: "#3e95cd",
+                    data: data,
+                }],
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        time: {
+                            unit: 'month',
+                            tooltipFormat: 'DD/MM/YYYY HH:mm:ss',
+                            displayFormats: {
+                               day: 'DD/MM'
+                            }
+                        },
+                        distribution: 'linear'
+                    }]
+                }
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        fill_chart();
+    });
+</script>
+</body>
+</html>
