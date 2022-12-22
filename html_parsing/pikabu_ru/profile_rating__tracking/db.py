@@ -17,15 +17,18 @@ from peewee import Model, SqliteDatabase, TextField, DateTimeField, IntegerField
 from shorten import shorten
 
 
+DIR = Path(__file__).resolve().parent
+
 # Absolute file name
-DB_FILE_NAME = str(Path(__file__).resolve().parent / 'db.sqlite')
+DB_FILE_NAME = str(DIR / 'db.sqlite')
+DIR_BACKUP = DIR / 'backup'
 
 
-def db_create_backup(backup_dir='backup'):
-    os.makedirs(backup_dir, exist_ok=True)
+def db_create_backup(backup_dir=DIR_BACKUP):
+    backup_dir.mkdir(parents=True, exist_ok=True)
 
     file_name = str(DT.datetime.today().date()) + '.sqlite'
-    file_name = os.path.join(backup_dir, file_name)
+    file_name = backup_dir / file_name
 
     shutil.copy(DB_FILE_NAME, file_name)
 
