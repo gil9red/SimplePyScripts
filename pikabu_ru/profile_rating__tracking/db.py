@@ -6,6 +6,7 @@ __author__ = 'ipetrash'
 
 import datetime as DT
 import shutil
+import sys
 
 from pathlib import Path
 from typing import Iterable, Type
@@ -13,10 +14,11 @@ from typing import Iterable, Type
 # pip install peewee
 from peewee import Model, SqliteDatabase, TextField, DateTimeField, IntegerField, CharField, ForeignKeyField
 
+DIR = Path(__file__).resolve().parent
+
+sys.path.append(str(DIR.parent.parent))
 from shorten import shorten
 
-
-DIR = Path(__file__).resolve().parent
 
 # Absolute file name
 DB_FILE_NAME = str(DIR / 'db.sqlite')
