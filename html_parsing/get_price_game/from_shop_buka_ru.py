@@ -4,20 +4,26 @@
 __author__ = 'ipetrash'
 
 
-text = 'titan'
-
-post_data = {
-    'search': text,
-}
-
 import requests
-rs = requests.post('http://shop.buka.ru/search', data=post_data)
-
 from bs4 import BeautifulSoup
-root = BeautifulSoup(rs.content, 'lxml')
 
-for game in root.select('.product'):
-    name = game.select_one('.name').text.strip()
-    price = game.select_one('.costs .c2').text.strip()
 
-    print(name, price)
+def search(text: str) -> list[tuple[str, str]]:
+    rs = requests.post('https://shop.buka.ru/search', params=dict(q=text))
+    rs.raise_for_status()
+
+    items = []
+    root = BeautifulSoup(rs.content, 'html.parser')
+    for game in root.select('.product-thumb'):
+        name = game['data-name']
+        price = game['data-price']
+
+        items.append((name, price))
+
+    return items
+
+
+if __name__ == '__main__':
+    text = 'titan'
+    for name, price in search(text):
+        print(name, price)
