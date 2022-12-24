@@ -28,10 +28,10 @@ def get_profile_rating(url: str) -> int:
 
 
 if __name__ == '__main__':
-    url = 'https://pikabu.ru/@user4942077'
+    url = 'https://pikabu.ru/@RytsarSvezhego'
     print(get_profile_rating(url))
-    # 624
+    # 2016
 
     url = 'https://pikabu.ru/@tibidohtel'
     print(get_profile_rating(url))
-    # 104087
+    # 104563

@@ -23,7 +23,7 @@ from get_profile_rating import get_profile_rating
 from db import ProfileRating, db_create_backup
 
 
-URL = 'https://pikabu.ru/@user4942077'
+URL = 'https://pikabu.ru/@RytsarSvezhego'
 
 
 while True:
