@@ -29,7 +29,7 @@ def get_url(page):
 from db import *
 
 import requests
-from requests_ntlm import HttpNtlmAuth
+from requests_ntlm2 import HttpNtlmAuth
 
 
 # # TODO: показывать короткое имя пользователя: ipetrash, ypaliy и т.п.
@@ -37,18 +37,9 @@ from requests_ntlm import HttpNtlmAuth
 # if __name__ == '__main__':
 #     fill_db()
 
-# TODO:
-import os
-if 'QT_API' not in os.environ:
-    # os.environ['QT_API'] = 'pyqt4'
-    os.environ['QT_API'] = 'pyqt5'
-
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
-from qtpy.QtCore import *
-
-# from PyQt4.QtGui import *
-# from PyQt4.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
 
 
 import base64
@@ -425,25 +416,6 @@ start parsing for the collection of employees and populate the database.""")
 
 if __name__ == '__main__':
     app = QApplication([])
-
-
-    # TODO: согласовать с os.environ['QT_API']
-    # def load_PyQt4_plugins():
-    #     """
-    #     Функция загружает Qt плагины.
-    #
-    #     """
-    #
-    #     import PyQt4
-    #     import os
-    #
-    #     qApp = PyQt4.QtGui.QApplication.instance()
-    #
-    #     for plugins_dir in [os.path.join(p, "plugins") for p in PyQt4.__path__]:
-    #         qApp.addLibraryPath(plugins_dir)
-    #
-    #
-    # load_PyQt4_plugins()
 
     mw = MainWindow()
     mw.resize(1000, 750)
