@@ -21,7 +21,7 @@
                     <tr>
                         <th scope="col" class="text-white bg-dark">DATE:</th>
                         {% for item in items %}
-                        <td class="date" title="{{ item.date.strftime('%d/%m/%Y %H:%M:%S') }}" date_iso="{{ item.date.isoformat() }}">{{ item.date.strftime('%d/%m/%Y') }}</td>
+                        <td class="date" title="{{ item.date.strftime('%d/%m/%Y %H:%M:%S') }}" data-date-iso="{{ item.date.isoformat() }}">{{ item.date.strftime('%d/%m/%Y') }}</td>
                         {% endfor %}
                     </tr>
                     <tr>
@@ -55,7 +55,7 @@
             let td_data = $(data_items[i]);
             let td_value = $(value_items[i]);
 
-            let date_iso = td_data.attr('date_iso');
+            let date_iso = td_data.data('date-iso');
             let value = parseInt(td_value.attr('title'));
 
             labels.push(date_iso);
