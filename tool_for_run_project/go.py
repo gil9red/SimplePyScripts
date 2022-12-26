@@ -253,7 +253,7 @@ SETTINGS = {
     },
     'manager': {
         'base': '__simple_base',
-        'path': 'C:/manager_1_2_11_23_8/manager/bin/manager.cmd',
+        'path': 'C:/DEV__RADIX/manager/manager/bin/manager.cmd',
     },
     'doc': {
         'base': '__simple_base',
