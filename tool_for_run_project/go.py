@@ -505,7 +505,6 @@ def parse_cmd_args(arguments: List[str]) -> List[Command]:
 
             else:
                 version = resolve_version(name, alias)
-                print(version)
                 versions.append(version)
 
         elif options['what'] != AvailabilityEnum.PROHIBITED:
