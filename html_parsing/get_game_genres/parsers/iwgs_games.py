@@ -4,35 +4,27 @@
 __author__ = 'ipetrash'
 
 
+from urllib.parse import urljoin
 from base_parser import BaseParser
 
 
-class IwantgamesRu_Parser(BaseParser):
+class IwgsGames_Parser(BaseParser):
     def _parse(self) -> list[str]:
-        url = f'https://iwantgames.ru/?s={self.game_name}'
-        root = self.send_get(url, return_html=True)
+        url = 'https://iwgs.games/'
 
-        for game_block in root.select('.game__content'):
-            title = self.get_norm_text(game_block.h2.a)
+        root = self.send_post(url, data=dict(s=self.game_name), return_html=True)
+        for a in root.select('.games h2 > a'):
+            title = self.get_norm_text(a)
             if not self.is_found_game(title):
                 continue
 
-            # <dt>Жанр:</dt>
-            # <dd>
-            #     <a href="https://iwantgames.ru/rpg/">РПГ</a>,
-            #     <a href="https://iwantgames.ru/horror/">Ужасы</a>,
-            #     <a href="https://iwantgames.ru/action/">Экшен</a>
-            # </dd>
-            #   -> ['РПГ', 'Ужасы', 'Экшен']
-            dt = game_block.find('dt', text='Жанр:')
-            if not dt:
-                continue
+            url_game = urljoin(url, a['href'])
+            self.log_info(f'Load {url_game!r}')
 
-            dd = dt.find_next_sibling('dd')
-            if not dd:
-                continue
+            game_block = self.send_get(url_game, return_html=True)
 
-            genres = [self.get_norm_text(a) for a in dd.find_all('a')]
+            genres_el = game_block.select('.genre > a')
+            genres = [self.get_norm_text(a) for a in genres_el]
 
             # Сойдет первый, совпадающий по имени, вариант
             return genres
@@ -42,7 +34,7 @@ class IwantgamesRu_Parser(BaseParser):
 
 
 def get_game_genres(game_name: str, *args, **kwargs) -> list[str]:
-    return IwantgamesRu_Parser(*args, **kwargs).get_game_genres(game_name)
+    return IwgsGames_Parser(*args, **kwargs).get_game_genres(game_name)
 
 
 if __name__ == '__main__':
