@@ -327,23 +327,24 @@ if __name__ == "__main__":
 
     for parser in parsers:
         parser._need_logs = False
+
         try:
-            print(f"    {parser.get_site_name():<25}: {parser.get_game_genres(game)}")
+            result = parser.get_game_genres(game)
         except Exception as e:
-            print(f"    {parser.get_site_name():<25}: {e}")
+            result = e
+
+        print(f"    {parser.get_site_name():<25}: {result}")
     """
-        ag_ru                    : ['Экшены', 'Шутеры']
-        gamebomb_ru              : ['Шутер', 'Боевик-приключения']
-        gameguru_ru              : ['Шутер', 'Хоррор', 'Экшен']
-        gamer_info_com           : ('Connection aborted.', ConnectionResetError(10054, 'Удаленный хост принудительно разорвал существующее подключение', None, 10054, None))
-        gamespot_com             : []
-        igromania_ru             : ['Хоррор', 'Экшен', 'FPS']
-        iwantgames_ru            : []
-        metacritic_com           : ('Connection aborted.', ConnectionResetError(10054, 'Удаленный хост принудительно разорвал существующее подключение', None, 10054, None))
+        ag_ru                    : ['Шутеры', 'Экшены']
+        gamebomb_ru              : ['Боевик-приключения', 'Шутер']
+        gameguru_ru              : ['Хоррор', 'Шутер', 'Экшен']
+        gamespot_com             : ['3D', 'Action', 'Adventure', 'Survival']
+        igromania_ru             : ['FPS', 'Хоррор', 'Экшен']
+        iwgs_games               : []
         mobygames_com            : ['Action']
-        playground_ru            : []
+        playground_ru            : ['Космос', 'Научная фантастика', 'От третьего лица', 'Ужасы', 'Экшен']
         spong_com                : ['Adventure: Survival Horror']
-        squarefaction_ru         : ['TPS', 'Action', 'Survival Horror']
-        stopgame_ru              : []
+        squarefaction_ru         : ['Action', 'Survival Horror', 'TPS']
+        stopgame_ru              : ['action']
         store_steampowered_com   : []
     """
