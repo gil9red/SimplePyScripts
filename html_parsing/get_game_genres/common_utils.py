@@ -181,13 +181,11 @@ def get_games_list() -> list:
 
     platforms = parse_played_games(content_gist)
 
-    # Пройденные игры
-    finished_game_list = platforms['PC']['FINISHED_GAME']
+    games = []
+    for categories in platforms.values():
+        games += categories['FINISHED_GAME'] + categories['FINISHED_WATCHED']
 
-    # Просмотренные игры
-    finished_watched_game_list = platforms['PC']['FINISHED_WATCHED']
-
-    return sorted(set(finished_game_list + finished_watched_game_list))
+    return sorted(set(games))
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py#L7
