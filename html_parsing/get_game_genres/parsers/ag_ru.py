@@ -61,9 +61,7 @@ def get_game_genres(game_name: str, *args, **kwargs) -> list[str]:
 
 
 if __name__ == '__main__':
-    from common import _common_test, TEST_GAMES
-    TEST_GAMES.clear()
-    TEST_GAMES.append('Resident Evil Outbreak: File #2')
+    from common import _common_test
     _common_test(get_game_genres)
 
     # Search 'Hellgate: London'...
