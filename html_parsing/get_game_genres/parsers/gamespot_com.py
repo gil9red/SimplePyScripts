@@ -27,11 +27,11 @@ class GamespotCom_Parser(BaseParser):
 
             game_block = self.send_get(url_game, return_html=True)
 
-            tag_object_stats = game_block.select_one('#object-stats-wrap')
+            tag_object_stats = game_block.select('.game-module__genres li a')
             if not tag_object_stats:
                 return []
 
-            genres = [self.get_norm_text(a) for a in tag_object_stats.select('a[href]') if '/genre/' in a['href']]
+            genres = [self.get_norm_text(a) for a in tag_object_stats]
 
             # Сойдет первый, совпадающий по имени, вариант
             return genres
