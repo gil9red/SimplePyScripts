@@ -25,7 +25,7 @@ class PlaygroundRu_Parser(BaseParser):
 
             game_block = self.send_get(url_game, return_html=True)
             genres = [
-                x['content'] for x in game_block.select('.genres > [itemprop="genre"]')
+                self.get_norm_text(x).strip(',') for x in game_block.select('.genres > a')
             ]
 
             # Сойдет первый, совпадающий по имени, вариант
