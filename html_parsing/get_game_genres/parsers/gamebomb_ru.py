@@ -8,15 +8,14 @@ from urllib.parse import urljoin
 from base_parser import BaseParser
 
 
-BASE_URL = 'https://gamebomb.ru'
-
-
 class GamebombRu_Parser(BaseParser):
+    base_url = 'https://gamebomb.ru'
+
     def _parse(self) -> list[str]:
         headers = {
             'X-Requested-With': 'XMLHttpRequest',
-            'Origin': BASE_URL,
-            'Referer': f'{BASE_URL}/games',
+            'Origin': self.base_url,
+            'Referer': f'{self.base_url}/games',
             'Accept': 'application/json',
         }
         data = {
@@ -24,7 +23,7 @@ class GamebombRu_Parser(BaseParser):
             'type': '',
         }
 
-        url = f'{BASE_URL}/base/ajaxSearch'
+        url = f'{self.base_url}/base/ajaxSearch'
         rs = self.send_post(url, data=data, headers=headers)
 
         for game_block_preview in rs.json():
