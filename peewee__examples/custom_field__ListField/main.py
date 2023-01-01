@@ -13,7 +13,7 @@ from peewee import *
 
 class ListField(Field):
     def python_value(self, value: str) -> List:
-        return json.loads(value, encoding='utf-8')
+        return json.loads(value)
 
     def db_value(self, value: Optional[Iterable]) -> str:
         if value is not None:
