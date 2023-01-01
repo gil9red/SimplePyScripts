@@ -11,8 +11,13 @@ from base_parser import BaseParser
 class StoreSteampoweredCom_Parser(BaseParser):
     def _parse(self) -> list[str]:
         # category1 = Игры
-        url = f'https://store.steampowered.com/search/?term={self.game_name}&category1=998'
-        root = self.send_get(url, return_html=True)
+        url = 'https://store.steampowered.com/search/'
+        params = dict(
+            term=self.game_name,
+            ndl=1,
+            category1=998
+        )
+        root = self.send_get(url, params=params, return_html=True)
 
         for game_block_preview in root.select('.search_result_row'):
             title = self.get_norm_text(game_block_preview.select_one('.search_name > .title'))
@@ -24,13 +29,8 @@ class StoreSteampoweredCom_Parser(BaseParser):
             self.log_info(f'Load {url_game!r}')
 
             game_block = self.send_get(url_game, return_html=True)
-            # <div class="details_block">
-            #     <b>Title:</b> HELLGATE: London<br>
-            #     <b>Genre:</b>
-            #     <a href="https://store.steampowered.com/genre/Action/?snr=1_5_9__408">Action</a>,
-            #     <a href="https://store.steampowered.com/genre/RPG/?snr=1_5_9__408">RPG</a>
             genres = [
-                self.get_norm_text(a) for a in game_block.select('.details_block > a[href*="/genre/"]')
+                self.get_norm_text(a) for a in game_block.select('.details_block a[href*="/genre/"]')
             ]
 
             # Сойдет первый, совпадающий по имени, вариант
