@@ -33,8 +33,14 @@ class AgRu_Parser(BaseParser):
             'X-API-Client': 'website',
         })
 
-        url = f'https://ag.ru/api/games?page_size=20&search={self.game_name}&page=1&key={key}'
-        rs = self.send_get(url, headers=headers)
+        url = 'https://ag.ru/api/games'
+        params = dict(
+            page_size=20,
+            search=self.game_name,
+            page=1,
+            key=key,
+        )
+        rs = self.send_get(url, params=params, headers=headers)
 
         for item in rs.json()['results']:
             title = item['name']
@@ -55,7 +61,9 @@ def get_game_genres(game_name: str, *args, **kwargs) -> list[str]:
 
 
 if __name__ == '__main__':
-    from common import _common_test
+    from common import _common_test, TEST_GAMES
+    TEST_GAMES.clear()
+    TEST_GAMES.append('Resident Evil Outbreak: File #2')
     _common_test(get_game_genres)
 
     # Search 'Hellgate: London'...
