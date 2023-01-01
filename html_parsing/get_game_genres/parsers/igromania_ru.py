@@ -4,13 +4,11 @@
 __author__ = 'ipetrash'
 
 
-from typing import List
-
 from base_parser import BaseParser
 
 
 class IgromaniaRu_Parser(BaseParser):
-    def _parse(self) -> List[str]:
+    def _parse(self) -> list[str]:
         headers = {
             'X-Requested-With': 'XMLHttpRequest',
         }
@@ -40,7 +38,7 @@ class IgromaniaRu_Parser(BaseParser):
         return []
 
 
-def get_game_genres(game_name: str, *args, **kwargs) -> List[str]:
+def get_game_genres(game_name: str, *args, **kwargs) -> list[str]:
     return IgromaniaRu_Parser(*args, **kwargs).get_game_genres(game_name)
 
 

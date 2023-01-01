@@ -5,7 +5,7 @@ __author__ = 'ipetrash'
 
 
 from abc import ABCMeta, abstractmethod
-from typing import List, Union
+from typing import Union
 from pathlib import Path
 import unicodedata
 
@@ -113,13 +113,13 @@ class BaseParser(metaclass=Singleton):
         return cls._site_name
 
     @abstractmethod
-    def _parse(self) -> List[str]:
+    def _parse(self) -> list[str]:
         pass
 
     def is_found_game(self, game_name: str) -> bool:
         return smart_comparing_names(self.game_name, game_name)
 
-    def get_game_genres(self, game_name: str) -> List[str]:
+    def get_game_genres(self, game_name: str) -> list[str]:
         self.game_name = game_name
         self.log_info(f'Search {game_name!r}...')
 

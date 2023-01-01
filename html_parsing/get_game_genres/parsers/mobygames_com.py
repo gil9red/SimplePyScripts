@@ -5,13 +5,11 @@ __author__ = 'ipetrash'
 
 
 from urllib.parse import urljoin
-from typing import List
-
 from base_parser import BaseParser
 
 
 class MobygamesCom_Parser(BaseParser):
-    def _parse(self) -> List[str]:
+    def _parse(self) -> list[str]:
         url = f'https://www.mobygames.com/search/quick?q={self.game_name}&p=3&search=Go&sFilter=1&sG=on'
         root = self.send_get(url, return_html=True)
 
@@ -39,7 +37,7 @@ class MobygamesCom_Parser(BaseParser):
         return []
 
 
-def get_game_genres(game_name: str, *args, **kwargs) -> List[str]:
+def get_game_genres(game_name: str, *args, **kwargs) -> list[str]:
     return MobygamesCom_Parser(*args, **kwargs).get_game_genres(game_name)
 
 

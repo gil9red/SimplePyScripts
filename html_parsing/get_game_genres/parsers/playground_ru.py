@@ -5,15 +5,13 @@ __author__ = 'ipetrash'
 
 
 from urllib.parse import urljoin
-from typing import List
-
 from base_parser import BaseParser
 
 
 class PlaygroundRu_Parser(BaseParser):
     base_url = 'https://www.playground.ru'
 
-    def _parse(self) -> List[str]:
+    def _parse(self) -> list[str]:
         url = f'{self.base_url}/api/game.search?query={self.game_name}&include_addons=1'
         data = self.send_get(url).json()
 
@@ -37,7 +35,7 @@ class PlaygroundRu_Parser(BaseParser):
         return []
 
 
-def get_game_genres(game_name: str, *args, **kwargs) -> List[str]:
+def get_game_genres(game_name: str, *args, **kwargs) -> list[str]:
     return PlaygroundRu_Parser(*args, **kwargs).get_game_genres(game_name)
 
 

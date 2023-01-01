@@ -4,13 +4,11 @@
 __author__ = 'ipetrash'
 
 
-from typing import List
-
 from base_parser import BaseParser
 
 
 class IwantgamesRu_Parser(BaseParser):
-    def _parse(self) -> List[str]:
+    def _parse(self) -> list[str]:
         url = f'https://iwantgames.ru/?s={self.game_name}'
         root = self.send_get(url, return_html=True)
 
@@ -43,7 +41,7 @@ class IwantgamesRu_Parser(BaseParser):
         return []
 
 
-def get_game_genres(game_name: str, *args, **kwargs) -> List[str]:
+def get_game_genres(game_name: str, *args, **kwargs) -> list[str]:
     return IwantgamesRu_Parser(*args, **kwargs).get_game_genres(game_name)
 
 

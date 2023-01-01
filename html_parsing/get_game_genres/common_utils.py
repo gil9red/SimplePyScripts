@@ -4,18 +4,19 @@
 __author__ = 'ipetrash'
 
 
-from glob import glob
 import importlib.util
-from pathlib import Path
 import sys
 import threading
-from typing import Dict, Callable
+
+from glob import glob
+from pathlib import Path
+from typing import Union
 
 # For import parsers/*
 sys.path.append('parsers')
 
 
-from common import DIR_LOGS
+from common import DIR_LOGS, IGNORE_SITE_NAMES
 
 
 def module_from_file(file_path: str):
@@ -30,19 +31,6 @@ def module_from_file(file_path: str):
     return module
 
 
-def get_funcs_parsers() -> Dict[str, Callable]:
-    data = dict()
-
-    for file_name in glob('parsers/*.py'):
-        module = module_from_file(file_name)
-        if 'get_game_genres' not in dir(module):
-            continue
-
-        data[module.__name__] = module.get_game_genres
-
-    return data
-
-
 def get_parsers() -> list:
     items = []
 
@@ -53,9 +41,9 @@ def get_parsers() -> list:
                 continue
 
             cls = getattr(module, attr)
-            items.append(
-                cls.instance()
-            )
+            parser = cls.instance()
+            if parser.get_site_name() not in IGNORE_SITE_NAMES:
+                items.append(parser)
 
     return items
 
@@ -290,7 +278,7 @@ class AtomicCounter:
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/f0403620f7948306ad9e34a373f2aabc0237fb2a/seconds_to_str.py
-def seconds_to_str(seconds: int) -> str:
+def seconds_to_str(seconds: Union[int, float]) -> str:
     hh, mm = divmod(seconds, 3600)
     mm, ss = divmod(mm, 60)
     return "%02d:%02d:%02d" % (hh, mm, ss)
@@ -337,40 +325,25 @@ if __name__ == "__main__":
     game = 'Dead Space'
     print(f'Search genres for {game!r}:')
 
-    for parser in get_parsers():
+    for parser in parsers:
         parser._need_logs = False
-        print(f"    {parser.get_site_name():<25}: {parser.get_game_genres(game)}")
-
-    # ag_ru                    : ['Экшены', 'Шутеры']
-    # gamebomb_ru              : ['Боевик-приключения', 'Шутер']
-    # gamefaqs_gamespot_com    : ['Action', 'Arcade', 'Shooter', 'Third-Person']
-    # gameguru_ru              : ['Экшен', 'Шутер']
-    # gamer_info_com           : ['ужасы', 'action']
-    # gamespot_com             : ['Action', '3D', 'Shooter', 'Third-Person']
-    # igromania_ru             : ['Боевик от третьего лица', 'Боевик', 'Ужасы']
-    # iwantgames_ru            : []
-    # metacritic_com           : ['Action', 'Shooter', 'Sci-Fi', 'Arcade', 'Third-Person']
-    # mobygames_com            : ['Action']
-    # playground_ru            : ['От третьего лица', 'Экшен', 'Космос', 'Ужасы']
-    # spong_com                : ['Adventure: Survival Horror']
-    # stopgame_ru              : []
-    # store_steampowered_com   : ['Action']
-
-    # print()
-    #
-    # for site, get_game_genres in get_funcs_parsers().items():
-    #     print(f"{site:<25}: {get_game_genres('Dead Space')}")
-    # # ag_ru                    : ['Шутеры', 'Экшены']
-    # # gamebomb_ru              : ['Боевик-приключения', 'Шутер']
-    # # gamefaqs_gamespot_com    : ['Arcade', 'Shooter', 'Action', 'Third-Person']
-    # # gameguru_ru              : ['Экшен', 'Шутер']
-    # # gamer_info_com           : ['ужасы', 'action']
-    # # gamespot_com             : ['3D', 'Shooter', 'Action', 'Third-Person']
-    # # igromania_ru             : ['Боевик', 'Ужасы', 'Боевик от третьего лица']
-    # # iwantgames_ru            : []
-    # # metacritic_com           : ['Arcade', 'Third-Person', 'Sci-Fi', 'Action', 'Shooter']
-    # # mobygames_com            : ['Action']
-    # # playground_ru            : ['Ужасы', 'От третьего лица', 'Космос', 'Экшен']
-    # # spong_com                : ['Adventure: Survival Horror']
-    # # stopgame_ru              : []
-    # # store_steampowered_com   : ['Action']
+        try:
+            print(f"    {parser.get_site_name():<25}: {parser.get_game_genres(game)}")
+        except Exception as e:
+            print(f"    {parser.get_site_name():<25}: {e}")
+    """
+        ag_ru                    : ['Экшены', 'Шутеры']
+        gamebomb_ru              : ['Шутер', 'Боевик-приключения']
+        gameguru_ru              : ['Шутер', 'Хоррор', 'Экшен']
+        gamer_info_com           : ('Connection aborted.', ConnectionResetError(10054, 'Удаленный хост принудительно разорвал существующее подключение', None, 10054, None))
+        gamespot_com             : []
+        igromania_ru             : ['Хоррор', 'Экшен', 'FPS']
+        iwantgames_ru            : []
+        metacritic_com           : ('Connection aborted.', ConnectionResetError(10054, 'Удаленный хост принудительно разорвал существующее подключение', None, 10054, None))
+        mobygames_com            : ['Action']
+        playground_ru            : []
+        spong_com                : ['Adventure: Survival Horror']
+        squarefaction_ru         : ['TPS', 'Action', 'Survival Horror']
+        stopgame_ru              : []
+        store_steampowered_com   : []
+    """

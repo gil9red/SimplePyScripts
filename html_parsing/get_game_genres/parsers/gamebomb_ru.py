@@ -5,17 +5,18 @@ __author__ = 'ipetrash'
 
 
 from urllib.parse import urljoin
-from typing import List
-
 from base_parser import BaseParser
 
 
+BASE_URL = 'https://gamebomb.ru'
+
+
 class GamebombRu_Parser(BaseParser):
-    def _parse(self) -> List[str]:
+    def _parse(self) -> list[str]:
         headers = {
             'X-Requested-With': 'XMLHttpRequest',
-            'Origin': 'http://gamebomb.ru',
-            'Referer': 'http://gamebomb.ru/games',
+            'Origin': BASE_URL,
+            'Referer': f'{BASE_URL}/games',
             'Accept': 'application/json',
         }
         data = {
@@ -23,7 +24,7 @@ class GamebombRu_Parser(BaseParser):
             'type': '',
         }
 
-        url = f'http://gamebomb.ru/base/ajaxSearch'
+        url = f'{BASE_URL}/base/ajaxSearch'
         rs = self.send_post(url, data=data, headers=headers)
 
         for game_block_preview in rs.json():
@@ -38,6 +39,7 @@ class GamebombRu_Parser(BaseParser):
             self.log_info(f'Load {url_game!r}')
 
             game_block = self.send_get(url_game, return_html=True)
+
             # <tr>
             #     <td valign="top">Жанры</td>
             #     <td>
@@ -69,7 +71,7 @@ class GamebombRu_Parser(BaseParser):
         return []
 
 
-def get_game_genres(game_name: str, *args, **kwargs) -> List[str]:
+def get_game_genres(game_name: str, *args, **kwargs) -> list[str]:
     return GamebombRu_Parser(*args, **kwargs).get_game_genres(game_name)
 
 

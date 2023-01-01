@@ -4,13 +4,12 @@
 __author__ = 'ipetrash'
 
 
-from typing import List
 from bs4 import BeautifulSoup
 from base_parser import BaseParser
 
 
 class SquarefactionRu_Parser(BaseParser):
-    def _parse(self) -> List[str]:
+    def _parse(self) -> list[str]:
         url = f'http://squarefaction.ru/main/search/games?q={self.game_name}'
         rs = self.send_get(url)
 
@@ -57,7 +56,7 @@ class SquarefactionRu_Parser(BaseParser):
         return []
 
 
-def get_game_genres(game_name: str, *args, **kwargs) -> List[str]:
+def get_game_genres(game_name: str, *args, **kwargs) -> list[str]:
     return SquarefactionRu_Parser(*args, **kwargs).get_game_genres(game_name)
 
 

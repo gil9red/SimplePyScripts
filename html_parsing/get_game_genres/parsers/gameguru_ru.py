@@ -5,13 +5,11 @@ __author__ = 'ipetrash'
 
 
 import re
-from typing import List
-
 from base_parser import BaseParser
 
 
 class GameguruRu_Parser(BaseParser):
-    def _parse(self) -> List[str]:
+    def _parse(self) -> list[str]:
         url_search = f'https://gameguru.ru/games/?search={self.game_name}'
 
         page = last_page = 1
@@ -47,7 +45,7 @@ class GameguruRu_Parser(BaseParser):
         return []
 
 
-def get_game_genres(game_name: str, *args, **kwargs) -> List[str]:
+def get_game_genres(game_name: str, *args, **kwargs) -> list[str]:
     return GameguruRu_Parser(*args, **kwargs).get_game_genres(game_name)
 
 

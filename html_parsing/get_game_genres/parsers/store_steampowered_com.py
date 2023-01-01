@@ -5,13 +5,11 @@ __author__ = 'ipetrash'
 
 
 from urllib.parse import urljoin
-from typing import List
-
 from base_parser import BaseParser
 
 
 class StoreSteampoweredCom_Parser(BaseParser):
-    def _parse(self) -> List[str]:
+    def _parse(self) -> list[str]:
         # category1 = Игры
         url = f'https://store.steampowered.com/search/?term={self.game_name}&category1=998'
         root = self.send_get(url, return_html=True)
@@ -42,7 +40,7 @@ class StoreSteampoweredCom_Parser(BaseParser):
         return []
 
 
-def get_game_genres(game_name: str, *args, **kwargs) -> List[str]:
+def get_game_genres(game_name: str, *args, **kwargs) -> list[str]:
     return StoreSteampoweredCom_Parser(*args, **kwargs).get_game_genres(game_name)
 
 

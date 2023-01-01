@@ -12,11 +12,9 @@ import sys
 sys.path.append('genre_translate_file')
 import create as create_genre_translate
 
-from db import db_create_backup, Dump, db
+from db import db_create_backup, Dump
 from common_utils import get_parsers, get_games_list, wait, get_logger, AtomicCounter, seconds_to_str, print_parsers
-
-
-IGNORE_SITE_NAMES = ['gamefaqs_gamespot_com']
+from common import IGNORE_SITE_NAMES
 
 # Test
 USE_FAKE_PARSER = False
@@ -113,7 +111,7 @@ def run_parser(parser, games: list, max_num_request=5):
 
 
 if __name__ == "__main__":
-    parsers = [x for x in get_parsers() if x.get_site_name() not in IGNORE_SITE_NAMES]
+    parsers = get_parsers()
     print_parsers(parsers, log=lambda *args, **kwargs: log.info(*args, **kwargs))
 
     while True:

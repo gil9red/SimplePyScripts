@@ -5,13 +5,11 @@ __author__ = 'ipetrash'
 
 
 import re
-from typing import List
-
 from base_parser import BaseParser
 
 
 class AgRu_Parser(BaseParser):
-    def _parse(self) -> List[str]:
+    def _parse(self) -> list[str]:
         headers = {
             'Host': 'ag.ru',
             'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
@@ -52,7 +50,7 @@ class AgRu_Parser(BaseParser):
         return []
 
 
-def get_game_genres(game_name: str, *args, **kwargs) -> List[str]:
+def get_game_genres(game_name: str, *args, **kwargs) -> list[str]:
     return AgRu_Parser(*args, **kwargs).get_game_genres(game_name)
 
 
