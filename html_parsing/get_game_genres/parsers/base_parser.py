@@ -127,6 +127,7 @@ class BaseParser(metaclass=Singleton):
             genres = self._parse()
             genres = [x.strip() for x in genres]
             genres = get_uniques(genres)
+            genres.sort()
 
         except SystemExit as e:
             raise e
