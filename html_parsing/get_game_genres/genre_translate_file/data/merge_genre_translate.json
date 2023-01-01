@@ -1,4 +1,18 @@
 {
-
-
+    "On-Rails": "",
+    "Add-on": "",
+    "Entertainment": "",
+    "Isometric": "Isometric",
+    "Shoot 'Em Up: Sniper": [
+        "Shoot 'em up",
+        "Sniper"
+    ],
+    "Combat Game: Space": [
+        "Wargame",
+        "Space"
+    ],
+    "Паззл": "Puzzle",
+    "Хоррор": "Horror",
+    "Пошаговые": "TBS",
+    "Space": "Space"
 }

@@ -5090,5 +5090,921 @@
     "Вивисектор: зверь внутри": [
         "Action",
         "Shooter"
+    ],
+    "American McGee’s Alice": [
+        "Action-adventure",
+        "Action/RPG",
+        "Platformer",
+        "Puzzle"
+    ],
+    "Heaven Dust 秘馆疑踪": [
+        "Action-adventure",
+        "Action/RPG"
+    ],
+    "Amnesia: Rebirth": [
+        "Action-adventure",
+        "Quest",
+        "Survival horror"
+    ],
+    "BORIS THE ROCKET": [
+        "Adventure",
+        "First-person",
+        "Simulation"
+    ],
+    "Battlefield 3": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "MMO",
+        "MMOFPS",
+        "Shoot 'em up",
+        "Tactic"
+    ],
+    "Battlefield: Bad Company 2": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "Wargame"
+    ],
+    "Braid": [
+        "2D",
+        "Action",
+        "Arcade",
+        "Casual",
+        "Logic",
+        "Platformer",
+        "Puzzle",
+        "Strategy"
+    ],
+    "Horizon Zero Dawn": [
+        "Action-adventure",
+        "Action/RPG"
+    ],
+    "Horizon Zero Dawn: The Frozen Wilds (DLC)": [
+        "Action-adventure",
+        "Action/RPG",
+        "Add-on"
+    ],
+    "Life Is Strange: Before The Storm": [
+        "Action-adventure",
+        "Adventure",
+        "Quest"
+    ],
+    "Life Is Strange: Before The Storm - Farewell (DLC)": [
+        "Adventure",
+        "Quest"
+    ],
+    "Mask of Mists": [
+        "Action-adventure",
+        "Casual",
+        "Puzzle"
+    ],
+    "Metel - Horror Escape": [
+        "Action-adventure",
+        "Survival"
+    ],
+    "Red Faction": [
+        "Action",
+        "FPS",
+        "Sci-fi",
+        "Shoot 'em up",
+        "Wargame"
+    ],
+    "Syndicate": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "Sci-fi",
+        "Shoot 'em up",
+        "Strategy"
+    ],
+    "The Dark Pictures Anthology: Little Hope": [
+        "Action-adventure"
+    ],
+    "3:30 AM at Floater's Cemetery": [
+        "Adventure"
+    ],
+    "A Short Hike": [
+        "Action-adventure",
+        "Logic"
+    ],
+    "Abzû": [],
+    "Accident": [
+        "Arcade",
+        "First-person",
+        "Racing",
+        "Simulation"
+    ],
+    "Afterfall: Insanity": [
+        "Action-adventure",
+        "Action/RPG",
+        "FPS",
+        "Post apocalypse",
+        "Shoot 'em up",
+        "Shooter",
+        "Survival horror",
+        "TPS",
+        "Third-person"
+    ],
+    "Alien Shooter": [
+        "Action/RPG",
+        "Arcade",
+        "Shoot 'em up",
+        "Shooter"
+    ],
+    "Area 51": [
+        "Action/RPG",
+        "Casual",
+        "FPS",
+        "Sci-fi",
+        "Shoot 'em up",
+        "Simulation",
+        "Strategy"
+    ],
+    "Assassin's Creed Chronicles: Russia": [
+        "Action-adventure",
+        "Arcade",
+        "Platform",
+        "Platformer",
+        "Stealth"
+    ],
+    "Battle: Los Angeles": [
+        "Action-adventure",
+        "Arcade",
+        "FPS",
+        "Sci-fi",
+        "Shoot 'em up"
+    ],
+    "Bio Inc. Redemption": [
+        "Simulation",
+        "Strategy"
+    ],
+    "Blade Kitten": [
+        "Action-adventure",
+        "Arcade",
+        "Platform",
+        "Platformer"
+    ],
+    "Blade Kitten: Episode 2": [
+        "Adventure",
+        "DLC"
+    ],
+    "Caligo": [
+        "Adventure",
+        "First-person"
+    ],
+    "Call of Juarez Gunslinger": [
+        "Action-adventure",
+        "Arcade",
+        "FPS",
+        "MMOFPS",
+        "Western"
+    ],
+    "Carto": [
+        "Action-adventure",
+        "Action/RPG",
+        "Casual",
+        "Logic",
+        "Puzzle"
+    ],
+    "CastleStorm": [
+        "Action",
+        "Arcade",
+        "Humor",
+        "Strategy",
+        "Tactic",
+        "Tower Defence",
+        "Tower Defense",
+        "Tower defense"
+    ],
+    "Chaos on Deponia": [
+        "Adventure",
+        "Humor",
+        "Logic",
+        "Quest",
+        "RPG"
+    ],
+    "Crash Bandicoot 4: It’s About Time": [
+        "Action-adventure",
+        "Adventure",
+        "Arcade",
+        "Platform",
+        "Platformer"
+    ],
+    "Crysis Remastered": [
+        "Action-adventure",
+        "Arcade",
+        "FPS"
+    ],
+    "D4: Dark Dreams Don't Die -Season One-": [],
+    "Dead Effect": [
+        "Action-adventure",
+        "Arcade",
+        "FPS"
+    ],
+    "Dead Effect 2": [
+        "Action/RPG",
+        "Arcade",
+        "FPS",
+        "Horror",
+        "Space",
+        "Zombie"
+    ],
+    "DeathSpank: The Baconing": [
+        "Action-adventure",
+        "Action/RPG"
+    ],
+    "Defunct": [
+        "Action-adventure",
+        "Racing",
+        "Third-person"
+    ],
+    "Deponia": [
+        "Adventure",
+        "Point-and-click",
+        "Puzzle",
+        "Quest",
+        "RPG"
+    ],
+    "Deponia Doomsday": [
+        "Adventure",
+        "Humor",
+        "Point-and-click",
+        "Puzzle",
+        "Quest",
+        "Sci-fi"
+    ],
+    "Disciples: Sacred Lands": [
+        "Fantasy",
+        "Strategy",
+        "TBS",
+        "Tactic"
+    ],
+    "Donut County": [
+        "Action-adventure",
+        "Arcade",
+        "Casual",
+        "Logic",
+        "Puzzle",
+        "Quest"
+    ],
+    "EBOLA 2": [
+        "Action-adventure"
+    ],
+    "ELEX": [
+        "Action-adventure",
+        "Action/RPG",
+        "Fantasy",
+        "Post apocalypse",
+        "Sci-fi",
+        "Third-person"
+    ],
+    "Eggs For Bart": [
+        "Action",
+        "Strategy"
+    ],
+    "FOTONICA": [
+        "Action",
+        "Arcade",
+        "Casual",
+        "First-person",
+        "Runner"
+    ],
+    "Far Cry 3": [
+        "Action-adventure",
+        "Arcade",
+        "FPS",
+        "Open-World",
+        "Sandbox"
+    ],
+    "Far Cry 4": [
+        "Action-adventure",
+        "Arcade",
+        "FPS",
+        "Open-World",
+        "Sandbox"
+    ],
+    "Far Cry Primal": [
+        "Action-adventure",
+        "Arcade",
+        "FPS",
+        "Open-World",
+        "Shoot 'em up"
+    ],
+    "Far Cry Primal: Legend of the Mammoth (DLC)": [],
+    "Final Fantasy IX": [
+        "Adventure",
+        "Cardgame",
+        "JRPG",
+        "RPG"
+    ],
+    "Final Fantasy Type-0 HD": [
+        "Action/RPG"
+    ],
+    "Final Fantasy XII: The Zodiac Age": [
+        "JRPG",
+        "RPG"
+    ],
+    "Game of Thrones - A Telltale Games Series": [
+        "Action-adventure",
+        "Fantasy",
+        "Interactive Movie",
+        "Point-and-click"
+    ],
+    "Global Operations": [
+        "Action",
+        "FPS",
+        "Tactic"
+    ],
+    "Goliath": [
+        "Action-adventure",
+        "Action/RPG",
+        "Slasher",
+        "Survival",
+        "Third-person"
+    ],
+    "Goodbye Deponia": [
+        "Adventure",
+        "Humor",
+        "Point-and-click",
+        "Quest",
+        "RPG"
+    ],
+    "Gothic 3": [
+        "Action-adventure",
+        "Action/RPG",
+        "Fantasy"
+    ],
+    "Grand Theft Auto IV": [
+        "Action-adventure",
+        "Open-World",
+        "Racing",
+        "Wargame"
+    ],
+    "Grand Theft Auto IV: Episodes from Liberty City (DLC)": [],
+    "Gris": [
+        "Action-adventure",
+        "Arcade",
+        "Logic",
+        "Platform",
+        "Platformer",
+        "Puzzle"
+    ],
+    "Guacamelee!": [
+        "2D",
+        "Action",
+        "Arcade",
+        "Beat 'em up",
+        "Platform",
+        "Platformer"
+    ],
+    "Guacamelee! 2": [
+        "2D",
+        "Action-adventure",
+        "Arcade",
+        "Platform",
+        "Platformer"
+    ],
+    "Guts and Glory": [
+        "Action",
+        "Casual",
+        "Racing",
+        "Simulation",
+        "Third-person"
+    ],
+    "Halo: Spartan Assault": [
+        "Action-adventure",
+        "Arcade",
+        "FPS",
+        "Shoot 'em up",
+        "Shooter",
+        "Tactic",
+        "Third-person"
+    ],
+    "Hollow Knight": [
+        "Action-adventure",
+        "Arcade",
+        "Platformer"
+    ],
+    "Homefront: The Revolution": [
+        "Action-adventure",
+        "Arcade",
+        "FPS",
+        "Shoot 'em up",
+        "Stealth"
+    ],
+    "Homefront: The Revolution - Aftermath (DLC)": [],
+    "Homefront: The Revolution - Beyond the Walls (DLC)": [],
+    "Homefront: The Revolution - The Voice of Freedom (DLC)": [
+        "Shooter"
+    ],
+    "Hugo Gold": [
+        "Arcade",
+        "Platform"
+    ],
+    "Hunted: The Demon's Forge": [
+        "Action-adventure",
+        "Action/RPG",
+        "Fantasy"
+    ],
+    "Hydrophobia Prophecy": [
+        "Action-adventure",
+        "FPS",
+        "Shooter",
+        "Strategy",
+        "Survival horror",
+        "TPS"
+    ],
+    "Immortal Redneck": [
+        "Action-adventure",
+        "Arcade",
+        "FPS"
+    ],
+    "Infinity Runner": [
+        "Action",
+        "Arcade",
+        "Runner"
+    ],
+    "Inversion": [
+        "Action-adventure",
+        "Arcade",
+        "FPS",
+        "Shoot 'em up",
+        "Shooter",
+        "TPS",
+        "Third-person"
+    ],
+    "JUMP FORCE": [
+        "Action-adventure",
+        "Action/RPG",
+        "Fighting",
+        "TPS"
+    ],
+    "Killing Floor": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "Horror",
+        "Sci-fi",
+        "Shoot 'em up",
+        "Zombie"
+    ],
+    "Killing Floor 2": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "Sci-fi",
+        "Survival horror"
+    ],
+    "L.A. Noire": [
+        "Action-adventure",
+        "Open-World",
+        "Puzzle",
+        "Racing",
+        "TPS",
+        "Third-person"
+    ],
+    "Lightning Returns: Final Fantasy XIII": [
+        "Action/RPG",
+        "Adventure",
+        "RPG"
+    ],
+    "Little Nightmares II": [
+        "Action-adventure",
+        "Platformer"
+    ],
+    "Lords of the Fallen": [
+        "Action/RPG",
+        "Fantasy",
+        "Third-person"
+    ],
+    "Lords of the Fallen: Ancient Labyrinth (DLC)": [
+        "Action/RPG",
+        "DLC"
+    ],
+    "Lucius II: The Prophecy": [
+        "Action-adventure",
+        "Horror",
+        "Sandbox",
+        "Survival horror"
+    ],
+    "MISSING: An Interactive Thriller - Episode One": [
+        "Adventure",
+        "Point-and-click"
+    ],
+    "Minecraft": [
+        "Action-adventure",
+        "Arcade",
+        "Fantasy",
+        "First-person",
+        "Sandbox",
+        "Strategy",
+        "Survival"
+    ],
+    "Mirror's Edge: Catalyst": [
+        "Action-adventure",
+        "FPS",
+        "Platformer"
+    ],
+    "Monsters, Inc. Scream Team": [
+        "Action",
+        "Platformer"
+    ],
+    "Nitro Family": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "Sci-fi",
+        "Shoot 'em up"
+    ],
+    "ObsCure": [
+        "Action-adventure",
+        "Survival horror",
+        "Third-person"
+    ],
+    "Obscure II: The Aftermath": [],
+    "Owlboy": [
+        "Action-adventure",
+        "Arcade",
+        "Platform",
+        "Platformer",
+        "Retro"
+    ],
+    "Penumbra: Black Plague": [
+        "Action-adventure",
+        "FPS",
+        "First-person",
+        "Stealth",
+        "Survival horror"
+    ],
+    "Penumbra: Overture": [
+        "Action-adventure",
+        "FPS",
+        "First-person",
+        "Puzzle",
+        "Stealth",
+        "Survival horror"
+    ],
+    "Penumbra: Requiem": [
+        "Action-adventure",
+        "DLC",
+        "First-person",
+        "Survival horror"
+    ],
+    "Perception": [
+        "Adventure",
+        "First-person",
+        "Horror",
+        "Quest"
+    ],
+    "Pillars of Eternity II: Deadfire": [
+        "RPG"
+    ],
+    "Pillars of Eternity II: Deadfire - Beast of Winter (DLC)": [
+        "DLC"
+    ],
+    "Pillars of Eternity II: Deadfire - Seeker, Slayer, Survivor (DLC)": [
+        "DLC"
+    ],
+    "Pillars of Eternity II: Deadfire - The Forgotten Sanctum (DLC)": [
+        "DLC",
+        "RPG"
+    ],
+    "Red Faction II": [
+        "Action",
+        "FPS",
+        "Robot War",
+        "Sci-fi",
+        "Strategy"
+    ],
+    "Red Faction: Armageddon": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "Robot War",
+        "Sci-fi",
+        "Shoot 'em up",
+        "Shooter",
+        "Third-person"
+    ],
+    "Red Faction: Guerrilla": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "Racing",
+        "Robot War",
+        "Sci-fi",
+        "Shooter",
+        "TPS",
+        "Third-person"
+    ],
+    "Remember Me": [
+        "Action-adventure",
+        "Cyberpunk",
+        "Platformer",
+        "Sci-fi",
+        "Third-person"
+    ],
+    "Republique Remastered": [
+        "Action-adventure",
+        "Adventure",
+        "Cyberpunk",
+        "Stealth",
+        "TPS"
+    ],
+    "Resident Evil 8: Village": [],
+    "RiME": [
+        "Action-adventure",
+        "Arcade",
+        "Platform",
+        "Platformer",
+        "Puzzle",
+        "Quest",
+        "Third-person"
+    ],
+    "Rocket League": [
+        "Action",
+        "Arcade",
+        "Racing",
+        "Sport"
+    ],
+    "Sacred 2: Fallen Angel (Ice & Blood)": [],
+    "Scooby Horror: Remastered!": [
+        "Adventure"
+    ],
+    "Scooby-Doo! Jinx at the Sphinx": [
+        "Adventure",
+        "Logic",
+        "Puzzle",
+        "Quest"
+    ],
+    "Scooby-Doo! Phantom of the Knight": [
+        "Adventure"
+    ],
+    "Scooby-Doo! Showdown in Ghost Town": [
+        "Adventure",
+        "Logic",
+        "Point-and-click",
+        "Puzzle"
+    ],
+    "Serious Sam's Bogus Detour": [
+        "Action-adventure",
+        "Retro",
+        "Shoot 'em up",
+        "Shooter"
+    ],
+    "Shadow Warrior 2": [
+        "Action-adventure",
+        "Arcade",
+        "FPS"
+    ],
+    "Sherlock Holmes versus Jack the Ripper": [
+        "Adventure",
+        "RPG"
+    ],
+    "Shovel Knight: Plague of Shadows": [
+        "2D",
+        "Action",
+        "Add-on",
+        "Arcade",
+        "Platform",
+        "Platformer"
+    ],
+    "Skyhill": [
+        "Action-adventure",
+        "Action/RPG",
+        "Casual",
+        "Platformer",
+        "Roguelike",
+        "Simulation",
+        "Survival horror"
+    ],
+    "Stories Untold": [
+        "Adventure",
+        "Horror",
+        "Logic",
+        "Puzzle",
+        "Quest",
+        "Simulation"
+    ],
+    "Styx: Shards of Darkness": [
+        "Action-adventure",
+        "Stealth",
+        "Third-person"
+    ],
+    "Syberia": [
+        "Adventure",
+        "Casual",
+        "Quest",
+        "Third-person"
+    ],
+    "Syberia 2": [
+        "Action-adventure",
+        "Puzzle",
+        "Quest",
+        "TPS",
+        "Third-person"
+    ],
+    "Syberia 3": [
+        "Adventure",
+        "Quest",
+        "Third-person"
+    ],
+    "Syberia 3 - An Automaton with a plan (DLC)": [
+        "Add-on",
+        "Adventure",
+        "DLC",
+        "Quest"
+    ],
+    "Tacoma": [
+        "Adventure",
+        "FPS",
+        "First-person",
+        "Quest",
+        "Simulation",
+        "Space"
+    ],
+    "Tales of Vesperia": [
+        "Action/RPG",
+        "JRPG",
+        "Third-person"
+    ],
+    "Teenage Mutant Ninja Turtles: Mutants in Manhattan": [
+        "Action",
+        "Arcade",
+        "Beat 'em up",
+        "Third-person"
+    ],
+    "Terraria": [
+        "2D",
+        "Action-adventure",
+        "Action/RPG",
+        "Arcade",
+        "Open-World",
+        "Platform",
+        "Platformer",
+        "Sandbox",
+        "Strategy"
+    ],
+    "The Chronicles of Riddick: Assault on Dark Athena": [
+        "Action-adventure",
+        "Arcade",
+        "FPS",
+        "Sci-fi",
+        "Stealth"
+    ],
+    "The Chronicles of Riddick: Escape from Butcher Bay (2009)": [],
+    "The Cursed Crusade": [
+        "Action-adventure",
+        "Beat 'em up",
+        "Fantasy",
+        "Slasher",
+        "Third-person"
+    ],
+    "The Dwarves": [
+        "Action-adventure",
+        "Action/RPG",
+        "Fighting",
+        "TRPG",
+        "Tactic"
+    ],
+    "The Elder Scrolls III: Morrowind": [
+        "Adventure",
+        "First-person",
+        "RPG"
+    ],
+    "The Elder Scrolls III: Morrowind - Bloodmoon (DLC)": [],
+    "The Elder Scrolls III: Morrowind - Tribunal (DLC)": [],
+    "The Guest": [
+        "Adventure",
+        "First-person",
+        "Puzzle",
+        "Quest",
+        "Sci-fi"
+    ],
+    "The Medium": [
+        "Action-adventure",
+        "Survival horror",
+        "Third-person"
+    ],
+    "The Surge": [
+        "Action/RPG",
+        "Cyberpunk"
+    ],
+    "The Surge 2": [
+        "Action-adventure",
+        "Action/RPG",
+        "Cyberpunk",
+        "Sci-fi",
+        "Third-person"
+    ],
+    "The Surge 2: The Kraken (DLC)": [
+        "DLC"
+    ],
+    "The Surge: A Walk in the Park (DLC)": [
+        "Add-on",
+        "DLC",
+        "RPG"
+    ],
+    "The Surge: The Good, the Bad and the Augmented (DLC)": [
+        "DLC"
+    ],
+    "The Swords of Ditto: Mormo's Curse": [
+        "Action-adventure",
+        "Action/RPG"
+    ],
+    "The Typing of The Dead: Overkill": [
+        "Action",
+        "Arcade",
+        "Horror",
+        "Shooter"
+    ],
+    "Tonight We Riot": [
+        "Action",
+        "Arcade",
+        "Beat 'em up",
+        "RTS",
+        "Retro",
+        "Shoot 'em up",
+        "Strategy"
+    ],
+    "Trine 4: The Nightmare Prince": [
+        "2D",
+        "Action-adventure",
+        "Arcade",
+        "Fantasy",
+        "Logic",
+        "Platformer",
+        "Puzzle"
+    ],
+    "Trine 4: The Nightmare Prince - Melody of Mystery (DLC)": [],
+    "True Fear: Forsaken Souls Part 1": [
+        "Adventure",
+        "Casual",
+        "Hidden Object",
+        "Puzzle"
+    ],
+    "True Fear: Forsaken Souls Part 2": [
+        "Adventure",
+        "Casual",
+        "First-person",
+        "Hidden Object",
+        "Horror",
+        "Logic",
+        "Puzzle",
+        "Quest"
+    ],
+    "Wait! Life is Beautiful!": [
+        "Adventure",
+        "Casual",
+        "RPG",
+        "Retro"
+    ],
+    "Worms Pinball": [
+        "Action",
+        "Arcade",
+        "Casual",
+        "Simulation"
+    ],
+    "X-Men Origins: Wolverine": [
+        "2D",
+        "Action",
+        "Beat 'em up",
+        "Quest",
+        "Slasher",
+        "TPS",
+        "Third-person"
+    ],
+    "Yoku's Island Express": [
+        "Action-adventure",
+        "Arcade",
+        "Platformer"
+    ],
+    "Zombie Army Trilogy": [
+        "Action",
+        "Arcade",
+        "FPS",
+        "Horror",
+        "Stealth",
+        "TPS",
+        "Third-person"
+    ],
+    "Zombie Night Terror": [
+        "Action",
+        "Arcade",
+        "Horror",
+        "Puzzle",
+        "Retro",
+        "Strategy",
+        "Zombie"
+    ],
+    "Как достать соседа. Каникулы олигарха": [
+        "Adventure",
+        "Arcade",
+        "Logic",
+        "Puzzle"
+    ],
+    "Не время для драконов / A Farewell To Dragons": [
+        "Action/RPG"
     ]
 }
