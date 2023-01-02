@@ -7,6 +7,7 @@ __author__ = 'ipetrash'
 import json
 import shutil
 import sys
+import re
 
 from pathlib import Path
 
@@ -34,11 +35,17 @@ GENRE_COMPRESSION = [
     ("Action", "Adventure", "Action-adventure"),
     ("Action", "RPG", "Action/RPG"),
     ("First-person", "Shooter", "FPS"),
+    ("Third-person", "Shooter", "TPS"),
     ("Survival", "Horror", "Survival horror"),
 ]
 
+SAFE_LIST_OF_PARTIAL_DUPLICATES = [
+    "Shooter",  # Отдельно пусть будет жанр - для сбора статистики именно по шутерам
+    "RPG",      # Аналогично
+]
 
-def do_genres_compression(genres: list[str]) -> list[str]:
+
+def do_genres_compression(genres: list[str], need_log: bool = True) -> list[str]:
     genres = sorted(set(genres))
     to_remove = set()
 
@@ -48,12 +55,43 @@ def do_genres_compression(genres: list[str]) -> list[str]:
             to_remove.add(src_2)
             genres.append(target)
 
-            log.info(f'Compress genres {src_1!r} and {src_2!r} -> {target!r}')
+            if need_log:
+                log.info(f'Compress genres {src_1!r} and {src_2!r} -> {target!r}')
 
     for x in to_remove:
         genres.remove(x)
 
     return sorted(set(genres))
+
+
+def remove_partial_duplicates(genres: list[str], need_log: bool = True) -> list[str]:
+    genres = genres.copy()
+
+    # Example: ['Action-adventure', 'Action/RPG', 'Adventure', 'RPG'] ->
+    #          -> {('action', 'adventure'): 'Action-adventure', ('action', 'rpg'): 'Action/RPG'}
+    words_by_complex_genre: dict[tuple[str], str] = dict()
+    for genre in genres:
+        if genre in SAFE_LIST_OF_PARTIAL_DUPLICATES:
+            continue
+
+        words: list[str] = [word.lower() for word in map(str.strip, re.split(r'\W', genre)) if word]
+        if len(words) > 1:
+            words_by_complex_genre[tuple(words)] = genre
+
+    # Example: ['Action-adventure', 'Action/RPG', 'Adventure', 'RPG'] ->
+    #          -> ['Action-adventure', 'Action/RPG']
+    to_remove = []
+    for words, complex_genre in words_by_complex_genre.items():
+        for genre in genres:
+            if genre.lower() in words:
+                if need_log:
+                    log.info(f"Remove partial duplicate {genre!r} of {complex_genre!r}")
+                to_remove.append(genre)
+
+    for genre in to_remove:
+        genres.remove(genre)
+
+    return genres
 
 
 log.info('Start.')
@@ -91,7 +129,7 @@ for game, genres in new_game_by_genres.items():
     if game in game_by_genres:
         continue
 
-    log.info(f'Added game {game!r} with genres: {genres}')
+    log.info(f'Added game {game!r} with genres ({len(genres)}): {genres}')
     number += 1
 
     new_genres = []
@@ -111,8 +149,9 @@ for game, genres in new_game_by_genres.items():
             log.warning(f'Unsupported type genres {tr_genres} from {x!r}')
 
     new_genres = do_genres_compression(new_genres)
+    new_genres = remove_partial_duplicates(new_genres)
 
-    log.info(f'Successful translate genres: {genres} -> {new_genres}')
+    log.info(f'Successful translate genres ({len(new_genres)}): {new_genres}')
     game_by_genres[game] = new_genres
 
     log.info('')
