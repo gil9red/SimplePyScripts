@@ -133,6 +133,11 @@ class Dump(BaseModel):
     site = CharField()
     genres = ListField()
 
+    class Meta:
+        indexes = (
+            (("name", "site"), True),
+        )
+
     @classmethod
     def exists(cls, site: str, name: str) -> bool:
         return cls.select().where(
@@ -195,11 +200,6 @@ class Dump(BaseModel):
             game_by_genres[k] = sorted(set(v))
 
         return game_by_genres
-
-    class Meta:
-        indexes = (
-            (("name", "site"), True),
-        )
 
     def __repr__(self):
         return f'Dump(name={self.name!r}, site={self.site!r}, genres={self.genres})'
