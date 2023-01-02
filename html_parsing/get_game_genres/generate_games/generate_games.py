@@ -4,12 +4,12 @@
 __author__ = 'ipetrash'
 
 
-import datetime as DT
 import json
-from pathlib import Path
 import shutil
-
 import sys
+
+from pathlib import Path
+
 sys.path.append('..')
 sys.path.append('../genre_translate_file')
 
