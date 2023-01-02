@@ -9,22 +9,25 @@ import json
 import shutil
 
 from collections import defaultdict
-from typing import Dict, List, Iterable, Optional
+from typing import Iterable, Optional, Type
 from pathlib import Path
 
 # pip install peewee
 from peewee import *
 from playhouse.sqliteq import SqliteQueueDatabase
 
-
-DB_DIR_NAME = str(Path(__file__).resolve().parent / 'database')
-DB_FILE_NAME = str(Path(DB_DIR_NAME) / 'games.sqlite')
+from shorten import shorten
 
 
-Path(DB_DIR_NAME).mkdir(parents=True, exist_ok=True)
+DIR = Path(__file__).resolve().parent
+
+DB_DIR_NAME = DIR / 'database'
+DB_DIR_NAME.mkdir(parents=True, exist_ok=True)
+
+DB_FILE_NAME = str(DB_DIR_NAME / 'games.sqlite')
 
 
-def db_create_backup(backup_dir='backup', date_fmt='%Y-%m-%d'):
+def db_create_backup(backup_dir=DIR / 'backup', date_fmt='%Y-%m-%d'):
     backup_path = Path(backup_dir)
     backup_path.mkdir(parents=True, exist_ok=True)
 
@@ -39,7 +42,9 @@ def db_create_backup(backup_dir='backup', date_fmt='%Y-%m-%d'):
 
 
 class ListField(Field):
-    def python_value(self, value: str) -> List:
+    field_type = 'TEXT'
+
+    def python_value(self, value: str) -> list:
         return json.loads(value)
 
     def db_value(self, value: Optional[Iterable]) -> str:
@@ -83,6 +88,45 @@ class BaseModel(Model):
     class Meta:
         database = db
 
+    @classmethod
+    def get_inherited_models(cls) -> list[Type['BaseModel']]:
+        return sorted(cls.__subclasses__(), key=lambda x: x.__name__)
+
+    @classmethod
+    def print_count_of_tables(cls):
+        items = []
+        for sub_cls in cls.get_inherited_models():
+            name = sub_cls.__name__
+            count = sub_cls.select().count()
+            items.append(f'{name}: {count}')
+
+        print(', '.join(items))
+
+    @classmethod
+    def count(cls, filters: Iterable = None) -> int:
+        query = cls.select()
+        if filters:
+            query = query.filter(*filters)
+        return query.count()
+
+    def __str__(self):
+        fields = []
+        for k, field in self._meta.fields.items():
+            v = getattr(self, k)
+
+            if isinstance(field, (TextField, CharField)):
+                if v:
+                    v = repr(shorten(v))
+
+            elif isinstance(field, ForeignKeyField):
+                k = f'{k}_id'
+                if v:
+                    v = v.id
+
+            fields.append(f'{k}={v}')
+
+        return self.__class__.__name__ + '(' + ', '.join(fields) + ')'
+
 
 class Dump(BaseModel):
     name = CharField()
@@ -101,15 +145,15 @@ class Dump(BaseModel):
             cls.create(site=site, name=name, genres=genres)
 
     @classmethod
-    def get(cls) -> List['Dump']:
+    def get(cls) -> list['Dump']:
         return cls.select().where(cls.genres != '[]').order_by(cls.name)
 
     @classmethod
-    def get_games_by_site(cls, site: str) -> List['Dump']:
+    def get_games_by_site(cls, site: str) -> list['Dump']:
         return list(cls.select().where(cls.site == site).order_by(cls.name))
 
     @classmethod
-    def get_genres_by_game(cls, game_name: str) -> List[str]:
+    def get_genres_by_game(cls, game_name: str) -> list[str]:
         items = []
 
         for dump in cls.select().where(cls.name == game_name):
@@ -118,7 +162,7 @@ class Dump(BaseModel):
         return sorted(set(items))
 
     @classmethod
-    def get_all_genres(cls) -> List[str]:
+    def get_all_genres(cls) -> list[str]:
         items = []
 
         for dump in cls.select():
@@ -127,21 +171,21 @@ class Dump(BaseModel):
         return sorted(set(items))
 
     @classmethod
-    def get_all_games(cls) -> List[str]:
+    def get_all_games(cls) -> list[str]:
         return [
             dump.name
             for dump in cls.select(cls.name).order_by(cls.name).distinct()
         ]
 
     @classmethod
-    def get_all_sites(cls) -> List[str]:
+    def get_all_sites(cls) -> list[str]:
         return [
             dump.site
             for dump in cls.select(cls.site).order_by(cls.site).distinct()
         ]
 
     @classmethod
-    def dump(cls) -> Dict[str, List[str]]:
+    def dump(cls) -> dict[str, list[str]]:
         game_by_genres = defaultdict(list)
 
         for dump in cls.select().order_by(cls.name):
@@ -165,10 +209,13 @@ class Dump(BaseModel):
 
 
 db.connect()
-db.create_tables([Dump])
+db.create_tables(BaseModel.get_inherited_models())
 
 
 if __name__ == '__main__':
+    BaseModel.print_count_of_tables()
+    print()
+
     print('Total:', Dump.select().count())
 
     genres = Dump.get_all_genres()
