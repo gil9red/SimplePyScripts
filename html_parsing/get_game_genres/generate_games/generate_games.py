@@ -23,9 +23,10 @@ log = get_logger('generate_games.txt')
 
 
 DIR = Path(__file__).parent.resolve()
-FILE_NAME_GAMES = DIR / 'game_by_genres.json'
-FILE_NAME_BACKUP = DIR / 'backup'
 
+FILE_NAME_GAMES = DIR / 'game_by_genres.json'
+
+FILE_NAME_BACKUP = DIR / 'backup'
 FILE_NAME_BACKUP.mkdir(parents=True, exist_ok=True)
 
 # Example: "Action", "Adventure" -> "Action-adventure"
@@ -37,7 +38,7 @@ GENRE_COMPRESSION = [
 ]
 
 
-def do_genres_compression(genres: list) -> list:
+def do_genres_compression(genres: list[str]) -> list[str]:
     genres = sorted(set(genres))
     to_remove = set()
 
