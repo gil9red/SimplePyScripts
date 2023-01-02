@@ -35,13 +35,12 @@ GENRE_COMPRESSION = [
     ("Action", "Adventure", "Action-adventure"),
     ("Action", "RPG", "Action/RPG"),
     ("First-person", "Shooter", "FPS"),
+    ("First-person", "FPS", "FPS"),
+    ("Shooter", "FPS", "FPS"),
     ("Third-person", "Shooter", "TPS"),
+    ("Third-person", "TPS", "TPS"),
+    ("Shooter", "TPS", "TPS"),
     ("Survival", "Horror", "Survival horror"),
-]
-
-SAFE_LIST_OF_PARTIAL_DUPLICATES = [
-    "Shooter",  # Отдельно пусть будет жанр - для сбора статистики именно по шутерам
-    "RPG",      # Аналогично
 ]
 
 
@@ -71,9 +70,6 @@ def remove_partial_duplicates(genres: list[str], need_log: bool = True) -> list[
     #          -> {('action', 'adventure'): 'Action-adventure', ('action', 'rpg'): 'Action/RPG'}
     words_by_complex_genre: dict[tuple[str], str] = dict()
     for genre in genres:
-        if genre in SAFE_LIST_OF_PARTIAL_DUPLICATES:
-            continue
-
         words: list[str] = [word.lower() for word in map(str.strip, re.split(r'\W', genre)) if word]
         if len(words) > 1:
             words_by_complex_genre[tuple(words)] = genre
