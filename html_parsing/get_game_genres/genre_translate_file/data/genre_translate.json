@@ -23,7 +23,7 @@
     "Arcade": "Arcade",
     "Automobile": "Racing",
     "Beat 'Em Up": "Beat 'em up",
-    "Beat 'Em Up: Hack and Slash": "Beat 'em up",
+    "Beat 'Em Up: Hack and Slash": ["Beat 'em up", "Hack and slash"],
     "Beat-'Em-Up": "Beat 'em up",
     "Beat-em-up": "Beat 'em up",
     "Board / Card Game": "Cardgame",
