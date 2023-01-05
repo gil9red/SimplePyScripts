@@ -103,9 +103,18 @@ if __name__ == '__main__':
     parser = CalcParser()
 
     text = '2 + 2 * 2'
+    print(list(lexer.tokenize(text)))
+    # [
+    #     Token(type='NUMBER', value='2', lineno=1, index=0, end=1),
+    #     Token(type='PLUS', value='+', lineno=1, index=2, end=3),
+    #     Token(type='NUMBER', value='2', lineno=1, index=4, end=5),
+    #     Token(type='TIMES', value='*', lineno=1, index=6, end=7),
+    #     Token(type='NUMBER', value='2', lineno=1, index=8, end=9)
+    # ]
+
     value = parser.parse(lexer.tokenize(text))
-    print(f'{text} = {value}')
-    # 2 + 2 * 2 = 6
+    print(f'{text!r} = {value}')
+    # '2 + 2 * 2' = 6
 
     print()
 
