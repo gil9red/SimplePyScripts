@@ -118,13 +118,15 @@ if __name__ == '__main__':
     for line in items:
         value = parser.parse(lexer.tokenize(line))
         if value is not None:
-            print(f'{line} = {value}')
+            print(f'{line!r} = {value}')
         else:
-            print(line)
-    # a = 2
-    # a = a * 2
-    # b = 2
-    # a + b + 1 = 7
+            print(f'{line!r}')
+    """
+    'a = 2'
+    'a = a * 2'
+    'b = 2'
+    'a + b + 1' = 7
+    """
 
     print()
 
