@@ -4,14 +4,14 @@
 __author__ = 'ipetrash'
 
 
-import datetime as DT
 import json
 import re
 import time
 import traceback
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Dict, Generator, Callable, Any, Tuple
+from datetime import datetime
+from typing import Optional, Generator, Callable, Any
 from urllib.parse import urljoin, urlparse, parse_qs
 
 # pip install tzlocal
@@ -127,7 +127,7 @@ class Video:
     duration_text: str = None
     seq: int = None
     is_live_now: bool = False
-    thumbnails: List[Thumbnail] = field(default_factory=list, repr=False, compare=False)
+    thumbnails: list[Thumbnail] = field(default_factory=list, repr=False, compare=False)
     context: Context = field(default=None, repr=False, compare=False)
 
     @classmethod
@@ -177,7 +177,7 @@ class Video:
         return False
 
     @classmethod
-    def get_from(cls, data_video: Dict, parent_context: Context = None) -> 'Video':
+    def get_from(cls, data_video: dict, parent_context: Context = None) -> 'Video':
         if parent_context and parent_context.yt_initial_data:
             raise_if_error(parent_context.yt_initial_data)
 
@@ -237,7 +237,7 @@ class Playlist:
     id: str
     url: str
     title: str
-    video_list: List[Video] = field(default_factory=list, repr=False)
+    video_list: list[Video] = field(default_factory=list, repr=False)
     duration_seconds: int = None
     duration_text: str = None
     context: Context = field(default=None, repr=False, compare=False)
@@ -312,7 +312,7 @@ class Playlist:
 
 
 def get_yt_cfg_data(html: str) -> dict:
-    m = re.search(r'ytcfg.set\((\{.+?\})\);', html)
+    m = re.search(r'ytcfg\.set\((\{.+?\})\);', html)
     if not m:
         raise Exception('Не удалось найти на странице ytcfg.set!')
 
@@ -327,18 +327,11 @@ def dict_merge(d1: dict, d2: dict):
             d1[k] = v
 
 
-def get_data_for_next_page(url: str, yt_cfg_data: dict, continuation_item: dict) -> dict:
-    innertube_context = yt_cfg_data.get('INNERTUBE_CONTEXT')
-    if not innertube_context:
-        raise Exception('Значение INNERTUBE_CONTEXT должно быть задано в yt_cfg_data!')
-
+def get_context_data(url: str) -> dict:
     local_zone = tzlocal.get_localzone()
-    utc_offset_minutes = local_zone.utcoffset(DT.datetime.now()).total_seconds() // 60
+    utc_offset_minutes = local_zone.utcoffset(datetime.now()).total_seconds() // 60
 
-    click_tracking_params = continuation_item['continuationEndpoint']['clickTrackingParams']
-    continuation_token = continuation_item['continuationEndpoint']['continuationCommand']['token']
-
-    pattern_next_page_data = {
+    return {
         "context": {
             "client": {
                 "hl": "ru",
@@ -377,9 +370,6 @@ def get_data_for_next_page(url: str, yt_cfg_data: dict, continuation_item: dict)
                 "useSsl": True,
                 "internalExperimentFlags": [],
                 "consistencyTokenJars": []
-            },
-            "clickTracking": {
-                "clickTrackingParams": click_tracking_params
             },
             "adSignalsInfo": {
                 "params": [{
@@ -446,9 +436,22 @@ def get_data_for_next_page(url: str, yt_cfg_data: dict, continuation_item: dict)
                 ]
             }
         },
-        "continuation": continuation_token
     }
 
+
+def get_data_for_next_page(url: str, yt_cfg_data: dict, continuation_item: dict) -> dict:
+    innertube_context = yt_cfg_data.get('INNERTUBE_CONTEXT')
+    if not innertube_context:
+        raise Exception('Значение INNERTUBE_CONTEXT должно быть задано в yt_cfg_data!')
+
+    click_tracking_params = continuation_item['continuationEndpoint']['clickTrackingParams']
+    continuation_token = continuation_item['continuationEndpoint']['continuationCommand']['token']
+
+    pattern_next_page_data = get_context_data(url)
+    pattern_next_page_data["continuation"] = continuation_token
+    pattern_next_page_data["context"]["clickTracking"] = {
+        "clickTrackingParams": click_tracking_params,
+    }
     dict_merge(pattern_next_page_data['context'], innertube_context)
 
     return pattern_next_page_data
@@ -467,7 +470,7 @@ def get_ytInitialData(html: str) -> Optional[dict]:
             return json.loads(data_str)
 
 
-def load(url: str) -> Tuple[requests.Response, dict]:
+def load(url: str) -> tuple[requests.Response, dict]:
     rs = session.get(url)
 
     data = get_ytInitialData(rs.text)
@@ -477,7 +480,7 @@ def load(url: str) -> Tuple[requests.Response, dict]:
     return rs, data
 
 
-def get_raw_video_renderer_items(yt_initial_data: Dict) -> List[Dict]:
+def get_raw_video_renderer_items(yt_initial_data: dict) -> list[dict]:
     items = []
     for render in [
         '**/gridVideoRenderer', '**/videoRenderer',
@@ -488,7 +491,7 @@ def get_raw_video_renderer_items(yt_initial_data: Dict) -> List[Dict]:
     return items
 
 
-def get_generator_raw_video_list_from_data(yt_initial_data: dict, rs: requests.Response) -> Generator[Dict, None, None]:
+def get_generator_raw_video_list_from_data(yt_initial_data: dict, rs: requests.Response) -> Generator[dict, None, None]:
     yt_cfg_data = get_yt_cfg_data(rs.text)
     innertube_api_key = yt_cfg_data['INNERTUBE_API_KEY']
 
@@ -521,12 +524,12 @@ def get_generator_raw_video_list_from_data(yt_initial_data: dict, rs: requests.R
         yield from get_raw_video_renderer_items(data)
 
 
-def get_generator_raw_video_list(url: str) -> Generator[Dict, None, None]:
+def get_generator_raw_video_list(url: str) -> Generator[dict, None, None]:
     rs, data = load(url)
     yield from get_generator_raw_video_list_from_data(data, rs)
 
 
-def get_raw_video_list(url: str, maximum_items=1000) -> List[Dict]:
+def get_raw_video_list(url: str, maximum_items=1000) -> list[dict]:
     items = []
     for i, video in enumerate(get_generator_raw_video_list(url)):
         if i >= maximum_items:
@@ -537,7 +540,7 @@ def get_raw_video_list(url: str, maximum_items=1000) -> List[Dict]:
     return items
 
 
-def get_video_list(url: str, *args, **kwargs) -> List[Video]:
+def get_video_list(url: str, *args, **kwargs) -> list[Video]:
     return [
         Video.get_from(video)
         for video in get_raw_video_list(url, *args, **kwargs)
@@ -545,7 +548,7 @@ def get_video_list(url: str, *args, **kwargs) -> List[Video]:
     ]
 
 
-def search_youtube(text_or_url: str, *args, **kwargs) -> List[Video]:
+def search_youtube(text_or_url: str, *args, **kwargs) -> list[Video]:
     if text_or_url.startswith('http'):
         url = text_or_url
     else:
@@ -555,7 +558,7 @@ def search_youtube(text_or_url: str, *args, **kwargs) -> List[Video]:
     return get_video_list(url, *args, **kwargs)
 
 
-def search_youtube_with_filter(url: str, sort=False, filter_func: Callable[[Any], bool] = None) -> List[str]:
+def search_youtube_with_filter(url: str, sort=False, filter_func: Callable[[Any], bool] = None) -> list[str]:
     video_title_list = [video.title for video in search_youtube(url)]
     if sort:
         video_title_list.sort()
@@ -616,7 +619,7 @@ if __name__ == '__main__':
 
     print('\n' + '-' * 100 + '\n')
 
-    def __print_video_list(items: List[Video]):
+    def __print_video_list(items: list[Video]):
         print(f'Items ({len(items)}):')
         for i, video in enumerate(items, 1):
             print(f'  {i:3}. {video.title!r}: {video.url}')
@@ -744,3 +747,4 @@ if __name__ == '__main__':
         __print_video_list(playlist.video_list)
     except AlertError as e:
         print(f'Error: {str(e)!r} for {url}')
+    # Error: 'Этот тип плейлиста недоступен для просмотра.' for https://www.youtube.com/watch?v=QKEjrOIrCBI&list=RDQKEjrOIrCBI&start_radio=1
