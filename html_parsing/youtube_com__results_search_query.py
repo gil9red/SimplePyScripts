@@ -63,6 +63,35 @@ def download_url_as_bytes(url: str) -> bytes:
     return rs.content
 
 
+def get_yt_cfg_data(html: str) -> dict:
+    m = re.search(r'ytcfg\.set\((\{.+?\})\);', html)
+    if not m:
+        raise Exception('Не удалось найти на странице ytcfg.set!')
+
+    return json.loads(m.group(1))
+
+
+def get_ytInitialData(html: str) -> Optional[dict]:
+    patterns = [
+        re.compile(r'window\["ytInitialData"\] = (\{.+?\});'),
+        re.compile(r'var ytInitialData = (\{.+?\});'),
+    ]
+
+    for pattern in patterns:
+        m = pattern.search(html)
+        if m:
+            data_str = m.group(1)
+            return json.loads(data_str)
+
+
+def get_yt_initial_player_response(html: str) -> dict:
+    m = re.search(r'ytInitialPlayerResponse = (\{.+?\});', html)
+    if not m:
+        raise Exception('Не удалось найти на странице ytInitialPlayerResponse!')
+
+    return json.loads(m.group(1))
+
+
 def raise_if_error(yt_initial_data: dict):
     # NOTE: Example:
     """
@@ -117,6 +146,31 @@ class Thumbnail:
     width: str
     height: str
 
+    @classmethod
+    def get_from(cls, thumbnail: dict) -> 'Thumbnail':
+        return cls(
+            url=thumbnail['url'],
+            width=thumbnail['width'],
+            height=thumbnail['height'],
+        )
+
+
+@dataclass
+class TranscriptItem:
+    start_ms: int
+    end_ms: int
+    start_time_str: str
+    text: str
+
+    @classmethod
+    def get_from(cls, transcript_segment_renderer: dict) -> 'TranscriptItem':
+        return cls(
+            start_ms=int(transcript_segment_renderer['startMs']),
+            end_ms=int(transcript_segment_renderer['endMs']),
+            start_time_str=dpath.util.get(transcript_segment_renderer, 'startTimeText/simpleText'),
+            text=dpath.util.get(transcript_segment_renderer, '**/runs/0/text'),
+        )
+
 
 @dataclass
 class Video:
@@ -131,16 +185,34 @@ class Video:
     context: Context = field(default=None, repr=False, compare=False)
 
     @classmethod
-    def get_url(cls, data_video: dict) -> str:
+    def parse_url(cls, data_video: dict) -> str:
         url_video = dpath.util.get(data_video, 'navigationEndpoint/commandMetadata/webCommandMetadata/url')
         return urljoin(BASE_URL, url_video)
 
     @classmethod
-    def get_title(cls, data_video: dict) -> str:
+    def parse_title(cls, data_video: dict) -> str:
+        if title := data_video.get('title'):
+            return title
+
         try:
             return dpath.util.get(data_video, 'title/runs/0/text')
         except KeyError:
             return dpath.util.get(data_video, 'title/simpleText')
+
+    @classmethod
+    def parse_duration_seconds(cls, data_video: dict) -> int:
+        # Если есть продолжительность в секундах
+        try:
+            duration_seconds = int(data_video['lengthSeconds'])
+        except KeyError:
+            # Если есть продолжительность в секундах в виде текста, пробуем распарсить
+            try:
+                text = dpath.util.get(data_video, 'lengthText/simpleText')
+                duration_seconds = time_to_seconds(text)
+            except KeyError:
+                duration_seconds = None
+
+        return duration_seconds
 
     def get_url_thumbnail_by_max_size(self) -> str:
         return max(self.thumbnails, key=lambda x: (x.width, x.height)).url
@@ -177,23 +249,21 @@ class Video:
         return False
 
     @classmethod
-    def get_from(cls, data_video: dict, parent_context: Context = None) -> 'Video':
+    def parse_from(
+            cls,
+            data_video: dict,
+            parent_context: Context = None,
+            url_video: str = "",
+    ) -> 'Video':
         if parent_context and parent_context.yt_initial_data:
             raise_if_error(parent_context.yt_initial_data)
 
-        title = cls.get_title(data_video)
-        url_video = cls.get_url(data_video)
+        title = cls.parse_title(data_video)
 
-        # Если есть продолжительность в секундах
-        try:
-            duration_seconds = int(data_video['lengthSeconds'])
-        except KeyError:
-            # Если есть продолжительность в секундах в виде текста, пробуем распарсить
-            try:
-                text = dpath.util.get(data_video, 'lengthText/simpleText')
-                duration_seconds = time_to_seconds(text)
-            except KeyError:
-                duration_seconds = None
+        if not url_video:
+            url_video = cls.parse_url(data_video)
+
+        duration_seconds = cls.parse_duration_seconds(data_video)
 
         duration_text = None
         if duration_seconds:
@@ -205,11 +275,7 @@ class Video:
             seq = None
 
         thumbnails = [
-            Thumbnail(
-                url=thumbnail['url'],
-                width=thumbnail['width'],
-                height=thumbnail['height'],
-            )
+            Thumbnail.get_from(thumbnail)
             for thumbnail in dpath.util.values(data_video, 'thumbnail/thumbnails/*')
         ]
 
@@ -230,6 +296,77 @@ class Video:
             thumbnails=thumbnails,
             context=context
         )
+
+    @classmethod
+    def get_id_from_url(cls, url: str) -> str:
+        parsed_url = urlparse(url)
+        return parse_qs(parsed_url.query)['v'][0]
+
+    @classmethod
+    def get_url(cls, video_id: str) -> str:
+        return urljoin(BASE_URL, f'watch?v={video_id}')
+
+    @classmethod
+    def get_from(cls, url_or_id: str) -> 'Video':
+        if url_or_id.startswith('http'):
+            url = url_or_id
+        else:
+            url = cls.get_url(url_or_id)
+
+        rs, yt_initial_data = load(url)
+        raise_if_error(yt_initial_data)
+
+        # NOTE: Оригинальный url может поменяться, лучше брать тот, что будет после запроса
+        url = rs.url
+
+        yt_cfg_data = get_yt_cfg_data(rs.text)
+        context = Context(
+            yt_initial_data=yt_initial_data,
+            yt_cfg_data=yt_cfg_data,
+            rs=rs,
+        )
+
+        data_video = dpath.util.get(yt_initial_data, '**/videoPrimaryInfoRenderer')
+        yt_initial_player_response = get_yt_initial_player_response(rs.text)
+
+        # NOTE: Костыль, чтобы старый код, парсящий видео из плейлистов и других страниц,
+        #       в parse_from смог разобрать
+        dict_merge(
+            data_video,
+            yt_initial_player_response['videoDetails']
+        )
+
+        return cls.parse_from(
+            data_video=data_video,
+            parent_context=context,
+            url_video=url,
+        )
+
+    def get_transcripts(self) -> list[TranscriptItem]:
+        yt_cfg_data = self.context.yt_cfg_data
+        innertube_api_key = yt_cfg_data['INNERTUBE_API_KEY']
+        context = get_context_data(self.url, yt_cfg_data['INNERTUBE_CONTEXT'])
+
+        params_get_transcript_endpoint = dpath.util.get(
+            self.context.yt_initial_data,
+            '**/content/continuationItemRenderer/continuationEndpoint/getTranscriptEndpoint/params',
+            default=None
+        )
+        if not params_get_transcript_endpoint:
+            return []
+
+        context["params"] = params_get_transcript_endpoint
+
+        url = f'{BASE_URL}/youtubei/v1/get_transcript'
+        params = {
+            'key': innertube_api_key,
+            'prettyPrint': 'false',
+        }
+        rs = session.post(url, json=context, params=params)
+        rs_data = rs.json()
+
+        transcript_items = dpath.util.values(rs_data, '**/transcriptSegmentRenderer')
+        return [TranscriptItem.get_from(item) for item in transcript_items]
 
 
 @dataclass
@@ -294,7 +431,7 @@ class Playlist:
         total_seconds = 0
         video_list = []
         for data_video in get_generator_raw_video_list_from_data(yt_initial_data, rs):
-            video = Video.get_from(data_video, context)
+            video = Video.parse_from(data_video, context)
             video_list.append(video)
 
             if video.duration_seconds:
@@ -311,14 +448,6 @@ class Playlist:
         )
 
 
-def get_yt_cfg_data(html: str) -> dict:
-    m = re.search(r'ytcfg\.set\((\{.+?\})\);', html)
-    if not m:
-        raise Exception('Не удалось найти на странице ytcfg.set!')
-
-    return json.loads(m.group(1))
-
-
 def dict_merge(d1: dict, d2: dict):
     for k, v in d2.items():
         if k in d1 and isinstance(d1[k], dict) and isinstance(v, dict):
@@ -327,11 +456,11 @@ def dict_merge(d1: dict, d2: dict):
             d1[k] = v
 
 
-def get_context_data(url: str) -> dict:
+def get_context_data(url: str, innertube_context: dict) -> dict:
     local_zone = tzlocal.get_localzone()
     utc_offset_minutes = local_zone.utcoffset(datetime.now()).total_seconds() // 60
 
-    return {
+    context_data = {
         "context": {
             "client": {
                 "hl": "ru",
@@ -438,6 +567,10 @@ def get_context_data(url: str) -> dict:
         },
     }
 
+    dict_merge(context_data['context'], innertube_context)
+
+    return context_data
+
 
 def get_data_for_next_page(url: str, yt_cfg_data: dict, continuation_item: dict) -> dict:
     innertube_context = yt_cfg_data.get('INNERTUBE_CONTEXT')
@@ -447,27 +580,13 @@ def get_data_for_next_page(url: str, yt_cfg_data: dict, continuation_item: dict)
     click_tracking_params = continuation_item['continuationEndpoint']['clickTrackingParams']
     continuation_token = continuation_item['continuationEndpoint']['continuationCommand']['token']
 
-    pattern_next_page_data = get_context_data(url)
+    pattern_next_page_data = get_context_data(url, innertube_context)
     pattern_next_page_data["continuation"] = continuation_token
     pattern_next_page_data["context"]["clickTracking"] = {
         "clickTrackingParams": click_tracking_params,
     }
-    dict_merge(pattern_next_page_data['context'], innertube_context)
 
     return pattern_next_page_data
-
-
-def get_ytInitialData(html: str) -> Optional[dict]:
-    patterns = [
-        re.compile(r'window\["ytInitialData"\] = (\{.+?\});'),
-        re.compile(r'var ytInitialData = (\{.+?\});'),
-    ]
-
-    for pattern in patterns:
-        m = pattern.search(html)
-        if m:
-            data_str = m.group(1)
-            return json.loads(data_str)
 
 
 def load(url: str) -> tuple[requests.Response, dict]:
@@ -515,10 +634,15 @@ def get_generator_raw_video_list_from_data(yt_initial_data: dict, rs: requests.R
             break
 
         url_next_page_data = urljoin(rs.url, dpath.util.get(continuation_item, '**/webCommandMetadata/apiUrl'))
-        url_next_page_data += '?key=' + innertube_api_key
 
         next_page_data = get_data_for_next_page(rs.url, yt_cfg_data, continuation_item)
-        rs = session.post(url_next_page_data, json=next_page_data)
+        rs = session.post(
+            url_next_page_data,
+            params={
+                "key": innertube_api_key
+            },
+            json=next_page_data
+        )
         data = rs.json()
 
         yield from get_raw_video_renderer_items(data)
@@ -542,7 +666,7 @@ def get_raw_video_list(url: str, maximum_items=1000) -> list[dict]:
 
 def get_video_list(url: str, *args, **kwargs) -> list[Video]:
     return [
-        Video.get_from(video)
+        Video.parse_from(video)
         for video in get_raw_video_list(url, *args, **kwargs)
         if 'videoId' in video  # NOTE: У плейлистов будет playlistId
     ]
@@ -570,6 +694,37 @@ def search_youtube_with_filter(url: str, sort=False, filter_func: Callable[[Any]
 
 
 if __name__ == '__main__':
+    url = 'https://www.youtube.com/watch?v=rgYQ7nUulAQ'
+    video_id = Video.get_id_from_url(url)
+    assert video_id == 'rgYQ7nUulAQ'
+
+    new_url = Video.get_url(video_id)
+    assert url == new_url
+
+    video = Video.get_from(url)
+    print(video)
+    print()
+    # Video(id='rgYQ7nUulAQ', url='https://www.youtube.com/watch?v=rgYQ7nUulAQ', title='Building a Website (P1D2) - Live Coding with Jesse', duration_seconds=1929, duration_text='00:32:09', seq=None, is_live_now=False)
+
+    transcripts = video.get_transcripts()
+    assert len(transcripts)
+    print(f'Transcripts ({len(transcripts)}):')
+    print(*transcripts[:3], sep='\n')
+    print('...')
+    print(*transcripts[-3:], sep='\n')
+    """
+    Transcripts (275):
+    TranscriptItem(start_ms=8840, end_ms=14219, start_time_str='0:08', text="hi everybody\n\nI'm Jesse wykel and I'm a front-end")
+    TranscriptItem(start_ms=14219, end_ms=21029, start_time_str='0:14', text="developer and this is my first live\n\nstream for free code camp I've done some")
+    TranscriptItem(start_ms=21029, end_ms=28949, start_time_str='0:21', text='live streams on my own channel but this\n\nis the first one on free code camp which')
+    ...
+    TranscriptItem(start_ms=1908679, end_ms=1915690, start_time_str='31:48', text="if there's any tips for me I'm still\n\npretty new at this live-streaming thing\n\nso definitely any tips are are very")
+    TranscriptItem(start_ms=1915690, end_ms=1920950, start_time_str='31:55', text="welcome all right so I'll end the stream")
+    TranscriptItem(start_ms=1920950, end_ms=1928329, start_time_str='32:00', text="now thanks again have a great day I'll\n\nbe back tomorrow\n\n[Music]")
+    """
+
+    print('\n' + '-' * 100 + '\n')
+
     url = 'https://www.youtube.com/playlist?list=PLWKjhJtqVAbknyJ7hSrf1WKh_Xnv9RL1r'
     assert Playlist.get_id_from_url(url) == 'PLWKjhJtqVAbknyJ7hSrf1WKh_Xnv9RL1r'
 

@@ -35,9 +35,9 @@ def search_video_and_playlist(
                 playlist_url = Playlist.get_url(playlist_id)
                 items.append((f'[P] {title!r}', playlist_url))
         else:
-            title = Video.get_title(obj)
+            title = Video.parse_title(obj)
             if smart_comparing(game_name, title):
-                video_url = Video.get_url(obj)
+                video_url = Video.parse_url(obj)
                 items.append((f'[V] {title!r}', video_url))
 
     return items
