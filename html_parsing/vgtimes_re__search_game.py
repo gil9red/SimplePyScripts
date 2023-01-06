@@ -48,7 +48,6 @@ def search(game_name: str) -> list[Game]:
     rs.raise_for_status()
 
     rs_html = rs.json()['games_result']
-
     root = BeautifulSoup(rs_html, 'html.parser')
 
     return [
