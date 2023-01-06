@@ -16,7 +16,7 @@ Window {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                helloText.text = "Hello world!";
+                helloText.text = "Hello World!";
             }
         }
     }
