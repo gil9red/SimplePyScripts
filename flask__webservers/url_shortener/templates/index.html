@@ -1,0 +1,74 @@
+<html lang="ru">
+<head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }}</title>
+
+    <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.4.1/bootstrap.css') }}">
+    <script src="{{ url_for('static', filename='bootstrap-4.4.1/bootstrap.bundle.js') }}"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-dark.min_3.0.0.css') }}" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>{{ title }}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <form id="form__add_url" method="post" action="/add">
+                    <div class="input-group">
+                        <input type="url" id="url" class="form-control" name="url" placeholder="https://example.com" required/>
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-primary">Создать</button>
+                        </div>
+                    </div>
+                </form>
+                <div id="result"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+$(document).ready(function() {
+    // Обработка удаления конкретной игры
+    $("#form__add_url").submit(function() {
+        let thisForm = this;
+
+        let url = $(this).attr("action");
+        let method = $(this).attr("method");
+        if (method === undefined) {
+            method = "get";
+        }
+
+        let data = $(this).serialize();
+        $.ajax({
+            url: url,
+            method: method,  // HTTP метод, по умолчанию GET
+            data: data,
+            dataType: "json",  // тип данных загружаемых с сервера
+            success: function(data) {
+                console.log(data);
+                $('#result').text(data.url);
+
+                // Очищение полей формы
+                thisForm.reset();
+            },
+
+            error: function(data) {
+                $('#result').text('На сервере произошла ошибка');
+            }
+        });
+
+        return false;
+    });
+});
+</script>
+
+</html>
