@@ -8,13 +8,13 @@ import sys
 import traceback
 import random
 
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QApplication, QWidget, QMessageBox
+from PyQt5.QtGui import QPainter, QImage
+from PyQt5.QtCore import Qt, QTimer
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+    text = f'{ex_cls.__name__}: {ex}:\n'
     text += ''.join(traceback.format_tb(tb))
 
     print(text)
