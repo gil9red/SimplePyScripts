@@ -1,0 +1,1 @@
+Simplified port from https://github.com/gil9red/WikiEyes
