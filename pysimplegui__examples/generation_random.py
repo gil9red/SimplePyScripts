@@ -16,7 +16,7 @@ layout = [
     [sg.Text('Minimum'), sg.Input(default_text='1', key='Min')],
     [sg.Text('Maximum'), sg.Input(default_text='9', key='Max')],
     [sg.Text(' ', key='OUT')],
-    [sg.Button('Generate'), sg.Button('Clear')]
+    [sg.Button('Generate', key='button_generate'), sg.Button('Clear')]
 ]
 
 window = sg.Window('Generator', layout)
@@ -31,7 +31,7 @@ while True:
     if event is None or event == sg.WIN_CLOSED:
         break
 
-    if event == 'Generate':
+    if event == 'button_generate':
         number, min_number, max_number = int(values['ND']), int(values['Min']), int(values['Max'])
         text = generate(number, min_number, max_number)
         print(text)
