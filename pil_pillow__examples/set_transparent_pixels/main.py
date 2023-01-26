@@ -18,4 +18,4 @@ for i in range(width):
         if (j + i) % 2 == 0:
             pixels[i, j] = 0, 0, 0, 0
 
-img.save("new.png")
+img.save("output.png")
