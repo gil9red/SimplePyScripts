@@ -5,9 +5,7 @@ __author__ = 'ipetrash'
 
 
 # pip install python-telegram-bot
-from telegram import (
-    Update, InlineKeyboardButton, InlineKeyboardMarkup
-)
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler
 
 from common import get_logger, log_func, start_bot, run_main
@@ -47,14 +45,14 @@ def on_callback_query(update: Update, context: CallbackContext):
     query = update.callback_query
     query.answer()
 
+    reply_markup = query.message.reply_markup
+
     # Change counter from telegram buttons context
-    inline_keyboard = query.message.reply_markup.inline_keyboard
+    inline_keyboard = reply_markup.inline_keyboard
     for rows in inline_keyboard:
         for x in rows:
             if x.callback_data == query.data:
                 x.text = str(int(x.text) + 1)
-
-    reply_markup = InlineKeyboardMarkup(inline_keyboard)
 
     query.message.edit_reply_markup(reply_markup=reply_markup)
 
