@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 def server_url() -> str:
     parse = urlparse(request.url)
-    return '{}://{}/'.format(parse.scheme, parse.netloc)
+    return f'{parse.scheme}://{parse.netloc}/'
 
 
 @app.route("/", defaults={'link_id': ''})
