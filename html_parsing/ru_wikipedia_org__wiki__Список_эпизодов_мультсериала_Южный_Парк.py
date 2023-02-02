@@ -25,19 +25,9 @@ def get_seasons() -> Dict[str, List[str]]:
         assert table_series, 'Не найдена таблица серий!'
 
         series_list = []
-        for tr in table_series.select('tr:has(td)'):
-            td_list = tr.select('td')
-            td_list_count = len(td_list)
-
-            title_el = None
-            if td_list_count == 4:  # Old version
-                title_el = td_list[0].select_one('b > a')
-            elif td_list_count > 4:  # New version
-                title_el = td_list[2].select_one('b > a')
-
-            if title_el:
-                series_title = title_el.get_text(strip=True)
-                series_list.append(series_title)
+        for title_el in table_series.select('tr td.summary a'):
+            series_title = title_el.get_text(strip=True)
+            series_list.append(series_title)
 
         assert series_list, f'Не найдена ни одна серия! Сезон: {season_title}'
         season_by_series[season_title] = series_list
