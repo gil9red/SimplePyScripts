@@ -6,13 +6,14 @@ __author__ = 'ipetrash'
 
 import copy
 import os
+import shutil
 import sys
 import re
 
 from dataclasses import dataclass
 from enum import Enum, auto
 from pathlib import Path
-from typing import Optional, List, Tuple, Union, Iterable, Dict
+from typing import Iterable
 
 sys.path.append('..')
 from from_ghbdtn import from_ghbdtn
@@ -79,9 +80,9 @@ class ParameterAvailabilityException(GoException):
 @dataclass
 class Command:
     name: str
-    version: Optional[str] = None
-    what: Optional[str] = None
-    args: Optional[List[str]] = None
+    version: str | None = None
+    what: str | None = None
+    args: list[str] | None = None
 
     def _check_parameter(self, param: str):
         settings = SETTINGS[self.name]
@@ -111,7 +112,7 @@ class Command:
 
 
 # SOURCE: https://stackoverflow.com/a/20666342/5909792
-def merge_dicts(source: Dict, destination: Dict) -> Dict:
+def merge_dicts(source: dict, destination: dict) -> dict:
     for key, value in source.items():
         if isinstance(value, dict):
             # Get node or create one
@@ -123,7 +124,7 @@ def merge_dicts(source: Dict, destination: Dict) -> Dict:
     return destination
 
 
-def get_similar_value(alias: str, items: Iterable) -> Optional[str]:
+def get_similar_value(alias: str, items: Iterable) -> str | None:
     if alias in items:
         return alias
 
@@ -167,7 +168,7 @@ def get_path_by_name(name: str) -> str:
     return settings['path']
 
 
-def get_versions_by_path(path: str) -> Dict[str, str]:
+def get_versions_by_path(path: str) -> dict[str, str]:
     version_by_path = dict()
 
     dir_path = Path(path)
@@ -180,13 +181,13 @@ def get_versions_by_path(path: str) -> Dict[str, str]:
     return version_by_path
 
 
-def _print_pretty_SETTINGS():
+def _print_pretty_settings():
     import json
     print(json.dumps(SETTINGS, indent=4, default=str))
     sys.exit()
 
 
-def settings_preprocess(settings: Dict[str, Dict]) -> Dict[str, Dict]:
+def settings_preprocess(settings: dict[str, dict]) -> dict[str, dict]:
     new_settings = dict()
 
     # Update from bases
@@ -214,6 +215,49 @@ def settings_preprocess(settings: Dict[str, Dict]) -> Dict[str, Dict]:
     return new_settings
 
 
+def _manager_up(path: str):
+    path = Path(path)
+
+    # NOTE: "C:\DEV__RADIX\manager\manager\bin\manager.cmd" -> "C:\DEV__RADIX\manager"
+    root_dir = path.parent.parent.parent
+    path_from = root_dir / 'radix_manager/distrib'
+    files = list(path_from.rglob('*.zip'))
+    if not files:
+        print(f'Not found files in {path_from}')
+        return
+
+    path_to = root_dir / 'optt_manager/upgrades'
+    print(f'Moving files to {path_to}:')
+
+    for file in files:
+        print(f'    File: {file.name}')
+
+        new_file = path_to / file.name
+
+        # Если файл уже есть, то удаляем его - мало ли в каком он состоянии
+        if new_file.exists():
+            new_file.unlink()
+
+        shutil.move(file, new_file)
+
+
+def _manager_clean(path: str):
+    path = Path(path)
+
+    # NOTE: "C:\DEV__RADIX\manager\manager\bin\manager.cmd" -> "C:\DEV__RADIX\manager"
+    root_dir = path.parent.parent.parent
+    path_from = root_dir / 'optt_manager/upgrades.backup'
+    files = list(path_from.rglob('*.zip'))
+    if not files:
+        print(f'Not found files in {path_from}')
+        return
+
+    print(f'Deleting files from {path_from}:')
+    for file in files:
+        print(f'    File: {file.name}')
+        file.unlink()
+
+
 SETTINGS = {
     '__radix_base': {
         'options': {
@@ -230,9 +274,15 @@ SETTINGS = {
             'compile':  '!build_ads__pause.bat',
             'build':    '!build_kernel__pause.cmd',
             'update':   ('svn update', r'start /b "" TortoiseProc /command:update /path:"{path}"'),
-            'log':      ('svn log', r'start /b "" TortoiseProc /command:log /path:"{path}" /findstring:"{find_string}"'),
-            'cleanup':  ('svn cleanup', 'start /b "" TortoiseProc /command:cleanup /path:"{path}" /cleanup /nodlg /closeonend:2'),
-            'revert':   ('svn revert', 'start /b "" TortoiseProc /command:revert /path:"{path}"'),
+            'log':      (
+                'svn log', r'start /b "" TortoiseProc /command:log /path:"{path}" /findstring:"{find_string}"'
+            ),
+            'cleanup':  (
+                'svn cleanup', 'start /b "" TortoiseProc /command:cleanup /path:"{path}" /cleanup /nodlg /closeonend:2'
+            ),
+            'revert':   (
+                'svn revert', 'start /b "" TortoiseProc /command:revert /path:"{path}"'
+            ),
         },
     },
     'tx': {
@@ -255,6 +305,13 @@ SETTINGS = {
     'manager': {
         'base': '__simple_base',
         'path': 'C:/DEV__RADIX/manager/manager/bin/manager.cmd',
+        'options': {
+            'what': AvailabilityEnum.OPTIONAL,
+        },
+        'whats': {
+            'up': _manager_up,
+            'clean': _manager_clean,
+        }
     },
     'doc': {
         'base': '__simple_base',
@@ -340,11 +397,14 @@ def resolve_name(alias: str) -> str:
     return name
 
 
-def resolve_whats(name: str, alias: str) -> List[str]:
+def resolve_whats(name: str, alias: str | None) -> list[str]:
+    items = []
+    if not alias:
+        return items
+
     supported = list(get_settings(name)['whats'])
     shadow_supported = {from_ghbdtn(x): x for x in supported}
 
-    items = []
     for alias_what in alias.split('+'):
         # Поиск среди списка
         what = get_similar_value(alias_what, supported)
@@ -362,7 +422,11 @@ def resolve_whats(name: str, alias: str) -> List[str]:
     return items
 
 
-def resolve_version(name: str, alias: str, versions: List[str] = None) -> str:
+def resolve_version(
+        name: str,
+        alias: str,
+        versions: list[str] | None = None
+) -> str:
     settings = get_settings(name)
 
     supported = versions
@@ -396,8 +460,11 @@ def resolve_version(name: str, alias: str, versions: List[str] = None) -> str:
     return version
 
 
-def get_file_by_what(name: str, alias: str) -> Union[str, Tuple[str, str]]:
-    what = resolve_whats(name, alias)[0]
+def get_file_by_what(name: str, alias: str | None) -> str | tuple[str, str] | None:
+    whats = resolve_whats(name, alias)
+    if not whats:
+        return
+    what = whats[0]
     return get_settings(name)['whats'][what]
 
 
@@ -432,12 +499,26 @@ def _open_dir(path: str):
     os.startfile(dir_file_name)
 
 
-def go_run(name: str, version: Optional[str] = None, what: Optional[str] = None, args: List[str] = None):
+def go_run(
+        name: str,
+        version: str | None = None,
+        what: str | None = None,
+        args: list[str] | None = None
+):
     if args is None:
         args = []
 
     # Если по <name> указывается файл, то сразу его и запускаем
     path = get_path_by_name(name)
+    value = get_file_by_what(name, what)
+
+    # Если в <whats> функция, вызываем её
+    if callable(value):
+        print(f'Run: {name} call {what!r}')
+        value(path)
+        return
+
+    # Если по <name> указывается файл, то сразу его и запускаем
     if os.path.isfile(path) or all_options_is_prohibited(name):
         _run_file(path)
         return
@@ -447,7 +528,6 @@ def go_run(name: str, version: Optional[str] = None, what: Optional[str] = None,
     # Move to active dir
     os.chdir(dir_file_name)
 
-    value = get_file_by_what(name, what)
     if isinstance(value, str):
         file_name = dir_file_name + '/' + value
         _run_file(file_name)
@@ -461,7 +541,7 @@ def go_run(name: str, version: Optional[str] = None, what: Optional[str] = None,
         os.system(command)
 
 
-def parse_cmd_args(arguments: List[str]) -> List[Command]:
+def parse_cmd_args(arguments: list[str]) -> list[Command]:
     arguments = arguments.copy()
     name, whats, args = [None] * 3
     versions = []
@@ -527,11 +607,13 @@ def parse_cmd_args(arguments: List[str]) -> List[Command]:
     commands = []
     for version in versions:
         for what in whats:
-            commands.append(Command(name, version, what, args))
+            commands.append(
+                Command(name, version, what, args)
+            )
     return commands
 
 
-def run(arguments: List[str]):
+def run(arguments: list[str]):
     if arguments[0] in ['open', from_ghbdtn('open')]:
         arguments.pop(0)
 
