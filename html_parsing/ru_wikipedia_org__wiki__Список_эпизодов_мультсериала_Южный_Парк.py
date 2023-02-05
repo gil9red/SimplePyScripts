@@ -22,7 +22,8 @@ def get_seasons() -> Dict[str, List[str]]:
         season_title = season_title_el.get_text(strip=True)
 
         table_series = season_title_el.parent.find_next_sibling('table', attrs={'class': 'wikitable'})
-        assert table_series, 'Не найдена таблица серий!'
+        if not table_series:
+            continue
 
         series_list = []
         for title_el in table_series.select('tr td.summary a'):
