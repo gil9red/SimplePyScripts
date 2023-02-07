@@ -5,13 +5,12 @@ __author__ = 'ipetrash'
 
 
 import calendar
-import datetime as DT
 import math
 import sys
 import time
 import traceback
 
-from typing import List, Dict
+from datetime import datetime, date, timedelta
 
 from PyQt5.QtWidgets import (
     QApplication, QMessageBox, QMainWindow, QSystemTrayIcon, QTabWidget, QTableWidget,
@@ -93,7 +92,7 @@ class TableWidgetRun(QWidget):
 
         self.setLayout(main_layout)
 
-    def refresh(self, items: List[Run]):
+    def refresh(self, items: list[Run]):
         # Удаление строк таблицы
         while self.table_run.rowCount():
             self.table_run.removeRow(0)
@@ -172,7 +171,7 @@ class CurrentAssignedOpenIssues(QWidget):
     def _update_total_issues(self, value):
         self.label_total.setText(f'<b>Total issues:</b> {value}')
 
-    def _on_set_items(self, items: Dict[str, int]):
+    def _on_set_items(self, items: dict[str, int]):
         self._update_total_issues(sum(items.values()))
 
         # Удаление строк таблицы
@@ -186,7 +185,7 @@ class CurrentAssignedOpenIssues(QWidget):
             self.table.setItem(i, 1, QTableWidgetItem(str(number)))
 
         self.label_last_refresh_date.setText(
-            "Last refresh date: " + DT.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+            "Last refresh date: " + datetime.now().strftime('%d/%m/%Y %H:%M:%S')
         )
 
     def _on_error(self, e: Exception):
@@ -291,16 +290,16 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(central_widget)
 
     @staticmethod
-    def _get_timegm(date: DT.date) -> int:
+    def _get_timegm(date: date) -> int:
         return calendar.timegm(date.timetuple()) * 1000
 
-    def _get_datetime(self, date: DT.date, delta: DT.timedelta = None) -> DT.datetime:
-        dt = DT.datetime.combine(date, DT.datetime.min.time())
+    def _get_datetime(self, date: date, delta: timedelta = None) -> datetime:
+        dt = datetime.combine(date, datetime.min.time())
         if delta:
             dt += delta
         return dt
 
-    def _fill_chart(self, items: List[Run]):
+    def _fill_chart(self, items: list[Run]):
         series = QLineSeries()
         series.setPointsVisible(True)
         series.setPointLabelsVisible(True)
@@ -309,10 +308,13 @@ class MainWindow(QMainWindow):
 
         self.timestamp_by_run.clear()
 
+        issues_number = []
+
         for run in items:
             date_value = self._get_timegm(run.date)
             total_issues = run.get_total_issues()
             series.append(date_value, total_issues)
+            issues_number.append(total_issues)
 
             self.timestamp_by_run[date_value] = run
 
@@ -328,8 +330,8 @@ class MainWindow(QMainWindow):
 
         axisX = QDateTimeAxis()
         axisX.setRange(
-            self._get_datetime(items[0].date, DT.timedelta(days=-30)),
-            self._get_datetime(items[-1].date, DT.timedelta(days=30))
+            self._get_datetime(items[0].date, timedelta(days=-30)),
+            self._get_datetime(items[-1].date, timedelta(days=30))
         )
         axisX.setFormat("dd/MM/yyyy")
         axisX.setTitleText('Date')
@@ -337,6 +339,10 @@ class MainWindow(QMainWindow):
         series.attachAxis(axisX)
 
         axisY = QValueAxis()
+        axisY.setRange(
+            min(issues_number) * 0.8,
+            max(issues_number) * 1.2
+        )
         axisY.setLabelFormat('%d')
         axisY.setTitleText('Total issues')
         chart.addAxis(axisY, Qt.AlignLeft)
@@ -354,7 +360,7 @@ class MainWindow(QMainWindow):
         items.reverse()
         self.table_run.refresh(items)
 
-        self.setWindowTitle(f"{WINDOW_TITLE}. Last refresh date: {DT.datetime.now():%d/%m/%Y %H:%M:%S}")
+        self.setWindowTitle(f"{WINDOW_TITLE}. Last refresh date: {datetime.now():%d/%m/%Y %H:%M:%S}")
 
     def _on_tray_activated(self, reason: QSystemTrayIcon.ActivationReason):
         # Если запрошено меню
