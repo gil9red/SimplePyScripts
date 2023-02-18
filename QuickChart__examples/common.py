@@ -4,12 +4,6 @@
 __author__ = 'ipetrash'
 
 
-# pip install requests
-import requests
-
-# pip install pillow
-from PIL import Image
-
 # pip install quickchart.io
 from quickchart import QuickChart
 
@@ -44,6 +38,3 @@ def get_chart() -> QuickChart:
         },
     }
     return qc
-
-
-# url = qc.get_url()

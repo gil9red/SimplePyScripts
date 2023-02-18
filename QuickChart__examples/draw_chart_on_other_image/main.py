@@ -9,8 +9,10 @@ import sys
 from io import BytesIO
 from pathlib import Path
 
+# pip install requests
 import requests
 
+# pip install pillow
 from PIL import Image
 
 DIR = Path(__file__).resolve().absolute().parent

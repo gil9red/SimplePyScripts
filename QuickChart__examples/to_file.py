@@ -8,8 +8,9 @@ from pathlib import Path
 from common import get_chart
 
 
-CURRENT_FILE = Path(__file__).resolve().absolute()
+PATH = Path(__file__).resolve().absolute()
+FILE_NAME = Path(f'{PATH}.png')
 
 
 qc = get_chart()
-qc.to_file(f'{CURRENT_FILE}.png')
+qc.to_file(FILE_NAME)
