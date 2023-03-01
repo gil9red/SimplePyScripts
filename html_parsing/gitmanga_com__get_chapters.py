@@ -22,20 +22,17 @@ class Chapter:
 
 
 def get_chapters(url: str) -> list[Chapter]:
-    items = []
-
     rs = session.get(url)
     rs.raise_for_status()
 
     soup = BeautifulSoup(rs.content, 'html.parser')
-    for el in soup.select('.chapters-list__item'):
-        url = urljoin(rs.url, el.a['href'])
-        items.append(Chapter(
+    return [
+        Chapter(
             title=el.select_one('.item-title').get_text(strip=True),
-            url=url,
-        ))
-
-    return items
+            url=urljoin(rs.url, el.a['href']),
+        )
+        for el in soup.select('.chapters-list__item')
+    ]
 
 
 if __name__ == '__main__':
