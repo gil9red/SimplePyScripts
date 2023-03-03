@@ -329,20 +329,22 @@ class MainWindow(QMainWindow):
         chart.setBackgroundRoundness(0)
 
         axisX = QDateTimeAxis()
-        axisX.setRange(
-            self._get_datetime(items[0].date, timedelta(days=-30)),
-            self._get_datetime(items[-1].date, timedelta(days=30))
-        )
+        if items:
+            axisX.setRange(
+                self._get_datetime(items[0].date, timedelta(days=-30)),
+                self._get_datetime(items[-1].date, timedelta(days=30))
+            )
         axisX.setFormat("dd/MM/yyyy")
         axisX.setTitleText('Date')
         chart.addAxis(axisX, Qt.AlignBottom)
         series.attachAxis(axisX)
 
         axisY = QValueAxis()
-        axisY.setRange(
-            min(issues_number) * 0.8,
-            max(issues_number) * 1.2
-        )
+        if issues_number:
+            axisY.setRange(
+                min(issues_number) * 0.8,
+                max(issues_number) * 1.2
+            )
         axisY.setLabelFormat('%d')
         axisY.setTitleText('Total issues')
         chart.addAxis(axisY, Qt.AlignLeft)
