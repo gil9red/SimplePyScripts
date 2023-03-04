@@ -15,7 +15,7 @@ from datetime import datetime, date, timedelta
 from PyQt5.QtWidgets import (
     QApplication, QMessageBox, QMainWindow, QSystemTrayIcon, QTabWidget, QTableWidget,
     QTableWidgetItem, QVBoxLayout, QWidget, QPushButton, QSplitter, QLabel, QGridLayout,
-    QHeaderView, QProgressBar, QMenu
+    QHeaderView, QProgressBar, QMenu, QComboBox
 )
 from PyQt5.QtGui import QIcon, QPainter, QCloseEvent
 from PyQt5.QtCore import QEvent, QTimer, Qt, QThread, pyqtSignal
@@ -267,6 +267,13 @@ class MainWindow(QMainWindow):
         self.chart_view = MyChartViewToolTips(self.timestamp_by_run)
         self.chart_view.setRenderHint(QPainter.Antialiasing)
 
+        self.cb_chart_filter = QComboBox()
+        self.cb_chart_filter.addItem('<all years>', userData=0)
+        self.cb_chart_filter.activated.connect(self.refresh)
+        layout_chart_view = QVBoxLayout(self.chart_view)
+        layout_chart_view.addWidget(self.cb_chart_filter)
+        layout_chart_view.setAlignment(self.cb_chart_filter, Qt.AlignTop | Qt.AlignRight)
+
         self.table_run = TableWidgetRun()
         self.table_run.layout().setContentsMargins(0, 0, 0, 0)
 
@@ -299,7 +306,24 @@ class MainWindow(QMainWindow):
             dt += delta
         return dt
 
+    def _fill_chart_filter(self, items: list[Run]):
+        years: list[int] = sorted({run.date.year for run in items})
+        filter_years: list[int] = [
+            self.cb_chart_filter.itemData(i)
+            for i in range(self.cb_chart_filter.count())
+        ]
+        for year in years:
+            if year not in filter_years:
+                self.cb_chart_filter.addItem(f'{year}', userData=year)
+
     def _fill_chart(self, items: list[Run]):
+        # Фильтрация данных из графика
+        year: int = self.cb_chart_filter.currentData()
+        if year:
+            items = [
+                run for run in items if run.date.year == year
+            ]
+
         series = QLineSeries()
         series.setPointsVisible(True)
         series.setPointLabelsVisible(True)
@@ -309,7 +333,6 @@ class MainWindow(QMainWindow):
         self.timestamp_by_run.clear()
 
         issues_number = []
-
         for run in items:
             date_value = self._get_timegm(run.date)
             total_issues = run.get_total_issues()
@@ -357,6 +380,9 @@ class MainWindow(QMainWindow):
         self.current_assigned_open_issues.refresh()
 
         items = list(Run.select())
+
+        self._fill_chart_filter(items)
+
         self._fill_chart(items)
 
         items.reverse()
