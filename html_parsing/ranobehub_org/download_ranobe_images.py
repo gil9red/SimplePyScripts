@@ -33,14 +33,7 @@ def parse(start_url: str, download_path: Path = DIR):
         soup = BeautifulSoup(rs.content, 'html.parser')
 
         title = soup.select_one('title').get_text(strip=True)
-
-        # Example: 'Да будет благословен этот прекрасный мир! / Том 666 / Веб-новелла: Короткая история богини'
-        #       -> 'Да будет благословен этот прекрасный мир/Том 666/Веб-новелла Короткая история богини'
-        title = '/'.join(get_valid_filename(el) for el in title.split('/'))
-
         print(title)
-
-        dir_chapter = download_path / title
 
         img_urls = []
         for img_el in soup.select('img[data-media-id]'):
@@ -50,15 +43,22 @@ def parse(start_url: str, download_path: Path = DIR):
                 img_urls.append(url)
 
         if img_urls:
-            dir_chapter.mkdir(parents=True, exist_ok=True)
-
             print(f'    Изображений: {len(img_urls)}')
+
+            # Example: 'Да будет благословен этот прекрасный мир! / Том 666 / Веб-новелла: Короткая история богини'
+            #       -> ['Да будет благословен этот прекрасный мир', 'Том 666', 'Веб-новелла Короткая история богини']
+            parts: list[str] = [get_valid_filename(el) for el in title.split('/')]
+            ranobe_title: str = parts[0]
+            chapter_title: str = '. '.join(parts[1:])
+
+            dir_ranobe = download_path / ranobe_title
+            dir_ranobe.mkdir(parents=True, exist_ok=True)
 
             for i, url in enumerate(img_urls, 1):
                 rs = session.get(url)
                 time.sleep(0.1)
 
-                img_path = dir_chapter / f'{i}.png'
+                img_path = dir_ranobe / f'{chapter_title}. {i}.png'
                 img_path.write_bytes(rs.content)
 
         next_chapter_link_el = soup.select_one('a[data-next-chapter-link]')
