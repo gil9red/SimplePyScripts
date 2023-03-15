@@ -5,7 +5,8 @@ __author__ = 'ipetrash'
 
 
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QToolButton, QSizePolicy, QGraphicsOpacityEffect
-from PyQt5.QtCore import QPropertyAnimation, QSequentialAnimationGroup
+from PyQt5.QtGui import QKeyEvent
+from PyQt5.QtCore import QPropertyAnimation, QSequentialAnimationGroup, Qt
 
 
 class MainWindow(QWidget):
@@ -60,6 +61,10 @@ class MainWindow(QWidget):
         self.animation_group.addAnimation(animation1)
         self.animation_group.addAnimation(animation2)
         self.animation_group.start()
+
+    def keyPressEvent(self, event: QKeyEvent):
+        if event.key() in [Qt.Key_Escape, Qt.Key_Return, Qt.Key_Enter, Qt.Key_Space]:
+            self.close()
 
 
 if __name__ == '__main__':
