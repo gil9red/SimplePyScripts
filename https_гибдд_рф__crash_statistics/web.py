@@ -43,13 +43,19 @@ def index():
     <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap-4.3.1/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='chart_js_2.9.3/Chart.bundle.min.js') }}"></script>
+    <style>
+        .table-wrap {
+            height: 90vh;
+            overflow-y: auto;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid">
     <h2 class="text-center"><a href="https://гибдд.рф/">{{ title }}</a></h2>
 
     <div class="row">
-        <div class="col-5">
+        <div class="col-5 table-wrap">
             <table class="table table-hover">
                 <thead class="thead-dark">
                     <tr>
