@@ -1,0 +1,66 @@
+BoxLayout:
+    orientation: 'horizontal'
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            text: 'PERMANENT'
+
+        Button:
+            text: 'Connections'
+            font_size: 20
+            on_release: screen_manager.current = 'ConnectionsScreen'
+        Button:
+            text: 'Exchange'
+            font_size: 20
+            on_release: screen_manager.current = 'ExchangeScreen'
+
+        Button:
+            text: 'EEG Signal'
+            font_size: 20
+            on_release: screen_manager.current = 'EegScreen'
+
+        Button:
+            text: 'Settings'
+            font_size: 20
+            on_release: screen_manager.current = 'SettingsScreen'
+
+    ScreenManager:
+        id: screen_manager
+
+        EegScreen:
+            id: eeg_screen
+            name: 'EegScreen'
+
+        SettingsScreen:
+            id: settings_screen
+            name: 'SettingsScreen'
+
+        ExchangeScreen:
+            id: exchange_screen
+            name: 'ExchangeScreen'
+
+        ConnectionsScreen:
+            id: connections_screen
+            name: 'ConnectionsScreen'
+
+<EegScreen>:
+    FloatLayout:
+        Label:
+            text: 'EegScreen'
+
+<SettingsScreen>:
+    FloatLayout:
+        Label:
+            text: 'SettingsScreen'
+
+<ExchangeScreen>:
+    FloatLayout:
+        Label:
+            text: 'ExchangeScreen'
+
+<ConnectionsScreen>:
+    FloatLayout:
+        Label:
+            text: 'ConnectionsScreen'
