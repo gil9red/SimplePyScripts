@@ -4,8 +4,9 @@
 __author__ = 'ipetrash'
 
 
-from http.server import BaseHTTPRequestHandler, HTTPServer
 import os
+
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlsplit
 
 # pip install psutil
