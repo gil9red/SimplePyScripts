@@ -4,8 +4,9 @@
 __author__ = 'ipetrash'
 
 
-from http.server import BaseHTTPRequestHandler, HTTPServer
 import os
+
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlsplit
 
 # pip install psutil
@@ -17,13 +18,21 @@ TITLE = "Список запущенных серверов на python"
 HEADERS = ["#", "PID", "Порт(ы)", "Путь"]
 
 
-def _get_processes() -> list:
+def _port_to_tag_a(port: int) -> str:
+    return f'<a target="_blank" href="http://127.0.0.1:{port}">{port}</a>'
+
+
+def _get_processes() -> list[dict[str, str | int]]:
     processes = []
     for proc in psutil.process_iter():
         if not proc.is_running() or proc.name().lower() not in NEED_PROCESS:
             continue
 
-        connections = [c for c in proc.connections() if c.status == psutil.CONN_LISTEN and c.laddr]
+        connections = [
+            c
+            for c in proc.connections()
+            if c.status == psutil.CONN_LISTEN and c.laddr
+        ]
         if not connections:
             continue
 
@@ -31,17 +40,13 @@ def _get_processes() -> list:
         processes.append({
             'pid': proc.pid,
             'name': proc.name(),
-            'path': os.path.normpath(proc.cmdline()[1]),
+            'path': ' '.join(proc.cmdline()[1:]),
             'ports': ', '.join(map(_port_to_tag_a, ports)),
         })
 
     processes.sort(key=lambda p: int(''.join(c for c in p['ports'] if c.isdigit())))
 
     return processes
-
-
-def _port_to_tag_a(port: int) -> str:
-    return f'<a target="_blank" href="http://127.0.0.1:{port}">{port}</a>'
 
 
 class HttpProcessor(BaseHTTPRequestHandler):
