@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/selwin/python-user-agents
@@ -11,8 +11,10 @@ __author__ = 'ipetrash'
 from user_agents import parse
 
 
-ua_string = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' \
-            '(KHTML, like Gecko) Chrome/61.0.3347.109 Safari/537.36'
+ua_string = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/61.0.3347.109 Safari/537.36"
+)
 user_agent = parse(ua_string)
 
 print(user_agent)

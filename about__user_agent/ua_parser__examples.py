@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/ua-parser/uap-python
@@ -13,8 +13,10 @@ import pprint
 from ua_parser import user_agent_parser
 
 
-ua_string = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' \
-            '(KHTML, like Gecko) Chrome/61.0.3347.109 Safari/537.36'
+ua_string = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/61.0.3347.109 Safari/537.36"
+)
 
 
 pp = pprint.PrettyPrinter(indent=4)

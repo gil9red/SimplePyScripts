@@ -70,24 +70,24 @@ MAIL_RU = [
 ]
 
 RAMBLER = [
-    'StackRambler/2.0 (MSIE incompatible)',
-    'StackRambler/2.0',
+    "StackRambler/2.0 (MSIE incompatible)",
+    "StackRambler/2.0",
 ]
 
 YAHOO = [
-    'Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)',
-    'Mozilla/5.0 (compatible; Yahoo! Slurp/3.0; http://help.yahoo.com/help/us/ysearch/slurp)',
+    "Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)",
+    "Mozilla/5.0 (compatible; Yahoo! Slurp/3.0; http://help.yahoo.com/help/us/ysearch/slurp)",
 ]
 
 MSN = [
-    'msnbot/1.1 (+http://search.msn.com/msnbot.htm)',
-    'msnbot-media/1.0 (+http://search.msn.com/msnbot.htm)',
-    'msnbot-media/1.1 (+http://search.msn.com/msnbot.htm)',
-    'msnbot-news (+http://search.msn.com/msnbot.htm)',
+    "msnbot/1.1 (+http://search.msn.com/msnbot.htm)",
+    "msnbot-media/1.0 (+http://search.msn.com/msnbot.htm)",
+    "msnbot-media/1.1 (+http://search.msn.com/msnbot.htm)",
+    "msnbot-news (+http://search.msn.com/msnbot.htm)",
 ]
 
 BING = [
-    'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)',
+    "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)",
 ]
 
 ALL = []
@@ -100,6 +100,6 @@ ALL.extend(MSN)
 ALL.extend(BING)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import random
     print(random.choice(ALL))
