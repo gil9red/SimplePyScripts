@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install aiohttp
@@ -9,7 +9,7 @@ from aiohttp import web
 
 
 async def handle(request):
-    name = request.match_info.get('name', "Anonymous")
+    name = request.match_info.get("name", "Anonymous")
     text = "Hello, " + name
     return web.Response(text=text)
 
@@ -31,11 +31,11 @@ async def wshandle(request):
 
 app = web.Application()
 app.add_routes([
-    web.get('/', handle),
-    web.get('/echo', wshandle),
-    web.get('/{name}', handle)
+    web.get("/", handle),
+    web.get("/echo", wshandle),
+    web.get("/{name}", handle)
 ])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     web.run_app(app)

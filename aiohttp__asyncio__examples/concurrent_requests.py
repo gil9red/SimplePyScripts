@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import asyncio
@@ -22,7 +22,7 @@ async def fetch_page(url: str, idx: int):
 
 
 async def main():
-    url = 'https://python.org'
+    url = "https://python.org"
     urls = [url] * 100
 
     tasks = [
@@ -32,7 +32,7 @@ async def main():
     await asyncio.gather(*tasks)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import time
     t = time.perf_counter()
 
@@ -40,4 +40,4 @@ if __name__ == '__main__':
     ignore_aiohttp_ssl_error(loop)
     loop.run_until_complete(main())
 
-    print(f'Elapsed {time.perf_counter() - t:.2f} secs')
+    print(f"Elapsed {time.perf_counter() - t:.2f} secs")

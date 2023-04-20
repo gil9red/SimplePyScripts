@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/aio-libs/aiohttp
@@ -19,10 +19,10 @@ async def fetch(session, url):
 
 async def main():
     async with aiohttp.ClientSession() as session:
-        html = await fetch(session, 'http://python.org')
+        html = await fetch(session, "http://python.org")
         print(html)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main())

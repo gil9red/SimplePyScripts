@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import asyncio
@@ -47,15 +47,15 @@ def ignore_aiohttp_ssl_error(loop):
             "Fatal error on transport",
         }:
             # validate we have the right exception, transport and protocol
-            exception = context.get('exception')
-            protocol = context.get('protocol')
+            exception = context.get("exception")
+            protocol = context.get("protocol")
             if (
                 isinstance(exception, ssl.SSLError)
-                and exception.reason == 'KRB5_S_INIT'
+                and exception.reason == "KRB5_S_INIT"
                 and isinstance(protocol, SSL_PROTOCOLS)
             ):
                 if loop.get_debug():
-                    asyncio.log.logger.debug('Ignoring asyncio SSL KRB5_S_INIT error')
+                    asyncio.log.logger.debug("Ignoring asyncio SSL KRB5_S_INIT error")
                 return
         if orig_handler is not None:
             orig_handler(loop, context)
