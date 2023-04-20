@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import time
@@ -15,7 +15,7 @@ from selenium.webdriver.common.by import By
 from config import LOGIN, PASSWORD
 
 
-URL = 'https://mail.compassplus.com'
+URL = "https://mail.compassplus.com"
 
 driver = webdriver.Firefox()
 
@@ -24,32 +24,32 @@ try:
     driver.get(URL)
     print('Title: "{}"'.format(driver.title))
 
-    driver.find_element_by_id('username').send_keys(LOGIN)
-    driver.find_element_by_id('password').send_keys(PASSWORD)
+    driver.find_element_by_id("username").send_keys(LOGIN)
+    driver.find_element_by_id("password").send_keys(PASSWORD)
 
     # Делаем скриншот результата
-    driver.save_screenshot('before_auth.png')
+    driver.save_screenshot("before_auth.png")
 
     driver.find_element_by_class_name("signinbutton").click()
 
-    driver.save_screenshot('after_auth.png')
+    driver.save_screenshot("after_auth.png")
     print('Title: "{}"'.format(driver.title))
 
-    driver.save_screenshot('before_click_on_calendar.png')
+    driver.save_screenshot("before_click_on_calendar.png")
     print('Title: "{}"'.format(driver.title))
 
     html = driver.page_source
-    print('Length:', len(html))
-    open('driver.before_click_on_calendar.html', 'w', encoding='utf-8').write(html)
+    print("Length:", len(html))
+    open("driver.before_click_on_calendar.html", "w", encoding="utf-8").write(html)
 
     # Ждем и кликаем на кнопку
     driver.find_element_by_xpath('//*[text()="Календарь"]').click()
 
     html = driver.page_source
-    print('Length:', len(html))
-    open('driver.after_click_on_calendar.html', 'w', encoding='utf-8').write(html)
+    print("Length:", len(html))
+    open("driver.after_click_on_calendar.html", "w", encoding="utf-8").write(html)
 
-    driver.save_screenshot('after_click_on_calendar.png')
+    driver.save_screenshot("after_click_on_calendar.png")
     print('Title: "{}"'.format(driver.title))
 
     # Ждем пока появится элемент
@@ -59,10 +59,10 @@ try:
     time.sleep(10)
 
     html = driver.page_source
-    print('Length:', len(html))
-    open('driver.after_click_on_calendar_2.html', 'w', encoding='utf-8').write(html)
+    print("Length:", len(html))
+    open("driver.after_click_on_calendar_2.html", "w", encoding="utf-8").write(html)
 
-    driver.save_screenshot('after_click_on_calendar_2.png')
+    driver.save_screenshot("after_click_on_calendar_2.png")
     print('Title: "{}"'.format(driver.title))
 
     # TODO: нужно
