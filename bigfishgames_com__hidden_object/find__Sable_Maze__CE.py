@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from typing import List
@@ -15,10 +15,9 @@ def get_games() -> List[str]:
     return get_all_games(prefix=prefix, postfix=postfix)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     games = get_games()
-    print(f'Games ({len(games)}):')
+    print(f"Games ({len(games)}):")
 
     for game in games:
-        print('    ' + game)
-
+        print("    " + game)
