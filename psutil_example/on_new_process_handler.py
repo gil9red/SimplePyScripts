@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from threading import Thread
 from time import sleep
-from typing import Callable, List
+from typing import Callable
 
 # pip install psutil
 import psutil
 
 
-ListenerFunc = Callable[[List], None]
+ListenerFunc = Callable[[list], None]
 
 
 class OnNewProcessHandler(Thread):
@@ -20,7 +20,7 @@ class OnNewProcessHandler(Thread):
         super().__init__()
 
         self._process = dict()
-        self._listeners: List[ListenerFunc] = []
+        self._listeners: list[ListenerFunc] = []
         self._timeout_secs = timeout_secs
 
     def add_listener(self, listener: ListenerFunc):
@@ -40,8 +40,8 @@ class OnNewProcessHandler(Thread):
 
         for proc in psutil.process_iter():
             try:
-                pinfo = proc.as_dict(attrs=['pid', 'name', 'exe'])
-                items[pinfo['pid']] = pinfo
+                pinfo = proc.as_dict(attrs=["pid", "name", "exe"])
+                items[pinfo["pid"]] = pinfo
 
             except psutil.NoSuchProcess:
                 continue
@@ -69,18 +69,17 @@ class OnNewProcessHandler(Thread):
             sleep(self._timeout_secs)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     def print_listener(process_list):
         result = []
         for p in process_list:
             result.append(f"{p['name']} (pid={p['pid']})")
 
-        print('-' * 10 + '\n' + '\n'.join(result) + '\n' + '-' * 10)
-
+        print("-" * 10 + "\n" + "\n".join(result) + "\n" + "-" * 10)
 
     handler = OnNewProcessHandler()
     handler.add_listener(print_listener)
     handler.start()
 
     sleep(2)
-    handler.add_listener(lambda x: print(f'New process: {len(x)}'))
+    handler.add_listener(lambda x: print(f"New process: {len(x)}"))

@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install psutil
 import psutil
 
+
 win_service_list = list(psutil.win_service_iter())
-print(f'Win service list ({len(win_service_list)}):')
+print(f"Win service list ({len(win_service_list)}):")
 
 win_service_list.sort(key=lambda x: x.status())
 
@@ -18,7 +19,16 @@ win_service_list.sort(key=lambda x: x.status())
 # # OR:
 # #
 if win_service_list:
-    headers = ['name', 'display_name', 'status', 'start_type', 'username', 'pid', 'binpath', 'description']
+    headers = [
+        "name",
+        "display_name",
+        "status",
+        "start_type",
+        "username",
+        "pid",
+        "binpath",
+        "description",
+    ]
 
     rows = []
     for win_service in win_service_list:
@@ -34,8 +44,10 @@ if win_service_list:
     print()
 
 print()
+
 name = win_service_list[0].name()
-print(f'Windows service info: {name}')
+print(f"Windows service info: {name}")
+
 win_service = psutil.win_service_get(name)
-print('  win_service:', win_service)
-print('  win_service info:', win_service.as_dict())
+print("  win_service:", win_service)
+print("  win_service info:", win_service.as_dict())

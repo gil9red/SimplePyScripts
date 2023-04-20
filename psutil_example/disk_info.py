@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -14,34 +14,36 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 from human_byte_size import sizeof_fmt
 
 
-print('Disk partitions:')
+print("Disk partitions:")
 for disk in psutil.disk_partitions():
-    print('  {}'.format(disk))
+    print(f"  {disk}")
 
 print()
-print('Disk usage:')
-for disk in filter(lambda x: 'fixed' in x.opts, psutil.disk_partitions()):
+print("Disk usage:")
+for disk in filter(lambda x: "fixed" in x.opts, psutil.disk_partitions()):
     info = psutil.disk_usage(disk.device)
-    print('  {} {}'.format(disk.device, info))
-    print('    {} free of {}'.format(sizeof_fmt(info.free), sizeof_fmt(info.total)))
+    print(f"  {disk.device} {info}")
+    print(f"    {sizeof_fmt(info.free)} free of {sizeof_fmt(info.total)}")
     print()
 
 print()
-print('Disk io (input/output) total sum counters:')
-print('  {}'.format(psutil.disk_io_counters()))
+print("Disk io (input/output) total sum counters:")
+print(f"  {psutil.disk_io_counters()}")
 
 
 physical_drive_by_info = list(psutil.disk_io_counters(True).items())
 
 print()
-print('Physical drive io (input/output) counters ({}):'.format(len(physical_drive_by_info)))
+print(
+    f"Physical drive io (input/output) counters ({len(physical_drive_by_info)}):"
+)
 #
 # for drive, info in physical_drive_by_info:
 #     print('  {}: {}'.format(drive, info))
 # #
 # # OR:
 # #
-headers = ('drive',) + physical_drive_by_info[0][1]._fields
+headers = ("drive",) + physical_drive_by_info[0][1]._fields
 headers = [header.upper() for header in headers]
 
 rows = [(drive,) + tuple(info) for drive, info in physical_drive_by_info]
