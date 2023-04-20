@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import json
@@ -13,31 +13,31 @@ import psutil
 
 
 # Absolute file name
-FILE_NAME_SNAPSHOT = str(pathlib.Path(__file__).resolve().parent / 'snapshot.json')
+FILE_NAME_SNAPSHOT = str(pathlib.Path(__file__).resolve().parent / "snapshot.json")
 
 
 def sizeof_fmt(num: Union[int, float], with_sign=False) -> str:
     if with_sign:
-        sign = '+' if num >= 0 else '-'
+        sign = "+" if num >= 0 else "-"
     else:
-        sign = ''
+        sign = ""
 
     if num == 0:
-        sign = ''
+        sign = ""
 
     num = abs(num)
 
-    for x in ['bytes', 'KB', 'MB', 'GB']:
+    for x in ["bytes", "KB", "MB", "GB"]:
         if num < 1024.0:
             return "%s%3.1f %s" % (sign, num, x)
 
         num /= 1024.0
 
-    return "%s%3.1f %s" % (sign, num, 'TB')
+    return "%s%3.1f %s" % (sign, num, "TB")
 
 
 def get_disc_list() -> List[str]:
-    return [disk.device for disk in psutil.disk_partitions() if 'fixed' in disk.opts]
+    return [disk.device for disk in psutil.disk_partitions() if "fixed" in disk.opts]
 
 
 def get_human_sizes(items: List[int], with_sign) -> List[str]:
@@ -59,17 +59,17 @@ def get_disc_total_used(disc_list: List[str]) -> str:
 
 
 def write_snapshot_raw_disc_used(disc_list: List[str] = None):
-    with open(FILE_NAME_SNAPSHOT, 'w', encoding='utf-8') as f:
+    with open(FILE_NAME_SNAPSHOT, "w", encoding="utf-8") as f:
         items = get_disc_used(disc_list, only_raw=True)
-        print('Write snapshot with:', items)
+        print("Write snapshot with:", items)
 
         json.dump(items, f)
 
 
 def load_snapshot_raw_disc_used() -> List[int]:
-    with open(FILE_NAME_SNAPSHOT, encoding='utf-8') as f:
+    with open(FILE_NAME_SNAPSHOT, encoding="utf-8") as f:
         items = json.load(f)
-        print('Read snapshot:', items)
+        print("Read snapshot:", items)
 
         return items
 
