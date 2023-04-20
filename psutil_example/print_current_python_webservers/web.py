@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import os
@@ -13,7 +13,7 @@ from urllib.parse import urlsplit
 import psutil
 
 
-NEED_PROCESS = ['python.exe', 'pythonw.exe']
+NEED_PROCESS = ["python.exe", "pythonw.exe"]
 TITLE = "Список запущенных серверов на python"
 HEADERS = ["#", "PID", "Порт(ы)", "Путь"]
 
@@ -38,13 +38,13 @@ def _get_processes() -> list[dict[str, str | int]]:
 
         ports = sorted(set(c.laddr.port for c in connections))
         processes.append({
-            'pid': proc.pid,
-            'name': proc.name(),
-            'path': ' '.join(proc.cmdline()[1:]),
-            'ports': ', '.join(map(_port_to_tag_a, ports)),
+            "pid": proc.pid,
+            "name": proc.name(),
+            "path": " ".join(proc.cmdline()[1:]),
+            "ports": ", ".join(map(_port_to_tag_a, ports)),
         })
 
-    processes.sort(key=lambda p: int(''.join(c for c in p['ports'] if c.isdigit())))
+    processes.sort(key=lambda p: int("".join(c for c in p["ports"] if c.isdigit())))
 
     return processes
 
@@ -54,22 +54,23 @@ class HttpProcessor(BaseHTTPRequestHandler):
         o = urlsplit(self.path)
 
         # Only index
-        if o.path != '/':
+        if o.path != "/":
             self.send_error(404)
             return
 
         table_rows = []
         for i, p in enumerate(_get_processes(), 1):
-            table_rows.append(f'''
+            table_rows.append(f"""
             <tr {'class="grayscale"' if p['pid'] == os.getpid() else ''}>
                 <td>{i}</td>
                 <td>{p['pid']}</td>
                 <td>{p['ports']}</td>
                 <td>{p['path']}</td>
             </tr>
-            ''')
+            """)
 
-        text = """
+        text = (
+        """
         <!DOCTYPE html>
         <html lang="ru">
         <head>
@@ -113,26 +114,26 @@ class HttpProcessor(BaseHTTPRequestHandler):
             </table>
         </body>
         </html>
-        """ \
-            .replace('{{ title }}', TITLE) \
-            .replace('{{ headers }}', ''.join(f'<th>{x}</th>' for x in HEADERS)) \
-            .replace('{{ table_rows }}', ''.join(table_rows))
+        """.replace("{{ title }}", TITLE)
+            .replace("{{ headers }}", "".join(f"<th>{x}</th>" for x in HEADERS))
+            .replace("{{ table_rows }}", "".join(table_rows))
+        )
 
         self.send_response(200)
-        self.send_header('Content-Type', 'text/html; charset=utf-8')
-        self.send_header('Connection', 'close')
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Connection", "close")
         self.end_headers()
 
-        self.wfile.write(text.encode('utf-8'))
+        self.wfile.write(text.encode("utf-8"))
 
 
 def run(server_class=HTTPServer, handler_class=HttpProcessor, port=8080):
-    print(f'HTTP server running on http://127.0.0.1:{port}')
+    print(f"HTTP server running on http://127.0.0.1:{port}")
 
-    server_address = ('', port)
+    server_address = ("", port)
     httpd = server_class(server_address, handler_class)
     httpd.serve_forever()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run(port=10012)

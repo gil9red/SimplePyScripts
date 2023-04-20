@@ -56,7 +56,8 @@ class HttpProcessor(BaseHTTPRequestHandler):
 
         table_rows = []
         for i, p in enumerate(_get_processes(), 1):
-            table_rows.append(f"""
+            table_rows.append(
+                f"""
             <tr {'class="grayscale"' if p['pid'] == os.getpid() else ''}>
                 <td>{i}</td>
                 <td>{p['pid']}</td>
@@ -64,9 +65,11 @@ class HttpProcessor(BaseHTTPRequestHandler):
                 <td>{p['ports']}</td>
                 <td>{p['path']}</td>
             </tr>
-            """)
+            """
+            )
 
-        text = """
+        text = (
+        """
         <!DOCTYPE html>
         <html lang="ru">
         <head>
@@ -110,9 +113,12 @@ class HttpProcessor(BaseHTTPRequestHandler):
             </table>
         </body>
         </html>
-        """.replace("{{ title }}", TITLE)\
-            .replace("{{ headers }}", "".join(f"<th>{x}</th>" for x in HEADERS))\
+        """.replace(
+                "{{ title }}", TITLE
+            )
+            .replace("{{ headers }}", "".join(f"<th>{x}</th>" for x in HEADERS))
             .replace("{{ table_rows }}", "".join(table_rows))
+        )
 
         self.send_response(200)
         self.send_header("Content-Type", "text/html; charset=utf-8")
