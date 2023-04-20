@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -26,13 +26,13 @@ pyautogui.FAILSAFE = False
 
 logging.basicConfig(
     level=logging.INFO,
-    format='[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s',
+    format="[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s",
     stream=sys.stdout,
 )
 
 
 def is_exists_rdp_process() -> bool:
-    return any(process.name() == 'mstsc.exe' for process in psutil.process_iter())
+    return any(process.name() == "mstsc.exe" for process in psutil.process_iter())
 
 
 def get_pos_rdp_task_icon() -> Optional[Tuple[int, int]]:
@@ -60,14 +60,14 @@ def run():
         img = pyautogui.screenshot()
         for _ in range(5):
             # Свернуть все окна
-            pyautogui.hotkey('win', 'd')
+            pyautogui.hotkey("win", "d")
             time.sleep(2)
 
             if img != pyautogui.screenshot():
                 break
 
         pos = get_pos_rdp_task_icon()
-        logging.info(f'1. get_pos_rdp_task_icon: {pos}')
+        logging.info(f"1. get_pos_rdp_task_icon: {pos}")
         if not pos:
             # Нужно сдвинуть курсор туда, где точно не может находиться кнопка задачи RPD,
             # это поможет если курсор уже находится на кнопке задачи RDP
@@ -76,7 +76,7 @@ def run():
         time.sleep(2)
 
         pos = get_pos_rdp_task_icon()
-        logging.info(f'2. get_pos_rdp_task_icon: {pos}')
+        logging.info(f"2. get_pos_rdp_task_icon: {pos}")
         if pos:
             pyautogui.click(*pos)
             logging.info("Click")
@@ -85,21 +85,18 @@ def run():
         print(traceback.format_exc())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     logging.info("Started...")
 
     # Каждый день в 08:30
-    schedule \
-        .every().day.at("08:30") \
-        .do(run)
+    schedule.every().day.at("08:30").do(run)
 
-    logging.info('Jobs:')
+    logging.info("Jobs:")
     for job in schedule.jobs:
-        logging.info(f'    {job!r}')
+        logging.info(f"    {job!r}")
 
-    logging.info('')
+    logging.info("")
 
     while True:
         schedule.run_pending()
         time.sleep(1)
-
