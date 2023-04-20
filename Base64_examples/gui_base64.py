@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import base64
 import traceback
 import sys
+
+from os.path import split as path_split
 
 try:
     from PyQt5.QtWidgets import *
@@ -23,11 +25,11 @@ except:
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
@@ -129,7 +131,7 @@ STANDART_ENCODINGS = [
     "utf_16_le",
     "utf_7",
     "utf_8",
-    "utf_8_sig"
+    "utf_8_sig",
 ]
 
 
@@ -137,7 +139,6 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        from os.path import split as path_split
         self.setWindowTitle(path_split(__file__)[1])
 
         self.button_direct = QPushButton()
@@ -147,10 +148,10 @@ class MainWindow(QWidget):
         self.cb_encoding.addItems(STANDART_ENCODINGS)
         self.cb_encoding.setFixedWidth(100)
 
-        index = self.cb_encoding.findText('utf_8')
+        index = self.cb_encoding.findText("utf_8")
         self.cb_encoding.setCurrentIndex(index)
 
-        self.cb_raw = QCheckBox('raw')
+        self.cb_raw = QCheckBox("raw")
 
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.button_direct)
@@ -170,9 +171,9 @@ class MainWindow(QWidget):
         self.label_error.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.label_error.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
 
-        self.button_detail_error = QPushButton('...')
+        self.button_detail_error = QPushButton("...")
         self.button_detail_error.setFixedSize(20, 20)
-        self.button_detail_error.setToolTip('Detail error')
+        self.button_detail_error.setToolTip("Detail error")
         self.button_detail_error.clicked.connect(self.show_detail_error_massage)
 
         self.last_error_message = None
@@ -205,10 +206,10 @@ class MainWindow(QWidget):
         self.setLayout(layout)
 
     def show_detail_error_massage(self):
-        message = self.last_error_message + '\n\n' + self.last_detail_error_message
+        message = self.last_error_message + "\n\n" + self.last_detail_error_message
 
         mb = QErrorMessage()
-        mb.setWindowTitle('Error')
+        mb.setWindowTitle("Error")
         # Сообщение ошибки содержит отступы, символы-переходы на следующую строку,
         # которые поломаются при вставке через QErrorMessage.showMessage, и нет возможности
         # выбрать тип текста, то делаем такой хак.
@@ -238,7 +239,7 @@ class MainWindow(QWidget):
             else:
                 # Параметр errors='replace' нужен для того, чтобы при декодировании в строку проблемные символы
                 # заменялись символами-заменителями (�)
-                text = text.decode(encoding=codec_name, errors='replace')
+                text = text.decode(encoding=codec_name, errors="replace")
 
             self.text_edit_output.setPlainText(text)
 
@@ -253,16 +254,18 @@ class MainWindow(QWidget):
             self.last_detail_error_message = str(tb)
             self.button_detail_error.show()
 
-            self.label_error.setText('Error: ' + self.last_error_message)
+            self.label_error.setText("Error: " + self.last_error_message)
 
     def change_convert_direct(self):
         self.direct_encode_text = not self.direct_encode_text
-        self.button_direct.setText('text -> base64' if self.direct_encode_text else 'base64 -> text')
+        self.button_direct.setText(
+            "text -> base64" if self.direct_encode_text else "base64 -> text"
+        )
 
         self.input_text_changed()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()

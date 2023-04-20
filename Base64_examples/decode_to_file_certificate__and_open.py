@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-FILE_NAME = 'cert.cer'
+FILE_NAME = "cert.cer"
 TEXT = """
 MIIBeTCCASigAwIBAgIEBoLBizAIBgYqhQMCAgMwMTELMAkGA1UEBhMCUlUxEjAQBgNVBAoMCUNy
 eXB0b1BybzEOMAwGA1UEAwwFQWxpYXMwHhcNMTcwNjA3MDk1MzM5WhcNMTgwNjA3MDk1MzM5WjAx
@@ -16,8 +16,10 @@ l1hnV3Acv5f+WLhiKblVW1gZnNjhmnacgFQo5xb3UimMqgroonZz
 """
 
 from decode_to_file import decode_base64_to_file
+
 decode_base64_to_file(FILE_NAME, TEXT)
 
 # Open file
 import os
+
 os.startfile(FILE_NAME)

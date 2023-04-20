@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import base64
 
 text = "Hello py! Привет py!"
-print("Text: {}".format(text))
+print(f"Text: {text}")
 
 b16 = base64.b16encode(text.encode())
 b32 = base64.b32encode(text.encode())
