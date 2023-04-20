@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install psutil
 import psutil
 
 net_connections = psutil.net_connections()
-print('Net connections ({}):'.format(len(net_connections)))
+print("Net connections ({}):".format(len(net_connections)))
 
 # Sort by pid
 net_connections.sort(key=lambda x: x.pid)
