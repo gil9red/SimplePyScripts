@@ -7,8 +7,9 @@ __author__ = "ipetrash"
 # pip install psutil
 import psutil
 
+
 net_interface_by_address_list = list(psutil.net_if_addrs().items())
-print("Net interface by address list ({}):".format(len(net_interface_by_address_list)))
+print(f"Net interface by address list ({len(net_interface_by_address_list)}):")
 
 # Sort by name interface
 net_interface_by_address_list.sort(key=lambda x: x[0])

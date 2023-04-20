@@ -7,8 +7,9 @@ __author__ = "ipetrash"
 # pip install psutil
 import psutil
 
+
 net_interface_list = list(psutil.net_io_counters(pernic=True).items())
-print("Net interface list ({}):".format(len(net_interface_list)))
+print(f"Net interface list ({len(net_interface_list)}):")
 
 # Sort by name interface
 net_interface_list.sort(key=lambda x: x[0])
