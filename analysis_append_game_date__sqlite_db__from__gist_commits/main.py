@@ -1,35 +1,35 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Parser from https://github.com/gil9red/played_games/blob/f23777a1368f9124450bedac036791068d8ca099/mini_played_games_parser.py#L7
-def parse_played_games(text: str, silence: bool=False) -> dict:
+def parse_played_games(text: str, silence: bool = False) -> dict:
     """
     Функция для парсинга списка игр.
     """
 
-    FINISHED_GAME = 'FINISHED_GAME'
-    NOT_FINISHED_GAME = 'NOT_FINISHED_GAME'
-    FINISHED_WATCHED = 'FINISHED_WATCHED'
-    NOT_FINISHED_WATCHED = 'NOT_FINISHED_WATCHED'
+    FINISHED_GAME = "FINISHED_GAME"
+    NOT_FINISHED_GAME = "NOT_FINISHED_GAME"
+    FINISHED_WATCHED = "FINISHED_WATCHED"
+    NOT_FINISHED_WATCHED = "NOT_FINISHED_WATCHED"
 
     FLAG_BY_CATEGORY = {
-        '  ': FINISHED_GAME,
-        '- ': NOT_FINISHED_GAME,
-        ' -': NOT_FINISHED_GAME,
-        ' @': FINISHED_WATCHED,
-        '@ ': FINISHED_WATCHED,
-        '-@': NOT_FINISHED_WATCHED,
-        '@-': NOT_FINISHED_WATCHED,
+        "  ": FINISHED_GAME,
+        "- ": NOT_FINISHED_GAME,
+        " -": NOT_FINISHED_GAME,
+        " @": FINISHED_WATCHED,
+        "@ ": FINISHED_WATCHED,
+        "-@": NOT_FINISHED_WATCHED,
+        "@-": NOT_FINISHED_WATCHED,
     }
 
     # Регулярка вытаскивает выражения вида: 1, 2, 3 или 1-3, или римские цифры: III, IV
     import re
     PARSE_GAME_NAME_PATTERN = re.compile(
-        r'(\d+(, *?\d+)+)|(\d+ *?- *?\d+)|([MDCLXVI]+(, ?[MDCLXVI]+)+)',
-        flags=re.IGNORECASE
+        r"(\d+(, *?\d+)+)|(\d+ *?- *?\d+)|([MDCLXVI]+(, ?[MDCLXVI]+)+)",
+        flags=re.IGNORECASE,
     )
 
     def parse_game_name(game_name: str) -> list:
@@ -54,14 +54,14 @@ def parse_played_games(text: str, silence: bool=False) -> dict:
         index = game_name.index(seq_str)
         base_name = game_name[:index].strip()
 
-        seq_str = seq_str.replace(' ', '')
+        seq_str = seq_str.replace(" ", "")
 
-        if ',' in seq_str:
+        if "," in seq_str:
             # '1,2,3' -> ['1', '2', '3']
-            seq = seq_str.split(',')
+            seq = seq_str.split(",")
 
-        elif '-' in seq_str:
-            seq = seq_str.split('-')
+        elif "-" in seq_str:
+            seq = seq_str.split("-")
 
             # ['1', '7'] -> [1, 7]
             seq = list(map(int, seq))
@@ -73,7 +73,7 @@ def parse_played_games(text: str, silence: bool=False) -> dict:
             return [game_name]
 
         # Сразу проверяем номер игры в серии и если она первая, то не добавляем в названии ее номер
-        return [base_name if num == '1' else base_name + " " + num for num in seq]
+        return [base_name if num == "1" else base_name + " " + num for num in seq]
 
     platforms = dict()
     platform = None
@@ -84,7 +84,7 @@ def parse_played_games(text: str, silence: bool=False) -> dict:
             continue
 
         flag = line[:2]
-        if flag not in FLAG_BY_CATEGORY and line.endswith(':'):
+        if flag not in FLAG_BY_CATEGORY and line.endswith(":"):
             platform_name = line[:-1]
 
             platform = {
@@ -121,7 +121,7 @@ def parse_played_games(text: str, silence: bool=False) -> dict:
 
 
 # Get FULL database from: https://github.com/gil9red/SimplePyScripts/blob/2f50908d5c70fafa885db009bfe9570f8fc111e8/PyGithub_examples/gist_history_to_sqlite_db.py
-DB_FILE_NAME = '../PyGithub_examples/gist_commits.sqlite'
+DB_FILE_NAME = "../PyGithub_examples/gist_commits.sqlite"
 
 
 def create_connect():
@@ -129,19 +129,19 @@ def create_connect():
     return sqlite3.connect(DB_FILE_NAME)
 
 
-FINISHED_GAME = 'FINISHED_GAME'
-FINISHED_WATCHED = 'FINISHED_WATCHED'
-NOT_FINISHED_GAME = 'NOT_FINISHED_GAME'
-NOT_FINISHED_WATCHED = 'NOT_FINISHED_WATCHED'
+FINISHED_GAME = "FINISHED_GAME"
+FINISHED_WATCHED = "FINISHED_WATCHED"
+NOT_FINISHED_GAME = "NOT_FINISHED_GAME"
+NOT_FINISHED_WATCHED = "NOT_FINISHED_WATCHED"
 CATEGORIES = [FINISHED_GAME, FINISHED_WATCHED, NOT_FINISHED_GAME, NOT_FINISHED_WATCHED]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from collections import defaultdict
     append_game_date = defaultdict(dict)
 
     with create_connect() as connect:
-        sql = 'SELECT committed_at, content FROM GistFile ORDER BY committed_at'
+        sql = "SELECT committed_at, content FROM GistFile ORDER BY committed_at"
 
         for committed_at, content in connect.execute(sql):
             platforms = parse_played_games(content, silence=True)
@@ -155,10 +155,10 @@ if __name__ == '__main__':
                             append_game_date[platform][category][game] = committed_at
 
     # Check
-    print('Ведьмак:', append_game_date['PC']['FINISHED_GAME']['Ведьмак'])
-    print('Dragon Age II:', append_game_date['PC']['FINISHED_GAME']['Dragon Age II'])
+    print("Ведьмак:", append_game_date["PC"]["FINISHED_GAME"]["Ведьмак"])
+    print("Dragon Age II:", append_game_date["PC"]["FINISHED_GAME"]["Dragon Age II"])
 
     # Dump this
-    with open('dumn.json', mode='w', encoding='utf-8') as f:
+    with open("dumn.json", mode="w", encoding="utf-8") as f:
         import json
         json.dump(append_game_date, f, ensure_ascii=False, indent=4, sort_keys=True)
