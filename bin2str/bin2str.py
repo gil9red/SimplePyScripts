@@ -1,16 +1,22 @@
-def bin2str(bin_str: str, encoding: str = 'utf-8') -> str:
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = "ipetrash"
+
+
+def bin2str(bin_str: str, encoding: str = "utf-8") -> str:
     # Удаление всех символов кроме 0 и 1
-    bin_str = ''.join(c for c in bin_str if c in '01')
+    bin_str = "".join(c for c in bin_str if c in "01")
 
     h = hex(int(bin_str, 2))[2:]
     return bytes.fromhex(h).decode(encoding)
 
 
-def str2bin(text: str, sep=' ', encoding: str = 'utf-8') -> str:
+def str2bin(text: str, sep=" ", encoding: str = "utf-8") -> str:
     data: bytes = text.encode(encoding)
 
     # Example: 'You' -> '10110010110111101110101'
-    bin_str = f'{int(data.hex(), 16):08b}'
+    bin_str = f"{int(data.hex(), 16):08b}"
 
     # Example: '10110010110111101110101 -> '01011001 01101111 01110101'
     bin_str = bin_str[::-1]
@@ -23,21 +29,23 @@ def str2bin(text: str, sep=' ', encoding: str = 'utf-8') -> str:
     return sep.join(items)
 
 
-if __name__ == '__main__':
-    assert str2bin('You') == '01011001 01101111 01110101'
-    assert str2bin(bin2str('01011001 01101111 01110101')) == '01011001 01101111 01110101'
-    assert str2bin(bin2str('010110010110111101110101')) == '01011001 01101111 01110101'
+if __name__ == "__main__":
+    assert str2bin("You") == "01011001 01101111 01110101"
+    assert (
+        str2bin(bin2str("01011001 01101111 01110101")) == "01011001 01101111 01110101"
+    )
+    assert str2bin(bin2str("010110010110111101110101")) == "01011001 01101111 01110101"
 
-    assert bin2str('01011001 01101111 01110101') == 'You'
-    assert bin2str('010110010110111101110101') == 'You'
-    assert bin2str('01011001-01101111-01110101') == 'You'
-    assert bin2str('BIN: 01011001-01101111-01110101') == 'You'
+    assert bin2str("01011001 01101111 01110101") == "You"
+    assert bin2str("010110010110111101110101") == "You"
+    assert bin2str("01011001-01101111-01110101") == "You"
+    assert bin2str("BIN: 01011001-01101111-01110101") == "You"
 
-    assert bin2str(str2bin('You')) == 'You'
+    assert bin2str(str2bin("You")) == "You"
 
-    assert bin2str(str2bin('Привет')) == 'Привет'
+    assert bin2str(str2bin("Привет")) == "Привет"
 
-    print('Bin to text:')
+    print("Bin to text:")
     text = (
         "01011001 01101111 01110101 00100000 01100001 01110010 01100101 00100000 01101101 01101111 "
         "01110010 01100101 00100000 01110100 01101000 01100001 01101110 00100000 01101010 01110101 "
@@ -47,6 +55,6 @@ if __name__ == '__main__':
     print(bin2str(text))
     print()
 
-    print('Text to bin:')
+    print("Text to bin:")
     text = "You are more than just an animal."
     print(str2bin(text))
