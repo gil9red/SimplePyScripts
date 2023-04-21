@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/mozilla/bleach
@@ -12,10 +12,10 @@ __author__ = 'ipetrash'
 import bleach
 
 
-html = '''
+html = """
 http://example.com
 hello_world@example.com
-'''.strip()
+""".strip()
 
 # The default callback adds rel="nofollow"
 print(bleach.linkify(html, parse_email=True))

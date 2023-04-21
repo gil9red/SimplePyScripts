@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/mozilla/bleach
@@ -13,7 +13,7 @@ import bleach
 
 
 # List of allowed protocols
-print('List of allowed protocols:', bleach.sanitizer.ALLOWED_PROTOCOLS)
+print("List of allowed protocols:", bleach.sanitizer.ALLOWED_PROTOCOLS)
 # ['http', 'https', 'mailto']
 
 print(
@@ -26,7 +26,7 @@ print(
 print(
     bleach.clean(
         '<a href="smb://more_text">allowed protocol</a>',
-        protocols=['http', 'https', 'smb']
+        protocols=["http", "https", "smb"],
     )
 )
 # <a href="smb://more_text">allowed protocol</a>
@@ -34,7 +34,7 @@ print(
 print(
     bleach.clean(
         '<a href="smb://more_text">allowed protocol</a>',
-        protocols=bleach.ALLOWED_PROTOCOLS + ['smb']
+        protocols=bleach.ALLOWED_PROTOCOLS + ["smb"],
     )
 )
 # <a href="smb://more_text">allowed protocol</a>

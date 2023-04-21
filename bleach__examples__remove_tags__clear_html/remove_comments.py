@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/mozilla/bleach
@@ -12,7 +12,7 @@ __author__ = 'ipetrash'
 import bleach
 
 
-html = 'my<!-- commented --> html'
+html = "my<!-- commented --> html"
 
 print(bleach.clean(html))
 # my html

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/mozilla/bleach
@@ -12,10 +12,10 @@ __author__ = 'ipetrash'
 from bleach.sanitizer import Cleaner
 
 
-html = '''
+html = """
 <p><span>is not <b><span>allowed</span></b></span></p>
 <p><b>Hello World!</b></p>
-'''.strip()
+""".strip()
 
 cleaner = Cleaner()
 
@@ -26,7 +26,7 @@ for text in html.splitlines():
 
 print()
 
-cleaner = Cleaner(tags=['b', 'span'], strip=True)
+cleaner = Cleaner(tags=["b", "span"], strip=True)
 for text in html.splitlines():
     print(cleaner.clean(text))
 # <span>is not <b><span>allowed</span></b></span>

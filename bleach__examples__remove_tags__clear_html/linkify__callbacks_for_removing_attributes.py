@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/mozilla/bleach
@@ -14,14 +14,15 @@ from bleach.linkifier import Linker
 
 # Removing Attributes
 
+
 def allowed_attrs(attrs, new=False):
     """Only allow href, target, rel and title."""
     allowed = [
-        (None, 'href'),
-        (None, 'target'),
-        (None, 'rel'),
-        (None, 'title'),
-        '_text',
+        (None, "href"),
+        (None, "target"),
+        (None, "rel"),
+        (None, "title"),
+        "_text",
     ]
     return dict((k, v) for k, v in attrs.items() if k in allowed)
 
@@ -34,9 +35,11 @@ print(linker.linkify(html))
 
 print()
 
+
 def remove_title(attrs, new=False):
-    attrs.pop((None, 'title'), None)
+    attrs.pop((None, "title"), None)
     return attrs
+
 
 linker = Linker(callbacks=[remove_title])
 print(linker.linkify('<a href="http://example.com">link</a>'))
