@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
 
     from PySide.QtGui import *
@@ -13,8 +13,8 @@ if __name__ == '__main__':
 
     app = QApplication(sys.argv)
 
-    line_edit = QLineEdit('New line')
-    button = QPushButton('Add')
+    line_edit = QLineEdit("New line")
+    button = QPushButton("Add")
     text_edit = QTextEdit()
 
     def add_to_text():
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     layout.addWidget(text_edit)
 
     w = QWidget()
-    w.setWindowTitle('Example')
+    w.setWindowTitle("Example")
     w.setLayout(layout)
     w.show()
 
