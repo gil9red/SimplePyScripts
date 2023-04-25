@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # from math import *
@@ -22,8 +22,8 @@ __author__ = 'ipetrash'
 from numeric_string_parser import NumericStringParser
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     nsp = NumericStringParser()
-    print(nsp.eval('2^4'))
-    print(nsp.eval('(2+2)*2^4'))
-    print(nsp.eval('sin(2+2)'))
+    print(nsp.eval("2^4"))
+    print(nsp.eval("(2+2)*2^4"))
+    print(nsp.eval("sin(2+2)"))
