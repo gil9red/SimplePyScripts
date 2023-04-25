@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://stackoverflow.com/a/9558001/5909792
@@ -20,7 +20,7 @@ OPERATORS = {
     ast.FloorDiv: op.floordiv,
     ast.Pow: op.pow,
     ast.BitXor: op.xor,
-    ast.USub: op.neg
+    ast.USub: op.neg,
 }
 
 
@@ -48,13 +48,13 @@ def eval_expr(expr):
     -5.0
     """
 
-    return eval_(ast.parse(expr, mode='eval').body)
+    return eval_(ast.parse(expr, mode="eval").body)
 
 
-if __name__ == '__main__':
-    print(eval_expr('2 + 2 * 2'))    # 6
-    print(eval_expr('(2 + 2) * 2'))  # 8
-    print(eval_expr('10 * 10'))      # 100
-    print(eval_expr('100 / 10'))     # 10.0
-    print(eval_expr('100 // 10'))    # 10
-    print(eval_expr('2 ** 3'))       # 8
+if __name__ == "__main__":
+    print(eval_expr("2 + 2 * 2"))    # 6
+    print(eval_expr("(2 + 2) * 2"))  # 8
+    print(eval_expr("10 * 10"))      # 100
+    print(eval_expr("100 / 10"))     # 10.0
+    print(eval_expr("100 // 10"))    # 10
+    print(eval_expr("2 ** 3"))       # 8
