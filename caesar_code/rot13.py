@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import codecs
 
 
 def rot13(message):
-    import codecs
-    return codecs.encode(message, 'rot13')
+    return codecs.encode(message, "rot13")
 
 
-assert rot13("test") == "grfg"
-assert rot13("Test") == "Grfg"
+if __name__ == '__main__':
+    assert rot13("test") == "grfg"
+    assert rot13("Test") == "Grfg"
