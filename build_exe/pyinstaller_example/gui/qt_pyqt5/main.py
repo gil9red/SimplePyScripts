@@ -1,17 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
-from PyQt5.QtWidgets import QApplication, QLineEdit, QPushButton, QTextEdit, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import (
+    QApplication,
+    QLineEdit,
+    QPushButton,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
 
 app = QApplication(sys.argv)
 
-line_edit = QLineEdit('New line')
-button = QPushButton('Add')
+line_edit = QLineEdit("New line")
+button = QPushButton("Add")
 text_edit = QTextEdit()
 
 
@@ -28,7 +35,7 @@ layout.addWidget(button)
 layout.addWidget(text_edit)
 
 w = QWidget()
-w.setWindowTitle('Example')
+w.setWindowTitle("Example")
 w.setLayout(layout)
 w.show()
 
