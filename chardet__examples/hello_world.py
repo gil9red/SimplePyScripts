@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from pathlib import Path
@@ -13,7 +13,7 @@ import chardet
 DIR = Path(__file__).resolve().parent
 
 
-for path in DIR.glob('*.txt'):
+for path in DIR.glob("*.txt"):
     raw_data = path.read_bytes()
     print(path.name, chardet.detect(raw_data))
 
