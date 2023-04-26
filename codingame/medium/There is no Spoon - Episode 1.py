@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
-import math
+
 
 # Don't let the machines win. You are humanity's last hope...
 
@@ -28,7 +28,7 @@ print("matrix:\n{}".format(matrix), file=sys.stderr)
 # Ищем соседей справа
 def right_neighbor(matrix, i, j):
     for _j in range(j + 1, width):
-        if matrix[i][_j] == '0':
+        if matrix[i][_j] == "0":
             return _j, i
 
     return -1, -1
@@ -37,7 +37,7 @@ def right_neighbor(matrix, i, j):
 # Ищем соседей снизу
 def bottom_neighbor(matrix, i, j):
     for _i in range(i + 1, height):
-        if matrix[_i][j] == '0':
+        if matrix[_i][j] == "0":
             return j, _i
 
     return -1, -1
@@ -45,7 +45,7 @@ def bottom_neighbor(matrix, i, j):
 
 for i in range(height):
     for j in range(width):
-        if matrix[i][j] == '.':
+        if matrix[i][j] == ".":
             continue
 
         x2, y2 = right_neighbor(matrix, i, j)
