@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from contextlib import redirect_stdout, redirect_stderr
@@ -14,8 +14,8 @@ f = io.StringIO()
 
 with redirect_stdout(f), redirect_stderr(f):
     try:
-        print('123')
-        print('abc')
+        print("123")
+        print("abc")
         1 / 0
     except:
         print(traceback.format_exc(), file=sys.stderr)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from io import StringIO
@@ -9,10 +9,10 @@ from contextlib import redirect_stdout
 
 
 with StringIO() as f, redirect_stdout(f):
-    print('Hello ', end='')
+    print("Hello ", end="")
 
     def foo():
-        print('World')
+        print("World")
 
     foo()
 
