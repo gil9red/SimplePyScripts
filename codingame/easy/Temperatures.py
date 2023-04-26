@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
-import math
+
 
 # Auto-generated code below aims at helping you parse
 # the standard input according to the problem statement.
@@ -14,7 +14,7 @@ n = int(input())  # the number of temperatures to analyse
 temps = input()  # the n temperatures expressed as integers ranging from -273 to 5526
 
 temps = [int(i) for i in temps.strip().split()]
-print('temps:', temps, file=sys.stderr)
+print("temps:", temps, file=sys.stderr)
 
 # Проверка того, что 0 уже есть в списке или список температор пустой
 if 0 in temps or not temps:

@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-import sys
 import math
+
 
 # Auto-generated code below aims at helping you parse
 # the standard input according to the problem statement.
 
-str_to_float = lambda x: float(x.replace(',', '.'))
+str_to_float = lambda x: float(x.replace(",", "."))
 
 lon = str_to_float(input())
 lat = str_to_float(input())
@@ -22,7 +22,7 @@ min_name = None
 
 n = int(input())
 for i in range(n):
-    defib = input().split(';')
+    defib = input().split(";")
 
     name = defib[1]
     lon_defib = str_to_float(defib[-2])

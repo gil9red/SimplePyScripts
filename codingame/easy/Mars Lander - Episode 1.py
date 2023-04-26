@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
-import math
+
 
 # Auto-generated code below aims at helping you parse
 # the standard input according to the problem statement.
@@ -26,12 +26,18 @@ while True:
     # rotate: the rotation angle in degrees (-90 to 90).
     # power: the thrust power (0 to 4).
     x, y, h_speed, v_speed, fuel, rotate, power = [int(i) for i in input().split()]
-    print("x={}, y={}, h_speed={}, v_speed={}, fuel={}, rotate={}, power={}".format(x, y, h_speed, v_speed, fuel, rotate, power), file=sys.stderr)
+    print(
+        "x={}, y={}, h_speed={}, v_speed={}, fuel={}, rotate={}, power={}".format(
+            x, y, h_speed, v_speed, fuel, rotate, power
+        ),
+        file=sys.stderr,
+    )
 
     # Write an action using print
     # To debug: print("Debug messages...", file=sys.stderr)
 
-    # 2 integers: rotate power. rotate is the desired rotation angle (should be 0 for level 1), power is the desired thrust power (0 to 4).
+    # 2 integers: rotate power. rotate is the desired rotation angle
+    # (should be 0 for level 1), power is the desired thrust power (0 to 4).
     if v_speed < -40:
         print("0 4")
     else:

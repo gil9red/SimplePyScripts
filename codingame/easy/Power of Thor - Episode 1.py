@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -19,15 +19,15 @@ import math
 light_x, light_y, initial_tx, initial_ty = [int(i) for i in input().split()]
 
 DIRECTION_DICT = {
-    (-1, 0): 'W',
-    (0, -1): 'N',
-    (1, 0): 'E',
-    (0, 1): 'S',
+    (-1, 0): "W",
+    (0, -1): "N",
+    (1, 0): "E",
+    (0, 1): "S",
 
-    (-1, -1): 'NW',
-    (1, -1): 'NE',
-    (1, 1): 'SE',
-    (-1, 1): 'SW',
+    (-1, -1): "NW",
+    (1, -1): "NE",
+    (1, 1): "SE",
+    (-1, 1): "SW",
 }
 
 x, y = initial_tx, initial_ty
@@ -36,7 +36,8 @@ complete_x, complete_y = False, False
 
 # game loop
 while True:
-    remaining_turns = int(input())  # The remaining amount of turns Thor can move. Do not remove this line.
+    # The remaining amount of turns Thor can move. Do not remove this line.
+    remaining_turns = int(input())
 
     # Write an action using print
     # To debug: print("Debug messages...", file=sys.stderr)

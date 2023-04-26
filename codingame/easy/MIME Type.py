@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
-import math
+
 
 # Auto-generated code below aims at helping you parse
 # the standard input according to the problem statement.
@@ -36,8 +36,8 @@ print(files, file=sys.stderr)
 
 for file in files:
     try:
-        i = file.rindex('.')
-        ext = file[i + 1:].lower()
+        i = file.rindex(".")
+        ext = file[i + 1 :].lower()
         print(ext_mime_dict[ext])
     except:
         print("UNKNOWN")

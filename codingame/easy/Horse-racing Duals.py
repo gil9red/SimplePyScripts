@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
-
-import sys
-import math
 
 # Auto-generated code below aims at helping you parse
 # the standard input according to the problem statement.
@@ -25,4 +22,3 @@ for i in items[1:]:
     last = i
 
 print(min_strength)
-
