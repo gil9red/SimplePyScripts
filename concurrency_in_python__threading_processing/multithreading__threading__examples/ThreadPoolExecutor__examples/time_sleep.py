@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://docs.python.org/3/library/concurrent.futures.html#threadpoolexecutor-example
@@ -16,7 +16,7 @@ MAX_WORKERS = 5
 
 
 def run(name):
-    print(f'name: {name}')
+    print(f"name: {name}")
     time.sleep(randint(1, 4))
 
 

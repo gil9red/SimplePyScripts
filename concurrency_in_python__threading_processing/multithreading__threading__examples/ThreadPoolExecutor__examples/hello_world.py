@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://docs.python.org/3/library/concurrent.futures.html#threadpoolexecutor-example
@@ -12,11 +12,11 @@ import urllib.request
 
 
 URLS = [
-    'http://www.foxnews.com/',
-    'http://www.cnn.com/',
-    'http://europe.wsj.com/',
-    'http://www.bbc.co.uk/',
-    'http://some-made-up-domain.com/'
+    "http://www.foxnews.com/",
+    "http://www.cnn.com/",
+    "http://europe.wsj.com/",
+    "http://www.bbc.co.uk/",
+    "http://some-made-up-domain.com/",
 ]
 
 MAX_WORKERS = 5
@@ -40,6 +40,6 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         try:
             data = future.result()
         except Exception as e:
-            print(f'{url!r} generated an exception: {e}')
+            print(f"{url!r} generated an exception: {e}")
         else:
-            print(f'{url!r} page is {len(data)} bytes')
+            print(f"{url!r} page is {len(data)} bytes")
