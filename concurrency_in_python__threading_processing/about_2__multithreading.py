@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://towardsdatascience.com/concurrency-in-python-e770c878ab53
@@ -26,7 +26,7 @@ def threaded(n):
         t.join()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     start = time.perf_counter()
     threaded(WORKERS)
     print(f"Elapsed {time.perf_counter() - start:.2f} secs")

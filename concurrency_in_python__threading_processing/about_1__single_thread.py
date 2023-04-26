@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://towardsdatascience.com/concurrency-in-python-e770c878ab53
@@ -19,7 +19,7 @@ N = 500
 def heavy(n, myid):
     for x in range(1, n):
         for y in range(1, n):
-            x ** y
+            x**y
     print(myid, "is done")
 
 
