@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://www.codewars.com/kata/5ef9ca8b76be6d001d5e1c3e/train/python
@@ -10,7 +10,7 @@ __author__ = 'ipetrash'
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
     for i in range(0, len(l), n):
-        yield l[i: i + n]
+        yield l[i : i + n]
 
 
 # Task 1: Encode function
@@ -28,9 +28,8 @@ def chunks(l, n):
 #     --> 000111111000111000000000 000111111000000111000111 000111111111111000000111  // tripled
 #     --> "000111111000111000000000000111111000000111000111000111111111111000000111"  // concatenated
 def encode(text: str) -> str:
-    return ''.join(
-        ''.join(b * 3 for b in f"{ord(c):08b}")  # Tripled bits
-        for c in text
+    return "".join(
+        "".join(b * 3 for b in f"{ord(c):08b}") for c in text  # Tripled bits
     )
 
 
@@ -62,28 +61,31 @@ def decode(bits: str) -> str:
         sums = sum(map(int, tripled_bits))
 
         # Example: 110 or 111 -> 1 and 000 -> 0 or 001 -> 0
-        bit_items.append('1' if sums == 2 or sums == 3 else '0')
+        bit_items.append("1" if sums == 2 or sums == 3 else "0")
 
-    binary = ''.join(bit_items)
+    binary = "".join(bit_items)
 
     items = []
     for byte in chunks(binary, 8):
         items.append(chr(int(byte, 2)))
 
-    return ''.join(items)
+    return "".join(items)
 
 
-if __name__ == '__main__':
-    text = 'hey'
+if __name__ == "__main__":
+    text = "hey"
     encoded = encode(text)
     print(encoded)
-    assert encoded == '000111111000111000000000000111111000000111000111000111111111111000000111'
+    assert (
+        encoded
+        == "000111111000111000000000000111111000000111000111000111111111111000000111"
+    )
 
     decoded = decode(encoded)
     print(decoded)
     assert text == decoded
 
-    invalid_encoded = '100111111000111001000010000111111000000111001111000111110110111000010111'
+    invalid_encoded = "100111111000111001000010000111111000000111001111000111110110111000010111"
     decoded = decode(invalid_encoded)
     print(decoded)
     assert text == decoded
