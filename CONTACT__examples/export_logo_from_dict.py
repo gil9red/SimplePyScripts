@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -9,26 +9,27 @@ __author__ = 'ipetrash'
 
 """
 
+import base64
+import os
 
-if __name__ == '__main__':
-    FILE_NAME_DICT_LOGO = 'mini_full_dict__CONTACT/logo.xml'
-    DIR_LOGO_IMAGES = 'logo_images'
+from bs4 import BeautifulSoup
 
-    import os
-    os.makedirs(DIR_LOGO_IMAGES, exist_ok=True)
 
-    from bs4 import BeautifulSoup
-    root = BeautifulSoup(open(FILE_NAME_DICT_LOGO, 'rb'), 'lxml')
+FILE_NAME_DICT_LOGO = "mini_full_dict__CONTACT/logo.xml"
 
-    for row in root.select('rowdata > row'):
-        logo_name = row['logo_name']
-        print(logo_name)
+DIR_LOGO_IMAGES = "logo_images"
+os.makedirs(DIR_LOGO_IMAGES, exist_ok=True)
 
-        logo_data = row['logo_data']
-        import base64
-        img_data = base64.b64decode(logo_data)
+root = BeautifulSoup(open(FILE_NAME_DICT_LOGO, "rb"), "lxml")
 
-        file_name = os.path.join(DIR_LOGO_IMAGES, logo_name)
+for row in root.select("rowdata > row"):
+    logo_name = row["logo_name"]
+    print(logo_name)
 
-        with open(file_name, 'wb') as f:
-            f.write(img_data)
+    logo_data = row["logo_data"]
+    img_data = base64.b64decode(logo_data)
+
+    file_name = os.path.join(DIR_LOGO_IMAGES, logo_name)
+
+    with open(file_name, "wb") as f:
+        f.write(img_data)

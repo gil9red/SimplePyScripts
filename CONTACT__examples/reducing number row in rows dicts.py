@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -12,30 +12,31 @@ Reducing the number of row in rows.
 """
 
 
-if __name__ == '__main__':
-    # NOTE: справочники CONTACT хранятся в кодировке cp1251 (windows-1251)
+import glob
+import os
 
-    import glob
-    for file_name in glob.glob('mini_contact_dicts/*.xml'):
-        print(file_name)
+from bs4 import BeautifulSoup
 
-        from bs4 import BeautifulSoup
-        root = BeautifulSoup(open(file_name, 'rb'), 'lxml', from_encoding='cp1251')
 
-        rows = root.select('row')
-        old_len = len(rows)
+# NOTE: справочники CONTACT хранятся в кодировке cp1251 (windows-1251)
 
-        for row in rows[20:]:
-            row.decompose()
+for file_name in glob.glob("mini_contact_dicts/*.xml"):
+    print(file_name)
 
-        rows = root.select('row')
-        print('  len {} -> {}'.format(old_len, len(rows)))
+    root = BeautifulSoup(open(file_name, "rb"), "lxml", from_encoding="cp1251")
 
-        import os
-        file_name = 'mini_contact_dicts/' + os.path.basename(file_name)
+    rows = root.select("row")
+    old_len = len(rows)
 
-        with open(file_name, 'w', encoding='cp1251') as f:
-            f.write(str(root))
+    for row in rows[20:]:
+        row.decompose()
 
-        print('  Write to {}'.format(file_name))
-        print()
+    rows = root.select("row")
+    print("  len {} -> {}".format(old_len, len(rows)))
+
+    file_name = "mini_contact_dicts/" + os.path.basename(file_name)
+    with open(file_name, "w", encoding="cp1251") as f:
+        f.write(str(root))
+
+    print("  Write to {}".format(file_name))
+    print()

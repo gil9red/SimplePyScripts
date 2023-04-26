@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import base64
 import zlib
 import sys
+import os
 
 from typing import Union
 
@@ -20,7 +21,9 @@ def get_bytes_from_base64_zlib(text_or_tag_or_bytes: Union[str, bytes, Tag]) -> 
 
     """
 
-    if not isinstance(text_or_tag_or_bytes, str) and not isinstance(text_or_tag_or_bytes, bytes):
+    if not isinstance(text_or_tag_or_bytes, str) and not isinstance(
+        text_or_tag_or_bytes, bytes
+    ):
         text = text_or_tag_or_bytes.text
     else:
         text = text_or_tag_or_bytes
@@ -29,24 +32,23 @@ def get_bytes_from_base64_zlib(text_or_tag_or_bytes: Union[str, bytes, Tag]) -> 
     return zlib.decompress(compress_data)
 
 
-if __name__ == '__main__':
-    file_name_full_dict = 'mini_full_dict__CONTACT.xml'
-    export_dir = 'mini_full_dict__CONTACT'
+if __name__ == "__main__":
+    file_name_full_dict = "mini_full_dict__CONTACT.xml"
+    export_dir = "mini_full_dict__CONTACT"
 
-    import os
     os.makedirs(export_dir, exist_ok=True)
 
     # Parsing
-    root = BeautifulSoup(open(file_name_full_dict, 'rb'), 'lxml')
-    response = root.select_one('response')
+    root = BeautifulSoup(open(file_name_full_dict, "rb"), "lxml")
+    response = root.select_one("response")
 
     # Если ошибка
-    if response['re'] != '0':
-        print('Error text: "{}"'.format(response['err_text']))
+    if response["re"] != "0":
+        print('Error text: "{}"'.format(response["err_text"]))
         sys.exit()
 
-    print('Справочник полный?:', response['full'] == '1')
-    print('Версия справочника:', response['version'])
+    print("Справочник полный?:", response["full"] == "1")
+    print("Версия справочника:", response["version"])
     print()
 
     for child in response.children:
@@ -54,9 +56,9 @@ if __name__ == '__main__':
         if child.name is None:
             continue
 
-        file_name = os.path.join(export_dir, child.name) + '.xml'
+        file_name = os.path.join(export_dir, child.name) + ".xml"
         print(file_name)
 
-        with open(file_name, 'w', encoding='cp1251') as f:
+        with open(file_name, "w", encoding="cp1251") as f:
             data = get_bytes_from_base64_zlib(child)
-            f.write(data.decode(encoding='cp1251'))
+            f.write(data.decode(encoding="cp1251"))
