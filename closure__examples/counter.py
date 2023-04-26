@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://stackoverflow.com/a/141426
 
 
-def make_counter(start=0, step=1):
+def make_counter(start: int | float = 0, step: int | float = 1):
     i = start
 
     def counter():  # counter() is a closure
@@ -19,10 +19,10 @@ def make_counter(start=0, step=1):
     return counter
 
 
-def make_counter_adder(start=0):
+def make_counter_adder(start: int | float = 0):
     i = start
 
-    def counter(step=0):  # counter() is a closure
+    def counter(step: int | float = 0):  # counter() is a closure
         nonlocal i
         i += step
 
@@ -31,7 +31,7 @@ def make_counter_adder(start=0):
     return counter
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     c = make_counter()
     print(c(), c(), c())  # 1 2 3
 
