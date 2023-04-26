@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
+import logging
 import threading
 
+from flask import Flask
 
-def run(port=80):
-    from flask import Flask
+
+def run(port: int = 80):
     app = Flask(__name__)
-
-    import logging
     logging.basicConfig(level=logging.DEBUG)
 
     @app.route("/")
@@ -24,13 +24,13 @@ def run(port=80):
     app.run(port=port)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # NOTE: recommended to add daemon=False or call join() for each thread
 
-    thread = threading.Thread(target=run, args=(5000, ))
+    thread = threading.Thread(target=run, args=(5000,))
     thread.start()
 
-    thread = threading.Thread(target=run, args=(5001, ))
+    thread = threading.Thread(target=run, args=(5001,))
     thread.start()
 
     thread = threading.Thread(target=run, args=(5002,))

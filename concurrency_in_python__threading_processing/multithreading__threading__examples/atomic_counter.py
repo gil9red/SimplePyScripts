@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://gist.github.com/benhoyt/8c8a8d62debe8e5aa5340373f9c509c7
@@ -40,6 +40,7 @@ class AtomicCounter:
     >>> counter.value
     400000
     """
+
     def __init__(self, initial=0):
         """Initialize a new atomic counter to given initial value (default 0)."""
         self.value = initial
@@ -54,8 +55,9 @@ class AtomicCounter:
             return self.value
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
 
     # MORE:
