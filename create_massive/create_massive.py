@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 def create_massive(rows, cols, init_value):
@@ -16,7 +16,7 @@ def create_massive_2(rows, cols, init_value):
     return massive
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     rows = 5
     cols = 3
     massive = create_massive(rows, cols, None)
