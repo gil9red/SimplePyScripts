@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """Скрипт собирает цитаты сайта bash.im"""
@@ -9,26 +9,21 @@ __author__ = 'ipetrash'
 
 import logging
 import sys
-import time
-import traceback
-
-from datetime import datetime
-
 
 import requests
 
-import sqlalchemy.exc
+from bs4 import BeautifulSoup
 from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, DateTime
 from sqlalchemy.orm import mapper, sessionmaker
 
-from bs4 import BeautifulSoup
 
-
-def get_logger(name, file='log.txt', encoding='utf8'):
+def get_logger(name, file="log.txt", encoding="utf8"):
     log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter('[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s')
+    formatter = logging.Formatter(
+        "[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s"
+    )
 
     fh = logging.FileHandler(file, encoding=encoding)
     fh.setLevel(logging.DEBUG)
@@ -44,7 +39,7 @@ def get_logger(name, file='log.txt', encoding='utf8'):
     return log
 
 
-logger = get_logger('collector_bash_im')
+logger = get_logger("collector_bash_im")
 
 
 class Quote:
@@ -55,30 +50,34 @@ class Quote:
         self.text = text
 
     def __repr__(self):
-        return "<Quote(id: {id}. Date: {date}. Rating: '{rating}'. " \
-               "Text len: {})>".format(len(self.text), **self.__dict__)
+        return (
+            "<Quote(id: {id}. Date: {date}. Rating: '{rating}'. "
+            "Text len: {})>".format(len(self.text), **self.__dict__)
+        )
 
     @property
     def url(self):
-        return 'http://bash.im/quote/' + str(self.id)
+        return "http://bash.im/quote/" + str(self.id)
 
 
 def get_session_factory():
     # Создаем базу, включаем логирование и автообновление подключения каждые 2 часа (7200 секунд)
     engine = create_engine(
         # 'sqlite:///:memory:',
-        'sqlite:///quotes.db',
+        "sqlite:///quotes.db",
         # echo=True,
-        pool_recycle=7200
+        pool_recycle=7200,
     )
 
     metadata = MetaData()
 
-    quotes_table = Table('Quote', metadata,
-        Column('id', Integer, primary_key=True),
-        Column('date', DateTime),
-        Column('rating', Integer),
-        Column('text', String),
+    quotes_table = Table(
+        "Quote",
+        metadata,
+        Column("id", Integer, primary_key=True),
+        Column("date", DateTime),
+        Column("rating", Integer),
+        Column("text", String),
     )
 
     mapper(Quote, quotes_table)
@@ -93,14 +92,14 @@ session = Session()
 query = session.query(Quote)
 
 
-if __name__ == '__main__':
-    rs = requests.get('http://bash.im')
+if __name__ == "__main__":
+    rs = requests.get("http://bash.im")
     soup = BeautifulSoup(rs.content, "lxml")
     # print(soup)
     i = 0
     for quote in soup.find_all(attrs={"class": "quote"}):
         text = quote.find(attrs={"class": "text"})
-        if text is None:
+        if not text:
             continue
 
         i += 1
