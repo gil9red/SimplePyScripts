@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+# pip install GitPython
+import git
+
+from config import REPO_PATH, URL_GIT
 
 
 repo = None
 
 
 def __get_repo():
-    # pip install GitPython
-    import git
-    from config import REPO_PATH, URL_GIT
-
     try:
         return git.Repo(REPO_PATH)
 
@@ -32,8 +34,8 @@ repo = get_repo()
 
 
 def print_log(reverse=False):
-    logs = repo.git.log('--pretty=format:%H%x09%an%x09%ad%x09%s').splitlines()
-    print('Logs[{}]:'.format(len(logs)))
+    logs = repo.git.log("--pretty=format:%H%x09%an%x09%ad%x09%s").splitlines()
+    print(f"Logs[{len(logs)}]:")
 
     if reverse:
         logs.reverse()
@@ -66,4 +68,3 @@ def pull():
 
 def push():
     repo.remotes.origin.push()
-
