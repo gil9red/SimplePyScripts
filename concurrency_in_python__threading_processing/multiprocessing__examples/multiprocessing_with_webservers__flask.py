@@ -1,27 +1,30 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-def go(port):
-    from flask import Flask
+import logging
+import time
+
+import requests
+
+from flask import Flask
+
+
+def go(port: int):
     app = Flask(__name__)
 
-    import logging
     logging.basicConfig(level=logging.DEBUG)
 
     @app.route("/")
     def index():
-        return "Hello World! (port={})".format(port)
+        return f"Hello World! (port={port})"
 
     app.run(port=port)
 
 
 def go_parser(urls):
-    import time
-    import requests
-
     while True:
         for url in urls:
             try:
@@ -34,7 +37,7 @@ def go_parser(urls):
         time.sleep(2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # NOTE: recommended to add daemon=False or call join() for each process
 
     from multiprocessing import Process
@@ -50,7 +53,7 @@ if __name__ == '__main__':
     #     p = Process(target=go, args=(port,))
     #     p.start()
 
-    urls = ['http://127.0.0.1:5001/', 'http://127.0.0.1:5002/']
+    urls = ["http://127.0.0.1:5001/", "http://127.0.0.1:5002/"]
     p3 = Process(target=go_parser, args=(urls,))
     p3.start()
 
