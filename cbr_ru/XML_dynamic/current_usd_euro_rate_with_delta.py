@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+from datetime import date, timedelta
+from urllib.request import urlopen
+
+from bs4 import BeautifulSoup
 
 
 def current_rate(ccy_rq_id):
@@ -15,38 +21,35 @@ def current_rate(ccy_rq_id):
 
     # Т.к. курс назначается не каждый день, разница может быть в несколько дней,
     # поэтому на всякий случай берем разницу от текущего дня и на 7 дней назад
-    from datetime import date, timedelta
-    date_req1 = (date.today() - timedelta(days=7)).strftime('%d/%m/%Y')
-    date_req2 = date.today().strftime('%d/%m/%Y')
+    date_req1 = (date.today() - timedelta(days=7)).strftime("%d/%m/%Y")
+    date_req2 = date.today().strftime("%d/%m/%Y")
     # date_req2 = (date.today() + timedelta(days=1)).strftime('%d/%m/%Y')
 
-    url = 'http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1={}&date_req2={}&VAL_NM_RQ={}'.format(
+    url = "http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1={}&date_req2={}&VAL_NM_RQ={}".format(
         date_req1, date_req2, ccy_rq_id
     )
 
-    from urllib.request import urlopen
     with urlopen(url) as f:
-        from bs4 import BeautifulSoup
         root = BeautifulSoup(f.read(), "xml")
 
         # Получаем список курсов
-        values = root.select('Record > Value')
+        values = root.select("Record > Value")
         if len(values) < 2:
-            raise Exception('Что-то пошло не так. Не хватает значений.\nurl: {}\nroot:\n{}'.format(url, root))
+            raise Exception(f"Что-то пошло не так. Не хватает значений.\nurl: {url}\nroot:\n{root}" )
 
         # Вытаскиваем последние два элемента и преобразуем в число
         values = [values[-2], values[-1]]
-        values = [float(price.text.replace(',', '.')) for price in values]
+        values = [float(price.text.replace(",", ".")) for price in values]
 
         delta = values[1] - values[0]
         return values[1], delta
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # R01235 -- USD, доллары, 840
-    price, delta = current_rate('R01235')
-    print('USD: {} ({}{:.4f})'.format(price, ('+' if delta > 0 else ''), delta))
+    price, delta = current_rate("R01235")
+    print("USD: {} ({}{:.4f})".format(price, ("+" if delta > 0 else ""), delta))
 
     # R01239 -- EUR, евро, 978
-    price, delta = current_rate('R01239')
-    print('EUR: {} ({}{:.4f})'.format(price, ('+' if delta > 0 else ''), delta))
+    price, delta = current_rate("R01239")
+    print("EUR: {} ({}{:.4f})".format(price, ("+" if delta > 0 else ""), delta))
