@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import time
 
 from urllib.request import urlopen
 from multiprocessing.dummy import Pool as ThreadPool
 
+
 urls = [
-    'http://www.python.org',
-    'http://www.python.org/about/',
-    'http://www.python.org/doc/',
-    'http://www.python.org/download/',
+    "http://www.python.org",
+    "http://www.python.org/about/",
+    "http://www.python.org/doc/",
+    "http://www.python.org/download/",
     # 'http://www.onlamp.com/pub/a/python/2003/04/17/metaclasses.html',
     # 'http://www.python.org/getit/',
     # 'http://www.python.org/community/',
@@ -22,19 +25,17 @@ urls = [
     # 'http://docs.python.org/devguide/',
     # 'http://www.python.org/community/awards/'
     # etc..
-    ]
-
-
-import time
+]
 
 t = time.clock()
 results = []
 for url in urls:
     result = urlopen(url)
     results.append(result)
-print('Single thread: {:.3f} seconds'.format(time.clock() - t))
+print("Single thread: {:.3f} seconds".format(time.clock() - t))
 
 # ------- VERSUS ------- #
+
 
 def go(count=1):
     t = time.clock()
@@ -42,7 +43,8 @@ def go(count=1):
     results = pool.map(urlopen, urls)
     # pool.close()
     # pool.join()
-    print('{} Pool: {:.3f} seconds'.format(count, time.clock() - t))
+    print("{} Pool: {:.3f} seconds".format(count, time.clock() - t))
+
 
 # ------- 1 Pool ------- #
 go()
