@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from pygost import gost341194
@@ -10,16 +10,24 @@ import base64
 
 def get_digest(data, sbox=gost341194.DEFAULT_SBOX):
     if isinstance(data, str):
-        data = data.encode('utf-8')
+        data = data.encode("utf-8")
 
     gost_digest = gost341194.GOST341194(data, sbox)
-    return gost_digest.digest(), gost_digest.hexdigest(), base64.b64encode(gost_digest.digest())
+    return (
+        gost_digest.digest(),
+        gost_digest.hexdigest(),
+        base64.b64encode(gost_digest.digest()),
+    )
+
 
 text = """<soapenv:Body xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="body"><smev:GISGMPTransferMsg xmlns:smev="http://roskazna.ru/gisgmp/02000000/SmevGISGMPService/"><rev:Message xmlns:rev="http://smev.gosuslugi.ru/rev120315"><rev:Sender><rev:Code>RCPT00001</rev:Code><rev:Name>Отправитель</rev:Name></rev:Sender><rev:Recipient><rev:Code>MNSV10000</rev:Code><rev:Name>Государственная информационная система жилищно-коммунального хозяйства</rev:Name></rev:Recipient><rev:Originator><rev:Code>735111111</rev:Code><rev:Name>Получатель</rev:Name></rev:Originator><rev:ServiceName>GISGMP</rev:ServiceName><rev:TypeCode>GFNC</rev:TypeCode><rev:Status>REQUEST</rev:Status><rev:Date>2018-02-28T16:30:39.877+05:00</rev:Date><rev:ExchangeType>6</rev:ExchangeType></rev:Message><rev:MessageData xmlns:rev="http://smev.gosuslugi.ru/rev120315"><rev:AppData><gisgmp:RequestMessage xmlns:gisgmp="http://roskazna.ru/gisgmp/xsd/116/Message" Id="ID_4050460995" senderIdentifier="01309b2f-fdec-48cb-9de5-e7c52d6f7d04" senderRole="7" timestamp="2018-02-28T16:30:39.877+05:00"><msgd:ExportRequest xmlns:msgd="http://roskazna.ru/gisgmp/xsd/116/MessageData" kind="CHARGE"><pdr:Filter xmlns:pdr="http://roskazna.ru/gisgmp/xsd/116/PGU_DataRequest"><pdr:Conditions><pdr:ChargesIdentifiers><pdr:SupplierBillID>1234567890</pdr:SupplierBillID></pdr:ChargesIdentifiers></pdr:Conditions></pdr:Filter></msgd:ExportRequest></gisgmp:RequestMessage></rev:AppData></rev:MessageData></smev:GISGMPTransferMsg></soapenv:Body>"""
-text = "<soapenv:Body xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:wsu=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd\" wsu:Id=\"body\"><smev:GISGMPTransferMsg xmlns:smev=\"http://roskazna.ru/gisgmp/02000000/SmevGISGMPService/\"><rev:Message xmlns:rev=\"http://smev.gosuslugi.ru/rev120315\"><rev:Sender><rev:Code>RCPT00001</rev:Code><rev:Name>Отправитель</rev:Name></rev:Sender><rev:Recipient><rev:Code>MNSV10000</rev:Code><rev:Name>Государственная информационная система жилищно-коммунального хозяйства</rev:Name></rev:Recipient><rev:Originator><rev:Code>735111111</rev:Code><rev:Name>Получатель</rev:Name></rev:Originator><rev:ServiceName>GISGMP</rev:ServiceName><rev:TypeCode>GFNC</rev:TypeCode><rev:Status>REQUEST</rev:Status><rev:Date>2018-02-28T16:30:39.877+05:00</rev:Date><rev:ExchangeType>6</rev:ExchangeType></rev:Message><rev:MessageData xmlns:rev=\"http://smev.gosuslugi.ru/rev120315\"><rev:AppData><gisgmp:RequestMessage xmlns:gisgmp=\"http://roskazna.ru/gisgmp/xsd/116/Message\" Id=\"ID_4050460995\" senderIdentifier=\"01309b2f-fdec-48cb-9de5-e7c52d6f7d04\" senderRole=\"7\" timestamp=\"2018-02-28T16:30:39.877+05:00\"><msgd:ExportRequest xmlns:msgd=\"http://roskazna.ru/gisgmp/xsd/116/MessageData\" kind=\"CHARGE\"><pdr:Filter xmlns:pdr=\"http://roskazna.ru/gisgmp/xsd/116/PGU_DataRequest\"><pdr:Conditions><pdr:ChargesIdentifiers><pdr:SupplierBillID>1234567890</pdr:SupplierBillID></pdr:ChargesIdentifiers></pdr:Conditions></pdr:Filter></msgd:ExportRequest></gisgmp:RequestMessage></rev:AppData></rev:MessageData></smev:GISGMPTransferMsg></soapenv:Body>"
+text = '<soapenv:Body xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="body"><smev:GISGMPTransferMsg xmlns:smev="http://roskazna.ru/gisgmp/02000000/SmevGISGMPService/"><rev:Message xmlns:rev="http://smev.gosuslugi.ru/rev120315"><rev:Sender><rev:Code>RCPT00001</rev:Code><rev:Name>Отправитель</rev:Name></rev:Sender><rev:Recipient><rev:Code>MNSV10000</rev:Code><rev:Name>Государственная информационная система жилищно-коммунального хозяйства</rev:Name></rev:Recipient><rev:Originator><rev:Code>735111111</rev:Code><rev:Name>Получатель</rev:Name></rev:Originator><rev:ServiceName>GISGMP</rev:ServiceName><rev:TypeCode>GFNC</rev:TypeCode><rev:Status>REQUEST</rev:Status><rev:Date>2018-02-28T16:30:39.877+05:00</rev:Date><rev:ExchangeType>6</rev:ExchangeType></rev:Message><rev:MessageData xmlns:rev="http://smev.gosuslugi.ru/rev120315"><rev:AppData><gisgmp:RequestMessage xmlns:gisgmp="http://roskazna.ru/gisgmp/xsd/116/Message" Id="ID_4050460995" senderIdentifier="01309b2f-fdec-48cb-9de5-e7c52d6f7d04" senderRole="7" timestamp="2018-02-28T16:30:39.877+05:00"><msgd:ExportRequest xmlns:msgd="http://roskazna.ru/gisgmp/xsd/116/MessageData" kind="CHARGE"><pdr:Filter xmlns:pdr="http://roskazna.ru/gisgmp/xsd/116/PGU_DataRequest"><pdr:Conditions><pdr:ChargesIdentifiers><pdr:SupplierBillID>1234567890</pdr:SupplierBillID></pdr:ChargesIdentifiers></pdr:Conditions></pdr:Filter></msgd:ExportRequest></gisgmp:RequestMessage></rev:AppData></rev:MessageData></smev:GISGMPTransferMsg></soapenv:Body>'
 
 # print(get_digest(text)[2])
-print(get_digest(text, 'GostR3411_94_CryptoProParamSet')[2])  # /zP/7KpLyXyg6FpKsAjNNSMe3pvPjvfx24X9RdI9AYg=
+print(
+    get_digest(text, "GostR3411_94_CryptoProParamSet")[2]
+)
+# /zP/7KpLyXyg6FpKsAjNNSMe3pvPjvfx24X9RdI9AYg=
 
 # # text = """\
 # # <soapenv:Envelope xmlns:rev="http://smev.gosuslugi.ru/rev120315" xmlns:smev="http://roskazna.ru/gisgmp/02000000/SmevGISGMPService/" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
