@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import csv
+from io import StringIO
+
 
 text = """\
 id;name;address;zip
@@ -20,11 +22,8 @@ for row in csv_reader:
 print()
 
 # Variant 2
-from io import StringIO
-
 csv_reader = csv.reader(StringIO(text), delimiter=";")
 for row in csv_reader:
     print(row)
 
 print()
-

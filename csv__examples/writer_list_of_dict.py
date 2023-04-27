@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://docs.python.org/3/library/csv.html#csv.DictWriter
@@ -10,13 +10,14 @@ __author__ = 'ipetrash'
 
 import csv
 
+
 items = [
-    {'name': 'bob', 'age': 25, 'weight': 200},
-    {'name': 'jim', 'age': 31, 'weight': 180}
+    {"name": "bob", "age": 25, "weight": 200},
+    {"name": "jim", "age": 31, "weight": 180},
 ]
 
 keys = items[0].keys()
-with open('people.csv', 'w', encoding='utf-8', newline='') as f:
+with open("people.csv", "w", encoding="utf-8", newline="") as f:
     dict_writer = csv.DictWriter(f, keys)
     dict_writer.writeheader()
     dict_writer.writerows(items)
