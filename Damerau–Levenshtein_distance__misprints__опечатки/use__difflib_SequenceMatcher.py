@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from typing import Optional, List
 from difflib import SequenceMatcher
 
 # pip install pymorphy2
@@ -14,17 +13,16 @@ from pymorphy2.tokenizers import simple_word_tokenize
 morph = pymorphy2.MorphAnalyzer()
 
 
-def get_tokens(text: str) -> List[pymorphy2.analyzer.Parse]:
+def get_tokens(text: str) -> list[pymorphy2.analyzer.Parse]:
     return [morph.parse(word)[0] for word in simple_word_tokenize(text)]
 
 
-ALL_WORDS = ['замена', 'заменить', 'касса']
+ALL_WORDS = ["замена", "заменить", "касса"]
 
 
-def fix_command(word: str) -> Optional[str]:
+def fix_command(word: str) -> str | None:
     rations = [
-        (word2, SequenceMatcher(None, word, word2).ratio())
-        for word2 in ALL_WORDS
+        (word2, SequenceMatcher(None, word, word2).ratio()) for word2 in ALL_WORDS
     ]
     rations = [(word, ratio) for word, ratio in rations if ratio >= 0.7]
     if not rations:
@@ -34,9 +32,9 @@ def fix_command(word: str) -> Optional[str]:
 
 
 commands = [
-    'замена кассы',
-    'заменить кассs',
-    'замени кассу',
+    "замена кассы",
+    "заменить кассs",
+    "замени кассу",
 ]
 for command in commands:
     words = get_tokens(command)
