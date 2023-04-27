@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import os
@@ -11,7 +11,7 @@ import traceback
 
 # For import utils.py
 import sys
-sys.path.append('..')
+sys.path.append("..")
 
 from utils import get_logger, backup
 
@@ -31,8 +31,10 @@ def backup_saves(path_ds_save: str, forced=False):
             # Save backup. If less than 600 secs have passed since the last modification of the file
             is_modified = (now_timestamp - save_timestamp) < 600
             ok = forced or is_modified
-            log.debug(f"{'Need backup' if ok else 'Not need backup'}. "
-                      f"Reason: Forced={forced}, Is modified file save={is_modified}")
+            log.debug(
+                f"{'Need backup' if ok else 'Not need backup'}. "
+                f"Reason: Forced={forced}, Is modified file save={is_modified}"
+            )
             if not ok:
                 continue
 
@@ -48,7 +50,7 @@ def run(path_ds_save: str, timeout_minutes=5):
     # Example: r'~\Documents\NBGI\DarkSouls\*\DRAKS0005.sl2'
     path_ds_save = os.path.expanduser(path_ds_save)
 
-    print(f'{path_ds_save}\n')
+    print(f"{path_ds_save}\n")
 
     backup_saves(path_ds_save, forced=True)
 
@@ -57,4 +59,3 @@ def run(path_ds_save: str, timeout_minutes=5):
         time.sleep(timeout_minutes * 60)
 
         backup_saves(path_ds_save, False)
-
