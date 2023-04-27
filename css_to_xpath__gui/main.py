@@ -1,28 +1,30 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import traceback
+import sys
 
 from PyQt5 import Qt
 
 # pip install cssselect
 from cssselect import HTMLTranslator
+
+
 css_to_xpath = HTMLTranslator(xhtml=True).css_to_xpath
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    Qt.QMessageBox.critical(None, 'Error', text)
+    Qt.QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -30,7 +32,7 @@ class MainWindow(Qt.QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('css_to_xpath__gui')
+        self.setWindowTitle("css_to_xpath__gui")
 
         self.text_edit_input = Qt.QPlainTextEdit()
         self.text_edit_output = Qt.QPlainTextEdit()
@@ -38,11 +40,13 @@ class MainWindow(Qt.QWidget):
         self.label_error = Qt.QLabel()
         self.label_error.setStyleSheet("QLabel { color : red; }")
         self.label_error.setTextInteractionFlags(Qt.Qt.TextSelectableByMouse)
-        self.label_error.setSizePolicy(Qt.QSizePolicy.Expanding, Qt.QSizePolicy.Preferred)
+        self.label_error.setSizePolicy(
+            Qt.QSizePolicy.Expanding, Qt.QSizePolicy.Preferred
+        )
 
-        self.button_detail_error = Qt.QPushButton('...')
+        self.button_detail_error = Qt.QPushButton("...")
         self.button_detail_error.setFixedSize(20, 20)
-        self.button_detail_error.setToolTip('Detail error')
+        self.button_detail_error.setToolTip("Detail error")
         self.button_detail_error.hide()
 
         self.last_error_message = None
@@ -94,13 +98,13 @@ class MainWindow(Qt.QWidget):
             self.last_detail_error_message = str(tb)
             self.button_detail_error.show()
 
-            self.label_error.setText('Error: ' + self.last_error_message)
+            self.label_error.setText("Error: " + self.last_error_message)
 
     def show_detail_error_message(self):
-        message = self.last_error_message + '\n\n' + self.last_detail_error_message
+        message = self.last_error_message + "\n\n" + self.last_detail_error_message
 
         mb = Qt.QErrorMessage()
-        mb.setWindowTitle('Error')
+        mb.setWindowTitle("Error")
         # Сообщение ошибки содержит отступы, символы-переходы на следующую строку,
         # которые поломаются при вставке через QErrorMessage.showMessage, и нет возможности
         # выбрать тип текста, то делаем такой хак.
@@ -109,7 +113,7 @@ class MainWindow(Qt.QWidget):
         mb.exec_()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = Qt.QApplication([])
 
     mw = MainWindow()
@@ -117,6 +121,6 @@ if __name__ == '__main__':
     mw.show()
 
     # For example
-    mw.text_edit_input.setPlainText('div#main > a[href]')
+    mw.text_edit_input.setPlainText("div#main > a[href]")
 
     app.exec_()
