@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import os
 import time
 import traceback
+import winsound
+
 from glob import glob
 
 # For import utils.py
 import sys
-sys.path.append('..')
+sys.path.append("..")
 
 from utils import get_logger, backup
 
@@ -21,7 +23,6 @@ import keyboard
 
 def beep():
     try:
-        import winsound
         winsound.Beep(1000, duration=50)
     except:
         # ignore
@@ -51,8 +52,8 @@ def run(path_ds_save: str, hotkey=HOTKEY):
     # Example: r'~\Documents\NBGI\DarkSouls\*\DRAKS0005.sl2'
     path_ds_save = os.path.expanduser(path_ds_save)
 
-    print(f'{path_ds_save}')
-    print(f'Using hotkey: {hotkey}\n')
+    print(f"{path_ds_save}")
+    print(f"Using hotkey: {hotkey}\n")
 
     # Run hotkey
     keyboard.add_hotkey(hotkey, lambda: backup_saves(path_ds_save))
