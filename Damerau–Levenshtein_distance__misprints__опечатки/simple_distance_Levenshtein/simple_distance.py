@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://ru.wikibooks.org/wiki/Реализации_алгоритмов/Расстояние_Левенштейна#Python
@@ -18,7 +18,11 @@ def distance(a, b):
     for i in range(1, m + 1):
         previous_row, current_row = current_row, [i] + [0] * n
         for j in range(1, n + 1):
-            add, delete, change = previous_row[j] + 1, current_row[j - 1] + 1, previous_row[j - 1]
+            add, delete, change = (
+                previous_row[j] + 1,
+                current_row[j - 1] + 1,
+                previous_row[j - 1],
+            )
             if a[j - 1] != b[i - 1]:
                 change += 1
 
@@ -27,7 +31,7 @@ def distance(a, b):
     return current_row[n]
 
 
-if __name__ == '__main__':
-    print(distance('Привет', 'Превет'))  # 1
-    print(distance('Привет', 'Првет'))   # 1
-    print(distance('Привет', 'Првед'))   # 2
+if __name__ == "__main__":
+    print(distance("Привет", "Превет"))  # 1
+    print(distance("Привет", "Првет"))   # 1
+    print(distance("Привет", "Првед"))   # 2
