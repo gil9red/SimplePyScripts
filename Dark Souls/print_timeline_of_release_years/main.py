@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Хронология выхода игр *Souls
@@ -14,15 +14,15 @@ from bs4 import BeautifulSoup
 
 def get_parsed_two_column_wikitable(url: str) -> [(str, str)]:
     rs = requests.get(url)
-    root = BeautifulSoup(rs.content, 'html.parser')
+    root = BeautifulSoup(rs.content, "html.parser")
 
-    table = root.select_one('.wikitable')
+    table = root.select_one(".wikitable")
 
     items = []
 
     # Timeline of release years
-    for tr in table.select('tr'):
-        td_items = tr.select('td')
+    for tr in table.select("tr"):
+        td_items = tr.select("td")
         if len(td_items) != 2:
             continue
 
@@ -33,8 +33,8 @@ def get_parsed_two_column_wikitable(url: str) -> [(str, str)]:
     return items
 
 
-if __name__ == '__main__':
-    url = 'https://en.wikipedia.org/wiki/Souls_(series)'
+if __name__ == "__main__":
+    url = "https://en.wikipedia.org/wiki/Souls_(series)"
     for year, name in get_parsed_two_column_wikitable(url):
         print(year, name)
 
