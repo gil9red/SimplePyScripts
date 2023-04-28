@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 """
 EN: Decoding the phone number for CLI.
@@ -19,7 +19,7 @@ RU: Декодирование телефонного номера для АОН
 # Например, входящая строка 4434###552222311333661 соответствует номеру 4452136
 
 
-def decoding_phone_number(string):
+def decoding_phone_number(string: str) -> str:
     string += " "
     result = ""
     last = ""
@@ -39,7 +39,9 @@ def decoding_phone_number(string):
             repeat += 1
         else:  # Если символ не такой же как предыдущий
             if repeat > 1:  # Если символ имеет повторы
-                if last is "#" and symbol_before_grill:  # Если последним символов является # и ...
+                if (
+                    last is "#" and symbol_before_grill
+                ):  # Если последним символов является # и ...
                     result += symbol_before_grill  # Добавим число, перед #, но саму # добавлять не будем
                     symbol_before_grill = ""
                 else:
@@ -51,7 +53,7 @@ def decoding_phone_number(string):
     return result
 
 
-if __name__ == '__main__':
-    string = '4434###552222311333661'
-    print('CLI = ' + string)
+if __name__ == "__main__":
+    string = "4434###552222311333661"
+    print("CLI = " + string)
     print("Phone number = " + decoding_phone_number(string))
