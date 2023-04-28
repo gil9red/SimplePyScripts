@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from _utils import parse, print_stats, URL_DS1, URL_DS2, URL_DS3
 
 rows = []
 for game, url in {
-    'DS1': URL_DS1,
-    'DS2': URL_DS2,
-    'DS3': URL_DS3
+    "DS1": URL_DS1,
+    "DS2": URL_DS2,
+    "DS3": URL_DS3,
 }.items():
     for name, health, souls in parse(url):
         rows.append((game, name, health, souls))
 
 print_stats(
     rows,
-    headers=('GAME', 'NAME', 'HEALTH', 'SOULS'),
-    sort_column=2
+    headers=("GAME", "NAME", "HEALTH", "SOULS"),
+    sort_column=2,
 )
 """
 GAME | NAME                                          | HEALTH | SOULS 
