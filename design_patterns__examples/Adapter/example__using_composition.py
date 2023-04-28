@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Adapter - Адаптер
@@ -19,12 +19,12 @@ class SourceAdapter(ABC):
 
 class GameConsole:
     def create_game_picture(self):
-        return 'picture from console'
+        return "picture from console"
 
 
 class Antenna:
     def create_wave_picture(self):
-        return 'picture from wave'
+        return "picture from wave"
 
 
 class SourceGameConsoleAdapter(SourceAdapter):
@@ -51,7 +51,7 @@ class TV:
         return self.source.get_picture()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     g = SourceGameConsoleAdapter(GameConsole())
     game_tv = TV(g)
     print(game_tv.show_picture())
