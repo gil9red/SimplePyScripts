@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Bridge — Мост
@@ -30,6 +30,6 @@ def test_device(device):
     device.print_status()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_device(Tv())
     test_device(Radio())

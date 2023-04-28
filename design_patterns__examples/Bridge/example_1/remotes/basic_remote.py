@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from remotes.remote import Remote
@@ -20,7 +20,7 @@ class BasicRemote(Remote):
             self._device.disable()
         else:
             self._device.enable()
-    
+
     def volume_down(self):
         print("Remote: volume down")
         self._device.set_volume(self._device.get_volume() - 10)

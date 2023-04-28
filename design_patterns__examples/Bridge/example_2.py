@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Bridge — Мост
@@ -15,34 +15,38 @@ class Drawer(ABC):
     @abstractmethod
     def draw_circle(self, x: int, y: int, radius: int):
         pass
-    
+
 
 class SmallCircleDrawer(Drawer):
     RADIUS_MULTIPLIER = 0.25
-    
+
     def draw_circle(self, x: int, y: int, radius: int):
-        print(f"Small circle center = {x},{y} radius = {radius * self.RADIUS_MULTIPLIER}")
+        print(
+            f"Small circle center = {x},{y} radius = {radius * self.RADIUS_MULTIPLIER}"
+        )
 
 
 class LargeCircleDrawer(Drawer):
     RADIUS_MULTIPLIER = 10
-    
+
     def draw_circle(self, x: int, y: int, radius: int):
-        print(f"Large circle center = {x},{y} radius = {radius * self.RADIUS_MULTIPLIER}")
-    
+        print(
+            f"Large circle center = {x},{y} radius = {radius * self.RADIUS_MULTIPLIER}"
+        )
+
 
 class Shape(ABC):
     def __init__(self, drawer: Drawer):
         self._drawer = drawer
-    
+
     @abstractmethod
     def draw(self):
         pass
-    
+
     @abstractmethod
     def enlarge_radius(self, multiplier: int):
         pass
-    
+
 
 class Circle(Shape):
     def __init__(self, x: int, y: int, radius: int, drawer: Drawer):
@@ -77,7 +81,7 @@ class Circle(Shape):
         self._radius = radius
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     shapes = [
         Circle(5, 10, 10, LargeCircleDrawer()),
         Circle(20, 30, 100, SmallCircleDrawer()),
