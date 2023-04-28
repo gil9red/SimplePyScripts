@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 def attrs(**kwargs):
@@ -14,10 +14,10 @@ def attrs(**kwargs):
 
 
 @attrs(versionadded="2.2", author="Guido van Rossum")
-def mymethod(text='ok'):
+def mymethod(text="ok"):
     return text
 
 
 print(mymethod.author)  # Guido van Rossum
 print(mymethod())  # ok
-print(mymethod('no'))  # ok
+print(mymethod("no"))  # ok

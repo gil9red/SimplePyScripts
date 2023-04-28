@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import functools
@@ -36,6 +36,7 @@ def composed(*decs):
         for dec in reversed(decs):
             f = dec(f)
         return f
+
     return deco
 
 
@@ -59,8 +60,8 @@ def hello_2(text):
     return text
 
 
-print(hello('Hello World!'))
+print(hello("Hello World!"))
 # <b><i>HELLO WORLD!</i></b>
 
-print(hello_2('Hello World!'))
+print(hello_2("Hello World!"))
 # <b><i>HELLO WORLD!</i></b>

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 def attrs(**kwargs):
@@ -22,4 +22,7 @@ class Foo:
 print(Foo.author)     # Guido van Rossum
 print(Foo().author)   # Guido van Rossum
 print(Foo().version)  # 2.2
-print(list(filter(lambda x: not x.startswith('_'), dir(Foo()))))  # ['author', 'version']
+print(
+    list(filter(lambda x: not x.startswith("_"), dir(Foo())))
+)
+# ['author', 'version']

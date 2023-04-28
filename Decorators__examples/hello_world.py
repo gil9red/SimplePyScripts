@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import functools
@@ -38,7 +38,7 @@ def hello(text):
     return text
 
 
-print(hello('Hello World!'))
+print(hello("Hello World!"))
 # <b><i>HELLO WORLD!</i></b>
 
-assert hello('Hello World!') == '<b><i>HELLO WORLD!</i></b>'
+assert hello("Hello World!") == "<b><i>HELLO WORLD!</i></b>"

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 class TextBuilder:
@@ -44,14 +44,17 @@ class TextBuilder:
         # Возаращаем сам декоратор
         return decorator
 
-    @_call_before(lambda self: self.result.append('+' + '-' * 10 + '+'))
-    @_call_after(lambda self: self.result.append('+' + '-' * 10 + '+'), lambda self: self.result.append('\n'))
-    def append(self, text: str) -> 'TextBuilder':
+    @_call_before(lambda self: self.result.append("+" + "-" * 10 + "+"))
+    @_call_after(
+        lambda self: self.result.append("+" + "-" * 10 + "+"),
+        lambda self: self.result.append("\n"),
+    )
+    def append(self, text: str) -> "TextBuilder":
         self.result.append(text)
         return self
 
     def build(self):
-        return '\n'.join(self.result)
+        return "\n".join(self.result)
 
 
 builder = TextBuilder()

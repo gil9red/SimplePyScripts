@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import random
 
 
 # http://ru.stackoverflow.com/a/491681/201445
+
 
 def try_repeat(func):
     def wrapper(*args, **kwargs):
@@ -14,7 +18,7 @@ def try_repeat(func):
             try:
                 return func(*args, **kwargs)
             except Exception as e:
-                print('Error:', e)
+                print("Error:", e)
                 count -= 1
 
     return wrapper
@@ -22,9 +26,8 @@ def try_repeat(func):
 
 @try_repeat
 def exception_func():
-    import random
     if random.randint(0, 1):
-        raise Exception('!!!')
+        raise Exception("!!!")
 
 
 exception_func()
