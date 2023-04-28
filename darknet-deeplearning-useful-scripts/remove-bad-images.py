@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import os
@@ -15,7 +15,7 @@ for file_name in glob.glob("*.png"):
     try:
         image = Image.open(file_name)
         if not image.verify():
-            raise ValueError(f'bad img {file_name}')
+            raise ValueError(f"bad img {file_name}")
     except:
         print(f"{file_name} looks bad")
         try:
