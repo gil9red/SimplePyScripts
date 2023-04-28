@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Chain of responsibility — Цепочка обязанностей
@@ -18,9 +18,9 @@ class Handler(ABC):
     Он также объявляет метод для обработки.
     """
 
-    _next_handler: 'Handler' = None
+    _next_handler: "Handler" = None
 
-    def set_next(self, handler: 'Handler') -> 'Handler':
+    def set_next(self, handler: "Handler") -> "Handler":
         self._next_handler = handler
         return self._next_handler
 
@@ -56,30 +56,31 @@ class IsNotMatchReHandler(Handler):
 
     def handle(self, obj):
         if not re.search(self._re_pattern, obj):
-            raise Exception(f'String {repr(obj)} is not matching by regexp: "{self._re_pattern}"!')
+            raise Exception(
+                f'String {repr(obj)} is not matching by regexp: "{self._re_pattern}"!'
+            )
 
         self.next_handle(obj)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     def client_code(handler: Handler):
-        for obj in [None, '123', '456', '111', 456]:
-            print(f'Object {repr(obj)} is ', end='')
+        for obj in [None, "123", "456", "111", 456]:
+            print(f"Object {repr(obj)} is ", end="")
 
             try:
                 handler.handle(obj)
-                print('ok!')
+                print("ok!")
 
             except Exception as e:
                 print(f'fail -> "{e}"')
 
-
     is_not_none = IsNotNoneHandler()
     is_not_string = IsNotStringHandler()
 
-    is_not_match_re_1 = IsNotMatchReHandler("\d")
+    is_not_match_re_1 = IsNotMatchReHandler(r"\d")
     is_not_match_re_2 = IsNotMatchReHandler("1..")
-    is_not_match_re_3 = IsNotMatchReHandler("\d{3}")
+    is_not_match_re_3 = IsNotMatchReHandler(r"\d{3}")
     is_not_match_re_1.set_next(is_not_match_re_2).set_next(is_not_match_re_3)
 
     # Check only None

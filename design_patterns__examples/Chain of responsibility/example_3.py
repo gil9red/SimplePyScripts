@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Chain of responsibility — Цепочка обязанностей
@@ -22,6 +22,7 @@ class LogLevel(IntEnum):
     """
     Log Levels Enum.
     """
+
     NONE = auto()
     INFO = auto()
     DEBUG = auto()
@@ -48,7 +49,7 @@ class Logger(ABC):
         self._next = None
         self._log_levels = list(levels)
 
-    def set_next(self, next_logger: 'Logger') -> 'Logger':
+    def set_next(self, next_logger: "Logger") -> "Logger":
         """
         Set next responsible logger in the chain.
 
@@ -107,6 +108,7 @@ class EmailLogger(Logger):
     Args:
         msg (str): Message string.
     """
+
     def write_message(self, msg: str):
         print("Sending via email:", msg)
 
@@ -118,6 +120,7 @@ class FileLogger(Logger):
     Args:
         msg (str): Message string.
     """
+
     def write_message(self, msg: str):
         print("Writing to log file:", msg)
 

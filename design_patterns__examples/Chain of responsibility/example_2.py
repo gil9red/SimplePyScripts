@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Chain of responsibility — Цепочка обязанностей
@@ -47,7 +47,7 @@ class Garage:
             handler(car)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     handlers = [handle_fuel, handle_km, handle_oil]
     garage = Garage()
 

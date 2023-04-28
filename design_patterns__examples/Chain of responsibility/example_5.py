@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Chain of responsibility — Цепочка обязанностей
@@ -20,7 +20,7 @@ class Handler(ABC):
     """
 
     @abstractmethod
-    def set_next(self, handler: 'Handler') -> 'Handler':
+    def set_next(self, handler: "Handler") -> "Handler":
         pass
 
     @abstractmethod
@@ -89,7 +89,7 @@ def client_code(handler: Handler) -> None:
     """
 
     for food in ["Nut", "Banana", "Cup of coffee"]:
-        print(f'\nClient: Who wants a {food}?')
+        print(f"\nClient: Who wants a {food}?")
         result = handler.handle(food)
         if result:
             print(f"  {result}", end="")
@@ -103,11 +103,11 @@ def print_chain(handler: Handler) -> None:
     chain = []
 
     while handler:
-        name = handler.__class__.__name__.replace('Handler', '')
+        name = handler.__class__.__name__.replace("Handler", "")
         chain.append(name)
         handler = handler._next_handler
 
-    print('Chain: ' + ' > '.join(chain))
+    print("Chain: " + " > ".join(chain))
 
 
 if __name__ == "__main__":
@@ -127,7 +127,7 @@ if __name__ == "__main__":
 
     # Клиент должен иметь возможность отправлять запрос любому обработчику, а не
     # только первому в цепочке.
-    print('OUTPUT:')
+    print("OUTPUT:")
 
     print("Chain: Monkey > Squirrel > Dog")
     client_code(monkey)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Chain of responsibility — Цепочка обязанностей
@@ -21,24 +21,24 @@ def get_timestamp() -> int:
 # Базовый класс цепочки.
 class Middleware(ABC):
     def __init__(self):
-        self._next: 'Middleware' = None
-    
+        self._next: "Middleware" = None
+
     # Помогает строить цепь из объектов-проверок.
-    def link_with(self, next: 'Middleware') -> 'Middleware':
+    def link_with(self, next: "Middleware") -> "Middleware":
         self._next = next
         return next
-    
+
     # Подклассы реализуют в этом методе конкретные проверки.
     @abstractmethod
     def check(self, email: str, password: str) -> bool:
         pass
-    
+
     # Запускает проверку в следующем объекте или завершает проверку, если мы в
     # последнем элементе цепи.
     def _check_next(self, email: str, password: str) -> bool:
         if not self._next:
             return True
-        
+
         return self._next.check(email, password)
 
 
@@ -46,7 +46,7 @@ class Middleware(ABC):
 class ThrottlingMiddleware(Middleware):
     def __init__(self, request_per_minute: int):
         super().__init__()
-        
+
         self._request: int = 0
         self._request_per_minute: int = request_per_minute
         self._current_time: int = get_timestamp()
@@ -62,30 +62,30 @@ class ThrottlingMiddleware(Middleware):
             self._current_time = get_timestamp()
 
         self._request += 1
-        
+
         if self._request > self._request_per_minute:
             print("Request limit exceeded!")
             return False
-        
+
         return self._check_next(email, password)
 
 
 # Конкретный элемент цепи обрабатывает запрос по-своему.
 class UserExistsMiddleware(Middleware):
-    def __init__(self, server: 'Server'):
+    def __init__(self, server: "Server"):
         super().__init__()
-        
+
         self._server: Server = server
 
     def check(self, email: str, password: str) -> bool:
         if not self._server.has_email(email):
             print("This email is not registered!")
             return False
-        
+
         if not self._server.is_valid_password(email, password):
             print("Wrong password!")
             return False
-        
+
         return self._check_next(email, password)
 
 
@@ -95,7 +95,7 @@ class RoleCheckMiddleware(Middleware):
         if email == "admin@example.com":
             print("Hello, admin!")
             return True
-        
+
         print("Hello, user!")
         return self._check_next(email, password)
 
@@ -105,12 +105,12 @@ class Server:
     def __init__(self):
         self._users: Dict[str, str] = dict()
         self._middleware: Middleware = None
-    
+
     # Клиент подаёт готовую цепочку в сервер. Это увеличивает гибкость и
     # упрощает тестирование класса сервера.
     def set_middleware(self, middleware: Middleware):
         self._middleware = middleware
-    
+
     # Сервер получает email и пароль от клиента и запускает проверку
     # авторизации у цепочки.
     def log_in(self, email: str, password: str) -> bool:
@@ -120,7 +120,7 @@ class Server:
             # Здесь должен быть какой-то полезный код, работающий для
             # авторизированных пользователей.
             return True
-        
+
         return False
 
     def register(self, email: str, password: str):
@@ -131,9 +131,9 @@ class Server:
 
     def is_valid_password(self, email: str, password: str) -> bool:
         return self._users.get(email) == password
-    
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     server = Server()
     server.register("admin@example.com", "admin_pass")
     server.register("user@example.com", "user_pass")
@@ -142,14 +142,12 @@ if __name__ == '__main__':
     # Проверки связаны в одну цепь. Клиент может строить различные цепи,
     # используя одни и те же компоненты.
     middleware = ThrottlingMiddleware(request_per_minute=2)
-    middleware\
-        .link_with(UserExistsMiddleware(server))\
-        .link_with(RoleCheckMiddleware())
+    middleware.link_with(UserExistsMiddleware(server)).link_with(RoleCheckMiddleware())
 
     # Сервер получает цепочку от клиентского кода.
     server.set_middleware(middleware)
-    
-    print('OUTPUT:')
+
+    print("OUTPUT:")
 
     while True:
         email = input("Enter email: ")
