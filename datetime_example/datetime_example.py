@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # TODO: больше примеров
@@ -9,7 +9,7 @@ __author__ = 'ipetrash'
 from datetime import date
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Dates are easily constructed and formatted
     now = date.today()
     print(now)
