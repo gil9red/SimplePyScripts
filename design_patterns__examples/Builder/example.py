@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Builder — Строитель
@@ -20,7 +20,7 @@ class Pizza:
 
     def set_dough(self, dough: str):
         self._dough = dough
-    
+
     def set_sauce(self, sauce: str):
         self._sauce = sauce
 
@@ -97,7 +97,7 @@ class Waiter:
         self.pizza_builder.build_topping()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # A customer ordering a pizza.
     hawaiianPizzaBuilder = HawaiianPizzaBuilder()
 

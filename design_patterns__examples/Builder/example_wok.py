@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Builder — Строитель
@@ -54,56 +54,92 @@ class WokTopping(NamedTuple):
     weight: int = 5
 
 
-WokUdon = WokBase.Factory.create(name='Удон', description='Пшеничная лапша + свежие овощи')
-WokUdonSmall = WokBase.Factory.create_small(name='Удон (эконом)', description='Пшеничная лапша + свежие овощи')
+WokUdon = WokBase.Factory.create(
+    name="Удон", description="Пшеничная лапша + свежие овощи"
+)
+WokUdonSmall = WokBase.Factory.create_small(
+    name="Удон (эконом)", description="Пшеничная лапша + свежие овощи"
+)
 
-WokSoba = WokBase.Factory.create(name='Соба', description='Гречневая лапша + свежие овощи')
-WokSobaSmall = WokBase.Factory.create_small(name='Соба (эконом)', description='Гречневая лапша + свежие овощи')
+WokSoba = WokBase.Factory.create(
+    name="Соба", description="Гречневая лапша + свежие овощи"
+)
+WokSobaSmall = WokBase.Factory.create_small(
+    name="Соба (эконом)", description="Гречневая лапша + свежие овощи"
+)
 
-WokRamen = WokBase.Factory.create_small(name='Рамен', description='Яичная лапша + свежие овощи')
-WokRamenSmall = WokBase.Factory.create_small(name='Рамен (эконом)', description='Яичная лапша + свежие овощи')
+WokRamen = WokBase.Factory.create_small(
+    name="Рамен", description="Яичная лапша + свежие овощи"
+)
+WokRamenSmall = WokBase.Factory.create_small(
+    name="Рамен (эконом)", description="Яичная лапша + свежие овощи"
+)
 
-WokHarusame = WokBase.Factory.create(name='Харусаме', description='Рисовая лапша + свежие овощи')
-WokHarusameSmall = WokBase.Factory.create_small(name='Харусаме (эконом)', description='Рисовая лапша + свежие овощи')
+WokHarusame = WokBase.Factory.create(
+    name="Харусаме", description="Рисовая лапша + свежие овощи"
+)
+WokHarusameSmall = WokBase.Factory.create_small(
+    name="Харусаме (эконом)", description="Рисовая лапша + свежие овощи"
+)
 
-WokRice = WokBase.Factory.create(name='Рис', description='Цельнозерный рис + свежие овощи')
-WokRiceSmall = WokBase.Factory.create_small(name='Рис (эконом)', description='Цельнозерный рис + свежие овощи')
-
-
-WokAdditiveChicken = WokAdditive.Factory.create(name='Курица', price=58)
-WokAdditiveChickenSmall = WokAdditive.Factory.create_small(name='Курица (эконом)', price=38)
-
-WokAdditiveBeef = WokAdditive.Factory.create(name='Говядина', price=84)
-WokAdditiveBeefSmall = WokAdditive.Factory.create_small(name='Говядина (эконом)', price=64)
-
-WokAdditiveShrimp = WokAdditive.Factory.create(name='Креветка', price=109)
-WokAdditiveShrimpSmall = WokAdditive.Factory.create_small(name='Креветка (эконом)', price=89)
-
-WokAdditiveSquid = WokAdditive.Factory.create(name='Кальмар', price=95)
-WokAdditiveSquidSmall = WokAdditive.Factory.create_small(name='Кальмар (эконом)', price=75)
-
-WokAdditiveSeafood = WokAdditive.Factory.create(name='Морепродукты', price=94)
-WokAdditiveSeafoodSmall = WokAdditive.Factory.create_small(name='Морепродукты (эконом)', price=74)
-
-WokAdditiveSalmon = WokAdditive.Factory.create(name='Лосось', price=102)
-WokAdditiveSalmonSmall = WokAdditive.Factory.create_small(name='Лосось (эконом)', price=82)
-
-WokAdditiveShiitakeMushrooms = WokAdditive.Factory.create(name='Грибы Шиитаке', price=44)
-WokAdditiveShiitakeMushroomsSmall = WokAdditive.Factory.create_small(name='Грибы Шиитаке (эконом)', price=24)
+WokRice = WokBase.Factory.create(
+    name="Рис", description="Цельнозерный рис + свежие овощи"
+)
+WokRiceSmall = WokBase.Factory.create_small(
+    name="Рис (эконом)", description="Цельнозерный рис + свежие овощи"
+)
 
 
-WokSauceCreamy = WokSauce(name='Сливочный соус')
-WokSauceOyster = WokSauce(name='Устричный соус')
-WokSauceCheese = WokSauce(name='Сырный соус')
-WokSauceTeriyaki = WokSauce(name='Терияки соус')
-WokSauceAcute = WokSauce(name='Острый соус')
+WokAdditiveChicken = WokAdditive.Factory.create(name="Курица", price=58)
+WokAdditiveChickenSmall = WokAdditive.Factory.create_small(
+    name="Курица (эконом)", price=38
+)
+
+WokAdditiveBeef = WokAdditive.Factory.create(name="Говядина", price=84)
+WokAdditiveBeefSmall = WokAdditive.Factory.create_small(
+    name="Говядина (эконом)", price=64
+)
+
+WokAdditiveShrimp = WokAdditive.Factory.create(name="Креветка", price=109)
+WokAdditiveShrimpSmall = WokAdditive.Factory.create_small(
+    name="Креветка (эконом)", price=89
+)
+
+WokAdditiveSquid = WokAdditive.Factory.create(name="Кальмар", price=95)
+WokAdditiveSquidSmall = WokAdditive.Factory.create_small(
+    name="Кальмар (эконом)", price=75
+)
+
+WokAdditiveSeafood = WokAdditive.Factory.create(name="Морепродукты", price=94)
+WokAdditiveSeafoodSmall = WokAdditive.Factory.create_small(
+    name="Морепродукты (эконом)", price=74
+)
+
+WokAdditiveSalmon = WokAdditive.Factory.create(name="Лосось", price=102)
+WokAdditiveSalmonSmall = WokAdditive.Factory.create_small(
+    name="Лосось (эконом)", price=82
+)
+
+WokAdditiveShiitakeMushrooms = WokAdditive.Factory.create(
+    name="Грибы Шиитаке", price=44
+)
+WokAdditiveShiitakeMushroomsSmall = WokAdditive.Factory.create_small(
+    name="Грибы Шиитаке (эконом)", price=24
+)
 
 
-WokToppingFriedOnions = WokTopping(name='Лук обжаренный')
-WokToppingGreenOnion = WokTopping(name='Лук зеленый')
-WokToppingRoastedSesame = WokTopping(name='Кунжут обжаренный')
-WokToppingChilli = WokTopping(name='Перец чили')
-WokToppingParmesanCheese = WokTopping(name='Сыр пармезан')
+WokSauceCreamy = WokSauce(name="Сливочный соус")
+WokSauceOyster = WokSauce(name="Устричный соус")
+WokSauceCheese = WokSauce(name="Сырный соус")
+WokSauceTeriyaki = WokSauce(name="Терияки соус")
+WokSauceAcute = WokSauce(name="Острый соус")
+
+
+WokToppingFriedOnions = WokTopping(name="Лук обжаренный")
+WokToppingGreenOnion = WokTopping(name="Лук зеленый")
+WokToppingRoastedSesame = WokTopping(name="Кунжут обжаренный")
+WokToppingChilli = WokTopping(name="Перец чили")
+WokToppingParmesanCheese = WokTopping(name="Сыр пармезан")
 
 
 class Wok:
@@ -117,25 +153,21 @@ class Wok:
         self.topping = []
 
     def get_order_text(self) -> str:
-        """ Текст заказа """
+        """Текст заказа"""
 
-        text = 'Заказ:\n'
+        text = "Заказ:\n"
 
         for item in self.get_order_items():
-            text += f'  {item.name:25} : {item.price} рублей\n'
+            text += f"  {item.name:25} : {item.price} рублей\n"
 
-        text += '  {:25} : {} рублей'.format('', self.get_order_price())
+        text += "  {:25} : {} рублей".format("", self.get_order_price())
 
         return text
 
     def get_order_items(self) -> list:
-        """ Элементы заказа """
+        """Элементы заказа"""
 
-        items = [
-            self.base,
-            self.additive,
-            self.sauce
-        ]
+        items = [self.base, self.additive, self.sauce]
 
         if self.sauce_additional:
             items.append(self.sauce_additional)
@@ -145,12 +177,12 @@ class Wok:
         return items
 
     def get_order_price(self) -> int:
-        """ Стоимость заказа """
+        """Стоимость заказа"""
 
         return sum(x.price for x in self.get_order_items())
 
     def get_order_weight(self) -> int:
-        """ Примерный вес заказа """
+        """Примерный вес заказа"""
 
         return sum(x.weight for x in self.get_order_items())
 
@@ -158,74 +190,82 @@ class Wok:
         def __init__(self):
             self.wok = Wok()
 
-        def set_base(self, base: WokBase) -> 'Builder':
-            """ Основа """
+        def set_base(self, base: WokBase) -> "Builder":
+            """Основа"""
 
             self.wok.base = base
             return self
 
-        def set_additive(self, additive: WokAdditive) -> 'Builder':
-            """ Добавка """
+        def set_additive(self, additive: WokAdditive) -> "Builder":
+            """Добавка"""
 
             self.wok.additive = additive
             return self
 
-        def set_sauce(self, sauce: WokSauce) -> 'Builder':
-            """ Соус """
+        def set_sauce(self, sauce: WokSauce) -> "Builder":
+            """Соус"""
 
             self.wok.sauce = sauce._replace(price=0)
             return self
 
-        def set_sauce_additional(self, sauce: WokSauce) -> 'Builder':
-            """ Дополнительный соус """
+        def set_sauce_additional(self, sauce: WokSauce) -> "Builder":
+            """Дополнительный соус"""
 
             self.wok.sauce_additional = sauce
             return self
 
-        def add_topping(self, topping: WokTopping) -> 'Builder':
-            """ Топпинг """
+        def add_topping(self, topping: WokTopping) -> "Builder":
+            """Топпинг"""
 
             self.wok.topping.append(topping)
             return self
 
-        def build(self) -> 'Wok':
+        def build(self) -> "Wok":
             return self.wok
 
 
 class WokDirector:
     @staticmethod
     def make_economy() -> Wok:
-        return Wok.Builder()\
-            .set_base(WokSoba) \
-            .set_additive(WokAdditiveChickenSmall) \
-            .set_sauce(WokSauceCheese) \
+        return (
+            Wok.Builder()
+            .set_base(WokSoba)
+            .set_additive(WokAdditiveChickenSmall)
+            .set_sauce(WokSauceCheese)
             .build()
+        )
 
     @staticmethod
     def make_business_lunch() -> Wok:
-        return Wok.Builder()\
-            .set_base(WokUdon) \
-            .set_additive(WokAdditiveChicken) \
-            .set_sauce(WokSauceCreamy) \
+        return (
+            Wok.Builder()
+            .set_base(WokUdon)
+            .set_additive(WokAdditiveChicken)
+            .set_sauce(WokSauceCreamy)
             .build()
+        )
 
     @staticmethod
     def make_vegetarian() -> Wok:
-        return Wok.Builder()\
-            .set_base(WokUdon) \
-            .set_additive(WokAdditiveShiitakeMushrooms) \
-            .set_sauce(WokSauceTeriyaki) \
-            .add_topping(WokToppingGreenOnion) \
+        return (
+            Wok.Builder()
+            .set_base(WokUdon)
+            .set_additive(WokAdditiveShiitakeMushrooms)
+            .set_sauce(WokSauceTeriyaki)
+            .add_topping(WokToppingGreenOnion)
             .build()
+        )
 
 
-if __name__ == '__main__':
-    wok = Wok.Builder()\
-        .set_base(WokUdon)\
-        .set_additive(WokAdditiveBeef)\
-        .set_sauce(WokSauceCheese)\
+if __name__ == "__main__":
+    wok = (
+        Wok.Builder()
+        .set_base(WokUdon)
+        .set_additive(WokAdditiveBeef)
+        .set_sauce(WokSauceCheese)
         .build()
-    print(wok.get_order_price())   # 213
+    )
+    print(wok.get_order_price())  # 213
     print(wok.get_order_weight())  # 350
     print(wok.get_order_text())
     # Заказ:
@@ -235,15 +275,17 @@ if __name__ == '__main__':
     #                             : 213 рублей
     print()
 
-    wok = Wok.Builder()\
-        .set_base(WokSoba)\
-        .set_additive(WokAdditiveBeef)\
-        .set_sauce(WokSauceCheese)\
-        .add_topping(WokToppingFriedOnions)\
-        .add_topping(WokToppingGreenOnion)\
-        .add_topping(WokToppingChilli)\
+    wok = (
+        Wok.Builder()
+        .set_base(WokSoba)
+        .set_additive(WokAdditiveBeef)
+        .set_sauce(WokSauceCheese)
+        .add_topping(WokToppingFriedOnions)
+        .add_topping(WokToppingGreenOnion)
+        .add_topping(WokToppingChilli)
         .build()
-    print(wok.get_order_price())   # 243
+    )
+    print(wok.get_order_price())  # 243
     print(wok.get_order_weight())  # 365
     print(wok.get_order_text())
     # Заказ:
@@ -255,7 +297,7 @@ if __name__ == '__main__':
     #   Перец чили                : 10 рублей
     #                             : 243 рублей
 
-    print('\n')
+    print("\n")
 
     print(WokDirector.make_economy().get_order_text())
     print(WokDirector.make_business_lunch().get_order_text())
