@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
-sys.path.append('..')
+sys.path.append("..")
 
 from common import parse_locations_ds3, find_links_ds3
 
