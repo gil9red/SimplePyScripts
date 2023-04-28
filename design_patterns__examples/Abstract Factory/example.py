@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Abstract Factory - Абстрактная фабрика
@@ -75,7 +75,7 @@ class OSXFactory(IGUIFactory):
         return OSXButton()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     def random_appearance() -> str:
         import random
         return random.choice(["OSX", "Windows", "error"])
