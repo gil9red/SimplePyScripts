@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Flyweight — Приспособленец
@@ -9,7 +9,6 @@ __author__ = 'ipetrash'
 
 
 from abc import ABC
-from typing import Dict
 
 
 # "Flyweight"
@@ -23,38 +22,38 @@ class Character(ABC):
 
     def display(self, point_size: int):
         self.point_size = point_size
-        print('{} (point_size {})'.format(self.symbol, self.point_size))
+        print(f"{self.symbol} (point_size {self.point_size})")
 
 
 # "FlyweightFactory"
 class CharacterFactory:
     def __init__(self):
-        self._characters: Dict[str, Character] = dict()
+        self._characters: dict[str, Character] = dict()
 
     def get_character(self, key: str) -> Character:
         # Uses "lazy initialization"
         character = self._characters.get(key)
         if character is None:
-            if key == 'A':
+            if key == "A":
                 character = CharacterA()
 
-            elif key == 'B':
+            elif key == "B":
                 character = CharacterB()
 
             # ...
 
-            elif key == 'Z':
+            elif key == "Z":
                 character = CharacterZ()
 
             self._characters[key] = character
 
         return character
-    
-  
+
+
 # "ConcreteFlyweight"
 class CharacterA(Character):
     def __init__(self):
-        self.symbol = 'A'
+        self.symbol = "A"
         self.height = 100
         self.width = 120
         self.ascent = 70
@@ -64,7 +63,7 @@ class CharacterA(Character):
 # "ConcreteFlyweight"
 class CharacterB(Character):
     def __init__(self):
-        self.symbol = 'B'
+        self.symbol = "B"
         self.height = 100
         self.width = 140
         self.ascent = 72
@@ -77,14 +76,14 @@ class CharacterB(Character):
 # "ConcreteFlyweight"
 class CharacterZ(Character):
     def __init__(self):
-        self.symbol = 'Z'
+        self.symbol = "Z"
         self.height = 100
         self.width = 100
         self.ascent = 68
         self.descent = 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Build a document with text
     chars = "AAZZBBZB"
 
