@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Composite - Компоновщик
 # SOURCE: https://ru.wikipedia.org/wiki/Компоновщик_(шаблон_проектирования)
 
+
+import traceback
+import sys
 
 from abc import ABC, abstractmethod
 from typing import List
@@ -15,16 +18,14 @@ from PyQt5.Qt import *
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -101,7 +102,7 @@ class CanvasWidget(QWidget):
     def __init__(self, graphic: Graphic):
         super().__init__()
 
-        self.setWindowTitle('Canvas')
+        self.setWindowTitle("Canvas")
 
         self.graphic = graphic
 
@@ -112,7 +113,7 @@ class CanvasWidget(QWidget):
         self.graphic.draw(painter)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ellipse_1 = Ellipse(x=50, y=50, rx=10, ry=15)
     ellipse_2 = Ellipse(x=10, y=5, rx=40, ry=50)
 

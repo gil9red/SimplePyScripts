@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Composite - Компоновщик
@@ -46,7 +46,7 @@ class Ellipse(Graphic):
         self.ry = ry
 
     def draw(self, *args, **kwargs):
-        print(f'Ellipse: x={self.x}, y={self.y}, rx={self.rx}, ry={self.ry}')
+        print(f"Ellipse: x={self.x}, y={self.y}, rx={self.rx}, ry={self.ry}")
 
 
 class Point(Graphic):
@@ -55,7 +55,7 @@ class Point(Graphic):
         self.y = y
 
     def draw(self, *args, **kwargs):
-        print(f'Point: x={self.x}, y={self.y}')
+        print(f"Point: x={self.x}, y={self.y}")
 
 
 class Rect(Graphic):
@@ -66,7 +66,7 @@ class Rect(Graphic):
         self.h = h
 
     def draw(self, *args, **kwargs):
-        print(f'Rect: x={self.x}, y={self.y}, w={self.w}, h={self.h}')
+        print(f"Rect: x={self.x}, y={self.y}, w={self.w}, h={self.h}")
 
 
 class Line(Graphic):
@@ -78,10 +78,10 @@ class Line(Graphic):
         self.y2 = y2
 
     def draw(self, *args, **kwargs):
-        print(f'Line: x1={self.x1}, y1={self.y1}, x2={self.x2}, y2={self.y2}')
+        print(f"Line: x1={self.x1}, y1={self.y1}, x2={self.x2}, y2={self.y2}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ellipse_1 = Ellipse(x=50, y=50, rx=10, ry=15)
     ellipse_2 = Ellipse(x=10, y=5, rx=40, ry=50)
 
