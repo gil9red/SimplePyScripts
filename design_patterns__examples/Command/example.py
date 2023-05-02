@@ -21,31 +21,31 @@ class Command(ABC):
 class Car:
     def start_engine(self):
         print("Запустить двигатель")
-    
+
     def stop_engine(self):
         print("Остановить двигатель")
-    
+
 
 class StartCar(Command):
     def __init__(self, car: Car):
         self.car: Car = car
-    
+
     def execute(self):
         self.car.start_engine()
-    
+
 
 class StopCar(Command):
     def __init__(self, car: Car):
         self.car: Car = car
-    
+
     def execute(self):
         self.car.stop_engine()
-    
+
 
 class CarInvoker:
     def __init__(self, command: Command):
         self.command: Command = command
-    
+
     def execute(self):
         self.command.execute()
 
