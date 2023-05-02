@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Decorator — Декоратор
@@ -49,10 +49,10 @@ class Application:
 
     def about_alert(self):
         if self._notifier:
-            self._notifier.send('Alert!')
+            self._notifier.send("Alert!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sms_enabled = True
     facebook_enabled = False
     slack_enabled = True
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     print()
 
     notifier = Notifier()
-    notifier.send('Test!')
+    notifier.send("Test!")
     # [Email] Send "Test!".
 
     print()
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     notifier = SMSDecorator(notifier)
     notifier = FacebookDecorator(notifier)
     notifier = SlackDecorator(notifier)
-    notifier.send('Test!')
+    notifier.send("Test!")
     # [Email] Send "Test!".
     # [SMS] send "Test!".
     # [Facebook] send "Test!".

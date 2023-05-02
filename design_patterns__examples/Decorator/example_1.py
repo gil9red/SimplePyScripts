@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Decorator — Декоратор
@@ -42,8 +42,8 @@ class UpperDecorator(BaseDecorator):
         return self._wrapped.run(text).upper()
 
 
-if __name__ == '__main__':
-    text = 'Hello World!'
+if __name__ == "__main__":
+    text = "Hello World!"
 
     operation = SimpleOperation()
     print(operation.run(text))  # Hello World!
