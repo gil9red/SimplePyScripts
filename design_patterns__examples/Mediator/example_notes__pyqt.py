@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Mediator — Посредник
@@ -9,9 +9,11 @@ __author__ = 'ipetrash'
 # SOURCE: https://refactoring.guru/ru/design-patterns/mediator/java/example
 
 
-from abc import abstractmethod
-from typing import List, Any
 import traceback
+import sys
+
+from abc import abstractmethod
+from typing import Any
 
 
 try:
@@ -29,15 +31,14 @@ except:
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -45,7 +46,7 @@ sys.excepthook = log_uncaught_exceptions
 class Note:
     def __init__(self):
         self._name = "note"
-        self._text = ''
+        self._text = ""
 
     def setName(self, name: str):
         self._name = name
@@ -64,9 +65,9 @@ class DefaultListModel(QAbstractListModel):
     def __init__(self):
         super().__init__()
 
-        self.items: List[Note] = []
+        self.items: list[Note] = []
 
-    def rowCount(self, parent: QModelIndex=None):
+    def rowCount(self, parent: QModelIndex = None):
         return len(self.items)
 
     def data(self, index: QModelIndex, role: int = Qt.DisplayRole) -> Any:
@@ -74,10 +75,10 @@ class DefaultListModel(QAbstractListModel):
             return QVariant()
 
         element = self.items[index.row()]
-    
+
         if role == Qt.DisplayRole:
             return element.getName()
-    
+
         return QVariant()
 
     def get_element(self, index: int) -> Note:
@@ -101,7 +102,7 @@ class DefaultListModel(QAbstractListModel):
         # Говорим view, что данные изменились
         self.dataChanged.emit(self.createIndex(index, 0), self.createIndex(index, 0))
 
-    def get_items(self) -> List[Note]:
+    def get_items(self) -> list[Note]:
         return self.items
 
 
@@ -140,7 +141,7 @@ class Mediator:
         pass
 
     @abstractmethod
-    def registerComponent(self, component: 'Component'):
+    def registerComponent(self, component: "Component"):
         pass
 
     @abstractmethod
@@ -203,7 +204,7 @@ class Filter(QLineEdit, Component):
     def setList(self, listModel: DefaultListModel):
         self._listModel = listModel
 
-    def keyPressEvent(self, event: 'QKeyEvent'):
+    def keyPressEvent(self, event: "QKeyEvent"):
         super().keyPressEvent(event)
 
         start = self.text()
@@ -267,7 +268,7 @@ class ListNote(QListView, Component):
 
     def getName(self) -> str:
         return "List"
-        
+
 
 # Конкретные компоненты никак не связаны между собой. У них есть только один
 # канал общения – через отправку уведомлений посреднику.
@@ -285,7 +286,7 @@ class SaveButton(QPushButton, Component):
 # Конкретные компоненты никак не связаны между собой. У них есть только один
 # канал общения – через отправку уведомлений посреднику.
 class TextBox(QTextEdit, Component):
-    def keyPressEvent(self, event: 'QKeyEvent'):
+    def keyPressEvent(self, event: "QKeyEvent"):
         super().keyPressEvent(event)
 
         self._mediator.markNote()
@@ -297,7 +298,7 @@ class TextBox(QTextEdit, Component):
 # Конкретные компоненты никак не связаны между собой. У них есть только один
 # канал общения – через отправку уведомлений посреднику.
 class Title(QLineEdit, Component):
-    def keyPressEvent(self, event: 'QKeyEvent'):
+    def keyPressEvent(self, event: "QKeyEvent"):
         super().keyPressEvent(event)
 
         self._mediator.markNote()
@@ -329,16 +330,16 @@ class Editor(Mediator):
     def registerComponent(self, component: Component):
         component.setMediator(self)
 
-        if component.getName() == 'AddButton':
+        if component.getName() == "AddButton":
             self._add = component
 
-        elif component.getName() == 'DelButton':
+        elif component.getName() == "DelButton":
             self._del = component
 
-        elif component.getName() == 'Filter':
+        elif component.getName() == "Filter":
             self._filter = component
 
-        elif component.getName() == 'List':
+        elif component.getName() == "List":
             self._list: ListNote = component
 
             def foo(*args):
@@ -352,13 +353,13 @@ class Editor(Mediator):
             # Вызываем нашу функцию при изменении выделения элементов в списке
             self._list.clicked.connect(foo)
 
-        elif component.getName() == 'SaveButton':
+        elif component.getName() == "SaveButton":
             self._save = component
 
-        elif component.getName() == 'TextBox':
+        elif component.getName() == "TextBox":
             self._textBox = component
 
-        elif component.getName() == 'Title':
+        elif component.getName() == "Title":
             self._title = component
 
     #
@@ -378,7 +379,7 @@ class Editor(Mediator):
         self._list.deleteElement()
 
     def getInfoFromList(self, note: Note):
-        self._title.setText(note.getName().replace('*', ' '))
+        self._title.setText(note.getName().replace("*", " "))
         self._textBox.setText(note.getText())
 
     def saveChanges(self):
@@ -466,7 +467,7 @@ class Editor(Mediator):
         splitter.addWidget(notes_editor)
 
         self._mainWindow = QMainWindow()
-        self._mainWindow.setWindowTitle('Notes')
+        self._mainWindow.setWindowTitle("Notes")
         self._mainWindow.setCentralWidget(splitter)
 
         # По умолчанию прячем элементы в редакторе заметки
@@ -475,7 +476,7 @@ class Editor(Mediator):
         self._mainWindow.show()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mediator = Editor()

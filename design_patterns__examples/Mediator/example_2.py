@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Mediator — Посредник
@@ -11,19 +11,19 @@ __author__ = 'ipetrash'
 
 class Mediator:
     @staticmethod
-    def send_message(user: 'User', msg: str):
-        print(user.name + ": " + msg)
-    
+    def send_message(user: "User", msg: str):
+        print(f"{user.name}: {msg}")
+
 
 class User:
     def __init__(self, name: str):
         self.name = name
-    
+
     def send_message(self, msg: str):
         Mediator.send_message(self, msg)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     user1 = User("user1")
     user2 = User("user2")
     user1.send_message("message1")

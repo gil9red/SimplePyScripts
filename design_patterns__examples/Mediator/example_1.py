@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Mediator — Посредник
@@ -43,7 +43,7 @@ class ConcreteMediator(IMediator):
 
         elif event == "B":
             print("[+] Mediator reacts on B and triggers following operations:")
-            print('[-] Nothing!')
+            print("[-] Nothing!")
 
         elif event == "D":
             print("[+] Mediator reacts on D and triggers following operations:")
@@ -86,7 +86,7 @@ class Component2(BaseComponent):
         self._mediator.notify(self, "D")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Клиентский код
     component1 = Component1()
     component2 = Component2()
