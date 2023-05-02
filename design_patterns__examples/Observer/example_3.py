@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Observer — Наблюдатель
@@ -11,7 +11,6 @@ __author__ = 'ipetrash'
 
 from abc import ABC, abstractmethod
 from random import randrange
-from typing import List
 
 
 class Observer(ABC):
@@ -21,7 +20,7 @@ class Observer(ABC):
     """
 
     @abstractmethod
-    def update(self, subject: 'Subject') -> None:
+    def update(self, subject: "Subject") -> None:
         """
         Получить обновление от субъекта.
         """
@@ -67,7 +66,7 @@ class ConcreteSubject(Subject):
     подписчикам.
     """
 
-    _observers: List[Observer] = []
+    _observers: list[Observer] = []
     """
     Список подписчиков. В реальной жизни список подписчиков может храниться в
     более подробном виде (классифицируется по типу события и т.д.)

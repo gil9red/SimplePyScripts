@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Observer — Наблюдатель
@@ -34,7 +34,7 @@ class Observable(ABC):
         """
         Constructor.
         """
-        self.observers = []     # инициализация списка наблюдателей
+        self.observers = []  # инициализация списка наблюдателей
 
     def register(self, observer: Observer) -> None:
         """
@@ -80,15 +80,15 @@ class Citizen(Observer):
         """
         Получение очередной новости
         """
-        print('{} узнал следующее: {}'.format(self.name, message))
+        print(f"{self.name} узнал следующее: {message}")
 
 
-if __name__ == '__main__':
-    newspaper = Newspaper()                 # Создаем небольшую газету
-    newspaper.register(Citizen('Иван'))     # Добавляем двух человек, которые
-    newspaper.register(Citizen('Василий'))  # ... ее регулярно выписывают
+if __name__ == "__main__":
+    newspaper = Newspaper()  # Создаем небольшую газету
+    newspaper.register(Citizen("Иван"))  # Добавляем двух человек, которые
+    newspaper.register(Citizen("Василий"))  # ... ее регулярно выписывают
     # ... и вбрасываем очередную газетную утку
-    newspaper.add_news('Наблюдатель - поведенческий шаблон проектирования')
+    newspaper.add_news("Наблюдатель - поведенческий шаблон проектирования")
 
     # Иван узнал следующее: Наблюдатель - поведенческий шаблон проектирования
     # Василий узнал следующее: Наблюдатель - поведенческий шаблон проектирования

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Observer — Наблюдатель
@@ -21,7 +21,7 @@ LogOpenListener следят за этими уведомлениями и вы�
 
 
 from abc import ABC, abstractmethod
-from typing import IO, List, Dict
+from typing import IO
 
 
 class EventListener(ABC):
@@ -32,7 +32,7 @@ class EventListener(ABC):
 
 class EventManager:
     def __init__(self, *operations):
-        self.listeners: Dict[str, List[EventListener]] = dict()
+        self.listeners: dict[str, list[EventListener]] = dict()
 
         for operation in operations:
             self.listeners[operation] = []
@@ -56,9 +56,9 @@ class Editor:
     def __init__(self):
         self.file: IO = None
         self.events = EventManager("open", "save")
-    
+
     def open_file(self, file_path: str):
-        self.file = open(file_path, 'w', encoding='utf-8')
+        self.file = open(file_path, "w", encoding="utf-8")
         self.events.notify("open", self.file)
 
     def save_file(self):
@@ -73,9 +73,11 @@ class EmailNotificationListener(EventListener):
         self.email = email
 
     def update(self, event_type: str, file: IO):
-        print(f"Email to {self.email}: Someone has performed {event_type} "
-              f"operation with the following file: {file.name}")
-   
+        print(
+            f"Email to {self.email}: Someone has performed {event_type} "
+            f"operation with the following file: {file.name}"
+        )
+
 
 class LogOpenListener(EventListener):
     def __init__(self, file_name: str):
@@ -85,8 +87,10 @@ class LogOpenListener(EventListener):
     def update(self, event_type: str, file: IO):
         # print(f"Save to log {self.log}: Someone has performed {event_type} "
         #       f"operation with the following file: {file.name}")
-        print(f"Save to log {self.file_name}: Someone has performed {event_type} "
-              f"operation with the following file: {file.name}")
+        print(
+            f"Save to log {self.file_name}: Someone has performed {event_type} "
+            f"operation with the following file: {file.name}"
+        )
 
 
 if __name__ == "__main__":

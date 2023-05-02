@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Observer — Наблюдатель
@@ -12,13 +12,13 @@ __author__ = 'ipetrash'
 from abc import ABC, abstractmethod
 
 
-# В примере описывается получение данных от метеорологической станции (класс weather_data, рассылатель событий) и 
-# использование их для вывода на экран (класс CurrentConditionsDisplay, слушатель событий). 
+# В примере описывается получение данных от метеорологической станции (класс weather_data, рассылатель событий) и
+# использование их для вывода на экран (класс CurrentConditionsDisplay, слушатель событий).
 # Слушатель регистрируется у наблюдателя с помощью метода register_observer (при этом слушатель заносится в
 # список observers). Регистрация происходит в момент создания объекта currentDisplay, т.к. метод register_observer
 # применяется в конструкторе.
-# При изменении погодных данных вызывается метод notify_observers, который в свою очередь вызывает метод update 
-# у всех слушателей, передавая им обновлённые данные. 
+# При изменении погодных данных вызывается метод notify_observers, который в свою очередь вызывает метод update
+# у всех слушателей, передавая им обновлённые данные.
 
 
 class Observer(ABC):
@@ -82,15 +82,17 @@ class CurrentConditionsDisplay(Observer):
         self.display()
 
     def display(self):
-        print("Сейчас значения: {:.1f} градусов цельсия и {:.1f}% влажности. Давление {} мм рт. ст.".format(
-            self.temperature, self.humidity, self.pressure
-        ))
+        print(
+            "Сейчас значения: {:.1f} градусов цельсия и {:.1f}% влажности. Давление {} мм рт. ст.".format(
+                self.temperature, self.humidity, self.pressure
+            )
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     weather_data = WeatherData()
     current_display = CurrentConditionsDisplay(weather_data)
-    
+
     weather_data.set_measurements(temperature=29, humidity=65, pressure=745)
     weather_data.set_measurements(temperature=39, humidity=70, pressure=760)
     weather_data.set_measurements(temperature=42, humidity=72, pressure=763)
