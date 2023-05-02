@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Facade — Фасад
@@ -76,7 +76,7 @@ class Facade:
             self._subsystem2.operation_ready(),
             "Facade orders subsystems to perform the action:",
             self._subsystem1.operation_go(),
-            self._subsystem2.operation_fire()
+            self._subsystem2.operation_fire(),
         ]
         return "\n".join(results)
 

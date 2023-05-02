@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Facade — Фасад
@@ -16,16 +16,16 @@ from abc import ABC
 class Musician(ABC):
     def __init__(self, name: str):
         self.name = name
-    
+
     def output(self, text: str):
         print(self.name + " " + text + ".")
-    
+
 
 # Конкретные музыканты
 class Vocalist(Musician):
     def sing_couplet(self, couplet_number: int):
         self.output("спел куплет №" + str(couplet_number))
-    
+
     def sing_chorus(self):
         self.output("спел припев")
 
@@ -33,7 +33,7 @@ class Vocalist(Musician):
 class Guitarist(Musician):
     def play_cool_opening(self):
         self.output("начинает с крутого вступления")
-    
+
     def play_cool_riffs(self):
         self.output("играет крутые риффы")
 
@@ -45,12 +45,12 @@ class Guitarist(Musician):
 
     def play_final_accord(self):
         self.output("заканчивает песню мощным аккордом")
-        
+
 
 class Bassist(Musician):
     def follow_the_drums(self):
         self.output("следует за барабанами")
-    
+
     def change_rhythm(self, type_rhythm: str):
         self.output("перешел на ритм " + type_rhythm + "a")
 
@@ -61,10 +61,10 @@ class Bassist(Musician):
 class Drummer(Musician):
     def start_playing(self):
         self.output("начинает играть")
-    
+
     def stop_playing(self):
         self.output("заканчивает играть")
-    
+
 
 # Фасад, в данном случае - знаменитая рок-группа
 class BlackSabbath:
@@ -73,7 +73,7 @@ class BlackSabbath:
         self.guitarist = Guitarist("Тони Айомми")
         self.bassist = Bassist("Гизер Батлер")
         self.drummer = Drummer("Билл Уорд")
-    
+
     def play_cool_song(self):
         self.guitarist.play_cool_opening()
         self.drummer.start_playing()
@@ -103,11 +103,11 @@ class BlackSabbath:
         self.guitarist.play_final_accord()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("OUTPUT:")
     band = BlackSabbath()
     band.play_cool_song()
-    
+
     # OUTPUT:
     # Тони Айомми начинает с крутого вступления.
     # Билл Уорд начинает играть.

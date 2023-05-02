@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Facade — Фасад
@@ -56,13 +56,15 @@ class Computer:
         self._cpu.freeze()
         self._memory.load(
             self._memory.BOOT_ADDRESS,
-            self._hard_drive.read(self._hard_drive.BOOT_SECTOR, self._hard_drive.SECTOR_SIZE)
+            self._hard_drive.read(
+                self._hard_drive.BOOT_SECTOR, self._hard_drive.SECTOR_SIZE
+            ),
         )
         self._cpu.jump(self._memory.BOOT_ADDRESS)
         self._cpu.execute()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Пользователям компьютера предоставляется Фасад (компьютер),
     # который скрывает все сложность работы с отдельными компонентами.
     computer = Computer()
