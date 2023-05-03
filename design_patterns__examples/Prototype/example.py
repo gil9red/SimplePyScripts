@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Prototype - Прототип
@@ -30,7 +30,8 @@ class Prototype:
         return obj
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     class A:
         def __init__(self):
             self.x = 3
@@ -39,16 +40,15 @@ if __name__ == '__main__':
             self.garbage = [38, 11, 19]
 
         def __str__(self):
-            return 'A({}, {}, {}, {})'.format(self.x, self.y, self.z, self.garbage)
-
+            return f"A({self.x}, {self.y}, {self.z}, {self.garbage})"
 
     a = A()
 
     prototype = Prototype()
-    prototype.register_object('object_a', a)
+    prototype.register_object("object_a", a)
 
-    b = prototype.clone('object_a')
-    c = prototype.clone('object_a', x=1, y=2, garbage=[88, 1])
+    b = prototype.clone("object_a")
+    c = prototype.clone("object_a", x=1, y=2, garbage=[88, 1])
 
     for x in (a, b, c):
         print(x)
