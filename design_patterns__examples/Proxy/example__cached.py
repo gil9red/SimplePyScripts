@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from abc import ABC, abstractmethod
@@ -57,7 +57,7 @@ class GoUrlCachedProxy(IGoUrl):
         return code
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import time
 
     class TimeThis:
@@ -66,9 +66,9 @@ if __name__ == '__main__':
             return self
 
         def __exit__(self, exc_type, exc_value, exc_traceback):
-            print('Elapsed time: {:.6f} sec'.format(time.clock() - self.start_time))
+            print("Elapsed time: {:.6f} sec".format(time.clock() - self.start_time))
 
-    url = 'https://github.com/gil9red'
+    url = "https://github.com/gil9red"
 
     go_url = GoUrl()
 
@@ -88,7 +88,7 @@ if __name__ == '__main__':
         print(rs, rs.status_code, code, rs.content)
 
     print()
-    print('Cached proxy:')
+    print("Cached proxy:")
 
     go_url = GoUrlCachedProxy()
 

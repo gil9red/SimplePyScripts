@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://ru.wikipedia.org/wiki/Заместитель_(шаблон_проектирования)
@@ -68,7 +68,7 @@ class MathProxy(IMath):
 
     def div(self, x, y):
         if y == 0:
-            return float('inf')  # Вернуть positive infinity
+            return float("inf")  # Вернуть positive infinity
 
         if not self.math:
             self.math = Math()
@@ -76,10 +76,10 @@ class MathProxy(IMath):
         return self.math.div(x, y)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     p = MathProxy()
     x, y = 4, 2
-    print('4 + 2 =', p.add(x, y))
-    print('4 - 2 =', p.sub(x, y))
-    print('4 * 2 =', p.mul(x, y))
-    print('4 / 2 =', p.div(x, y))
+    print("4 + 2 =", p.add(x, y))
+    print("4 - 2 =", p.sub(x, y))
+    print("4 * 2 =", p.mul(x, y))
+    print("4 / 2 =", p.div(x, y))

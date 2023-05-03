@@ -1,28 +1,32 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import logging
+import sys
+
+from logging.handlers import RotatingFileHandler
 
 from example__cached import IGoUrl, GoUrl, GoUrlCachedProxy, requests
 
 
-def get_logger(name, file='log.txt', encoding='utf-8'):
-    import logging
+def get_logger(name, file="log.txt", encoding="utf-8"):
     log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter('[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s')
+    formatter = logging.Formatter(
+        "[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s"
+    )
 
     # Simple file handler
     # fh = logging.FileHandler(file, encoding=encoding)
     # or:
-    from logging.handlers import RotatingFileHandler
     fh = RotatingFileHandler(file, maxBytes=10000000, backupCount=5, encoding=encoding)
     fh.setFormatter(formatter)
     log.addHandler(fh)
 
-    import sys
     sh = logging.StreamHandler(stream=sys.stdout)
     sh.setFormatter(formatter)
     log.addHandler(sh)
@@ -33,7 +37,7 @@ def get_logger(name, file='log.txt', encoding='utf-8'):
 class GoUrlLoggedProxy(IGoUrl):
     """Прокси"""
 
-    _LOGGER = get_logger('GoUrlLoggedProxy')
+    _LOGGER = get_logger("GoUrlLoggedProxy")
 
     def __init__(self, go_url: IGoUrl = None):
         if go_url is None:
@@ -61,7 +65,7 @@ class GoUrlLoggedProxy(IGoUrl):
         GoUrlLoggedProxy._LOGGER.debug(text)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import time
 
     class TimeThis:
@@ -70,9 +74,9 @@ if __name__ == '__main__':
             return self
 
         def __exit__(self, exc_type, exc_value, exc_traceback):
-            print('Elapsed time: {:.6f} sec'.format(time.clock() - self.start_time))
+            print("Elapsed time: {:.6f} sec".format(time.clock() - self.start_time))
 
-    url = 'https://github.com/gil9red'
+    url = "https://github.com/gil9red"
 
     go_url = GoUrl()
 
@@ -82,7 +86,7 @@ if __name__ == '__main__':
         print(rs, rs.status_code, code, rs.content)
 
     print()
-    print('Logged proxy:')
+    print("Logged proxy:")
 
     go_url = GoUrlLoggedProxy()
 
@@ -92,7 +96,7 @@ if __name__ == '__main__':
         print(rs, rs.status_code, code, rs.content)
 
     print()
-    print('Cached proxy with Logged proxy:')
+    print("Cached proxy with Logged proxy:")
 
     go_url = GoUrlLoggedProxy(go_url=GoUrlCachedProxy())
 
