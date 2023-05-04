@@ -1,50 +1,64 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import difflib
+import hashlib
+import logging
+import os
+import sys
+
+from PySide.QtGui import QApplication
+from PySide.QtCore import QEventLoop
+from PySide.QtWebKit import QWebSettings, QWebPage, QWebView
+from PySide.QtNetwork import QNetworkProxyFactory
+
+from sqlalchemy import create_engine, Column, Integer, String, DateTime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
 # NOTE: костыль для винды, для исправления проблем с исключениями
 # при выводе юникодных символов в консоль винды
-import sys
-if sys.platform == 'win32':
+if sys.platform == "win32":
     import codecs
-    # Для винды кодировкой консоли будет cp866
-    sys.stdout = codecs.getwriter(sys.stdout.encoding)(sys.stdout.detach(), 'backslashreplace')
-    sys.stderr = codecs.getwriter(sys.stderr.encoding)(sys.stderr.detach(), 'backslashreplace')
 
-import os
+    # Для винды кодировкой консоли будет cp866
+    sys.stdout = codecs.getwriter(sys.stdout.encoding)(
+        sys.stdout.detach(), "backslashreplace"
+    )
+    sys.stderr = codecs.getwriter(sys.stderr.encoding)(
+        sys.stderr.detach(), "backslashreplace"
+    )
+
+
 DIR = os.path.dirname(__file__)
-        
-import logging
+
+
 logging.basicConfig(
     level=logging.DEBUG,
-    format='[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s',
+    format="[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s",
     handlers=[
-        logging.FileHandler(os.path.join(DIR, 'log'), encoding='utf8'),
+        logging.FileHandler(os.path.join(DIR, "log"), encoding="utf8"),
         logging.StreamHandler(stream=sys.stdout),
     ],
 )
 
 
-def get_site_text(url='https://test.api.unistream.com/help/index.html'):
+def get_site_text(url="https://test.api.unistream.com/help/index.html"):
     """Функция возвращает содержимое по указанному url."""
-
-    import sys
-
-    from PySide.QtGui import QApplication
-    from PySide.QtCore import QEventLoop
-    from PySide.QtWebKit import QWebSettings, QWebPage, QWebView
-    from PySide.QtNetwork import QNetworkProxyFactory
 
     # Чтобы не было проблем запуска компов с прокси:
     QNetworkProxyFactory.setUseSystemConfiguration(True)
 
-    QWebSettings.globalSettings().setAttribute(QWebSettings.DeveloperExtrasEnabled, True)
+    QWebSettings.globalSettings().setAttribute(
+        QWebSettings.DeveloperExtrasEnabled, True
+    )
 
     class WebPage(QWebPage):
         def userAgentForUrl(self, url):
-            return 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0'
+            return "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0"
 
     if QApplication.instance() is None:
         QApplication(sys.argv)
@@ -66,7 +80,6 @@ def get_site_text(url='https://test.api.unistream.com/help/index.html'):
 def get_hash_from_str(text):
     """Функция возвращает хеш от строки в виде HEX чисел, используя алгоритм sha1."""
 
-    import hashlib
     alg = hashlib.sha1()
     alg.update(text.encode())
     return alg.hexdigest().upper()
@@ -78,15 +91,13 @@ def get_diff(str_1, str_2, full=True):
 
     """
 
-    logging.debug('x1')
-    import difflib
-
-    logging.debug('x2')
+    logging.debug("x1")
+    logging.debug("x2")
     diff_html = ""
-    logging.debug('x3')
+    logging.debug("x3")
     theDiffs = difflib.ndiff(str_1.splitlines(), str_2.splitlines())
 
-    logging.debug('x4')
+    logging.debug("x4")
     theDiffs = list(theDiffs)
     print(theDiffs)
     for eachDiff in theDiffs:
@@ -94,18 +105,20 @@ def get_diff(str_1, str_2, full=True):
             diff_html += "<del>%s</del><br>" % eachDiff[1:].strip()
         elif eachDiff[0] == "+":
             diff_html += "<ins>%s</ins><br>" % eachDiff[1:].strip()
-    logging.debug('x5')
+    logging.debug("x5")
 
     print(112121, diff_html)
 
     if full:
-        return """<html><head><meta charset="utf-8"></head> <body>""" + diff_html + "</body></html>"
+        return (
+            """<html><head><meta charset="utf-8"></head> <body>"""
+            + diff_html
+            + "</body></html>"
+        )
     else:
         return diff_html
 
 
-from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
@@ -116,7 +129,7 @@ class TextRevision(Base):
 
     """
 
-    __tablename__ = 'TextRevision'
+    __tablename__ = "TextRevision"
 
     id = Column(Integer, primary_key=True)
 
@@ -136,7 +149,7 @@ class TextRevision(Base):
     # Содержимым является только разница
     diff = Column(String)
 
-    def __init__(self, new_text, old_text=''):
+    def __init__(self, new_text, old_text=""):
         """
         Конструктор принимает контент и сравниваемый контент, запоминает хеш содержимого,
         текущую дату и время и результат сравнения
@@ -154,24 +167,24 @@ class TextRevision(Base):
         self.diff = get_diff(old_text, new_text, full=False)
 
     def __repr__(self):
-        return "<TextRevision(id: {}, datetime: {}, text_hash: {})>".format(self.id, self.datetime, self.text_hash)
+        return "<TextRevision(id: {}, datetime: {}, text_hash: {})>".format(
+            self.id, self.datetime, self.text_hash
+        )
 
 
 def get_session():
-    DB_FILE_NAME = 'sqlite:///' + os.path.join(DIR, 'database')
+    DB_FILE_NAME = "sqlite:///" + os.path.join(DIR, "database")
     # DB_FILE_NAME = 'sqlite:///:memory:'
 
     # Создаем базу, включаем логирование и автообновление подключения каждые 2 часа (7200 секунд)
-    from sqlalchemy import create_engine
     engine = create_engine(
         DB_FILE_NAME,
         # echo=True,
-        pool_recycle=7200
+        pool_recycle=7200,
     )
 
     Base.metadata.create_all(engine)
 
-    from sqlalchemy.orm import sessionmaker
     Session = sessionmaker(bind=engine)
     return Session()
 
@@ -189,9 +202,7 @@ def add_text_revision(text):
     """Функция добавляет новую ревизию, предварительно сравнив ее с предыдущей."""
 
     last = get_last_revision()
-    logging.debug('Последняя запись: %s.', last)
-
-    text_revision = None
+    logging.debug("Последняя запись: %s.", last)
 
     # Если таблица пуста
     if last is None:
@@ -199,32 +210,32 @@ def add_text_revision(text):
     else:
         # Если хеши текстов отличаются, добавляем новую ревизию
         if last.text_hash != get_hash_from_str(text):
-            logging.debug('Обнаружено изменение, создаю ревизию.')
+            logging.debug("Обнаружено изменение, создаю ревизию.")
             text_revision = TextRevision(text, last.text)
-            logging.debug('-')
+            logging.debug("-")
         else:
-            logging.debug('Одинаковые значения, пропускаю добавление.')
+            logging.debug("Одинаковые значения, пропускаю добавление.")
             return
 
-    logging.debug('@')
+    logging.debug("@")
     if text_revision:
-        logging.debug('add')
+        logging.debug("add")
         session.add(text_revision)
-        logging.debug('commit')
+        logging.debug("commit")
         session.commit()
 
-    logging.debug('return')
+    logging.debug("return")
     return text_revision
 
 
-if __name__ == '__main__':
-    logging.debug('Запуск.')
+if __name__ == "__main__":
+    logging.debug("Запуск.")
 
     import time
 
     while True:
         try:
-            logging.debug('Проверка сайта.')
+            logging.debug("Проверка сайта.")
 
             # text = "dfsdfsdfsdfsdf"
             # text += get_site_text()
@@ -243,6 +254,7 @@ if __name__ == '__main__':
             # "createTime": "2016-06-22T10:13:42.0888396+03:00",
             # "templateId": "e6635cf6-47c3-4164-8173-cb8fd249604a"
             import re
+
             text = re.sub(r'"((?i)OperationId)": ".+?"', r'"\1": "<removed>"', text)
             text = re.sub(r'"((?i)CommandId)": ".+?"', r'"\1": "<removed>"', text)
             text = re.sub(r'"((?i)cashierUniqueId)": ".+?"', r'"\1": "<removed>"', text)
@@ -253,7 +265,7 @@ if __name__ == '__main__':
                 continue
 
             add_text_revision(text)
-            logging.debug('Проверка закончена.')
+            logging.debug("Проверка закончена.")
 
             # last = get_last_revision()
             # print(len(last.text))
@@ -264,7 +276,7 @@ if __name__ == '__main__':
             # Задержка каждые 7 часов
             time.sleep(60 * 60 * 7)
         except Exception:
-            logging.exception('Error:')
+            logging.exception("Error:")
 
     # last = get_last_revision()
     # print(len(last.text))

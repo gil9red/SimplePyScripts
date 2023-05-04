@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """Скрипт создает окно, позволяющее просматривать все ревизии и их различие."""
 
 
+import os
 import sys
 
 from PySide.QtGui import *
@@ -24,7 +25,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('detection_of_site_changes_Unistream')
+        self.setWindowTitle("detection_of_site_changes_Unistream")
 
         self.revision_list_widget = QListWidget()
         self.revision_list_widget.itemDoubleClicked.connect(self._show_last_diff)
@@ -47,7 +48,7 @@ class MainWindow(QMainWindow):
             if len(items) > 1:
                 for item in items:
                     # Придаем элементу ревизии цвет, зависящий от первых 6-ти символов его хеша
-                    color = QColor('#' + text_hash[:6])
+                    color = QColor("#" + text_hash[:6])
                     item.setBackground(color)
 
         self.setCentralWidget(self.revision_list_widget)
@@ -55,20 +56,23 @@ class MainWindow(QMainWindow):
     def _show_last_diff(self, item):
         row = self.revision_list_widget.row(item)
 
-        file_name_a = 'file_a'
-        file_name_b = 'file_b'
+        file_name_a = "file_a"
+        file_name_b = "file_b"
 
-        file_a_text = self.revision_list_widget.item(row - 1).data(Qt.UserRole).text if row > 0 else ''
+        file_a_text = (
+            self.revision_list_widget.item(row - 1).data(Qt.UserRole).text
+            if row > 0
+            else ""
+        )
         file_b_text = self.revision_list_widget.item(row).data(Qt.UserRole).text
 
-        with open(file_name_a, mode='w', encoding='utf-8') as f:
+        with open(file_name_a, mode="w", encoding="utf-8") as f:
             f.write(file_a_text)
 
-        with open(file_name_b, mode='w', encoding='utf-8') as f:
+        with open(file_name_b, mode="w", encoding="utf-8") as f:
             f.write(file_b_text)
 
-        import os
-        os.system('kdiff3 {} {}'.format(file_name_a, file_name_b))
+        os.system("kdiff3 {} {}".format(file_name_a, file_name_b))
 
         if os.path.exists(file_name_a):
             os.remove(file_name_a)
@@ -78,7 +82,7 @@ class MainWindow(QMainWindow):
 
 
 # TODO: выделять одинаковые элементы одним цветом
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     mw = MainWindow()
