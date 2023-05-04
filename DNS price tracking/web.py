@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import logging
@@ -49,23 +49,21 @@ def index():
             "price_techopoint": get_float(p.value_technopoint),
         })
 
-    return render_template('index.html', products=products, prices=prices)
+    return render_template("index.html", products=products, prices=prices)
 
 
-@app.route('/favicon.ico')
+@app.route("/favicon.ico")
 def favicon():
     return send_from_directory(
-        os.path.join(app.root_path, 'static/img'),
-        'favicon.png'
+        os.path.join(app.root_path, "static/img"),
+        "favicon.png",
     )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.debug = True
 
-    app.run(
-        port=10010
-    )
+    app.run(port=10010)
 
     # # Public IP
     # app.run(host='0.0.0.0')
