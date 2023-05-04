@@ -1,26 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 def parse(s):
-    """"""
-
-    # if s.startswith('-') and len(s)
-
-    if s[0] == '-':
+    if s[0] == "-":
         s = s[1:]
-
-    # if len(s) % 2 != 0:
-    #     raise Exception('Неправильн')
 
     mod_list = list()
 
     # Вроде бы, единственная короткая комманда, длинной в 3 символа
-    if 'wtf' in s:
-        mod_list.append('wtf')
-        s.replace('wtf', '')
+    if "wtf" in s:
+        mod_list.append("wtf")
+        s.replace("wtf", "")
 
     for i in range(0, len(s), 2):
         mod_list.append(s[i] + s[i + 1])
@@ -28,17 +21,18 @@ def parse(s):
     return mod_list
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import json
-    game_mods = json.load(open('game_mods.json', encoding='utf-8'))
 
-    mods = '-aremnpakulsc'
-    mods = '-apemomsc'
+    game_mods = json.load(open("game_mods.json", encoding="utf-8"))
 
-    print('game mods:', mods)
+    mods = "-aremnpakulsc"
+    mods = "-apemomsc"
+
+    print("game mods:", mods)
     for gm in parse(mods):
         try:
-            print(gm, game_mods[gm]['en'])
+            print(gm, game_mods[gm]["en"])
         except KeyError:
             print('Could not find the game mode: "{}".'.format(gm))
 
