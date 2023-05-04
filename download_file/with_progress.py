@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -27,8 +27,11 @@ def reporthook(blocknum, blocksize, totalsize):
         sys.stdout.write(f"read {readsofar}\n")
 
 
-def download(url: str, file_name: str = None, as_thread=False, callback_func=None) -> str:
+def download(
+    url: str, file_name: str = None, as_thread=False, callback_func=None
+) -> str:
     if as_thread:
+
         def run(url, file_name, reporthook, callback_func):
             local_file_name, _ = urlretrieve(url, file_name, reporthook=reporthook)
             if callable(callback_func):
@@ -42,17 +45,22 @@ def download(url: str, file_name: str = None, as_thread=False, callback_func=Non
         return urlretrieve(url, file_name, reporthook=reporthook)[0]
 
 
-if __name__ == '__main__':
-    URL = 'https://codeload.github.com/gil9red/SimplePyScripts/zip/master'
+if __name__ == "__main__":
+    URL = "https://codeload.github.com/gil9red/SimplePyScripts/zip/master"
     print(download(URL))
     print()
-    print(download(URL, 'SimplePyScripts.zip'))
+    print(download(URL, "SimplePyScripts.zip"))
 
-    print('\n')
-    sys.stderr.write('Threading...\n')
+    print("\n")
+    sys.stderr.write("Threading...\n")
 
-    print(download(URL, 'SimplePyScripts.zip', as_thread=True))
+    print(download(URL, "SimplePyScripts.zip", as_thread=True))
 
     def callback_func(file_name: str):
-        print('File name:', file_name)
-    print(download(URL, 'SimplePyScripts.zip', as_thread=True, callback_func=callback_func))
+        print("File name:", file_name)
+
+    print(
+        download(
+            URL, "SimplePyScripts.zip", as_thread=True, callback_func=callback_func
+        )
+    )
