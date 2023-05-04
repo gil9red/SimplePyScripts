@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Template method — Шаблонный метод
@@ -29,10 +29,10 @@ class Unit(ABC):
         """
         Шаблонный метод
         """
-        self._move('вперед')
+        self._move("вперед")
         self._stop()
         self._attack()
-        self._move('назад')
+        self._move("назад")
 
     @abstractmethod
     def _attack(self) -> None:
@@ -48,7 +48,7 @@ class Unit(ABC):
 
         :param direction: направление движения
         """
-        self._output('движется {} со скоростью {}'.format(direction, self._speed))
+        self._output("движется {} со скоростью {}".format(direction, self._speed))
 
     def _output(self, message: str) -> None:
         """
@@ -56,7 +56,7 @@ class Unit(ABC):
 
         :param message: выводимое сообщение
         """
-        print('Отряд типа {} {}'.format(self.__class__.__name__, message))
+        print("Отряд типа {} {}".format(self.__class__.__name__, message))
 
 
 class Archers(Unit):
@@ -65,10 +65,10 @@ class Archers(Unit):
     """
 
     def _attack(self) -> None:
-        self._output('обстреливает врага')
+        self._output("обстреливает врага")
 
     def _stop(self) -> None:
-        self._output('останавливается в 100 шагах от врага')
+        self._output("останавливается в 100 шагах от врага")
 
 
 class Cavarlymen(Unit):
@@ -77,14 +77,14 @@ class Cavarlymen(Unit):
     """
 
     def _attack(self) -> None:
-        self._output('на полном скаку врезается во вражеский строй')
+        self._output("на полном скаку врезается во вражеский строй")
 
     def _stop(self) -> None:
-        self._output('летит вперед, не останавливаясь')
+        self._output("летит вперед, не останавливаясь")
 
 
-if __name__ == '__main__':
-    print('OUTPUT:')
+if __name__ == "__main__":
+    print("OUTPUT:")
     archers = Archers(4)
     archers.hit_and_run()
     cavarlymen = Cavarlymen(8)

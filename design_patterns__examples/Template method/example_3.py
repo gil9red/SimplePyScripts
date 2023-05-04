@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Template method — Шаблонный метод
@@ -19,7 +19,7 @@ from abc import ABC, abstractmethod
 class Network(ABC):
     user_name: str
     password: str
-    
+
     # Публикация данных в любой сети.
     def post(self, message: str) -> bool:
         # Проверка данных пользователя перед постом в соцсеть. Каждая сеть для
@@ -29,7 +29,7 @@ class Network(ABC):
             result = self.send_data(message.encode())
             self.log_out()
             return result
-        
+
         return False
 
     @abstractmethod
@@ -54,7 +54,7 @@ class Facebook(Network):
     def log_in(self, user_name: str, password: str) -> bool:
         print("\nChecking user's parameters")
         print("Name: " + self.user_name)
-        print("Password: " + ('*' * len(self.password)), end='')
+        print("Password: " + ("*" * len(self.password)), end="")
 
         self._simulate_network_latency()
         print("\n\nlog_in success on Facebook")
@@ -77,10 +77,10 @@ class Facebook(Network):
         try:
             i = 0
             while i < 10:
-                print(".", end='')
+                print(".", end="")
                 time.sleep(0.5)
                 i += 1
-            
+
         except Exception as e:
             print(e)
 
@@ -94,8 +94,8 @@ class Twitter(Network):
     def log_in(self, user_name: str, password: str) -> bool:
         print("\nChecking user's parameters")
         print("Name: " + self.user_name)
-        print("Password: " + ('*' * len(self.password)), end='')
-        
+        print("Password: " + ("*" * len(self.password)), end="")
+
         self._simulate_network_latency()
         print("\n\nlog_in success on Twitter")
         return True
@@ -117,22 +117,24 @@ class Twitter(Network):
         try:
             i = 0
             while i < 10:
-                print(".", end='')
+                print(".", end="")
                 time.sleep(0.5)
                 i += 1
 
         except Exception as e:
             print(e)
-        
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     user_name = input("Input user name: ")
     password = input("Input password: ")
 
     # Вводим сообщение.
     message = input("Input message: ")
 
-    choice = input("\nChoose social network for posting message.\n1 - Facebook\n2 - Twitter\n")
+    choice = input(
+        "\nChoose social network for posting message.\n1 - Facebook\n2 - Twitter\n"
+    )
     network = None
 
     # Создаем сетевые объекты и публикуем пост.
@@ -143,7 +145,7 @@ if __name__ == '__main__':
         network = Twitter(user_name, password)
 
     else:
-        print('Unknown network!')
+        print("Unknown network!")
         sys.exit()
-    
+
     network.post(message)

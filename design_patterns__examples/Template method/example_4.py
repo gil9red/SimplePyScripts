@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Template def — Шаблонный метод
@@ -10,7 +10,7 @@ __author__ = 'ipetrash'
 
 
 from abc import ABC, abstractmethod
-from typing import Optional, List
+from typing import Optional
 
 
 class Map:
@@ -40,7 +40,7 @@ class GameAI(ABC):
 
     # А некоторые могут быть полностью абстрактными.
     @abstractmethod
-    def build_structures(self) -> List['Structure']:
+    def build_structures(self) -> list["Structure"]:
         pass
 
     @abstractmethod
@@ -56,7 +56,7 @@ class GameAI(ABC):
         else:
             self.send_warriors(enemy.position)
 
-    def closest_enemy(self) -> Optional['Enemy']:
+    def closest_enemy(self) -> Optional["Enemy"]:
         ...
 
     @abstractmethod
@@ -71,7 +71,7 @@ class GameAI(ABC):
 # Подклассы могут предоставлять свою реализацию шагов
 # алгоритма, не изменяя сам шаблонный метод.
 class OrcsAI(GameAI):
-    def build_structures(self) -> List['Structure']:
+    def build_structures(self) -> list["Structure"]:
         structures = []
 
         there_are_some_resources: bool = ...
@@ -133,7 +133,7 @@ class MonstersAI(GameAI):
             ...
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ai = MonstersAI()
     ai.turn()
 

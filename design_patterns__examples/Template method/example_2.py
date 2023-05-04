@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Template method — Шаблонный метод
@@ -33,7 +33,7 @@ class GameObject(ABC):
     def play_one_game(self, players_count: int):
         self.players_count = players_count
         self.initialize_game()
-        
+
         j = 0
 
         while not self.end_of_game():
@@ -87,7 +87,7 @@ class Chess(GameObject):
     # ...
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     game = Monopoly()
     game.play_one_game(2)
 
