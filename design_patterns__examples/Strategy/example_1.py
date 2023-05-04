@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Strategy — Стратегия
@@ -38,7 +38,7 @@ class Context:
         return self._strategy.action(a, b)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     context = Context(AdditionStrategy())
     print(context.action(10, 5))  # 15
     print()

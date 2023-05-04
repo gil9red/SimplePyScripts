@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: Design Patterns: Strategy — Стратегия
@@ -39,7 +39,7 @@ class Context:
         self._strategy.download(file)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     context = Context(DownloadWindowsStrategy())
     context.download("file.txt")  # Windows download: file.txt
     print()
