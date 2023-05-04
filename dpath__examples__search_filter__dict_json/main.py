@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install dpath
@@ -13,15 +13,15 @@ x = {
             "3": 2,
             "43": 30,
             "c": [],
-            "d": ['red', 'buggy', 'bumpers'],
+            "d": ["red", "buggy", "bumpers"],
         }
     }
 }
 
-print(dpath.util.get(x, 'a/b/d'))  # ['red', 'buggy', 'bumpers']
-print(dpath.util.get(x, 'a/b/d/0'))  # red
-print(dpath.util.get(x, 'a/b/d/1'))  # buggy
-print(dpath.util.get(x, 'a/b/43'))  # 30
+print(dpath.util.get(x, "a/b/d"))  # ['red', 'buggy', 'bumpers']
+print(dpath.util.get(x, "a/b/d/0"))  # red
+print(dpath.util.get(x, "a/b/d/1"))  # buggy
+print(dpath.util.get(x, "a/b/43"))  # 30
 print()
 
 print(dpath.util.values(x, "**/43"))  # [30]
@@ -37,12 +37,12 @@ def afilter(x):
     return str(x).isdecimal()
 
 
-result = dpath.util.search(x, '**', afilter=afilter)
+result = dpath.util.search(x, "**", afilter=afilter)
 print(result)  # {'a': {'b': {'3': 2, '43': 30}}}
 
 # Фильтрация через лябмды:
-result = dpath.util.search(x, '**', afilter=lambda x: str(x).isdecimal())
+result = dpath.util.search(x, "**", afilter=lambda x: str(x).isdecimal())
 print(result)  # {'a': {'b': {'3': 2, '43': 30}}}
 
-result = list(dpath.util.search(x, '**', yielded=True, afilter=afilter))
+result = list(dpath.util.search(x, "**", yielded=True, afilter=afilter))
 print(result)  # [('a/b/3', 2), ('a/b/43', 30)]
