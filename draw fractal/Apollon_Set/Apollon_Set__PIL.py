@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -63,39 +63,41 @@ __author__ = 'ipetrash'
 #     ReadKey
 # end.
 
-from math import *
 import random
+from math import *
+
+from PIL import Image, ImageDraw
 
 
 def draw_apollon_set(draw_by_image, step):
     x = 0.2
     y = 0.3
-    
+
     r = sqrt(3)
 
     sqr = lambda x: x * x
 
     for i in range(step):
         a = random.random()
-        a0 = 3*(1+r-x)/(sqr(1+r-x)+sqr(y))-(1+r)/(2+r)
-        b0 = 3*y/(sqr(1+r-x)+sqr(y))
-        if 1/3 >= a >= 0:
+        a0 = 3 * (1 + r - x) / (sqr(1 + r - x) + sqr(y)) - (1 + r) / (2 + r)
+        b0 = 3 * y / (sqr(1 + r - x) + sqr(y))
+        if 1 / 3 >= a >= 0:
             x1 = a0
             y1 = b0
 
-        a1 = -1/2
-        b1 = r/2
-        a2 = -1/2
-        b2 = -r/2
-        f1x = a0/(sqr(a0)+sqr(b0))
-        f1y = -b0/(sqr(a0)+sqr(b0))
-        if 2/3 >= a > 1/3:
-            x1 = f1x*a1-f1y*b1
-            y1 = f1x*b1+f1y*a1
+        a1 = -1 / 2
+        b1 = r / 2
+        a2 = -1 / 2
+        b2 = -r / 2
+        f1x = a0 / (sqr(a0) + sqr(b0))
+        f1y = -b0 / (sqr(a0) + sqr(b0))
+        if 2 / 3 >= a > 1 / 3:
+            x1 = f1x * a1 - f1y * b1
+            y1 = f1x * b1 + f1y * a1
 
-        if 3/3 >= a > 2/3:
-            x1 = f1x*a2-f1y*b2
-            y1 = f1x*b2+f1y*a2
+        if 3 / 3 >= a > 2 / 3:
+            x1 = f1x * a2 - f1y * b2
+            y1 = f1x * b2 + f1y * a2
 
         x = x1
         y = y1
@@ -103,12 +105,11 @@ def draw_apollon_set(draw_by_image, step):
         draw_by_image.point((320 + x * 50, 240 + y * 50), "red")
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (650, 500), "white")
 
     # Каждый step это одна точка
     step = 50000
     draw_apollon_set(ImageDraw.Draw(img), step)
 
-    img.save('img.png')
+    img.save("img.png")
