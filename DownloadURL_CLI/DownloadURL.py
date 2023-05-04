@@ -1,18 +1,20 @@
 # coding=utf-8
 
-import argparse
-import urllib2
+__author__ = "ipetrash"
 
-__author__ = 'ipetrash'
+
+import argparse
+from urllib.request import urlopen
 
 
 def create_parser():
     parser = argparse.ArgumentParser(description="Download content URL.")
     return parser
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     create_parser().parse_args()
-    url = raw_input("Input url: ")
-    file = urllib2.urlopen(url)
+    url = input("Input url: ")
+    file = urlopen(url)
     content = file.read()
     print(content)
