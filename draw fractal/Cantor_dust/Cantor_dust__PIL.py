@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -37,6 +37,9 @@ __author__ = 'ipetrash'
 # end.
 
 
+from PIL import Image, ImageDraw
+
+
 def draw_cantor_dust(draw_by_image):
     def draw(x, y, size):
         if size > 1:
@@ -44,15 +47,14 @@ def draw_cantor_dust(draw_by_image):
             draw(x, y + 20, s)
             draw(x + s * 2, y + 20, s)
 
-        draw_by_image.rectangle((x, y, x + size, y + 5), 'black')
+        draw_by_image.rectangle((x, y, x + size, y + 5), "black")
 
     draw(10, 30, 500)
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (520, 160), "white")
 
     draw_cantor_dust(ImageDraw.Draw(img))
 
-    img.save('img.png')
+    img.save("img.png")
