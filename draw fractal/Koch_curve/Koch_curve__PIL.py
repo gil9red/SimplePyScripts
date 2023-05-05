@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -57,6 +57,9 @@ __author__ = 'ipetrash'
 # ?>
 
 
+from PIL import Image, ImageDraw
+
+
 def draw_koch(draw, xa, ya, xe, ye, n):
     """
     Draws koch curve between two points.
@@ -70,11 +73,11 @@ def draw_koch(draw, xa, ya, xe, ye, n):
         #      / \
         # A---B   D---E
 
-        xb = xa + (xe - xa) * 1/3
-        yb = ya + (ye - ya) * 1/3
+        xb = xa + (xe - xa) * 1 / 3
+        yb = ya + (ye - ya) * 1 / 3
 
-        xd = xa + (xe - xa) * 2/3
-        yd = ya + (ye - ya) * 2/3
+        xd = xa + (xe - xa) * 2 / 3
+        yd = ya + (ye - ya) * 2 / 3
 
         cos60 = 0.5
         sin60 = -0.866
@@ -87,11 +90,10 @@ def draw_koch(draw, xa, ya, xe, ye, n):
         draw_koch(draw, xd, yd, xe, ye, n - 1)
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (600, 200), "white")
 
     step = 4
     draw_koch(ImageDraw.Draw(img), 0, img.height - 1, img.width, img.height - 1, step)
 
-    img.save('img.png')
+    img.save("img.png")

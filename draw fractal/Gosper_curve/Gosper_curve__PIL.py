@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -58,6 +58,7 @@ __author__ = 'ipetrash'
 
 
 import math
+from PIL import Image, ImageDraw
 
 
 def draw_gosper_curve(draw_by_image, step):
@@ -67,20 +68,22 @@ def draw_gosper_curve(draw_by_image, step):
                 x += l * math.cos(u)
                 y -= l * math.sin(u)
                 u += math.pi
-            
-            u -= 2*math.pi/19
+
+            u -= 2 * math.pi / 19
             l /= math.sqrt(7)
 
-            x, y = draw2(x, y, l, u, t-1, 0)
-            x, y = draw2(x, y, l, u+math.pi/3, t-1, 1)
-            x, y = draw2(x, y, l, u+math.pi, t-1, 1)
-            x, y = draw2(x, y, l, u+2*math.pi/3, t-1, 0)
-            x, y = draw2(x, y, l, u, t-1, 0)
-            x, y = draw2(x, y, l, u, t-1, 0)
-            _, _ = draw2(x, y, l, u-math.pi/3, t-1, 1)
+            x, y = draw2(x, y, l, u, t - 1, 0)
+            x, y = draw2(x, y, l, u + math.pi / 3, t - 1, 1)
+            x, y = draw2(x, y, l, u + math.pi, t - 1, 1)
+            x, y = draw2(x, y, l, u + 2 * math.pi / 3, t - 1, 0)
+            x, y = draw2(x, y, l, u, t - 1, 0)
+            x, y = draw2(x, y, l, u, t - 1, 0)
+            _, _ = draw2(x, y, l, u - math.pi / 3, t - 1, 1)
 
         else:
-            draw_by_image.line((x, y, x + math.cos(u) * l, y - math.sin(u) * l), fill="black")
+            draw_by_image.line(
+                (x, y, x + math.cos(u) * l, y - math.sin(u) * l), fill="black"
+            )
 
     def draw2(x, y, l, u, t, q):
         draw(x, y, l, u, t, q)
@@ -89,12 +92,11 @@ def draw_gosper_curve(draw_by_image, step):
     draw(100, 355, 400, 0, step, 0)
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (650, 500), "white")
     draw_by_image = ImageDraw.Draw(img)
 
     step = 4
     draw_gosper_curve(draw_by_image, step)
 
-    img.save('img.png')
+    img.save("img.png")

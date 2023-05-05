@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -46,6 +46,7 @@ __author__ = 'ipetrash'
 
 
 from math import *
+from PIL import Image, ImageDraw
 
 
 def draw_ice_fractal_1(draw_by_image, step):
@@ -56,25 +57,24 @@ def draw_ice_fractal_1(draw_by_image, step):
     def draw(x, y, l, u, t):
         if t > 0:
             l *= 0.5
-            x, y = draw2(x, y, l, u, t-1)
-            x, y = draw2(x, y, l*0.8, u+pi/2, t-1)
-            x, y = draw2(x, y, l*0.8, u-pi/2, t-1)
-            _, _ = draw2(x, y, l, u, t-1)
+            x, y = draw2(x, y, l, u, t - 1)
+            x, y = draw2(x, y, l * 0.8, u + pi / 2, t - 1)
+            x, y = draw2(x, y, l * 0.8, u - pi / 2, t - 1)
+            _, _ = draw2(x, y, l, u, t - 1)
 
         else:
-            draw_by_image.line((x, y, x+cos(u)*l, y-sin(u)*l), 'black')
+            draw_by_image.line((x, y, x + cos(u) * l, y - sin(u) * l), "black")
 
     draw(410, 10, 400, -pi, step)
     draw(10, 410, 400, 0, step)
-    draw(10, 10, 400, -pi/2, step)
-    draw(410, 410, 400, pi/2, step)
+    draw(10, 10, 400, -pi / 2, step)
+    draw(410, 410, 400, pi / 2, step)
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (420, 420), "white")
 
     step = 5
     draw_ice_fractal_1(ImageDraw.Draw(img), step)
 
-    img.save('img.png')
+    img.save("img.png")

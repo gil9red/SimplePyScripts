@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -70,11 +70,11 @@ def draw_koch(painter, xa, ya, xe, ye, n):
         #      / \
         # A---B   D---E
 
-        xb = xa + (xe - xa) * 1/3
-        yb = ya + (ye - ya) * 1/3
+        xb = xa + (xe - xa) * 1 / 3
+        yb = ya + (ye - ya) * 1 / 3
 
-        xd = xa + (xe - xa) * 2/3
-        yd = ya + (ye - ya) * 2/3
+        xd = xa + (xe - xa) * 2 / 3
+        yd = ya + (ye - ya) * 2 / 3
 
         cos60 = 0.5
         sin60 = -0.866
@@ -101,7 +101,7 @@ except ImportError:
         from PySide.QtCore import Qt
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     img = QImage(600, 200, QImage.Format_RGB16)
     img.fill(Qt.white)
 
@@ -111,4 +111,4 @@ if __name__ == '__main__':
     painter.setPen(Qt.black)
     draw_koch(painter, 0, img.height() - 1, img.width(), img.height() - 1, step)
 
-    img.save('img.png')
+    img.save("img.png")
