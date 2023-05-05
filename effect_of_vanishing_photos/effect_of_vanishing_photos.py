@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-"""Эффект исчезновения фотографии
+"""
+Эффект исчезновения фотографии
 Кликая на области на фотографии запускаются процессы плавного увеличения
 прозрачности пикселей, эффект как круги воды, будут расходиться пока не
-закончатся непрозрачные пиксели"""
+закончатся непрозрачные пиксели
+"""
 
 
 import sys
@@ -30,11 +32,11 @@ except:
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
@@ -81,9 +83,9 @@ class Widget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('effect_of_vanishing_photos.py')
+        self.setWindowTitle("effect_of_vanishing_photos.py")
 
-        self.im = QImage('im.png')
+        self.im = QImage("im.png")
         self.resize(self.im.size())
 
         self.timer = Timer(self, self.im)
@@ -102,11 +104,13 @@ class Widget(QWidget):
         p.drawRect(self.rect())
 
         p.setBrush(Qt.yellow)
-        p.drawRect(self.width() // 6, self.width() // 5, self.width() // 3, self.height() // 4)
+        p.drawRect(
+            self.width() // 6, self.width() // 5, self.width() // 3, self.height() // 4
+        )
         p.drawImage(0, 0, self.im)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     w = Widget()
