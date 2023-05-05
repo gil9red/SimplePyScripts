@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -37,6 +37,9 @@ __author__ = 'ipetrash'
 # End.
 
 
+from PIL import Image, ImageDraw
+
+
 def draw_dragon_curve_1(draw_by_image, x1, y1, x2, y2, k):
     if k > 0:
         xn = (x1 + x2) // 2 + (y2 - y1) // 2
@@ -45,15 +48,14 @@ def draw_dragon_curve_1(draw_by_image, x1, y1, x2, y2, k):
         draw_dragon_curve_1(draw_by_image, x2, y2, xn, yn, k - 1)
 
     else:
-        draw_by_image.line((x1, y1, x2, y2), 'black')
+        draw_by_image.line((x1, y1, x2, y2), "black")
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (700, 512), "white")
 
     # Глубина фрактала
     z = 14
     draw_dragon_curve_1(ImageDraw.Draw(img), 200, 300, 500, 300, z)
 
-    img.save('img.png')
+    img.save("img.png")

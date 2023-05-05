@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -12,11 +12,11 @@ __author__ = 'ipetrash'
 
 # Оригинал: http://www.cyberforum.ru/pascalabc/thread994987.html
 # uses GraphABC;
-#  
+#
 # const
 #   n=255;
 #   max=10;
-#  
+#
 # var
 #   x,y,x1,y1,cx,cy: real;
 #   i,ix,iy: integer;
@@ -45,6 +45,9 @@ __author__ = 'ipetrash'
 # end.
 
 
+from PIL import Image, ImageDraw
+
+
 def draw_fingerprint(draw_by_image, width, height):
     n = 255
     max = 10
@@ -68,17 +71,16 @@ def draw_fingerprint(draw_by_image, width, height):
                 y = y1
 
                 if i >= n:
-                    color = 'red'
+                    color = "red"
                 else:
                     color = (255, 255 - i, 255 - i)
 
                 draw_by_image.point((ix, iy), color)
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (400, 300), "white")
 
     draw_fingerprint(ImageDraw.Draw(img), img.width, img.height)
 
-    img.save('img.png')
+    img.save("img.png")

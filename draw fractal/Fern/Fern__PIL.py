@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -46,6 +46,9 @@ __author__ = 'ipetrash'
 # end.
 
 
+from PIL import Image, ImageDraw
+
+
 def draw_fern(draw_by_image, width, height):
     n = 255
 
@@ -70,10 +73,9 @@ def draw_fern(draw_by_image, width, height):
             draw_by_image.point((ix, iy), color)
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (300, 300), "white")
 
     draw_fern(ImageDraw.Draw(img), img.width, img.height)
 
-    img.save('img.png')
+    img.save("img.png")

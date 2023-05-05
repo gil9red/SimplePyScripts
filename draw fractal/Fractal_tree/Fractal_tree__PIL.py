@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -58,27 +58,29 @@ __author__ = 'ipetrash'
 # End.
 
 
-from math import *
 import random
+from math import *
+
+from PIL import Image, ImageDraw
 
 
 def draw_fractal_tree(draw_by_image, x, y, a, l):
     if l < 8:
         return
 
-    x1 = x + l*cos(a)
-    y1 = y + l*sin(a)
+    x1 = x + l * cos(a)
+    y1 = y + l * sin(a)
     p = 100 if l > 100 else l
 
     if p < 40:
         # Генерация листьев
-        color = 'lime' if random.random() > 0.5 else 'green'
+        color = "lime" if random.random() > 0.5 else "green"
 
         for i in range(3):
             draw_by_image.line((x + i, y, x1, y1), color)
     else:
         # Генерация веток
-        color = 'brown'
+        color = "brown"
 
         for i in range(p // 6):
             draw_by_image.line((x + i - (p / 12), y, x1, y1), color)
@@ -96,10 +98,9 @@ def draw_fractal_tree(draw_by_image, x, y, a, l):
         draw_fractal_tree(draw_by_image, x1, y1, a1, p - 5 - random.randrange(30))
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (700, 600), "white")
 
     draw_fractal_tree(ImageDraw.Draw(img), 350, 580, 3 * pi / 2, 200)
 
-    img.save('img.png')
+    img.save("img.png")
