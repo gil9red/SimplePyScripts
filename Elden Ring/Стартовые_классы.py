@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import re
@@ -27,10 +27,10 @@ class Class:
     arcane: int
 
     @classmethod
-    def parse_from(cls, tr: Tag) -> 'Class':
+    def parse_from(cls, tr: Tag) -> "Class":
         cells = [
             el.get_text(strip=True)
-            for el in tr.find_all(name=re.compile('th|td'), recursive=False)
+            for el in tr.find_all(name=re.compile("th|td"), recursive=False)
         ]
         clss = cells[0]               # Класс
         level = int(cells[1])         # Уровень
@@ -60,8 +60,14 @@ class Class:
 
     def get_total_stats(self, for_level: int = 0) -> int:
         total = (
-                self.vigor + self.endurance + self.dexterity + self.faith
-                + self.intelligence + self.strength + self.mind + self.arcane
+            self.vigor
+            + self.endurance
+            + self.dexterity
+            + self.faith
+            + self.intelligence
+            + self.strength
+            + self.mind
+            + self.arcane
         )
         # Добавляем очки характеристик от разницы уровней
         if for_level > self.level:
@@ -70,7 +76,7 @@ class Class:
         return total
 
 
-URL = 'https://eldenring.fandom.com/ru/wiki/Стартовые_классы'
+URL = "https://eldenring.fandom.com/ru/wiki/Стартовые_классы"
 
 
 def get_classes() -> list[Class]:
@@ -78,11 +84,11 @@ def get_classes() -> list[Class]:
 
     return [
         Class.parse_from(tr)
-        for tr in root.select_one('table').select('tr')[1:]
+        for tr in root.select_one("table").select("tr")[1:]
     ]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     classes = get_classes()
     for obj in classes:
         print(obj)

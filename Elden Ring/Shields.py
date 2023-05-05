@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import enum
@@ -15,7 +15,7 @@ from bs4 import Tag
 from common import parse
 
 
-URL = 'https://eldenring.fandom.com/wiki/Shields'
+URL = "https://eldenring.fandom.com/wiki/Shields"
 
 
 class ShieldTypeEnum(enum.Enum):
@@ -24,16 +24,16 @@ class ShieldTypeEnum(enum.Enum):
     GREAT = enum.auto()
 
     @classmethod
-    def parse(cls, shield_type_str: str) -> 'ShieldTypeEnum':
+    def parse(cls, shield_type_str: str) -> "ShieldTypeEnum":
         shield_type_str = shield_type_str.lower()
-        if 'small' in shield_type_str:
+        if "small" in shield_type_str:
             return ShieldTypeEnum.SMALL
-        elif 'medium' in shield_type_str:
+        elif "medium" in shield_type_str:
             return ShieldTypeEnum.MEDIUM
-        elif 'great' in shield_type_str:
+        elif "great" in shield_type_str:
             return ShieldTypeEnum.GREAT
         else:
-            raise Exception(f'Unknown type {shield_type_str!r}!')
+            raise Exception(f"Unknown type {shield_type_str!r}!")
 
 
 def get_int(value: str) -> int:
@@ -82,25 +82,47 @@ class Shield:
     guard_boost: int
 
     @classmethod
-    def parse_from(cls, td_list: list[Tag], type_: ShieldTypeEnum) -> 'Shield':
+    def parse_from(cls, td_list: list[Tag], type_: ShieldTypeEnum) -> "Shield":
         name = td_list[1].get_text(strip=True)
-        url = urljoin(URL, td_list[1].select_one('a[href]')['href'])
+        url = urljoin(URL, td_list[1].select_one("a[href]")["href"])
         skill = td_list[2].get_text(strip=True)
         weight = float(td_list[3].get_text(strip=True))
 
-        physical_attack, physical_guard = map(get_int, td_list[4].get_text(strip=True, separator='\n').split('\n'))
-        magic_attack, magic_guard = map(get_int, td_list[5].get_text(strip=True, separator='\n').split('\n'))
-        fire_attack, fire_guard = map(get_int, td_list[6].get_text(strip=True, separator='\n').split('\n'))
-        lightning_attack, lightning_guard = map(get_int, td_list[7].get_text(strip=True, separator='\n').split('\n'))
-        holy_attack, holy_guard = map(get_int, td_list[8].get_text(strip=True, separator='\n').split('\n'))
+        physical_attack, physical_guard = map(
+            get_int, td_list[4].get_text(strip=True, separator="\n").split("\n")
+        )
+        magic_attack, magic_guard = map(
+            get_int, td_list[5].get_text(strip=True, separator="\n").split("\n")
+        )
+        fire_attack, fire_guard = map(
+            get_int, td_list[6].get_text(strip=True, separator="\n").split("\n")
+        )
+        lightning_attack, lightning_guard = map(
+            get_int, td_list[7].get_text(strip=True, separator="\n").split("\n")
+        )
+        holy_attack, holy_guard = map(
+            get_int, td_list[8].get_text(strip=True, separator="\n").split("\n")
+        )
 
-        critical, guard_boost = map(get_int, td_list[9].get_text(strip=True, separator='\n').split('\n'))
+        critical, guard_boost = map(
+            get_int, td_list[9].get_text(strip=True, separator="\n").split("\n")
+        )
 
-        strength_scale, strength_required = td_list[10].get_text(strip=True, separator='\n').split('\n')
-        dexterity_scale, dexterity_required = td_list[11].get_text(strip=True, separator='\n').split('\n')
-        intelligence_scale, intelligence_required = td_list[12].get_text(strip=True, separator='\n').split('\n')
-        faith_scale, faith_required = td_list[13].get_text(strip=True, separator='\n').split('\n')
-        arcane_scale, arcane_required = td_list[14].get_text(strip=True, separator='\n').split('\n')
+        strength_scale, strength_required = (
+            td_list[10].get_text(strip=True, separator="\n").split("\n")
+        )
+        dexterity_scale, dexterity_required = (
+            td_list[11].get_text(strip=True, separator="\n").split("\n")
+        )
+        intelligence_scale, intelligence_required = (
+            td_list[12].get_text(strip=True, separator="\n").split("\n")
+        )
+        faith_scale, faith_required = (
+            td_list[13].get_text(strip=True, separator="\n").split("\n")
+        )
+        arcane_scale, arcane_required = (
+            td_list[14].get_text(strip=True, separator="\n").split("\n")
+        )
 
         return cls(
             type=type_,
@@ -125,7 +147,9 @@ class Shield:
             attributes=Attributes(
                 strength=Attribute(strength_scale, get_int(strength_required)),
                 dexterity=Attribute(dexterity_scale, get_int(dexterity_required)),
-                intelligence=Attribute(intelligence_scale, get_int(intelligence_required)),
+                intelligence=Attribute(
+                    intelligence_scale, get_int(intelligence_required)
+                ),
                 faith=Attribute(faith_scale, get_int(faith_required)),
                 arcane=Attribute(arcane_scale, get_int(arcane_required)),
             ),
@@ -139,13 +163,13 @@ def get_shields() -> dict[ShieldTypeEnum, list[Shield]]:
 
     type_by_shields = defaultdict(list)
 
-    for el_shield_type in root.select('h2:has(.mw-headline)'):
+    for el_shield_type in root.select("h2:has(.mw-headline)"):
         shield_type_str = el_shield_type.get_text(strip=True)
         shield_type = ShieldTypeEnum.parse(shield_type_str)
 
-        el_table = el_shield_type.find_next_sibling('table')
-        for row in el_table.select('tr'):
-            td_list = row.select('td')
+        el_table = el_shield_type.find_next_sibling("table")
+        for row in el_table.select("tr"):
+            td_list = row.select("td")
             if not td_list:
                 continue
 
@@ -156,18 +180,18 @@ def get_shields() -> dict[ShieldTypeEnum, list[Shield]]:
     return type_by_shields
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     type_by_shields = get_shields()
-    print(f'Total: {sum(len(v) for v in type_by_shields.values())}')
+    print(f"Total: {sum(len(v) for v in type_by_shields.values())}")
 
-    print('All shields with guard.physical = 100, sorted by Guard Boost')
+    print("All shields with guard.physical = 100, sorted by Guard Boost")
     for type_shield, shields in type_by_shields.items():
         shields.sort(key=lambda x: x.guard_boost, reverse=True)
 
-        print(f'{type_shield} ({len(shields)}):')
+        print(f"{type_shield} ({len(shields)}):")
         for i, shield in enumerate(shields, 1):
             if shield.guard.physical == 100:
-                print(f'  {i}. {shield}')
+                print(f"  {i}. {shield}")
 
         print()
     """
