@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -74,56 +74,56 @@ __author__ = 'ipetrash'
 
 
 from math import *
+from PIL import Image, ImageDraw
 
 
 def draw_monkey_tree(draw_by_image):
-    def Draw2(x, y, l, u, t, q, s):
-        Draw(x, y, l, u, t, q, s)
-        return x + l*cos(u), y - l*sin(u)
-    
-    def Draw(x, y, l, u, t, q,s):
+    def draw2(x, y, l, u, t, q, s):
+        draw(x, y, l, u, t, q, s)
+        return x + l * cos(u), y - l * sin(u)
+
+    def draw(x, y, l, u, t, q, s):
         if t > 0:
             if q == 1:
-                x += l*cos(u)
-                y -= l*sin(u)
+                x += l * cos(u)
+                y -= l * sin(u)
                 s = -s
                 u = u + pi
 
             elif q == 3:
-                x += l*cos(u)
-                y -= l*sin(u)
+                x += l * cos(u)
+                y -= l * sin(u)
                 s = s
                 u = u + pi
 
             elif q == 2:
                 s = -s
-            
+
             elif q == 0:
                 s = s
 
             l /= 3
-            x, y = Draw2(x, y, l,           u+s*pi/3,   t-1, 2, s)
-            x, y = Draw2(x, y, l,           u+s*pi/3,   t-1, 1, s)
-            x, y = Draw2(x, y, l,           u,          t-1, 0, s)
-            x, y = Draw2(x, y, l,           u-s*pi/3,   t-1, 1, s)
-            x, y = Draw2(x, y, l*sqrt(3)/3, u-s*7*pi/6, t-1, 1, s)
-            x, y = Draw2(x, y, l*sqrt(3)/3, u-s*7*pi/6, t-1, 2, s)
-            x, y = Draw2(x, y, l*sqrt(3)/3, u-s*5*pi/6, t-1, 3, s)
-            x, y = Draw2(x, y, l*sqrt(3)/3, u-s*pi/2,   t-1, 3, s)
-            x, y = Draw2(x, y, l*sqrt(3)/3, u-s*pi/2,   t-1, 0, s)
-            x, y = Draw2(x, y, l,           u,          t-1, 3, s)
-            _, _ = Draw2(x, y, l,           u,          t-1, 0, s)
+            x, y = draw2(x, y, l, u + s * pi / 3, t - 1, 2, s)
+            x, y = draw2(x, y, l, u + s * pi / 3, t - 1, 1, s)
+            x, y = draw2(x, y, l, u, t - 1, 0, s)
+            x, y = draw2(x, y, l, u - s * pi / 3, t - 1, 1, s)
+            x, y = draw2(x, y, l * sqrt(3) / 3, u - s * 7 * pi / 6, t - 1, 1, s)
+            x, y = draw2(x, y, l * sqrt(3) / 3, u - s * 7 * pi / 6, t - 1, 2, s)
+            x, y = draw2(x, y, l * sqrt(3) / 3, u - s * 5 * pi / 6, t - 1, 3, s)
+            x, y = draw2(x, y, l * sqrt(3) / 3, u - s * pi / 2, t - 1, 3, s)
+            x, y = draw2(x, y, l * sqrt(3) / 3, u - s * pi / 2, t - 1, 0, s)
+            x, y = draw2(x, y, l, u, t - 1, 3, s)
+            _, _ = draw2(x, y, l, u, t - 1, 0, s)
 
         else:
-            draw_by_image.line((x, y, x + cos(u)*l, y - sin(u)*l), 'black')
+            draw_by_image.line((x, y, x + cos(u) * l, y - sin(u) * l), "black")
 
-    Draw(50, 365, 430, 0, 3, 0, 1)
+    draw(50, 365, 430, 0, 3, 0, 1)
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (520, 500), "white")
 
     draw_monkey_tree(ImageDraw.Draw(img))
 
-    img.save('img.png')
+    img.save("img.png")

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -36,6 +36,7 @@ __author__ = 'ipetrash'
 
 
 from math import *
+from PIL import Image, ImageDraw
 
 
 def draw_snowflake(draw_by_image, width, height, count):
@@ -45,22 +46,21 @@ def draw_snowflake(draw_by_image, width, height, count):
         for i in range(count):
             x = x0 + r * cos(i * t)
             y = y0 - r * sin(i * t)
-            draw_by_image.line((x0, y0, x, y), 'black')
+            draw_by_image.line((x0, y0, x, y), "black")
 
             if n > 1:
-                draw(x, y, r // 5, n-1)
+                draw(x, y, r // 5, n - 1)
 
     x = width // 2
     y = height // 2
     draw(x, y, 180, 4)
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (500, 500), "white")
 
     # Количество повторений
     count = 8
     draw_snowflake(ImageDraw.Draw(img), img.width, img.height, count)
 
-    img.save('img.png')
+    img.save("img.png")

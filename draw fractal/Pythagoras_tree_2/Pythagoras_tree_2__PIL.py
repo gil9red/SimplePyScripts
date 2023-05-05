@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -42,11 +42,12 @@ __author__ = 'ipetrash'
 
 
 from math import *
+from PIL import Image, ImageDraw
 
 
 def draw_pythagoras_tree_2(draw_by_image):
     def line_to(x, y, l, u):
-        draw_by_image.line((x, y, x + l * cos(u), y - l * sin(u)), 'black')
+        draw_by_image.line((x, y, x + l * cos(u), y - l * sin(u)), "black")
 
     def draw(x, y, l, u):
         if l > 3:
@@ -62,10 +63,9 @@ def draw_pythagoras_tree_2(draw_by_image):
     draw(320, 460, 200, pi / 2)
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (730, 500), "white")
 
     draw_pythagoras_tree_2(ImageDraw.Draw(img))
 
-    img.save('img.png')
+    img.save("img.png")

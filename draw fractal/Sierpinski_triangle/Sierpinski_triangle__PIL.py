@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -49,6 +49,9 @@ __author__ = 'ipetrash'
 # End.
 
 
+from PIL import Image, ImageDraw
+
+
 def draw_sierpinski_triangle(draw_by_image, Z):
     color = "black"
 
@@ -75,8 +78,7 @@ def draw_sierpinski_triangle(draw_by_image, Z):
     draw(320, 10, 600, 470, 40, 470, Z)
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (650, 500), "white")
 
     # Глубина фрактала
@@ -84,4 +86,4 @@ if __name__ == '__main__':
 
     draw_sierpinski_triangle(ImageDraw.Draw(img), Z)
 
-    img.save('img.png')
+    img.save("img.png")
