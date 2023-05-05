@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -45,24 +45,27 @@ __author__ = 'ipetrash'
 # end.
 
 
+from PIL import Image, ImageDraw
+
+
 def draw_mandelbrot_set_2(draw_by_image, width, height):
     n = 255
     max = 10
-    
+
     for ix in range(width):
         for iy in range(height):
             x = 0
             y = 0
             cx = 0.005 * (ix - 365)
             cy = 0.005 * (iy - 300)
-    
+
             for i in range(n):
                 x1 = x * x - y * y + cx
                 y1 = 2 * x * y + cy
-    
+
                 if x1 > max or y1 > max:
                     break
-    
+
                 x = x1
                 y = y1
 
@@ -74,10 +77,9 @@ def draw_mandelbrot_set_2(draw_by_image, width, height):
             draw_by_image.point((ix, iy), color)
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (600, 600), "white")
 
     draw_mandelbrot_set_2(ImageDraw.Draw(img), img.width, img.height)
 
-    img.save('img.png')
+    img.save("img.png")

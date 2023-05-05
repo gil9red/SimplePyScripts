@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -47,6 +47,7 @@ __author__ = 'ipetrash'
 
 
 import math
+from PIL import Image, ImageDraw
 
 
 def draw_snowflake_koch(draw_by_image, step):
@@ -57,7 +58,9 @@ def draw_snowflake_koch(draw_by_image, step):
 
     def draw(x, y, l, u, t):
         if t == 0:
-            draw_by_image.line((x, y, x + math.cos(u) * l, y - math.sin(u) * l), fill="black")
+            draw_by_image.line(
+                (x, y, x + math.cos(u) * l, y - math.sin(u) * l), fill="black"
+            )
         else:
             l /= 3
             x, y = draw2(x, y, l, u, t - 1)
@@ -74,12 +77,11 @@ def draw_snowflake_koch(draw_by_image, step):
     draw(210, 8, 400, -math.pi / 3, step)
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (425, 500), "white")
     draw_by_image = ImageDraw.Draw(img)
 
     step = 4
     draw_snowflake_koch(draw_by_image, step)
 
-    img.save('img.png')
+    img.save("img.png")

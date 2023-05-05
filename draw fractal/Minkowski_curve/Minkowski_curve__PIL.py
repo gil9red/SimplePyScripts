@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -76,6 +76,9 @@ __author__ = 'ipetrash'
 # ?>
 
 
+from PIL import Image, ImageDraw
+
+
 def draw_minkowski(draw, xa, ya, xi, yi, n):
     """
     Draws minkowski curve between two points.
@@ -91,14 +94,14 @@ def draw_minkowski(draw, xa, ya, xi, yi, n):
         #         |   |
         #         F---G
 
-        xb = xa + (xi - xa) * 1/4
-        yb = ya + (yi - ya) * 1/4
+        xb = xa + (xi - xa) * 1 / 4
+        yb = ya + (yi - ya) * 1 / 4
 
-        xe = xa + (xi - xa) * 2/4
-        ye = ya + (yi - ya) * 2/4
+        xe = xa + (xi - xa) * 2 / 4
+        ye = ya + (yi - ya) * 2 / 4
 
-        xh = xa + (xi - xa) * 3/4
-        yh = ya + (yi - ya) * 3/4
+        xh = xa + (xi - xa) * 3 / 4
+        yh = ya + (yi - ya) * 3 / 4
 
         cos90 = 0
         sin90 = -1
@@ -125,11 +128,12 @@ def draw_minkowski(draw, xa, ya, xi, yi, n):
         draw_minkowski(draw, xh, yh, xi, yi, n - 1)
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (600, 400), "white")
 
     step = 3
-    draw_minkowski(ImageDraw.Draw(img), 0, img.height / 2, img.width, img.height / 2, step)
+    draw_minkowski(
+        ImageDraw.Draw(img), 0, img.height / 2, img.width, img.height / 2, step
+    )
 
-    img.save('img.png')
+    img.save("img.png")

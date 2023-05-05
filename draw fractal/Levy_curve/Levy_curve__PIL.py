@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -53,6 +53,7 @@ __author__ = 'ipetrash'
 
 
 import random
+from PIL import Image, ImageDraw
 
 
 def draw_levy(draw):
@@ -68,22 +69,21 @@ def draw_levy(draw):
     for k in range(iter):
         p = random.random()
         t = x
-        if p <= 1/2:
-            x = 0.5*x - 0.5*y
-            y = 0.5*t + 0.5*y
+        if p <= 1 / 2:
+            x = 0.5 * x - 0.5 * y
+            y = 0.5 * t + 0.5 * y
         else:
-            x = 0.5*x + 0.5*y + 0.5;
-            y = -0.5*t + 0.5*y + 0.5;
+            x = 0.5 * x + 0.5 * y + 0.5
+            y = -0.5 * t + 0.5 * y + 0.5
 
         draw.point((mx + rad * x, my - rad * y), "blue")
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (650, 450), "white")
 
     step = 10
 
     draw_levy(ImageDraw.Draw(img))
 
-    img.save('img.png')
+    img.save("img.png")
