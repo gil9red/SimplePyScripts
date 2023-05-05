@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -36,6 +36,7 @@ __author__ = 'ipetrash'
 
 
 from math import *
+from PIL import Image, ImageDraw
 
 
 def draw_circular_fractal(draw_by_image, x, y, size):
@@ -51,19 +52,18 @@ def draw_circular_fractal(draw_by_image, x, y, size):
                 draw_by_image,
                 x - s2 * sin(2 * pi / m * i),
                 y + s2 * cos(2 * pi / m * i),
-                s1
+                s1,
             )
 
         draw_circular_fractal(draw_by_image, x, y, s1)
 
     bbox = (x - size, y - size, x + size, y + size)
-    draw_by_image.ellipse(bbox, outline='black')
+    draw_by_image.ellipse(bbox, outline="black")
 
 
-if __name__ == '__main__':
-    from PIL import Image, ImageDraw
+if __name__ == "__main__":
     img = Image.new("RGB", (320 * 2, 240 * 2), "white")
 
     draw_circular_fractal(ImageDraw.Draw(img), 320, 240, 200)
 
-    img.save('img.png')
+    img.save("img.png")
