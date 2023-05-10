@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install email-validator
@@ -28,7 +28,7 @@ for email in emails:
     except EmailNotValidError as e:
         # Email is not valid.
         # The exception message is human-readable.
-        print(f'{email!r}, error: {e!r}')
+        print(f"{email!r}, error: {e!r}")
         # 'my+address@mydomain.tld', error: EmailUndeliverableError('The domain name mydomain.tld does not exist.')
 
     print(email)
