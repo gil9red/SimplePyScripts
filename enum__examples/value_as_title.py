@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from enum import Enum, auto
+from random import choice
 
 
 class KeyboardEnum(Enum):
@@ -19,11 +20,10 @@ class KeyboardEnum(Enum):
         return self.name.replace("_", " ")
 
 
-print(KeyboardEnum.GET_ALL)          # KeyboardEnum.GET_ALL
+print(KeyboardEnum.GET_ALL)  # KeyboardEnum.GET_ALL
 print(KeyboardEnum.GET_ALL.title())  # GET ALL
 print()
 
-from random import choice
 button = choice(list(KeyboardEnum))
 print(f'{button}: "{button.title()}"')
 

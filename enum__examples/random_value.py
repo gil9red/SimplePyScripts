@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from enum import Enum, auto
@@ -17,7 +17,7 @@ class MoveEnum(Enum):
 
 for _ in range(5):
     button = choice(list(MoveEnum))
-    print(f'{button:<14} {button.name:<5} {button.value}')
+    print(f"{button:<14} {button.name:<5} {button.value}")
 
 print()
 print(choices(list(MoveEnum), k=5))
