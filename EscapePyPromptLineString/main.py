@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import traceback
@@ -24,11 +24,11 @@ except:
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
@@ -39,7 +39,7 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('EscapePyPromptLineString')
+        self.setWindowTitle("EscapePyPromptLineString")
 
         self.text_edit_input = QPlainTextEdit()
 
@@ -51,9 +51,9 @@ class MainWindow(QWidget):
         self.label_error.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.label_error.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
 
-        self.button_detail_error = QPushButton('...')
+        self.button_detail_error = QPushButton("...")
         self.button_detail_error.setFixedSize(20, 20)
-        self.button_detail_error.setToolTip('Detail error')
+        self.button_detail_error.setToolTip("Detail error")
         self.button_detail_error.clicked.connect(self.show_detail_error_massage)
 
         self.last_error_message = None
@@ -78,10 +78,10 @@ class MainWindow(QWidget):
         self.setLayout(layout)
 
     def show_detail_error_massage(self):
-        message = self.last_error_message + '\n\n' + self.last_detail_error_message
+        message = self.last_error_message + "\n\n" + self.last_detail_error_message
 
         mb = QErrorMessage()
-        mb.setWindowTitle('Error')
+        mb.setWindowTitle("Error")
         # Сообщение ошибки содержит отступы, символы-переходы на следующую строку,
         # которые поломаются при вставке через QErrorMessage.showMessage, и нет возможности
         # выбрать тип текста, то делаем такой хак.
@@ -104,15 +104,15 @@ class MainWindow(QWidget):
             new_out_text = []
 
             for line in out_text.splitlines():
-                if line.startswith('>>> ') or line.startswith('... ') or line == '...':
+                if line.startswith(">>> ") or line.startswith("... ") or line == "...":
                     line = line[4:]
 
                 new_out_text.append(line)
 
-            out_text = '\n'.join(new_out_text)
+            out_text = "\n".join(new_out_text)
             self.text_edit_output.setPlainText(out_text)
 
-            print('Escape for {:.3f} secs'.format(time.perf_counter() - t))
+            print("Escape for {:.3f} secs".format(time.perf_counter() - t))
 
         except Exception as e:
             # Выводим ошибку в консоль
@@ -125,15 +125,16 @@ class MainWindow(QWidget):
             self.last_detail_error_message = str(tb)
             self.button_detail_error.show()
 
-            self.label_error.setText('Error: ' + self.last_error_message)
+            self.label_error.setText("Error: " + self.last_error_message)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
     mw.resize(650, 500)
-    mw.text_edit_input.setPlainText("""\
+    mw.text_edit_input.setPlainText(
+        """\
 >>> import bcrypt
 >>> password = b"super secret password"
 >>> # Hash a password for the first time, with a randomly-generated salt
