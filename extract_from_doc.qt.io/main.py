@@ -58,9 +58,7 @@ if __name__ == "__main__":
     print(content.encode("utf-8"))
 
     print()
-    url = (
-        "http://doc.qt.io/qt-5/qtwebengine-webenginewidgets-simplebrowser-example.html"
-    )
+    url = "http://doc.qt.io/qt-5/qtwebengine-webenginewidgets-simplebrowser-example.html"
     urls_files_list = get_list_urls_files(url)
     print(f"Files: {len(urls_files_list)}")
 
