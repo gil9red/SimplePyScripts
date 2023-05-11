@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+from datetime import date
+from urllib.request import urlopen
+
+from lxml import etree
 
 
 def exchange_rate(currency, date_req=None):
@@ -15,19 +21,16 @@ def exchange_rate(currency, date_req=None):
     # Example:
     # http://www.cbr.ru/scripts/XML_daily.asp
     # http://www.cbr.ru/scripts/XML_daily.asp?date_req=21.10.2016
-    from datetime import date
     if date_req is None:
         date_req = date.today()
 
     if isinstance(date_req, date):
-        date_req = date_req.strftime('%d.%m.%Y')
+        date_req = date_req.strftime("%d.%m.%Y")
 
-    url = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=' + date_req
+    url = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=" + date_req
     # url = 'http://www.cbr.ru/scripts/XML_daily.asp'
 
-    from urllib.request import urlopen
     with urlopen(url) as f:
-        from lxml import etree
         root = etree.XML(f.read())
 
         # <ValCurs Date="21.10.2016" name="Foreign Currency Market">
@@ -41,33 +44,33 @@ def exchange_rate(currency, date_req=None):
         #     ...
 
         for valute in root:
-            ccy = valute.xpath('child::CharCode/text()')[0]
-            value = valute.xpath('child::Value/text()')[0]
+            ccy = valute.xpath("child::CharCode/text()")[0]
+            value = valute.xpath("child::Value/text()")[0]
 
             if currency == ccy:
-                return float(value.replace(',', '.')), root.attrib['Date']
+                return float(value.replace(",", ".")), root.attrib["Date"]
 
     return None, None
 
 
-if __name__ == '__main__':
-    print('USD:', exchange_rate('USD'))
-    print('EUR:', exchange_rate('EUR'))
+if __name__ == "__main__":
+    print("USD:", exchange_rate("USD"))
+    print("EUR:", exchange_rate("EUR"))
 
     from datetime import date, timedelta
 
     date_req = date.today()
-    value, rate_date = exchange_rate('USD', date_req)
-    print('{}: USD: {}'.format(rate_date, value))
+    value, rate_date = exchange_rate("USD", date_req)
+    print("{}: USD: {}".format(rate_date, value))
 
     date_req = date.today() - timedelta(days=1)
-    value, rate_date = exchange_rate('USD', date_req)
-    print('{}: USD: {}'.format(rate_date, value))
+    value, rate_date = exchange_rate("USD", date_req)
+    print("{}: USD: {}".format(rate_date, value))
 
     date_req = date.today() + timedelta(days=1)
-    value, rate_date = exchange_rate('USD', date_req)
-    print('{}: USD: {}'.format(rate_date, value))
+    value, rate_date = exchange_rate("USD", date_req)
+    print("{}: USD: {}".format(rate_date, value))
 
     date_req = date.today() + timedelta(days=2)
-    value, rate_date = exchange_rate('USD', date_req)
-    print('{}: USD: {}'.format(rate_date, value))
+    value, rate_date = exchange_rate("USD", date_req)
+    print("{}: USD: {}".format(rate_date, value))
