@@ -33,7 +33,7 @@ def do(file_name, output_dir="output", debug=True):
 
     total_image_size = 0
 
-    with open(file_name, encoding="utf8") as fb2:
+    with open(file_name, encoding="utf-8") as fb2:
         pattern = re.compile(
             '<binary ((content-type=".+?") (id=".+?")'
             '|(id=".+?") (content-type=".+?")) *?>(.+?)</binary>',

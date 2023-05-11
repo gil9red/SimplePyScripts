@@ -4,6 +4,8 @@
 __author__ = "ipetrash"
 
 
+from timeit import timeit
+
 from fb2_pictures__using_lxml import do as do_lxml
 from fb2_pictures__using_bs4 import do as do_bs4
 from fb2_pictures__using_xml_expat import do as do_xml_expat
@@ -14,8 +16,6 @@ from fb2_pictures__using_re import do as do_using_re
 
 file_name = "../input/Непутевый ученик в школе магии 1. Зачисление в школу (Часть 1).fb2"
 count = 10
-
-from timeit import timeit
 
 runs = [
     ("LXML", "do_lxml"),
