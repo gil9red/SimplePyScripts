@@ -215,7 +215,29 @@ def settings_preprocess(settings: dict[str, dict]) -> dict[str, dict]:
     return new_settings
 
 
-def _manager_up(path: str):
+def _run_path(path: str, args: list[str] | None = None):
+    if not args:
+        print('Need specify file mask')
+        return
+
+    file_mask = args[0]
+
+    files = list(Path(path).glob(file_mask))
+    if not files:
+        print('Not found file')
+        return
+
+    if len(files) > 1:
+        print(f'The file mask must match one file.\nFound ({len(files)}):')
+        for name in files:
+            print(f'    {name}')
+        return
+
+    file_name = str(files[0])
+    _run_file(file_name)
+
+
+def _manager_up(path: str, _: list[str] | None = None):
     path = Path(path)
 
     # NOTE: "C:\DEV__RADIX\manager\manager\bin\manager.cmd" -> "C:\DEV__RADIX\manager"
@@ -241,7 +263,7 @@ def _manager_up(path: str):
         shutil.move(file, new_file)
 
 
-def _manager_clean(path: str):
+def _manager_clean(path: str, _: list[str] | None = None):
     path = Path(path)
 
     # NOTE: "C:\DEV__RADIX\manager\manager\bin\manager.cmd" -> "C:\DEV__RADIX\manager"
@@ -282,6 +304,7 @@ SETTINGS = {
             'revert':   (
                 'svn revert', 'start /b "" TortoiseProc /command:revert /path:"{path}"'
             ),
+            'run': _run_path,
         },
     },
     'tx': {
@@ -513,8 +536,11 @@ def go_run(
 
     # Если в <whats> функция, вызываем её
     if callable(value):
-        print(f'Run: {name} call {what!r}')
-        value(path)
+        print(f'Run: {name} call {what!r}' + (f' ({args})' if args else ''))
+        if version:
+            path = get_similar_version_path(name, version)
+
+        value(path, args)
         return
 
     # Если по <name> указывается файл, то сразу его и запускаем
