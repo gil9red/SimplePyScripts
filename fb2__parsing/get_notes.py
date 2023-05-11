@@ -1,23 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from bs4 import BeautifulSoup
-from typing import List, Tuple
-
 from common import get_attribute_value_by_local_name
 
 
-def get_note_links(root) -> List[Tuple['href', 'text']]:
+def get_note_links(root) -> list[tuple[str, str]]:
     # в стиле Роберта Адама <a l:href="#note1" type="note">[1]</a>
     note_link_list = root.select('a[type="note"]')
 
     items = []
 
     for link in note_link_list:
-        href = get_attribute_value_by_local_name(link, 'href')
+        href = get_attribute_value_by_local_name(link, "href")
         text = link.text.strip()
 
         items.append((href, text))
@@ -25,7 +23,7 @@ def get_note_links(root) -> List[Tuple['href', 'text']]:
     return items
 
 
-def get_notes(root) -> List[Tuple['id', 'title', 'text']]:
+def get_notes(root) -> list[tuple[str, str, str]]:
     # Пример тега:
     # <body name="notes">
     #     <title>
@@ -42,7 +40,7 @@ def get_notes(root) -> List[Tuple['id', 'title', 'text']]:
     items = []
 
     for note in notes_list:
-        note_id = note.attrs['id']
+        note_id = note.attrs["id"]
 
         title = note.title.text.strip()
 
@@ -57,19 +55,19 @@ def get_notes(root) -> List[Tuple['id', 'title', 'text']]:
     return items
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import glob
 
-    for fb2_file_name in glob.glob('input/*.fb2'):
-        with open(fb2_file_name, encoding='utf-8') as f:
-            root = BeautifulSoup(f, 'html.parser')
+    for fb2_file_name in glob.glob("input/*.fb2"):
+        with open(fb2_file_name, encoding="utf-8") as f:
+            root = BeautifulSoup(f, "html.parser")
 
         print(fb2_file_name)
 
         note_links = get_note_links(root)
-        print('note_links:', note_links)
+        print("note_links:", note_links)
 
         notes = get_notes(root)
-        print('notes:', notes)
+        print("notes:", notes)
 
-        print('\n')
+        print("\n")
