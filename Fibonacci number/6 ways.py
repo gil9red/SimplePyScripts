@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://technobeans.com/2012/04/16/5-ways-of-fibonacci-in-python/
 
 NUMBER = 15
+
 
 # Example 1: Using looping technique
 def fib_loop(n):
@@ -16,7 +17,7 @@ def fib_loop(n):
     return a
 
 
-print('Example 1')
+print("Example 1")
 print(fib_loop(NUMBER))
 print()
 
@@ -28,7 +29,7 @@ def fib_recursion(n):
     return fib_recursion(n - 1) + fib_recursion(n - 2)
 
 
-print('Example 2')
+print("Example 2")
 print(fib_recursion(NUMBER))
 print()
 
@@ -40,7 +41,8 @@ def fib_generator():
         a, b = b, a + b
         yield a
 
-print('Example 3')
+
+print("Example 3")
 f = fib_generator()
 for _ in range(NUMBER):
     print(next(f))
@@ -56,7 +58,7 @@ def memoize(fn, arg):
 
 
 # fib() as written in example 1.
-print('Example 4')
+print("Example 4")
 fibm = memoize(fib_loop, NUMBER)
 print(fibm)
 print()
@@ -82,7 +84,8 @@ def fib(n):
         a, b = b, a + b
     return a
 
-print('Example 5')
+
+print("Example 5")
 print(fib(NUMBER))
 print()
 
@@ -98,6 +101,7 @@ def memoize_func(f):
 
     return func
 
+
 @memoize_func
 def fib(n):
     a, b = 1, 1
@@ -105,6 +109,7 @@ def fib(n):
         a, b = b, a + b
     return a
 
-print('Example 6')
+
+print("Example 6")
 print(fib(NUMBER))
 print()
