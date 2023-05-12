@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import base64
@@ -18,7 +18,7 @@ import requests
 from flask import Flask, jsonify, render_template_string, redirect, request
 from PIL import Image
 
-sys.path.append('..')
+sys.path.append("..")
 from common import sizeof_fmt
 
 
@@ -26,7 +26,7 @@ from common import sizeof_fmt
 def get_exif_tags(file_object_or_file_name, as_category=True):
     if type(file_object_or_file_name) == str:
         # Open image file for reading (binary mode)
-        file_object_or_file_name = open(file_object_or_file_name, mode='rb')
+        file_object_or_file_name = open(file_object_or_file_name, mode="rb")
 
     # Return Exif tags
     tags = exifread.process_file(file_object_or_file_name)
@@ -45,9 +45,9 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
                 try:
                     # If last 2 items equals [0, 0]
                     if value.values[-2:] == [0, 0]:
-                        value = bytes(value.values[:-2]).decode('utf-16')
+                        value = bytes(value.values[:-2]).decode("utf-16")
                     else:
-                        value = bytes(value.values).decode('utf-16')
+                        value = bytes(value.values).decode("utf-16")
 
                 except:
                     value = str(value.values)
@@ -68,8 +68,8 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
 
         else:
             # Fill categories_by_tag
-            if ' ' in tag:
-                category, sub_tag = tag.split(' ', maxsplit=1)
+            if " " in tag:
+                category, sub_tag = tag.split(" ", maxsplit=1)
 
                 if category not in tags_by_value:
                     tags_by_value[category] = dict()
@@ -89,7 +89,7 @@ def img_to_base64_html(file_name__or__bytes__or__file_object):
     arg = file_name__or__bytes__or__file_object
 
     if type(arg) == str:
-        with open(arg, mode='rb') as f:
+        with open(arg, mode="rb") as f:
             img_bytes = f.read()
 
     elif type(arg) == bytes:
@@ -101,10 +101,10 @@ def img_to_base64_html(file_name__or__bytes__or__file_object):
     bytes_io = io.BytesIO(img_bytes)
     img = Image.open(bytes_io)
 
-    img_base64 = base64.b64encode(img_bytes).decode('utf-8')
+    img_base64 = base64.b64encode(img_bytes).decode("utf-8")
     # print(img_base64)
 
-    return 'data:image/{};base64,'.format(img.format.lower()) + img_base64
+    return f"data:image/{img.format.lower()};base64,{img_base64}"
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/84651cfefaee768851170ec4ba7d025bbaae622d/get_image_info/main.py#L84
@@ -114,7 +114,7 @@ def get_image_info(file_name__or__bytes__or__bytes_io, pretty_json_str=False):
 
     # File name
     if type_data == str:
-        with open(data, mode='rb') as f:
+        with open(data, mode="rb") as f:
             data = f.read()
 
     if type(data) == bytes:
@@ -126,23 +126,30 @@ def get_image_info(file_name__or__bytes__or__bytes_io, pretty_json_str=False):
     img = Image.open(data)
 
     info = dict()
-    info['length'] = dict()
-    info['length']['value'] = length
-    info['length']['text'] = sizeof_fmt(length)
+    info["length"] = dict()
+    info["length"]["value"] = length
+    info["length"]["text"] = sizeof_fmt(length)
 
-    info['format'] = img.format
-    info['mode'] = img.mode
-    info['channels'] = len(img.getbands())
-    info['bit_color'] = {
-        '1': 1, 'L': 8, 'P': 8, 'RGB': 24, 'RGBA': 32,
-        'CMYK': 32, 'YCbCr': 24, 'I': 32, 'F': 32
+    info["format"] = img.format
+    info["mode"] = img.mode
+    info["channels"] = len(img.getbands())
+    info["bit_color"] = {
+        "1": 1,
+        "L": 8,
+        "P": 8,
+        "RGB": 24,
+        "RGBA": 32,
+        "CMYK": 32,
+        "YCbCr": 24,
+        "I": 32,
+        "F": 32,
     }[img.mode]
 
-    info['size'] = dict()
-    info['size']['width'] = img.width
-    info['size']['height'] = img.height
+    info["size"] = dict()
+    info["size"]["width"] = img.width
+    info["size"]["height"] = img.height
 
-    info['exif'] = exif
+    info["exif"] = exif
 
     if pretty_json_str:
         info = json.dumps(info, indent=4, ensure_ascii=False)
@@ -157,14 +164,15 @@ app = Flask(__name__)
 # ensure that independent of the hash seed of the dictionary the return value will be consistent to not trash external
 # HTTP caches. You can override the default behavior by changing this variable. This is not recommended but might give
 # you a performance improvement on the cost of cacheability.
-app.config['JSON_SORT_KEYS'] = False
+app.config["JSON_SORT_KEYS"] = False
 
 logging.basicConfig(level=logging.DEBUG)
 
 
-@app.route('/')
+@app.route("/")
 def index():
-    return render_template_string('''\
+    return render_template_string(
+        """\
 <html>
     <head>
         <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
@@ -356,43 +364,44 @@ def index():
         </script>
     </body>
 </html>
-''')
+"""
+    )
 
 
-@app.route("/get_info_from_file", methods=['POST'])
+@app.route("/get_info_from_file", methods=["POST"])
 def get_info_from_file():
     print(request.files)
 
     # check if the post request has the file part
-    if 'file' not in request.files:
-        return redirect('/')
+    if "file" not in request.files:
+        return redirect("/")
 
-    file = request.files['file']
+    file = request.files["file"]
     file_data = file.stream.read()
 
     info = get_image_info(file_data)
-    info['img_base64'] = img_to_base64_html(file_data)
+    info["img_base64"] = img_to_base64_html(file_data)
 
     return jsonify(info)
 
 
-@app.route("/get_info_from_url", methods=['POST'])
+@app.route("/get_info_from_url", methods=["POST"])
 def get_info_from_url():
     print(request.form)
 
-    if 'url' not in request.form:
-        return redirect('/')
+    if "url" not in request.form:
+        return redirect("/")
 
-    url = request.form['url']
+    url = request.form["url"]
     file_data = requests.get(url).content
 
     info = get_image_info(file_data)
-    info['img_base64'] = img_to_base64_html(file_data)
+    info["img_base64"] = img_to_base64_html(file_data)
 
     return jsonify(info)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.debug = True
 
     # Localhost

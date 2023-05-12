@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import logging
@@ -13,7 +13,9 @@ from pathlib import Path
 from flask import Flask, request, redirect
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-sys.path.append(str(ROOT / 'winapi__windows__ctypes/windows__toast_balloontip_notifications'))
+sys.path.append(
+    str(ROOT / "winapi__windows__ctypes/windows__toast_balloontip_notifications")
+)
 from run_notify import run_in_thread
 
 
@@ -28,22 +30,22 @@ def show(text):
 
 @app.route("/")
 def index():
-    return redirect('/show_notification?text=О, уведомление пришло!')
+    return redirect("/show_notification?text=О, уведомление пришло!")
 
 
 @app.route("/show_notification")
 def show_notification():
-    text = request.args.get('text')
-    print('text:', text)
+    text = request.args.get("text")
+    print("text:", text)
 
     # Run function in new thread
     thread = threading.Thread(target=show, args=(text,))
     thread.start()
 
-    return 'Ok'
+    return "Ok"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Localhost
     app.run(
         port=5000,

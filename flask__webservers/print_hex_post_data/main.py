@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import binascii
@@ -15,7 +15,7 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 
-@app.route("/", methods=['POST'])
+@app.route("/", methods=["POST"])
 def index():
     data = request.data
     print(binascii.hexlify(data), data)
@@ -23,7 +23,7 @@ def index():
     return "Ok"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.debug = True
 
     app.run(port=33333)

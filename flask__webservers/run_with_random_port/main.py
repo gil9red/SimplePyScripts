@@ -5,22 +5,23 @@
 # SOURCE: https://stackoverflow.com/a/5089963/5909792
 
 
-from flask import Flask, request
 import socket
+from flask import Flask, request
+
 
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route("/")
 def hello():
-    return 'Hello, world! running on %s' % request.host
+    return "Hello, world! running on %s" % request.host
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind(('localhost', 0))
+    sock.bind(("localhost", 0))
     port = sock.getsockname()[1]
-    print('sock.getsockname:', sock.getsockname())
+    print("sock.getsockname:", sock.getsockname())
 
     sock.close()
     app.run(port=port)

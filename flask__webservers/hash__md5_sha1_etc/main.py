@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import hashlib
@@ -15,14 +15,17 @@ logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
 
 
-SUPPORTED_HASH_ALGOS = set(list(hashlib.algorithms_guaranteed) + ['md4'])
-SUPPORTED_HASH_ALGOS = [algo for algo in SUPPORTED_HASH_ALGOS if not algo.lower().startswith('shake')]
+SUPPORTED_HASH_ALGOS = set(list(hashlib.algorithms_guaranteed) + ["md4"])
+SUPPORTED_HASH_ALGOS = [
+    algo for algo in SUPPORTED_HASH_ALGOS if not algo.lower().startswith("shake")
+]
 SUPPORTED_HASH_ALGOS = sorted(SUPPORTED_HASH_ALGOS)
 
 
 @app.route("/")
 def index():
-    return render_template_string('''\
+    return render_template_string(
+        """\
 <html>
     <head>
         <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
@@ -131,46 +134,51 @@ def index():
         </script>
     </body>
 </html>
-''', algos=SUPPORTED_HASH_ALGOS)
+""",
+        algos=SUPPORTED_HASH_ALGOS,
+    )
 
 
-@app.route("/do_hash", methods=['GET', 'POST'])
+@app.route("/do_hash", methods=["GET", "POST"])
 def do_hash():
-    print('request.args:', request.args)
-    print('request.form:', request.form)
-    print('request.files:', request.files)
+    print("request.args:", request.args)
+    print("request.form:", request.form)
+    print("request.files:", request.files)
     print()
 
-    text = request.args.get('text')
+    text = request.args.get("text")
     if not text:
-        text = request.form.get('text')
+        text = request.form.get("text")
 
-    file = request.files.get('file')
+    file = request.files.get("file")
 
-    algo = request.args.get('hash')
+    algo = request.args.get("hash")
     if not algo:
-        algo = request.form.get('hash')
+        algo = request.form.get("hash")
 
     if not ((text or file) and algo):
-        return render_template_string("""\
+        return render_template_string(
+            """\
         Example:<br>
         <a href="{{ example_uri }}&hash=md5">{{ example_uri }}&hash=md5<a><br>
         <a href="{{ example_uri }}&hash=sha1">{{ example_uri }}&hash=sha1<a><br>
         <a href="{{ example_uri }}&hash=sha512">{{ example_uri }}&hash=sha512<a>
-        """, example_uri='/do_hash?text=Hello World!')
+        """,
+            example_uri="/do_hash?text=Hello World!",
+        )
 
     result = {
-        'result': None,
-        'hash': algo,
-        'error': None,
+        "result": None,
+        "hash": algo,
+        "error": None,
     }
 
     if algo not in SUPPORTED_HASH_ALGOS:
-        result['error'] = f'Unsupported algorithm {algo!r}'
+        result["error"] = f"Unsupported algorithm {algo!r}"
     else:
         if file:
             digest = hashlib.new(algo)
-            for chunk in iter(lambda: file.stream.read(128 * digest.block_size), b''):
+            for chunk in iter(lambda: file.stream.read(128 * digest.block_size), b""):
                 digest.update(chunk)
 
         else:
@@ -178,7 +186,7 @@ def do_hash():
 
         hex_digest = digest.hexdigest()
 
-        result['result'] = hex_digest
+        result["result"] = hex_digest
 
     # Вернется json c результатом хеширования
     return jsonify(result)
