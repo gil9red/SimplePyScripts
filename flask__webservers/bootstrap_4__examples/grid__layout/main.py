@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/twbs/bootstrap
@@ -13,17 +13,17 @@ import logging
 from flask import Flask, render_template
 
 
-app = Flask(__name__, static_folder='../_static')
+app = Flask(__name__, static_folder="../_static")
 
 logging.basicConfig(level=logging.DEBUG)
 
 
 @app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.debug = True
 
     # Localhost
