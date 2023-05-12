@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import logging
@@ -26,9 +26,10 @@ def index():
 
         items.append(row)
 
-    items[0][0] = ''
+    items[0][0] = ""
 
-    return render_template_string("""\
+    return render_template_string(
+        """\
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -74,10 +75,12 @@ def index():
     </table>
 </body>
 </html>
-    """, items=items)
+    """,
+        items=items,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.debug = True
 
     # Localhost

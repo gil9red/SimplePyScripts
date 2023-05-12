@@ -1,23 +1,31 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import hashlib
 import logging
 import os
 
-from flask import Flask, request, jsonify, render_template_string, send_from_directory, url_for, redirect
+from flask import (
+    Flask,
+    request,
+    jsonify,
+    render_template_string,
+    send_from_directory,
+    url_for,
+    redirect,
+)
 
 # pip install qrcode
 import qrcode
 
 
-UPLOAD_FOLDER = 'images'
+UPLOAD_FOLDER = "images"
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -26,7 +34,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/")
 def index():
-    return render_template_string('''\
+    return render_template_string(
+        """\
 <html>
     <head>
         <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
@@ -89,37 +98,41 @@ def index():
         </script>
     </body>
 </html>
-''')
+"""
+    )
 
 
-@app.route("/generate_qrcode", methods=['GET', 'POST'])
+@app.route("/generate_qrcode", methods=["GET", "POST"])
 def generate_qrcode():
-    print('request.args:', request.args)
-    print('request.form:', request.form)
+    print("request.args:", request.args)
+    print("request.form:", request.form)
     print()
 
-    text = request.args.get('text', None)
+    text = request.args.get("text", None)
     if not text:
-        text = request.form.get('text')
+        text = request.form.get("text")
 
-    download = 'download' in request.args
-    is_redirect = 'redirect' in request.args
-    as_image = 'as_image' in request.args
+    download = "download" in request.args
+    is_redirect = "redirect" in request.args
+    as_image = "as_image" in request.args
 
     if not text:
-        return render_template_string("""\
+        return render_template_string(
+            """\
         Example:<br>
         <a href="{{ example_uri }}">{{ example_uri }}<a><br>
         <a href="{{ example_uri }}&download">{{ example_uri }}&download<a><br>
         <a href="{{ example_uri }}&redirect">{{ example_uri }}&redirect<a><br>
         <a href="{{ example_uri }}&as_image">{{ example_uri }}&as_image<a>
-        """, example_uri='/generate_qrcode?text=Hello World!')
+        """,
+            example_uri="/generate_qrcode?text=Hello World!",
+        )
 
     algo = hashlib.md5(text.encode())
     hash_data = algo.hexdigest()
 
-    file_name = hash_data + '.png'
-    upload_folder = app.config['UPLOAD_FOLDER']
+    file_name = hash_data + ".png"
+    upload_folder = app.config["UPLOAD_FOLDER"]
     abs_file_name = os.path.join(upload_folder, file_name)
 
     if not os.path.exists(abs_file_name):
@@ -143,14 +156,16 @@ def generate_qrcode():
     # Вернется json c ссылкой на картинку
     return jsonify({
         # url_for составляет путь для функции images, которая возвращает картинку с сервера
-        'file_name': uri,
+        "file_name": uri,
     })
 
 
-@app.route('/' + UPLOAD_FOLDER + '/<file_name>')
+@app.route("/" + UPLOAD_FOLDER + "/<file_name>")
 def images(file_name):
-    download = 'download' in request.args
-    return send_from_directory(app.config['UPLOAD_FOLDER'], file_name, as_attachment=download)
+    download = "download" in request.args
+    return send_from_directory(
+        app.config["UPLOAD_FOLDER"], file_name, as_attachment=download
+    )
 
 
 if __name__ == "__main__":
