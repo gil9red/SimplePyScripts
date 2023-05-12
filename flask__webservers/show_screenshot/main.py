@@ -1,30 +1,34 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
-
-from flask import Flask, render_template_string
-app = Flask(__name__)
 
 import logging
-logging.basicConfig(level=logging.DEBUG)
+
+from flask import Flask, render_template_string
 
 import pyscreenshot as ImageGrab
 
 
+app = Flask(__name__)
+logging.basicConfig(level=logging.DEBUG)
+
+
 @app.route("/")
 def index():
-    im = ImageGrab.grab()
-    im.save('static/screenshot.png')
+    img = ImageGrab.grab()
+    img.save("static/screenshot.png")
 
-    return render_template_string('''\
+    return render_template_string(
+        """\
     <html>
     <head><title>Show screenshot</title></head>
     <body>
     <p><img src="{{ url_for('static', filename='screenshot.png') }}" /></p>
     </body>
-    </html>''')
+    </html>"""
+    )
 
 
 if __name__ == "__main__":

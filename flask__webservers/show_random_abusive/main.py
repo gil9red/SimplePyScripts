@@ -1,40 +1,41 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
-
-from flask import Flask, render_template_string, request, redirect
-app = Flask(__name__)
 
 import logging
+import os
+import sys
+
+from flask import Flask, render_template_string, request, redirect
+
+
+app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 # Добавление пути основной папки репозитория, чтобы импортировать модуль random_abusive
-import os
 dir = os.path.dirname(__file__)
 dir = os.path.dirname(dir)
 dir = os.path.dirname(dir)
-
-import sys
 sys.path.append(dir)
-
 import random_abusive
 
 
 @app.route("/")
 def index():
     if not request.args:
-        return redirect('/?number=10&chain=2')
+        return redirect("/?number=10&chain=2")
 
-    print('query_string:', request.query_string)
-    number = int(request.args['number'])
-    chain = int(request.args['chain'])
+    print("query_string:", request.query_string)
+    number = int(request.args["number"])
+    chain = int(request.args["chain"])
 
     words = random_abusive.get_words(number, chain)
-    print('words:', words)
+    print("words:", words)
 
-    return render_template_string('''\
+    return render_template_string(
+        """\
     <html>
     <head><title>Рандомные матерные слова</title></head>
     <body>
@@ -44,7 +45,9 @@ def index():
 
     </body>
     </html>
-    ''', words=words)
+    """,
+        words=words,
+    )
 
 
 if __name__ == "__main__":
