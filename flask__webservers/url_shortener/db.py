@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import time
@@ -35,14 +35,14 @@ class NotDefinedParameterException(Exception):
 db = SqliteQueueDatabase(
     DB_FILE_NAME,
     pragmas={
-        'foreign_keys': 1,
-        'journal_mode': 'wal',    # WAL-mode
-        'cache_size': -1024 * 64  # 64MB page-cache
+        "foreign_keys": 1,
+        "journal_mode": "wal",     # WAL-mode
+        "cache_size": -1024 * 64,  # 64MB page-cache
     },
     use_gevent=False,     # Use the standard library "threading" module.
     autostart=True,
     queue_max_size=64,    # Max. # of pending writes that can accumulate.
-    results_timeout=5.0   # Max. time to wait for query to be executed.
+    results_timeout=5.0,  # Max. time to wait for query to be executed.
 )
 
 
@@ -54,19 +54,19 @@ class BaseModel(Model):
     class Meta:
         database = db
 
-    def get_new(self) -> Type['BaseModel']:
+    def get_new(self) -> Type["BaseModel"]:
         return type(self).get(self._pk_expr())
 
     @classmethod
-    def get_first(cls) -> Type['BaseModel']:
+    def get_first(cls) -> Type["BaseModel"]:
         return cls.select().first()
 
     @classmethod
-    def get_last(cls) -> Type['BaseModel']:
+    def get_last(cls) -> Type["BaseModel"]:
         return cls.select().order_by(cls.id.desc()).first()
 
     @classmethod
-    def get_inherited_models(cls) -> list[Type['BaseModel']]:
+    def get_inherited_models(cls) -> list[Type["BaseModel"]]:
         return sorted(cls.__subclasses__(), key=lambda x: x.__name__)
 
     @classmethod
@@ -75,9 +75,9 @@ class BaseModel(Model):
         for sub_cls in cls.get_inherited_models():
             name = sub_cls.__name__
             count = sub_cls.select().count()
-            items.append(f'{name}: {count}')
+            items.append(f"{name}: {count}")
 
-        print(', '.join(items))
+        print(", ".join(items))
 
     @classmethod
     def count(cls, filters: Iterable = None) -> int:
@@ -96,13 +96,13 @@ class BaseModel(Model):
                     v = repr(shorten(v))
 
             elif isinstance(field, ForeignKeyField):
-                k = f'{k}_id'
+                k = f"{k}_id"
                 if v:
                     v = v.id
 
-            fields.append(f'{k}={v}')
+            fields.append(f"{k}={v}")
 
-        return self.__class__.__name__ + '(' + ', '.join(fields) + ')'
+        return self.__class__.__name__ + "(" + ", ".join(fields) + ")"
 
 
 class Link(BaseModel):
@@ -110,21 +110,21 @@ class Link(BaseModel):
     link_url = TextField(unique=True)
 
     @classmethod
-    def get_by_link_url(cls, link_url: str) -> Optional['Link']:
+    def get_by_link_url(cls, link_url: str) -> Optional["Link"]:
         if not link_url or not link_url.strip():
-            raise NotDefinedParameterException(parameter_name='link_url')
+            raise NotDefinedParameterException(parameter_name="link_url")
 
         return cls.get_or_none(cls.link_url == link_url)
 
     @classmethod
-    def get_by_link_id(cls, link_id: str) -> Optional['Link']:
+    def get_by_link_id(cls, link_id: str) -> Optional["Link"]:
         if not link_id or not link_id.strip():
-            raise NotDefinedParameterException(parameter_name='link_id')
+            raise NotDefinedParameterException(parameter_name="link_id")
 
         return cls.get_or_none(cls.link_id == link_id)
 
     @classmethod
-    def add(cls, link_url: str) -> 'Link':
+    def add(cls, link_url: str) -> "Link":
         obj = cls.get_by_link_url(link_url)
         if not obj:
             # Убеждаемся, что link_id будет уникальным
@@ -148,12 +148,12 @@ db.create_tables(BaseModel.get_inherited_models())
 # Т.к. в SqliteQueueDatabase запросы на чтение выполняются сразу, а на запись попадают в очередь
 time.sleep(0.050)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     BaseModel.print_count_of_tables()
     # Link: 1
     print()
 
-    link = Link.add(link_url='https://example.com')
+    link = Link.add(link_url="https://example.com")
     assert Link.select().count()
     assert link == link.get_by_link_url(link_url=link.link_url)
     assert link == link.get_by_link_id(link_id=link.link_id)

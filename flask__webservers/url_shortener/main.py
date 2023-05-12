@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from pathlib import Path
@@ -17,10 +17,10 @@ app = Flask(__name__)
 
 def server_url() -> str:
     parse = urlparse(request.url)
-    return f'{parse.scheme}://{parse.netloc}/'
+    return f"{parse.scheme}://{parse.netloc}/"
 
 
-@app.route("/", defaults={'link_id': ''})
+@app.route("/", defaults={"link_id": ""})
 @app.route("/<path:link_id>")
 def index(link_id: str):
     if link_id:
@@ -32,27 +32,27 @@ def index(link_id: str):
         return redirect(url)
 
     return render_template(
-        'index.html',
-        title=Path(__file__).parent.resolve().stem
+        "index.html",
+        title=Path(__file__).parent.resolve().stem,
     )
 
 
-@app.route("/add", methods=['POST'])
+@app.route("/add", methods=["POST"])
 def add():
     result = {
         "url": "",
     }
-    if 'url' in request.form:
-        link_url = request.form['url']
+    if "url" in request.form:
+        link_url = request.form["url"]
         link = db.Link.add(link_url)
-        result['url'] = urljoin(server_url(), link.link_id)
+        result["url"] = urljoin(server_url(), link.link_id)
 
     return jsonify(result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # # Localhost
     # app.run(port=5001)
 
     # Public IP
-    app.run(host='0.0.0.0')
+    app.run(host="0.0.0.0")
