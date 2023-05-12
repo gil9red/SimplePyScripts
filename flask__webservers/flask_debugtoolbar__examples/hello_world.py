@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import logging
@@ -9,10 +9,11 @@ import logging
 from flask import Flask
 from flask_debugtoolbar import DebugToolbarExtension
 
+
 app = Flask(__name__)
 
 # set a 'SECRET_KEY' to enable the Flask session cookies
-app.config['SECRET_KEY'] = '<replace with a secret key>'
+app.config["SECRET_KEY"] = "<replace with a secret key>"
 
 
 @app.route("/")
@@ -21,7 +22,7 @@ def index():
     return "<body>Hello World!</body>"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.debug = True
 
     if app.debug:
@@ -32,9 +33,7 @@ if __name__ == '__main__':
     # Localhost
     # port=0 -- random free port
     # app.run(port=0)
-    app.run(
-        port=5000
-    )
+    app.run(port=5000)
 
     # # Public IP
     # app.run(host='0.0.0.0')

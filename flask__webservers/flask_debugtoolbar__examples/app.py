@@ -6,24 +6,24 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 
 app = Flask(__name__)
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
-#app.config['DEBUG_TB_PANELS'] = (
+app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = True
+# app.config['DEBUG_TB_PANELS'] = (
 #    'flask_debugtoolbar.panels.headers.HeaderDebugPanel',
 #    'flask_debugtoolbar.panels.logger.LoggingPanel',
 #    'flask_debugtoolbar.panels.timer.TimerDebugPanel',
-#)
-#app.config['DEBUG_TB_HOSTS'] = ('127.0.0.1', '::1' )
-app.config['SECRET_KEY'] = 'asd'
+# )
+# app.config['DEBUG_TB_HOSTS'] = ('127.0.0.1', '::1' )
+app.config["SECRET_KEY"] = "asd"
 
 # TODO: This can be removed once flask_sqlalchemy 3.0 ships
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
 db = SQLAlchemy(app)
 
 
 class ExampleModel(db.Model):
-    __tablename__ = 'examples'
+    __tablename__ = "examples"
     value = db.Column(db.String(100), primary_key=True)
 
 
@@ -32,21 +32,21 @@ def setup():
     db.create_all()
 
 
-@app.route('/')
+@app.route("/")
 def index():
     app.logger.info("Hello there")
     ExampleModel.query.get(1)
-    return render_template('index.html')
+    return render_template("index.html")
 
 
-@app.route('/redirect')
+@app.route("/redirect")
 def redirect_example():
-    response = redirect(url_for('index'))
-    response.set_cookie('test_cookie', '1')
+    response = redirect(url_for("index"))
+    response.set_cookie("test_cookie", "1")
     return response
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.debug = True
 
     toolbar = DebugToolbarExtension(app)
@@ -54,9 +54,7 @@ if __name__ == '__main__':
     # Localhost
     # port=0 -- random free port
     # app.run(port=0)
-    app.run(
-        port=5000
-    )
+    app.run(port=5000)
 
     # # Public IP
     # app.run(host='0.0.0.0')
