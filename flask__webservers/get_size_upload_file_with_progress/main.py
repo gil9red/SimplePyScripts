@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import logging
@@ -9,7 +9,7 @@ import sys
 
 from flask import Flask, request, redirect, render_template_string, jsonify
 
-sys.path.append('..')
+sys.path.append("..")
 from common import sizeof_fmt
 
 
@@ -18,9 +18,10 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 
-@app.route('/')
+@app.route("/")
 def index():
-    return render_template_string('''\
+    return render_template_string(
+        """\
 <html>
     <head>
         <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
@@ -118,28 +119,29 @@ def index():
         </script>
     </body>
 </html>
-''')
+"""
+    )
 
 
-@app.route('/get_file_size', methods=['POST'])
+@app.route("/get_file_size", methods=["POST"])
 def get_file_size():
     print(request.files)
 
     # check if the post request has the file part
-    if 'file' not in request.files:
-        return redirect('/')
+    if "file" not in request.files:
+        return redirect("/")
 
     length = 0
 
-    file = request.files['file']
+    file = request.files["file"]
     if file:
         data = file.stream.read()
         length = len(data)
 
-    return jsonify({'length': length, 'length_human': sizeof_fmt(length)})
+    return jsonify({"length": length, "length_human": sizeof_fmt(length)})
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.debug = True
 
     # Localhost
