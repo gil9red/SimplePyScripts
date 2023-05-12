@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import requests
@@ -10,7 +10,7 @@ import requests
 session = requests.Session()
 
 
-rs = session.get('http://127.0.0.1:5001/get-cookies')
+rs = session.get("http://127.0.0.1:5001/get-cookies")
 print(rs, rs.url)
 print(rs.headers)
 print(rs.cookies)
@@ -24,7 +24,7 @@ print(rs.json())
 
 print()
 
-rs = session.post('http://127.0.0.1:5001/set-cookies', params=dict(a=123, b=3))
+rs = session.post("http://127.0.0.1:5001/set-cookies", params=dict(a=123, b=3))
 print(rs, rs.url)
 print(rs.headers)
 print(rs.cookies)
@@ -38,7 +38,7 @@ print(rs.json())
 
 print()
 
-rs = session.get('http://127.0.0.1:5001/get-cookies')
+rs = session.get("http://127.0.0.1:5001/get-cookies")
 print(rs, rs.url)
 print(rs.headers)
 print(rs.cookies)

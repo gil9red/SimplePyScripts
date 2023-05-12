@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import logging
@@ -17,7 +17,7 @@ def get_cookies():
     return jsonify(request.cookies)
 
 
-@app.route("/set-cookies", methods=['POST'])
+@app.route("/set-cookies", methods=["POST"])
 def set_cookies():
     rs = make_response(jsonify(dict(ok=True)))
 
@@ -27,7 +27,7 @@ def set_cookies():
     return rs
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.debug = True
     app.run(
         port=5001,
