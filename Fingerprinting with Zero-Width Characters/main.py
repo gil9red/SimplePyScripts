@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Fingerprinting with Zero-Width Characters
@@ -23,10 +23,10 @@ __author__ = 'ipetrash'
 # const zeroWidthNoBreakSpace = '\uFEFF'; // 65279
 
 
-ZERO_WIDTH_SPACE = '\u200B'  # 8203
-ZERO_WIDTH_NON_JOINER = '\u200C'  # 8204
-ZERO_WIDTH_JOINER = '\u200D'  # 8205
-ZERO_WIDTH_NO_BREAK_SPACE = '\uFEFF'  # 65279
+ZERO_WIDTH_SPACE = "\u200B"  # 8203
+ZERO_WIDTH_NON_JOINER = "\u200C"  # 8204
+ZERO_WIDTH_JOINER = "\u200D"  # 8205
+ZERO_WIDTH_NO_BREAK_SPACE = "\uFEFF"  # 65279
 
 
 def to_binary(c: str) -> str:
@@ -34,16 +34,16 @@ def to_binary(c: str) -> str:
 
 
 def text_to_binary(username: str) -> str:
-    return ' '.join(map(to_binary, username))
+    return " ".join(map(to_binary, username))
 
 
 def binary_to_zero_width(binary_username: str) -> str:
     zero_width_items = []
 
     for c in binary_username:
-        if c == '1':
+        if c == "1":
             zero_width = ZERO_WIDTH_SPACE
-        elif c == '0':
+        elif c == "0":
             zero_width = ZERO_WIDTH_NON_JOINER
         else:
             zero_width = ZERO_WIDTH_JOINER
@@ -69,23 +69,29 @@ def zero_width_to_binary(text: str) -> str:
 
     for c in text.split(ZERO_WIDTH_NO_BREAK_SPACE):
         if c == ZERO_WIDTH_SPACE:
-            binary.append('1')
+            binary.append("1")
         elif c == ZERO_WIDTH_NON_JOINER:
-            binary.append('0')
+            binary.append("0")
         else:
-            binary.append(' ')
+            binary.append(" ")
 
-    return ''.join(binary)
+    return "".join(binary)
 
 
 def binary_to_text(text: str) -> str:
-    return ''.join(chr(int(num, 2)) for num in text.split(' '))
+    return "".join(chr(int(num, 2)) for num in text.split(" "))
 
 
 def get_zero_width_from_text(text: str) -> str:
-    return ''.join(
-        c for c in text
-        if c in (ZERO_WIDTH_SPACE, ZERO_WIDTH_NON_JOINER, ZERO_WIDTH_JOINER, ZERO_WIDTH_NO_BREAK_SPACE)
+    return "".join(
+        c
+        for c in text
+        if c in (
+            ZERO_WIDTH_SPACE,
+            ZERO_WIDTH_NON_JOINER,
+            ZERO_WIDTH_JOINER,
+            ZERO_WIDTH_NO_BREAK_SPACE,
+        )
     )
 
 
@@ -102,10 +108,12 @@ def get_username_from_text(text: str) -> str:
     return text_username
 
 
-if __name__ == '__main__':
-    text = "This is some confidential text that you really shouldn't be sharing anywhere else. " \
-           "Это конфиденциальный текст, которым вы действительно не должны делиться."
-    username = 'hello world/привет мир'
+if __name__ == "__main__":
+    text = (
+        "This is some confidential text that you really shouldn't be sharing anywhere else. "
+        "Это конфиденциальный текст, которым вы действительно не должны делиться."
+    )
+    username = "hello world/привет мир"
 
     print(len(text), text)
 
