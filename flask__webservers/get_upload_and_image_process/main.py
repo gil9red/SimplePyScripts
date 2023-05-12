@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import base64
@@ -18,19 +18,19 @@ from commands import invert, gray, invert_gray, pixelate, jackal_jpg, thumbnail,
 
 
 COMMANDS = {
-    'invert': invert,
-    'gray': gray,
-    'invert_gray': invert_gray,
-    'pixelate': pixelate,
-    'pixelate16': lambda img: pixelate(img, 16),
-    'pixelate32': lambda img: pixelate(img, 32),
-    'pixelate48': lambda img: pixelate(img, 48),
-    'jackal_jpg': jackal_jpg,
-    'thumbnail32': lambda img: thumbnail(img, (32, 32)),
-    'thumbnail64': lambda img: thumbnail(img, (64, 64)),
-    'thumbnail128': lambda img: thumbnail(img, (128, 129)),
-    'blur': blur,
-    'blur5': lambda img: blur(img, 5)
+    "invert": invert,
+    "gray": gray,
+    "invert_gray": invert_gray,
+    "pixelate": pixelate,
+    "pixelate16": lambda img: pixelate(img, 16),
+    "pixelate32": lambda img: pixelate(img, 32),
+    "pixelate48": lambda img: pixelate(img, 48),
+    "jackal_jpg": jackal_jpg,
+    "thumbnail32": lambda img: thumbnail(img, (32, 32)),
+    "thumbnail64": lambda img: thumbnail(img, (64, 64)),
+    "thumbnail128": lambda img: thumbnail(img, (128, 129)),
+    "blur": blur,
+    "blur5": lambda img: blur(img, 5),
 }
 
 
@@ -39,7 +39,7 @@ def img_to_base64_html(file_name__or__bytes__or__file_object):
     arg = file_name__or__bytes__or__file_object
 
     if type(arg) == str:
-        with open(arg, mode='rb') as f:
+        with open(arg, mode="rb") as f:
             img_bytes = f.read()
 
     elif type(arg) == bytes:
@@ -51,10 +51,10 @@ def img_to_base64_html(file_name__or__bytes__or__file_object):
     bytes_io = io.BytesIO(img_bytes)
     img = Image.open(bytes_io)
 
-    img_base64 = base64.b64encode(img_bytes).decode('utf-8')
+    img_base64 = base64.b64encode(img_bytes).decode("utf-8")
     # print(img_base64)
 
-    return 'data:image/{};base64,'.format(img.format.lower()) + img_base64
+    return f"data:image/{img.format.lower()};base64,{img_base64}"
 
 
 app = Flask(__name__)
@@ -64,27 +64,28 @@ app = Flask(__name__)
 # ensure that independent of the hash seed of the dictionary the return value will be consistent to not trash external
 # HTTP caches. You can override the default behavior by changing this variable. This is not recommended but might give
 # you a performance improvement on the cost of cacheability.
-app.config['JSON_SORT_KEYS'] = False
+app.config["JSON_SORT_KEYS"] = False
 
 logging.basicConfig(level=logging.DEBUG)
 
 
-LAST_IMAGE = 'last_image.jpg'
+LAST_IMAGE = "last_image.jpg"
 
 
 def save_last_image(file_data):
-    with open(LAST_IMAGE, 'wb') as f:
+    with open(LAST_IMAGE, "wb") as f:
         f.write(file_data)
 
 
 def load_last_image():
-    with open(LAST_IMAGE, 'rb') as f:
+    with open(LAST_IMAGE, "rb") as f:
         return f.read()
 
 
-@app.route('/')
+@app.route("/")
 def index():
-    return render_template_string('''\
+    return render_template_string(
+        """\
 <html>
     <head>
         <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
@@ -279,70 +280,72 @@ def index():
         </script>
     </body>
 </html>
-''', commands=COMMANDS)
+""",
+        commands=COMMANDS,
+    )
 
 
-@app.route("/upload_file", methods=['POST'])
+@app.route("/upload_file", methods=["POST"])
 def upload_file():
     print(request.files)
 
     # check if the post request has the file part
-    if 'file' not in request.files:
-        return redirect('/')
+    if "file" not in request.files:
+        return redirect("/")
 
-    file = request.files['file']
+    file = request.files["file"]
     file_data = file.stream.read()
 
     save_last_image(file_data)
 
     return jsonify({
-        'img_original': img_to_base64_html(file_data),
-        'img_process': None,
+        "img_original": img_to_base64_html(file_data),
+        "img_process": None,
     })
 
 
-@app.route("/upload_url", methods=['POST'])
+@app.route("/upload_url", methods=["POST"])
 def upload_url():
     print(request.form)
 
-    if 'url' not in request.form:
-        return redirect('/')
+    if "url" not in request.form:
+        return redirect("/")
 
-    url = request.form['url']
+    url = request.form["url"]
     file_data = requests.get(url).content
 
     save_last_image(file_data)
 
     return jsonify({
-        'img_original': img_to_base64_html(file_data),
-        'img_process': None,
+        "img_original": img_to_base64_html(file_data),
+        "img_process": None,
     })
 
 
-@app.route("/image_process", methods=['POST'])
+@app.route("/image_process", methods=["POST"])
 def image_process():
     print(request.form)
-    command = request.form['command']
+    command = request.form["command"]
 
     img_original = load_last_image()
     data_io = io.BytesIO(img_original)
-    img = Image.open(data_io).convert('RGB')
+    img = Image.open(data_io).convert("RGB")
 
     # Получение и вызов функции
     result = COMMANDS[command](img)
 
     data_io = io.BytesIO()
-    result.save(data_io, 'JPEG')
+    result.save(data_io, "JPEG")
 
     img_process = data_io.getvalue()
 
     return jsonify({
-        'img_original': img_to_base64_html(img_original),
-        'img_process': img_to_base64_html(img_process),
+        "img_original": img_to_base64_html(img_original),
+        "img_process": img_to_base64_html(img_process),
     })
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.debug = True
 
     # Localhost
