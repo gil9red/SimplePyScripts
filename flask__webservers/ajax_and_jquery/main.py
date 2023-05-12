@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
-
-from flask import Flask, render_template_string, request, jsonify
-app = Flask(__name__)
 
 import logging
+from datetime import datetime
+
+from flask import Flask, render_template_string, request, jsonify
+
+
+app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 
 @app.route("/")
 def index():
-    return render_template_string('''\
+    return render_template_string(
+        """\
 <html>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
@@ -78,10 +82,11 @@ def index():
         <p id="out_get_text"></p>
 
     </body>
-</html>''')
+</html>"""
+    )
 
 
-@app.route("/post_method", methods=['POST'])
+@app.route("/post_method", methods=["POST"])
 def post_method():
     data = request.get_json()
     print(data)
@@ -91,7 +96,6 @@ def post_method():
 
 @app.route("/get_method")
 def get_method():
-    from datetime import datetime
     data = datetime.today()
     print(data)
 

@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import logging
-
 from flask import Flask, jsonify, render_template
 
 
@@ -36,15 +35,15 @@ DATA = [
                 "children": [
                     {
                         "title": "Потомок Потомка 1",
-                        "url": "http://domain.com/url2/child1/child2/"
+                        "url": "http://domain.com/url2/child1/child2/",
                     },
                     {
                         "title": "Потомок Потомка 2",
-                        "url": "http://domain.com/url2/child1/child3/"
-                    }
-                ]
-            }
-        ]
+                        "url": "http://domain.com/url2/child1/child3/",
+                    },
+                ],
+            },
+        ],
     },
     {
         "title": "Родитель 3",
@@ -53,9 +52,9 @@ DATA = [
 ]
 
 
-@app.route('/')
+@app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
 
 @app.route("/json/")
@@ -63,7 +62,7 @@ def get_json():
     return jsonify(DATA)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.debug = True
 
     # Localhost
