@@ -80,7 +80,7 @@ def loads_json(file_obj: BinaryIO) -> dict:
 
 
 def dumps_json(file_obj: BinaryIO, json_data: dict):
-    data = json.dumps(json_data).encode('utf-8')
+    data = json.dumps(json_data).encode("utf-8")
     compressed = compress_data(data)
 
     file_obj.write(compressed)
@@ -88,33 +88,37 @@ def dumps_json(file_obj: BinaryIO, json_data: dict):
 
 if __name__ == "__main__":
     from argparse import ArgumentParser
+
     argparser = ArgumentParser(description="MozLz4a compression/decompression utility")
     argparser.add_argument(
-        "-d", "--decompress", "--uncompress",
+        "-d",
+        "--decompress",
+        "--uncompress",
         action="store_true",
-        help="Decompress the input file instead of compressing it."
+        help="Decompress the input file instead of compressing it.",
     )
-    argparser.add_argument(
-        "in_file",
-        help="Path to input file."
-    )
-    argparser.add_argument(
-        "out_file",
-        help="Path to output file."
-    )
+    argparser.add_argument("in_file", help="Path to input file.")
+    argparser.add_argument("out_file", help="Path to output file.")
 
     parsed_args = argparser.parse_args()
 
     try:
         in_file = open(parsed_args.in_file, "rb")
     except IOError as e:
-        print("Could not open input file `%s' for reading: %s" % (parsed_args.in_file, e), file=sys.stderr)
+        print(
+            "Could not open input file `%s' for reading: %s" % (parsed_args.in_file, e),
+            file=sys.stderr,
+        )
         sys.exit(2)
-    
+
     try:
         out_file = open(parsed_args.out_file, "wb")
     except IOError as e:
-        print("Could not open output file `%s' for writing: %s" % (parsed_args.out_file, e), file=sys.stderr)
+        print(
+            "Could not open output file `%s' for writing: %s"
+            % (parsed_args.out_file, e),
+            file=sys.stderr,
+        )
         sys.exit(3)
 
     try:
@@ -123,13 +127,19 @@ if __name__ == "__main__":
         else:
             data = compress(in_file)
     except Exception as e:
-        print("Could not compress/decompress file `%s': %s" % (parsed_args.in_file, e), file=sys.stderr)
+        print(
+            "Could not compress/decompress file `%s': %s" % (parsed_args.in_file, e),
+            file=sys.stderr,
+        )
         sys.exit(4)
 
     try:
         out_file.write(data)
     except IOError as e:
-        print("Could not write to output file `%s': %s" % (parsed_args.out_file, e), file=sys.stderr)
+        print(
+            "Could not write to output file `%s': %s" % (parsed_args.out_file, e),
+            file=sys.stderr,
+        )
         sys.exit(5)
     finally:
         out_file.close()

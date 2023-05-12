@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import io
@@ -18,7 +18,7 @@ sys.path.append(str(DIR.parent))
 import mozlz4a
 
 
-FILE_TEST = DIR / 'recovery.jsonlz4'
+FILE_TEST = DIR / "recovery.jsonlz4"
 
 
 class TestAll(unittest.TestCase):
@@ -27,7 +27,7 @@ class TestAll(unittest.TestCase):
         self.assertTrue(FILE_TEST.read_bytes())
 
     def test_decompress_compress(self):
-        with open(FILE_TEST, 'rb') as f:
+        with open(FILE_TEST, "rb") as f:
             expected_data = mozlz4a.decompress(f)
 
         bytes_io = io.BytesIO(expected_data)
@@ -39,7 +39,7 @@ class TestAll(unittest.TestCase):
         self.assertEqual(expected_data, data)
 
     def test_compress_decompress_data(self):
-        expected_data = str(uuid.uuid4()).encode('utf-8')
+        expected_data = str(uuid.uuid4()).encode("utf-8")
 
         compressed_data = mozlz4a.compress_data(expected_data)
         data = mozlz4a.decompress_data(compressed_data)
@@ -47,7 +47,7 @@ class TestAll(unittest.TestCase):
         self.assertEqual(expected_data, data)
 
     def test_json(self):
-        with open(FILE_TEST, 'rb') as f:
+        with open(FILE_TEST, "rb") as f:
             expected_json_data = mozlz4a.loads_json(f)
 
         bytes_io = io.BytesIO()
@@ -59,5 +59,5 @@ class TestAll(unittest.TestCase):
         self.assertEqual(expected_json_data, json_data)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
