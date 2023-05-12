@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -15,9 +15,9 @@ from common import get_logger
 from config import file_name_session
 
 
-log = get_logger(__file__, DIR / 'logs')
+log = get_logger(__file__, DIR / "logs")
 
 
-log.info('Start')
+log.info("Start")
 api.close_duplicate_tabs(file_name_session, log)
-log.info('Finish')
+log.info("Finish")
