@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import json
@@ -11,7 +11,7 @@ import sys
 from flask import Flask, render_template_string
 
 # Для импорта common.py
-sys.path.append('..')
+sys.path.append("..")
 from common import generate_table
 
 
@@ -25,7 +25,8 @@ def index():
     items = generate_table(10)
     items = json.dumps(items, ensure_ascii=False)
 
-    return render_template_string("""\
+    return render_template_string(
+        """\
 <html>
 <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
@@ -84,10 +85,12 @@ def index():
 
 </body>
 </html>
-    """, items=items)
+    """,
+        items=items,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.debug = True
 
     # Localhost

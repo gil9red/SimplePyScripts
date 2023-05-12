@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import logging
@@ -10,7 +10,7 @@ import sys
 from flask import Flask, render_template_string, jsonify
 
 # Для импорта common.py
-sys.path.append('..')
+sys.path.append("..")
 from common import generate_table
 
 
@@ -21,7 +21,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/")
 def index():
-    return render_template_string("""\
+    return render_template_string(
+        """\
 <html>
 <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
@@ -95,7 +96,8 @@ def index():
     
 </body>
 </html>
-    """)
+    """
+    )
 
 
 @app.route("/get_table")
@@ -105,7 +107,7 @@ def get_table():
     return jsonify(items)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.debug = True
 
     # Localhost
