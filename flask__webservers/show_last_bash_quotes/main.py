@@ -1,37 +1,35 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
+import logging
 import re
+import traceback
+
+import requests
+
+from bs4 import BeautifulSoup
+from flask import Flask, render_template_string
 
 
 def today_quotes(soup):
     # Узнаем количество сегодняшних цитат
-    tag = soup.find(attrs=dict(id='stats'))
+    tag = soup.find(attrs=dict(id="stats"))
 
-    match = re.search('сегодня (\d+),', tag.text)
+    match = re.search(r"сегодня (\d+),", tag.text)
     return int(match.group(1))
 
 
-from flask import Flask, render_template_string
 app = Flask(__name__)
-
-import logging
 logging.basicConfig(level=logging.DEBUG)
-
-
-import requests
-from bs4 import BeautifulSoup
-
-import traceback
 
 
 @app.route("/")
 def index():
     try:
-        rs = requests.get('http://bash.im')
+        rs = requests.get("http://bash.im")
         soup = BeautifulSoup(rs.text, "lxml")
 
         number = today_quotes(soup)
@@ -48,7 +46,8 @@ def index():
             print(i, text)
             quotes.append(text)
 
-        return render_template_string('''\
+        return render_template_string(
+            """\
         <html>
         <head><title>Новые за день цитаты bash.im</title></head>
         <body>
@@ -68,11 +67,14 @@ def index():
         {% endif %}
 
         </body>
-        </html>''', number=number, item_list=quotes)
+        </html>""",
+            number=number,
+            item_list=quotes,
+        )
 
     except BaseException as e:
-        print('Error: {}\n\n{}'.format(e, traceback.format_exc()))
-        return 'Error: ' + str(e)
+        print("Error: {}\n\n{}".format(e, traceback.format_exc()))
+        return "Error: " + str(e)
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """Чтение из docx файла таблицы меню и отображении таблицы на веб странице.
@@ -10,17 +10,18 @@ __author__ = 'ipetrash'
 """
 
 
-from flask import Flask, render_template_string
-app = Flask(__name__)
-
 import logging
+import re
+
+from docx import Document
+from flask import Flask, render_template_string
+
+
+app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 # Регулярка для поиска последовательностей пробелов: от двух подряд и более
-import re
-multi_space_pattern = re.compile(r'[ ]{2,}')
-
-from docx import Document
+multi_space_pattern = re.compile(r"[ ]{2,}")
 
 
 def get_rows_lunch_menu():
@@ -31,16 +32,19 @@ def get_rows_lunch_menu():
     for table in document.tables:
         # Перебор начинается со второй строки, потому что, первая строка таблицы -- это строка "Обеденное меню"
         for row in table.rows[1:]:
-            name, weight, price = [multi_space_pattern.sub(' ', i.text.strip()) for i in row.cells]
+            name, weight, price = [
+                multi_space_pattern.sub(" ", i.text.strip())
+                for i in row.cells
+            ]
 
             if name == weight == price or (not weight or not price):
                 name = name.title()
                 logging.debug(name)
-                rows.append((name, ))
+                rows.append((name,))
                 continue
 
             rows.append((name, weight, price))
-            logging.debug('{} {} {}'.format(name, weight, price))
+            logging.debug(f"{name} {weight} {price}")
 
         # Таблицы в меню дублируются
         break
@@ -52,7 +56,8 @@ def get_rows_lunch_menu():
 def index():
     rows = get_rows_lunch_menu()
 
-    return render_template_string('''\
+    return render_template_string(
+        """\
     <html>
     <head>
         <title>Обеденное меню</title>
@@ -82,10 +87,12 @@ def index():
 
     </body>
     </html>
-    ''', rows=rows)
+    """,
+        rows=rows,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Localhost
     app.run(port=5001)
 
