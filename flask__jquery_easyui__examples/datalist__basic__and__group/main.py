@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: http://www.jeasyui.com/demo/main/index.php?plugin=DataList&theme=default
 # SOURCE: http://www.jeasyui.com/documentation/datalist.php
 
 
-from flask import Flask, render_template_string, jsonify
-app = Flask(__name__, static_folder='../static')
-
 import logging
+from flask import Flask, render_template_string, jsonify
+
+
+app = Flask(__name__, static_folder="../static")
 logging.basicConfig(level=logging.DEBUG)
 
 
 @app.route("/")
 def index():
-    return render_template_string("""\
+    return render_template_string(
+        """\
 <html>
 <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
@@ -144,7 +146,8 @@ def index():
     </script>
 </body>
 </html>
-    """)
+    """
+    )
 
 
 @app.route("/datalist_data.json")
@@ -162,11 +165,11 @@ def get_datalist_data():
         {"text": "Logitech Gaming Keyboard G110", "group": "Keyboard"},
         {"text": "Nikon COOLPIX L26 16.1 MP", "group": "Camera"},
         {"text": "Canon PowerShot A1300", "group": "Camera"},
-        {"text": "Canon PowerShot A2300", "group": "Camera"}
+        {"text": "Canon PowerShot A2300", "group": "Camera"},
     ])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.debug = True
 
     # Localhost

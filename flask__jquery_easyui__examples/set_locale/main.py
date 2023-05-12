@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: http://www.jeasyui.com/tutorial/index.php
 # SOURCE: http://www.jeasyui.com/tutorial/app/crud.php
 
 
-from flask import Flask, render_template_string
-app = Flask(__name__, static_folder='../static')
-
 import logging
+from flask import Flask, render_template_string
+
+
+app = Flask(__name__, static_folder="../static")
 logging.basicConfig(level=logging.DEBUG)
 
 
 @app.route("/")
 def index():
-    return render_template_string("""\
+    return render_template_string(
+        """\
 <html>
 <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
@@ -45,10 +47,11 @@ def index():
     <div class="easyui-calendar" style="width:250px;height:250px;"></div>
 </body>
 </html>
-    """)
+    """
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # app.debug = True
 
     # Localhost
