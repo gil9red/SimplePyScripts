@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
-
-from flask import Flask, request
-app = Flask(__name__)
 
 import logging
+from flask import Flask, request
+
+
+app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -47,13 +48,13 @@ def print_args():
     print(args)
 
     text = '<table border="1px" width="300px">'
-    text += '<caption>URL ARGUMENTS:<caption>'
+    text += "<caption>URL ARGUMENTS:<caption>"
     for k, v in args.items():
-        text += f'<tr><td>{k}</td><td>{v}</td></tr>'
-    text += '</table>'
+        text += f"<tr><td>{k}</td><td>{v}</td></tr>"
+    text += "</table>"
 
     return text
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()

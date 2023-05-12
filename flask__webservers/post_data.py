@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
-
-from flask import Flask, request
-app = Flask(__name__)
 
 import logging
+from flask import Flask, request
+
+
+app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -38,13 +39,13 @@ callAjax('/print_data', data, function(responseText) {
 """
 
 
-@app.route("/print_data", methods=['POST'])
+@app.route("/print_data", methods=["POST"])
 def print_data():
     data = request.data
-    print('data:', data)
+    print("data:", data)
 
     return data
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()

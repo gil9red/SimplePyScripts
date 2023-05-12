@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import logging
@@ -22,7 +22,7 @@ text = "Hello World!"
 
 def go():
     time.sleep(2)
-    print('\n')
+    print("\n")
 
     global text
 
@@ -35,7 +35,7 @@ def index():
     return text
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     thread = Thread(target=go)
     thread.start()
 
