@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://flask-restful.readthedocs.io/en/latest/quickstart.html#full-example
@@ -16,9 +16,9 @@ api = Api(app)
 
 
 TODOS = {
-    'todo1': {'task': 'build an API'},
-    'todo2': {'task': '?????'},
-    'todo3': {'task': 'profit!'},
+    "todo1": {"task": "build an API"},
+    "todo2": {"task": "?????"},
+    "todo3": {"task": "profit!"},
 }
 
 
@@ -28,12 +28,12 @@ def abort_if_todo_doesnt_exist(todo_id):
 
 
 parser = reqparse.RequestParser()
-parser.add_argument('task')
+parser.add_argument("task")
 
 
 class Index(Resource):
     def get(self):
-        return {'total': len(TODOS)}
+        return {"total": len(TODOS)}
 
 
 class Todo(Resource):
@@ -52,7 +52,7 @@ class Todo(Resource):
 
     def put(self, todo_id):
         args = parser.parse_args()
-        task = {'task': args['task']}
+        task = {"task": args["task"]}
         TODOS[todo_id] = task
         return task, 201
 
@@ -67,15 +67,15 @@ class TodoList(Resource):
 
     def post(self):
         args = parser.parse_args()
-        todo_id = f'todo{len(TODOS.keys()) + 1}'
-        TODOS[todo_id] = {'task': args['task']}
+        todo_id = f"todo{len(TODOS.keys()) + 1}"
+        TODOS[todo_id] = {"task": args["task"]}
         return TODOS[todo_id], 201
 
 
-api.add_resource(Index, '/')
-api.add_resource(TodoList, '/todos')
-api.add_resource(Todo, '/todos/<todo_id>')
+api.add_resource(Index, "/")
+api.add_resource(TodoList, "/todos")
+api.add_resource(Todo, "/todos/<todo_id>")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)

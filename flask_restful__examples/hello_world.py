@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://flask-restful.readthedocs.io/en/latest/quickstart.html#a-minimal-api
@@ -19,17 +19,17 @@ api = Api(app)
 
 class HelloWorld(Resource):
     def get(self):
-        return {'hello': 'world'}
+        return {"hello": "world"}
 
 
 class Echo(Resource):
     def get(self, text: str):
-        return {'echo': text}
+        return {"echo": text}
 
 
-api.add_resource(HelloWorld, '/')
-api.add_resource(Echo, '/echo/<string:text>')
+api.add_resource(HelloWorld, "/")
+api.add_resource(Echo, "/echo/<string:text>")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
