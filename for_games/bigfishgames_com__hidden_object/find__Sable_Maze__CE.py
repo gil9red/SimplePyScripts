@@ -4,11 +4,10 @@
 __author__ = "ipetrash"
 
 
-from typing import List
 from get_all_games import get_all_games
 
 
-def get_games() -> List[str]:
+def get_games() -> list[str]:
     prefix = "Sable Maze".upper()
     postfix = "Collector's Edition".upper()
 
