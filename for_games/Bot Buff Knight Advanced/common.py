@@ -48,34 +48,34 @@ def find_contours(image_source_hsv, hsv_min, hsv_max):
     thresholded_image = cv2.inRange(
         thresholded_image,
         np.array(hsv_min, np.uint8),
-        np.array(hsv_max, np.uint8)
+        np.array(hsv_max, np.uint8),
     )
 
     # Убираем шум
     thresholded_image = cv2.erode(
         thresholded_image,
-        cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+        cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5)),
     )
     thresholded_image = cv2.dilate(
         thresholded_image,
-        cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+        cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5)),
     )
 
     # Замыкаем оставшиеся крупные объекты
     thresholded_image = cv2.dilate(
         thresholded_image,
-        cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+        cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5)),
     )
     thresholded_image = cv2.erode(
         thresholded_image,
-        cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+        cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5)),
     )
 
     # Находим контуры
     contours, _ = cv2.findContours(
         thresholded_image,
         cv2.RETR_EXTERNAL,
-        cv2.CHAIN_APPROX_SIMPLE
+        cv2.CHAIN_APPROX_SIMPLE,
     )
 
     return contours

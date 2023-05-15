@@ -147,19 +147,34 @@ for file_name in glob.glob("screenshots__Buff Knight Advanced/*.png"):
         draw_rects(img_with_rect, rects_fairy, (255, 255, 255))
 
         cv2.putText(
-            img_with_rect, f"blue {rects_blue}",
-            (10, 500 + 50), cv2.FONT_HERSHEY_SIMPLEX,
-            1, (255, 255, 255), 2, cv2.LINE_AA
+            img_with_rect,
+            f"blue {rects_blue}",
+            (10, 500 + 50),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (255, 255, 255),
+            2,
+            cv2.LINE_AA,
         )
         cv2.putText(
-            img_with_rect, f"orange {rects_orange}",
-            (10, 500 + 100), cv2.FONT_HERSHEY_SIMPLEX,
-            1, (255, 255, 255), 2, cv2.LINE_AA
+            img_with_rect,
+            f"orange {rects_orange}",
+            (10, 500 + 100),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (255, 255, 255),
+            2,
+            cv2.LINE_AA,
         )
         cv2.putText(
-            img_with_rect, f"fairy {rects_fairy}",
-            (10, 500 + 150), cv2.FONT_HERSHEY_SIMPLEX,
-            1, (255, 255, 255), 2, cv2.LINE_AA
+            img_with_rect,
+            f"fairy {rects_fairy}",
+            (10, 500 + 150),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (255, 255, 255),
+            2,
+            cv2.LINE_AA,
         )
 
     finally:
