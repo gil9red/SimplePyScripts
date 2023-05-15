@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://docs.python.org/3.7/library/fnmatch.html#fnmatch.fnmatch
@@ -10,9 +10,9 @@ __author__ = 'ipetrash'
 import fnmatch
 
 
-file_name = 'README.md'
-patterns = ['*.md', 'READ*', 'RE*md', 'RE??ME.*', 'README.*', 'README.md']
-template_string = '{} is {:<%s} -> {}' % len(max(patterns, key=len))
+file_name = "README.md"
+patterns = ["*.md", "READ*", "RE*md", "RE??ME.*", "README.*", "README.md"]
+template_string = "{} is {:<%s} -> {}" % len(max(patterns, key=len))
 
 for p in patterns:
     print(template_string.format(file_name, p, fnmatch.fnmatch(file_name, p)))
@@ -25,7 +25,7 @@ for p in patterns:
 
 print()
 
-file_name = 'README.txt'
+file_name = "README.txt"
 for p in patterns:
     print(template_string.format(file_name, p, fnmatch.fnmatch(file_name, p)))
 # README.md is *.md      -> True
