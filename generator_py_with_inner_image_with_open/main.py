@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
-
-
-file_name = 'Penguins.jpg'
-with open(file_name, 'rb') as f:
-    img_bytes = f.read()
+__author__ = "ipetrash"
 
 
 import base64
-img_base64 = base64.b64encode(img_bytes).decode('utf-8')
 
 
-with open('image_png.py', 'w', encoding='utf-8') as f:
-    f.write('''\
+file_name = "Penguins.jpg"
+with open(file_name, "rb") as f:
+    img_bytes = f.read()
+
+img_base64 = base64.b64encode(img_bytes).decode("utf-8")
+
+
+with open("image_png.py", "w", encoding="utf-8") as f:
+    f.write(
+        """\
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -37,8 +39,11 @@ def save_and_run():
 
     os.startfile(NEW_FILE_NAME)
 
-    '''.format(file_name, img_base64))
+    """.format(
+            file_name, img_base64
+        )
+    )
 
-
+# Скрипт создается строкой выше в open
 import image_png
 image_png.save_and_run()
