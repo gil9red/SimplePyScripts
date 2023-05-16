@@ -16,13 +16,13 @@ img_base64 = base64.b64encode(img_bytes).decode("utf-8")
 
 with open("image_png.py", "w", encoding="utf-8") as f:
     f.write(
-        """\
+        f"""\
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 
-FILE_NAME_IMAGE = "{}"
-IMAGE = "{}"
+FILE_NAME_IMAGE = "{file_name}"
+IMAGE = "{img_base64}"
 
 import base64
 img_bytes = base64.b64decode(IMAGE)
@@ -38,10 +38,7 @@ def save_and_run():
         f.write(img_bytes)
 
     os.startfile(NEW_FILE_NAME)
-
-    """.format(
-            file_name, img_base64
-        )
+    """
     )
 
 # Скрипт создается строкой выше в open
