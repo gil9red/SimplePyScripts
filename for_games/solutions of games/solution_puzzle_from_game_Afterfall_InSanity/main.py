@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import copy
-
 from dataclasses import dataclass
-from typing import List
 
 
 @dataclass
@@ -16,7 +14,7 @@ class Button:
     is_clicked: bool = False
 
 
-def activate(buttons: List[Button], index: int):
+def activate(buttons: list[Button], index: int):
     button = buttons[index]
     if button.is_clicked:
         return
@@ -35,11 +33,11 @@ def activate(buttons: List[Button], index: int):
         buttons[i].value = not buttons[i].value
 
 
-def is_win(buttons: List[Button]) -> bool:
+def is_win(buttons: list[Button]) -> bool:
     return all(x.value for x in buttons)
 
 
-def run(init_buttons: List[Button]):
+def run(init_buttons: list[Button]):
     for start_index in range(len(init_buttons)):
         seq = [start_index]
 
@@ -61,6 +59,6 @@ def run(init_buttons: List[Button]):
 INIT_BUTTONS = [Button(value=False), Button(value=True), Button(value=False)]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run(INIT_BUTTONS)
     # [2, 0]
