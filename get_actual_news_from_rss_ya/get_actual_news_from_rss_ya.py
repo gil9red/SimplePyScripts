@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import feedparser
 
 
 def get_news() -> list:
-    import feedparser
-    rss = feedparser.parse('https://news.yandex.ru/games.rss')
+    rss = feedparser.parse("https://news.yandex.ru/games.rss")
     return [(entry.title, entry.id) for entry in rss.entries]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    import time
+
     current_news = []
 
     while True:
@@ -33,5 +37,4 @@ if __name__ == '__main__':
             current_news = new_feeds
 
         # Every 5 minutes
-        import time
         time.sleep(60 * 5)

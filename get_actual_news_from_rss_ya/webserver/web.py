@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from collections import defaultdict
@@ -14,14 +14,14 @@ from common import get_news_list, get_news_list_and_mark_as_read, reset_all_is_r
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route("/")
 def index():
     # return "Тут ничего нет интересного"
-    return redirect('/get_news_list?last=15')
+    return redirect("/get_news_list?last=15")
 
 
-@app.route('/get_news_list', defaults={'interest': None})
-@app.route('/get_news_list/<interest>')
+@app.route("/get_news_list", defaults={"interest": None})
+@app.route("/get_news_list/<interest>")
 def get_news_list(interest=None):
     """
     Функция возвращает новости.
@@ -31,7 +31,7 @@ def get_news_list(interest=None):
 
     """
 
-    last = request.args.get('last')
+    last = request.args.get("last")
     if last:
         last = int(last)
 
@@ -40,19 +40,19 @@ def get_news_list(interest=None):
 
     for title, url, interest in news_list:
         interest_by_news_list[interest].append({
-            'title': title,
-            'url': url,
+            "title": title,
+            "url": url,
         })
 
     return jsonify({
-        'items': interest_by_news_list,
-        'count': len(news_list),
-        'total': total,
+        "items": interest_by_news_list,
+        "count": len(news_list),
+        "total": total,
     })
 
 
-@app.route('/get_news_list_and_mark_as_read', defaults={'interest': None})
-@app.route('/get_news_list_and_mark_as_read/<interest>')
+@app.route("/get_news_list_and_mark_as_read", defaults={"interest": None})
+@app.route("/get_news_list_and_mark_as_read/<interest>")
 def get_news_list_and_mark_as_read(interest=None):
     """
     Функция возвращает непрочитанные еще новости и помечает их как помеченные.
@@ -61,7 +61,7 @@ def get_news_list_and_mark_as_read(interest=None):
     :return:
     """
 
-    count = request.args.get('count')
+    count = request.args.get("count")
     if count:
         count = int(count)
 
@@ -70,18 +70,18 @@ def get_news_list_and_mark_as_read(interest=None):
 
     for title, url, interest in news_list:
         interest_by_news_list[interest].append({
-            'title': title,
-            'url': url,
+            "title": title,
+            "url": url,
         })
 
     return jsonify({
-        'items': interest_by_news_list,
-        'count': len(news_list),
-        'total': total,
+        "items": interest_by_news_list,
+        "count": len(news_list),
+        "total": total,
     })
 
 
-@app.route('/reset_all_is_read')
+@app.route("/reset_all_is_read")
 def reset_all_is_read():
     """
     Функция сбрасывает у всех новостей флаг is_read -- то, что они прочитаны.
@@ -91,7 +91,7 @@ def reset_all_is_read():
 
     reset_all_is_read()
 
-    return jsonify({'status': 'ok'})
+    return jsonify({"status": "ok"})
 
 
 if __name__ == "__main__":

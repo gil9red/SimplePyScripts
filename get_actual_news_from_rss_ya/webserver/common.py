@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # # При выводе юникодных символов в консоль винды
@@ -14,11 +14,13 @@ __author__ = 'ipetrash'
 #     sys.stderr = codecs.getwriter(sys.stderr.encoding)(sys.stderr.detach(), 'backslashreplace')
 
 
-DB_FILE_NAME = 'database.sqlite'
+import sqlite3
+
+
+DB_FILE_NAME = "database.sqlite"
 
 
 def create_connect():
-    import sqlite3
     return sqlite3.connect(DB_FILE_NAME)
 
 
@@ -26,7 +28,8 @@ def init_db():
     # Создание базы и таблицы
     connect = create_connect()
     try:
-        connect.executescript('''
+        connect.executescript(
+            """
             CREATE TABLE IF NOT EXISTS News (
                 id INTEGER PRIMARY KEY,
                 title TEXT NOT NULL,
@@ -36,7 +39,8 @@ def init_db():
 
                 CONSTRAINT news_url_unique UNIQUE (url)
             );
-        ''')
+        """
+        )
 
         connect.commit()
 
@@ -77,7 +81,10 @@ def append_list_news(list_news: [str, str], interest: str):
             return
 
         print('Добавляю новость "{}" ({})'.format(title, interest))
-        connect.execute("INSERT OR IGNORE INTO News (title, url, interest) VALUES (?,?,?)", (title, url, interest))
+        connect.execute(
+            "INSERT OR IGNORE INTO News (title, url, interest) VALUES (?,?,?)",
+            (title, url, interest),
+        )
 
     try:
         for title, url in list_news:
@@ -89,14 +96,18 @@ def append_list_news(list_news: [str, str], interest: str):
         connect.close()
 
 
-def get_news_list(interest: str=None, last: int=None) -> ([str, str, str], int):
+def get_news_list(interest: str = None, last: int = None) -> ([str, str, str], int):
     connect = create_connect()
 
     try:
         if interest:
-            news_list = connect.execute("SELECT title, url, interest from News where interest = ?", (interest,)).fetchall()
+            news_list = connect.execute(
+                "SELECT title, url, interest from News where interest = ?", (interest,)
+            ).fetchall()
         else:
-            news_list = connect.execute("SELECT title, url, interest from News").fetchall()
+            news_list = connect.execute(
+                "SELECT title, url, interest from News"
+            ).fetchall()
 
         total = len(news_list)
 
@@ -110,15 +121,21 @@ def get_news_list(interest: str=None, last: int=None) -> ([str, str, str], int):
         connect.close()
 
 
-def get_news_list_and_mark_as_read(interest: str=None, count: int=None) -> ([str, str, str], int):
+def get_news_list_and_mark_as_read(
+    interest: str = None, count: int = None
+) -> ([str, str, str], int):
     connect = create_connect()
 
     try:
         if interest:
-            news_list = connect.execute("SELECT id, title, url, interest from News where interest = ? and is_read = 0",
-                                        (interest,)).fetchall()
+            news_list = connect.execute(
+                "SELECT id, title, url, interest from News where interest = ? and is_read = 0",
+                (interest,),
+            ).fetchall()
         else:
-            news_list = connect.execute("SELECT id, title, url, interest from News where is_read = 0").fetchall()
+            news_list = connect.execute(
+                "SELECT id, title, url, interest from News where is_read = 0"
+            ).fetchall()
 
         # Всего непрочитанных новостей
         total = len(news_list)
@@ -136,7 +153,9 @@ def get_news_list_and_mark_as_read(interest: str=None, count: int=None) -> ([str
 
         connect.commit()
 
-        return [(title, url, interest) for _id, title, url, interest in news_list], total
+        return [
+            (title, url, interest) for _id, title, url, interest in news_list
+        ], total
 
     finally:
         connect.close()
