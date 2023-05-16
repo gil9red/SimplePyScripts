@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """Скрипт для генерации похожих внешне слов."""
@@ -44,20 +44,20 @@ SIMILAR_SYMBOLS_LIST = [
     # ('x', 'y'),
     # ('Ё', 'E'),
     # ('Ё', 'H'),
-    ('І', 'T'),
-    ('А', 'A'),
+    ("І", "T"),
+    ("А", "A"),
     # ('Б', 'В'),
     # ('Б', 'B'),
     # ('В', 'Н'),
     # ('В', 'Ё'),
-    ('В', 'B'),
+    ("В", "B"),
     # ('В', 'E'),
     # ('В', 'H'),
     # ('В', 'P'),
     # ('Е', 'Н'),
     # ('Е', 'Ё'),
     # ('Е', 'B'),
-    ('E', 'Е'),
+    ("E", "Е"),
     # ('Е', 'H'),
     # ('Ж', 'Х'),
     # ('Ж', 'K'),
@@ -65,28 +65,28 @@ SIMILAR_SYMBOLS_LIST = [
     # ('Ж', 'Y'),
     # ('И', 'Й'),
     # ('И', 'H'),
-    ('К', 'K'),
-    ('М', 'M'),
+    ("К", "K"),
+    ("М", "M"),
     # ('Н', 'Ё'),
     # ('Н', 'E'),
-    ('Н', 'H'),
+    ("Н", "H"),
     # ('О', 'С'),
-    ('О', 'O'),
+    ("О", "O"),
     # ('О', 'Q'),
     # ('Р', 'B'),
-    ('Р', 'P'),
-    ('С', 'C'),
-    ('Т', 'T'),
+    ("Р", "P"),
+    ("С", "C"),
+    ("Т", "T"),
     # ('У', 'Ѵ'),
     # ('У', 'V'),
     # ('У', 'U'),
     # ('У', 'Y'),
-    ('Х', 'X'),
+    ("Х", "X"),
     # ('а', 'е'),
     # ('а', 'о'),
     # ('а', 'с'),
     # ('а', 'ё'),
-    ('а', 'a'),
+    ("а", "a"),
     # ('а', 'c'),
     # ('а', 'e'),
     # ('а', 'o'),
@@ -101,7 +101,7 @@ SIMILAR_SYMBOLS_LIST = [
     # ('е', 'ё'),
     # ('е', 'a'),
     # ('е', 'c'),
-    ('e', 'е'),
+    ("e", "е"),
     # ('е', 'o'),
     # ('и', 'й'),
     # ('и', 'м'),
@@ -109,12 +109,12 @@ SIMILAR_SYMBOLS_LIST = [
     # ('о', 'b'),
     # ('о', 'c'),
     # ('о', 'e'),
-    ('о', 'o'),
+    ("о", "o"),
     # ('о', 'p'),
     # ('р', 'c'),
     # ('р', 'o'),
-    ('р', 'p'),
-    ('с', 'c'),
+    ("р", "p"),
+    ("с", "c"),
     # ('с', 'e'),
     # ('с', 'o'),
     # ('с', 'p'),
@@ -123,16 +123,16 @@ SIMILAR_SYMBOLS_LIST = [
     # ('у', 'K'),
     # ('у', 'X'),
     # ('у', 'Y'),
-    ('у', 'y'),
+    ("у", "y"),
     # ('х', 'Ѵ'),
     # ('х', 'X'),
     # ('х', 'k'),
-    ('х', 'x'),
+    ("х", "x"),
     # ('х', 'y'),
     # ('ё', 'e'),
     # ('ё', 'o'),
     # ('ё', 'p'),
-    ('Ѵ', 'V'),
+    ("Ѵ", "V"),
     # ('Ѵ', 'U'),
     # ('Ѵ', 'Y'),
     # ('Ѵ', 'y'),
@@ -142,8 +142,8 @@ SIMILAR_SYMBOLS_LIST = [
 SIMILAR_SYMBOLS_DICT = {k: v for k, v in SIMILAR_SYMBOLS_LIST}
 SIMILAR_SYMBOLS_DICT.update({v: k for k, v in SIMILAR_SYMBOLS_LIST})
 
-text = 'Привет! Большой тупой урод! Cat! Dog! Enot! gil9red! Big Nagibator! Zevs! '
-new_text = ''.join(SIMILAR_SYMBOLS_DICT.get(c, c) for c in text)
+text = "Привет! Большой тупой урод! Cat! Dog! Enot! gil9red! Big Nagibator! Zevs! "
+new_text = "".join(SIMILAR_SYMBOLS_DICT.get(c, c) for c in text)
 
 print(text)
 print(new_text)
@@ -152,11 +152,12 @@ number = 0
 for i in range(len(text)):
     if text[i] != new_text[i]:
         number += 1
-print('Изменено {} символов (всего {} символов, прогресс {:.0%}).'.format(
-    number, len(text), number / len(text)))
-print(' '.join('{: <3}'.format(c) for c in text))
-print(' '.join('{: <3x}'.format(ord(c)) for c in text))
+print(
+    f"Изменено {number} символов (всего {len(text)} символов, прогресс {number / len(text):.0%})."
+)
+print(" ".join(f"{c: <3}" for c in text))
+print(" ".join("{: <3x}".format(ord(c)) for c in text))
 
 print()
-print(' '.join('{: <3}'.format(c) for c in new_text))
-print(' '.join('{: <3x}'.format(ord(c)) for c in new_text))
+print(" ".join(f"{c: <3}" for c in new_text))
+print(" ".join(f"{ord(c): <3x}" for c in new_text))
