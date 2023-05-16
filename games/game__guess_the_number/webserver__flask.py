@@ -1,40 +1,42 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/44d89639620d326ea67f2dfb909545c508259911/game__guess_the_number.py
 
 
-from flask import Flask, render_template_string, request, redirect
-app = Flask(__name__)
-
+import logging
 import random
 
-import logging
+from flask import Flask, render_template_string, request, redirect
+
+
+app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 
 GAME_DATA = {
-    'ADMIN': {
-        'max_n': None,
-        'trying': None,
-        'hidden_num': None,
-        'num': None,
-        'response': '',
-        'end_game': False,
+    "ADMIN": {
+        "max_n": None,
+        "trying": None,
+        "hidden_num": None,
+        "num": None,
+        "response": "",
+        "end_game": False,
     }
 }
 
 
 def get_current_game_data():
-    return GAME_DATA['ADMIN']
+    return GAME_DATA["ADMIN"]
 
 
 @app.route("/")
 def index():
-    return render_template_string('''\
+    return render_template_string(
+        """\
 <html>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
     
@@ -74,59 +76,63 @@ def index():
         <div>{{ game_data }}</div>
         
     </body>
-</html>''', game_data=get_current_game_data())
+</html>""",
+        game_data=get_current_game_data(),
+    )
 
 
-@app.route("/set_max_n", methods=['POST'])
+@app.route("/set_max_n", methods=["POST"])
 def set_max_n():
     print(request.form)
 
-    max_n = int(request.form['max_n'])
+    max_n = int(request.form["max_n"])
     trying = max_n // 10
     hidden_num = random.randint(1, max_n)
 
     game_data = get_current_game_data()
-    game_data['max_n'] = max_n
-    game_data['trying'] = trying
-    game_data['hidden_num'] = hidden_num
+    game_data["max_n"] = max_n
+    game_data["trying"] = trying
+    game_data["hidden_num"] = hidden_num
 
-    return redirect('/')
+    return redirect("/")
 
 
-@app.route("/send_num", methods=['POST'])
+@app.route("/send_num", methods=["POST"])
 def send_num():
     print(request.form)
 
     game_data = get_current_game_data()
 
-    num = int(request.form['num'])
-    hidden_num = int(game_data['hidden_num'])
-    trying = int(game_data['trying'])
+    num = int(request.form["num"])
+    hidden_num = int(game_data["hidden_num"])
+    trying = int(game_data["trying"])
 
     if num == hidden_num:
-        game_data['end_game'] = True
-        game_data['response'] += 'Победа!\n'
-        return redirect('/')
+        game_data["end_game"] = True
+        game_data["response"] += "Победа!\n"
+        return redirect("/")
 
     elif num > hidden_num:
-        game_data['response'] += 'Неа, "?" < "{}"\n'.format(num)
+        game_data["response"] += 'Неа, "?" < "{}"\n'.format(num)
 
     else:
-        game_data['response'] += 'Неа, "?" > "{}"\n'.format(num)
+        game_data["response"] += 'Неа, "?" > "{}"\n'.format(num)
 
     trying -= 1
 
     if trying == 0:
-        game_data['response'] += 'Закончились попытки. Проигрыш!\nЗагаданное число: {}'.format(hidden_num)
-        game_data['end_game'] = True
-        return redirect('/')
+        game_data[
+            "response"
+        ] += "Закончились попытки. Проигрыш!\nЗагаданное число: {}".format(hidden_num)
+        game_data["end_game"] = True
+        return redirect("/")
 
-    game_data['trying'] = trying
+    game_data["trying"] = trying
 
-    return redirect('/')
+    return redirect("/")
 
 
-@app.route("/new_game", methods=['POST'])
+@app.route("/new_game", methods=["POST"])
 def new_game():
     print(request.form)
 
@@ -134,10 +140,10 @@ def new_game():
     for k in game_data:
         game_data[k] = None
 
-    game_data['response'] = ''
-    game_data['end_game'] = False
+    game_data["response"] = ""
+    game_data["end_game"] = False
 
-    return redirect('/')
+    return redirect("/")
 
 
 if __name__ == "__main__":

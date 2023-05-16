@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -18,12 +18,12 @@ import random
 
 
 while True:
-    num = input('Введите максимальное значение диапазона N: ')
+    num = input("Введите максимальное значение диапазона N: ")
 
     if num.isdecimal():
         N = int(num)
         if N <= 0:
-            print('Число должно быть больше 0')
+            print("Число должно быть больше 0")
             continue
 
         break
@@ -33,16 +33,16 @@ while True:
 
 
 trying = N // 10
-print(f'Количество попыток: {trying}\n')
+print(f"Количество попыток: {trying}\n")
 
 hidden_num = random.randint(1, N)
 print('Я загадал число "?"\n')
 
 while True:
-    num = input('Введите число: ')
+    num = input("Введите число: ")
 
     # TODO: Удалить
-    if num == 'show':
+    if num == "show":
         print(hidden_num)
         continue
 
@@ -52,11 +52,11 @@ while True:
 
     num = int(num)
     if num <= 0:
-        print('Число должно быть больше 0')
+        print("Число должно быть больше 0")
         continue
 
     if num == hidden_num:
-        print('Победа!')
+        print("Победа!")
         break
 
     elif num > hidden_num:
@@ -68,7 +68,7 @@ while True:
     trying -= 1
 
     if trying == 0:
-        print(f'Закончились попытки. Проирыш!\nЗагаданное число: {hidden_num}')
+        print(f"Закончились попытки. Проигрыш!\nЗагаданное число: {hidden_num}")
         break
 
-    print(f'Осталось попыток: {trying}\n')
+    print(f"Осталось попыток: {trying}\n")

@@ -1,24 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import random
+import traceback
+import sys
+
 from PyQt5.Qt import *
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -47,7 +48,7 @@ class PageGuessWidget(QWidget):
         self.level = 0
         self.guess_number = 0
 
-        self.pb_prev = QPushButton('Назад')
+        self.pb_prev = QPushButton("Назад")
         self.pb_prev.clicked.connect(self.about_prev.emit)
 
         self.lbl_lives = QLabel()
@@ -71,8 +72,8 @@ class PageGuessWidget(QWidget):
         self._update_states()
 
     def _update_states(self):
-        self.lbl_lives.setText(f'Жизней: {self.lives}')
-        self.lbl_level.setText(f'Уровень: {self.level}')
+        self.lbl_lives.setText(f"Жизней: {self.lives}")
+        self.lbl_level.setText(f"Уровень: {self.level}")
 
     def start_game(self, level: int, lives=10):
         self.lives = lives
@@ -125,7 +126,7 @@ class PageSelectLevelWidget(QWidget):
         super().__init__()
 
         self.grid_layout = QGridLayout()
-        self.grid_layout.addWidget(QLabel('Выбор уровня сложности:'), 0, 0, 1, 2)
+        self.grid_layout.addWidget(QLabel("Выбор уровня сложности:"), 0, 0, 1, 2)
         self._add_levels([
             [25, 50],
             [75, 100],
@@ -144,10 +145,10 @@ class PageSelectLevelWidget(QWidget):
 
         for row, rows in enumerate(levels, start=start_row):
             for col, value in enumerate(rows):
-                _on_clicked = lambda checked, level=value: self.about_select_level.emit(level)
-
                 pb = QPushButton(str(value))
-                pb.clicked.connect(_on_clicked)
+                pb.clicked.connect(
+                    lambda checked, level=value: self.about_select_level.emit(level)
+                )
 
                 self.grid_layout.addWidget(pb, row, col)
 
@@ -156,7 +157,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('Guess the number')
+        self.setWindowTitle("Guess the number")
 
         self.stack_widget = QStackedWidget()
 
@@ -164,7 +165,9 @@ class MainWindow(QMainWindow):
         self.page_select_level.about_select_level.connect(self._on_select_level)
 
         self.page_guess = PageGuessWidget()
-        self.page_guess.about_prev.connect(lambda: self.stack_widget.setCurrentWidget(self.page_select_level))
+        self.page_guess.about_prev.connect(
+            lambda: self.stack_widget.setCurrentWidget(self.page_select_level)
+        )
 
         self.stack_widget.addWidget(self.page_select_level)
         self.stack_widget.addWidget(self.page_guess)
@@ -178,7 +181,7 @@ class MainWindow(QMainWindow):
         self.page_guess.start_game(level)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
