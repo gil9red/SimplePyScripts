@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -36,7 +36,16 @@ class MyLateFigletText(StaticRenderer):
 
 
 class BoardWidget(Frame):
-    def __init__(self, board: Board, screen: Screen, y: int, x: int, height: int, width: int, next_scene: str):
+    def __init__(
+        self,
+        board: Board,
+        screen: Screen,
+        y: int,
+        x: int,
+        height: int,
+        width: int,
+        next_scene: str,
+    ):
         self.y = y
         self.x = x
         self.height = height
@@ -49,9 +58,9 @@ class BoardWidget(Frame):
             x=self.x,
             y=self.y,
             can_scroll=False,
-            name="BoardWidget"
+            name="BoardWidget",
         )
-        self.set_theme('monochrome')
+        self.set_theme("monochrome")
 
         self.board = board
         self.is_fail = False
@@ -85,11 +94,11 @@ class BoardWidget(Frame):
             raise NextScene(self.next_scene)
 
         self.screen.set_title(
-            f'Life. '
-            f'Board: {self.board.rows}x{self.board.cols}. '
-            f'Seed: {self.board.seed}. '
-            f'Generation: {self.board.generation_number}. '
-            f'Living cells: {self.board.count_living_cells}'
+            f"Life. "
+            f"Board: {self.board.rows}x{self.board.cols}. "
+            f"Seed: {self.board.seed}. "
+            f"Generation: {self.board.generation_number}. "
+            f"Living cells: {self.board.count_living_cells}"
         )
 
         # Рисование заполненных ячеек
@@ -98,7 +107,9 @@ class BoardWidget(Frame):
                 if not cell_color:
                     continue
 
-                self.screen.print_at(' ', self.x + x + 1, self.y + y + 1, bg=Screen.COLOUR_WHITE)
+                self.screen.print_at(
+                    " ", self.x + x + 1, self.y + y + 1, bg=Screen.COLOUR_WHITE
+                )
 
     @property
     def frame_update_count(self) -> int:
@@ -112,7 +123,7 @@ class MenuWidget(Frame):
     def __init__(
             self,
             screen: Screen,
-            y: int, x: int, height: int, width: int
+            y: int, x: int, height: int, width: int,
     ):
         self.y = y
         self.x = x
@@ -128,15 +139,15 @@ class MenuWidget(Frame):
             hover_focus=True,
             can_scroll=False,
             name="MenuWidget",
-            reduce_cpu=True
+            reduce_cpu=True,
         )
-        self.set_theme('monochrome')
+        self.set_theme("monochrome")
 
         self.on_click_start: Callable[[int, str], None] = None
 
         # TODO: validator не работает
-        self.le_timer = Text("Timer (ms):", "timer_ms", validator=r'\d+')
-        self.le_timer.value = '50'
+        self.le_timer = Text("Timer (ms):", "timer_ms", validator=r"\d+")
+        self.le_timer.value = "50"
 
         self.le_seed = Text("Seed:", "seed")
         self.le_seed.value = get_random_seed()
@@ -171,39 +182,43 @@ def demo(screen: Screen, scene: Scene):
     menu_widget = MenuWidget(
         screen,
         y=0, x=0,
-        width=screen.width, height=5
+        width=screen.width, height=5,
     )
 
     board = Board()
     board_widget = BoardWidget(
-        board, screen,
-        y=menu_widget.height, x=0,
-        width=screen.width, height=screen.height - menu_widget.height,
-        next_scene='LOSE',
+        board,
+        screen,
+        y=menu_widget.height,
+        x=0,
+        width=screen.width,
+        height=screen.height - menu_widget.height,
+        next_scene="LOSE",
     )
 
     menu_widget.on_click_start = board_widget.start
 
     scenes = [
         Scene(
-            [
-                menu_widget,
-                board_widget
-            ],
+            [menu_widget, board_widget],
             duration=-1,
-            name='GAME'
+            name="GAME",
         ),
         Scene(
             [
                 Print(
                     screen,
-                    MyLateFigletText(lambda: f"YOU LOSE!\nResult: {board.last_step_result.name}", font="standard"),
-                    x=0, y=screen.height // 3 - 3,
+                    MyLateFigletText(
+                        lambda: f"YOU LOSE!\nResult: {board.last_step_result.name}",
+                        font="standard",
+                    ),
+                    x=0,
+                    y=screen.height // 3 - 3,
                 ),
             ],
             duration=-1,
-            name='LOSE'
-        )
+            name="LOSE",
+        ),
     ]
 
     screen.play(scenes, stop_on_resize=True, start_scene=scene)
@@ -216,7 +231,7 @@ while True:
             demo,
             # TODO:
             # catch_interrupt=True,
-            arguments=[last_scene]
+            arguments=[last_scene],
         )
         sys.exit(0)
     except ResizeScreenError as e:

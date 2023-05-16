@@ -1,14 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
 import traceback
 
 from PyQt5.QtWidgets import (
-    QWidget, QApplication, QMessageBox, QVBoxLayout, QGridLayout, QPushButton, QSpinBox, QLabel, QLineEdit, QStyle
+    QWidget,
+    QApplication,
+    QMessageBox,
+    QVBoxLayout,
+    QGridLayout,
+    QPushButton,
+    QSpinBox,
+    QLabel,
+    QLineEdit,
+    QStyle,
 )
 from PyQt5.QtGui import QPainter, QPaintEvent, QColor
 from PyQt5.QtCore import Qt, QTimer
@@ -17,14 +26,14 @@ from board import Board, StepResultEnum, get_random_seed
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = f'{ex_cls.__name__}: {ex}:\n'
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     if isinstance(ex, KeyboardInterrupt):
         sys.exit(0)
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
@@ -41,7 +50,9 @@ class BoardWidget(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
 
-        self.cell_size = min(self.width(), self.height()) // min(self.board.rows, self.board.cols)
+        self.cell_size = min(self.width(), self.height()) // min(
+            self.board.rows, self.board.cols
+        )
         if self.cell_size < 1:
             self.cell_size = 1
 
@@ -50,7 +61,9 @@ class BoardWidget(QWidget):
     def _draw_cell_board(self, painter: QPainter, x: int, y: int, color: QColor):
         painter.setPen(Qt.NoPen)
         painter.setBrush(color)
-        painter.drawRect(x * self.cell_size, y * self.cell_size, self.cell_size, self.cell_size)
+        painter.drawRect(
+            x * self.cell_size, y * self.cell_size, self.cell_size, self.cell_size
+        )
 
     def _draw_board(self, painter: QPainter):
         painter.save()
@@ -75,7 +88,7 @@ class BoardWidget(QWidget):
 class MainWindow(QWidget):
     SPEED_MS = 50
 
-    TITLE = 'Life'
+    TITLE = "Life"
 
     def __init__(self):
         super().__init__()
@@ -88,30 +101,33 @@ class MainWindow(QWidget):
         self.timer.timeout.connect(self._on_tick)
         self.timer.setInterval(self.SPEED_MS)
 
-        self.button_start = QPushButton('Start')
+        self.button_start = QPushButton("Start")
         self.button_start.clicked.connect(self.start)
 
-        self.button_timer = QPushButton('Start/Pause')
+        self.button_timer = QPushButton("Start/Pause")
         self.button_timer.setCheckable(True)
         self.button_timer.clicked.connect(self.start_pause_timer)
 
         self.sb_timer_interval = QSpinBox()
         self.sb_timer_interval.setRange(10, 5000)
         self.sb_timer_interval.setValue(self.SPEED_MS)
-        self.sb_timer_interval.valueChanged.connect(lambda value: self.timer.setInterval(value))
+        self.sb_timer_interval.valueChanged.connect(
+            lambda value: self.timer.setInterval(value)
+        )
 
         self.le_seed = QLineEdit(get_random_seed())
         self.le_seed.returnPressed.connect(self.start)
         action_rand_seed = self.le_seed.addAction(
-            self.style().standardIcon(QStyle.SP_BrowserReload), QLineEdit.TrailingPosition
+            self.style().standardIcon(QStyle.SP_BrowserReload),
+            QLineEdit.TrailingPosition,
         )
         action_rand_seed.triggered.connect(self._do_rand_seed)
 
         grid_layout = QGridLayout()
         grid_layout.addWidget(self.button_timer, 0, 0, 1, 2)
-        grid_layout.addWidget(QLabel('Timer (ms):'), 1, 0)
+        grid_layout.addWidget(QLabel("Timer (ms):"), 1, 0)
         grid_layout.addWidget(self.sb_timer_interval, 1, 1)
-        grid_layout.addWidget(QLabel('Seed:'), 2, 0)
+        grid_layout.addWidget(QLabel("Seed:"), 2, 0)
         grid_layout.addWidget(self.le_seed, 2, 1)
 
         main_layout = QVBoxLayout()
@@ -141,13 +157,13 @@ class MainWindow(QWidget):
 
     def _update_states(self):
         is_paused = not self.timer.isActive()
-        prefix = '[IS PAUSED] ' if is_paused else ''
+        prefix = "[IS PAUSED] " if is_paused else ""
         self.setWindowTitle(
-            f'{prefix}{self.TITLE}. '
-            f'Board: {self.board.rows}x{self.board.cols}. '
-            f'Seed: {self.board.seed}. '
-            f'Generation: {self.board.generation_number}. '
-            f'Living cells: {self.board.count_living_cells}'
+            f"{prefix}{self.TITLE}. "
+            f"Board: {self.board.rows}x{self.board.cols}. "
+            f"Seed: {self.board.seed}. "
+            f"Generation: {self.board.generation_number}. "
+            f"Living cells: {self.board.count_living_cells}"
         )
 
         self.button_timer.setChecked(self.timer.isActive())
@@ -164,13 +180,13 @@ class MainWindow(QWidget):
 
         match result:
             case StepResultEnum.NO_CELLS:
-                reason = 'Закончили клетки'
+                reason = "Закончили клетки"
             case StepResultEnum.NO_CHANGE:
-                reason = 'Мир перестал меняться'
+                reason = "Мир перестал меняться"
             case StepResultEnum.REPEATS:
-                reason = 'Мир зациклен'
+                reason = "Мир зациклен"
             case _:
-                raise Exception(f'Неизвестный результат {result}')
+                raise Exception(f"Неизвестный результат {result}")
 
         self.abort_game(reason)
 
@@ -180,7 +196,7 @@ class MainWindow(QWidget):
         self.board_widget.update()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import enum
@@ -12,7 +12,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 
 
 def get_random_seed(length: int = 8) -> str:
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+    return "".join(random.choices(string.ascii_letters + string.digits, k=length))
 
 
 class StepResultEnum(enum.Enum):
@@ -31,14 +31,14 @@ class Board(QObject):
         self.rows = 100
         self.cols = 100
 
-        self.seed = ''
+        self.seed = ""
         self.matrix: list[list[bool]] = []
         self.matrix_digest_list: list[int] = []
         self.__generation_number = 0
 
         self.last_step_result: StepResultEnum = None
 
-    def generate(self, seed: str = ''):
+    def generate(self, seed: str = ""):
         self.seed = seed
         if not self.seed:
             self.seed = get_random_seed()
@@ -99,9 +99,9 @@ class Board(QObject):
         for i, row in enumerate(matrix):
             for j, cell in enumerate(row):
                 if cell:
-                    items.append(f'{i}x{j}')
+                    items.append(f"{i}x{j}")
 
-        return hash(','.join(items))
+        return hash(",".join(items))
 
     def do_step(self) -> StepResultEnum:
         self.generation_number += 1
