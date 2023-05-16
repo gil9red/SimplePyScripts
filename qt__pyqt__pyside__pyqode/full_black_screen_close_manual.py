@@ -1,19 +1,27 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QToolButton, QSizePolicy, QGraphicsOpacityEffect
+from PyQt5.QtWidgets import (
+    QApplication,
+    QWidget,
+    QVBoxLayout,
+    QToolButton,
+    QSizePolicy,
+    QGraphicsOpacityEffect,
+)
 from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtCore import QPropertyAnimation, QSequentialAnimationGroup, Qt
 
 
 class MainWindow(QWidget):
-    def __init__(self, background_color: str = 'black', text_color: str = 'white'):
+    def __init__(self, background_color: str = "black", text_color: str = "white"):
         super().__init__()
 
-        self.setStyleSheet(f"""
+        self.setStyleSheet(
+            f"""
             MainWindow {{
                 background-color: {background_color};
             }}
@@ -23,10 +31,11 @@ class MainWindow(QWidget):
                 background-color: {background_color};
                 border: 1px solid darkgray;
             }}
-        """)
+        """
+        )
 
         self.button_close = QToolButton()
-        self.button_close.setText('ЗАКРЫТЬ')
+        self.button_close.setText("ЗАКРЫТЬ")
         self.button_close.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         self.button_close.setFixedHeight(60)
         self.button_close.clicked.connect(self.close)
@@ -41,7 +50,7 @@ class MainWindow(QWidget):
         self.button_close.setGraphicsEffect(QGraphicsOpacityEffect())
 
         animation_object = self.button_close.graphicsEffect()
-        animation_property = b'opacity'
+        animation_property = b"opacity"
         duration = 5000
         start_value = 1.0
         end_value = 0.0
@@ -67,7 +76,7 @@ class MainWindow(QWidget):
             self.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
