@@ -55,4 +55,4 @@ def get_process_run_time(provided_process_name: str) -> str:
     epoch_created_time = process.create_time()
     dt_created_time = DT.datetime.fromtimestamp(epoch_created_time)
     time_elapsed = DT.datetime.now() - dt_created_time
-    return str(time_elapsed).rsplit('.')[0]
+    return str(time_elapsed).rsplit(".")[0]

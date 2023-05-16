@@ -9,23 +9,20 @@ import argparse
 from get_cpu_process import get_pid, get_process_run_time, is_running, ProcessNotFound
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Simple CPU related script written by Zac the Wise utilising psutil"
     )
 
     # set arguments
     parser.add_argument(
-        "--get-pid", action='store_true',
-        help="returns PID of process name"
+        "--get-pid", action="store_true", help="returns PID of process name"
     )
     parser.add_argument(
-        "--run-time", action='store_true',
-        help="returns run time of process name"
+        "--run-time", action="store_true", help="returns run time of process name"
     )
     parser.add_argument(
-        "process_name",
-        help="when used alone, returns True if process is running"
+        "process_name", help="when used alone, returns True if process is running"
     )
 
     # parse args
