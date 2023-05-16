@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import random
 
 
 # Этот шаблон допускает любые числа
-_ = '*'
+_ = "*"
 keys = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 fixed_values = [_, _, _, _]
 need_values = []
@@ -17,9 +17,9 @@ keys = [1, 2, 4, 5, 7, 8, 9]
 keys = [0, 1, 6, 8]
 keys = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-eval_template = 'a == b and (a > c < d)'
-eval_template = 'a > b > c < d'
-eval_template = 'a > b < c > d'
+eval_template = "a == b and (a > c < d)"
+eval_template = "a > b > c < d"
+eval_template = "a > b < c > d"
 
 fixed_values = [_, _, _, _]
 fixed_values = [_, 1, 8, _]
@@ -54,9 +54,12 @@ while True:
 
     a, b, c, d = fixed_items
 
-    text = eval_template\
-        .replace('a', str(a)).replace('b', str(b))\
-        .replace('c', str(c)).replace('d', str(d))
+    text = (
+        eval_template.replace("a", str(a))
+        .replace("b", str(b))
+        .replace("c", str(c))
+        .replace("d", str(d))
+    )
 
     ok = eval(text)
     if ok:
