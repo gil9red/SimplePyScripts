@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 try:
@@ -31,8 +31,8 @@ class Window(QWidget):
         win_X = False
         win_O = False
 
-        seq_X = ['X', 'X', 'X']
-        seq_O = ['O', 'O', 'O']
+        seq_X = ["X", "X", "X"]
+        seq_O = ["O", "O", "O"]
 
         if not win_X and not win_O:
             # Построчная проверка
@@ -73,11 +73,11 @@ class Window(QWidget):
                     break
 
         if win_X:
-            QMessageBox.information(self, 'Winner', 'Win X')
+            QMessageBox.information(self, "Winner", "Win X")
             return
 
         if win_O:
-            QMessageBox.information(self, 'Winner', 'Win O')
+            QMessageBox.information(self, "Winner", "Win O")
             return
 
     def mouseReleaseEvent(self, e):
@@ -89,7 +89,7 @@ class Window(QWidget):
         if i >= 3 or j >= 3:
             return
 
-        self._board_tic_tac_toe[i][j] = 'X' if self._current_figure_flag else 'O'
+        self._board_tic_tac_toe[i][j] = "X" if self._current_figure_flag else "O"
         self._current_figure_flag = not self._current_figure_flag
 
         # Перерисовка, вызов paintEvent
@@ -115,17 +115,17 @@ class Window(QWidget):
                 painter.drawRect(x, y, w, h)
 
                 painter.save()
-                painter.setFont(QFont('Arial', 16))
+                painter.setFont(QFont("Arial", 16))
 
                 value = self._board_tic_tac_toe[i][j]
-                painter.setPen(Qt.blue if value == 'X' else Qt.red)
+                painter.setPen(Qt.blue if value == "X" else Qt.red)
 
                 painter.drawText(x, y, w, h, Qt.AlignCenter, value)
 
                 painter.restore()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = Window()
