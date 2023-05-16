@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -13,10 +13,12 @@ __author__ = 'ipetrash'
 """
 
 
-from typing import Optional
-
-
-def find_first_selection(a: int, b: int, c: int, max_sum: int) -> Optional[tuple[int, int, int]]:
+def find_first_selection(
+    a: int,
+    b: int,
+    c: int,
+    max_sum: int,
+) -> tuple[int, int, int] | None:
     """Функция вернет первый правильный вариант"""
 
     if max_sum == 0:
@@ -44,7 +46,13 @@ def find_first_selection(a: int, b: int, c: int, max_sum: int) -> Optional[tuple
             return r
 
 
-def find_all_selection(a: int, b: int, c: int, max_sum: int, all_sel: list[tuple[int, int, int]]):
+def find_all_selection(
+    a: int,
+    b: int,
+    c: int,
+    max_sum: int,
+    all_sel: list[tuple[int, int, int]],
+):
     """Функция будет перебирать и запоминать все варианты"""
 
     if max_sum == 0:
@@ -68,18 +76,18 @@ def find_all_selection(a: int, b: int, c: int, max_sum: int, all_sel: list[tuple
         find_all_selection(a, b, c + 1, max_sum - 17, all_sel)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     a, b, c = find_first_selection(0, 0, 0, 107)
-    print(f'{a}*7 + {b}*9 + {c}*17 = 107')
+    print(f"{a}*7 + {b}*9 + {c}*17 = 107")
     # 9*7 + 3*9 + 1*17 = 107
 
     print()
 
-    print('Все варианты:')
+    print("Все варианты:")
     all_selection = []
     find_all_selection(0, 0, 0, 107, all_selection)
     for i, (a, b, c) in enumerate(all_selection, 1):
-        print(f'{i}. {a}*7 + {b}*9 + {c}*17 = 107')
+        print(f"{i}. {a}*7 + {b}*9 + {c}*17 = 107")
     """
     Все варианты:
     1. 9*7 + 3*9 + 1*17 = 107
