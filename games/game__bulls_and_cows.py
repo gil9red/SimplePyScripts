@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -20,13 +20,13 @@ import random
 
 
 def get_unique_four_digits():
-    digits = ''
+    digits = ""
 
     while len(digits) != 4:
         if len(digits) == 0:
-            digit = random.choice('123456789')
+            digit = random.choice("123456789")
         else:
-            digit = random.choice('1234567890')
+            digit = random.choice("1234567890")
 
         if digit in digits:
             continue
@@ -51,32 +51,39 @@ def get_bulls_and_cows(hidden_num, num):
 
 
 hidden_num = get_unique_four_digits()
-print('Я загадал число\n')
+print("Я загадал число\n")
 
 trying = 10
 
 while True:
-    num = input('Введите 4-х значное число: ')
+    num = input("Введите 4-х значное число: ")
 
     # TODO: Удалить
-    if num == 'show':
+    if num == "show":
         print(hidden_num)
         continue
 
     # Должно: иметь длину 4, не начинаться на 0, состоять из цифр, и не иметь повторяющихся цифр
-    if len(num) != 4 or num[0] == '0' or not num.isdecimal() or len(num) != len(set(num)):
-        print('Неправильный формат числа: "{}"\n'.format(num))
+    if (
+        len(num) != 4
+        or num[0] == "0"
+        or not num.isdecimal()
+        or len(num) != len(set(num))
+    ):
+        print(f'Неправильный формат числа: "{num}"\n')
         continue
 
     if num == hidden_num:
-        print('Победа!')
+        print("Победа!")
         break
 
     trying -= 1
 
     if trying == 0:
-        print('Закончились попытки. Проирыш!\nЗагаданное число: ' + hidden_num)
+        print("Закончились попытки. Проигрыш!\nЗагаданное число: " + hidden_num)
         break
 
     bull_count, cow_count = get_bulls_and_cows(hidden_num, num)
-    print('Быков: {}, коров: {}. Осталось попыток: {}\n'.format(bull_count, cow_count, trying))
+    print(
+        f"Быков: {bull_count}, коров: {cow_count}. Осталось попыток: {trying}\n"
+    )
