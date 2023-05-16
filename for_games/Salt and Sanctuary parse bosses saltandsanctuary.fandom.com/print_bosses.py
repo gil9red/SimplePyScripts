@@ -1,31 +1,30 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from typing import Dict, List
 from utils import get_bosses, Boss
 
 
-def print_bosses(bosses: Dict[str, List[Boss]], only_names=False):
-    print('Salt and Sanctuary ({}):'.format(sum(len(i) for i in bosses.values())))
+def print_bosses(bosses: dict[str, list[Boss]], only_names=False):
+    print("Salt and Sanctuary ({}):".format(sum(len(i) for i in bosses.values())))
 
     for category, bosses in bosses.items():
-        print('    {} ({}):'.format(category, len(bosses)))
+        print(f"    {category} ({len(bosses)}):")
 
         for i, boss in enumerate(bosses, 1):
             if only_names:
-                print('        {}. "{}"'.format(i, boss.name))
+                print(f'        {i}. "{boss.name}"')
             else:
-                print('        {}. "{}": {}'.format(i, boss.name, boss.url))
+                print(f'        {i}. "{boss.name}": {boss.url}')
 
         print()
 
     print()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     bosses_by_category = get_bosses()
     print_bosses(bosses_by_category)
     # Salt and Sanctuary (23):
