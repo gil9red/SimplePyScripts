@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from random import randint
-from typing import List
 
-from PyQt5.Qt import *
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton
+from PyQt5.QtGui import QPainter, QColor, QPen
+from PyQt5.QtCore import QTimer, Qt
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/1d6226ea5545e49b533e71c92d77856a7b2e171d/pygame__examples/simple_balls.py
@@ -69,7 +70,7 @@ class Widget(QWidget):
         self._old_pos = None
         self.frame_color = Qt.darkCyan
 
-        self.balls: List[Ball] = []
+        self.balls: list[Ball] = []
 
         timeout = 1000 // 60
 
@@ -146,10 +147,10 @@ class Widget(QWidget):
         self.balls.append(ball)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
-    WIDTH = 600   # ширина экрана
+    WIDTH = 600  # ширина экрана
     HEIGHT = 600  # высота экрана
     BALL_NUMBER = 1000
 
