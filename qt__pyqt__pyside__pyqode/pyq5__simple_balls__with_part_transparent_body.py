@@ -30,8 +30,15 @@ class Ball:
         self.y += self.v_y
 
     def draw(self, painter: QPainter):
-        r, g, b = self.color
-        color = QColor(r, g, b)
+        if isinstance(self.color, tuple):
+            if len(self.color) == 4:
+                r, g, b, a = self.color
+                color = QColor(r, g, b, a)
+            else:
+                r, g, b = self.color
+                color = QColor(r, g, b)
+        else:
+            color = self.color
 
         painter.save()
         painter.setPen(Qt.black)
@@ -58,6 +65,19 @@ class Ball:
     @property
     def right(self):
         return self.x + self.r
+
+
+def get_random_vector() -> tuple[int, int]:
+    pos = 0, 0
+    # Если pos равен (0, 0), пересчитываем значения, т.к. шарик должен двигаться
+    while pos == (0, 0):
+        pos = randint(-3, 3), randint(-3, 3)
+
+    return pos
+
+
+def get_random_color() -> tuple[int, int, int]:
+    return randint(0, 255), randint(0, 255), randint(0, 255)
 
 
 class Widget(QWidget):
@@ -126,17 +146,6 @@ class Widget(QWidget):
             ball.draw(painter)
 
     def append_random_ball(self):
-        def get_random_vector():
-            pos = 0, 0
-            # Если pos равен (0, 0), пересчитываем значения, т.к. шарик должен двигаться
-            while pos == (0, 0):
-                pos = randint(-3, 3), randint(-3, 3)
-
-            return pos
-
-        def get_random_color():
-            return randint(0, 255), randint(0, 255), randint(0, 255)
-
         x = self.width() // 2 + randint(-self.width() // 4, self.width() // 4)
         y = self.height() // 2 + randint(-self.height() // 4, self.height() // 4)
         r = randint(10, 20)
