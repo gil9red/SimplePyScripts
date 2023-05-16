@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import abc
@@ -21,7 +21,7 @@ class Piece(abc.ABC):
         4: 1,
     }
 
-    def __init__(self, x: int, y: int, parent: 'Board' = None):
+    def __init__(self, x: int, y: int, parent: "Board" = None):
         self.x = x
         self.y = y
         self.parent = parent
@@ -30,7 +30,12 @@ class Piece(abc.ABC):
         self.points: list[tuple[int, int]] = self.get_points_for_state()
 
     @classmethod
-    def get_random(cls, x: int, y: int, parent: 'Board', rand_x: bool = False) -> 'Piece':
+    def get_random(
+        cls,
+        x: int, y: int,
+        parent: "Board",
+        rand_x: bool = False,
+    ) -> "Piece":
         clazz = choice(cls.__subclasses__())
         obj = clazz(x=x, y=y, parent=parent)
 
@@ -51,7 +56,12 @@ class Piece(abc.ABC):
     def _get_all_states(self) -> list[list[str]]:
         pass
 
-    def get_points_for_state(self, state: int = None, x: int = None, y: int = None) -> list[tuple[int, int]]:
+    def get_points_for_state(
+        self,
+        state: int = None,
+        x: int = None,
+        y: int = None,
+    ) -> list[tuple[int, int]]:
         if state is None:
             state = self.current_state
 
@@ -82,7 +92,7 @@ class Piece(abc.ABC):
         idx_x = idx_y = -1
         for i, row in enumerate(points_board):
             for j, value in enumerate(row):
-                if value == 'X':
+                if value == "X":
                     idx_x = j
                     idx_y = i
                     break
@@ -90,13 +100,13 @@ class Piece(abc.ABC):
         points = []
         for i, row in enumerate(points_board):
             for j, value in enumerate(row):
-                if value != '.':
+                if value != ".":
                     points.append((
                         # Рассчитываем разницу между X и остальными значениями
                         # и прибавляем текущие координаты центра фигуры
                         (j - idx_x) + x,
-                        (i - idx_y) + y)
-                    )
+                        (i - idx_y) + y
+                    ))
         return points
 
     def get_min_x(self) -> int:
@@ -170,19 +180,19 @@ class Piece(abc.ABC):
         for x, y in points:
             try:
                 if x < 0 or y < 0:
-                    logger.debug(f'[is_collapse] y < 0 or x < 0. x={x}, y={y}')
+                    logger.debug(f"[is_collapse] y < 0 or x < 0. x={x}, y={y}")
                     return True
 
                 # Если ячейка занята или выход за пределы
                 if self.parent.matrix[y][x]:
                     logger.debug(
-                        f'[is_collapse] self.parent.board_matrix[y][x]. x={x}, y={y}, '
-                        f'value={self.parent.matrix[y][x]}'
+                        f"[is_collapse] self.parent.board_matrix[y][x]. x={x}, y={y}, "
+                        f"value={self.parent.matrix[y][x]}"
                     )
                     return True
 
             except IndexError:
-                logger.debug(f'[is_collapse] IndexError. x={x}, y={y}')
+                logger.debug(f"[is_collapse] IndexError. x={x}, y={y}")
                 return True
 
         return False
@@ -191,10 +201,10 @@ class Piece(abc.ABC):
 class PieceO(Piece):
     _ = [
         [
-            '....',
-            '.1X.',
-            '.11.',
-            '....',
+            "....",
+            ".1X.",
+            ".11.",
+            "....",
         ],
     ]
 
@@ -208,16 +218,16 @@ class PieceO(Piece):
 class PieceI(Piece):
     _ = [
         [
-            '....',
-            '11X1',
-            '....',
-            '....',
+            "....",
+            "11X1",
+            "....",
+            "....",
         ],
         [
-            '..1.',
-            '..X.',
-            '..1.',
-            '..1.',
+            "..1.",
+            "..X.",
+            "..1.",
+            "..1.",
         ],
     ]
 
@@ -231,16 +241,16 @@ class PieceI(Piece):
 class PieceS(Piece):
     _ = [
         [
-            '....',
-            '..X1',
-            '.11.',
-            '....',
+            "....",
+            "..X1",
+            ".11.",
+            "....",
         ],
         [
-            '..1.',
-            '..X1',
-            '...1',
-            '....',
+            "..1.",
+            "..X1",
+            "...1",
+            "....",
         ],
     ]
 
@@ -254,16 +264,16 @@ class PieceS(Piece):
 class PieceZ(Piece):
     _ = [
         [
-            '....',
-            '.1X.',
-            '..11',
-            '....',
+            "....",
+            ".1X.",
+            "..11",
+            "....",
         ],
         [
-            '...1',
-            '..X1',
-            '..1.',
-            '....',
+            "...1",
+            "..X1",
+            "..1.",
+            "....",
         ],
     ]
 
@@ -277,29 +287,29 @@ class PieceZ(Piece):
 class PieceL(Piece):
     _ = [
         [
-            '....',
-            '.1X1',
-            '.1..',
-            '....',
+            "....",
+            ".1X1",
+            ".1..",
+            "....",
         ],
         [
-            '..1.',
-            '..X.',
-            '..11',
-            '....',
+            "..1.",
+            "..X.",
+            "..11",
+            "....",
         ],
         [
-            '...1',
-            '.1X1',
-            '....',
-            '....',
+            "...1",
+            ".1X1",
+            "....",
+            "....",
         ],
         [
-            '.11.',
-            '..X.',
-            '..1.',
-            '....',
-        ]
+            ".11.",
+            "..X.",
+            "..1.",
+            "....",
+        ],
     ]
 
     def _get_all_states(self) -> list[list[str]]:
@@ -312,29 +322,29 @@ class PieceL(Piece):
 class PieceJ(Piece):
     _ = [
         [
-            '....',
-            '.1X1',
-            '...1',
-            '....',
+            "....",
+            ".1X1",
+            "...1",
+            "....",
         ],
         [
-            '..11',
-            '..X.',
-            '..1.',
-            '....',
+            "..11",
+            "..X.",
+            "..1.",
+            "....",
         ],
         [
-            '.1..',
-            '.1X1',
-            '....',
-            '....',
+            ".1..",
+            ".1X1",
+            "....",
+            "....",
         ],
         [
-            '..1.',
-            '..X.',
-            '.11.',
-            '....',
-        ]
+            "..1.",
+            "..X.",
+            ".11.",
+            "....",
+        ],
     ]
 
     def _get_all_states(self) -> list[list[str]]:
@@ -347,29 +357,29 @@ class PieceJ(Piece):
 class PieceT(Piece):
     _ = [
         [
-            '....',
-            '.1X1',
-            '..1.',
-            '....',
+            "....",
+            ".1X1",
+            "..1.",
+            "....",
         ],
         [
-            '..1.',
-            '..X1',
-            '..1.',
-            '....',
+            "..1.",
+            "..X1",
+            "..1.",
+            "....",
         ],
         [
-            '..1.',
-            '.1X1',
-            '....',
-            '....',
+            "..1.",
+            ".1X1",
+            "....",
+            "....",
         ],
         [
-            '..1.',
-            '.1X.',
-            '..1.',
-            '....',
-        ]
+            "..1.",
+            ".1X.",
+            "..1.",
+            "....",
+        ],
     ]
 
     def _get_all_states(self) -> list[list[str]]:

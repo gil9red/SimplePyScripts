@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
-
-from typing import Optional
 
 from PyQt5.QtCore import QObject, pyqtSignal
 from PyQt5.QtGui import QColor
@@ -22,13 +20,13 @@ class Board(QObject):
     def __init__(self):
         super().__init__()
 
-        self.matrix: list[list[Optional[QColor]]] = [
+        self.matrix: list[list[QColor | None]] = [
             [None for _ in range(self.COLS)]
             for _ in range(self.ROWS)
         ]
 
-        self.current_piece: Optional[Piece] = None
-        self.next_piece: Optional[Piece] = None
+        self.current_piece: Piece = None
+        self.next_piece: Piece = None
 
         self.__score: int = 0
 
@@ -42,7 +40,7 @@ class Board(QObject):
         self.on_update_score.emit(self.score)
 
     def add_piece(self, piece: Piece):
-        logger.debug('[add_piece]')
+        logger.debug("[add_piece]")
         for x, y in piece.get_points():
             self.matrix[y][x] = piece.get_color()
 

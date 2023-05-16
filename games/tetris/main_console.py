@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -51,7 +51,16 @@ class MyLateFigletText(StaticRenderer):
 
 
 class BoardWidget(Frame):
-    def __init__(self, board: Board, screen: Screen, y: int, x: int, height: int, width: int, next_scene: str):
+    def __init__(
+        self,
+        board: Board,
+        screen: Screen,
+        y: int,
+        x: int,
+        height: int,
+        width: int,
+        next_scene: str,
+    ):
         self.y = y
         self.x = x
         self.height = height
@@ -64,9 +73,9 @@ class BoardWidget(Frame):
             x=self.x,
             y=self.y,
             can_scroll=False,
-            name="BoardWidget"
+            name="BoardWidget",
         )
-        self.set_theme('monochrome')
+        self.set_theme("monochrome")
         self.board = board
         self.current_piece = self.board.current_piece
         self.is_fail = False
@@ -90,7 +99,7 @@ class BoardWidget(Frame):
 
         self.current_piece = self.board.current_piece
 
-        self.screen.set_title(f'Tetris. Score: {self.board.score}')
+        self.screen.set_title(f"Tetris. Score: {self.board.score}")
 
         # Рисование заполненных ячеек
         for y, row in enumerate(self.board.matrix):
@@ -100,20 +109,20 @@ class BoardWidget(Frame):
 
                 color = PIECE_BY_COLOR[cell_color.name()]
                 # TODO: Рисовать квадратами, а не линиями
-                self.screen.print_at(' ', x + 1, y + 1, bg=color)
+                self.screen.print_at(" ", x + 1, y + 1, bg=color)
 
         if self.current_piece:
             color = PIECE_BY_COLOR[self.current_piece.get_color().name()]
             for x, y in self.current_piece.get_points():
                 # TODO: Рисовать квадратами, а не линиями
-                self.screen.print_at(' ', x + 1, y + 1, bg=color)
+                self.screen.print_at(" ", x + 1, y + 1, bg=color)
 
     def process_event(self, event: Event):
         if isinstance(event, KeyboardEvent):
             key_code = event.key_code
             match key_code:
                 case 81 | 113:  # Q | q
-                    raise StopApplication('User requested exit')
+                    raise StopApplication("User requested exit")
 
                 case 87 | 119 | Screen.KEY_UP:  # W | w
                     if self.current_piece:
@@ -142,7 +151,12 @@ class BoardWidget(Frame):
 
 
 class NextPieceWidget(Frame):
-    def __init__(self, board: Board, screen: Screen, y: int, x: int, height: int, width: int):
+    def __init__(
+        self,
+        board: Board,
+        screen: Screen,
+        y: int, x: int, height: int, width: int,
+    ):
         self.y = y
         self.x = x
         self.height = height
@@ -155,9 +169,9 @@ class NextPieceWidget(Frame):
             y=self.y,
             x=self.x,
             can_scroll=False,
-            name="NextPieceWidget"
+            name="NextPieceWidget",
         )
-        self.set_theme('monochrome')
+        self.set_theme("monochrome")
         self.board = board
         self.next_piece = self.board.next_piece
 
@@ -172,7 +186,7 @@ class NextPieceWidget(Frame):
             color = PIECE_BY_COLOR[self.next_piece.get_color().name()]
             for x, y in self.next_piece.get_points_for_state(x=x_next, y=y_next):
                 # TODO: Рисовать квадратами, а не линиями
-                self.screen.print_at(' ', x + 1, y + 1, bg=color)
+                self.screen.print_at(" ", x + 1, y + 1, bg=color)
 
     def process_event(self, event: Event):
         return event
@@ -183,7 +197,12 @@ class NextPieceWidget(Frame):
 
 
 class ScoreWidget(Frame):
-    def __init__(self, board: Board, screen: Screen, y: int, x: int, height: int, width: int):
+    def __init__(
+        self,
+        board: Board,
+        screen: Screen,
+        y: int, x: int, height: int, width: int,
+    ):
         self.y = y
         self.x = x
         self.height = height
@@ -196,15 +215,15 @@ class ScoreWidget(Frame):
             y=self.y,
             x=self.x,
             can_scroll=False,
-            name="ScoreWidget"
+            name="ScoreWidget",
         )
-        self.set_theme('monochrome')
+        self.set_theme("monochrome")
         self.board = board
 
     def update(self, frame_no: int):
         super().update(frame_no)
 
-        self.screen.print_at(f'Score: {self.board.score}', self.x, self.y)
+        self.screen.print_at(f"Score: {self.board.score}", self.x, self.y)
 
     def process_event(self, event: Event):
         return event
@@ -220,26 +239,35 @@ def demo(screen: Screen, scene: Scene):
         Scene(
             [
                 BoardWidget(
-                    board, screen,
-                    y=0, x=0, width=board.COLS + 2, height=board.ROWS + 2,
-                    next_scene='LOSE'
+                    board,
+                    screen,
+                    y=0,
+                    x=0,
+                    width=board.COLS + 2,
+                    height=board.ROWS + 2,
+                    next_scene="LOSE",
                 ),
-                NextPieceWidget(board, screen, y=0, x=board.COLS + 2, width=8, height=6),
+                NextPieceWidget(
+                    board, screen, y=0, x=board.COLS + 2, width=8, height=6
+                ),
                 ScoreWidget(board, screen, y=6, x=board.COLS + 2, width=8, height=2),
             ],
-            duration=-1
+            duration=-1,
         ),
         Scene(
             [
                 Print(
                     screen,
-                    MyLateFigletText(lambda: f"YOU LOSE!\nScore: {board.score}", font="standard"),
-                    x=0, y=screen.height // 3 - 3,
+                    MyLateFigletText(
+                        lambda: f"YOU LOSE!\nScore: {board.score}", font="standard"
+                    ),
+                    x=0,
+                    y=screen.height // 3 - 3,
                 ),
             ],
             duration=-1,
-            name='LOSE'
-        )
+            name="LOSE",
+        ),
     ]
 
     screen.play(scenes, stop_on_resize=True, start_scene=scene)
@@ -252,7 +280,7 @@ while True:
             demo,
             # TODO:
             # catch_interrupt=True,
-            arguments=[last_scene]
+            arguments=[last_scene],
         )
         sys.exit(0)
     except ResizeScreenError as e:

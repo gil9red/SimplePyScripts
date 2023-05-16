@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
 import traceback
-
-from typing import Optional
 
 from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox
 from PyQt5.QtGui import QPainter, QPaintEvent, QKeyEvent, QColor
@@ -20,11 +18,11 @@ from piece import Piece
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = f'{ex_cls.__name__}: {ex}:\n'
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     logger.error(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
@@ -35,7 +33,7 @@ class MainWindow(QWidget):
     CELL_SIZE = 20
     SPEED_MS = 400
 
-    TITLE = 'Tetris'
+    TITLE = "Tetris"
 
     def __init__(self):
         super().__init__()
@@ -43,8 +41,8 @@ class MainWindow(QWidget):
         self.board = Board()
         self.board.on_update_score.connect(self._update_states)
 
-        self.current_piece: Optional[Piece] = None
-        self.next_piece: Optional[Piece] = None
+        self.current_piece: Piece = None
+        self.next_piece: Piece = None
 
         self.timer = QTimer()
         self.timer.timeout.connect(self._on_tick)
@@ -54,7 +52,7 @@ class MainWindow(QWidget):
         self._update_states()
 
     def _update_states(self):
-        self.setWindowTitle(f'{self.TITLE}. Score: {self.board.score}')
+        self.setWindowTitle(f"{self.TITLE}. Score: {self.board.score}")
 
     def abort_game(self):
         self.timer.stop()
@@ -76,7 +74,9 @@ class MainWindow(QWidget):
     def _draw_cell_board(self, painter: QPainter, x: int, y: int, color: QColor):
         painter.setPen(Qt.NoPen)
         painter.setBrush(color)
-        painter.drawRect(x * self.CELL_SIZE, y * self.CELL_SIZE, self.CELL_SIZE, self.CELL_SIZE)
+        painter.drawRect(
+            x * self.CELL_SIZE, y * self.CELL_SIZE, self.CELL_SIZE, self.CELL_SIZE
+        )
 
     def _draw_board(self, painter: QPainter):
         painter.save()
@@ -118,7 +118,9 @@ class MainWindow(QWidget):
 
         # Рисуем центр фигуры
         if DEBUG:
-            self._draw_cell_board(painter, self.current_piece.x, self.current_piece.y, Qt.black)
+            self._draw_cell_board(
+                painter, self.current_piece.x, self.current_piece.y, Qt.black
+            )
 
         x_next = self.board.COLS + 3
         y_next = 1
@@ -133,7 +135,7 @@ class MainWindow(QWidget):
         painter.setPen(Qt.black)
 
         x, y = self.CELL_SIZE * (self.board.COLS + 1), self.CELL_SIZE * 5
-        painter.drawText(x, y, f'Score: {self.board.score}')
+        painter.drawText(x, y, f"Score: {self.board.score}")
 
         painter.restore()
 
@@ -164,7 +166,7 @@ class MainWindow(QWidget):
                     self.update()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
