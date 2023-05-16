@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # C:\Users\<user_name>\AppData\LocalLow\Soaphog\Rezrog\Save
@@ -47,6 +47,9 @@ __author__ = 'ipetrash'
 #             return Encoding.UTF8.GetString(bytes2);
 #         }
 
+import base64
+import json
+
 # pip install pycryptodome
 # OR:
 # pip install pycryptodomex
@@ -54,9 +57,6 @@ from Crypto.Cipher import AES
 
 # pip install pkcs7
 from pkcs7 import PKCS7Encoder
-
-import base64
-import json
 
 
 def encrypt(to_encrypt: str, key: str) -> bytes:
@@ -76,34 +76,33 @@ def decrypt(to_decrypt: bytes, key: str) -> str:
     array = base64.b64decode(to_decrypt)
     decrypt_text = encryptor.decrypt(array)
 
-    return encoder.decode(str(decrypt_text, 'utf-8'))
+    return encoder.decode(str(decrypt_text, "utf-8"))
 
 
-if __name__ == '__main__':
-    KEY = '32647863128053433215894456187813'
+if __name__ == "__main__":
+    KEY = "32647863128053433215894456187813"
 
     # C:\Users\<user_name>\AppData\LocalLow\Soaphog\Rezrog\Save
     # C:\Users\<user_name>\AppData\LocalLow\Soaphog\Rezrog\Save\game save.json
     # C:\Users\<user_name>\AppData\LocalLow\Soaphog\Rezrog\Save\progress.json
 
-    with open('progress.json', 'rb') as f:
+    with open("progress.json", "rb") as f:
         array = f.read()
 
     print(array)  # b'o41r7i6/ekDVTWAmDvsmuEwhqMelq3bF3wukSbVpeeFaKIdyX ...
 
     text = decrypt(array, KEY)
-    print(text)  # '{"goldEarnedTotal":23778,"timePlayedMage":3581.58911132813,"timePlayedArcher" ...'
+    print(text)
+    # '{"goldEarnedTotal":23778,"timePlayedMage":3581.58911132813,"timePlayedArcher" ...'
 
     data = json.loads(text)
-    print(data)  # {'goldEarnedTotal': 23778, 'timePlayedMage': 3581.58911132813, ...
+    print(data)
+    # {'goldEarnedTotal': 23778, 'timePlayedMage': 3581.58911132813, ...
 
-    # with open('progress_decrypted.json', 'w', encoding='utf-8') as f:
-    #     f.write(text)
-    # OR:
-    with open('progress_decrypted.json', 'w', encoding='utf-8') as f:
+    with open("progress_decrypted.json", "w", encoding="utf-8") as f:
         json.dump(data, f)
 
-    with open('progress_decrypted_pretty.json', 'w', encoding='utf-8') as f:
+    with open("progress_decrypted_pretty.json", "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4)
 
     # # Меняем данные
@@ -116,5 +115,5 @@ if __name__ == '__main__':
     new_array = encrypt(text, KEY)
     print(new_array)  # b'o41r7i6/ekDVTWAmDvsmuEwhqMelq3bF3wukSbVpeeFaKIdyX ...
 
-    with open('progress_encrypted.json', 'wb') as f:
+    with open("progress_encrypted.json", "wb") as f:
         f.write(new_array)
