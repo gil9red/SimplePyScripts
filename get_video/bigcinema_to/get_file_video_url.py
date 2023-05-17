@@ -1,22 +1,53 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import base64
+import re
+
+import requests
 
 
 # source: https://hms.lostcut.net/viewtopic.php?id=80
 def decode_base64_bigcinema_to(base64_data, remove_secret_word=True):
     # Чтобы получить этот словарь заменяемых символов, нужно скачать плеер сайта (формат swf),
     # декодировать его "Flash Decompiler Trillix" и найти списки codec_a и codec_b
-    a_to_b_dict = {'f': 'D', 'v': 'U', '=': 'E', '7': 'X', '4': 'L', 'W': 'H', 'w': '8', 'n': '1', 'e': 'M', 'z': 'I',
-                   'T': 'i', 'Y': 'u', 'm': 'o', 's': 'g', 'k': 'Z', 'x': 'p', 'J': 'N', 'B': 'c', 'Q': '0', 'b': 't',
-                   'a': 'R', '6': 'd', 'l': 'y', '5': '3', '9': 'V', 'G': '2'}
+    a_to_b_dict = {
+        "f": "D",
+        "v": "U",
+        "=": "E",
+        "7": "X",
+        "4": "L",
+        "W": "H",
+        "w": "8",
+        "n": "1",
+        "e": "M",
+        "z": "I",
+        "T": "i",
+        "Y": "u",
+        "m": "o",
+        "s": "g",
+        "k": "Z",
+        "x": "p",
+        "J": "N",
+        "B": "c",
+        "Q": "0",
+        "b": "t",
+        "a": "R",
+        "6": "d",
+        "l": "y",
+        "5": "3",
+        "9": "V",
+        "G": "2",
+    }
 
-    base64_data = base64_data.replace('\n', '')
+    base64_data = base64_data.replace("\n", "")
     for a, b in a_to_b_dict.items():
-        base64_data = base64_data.replace(b, '___')
+        base64_data = base64_data.replace(b, "___")
         base64_data = base64_data.replace(a, b)
-        base64_data = base64_data.replace('___', a)
+        base64_data = base64_data.replace("___", a)
 
     # secret_words случайно вставляется base64_data, портя его
     # У bigcinema.to секретное слово меняется
@@ -27,7 +58,6 @@ def decode_base64_bigcinema_to(base64_data, remove_secret_word=True):
 
     # Секретные слова очень похожие, и можно попытаться регуляркой их заменять
     if remove_secret_word:
-        import re
         # base64_data = re.sub(r'N.{,5}==', '', base64_data)
 
         # Или, попытаемся вырезать подстроки, оканчивающиеся на ==
@@ -36,11 +66,10 @@ def decode_base64_bigcinema_to(base64_data, remove_secret_word=True):
         # NOTE: или же можно попробовать найти это секретное слово, сделав два запроса,
         # получив 2 base64, а т.к. секретное слово вставляется в случайное место, то нужно
         # просто найти его и удалить
-        base64_data = re.sub(r'.{,6}==', '', base64_data, count=1)
+        base64_data = re.sub(r".{,6}==", "", base64_data, count=1)
 
-    import base64
     data = base64.standard_b64decode(base64_data)
-    return data.decode('utf-8')
+    return data.decode("utf-8")
 
 
 # Нужно вытащить значение из file
@@ -50,12 +79,10 @@ def decode_base64_bigcinema_to(base64_data, remove_secret_word=True):
 #                     file:"RWaQBfmU4GZYkoNGRGJZtT3jtGQU6 ... JAEEJJ926d0v324GnU6oyyBlwLOf=8JizYt7AQ"
 #
 # };
-import re
 GET_FILE_DATA_FROM_FLASHVALS_PATTERN = re.compile(r"""file *?: *?['"](.+?)['"]""")
 
 
 def get_file_video_url(url):
-    import requests
     rs = requests.get(url)
     if not rs.ok:
         return
@@ -69,12 +96,12 @@ def get_file_video_url(url):
     return decode_base64_bigcinema_to(match.group(1))
 
 
-if __name__ == '__main__':
-    url = 'http://bigcinema.to/movie/menya-zovut-dzhig-robot-lo-chiamavano-jeeg-robot.html'
+if __name__ == "__main__":
+    url = "http://bigcinema.to/movie/menya-zovut-dzhig-robot-lo-chiamavano-jeeg-robot.html"
     print(get_file_video_url(url))
 
-    url = 'http://bigcinema.to/movie/pit-i-ego-drakon-petes-dragon.html'
+    url = "http://bigcinema.to/movie/pit-i-ego-drakon-petes-dragon.html"
     print(get_file_video_url(url))
 
-    url = 'http://bigcinema.to/movie/bokser-marionetka-cardboard-boxer.html'
+    url = "http://bigcinema.to/movie/bokser-marionetka-cardboard-boxer.html"
     print(get_file_video_url(url))

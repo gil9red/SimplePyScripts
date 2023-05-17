@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
+import json
 import re
+
+import requests
+
+from get_file_video_url import decode_base64_bigcinema_to
+
+
 GET_PL_DATA_FROM_FLASHVALS_PATTERN = re.compile(r"""pl *?: *?['"](.+?)['"]""")
 
 
 def get_video_list_url(url):
-    import requests
     rs = requests.get(url)
     if not rs.ok:
         return
@@ -20,7 +26,6 @@ def get_video_list_url(url):
     if match is None:
         return
 
-    from get_file_video_url import decode_base64_bigcinema_to
     pl_text_data_url = decode_base64_bigcinema_to(match.group(1))
 
     rs = requests.get(pl_text_data_url)
@@ -33,17 +38,16 @@ def get_video_list_url(url):
 
     # Вернется json с описанием сезонов, их серий, а также для каждой серии будет доступно несколько ссылок на
     # файлы видео на разных серверах
-    import json
     json_data = json.loads(data)
     return json_data
 
 
-if __name__ == '__main__':
-    url = 'http://bigcinema.to/series/the-missing-mini-serial.html'
+if __name__ == "__main__":
+    url = "http://bigcinema.to/series/the-missing-mini-serial.html"
     print(get_video_list_url(url))
 
-    url = 'http://bigcinema.to/series/vse-shvacheno-serial-2016-man-with-a-plan.html'
+    url = "http://bigcinema.to/series/vse-shvacheno-serial-2016-man-with-a-plan.html"
     print(get_video_list_url(url))
 
-    url = 'http://bigcinema.to/series/kesem-sultan-dublyazh-muhtesem-yzyil-ksem.html'
+    url = "http://bigcinema.to/series/kesem-sultan-dublyazh-muhtesem-yzyil-ksem.html"
     print(get_video_list_url(url))
