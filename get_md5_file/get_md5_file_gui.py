@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -11,16 +11,33 @@ __author__ = 'ipetrash'
 
 
 import traceback
+import sys
+
+from datetime import datetime
 
 try:
     from PyQt5.QtWidgets import (
-        QApplication, QMainWindow, QLabel, QMessageBox, QWidget, QFormLayout, QVBoxLayout, QCheckBox
+        QApplication,
+        QMainWindow,
+        QLabel,
+        QMessageBox,
+        QWidget,
+        QFormLayout,
+        QVBoxLayout,
+        QCheckBox,
     )
     from PyQt5.QtCore import Qt
 
 except:
     from PyQt4.QtGui import (
-        QApplication, QMainWindow, QLabel, QMessageBox, QWidget, QFormLayout, QVBoxLayout, QCheckBox
+        QApplication,
+        QMainWindow,
+        QLabel,
+        QMessageBox,
+        QWidget,
+        QFormLayout,
+        QVBoxLayout,
+        QCheckBox,
     )
     from PyQt4.QtCore import Qt
 
@@ -29,19 +46,17 @@ from get_md5_file import md5sum
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
-    from datetime import datetime
     ts = datetime.today().timestamp()
-    with open('error_text_{}'.format(ts), 'w', encoding='utf-8') as f:
+    with open("error_text_{}".format(ts), "w", encoding="utf-8") as f:
         f.write(text)
 
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -49,7 +64,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('get_md5_file_gui')
+        self.setWindowTitle("get_md5_file_gui")
         self.setAcceptDrops(True)
 
         self.label_file_name = QLabel()
@@ -59,18 +74,20 @@ class MainWindow(QMainWindow):
         self.label_md5 = QLabel()
         self.label_md5.setTextInteractionFlags(Qt.TextSelectableByMouse)
 
-        self.checkbox_copy_md5_to_clipboard = QCheckBox('After drop copy md5 to clipboard')
+        self.checkbox_copy_md5_to_clipboard = QCheckBox(
+            "After drop copy md5 to clipboard"
+        )
         self.checkbox_copy_md5_to_clipboard.setChecked(False)
 
-        label_file_name_label = QLabel('File name:')
+        label_file_name_label = QLabel("File name:")
         label_file_name_label.setAlignment(Qt.AlignTop | Qt.AlignLeft)
 
         layout = QFormLayout()
         layout.addRow(label_file_name_label, self.label_file_name)
-        layout.addRow('MD5:', self.label_md5)
+        layout.addRow("MD5:", self.label_md5)
 
         main_layout = QVBoxLayout()
-        main_layout.addWidget(QLabel('Drag and drop the file:'))
+        main_layout.addWidget(QLabel("Drag and drop the file:"))
         main_layout.addLayout(layout)
         main_layout.addStretch()
         main_layout.addWidget(self.checkbox_copy_md5_to_clipboard)
@@ -101,7 +118,7 @@ class MainWindow(QMainWindow):
         return super().dropEvent(event)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = MainWindow()
