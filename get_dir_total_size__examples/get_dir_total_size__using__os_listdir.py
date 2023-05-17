@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from os import listdir
@@ -10,7 +10,7 @@ from os.path import join, getsize, isfile
 from common import sizeof_fmt
 
 
-def get_dir_total_size(dir_name: str, ignore_permission_error=True) -> (int, str):
+def get_dir_total_size(dir_name: str, ignore_permission_error=True) -> tuple[int, str]:
     def _get_sub_size(root_path: str) -> int:
         if isfile(root_path):
             return getsize(root_path)
@@ -31,9 +31,9 @@ def get_dir_total_size(dir_name: str, ignore_permission_error=True) -> (int, str
         except Exception as e:
             if type(e) is PermissionError:
                 if not ignore_permission_error:
-                    print('Error: "{}"'.format(e))
+                    print(f'Error: "{e}"')
             else:
-                print('Path: "{}", error: "{}"'.format(root_path, e))
+                print(f'Path: "{root_path}", error: "{e}"')
 
         return total_size
 
@@ -41,11 +41,11 @@ def get_dir_total_size(dir_name: str, ignore_permission_error=True) -> (int, str
     return total_size, sizeof_fmt(total_size)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import os
 
     # paths = [r"C:\Users\Default", r"C:\Program Files (x86)", os.path.expanduser(r'~\Desktop')]
-    paths = ['..']
+    paths = [".."]
 
     for path in paths:
         path = os.path.abspath(path)

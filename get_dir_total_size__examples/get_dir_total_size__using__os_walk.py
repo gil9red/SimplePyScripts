@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://docs.python.org/3/library/os.html#os.walk
@@ -21,11 +21,11 @@ def get_dir_total_size(dir_name: str) -> (int, str):
     return total_size, sizeof_fmt(total_size)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import os
 
     # paths = [r"C:\Users\Default", r"C:\Program Files (x86)", os.path.expanduser(r'~\Desktop')]
-    paths = ['..']
+    paths = [".."]
 
     for path in paths:
         path = os.path.abspath(path)
