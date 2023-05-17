@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -12,12 +12,12 @@ from grab import Grab
 
 def get_my_public_ip() -> str:
     g = Grab()
-    g.setup(proxy='proxy.compassplus.ru:3128', proxy_type='http')
+    g.setup(proxy="proxy.compassplus.ru:3128", proxy_type="http")
     g.go("http://api.wipmania.com")
-    context = g.doc.body.decode('utf-8')
+    context = g.doc.body.decode("utf-8")
     return context.split("<br>")[0]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ip = get_my_public_ip()
-    print("My IP: {}".format(ip))
+    print(f"My IP: {ip}")
