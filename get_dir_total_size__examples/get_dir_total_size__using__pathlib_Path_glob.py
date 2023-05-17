@@ -9,11 +9,9 @@ import pathlib
 from common import sizeof_fmt
 
 
-def get_dir_total_size(dir_name: str) -> (int, str):
+def get_dir_total_size(dir_name: str) -> tuple[int, str]:
     total_size = 0
 
-    # for file_name in pathlib.Path(dir_name).rglob('*'):
-    # OR:
     for file_name in pathlib.Path(dir_name).glob("**/*"):
         if file_name.is_file():
             total_size += file_name.stat().st_size

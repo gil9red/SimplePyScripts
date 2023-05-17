@@ -12,7 +12,7 @@ from os.path import join, getsize
 from common import sizeof_fmt
 
 
-def get_dir_total_size(dir_name: str) -> (int, str):
+def get_dir_total_size(dir_name: str) -> tuple[int, str]:
     total_size = 0
 
     for root, dirs, files in os.walk(dir_name):

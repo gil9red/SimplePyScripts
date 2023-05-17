@@ -12,7 +12,7 @@ from common import sizeof_fmt
 
 # FIXME: glob ignored dot folders and files
 #        Examples: .git/ .idea/ .gitignore
-def get_dir_total_size(dir_name: str) -> (int, str):
+def get_dir_total_size(dir_name: str) -> tuple[int, str]:
     total_size = 0
 
     for file_name in iglob(escape(dir_name) + "/**", recursive=True):
