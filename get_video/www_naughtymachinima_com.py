@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import re
 
-GET_VIDEO_ID_FROM_URL_PATTERN = re.compile('http://www.naughtymachinima.com/video/(\d+)/')
+
+GET_VIDEO_ID_FROM_URL_PATTERN = re.compile(
+    r"http://www\.naughtymachinima\.com/video/(\d+)/"
+)
 
 
 # TODO: голая ссылка на видео не работает, похоже без каких-то заголовков не получится скачать видео
@@ -20,10 +23,10 @@ def get_video_url(url):
         return
 
     video_id = match.group(1)
-    return 'http://www.naughtymachinima.com/media/videos/iphone/{}.mp4'.format(video_id)
+    return "http://www.naughtymachinima.com/media/videos/iphone/{}.mp4".format(video_id)
 
 
-if __name__ == '__main__':
-    url = 'http://www.naughtymachinima.com/video/18317/lara-with-horse-2-ep-4'
+if __name__ == "__main__":
+    url = "http://www.naughtymachinima.com/video/18317/lara-with-horse-2-ep-4"
     video_url = get_video_url(url)
     print(video_url)
