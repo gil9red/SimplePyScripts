@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
+import os
+import sys
 import time
 
 # Import https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py
-import sys
-sys.path.append('../wait')
-
+sys.path.append("../wait")
 from wait import wait
 
+from common import get_repo
 
-if __name__ == '__main__':
-    from common import get_repo
+
+if __name__ == "__main__":
     repo = get_repo()
-
-    import os
-    new_file_name = os.path.join(repo.working_tree_dir, 'cycle_file')
+    new_file_name = os.path.join(repo.working_tree_dir, "cycle_file")
 
     while True:
         try:
@@ -31,7 +30,7 @@ if __name__ == '__main__':
                 message = "Start cycle #{}".format(number)
 
             else:
-                with open(new_file_name, 'r') as f:
+                with open(new_file_name, "r") as f:
                     number = int(f.read())
                     number += 1
 
@@ -40,7 +39,7 @@ if __name__ == '__main__':
                 message = "Cycle commit #{}".format(number)
 
             # Обновление значения
-            with open(new_file_name, 'w') as f:
+            with open(new_file_name, "w") as f:
                 f.write(str(number))
 
             print(message)
@@ -54,7 +53,7 @@ if __name__ == '__main__':
         while True:
             try:
                 repo.remotes.origin.push()
-                print('Finish push')
+                print("Finish push")
                 break
 
             except Exception as e:

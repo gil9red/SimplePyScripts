@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-if __name__ == '__main__':
-    from common import return_log
-    text = '\n'.join(return_log(reverse=True))
+import re
+from common import return_log
+
+
+if __name__ == "__main__":
+    text = "\n".join(return_log(reverse=True))
     print(text)
 
-    import re
-    num_list = sorted(map(int, set(re.findall('Cycle commit #(\d+)', text))))
+    num_list = sorted(map(int, set(re.findall(r"Cycle commit #(\d+)", text))))
     start = num_list[0]
     end = num_list[-1]
     print(start, end)

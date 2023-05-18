@@ -1,27 +1,32 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import random
+import string
+import os
+import uuid
 
 
 def create_random_file(repo):
-    import uuid
     file_name = str(uuid.uuid4())
-
-    import os
     full_file_name = os.path.join(repo.working_tree_dir, file_name)
 
-    with open(full_file_name, 'w') as f:
-        import random
-        import string
-        text = "".join(random.choice(string.ascii_letters + string.digits) for _ in range(64))
+    with open(full_file_name, "w") as f:
+        text = "".join(
+            random.choice(string.ascii_letters + string.digits)
+            for _ in range(64)
+        )
         f.write(text)
 
     return file_name, file_name
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from common import get_repo, print_log
+
     repo = get_repo()
     print(repo)
     print()
@@ -31,7 +36,7 @@ if __name__ == '__main__':
     print()
 
     new_file_name = create_random_file(repo)[1]
-    message = 'Create: ' + new_file_name
+    message = "Create: " + new_file_name
     print(message)
 
     repo.index.add([new_file_name])
