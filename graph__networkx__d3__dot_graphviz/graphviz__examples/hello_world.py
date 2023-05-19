@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # NOTE: HOW INSTALL:
@@ -12,15 +12,16 @@ __author__ = 'ipetrash'
 # pip install graphviz
 from graphviz import Digraph
 
-g = Digraph(comment='King Arthur')
 
-g.node('A', 'King Arthur')
-g.node('B', 'Sir Bedevere the Wise')
-g.node('L', 'Sir Lancelot the Brave')
+g = Digraph(comment="King Arthur")
 
-g.edges(['AB', 'AL'])
-g.edge('B', 'L', constraint='false')
+g.node("A", "King Arthur")
+g.node("B", "Sir Bedevere the Wise")
+g.node("L", "Sir Lancelot the Brave")
 
-g.attr(label=r'\n\nKing Arthur')
+g.edges(["AB", "AL"])
+g.edge("B", "L", constraint="false")
 
-g.render('test-output/hello_world.gv', view=True)
+g.attr(label=r"\n\nKing Arthur")
+
+g.render("test-output/hello_world.gv", view=True)
