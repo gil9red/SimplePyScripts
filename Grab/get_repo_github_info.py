@@ -3,13 +3,13 @@
 репозиториев и некоторую информацию о них.
 """
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from grab import Grab
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     login = input("Логин: ")
     password = input("Пароль: ")
 
@@ -17,12 +17,12 @@ if __name__ == '__main__':
 
     # Переходим на страницу входа
     print("...Перехожу на страницу входа...")
-    g.go('https://github.com/login')
+    g.go("https://github.com/login")
 
     # Заполняем формы логина и пароля
     print("...Заполняем формы логина и пароля...")
-    g.set_input('login', login)
-    g.set_input('password', password)
+    g.set_input("login", login)
+    g.set_input("password", password)
 
     # Отсылаю данные формы
     print("...Отсылаю данные формы...")
@@ -37,14 +37,14 @@ if __name__ == '__main__':
     # list_repo = g.doc.select('//ul[@class="repo-list js-repo-list"]/li/h3/a')
     list_repo = g.doc.select('//h3[@class="repo-list-name"]/a')
 
-    print("\nРепозитории({}):".format(len(list_repo)))
+    print(f"\nРепозитории({len(list_repo)}):")
 
     # Перебор всех репозиториев
     for i, repo in enumerate(list_repo, 1):
-        url = "https://github.com" + repo.attr('href')
+        url = "https://github.com" + repo.attr("href")
         grab_repo = Grab()
         grab_repo.go(url)  # переход на страницу репозитория
 
         # получение количества коммитов данного репозитория
         count = grab_repo.doc.select('//span[@class="num text-emphasized"]').text()
-        print('{}. "{}" ({} commits): {}'.format(i, repo.text(), count, url))
+        print(f'{i}. "{repo.text()}" ({count} commits): {url}')

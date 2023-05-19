@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """Вывод манг жанра 'game' с статусом 'Переведена'.
@@ -22,52 +22,51 @@ __author__ = 'ipetrash'
 
 from grab import Grab
 
-LOGIN = ''
-PASSWORD = ''
+LOGIN = ""
+PASSWORD = ""
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     g = Grab()
 
     # Авторизация
-    g.go('http://grouple.ru/internal/auth/login')
-    g.set_input('j_username', LOGIN)
-    g.set_input('j_password', PASSWORD)
+    g.go("http://grouple.ru/internal/auth/login")
+    g.set_input("j_username", LOGIN)
+    g.set_input("j_password", PASSWORD)
     g.submit()
 
-    if g.response.url == 'http://grouple.ru/internal/auth/login?login_error=1':
-        print('Авторизация прошла неудачно :(')
+    if g.response.url == "http://grouple.ru/internal/auth/login?login_error=1":
+        print("Авторизация прошла неудачно :(")
 
     # Зайдем в закладки
-    g.go('http://grouple.ru/private/bookmarks')
+    g.go("http://grouple.ru/private/bookmarks")
 
     # Получим список всех url'ов манг в закладках
     get_href_manga_xpath = '//div[@class="bookmarks-lists"]/*/tr/td/a/@href'
-    all_bookmarks_href = [href.text()
-                          for href in g.doc.select(get_href_manga_xpath)]
+    all_bookmarks_href = [href.text() for href in g.doc.select(get_href_manga_xpath)]
 
     # Заходим на страницу жанра манг "игра"
-    g.go('http://readmanga.me/list/genre/game')
+    g.go("http://readmanga.me/list/genre/game")
 
     # Ищем элементы div, у которых есть дети div/span у которого есть класс "mangaTranslationCompleted",
     # и если мы такой нашли, мы у него ищем div с классом "desc"
     xpath = '//div[div/span[@class="mangaTranslationCompleted"]]/div[@class="desc"]'
 
-    print('Список законченной и переведенной манги:')
+    print("Список законченной и переведенной манги:")
 
     # Переберем список найденных элементов
     for i, tile in enumerate(g.doc.select(xpath), 1):
-        title = tile.select('h3/a/@title').text()
+        title = tile.select("h3/a/@title").text()
 
-        alt_title = tile.select('h4/@title')
+        alt_title = tile.select("h4/@title")
         # Если альтернативный заголовок есть, добавим его
         if alt_title.count():
-            title = '"{}" / "{}"'.format(title, alt_title.text())
+            title = f'"{title}" / "{alt_title.text()}"'
         else:
-            title = '"{}"'.format(title)
+            title = f'"{title}"'
 
-        href = 'http://readmanga.me' + tile.select('h3/a/@href').text()
+        href = "http://readmanga.me" + tile.select("h3/a/@href").text()
 
         if href not in all_bookmarks_href:
-            print('{}. {}: {}'.format(i, title, href))
+            print("{i}. {title}: {href}")
         else:
-            print('Уже есть в закладках {}: {}'.format(title, href))
+            print("Уже есть в закладках {title}: {href}")

@@ -5,10 +5,10 @@ from grab import Grab
 """
 
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     login = input("Логин: ")
     password = input("Пароль: ")
 
@@ -36,7 +36,9 @@ if __name__ == '__main__':
 
     fullname = g.doc.select('//span[@itemprop="name"]').text()
     username = g.doc.select('//span[@itemprop="additionalName"]').text()
-    avatar = g.doc.select('//*[@class="vcard-avatar tooltipped tooltipped-s"]/*[@class="avatar"]').attr('src')
+    avatar = g.doc.select(
+        '//*[@class="vcard-avatar tooltipped tooltipped-s"]/*[@class="avatar"]'
+    ).attr("src")
     organization = g.doc.select('//li[@itemprop="worksFor"]').text()
     homeLocation = g.doc.select('//li[@itemprop="homeLocation"]').text()
     email = g.doc.select('//a[@class="email"]').text()
@@ -53,31 +55,30 @@ if __name__ == '__main__':
     print("home location:", homeLocation)
     print("email:", email)
     print("url:", url)
-    print('{} {} ({})'.format(join_label, join_title_time, join_datetime))
+    print(f"{join_label} {join_title_time} ({join_datetime})")
 
     # Получение списка репозиториев
     print()
-    print('...Перехожу на вкладку репозиториев...')
-    g.go("https://github.com/" + login + '?tab=repositories')
+    print("...Перехожу на вкладку репозиториев...")
+    g.go("https://github.com/" + login + "?tab=repositories")
 
     print("...Получаю список репозиториев...")
     list_source_repo = g.doc.select('//li[@class="repo-list-item public source"]')
 
     print()
     print("Репозитории:")
-    print("Sources({}):".format(len(list_source_repo)))
+    print(f"Sources({len(list_source_repo)}):")
 
     for i, repo in enumerate(list_source_repo, 1):
         name = repo.select('*[@class="repo-list-name"]/a')
 
-        href = 'https://github.com' + name.attr('href')
-        print('  {}. {}: {}'.format(i, name.text(), href))
+        href = "https://github.com" + name.attr("href")
+        print(f"  {i}. {name.text()}: {href}")
 
         description = repo.select('*[@class="repo-list-description"]')
         if description.count():
-            print('      "{}"'.format(description.text()))
+            print(f'      "{description.text()}"')
 
-        stats = repo.select('*[@class="repo-list-stats"]').text().split(' ')
+        stats = repo.select('*[@class="repo-list-stats"]').text().split(" ")
         lang, stars, forks = stats
-        print('      lang: {}, stars: {}, forks: {}'.format(lang, stars, forks))
-        print()
+        print(f"      lang: {lang}, stars: {stars}, forks: {forks}\n")
