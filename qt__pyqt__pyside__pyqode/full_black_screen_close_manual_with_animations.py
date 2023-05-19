@@ -53,7 +53,7 @@ class AnimationBalls(Animation):
             r=randint(50, 70),
             v_x=v_x,
             v_y=v_y,
-            color=(r, g, b, 5),
+            color=(r, g, b, 15),
         )
         self.balls.append(ball)
 
