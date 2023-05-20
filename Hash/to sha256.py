@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-def to_sha256(text):
-    import hashlib
+import hashlib
+
+
+def to_sha256(text: str) -> str:
     return hashlib.sha256(text.encode()).hexdigest()
 
 
-if __name__ == '__main__':
-    print(to_sha256('Hello World!'))
+if __name__ == "__main__":
+    print(to_sha256("Hello World!"))
