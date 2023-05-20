@@ -52,3 +52,11 @@ def print_log(reverse=False):
 
     for log in logs:
         print(log)
+
+
+def get_total_commits(repo: git.Repo = None) -> int:
+    if not repo:
+        repo = get_repo()
+    return int(
+        repo.git.rev_list("HEAD", "--count")
+    )
