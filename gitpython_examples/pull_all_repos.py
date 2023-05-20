@@ -33,9 +33,9 @@ def process_repository(repo_path: Path):
 
 def process_all(path: Path, pattern: str = '.git'):
     paths: list[Path] = [
-        path.parent
-        for path in path.rglob(pattern)
-        if path.is_dir()
+        p.parent
+        for p in path.rglob(pattern)
+        if p.is_dir()
     ]
 
     for repo_path in paths:
