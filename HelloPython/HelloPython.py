@@ -1,15 +1,14 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import argparse
+from datetime import datetime, time
 
 
 def main(namespace):
     args = namespace.parse_args()
     args.user = "Илья"
     if args.user:
-        from datetime import datetime, time
-
         welcome = "Привет"
 
         current = datetime.now().time()
@@ -25,16 +24,17 @@ def main(namespace):
         elif time(0) <= current < time(6):
             welcome = "Доброй ночи"
 
-        print("{}, {}!".format(welcome, args.user))
+        print(f"{welcome}, {args.user}!")
     else:
         print("Привет, Python!")
 
 
 def create_parser():
-    parser = argparse.ArgumentParser(description='Hello World Example!')
-    parser.add_argument('--user', type=str, help=' user name.')
+    parser = argparse.ArgumentParser(description="Hello World Example!")
+    parser.add_argument("--user", type=str, help=" user name.")
     return parser
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     parser = create_parser()
     main(parser)
