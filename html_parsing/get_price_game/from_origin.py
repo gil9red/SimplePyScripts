@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+from bs4 import BeautifulSoup
+
+from PyQt5.QtCore import QUrl, QTimer
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWebEngineWidgets import QWebEnginePage
 
 
 # Основа взята из http://stackoverflow.com/a/37755811/5909792
 def get_html(url):
-    from PyQt5.QtCore import QUrl, QTimer
-    from PyQt5.QtWidgets import QApplication
-    from PyQt5.QtWebEngineWidgets import QWebEnginePage
-
     class ExtractorHtml:
         def __init__(self, url):
             _app = QApplication([])
@@ -49,26 +52,23 @@ def get_html(url):
     return ExtractorHtml(url).html
 
 
-text = 'titan'
-url = 'https://www.origin.com/rus/ru-ru/search?searchString=' + text
+text = "titan"
+url = f"https://www.origin.com/rus/ru-ru/search?searchString={text}"
 
 html = get_html(url)
+root = BeautifulSoup(html, "lxml")
 
-
-from bs4 import BeautifulSoup
-root = BeautifulSoup(html, 'lxml')
-
-for game in root.select('.origin-search-section .origin-storegametile-details'):
-    name = game.select_one('.origin-storegametile-title').text.strip()
+for game in root.select(".origin-search-section .origin-storegametile-details"):
+    name = game.select_one(".origin-storegametile-title").text.strip()
     price = None
 
-    storeprice = game.select_one('.origin-storeprice')
+    storeprice = game.select_one(".origin-storeprice")
 
-    otkprice = storeprice.select_one('.otkprice')
+    otkprice = storeprice.select_one(".otkprice")
     if otkprice:
         price = otkprice.text.strip()
     else:
-        free = storeprice.select_one('.otkprice-free')
+        free = storeprice.select_one(".otkprice-free")
         if free:
             price = 0
 

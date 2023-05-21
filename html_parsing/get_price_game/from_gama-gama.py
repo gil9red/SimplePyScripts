@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import re
+
+from bs4 import BeautifulSoup
+
+from PyQt5.QtCore import QUrl
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWebEngineWidgets import QWebEnginePage
 
 
 # Основа взята из http://stackoverflow.com/a/37755811/5909792
 def get_html(url):
-    from PyQt5.QtCore import QUrl
-    from PyQt5.QtWidgets import QApplication
-    from PyQt5.QtWebEngineWidgets import QWebEnginePage
-
     class ExtractorHtml:
         def __init__(self, url):
             _app = QApplication([])
@@ -47,35 +52,31 @@ def get_html(url):
     return ExtractorHtml(url).html
 
 
-text = 'mad'
-url = 'http://gama-gama.ru/search/?searchField=' + text
+text = "mad"
+url = f"http://gama-gama.ru/search/?searchField={text}"
 
 html = get_html(url)
 
 
-from bs4 import BeautifulSoup
-root = BeautifulSoup(html, 'lxml')
+root = BeautifulSoup(html, "lxml")
 
-for game in root.select('.catalog-content > a'):
-    name = game['title'].strip()
-    name = name.replace('Купить ', '')
+for game in root.select(".catalog-content > a"):
+    name = game["title"].strip()
+    name = name.replace("Купить ", "")
 
     price = None
-    price_holder = game.select_one('.catalog_price_holder')
+    price_holder = game.select_one(".catalog_price_holder")
 
-    price_1 = price_holder.select_one('.price_1')
+    price_1 = price_holder.select_one(".price_1")
     if price_1:
         price = price_1.text.strip()
     else:
         # Содержит описание цены со скидкой. Вытаскиваем цену со скидкой
-        price_2 = price_holder.select_one('.price_2')
+        price_2 = price_holder.select_one(".price_2")
         if price_2:
-            price = price_2.select_one('.price_group > .promo_price').text
+            price = price_2.select_one(".price_group > .promo_price").text
 
             # Удаление пустых символов пробелом
-            import re
-            price = re.sub(r'\s+', ' ', price)
-
-            price = price.strip()
+            price = re.sub(r"\s+", " ", price).strip()
 
     print(name, price)
