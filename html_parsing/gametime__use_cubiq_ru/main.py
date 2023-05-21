@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import re
 from dataclasses import dataclass
-from typing import Dict, Optional
 from urllib.parse import urljoin
 
 import requests
@@ -19,27 +18,29 @@ class Time:
     seconds: int
 
     @classmethod
-    def from_text(cls, value: str) -> 'Time':
+    def from_text(cls, value: str) -> "Time":
         seconds = to_seconds(value)
         return cls(value, seconds)
 
 
-USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'
+USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0"
+)
 
 session = requests.Session()
-session.headers['User-Agent'] = USER_AGENT
+session.headers["User-Agent"] = USER_AGENT
 
 
 def to_seconds(time_str: str) -> int:
     kind_to_seconds = {
-        'ч': 60 * 60,
-        'мин': 60,
+        "ч": 60 * 60,
+        "мин": 60,
     }
 
     seconds = 0
-    for value, kind in re.findall(r'(\d+) (ч|мин)', time_str):
+    for value, kind in re.findall(r"(\d+) (ч|мин)", time_str):
         if kind not in kind_to_seconds:
-            raise Exception(f'Неизвестный kind={kind}!')
+            raise Exception(f"Неизвестный kind={kind}!")
 
         seconds += int(value) * kind_to_seconds[kind]
 
@@ -59,14 +60,14 @@ def smart_comparing_names(name_1: str, name_2: str) -> bool:
     name_2 = name_2.lower()
 
     def remove_postfix(text: str) -> str:
-        for postfix in ('dlc', 'expansion'):
+        for postfix in ("dlc", "expansion"):
             if text.endswith(postfix):
-                return text[:-len(postfix)]
+                return text[: -len(postfix)]
         return text
 
     # Удаление символов кроме буквенных, цифр и _: "the witcher®3:___ вася! wild hunt" -> "thewitcher3___васяwildhunt"
     def clear_name(name: str) -> str:
-        return re.sub(r'\W', '', name)
+        return re.sub(r"\W", "", name)
 
     name_1 = clear_name(name_1)
     name_1 = remove_postfix(name_1)
@@ -77,15 +78,15 @@ def smart_comparing_names(name_1: str, name_2: str) -> bool:
     return name_1 == name_2
 
 
-def get(url: str) -> Dict[str, Dict[str, Time]]:
+def get(url: str) -> dict[str, dict[str, Time]]:
     rs = session.get(url)
-    root = BeautifulSoup(rs.content, 'html.parser')
+    root = BeautifulSoup(rs.content, "html.parser")
 
     data = {
-        'title': root.select_one('.entry-header').get_text(strip=True),
+        "title": root.select_one(".entry-header").get_text(strip=True),
     }
 
-    for li in root.select('ul.game_times > li'):
+    for li in root.select("ul.game_times > li"):
         name = li.h5.get_text(strip=True)
         value = li.div.get_text(strip=True)
 
@@ -94,25 +95,25 @@ def get(url: str) -> Dict[str, Dict[str, Time]]:
     return data
 
 
-def find(game: str) -> Optional[Dict[str, Dict[str, Time]]]:
-    url_search = 'https://cubiq.ru/gametime/?s=' + game
+def find(game: str) -> dict[str, dict[str, Time]] | None:
+    url_search = "https://cubiq.ru/gametime/?s=" + game
 
     rs = session.get(url_search)
-    root = BeautifulSoup(rs.content, 'html.parser')
+    root = BeautifulSoup(rs.content, "html.parser")
 
-    for a in root.select('.entry-title > a[href]'):
+    for a in root.select(".entry-title > a[href]"):
         name = a.get_text(strip=True)
         if smart_comparing_names(name, game):
-            url = urljoin(rs.url, a['href'])
+            url = urljoin(rs.url, a["href"])
             return get(url)
 
 
-if __name__ == '__main__':
-    assert to_seconds('25 ч. 18 мин.') == 91080
-    assert to_seconds('71 ч. 50 мин.') == 258600
-    assert to_seconds('113 ч.') == 406800
+if __name__ == "__main__":
+    assert to_seconds("25 ч. 18 мин.") == 91080
+    assert to_seconds("71 ч. 50 мин.") == 258600
+    assert to_seconds("113 ч.") == 406800
 
-    url = 'https://cubiq.ru/gametime/age-of-wonders-iii/'
+    url = "https://cubiq.ru/gametime/age-of-wonders-iii/"
     rs = get(url)
     print(rs)
     # {
@@ -123,7 +124,7 @@ if __name__ == '__main__':
     #  }
 
     print()
-    print(find('dead space'))
+    print(find("dead space"))
     # {
     #     'title': 'Время прохождения Dead Space',
     #     'Основной сюжет': Time(text='11 ч. 10 мин.', seconds=40200),
@@ -132,7 +133,7 @@ if __name__ == '__main__':
     # }
 
     print()
-    print(find('dead space 2'))
+    print(find("dead space 2"))
     # {
     #     'title': 'Время прохождения Dead Space 2',
     #     'Основной сюжет': Time(text='9 ч. 18 мин.', seconds=33480),

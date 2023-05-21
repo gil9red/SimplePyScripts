@@ -1,31 +1,31 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from extract_all_games import cache
 
 
-print(f'Всего игр: {len(cache)}')
+print(f"Всего игр: {len(cache)}")
 print()
 # Всего игр: 11301
 
 games = []
 for game, time_obj in cache.items():
-    seconds = time_obj['seconds']
-    if not seconds or game.upper().endswith('DLC'):
+    seconds = time_obj["seconds"]
+    if not seconds or game.upper().endswith("DLC"):
         continue
 
-    games.append((game, time_obj['text'], seconds))
+    games.append((game, time_obj["text"], seconds))
 
 # Сортировка по возрастанию времени прохождения
 games.sort(key=lambda x: x[2])
 
 n = 100
-print(f'Первые {n} игр с минимум времени прохождения:')
+print(f"Первые {n} игр с минимум времени прохождения:")
 for i, (game, time_text, _) in enumerate(games[:n], 1):
-    print(f'{i:3}. {game!r}: {time_text}')
+    print(f"{i:3}. {game!r}: {time_text}")
 """
 Первые 100 игр с минимум времени прохождения:
   1. 'Mitoza': 1 мин.
