@@ -1,15 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from pathlib import Path
 import re
+from pathlib import Path
 
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout, QGridLayout, QLabel, QLineEdit,
-    QTextEdit, QSplitter, QTableWidget, QTableWidgetItem
+    QApplication,
+    QMainWindow,
+    QWidget,
+    QVBoxLayout,
+    QGridLayout,
+    QLabel,
+    QLineEdit,
+    QTextEdit,
+    QSplitter,
+    QTableWidget,
+    QTableWidgetItem,
 )
 from PyQt5.QtCore import Qt
 
@@ -32,12 +41,14 @@ def _get_line_edit(text: str) -> QLineEdit:
     line_edit = QLineEdit()
     line_edit.setReadOnly(True)
     line_edit.setText(text)
-    line_edit.setStyleSheet("""
+    line_edit.setStyleSheet(
+        """
         QLineEdit {
             border: 0;
             background: transparent;
         }
-    """)
+    """
+    )
 
     return line_edit
 
@@ -60,7 +71,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.filter_le = QLineEdit()
-        self.filter_le.setPlaceholderText('Enter for search regexp...')
+        self.filter_le.setPlaceholderText("Enter for search regexp...")
         self.filter_le.textEdited.connect(self.fill)
 
         self.table_dossier = get_table_widget(["TITLE"])
@@ -72,26 +83,26 @@ class MainWindow(QMainWindow):
         self.question_te = QTextEdit()
         self.answer_te = QTextEdit()
 
-        self.dossier_title = _get_line_edit('-')
-        self.dossier_url = _get_line_edit('-')
-        self.dossier_date = QLabel('-')
-        self.dossier_total_items = QLabel('-')
+        self.dossier_title = _get_line_edit("-")
+        self.dossier_url = _get_line_edit("-")
+        self.dossier_date = QLabel("-")
+        self.dossier_total_items = QLabel("-")
 
         central_content_widget = QWidget()
         central_content_widget.setLayout(QGridLayout())
-        central_content_widget.layout().addWidget(QLabel('Title:'), 0, 0)
+        central_content_widget.layout().addWidget(QLabel("Title:"), 0, 0)
         central_content_widget.layout().addWidget(self.dossier_title, 0, 1)
-        central_content_widget.layout().addWidget(QLabel('Url:'), 1, 0)
+        central_content_widget.layout().addWidget(QLabel("Url:"), 1, 0)
         central_content_widget.layout().addWidget(self.dossier_url, 1, 1)
-        central_content_widget.layout().addWidget(QLabel('Date:'), 2, 0)
+        central_content_widget.layout().addWidget(QLabel("Date:"), 2, 0)
         central_content_widget.layout().addWidget(self.dossier_date, 2, 1)
-        central_content_widget.layout().addWidget(QLabel('Total items:'), 3, 0)
+        central_content_widget.layout().addWidget(QLabel("Total items:"), 3, 0)
         central_content_widget.layout().addWidget(self.dossier_total_items, 3, 1)
         central_content_widget.layout().addWidget(self.table_items, 4, 0, 1, 2)
 
         right_splitter = QSplitter(Qt.Vertical)
-        right_splitter.addWidget(_get_field_widget('Question:', self.question_te))
-        right_splitter.addWidget(_get_field_widget('Answer:', self.answer_te))
+        right_splitter.addWidget(_get_field_widget("Question:", self.question_te))
+        right_splitter.addWidget(_get_field_widget("Answer:", self.answer_te))
 
         main_splitter = QSplitter(Qt.Horizontal)
         main_splitter.addWidget(self.table_dossier)
@@ -168,14 +179,18 @@ class MainWindow(QMainWindow):
         search_text = self.filter_le.text()
         pattern = self._get_search_pattern()
         if search_text and pattern:
-            items = [x for x in items if pattern.search(x.question_text) or pattern.search(x.answer_text)]
+            items = [
+                x
+                for x in items
+                if pattern.search(x.question_text) or pattern.search(x.answer_text)
+            ]
 
         for i, question_answer_pairs in enumerate(items):
             self.table_items.setRowCount(self.table_items.rowCount() + 1)
 
             question_text = question_answer_pairs.question_text
             answer_text = question_answer_pairs.answer_text
-            title = shorten(question_text) + ' | ' + shorten(answer_text)
+            title = shorten(question_text) + " | " + shorten(answer_text)
 
             item = QTableWidgetItem(title)
             item.setData(Qt.UserRole, question_answer_pairs)
@@ -196,14 +211,14 @@ class MainWindow(QMainWindow):
         search_text = self.filter_le.text()
         pattern = self._get_search_pattern()
         if search_text and pattern:
-            question_text = pattern.sub(lambda m: f'<b>{m.group()}</b>', question_text)
-            answer_text = pattern.sub(lambda m: f'<b>{m.group()}</b>', answer_text)
+            question_text = pattern.sub(lambda m: f"<b>{m.group()}</b>", question_text)
+            answer_text = pattern.sub(lambda m: f"<b>{m.group()}</b>", answer_text)
 
         self.question_te.setText(question_text)
         self.answer_te.setText(answer_text)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
