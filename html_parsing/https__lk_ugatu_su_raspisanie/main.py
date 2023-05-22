@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://ru.stackoverflow.com/questions/953820/
@@ -21,31 +21,31 @@ def get_csrfmiddlewaretoken(rs) -> str:
 
 
 COMMON_HEADERS = {
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
-    'Connection': 'keep-alive',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:61.0) Gecko/20100101 Firefox/61.0',
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Accept-Language": "ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3",
+    "Connection": "keep-alive",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:61.0) Gecko/20100101 Firefox/61.0",
 }
 
 
 with requests.Session() as s:
-    rs = s.get('https://lk.ugatu.su/raspisanie/', headers=COMMON_HEADERS)
+    rs = s.get("https://lk.ugatu.su/raspisanie/", headers=COMMON_HEADERS)
     print(rs)
 
     csrfmiddlewaretoken = get_csrfmiddlewaretoken(rs)
 
     # Эмуляция клика на кнопку "ПОКАЗАТЬ"
     data = {
-        'csrfmiddlewaretoken': csrfmiddlewaretoken,
-        'faculty': 'АВИЭТ',
-        'klass': '1',
-        'group': '2435',
-        'ScheduleType': 'За+неделю',
-        'week': '5',
-        'date': '07.03.2019',
-        'sem': '9',
-        'view': 'ПОКАЗАТЬ',
+        "csrfmiddlewaretoken": csrfmiddlewaretoken,
+        "faculty": "АВИЭТ",
+        "klass": "1",
+        "group": "2435",
+        "ScheduleType": "За+неделю",
+        "week": "5",
+        "date": "07.03.2019",
+        "sem": "9",
+        "view": "ПОКАЗАТЬ",
     }
     # Костыль для обхода проблемы составления ScheduleType='За+неделю'
     # Дело в том, что если в data положить словарь, то 'За+неделю' будет закодирован как
@@ -55,20 +55,19 @@ with requests.Session() as s:
     #
     # NOTE: возможно, лучше вместо костыля с urlencode+replace вручную собрать строку
     #
-    data = urlencode(data).replace('%2B', '+').encode()
+    data = urlencode(data).replace("%2B", "+").encode()
 
     headers = {
-        'Referer': "https://lk.ugatu.su/raspisanie/",
-
+        "Referer": "https://lk.ugatu.su/raspisanie/",
         # Нужно заполнить, т.к. в post data передан не как словарь
-        'Content-Type': 'application/x-www-form-urlencoded',
+        "Content-Type": "application/x-www-form-urlencoded",
     }
     headers.update(COMMON_HEADERS)
 
-    rs = s.post('https://lk.ugatu.su/raspisanie/', data=data, headers=headers)
+    rs = s.post("https://lk.ugatu.su/raspisanie/", data=data, headers=headers)
 
-    root = BeautifulSoup(rs.content, 'html.parser')
-    print(root.select_one('#schedule .bgc-lecture-practical'))
+    root = BeautifulSoup(rs.content, "html.parser")
+    print(root.select_one("#schedule .bgc-lecture-practical"))
 
 # Консоль:
 # <Response [200]>
