@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import re
 import time
 
 from dataclasses import dataclass
-from typing import List
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
@@ -26,11 +25,11 @@ class Achievement:
 
 
 def get_achievements(
-        url: str,
-        start_page: int = 1,
-        need_total_items: int = None,
-        reversed: bool = False,
-) -> List[Achievement]:
+    url: str,
+    start_page: int = 1,
+    need_total_items: int = None,
+    reversed: bool = False,
+) -> list[Achievement]:
     data = {
         "ajax_load": "yes",
         "start_from_page": start_page,
@@ -42,31 +41,31 @@ def get_achievements(
         rs = session.post(url, data=data)
         rs.raise_for_status()
 
-        root = BeautifulSoup(rs.text, 'html.parser')
+        root = BeautifulSoup(rs.text, "html.parser")
 
-        achiv_items = root.select('.achiv_all_in')
+        achiv_items = root.select(".achiv_all_in")
         if not achiv_items:
             break
 
         for item in achiv_items:
             icon_url = None
-            icon_style = item.select_one('.achiv_all_icon')['style']
+            icon_style = item.select_one(".achiv_all_icon")["style"]
             match = re.search(r"url\(.(.+).\)", icon_style)
             if not match:
-                print('[-] Not found icon!')
+                print("[-] Not found icon!")
             else:
                 icon_url = match.group(1)
 
-            title = item.select_one('.achiv_all_text_title').get_text(strip=True)
-            description = item.select_one('.achiv_all_text_description').get_text(strip=True)
-
-            tag_date_a = item.select_one('.achiv_all_text_date > a')
-            date_str = tag_date_a.get_text(strip=True)
-            video_url = urljoin(rs.url, tag_date_a['href'])
-
-            items.append(
-                Achievement(icon_url, title, description, date_str, video_url)
+            title = item.select_one(".achiv_all_text_title").get_text(strip=True)
+            description = item.select_one(".achiv_all_text_description").get_text(
+                strip=True
             )
+
+            tag_date_a = item.select_one(".achiv_all_text_date > a")
+            date_str = tag_date_a.get_text(strip=True)
+            video_url = urljoin(rs.url, tag_date_a["href"])
+
+            items.append(Achievement(icon_url, title, description, date_str, video_url))
 
         if need_total_items and len(items) >= need_total_items:
             items = items[:need_total_items]
@@ -82,13 +81,13 @@ def get_achievements(
     return items
 
 
-if __name__ == '__main__':
-    url = 'https://jut.su/user/gil9red/achievements/'
+if __name__ == "__main__":
+    url = "https://jut.su/user/gil9red/achievements/"
     items = get_achievements(url)
 
-    print(f'Achievements ({len(items)}):')
+    print(f"Achievements ({len(items)}):")
     for item in items:
-        print(f'    {item}')
+        print(f"    {item}")
 
     """
     Achievements (2690):

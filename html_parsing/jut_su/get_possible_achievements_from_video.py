@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import logging
@@ -9,7 +9,6 @@ import re
 
 from base64 import b64decode
 from dataclasses import dataclass
-from typing import Union
 
 from seconds_to_str import seconds_to_str
 
@@ -20,12 +19,12 @@ DEBUG = False
 
 logging.basicConfig(
     level=logging.DEBUG if DEBUG else logging.INFO,
-    format='[%(asctime)s] %(levelname)-8s %(message)s',
+    format="[%(asctime)s] %(levelname)-8s %(message)s",
 )
 
 RE_BASE64 = re.compile(r'eval\( *Base64.decode\( *"(.+?)" *\) *\);')
 RE_SOME_ACHIV_STR = re.compile(r'some_achiv_str *= *"(.+?)";')
-RE_BRACE_CONTENT = re.compile(r'\{(.+?)\}', flags=re.DOTALL)
+RE_BRACE_CONTENT = re.compile(r"\{(.+?)\}", flags=re.DOTALL)
 
 
 @dataclass
@@ -40,7 +39,7 @@ class Achievement:
     icon: str
 
 
-def parse_raw_anime_achievement(anime_achievement: str) -> dict[str, Union[str, int]]:
+def parse_raw_anime_achievement(anime_achievement: str) -> dict[str, str | int]:
     # Пример значения
     """
     category: "events",
@@ -52,34 +51,30 @@ def parse_raw_anime_achievement(anime_achievement: str) -> dict[str, Union[str, 
     hash: "11560c9068571116"
     """
 
-    values: dict[str, Union[str, int]] = dict()
+    values: dict[str, str | int] = dict()
     for line in anime_achievement.splitlines():
         line = line.strip()
         if not line:
             continue
 
-        key, value = line.split(': ', maxsplit=1)
+        key, value = line.split(": ", maxsplit=1)
         key = key.strip()
-        value = value.strip().rstrip(',')
+        value = value.strip().rstrip(",")
         if value.startswith('"') and value.endswith('"'):
             value = value[1:-1]
 
         values[key] = value
 
-    values['id'] = int(
-        values['id']
-    )
-    values['time_start'] = int(
-        values['time_start']
-    )
-    values['time_start_pretty'] = seconds_to_str(
-        values['time_start']
-    )
+    values["id"] = int(values["id"])
+    values["time_start"] = int(values["time_start"])
+    values["time_start_pretty"] = seconds_to_str(values["time_start"])
 
     return values
 
 
-def parse_raw_anime_achievements(some_achiv_str: str) -> list[dict[str, Union[str, int]]]:
+def parse_raw_anime_achievements(
+    some_achiv_str: str,
+) -> list[dict[str, str | int]]:
     # Пример значения:
     """
     var this_anime_achievements = [];
@@ -110,7 +105,7 @@ def parse_raw_anime_achievements(some_achiv_str: str) -> list[dict[str, Union[st
 
 
 def get_raw_achievements(url: str) -> list[dict[str, str]]:
-    logging.debug(f'Загрузка {url}')
+    logging.debug(f"Загрузка {url}")
 
     rs = session.get(url)
     rs.raise_for_status()
@@ -118,29 +113,29 @@ def get_raw_achievements(url: str) -> list[dict[str, str]]:
     text = rs.text
 
     base64_items = RE_BASE64.findall(text)
-    logging.debug(f'Найдено base64: {len(base64_items)}')
+    logging.debug(f"Найдено base64: {len(base64_items)}")
 
     if not base64_items:
         raise Exception(f"Не найдено ни одного base64 по шаблону '{RE_BASE64.pattern}'")
 
-    logging.debug('Поиск some_achiv_str среди base64')
+    logging.debug("Поиск some_achiv_str среди base64")
 
-    some_achiv_str: str = ''
+    some_achiv_str: str = ""
 
     for i, base64_value in enumerate(base64_items, 1):
-        logging.debug(f'    {i}. base64: {base64_value}')
+        logging.debug(f"    {i}. base64: {base64_value}")
 
         data = b64decode(base64_value)
-        logging.debug(f'       data: {data}\n')
+        logging.debug(f"       data: {data}\n")
 
-        m = RE_SOME_ACHIV_STR.search(data.decode('utf-8'))
+        m = RE_SOME_ACHIV_STR.search(data.decode("utf-8"))
         if not m:
             continue
 
         base64_achiv = m.group(1)
         data = b64decode(base64_achiv)
-        some_achiv_str = data.decode('utf-8')
-        logging.debug(f'some_achiv_str:\n{some_achiv_str}')
+        some_achiv_str = data.decode("utf-8")
+        logging.debug(f"some_achiv_str:\n{some_achiv_str}")
 
     if not some_achiv_str:
         raise Exception("Не удалось найти some_achiv_str среди base64")
@@ -148,7 +143,7 @@ def get_raw_achievements(url: str) -> list[dict[str, str]]:
     return parse_raw_anime_achievements(some_achiv_str)
 
 
-def get_anime_achievement(anime_achievement: dict[str, Union[str, int]]) -> Achievement:
+def get_anime_achievement(anime_achievement: dict[str, str | int]) -> Achievement:
     return Achievement(**anime_achievement)
 
 
@@ -159,20 +154,20 @@ def get_achievements(url: str) -> list[Achievement]:
     ]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     for url in [
-        'https://jut.su/bleeach/episode-1.html',
-        'https://jut.su/bleeach/episode-16.html',
-        'https://jut.su/bleeach/episode-20.html',
-        'https://jut.su/bleeach/episode-21.html',
-        'https://jut.su/bleeach/episode-24.html',
-        'https://jut.su/bleeach/episode-47.html',
+        "https://jut.su/bleeach/episode-1.html",
+        "https://jut.su/bleeach/episode-16.html",
+        "https://jut.su/bleeach/episode-20.html",
+        "https://jut.su/bleeach/episode-21.html",
+        "https://jut.su/bleeach/episode-24.html",
+        "https://jut.su/bleeach/episode-47.html",
     ]:
         achievements = get_achievements(url)
-        print(f'{url} ({len(achievements)}):')
+        print(f"{url} ({len(achievements)}):")
 
         for achievement in achievements:
-            print(f'    {achievement}')
+            print(f"    {achievement}")
 
         print()
     """

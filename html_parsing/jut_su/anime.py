@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import re
@@ -17,9 +17,9 @@ from bs4 import BeautifulSoup
 from common import session
 
 
-RE_ANIME_PAGE_NEXT = re.compile('anime_page_next = (true|false);')
+RE_ANIME_PAGE_NEXT = re.compile("anime_page_next = (true|false);")
 
-URL = 'https://jut.su/anime/'
+URL = "https://jut.su/anime/"
 
 
 @dataclass
@@ -30,10 +30,10 @@ class Anime:
 
 def parse_anime_list(rs: requests.Response) -> list[Anime]:
     items = []
-    root = BeautifulSoup(rs.text, 'html.parser')
-    for anime_el in root.select('.all_anime_global'):
-        url = urljoin(rs.url, anime_el.a['href'])
-        title = anime_el.select_one('.aaname').text
+    root = BeautifulSoup(rs.text, "html.parser")
+    for anime_el in root.select(".all_anime_global"):
+        url = urljoin(rs.url, anime_el.a["href"])
+        title = anime_el.select_one(".aaname").text
 
         items.append(Anime(url, title))
 
@@ -48,18 +48,18 @@ def send_get() -> requests.Response:
 
 
 def send_post(
-        page: int = 1,
-        show_search: str = '',
-        anime_of_user: str = ''
+    page: int = 1,
+    show_search: str = "",
+    anime_of_user: str = "",
 ) -> requests.Response:
     headers = {
-        'X-Requested-With': 'XMLHttpRequest'
+        "X-Requested-With": "XMLHttpRequest",
     }
     data = {
-        'ajax_load': 'yes',
-        'start_from_page': page,
-        'show_search': show_search,
-        'anime_of_user': anime_of_user,
+        "ajax_load": "yes",
+        "start_from_page": page,
+        "show_search": show_search,
+        "anime_of_user": anime_of_user,
     }
     rs = session.post(URL, data=data, headers=headers)
     rs.raise_for_status()
@@ -70,8 +70,8 @@ def send_post(
 def has_next_page(text: str) -> bool:
     m = RE_ANIME_PAGE_NEXT.search(text)
     if not m:
-        raise Exception('Не удалось найти переменную anime_page_next!')
-    return m.group(1) == 'true'
+        raise Exception("Не удалось найти переменную anime_page_next!")
+    return m.group(1) == "true"
 
 
 def get_all_lazy() -> Iterator[list[Anime]]:
@@ -100,7 +100,7 @@ def get_all() -> list[Anime]:
     return items
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Первые 3 страницы
     for page, anime_list in enumerate(get_all_lazy(), 1):
         print(page, anime_list)
@@ -113,5 +113,5 @@ if __name__ == '__main__':
     """
 
     all_anime = get_all()
-    print(f'All anime ({len(all_anime)}): [{all_anime[0]}, ..., {all_anime[-1]}]')
+    print(f"All anime ({len(all_anime)}): [{all_anime[0]}, ..., {all_anime[-1]}]")
     # All anime (863): [Anime(url='https://jut.su/shingekii-no-kyojin/', title='Атака титанов'), ..., Anime(url='https://jut.su/extreme-hearts/', title='Экстремальные сердца')]

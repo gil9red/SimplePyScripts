@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from collections import defaultdict
@@ -28,46 +28,46 @@ def get_video_list(url: str) -> dict[str, list[Video]]:
     rs = session.get(url)
     rs.raise_for_status()
 
-    season = ''
+    season = ""
 
-    root = BeautifulSoup(rs.content, 'html.parser')
+    root = BeautifulSoup(rs.content, "html.parser")
 
     # Название сезона хранится в <h2>, а сами видео в <a>, причем h2 может и не быть, а сами теги находятся на
     # одном уровне
-    for el in root.select_one('#dle-content').find_all(name=['h2', 'a']):
-        attr_class = el.get('class', [])
+    for el in root.select_one("#dle-content").find_all(name=["h2", "a"]):
+        attr_class = el.get("class", [])
 
-        if el.name == 'h2' and 'the-anime-season' in attr_class:
+        if el.name == "h2" and "the-anime-season" in attr_class:
             season = el.get_text(strip=True)
             continue
 
-        if el.name == 'a' and 'video' in attr_class:
+        if el.name == "a" and "video" in attr_class:
             # Удаление лишнего тега i из <a class="... video ..." href="...html"><i>... </i>1 серия</a>
             el.i.decompose()
 
             season_by_video_list[season].append(
                 Video(
                     title=el.get_text(strip=True),
-                    url=urljoin(rs.url, el['href']),
+                    url=urljoin(rs.url, el["href"]),
                 )
             )
 
     return season_by_video_list
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import time
 
     for url in [
-        'https://jut.su/zero-kara/',
-        'https://jut.su/cowboy-bebop/',
-        'https://jut.su/overlord/',
+        "https://jut.su/zero-kara/",
+        "https://jut.su/cowboy-bebop/",
+        "https://jut.su/overlord/",
     ]:
         print(url)
         for season, video_list in get_video_list(url).items():
             print(f'"{season}" ({len(video_list)}):')
             for video in video_list:
-                print(f'    {video}')
+                print(f"    {video}")
         print()
 
         time.sleep(1)
