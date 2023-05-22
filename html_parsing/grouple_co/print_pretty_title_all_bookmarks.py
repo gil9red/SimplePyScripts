@@ -1,33 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from typing import List
 from common import get_all_bookmarks
 
 
-def get_all_pretty_title_of_bookmarks() -> List[str]:
+def get_all_pretty_title_of_bookmarks() -> list[str]:
     items = []
     for bookmarks in get_all_bookmarks().values():
-        items += [
-            x.get_title_with_tags()
-            for x in bookmarks
-        ]
+        items += [x.get_title_with_tags() for x in bookmarks]
 
     return items
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     all_bookmarks = get_all_pretty_title_of_bookmarks()
-    print('Total bookmarks:', len(all_bookmarks))
+    print("Total bookmarks:", len(all_bookmarks))
     # Total bookmarks: 143
 
     print()
 
     for i, bookmark_title in enumerate(all_bookmarks, 1):
-        print(f'{i}. {bookmark_title}')
+        print(f"{i}. {bookmark_title}")
 
     """
     1. Башня Бога

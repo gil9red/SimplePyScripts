@@ -1,22 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from common import get_all_bookmarks
 
 
 status_by_bookmarks = get_all_bookmarks()
-print('Total bookmarks:', sum(len(bookmarks) for bookmarks in status_by_bookmarks.values()))
+print(
+    "Total bookmarks:",
+    sum(len(bookmarks) for bookmarks in status_by_bookmarks.values()),
+)
 # Total bookmarks: 143
 
 print()
 
 for status, bookmarks in status_by_bookmarks.items():
-    print(f'{status.value}. Bookmarks ({len(bookmarks)}):')
+    print(f"{status.value}. Bookmarks ({len(bookmarks)}):")
     for i, bookmark in enumerate(bookmarks, 1):
-        print(f'{i}. {bookmark}')
+        print(f"{i}. {bookmark}")
 
     print()
 

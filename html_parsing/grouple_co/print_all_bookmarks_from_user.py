@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from common import get_plain_all_bookmarks_from_user
 
 
 bookmarks = get_plain_all_bookmarks_from_user(315828)
-print(f'Bookmarks ({len(bookmarks)}):')
+print(f"Bookmarks ({len(bookmarks)}):")
 for i, bookmark in enumerate(bookmarks, 1):
-    print(f'{i}. {bookmark}')
+    print(f"{i}. {bookmark}")
 """
 Bookmarks (85):
 1. Bookmark(title='Башня Бога', url='https://readmanga.io/bashnia_boga__A339d2', tags=[])
