@@ -1,24 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import re
 
 import requests
 from bs4 import BeautifulSoup
-import re
 
 
 def is_has(letter: str) -> bool:
     letter = letter.strip().lower()
 
-    return bool(re.match('^[а-яё]$', letter))
+    return bool(re.match("^[а-яё]$", letter))
 
 
-rs = requests.get('http://encyclopatia.ru/wiki/Расстрельный_список_препаратов')
+rs = requests.get("http://encyclopatia.ru/wiki/Расстрельный_список_препаратов")
 
-root = BeautifulSoup(rs.content, 'html.parser')
-for span in root.select('h2 > .mw-headline'):
+root = BeautifulSoup(rs.content, "html.parser")
+for span in root.select("h2 > .mw-headline"):
     if not is_has(span.text):
         continue
 
@@ -28,8 +29,8 @@ for span in root.select('h2 > .mw-headline'):
     # мы сначала найдем элемент с буквой, а после сам элемент
     # <h2><span>А</span></h2>
     # <ul>
-    ul = span.parent.find_next_sibling('ul')
-    for li in ul.select('li'):
+    ul = span.parent.find_next_sibling("ul")
+    for li in ul.select("li"):
         print(li.text.strip())
 
     print()
