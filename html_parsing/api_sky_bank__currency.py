@@ -1,44 +1,44 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import requests
 
 
 session = requests.session()
-session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:94.0) Gecko/20100101 Firefox/94.0'
+session.headers[
+    "User-Agent"
+] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:94.0) Gecko/20100101 Firefox/94.0"
 
 
-URL_GET_OFFICES = 'https://api.sky.bank/currency/get-offices-list'
-URL_RATES_BY_CODES = 'https://api.sky.bank/currency/rates-by-codes'
+URL_GET_OFFICES = "https://api.sky.bank/currency/get-offices-list"
+URL_RATES_BY_CODES = "https://api.sky.bank/currency/rates-by-codes"
 
 
 rs = session.get(URL_GET_OFFICES)
 
-office_id_by_name = {
-    x['id']: x['sname'] for x in rs.json()['response']
-}
+office_id_by_name = {x["id"]: x["sname"] for x in rs.json()["response"]}
 print(office_id_by_name)
 # {24: '1 ФИЛИАЛ (закр)', 2: 'АТ "СКАЙ БАНК"', 25: 'Барвінківське відділення', 4: 'БАРВ.Ф.АКРБ "РЕГ_ОН-БАНК" ...
 
 rs = session.post(URL_RATES_BY_CODES)
-currency_by_rates = rs.json()['response']
+currency_by_rates = rs.json()["response"]
 print(currency_by_rates)
 # {'EUR': [{'id': 839871, 'currency_id': 4, 'unit': None, 'rate': None, 'date': '2022-01-28T00:00:00+02:00', ...
 
 print()
 
 for office_id, name in office_id_by_name.items():
-    print(f'{name} (#{office_id}):')
+    print(f"{name} (#{office_id}):")
 
     for currency_name, rates in currency_by_rates.items():
         for rate in rates:
-            if rate['office_id'] == office_id:
+            if rate["office_id"] == office_id:
                 buy_rate = float(rate["buy_rate"]) / rate["buy_unit"]
                 sell_rate = float(rate["sell_rate"]) / rate["sell_unit"]
-                print(f'    {currency_name}: {buy_rate} | {sell_rate}')
+                print(f"    {currency_name}: {buy_rate} | {sell_rate}")
 
     print()
 """

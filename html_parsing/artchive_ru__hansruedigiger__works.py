@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import re
-from typing import List, Tuple
-
 import requests
 
 
-USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'
+USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0"
+)
 
 session = requests.session()
-session.headers['User-Agent'] = USER_AGENT
+session.headers["User-Agent"] = USER_AGENT
 
 
 def get_url_img(media: dict) -> str:
@@ -21,13 +21,13 @@ def get_url_img(media: dict) -> str:
     return f"{media['base_url']}/img/orig/work/{media['data']['version_orig']}/{media['media_id']}.webp"
 
 
-def get_url_images(url: str) -> List[Tuple[str, str]]:
+def get_url_images(url: str) -> list[tuple[str, str]]:
     rs = session.get(url)
     rs.raise_for_status()
 
     m = re.search(r' artist_id="(\d+)"', rs.text)
     if not m:
-        raise Exception('Not found artist_id!')
+        raise Exception("Not found artist_id!")
 
     artist_id = m.group(1)
 
@@ -35,27 +35,27 @@ def get_url_images(url: str) -> List[Tuple[str, str]]:
 
     # TODO: iterate by all pages
     params = {
-        'p': 1,
-        'artist': artist_id,
+        "p": 1,
+        "artist": artist_id,
     }
 
-    url_api = 'https://artchive.ru/action/vue/works/search'
+    url_api = "https://artchive.ru/action/vue/works/search"
 
     rs = session.get(url_api, params=params)
     rs.raise_for_status()
 
     data = rs.json()
-    for work in data['works']:
+    for work in data["works"]:
         items.append((
-            work['name'],
-            get_url_img(work['media'])
+            work["name"],
+            get_url_img(work["media"])
         ))
 
     return items
 
 
-if __name__ == '__main__':
-    url = 'https://artchive.ru/hansruedigiger/works'
+if __name__ == "__main__":
+    url = "https://artchive.ru/hansruedigiger/works"
     for name, url_img in get_url_images(url):
         print(name)
         print(url_img)
