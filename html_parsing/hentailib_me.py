@@ -1,45 +1,44 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-import re
 import json
-from typing import List
+import re
 
 import requests
 
 
-def get_images(url: str) -> List[str]:
+def get_images(url: str) -> list[str]:
     rs = requests.get(url)
 
-    info = re.search('window.__info = (.+?);', rs.text)
+    info = re.search("window.__info = (.+?);", rs.text)
     if not info:
-        print('[#] Not found window.__info!')
+        print("[#] Not found window.__info!")
         return []
 
-    pages = re.search('window.__pg = (.+?);', rs.text)
+    pages = re.search("window.__pg = (.+?);", rs.text)
     if not pages:
-        print('[#] Not found window.__pg!')
+        print("[#] Not found window.__pg!")
         return []
 
     info = json.loads(info.group(1))
     pages = json.loads(pages.group(1))
 
-    url_chapter = info['img']['url']
-    url_base = info['servers']['main'] + url_chapter
+    url_chapter = info["img"]["url"]
+    url_base = info["servers"]["main"] + url_chapter
 
-    return [url_base + p['u'] for p in pages]
+    return [url_base + p["u"] for p in pages]
 
 
-if __name__ == '__main__':
-    url = 'https://hentailib.me/koshkodevochki-eto-lozh/v1/c1?page=1'
+if __name__ == "__main__":
+    url = "https://hentailib.me/koshkodevochki-eto-lozh/v1/c1?page=1"
     items = get_images(url)
 
-    print(f'Images ({len(items)}):')
+    print(f"Images ({len(items)}):")
     for i, url in enumerate(items, 1):
-        print(f'    {i}. {url}')
+        print(f"    {i}. {url}")
 
     # Images (22):
     #     1. https://img2.hentailib.me/manga/koshkodevochki-eto-lozh/chapters/468545/02_iips.png

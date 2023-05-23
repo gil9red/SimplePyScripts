@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from dataclasses import dataclass
@@ -12,7 +12,9 @@ from bs4 import BeautifulSoup
 
 
 session = requests.session()
-session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/110.0'
+session.headers[
+    "User-Agent"
+] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/110.0"
 
 
 @dataclass
@@ -25,24 +27,25 @@ def get_chapters(url: str) -> list[Chapter]:
     rs = session.get(url)
     rs.raise_for_status()
 
-    soup = BeautifulSoup(rs.content, 'html.parser')
+    soup = BeautifulSoup(rs.content, "html.parser")
     return [
         Chapter(
-            title=el.select_one('.item-title').get_text(strip=True),
-            url=urljoin(rs.url, el.a['href']),
+            title=el.select_one(".item-title").get_text(strip=True),
+            url=urljoin(rs.url, el.a["href"]),
         )
-        for el in soup.select('.chapters-list__item')
+        for el in soup.select(".chapters-list__item")
     ]
 
 
-if __name__ == '__main__':
-    def print_chapter(items: list[Chapter]):
-        print(f'Chapters ({len(items)}):')
-        print(f'    {items[0]}')
-        print('    ...')
-        print(f'    {items[-1]}')
+if __name__ == "__main__":
 
-    url = 'https://gitmanga.com/764-berserk.html'
+    def print_chapter(items: list[Chapter]):
+        print(f"Chapters ({len(items)}):")
+        print(f"    {items[0]}")
+        print("    ...")
+        print(f"    {items[-1]}")
+
+    url = "https://gitmanga.com/764-berserk.html"
     items = get_chapters(url)
     print_chapter(items)
     """
@@ -54,7 +57,7 @@ if __name__ == '__main__':
 
     print()
 
-    url = 'https://gitmanga.com/605-igrok.html'
+    url = "https://gitmanga.com/605-igrok.html"
     items = get_chapters(url)
     print_chapter(items)
     """
