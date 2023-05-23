@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import requests
@@ -9,20 +9,19 @@ from bs4 import BeautifulSoup
 
 
 session = requests.session()
-session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0'
+session.headers[
+    "User-Agent"
+] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0"
 
 
-url = 'https://www.ign.com/articles/the-best-100-video-games-of-all-time'
+url = "https://www.ign.com/articles/the-best-100-video-games-of-all-time"
 rs = session.get(url)
 rs.raise_for_status()
 
-root = BeautifulSoup(rs.content, 'html.parser')
-items = [
-    el.text
-    for el in root.select('.article-page > h2 > strong')
-]
+root = BeautifulSoup(rs.content, "html.parser")
+items = [el.text for el in root.select(".article-page > h2 > strong")]
 items.reverse()
-print(*items, sep='\n')
+print(*items, sep="\n")
 assert len(items) == 100
 """
 1. The Legend of Zelda: Breath of the Wild
