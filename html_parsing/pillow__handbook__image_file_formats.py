@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from bs4 import BeautifulSoup
@@ -9,15 +9,18 @@ import requests
 
 
 def get_formats(css_selector: str) -> list:
-    formats_els = root\
-        .select_one(css_selector)\
-        .find_next_sibling('ul')\
-        .find_all('li', recursive=False)
+    formats_els = (
+        root.select_one(css_selector)
+        .find_next_sibling("ul")
+        .find_all("li", recursive=False)
+    )
     return [li.a.get_text(strip=True) for li in formats_els]
 
 
-rs = requests.get('https://pillow.readthedocs.io/en/latest/handbook/image-file-formats.html')
-root = BeautifulSoup(rs.content, 'html.parser')
+rs = requests.get(
+    "https://pillow.readthedocs.io/en/latest/handbook/image-file-formats.html"
+)
+root = BeautifulSoup(rs.content, "html.parser")
 
 fully_supported_formats = get_formats('#contents a[href="#fully-supported-formats"]')
 print(fully_supported_formats)
