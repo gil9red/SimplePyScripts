@@ -1,48 +1,48 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import json
 from urllib.parse import urljoin
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 
 def get_products(search: str) -> list:
     headers = {
-        'X-Requested-With': 'XMLHttpRequest',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0'
+        "X-Requested-With": "XMLHttpRequest",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0",
     }
-    url = f'https://www.dns-shop.ru/search/?q={search}&p=1&order=popular&stock=all'
+    url = f"https://www.dns-shop.ru/search/?q={search}&p=1&order=popular&stock=all"
     session = requests.session()
     session.headers.update(headers)
 
     rs = session.get(url)
     data = json.loads(rs.text)
 
-    root = BeautifulSoup(data['html'], 'html.parser')
+    root = BeautifulSoup(data["html"], "html.parser")
 
     items = []
 
-    for a in root.select('.product-info__title-link > a'):
+    for a in root.select(".product-info__title-link > a"):
         items.append(
-            (a.get_text(strip=True), urljoin(rs.url, a['href']))
+            (a.get_text(strip=True), urljoin(rs.url, a["href"]))
         )
 
     return items
 
 
-if __name__ == '__main__':
-    name = 'Видеокарты'
+if __name__ == "__main__":
+    name = "Видеокарты"
     items = get_products(name)
 
-    print(f'Search {name!r}...')
-    print(f'  Result ({len(items)}):')
+    print(f"Search {name!r}...")
+    print(f"  Result ({len(items)}):")
     for title, url in items:
-        print(f'    {title!r}: {url}')
+        print(f"    {title!r}: {url}")
     print()
 
     # Search 'Видеокарты'...
