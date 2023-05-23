@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import re
@@ -10,20 +10,20 @@ from bs4 import BeautifulSoup
 
 
 html = get_html()
-root = BeautifulSoup(html, 'html.parser')
+root = BeautifulSoup(html, "html.parser")
 
 # Таблица "Награды Пиратов Соломенной Шляпы"
-table = root.select('.wikitable')[0]
+table = root.select(".wikitable")[0]
 
 # Список строк исключая строку заголовка
-row_list = table.select('tr')[1:]
+row_list = table.select("tr")[1:]
 
 # Перебор tr с шагом 2
-items = [[process_td(td) for td in x.select('td')] for x in row_list[::2]]
+items = [[process_td(td) for td in x.select("td")] for x in row_list[::2]]
 
-print('Награды:')
+print("Награды:")
 for row, x in enumerate(items, 1):
-    print('{:2}. {}'.format(row, x))
+    print("{:2}. {}".format(row, x))
 
 #  1. ['Монки Д. Луффи', '«Соломенная Шляпа» / «Пятый Император»', '1 500 000 000']
 #  2. ['Ророноа Зоро', '«Охотник на пиратов»', '320 000 000']
@@ -38,13 +38,13 @@ for row, x in enumerate(items, 1):
 
 print()
 
-print('Награды (по убыванию):')
+print("Награды (по убыванию):")
 
 # Вывод с сортировкой по наградам:
-items.sort(key=lambda x: int(re.sub(r'\D', '', x[-1])), reverse=True)
+items.sort(key=lambda x: int(re.sub(r"\D", "", x[-1])), reverse=True)
 
 for row, x in enumerate(items, 1):
-    print('{:2}. {}'.format(row, x))
+    print("{:2}. {}".format(row, x))
 
 #  1. ['Монки Д. Луффи', '«Соломенная Шляпа» / «Пятый Император»', '1 500 000 000']
 #  2. ['Дзимбэй', '«Рыцарь Моря»', 'Более 400 000 000']
