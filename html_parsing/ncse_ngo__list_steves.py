@@ -1,25 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import re
 from dataclasses import dataclass
-from typing import List, Tuple, Union
 
 import requests
 from bs4 import BeautifulSoup, Tag
 
 
-PATTERN_GET_NUMBER_OF_STEVES = re.compile(r'(\d+) Steves have signed the statement', flags=re.IGNORECASE)
-PATTERN_MANY_NEWLINES = re.compile(r'\n{2,}')
-PATTERN_MANY_EMPTY = re.compile(r'\s{2,}')
+PATTERN_GET_NUMBER_OF_STEVES = re.compile(
+    r"(\d+) Steves have signed the statement", flags=re.IGNORECASE
+)
+PATTERN_MANY_NEWLINES = re.compile(r"\n{2,}")
+PATTERN_MANY_EMPTY = re.compile(r"\s{2,}")
 
 session = requests.session()
-session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0'
+session.headers[
+    "User-Agent"
+] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0"
 
-URL = 'https://ncse.ngo/list-steves'
+URL = "https://ncse.ngo/list-steves"
 
 
 @dataclass
@@ -28,14 +31,14 @@ class Steve:
     description: str
 
     def get_text(self) -> str:
-        return f'{self.name}\n{self.description}'
+        return f"{self.name}\n{self.description}"
 
 
 def get_number_from_description() -> int:
     rs = session.get(URL)
     m = PATTERN_GET_NUMBER_OF_STEVES.search(rs.text)
     if not m:
-        raise Exception('Not found number of Steves!')
+        raise Exception("Not found number of Steves!")
 
     return int(m.group(1))
 
@@ -44,35 +47,37 @@ def _get_stripped_text(text: str) -> str:
     if not text:
         return text
 
-    text = PATTERN_MANY_NEWLINES.sub('\n', text)
-    text = PATTERN_MANY_EMPTY.sub(' ', text)
+    text = PATTERN_MANY_NEWLINES.sub("\n", text)
+    text = PATTERN_MANY_EMPTY.sub(" ", text)
     return text.strip()
 
 
-def _get_text(el: Union[Tag, str]) -> str:
-    return _get_stripped_text(el) if isinstance(el, str) else _get_stripped_text(el.text)
+def _get_text(el: Tag | str) -> str:
+    return (
+        _get_stripped_text(el) if isinstance(el, str) else _get_stripped_text(el.text)
+    )
 
 
 def _remove_postfix(text: str) -> str:
-    return text.replace('*', '').replace('†', '').strip()
+    return text.replace("*", "").replace("†", "").strip()
 
 
-def get_Steves() -> List[Steve]:
+def get_Steves() -> list[Steve]:
     items = []
 
     rs = session.get(URL)
-    root = BeautifulSoup(rs.content, 'html.parser')
+    root = BeautifulSoup(rs.content, "html.parser")
 
-    p_items = root.select('.field-field_body > article > p:has(:is(strong, b))')
+    p_items = root.select(".field-field_body > article > p:has(:is(strong, b))")
 
     for p in p_items:
         # Ignore <p> with footnotes
-        if 'Added after the Project Steve 200 t-shirt was designed' in p.text:
+        if "Added after the Project Steve 200 t-shirt was designed" in p.text:
             continue
 
         tag_name = p.strong or p.b
         if not tag_name:
-            raise Exception('Could not find b / strong tag containing name!')
+            raise Exception("Could not find b / strong tag containing name!")
 
         name = _get_stripped_text(tag_name.text)
         name = _remove_postfix(name)
@@ -87,22 +92,24 @@ def get_Steves() -> List[Steve]:
     return items
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     number = get_number_from_description()
-    print(f'Number from description: {number}')
+    print(f"Number from description: {number}")
     # Number from description: 1472
 
     items = get_Steves()
-    print(f'Total: {len(items)}')
+    print(f"Total: {len(items)}")
     # Total: 1466
 
-    print(f'''
+    print(
+        f"""
 First:
 {items[0].get_text()}
 
 Last:
 {items[-1].get_text()}
-''')
+"""
+    )
     """
     First:
     Stephen T. Abedon
