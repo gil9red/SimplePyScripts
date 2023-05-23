@@ -1,34 +1,33 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import time
-from typing import Dict, List
 from urllib.parse import urljoin
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 
-def get_season_by_series() -> Dict[str, List[str]]:
-    url = 'http://rik-i-morti.ru/'
+def get_season_by_series() -> dict[str, list[str]]:
+    url = "http://rik-i-morti.ru/"
 
     s = requests.session()
     rs = s.get(url)
-    root = BeautifulSoup(rs.content, 'html.parser')
+    root = BeautifulSoup(rs.content, "html.parser")
 
     season_by_series = dict()
 
-    for cell in root.select_one('.alltable').select('.cell'):
+    for cell in root.select_one(".alltable").select(".cell"):
         title = cell.p.get_text(strip=True)
-        season_url = urljoin(rs.url, cell.a['href'])
+        season_url = urljoin(rs.url, cell.a["href"])
 
         rs_season = s.get(season_url)
-        root = BeautifulSoup(rs_season.content, 'html.parser')
+        root = BeautifulSoup(rs_season.content, "html.parser")
         season_by_series[title] = [
-            x.get_text(strip=True) for x in root.select('#dle-content > .short-item h3')
+            x.get_text(strip=True) for x in root.select("#dle-content > .short-item h3")
         ]
 
         # Не нужно напрягать сайт
@@ -37,10 +36,10 @@ def get_season_by_series() -> Dict[str, List[str]]:
     return season_by_series
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     season_by_series = get_season_by_series()
-    print('Total seasons:', len(season_by_series))
-    print('Total episodes:', sum(map(len, season_by_series.values())))
+    print("Total seasons:", len(season_by_series))
+    print("Total episodes:", sum(map(len, season_by_series.values())))
     # Total seasons: 4
     # Total episodes: 41
 

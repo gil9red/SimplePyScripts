@@ -1,44 +1,43 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import time
-from typing import Dict, List
 from urllib.parse import urljoin
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 
-URL = 'https://rick-i-morty.online/'
+URL = "https://rick-i-morty.online/"
 
 
-def get_season_by_series() -> Dict[str, List[str]]:
+def get_season_by_series() -> dict[str, list[str]]:
     s = requests.session()
     rs = s.get(URL)
-    root = BeautifulSoup(rs.content, 'html.parser')
+    root = BeautifulSoup(rs.content, "html.parser")
 
     season_by_series = dict()
 
-    for season in root.select('#dz-seasons > .seasons'):
+    for season in root.select("#dz-seasons > .seasons"):
         # На сайте появилась карточка Аркейн и это сломало логику парсера
-        if 'Рик и Морти' not in str(season):
+        if "Рик и Морти" not in str(season):
             continue
 
-        title = season.select_one('h3').get_text(strip=True)
-        href = season.select_one('a')['href']
+        title = season.select_one("h3").get_text(strip=True)
+        href = season.select_one("a")["href"]
         season_url = urljoin(rs.url, href)
 
         rs_season = s.get(season_url)
-        root = BeautifulSoup(rs_season.content, 'html.parser')
+        root = BeautifulSoup(rs_season.content, "html.parser")
 
         series = []
-        for x in root.select('.episodios > li'):
-            series_num = x.select_one('.serie').get_text(strip=True)
-            series_title = x.select_one('.episodiotitle > a').get_text(strip=True)
-            series.append(f'{series_num}: {series_title}')
+        for x in root.select(".episodios > li"):
+            series_num = x.select_one(".serie").get_text(strip=True)
+            series_title = x.select_one(".episodiotitle > a").get_text(strip=True)
+            series.append(f"{series_num}: {series_title}")
 
         season_by_series[title] = series
 
@@ -48,10 +47,10 @@ def get_season_by_series() -> Dict[str, List[str]]:
     return season_by_series
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     season_by_series = get_season_by_series()
-    print('Total seasons:', len(season_by_series))
-    print('Total episodes:', sum(map(len, season_by_series.values())))
+    print("Total seasons:", len(season_by_series))
+    print("Total episodes:", sum(map(len, season_by_series.values())))
     # Total seasons: 5
     # Total episodes: 53
 
