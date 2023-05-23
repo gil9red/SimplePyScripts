@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from bs4 import BeautifulSoup
 import requests
 
 
-rs = requests.get('https://ru.wikipedia.org/wiki/ISO_3166-1')
-root = BeautifulSoup(rs.content, 'html.parser')
+rs = requests.get("https://ru.wikipedia.org/wiki/ISO_3166-1")
+root = BeautifulSoup(rs.content, "html.parser")
 
-for tr in root.select_one('.wikitable').select('tr'):
-    td_list = tr.select('td')
+for tr in root.select_one(".wikitable").select("tr"):
+    td_list = tr.select("td")
     if not td_list:
         continue
 

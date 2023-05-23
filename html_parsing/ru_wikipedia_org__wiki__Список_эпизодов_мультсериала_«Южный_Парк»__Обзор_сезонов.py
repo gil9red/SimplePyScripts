@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from dataclasses import dataclass
 import datetime as DT
-from typing import List
+from dataclasses import dataclass
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 
 def parse_date(date_str: str) -> DT.date:
@@ -20,8 +19,18 @@ def parse_date(date_str: str) -> DT.date:
     day, month, year = date_str.split()
     day = int(day)
     month = [
-        'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-        'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+        "января",
+        "февраля",
+        "марта",
+        "апреля",
+        "мая",
+        "июня",
+        "июля",
+        "августа",
+        "сентября",
+        "октября",
+        "ноября",
+        "декабря",
     ].index(month) + 1
     year = int(year)
 
@@ -37,31 +46,27 @@ class Season:
     diff_dates: DT.timedelta
 
 
-def parse() -> List[Season]:
-    url = 'https://ru.wikipedia.org/wiki/Список_эпизодов_мультсериала_«Южный_Парк»'
+def parse() -> list[Season]:
+    url = "https://ru.wikipedia.org/wiki/Список_эпизодов_мультсериала_«Южный_Парк»"
 
     rs = requests.get(url)
-    root = BeautifulSoup(rs.content, 'html.parser')
+    root = BeautifulSoup(rs.content, "html.parser")
 
     items = []
-    for tr in root.select_one('.wikitable').select('tr'):
-        td_list = tr.select('td')
+    for tr in root.select_one(".wikitable").select("tr"):
+        td_list = tr.select("td")
         if len(td_list) != 4:
             continue
 
         td_season, td_num_episodes, td_start_date, td_end_date = td_list
 
-        season = int(
-            td_season.get_text(strip=True)
-        )
-        num_episodes = int(
-            td_num_episodes.get_text(strip=True)
-        )
+        season = int(td_season.get_text(strip=True))
+        num_episodes = int(td_num_episodes.get_text(strip=True))
         start_date = parse_date(
-            ' '.join(a.get_text(strip=True) for a in td_start_date.select('a'))
+            " ".join(a.get_text(strip=True) for a in td_start_date.select("a"))
         )
         end_date = parse_date(
-            ' '.join(a.get_text(strip=True) for a in td_end_date.select('a'))
+            " ".join(a.get_text(strip=True) for a in td_end_date.select("a"))
         )
 
         items.append(
@@ -71,27 +76,27 @@ def parse() -> List[Season]:
     return items
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
-    sys.path.append('..')
+
+    sys.path.append("..")
     from ascii_table__simple_pretty__format import print_pretty_table
 
     seasons = parse()
-    print('Total seasons:', len(seasons))
-    print('Total episodes:', sum(s.num_episodes for s in seasons))
+    print("Total seasons:", len(seasons))
+    print("Total episodes:", sum(s.num_episodes for s in seasons))
     print()
     # Total seasons: 23
     # Total episodes: 307
 
-    rows = [
-        ("СЕЗОН", "ЭПИЗОДЫ", "НАЧАЛО ЭФИРА", "КОНЕЦ ЭФИРА", "ДНЕЙ ЭФИРА")
-    ]
+    rows = [("СЕЗОН", "ЭПИЗОДЫ", "НАЧАЛО ЭФИРА", "КОНЕЦ ЭФИРА", "ДНЕЙ ЭФИРА")]
     for s in seasons:
         rows.append((
-            s.season, s.num_episodes,
+            s.season,
+            s.num_episodes,
             s.start_date.strftime("%d/%m/%Y"),
             s.end_date.strftime("%d/%m/%Y"),
-            s.diff_dates.days
+            s.diff_dates.days,
         ))
 
     print_pretty_table(rows)

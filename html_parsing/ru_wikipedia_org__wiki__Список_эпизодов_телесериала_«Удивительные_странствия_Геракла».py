@@ -1,30 +1,31 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
-url = 'https://ru.wikipedia.org/wiki/Список_эпизодов_телесериала_«Удивительные_странствия_Геракла»'
+
+url = "https://ru.wikipedia.org/wiki/Список_эпизодов_телесериала_«Удивительные_странствия_Геракла»"
 
 rs = requests.get(url)
-root = BeautifulSoup(rs.content, 'html.parser')
+root = BeautifulSoup(rs.content, "html.parser")
 
 seasons_by_number = dict()
 
-for span in root.select('span.mw-headline'):
-    if 'Сезон' not in span.text:
+for span in root.select("span.mw-headline"):
+    if "Сезон" not in span.text:
         continue
 
-    tr_items = span.parent.find_next_sibling('table').find_all('tr')
+    tr_items = span.parent.find_next_sibling("table").find_all("tr")
     seasons_by_number[span.text] = len(tr_items) - 1
 
-print(f'Seasons: {len(seasons_by_number)}')
-print(f'Series: {sum(seasons_by_number.values())}\n')
+print(f"Seasons: {len(seasons_by_number)}")
+print(f"Series: {sum(seasons_by_number.values())}\n")
 for k, v in seasons_by_number.items():
-    print(f'{k}: {v}')
+    print(f"{k}: {v}")
 
 # Seasons: 6
 # Series: 111
