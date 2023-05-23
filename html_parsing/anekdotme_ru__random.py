@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 
 def get_anekdot() -> str:
-    rs = requests.get('http://anekdotme.ru/random')
+    rs = requests.get("http://anekdotme.ru/random")
     root = BeautifulSoup(rs.content, "html.parser")
 
-    el = root.select_one('.anekdot_text')
-    return el.get_text(strip=True, separator='\n')
+    el = root.select_one(".anekdot_text")
+    return el.get_text(strip=True, separator="\n")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(get_anekdot())
     """
     Урок языковедения в школе. Училка распинается:
