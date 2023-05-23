@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -13,10 +13,12 @@ import requests
 
 
 session = requests.session()
-session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0'
+session.headers[
+    "User-Agent"
+] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0"
 
 
-URL_BASE = 'https://gamestatus.info'
+URL_BASE = "https://gamestatus.info"
 
 
 @dataclass
@@ -28,11 +30,11 @@ class Game:
     crack_date: DT.date
 
     @classmethod
-    def parse_from(cls, data: dict) -> 'Game':
+    def parse_from(cls, data: dict) -> "Game":
         # Example: "[\"DENUVO\"]" -> "DENUVO", "denuvo" -> "DENUVO"
         protection: str = data["protections"].upper()
-        if protection.startswith('['):
-            protection = ', '.join(json.loads(protection))
+        if protection.startswith("["):
+            protection = ", ".join(json.loads(protection))
 
         return cls(
             title=data["title"],
@@ -44,17 +46,17 @@ class Game:
 
 
 def get_games() -> list[Game]:
-    rs = session.get(f'{URL_BASE}/back/api/gameinfo/game/lastcrackedgames/')
+    rs = session.get(f"{URL_BASE}/back/api/gameinfo/game/lastcrackedgames/")
     rs.raise_for_status()
 
-    return [Game.parse_from(game) for game in rs.json()['list_crack_games']]
+    return [Game.parse_from(game) for game in rs.json()["list_crack_games"]]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     items = get_games()
-    print(f'Games ({len(items)}):')
+    print(f"Games ({len(items)}):")
     for i, game in enumerate(items, 1):
-        print(f'{i}. {game}')
+        print(f"{i}. {game}")
     """
     Games (200):
     1. Game(title='High On Life', url='https://gamestatus.info/high-on-life', protection='STEAM', release_date=datetime.date(2022, 12, 13), crack_date=datetime.date(2022, 12, 13))
