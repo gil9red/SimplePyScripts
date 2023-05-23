@@ -1,25 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import base64
+
 from dataclasses import dataclass
 from urllib.parse import urlsplit
 from pathlib import Path
-from typing import List
 
 import requests
 
 
 session = requests.session()
-session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0'
+session.headers[
+    "User-Agent"
+] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0"
 
-COLLECTION = 'igry-s-podderzhkoi-rtx'
-URL_BASE = 'https://kanobu.ru'
-URL = f'{URL_BASE}/games/collections/{COLLECTION}/'
-URL_API = f'{URL_BASE}/api/v2/games/?collection={COLLECTION}&limit=12&order=-release_date'
+COLLECTION = "igry-s-podderzhkoi-rtx"
+URL_BASE = "https://kanobu.ru"
+URL = f"{URL_BASE}/games/collections/{COLLECTION}/"
+URL_API = (
+    f"{URL_BASE}/api/v2/games/?collection={COLLECTION}&limit=12&order=-release_date"
+)
 
 
 @dataclass
@@ -44,11 +48,11 @@ def img_to_base64_html(rs: requests.Response) -> str:
     path = urlsplit(rs.url).path
     suffix = Path(path).suffix.lower()[1:]
 
-    img_base64 = base64.b64encode(rs.content).decode('utf-8')
-    return f'data:image/{suffix};base64,{img_base64}'
+    img_base64 = base64.b64encode(rs.content).decode("utf-8")
+    return f"data:image/{suffix};base64,{img_base64}"
 
 
-def get_games() -> List[Game]:
+def get_games() -> list[Game]:
     items = []
 
     # Соберем куки и прочее полезное
@@ -61,28 +65,27 @@ def get_games() -> List[Game]:
         rs.raise_for_status()
 
         data = rs.json()
-        for data_game in data['results']:
-            title = data_game['name']
+        for data_game in data["results"]:
+            title = data_game["name"]
             url_game = f'{URL_BASE}/games/{data_game["slug"]}/'
 
-            rs_img = session.get(data_game['image']['origin'])
+            rs_img = session.get(data_game["image"]["origin"])
             img_base64 = img_to_base64_html(rs_img)
 
-            items.append(
-                Game(title, url_game, img_base64)
-            )
+            items.append(Game(title, url_game, img_base64))
 
-        url = data.get('next')
+        url = data.get("next")
 
     return items
 
 
-def save_as_html(file_name: str, items: List[Game], columns=4):
-    title = 'Games with RTX'
+def save_as_html(file_name: str, items: list[Game], columns=4):
+    title = "Games with RTX"
 
-    with open(file_name, 'w', encoding='utf-8') as f:
+    with open(file_name, "w", encoding="utf-8") as f:
         # SOURCE: https://www.w3schools.com/howto/howto_css_cards.asp
-        f.write("""
+        f.write(
+            """
             <html lang="ru">
             <head>
                 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
@@ -123,29 +126,36 @@ def save_as_html(file_name: str, items: List[Game], columns=4):
                 <div style="width: 800px; margin:0 auto;">
                     <h1><a href="{{ URL }}">{{ title }}</a></h1>
                     <table cellspacing="5">
-        """.replace('{{ title }}', title).replace('{{ URL }}', URL))
+        """.replace(
+                "{{ title }}", title
+            ).replace(
+                "{{ URL }}", URL
+            )
+        )
 
         for i in range(0, len(items), columns):
             f.write("<tr>")
 
-            for game in items[i: i+columns]:
+            for game in items[i : i + columns]:
                 f.write(f"<td>{game.as_html_card()}</td>")
 
             f.write("</tr>")
 
-        f.write("""
+        f.write(
+            """
                     </table>
                 </div>
             </body>
             </html>
-        """)
+        """
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     items = get_games()
-    print(f'Games ({len(items)}):')
+    print(f"Games ({len(items)}):")
     for i, x in enumerate(items, 1):
-        print(f'    {i:2}: {x.name!r}')
+        print(f"    {i:2}: {x.name!r}")
     # Games (26):
     #      1: 'Minecraft'
     #      2: 'Cyberpunk 2077'
@@ -156,6 +166,6 @@ if __name__ == '__main__':
 
     print()
 
-    file_name = str(Path(__file__).resolve()) + '.html'
-    print('Save as HTML:', file_name)
+    file_name = str(Path(__file__).resolve()) + ".html"
+    print("Save as HTML:", file_name)
     save_as_html(file_name, items)
