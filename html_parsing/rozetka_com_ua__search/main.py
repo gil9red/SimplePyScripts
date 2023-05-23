@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
 
-from typing import List, Tuple, Union
 from pathlib import Path
 
 # pip install pandas
@@ -23,9 +22,9 @@ from selenium.common.exceptions import NoSuchElementException
 # TODO: price must be decimal
 
 
-def parse(url: str) -> List[Tuple[str, str, str]]:
+def parse(url: str) -> list[tuple[str, str, str]]:
     options = Options()
-    options.add_argument('--headless')
+    options.add_argument("--headless")
 
     items = []
 
@@ -33,19 +32,23 @@ def parse(url: str) -> List[Tuple[str, str, str]]:
     driver.implicitly_wait(10)
     try:
         while True:
-            print('Load:', url)
+            print("Load:", url)
             driver.get(url)
 
             for item_el in driver.find_elements_by_css_selector(".goods-tile"):
-                name = item_el.find_element_by_css_selector('.goods-tile__title').text
+                name = item_el.find_element_by_css_selector(".goods-tile__title").text
 
                 # Не у всех товаров есть цена
                 try:
-                    price = item_el.find_element_by_css_selector('.goods-tile__price-value').text
+                    price = item_el.find_element_by_css_selector(
+                        ".goods-tile__price-value"
+                    ).text
                 except NoSuchElementException:
-                    price = '-'
+                    price = "-"
 
-                nal = item_el.find_element_by_css_selector('.goods-tile__availability').text
+                nal = item_el.find_element_by_css_selector(
+                    ".goods-tile__availability"
+                ).text
 
                 row = name, price, nal
                 print(row)
@@ -53,8 +56,10 @@ def parse(url: str) -> List[Tuple[str, str, str]]:
 
             # Если есть кнопка перехода на следующую страницу, то продолжаем цикл, иначе завершаем
             try:
-                a_next_page = driver.find_element_by_css_selector('a.pagination__direction_type_forward[href]')
-                url = a_next_page.get_attribute('href')
+                a_next_page = driver.find_element_by_css_selector(
+                    "a.pagination__direction_type_forward[href]"
+                )
+                url = a_next_page.get_attribute("href")
 
             except NoSuchElementException:
                 break
@@ -66,19 +71,19 @@ def parse(url: str) -> List[Tuple[str, str, str]]:
 
 
 def save_goods(
-        file_name: Union[str, Path],
-        items: List[Tuple[str, str, str]],
-        encoding='utf-8'
+    file_name: str | Path,
+    items: list[tuple[str, str, str]],
+    encoding="utf-8",
 ):
-    df = pd.DataFrame(items, columns=['Name', 'Price', 'Nal'])
+    df = pd.DataFrame(items, columns=["Name", "Price", "Nal"])
     df.to_csv(file_name, encoding=encoding)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     url = "https://rozetka.com.ua/search/?producer=gazer&seller=rozetka&text=Gazer"
     items = parse(url)
-    print(f'Total goods: {len(items)}')
+    print(f"Total goods: {len(items)}")
 
-    file_name = f'rozetka_parser_{DT.datetime.now():%Y-%m-%d}.csv'
-    print(f'Saved to {file_name}')
+    file_name = f"rozetka_parser_{DT.datetime.now():%Y-%m-%d}.csv"
+    print(f"Saved to {file_name}")
     save_goods(file_name, items)
