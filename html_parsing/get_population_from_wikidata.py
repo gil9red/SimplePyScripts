@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import requests
@@ -10,17 +10,17 @@ from bs4 import BeautifulSoup
 
 def get_populations(url: str) -> dict:
     rs = requests.get(url)
-    root = BeautifulSoup(rs.content, 'html.parser')
+    root = BeautifulSoup(rs.content, "html.parser")
 
     # P1082 -- идентификатор для population
-    population_node = root.select_one('#P1082')
+    population_node = root.select_one("#P1082")
 
     populations = dict()
 
     # Перебор строк в соседнем от population столбце
-    for row in population_node.select('.wikibase-statementview'):
+    for row in population_node.select(".wikibase-statementview"):
         # Небольшая хитрость -- берем только первые 2 значения, поидеи это будут: количество людей и дата
-        number_str, data_str = row.select('.wikibase-snakview-value')[:2]
+        number_str, data_str = row.select(".wikibase-snakview-value")[:2]
 
         # Вытаскиваем текст из
         number_str = number_str.text.strip()
@@ -48,10 +48,11 @@ def get_population_from_url_by_year(url: str, year: int) -> str:
     return get_population_by_year(populations, year)
 
 
-if __name__ == '__main__':
-    url = 'https://www.wikidata.org/wiki/Q148'
+if __name__ == "__main__":
+    url = "https://www.wikidata.org/wiki/Q148"
     populations = get_populations(url)
-    print(populations)  # {2012: '1,375,198,619', 2010: '1,359,755,102', 2015: '1,397,028,553', ...
+    print(populations)
+    # {2012: '1,375,198,619', 2010: '1,359,755,102', 2015: '1,397,028,553', ...
 
     # Выводим данные с сортировкой по ключу: по возрастанию
     for year in sorted(populations):
