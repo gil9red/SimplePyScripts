@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 
-rs = requests.get('https://rbkgames.com/games/code-vein/articles/kody-krovi-v-code-vein-kak-poluchit/')
-root = BeautifulSoup(rs.content, 'html.parser')
+url = "https://rbkgames.com/games/code-vein/articles/kody-krovi-v-code-vein-kak-poluchit/"
+rs = requests.get()
+root = BeautifulSoup(rs.content, "html.parser")
 
 items = []
 
@@ -18,12 +19,12 @@ for x in root.select('div[itemprop="articleBody"] > h3'):
     if not title:
         continue
 
-    description = x.find_next_sibling('p').get_text(strip=True)
+    description = x.find_next_sibling("p").get_text(strip=True)
     items.append((title, description))
 
-print(f'Total ({len(items)}):')
+print(f"Total ({len(items)}):")
 for i, (title, description) in enumerate(items, 1):
-    print(f'    {i:2}. {title}: {description!r}')
+    print(f"    {i:2}. {title}: {description!r}")
 
 # Total (20):
 #      1. Берсерк: 'Берсерки отличаются выносливостью и сопротивлениями к разным видам урона. Чтобы открыть этот Код, победите сюжетного босса по имени Оливер в начале игры.'
