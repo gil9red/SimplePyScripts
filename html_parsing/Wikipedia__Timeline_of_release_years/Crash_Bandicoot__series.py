@@ -1,28 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
-
-from typing import List, Tuple
 
 import requests
 from bs4 import BeautifulSoup
 
 
-def get_parsed_two_column_wikitable() -> List[Tuple[str, str]]:
-    url = 'https://en.wikipedia.org/wiki/Crash_Bandicoot'
+def get_parsed_two_column_wikitable() -> list[tuple[str, str]]:
+    url = "https://en.wikipedia.org/wiki/Crash_Bandicoot"
 
     rs = requests.get(url)
-    root = BeautifulSoup(rs.content, 'html.parser')
+    root = BeautifulSoup(rs.content, "html.parser")
 
-    table = root.select_one('.wikitable.release-timeline')
+    table = root.select_one(".wikitable.release-timeline")
 
     items = []
     year = None
 
     # Timeline of release years
-    for tr in table.select('tr'):
+    for tr in table.select("tr"):
         # Отбрасываем строки с годом, но без игры
         if tr.td is None:
             continue
@@ -46,9 +44,9 @@ def get_parsed_two_column_wikitable() -> List[Tuple[str, str]]:
     return items
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     for year, name in get_parsed_two_column_wikitable():
-        print(f'{year}: {name}')
+        print(f"{year}: {name}")
 
     # 1996: Crash Bandicoot
     # 1997: Cortex Strikes Back

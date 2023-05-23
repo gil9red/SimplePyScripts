@@ -1,23 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from typing import Callable, Any, Optional
+from typing import Callable, Any
 
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 
 
 MatchFunc = Callable[[Any], bool]
 
 
-def find_table(url: str, is_match_table_func: MatchFunc=lambda table: True) -> Optional['Table']:
+def find_table(
+    url: str,
+    is_match_table_func: MatchFunc = lambda table: True,
+) -> Tag | None:
     rs = requests.get(url)
-    root = BeautifulSoup(rs.content, 'html.parser')
+    root = BeautifulSoup(rs.content, "html.parser")
 
-    for t in root.select('.wikitable'):
+    for t in root.select(".wikitable"):
         if not t.caption:
             continue
 
@@ -27,7 +30,11 @@ def find_table(url: str, is_match_table_func: MatchFunc=lambda table: True) -> O
     return
 
 
-def get_parsed_two_column_wikitable(url: str, is_match_table_func: MatchFunc=lambda table: True, is_match_row_func: MatchFunc=lambda tr: True) -> [(str, str)]:
+def get_parsed_two_column_wikitable(
+    url: str,
+    is_match_table_func: MatchFunc = lambda table: True,
+    is_match_row_func: MatchFunc = lambda tr: True,
+) -> list[tuple[str, str]]:
     table = find_table(url, is_match_table_func)
     if not table:
         raise Exception('Not found table "Timeline of releases"')
@@ -37,8 +44,8 @@ def get_parsed_two_column_wikitable(url: str, is_match_table_func: MatchFunc=lam
     year = None
 
     # Timeline of release years
-    for tr in table.select('tr'):
-        td_items = tr.select('td')
+    for tr in table.select("tr"):
+        td_items = tr.select("td")
 
         # if len(td_items) != 2:
         #     continue
