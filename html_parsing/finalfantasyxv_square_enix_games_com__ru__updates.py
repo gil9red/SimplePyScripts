@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import requests
@@ -16,34 +16,34 @@ def get_plaintext(element) -> str:
     for elem in element.descendants:
         if isinstance(elem, str):
             items.append(elem.strip())
-        elif elem.name in ['br', 'p']:
-            items.append('\n')
-    return ''.join(items).strip()
+        elif elem.name in ["br", "p"]:
+            items.append("\n")
+    return "".join(items).strip()
 
 
-def parse_ul(ul: Tag, level=1, bullet='•'):
+def parse_ul(ul: Tag, level=1, bullet="•"):
     items = []
 
     for li in ul.findChildren("li", recursive=False):
         text = li.find(text=True).strip()
-        items.append(('  ' * level) + bullet + ' ' + text)
+        items.append(("  " * level) + bullet + " " + text)
 
         for sub_ul in li.findChildren("ul", recursive=False):
             items.append(
-                parse_ul(sub_ul, level=level+1)
+                parse_ul(sub_ul, level=level + 1)
             )
 
-    return '\n'.join(items)
+    return "\n".join(items)
 
 
-rs = requests.get('https://finalfantasyxv.square-enix-games.com/ru/updates')
-root = BeautifulSoup(rs.content, 'html.parser')
+rs = requests.get("https://finalfantasyxv.square-enix-games.com/ru/updates")
+root = BeautifulSoup(rs.content, "html.parser")
 
-for patch in root.select('.patch-notes-text'):
-    patch_name_el = patch.select_one('.patch-name')
+for patch in root.select(".patch-notes-text"):
+    patch_name_el = patch.select_one(".patch-name")
     patch_name = get_plaintext(patch_name_el)
 
-    game_title_el = patch.select_one('.game-title')
+    game_title_el = patch.select_one(".game-title")
     game_title = get_plaintext(game_title_el).upper()
 
     ul = patch.select_one("ul")
@@ -52,7 +52,7 @@ for patch in root.select('.patch-notes-text'):
     print(patch_name)
     print(game_title)
     print(text)
-    print('\n' + '-' * 100 + '\n')
+    print("\n" + "-" * 100 + "\n")
 
 """
 01.04.2020
