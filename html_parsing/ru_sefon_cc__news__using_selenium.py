@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import traceback
@@ -11,20 +11,20 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
 
-URL = 'https://ru.sefon.cc/news/'
+URL = "https://ru.sefon.cc/news/"
 
 
 options = Options()
-options.add_argument('--headless')
+options.add_argument("--headless")
 
 driver = webdriver.Firefox(options=options)
 try:
     driver.implicitly_wait(5)
     driver.get(URL)
-    print(f'Title: {driver.title!r}')
+    print(f"Title: {driver.title!r}")
 
-    for a in driver.find_elements_by_css_selector('.mp3 > .btns > a[data-url]'):
-        print(a.get_attribute('data-url'))
+    for a in driver.find_elements_by_css_selector(".mp3 > .btns > a[data-url]"):
+        print(a.get_attribute("data-url"))
 
     # https://cdn5.sefon.pro/files/prev/193/Sontry%20-%20%D0%94%D0%B8%D1%81%D0%B1%D0%B0%D0%BB%D0%B0%D0%BD%D1%81%20%28192kbps%29.mp3
     # https://cdn5.sefon.pro/files/prev/193/Orlando%20-%20%D0%9D%D0%B5%20%D0%A1%D1%82%D0%B5%D1%81%D0%BD%D1%8F%D0%B9%D1%81%D1%8F%20%28192kbps%29.mp3

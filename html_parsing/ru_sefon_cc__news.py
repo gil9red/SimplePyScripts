@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import base64
@@ -11,21 +11,21 @@ import requests
 
 
 def decrypt_url(data: str, key: str) -> str:
-    if data.startswith('#'):
+    if data.startswith("#"):
         data = data[1:]
 
     for x in key[::-1]:
         data = x.join(reversed(data.split(x)))
 
-    return base64.b64decode(data).decode('utf-8')
+    return base64.b64decode(data).decode("utf-8")
 
 
-rs = requests.get('https://ru.sefon.cc/news/')
-root = BeautifulSoup(rs.content, 'html.parser')
+rs = requests.get("https://ru.sefon.cc/news/")
+root = BeautifulSoup(rs.content, "html.parser")
 
-for a in root.select('.url_protected'):
-    data = a['data-url']
-    key = a['data-key']
+for a in root.select(".url_protected"):
+    data = a["data-url"]
+    key = a["data-key"]
 
     url = decrypt_url(data, key)
     print(url)
