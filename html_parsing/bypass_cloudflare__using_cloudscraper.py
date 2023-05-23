@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import cloudscraper
 import requests
 
 
-url = 'https://tofunft.com/ru/collection/iguverse-nft/activities?category=listing'
+url = "https://tofunft.com/ru/collection/iguverse-nft/activities?category=listing"
 
 
 scraper = cloudscraper.create_scraper()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from urllib.parse import urljoin
@@ -13,35 +13,37 @@ from bs4 import BeautifulSoup
 def get_price(tag) -> int:
     try:
         # Оставляем только цифры
-        value = ''.join(c for c in tag.get_text() if c.isdigit())
+        value = "".join(c for c in tag.get_text() if c.isdigit())
         return int(value)
     except:
         return 0
 
 
 session = requests.Session()
-session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'
-session.headers['Accept'] = '*/*'
+session.headers[
+    "User-Agent"
+] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36"
+session.headers["Accept"] = "*/*"
 
 
-url = 'https://auto.ru/schelkovo/cars/hyundai/used/'
+url = "https://auto.ru/schelkovo/cars/hyundai/used/"
 
 rs = session.get(url)
-root = BeautifulSoup(rs.content, 'html.parser')
+root = BeautifulSoup(rs.content, "html.parser")
 
-for item in root.select('.ListingItem'):
-    title_el = item.select_one('.ListingItemTitle__link[href]')
+for item in root.select(".ListingItem"):
+    title_el = item.select_one(".ListingItemTitle__link[href]")
 
     title = title_el.get_text(strip=True)
-    url = urljoin(rs.url, title_el['href'])
+    url = urljoin(rs.url, title_el["href"])
 
-    price_el = item.select_one('.ListingItemPrice__content')
+    price_el = item.select_one(".ListingItemPrice__content")
     price = get_price(price_el)
 
-    region_el = item.select_one('.MetroListPlace__regionName')
-    city = region_el.get_text() if region_el else '-'
+    region_el = item.select_one(".MetroListPlace__regionName")
+    city = region_el.get_text() if region_el else "-"
 
-    print(f'{title!r}, {price}, {city!r}')
+    print(f"{title!r}, {price}, {city!r}")
     print(url)
     print()
 

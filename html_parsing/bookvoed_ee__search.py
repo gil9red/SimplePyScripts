@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from urllib.parse import urljoin
@@ -10,12 +10,12 @@ from bs4 import BeautifulSoup
 import requests
 
 
-rs = requests.get('https://bookvoed.ee/search?q=white+fang')
-root = BeautifulSoup(rs.content, 'html.parser')
+rs = requests.get("https://bookvoed.ee/search?q=white+fang")
+root = BeautifulSoup(rs.content, "html.parser")
 
-for row in root.select('.o-row'):
-    a = row.select_one('a.title')
-    href = urljoin(rs.url, a.get('href'))
+for row in root.select(".o-row"):
+    a = row.select_one("a.title")
+    href = urljoin(rs.url, a.get("href"))
     title = a.get_text(strip=True)
     print(title, href)
 
