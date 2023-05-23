@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import json
@@ -10,15 +10,15 @@ import re
 import requests
 
 
-rs = requests.get('https://magnit.ru/shops/')
-m = re.search('var elementsArr = (.+);', rs.text)
+rs = requests.get("https://magnit.ru/shops/")
+m = re.search("var elementsArr = (.+);", rs.text)
 
 data = json.loads(m.group(1))
 # {'points': [{'id': 49215, 'city': '2398', 'lat': '55.742145', 'lng': '37.520419', 'address': ...
 
-points = data['points']
+points = data["points"]
 
-print(f'Points ({len(points)}):')
+print(f"Points ({len(points)}):")
 for p in points:
     print(f"  lat: {p['lat']}, lng: {p['lng']}")
 

@@ -1,57 +1,54 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from urllib.parse import urljoin
 import time
-from typing import Tuple
+from urllib.parse import urljoin
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 
-def get(s: requests.Session, url: str) -> Tuple[requests.Response, BeautifulSoup]:
+def get(s: requests.Session, url: str) -> tuple[requests.Response, BeautifulSoup]:
     rs = s.get(url)
     time.sleep(0.3)
 
-    return rs, BeautifulSoup(rs.content, 'html.parser')
+    return rs, BeautifulSoup(rs.content, "html.parser")
 
 
 def get_count_sublist(s: requests.Session, url: str) -> int:
     _, root = get(s, url)
-    return sum(
-        int(x.text[1:-1]) for x in root.select('.left-list > li > .c1')
-    )
+    return sum(int(x.text[1:-1]) for x in root.select(".left-list > li > .c1"))
 
 
 def url_join(a) -> str:
-    return urljoin(URL, a['href'])
+    return urljoin(URL, a["href"])
 
 
-URL = 'http://lists.memo.ru/index.htm'
+URL = "http://lists.memo.ru/index.htm"
 
 s = requests.session()
 _, root = get(s, URL)
 
 letter_by_number = dict()
 
-for a in root.select('.alefbet > a'):
+for a in root.select(".alefbet > a"):
     url = url_join(a)
     _, root = get(s, url)
 
     letter = a.text
 
     number = 0
-    for a in root.select('.doppoisk > a'):
+    for a in root.select(".doppoisk > a"):
         number += get_count_sublist(s, url_join(a))
 
     letter_by_number[letter] = number
 
-print('Total:', sum(letter_by_number.values()))
+print("Total:", sum(letter_by_number.values()))
 for k, v in letter_by_number.items():
-    print(f'{k}: {v}')
+    print(f"{k}: {v}")
 
 # Total: 2734132
 # А: 144478
