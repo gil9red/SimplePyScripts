@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import time
@@ -10,31 +10,35 @@ import requests
 from bs4 import BeautifulSoup
 
 
-URL = 'https://rpcs3.net/compatibility'
+URL = "https://rpcs3.net/compatibility"
 
 
 session = requests.session()
-session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0'
+session.headers[
+    "User-Agent"
+] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0"
 
 page = last_page = 1
 params = dict()
 while page <= last_page:
     if page > 1:
-        params['p'] = page
+        params["p"] = page
 
     rs = session.get(URL, params=params)
-    root = BeautifulSoup(rs.content, 'html.parser')
+    root = BeautifulSoup(rs.content, "html.parser")
 
-    for row_el in root.select('label.compat-table-row'):
-        game_ids_el, game_title_el, status_el, _ = row_el.select('.compat-table-cell')
+    for row_el in root.select("label.compat-table-row"):
+        game_ids_el, game_title_el, status_el, _ = row_el.select(".compat-table-cell")
 
-        game_ids = ', '.join(a.text for a in game_ids_el.select('a'))
+        game_ids = ", ".join(a.text for a in game_ids_el.select("a"))
         game_title = game_title_el.get_text(strip=True)
         status = status_el.get_text(strip=True)
 
-        print(f'[page {page}] game_ids={game_ids!r}, game_title={game_title!r}, status={status}')
+        print(
+            f"[page {page}] game_ids={game_ids!r}, game_title={game_title!r}, status={status}"
+        )
 
-    last_el = root.select_one('.compat-con-pages > a:last-child')
+    last_el = root.select_one(".compat-con-pages > a:last-child")
     last_page = int(last_el.text)
     page += 1
 
