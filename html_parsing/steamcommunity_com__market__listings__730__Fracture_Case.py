@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import json
@@ -10,9 +10,9 @@ import re
 import requests
 
 
-rs = requests.get('https://steamcommunity.com/market/listings/730/Fracture Case')
+rs = requests.get("https://steamcommunity.com/market/listings/730/Fracture Case")
 
-m = re.search(r'var line1=(.+);', rs.text)
+m = re.search(r"var line1=(.+);", rs.text)
 data_str = m.group(1)
 
 data = json.loads(data_str)
