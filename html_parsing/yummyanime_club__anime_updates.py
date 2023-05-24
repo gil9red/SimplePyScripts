@@ -1,45 +1,45 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from urllib.parse import urljoin
 
-from bs4 import BeautifulSoup, Tag
 import requests
+from bs4 import BeautifulSoup, Tag
 
 
 def get_text(el: Tag) -> str:
     text = el.get_text(strip=True)
-    return text.replace('\xa0', ' ')
+    return text.replace("\xa0", " ")
 
 
 def parse_update_anime(update_el: Tag):
-    title = get_text(update_el.select_one('.update-title'))
-    update_date = get_text(update_el.select_one('.update-date'))
-    update_info = get_text(update_el.select_one('.update-info'))
-    url_anime = urljoin(URL, update_el['href'])
-    url_img = urljoin(URL, update_el.select_one('.update-img')['src'])
+    title = get_text(update_el.select_one(".update-title"))
+    update_date = get_text(update_el.select_one(".update-date"))
+    update_info = get_text(update_el.select_one(".update-info"))
+    url_anime = urljoin(URL, update_el["href"])
+    url_img = urljoin(URL, update_el.select_one(".update-img")["src"])
 
-    print(f'{update_date} | {title} - {update_info}')
-    print(f'    {url_anime} | {url_img}\n')
+    print(f"{update_date} | {title} - {update_info}")
+    print(f"    {url_anime} | {url_img}\n")
 
 
-URL = 'https://yummyanime.club/anime-updates'
+URL = "https://yummyanime.club/anime-updates"
 
 headers = {
-    'Host': 'yummyanime.club',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
+    "Host": "yummyanime.club",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0",
 }
 
 session = requests.session()
 session.headers.update(headers)
 
 rs = session.get(URL)
-root = BeautifulSoup(rs.content, 'html.parser')
+root = BeautifulSoup(rs.content, "html.parser")
 
-for update_anime in root.select('.update-list > li > a'):
+for update_anime in root.select(".update-list > li > a"):
     parse_update_anime(update_anime)
 
 """

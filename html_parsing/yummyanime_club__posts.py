@@ -1,52 +1,52 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from urllib.parse import urljoin
 
-from bs4 import BeautifulSoup, Tag
 import requests
+from bs4 import BeautifulSoup, Tag
 
 
 def get_text(el: Tag) -> str:
     text = el.get_text(strip=True)
-    return text.replace('\xa0', ' ')
+    return text.replace("\xa0", " ")
 
 
 def parse_post_block(post_block: Tag):
-    title_el = post_block.select_one('.post-title')
-    url_post = urljoin(URL, title_el['href'])
+    title_el = post_block.select_one(".post-title")
+    url_post = urljoin(URL, title_el["href"])
     title = get_text(title_el)
-    category = get_text(post_block.select_one('.post-title-category'))
+    category = get_text(post_block.select_one(".post-title-category"))
 
-    post_time = get_text(post_block.select_one('.post-time'))
-    p_text, p_author, p_comments = post_block.select('p')
+    post_time = get_text(post_block.select_one(".post-time"))
+    p_text, p_author, p_comments = post_block.select("p")
     post_text = get_text(p_text)
     author = get_text(p_author.a)
     comments = get_text(p_comments)
 
-    print(title, category, url_post, sep=' | ')
-    print(post_time, author, comments, sep=' | ')
+    print(title, category, url_post, sep=" | ")
+    print(post_time, author, comments, sep=" | ")
     print(repr(post_text))
-    print('\n' + '-' * 100 + '\n')
+    print("\n" + "-" * 100 + "\n")
 
 
-URL = 'https://yummyanime.club/posts'
+URL = "https://yummyanime.club/posts"
 
 headers = {
-    'Host': 'yummyanime.club',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
+    "Host": "yummyanime.club",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0",
 }
 
 session = requests.session()
 session.headers.update(headers)
 
 rs = session.get(URL)
-root = BeautifulSoup(rs.content, 'html.parser')
+root = BeautifulSoup(rs.content, "html.parser")
 
-for post_block in root.select('.post-block'):
+for post_block in root.select(".post-block"):
     parse_post_block(post_block)
 
 """
