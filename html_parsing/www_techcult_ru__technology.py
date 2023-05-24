@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 
 headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0',
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0",
 }
 
-rs = requests.get('https://www.techcult.ru/technology', headers=headers)
+rs = requests.get("https://www.techcult.ru/technology", headers=headers)
 root = BeautifulSoup(rs.content, "html.parser")
 
-for a in root.select('a.pad'):
-    url = a['href']
+for a in root.select("a.pad"):
+    url = a["href"]
     title = a.h2.get_text(strip=True)
     print(title, url)
 

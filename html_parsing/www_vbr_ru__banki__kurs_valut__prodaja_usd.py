@@ -1,33 +1,33 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import requests
 from bs4 import BeautifulSoup
 
 
-URL = 'https://www.vbr.ru/banki/kurs-valut/prodaja-usd/'
+URL = "https://www.vbr.ru/banki/kurs-valut/prodaja-usd/"
 
 
 rs = requests.get(URL)
-root = BeautifulSoup(rs.content, 'html.parser')
+root = BeautifulSoup(rs.content, "html.parser")
 
 items = []
-for tr in root.select('#bank_table > .show-detail'):
-    tds = tr.select('td')
+for tr in root.select("#bank_table > .show-detail"):
+    tds = tr.select("td")
     td_name, _, td_buy, td_sell = tds
 
     name = td_name.get_text(strip=True)
-    buy = td_buy.select_one('.currency-price').get_text(strip=True)
-    sell = td_sell.select_one('.currency-price').get_text(strip=True)
+    buy = td_buy.select_one(".currency-price").get_text(strip=True)
+    sell = td_sell.select_one(".currency-price").get_text(strip=True)
 
     items.append((name, buy, sell))
 
-print(f'Items ({len(items)}):')
+print(f"Items ({len(items)}):")
 for i, (name, buy, sell) in enumerate(items, 1):
-    print(f'  {i:2}. {name!r}, buy={buy}, sell={sell}')
+    print(f"  {i:2}. {name!r}, buy={buy}, sell={sell}")
 
 # Items (20):
 #    1. 'Банк «Веста»', buy=76,10, sell=76,62
