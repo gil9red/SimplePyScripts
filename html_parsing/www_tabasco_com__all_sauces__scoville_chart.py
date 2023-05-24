@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
-sys.path.append('..')
-from ascii_table__simple_pretty__format import print_pretty_table
 
 from bs4 import BeautifulSoup
 import requests
 
+sys.path.append("..")
+from ascii_table__simple_pretty__format import print_pretty_table
 
-rs = requests.get('https://www.tabasco.com/hot-sauces/original-red-sauce/')
-root = BeautifulSoup(rs.content, 'html.parser')
 
-rows = [
-    ("", "NAME", "SCOVILLE RATING")
-]
-for i, el in enumerate(root.select('.scoville-chart__product-text'), 1):
+rs = requests.get("https://www.tabasco.com/hot-sauces/original-red-sauce/")
+root = BeautifulSoup(rs.content, "html.parser")
+
+rows = [("", "NAME", "SCOVILLE RATING")]
+for i, el in enumerate(root.select(".scoville-chart__product-text"), 1):
     name, scoville = el.get_text(strip=True, separator="\n").splitlines()
     rows.append((i, name, scoville))
 
