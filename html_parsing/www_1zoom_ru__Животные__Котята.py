@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import requests
@@ -9,18 +9,18 @@ from bs4 import BeautifulSoup
 
 
 def get_imgs(page: int) -> list:
-    HEADERS = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
     }
-    url = f'https://www.1zoom.ru/Животные/Котята/t2/{page}'
+    url = f"https://www.1zoom.ru/Животные/Котята/t2/{page}"
 
-    rs = requests.get(url, headers=HEADERS)
-    root = BeautifulSoup(rs.content, 'html.parser')
+    rs = requests.get(url, headers=headers)
+    root = BeautifulSoup(rs.content, "html.parser")
 
-    return [img['src'] for img in root.select('#suda .ph > a > img[src]')]
+    return [img["src"] for img in root.select("#suda .ph > a > img[src]")]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Парсинг первой страницы
     imgs = get_imgs(1)
     print(len(imgs), imgs)

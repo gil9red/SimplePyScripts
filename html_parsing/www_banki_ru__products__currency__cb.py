@@ -1,22 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 
-url = 'https://www.banki.ru/products/currency/cb/'
+url = "https://www.banki.ru/products/currency/cb/"
 
 rs = requests.get(url)
-root = BeautifulSoup(rs.content, 'html.parser')
+root = BeautifulSoup(rs.content, "html.parser")
 
-for tr in root.select('tbody > tr[data-currency-code]'):
-    td_items = tr.select('td')
-    code, num, name, value, change = \
-        map(lambda x: x.get_text(strip=True), td_items)
+for tr in root.select("tbody > tr[data-currency-code]"):
+    td_items = tr.select("td")
+    code, num, name, value, change = map(lambda x: x.get_text(strip=True), td_items)
     print(code, num, name, value, change)
 
 # USD 1 Доллар США 73.4261 +0,0628
