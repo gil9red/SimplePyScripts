@@ -1,51 +1,51 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-# For import ascii_table__simple_pretty__ljust.py
 import sys
 
-sys.path.append('..')
+import requests
+from bs4 import BeautifulSoup
+
+# For import ascii_table__simple_pretty__ljust.py
+sys.path.append("..")
 from ascii_table__simple_pretty__ljust import print_pretty_table
 
-from bs4 import BeautifulSoup
-import requests
 
-
-url = 'https://ru.wikipedia.org/wiki/Список_персонажей_Tekken'
+url = "https://ru.wikipedia.org/wiki/Список_персонажей_Tekken"
 rs = requests.get(url)
-root = BeautifulSoup(rs.content, 'html.parser')
+root = BeautifulSoup(rs.content, "html.parser")
 
 number = 0
 items = []
 
-for tr in root.select_one('.wikitable').select('tbody > tr'):
-    td_list = tr.select('td')
+for tr in root.select_one(".wikitable").select("tbody > tr"):
+    td_list = tr.select("td")
     if len(td_list) < 3:
         continue
 
-    for sub in tr.select('sup'):
+    for sub in tr.select("sup"):
         sub.decompose()
 
     number += 1
     person_td, _, *games_td = td_list
 
     name = person_td.get_text(strip=True)
-    was_presents = [td.img['title'] == 'Да' for td in games_td]
+    was_presents = [td.img["title"] == "Да" for td in games_td]
     if sum(was_presents) != 1:
         continue
 
     num = was_presents.index(True) + 1
-    game = 'Tekken ' + ('' if num == 1 else str(num))
+    game = "Tekken " + ("" if num == 1 else str(num))
     items.append((name, game))
 
 
-print(f'Total: {number}, unique: {len(items)}\n')
+print(f"Total: {number}, unique: {len(items)}\n")
 # Total: 87, unique: 39
 
-print_pretty_table([('PERSON', 'GAME')] + items)
+print_pretty_table([("PERSON", "GAME")] + items)
 # PERSON              | GAME
 # --------------------+---------
 # Азазель             | Tekken 6
