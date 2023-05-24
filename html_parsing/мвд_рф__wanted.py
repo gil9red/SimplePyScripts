@@ -1,36 +1,38 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import re
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 
 PATTERN_PARSE = re.compile(
-    r"пол: ([\w]+).*национальность: ([\w]+).*дата рождения: (\d{1,2}\.\d{1,2}\.\d{4})"
+    r"пол: (\w+).*национальность: (\w+).*дата рождения: (\d{1,2}\.\d{1,2}\.\d{4})"
 )
 
-rs = requests.get('https://мвд.рф/wanted')
+rs = requests.get("https://мвд.рф/wanted")
 
 # NOTE: Monkey patch for attribute href: <a class="e-popup_html" href="#popup-33644" href="#">
-content = rs.content.replace(b' href="#"', b'')
+content = rs.content.replace(b' href="#"', b"")
 
-root = BeautifulSoup(content, 'html.parser')
-items = root.select('.sl-item-title > a')
+root = BeautifulSoup(content, "html.parser")
+items = root.select(".sl-item-title > a")
 
 for i, a in enumerate(items, 1):
     name = a.text
-    print(f'{i:2}. {name}')
+    print(f"{i:2}. {name}")
 
-    detail_text = root.select_one(a['href'] + ' .sd-text').get_text(strip=True)
+    detail_text = root.select_one(a["href"] + " .sd-text").get_text(strip=True)
     m = PATTERN_PARSE.search(detail_text)
     if m:
         sex, nationality, date_of_birth = m.groups()
-        print(f"    Пол: {sex}, национальность: {nationality}, дата рождения: {date_of_birth}")
+        print(
+            f"    Пол: {sex}, национальность: {nationality}, дата рождения: {date_of_birth}"
+        )
     else:
         print("    <не получилось распарсить>")
         print(detail_text)
