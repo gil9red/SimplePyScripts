@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from urllib.parse import urljoin
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 
-URL = 'https://www.film.ru/movies'
+URL = "https://www.film.ru/movies"
 rs = requests.get(URL)
-root = BeautifulSoup(rs.content, 'html.parser')
+root = BeautifulSoup(rs.content, "html.parser")
 
-for a in root.select('div.rating.infinite_scroll > a'):
+for a in root.select("div.rating.infinite_scroll > a"):
     title = a.strong.get_text(strip=True)
-    url = urljoin(rs.url, a['href'])
+    url = urljoin(rs.url, a["href"])
     print(title, url)
 
 # Проклятый путь https://www.film.ru/articles/semeynaya-drama-s-tommi-ganom-v-ruke

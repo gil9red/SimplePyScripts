@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import ast
@@ -11,12 +11,12 @@ import requests
 
 
 def preprocess_js(text: str) -> str:
-    return re.sub(r'(\w+):', r'"\1":', text)
+    return re.sub(r"(\w+):", r'"\1":', text)
 
 
-rs = requests.get('https://www.foreca.ru/Russia/Moscow')
+rs = requests.get("https://www.foreca.ru/Russia/Moscow")
 
-m = re.search(r'var mgdata = (.+);', rs.text)
+m = re.search(r"var mgdata = (.+);", rs.text)
 js_text = m.group(1)
 print(js_text)
 # [{d:'пн', di: 0, dl: 'Понедельник', dt: '9.8.', hi: '21:00', h: '21', s: 'n000', r: 0.00, rl: 0.00, rs: 0.00, wx: ...
@@ -27,7 +27,7 @@ print(js_text)
 
 items = ast.literal_eval(js_text)
 for x in items:
-    print(x['dl'], x['ws'], x['wd'])
+    print(x["dl"], x["ws"], x["wd"])
 """
 Понедельник 2 45
 Вторник 2 45

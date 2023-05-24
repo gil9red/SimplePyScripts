@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import re
@@ -11,11 +11,11 @@ import requests
 from bs4 import BeautifulSoup
 
 
-rs = requests.get('https://www.flickr.com/search/?text=cats')
-root = BeautifulSoup(rs.content, 'html.parser')
+rs = requests.get("https://www.flickr.com/search/?text=cats")
+root = BeautifulSoup(rs.content, "html.parser")
 
-for x in root.select('.view.photo-list-photo-view[style]'):
-    m = re.search(r'url\((.+?)\)', x['style'])
+for x in root.select(".view.photo-list-photo-view[style]"):
+    m = re.search(r"url\((.+?)\)", x["style"])
     url_img = urljoin(rs.url, m.group(1))
     print(url_img)
 
