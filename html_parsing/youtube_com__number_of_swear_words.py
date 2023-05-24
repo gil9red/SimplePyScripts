@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from youtube_com__results_search_query import Video
 
 
-url = 'https://www.youtube.com/watch?v=OIVXORUjzTE'
+url = "https://www.youtube.com/watch?v=OIVXORUjzTE"
 
 video = Video.get_from(url)
 print(video)
@@ -17,10 +17,10 @@ print()
 
 number = 0
 
-print('Transcripts:')
+print("Transcripts:")
 for transcript in video.get_transcripts():
     print(transcript)
-    number += transcript.text.count('[\xa0__\xa0]')
+    number += transcript.text.count("[\xa0__\xa0]")
 """
 Transcripts:
 TranscriptItem(start_ms=800, end_ms=3449, start_time_str='0:00', text='всем привет друзья меня зовут дмитрий')
@@ -36,8 +36,10 @@ TranscriptItem(start_ms=609430, end_ms=612750, start_time_str='10:09', text='у�
 
 print()
 
-print(f'Swear words: {number}')
-print(f'Swear word about every {(video.duration_seconds // number) if number else "-"} seconds')
+print(f"Swear words: {number}")
+print(
+    f'Swear word about every {(video.duration_seconds // number) if number else "-"} seconds'
+)
 """
 Swear words: 28
 Swear word about every 21 seconds

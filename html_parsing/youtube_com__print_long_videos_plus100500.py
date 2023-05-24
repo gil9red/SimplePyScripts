@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from youtube_com__results_search_query import Playlist
 
 
-URL = 'https://www.youtube.com/playlist?list=PLC6A0625DCA9AAE2D'
+URL = "https://www.youtube.com/playlist?list=PLC6A0625DCA9AAE2D"
 NEED_SECONDS = 15 * 60  # 15 minutes
 
-video_list = [video for video in Playlist.get_from(URL).video_list if video.duration_seconds >= NEED_SECONDS]
+video_list = [
+    video
+    for video in Playlist.get_from(URL).video_list
+    if video.duration_seconds >= NEED_SECONDS
+]
 for i, video in enumerate(video_list, 1):
     print(f"{i}. {video.title!r} ({video.duration_text}): {video.url}")
 
