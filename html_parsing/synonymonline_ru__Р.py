@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import time
@@ -9,23 +9,27 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
+
 session = requests.session()
-session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0'
+session.headers[
+    "User-Agent"
+] = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0"
 
 words = []
 
-for page in range(1, 94+1):
+# TODO: выяснение максимума количества страниц по ходу работы скрипта
+for page in range(1, 94 + 1):
     if page == 1:
-        url = 'https://synonymonline.ru/%D0%A0'
+        url = "https://synonymonline.ru/%D0%A0"
     else:
-        url = f'https://synonymonline.ru/%D0%A0?page={page}'
+        url = f"https://synonymonline.ru/%D0%A0?page={page}"
 
     rs = session.get(url)
-    root = BeautifulSoup(rs.content, 'html.parser')
+    root = BeautifulSoup(rs.content, "html.parser")
 
-    for a in root.select('ul.words-list > li > a'):
+    for a in root.select("ul.words-list > li > a"):
         word = a.text.lower()
-        if word.startswith('ре') and word.endswith('р'):
+        if word.startswith("ре") and word.endswith("р"):
             words.append(word)
 
     time.sleep(0.3)
