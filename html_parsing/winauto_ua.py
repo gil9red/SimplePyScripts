@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import requests
@@ -9,21 +9,23 @@ from bs4 import BeautifulSoup
 
 
 session = requests.Session()
-session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0'
+session.headers[
+    "User-Agent"
+] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"
 
 
-url = 'https://winauto.ua/index.php?match=all&subcats=y&pcode_from_q=y&pshort=y&pfull=y&pname=y&pkeywords=y&search_performed=y&q=gazer&dispatch=products.search&items_per_page=128&search_id=37901&page=1'
+url = "https://winauto.ua/index.php?match=all&subcats=y&pcode_from_q=y&pshort=y&pfull=y&pname=y&pkeywords=y&search_performed=y&q=gazer&dispatch=products.search&items_per_page=128&search_id=37901&page=1"
 rs = session.get(url)
-root = BeautifulSoup(rs.content, 'html.parser')
+root = BeautifulSoup(rs.content, "html.parser")
 
-for product in root.select('#products_search_pagination_contents .ut2-gl__body'):
-    title = product.select_one('.product-title').get_text(strip=True)
-    price = product.select_one('.ty-price-update img[title]')
+for product in root.select("#products_search_pagination_contents .ut2-gl__body"):
+    title = product.select_one(".product-title").get_text(strip=True)
+    price = product.select_one(".ty-price-update img[title]")
     if not price:
-        print(f'[#] Не удалось найти цену для {title!r}!')
+        print(f"[#] Не удалось найти цену для {title!r}!")
         continue
 
-    print(title, price['title'], sep=" | ")
+    print(title, price["title"], sep=" | ")
 
 """
 Видеорегистратор Gazer F155 c GPS, Wi-Fi, LTE с охранным режимом | Цена: 5999 грн.

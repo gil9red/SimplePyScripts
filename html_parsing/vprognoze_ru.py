@@ -1,21 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import traceback
 
 # pip install selenium
 from selenium import webdriver
 
-URL = 'https://vprognoze.ru/'
+
+URL = "https://vprognoze.ru/"
 
 driver = webdriver.Firefox()
 try:
     driver.implicitly_wait(5)
     driver.get(URL)
-    print(f'Title: {driver.title!r}')
+    print(f"Title: {driver.title!r}")
 
-    for a in driver.find_elements_by_css_selector('.title_news > a'):
+    for a in driver.find_elements_by_css_selector(".title_news > a"):
         print(a.text)
     # Фьолнир - Валюр от Football2020 | 27-07-2020
     # Стьярнан - Викингур Рейкьявик от Football2020 | 27-07-2020
@@ -32,7 +35,6 @@ try:
     # Nigma - FlytoMoon от Artorias | 27-07-2020
 
 except:
-    import traceback
     print(traceback.format_exc())
 
 finally:
