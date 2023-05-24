@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from dataclasses import dataclass, field
@@ -10,7 +10,7 @@ import requests
 from bs4 import BeautifulSoup, Tag
 
 
-URL_BASE = 'https://vgtimes.ru/'
+URL_BASE = "https://vgtimes.ru/"
 
 
 @dataclass
@@ -20,47 +20,46 @@ class Game:
     genres: list[str] = field(default_factory=list)
 
     @classmethod
-    def parse(cls, game_el: Tag) -> 'Game':
+    def parse(cls, game_el: Tag) -> "Game":
         return cls(
-            title=game_el.select_one('.title').text.strip(),
-            date=game_el.select_one('.date').text.strip(),
-            genres=game_el.select_one('.genre').text.strip().split(', '),
+            title=game_el.select_one(".title").text.strip(),
+            date=game_el.select_one(".date").text.strip(),
+            genres=game_el.select_one(".genre").text.strip().split(", "),
         )
 
 
 session = requests.Session()
-session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0'
+session.headers[
+    "User-Agent"
+] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0"
 
 
 def search(game_name: str) -> list[Game]:
     rs = session.get(URL_BASE)
     rs.raise_for_status()
 
-    url_search = f'{URL_BASE}engine/ajax/search.php'
+    url_search = f"{URL_BASE}engine/ajax/search.php"
     data = {
-        'action': 'search2',
-        'query': game_name,
-        'ismobile': '',
-        'what': 1,
+        "action": "search2",
+        "query": game_name,
+        "ismobile": "",
+        "what": 1,
     }
 
     rs = session.post(url_search, data=data)
     rs.raise_for_status()
 
-    rs_html = rs.json()['games_result']
-    root = BeautifulSoup(rs_html, 'html.parser')
+    rs_html = rs.json()["games_result"]
+    root = BeautifulSoup(rs_html, "html.parser")
 
-    return [
-        Game.parse(game_el)
-        for game_el in root.select('.game_search')
-    ]
+    return [Game.parse(game_el) for game_el in root.select(".game_search")]
 
 
-if __name__ == '__main__':
-    games = search('Dead Space')
-    print(f'Games ({len(games)}):')
+if __name__ == "__main__":
+    games = search("Dead Space")
+    print(f"Games ({len(games)}):")
     for i, game in enumerate(games, 1):
-        print(f'    {i}. {game}')
+        print(f"    {i}. {game}")
     """
     Games (9):
         1. Game(title='Dead Space', date='27 января 2023', genres=['Экшен', 'Шутер', 'Вид от третьего лица', 'Футуризм (Будущее)', 'Хоррор на выживание'])

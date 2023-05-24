@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from urllib.parse import urljoin
@@ -10,13 +10,13 @@ import requests
 from bs4 import BeautifulSoup
 
 
-rs = requests.get('https://www.vesti.ru/news')
-root = BeautifulSoup(rs.content, 'html.parser')
+rs = requests.get("https://www.vesti.ru/news")
+root = BeautifulSoup(rs.content, "html.parser")
 
-for i in root.select('.b-item__info'):
-    title = i.select_one('.b-item__title')
+for i in root.select(".b-item__info"):
+    title = i.select_one(".b-item__title")
     text = title.a.get_text(strip=True)
-    url = urljoin(rs.url, title.a['href'])
+    url = urljoin(rs.url, title.a["href"])
     print(text, url)
 
 # "Спасибо за освобождение, но...": европолитиков понесло https://www.vesti.ru/doc.html?id=3263997
