@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -13,7 +13,7 @@ from common import get_crash_statistics_list_db
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route("/")
 def index():
     headers = ["Дата", "ДТП", "Погибли", "Погибло детей", "Ранены", "Ранено детей"]
     rows = get_crash_statistics_list_db()
@@ -22,16 +22,17 @@ def index():
     data = []
     for date, dtp, died, children_died, wounded, wounded_children in rows:
         data.append({
-            'date': date,
-            'date_iso': DT.datetime.strptime(date, '%d.%m.%Y').date().isoformat(),
-            'dtp': int(dtp),
-            'died': int(died),
-            'children_died': int(children_died),
-            'wounded': int(wounded),
-            'wounded_children': int(wounded_children),
+            "date": date,
+            "date_iso": DT.datetime.strptime(date, "%d.%m.%Y").date().isoformat(),
+            "dtp": int(dtp),
+            "died": int(died),
+            "children_died": int(children_died),
+            "wounded": int(wounded),
+            "wounded_children": int(wounded_children),
         })
 
-    return render_template_string("""
+    return render_template_string(
+        """
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -177,8 +178,11 @@ def index():
 </script>
 </body>
 </html>
-    """, title="АВАРИЙНОСТЬ НА ДОРОГАХ РОССИИ", headers=headers, data=data
-)
+    """,
+        title="АВАРИЙНОСТЬ НА ДОРОГАХ РОССИИ",
+        headers=headers,
+        data=data,
+    )
 
 
 if __name__ == "__main__":

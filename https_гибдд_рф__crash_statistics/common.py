@@ -1,23 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from datetime import datetime
+import datetime as DT
 import os
 import shutil
 import sqlite3
-from typing import NamedTuple, List
+
+from typing import NamedTuple
 
 from bs4 import BeautifulSoup
 import requests
-
-# Import https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py
-import sys
-sys.path.append('../wait')
-
-from wait import wait
 
 
 class CrashStatistics(NamedTuple):
@@ -38,21 +33,21 @@ def get_crash_statistics() -> CrashStatistics:
     :return: Dict
     """
 
-    rs = requests.get('https://гибдд.рф/')
+    rs = requests.get("https://гибдд.рф/")
 
-    root = BeautifulSoup(rs.content, 'html.parser')
-    table = root.select_one('table.b-crash-stat')
+    root = BeautifulSoup(rs.content, "html.parser")
+    table = root.select_one("table.b-crash-stat")
 
     # Example: "АВАРИЙНОСТЬ НА ДОРОГАХ РОССИИ ЗА 27.08.2018"
-    table_title = table.select_one('th').text.strip()
+    table_title = table.select_one("th").text.strip()
 
-    date_str = table_title.replace('АВАРИЙНОСТЬ НА ДОРОГАХ РОССИИ ЗА ', '')
+    date_str = table_title.replace("АВАРИЙНОСТЬ НА ДОРОГАХ РОССИИ ЗА ", "")
 
     # Example: {'ДТП': 424, 'Погибли': 40, 'Погибло детей': 1, 'Ранены': 549, 'Ранено детей': 81}
     key_by_value = dict()
 
-    for tr in table.select('tr'):
-        td_list = tr.select('td')
+    for tr in table.select("tr"):
+        td_list = tr.select("td")
         if not td_list:
             continue
 
@@ -61,24 +56,22 @@ def get_crash_statistics() -> CrashStatistics:
 
     return CrashStatistics(
         date_str,
-        key_by_value['ДТП'],
-
-        key_by_value['Погибли'],
-        key_by_value['Погибло детей'],
-
-        key_by_value['Ранены'],
-        key_by_value['Ранено детей'],
+        key_by_value["ДТП"],
+        key_by_value["Погибли"],
+        key_by_value["Погибло детей"],
+        key_by_value["Ранены"],
+        key_by_value["Ранено детей"],
     )
 
 
-DB_FILE_NAME = 'db.sqlite'
+DB_FILE_NAME = "db.sqlite"
 
 
 def create_connect(fields_as_dict=False, trace_sql=False) -> sqlite3.Connection:
     connect = sqlite3.connect(DB_FILE_NAME)
 
     if trace_sql:
-        my_print = lambda text: print('SQL: ' + text.strip())
+        my_print = lambda text: print("SQL: " + text.strip())
         connect.set_trace_callback(my_print)
 
     if fields_as_dict:
@@ -90,7 +83,8 @@ def create_connect(fields_as_dict=False, trace_sql=False) -> sqlite3.Connection:
 def init_db():
     # Создание базы и таблицы
     with create_connect() as connect:
-        connect.execute('''
+        connect.execute(
+            """
             CREATE TABLE IF NOT EXISTS CrashStatistics (
                 id                INTEGER  PRIMARY KEY,
                 date              TEXT     NOT NULL,
@@ -102,31 +96,28 @@ def init_db():
                 
                 CONSTRAINT date_unique UNIQUE (date)
             );
-        ''')
+        """
+        )
 
         connect.commit()
 
 
-def db_create_backup(backup_dir='backup'):
-    import datetime as DT
-    import os
-    import shutil
-
+def db_create_backup(backup_dir="backup"):
     os.makedirs(backup_dir, exist_ok=True)
 
-    file_name = str(DT.datetime.today().date()) + '.sqlite'
+    file_name = str(DT.datetime.today().date()) + ".sqlite"
     file_name = os.path.join(backup_dir, file_name)
 
     shutil.copy(DB_FILE_NAME, file_name)
 
 
-def append_crash_statistics_db(crash_statistics: CrashStatistics=None):
+def append_crash_statistics_db(crash_statistics: CrashStatistics = None):
     db_create_backup()
 
     if not crash_statistics:
         crash_statistics = get_crash_statistics()
 
-    print(f'Append: {crash_statistics}')
+    print(f"Append: {crash_statistics}")
 
     with create_connect() as connect:
         sql = """
@@ -141,7 +132,7 @@ def append_crash_statistics_db(crash_statistics: CrashStatistics=None):
         connect.commit()
 
 
-def get_crash_statistics_list_db() -> List[CrashStatistics]:
+def get_crash_statistics_list_db() -> list[CrashStatistics]:
     with create_connect() as connect:
         sql = """
         SELECT 
@@ -154,7 +145,7 @@ def get_crash_statistics_list_db() -> List[CrashStatistics]:
         return [CrashStatistics(*row) for row in connect.execute(sql)]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     crash_statistics = get_crash_statistics()
     print(crash_statistics)
     print(crash_statistics._asdict())
@@ -166,4 +157,6 @@ if __name__ == '__main__':
     print()
 
     crash_statistics_list = get_crash_statistics_list_db()
-    print(f'Crash statistics list ({len(crash_statistics_list)}): {crash_statistics_list}')
+    print(
+        f"Crash statistics list ({len(crash_statistics_list)}): {crash_statistics_list}"
+    )
