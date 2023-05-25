@@ -63,11 +63,8 @@ def remove_previous_torrent_from_qbittorrent(qb, new_info_hash):
         print("Предыдущие закачки не найдены")
 
         
-# Import https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py
-import sys
-sys.path.append('../wait')
-
-from wait import wait
+# pip install simple-wait
+from simple_wait import wait
 
 
 if __name__ == '__main__':
@@ -148,6 +145,5 @@ if __name__ == '__main__':
 
             print('Через 1 минуту попробую снова...')
 
-            # Wait 1 minute before next attempt
-            import time
-            time.sleep(60)
+            # Wait before next attempt
+            wait(minutes=1)

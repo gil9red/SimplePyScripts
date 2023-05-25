@@ -10,15 +10,12 @@ import traceback
 
 from pathlib import Path
 
+# pip install simple-wait
+from simple_wait import wait
 
 DIR = Path(__file__).resolve().parent
-
-# Import https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py
-sys.path.append(str(DIR.parent.parent / 'wait'))
 sys.path.append(str(DIR.parent))
-from wait import wait
 from get_profile_rating import get_profile_rating
-
 
 from db import ProfileRating, db_create_backup
 

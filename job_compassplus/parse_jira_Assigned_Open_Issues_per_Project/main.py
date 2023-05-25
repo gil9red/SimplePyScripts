@@ -4,18 +4,17 @@
 __author__ = 'ipetrash'
 
 
-import sys
 import time
 
 # pip install schedule
 import schedule
 
-import db
-from common import ROOT_DIR, get_table, logger
-from get_assigned_open_issues_per_project import get_assigned_open_issues_per_project
+# pip install simple-wait
+from simple_wait import wait
 
-sys.path.append(str(ROOT_DIR.parent / 'wait'))
-from wait import wait
+import db
+from common import get_table, logger
+from get_assigned_open_issues_per_project import get_assigned_open_issues_per_project
 
 
 def run():

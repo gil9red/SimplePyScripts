@@ -5,13 +5,12 @@ __author__ = 'ipetrash'
 
 
 import datetime as DT
-
-# Import https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py
 import sys
-sys.path.append('../wait')
-sys.path.append('../html_parsing')
 
-from wait import wait
+# pip install simple-wait
+from simple_wait import wait
+
+sys.path.append('../html_parsing')
 from get_stackoverflow_people_reached import get_stackoverflow_people_reached
 
 from db import PeopleReached, db_create_backup

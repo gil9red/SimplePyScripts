@@ -5,12 +5,10 @@ __author__ = "ipetrash"
 
 
 import os
-import sys
 import time
 
-# Import https://github.com/gil9red/SimplePyScripts/blob/8fa9b9c23d10b5ee7ff0161da997b463f7a861bf/wait/wait.py
-sys.path.append("../wait")
-from wait import wait
+# pip install simple-wait
+from simple_wait import wait
 
 from common import get_repo
 

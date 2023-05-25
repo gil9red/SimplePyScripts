@@ -14,12 +14,10 @@ from pathlib import Path
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
+# pip install simple-wait
+from simple_wait import wait
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
-
-sys.path.append(str(ROOT_DIR / "wait"))
-from wait import wait
-
 sys.path.append(
     str(ROOT_DIR / "winapi__windows__ctypes/windows__toast_balloontip_notifications")
 )
