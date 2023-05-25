@@ -89,6 +89,6 @@ while True:
         print(tb)
 
         print("Wait 15 minutes")
-        time.sleep(15 * 60)  # 15 minutes
+        wait(minutes=15)
 
     print()
