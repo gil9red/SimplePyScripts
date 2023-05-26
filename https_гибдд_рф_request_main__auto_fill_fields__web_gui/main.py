@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -15,11 +15,11 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit()
 
 
@@ -64,16 +64,13 @@ TEXT_PATTERN = """\
 """
 
 
-
 def run_js_code(page: QWebEnginePage, code: str) -> object:
     loop = QEventLoop()
 
-    result_value = {
-        'value': None
-    }
+    result_value = {"value": None}
 
     def _on_callback(result: object):
-        result_value['value'] = result
+        result_value["value"] = result
 
         loop.quit()
 
@@ -81,15 +78,24 @@ def run_js_code(page: QWebEnginePage, code: str) -> object:
 
     loop.exec()
 
-    return result_value['value']
+    return result_value["value"]
 
 
 class MyWebEnginePage(QWebEnginePage):
-    def javaScriptConsoleMessage(self, level: 'JavaScriptConsoleMessage', message: str, line_number: int, source_id: str):
-        print(f'javascript_console_message: {level}, {message}, {line_number}, {source_id}', file=sys.stderr)
+    def javaScriptConsoleMessage(
+        self,
+        level: "JavaScriptConsoleMessage",
+        message: str,
+        line_number: int,
+        source_id: str,
+    ):
+        print(
+            f"javascript_console_message: {level}, {message}, {line_number}, {source_id}",
+            file=sys.stderr,
+        )
 
 
-with open('js/jquery-3.1.1.min.js') as f:
+with open("js/jquery-3.1.1.min.js") as f:
     jquery_text = f.read()
     jquery_text += "\nvar qt = { 'jQuery': jQuery.noConflict(true) };"
 
@@ -103,7 +109,7 @@ app = QApplication([])
 #     mw.setWindowTitle(str(url))
 
 
-url = 'https://гибдд.рф/request_main'
+url = "https://гибдд.рф/request_main"
 
 page = MyWebEnginePage()
 page.load(QUrl(url))
@@ -120,11 +126,11 @@ def _on_load_finished(ok: bool):
     page.runJavaScript(jquery_text)
 
     result = run_js_code(page, "document.title")
-    print('run_java_script:', result)
+    print("run_java_script:", result)
 
     # TODO: обернуть в функцию has с css-selector
     result = run_js_code(page, "qt.jQuery('#surname_check').length > 0")
-    print('run_java_script:', result)
+    print("run_java_script:", result)
 
     # Клик на флажок "С информацией ознакомлен"
     run_js_code(page, """qt.jQuery('input[name="agree"]').click();""")
@@ -138,7 +144,12 @@ def _on_load_finished(ok: bool):
 
     run_js_code(page, """qt.jQuery('#email_check').val('FOOBAR@EMAIL.COM');""")
 
-    run_js_code(page, """qt.jQuery('#message_check > textarea').val({});""".format(repr(TEXT_PATTERN)))
+    run_js_code(
+        page,
+        """qt.jQuery('#message_check > textarea').val({});""".format(
+            repr(TEXT_PATTERN)
+        ),
+    )
 
     # code = """
     # console.log('testetst');
@@ -159,7 +170,9 @@ def _on_load_finished(ok: bool):
     print()
 
 
-view.loadProgress.connect(lambda value: mw.setWindowTitle('{} ({}%)'.format(view.url().toString(), value)))
+view.loadProgress.connect(
+    lambda value: mw.setWindowTitle(f"{view.url().toString()} ({value}%)")
+)
 view.loadFinished.connect(_on_load_finished)
 
 mw = QMainWindow()
