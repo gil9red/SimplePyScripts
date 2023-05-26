@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/JohannesBuchner/imagehash
 
 
-from glob import glob
 import itertools
+from glob import glob
 
 # pip install imagehash
 import imagehash
@@ -17,8 +17,8 @@ import imagehash
 from PIL import Image
 
 
-file_names = glob('D:\все фотки\**\*.jpg', recursive=True)
-print(f'Files: {len(file_names)}')
+file_names = glob(r"D:\все фотки\**\*.jpg", recursive=True)
+print(f"Files: {len(file_names)}")
 
 img_by_hash = dict()
 
@@ -31,7 +31,7 @@ for file_name in file_names:
 
     img_by_hash[file_name] = hash_img
 
-print('Find similar images')
+print("Find similar images")
 
 for img_1, img_2 in itertools.combinations(img_by_hash.items(), 2):
     file_name_1, hash_img_1 = img_1
