@@ -1,48 +1,48 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import base64
+import sys
+import traceback
+
+import requests
+
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+
+from requests_ntlm2 import HttpNtlmAuth
+
+from sqlalchemy import or_
+
+import config
+from db import *
 
 
 # Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    import traceback
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
-    print('Error: ', text)
-    QMessageBox.critical(None, 'Error', text)
+    print("Error: ", text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
-
-
-import config
 
 
 def get_url(page):
     return config.URL_GET_EMPLOYEES_LIST.format((page - 1) * 50)
 
 
-from db import *
-
-import requests
-from requests_ntlm2 import HttpNtlmAuth
-
-
 # # TODO: показывать короткое имя пользователя: ipetrash, ypaliy и т.п.
 #
 # if __name__ == '__main__':
 #     fill_db()
-
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-
-
-import base64
 
 
 def pixmap_from_base64(base64_text):
@@ -142,7 +142,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('Compass Plus Employees')
+        self.setWindowTitle("Compass Plus Employees")
         self.setContextMenuPolicy(Qt.NoContextMenu)
 
         # TODO: окно с информацией о выделенном сотруднике умеет показывать его переработку/недоработку и прочее
@@ -155,11 +155,15 @@ class MainWindow(QMainWindow):
             # Добавление в редактор фильтра кнопки очищения содержимого
             clear_icon = self.style().standardIcon(QStyle.SP_LineEditClearButton)
 
-            clear_action = self.filter_line_edit.addAction(clear_icon, QLineEdit.TrailingPosition)
+            clear_action = self.filter_line_edit.addAction(
+                clear_icon, QLineEdit.TrailingPosition
+            )
             clear_action.setVisible(len(self.filter_line_edit.text()) > 0)
             clear_action.triggered.connect(self.filter_line_edit.clear)
 
-            self.filter_line_edit.textChanged.connect(lambda text: clear_action.setVisible(len(text) > 0))
+            self.filter_line_edit.textChanged.connect(
+                lambda text: clear_action.setVisible(len(text) > 0)
+            )
 
         # Если SP_LineEditClearButton не найден
         except AttributeError:
@@ -170,10 +174,12 @@ class MainWindow(QMainWindow):
         self.employees_table = QTableWidget()
         self.employees_table.setSelectionBehavior(QTableWidget.SelectRows)
         self.employees_table.setSelectionMode(QTableWidget.SingleSelection)
-        self.employees_table.currentItemChanged.connect(lambda item, _: self._item_click(item))
+        self.employees_table.currentItemChanged.connect(
+            lambda item, _: self._item_click(item)
+        )
 
         layout_filter = QHBoxLayout()
-        layout_filter.addWidget(QLabel('Filter:'))
+        layout_filter.addWidget(QLabel("Filter:"))
         layout_filter.addWidget(self.filter_line_edit)
 
         layout = QVBoxLayout()
@@ -195,7 +201,9 @@ class MainWindow(QMainWindow):
         tool_bar = self.addToolBar("General")
         tool_bar.setObjectName("General")
         action_refill = tool_bar.addAction("Parse and refill")
-        action_refill.setToolTip("Clear database, parse site with employees, and fill database")
+        action_refill.setToolTip(
+            "Clear database, parse site with employees, and fill database"
+        )
         action_refill.setStatusTip(action_refill.toolTip())
         action_refill.triggered.connect(self.refill)
 
@@ -204,11 +212,13 @@ class MainWindow(QMainWindow):
     def refill(self):
         # TODO: можно в отдельный класс вынести
         dialog = QDialog()
-        dialog.setWindowTitle('Auth and refill database')
+        dialog.setWindowTitle("Auth and refill database")
 
         info = QLabel()
-        info.setText("""When you click on OK, you will be cleansing a database of employees,
-start parsing for the collection of employees and populate the database.""")
+        info.setText(
+            """When you click on OK, you will be cleansing a database of employees,
+start parsing for the collection of employees and populate the database."""
+        )
 
         login = QLineEdit("CP\\")
         password = QLineEdit()
@@ -242,9 +252,9 @@ start parsing for the collection of employees and populate the database.""")
         rs = session.get(config.URL)
         if not rs.ok:
             QMessageBox.information(self, "Info", "Failed to login")
-            print('Не удалось авторизоваться')
-            print('rs.status_code = {}'.format(rs.status_code))
-            print('rs.headers = {}'.format(rs.headers))
+            print("Не удалось авторизоваться")
+            print("rs.status_code = {}".format(rs.status_code))
+            print("rs.headers = {}".format(rs.headers))
             return
 
         # TODO: move to db.py
@@ -263,11 +273,11 @@ start parsing for the collection of employees and populate the database.""")
         rs = session.get(get_url(page))
         data = rs.json()
 
-        max_page = data['Pages']
+        max_page = data["Pages"]
 
         # TODO: наверное тоже нужно в QProgressDialog обернуть, хоть сбор и быстрый
         employee_list = list()
-        employee_list += data['Properties']
+        employee_list += data["Properties"]
 
         while page < max_page:
             page += 1
@@ -275,10 +285,12 @@ start parsing for the collection of employees and populate the database.""")
             rs = session.get(get_url(page))
             data = rs.json()
 
-            employee_list += data['Properties']
+            employee_list += data["Properties"]
 
         # Для отображения диалога парсинга и заполнения базы
-        progress = QProgressDialog("Operation in progress...", "Cancel", 0, len(employee_list), self)
+        progress = QProgressDialog(
+            "Operation in progress...", "Cancel", 0, len(employee_list), self
+        )
         progress.setWindowTitle("Parsing")
         progress.setWindowModality(Qt.WindowModal)
 
@@ -288,15 +300,17 @@ start parsing for the collection of employees and populate the database.""")
             if progress.wasCanceled():
                 break
 
-            employee_id = row['Id']
+            employee_id = row["Id"]
 
             if exists(employee_id):
-                print('Employee with id = {} already exist.'.format(employee_id))
+                print("Employee with id = {} already exist.".format(employee_id))
                 continue
 
             rs = session.get(config.URL_GET_EMPLOYEE_INFO.format(employee_id))
             if not rs.ok:
-                print("Request getting employee info (id={}) not ok.".format(employee_id))
+                print(
+                    "Request getting employee info (id={}) not ok.".format(employee_id)
+                )
                 print("rs.status_code = {}".format(rs.status_code))
                 print("rs.headers = {}".format(rs.headers))
                 continue
@@ -328,7 +342,6 @@ start parsing for the collection of employees and populate the database.""")
         self._item_click(None)
 
         # TODO: db.py
-        from sqlalchemy import or_
         filter_text = self.filter_line_edit.text()
         filter_text = "%{}%".format(filter_text)
         sql_filter = or_(
@@ -349,8 +362,17 @@ start parsing for the collection of employees and populate the database.""")
         self.employees_table.setRowCount(rows)
 
         headers = [
-            "Name", "Short Name", "Job", "Department",
-            "Birthday", "Url", "Work Phone", "Mobile Phone", "Id", "Email", "Photo"
+            "Name",
+            "Short Name",
+            "Job",
+            "Department",
+            "Birthday",
+            "Url",
+            "Work Phone",
+            "Mobile Phone",
+            "Id",
+            "Email",
+            "Photo",
         ]
         self.employees_table.setColumnCount(len(headers))
         self.employees_table.setHorizontalHeaderLabels(headers)
@@ -364,7 +386,9 @@ start parsing for the collection of employees and populate the database.""")
             self.employees_table.setItem(row, 4, QTableWidgetItem(employee.birthday))
             self.employees_table.setItem(row, 5, QTableWidgetItem(employee.url))
             self.employees_table.setItem(row, 6, QTableWidgetItem(employee.work_phone))
-            self.employees_table.setItem(row, 7, QTableWidgetItem(employee.mobile_phone))
+            self.employees_table.setItem(
+                row, 7, QTableWidgetItem(employee.mobile_phone)
+            )
             self.employees_table.setItem(row, 8, QTableWidgetItem(employee.id))
             self.employees_table.setItem(row, 9, QTableWidgetItem(employee.email))
             self.employees_table.setItem(row, 10, QTableWidgetItem(employee.photo))
@@ -376,7 +400,9 @@ start parsing for the collection of employees and populate the database.""")
         # Запрет редактирования ячеек таблицы
         for row in range(self.employees_table.rowCount()):
             for column in range(self.employees_table.columnCount()):
-                self.employees_table.item(row, column).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+                self.employees_table.item(row, column).setFlags(
+                    Qt.ItemIsSelectable | Qt.ItemIsEnabled
+                )
 
         # Показываем информацию о первом сотруднике
         if self.employees_table.rowCount() > 0:
@@ -386,18 +412,18 @@ start parsing for the collection of employees and populate the database.""")
     def read_settings(self):
         ini = QSettings(config.SETTINGS_FILE_NAME, QSettings.IniFormat)
 
-        state = ini.value('MainWindow_State')
+        state = ini.value("MainWindow_State")
         if state:
             self.restoreState(state)
 
-        geometry = ini.value('MainWindow_Geometry')
+        geometry = ini.value("MainWindow_Geometry")
         if geometry:
             self.restoreGeometry(geometry)
 
     def write_settings(self):
         ini = QSettings(config.SETTINGS_FILE_NAME, QSettings.IniFormat)
-        ini.setValue('MainWindow_State', self.saveState())
-        ini.setValue('MainWindow_Geometry', self.saveGeometry())
+        ini.setValue("MainWindow_State", self.saveState())
+        ini.setValue("MainWindow_Geometry", self.saveGeometry())
 
     def eventFilter(self, object, event):
         # В окне вводе при клике на стрелку вниз фокус переходит в таблицу
@@ -414,7 +440,7 @@ start parsing for the collection of employees and populate the database.""")
         QApplication.instance().quit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
