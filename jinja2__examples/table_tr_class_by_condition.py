@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install jinja2
 import jinja2
 
 
-template = jinja2.Template("""\
+template = jinja2.Template(
+    """\
 <table>
   <tr>
   {% for x in rows_1 %}
@@ -21,18 +22,19 @@ template = jinja2.Template("""\
   {% endfor %}
   </tr>
 </table>
-""")
+"""
+)
 
 
 in_dict = {
-    'a': [1, 2, 3],
-    'b': [3, 4, 5],
-    'c': [99, 3],
+    "a": [1, 2, 3],
+    "b": [3, 4, 5],
+    "c": [99, 3],
 }
 
 html = template.render(
     rows_1=[k for k, v in in_dict.items()],
-    rows_2=[sum(v) for k, v in in_dict.items()]
+    rows_2=[sum(v) for k, v in in_dict.items()],
 )
 print(html)
 """

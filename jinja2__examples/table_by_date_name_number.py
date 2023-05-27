@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-import datetime
 from collections import defaultdict
+from datetime import datetime
 
 import jinja2
 
 
 array1 = [
-    [datetime.datetime(2020, 10, 27, 12, 37), 'Саша'],
-    [datetime.datetime(2020, 10, 28, 16, 2), 'Олег'],
-    [datetime.datetime(2020, 10, 27, 16, 40), 'Саша'],
-    [datetime.datetime(2020, 10, 27, 16, 41), 'Саша'],
-    [datetime.datetime(2020, 10, 27, 12, 54), 'Костя'],
-    [datetime.datetime(2020, 10, 27, 12, 27), 'Костя'],
-    [datetime.datetime(2020, 10, 27, 12, 27), 'Олег'],
-    [datetime.datetime(2020, 10, 27, 12, 54), 'Саша']
+    [datetime(2020, 10, 27, 12, 37), "Саша"],
+    [datetime(2020, 10, 28, 16, 2), "Олег"],
+    [datetime(2020, 10, 27, 16, 40), "Саша"],
+    [datetime(2020, 10, 27, 16, 41), "Саша"],
+    [datetime(2020, 10, 27, 12, 54), "Костя"],
+    [datetime(2020, 10, 27, 12, 27), "Костя"],
+    [datetime(2020, 10, 27, 12, 27), "Олег"],
+    [datetime(2020, 10, 27, 12, 54), "Саша"],
 ]
 
 result = defaultdict(dict)
@@ -37,7 +37,8 @@ for dt, name in array1:
     dates.add(date)
 
 
-template = jinja2.Template("""\
+template = jinja2.Template(
+    """\
 <table class="table-2">
   <tr>
     <td>Отчет</td>
@@ -54,7 +55,8 @@ template = jinja2.Template("""\
     </tr>
   {% endfor %}
 </table>
-""")
+"""
+)
 
 html_tab = template.render(
     dates=sorted(dates),
