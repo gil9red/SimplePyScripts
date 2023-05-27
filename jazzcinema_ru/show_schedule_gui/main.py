@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from urllib.parse import urljoin
-from urllib.request import urlopen
-
-from datetime import datetime
+import base64
+import logging
+import traceback
+import sys
 
 from collections import OrderedDict
+from datetime import datetime
+from urllib.parse import urljoin
+from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 
@@ -19,46 +22,42 @@ from qtpy.QtCore import *
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
-
-    import logging
     logging.critical(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
-URL = 'http://www.jazzcinema.ru/schedule/'
+URL = "http://www.jazzcinema.ru/schedule/"
 
 
 class Movie:
     def __init__(self, border):
-        a = border.select_one('.movie .title > a')
-        self.movie_url = urljoin(URL, a['href'])
+        a = border.select_one(".movie .title > a")
+        self.movie_url = urljoin(URL, a["href"])
 
-        self.title = a['title']
+        self.title = a["title"]
 
-        self.genre = border.select_one('.genre')
+        self.genre = border.select_one(".genre")
         if self.genre:
             self.genre = self.genre.text
 
         self.seanses = OrderedDict()
-        for seanse in border.select('.seanses li'):
-            time = seanse.select_one('a').text
-            price = seanse.select_one('.price').text
+        for seanse in border.select(".seanses li"):
+            time = seanse.select_one("a").text
+            price = seanse.select_one(".price").text
             self.seanses[time] = price
 
         movie_info = border.next_sibling
 
-        self.annotation = movie_info.select_one('.text').text.strip()
+        self.annotation = movie_info.select_one(".text").text.strip()
 
-        img_url = movie_info.select_one('.poster img')["src"]
+        img_url = movie_info.select_one(".poster img")["src"]
         self.img_url = urljoin(URL, img_url)
 
         # Начало и конец проката
@@ -69,24 +68,24 @@ class Movie:
         self.producer = None
         self.actors = None
         self.duration = None
-        self.age_restrictions = movie_info.select_one('.text.age-count').text.strip()
+        self.age_restrictions = movie_info.select_one(".text.age-count").text.strip()
 
-        for td in movie_info.select('table td'):
+        for td in movie_info.select("table td"):
             key = td.text.strip()
             if key.endswith(":"):
                 value = td.next_sibling.text.strip()
 
-                if 'Начало проката:' == key:
+                if "Начало проката:" == key:
                     self.start_rentals = value
-                elif 'Окончание проката:' == key:
+                elif "Окончание проката:" == key:
                     self.end_rentals = value
-                elif 'Страна:' == key:
+                elif "Страна:" == key:
                     self.country = value
-                elif 'Режиссёр:' == key:
+                elif "Режиссёр:" == key:
                     self.producer = value
-                elif 'В ролях:' == key:
+                elif "В ролях:" == key:
                     self.actors = value
-                elif 'Продолжительность:' == key:
+                elif "Продолжительность:" == key:
                     self.duration = value
 
 
@@ -109,14 +108,17 @@ class MovieInfoWidget(QWidget):
 
         # Скачивание обложки и получени base64
         with urlopen(movie.img_url) as f:
-            import base64
-            img_base64 = base64.standard_b64encode(f.read()).decode('utf-8')
+            img_base64 = base64.standard_b64encode(f.read()).decode("utf-8")
             data["img_url"] = "data:image/png;base64," + img_base64
 
-        seanses_table = '<table>'
+        seanses_table = "<table>"
 
         for time, price in movie.seanses.items():
-            seanses_table += "<tr><td>{}&nbsp;&nbsp;&nbsp;&nbsp;</td><td>{}</td></tr>".format(time, price)
+            seanses_table += (
+                "<tr><td>{}&nbsp;&nbsp;&nbsp;&nbsp;</td><td>{}</td></tr>".format(
+                    time, price
+                )
+            )
 
         seanses_table += "</table>"
 
@@ -159,7 +161,9 @@ class MovieInfoWidget(QWidget):
         </table>
     </body>
 </html>
-        """.format(movie, **data)
+        """.format(
+            movie, **data
+        )
 
         self.browser.setHtml(html)
 
@@ -168,11 +172,16 @@ class SchedulerMoviePage(QWidget):
     def __init__(self, schedule):
         super().__init__()
 
-        self.schedule_date_str = datetime.strptime(schedule['rel'], 'calendar-%Y-%m-%d-schedule').strftime('%d/%m/%Y')
+        self.schedule_date_str = datetime.strptime(
+            schedule["rel"], "calendar-%Y-%m-%d-schedule"
+        ).strftime("%d/%m/%Y")
 
         self.movie_list_widget = QListWidget()
-        self.movie_list_widget.currentItemChanged.connect(lambda current, previous:
-                                                          self.movie_info.set_movie(current.data(Qt.UserRole)))
+        self.movie_list_widget.currentItemChanged.connect(
+            lambda current, previous: self.movie_info.set_movie(
+                current.data(Qt.UserRole)
+            )
+        )
 
         self.movie_info = MovieInfoWidget()
 
@@ -185,7 +194,7 @@ class SchedulerMoviePage(QWidget):
         self.setLayout(layout)
 
         # Получение фильмов в текущей вкладке (в каждой вкладке будет свой список фильмов на день)
-        for border in schedule.select('.border'):
+        for border in schedule.select(".border"):
             movie = Movie(border)
 
             item = QListWidgetItem(movie.title)
@@ -199,12 +208,12 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('show_schedule_gui.py')
+        self.setWindowTitle("show_schedule_gui.py")
 
         self.tab_widget = QTabWidget()
 
         layout = QVBoxLayout()
-        layout.addWidget(QLabel('Расписание фильмов на:'))
+        layout.addWidget(QLabel("Расписание фильмов на:"))
         layout.addWidget(self.tab_widget)
 
         widget = QWidget()
@@ -214,22 +223,22 @@ class MainWindow(QMainWindow):
 
     def load(self):
         with urlopen(URL) as f:
-            root = BeautifulSoup(f.read(), 'lxml')
+            root = BeautifulSoup(f.read(), "lxml")
 
             # Список расписаний
-            schedule_list = root.select('.schedule')
+            schedule_list = root.select(".schedule")
 
             # Проходим по списку расписаний
             for schedule in schedule_list:
                 # Если фильмов нет
-                if not schedule.select('.border'):
+                if not schedule.select(".border"):
                     continue
 
                 tab = SchedulerMoviePage(schedule)
                 self.tab_widget.addTab(tab, tab.schedule_date_str)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
