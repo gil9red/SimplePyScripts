@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from functools import total_ordering
-from typing import List
 
 
 class ReportPerson:
     """Класс для описания сотрудника в отчете."""
 
-    def __init__(self, tags: List[str]):
+    def __init__(self, tags: list[str]):
         # ФИО
         self.second_name, self.first_name, self.middle_name = tags[0].split(maxsplit=2)
 
@@ -34,11 +33,13 @@ class ReportPerson:
 
     @property
     def full_name(self):
-        return self.second_name + ' ' + self.first_name + ' ' + self.middle_name
+        return self.second_name + " " + self.first_name + " " + self.middle_name
 
     @staticmethod
     def get_work_day(day_str):
-        return int(day_str) if '=' not in day_str else int(day_str.split('=')[0].strip())
+        return (
+            int(day_str) if "=" not in day_str else int(day_str.split("=")[0].strip())
+        )
 
     @total_ordering
     class Time:
@@ -46,7 +47,7 @@ class ReportPerson:
 
         def __init__(self, time_str: str):
             # TODO: supports self._seconds
-            self._hours, self._minutes, self._seconds = map(int, time_str.split(':'))
+            self._hours, self._minutes, self._seconds = map(int, time_str.split(":"))
 
         @property
         def total(self) -> int:
