@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Install kivy:
@@ -15,8 +15,8 @@ from kivy.uix.label import Label
 
 class MyApp(App):
     def build(self):
-        return Label(text='Hello world')
+        return Label(text="Hello world")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     MyApp().run()

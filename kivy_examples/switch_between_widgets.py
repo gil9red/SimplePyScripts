@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from kivy.app import App
@@ -11,7 +11,7 @@ from kivy.uix.boxlayout import BoxLayout
 
 
 class ScreenMain(Screen):
-    def __init__ (self, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
         box_layout = BoxLayout(orientation="vertical", spacing=5, padding=[10])
@@ -27,8 +27,8 @@ class ScreenMain(Screen):
         self.add_widget(box_layout)
 
     def _on_press_button_new_pasword(self, *args):
-        self.manager.transition.direction = 'left'
-        self.manager.current = 'len_password'
+        self.manager.transition.direction = "left"
+        self.manager.current = "len_password"
 
 
 class ScreenLenPassword(Screen):
@@ -48,15 +48,15 @@ class ScreenLenPassword(Screen):
         self.add_widget(box_layout)
 
     def _on_press_button_new_pasword(self, *args):
-        self.manager.transition.direction = 'right'
-        self.manager.current = 'main_screen'
+        self.manager.transition.direction = "right"
+        self.manager.current = "main_screen"
 
 
 class MainApp(App):
     def build(self):
         sm = ScreenManager()
-        sm.add_widget(ScreenMain(name='main_screen'))
-        sm.add_widget(ScreenLenPassword(name='len_password'))
+        sm.add_widget(ScreenMain(name="main_screen"))
+        sm.add_widget(ScreenLenPassword(name="len_password"))
 
         return sm
 

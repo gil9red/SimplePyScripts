@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import os
@@ -11,11 +11,11 @@ from kivymd.app import MDApp
 from kivymd.uix.list import OneLineListItem
 
 
-KV = '''
+KV = """
 ScrollView:
     MDList:
         id: container
-'''
+"""
 
 
 class Test(MDApp):
@@ -23,11 +23,11 @@ class Test(MDApp):
         return Builder.load_string(KV)
 
     def on_start(self):
-        for i in os.listdir(path='.'):
+        for i in os.listdir(path="."):
             self.root.ids.container.add_widget(
                 OneLineListItem(text=i, on_release=lambda item, i=i: print(i))
             )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     Test().run()

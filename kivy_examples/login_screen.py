@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from kivy.app import App
@@ -20,14 +20,14 @@ class LoginScreen(GridLayout):
         self.spacing = 10
         self.padding = 10
 
-        self.add_widget(Label(text='User Name'))
+        self.add_widget(Label(text="User Name"))
         self.username = TextInput(multiline=False)
-        self.username.text = 'admin'
+        self.username.text = "admin"
         self.add_widget(self.username)
 
-        self.add_widget(Label(text='password'))
+        self.add_widget(Label(text="password"))
         self.password = TextInput(password=True, multiline=False)
-        self.password.text = 'admin'
+        self.password.text = "admin"
         self.add_widget(self.password)
 
         self.add_widget(Button(text="Ok", on_press=self.check))
@@ -53,5 +53,5 @@ class MyLoginScreenApp(App):
         return LoginScreen()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     MyLoginScreenApp().run()
