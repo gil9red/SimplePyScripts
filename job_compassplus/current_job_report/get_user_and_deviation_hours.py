@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -10,7 +10,6 @@ import re
 import sys
 
 from pathlib import Path
-from typing import Tuple
 
 from lxml import etree
 
@@ -21,18 +20,21 @@ sys.path.append(str(DIR.parent))
 from root_common import session
 
 sys.path.append(str(DIR.parent.parent))
-from get_quarter import get_quarter, get_quarter_num  # NOTE: оставить get_quarter_num для main.py
+from get_quarter import (
+    get_quarter,
+    get_quarter_num,
+)  # NOTE: оставить get_quarter_num для main.py
 
 
 class NotFoundReport(Exception):
     pass
 
 
-URL = 'https://helpdesk.compassluxe.com/pa-reports/'
+URL = "https://helpdesk.compassluxe.com/pa-reports/"
 
 
 def clear_hours(hours: str) -> str:
-    return re.sub(r'[^\d:-]', '', hours)
+    return re.sub(r"[^\d:-]", "", hours)
 
 
 def _send_data(data: dict) -> str:
@@ -51,11 +53,11 @@ def _send_data(data: dict) -> str:
 def get_report_context() -> str:
     today = DT.datetime.today()
     data = {
-        'dep': 'all',
-        'rep': 'rep1',
-        'period': today.strftime('%Y-%m'),
-        'v': int(today.timestamp() * 1000),
-        'type': 'normal',
+        "dep": "all",
+        "rep": "rep1",
+        "period": today.strftime("%Y-%m"),
+        "v": int(today.timestamp() * 1000),
+        "type": "normal",
     }
     return _send_data(data)
 
@@ -63,27 +65,27 @@ def get_report_context() -> str:
 def get_quarter_report_context() -> str:
     today = DT.datetime.today()
     data = {
-        'dep': 'all',
-        'rep': 'rep1',
-        'quarter': 'quarter',
-        'period': f'{today.year}-q{get_quarter(today)}',
-        'v': int(today.timestamp() * 1000),
-        'type': 'normal',
+        "dep": "all",
+        "rep": "rep1",
+        "quarter": "quarter",
+        "period": f"{today.year}-q{get_quarter(today)}",
+        "v": int(today.timestamp() * 1000),
+        "type": "normal",
     }
     return _send_data(data)
 
 
-def parse_current_user_deviation_hours(html: str) -> Tuple[str, str]:
+def parse_current_user_deviation_hours(html: str) -> tuple[str, str]:
     root = etree.HTML(html)
 
-    XPATH_1 = '//table[@id="report"]/tbody/tr[th[contains(text(),"Текущий пользователь")]]'
-    XPATH_2 = '//table[@class="report"]/tbody/tr[th[contains(text(),"Текущий пользователь")]]'
+    xpath_1 = '//table[@id="report"]/tbody/tr[th[contains(text(),"Текущий пользователь")]]'
+    xpath_2 = '//table[@class="report"]/tbody/tr[th[contains(text(),"Текущий пользователь")]]'
 
     # Вытаскивание tr, у которого есть вложенный th, имеющий в содержимом текст "Текущий пользователь"
     try:
-        items = root.xpath(XPATH_1)
+        items = root.xpath(xpath_1)
         if not items:
-            items = root.xpath(XPATH_2)
+            items = root.xpath(xpath_2)
 
         current_user_tr = items[0]
 
@@ -107,7 +109,7 @@ def parse_current_user_deviation_hours(html: str) -> Tuple[str, str]:
     return name, clear_hours(deviation_hours)
 
 
-def parse_user_deviation_hours(html: str, user_name: str = 'Петраш') -> Tuple[str, str]:
+def parse_user_deviation_hours(html: str, user_name: str = "Петраш") -> tuple[str, str]:
     root = etree.HTML(html)
 
     XPATH_1 = f'//table[@id="report"]/tbody/tr[td[contains(text(),"{user_name}")]]'
@@ -141,22 +143,30 @@ def parse_user_deviation_hours(html: str, user_name: str = 'Петраш') -> Tu
     return name, clear_hours(deviation_hours)
 
 
-def get_user_and_deviation_hours() -> Tuple[str, str]:
+def get_user_and_deviation_hours() -> tuple[str, str]:
     content = get_report_context()
     return parse_current_user_deviation_hours(content)
 
 
-def get_quarter_user_and_deviation_hours() -> Tuple[str, str]:
+def get_quarter_user_and_deviation_hours() -> tuple[str, str]:
     content = get_quarter_report_context()
     return parse_user_deviation_hours(content)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     name, deviation_hours = get_user_and_deviation_hours()
     print(name)
-    print(('Недоработка' if deviation_hours[0] == '-' else 'Переработка') + ' ' + deviation_hours)
+    print(
+        ("Недоработка" if deviation_hours[0] == "-" else "Переработка")
+        + " "
+        + deviation_hours
+    )
     print()
 
     name, deviation_hours = get_quarter_user_and_deviation_hours()
     print(name)
-    print(('Недоработка' if deviation_hours[0] == '-' else 'Переработка') + ' за квартал ' + deviation_hours)
+    print(
+        ("Недоработка" if deviation_hours[0] == "-" else "Переработка")
+        + " за квартал "
+        + deviation_hours
+    )

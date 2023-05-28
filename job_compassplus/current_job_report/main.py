@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -11,31 +11,42 @@ import traceback
 import os.path
 
 from PyQt5.QtWidgets import (
-    QApplication, QWidget, QLabel, QToolButton, QPlainTextEdit, QVBoxLayout, QHBoxLayout, QSystemTrayIcon,
-    QMenu, QWidgetAction, QMessageBox
+    QApplication,
+    QWidget,
+    QLabel,
+    QToolButton,
+    QPlainTextEdit,
+    QVBoxLayout,
+    QHBoxLayout,
+    QSystemTrayIcon,
+    QMenu,
+    QWidgetAction,
+    QMessageBox,
 )
 from PyQt5.QtGui import QColor, QPainter, QIcon
 from PyQt5.QtCore import Qt, pyqtSignal, QThread
 
 from get_user_and_deviation_hours import (
-    get_user_and_deviation_hours, get_quarter_user_and_deviation_hours, get_quarter_num,
-    NotFoundReport
+    get_user_and_deviation_hours,
+    get_quarter_user_and_deviation_hours,
+    get_quarter_num,
+    NotFoundReport,
 )
 
 
 # Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = f'{ex_cls.__name__}: {ex}:\n'
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
-    print('Error: ', text)
-    QMessageBox.critical(None, 'Error', text)
+    print("Error: ", text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
 sys.excepthook = log_uncaught_exceptions
 
-TRAY_ICON = os.path.join(os.path.dirname(__file__), 'favicon.ico')
+TRAY_ICON = os.path.join(os.path.dirname(__file__), "favicon.ico")
 
 
 class CheckJobReportThread(QThread):
@@ -51,11 +62,11 @@ class CheckJobReportThread(QThread):
 
     def do_run(self):
         def _get_title(deviation_hours):
-            ok = deviation_hours[0] != '-'
-            return 'Переработка' if ok else 'Недоработка'
+            ok = deviation_hours[0] != "-"
+            return "Переработка" if ok else "Недоработка"
 
-        today = DT.datetime.today().strftime('%d/%m/%Y %H:%M:%S')
-        self.about_log.emit(f'Check for {today}')
+        today = DT.datetime.today().strftime("%d/%m/%Y %H:%M:%S")
+        self.about_log.emit(f"Check for {today}")
 
         text = ""
         deviation_hours = None
@@ -63,8 +74,8 @@ class CheckJobReportThread(QThread):
 
         try:
             name, deviation_hours = get_user_and_deviation_hours()
-            ok = deviation_hours[0] != '-'
-            text += name + '\n\n' + _get_title(deviation_hours) + ' ' + deviation_hours
+            ok = deviation_hours[0] != "-"
+            text += name + "\n\n" + _get_title(deviation_hours) + " " + deviation_hours
 
         except NotFoundReport:
             text = "Отчет на сегодня еще не готов."
@@ -72,11 +83,17 @@ class CheckJobReportThread(QThread):
 
         try:
             _, quarter_deviation_hours = get_quarter_user_and_deviation_hours()
-            if quarter_deviation_hours.count(':') == 1:
+            if quarter_deviation_hours.count(":") == 1:
                 quarter_deviation_hours += ":00"
 
-            text += "\n" + _get_title(quarter_deviation_hours) + ' за квартал ' + get_quarter_num() \
-                    + " " + quarter_deviation_hours
+            text += (
+                "\n"
+                + _get_title(quarter_deviation_hours)
+                + " за квартал "
+                + get_quarter_num()
+                + " "
+                + quarter_deviation_hours
+            )
 
         except NotFoundReport:
             pass
@@ -105,7 +122,7 @@ class CheckJobReportThread(QThread):
                 time.sleep(3600)
 
             except Exception as e:
-                self.about_log.emit("Error: " + str(e))
+                self.about_log.emit(f"Error: {e}")
                 self.about_log.emit("Wait 60 secs")
                 time.sleep(60)
 
@@ -118,12 +135,12 @@ class JobReportWidget(QWidget):
         self.ok = None
 
         self.quit_button = QToolButton()
-        self.quit_button.setText('Quit')
+        self.quit_button.setText("Quit")
         self.quit_button.setAutoRaise(True)
         self.quit_button.clicked.connect(QApplication.instance().quit)
 
         self.hide_button = QToolButton()
-        self.hide_button.setText('Hide')
+        self.hide_button.setText("Hide")
         self.hide_button.setAutoRaise(True)
         self.hide_button.clicked.connect(lambda x=None: self.parent().hide())
 
@@ -182,7 +199,7 @@ class JobReportWidget(QWidget):
     def paintEvent(self, event):
         super().paintEvent(event)
 
-        color = QColor('#29AB87') if self.ok else QColor(255, 0, 0, 128)
+        color = QColor("#29AB87") if self.ok else QColor(255, 0, 0, 128)
 
         painter = QPainter(self)
         painter.setBrush(color)
@@ -191,7 +208,7 @@ class JobReportWidget(QWidget):
 
 
 # TODO: Нарисовать график
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
     app.setQuitOnLastWindowClosed(False)
 
@@ -208,7 +225,7 @@ if __name__ == '__main__':
     tray.setContextMenu(menu)
     tray.activated.connect(lambda x: menu.exec(tray.geometry().center()))
 
-    tray.setToolTip('Compass Plus. Рапорт учета рабочего времени')
+    tray.setToolTip("Compass Plus. Рапорт учета рабочего времени")
     tray.show()
 
     app.exec()
