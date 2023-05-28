@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -35,12 +35,12 @@ from print_statistic_all_names import get_all_names
 
 first_name_list = [name[1] for name in get_all_names(split_name=True)]
 total = len(first_name_list)
-print('Total:', total)
+print("Total:", total)
 print()
 
-print('Top 15:')
+print("Top 15:")
 counter = Counter(first_name_list)
 
 # Сортировка по количеству
 for name, number in sorted(counter.items(), key=lambda x: x[1], reverse=True)[:15]:
-    print(f'    {name}: {number} ({number * 100 / total:.1f}%)')
+    print(f"    {name}: {number} ({number * 100 / total:.1f}%)")
