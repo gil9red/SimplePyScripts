@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -9,9 +9,15 @@ import os
 import shutil
 import sys
 
-from typing import Dict, Optional
-
-from peewee import SqliteDatabase, Model, TextField, CharField, ForeignKeyField, DateField, IntegerField
+from peewee import (
+    SqliteDatabase,
+    Model,
+    TextField,
+    CharField,
+    ForeignKeyField,
+    DateField,
+    IntegerField,
+)
 
 from common import ROOT_DIR, DIR, print_table
 
@@ -19,21 +25,22 @@ from common import ROOT_DIR, DIR, print_table
 sys.path.append(str(ROOT_DIR.parent))
 from shorten import shorten
 
+
 # Absolute file name
-DB_FILE_NAME = str(DIR / 'database.sqlite')
+DB_FILE_NAME = str(DIR / "database.sqlite")
 
 
-def db_create_backup(backup_dir=DIR / 'backup'):
+def db_create_backup(backup_dir=DIR / "backup"):
     os.makedirs(backup_dir, exist_ok=True)
 
-    file_name = str(DT.datetime.today().date()) + '.sqlite'
+    file_name = str(DT.datetime.today().date()) + ".sqlite"
     file_name = os.path.join(backup_dir, file_name)
 
     shutil.copy(DB_FILE_NAME, file_name)
 
 
 # Ensure foreign-key constraints are enforced.
-db = SqliteDatabase(DB_FILE_NAME, pragmas={'foreign_keys': 1})
+db = SqliteDatabase(DB_FILE_NAME, pragmas={"foreign_keys": 1})
 
 
 class BaseModel(Model):
@@ -50,13 +57,13 @@ class BaseModel(Model):
                     v = repr(shorten(v))
 
             elif isinstance(field, ForeignKeyField):
-                k = f'{k}_id'
+                k = f"{k}_id"
                 if v:
                     v = v.id
 
-            fields.append(f'{k}={v}')
+            fields.append(f"{k}={v}")
 
-        return self.__class__.__name__ + '(' + ', '.join(fields) + ')'
+        return self.__class__.__name__ + "(" + ", ".join(fields) + ")"
 
 
 class Run(BaseModel):
@@ -65,11 +72,11 @@ class Run(BaseModel):
     def get_total_issues(self) -> int:
         return sum(x.value for x in self.issue_numbers)
 
-    def get_project_by_issue_numbers(self) -> Dict[str, int]:
+    def get_project_by_issue_numbers(self) -> dict[str, int]:
         return {issue.project.name: issue.value for issue in self.issue_numbers}
 
     def __str__(self):
-        return f'{self.__class__.__name__}(id={self.id}, date={self.date}, total_issues={self.get_total_issues()})'
+        return f"{self.__class__.__name__}(id={self.id}, date={self.date}, total_issues={self.get_total_issues()})"
 
 
 class Project(BaseModel):
@@ -78,11 +85,11 @@ class Project(BaseModel):
 
 class IssueNumber(BaseModel):
     value = IntegerField()
-    run = ForeignKeyField(Run, backref='issue_numbers')
-    project = ForeignKeyField(Project, backref='issue_numbers')
+    run = ForeignKeyField(Run, backref="issue_numbers")
+    project = ForeignKeyField(Project, backref="issue_numbers")
 
 
-def add(assigned_open_issues_per_project: Dict[str, int]) -> Optional[bool]:
+def add(assigned_open_issues_per_project: dict[str, int]) -> bool | None:
     last_run = Run.select().order_by(Run.id.desc()).get()
     if assigned_open_issues_per_project == last_run.get_project_by_issue_numbers():
         return
@@ -94,11 +101,7 @@ def add(assigned_open_issues_per_project: Dict[str, int]) -> Optional[bool]:
     for project_name, issue_numbers in assigned_open_issues_per_project.items():
         project, _ = Project.get_or_create(name=project_name)
 
-        IssueNumber.create(
-            value=issue_numbers,
-            run=run,
-            project=project
-        )
+        IssueNumber.create(value=issue_numbers, run=run, project=project)
 
     db_create_backup()
 
@@ -109,13 +112,13 @@ db.connect()
 db.create_tables([Run, Project, IssueNumber])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     projects = [p.name for p in Project.select()]
     print(f"Projects ({len(projects)}): {projects}\n")
 
     # Print last rows
     for run in Run.select().order_by(Run.id.desc()).limit(5):
-        print(run, '\n')
+        print(run, "\n")
         print_table(run.get_project_by_issue_numbers())
 
-        print('\n' + '-' * 100 + '\n')
+        print("\n" + "-" * 100 + "\n")

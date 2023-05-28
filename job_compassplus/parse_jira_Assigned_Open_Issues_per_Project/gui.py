@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import calendar
@@ -13,9 +13,23 @@ import traceback
 from datetime import datetime, date, timedelta
 
 from PyQt5.QtWidgets import (
-    QApplication, QMessageBox, QMainWindow, QSystemTrayIcon, QTabWidget, QTableWidget,
-    QTableWidgetItem, QVBoxLayout, QWidget, QPushButton, QSplitter, QLabel, QGridLayout,
-    QHeaderView, QProgressBar, QMenu, QComboBox
+    QApplication,
+    QMessageBox,
+    QMainWindow,
+    QSystemTrayIcon,
+    QTabWidget,
+    QTableWidget,
+    QTableWidgetItem,
+    QVBoxLayout,
+    QWidget,
+    QPushButton,
+    QSplitter,
+    QLabel,
+    QGridLayout,
+    QHeaderView,
+    QProgressBar,
+    QMenu,
+    QComboBox,
 )
 from PyQt5.QtGui import QIcon, QPainter, QCloseEvent
 from PyQt5.QtCore import QEvent, QTimer, Qt, QThread, pyqtSignal
@@ -25,16 +39,16 @@ from common import ROOT_DIR, DIR, get_table
 from get_assigned_open_issues_per_project import get_assigned_open_issues_per_project
 from db import Run
 
-sys.path.append(str(ROOT_DIR.parent / 'qt__pyqt__pyside__pyqode'))
+sys.path.append(str(ROOT_DIR.parent / "qt__pyqt__pyside__pyqode"))
 from chart_line__show_tooltip_on_series__QtChart import ChartViewToolTips
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = f'{ex_cls.__name__}: {ex}:\n'
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
@@ -76,10 +90,12 @@ class TableWidgetRun(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.table_run = get_table_widget(['DATE', 'TOTAL ISSUES'])
-        self.table_run.selectionModel().selectionChanged.connect(self._on_table_run_item_clicked)
+        self.table_run = get_table_widget(["DATE", "TOTAL ISSUES"])
+        self.table_run.selectionModel().selectionChanged.connect(
+            self._on_table_run_item_clicked
+        )
 
-        self.table_issues = get_table_widget(['PROJECT', 'NUMBER'])
+        self.table_issues = get_table_widget(["PROJECT", "NUMBER"])
         self.table_run.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table_issues.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
@@ -100,7 +116,7 @@ class TableWidgetRun(QWidget):
         for i, run in enumerate(items):
             self.table_run.setRowCount(self.table_run.rowCount() + 1)
 
-            item = QTableWidgetItem(run.date.strftime('%d/%m/%Y'))
+            item = QTableWidgetItem(run.date.strftime("%d/%m/%Y"))
             item.setData(Qt.UserRole, run.get_project_by_issue_numbers())
             self.table_run.setItem(i, 0, item)
 
@@ -131,7 +147,7 @@ class CurrentAssignedOpenIssues(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.table = get_table_widget(['PROJECT', 'NUMBER'])
+        self.table = get_table_widget(["PROJECT", "NUMBER"])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
         self.progress_bar = QProgressBar()
@@ -155,7 +171,9 @@ class CurrentAssignedOpenIssues(QWidget):
         main_layout = QGridLayout()
         main_layout.addWidget(self.label_total, 0, 0, Qt.AlignLeft | Qt.AlignCenter)
         main_layout.addWidget(self.progress_bar, 0, 1)
-        main_layout.addWidget(self.label_last_refresh_date, 0, 2, Qt.AlignRight | Qt.AlignCenter)
+        main_layout.addWidget(
+            self.label_last_refresh_date, 0, 2, Qt.AlignRight | Qt.AlignCenter
+        )
         main_layout.addWidget(self.table, 1, 0, 2, 0)
 
         self.setLayout(main_layout)
@@ -166,10 +184,10 @@ class CurrentAssignedOpenIssues(QWidget):
         self.thread.about_items.connect(self._on_set_items)
         self.thread.about_error.connect(self._on_error)
 
-        self._update_total_issues('-')
+        self._update_total_issues("-")
 
     def _update_total_issues(self, value):
-        self.label_total.setText(f'<b>Total issues:</b> {value}')
+        self.label_total.setText(f"<b>Total issues:</b> {value}")
 
     def _on_set_items(self, items: dict[str, int]):
         self._update_total_issues(sum(items.values()))
@@ -185,13 +203,13 @@ class CurrentAssignedOpenIssues(QWidget):
             self.table.setItem(i, 1, QTableWidgetItem(str(number)))
 
         self.label_last_refresh_date.setText(
-            "Last refresh date: " + datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+            f"Last refresh date: {datetime.now()}:%d/%m/%Y %H:%M:%S"
         )
 
     def _on_error(self, e: Exception):
         tb_str = "".join(traceback.format_tb(e.__traceback__))
         print(tb_str)
-        QMessageBox.warning(self, 'ERROR', str(e))
+        QMessageBox.warning(self, "ERROR", str(e))
 
     def refresh(self):
         if self.thread.isRunning():
@@ -204,7 +222,7 @@ class MyChartViewToolTips(ChartViewToolTips):
     def __init__(self, timestamp_by_run: dict):
         super().__init__()
 
-        self._callout_font_family = 'Courier'
+        self._callout_font_family = "Courier"
         self.timestamp_by_run = timestamp_by_run
 
     def show_series_tooltip(self, point, state: bool):
@@ -247,16 +265,16 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle(WINDOW_TITLE)
 
-        file_name = str(DIR / 'favicon.ico')
+        file_name = str(DIR / "favicon.ico")
         icon = QIcon(file_name)
         self.setWindowIcon(icon)
 
         self.timestamp_by_run = dict()
 
         menu = QMenu()
-        menu.addAction('Show / hide', (lambda: self.setVisible(not self.isVisible())))
+        menu.addAction("Show / hide", (lambda: self.setVisible(not self.isVisible())))
         menu.addSeparator()
-        menu.addAction('Quit', QApplication.instance().quit)
+        menu.addAction("Quit", QApplication.instance().quit)
 
         self.tray = QSystemTrayIcon(icon)
         self.tray.setContextMenu(menu)
@@ -268,11 +286,13 @@ class MainWindow(QMainWindow):
         self.chart_view.setRenderHint(QPainter.Antialiasing)
 
         self.cb_chart_filter = QComboBox()
-        self.cb_chart_filter.addItem('<all years>', userData=0)
+        self.cb_chart_filter.addItem("<all years>", userData=0)
         self.cb_chart_filter.activated.connect(self.refresh)
         layout_chart_view = QVBoxLayout(self.chart_view)
         layout_chart_view.addWidget(self.cb_chart_filter)
-        layout_chart_view.setAlignment(self.cb_chart_filter, Qt.AlignTop | Qt.AlignRight)
+        layout_chart_view.setAlignment(
+            self.cb_chart_filter, Qt.AlignTop | Qt.AlignRight
+        )
 
         self.table_run = TableWidgetRun()
         self.table_run.layout().setContentsMargins(0, 0, 0, 0)
@@ -280,11 +300,13 @@ class MainWindow(QMainWindow):
         self.current_assigned_open_issues = CurrentAssignedOpenIssues()
 
         self.tab_widget = QTabWidget()
-        self.tab_widget.addTab(self.chart_view, 'CHART')
-        self.tab_widget.addTab(self.table_run, 'TABLE RUN')
-        self.tab_widget.addTab(self.current_assigned_open_issues, 'Current Assigned Open Issues')
+        self.tab_widget.addTab(self.chart_view, "CHART")
+        self.tab_widget.addTab(self.table_run, "TABLE RUN")
+        self.tab_widget.addTab(
+            self.current_assigned_open_issues, "Current Assigned Open Issues"
+        )
 
-        self.pb_refresh = QPushButton('REFRESH')
+        self.pb_refresh = QPushButton("REFRESH")
         self.pb_refresh.clicked.connect(self.refresh)
 
         main_layout = QVBoxLayout()
@@ -314,15 +336,13 @@ class MainWindow(QMainWindow):
         ]
         for year in years:
             if year not in filter_years:
-                self.cb_chart_filter.addItem(f'{year}', userData=year)
+                self.cb_chart_filter.addItem(f"{year}", userData=year)
 
     def _fill_chart(self, items: list[Run]):
         # Фильтрация данных из графика
         year: int = self.cb_chart_filter.currentData()
         if year:
-            items = [
-                run for run in items if run.date.year == year
-            ]
+            items = [run for run in items if run.date.year == year]
 
         series = QLineSeries()
         series.setPointsVisible(True)
@@ -355,10 +375,10 @@ class MainWindow(QMainWindow):
         if items:
             axisX.setRange(
                 self._get_datetime(items[0].date, timedelta(days=-30)),
-                self._get_datetime(items[-1].date, timedelta(days=30))
+                self._get_datetime(items[-1].date, timedelta(days=30)),
             )
         axisX.setFormat("dd/MM/yyyy")
-        axisX.setTitleText('Date')
+        axisX.setTitleText("Date")
         chart.addAxis(axisX, Qt.AlignBottom)
         series.attachAxis(axisX)
 
@@ -368,8 +388,8 @@ class MainWindow(QMainWindow):
                 min(issues_number) * 0.8,
                 max(issues_number) * 1.2
             )
-        axisY.setLabelFormat('%d')
-        axisY.setTitleText('Total issues')
+        axisY.setLabelFormat("%d")
+        axisY.setTitleText("Total issues")
         chart.addAxis(axisY, Qt.AlignLeft)
         series.attachAxis(axisY)
 
@@ -388,7 +408,9 @@ class MainWindow(QMainWindow):
         items.reverse()
         self.table_run.refresh(items)
 
-        self.setWindowTitle(f"{WINDOW_TITLE}. Last refresh date: {datetime.now():%d/%m/%Y %H:%M:%S}")
+        self.setWindowTitle(
+            f"{WINDOW_TITLE}. Last refresh date: {datetime.now():%d/%m/%Y %H:%M:%S}"
+        )
 
     def _on_tray_activated(self, reason: QSystemTrayIcon.ActivationReason):
         # Если запрошено меню
@@ -413,7 +435,7 @@ class MainWindow(QMainWindow):
         event.ignore()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
     app.setQuitOnLastWindowClosed(False)
 
