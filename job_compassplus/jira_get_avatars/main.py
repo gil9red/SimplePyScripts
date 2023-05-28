@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -14,11 +14,11 @@ sys.path.append(str(ROOT_DIR))
 from root_common import session
 
 
-url = 'https://helpdesk.compassluxe.com/rest/api/latest/user/avatars?username=ipetrash'
+url = "https://helpdesk.compassluxe.com/rest/api/latest/user/avatars?username=ipetrash"
 
 rs = session.get(url)
 print(rs)
 for kind, avatars in rs.json().items():
-    print(f'{kind} ({len(avatars)}):')
+    print(f"{kind} ({len(avatars)}):")
     for item in avatars:
-        print(f'    {item}')
+        print(f"    {item}")
