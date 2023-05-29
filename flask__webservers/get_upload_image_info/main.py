@@ -8,7 +8,6 @@ import base64
 import io
 import json
 import logging
-import sys
 
 # pip install exifread
 import exifread
@@ -16,10 +15,11 @@ import exifread
 import requests
 
 from flask import Flask, jsonify, render_template_string, redirect, request
-from PIL import Image
 
-sys.path.append("..")
-from common import sizeof_fmt
+# pip install humanize
+from humanize import naturalsize as sizeof_fmt
+
+from PIL import Image
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/master/print_exif/main.py

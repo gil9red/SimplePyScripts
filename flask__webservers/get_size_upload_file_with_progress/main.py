@@ -5,12 +5,11 @@ __author__ = "ipetrash"
 
 
 import logging
-import sys
 
 from flask import Flask, request, redirect, render_template_string, jsonify
 
-sys.path.append("..")
-from common import sizeof_fmt
+# pip install humanize
+from humanize import naturalsize as sizeof_fmt
 
 
 app = Flask(__name__)

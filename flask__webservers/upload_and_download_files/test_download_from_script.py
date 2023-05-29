@@ -5,10 +5,9 @@ __author__ = "ipetrash"
 
 
 import os
-import sys
 
-sys.path.append("..")
-from common import sizeof_fmt
+# pip install humanize
+from humanize import naturalsize as sizeof_fmt
 
 
 def progress(count, block_size, total_size):
