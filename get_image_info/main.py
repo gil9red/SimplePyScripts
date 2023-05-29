@@ -7,14 +7,14 @@ __author__ = 'ipetrash'
 
 import json
 import io
-import sys
 
-from pathlib import Path
+# pip install exifread
+import exifread
+
+# pip install humanize
+from humanize import naturalsize as sizeof_fmt
 
 from PIL import Image
-
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-from human_byte_size import sizeof_fmt
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/master/print_exif/main.py
@@ -24,8 +24,6 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
         file_object_or_file_name = open(file_object_or_file_name, mode='rb')
 
     # Return Exif tags
-    # pip install exifread
-    import exifread
     tags = exifread.process_file(file_object_or_file_name)
     tags_by_value = dict()
 
