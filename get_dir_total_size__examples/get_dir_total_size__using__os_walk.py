@@ -9,7 +9,8 @@ __author__ = "ipetrash"
 
 from os.path import join, getsize
 
-from common import sizeof_fmt
+# pip install humanize
+from humanize import naturalsize as sizeof_fmt
 
 
 def get_dir_total_size(dir_name: str) -> tuple[int, str]:

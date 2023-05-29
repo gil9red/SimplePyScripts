@@ -4,10 +4,11 @@
 __author__ = "ipetrash"
 
 
-from glob import iglob, escape
 import os
+from glob import iglob, escape
 
-from common import sizeof_fmt
+# pip install humanize
+from humanize import naturalsize as sizeof_fmt
 
 
 # FIXME: glob ignored dot folders and files
