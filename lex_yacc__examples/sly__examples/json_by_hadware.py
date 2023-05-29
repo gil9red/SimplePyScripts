@@ -5,12 +5,12 @@ import pprint
 class JSONLexer(Lexer):
     tokens = {"FLOAT", "INTEGER", "STRING"}
 
-    literals = {'{', '}', '[', ']', ',', ':'}
+    literals = {"{", "}", "[", "]", ",", ":"}
     ignore = " \t\n"
 
     @_(r"\".*?\"")
     def STRING(self, t):
-        t.value = t.value.strip("\"")
+        t.value = t.value.strip('"')
         return t
 
     @_(r"\d+\.\d*")
@@ -28,8 +28,7 @@ class JSONParser(Parser):
     tokens = JSONLexer.tokens
     start = "json"
 
-    @_('object',
-       'array')
+    @_("object", "array")
     def json(self, p):
         return p[0]
 
@@ -37,7 +36,7 @@ class JSONParser(Parser):
     def object(self, p):
         return {key: value for key, value in p.members}
 
-    @_('pair')
+    @_("pair")
     def members(self, p):
         return [p.pair]
 
@@ -53,7 +52,7 @@ class JSONParser(Parser):
     def array(self, p):
         return p.elements
 
-    @_('value')
+    @_("value")
     def elements(self, p):
         return [p.value]
 
@@ -61,11 +60,7 @@ class JSONParser(Parser):
     def elements(self, p):
         return [p.value] + p.elements
 
-    @_('STRING',
-       'INTEGER',
-       'FLOAT',
-       'object',
-       'array')
+    @_("STRING", "INTEGER", "FLOAT", "object", "array")
     def value(self, p):
         return p[0]
 
