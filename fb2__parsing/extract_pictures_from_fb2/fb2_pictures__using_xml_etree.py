@@ -13,13 +13,13 @@ import io
 import os
 import traceback
 
-from xml.etree import ElementTree as ET
+# pip install humanize
+from humanize import naturalsize as sizeof_fmt
+
 from PIL import Image
+from xml.etree import ElementTree as ET
 
-import sys
-sys.path.append("..")
-
-from common import sizeof_fmt, get_file_name_from_binary
+from common import get_file_name_from_binary
 
 
 def do(file_name, output_dir="output", debug=True):
