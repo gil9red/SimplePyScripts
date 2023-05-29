@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -14,6 +14,9 @@ __author__ = 'ipetrash'
 """
 
 
+import requests
+
+
 def check_ru(text: str) -> list():
     """
     Функция делает запрос на https://languagetool.org/ чтобы проверить на правильность указанный текст.
@@ -22,20 +25,19 @@ def check_ru(text: str) -> list():
 
     """
 
-    url = 'https://languagetool.org/api/v2/check'
+    url = "https://languagetool.org/api/v2/check"
     post_data = {
-        'disabledRules': 'WHITESPACE_RULE',
-        'allowIncompleteResults': 'true',
-        'text': text,
-        'language': 'ru',
+        "disabledRules": "WHITESPACE_RULE",
+        "allowIncompleteResults": "true",
+        "text": text,
+        "language": "ru",
     }
 
-    import requests
     rs = requests.post(url, data=post_data)
     if not rs.ok:
-        raise Exception('Проблема с {}, status_code = {}'.format(url, rs.status_code))
+        raise Exception("Проблема с {}, status_code = {}".format(url, rs.status_code))
 
-    return rs.json()['matches']
+    return rs.json()["matches"]
 
 
 def is_ok_ru(text: str) -> bool:
@@ -47,7 +49,7 @@ def is_ok_ru(text: str) -> bool:
     return not check_ru(text)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     text = """\
 Интересует другое почему она возникла?
 Дубаль два, надеюсь все пройдет отлично.
@@ -58,20 +60,27 @@ if __name__ == '__main__':
     if not matches:
         print("Ошибок нет")
     else:
-        print('Найденные проблемы:')
+        print("Найденные проблемы:")
 
         for match in matches:
-            error = match['message']
-            context = match['context']
-            offset = context['offset']
-            length = context['length']
+            error = match["message"]
+            context = match["context"]
+            offset = context["offset"]
+            length = context["length"]
 
-            error_text = context['text'][offset: offset + length]
-            print('"{}" [{}:{}]: "{}" -> {}'.format(error_text, offset, length, error,
-                                                    [i['value'] for i in match['replacements']]))
+            error_text = context["text"][offset : offset + length]
+            print(
+                '"{}" [{}:{}]: "{}" -> {}'.format(
+                    error_text,
+                    offset,
+                    length,
+                    error,
+                    [i["value"] for i in match["replacements"]],
+                )
+            )
 
     print()
-    print('-' * 20)
+    print("-" * 20)
     print(is_ok_ru(text))
     print(is_ok_ru("Все хорошо!"))
 
