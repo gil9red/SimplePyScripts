@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # EN: Least Common Multiple.
@@ -15,9 +15,11 @@ def gcd(a, b):
     return b
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     a, b = 7006652, 112307574
     print("LCM: %s" % ((a * b) // gcd(a, b)))
+    # LCM: 637682405172
 
     import math
     print("LCM: %s" % ((a * b) // math.gcd(a, b)))
+    # LCM: 637682405172
