@@ -4,7 +4,6 @@
 __author__ = "ipetrash"
 
 
-import sys
 import time
 import re
 
@@ -17,8 +16,8 @@ from selenium.common.exceptions import MoveTargetOutOfBoundsException
 from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 from selenium.webdriver.remote.webdriver import WebElement
 
-sys.path.append("..")
-from ascii_table import ascii_table
+# pip install tabulate
+from tabulate import tabulate
 
 
 DEBUG_LOG = False
@@ -31,11 +30,12 @@ def do_page_down(driver: RemoteWebDriver, footer: WebElement):
         DEBUG_LOG and print("y_position:", y_position)
         try:
             ActionChains(driver).move_to_element(footer).perform()
+            DEBUG_LOG and print("Footer is found!")
             break
         except MoveTargetOutOfBoundsException:
             y_position += 250
             driver.execute_script(f"window.scrollTo(0, {y_position});")
-            time.sleep(1)
+            time.sleep(0.5)
 
 
 def print_the_most_profitable_dish(url: str):
@@ -67,16 +67,18 @@ def print_the_most_profitable_dish(url: str):
 
             try:
                 tag_subtitle = product_el.find_element(
-                    By.CSS_SELECTOR, ".parameters > .param-size"
+                    By.CSS_SELECTOR, ".parameters__single"
                 ).text.strip()
                 weight, metrics = tag_subtitle.split()
 
-            except Exception:
+            except Exception as e:
+                DEBUG_LOG and print(f"Error: {e}")
                 unknown_metrics_items.append((title, price))
                 continue
 
             # Определение метрики
             if metrics not in ["кг.", "гр.", "г."]:
+                DEBUG_LOG and print(f"Unknown metrics: {metrics}")
                 unknown_metrics_items.append((title, tag_subtitle, price))
                 continue
 
@@ -100,8 +102,7 @@ def print_the_most_profitable_dish(url: str):
         ]
 
         columns = ["Название", "Вес (г.)", "Цена", "Коэффициент"]
-        items.insert(0, columns)
-        print(ascii_table(items))
+        print(tabulate(items, headers=columns, tablefmt="grid"))
 
         if unknown_metrics_items:
             print("\nНе удалось обработать:")
@@ -117,7 +118,7 @@ def print_the_most_profitable_dish(url: str):
 
 if __name__ == "__main__":
     urls = [
-        "https://sushivkusno.com/nabory-sety",
+        "https://sushivkusno.com/magnitogorsk/nabory-sety",
         # 'https://sushivkusno.com/goryachie-zakuski',
         # 'https://sushivkusno.com/salaty',
     ]
