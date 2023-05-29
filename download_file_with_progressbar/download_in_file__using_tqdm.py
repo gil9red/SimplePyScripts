@@ -13,7 +13,8 @@ from tqdm import tqdm
 # pip install requests
 import requests
 
-from utils import sizeof_fmt
+# pip install humanize
+from humanize import naturalsize as sizeof_fmt
 
 
 url = "https://github.com/gil9red/NotesManager/raw/master/bin.rar"
