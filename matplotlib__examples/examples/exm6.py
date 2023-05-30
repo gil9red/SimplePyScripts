@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Для того, чтобы добавить текстовые метки к секторам, достаточно передать их список
@@ -6,7 +6,7 @@ __author__ = 'ipetrash'
 
 import pylab
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Данные для построения графика
     data = [20.0, 10.0, 5.0, 1.0, 0.5]
 
@@ -14,12 +14,12 @@ if __name__ == '__main__':
     labels = ["data1", "data2", "data3", "data4", "data5"]
 
     # Создать новое окно (фигуру) с одинаковыми размерами сторон (6 x 6 дюйма)
-    pylab.figure(figsize=(6, 6) )
+    pylab.figure(figsize=(6, 6))
 
     # Установим размеры осей по горизонтали и вертикали тоже одинаковыми
     pylab.axes([0.05, 0.05, 0.9, 0.9])
 
     # И снова нарисуем график
-    pylab.pie (data, labels=labels)
+    pylab.pie(data, labels=labels)
 
     pylab.show()

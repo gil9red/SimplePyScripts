@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Цветовые карты используются, если нужно указать в какие цвета должны окрашиваться
@@ -11,23 +11,25 @@ __author__ = 'ipetrash'
 # чтобы создать градиент перехода от синего цвета к красному через белый.
 
 
+import numpy
 import pylab
+
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib__examples.colors import LinearSegmentedColormap
-import numpy
+
 
 # Эта функция возвращает три двумерные матрицы: x, y, z.
 # Координаты x и y лежат в интервале от -10 до 10 с шагом 0.1.
-def makeData ():
-    x = numpy.arange (-10, 10, 0.1)
-    y = numpy.arange (-10, 10, 0.1)
+def makeData():
+    x = numpy.arange(-10, 10, 0.1)
+    y = numpy.arange(-10, 10, 0.1)
     xgrid, ygrid = numpy.meshgrid(x, y)
 
-    zgrid = numpy.sin (xgrid) * numpy.sin (ygrid) / (xgrid * ygrid)
+    zgrid = numpy.sin(xgrid) * numpy.sin(ygrid) / (xgrid * ygrid)
     return xgrid, ygrid, zgrid
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     x, y, z = makeData()
 
     # Чтобы отобразить наши данные, достаточно вызвать метод plot_surface()
@@ -54,7 +56,7 @@ if __name__ == '__main__':
     # color_map = cm.cmap_d["jet"]
     # axes.plot_surface(x, y, z, rstride=4, cstride=4, cmap=color_map)
 
-    color_map = LinearSegmentedColormap.from_list("red_blue", ['b', 'w', 'r'], 256)
+    color_map = LinearSegmentedColormap.from_list("red_blue", ["b", "w", "r"], 256)
     axes.plot_surface(x, y, z, rstride=3, cstride=3, cmap=color_map)
 
     pylab.show()

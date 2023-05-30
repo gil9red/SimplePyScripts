@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Использование библиотеки Matplotlib. Как отобразить легенду
@@ -14,17 +14,18 @@ import pylab
 # Импортируем пакет со вспомогательными функциями
 from matplotlib__examples import mlab
 
+
 # Будем рисовать график этой функции
-def func (x):
+def func(x):
     """
     sinc (x)
     """
     if x == 0:
         return 1.0
-    return math.sin (x) / x
+    return math.sin(x) / x
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Интервал изменения переменной по оси X
     xmin = -20.0
     xmax = 20.0
@@ -33,12 +34,11 @@ if __name__ == '__main__':
     dx = 0.01
 
     # Создадим список координат по оси X на отрезке [-xmin; xmax], включая концы
-    xlist = mlab.frange (xmin, xmax, dx)
+    xlist = mlab.frange(xmin, xmax, dx)
 
     # Вычислим значение функции в заданных точках
-    ylist1 = [func (x) for x in xlist]
-    ylist2 = [func (x * 0.2) for x in xlist]
-
+    ylist1 = [func(x) for x in xlist]
+    ylist2 = [func(x * 0.2) for x in xlist]
 
     ## Первый способ
     # В качестве параметра функции legend() нужно передать список или кортеж,
@@ -49,15 +49,14 @@ if __name__ == '__main__':
     # виде легенды.
 
     # Нарисуем два одномерных графика
-    pylab.plot (xlist, ylist1, "b-")
-    pylab.plot (xlist, ylist2, "g--")
+    pylab.plot(xlist, ylist1, "b-")
+    pylab.plot(xlist, ylist2, "g--")
 
     # !!! Добавим легенду.
     # !!! Первому графику будет соответствовать надпись "f(x)",
     # !!! А второму - "f(0.2 * x)"
-    pylab.legend ( ("f(x)", "f(0.2 * x)") )
+    pylab.legend(("f(x)", "f(0.2 * x)"))
     ## Первый способ
-
 
     ## Второй способ
     # Того же самого результата мы можем добиться, если при рисовании графиков
@@ -73,14 +72,12 @@ if __name__ == '__main__':
     # метка.
     ## Второй способ
 
-
     ## Заголовок легенды
     # В легенду можно добавить заголовок, для этого в функцию legend() надо
     # передать дополнительный строковый параметр title со строкой заголовка.
     # !!! Добавим легенду с заголовком
     # pylab.legend (title = "Sinc")
     ## Заголовок легенды
-
 
     # Покажем окно с нарисованным графиком
     pylab.show()

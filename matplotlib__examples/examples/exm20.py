@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Использование библиотеки Matplotlib. Как изменять размеры ячеек таблицы при
@@ -14,18 +14,19 @@ __author__ = 'ipetrash'
 import math
 
 import pylab
+
 import matplotlib__examples
 
 
-def plotGraph ():
+def plotGraph():
     # Будем рисовать график этой функции
-    def func (x):
+    def func(x):
         """
         sinc (x)
         """
         if x == 0:
             return 1.0
-        return math.sin (x) / x
+        return math.sin(x) / x
 
     # Интервал изменения переменной по оси X
     xmin = -20.0
@@ -35,15 +36,15 @@ def plotGraph ():
     dx = 0.01
 
     # Создадим список координат по оси X на отрезке [-xmin; xmax], включая концы
-    xlist = matplotlib__examples.mlab.frange (xmin, xmax, dx)
+    xlist = matplotlib__examples.mlab.frange(xmin, xmax, dx)
 
     # Вычислим значение функции в заданных точках
-    ylist = [func (x) for x in xlist]
+    ylist = [func(x) for x in xlist]
 
-    pylab.plot (xlist, ylist)
+    pylab.plot(xlist, ylist)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Создаем таблицу (сетку) с тремя строками и двумя столбцами
     rows = 3
     cols = 2
@@ -54,13 +55,12 @@ if __name__ == '__main__':
     # height_ratios - список соотношений высот ячеек
     # В данном случае высота второй строки будет в 2 раза больше первого,
     # а высота третьей строки будет в 3 раза больше первой (в 1.5 раза больше второй)
-    grid = matplotlib__examples.gridspec.GridSpec(rows,
-                                                  cols,
-                                                  width_ratios=[1, 1.5],
-                                                  height_ratios=[1, 2, 3])
+    grid = matplotlib__examples.gridspec.GridSpec(
+        rows, cols, width_ratios=[1, 1.5], height_ratios=[1, 2, 3]
+    )
 
-    for n in range (rows * cols):
-        pylab.subplot (grid[n])
+    for n in range(rows * cols):
+        pylab.subplot(grid[n])
         plotGraph()
 
     pylab.show()

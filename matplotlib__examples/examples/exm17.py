@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 ## Использование библиотеки Matplotlib. Как нарисовать несколько графиков в одном окне
@@ -26,16 +26,16 @@ from matplotlib__examples import mlab
 
 
 # Будем рисовать график этой функции
-def func (x):
+def func(x):
     """
     sinc (x)
     """
     if x == 0:
         return 1.0
-    return math.sin (x) / x
+    return math.sin(x) / x
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Интервал изменения переменной по оси X
     xmin = -20.0
     xmax = 20.0
@@ -44,40 +44,40 @@ if __name__ == '__main__':
     dx = 0.01
 
     # Создадим список координат по оиси X на отрезке [-xmin; xmax], включая концы
-    xlist = mlab.frange (xmin, xmax, dx)
+    xlist = mlab.frange(xmin, xmax, dx)
 
     # Вычислим значение функции в заданных точках
-    ylist = [func (x) for x in xlist]
+    ylist = [func(x) for x in xlist]
 
     # !!! Две строки, три столбца.
     # !!! Текущая ячейка - 1
-    pylab.subplot (2, 3, 1)
-    pylab.plot (xlist, ylist)
-    pylab.title ("1")
+    pylab.subplot(2, 3, 1)
+    pylab.plot(xlist, ylist)
+    pylab.title("1")
 
     # !!! Две строки, три столбца.
     # !!! Текущая ячейка - 2
-    pylab.subplot (2, 3, 2)
-    pylab.plot (xlist, ylist)
-    pylab.title ("2")
+    pylab.subplot(2, 3, 2)
+    pylab.plot(xlist, ylist)
+    pylab.title("2")
 
     # !!! Две строки, три столбца.
     # !!! Текущая ячейка - 4
-    pylab.subplot (2, 3, 4)
-    pylab.plot (xlist, ylist)
-    pylab.title ("4")
+    pylab.subplot(2, 3, 4)
+    pylab.plot(xlist, ylist)
+    pylab.title("4")
 
     # !!! Две строки, три столбца.
     # !!! Текущая ячейка - 5
-    pylab.subplot (2, 3, 5)
-    pylab.plot (xlist, ylist)
-    pylab.title ("5")
+    pylab.subplot(2, 3, 5)
+    pylab.plot(xlist, ylist)
+    pylab.title("5")
 
     # !!! Одна строка, три столбца.
     # !!! Текущая ячейка - 3
-    pylab.subplot (1, 3, 3)
-    pylab.plot (xlist, ylist)
-    pylab.title ("3")
+    pylab.subplot(1, 3, 3)
+    pylab.plot(xlist, ylist)
+    pylab.title("3")
 
     # Покажем окно с нарисованным графиком
     pylab.show()

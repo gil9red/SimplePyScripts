@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Использование библиотеки Matplotlib. Как отображать формулы в нотации TeX
@@ -20,17 +20,18 @@ import pylab
 # Импортируем пакет со вспомогательными функциями
 from matplotlib__examples import mlab
 
+
 # Будем рисовать график этой функции
-def func (x):
+def func(x):
     """
     sinc (x)
     """
     if x == 0:
         return 1.0
-    return math.sin (x) / x
+    return math.sin(x) / x
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Интервал изменения переменной по оси X
     xmin = -20.0
     xmax = 20.0
@@ -39,18 +40,18 @@ if __name__ == '__main__':
     dx = 0.01
 
     # Создадим список координат по оиси X на отрезке [-xmin; xmax], включая концы
-    xlist = mlab.frange (xmin, xmax, dx)
+    xlist = mlab.frange(xmin, xmax, dx)
 
     # Вычислим значение функции в заданных точках
-    ylist1 = [func (x) for x in xlist]
-    ylist2 = [func (x * 0.2) for x in xlist]
+    ylist1 = [func(x) for x in xlist]
+    ylist2 = [func(x * 0.2) for x in xlist]
 
     # !!! Графики имеют метки с формулами в формате TeX
-    pylab.plot (xlist, ylist1, "b-", label = "$f(x)$")
-    pylab.plot (xlist, ylist2, "g--", label = "$f(x \cdot 0.2)$")
+    pylab.plot(xlist, ylist1, "b-", label="$f(x)$")
+    pylab.plot(xlist, ylist2, "g--", label="$f(x \cdot 0.2)$")
 
     # !!! Добавим легенду с заголовком в виде формулы
-    pylab.legend (title = r"$f(x) = \frac{sin(x)}{x}$")
+    pylab.legend(title=r"$f(x) = \frac{sin(x)}{x}$")
 
     # Покажем окно с нарисованным графиком
     pylab.show()

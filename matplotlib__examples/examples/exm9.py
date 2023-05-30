@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Из эстетических соображений к графику можно добавить тень. Для этого в функцию pie()
@@ -7,7 +7,7 @@ __author__ = 'ipetrash'
 
 import pylab
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Данные для построения графика
     data = [20.0, 10.0, 5.0, 1.0, 0.5]
 
@@ -20,12 +20,12 @@ if __name__ == '__main__':
     explode = [0.02, 0.05, 0.08, 0.08, 0.05]
 
     # Создать новое окно (фигуру) с одинаковыми размерами сторон (6 x 6 дюйма)
-    pylab.figure(figsize=(6, 6) )
+    pylab.figure(figsize=(6, 6))
 
     # Установим размеры осей по горизонтали и вертикали тоже одинаковыми
     pylab.axes([0.1, 0.1, 0.8, 0.8])
 
     # И снова нарисуем график
-    pylab.pie (data, explode=explode, colors=colors, labels=labels, shadow=True)
+    pylab.pie(data, explode=explode, colors=colors, labels=labels, shadow=True)
 
     pylab.show()

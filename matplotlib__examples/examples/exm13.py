@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import math
@@ -8,6 +8,7 @@ import pylab
 
 # !!! Импортируем пакет со вспомогательными функциями
 from matplotlib__examples import mlab
+
 
 # Будем рисовать график этой функции
 def func(x):
@@ -19,7 +20,7 @@ def func(x):
     return math.sin(x) / x
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Интервал изменения переменной по оси X
     xmin = -20.0
     xmax = 20.0
@@ -28,10 +29,10 @@ if __name__ == '__main__':
     dx = 0.2
 
     # !!! Создадим список координат по оси X на отрезке [-xmin; xmax], включая концы
-    xlist = mlab.frange (xmin, xmax, dx)
+    xlist = mlab.frange(xmin, xmax, dx)
 
     # Вычислим значение функции в заданных точках
-    ylist = [func (x) for x in xlist]
+    ylist = [func(x) for x in xlist]
 
     # !!! Нарисуем одномерный график с использованием стиля
     pylab.plot(xlist, ylist, "x")

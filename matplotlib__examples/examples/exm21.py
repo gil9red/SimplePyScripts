@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 ## Использование библиотеки Matplotlib. Как рисовать графики в разных окнах
@@ -25,16 +25,16 @@ from matplotlib__examples import mlab
 
 
 # Будем рисовать график этой функции
-def func (x):
+def func(x):
     """
     sinc (x)
     """
     if x == 0:
         return 1.0
-    return math.sin (x) / x
+    return math.sin(x) / x
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Интервал изменения переменной по оси X
     xmin = -20.0
     xmax = 20.0
@@ -43,25 +43,25 @@ if __name__ == '__main__':
     dx = 0.01
 
     # Создадим список координат по оиси X на отрезке [-xmin; xmax], включая концы
-    xlist = mlab.frange (xmin, xmax, dx)
+    xlist = mlab.frange(xmin, xmax, dx)
 
     # Вычислим значение функции в заданных точках
-    ylist1 = [func (x) for x in xlist]
-    ylist2 = [func (x * 0.2) for x in xlist]
-    ylist3 = [func (x * 2) for x in xlist]
+    ylist1 = [func(x) for x in xlist]
+    ylist2 = [func(x * 0.2) for x in xlist]
+    ylist3 = [func(x * 2) for x in xlist]
 
     # !!! Нарисуем график в первом окне
-    pylab.figure (1)
-    pylab.plot (xlist, ylist1, label = "f(x)")
+    pylab.figure(1)
+    pylab.plot(xlist, ylist1, label="f(x)")
 
     # !!! Нарисуем график во втором окне
     pylab.figure(2)
-    pylab.plot (xlist, ylist2, label = "f(x * 0.2)")
+    pylab.plot(xlist, ylist2, label="f(x * 0.2)")
     pylab.legend()
 
     # !!! Нарисуем еще один график в первом окне
-    pylab.figure (1)
-    pylab.plot (xlist, ylist3, label = "f(x * 2)")
+    pylab.figure(1)
+    pylab.plot(xlist, ylist3, label="f(x * 2)")
     pylab.legend()
 
     # Покажем окна с нарисованными графиками

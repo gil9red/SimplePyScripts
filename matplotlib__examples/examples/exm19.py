@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 ## Использование библиотеки Matplotlib. Использование класса GridSpec для расположения
@@ -20,18 +20,19 @@ __author__ = 'ipetrash'
 
 import math
 
-import pylab
 import matplotlib__examples
+import pylab
 
-def plotGraph ():
+
+def plotGraph():
     # Будем рисовать график этой функции
-    def func (x):
+    def func(x):
         """
         sinc (x)
         """
         if x == 0:
             return 1.0
-        return math.sin (x) / x
+        return math.sin(x) / x
 
     # Интервал изменения переменной по оси X
     xmin = -20.0
@@ -41,76 +42,76 @@ def plotGraph ():
     dx = 0.01
 
     # Создадим список координат по оси X на отрезке [-xmin; xmax], включая концы
-    xlist = matplotlib__examples.mlab.frange (xmin, xmax, dx)
+    xlist = matplotlib__examples.mlab.frange(xmin, xmax, dx)
 
     # Вычислим значение функции в заданных точках
-    ylist = [func (x) for x in xlist]
+    ylist = [func(x) for x in xlist]
 
-    pylab.plot (xlist, ylist)
+    pylab.plot(xlist, ylist)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # создаем таблицу (сетку) размером 4 x 4 ячеек
     grid = matplotlib__examples.gridspec.GridSpec(4, 4)
 
     # Одномерное индексирование.
     # 0-ая ячейка, начиная с левого верхнего угла
     # График занимает одну ячейку
-    pylab.subplot (grid[0])
-    pylab.title ("Graph 1")
+    pylab.subplot(grid[0])
+    pylab.title("Graph 1")
     plotGraph()
 
     # Одномерное индексирование.
     # 1-ая ячейка, начиная с левого верхнего угла (0-ая строка, 1-ый столбец)
     # График занимает одну ячейку
-    pylab.subplot (grid[1])
-    pylab.title ("Graph 2")
+    pylab.subplot(grid[1])
+    pylab.title("Graph 2")
     plotGraph()
 
     # Двумерное индексирование.
     # 1-ая строка, 0-ой столбец
     # График занимает одну ячейку
-    pylab.subplot (grid [1, 0])
-    pylab.title ("Graph 3")
+    pylab.subplot(grid[1, 0])
+    pylab.title("Graph 3")
     plotGraph()
 
     # Двумерное индексирование.
     # 0-ая строка. График занимает столбцы от 2 и до конца строки (2:)
     # График занимает одну строку и два столбца (2-й и 3-й)
-    pylab.subplot (grid [0, 2:])
-    pylab.title ("Graph 4")
+    pylab.subplot(grid[0, 2:])
+    pylab.title("Graph 4")
     plotGraph()
 
     # Двумерное индексирование.
     # График занимает строки, начиная с 1 и до 2 включительно (1: 3)
     # График занимает столбцы от 1 и до предпоследней ячейки включительно (1: -1)
     # График занимает две строки и два столбца
-    pylab.subplot (grid [1: 3, 1: -1])
-    pylab.title ("Graph 5")
+    pylab.subplot(grid[1:3, 1:-1])
+    pylab.title("Graph 5")
     plotGraph()
 
     # Двумерное индексирование.
     # График занимает строки, начиная со 2 и до конца всех строк (столбца) (2: )
     # График занимает один столбец по горизонтали
     # График занимает две строки и один столбец
-    pylab.subplot (grid [2:, 0])
-    pylab.title ("Graph 6")
+    pylab.subplot(grid[2:, 0])
+    pylab.title("Graph 6")
     plotGraph()
 
     # Двумерное индексирование.
     # График занимает строки, начиная с 1 и до последней строки включительно (1:)
     # График занимает один последний столбец (-1)
     # График занимает две строки и один столбец
-    pylab.subplot (grid [1:, -1])
-    pylab.title ("Graph 7")
+    pylab.subplot(grid[1:, -1])
+    pylab.title("Graph 7")
     plotGraph()
 
     # Двумерное индексирование.
     # График занимает одну последнюю строку (-1)
     # График занимает два столбца: 1 и 2 (1: 3)
     # График занимает одну строку и два столбца
-    pylab.subplot (grid [-1, 1: 3])
-    pylab.title ("Graph 8")
+    pylab.subplot(grid[-1, 1:3])
+    pylab.title("Graph 8")
     plotGraph()
 
     pylab.show()

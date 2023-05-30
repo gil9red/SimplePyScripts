@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 ## Использование библиотеки Matplotlib. Как изменять интервал осей
@@ -20,16 +20,16 @@ from matplotlib__examples import mlab
 
 
 # Будем рисовать график этой функции
-def func (x):
+def func(x):
     """
     sinc (x)
     """
     if x == 0:
         return 1.0
-    return math.sin (x) / x
+    return math.sin(x) / x
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Интервал изменения переменной по оси X
     xmin = -50.0
     xmax = 50.0
@@ -38,16 +38,16 @@ if __name__ == '__main__':
     dx = 0.2
 
     # !!! Создадим список координат по оси X на отрезке [-xmin; xmax], включая концы
-    xlist = mlab.frange (xmin, xmax, dx)
+    xlist = mlab.frange(xmin, xmax, dx)
 
     # Вычислим значение функции в заданных точках
-    ylist = [func (x) for x in xlist]
+    ylist = [func(x) for x in xlist]
 
     # !!! Нарисуем одномерный график с использованием стиля
-    pylab.plot (xlist, ylist)
+    pylab.plot(xlist, ylist)
 
     # !!! На графике будет показан только участок от -10 до 30 по оси X
-    pylab.xlim (-10, 30)
+    pylab.xlim(-10, 30)
 
     # !!! Покажем окно с нарисованным графиком
     pylab.show()

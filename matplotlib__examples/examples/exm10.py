@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Все классы для работы с трехмерными графиками находятся в пакете mpl_toolkits.mplot3d,
@@ -14,7 +14,7 @@ __author__ = 'ipetrash'
 import pylab
 from mpl_toolkits.mplot3d import Axes3D
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     fig = pylab.figure()
     Axes3D(fig)
 

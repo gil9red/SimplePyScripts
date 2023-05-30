@@ -1,11 +1,11 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Цвета секторов задаются с помощью параметра colors функции pie().
 
 import pylab
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Данные для построения графика
     data = [20.0, 10.0, 5.0, 1.0, 0.5]
 
@@ -16,12 +16,12 @@ if __name__ == '__main__':
     colors = ["g", "r", "#FF00BB", "0.5", "y"]
 
     # Создать новое окно (фигуру) с одинаковыми размерами сторон (6 x 6 дюйма)
-    pylab.figure(figsize=(6, 6) )
+    pylab.figure(figsize=(6, 6))
 
     # Установим размеры осей по горизонтали и вертикали тоже одинаковыми
     pylab.axes([0.05, 0.05, 0.9, 0.9])
 
     # И снова нарисуем график
-    pylab.pie (data, colors=colors, labels=labels)
+    pylab.pie(data, colors=colors, labels=labels)
 
     pylab.show()

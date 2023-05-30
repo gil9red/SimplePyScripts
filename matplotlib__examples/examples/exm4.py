@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Для рисования кругового графика используется функция pie() из модуля pylab.
@@ -8,11 +8,11 @@ __author__ = 'ipetrash'
 
 import pylab
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Данные для построения графика
     data = [20.0, 10.0, 5.0, 1.0, 0.5]
 
     # Нарисовать круговой график
-    pylab.pie (data)
+    pylab.pie(data)
 
     pylab.show()

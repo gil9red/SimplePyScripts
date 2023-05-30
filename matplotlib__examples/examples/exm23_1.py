@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 ## Использование библиотеки Matplotlib. Как изменять формат меток на осях
@@ -19,13 +19,13 @@ import pylab
 
 
 if __name__ == "__main__":
-    xvals = numpy.arange (-10.0, 10.1, 0.1)
-    yvals = numpy.sinc (xvals)
+    xvals = numpy.arange(-10.0, 10.1, 0.1)
+    yvals = numpy.sinc(xvals)
 
     figure = pylab.figure()
-    axes = figure.add_subplot (1, 1, 1)
+    axes = figure.add_subplot(1, 1, 1)
 
-    pylab.plot (xvals, yvals)
+    pylab.plot(xvals, yvals)
 
     axes.grid()
     pylab.show()

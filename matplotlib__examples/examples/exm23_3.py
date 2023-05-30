@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 ## FormatStrFormatter
@@ -27,20 +27,20 @@ import matplotlib__examples.ticker
 
 
 if __name__ == "__main__":
-    xvals = numpy.arange (-10.0, 10.1, 0.1)
-    yvals = numpy.sinc (xvals)
+    xvals = numpy.arange(-10.0, 10.1, 0.1)
+    yvals = numpy.sinc(xvals)
 
-    pylab.rc('font',**{'family':'verdana'})
+    pylab.rc("font", **{"family": "verdana"})
     figure = pylab.figure()
-    axes = figure.add_subplot (1, 1, 1)
+    axes = figure.add_subplot(1, 1, 1)
 
     # Создаем форматер
-    formatter = matplotlib__examples.ticker.FormatStrFormatter ("%.3f")
+    formatter = matplotlib__examples.ticker.FormatStrFormatter("%.3f")
 
     # Установка форматера для оси X
-    axes.xaxis.set_major_formatter (formatter)
+    axes.xaxis.set_major_formatter(formatter)
 
-    pylab.plot (xvals, yvals)
+    pylab.plot(xvals, yvals)
 
     axes.grid()
     pylab.show()

@@ -1,23 +1,23 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
+import numpy
 import pylab
 from mpl_toolkits.mplot3d import Axes3D
-import numpy
 
 
 # Эта функция возвращает три двумерные матрицы: x, y, z.
 # Координаты x и y лежат в интервале от -10 до 10 с шагом 0.1.
-def makeData ():
-    x = numpy.arange (-10, 10, 0.1)
-    y = numpy.arange (-10, 10, 0.1)
+def makeData():
+    x = numpy.arange(-10, 10, 0.1)
+    y = numpy.arange(-10, 10, 0.1)
     xgrid, ygrid = numpy.meshgrid(x, y)
 
-    zgrid = numpy.sin (xgrid) * numpy.sin (ygrid) / (xgrid * ygrid)
+    zgrid = numpy.sin(xgrid) * numpy.sin(ygrid) / (xgrid * ygrid)
     return xgrid, ygrid, zgrid
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     x, y, z = makeData()
 
     # Чтобы отобразить наши данные, достаточно вызвать метод plot_surface()

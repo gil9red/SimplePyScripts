@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 ## Использование библиотеки Matplotlib. Как делать анимированные графики
@@ -24,7 +24,7 @@ import pylab
 from matplotlib__examples import mlab
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Интервал изменения переменной по оси X
     xmin = -20.0
     xmax = 20.0
@@ -33,21 +33,21 @@ if __name__ == '__main__':
     dx = 0.01
 
     # Создадим список координат по оиси X на отрезке [-xmin; xmax], включая концы
-    xlist = mlab.frange (xmin, xmax, dx)
+    xlist = mlab.frange(xmin, xmax, dx)
 
     # !!! Включаем интерактивный режим
     pylab.ion()
 
     # У нас будет 50 кадров
-    for n in range (50):
+    for n in range(50):
         # Данные для очередного кадра
-        ylist = [math.sin (x + n / 2.0) for x in xlist]
+        ylist = [math.sin(x + n / 2.0) for x in xlist]
 
         # !!! Очистим график
         pylab.clf()
 
         # Выведем новые данные
-        pylab.plot (xlist, ylist)
+        pylab.plot(xlist, ylist)
 
         # !!! Нарисуем их
         # !!! Обратите внимание, что здесь используется функция draw(), а не show()

@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 ## ScalarFormatter
@@ -14,17 +14,16 @@ __author__ = 'ipetrash'
 import numpy
 
 import pylab
-import matplotlib__examples.ticker
 
 
 if __name__ == "__main__":
-    xvals = numpy.arange (-10.0, 10.1, 0.1)
-    yvals = numpy.sinc (xvals) * 1e5
+    xvals = numpy.arange(-10.0, 10.1, 0.1)
+    yvals = numpy.sinc(xvals) * 1e5
 
     figure = pylab.figure()
-    axes = figure.add_subplot (1, 1, 1)
+    axes = figure.add_subplot(1, 1, 1)
 
-    pylab.plot (xvals, yvals)
+    pylab.plot(xvals, yvals)
 
     axes.grid()
     pylab.show()

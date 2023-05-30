@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Если вызывать функцию plot() несколько раз подряд, то на график
@@ -12,15 +12,15 @@ import pylab
 # !!! Импортируем пакет со вспомогательными функциями
 from matplotlib__examples import mlab
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Будем рисовать график этой функции
-    def func (x):
+    def func(x):
         """
         sinc (x)
         """
         if x == 0:
             return 1.0
-        return math.sin (x) / x
+        return math.sin(x) / x
 
     # Интервал изменения переменной по оси X
     xmin = -20.0
@@ -30,15 +30,15 @@ if __name__ == '__main__':
     dx = 0.01
 
     # !!! Создадим список координат по оиси X на отрезке [-xmin; xmax], включая концы
-    xlist = mlab.frange (xmin, xmax, dx)
+    xlist = mlab.frange(xmin, xmax, dx)
 
     # Вычислим значение функции в заданных точках
-    ylist1 = [func (x) for x in xlist]
-    ylist2 = [func (x * 0.2) for x in xlist]
+    ylist1 = [func(x) for x in xlist]
+    ylist2 = [func(x * 0.2) for x in xlist]
 
     # !!! Нарисуем одномерные графики
-    pylab.plot (xlist, ylist1)
-    pylab.plot (xlist, ylist2)
+    pylab.plot(xlist, ylist1)
+    pylab.plot(xlist, ylist2)
 
     # !!! Покажем окно с нарисованным графиком
     pylab.show()
