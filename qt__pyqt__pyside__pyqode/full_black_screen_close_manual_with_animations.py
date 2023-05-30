@@ -4,14 +4,15 @@
 __author__ = "ipetrash"
 
 
-from random import randint
+import enum
+from random import randint, choice
 
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtGui import QPainter, QPaintEvent
 from PyQt5.QtCore import QTimer
 
 from full_black_screen_close_manual import MainWindow as BaseMainWindow
-from pyq5__simple_balls__with_part_transparent_body import Ball, get_random_vector, get_random_color
+from pyq5__simple_balls__with_part_transparent_body import Ball as BaseBall, get_random_vector, get_random_color
 
 
 class Animation:
@@ -31,12 +32,34 @@ class Animation:
         pass
 
 
+class DirectionEnum(enum.IntEnum):
+    UP = 1
+    DOWN = -1
+
+
+class Ball(BaseBall):
+    def __init__(self, x, y, r, v_x, v_y, color):
+        super().__init__(x, y, r, v_x, v_y, color)
+
+        self.animation_alpha_direction = choice(list(DirectionEnum))
+
+
 class AnimationBalls(Animation):
-    def __init__(self, owner: QWidget = None, number_balls: int = 50):
+    def __init__(
+        self,
+        owner: QWidget = None,
+        number_balls: int = 50,
+        min_ball_alpha_color: int = 35,
+        max_ball_alpha_color: int = 255,
+        animation_ball_alpha_color: bool = True,
+    ):
         super().__init__(owner)
         
         self.balls: list[Ball] = []
         self.number_balls = number_balls
+        self.min_ball_alpha_color = min_ball_alpha_color
+        self.max_ball_alpha_color = max_ball_alpha_color
+        self.animation_ball_alpha_color = animation_ball_alpha_color
 
     def prepare(self):
         for _ in range(self.number_balls):
@@ -47,13 +70,14 @@ class AnimationBalls(Animation):
         y = self.owner.height() // 2 + randint(-self.owner.height() // 3, self.owner.height() // 3)
         v_x, v_y = get_random_vector()
         r, g, b = get_random_color()
+        a = randint(self.min_ball_alpha_color, self.max_ball_alpha_color)
 
         ball = Ball(
             x, y,
             r=randint(50, 70),
             v_x=v_x,
             v_y=v_y,
-            color=(r, g, b, 15),
+            color=(r, g, b, a),
         )
         self.balls.append(ball)
 
@@ -68,6 +92,17 @@ class AnimationBalls(Animation):
             # Условия отскакивания шарика верхнего и нижнего края
             if ball.top <= 0 or ball.bottom >= self.owner.height():
                 ball.v_y = -ball.v_y
+
+            if self.animation_ball_alpha_color:
+                alpha = ball.color[3] + ball.animation_alpha_direction
+
+                if alpha >= self.max_ball_alpha_color:
+                    ball.animation_alpha_direction = DirectionEnum.DOWN
+
+                if alpha <= self.min_ball_alpha_color:
+                    ball.animation_alpha_direction = DirectionEnum.UP
+
+                ball.color = ball.color[:3] + (alpha,)
 
     def draw(self, painter: QPainter):
         for ball in self.balls:
