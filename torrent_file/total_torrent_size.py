@@ -4,13 +4,10 @@
 __author__ = 'ipetrash'
 
 
-import sys
-from pathlib import Path
-
 import effbot_bencode
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-from human_byte_size import sizeof_fmt
+# pip install humanize
+from humanize import naturalsize as sizeof_fmt
 
 
 with open('_.torrent', 'rb') as f:
