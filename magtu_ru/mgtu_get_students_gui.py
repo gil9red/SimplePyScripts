@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import requests
-
 
 try:
     from PyQt5.QtGui import *
@@ -39,7 +38,9 @@ class Widget(QWidget):
 
     def fill(self):
         self.lw_dep.clear()
-        rs = requests.get('http://magtu.ru/modules/mod_reiting/mobile.php?action=get_all_department')
+        rs = requests.get(
+            "http://magtu.ru/modules/mod_reiting/mobile.php?action=get_all_department"
+        )
         rs.raise_for_status()
 
         for dep in rs.json():
@@ -54,7 +55,9 @@ class Widget(QWidget):
         self.lw_kaf.clear()
 
         id_dep = item_dep.data(Qt.UserRole)
-        rs = requests.get('http://magtu.ru/modules/mod_reiting/mobile.php?action=get_spec_by_depart&depart_kod=' + id_dep)
+        rs = requests.get(
+            f"http://magtu.ru/modules/mod_reiting/mobile.php?action=get_spec_by_depart&depart_kod={id_dep}"
+        )
         rs.raise_for_status()
 
         for kaf in rs.json():
@@ -69,7 +72,9 @@ class Widget(QWidget):
         self.lw_stu.clear()
 
         id_kaf = item_kaf.data(Qt.UserRole)
-        rs = requests.get('http://magtu.ru/modules/mod_reiting/mobile.php?action=get_reiting&spec_kod=' + id_kaf)
+        rs = requests.get(
+            f"http://magtu.ru/modules/mod_reiting/mobile.php?action=get_reiting&spec_kod={id_kaf}"
+        )
         rs.raise_for_status()
 
         for stud in rs.json():
