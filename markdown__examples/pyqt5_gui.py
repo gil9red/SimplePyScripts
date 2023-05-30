@@ -1,13 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from pathlib import Path
 
 # pip install pyqt5
-from PyQt5.QtWidgets import QApplication, QWidget, QTextEdit, QLabel, QSplitter, QVBoxLayout, QTabWidget
+from PyQt5.QtWidgets import (
+    QApplication,
+    QWidget,
+    QTextEdit,
+    QLabel,
+    QSplitter,
+    QVBoxLayout,
+    QTabWidget,
+)
 
 # pip install markdown
 import markdown
@@ -31,15 +39,15 @@ class MainWindow(QWidget):
         self.edit_result_markdown.setReadOnly(True)
 
         left_side_layout = QVBoxLayout()
-        left_side_layout.addWidget(QLabel('Markdown:'))
+        left_side_layout.addWidget(QLabel("Markdown:"))
         left_side_layout.addWidget(self.edit_markdown)
 
         left_side = QWidget()
         left_side.setLayout(left_side_layout)
 
         tab_result = QTabWidget()
-        tab_result.addTab(self.edit_result_qt, 'Result (Qt)')
-        tab_result.addTab(self.edit_result_markdown, 'Result (markdown)')
+        tab_result.addTab(self.edit_result_qt, "Result (Qt)")
+        tab_result.addTab(self.edit_result_markdown, "Result (markdown)")
 
         splitter = QSplitter()
         splitter.addWidget(left_side)
@@ -57,7 +65,7 @@ class MainWindow(QWidget):
         self.edit_result_markdown.setHtml(html)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
