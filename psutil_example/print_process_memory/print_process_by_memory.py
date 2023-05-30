@@ -4,16 +4,13 @@
 __author__ = "ipetrash"
 
 
-import sys
-from pathlib import Path
-
 from collections import defaultdict
 
 # pip install psutil
 import psutil
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-from human_byte_size import sizeof_fmt
+# pip install humanize
+from humanize import naturalsize as sizeof_fmt
 
 
 column_width = defaultdict(int)
