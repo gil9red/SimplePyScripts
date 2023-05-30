@@ -118,7 +118,7 @@ if __name__ == "__main__":
 
     # Print last rows
     for run in Run.select().order_by(Run.id.desc()).limit(5):
-        print(run, "\n")
+        print(run)
         print_table(run.get_project_by_issue_numbers())
 
         print("\n" + "-" * 100 + "\n")

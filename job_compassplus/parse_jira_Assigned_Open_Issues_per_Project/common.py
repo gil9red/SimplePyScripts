@@ -13,14 +13,16 @@ from pathlib import Path
 DIR = Path(__file__).resolve().parent
 ROOT_DIR = DIR.parent
 
-# For import ascii_table__simple_pretty__ljust.py
-sys.path.append(str(ROOT_DIR.parent))
-from ascii_table__simple_pretty__ljust import pretty_table
+# pip install tabulate
+from tabulate import tabulate
 
 
 def get_table(assigned_open_issues_per_project: dict[str, int]) -> str:
-    data = [("PROJECT", "Issues")] + list(assigned_open_issues_per_project.items())
-    return pretty_table(data)
+    return tabulate(
+        list(assigned_open_issues_per_project.items()),
+        headers=("PROJECT", "Issues"),
+        tablefmt="grid",
+    )
 
 
 def print_table(assigned_open_issues_per_project: dict[str, int]):
