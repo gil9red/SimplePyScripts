@@ -7,7 +7,8 @@ __author__ = 'ipetrash'
 import os
 import sys
 
-from pathlib import Path
+# pip install humanize
+from humanize import naturalsize as sizeof_fmt
 
 # pip install tqdm
 from tqdm import tqdm
@@ -15,11 +16,9 @@ from tqdm import tqdm
 # pip install requests
 import requests
 
-sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
-from human_byte_size import sizeof_fmt
-
 
 url = 'https://github.com/gil9red/NotesManager/raw/master/bin.rar'
+
 # Streaming, so we can iterate over the response.
 rs = requests.get(url, stream=True)
 
