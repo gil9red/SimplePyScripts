@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-import sys
-from typing import List, Dict
-from pathlib import Path
+# pip install humanize
+from humanize import naturalsize as sizeof_fmt
 
 # pip install tabulate
 from tabulate import tabulate
@@ -16,11 +15,8 @@ from qbittorrent import Client
 
 from config import IP_HOST, USER, PASSWORD
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-from human_byte_size import sizeof_fmt
 
-
-def print_table(rows: List[List[str]], headers: List[str], show_index=True):
+def print_table(rows: list[list[str]], headers: list[str], show_index=True):
     if show_index:
         show_index = range(1, len(rows) + 1)
 
@@ -28,23 +24,28 @@ def print_table(rows: List[List[str]], headers: List[str], show_index=True):
     print(text)
 
 
-def print_files_table(files: List[Dict]):
-    rows = [(file['name'], sizeof_fmt(file['size'])) for file in sorted(files, key=lambda x: x['name'])]
-    headers = ['#', 'File Name', 'Size']
+def print_files_table(files: list[dict]):
+    rows = [
+        (file["name"], sizeof_fmt(file["size"]))
+        for file in sorted(files, key=lambda x: x["name"])
+    ]
+    headers = ["#", "File Name", "Size"]
     print_table(rows, headers)
 
 
-def print_torrents(torrents: List[Dict]):
+def print_torrents(torrents: list[dict]):
     total_size = 0
 
     for i, torrent in enumerate(torrents, 1):
-        torrent_size = torrent['total_size']
+        torrent_size = torrent["total_size"]
         total_size += torrent_size
 
         print(f"{i:3}. {torrent['name']} ({sizeof_fmt(torrent_size)})")
 
     print()
-    print(f'Total torrents: {len(torrents)}, total size: {sizeof_fmt(total_size)} ({total_size} bytes)')
+    print(
+        f"Total torrents: {len(torrents)}, total size: {sizeof_fmt(total_size)} ({total_size} bytes)"
+    )
 
 
 def get_client() -> Client:
