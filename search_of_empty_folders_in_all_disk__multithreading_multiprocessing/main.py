@@ -7,19 +7,16 @@ __author__ = 'ipetrash'
 import time
 import os
 import shutil
-import sys
 
 # If need use threads
 from multiprocessing.dummy import Pool
 # Or:
 # from multiprocessing import Pool
 
-from pathlib import Path
-
 import psutil
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-from human_byte_size import sizeof_fmt
+# pip install humanize
+from humanize import naturalsize as sizeof_fmt
 
 
 def search_empty_folders(disk):
