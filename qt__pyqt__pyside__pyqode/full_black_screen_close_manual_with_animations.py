@@ -49,8 +49,8 @@ class AnimationBalls(Animation):
         self,
         owner: QWidget = None,
         number_balls: int = 50,
-        min_ball_alpha_color: int = 35,
-        max_ball_alpha_color: int = 255,
+        min_ball_alpha_color: int = 35,  # Минимальное значение может быть 0
+        max_ball_alpha_color: int = 160,  # Максимальное значение может быть 255
         animation_ball_alpha_color: bool = True,
     ):
         super().__init__(owner)
