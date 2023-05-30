@@ -4,14 +4,14 @@
 __author__ = "ipetrash"
 
 
-import sys
-from pathlib import Path
-
 # pip install psutil
 import psutil
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-from human_byte_size import sizeof_fmt
+# pip install humanize
+from humanize import naturalsize as sizeof_fmt
+
+# pip install tabulate
+from tabulate import tabulate
 
 
 print("Disk partitions:")
@@ -37,19 +37,9 @@ print()
 print(
     f"Physical drive io (input/output) counters ({len(physical_drive_by_info)}):"
 )
-#
-# for drive, info in physical_drive_by_info:
-#     print('  {}: {}'.format(drive, info))
-# #
-# # OR:
-# #
+
 headers = ("drive",) + physical_drive_by_info[0][1]._fields
 headers = [header.upper() for header in headers]
 
 rows = [(drive,) + tuple(info) for drive, info in physical_drive_by_info]
-
-# pip install tabulate
-from tabulate import tabulate
 print(tabulate(rows, headers=headers, tablefmt="grid"))
-print()
-print()
