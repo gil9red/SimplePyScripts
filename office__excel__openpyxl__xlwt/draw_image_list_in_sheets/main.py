@@ -1,25 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import glob
 import os
+import sys
 
 import openpyxl
 
 # pip install Pillow
 from PIL import Image
 
-import sys
-sys.path.append('..')
-
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/2c4391214de936260926a47440f2bad2d6fb90da/excel__openpyxl__xlwt/draw_image_in_sheet
+sys.path.append("..")
 from draw_image_in_sheet.main import set_row_column_size, get_pixel_array, draw_image
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     wb = openpyxl.Workbook()
 
     # Remove default sheet
@@ -28,7 +27,7 @@ if __name__ == '__main__':
         wb.remove(sheet)
 
     # Append images
-    for file_name in glob.glob('images/*.jpg') + glob.glob('images/*.png'):
+    for file_name in glob.glob("images/*.jpg") + glob.glob("images/*.png"):
         title = os.path.basename(file_name)
         ws = wb.create_sheet(title)
 
@@ -40,4 +39,4 @@ if __name__ == '__main__':
         img = Image.open(file_name)
         draw_image(ws, img)
 
-    wb.save('excel.xlsx')
+    wb.save("excel.xlsx")
