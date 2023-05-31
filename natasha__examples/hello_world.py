@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/natasha/natasha
@@ -17,14 +17,14 @@ emb = NewsEmbedding()
 morph_tagger = NewsMorphTagger(emb)
 
 
-text = 'Появление ООН было обусловлено целым рядом объективных факторов'
+text = "Появление ООН было обусловлено целым рядом объективных факторов"
 
 doc = Doc(text)
 doc.segment(segmenter)
 doc.tag_morph(morph_tagger)
 
 for token in doc.tokens:
-    print(f'[{token.start}:{token.stop}] {token.pos} {token.text!r}\n{token}\n')
+    print(f"[{token.start}:{token.stop}] {token.pos} {token.text!r}\n{token}\n")
 
 """
 [0:9] NOUN 'Появление'
@@ -52,16 +52,16 @@ DocToken(start=43, stop=54, text='объективных', pos='ADJ', feats=<Gen
 DocToken(start=55, stop=63, text='факторов', pos='NOUN', feats=<Inan,Gen,Masc,Plur>)
 """
 
-print('\n' + '-' * 10 + '\n')
+print("\n" + "-" * 10 + "\n")
 
-text = 'Hello World!'
+text = "Hello World!"
 
 doc = Doc(text)
 doc.segment(segmenter)
 doc.tag_morph(morph_tagger)
 
 for token in doc.tokens:
-    print(f'[{token.start}:{token.stop}] {token.pos} {token.text!r}\n{token}\n')
+    print(f"[{token.start}:{token.stop}] {token.pos} {token.text!r}\n{token}\n")
 
 """
 [0:5] X 'Hello'
