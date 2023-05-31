@@ -1,8 +1,12 @@
-# coding=utf-8
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = "ipetrash"
+
+
 # Реализовать функцию-генератор строки с таблицей умножения на число Х.
 
-__author__ = 'ipetrash'
 
-if __name__ == '__main__':
-    x = int(raw_input("Input x: "))
-    print(' '.join(['%d' % (i * x) for i in xrange(1, 10 + 1)]))
+if __name__ == "__main__":
+    x = int(input("Input x: "))
+    print(" ".join(f"{i * x}" for i in range(1, 10 + 1)))
