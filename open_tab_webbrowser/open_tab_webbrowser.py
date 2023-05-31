@@ -1,10 +1,10 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """Пример открытия вкладки в браузере."""
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import webbrowser
 
     # Вернет True и откроет вкладку
