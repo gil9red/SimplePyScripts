@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -20,7 +20,8 @@ def docx_replace(doc, data):
                     paragraphs.append(paragraph)
     for p in paragraphs:
         for key, val in data.items():
-            key_name = '${{{}}}'.format(key) # I'm using placeholders in the form ${PlaceholderName}
+            # I'm using placeholders in the form ${PlaceholderName}
+            key_name = "${{{}}}".format(key)
             if key_name in p.text:
                 inline = p.runs
                 # Replace strings and retain the same style.
@@ -34,10 +35,11 @@ def docx_replace(doc, data):
                 found_all = False
                 replace_done = False
                 for i in range(len(inline)):
-
                     # case 1: found in single run so short circuit the replace
                     if key_name in inline[i].text and not started:
-                        found_runs.append((i, inline[i].text.find(key_name), len(key_name)))
+                        found_runs.append(
+                            (i, inline[i].text.find(key_name), len(key_name))
+                        )
                         text = inline[i].text.replace(key_name, str(val))
                         inline[i].text = text
                         replace_done = True
@@ -49,7 +51,11 @@ def docx_replace(doc, data):
                         continue
 
                     # case 2: search for partial text, find first run
-                    if key_name[key_index] in inline[i].text and inline[i].text[-1] in key_name and not started:
+                    if (
+                        key_name[key_index] in inline[i].text
+                        and inline[i].text[-1] in key_name
+                        and not started
+                    ):
                         # check sequence
                         start_index = inline[i].text.find(key_name[key_index])
                         check_length = len(inline[i].text)
@@ -70,7 +76,11 @@ def docx_replace(doc, data):
                             break
 
                     # case 2: search for partial text, find subsequent run
-                    if key_name[key_index] in inline[i].text and started and not found_all:
+                    if (
+                        key_name[key_index] in inline[i].text
+                        and started
+                        and not found_all
+                    ):
                         # check sequence
                         chars_found = 0
                         check_length = len(inline[i].text)
@@ -90,21 +100,25 @@ def docx_replace(doc, data):
                     for i, item in enumerate(found_runs):
                         index, start, length = [t for t in item]
                         if i == 0:
-                            text = inline[index].text.replace(inline[index].text[start:start + length], str(val))
+                            text = inline[index].text.replace(
+                                inline[index].text[start : start + length], str(val)
+                            )
                             inline[index].text = text
                         else:
-                            text = inline[index].text.replace(inline[index].text[start:start + length], '')
+                            text = inline[index].text.replace(
+                                inline[index].text[start : start + length], ""
+                            )
                             inline[index].text = text
                 # print(p.text)
 
 
-if __name__ == '__main__':
-    from_filename = 'template.docx'
-    to_filename = 'save_style.docx'
+if __name__ == "__main__":
+    from_filename = "template.docx"
+    to_filename = "save_style.docx"
 
     REPLACING = {
-        'title': 'My pretty title!',
-        'date_time': DT.datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
+        "title": "My pretty title!",
+        "date_time": DT.datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
     }
 
     doc = docx.Document(from_filename)

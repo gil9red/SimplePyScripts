@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -10,13 +10,13 @@ import datetime as DT
 import docx
 
 
-from_filename = 'template.docx'
-to_filename = 'simple.docx'
+from_filename = "template.docx"
+to_filename = "simple.docx"
 
 
 REPLACING = {
-    '${title}': 'My pretty title!',
-    '${date_time}': DT.datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
+    "${title}": "My pretty title!",
+    "${date_time}": DT.datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
 }
 
 doc = docx.Document(from_filename)
