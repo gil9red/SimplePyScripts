@@ -1,36 +1,38 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: http://itnotesblog.ru/note.php?id=272#sthash.e5tCuHk0.dpbs
 
+
+import sys
+import traceback
 
 from PyQt5 import Qt
 from PyQt5 import uic
 
 # pip install opencv-python
 import cv2
+
 import numpy as np
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    Qt.QMessageBox.critical(None, 'Error', text)
+    Qt.QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
 CONFIG_FILE_NAME = "config.ini"
-WINDOW_TITLE = 'Color Detection Tool'
+WINDOW_TITLE = "Color Detection Tool"
 GRAY_COLOR_TABLE = [Qt.qRgb(i, i, i) for i in range(256)]
 
 
@@ -41,17 +43,35 @@ def numpy_array_to_QImage(numpy_array):
     height, width = numpy_array.shape[:2]
 
     if len(numpy_array.shape) == 2:
-        img = Qt.QImage(numpy_array.data, width, height, numpy_array.strides[0], Qt.QImage.Format_Indexed8)
+        img = Qt.QImage(
+            numpy_array.data,
+            width,
+            height,
+            numpy_array.strides[0],
+            Qt.QImage.Format_Indexed8,
+        )
         img.setColorTable(GRAY_COLOR_TABLE)
         return img
 
     elif len(numpy_array.shape) == 3:
         if numpy_array.shape[2] == 3:
-            img = Qt.QImage(numpy_array.data, width, height, numpy_array.strides[0], Qt.QImage.Format_RGB888)
+            img = Qt.QImage(
+                numpy_array.data,
+                width,
+                height,
+                numpy_array.strides[0],
+                Qt.QImage.Format_RGB888,
+            )
             return img
 
         elif numpy_array.shape[2] == 4:
-            img = Qt.QImage(numpy_array.data, width, height, numpy_array.strides[0], Qt.QImage.Format_ARGB32)
+            img = Qt.QImage(
+                numpy_array.data,
+                width,
+                height,
+                numpy_array.strides[0],
+                Qt.QImage.Format_ARGB32,
+            )
             return img
 
 
@@ -59,15 +79,15 @@ class MainWindow(Qt.QWidget):
     def __init__(self):
         super().__init__()
 
-        uic.loadUi('mainwidget.ui', self)
+        uic.loadUi("mainwidget.ui", self)
 
         self.setWindowTitle(WINDOW_TITLE)
 
-        self.cbPenStyle.addItem('Solid', Qt.Qt.SolidLine)
-        self.cbPenStyle.addItem('Dash', Qt.Qt.DashLine)
-        self.cbPenStyle.addItem('Dot', Qt.Qt.DotLine)
-        self.cbPenStyle.addItem('Dash Dot', Qt.Qt.DashDotLine)
-        self.cbPenStyle.addItem('Dash Dot Dot', Qt.Qt.DashDotDotLine)
+        self.cbPenStyle.addItem("Solid", Qt.Qt.SolidLine)
+        self.cbPenStyle.addItem("Dash", Qt.Qt.DashLine)
+        self.cbPenStyle.addItem("Dot", Qt.Qt.DotLine)
+        self.cbPenStyle.addItem("Dash Dot", Qt.Qt.DashDotLine)
+        self.cbPenStyle.addItem("Dash Dot Dot", Qt.Qt.DashDotDotLine)
 
         self.pen_color = Qt.QColor(Qt.Qt.green)
         self.last_load_path = "."
@@ -108,21 +128,25 @@ class MainWindow(Qt.QWidget):
 
     def on_load(self):
         image_filters = "Images (*.jpg *.jpeg *.png *.bmp)"
-        file_name = Qt.QFileDialog.getOpenFileName(self, "Load image", self.last_load_path, image_filters)[0]
+        file_name = Qt.QFileDialog.getOpenFileName(
+            self, "Load image", self.last_load_path, image_filters
+        )[0]
         if not file_name:
             return
 
         self.last_load_path = Qt.QFileInfo(file_name).absolutePath()
 
         # Load image as bytes
-        with open(file_name, 'rb') as f:
+        with open(file_name, "rb") as f:
             img_data = f.read()
 
         nparr = np.frombuffer(img_data, np.uint8)
         self.image_source = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
 
         height, width, channels = self.image_source.shape
-        self.setWindowTitle(WINDOW_TITLE + '. {}x{} ({} channels). {}'.format(width, height, channels, file_name))
+        self.setWindowTitle(
+            f"{WINDOW_TITLE}. {width}x{height} ({channels} channels). {file_name}"
+        )
 
         # Трансформация BGR->RGB если 3 канала. У картинок с прозрачностью каналов 4 и для них почему
         if channels == 3:
@@ -132,7 +156,7 @@ class MainWindow(Qt.QWidget):
             code = cv2.COLOR_BGRA2RGB
 
         else:
-            raise Exception('Unexpected number of channels: {}'.format(channels))
+            raise Exception(f"Unexpected number of channels: {channels}")
 
         self.image_source = cv2.cvtColor(self.image_source, code)
 
@@ -143,7 +167,9 @@ class MainWindow(Qt.QWidget):
             return
 
         size = self.lbView.size()
-        pixmap = Qt.QPixmap.fromImage(self.result_img).scaled(size, Qt.Qt.KeepAspectRatio, Qt.Qt.SmoothTransformation)
+        pixmap = Qt.QPixmap.fromImage(self.result_img).scaled(
+            size, Qt.Qt.KeepAspectRatio, Qt.Qt.SmoothTransformation
+        )
         self.lbView.setPixmap(pixmap)
 
     def _update_pen_color(self):
@@ -191,8 +217,8 @@ class MainWindow(Qt.QWidget):
         color_hsv_min = Qt.QColor.fromHsv(*hsv_min)
         color_hsv_max = Qt.QColor.fromHsv(*hsv_max)
 
-        self.label_hsv_from_text.setText(', '.join(map(str, hsv_min)))
-        self.label_hsv_to_text.setText(', '.join(map(str, hsv_max)))
+        self.label_hsv_from_text.setText(", ".join(map(str, hsv_min)))
+        self.label_hsv_to_text.setText(", ".join(map(str, hsv_max)))
 
         pixmap = Qt.QPixmap(1, 1)
         pixmap.fill(color_hsv_min)
@@ -215,27 +241,23 @@ class MainWindow(Qt.QWidget):
             thresholded_image = cv2.inRange(
                 thresholded_image,
                 np.array(hsv_min, np.uint8),
-                np.array(hsv_max, np.uint8)
+                np.array(hsv_max, np.uint8),
             )
 
             # Убираем шум
             thresholded_image = cv2.erode(
-                thresholded_image,
-                cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+                thresholded_image, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
             )
             thresholded_image = cv2.dilate(
-                thresholded_image,
-                cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+                thresholded_image, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
             )
 
             # Замыкаем оставшиеся крупные объекты
             thresholded_image = cv2.dilate(
-                thresholded_image,
-                cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+                thresholded_image, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
             )
             thresholded_image = cv2.erode(
-                thresholded_image,
-                cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+                thresholded_image, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
             )
 
             if self.rbCanny.isChecked():
@@ -243,13 +265,15 @@ class MainWindow(Qt.QWidget):
                 thresholded_image = cv2.Canny(thresholded_image, 100, 50, 5)
 
             if self.rbResult.isChecked():
-                mode = cv2.RETR_EXTERNAL if self.chOnlyExternal.isChecked() else cv2.RETR_TREE
+                mode = (
+                    cv2.RETR_EXTERNAL
+                    if self.chOnlyExternal.isChecked()
+                    else cv2.RETR_TREE
+                )
 
                 # Находим контуры
                 contours, _ = cv2.findContours(
-                    thresholded_image,
-                    mode,
-                    cv2.CHAIN_APPROX_SIMPLE
+                    thresholded_image, mode, cv2.CHAIN_APPROX_SIMPLE
                 )
 
                 result_img = self.image_source.copy()
@@ -297,7 +321,7 @@ class MainWindow(Qt.QWidget):
             name = w.objectName()
             settings.setValue(name, int(w.isChecked()))
 
-        settings.setValue('PenColor', self.pen_color.name())
+        settings.setValue("PenColor", self.pen_color.name())
 
         settings.setValue("lastLoadPath", self.last_load_path)
 
@@ -310,7 +334,7 @@ class MainWindow(Qt.QWidget):
 
         self.last_load_path = settings.value("lastLoadPath", ".")
 
-        self.pen_color = Qt.QColor(settings.value('PenColor', Qt.Qt.green))
+        self.pen_color = Qt.QColor(settings.value("PenColor", Qt.Qt.green))
 
         # TODO: рефакторинг циклов
 
@@ -361,7 +385,7 @@ class MainWindow(Qt.QWidget):
         super().closeEvent(e)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = Qt.QApplication([])
 
     mw = MainWindow()
