@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import openpyxl
 
 
-columns = ['Language', 'Text', 'Total']
+columns = ["Language", "Text", "Total"]
 rows = [
-    ['python', 1],
-    ['java', 2],
-    ['c#', 3],
+    ["python", 1],
+    ["java", 2],
+    ["c#", 3],
 ]
 
 wb = openpyxl.Workbook()
@@ -25,9 +25,9 @@ for i, row in enumerate(rows, 2):
         cell = ws.cell(row=i, column=j)
         cell.value = value
 
-ws.merge_cells('C2:C4')
+ws.merge_cells("C2:C4")
 
 # Total:
-ws['C2'].value = '=SUM(B2:B4)'
+ws["C2"].value = "=SUM(B2:B4)"
 
-wb.save('excel.xlsx')
+wb.save("excel.xlsx")

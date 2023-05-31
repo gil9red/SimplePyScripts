@@ -1,19 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import openpyxl
 
 
-columns = ['Language', 'Text']
-rows = [
-    ['python', 1],
-    ['java', 2],
-    ['c#', 3],
-    ['Total:', 0]
-]
+columns = ["Language", "Text"]
+rows = [["python", 1], ["java", 2], ["c#", 3], ["Total:", 0]]
 
 wb = openpyxl.Workbook()
 ws = wb.active
@@ -27,6 +22,6 @@ for i, row in enumerate(rows, 2):
         cell.value = value
 
 # Total:
-ws.cell(row=5, column=2).value = '=SUM(B2:B4)'
+ws.cell(row=5, column=2).value = "=SUM(B2:B4)"
 
-wb.save('excel.xlsx')
+wb.save("excel.xlsx")

@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from urllib.parse import quote
 import openpyxl
 
 
-columns = ['Language', 'Text', 'Hyperlink']
+columns = ["Language", "Text", "Hyperlink"]
 rows = [
-    ['python', 'excel'],
-    ['java', 'excel'],
-    ['c#', 'excel'],
+    ["python", "excel"],
+    ["java", "excel"],
+    ["c#", "excel"],
 ]
 
 wb = openpyxl.Workbook()
@@ -27,8 +27,9 @@ for i, row in enumerate(rows, 2):
     ws.cell(row=i, column=1).value = lang
     ws.cell(row=i, column=2).value = text
 
-    ws.cell(row=i, column=3).hyperlink = "https://stackoverflow.com/search?q=" + quote(lang + ' ' + text)
+    url = "https://stackoverflow.com/search?q=" + quote(lang + " " + text)
+    ws.cell(row=i, column=3).hyperlink = url
     ws.cell(row=i, column=3).value = "StackOverflow"
 
 
-wb.save('excel.xlsx')
+wb.save("excel.xlsx")

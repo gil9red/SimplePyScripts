@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import openpyxl
@@ -24,12 +24,12 @@ def set_column_size(ws: Worksheet):
 
 
 def fill_sheet(ws: Worksheet):
-    columns = ['Language', 'Text']
+    columns = ["Language", "Text"]
     rows = [
-        ['python', '-' * 10],
-        ['java', 'j' * 10],
-        ['c#', '*' * 5],
-        ['c++', '0' * 50],
+        ["python", "-" * 10],
+        ["java", "j" * 10],
+        ["c#", "*" * 5],
+        ["c++", "0" * 50],
     ]
 
     for i, value in enumerate(columns, 1):
@@ -48,8 +48,8 @@ ws = wb.active
 fill_sheet(ws)
 
 # Sheet 2
-ws = wb.create_sheet('set_column_size')
+ws = wb.create_sheet("set_column_size")
 fill_sheet(ws)
 set_column_size(ws)
 
-wb.save('excel.xlsx')
+wb.save("excel.xlsx")

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import random
@@ -22,7 +22,7 @@ def set_row_column_size(ws: Worksheet):
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/1c2274804f52004b07601ece535ec74b3f82aa8d/get_random_hex_color.py
 def get_random_hex_color() -> str:
-    return ''.join(random.choices('0123456789ABCDEF', k=6))
+    return "".join(random.choices("0123456789ABCDEF", k=6))
 
 
 def set_fill_color(ws: Worksheet):
@@ -43,4 +43,4 @@ ws.sheet_view.zoomScale = 10
 set_row_column_size(ws)
 set_fill_color(ws)
 
-wb.save('excel.xlsx')
+wb.save("excel.xlsx")

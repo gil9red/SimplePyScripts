@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import openpyxl
@@ -22,4 +22,4 @@ wb = openpyxl.Workbook()
 ws = wb.create_sheet()
 set_row_column_size(ws)
 
-wb.save('excel.xlsx')
+wb.save("excel.xlsx")
