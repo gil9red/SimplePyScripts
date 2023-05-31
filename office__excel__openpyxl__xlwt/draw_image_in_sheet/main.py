@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import openpyxl
@@ -34,7 +34,7 @@ def get_pixel_array(img, rgb_hex=False):
             r, g, b = img.getpixel((x, y))
 
             if rgb_hex:
-                value = '{:02X}{:02X}{:02X}'.format(r, g, b)
+                value = "{:02X}{:02X}{:02X}".format(r, g, b)
                 row.append(value)
             else:
                 row.append((r, g, b))
@@ -43,7 +43,7 @@ def get_pixel_array(img, rgb_hex=False):
 
 
 def draw_image(ws, img):
-    img = img.convert('RGB')
+    img = img.convert("RGB")
 
     # Resize
     img.thumbnail((250, 250))
@@ -56,7 +56,7 @@ def draw_image(ws, img):
             cell.fill = PatternFill(fgColor=pixels[i][j], fill_type="solid")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     wb = openpyxl.Workbook()
     ws = wb.active
 
@@ -70,4 +70,4 @@ if __name__ == '__main__':
     ws.title = file_name
     draw_image(ws, img)
 
-    wb.save('excel.xlsx')
+    wb.save("excel.xlsx")
