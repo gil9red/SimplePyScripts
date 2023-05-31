@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import os
 
 # pip install python-docx
 import docx
@@ -11,14 +13,15 @@ import docx
 COL_COUNT = 5
 ROW_COUNT = 5
 
-HEADERS = ['TABLE HEADER', '', '', '', '']
+HEADERS = ["TABLE HEADER", "", "", "", ""]
 ROWS = [
-    ['{}x{}'.format(i, j) for j in range(1, COL_COUNT + 1)] for i in range(1, ROW_COUNT + 1)
+    [f"{i}x{j}" for j in range(1, COL_COUNT + 1)]
+    for i in range(1, ROW_COUNT + 1)
 ]
 
 
 def fill_table(document, headers, rows):
-    table = document.add_table(rows=1, cols=len(headers), style='Table Grid')
+    table = document.add_table(rows=1, cols=len(headers), style="Table Grid")
     heading_cells = table.rows[0].cells
 
     for i, value in enumerate(headers):
@@ -54,9 +57,8 @@ table_2.cell(1, 0).merge(table_2.cell(ROW_COUNT, 0))
 table_2.cell(2, 2).merge(table_2.cell(2, 4))
 
 # Save
-file_name_doc = 'word.docx'
+file_name_doc = "word.docx"
 document.save(file_name_doc)
 
 # Open file
-import os
 os.startfile(file_name_doc)

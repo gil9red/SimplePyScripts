@@ -1,23 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import os
 
 # pip install python-docx
 import docx
 
 
-headers = ['VALUE']
-rows = [
-    [''],
-    ['']
-]
+headers = ["VALUE"]
+rows = [[""], [""]]
 
 
 document = docx.Document()
 
-table = document.add_table(rows=1, cols=len(headers), style='Table Grid')
+table = document.add_table(rows=1, cols=len(headers), style="Table Grid")
 heading_cells = table.rows[0].cells
 
 for i, value in enumerate(headers):
@@ -34,21 +33,20 @@ for row in rows:
 
 # Row 1
 sub_table = table.cell(1, 0).add_table(rows=1, cols=3)
-sub_table.style = 'Table Grid'
+sub_table.style = "Table Grid"
 
 for i, col in enumerate(sub_table.row_cells(0), 1):
-    col.text = str(2 ** i)
+    col.text = str(2**i)
 
 # Row 2
 sub_table = table.cell(2, 0).add_table(rows=1, cols=3)
 for i, col in enumerate(sub_table.row_cells(0), 1):
-    col.text = str(2 ** i)
+    col.text = str(2**i)
 
 
 # Save
-file_name_doc = 'word.docx'
+file_name_doc = "word.docx"
 document.save(file_name_doc)
 
 # Open file
-import os
 os.startfile(file_name_doc)
