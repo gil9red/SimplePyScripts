@@ -1,25 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # NOTE: Frozen Throne, 2560x1440
 
 
 import time
+
 # import winsound
 
 # pip install pyautogui
 import pyautogui
 
 
-LOCAL_NETWORK_BUTTON = 'images/local_network_button.png'
-NEW_GAME_BUTTON = 'images/new_game_button.png'
-NEW_GAME_BUTTON_SELECT_MAP = 'images/new_game_button_select_map.png'
+LOCAL_NETWORK_BUTTON = "images/local_network_button.png"
+NEW_GAME_BUTTON = "images/new_game_button.png"
+NEW_GAME_BUTTON_SELECT_MAP = "images/new_game_button_select_map.png"
 
-OPEN_COMBO_BOX_SENTINEL = 'images/open_combo_box_sentinel.png'
-OPEN_COMBO_BOX_SCOURGE = 'images/open_combo_box_scourge.png'
+OPEN_COMBO_BOX_SENTINEL = "images/open_combo_box_sentinel.png"
+OPEN_COMBO_BOX_SCOURGE = "images/open_combo_box_scourge.png"
 
 SELECT_AI_MENU_SENTINEL = "images/select_ai_menu_sentinel.png"
 SELECT_AI_MENU_SCOURGE = "images/select_ai_menu_scourge.png"
@@ -28,7 +29,7 @@ AI_EASY = "images/ai_easy.png"
 
 def go_local_network():
     pos = pyautogui.locateCenterOnScreen(LOCAL_NETWORK_BUTTON)
-    print('LOCAL_NETWORK_BUTTON:', pos)
+    print("LOCAL_NETWORK_BUTTON:", pos)
 
     if pos:
         pyautogui.click(pos)
@@ -42,7 +43,7 @@ def go_local_network():
 
 def go_new_game():
     pos = pyautogui.locateCenterOnScreen(NEW_GAME_BUTTON)
-    print('NEW_GAME_BUTTON:', pos)
+    print("NEW_GAME_BUTTON:", pos)
 
     if pos:
         pyautogui.click(pos)
@@ -56,7 +57,7 @@ def go_new_game():
 
 def go_select_map():
     pos = pyautogui.locateCenterOnScreen(NEW_GAME_BUTTON_SELECT_MAP)
-    print('NEW_GAME_BUTTON_SELECT_MAP:', pos)
+    print("NEW_GAME_BUTTON_SELECT_MAP:", pos)
 
     if pos:
         pyautogui.click(pos)
@@ -77,7 +78,7 @@ Bot say:
 
     for line in text.splitlines():
         pyautogui.typewrite(line)
-        pyautogui.typewrite(['enter'])
+        pyautogui.typewrite(["enter"])
 
 
 def select_sentinel_and_scourge(coords_sentinel, coords_scourge):
@@ -93,14 +94,16 @@ def select_sentinel_and_scourge(coords_sentinel, coords_scourge):
             # Ждем появления меню
             pos_menu_sentinel = pyautogui.locateCenterOnScreen(SELECT_AI_MENU_SENTINEL)
             pos_menu_scourge = pyautogui.locateCenterOnScreen(SELECT_AI_MENU_SCOURGE)
-            print(f'SELECT_AI_MENU_SENTINEL: {pos_menu_sentinel}, SELECT_AI_MENU_SCOURGE: {pos_menu_scourge}')
+            print(
+                f"SELECT_AI_MENU_SENTINEL: {pos_menu_sentinel}, SELECT_AI_MENU_SCOURGE: {pos_menu_scourge}"
+            )
 
             if pos_menu_sentinel or pos_menu_scourge:
                 break
 
         # Выбираем игрока
         pos = pyautogui.locateCenterOnScreen(AI_EASY)
-        print('AI_EASY:', pos)
+        print("AI_EASY:", pos)
         if pos:
             pyautogui.moveTo(pos) or time.sleep(0.3)
             pyautogui.click(pos)
@@ -108,7 +111,7 @@ def select_sentinel_and_scourge(coords_sentinel, coords_scourge):
         time.sleep(0.3)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     while True:
         # Кликаем на Локальную игру
         while not go_local_network():
@@ -133,7 +136,9 @@ if __name__ == '__main__':
         while True:
             coords_sentinel = list(pyautogui.locateAllOnScreen(OPEN_COMBO_BOX_SENTINEL))
             coords_scourge = list(pyautogui.locateAllOnScreen(OPEN_COMBO_BOX_SCOURGE))
-            print(f'coords_sentinel: {coords_sentinel}, coords_scourge: {coords_scourge}')
+            print(
+                f"coords_sentinel: {coords_sentinel}, coords_scourge: {coords_scourge}"
+            )
 
             if coords_sentinel and coords_scourge:
                 # winsound.Beep(1000, duration=10)
