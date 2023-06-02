@@ -82,6 +82,11 @@ class MainWindow(QWidget):
         self.cb_string_literal.clicked.connect(self.input_text_changed)
         button_layout.addWidget(self.cb_string_literal)
 
+        self.cb_semicolon = QCheckBox(";")
+        self.cb_semicolon.setChecked(True)
+        self.cb_semicolon.clicked.connect(self.input_text_changed)
+        button_layout.addWidget(self.cb_semicolon)
+
         layout = QVBoxLayout()
         layout.addLayout(button_layout)
 
@@ -184,6 +189,8 @@ class MainWindow(QWidget):
                     out_text = '"' + out_text
                 if not out_text.endswith('"'):
                     out_text += '"'
+
+            if self.cb_semicolon.isChecked():
                 out_text += ";"
 
             self.text_edit_output.setPlainText(out_text)
