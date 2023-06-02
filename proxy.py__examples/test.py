@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import os.path
@@ -20,13 +20,13 @@ DEBUG_LOG = False
 
 
 proxies = {
-    "http": 'localhost:33333',
-    "https": 'localhost:33333',
+    "http": "localhost:33333",
+    "https": "localhost:33333",
 }
 
 # NOTE: When error "ssl.SSLError: [X509: KEY_VALUES_MISMATCH] key values mismatch (_ssl.c:3845)"
 #       try remove all files from "C:\Users\<user>\.proxy\certificates"
-for url in ['http://httpbin.org/headers', 'https://httpbin.org/headers']:
+for url in ["http://httpbin.org/headers", "https://httpbin.org/headers"]:
     print(url)
 
     # NOTE: The "verify" parameter is needed for HTTPS interception
@@ -38,9 +38,9 @@ for url in ['http://httpbin.org/headers', 'https://httpbin.org/headers']:
     DEBUG_LOG and print(rs.headers)
     DEBUG_LOG and print(rs.content)
 
-    for header, value in rs.json()['headers'].items():
-        if header.lower().startswith('x-my'):
-            print(f'{header}: {value!r}')
+    for header, value in rs.json()["headers"].items():
+        if header.lower().startswith("x-my"):
+            print(f"{header}: {value!r}")
 
     print()
 

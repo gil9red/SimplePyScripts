@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/abhinavsingh/proxy.py#tls-interception
@@ -22,7 +22,7 @@ if not os.path.exists(CA_CERT_FILE_PATH):
     ca_certificate.main()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(
         ca_key_file=CA_KEY_FILE_PATH,
         ca_cert_file=CA_CERT_FILE_PATH,
