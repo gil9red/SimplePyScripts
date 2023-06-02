@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PIL import Image
@@ -9,7 +9,7 @@ from PIL import Image
 
 file_name = "../for_cycle__pixels__array/input.jpg"
 
-img = Image.open(file_name).convert('RGBA')
+img = Image.open(file_name).convert("RGBA")
 pixels = img.load()
 width, height = img.size
 
