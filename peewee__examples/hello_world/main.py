@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install peewee
 from peewee import *
 
 
-db = SqliteDatabase('my_database.sqlite')
+db = SqliteDatabase("my_database.sqlite")
 
 
 class Info(Model):
@@ -20,18 +20,22 @@ class Info(Model):
         database = db
 
     def __str__(self):
-        return f'Info<#{self.id} first_name={self.first_name} second_name={self.second_name} state={self.state}>'
+        return f"Info<#{self.id} first_name={self.first_name} second_name={self.second_name} state={self.state}>"
 
 
 db.connect()
 db.create_tables([Info])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Вызываем в первый раз, чтобы заполнить таблицу
     if not Info.select().count():
         for i in range(5):
-            Info.create(first_name="first_name_" + str(i), second_name="second_name_" + str(i), state=i)
+            Info.create(
+                first_name="first_name_" + str(i),
+                second_name="second_name_" + str(i),
+                state=i,
+            )
 
     for info in Info.select():
         print(info)
