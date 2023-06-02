@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install Pillow
 from PIL import Image
+
 from PyQt5 import Qt
+
 
 image_file = "input.jpg"
 image = Image.open(image_file)
