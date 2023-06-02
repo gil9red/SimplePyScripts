@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from pathlib import Path
@@ -12,7 +12,7 @@ from PIL import Image
 
 path = Path(...)
 
-for file_name in path.glob('*.jpg'):
+for file_name in path.glob("*.jpg"):
     img = Image.open(file_name)
     width, height = img.size
 

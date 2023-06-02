@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PIL.ImageShow import _viewers
 
 
-print(f'Viewers: {len(_viewers)}')
+print(f"Viewers: {len(_viewers)}")
 for viewer in _viewers:
-    print(viewer.get_command('123.png'))
+    print(viewer.get_command("123.png"))
 
 """
 Viewers: 1
