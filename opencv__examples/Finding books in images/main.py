@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://tproger.ru/translations/finding-books-python-opencv/
 
+
 # pip install opencv-python
 import cv2
+
 
 # Загрузка изображения
 image = cv2.imread("example.jpg")
@@ -56,10 +58,18 @@ for c in contours:
     cX = int(M["m10"] / M["m00"])
     cY = int(M["m01"] / M["m00"])
 
-    cv2.putText(image_result, str(total), (cX, cY), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0), 2)
+    cv2.putText(
+        image_result,
+        str(total),
+        (cX, cY),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        1.5,
+        (0, 255, 0),
+        2,
+    )
 
 print("На картинке {0} книг(и)".format(total))
 cv2.imwrite("output.jpg", image_result)
-cv2.imshow('image_result', image_result)
+cv2.imshow("image_result", image_result)
 
 cv2.waitKey()

@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install opencv-python
 import cv2
-img = cv2.imread('image.png')
-cv2.imshow('img', img)
+
+
+img = cv2.imread("image.png")
+cv2.imshow("img", img)
 
 gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -29,7 +31,7 @@ for contour in contours:
 
     cv2.rectangle(img_with_rect, (x, y), (x + w, y + h), (0, 0, 255))
 
-cv2.imshow('img_with_rect', img_with_rect)
+cv2.imshow("img_with_rect", img_with_rect)
 
 #
 # Draw img_with_rect_rect
@@ -47,7 +49,7 @@ for contour in contours:
 
     cv2.rectangle(img_with_rect_rect, (x, y), (x + w, y + h), (0, 0, 255))
 
-cv2.imshow('img_with_rect_rect', img_with_rect_rect)
+cv2.imshow("img_with_rect_rect", img_with_rect_rect)
 
 cv2.waitKey()
 cv2.destroyAllWindows()

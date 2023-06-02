@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://www.pyimagesearch.com/2015/02/09/removing-contours-image-using-python-opencv/
@@ -9,6 +9,7 @@ __author__ = 'ipetrash'
 
 # pip install opencv-python
 import cv2
+
 import numpy as np
 
 
