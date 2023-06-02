@@ -6,12 +6,12 @@ __author__ = "ipetrash"
 
 # Run 2 process and wait terminate
 
+import threading
+import time
+
 
 def func(time_life=4):
-    import time
     i = 1
-
-    import threading
 
     while i <= time_life:
         print(threading.current_thread(), i)
@@ -22,6 +22,7 @@ def func(time_life=4):
 
 if __name__ == "__main__":
     from multiprocessing import Process
+
     p1 = Process(target=func, args=(5,))
     p1.start()
 
@@ -30,6 +31,7 @@ if __name__ == "__main__":
 
     # pip install psutil
     import psutil
+
     process1 = psutil.Process(p1.pid)
     print("process1 is_running:", process1.is_running())
 

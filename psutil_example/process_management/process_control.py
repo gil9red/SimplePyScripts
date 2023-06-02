@@ -4,10 +4,11 @@
 __author__ = "ipetrash"
 
 
-def func():
-    import time
-    import threading
+import time
+import threading
 
+
+def func():
     i = 1
 
     while True:
@@ -19,12 +20,14 @@ def func():
 
 if __name__ == "__main__":
     from multiprocessing import Process
+
     p = Process(target=func)
     p.start()
     print(p.pid)
 
     # pip install psutil
     import psutil
+
     process = psutil.Process(p.pid)
     print("is_running:", process.is_running())
 
@@ -33,7 +36,6 @@ if __name__ == "__main__":
     print_info(p.pid)
     print("\n")
 
-    import time
     time.sleep(4)
 
     print("suspend on 3 seconds")
