@@ -1,32 +1,63 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import sys
+import traceback
 
 from os.path import split as path_split
-import traceback
-import sys
 
 try:
     from PyQt5.QtWidgets import (
-        QWidget, QVBoxLayout, QPlainTextEdit, QLabel, QSizePolicy, QPushButton,
-        QSplitter, QHBoxLayout, QMessageBox, QErrorMessage, QTextEdit, QApplication
+        QWidget,
+        QVBoxLayout,
+        QPlainTextEdit,
+        QLabel,
+        QSizePolicy,
+        QPushButton,
+        QSplitter,
+        QHBoxLayout,
+        QMessageBox,
+        QErrorMessage,
+        QTextEdit,
+        QApplication,
     )
     from PyQt5.QtCore import Qt
 
 except:
     try:
         from PyQt4.QtGui import (
-            QWidget, QVBoxLayout, QPlainTextEdit, QLabel, QSizePolicy, QPushButton,
-            QSplitter, QHBoxLayout, QMessageBox, QErrorMessage, QTextEdit, QApplication
+            QWidget,
+            QVBoxLayout,
+            QPlainTextEdit,
+            QLabel,
+            QSizePolicy,
+            QPushButton,
+            QSplitter,
+            QHBoxLayout,
+            QMessageBox,
+            QErrorMessage,
+            QTextEdit,
+            QApplication,
         )
         from PyQt4.QtCore import Qt
 
     except:
         from PySide.QtGui import (
-            QWidget, QVBoxLayout, QPlainTextEdit, QLabel, QSizePolicy, QPushButton,
-            QSplitter, QHBoxLayout, QMessageBox, QErrorMessage, QTextEdit, QApplication
+            QWidget,
+            QVBoxLayout,
+            QPlainTextEdit,
+            QLabel,
+            QSizePolicy,
+            QPushButton,
+            QSplitter,
+            QHBoxLayout,
+            QMessageBox,
+            QErrorMessage,
+            QTextEdit,
+            QApplication,
         )
         from PySide.QtCore import Qt
 
@@ -34,11 +65,11 @@ from pretty_html import pretty_html
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
@@ -61,9 +92,9 @@ class MainWindow(QWidget):
         self.label_error.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.label_error.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
 
-        self.button_detail_error = QPushButton('...')
+        self.button_detail_error = QPushButton("...")
         self.button_detail_error.setFixedSize(20, 20)
-        self.button_detail_error.setToolTip('Detail error')
+        self.button_detail_error.setToolTip("Detail error")
         self.button_detail_error.hide()
 
         self.last_error_message = None
@@ -110,13 +141,13 @@ class MainWindow(QWidget):
             self.last_detail_error_message = str(tb)
             self.button_detail_error.show()
 
-            self.label_error.setText('Error: ' + self.last_error_message)
+            self.label_error.setText("Error: " + self.last_error_message)
 
     def show_detail_error_message(self):
-        message = self.last_error_message + '\n\n' + self.last_detail_error_message
+        message = self.last_error_message + "\n\n" + self.last_detail_error_message
 
         mb = QErrorMessage()
-        mb.setWindowTitle('Error')
+        mb.setWindowTitle("Error")
         # Сообщение ошибки содержит отступы, символы-переходы на следующую строку,
         # которые поломаются при вставке через QErrorMessage.showMessage, и нет возможности
         # выбрать тип текста, то делаем такой хак.
@@ -125,7 +156,7 @@ class MainWindow(QWidget):
         mb.exec_()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
@@ -133,9 +164,9 @@ if __name__ == '__main__':
     mw.show()
 
     mw.text_edit_input.setPlainText(
-        '<!DOCTYPE html><html><head><title>Example</title></head><body>'
-        '<p>This is an example of a simple HTML page with one paragraph.</p>'
-        '</body></html>'
+        "<!DOCTYPE html><html><head><title>Example</title></head><body>"
+        "<p>This is an example of a simple HTML page with one paragraph.</p>"
+        "</body></html>"
     )
 
     app.exec_()
