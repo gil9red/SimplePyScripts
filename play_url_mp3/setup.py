@@ -9,12 +9,11 @@
 
 from cx_Freeze import setup, Executable
 
-executables = [
-    Executable('play_url_mp3.py')
-]
+executables = [Executable("play_url_mp3.py")]
 
-setup(name='play_url_mp3',
-      version='0.1',
-      description='play_url_mp3.py',
-      executables=executables
-      )
+setup(
+    name="play_url_mp3",
+    version="0.1",
+    description="play_url_mp3.py",
+    executables=executables,
+)
