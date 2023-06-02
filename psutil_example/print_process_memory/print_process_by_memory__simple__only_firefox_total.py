@@ -20,9 +20,11 @@ for p in psutil.process_iter():
 
     print(name, memory)
 
-print(f"""
+print(
+    f"""
 Total: {total} bytes
        {total // 1024} KB
        {total // 1024 // 1024} MB
        {total // 1024 // 1024 // 1024} GB
-""")
+"""
+)
