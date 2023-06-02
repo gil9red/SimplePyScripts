@@ -1,20 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import os
-from PyQt5 import Qt
+import sys
+import traceback
+
 from PIL import Image
+
+from PyQt5 import Qt
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/1c1ad83de7c0f0bd02d9926fe141da4ba5b92720/pil_example/pixelate_image/main.py
 def pixelate(image, pixel_size=9, draw_margin=True):
     margin_color = (0, 0, 0)
 
-    image = image.resize((image.size[0] // pixel_size, image.size[1] // pixel_size), Image.NEAREST)
-    image = image.resize((image.size[0] * pixel_size, image.size[1] * pixel_size), Image.NEAREST)
+    image = image.resize(
+        (image.size[0] // pixel_size, image.size[1] // pixel_size), Image.NEAREST
+    )
+    image = image.resize(
+        (image.size[0] * pixel_size, image.size[1] * pixel_size), Image.NEAREST
+    )
     pixel = image.load()
 
     # Draw black margin between pixels
@@ -22,27 +30,25 @@ def pixelate(image, pixel_size=9, draw_margin=True):
         for i in range(0, image.size[0], pixel_size):
             for j in range(0, image.size[1], pixel_size):
                 for r in range(pixel_size):
-                    pixel[i+r, j] = margin_color
-                    pixel[i, j+r] = margin_color
+                    pixel[i + r, j] = margin_color
+                    pixel[i, j + r] = margin_color
 
     return image
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    Qt.QMessageBox.critical(None, 'Error', text)
+    Qt.QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
-WINDOW_TITLE = 'Pixelate'
+WINDOW_TITLE = "Pixelate"
 
 
 class MainWindow(Qt.QWidget):
@@ -51,7 +57,7 @@ class MainWindow(Qt.QWidget):
 
         self.setWindowTitle(WINDOW_TITLE)
 
-        self.last_load_path = '.'
+        self.last_load_path = "."
         self.file_name = None
         self.image_source = None
         self.image_result = None
@@ -59,20 +65,20 @@ class MainWindow(Qt.QWidget):
         self.lb_image_view = Qt.QLabel()
         self.lb_image_view.setAlignment(Qt.Qt.AlignCenter)
 
-        self.pb_load_image = Qt.QPushButton('Load')
+        self.pb_load_image = Qt.QPushButton("Load")
         self.pb_load_image.clicked.connect(self.load)
 
-        self.pb_save_as = Qt.QPushButton('Save as...')
+        self.pb_save_as = Qt.QPushButton("Save as...")
         self.pb_save_as.clicked.connect(self.save_as)
 
-        self.rb_original = Qt.QRadioButton('Original')
+        self.rb_original = Qt.QRadioButton("Original")
         self.rb_original.clicked.connect(self._do_pixelate)
 
-        self.rb_result = Qt.QRadioButton('Result')
+        self.rb_result = Qt.QRadioButton("Result")
         self.rb_result.setChecked(True)
         self.rb_result.clicked.connect(self._do_pixelate)
 
-        self.cb_draw_margin = Qt.QCheckBox('Draw margin')
+        self.cb_draw_margin = Qt.QCheckBox("Draw margin")
         self.cb_draw_margin.setChecked(True)
         self.cb_draw_margin.clicked.connect(self._do_pixelate)
 
@@ -81,7 +87,9 @@ class MainWindow(Qt.QWidget):
         self.sl_pixel_size.setValue(9)
 
         self.sb_pixel_size = Qt.QSpinBox()
-        self.sb_pixel_size.setRange(self.sl_pixel_size.minimum(), self.sl_pixel_size.maximum())
+        self.sb_pixel_size.setRange(
+            self.sl_pixel_size.minimum(), self.sl_pixel_size.maximum()
+        )
         self.sb_pixel_size.setValue(self.sl_pixel_size.value())
 
         self.sl_pixel_size.sliderMoved.connect(self.sb_pixel_size.setValue)
@@ -101,7 +109,7 @@ class MainWindow(Qt.QWidget):
         layout_button.addWidget(self.cb_draw_margin)
 
         layout_button_2 = Qt.QHBoxLayout()
-        layout_button_2.addWidget(Qt.QLabel('Pixel size:'))
+        layout_button_2.addWidget(Qt.QLabel("Pixel size:"))
         layout_button_2.addWidget(self.sl_pixel_size)
         layout_button_2.addWidget(self.sb_pixel_size)
 
@@ -119,12 +127,14 @@ class MainWindow(Qt.QWidget):
 
     def load(self):
         image_filters = "Images (*.jpg *.jpeg *.png *.bmp)"
-        self.file_name = Qt.QFileDialog.getOpenFileName(self, "Load image", self.last_load_path, image_filters)[0]
+        self.file_name = Qt.QFileDialog.getOpenFileName(
+            self, "Load image", self.last_load_path, image_filters
+        )[0]
         if not self.file_name:
             return
 
         self.last_load_path = Qt.QFileInfo(self.file_name).absolutePath()
-        self.image_source = Image.open(self.file_name).convert('RGB')
+        self.image_source = Image.open(self.file_name).convert("RGB")
 
         self._do_pixelate()
 
@@ -132,9 +142,11 @@ class MainWindow(Qt.QWidget):
         image_filters = "Images (*.jpg *.jpeg *.png *.bmp)"
 
         # C:\Images\img.png -> C:\Images\img_pixelate.png
-        file_name = '_pixelate'.join(os.path.splitext(self.file_name))
+        file_name = "_pixelate".join(os.path.splitext(self.file_name))
 
-        file_name = Qt.QFileDialog.getSaveFileName(self, "Save as image", file_name, image_filters)[0]
+        file_name = Qt.QFileDialog.getSaveFileName(
+            self, "Save as image", file_name, image_filters
+        )[0]
         if not file_name:
             return
 
@@ -165,11 +177,15 @@ class MainWindow(Qt.QWidget):
         image_result = image_result.toqpixmap()
 
         size = self.lb_image_view.size()
-        pixmap = image_result.scaled(size, Qt.Qt.KeepAspectRatio, Qt.Qt.SmoothTransformation)
+        pixmap = image_result.scaled(
+            size, Qt.Qt.KeepAspectRatio, Qt.Qt.SmoothTransformation
+        )
         self.lb_image_view.setPixmap(pixmap)
 
         height, width = self.image_source.size
-        title = WINDOW_TITLE + '. {}x{} ({}x{}). {}'.format(width, height, size.width(), size.height(), self.file_name)
+        title = WINDOW_TITLE + ". {}x{} ({}x{}). {}".format(
+            width, height, size.width(), size.height(), self.file_name
+        )
         self.setWindowTitle(title)
 
     def resizeEvent(self, e):
@@ -178,7 +194,7 @@ class MainWindow(Qt.QWidget):
         self.show_result()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = Qt.QApplication([])
 
     mw = MainWindow()
