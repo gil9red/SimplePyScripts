@@ -1,35 +1,38 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import logging
+import sys
+import time
+
+# OpenCv -- for performance
+# pip install opencv-python
+#
+# pip install pyautogui
+import pyautogui
 
 
 def go():
-    OPEN_SMILE_MENU = 'elements/open_smile_menu.png'
-    GROUP_SMILE = 'elements/group_smile.png'
-    CLICK_SMILE = 'elements/click_smile.png'
-    SEND = 'elements/send.png'
+    OPEN_SMILE_MENU = "elements/open_smile_menu.png"
+    GROUP_SMILE = "elements/group_smile.png"
+    CLICK_SMILE = "elements/click_smile.png"
+    SEND = "elements/send.png"
 
     def get_logger():
-        import logging
-        log = logging.getLogger('telegram_smile_clicker')
+        log = logging.getLogger("telegram_smile_clicker")
         log.setLevel(logging.DEBUG)
 
-        import sys
         sh = logging.StreamHandler(stream=sys.stdout)
-        sh.setFormatter(logging.Formatter('[%(asctime)s] %(message)s'))
+        sh.setFormatter(logging.Formatter("[%(asctime)s] %(message)s"))
         log.addHandler(sh)
 
         return log
 
     log = get_logger()
-    log_it = lambda pos, filename: log.debug('{} [{}]'.format(pos, filename))
-
-    # OpenCv -- for performance
-    # pip install opencv-python
-
-    # pip install pyautogui
-    import pyautogui
+    log_it = lambda pos, filename: log.debug("{} [{}]".format(pos, filename))
 
     # Ищем меню с смайлами
     pos = pyautogui.locateCenterOnScreen(OPEN_SMILE_MENU)
@@ -41,7 +44,6 @@ def go():
     pyautogui.moveTo(pos)
 
     # Ожидаем
-    import time
     time.sleep(1)
 
     # Ищем наш смайл в меню
@@ -80,7 +82,7 @@ def go():
     pyautogui.click(pos)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # import profile
     # profile.run('go()')
 
