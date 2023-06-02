@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import os
+
+from multiprocessing import Process
 
 from PyQt5.QtCore import QCoreApplication, QUrl, QTimer
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
-import os
 
 
 def play(file_name: str):
@@ -40,19 +43,20 @@ def play_async(file_name: str):
     # thread = Thread(target=play, args=(file_name,))
     # thread.start()
 
-    from multiprocessing import Process
     process = Process(target=play, args=(file_name,))
     process.start()
 
 
-if __name__ == '__main__':
-    file_name = r'..\speak\play_mp3\speak_male.mp3'
-
+if __name__ == "__main__":
+    file_name = r"..\speak\play_mp3\speak_male.mp3"
     play(file_name)
 
     import time
+
     play_async(file_name)
     time.sleep(0.2)
+
     play_async(file_name)
     time.sleep(0.2)
+
     play_async(file_name)
