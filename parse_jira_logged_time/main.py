@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import re
@@ -10,7 +10,6 @@ import sys
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Tuple
 
 import requests
 from bs4 import BeautifulSoup
@@ -22,13 +21,13 @@ from logged_human_time_to_seconds import logged_human_time_to_seconds
 from seconds_to_str import seconds_to_str
 
 
-URL = 'https://helpdesk.compassluxe.com/activity?maxResults=100&streams=user+IS+ipetrash&os_authType=basic&title=undefined'
+URL = "https://helpdesk.compassluxe.com/activity?maxResults=100&streams=user+IS+ipetrash&os_authType=basic&title=undefined"
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0',
+    "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0",
 }
 
 # NOTE: Get <PEM_FILE_NAME>: openssl pkcs12 -nodes -out ipetrash.pem -in ipetrash.p12
-PEM_FILE_NAME = str(DIR / 'ipetrash.pem')
+PEM_FILE_NAME = str(DIR / "ipetrash.pem")
 
 
 # SOURCE: https://stackoverflow.com/a/13287083/5909792
@@ -42,10 +41,10 @@ def get_rss_jira_log() -> bytes:
     return rs.content
 
 
-def get_logged_dict(root) -> Dict[str, List[Dict]]:
+def get_logged_dict(root) -> dict[str, list[dict]]:
     logged_dict = defaultdict(list)
 
-    for entry in root.select('entry'):
+    for entry in root.select("entry"):
         # Ищем в <entry> строку с логированием
         match = re.search("logged '(.+?)'", entry.text, flags=re.IGNORECASE)
         if not match:
@@ -63,45 +62,51 @@ def get_logged_dict(root) -> Dict[str, List[Dict]]:
         entry_dt = utc_to_local(entry_dt)
 
         entry_date = entry_dt.date()
-        date_str = entry_date.strftime('%d/%m/%Y')
+        date_str = entry_date.strftime("%d/%m/%Y")
 
         logged_dict[date_str].append({
-            'date_time': entry_dt.strftime('%d/%m/%Y %H:%M:%S'),
-            'date': entry_dt.strftime('%d/%m/%Y'),
-            'time': entry_dt.strftime('%H:%M:%S'),
-            'logged_human_time': logged_human_time,
-            'logged_seconds': logged_seconds,
-            'jira_id': jira_id,
-            'jira_title': jira_title,
+            "date_time": entry_dt.strftime("%d/%m/%Y %H:%M:%S"),
+            "date": entry_dt.strftime("%d/%m/%Y"),
+            "time": entry_dt.strftime("%H:%M:%S"),
+            "logged_human_time": logged_human_time,
+            "logged_seconds": logged_seconds,
+            "jira_id": jira_id,
+            "jira_title": jira_title,
         })
 
     return logged_dict
 
 
-def parse_logged_dict(xml_data: bytes) -> Dict[str, List[Dict]]:
+def parse_logged_dict(xml_data: bytes) -> dict[str, list[dict]]:
     # Структура документа -- xml
-    root = BeautifulSoup(xml_data, 'xml')
+    root = BeautifulSoup(xml_data, "xml")
 
     return get_logged_dict(root)
 
 
-def get_sorted_logged(date_str_by_logged_list: Dict, reverse=True) -> List[Tuple[str, List[Dict]]]:
+def get_sorted_logged(
+    date_str_by_logged_list: dict, reverse=True
+) -> list[tuple[str, list[dict]]]:
     sorted_items = date_str_by_logged_list.items()
-    sorted_items = sorted(sorted_items, key=lambda x: datetime.strptime(x[0], '%d/%m/%Y'), reverse=reverse)
+    sorted_items = sorted(
+        sorted_items, key=lambda x: datetime.strptime(x[0], "%d/%m/%Y"), reverse=reverse
+    )
 
     return list(sorted_items)
 
 
-def get_logged_list_by_now_utc_date(date_str_by_entry_logged_list: Dict[str, List[Dict]]) -> List[Dict]:
-    current_utc_date_str = datetime.utcnow().strftime('%d/%m/%Y')
+def get_logged_list_by_now_utc_date(
+    date_str_by_entry_logged_list: dict[str, list[dict]]
+) -> list[dict]:
+    current_utc_date_str = datetime.utcnow().strftime("%d/%m/%Y")
     return date_str_by_entry_logged_list.get(current_utc_date_str, [])
 
 
-def get_logged_total_seconds(entry_logged_list: List[Dict]) -> int:
-    return sum(entry['logged_seconds'] for entry in entry_logged_list)
+def get_logged_total_seconds(entry_logged_list: list[dict]) -> int:
+    return sum(entry["logged_seconds"] for entry in entry_logged_list)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     xml_data = get_rss_jira_log()
     print(len(xml_data), repr(xml_data[:50]))
 
@@ -118,9 +123,9 @@ if __name__ == '__main__':
 
     logged_list = get_logged_list_by_now_utc_date(logged_dict)
     logged_total_seconds = get_logged_total_seconds(logged_list)
-    print('entry_logged_list:', logged_list)
-    print('today seconds:', logged_total_seconds)
-    print('today time:', seconds_to_str(logged_total_seconds))
+    print("entry_logged_list:", logged_list)
+    print("today seconds:", logged_total_seconds)
+    print("today time:", seconds_to_str(logged_total_seconds))
     print()
 
     # Для красоты выводим результат в табличном виде
@@ -133,7 +138,7 @@ if __name__ == '__main__':
     max_len_columns = [max(map(len, map(str, col))) for col in zip(*lines)]
 
     # Создание строки форматирования: [30, 14, 5] -> "{:<30} | {:<14} | {:<5}"
-    my_table_format = ' | '.join('{:<%s}' % max_len for max_len in max_len_columns)
+    my_table_format = " | ".join("{:<%s}" % max_len for max_len in max_len_columns)
 
     for line in lines:
         print(my_table_format.format(*line))

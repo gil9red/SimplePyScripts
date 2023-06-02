@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import json
@@ -14,23 +14,48 @@ from contextlib import redirect_stdout
 from datetime import datetime
 
 from PyQt5.Qt import (
-    QApplication, QMessageBox, QThread, pyqtSignal, QMainWindow, QPushButton, QCheckBox, QPlainTextEdit,
-    QVBoxLayout, QHBoxLayout, QTextOption, QTableWidget, QWidget, QSizePolicy, QSplitter, Qt, QTableWidgetItem,
-    QProgressDialog, QHeaderView, QSystemTrayIcon, QIcon, QEvent, QTimer
+    QApplication,
+    QMessageBox,
+    QThread,
+    pyqtSignal,
+    QMainWindow,
+    QPushButton,
+    QCheckBox,
+    QPlainTextEdit,
+    QVBoxLayout,
+    QHBoxLayout,
+    QTextOption,
+    QTableWidget,
+    QWidget,
+    QSizePolicy,
+    QSplitter,
+    Qt,
+    QTableWidgetItem,
+    QProgressDialog,
+    QHeaderView,
+    QSystemTrayIcon,
+    QIcon,
+    QEvent,
+    QTimer,
 )
 
 from main import (
-    DIR, get_rss_jira_log, parse_logged_dict, get_logged_list_by_now_utc_date, get_logged_total_seconds,
-    get_sorted_logged, seconds_to_str
+    DIR,
+    get_rss_jira_log,
+    parse_logged_dict,
+    get_logged_list_by_now_utc_date,
+    get_logged_total_seconds,
+    get_sorted_logged,
+    seconds_to_str,
 )
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = f'{ex_cls.__name__}: {ex}:\n'
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
@@ -49,7 +74,7 @@ class RunFuncThread(QThread):
         self.run_finished.emit(self.func())
 
 
-WINDOW_TITLE = 'parse_jira_logged_time'
+WINDOW_TITLE = "parse_jira_logged_time"
 
 
 class MainWindow(QMainWindow):
@@ -58,7 +83,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle(WINDOW_TITLE)
 
-        file_name = str(DIR / 'favicon.ico')
+        file_name = str(DIR / "favicon.ico")
         icon = QIcon(file_name)
 
         self.setWindowIcon(icon)
@@ -70,7 +95,7 @@ class MainWindow(QMainWindow):
 
         self.logged_dict = dict()
 
-        self.pb_refresh = QPushButton('REFRESH')
+        self.pb_refresh = QPushButton("REFRESH")
         self.pb_refresh.clicked.connect(self.refresh)
 
         self.cb_show_log = QCheckBox()
@@ -80,13 +105,13 @@ class MainWindow(QMainWindow):
         self.log.setReadOnly(True)
         self.log.setWordWrapMode(QTextOption.NoWrap)
         log_font = self.log.font()
-        log_font.setFamily('Courier New')
+        log_font.setFamily("Courier New")
         self.log.setFont(log_font)
 
         self.cb_show_log.clicked.connect(self.log.setVisible)
         self.log.setVisible(self.cb_show_log.isChecked())
 
-        header_labels = ['DATE', 'TOTAL LOGGED TIME']
+        header_labels = ["DATE", "TOTAL LOGGED TIME"]
         self.table_logged = QTableWidget()
         self.table_logged.setEditTriggers(QTableWidget.NoEditTriggers)
         self.table_logged.setSelectionBehavior(QTableWidget.SelectRows)
@@ -96,16 +121,20 @@ class MainWindow(QMainWindow):
         self.table_logged.horizontalHeader().setStretchLastSection(True)
         self.table_logged.itemClicked.connect(self._on_table_logged_item_clicked)
 
-        header_labels = ['TIME', 'LOGGED', 'JIRA']
+        header_labels = ["TIME", "LOGGED", "JIRA"]
         self.table_logged_info = QTableWidget()
         self.table_logged_info.setEditTriggers(QTableWidget.NoEditTriggers)
         self.table_logged_info.setSelectionBehavior(QTableWidget.SelectRows)
         self.table_logged_info.setSelectionMode(QTableWidget.SingleSelection)
         self.table_logged_info.setColumnCount(len(header_labels))
         self.table_logged_info.setHorizontalHeaderLabels(header_labels)
-        self.table_logged_info.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
+        self.table_logged_info.horizontalHeader().setSectionResizeMode(
+            1, QHeaderView.ResizeToContents
+        )
         self.table_logged_info.horizontalHeader().setStretchLastSection(True)
-        self.table_logged_info.itemDoubleClicked.connect(self._on_table_logged_info_item_double_clicked)
+        self.table_logged_info.itemDoubleClicked.connect(
+            self._on_table_logged_info_item_double_clicked
+        )
 
         main_layout = QVBoxLayout()
 
@@ -114,7 +143,9 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(central_widget)
 
-        self.pb_refresh.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred))
+        self.pb_refresh.setSizePolicy(
+            QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        )
 
         h_layout = QHBoxLayout()
         h_layout.addWidget(self.pb_refresh)
@@ -155,9 +186,9 @@ class MainWindow(QMainWindow):
 
                 logged_total_seconds = get_logged_total_seconds(logged_list)
                 logged_total_seconds_str = seconds_to_str(logged_total_seconds)
-                print('entry_logged_list:', logged_list)
-                print('today seconds:', logged_total_seconds)
-                print('today time:', logged_total_seconds_str)
+                print("entry_logged_list:", logged_list)
+                print("today seconds:", logged_total_seconds)
+                print("today time:", logged_total_seconds_str)
                 print()
 
                 # Для красоты выводим результат в табличном виде
@@ -167,7 +198,9 @@ class MainWindow(QMainWindow):
                 while self.table_logged.rowCount():
                     self.table_logged.removeRow(0)
 
-                for i, (date_str, logged_list) in enumerate(get_sorted_logged(self.logged_dict)):
+                for i, (date_str, logged_list) in enumerate(
+                    get_sorted_logged(self.logged_dict)
+                ):
                     total_seconds = get_logged_total_seconds(logged_list)
                     total_seconds_str = seconds_to_str(total_seconds)
                     row = date_str, total_seconds_str, total_seconds
@@ -178,7 +211,7 @@ class MainWindow(QMainWindow):
                     self.table_logged.setItem(i, 0, QTableWidgetItem(date_str))
 
                     item = QTableWidgetItem(total_seconds_str)
-                    item.setToolTip('Total seconds: {}'.format(total_seconds))
+                    item.setToolTip("Total seconds: {}".format(total_seconds))
                     self.table_logged.setItem(i, 1, item)
 
                 self.table_logged.setCurrentCell(0, 0)
@@ -189,7 +222,9 @@ class MainWindow(QMainWindow):
                 max_len_columns = [max(map(len, map(str, col))) for col in zip(*lines)]
 
                 # Создание строки форматирования: [30, 14, 5] -> "{:<30} | {:<14} | {:<5}"
-                my_table_format = ' | '.join('{:<%s}' % max_len for max_len in max_len_columns)
+                my_table_format = " | ".join(
+                    "{:<%s}" % max_len for max_len in max_len_columns
+                )
 
                 for line in lines:
                     print(my_table_format.format(*line))
@@ -208,12 +243,16 @@ class MainWindow(QMainWindow):
         thread.run_finished.connect(progress_dialog.close)
         thread.start()
 
-        progress_dialog.setWindowTitle('Please wait...')
+        progress_dialog.setWindowTitle("Please wait...")
         progress_dialog.setLabelText(progress_dialog.windowTitle())
         progress_dialog.setRange(0, 0)
         progress_dialog.exec()
 
-        self.setWindowTitle(WINDOW_TITLE + ". Last refresh date: " + datetime.now().strftime('%d/%m/%Y %H:%M:%S'))
+        self.setWindowTitle(
+            WINDOW_TITLE
+            + ". Last refresh date: "
+            + datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        )
 
     def _on_table_logged_item_clicked(self, item: QTableWidgetItem):
         # Удаление строк таблицы
@@ -228,18 +267,20 @@ class MainWindow(QMainWindow):
         for i, logged in enumerate(logged_list):
             self.table_logged_info.setRowCount(self.table_logged_info.rowCount() + 1)
 
-            self.table_logged_info.setItem(i, 0, QTableWidgetItem(logged['time']))
-            self.table_logged_info.setItem(i, 1, QTableWidgetItem(logged['logged_human_time']))
+            self.table_logged_info.setItem(i, 0, QTableWidgetItem(logged["time"]))
+            self.table_logged_info.setItem(
+                i, 1, QTableWidgetItem(logged["logged_human_time"])
+            )
 
-            item = QTableWidgetItem(logged['jira_id'])
-            item.setToolTip(logged['jira_title'])
+            item = QTableWidgetItem(logged["jira_id"])
+            item.setToolTip(logged["jira_title"])
             self.table_logged_info.setItem(i, 2, item)
 
     def _on_table_logged_info_item_double_clicked(self, item: QTableWidgetItem):
         row = item.row()
         jira_id = self.table_logged_info.item(row, 2).text()
 
-        url = 'https://helpdesk.compassluxe.com/browse/' + jira_id
+        url = "https://helpdesk.compassluxe.com/browse/" + jira_id
         webbrowser.open(url)
 
     def _on_tray_activated(self, reason):
@@ -257,7 +298,7 @@ class MainWindow(QMainWindow):
                 QTimer.singleShot(0, self.hide)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
