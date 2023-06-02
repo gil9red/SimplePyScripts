@@ -7,6 +7,9 @@ __author__ = "ipetrash"
 # pip install psutil
 import psutil
 
+# pip install tabulate
+from tabulate import tabulate
+
 
 net_interface_list = list(psutil.net_io_counters(pernic=True).items())
 print(f"Net interface list ({len(net_interface_list)}):")
@@ -25,7 +28,4 @@ if net_interface_list:
     headers = [header.upper() for header in headers]
 
     rows = [(interface,) + tuple(info) for interface, info in net_interface_list]
-
-    # pip install tabulate
-    from tabulate import tabulate
     print(tabulate(rows, headers=headers, tablefmt="grid"))
