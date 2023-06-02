@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -11,7 +11,7 @@ import json
 from peewee import *
 
 
-db = SqliteDatabase('persons.sqlite', pragmas={'foreign_keys': 1})
+db = SqliteDatabase("persons.sqlite", pragmas={"foreign_keys": 1})
 
 
 class BaseModel(Model):
@@ -25,7 +25,7 @@ class Person(BaseModel):
 
 
 class Pet(BaseModel):
-    owner = ForeignKeyField(Person, backref='pets')
+    owner = ForeignKeyField(Person, backref="pets")
     name = CharField()
     animal_type = CharField()
 
@@ -33,19 +33,21 @@ class Pet(BaseModel):
 db.connect()
 db.create_tables([Person, Pet])
 
-for person_data in json.load(open('persons.json', encoding='utf-8')):
-    birthday = DT.datetime.strptime(person_data['birthday'], '%Y-%M-%d')
-    person, _ = Person.get_or_create(name=person_data['name'], birthday=birthday)
+for person_data in json.load(open("persons.json", encoding="utf-8")):
+    birthday = DT.datetime.strptime(person_data["birthday"], "%Y-%M-%d")
+    person, _ = Person.get_or_create(name=person_data["name"], birthday=birthday)
 
-    for pet in person_data['pets']:
-        Pet.get_or_create(owner=person, name=pet['name'], animal_type=pet['animal_type'])
+    for pet in person_data["pets"]:
+        Pet.get_or_create(
+            owner=person, name=pet["name"], animal_type=pet["animal_type"]
+        )
 
 
 for person in Person.select():
-    print(f'{person.name} ({person.birthday}). Pets: {person.pets.count()}')
+    print(f"{person.name} ({person.birthday}). Pets: {person.pets.count()}")
 
     for pet in person.pets:
-        print(f'    {pet.name} ({pet.animal_type}). Owner: {pet.owner.name}')
+        print(f"    {pet.name} ({pet.animal_type}). Owner: {pet.owner.name}")
 
     print()
 

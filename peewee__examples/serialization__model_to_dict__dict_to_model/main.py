@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -12,7 +12,7 @@ from peewee import *
 from playhouse.shortcuts import model_to_dict, dict_to_model
 
 
-db = SqliteDatabase(':memory:', pragmas={'foreign_keys': 1})
+db = SqliteDatabase(":memory:", pragmas={"foreign_keys": 1})
 
 
 class BaseModel(Model):
@@ -25,26 +25,28 @@ class Person(BaseModel):
     birthday = DateField()
 
     def __str__(self):
-        return f'Person(id={self.id} name={self.name!r} birthday={self.birthday} ' \
-               f'pets={", ".join(p.name for p in self.pets)!r})'
+        return (
+            f"Person(id={self.id} name={self.name!r} birthday={self.birthday} "
+            f'pets={", ".join(p.name for p in self.pets)!r})'
+        )
 
 
 class Pet(BaseModel):
-    owner = ForeignKeyField(Person, backref='pets')
+    owner = ForeignKeyField(Person, backref="pets")
     name = CharField()
     animal_type = CharField()
 
     def __str__(self):
-        return f'Pet(id={self.id} name={self.name!r} owner={self.owner.name!r} self.animal_type={self.animal_type!r})'
+        return f"Pet(id={self.id} name={self.name!r} owner={self.owner.name!r} self.animal_type={self.animal_type!r})"
 
 
 db.connect()
 db.create_tables([Person, Pet])
 
-person = Person.create(name='Ivan', birthday=DT.date.today())
+person = Person.create(name="Ivan", birthday=DT.date.today())
 
-Pet.create(owner=person, name='Oval', animal_type='Dog')
-Pet.create(owner=person, name='Bortik', animal_type='Cat')
+Pet.create(owner=person, name="Oval", animal_type="Dog")
+Pet.create(owner=person, name="Bortik", animal_type="Cat")
 
 print(person)
 # Person(id=1 name='Ivan' birthday=2020-01-09 pets='Oval, Bortik')
@@ -63,7 +65,7 @@ print(type(data_backrefs_true), data_backrefs_true)
 print()
 
 # Create another database and import this
-db = SqliteDatabase('persons.sqlite', pragmas={'foreign_keys': 1})
+db = SqliteDatabase("persons.sqlite", pragmas={"foreign_keys": 1})
 Person._meta.database = db
 Pet._meta.database = db
 db.connect()
