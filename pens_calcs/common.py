@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # http://www.pfrf.ru/thm/common/mod/pensCalc/js/params.js
@@ -45,7 +45,7 @@ SPKop = {
     7: 1.74,
     8: 1.9,
     9: 2.09,
-    10: 2.32
+    10: 2.32,
 }
 
 VSkoef = 1.8  # Коэффициент за 1 год военной службы

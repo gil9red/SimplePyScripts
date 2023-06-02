@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import common
@@ -21,8 +21,10 @@ def number_of_pension_points_for_year(zp: float) -> float:
 
     # Зарплата меньше мрот
     if zp < common.MROT:
-        raise Exception('Ошибка! Введите зарплату выше, чем минимальный размер оплаты труда в '
-                        'Российской Федерации в 2017 году - 7 500 рублей')
+        raise Exception(
+            "Ошибка! Введите зарплату выше, чем минимальный размер оплаты труда в "
+            "Российской Федерации в 2017 году - 7 500 рублей"
+        )
 
     kpk_trud = zp / common.ZPM * 10
     if kpk_trud > 8.26:
@@ -31,7 +33,7 @@ def number_of_pension_points_for_year(zp: float) -> float:
     return round(kpk_trud * 100) / 100
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Сколько пенсионных баллов может быть начислено Вам за 2017 год?
     #
     # Введите размер Вашей ежемесячной заработной платы до вычета НДФЛ:
