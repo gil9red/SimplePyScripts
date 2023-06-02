@@ -1,23 +1,32 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://habrahabr.ru/post/346146/
 
 
-# pip install pyautogui
-import pyautogui
-from graphics import GraphWin, Circle, Point, Entry, color_rgb
 import time
 
-win = GraphWin("pipetka", 200, 200, autoflush=True)  # создаем графическую форму размером 200х200 и элементы на ней
+# pip install pyautogui
+import pyautogui
+
+from graphics import GraphWin, Circle, Point, Entry, color_rgb
+
+
+# Создаем графическую форму размером 200х200 и элементы на ней
+win = GraphWin(
+    "pipetka", 200, 200, autoflush=True
+)
 x, y = pyautogui.position()  # получаем в x, y координаты мыши
 r, g, b = pyautogui.pixel(x, y)  # получаем в r, g, b цвет
 
 ColorDot = Circle(Point(100, 100), 25)  # создаем точку, отображающую цвет
-ColorDot.setFill(color_rgb(r, g, b))  # устанавливает ей заливку из ранее полученных цветов
+# Устанавливает ей заливку из ранее полученных цветов
+ColorDot.setFill(
+    color_rgb(r, g, b)
+)
 ColorDot.draw(win)  # рисуем на форме win
 
 RGBtext = Entry(Point(win.getWidth() / 2, 25), 10)  # создаем RGB вывод
@@ -37,7 +46,7 @@ while True:  # цикл перереисовки формы
     ColorDot.setFill(color_rgb(r, g, b))  # Обновляем цвет
     RGBtext.setText(pyautogui.pixel(x, y))  # Обновляем RGB
     RGBstring.setText(color_rgb(r, g, b))  # Обновляем web цвет
-    Coordstring.setText('{} x {}'.format(x, y))  # Обновляем координаты
+    Coordstring.setText("{} x {}".format(x, y))  # Обновляем координаты
 
     if win.isClosed():
         break
