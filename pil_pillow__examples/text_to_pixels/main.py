@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PIL import Image, ImageDraw
@@ -46,7 +46,7 @@ for s in range(2, 1000):
         img_size = s
         break
 
-assert img_size != -1, "Неудалось подобрать размер изображения"
+assert img_size != -1, "Не удалось подобрать размер изображения"
 
 image = Image.new("RGBA", (img_size, img_size), (0, 0, 0, 0))
 draw = ImageDraw.Draw(image)
@@ -61,4 +61,4 @@ for y in range(img_size):
         color = colors[pos]
         draw.point((x, y), fill=(color, 255, 255))
 
-image.save('result.png')
+image.save("result.png")
