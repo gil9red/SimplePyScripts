@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import json
+import pandas as pd
 
 
 json_str = """\
@@ -67,10 +71,9 @@ json_str = """\
 }
 """
 
-import json
 data = json.loads(json_str)
 
 # SOURCE: https://ru.stackoverflow.com/questions/671333
-import pandas as pd
-df = pd.DataFrame(data['d']['Items'])
-df.set_index('CouponCode')['TotalPrizeValue'].reset_index().to_excel('result.xlsx')
+
+df = pd.DataFrame(data["d"]["Items"])
+df.set_index("CouponCode")["TotalPrizeValue"].reset_index().to_excel("result.xlsx")

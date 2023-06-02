@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from PyQt5.QtWidgets import *
+import pandas as pd
 
 
 def generate_test_data():
     records = [
-        (1, 'Vasya', 16),
-        (2, 'Vasya2', 18),
-        (3, 'Vasya3', 34),
-        (4, 'Vasya4', 10),
-        (5, 'Vasya5', 19),
+        (1, "Vasya", 16),
+        (2, "Vasya2", 18),
+        (3, "Vasya3", 34),
+        (4, "Vasya4", 10),
+        (5, "Vasya5", 19),
     ]
-
-    import pandas as pd
-    return pd.DataFrame(data=records, columns=['ID', 'NAME', 'AGE'])
+    return pd.DataFrame(data=records, columns=["ID", "NAME", "AGE"])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    from PyQt5.QtWidgets import *
+
     # Подготовка данных
     df = generate_test_data()
     headers = df.columns.values.tolist()
