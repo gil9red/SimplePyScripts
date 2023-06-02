@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install Pillow
@@ -21,7 +21,7 @@ def get_pixel_array(img, rgb_hex=False):
             r, g, b = img.getpixel((x, y))
 
             if rgb_hex:
-                value = '{:02X}{:02X}{:02X}'.format(r, g, b)
+                value = "{:02X}{:02X}{:02X}".format(r, g, b)
                 row.append(value)
             else:
                 row.append((r, g, b))
@@ -29,16 +29,16 @@ def get_pixel_array(img, rgb_hex=False):
     return pixels
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     img = Image.open("input.jpg")
     print(img)
     print()
 
     pixels = get_pixel_array(img)
-    print('Rows: {}, cols: {}'.format(len(pixels), len(pixels[0])))
+    print("Rows: {}, cols: {}".format(len(pixels), len(pixels[0])))
     print([pixels[0][i] for i in range(2)])  # [(7, 7, 7), (23, 23, 23)]
     print()
 
     pixels = get_pixel_array(img, rgb_hex=True)
-    print('Rows: {}, cols: {}'.format(len(pixels), len(pixels[0])))
+    print("Rows: {}, cols: {}".format(len(pixels), len(pixels[0])))
     print([pixels[0][i] for i in range(2)])  # ['070707', '171717']
