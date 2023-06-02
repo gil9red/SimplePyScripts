@@ -69,7 +69,7 @@ class HttpProcessor(BaseHTTPRequestHandler):
             )
 
         text = (
-        """
+            """
         <!DOCTYPE html>
         <html lang="ru">
         <head>
