@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -31,7 +31,9 @@ class ThreadOpenCV(QThread):
                 rgbImage = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 h, w, ch = rgbImage.shape
                 bytesPerLine = ch * w
-                convertToQtFormat = QImage(rgbImage.data, w, h, bytesPerLine, QImage.Format_RGB888)
+                convertToQtFormat = QImage(
+                    rgbImage.data, w, h, bytesPerLine, QImage.Format_RGB888
+                )
                 p = convertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
                 self.changePixmap.emit(p)
 
@@ -45,7 +47,7 @@ class Widget(QWidget):
         self.label_video = QLabel()
         self.label_video.setMinimumSize(600, 480)
 
-        self.pb_play = QPushButton('Play')
+        self.pb_play = QPushButton("Play")
         self.pb_play.clicked.connect(self.playVideo)
 
         self.thread = ThreadOpenCV("video.mp4")
@@ -64,7 +66,7 @@ class Widget(QWidget):
         self.label_video.setPixmap(QPixmap.fromImage(image))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     mw = Widget()

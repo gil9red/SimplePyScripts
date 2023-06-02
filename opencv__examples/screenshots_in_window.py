@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://ru.stackoverflow.com/questions/926556/
 
 
 import threading
+
 import cv2
 import numpy as np
+
 from PIL import ImageGrab
 
 
@@ -28,7 +30,7 @@ def go():
                 break
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     thread = threading.Thread(target=go)
     thread.start()
 
