@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import os
+import pyglet
 
 
 # # SIMPLE EXAMPLE
@@ -12,9 +16,7 @@ __author__ = 'ipetrash'
 
 
 def play(file_name):
-    import pyglet
-    import os
-    dll_file_name = os.path.join(os.path.dirname(__file__), 'avbin')
+    dll_file_name = os.path.join(os.path.dirname(__file__), "avbin")
     pyglet.lib.load_library(dll_file_name)
 
     player = pyglet.media.Player()
@@ -35,5 +37,5 @@ def play(file_name):
     pyglet.app.run()
 
 
-if __name__ == '__main__':
-    play(r'speak.mp3')
+if __name__ == "__main__":
+    play(r"speak.mp3")
