@@ -2,18 +2,16 @@
 # -*- coding: utf-8 -*-
 
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-import typing
+import re
 
 
-def get_cache_object_info(file_name) -> typing.Dict[str, typing.Dict[str, int]]:
+def get_cache_object_info(file_name) -> dict[str, dict[str, int]]:
     # new_object: Tran[180409000010273756]
     # existing_object: Hold[13708]
-
-    import re
-    pattern_object = re.compile('^(\w+_object): (.+)\[.+$')
+    pattern_object = re.compile(r"^(\w+_object): (.+)\[.+$")
 
     object_by_number = dict()
 
@@ -34,10 +32,14 @@ def get_cache_object_info(file_name) -> typing.Dict[str, typing.Dict[str, int]]:
     return object_by_number
 
 
-def get_cache_existing_object_list(file_name, top_values=None) -> typing.List[typing.Tuple[str, int]]:
+def get_cache_existing_object_list(
+    file_name, top_values=None
+) -> list[tuple[str, int]]:
     object_by_number = get_cache_object_info(file_name)
 
-    existing_object_list = sorted(object_by_number['existing_object'].items(), key=lambda x: x[1], reverse=True)
+    existing_object_list = sorted(
+        object_by_number["existing_object"].items(), key=lambda x: x[1], reverse=True
+    )
     if top_values:
         existing_object_list = existing_object_list[:top_values]
 
@@ -45,13 +47,12 @@ def get_cache_existing_object_list(file_name, top_values=None) -> typing.List[ty
     return rows
 
 
-if __name__ == '__main__':
-    file_name = 'CacheContent_log.txt'
+if __name__ == "__main__":
+    file_name = "CacheContent_log.txt"
     print(file_name)
 
     rows = get_cache_existing_object_list(file_name, top_values=5)
 
     # pip install tabulate
     from tabulate import tabulate
-    print(tabulate(rows, headers=('NAME', 'NUMBER'), tablefmt="grid"))
-    print()
+    print(tabulate(rows, headers=("NAME", "NUMBER"), tablefmt="grid"))
