@@ -9,25 +9,20 @@ import sys
 
 from collections import defaultdict
 from datetime import datetime, timezone
-from pathlib import Path
 
-import requests
 from bs4 import BeautifulSoup
 
-DIR = Path(__file__).resolve().parent
+from common import ROOT_DIR
 
-sys.path.append(str(DIR.parent))
+sys.path.append(str(ROOT_DIR))
+from root_common import session
+
+sys.path.append(str(ROOT_DIR.parent))
 from logged_human_time_to_seconds import logged_human_time_to_seconds
 from seconds_to_str import seconds_to_str
 
 
 URL = "https://helpdesk.compassluxe.com/activity?maxResults=100&streams=user+IS+ipetrash&os_authType=basic&title=undefined"
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0",
-}
-
-# NOTE: Get <PEM_FILE_NAME>: openssl pkcs12 -nodes -out ipetrash.pem -in ipetrash.p12
-PEM_FILE_NAME = str(DIR / "ipetrash.pem")
 
 
 # SOURCE: https://stackoverflow.com/a/13287083/5909792
@@ -36,7 +31,7 @@ def utc_to_local(utc_dt: datetime) -> datetime:
 
 
 def get_rss_jira_log() -> bytes:
-    rs = requests.get(URL, headers=HEADERS, cert=PEM_FILE_NAME)
+    rs = session.get(URL)
     rs.raise_for_status()
     return rs.content
 

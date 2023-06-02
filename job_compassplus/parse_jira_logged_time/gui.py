@@ -39,8 +39,8 @@ from PyQt5.Qt import (
     QTimer,
 )
 
+from common import DIR
 from main import (
-    DIR,
     get_rss_jira_log,
     parse_logged_dict,
     get_logged_list_by_now_utc_date,
