@@ -1,14 +1,16 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 ## Example of using pipe module
+
 # https://github.com/JulienPalard/Pipe
 # ru: http://habrahabr.ru/post/117679/
 import pipe
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     print((i for i in range(10)) | pipe.as_list)  # tuple to list
-    print([i for i in range(10)] | pipe.as_tuple)   # list to tuple
-    print(((1,1), ('a', 2), (3, 'd')) | pipe.as_dict)  # tuple to dict
+    print([i for i in range(10)] | pipe.as_tuple)  # list to tuple
+    print(((1, 1), ("a", 2), (3, "d")) | pipe.as_dict)  # tuple to dict
 
     print()
     # list of even numbers
@@ -22,4 +24,4 @@ if __name__ == '__main__':
     def custom_add(x):
         return sum(x)
 
-    print([1,2,3,4] | custom_add)  # = 10
+    print([1, 2, 3, 4] | custom_add)  # = 10
