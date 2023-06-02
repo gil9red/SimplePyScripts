@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install Pillow
@@ -33,11 +33,11 @@ def draw_progress(image: Image, percent: int) -> Image:
     return image
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     image_file = "input.jpg"
     image = Image.open(image_file)
-    
+
     for percent in (5, 15, 75, 100):
         img = draw_progress(image, percent)
-        img.save(f'output/image_{percent}%.png')
+        img.save(f"output/image_{percent}%.png")
         img.show()
