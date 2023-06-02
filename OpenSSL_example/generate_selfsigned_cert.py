@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://stackoverflow.com/a/60804101/5909792
@@ -21,7 +21,7 @@ def cert_gen(
     serial_number=0,
     validity_end_in_seconds=10 * 365 * 24 * 60 * 60,
     key_file="key.pem",
-    cert_file="cert.pem"
+    cert_file="cert.pem",
 ):
     # Create a key pair
     k = crypto.PKey()
@@ -41,7 +41,7 @@ def cert_gen(
     cert.gmtime_adj_notAfter(validity_end_in_seconds)
     cert.set_issuer(cert.get_subject())
     cert.set_pubkey(k)
-    cert.sign(k, 'sha512')
+    cert.sign(k, "sha512")
 
     with open(cert_file, "wb") as f:
         f.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert))
@@ -50,5 +50,5 @@ def cert_gen(
         f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, k))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cert_gen()
