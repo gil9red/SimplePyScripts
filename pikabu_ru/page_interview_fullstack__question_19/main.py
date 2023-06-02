@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://pikabu.ru/page/interview/fullstack/
@@ -17,7 +17,8 @@ __author__ = 'ipetrash'
 # pip install Pillow
 from PIL import Image
 
-image = Image.open('154800137443598227.png')
+
+image = Image.open("154800137443598227.png")
 width, height = image.size
 pixel = image.load()
 
@@ -30,11 +31,11 @@ for y in range(height):
         # RGBa, alpha-канал нас не интересует, только RGB
         r, g, b, _ = pixel[x, y]
 
-        r = (r + s) & 0xff
-        g = (g - s) & 0xff
-        b = (b + s) & 0xff
+        r = (r + s) & 0xFF
+        g = (g - s) & 0xFF
+        b = (b + s) & 0xFF
 
         pixel[x, y] = r, g, b
 
 
-image.save('result.png')
+image.save("result.png")

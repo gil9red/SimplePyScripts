@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -20,17 +20,17 @@ from get_profile_rating import get_profile_rating
 from db import ProfileRating, db_create_backup
 
 
-URL = 'https://pikabu.ru/@RytsarSvezhego'
+URL = "https://pikabu.ru/@RytsarSvezhego"
 
 
 while True:
-    print(f'Started at {DT.datetime.now():%d/%m/%Y %H:%M:%S}\n')
+    print(f"Started at {DT.datetime.now():%d/%m/%Y %H:%M:%S}\n")
 
     db_create_backup()
 
     try:
         value = get_profile_rating(URL)
-        print(f'URL: {URL}\n     {value}\n')
+        print(f"URL: {URL}\n     {value}\n")
 
         ProfileRating.append(URL, value)
 
@@ -41,7 +41,7 @@ while True:
         tb = traceback.format_exc()
         print(tb)
 
-        print('Wait 15 minutes')
+        print("Wait 15 minutes")
         wait(minutes=15)
 
     print()

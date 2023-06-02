@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -12,7 +12,15 @@ from pathlib import Path
 from typing import Iterable, Type
 
 # pip install peewee
-from peewee import Model, SqliteDatabase, TextField, DateTimeField, IntegerField, CharField, ForeignKeyField
+from peewee import (
+    Model,
+    SqliteDatabase,
+    TextField,
+    DateTimeField,
+    IntegerField,
+    CharField,
+    ForeignKeyField,
+)
 
 DIR = Path(__file__).resolve().parent
 
@@ -21,21 +29,21 @@ from shorten import shorten
 
 
 # Absolute file name
-DB_FILE_NAME = str(DIR / 'db.sqlite')
-DIR_BACKUP = DIR / 'backup'
+DB_FILE_NAME = str(DIR / "db.sqlite")
+DIR_BACKUP = DIR / "backup"
 
 
 def db_create_backup(backup_dir=DIR_BACKUP):
     backup_dir.mkdir(parents=True, exist_ok=True)
 
-    file_name = str(DT.datetime.today().date()) + '.sqlite'
+    file_name = str(DT.datetime.today().date()) + ".sqlite"
     file_name = backup_dir / file_name
 
     shutil.copy(DB_FILE_NAME, file_name)
 
 
 # Ensure foreign-key constraints are enforced.
-db = SqliteDatabase(DB_FILE_NAME, pragmas={'foreign_keys': 1})
+db = SqliteDatabase(DB_FILE_NAME, pragmas={"foreign_keys": 1})
 
 
 class BaseModel(Model):
@@ -46,19 +54,19 @@ class BaseModel(Model):
     class Meta:
         database = db
 
-    def get_new(self) -> Type['BaseModel']:
+    def get_new(self) -> Type["BaseModel"]:
         return type(self).get(self._pk_expr())
 
     @classmethod
-    def get_first(cls) -> Type['BaseModel']:
+    def get_first(cls) -> Type["BaseModel"]:
         return cls.select().first()
 
     @classmethod
-    def get_last(cls) -> Type['BaseModel']:
+    def get_last(cls) -> Type["BaseModel"]:
         return cls.select().order_by(cls.id.desc()).first()
 
     @classmethod
-    def get_inherited_models(cls) -> list[Type['BaseModel']]:
+    def get_inherited_models(cls) -> list[Type["BaseModel"]]:
         return sorted(cls.__subclasses__(), key=lambda x: x.__name__)
 
     @classmethod
@@ -67,9 +75,9 @@ class BaseModel(Model):
         for sub_cls in cls.get_inherited_models():
             name = sub_cls.__name__
             count = sub_cls.select().count()
-            items.append(f'{name}: {count}')
+            items.append(f"{name}: {count}")
 
-        print(', '.join(items))
+        print(", ".join(items))
 
     @classmethod
     def count(cls, filters: Iterable = None) -> int:
@@ -88,13 +96,13 @@ class BaseModel(Model):
                     v = repr(shorten(v))
 
             elif isinstance(field, ForeignKeyField):
-                k = f'{k}_id'
+                k = f"{k}_id"
                 if v:
                     v = v.id
 
-            fields.append(f'{k}={v}')
+            fields.append(f"{k}={v}")
 
-        return self.__class__.__name__ + '(' + ', '.join(fields) + ')'
+        return self.__class__.__name__ + "(" + ", ".join(fields) + ")"
 
 
 class ProfileRating(BaseModel):
@@ -103,7 +111,7 @@ class ProfileRating(BaseModel):
     value = IntegerField()
 
     @classmethod
-    def append(cls, url: str, value: int) -> 'ProfileRating':
+    def append(cls, url: str, value: int) -> "ProfileRating":
         return cls.get_or_create(url=url, value=value)[0]
 
 
@@ -111,6 +119,6 @@ db.connect()
 db.create_tables(BaseModel.get_inherited_models())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     BaseModel.print_count_of_tables()
     print()
