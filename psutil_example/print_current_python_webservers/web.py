@@ -35,12 +35,14 @@ def _get_processes() -> list[dict[str, str | int]]:
             continue
 
         ports = sorted(set(c.laddr.port for c in connections))
-        processes.append({
-            "pid": proc.pid,
-            "name": proc.name(),
-            "path": " ".join(proc.cmdline()[1:]),
-            "ports": ", ".join(map(_port_to_tag_a, ports)),
-        })
+        processes.append(
+            {
+                "pid": proc.pid,
+                "name": proc.name(),
+                "path": " ".join(proc.cmdline()[1:]),
+                "ports": ", ".join(map(_port_to_tag_a, ports)),
+            }
+        )
 
     processes.sort(key=lambda p: int("".join(c for c in p["ports"] if c.isdigit())))
 

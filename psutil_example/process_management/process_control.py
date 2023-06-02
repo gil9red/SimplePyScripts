@@ -33,6 +33,7 @@ if __name__ == "__main__":
 
     print("Info:")
     from process_detail_info import print_info
+
     print_info(p.pid)
     print("\n")
 

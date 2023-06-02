@@ -30,12 +30,14 @@ def _get_processes() -> list:
                 continue
 
             ports = sorted(set(c.laddr.port for c in connections))
-            processes.append({
-                "pid": proc.pid,
-                "name": proc.name(),
-                "path": " ".join(os.path.normpath(x) for x in proc.cmdline()),
-                "ports": ", ".join(map(str, ports)),
-            })
+            processes.append(
+                {
+                    "pid": proc.pid,
+                    "name": proc.name(),
+                    "path": " ".join(os.path.normpath(x) for x in proc.cmdline()),
+                    "ports": ", ".join(map(str, ports)),
+                }
+            )
 
         except psutil.AccessDenied:
             pass
