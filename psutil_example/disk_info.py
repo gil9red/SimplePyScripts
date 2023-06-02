@@ -4,11 +4,11 @@
 __author__ = "ipetrash"
 
 
-# pip install psutil
-import psutil
-
 # pip install humanize
 from humanize import naturalsize as sizeof_fmt
+
+# pip install psutil
+import psutil
 
 # pip install tabulate
 from tabulate import tabulate
@@ -34,9 +34,7 @@ print(f"  {psutil.disk_io_counters()}")
 physical_drive_by_info = list(psutil.disk_io_counters(True).items())
 
 print()
-print(
-    f"Physical drive io (input/output) counters ({len(physical_drive_by_info)}):"
-)
+print(f"Physical drive io (input/output) counters ({len(physical_drive_by_info)}):")
 
 headers = ("drive",) + physical_drive_by_info[0][1]._fields
 headers = [header.upper() for header in headers]

@@ -70,6 +70,7 @@ class OnNewProcessHandler(Thread):
 
 
 if __name__ == "__main__":
+
     def print_listener(process_list):
         result = []
         for p in process_list:

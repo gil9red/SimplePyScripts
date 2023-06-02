@@ -4,6 +4,8 @@
 __author__ = "ipetrash"
 
 
+from datetime import datetime
+
 # pip install psutil
 import psutil
 
@@ -14,5 +16,4 @@ print()
 boot_time = psutil.boot_time()
 print("System boot time (timestamp):", boot_time)
 
-from datetime import datetime
 print("System boot time:", datetime.fromtimestamp(boot_time))

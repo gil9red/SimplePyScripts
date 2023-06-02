@@ -4,6 +4,9 @@
 __author__ = "ipetrash"
 
 
+# pip install tabulate
+from tabulate import tabulate
+
 # pip install psutil
 import psutil
 
@@ -37,9 +40,6 @@ if win_service_list:
         rows.append(row)
 
     headers = [header.upper() for header in headers]
-
-    # pip install tabulate
-    from tabulate import tabulate
     print(tabulate(rows, headers=headers, tablefmt="grid", showindex=True))
     print()
 
