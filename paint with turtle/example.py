@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import turtle
-turtle.color('red', 'yellow')
+
+
+turtle.color("red", "yellow")
 turtle.begin_fill()
 
 while True:
