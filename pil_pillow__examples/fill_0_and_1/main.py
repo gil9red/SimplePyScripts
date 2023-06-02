@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import itertools
@@ -10,7 +10,7 @@ import itertools
 from PIL import Image, ImageDraw, ImageFont
 
 
-img = Image.new('RGB', (500, 300), (255, 0, 0))
+img = Image.new("RGB", (500, 300), (255, 0, 0))
 width, height = img.size
 
 drawer = ImageDraw.Draw(img)
@@ -19,7 +19,8 @@ font = ImageFont.truetype("arial.ttf", 25)
 text_0, text_1 = "0", "1"
 color_0, color_1 = (0, 0, 0), (255, 255, 255)
 it = itertools.cycle([
-    (text_0, color_0), (text_1, color_1)
+    (text_0, color_0),
+    (text_1, color_1),
 ])
 
 width_text_0, height_text_0 = font.getsize(text_0)

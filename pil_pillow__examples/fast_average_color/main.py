@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import math
-from typing import Tuple
 from pathlib import Path
 
 from PIL import Image
@@ -15,16 +14,16 @@ DIR = Path(__file__).resolve().parent
 
 
 def get_mode_correction(image: Image) -> str:
-    if image.mode not in ['RGB', 'RGBA']:
-        return 'RGB'
+    if image.mode not in ["RGB", "RGBA"]:
+        return "RGB"
     return image.mode
 
 
 # SOURCE: https://github.com/fast-average-color/fast-average-color/blob/15561aa55a36702f0b1af3d0ef611a205f8d56b5/src/algorithm/sqrt.js#L3
-def sqrt_algorithm(image: Image) -> Tuple[int, int, int, int]:
+def sqrt_algorithm(image: Image) -> tuple[int, int, int, int]:
     mode = get_mode_correction(image)
     if mode != image.mode:
-        image = image.convert('RGB')
+        image = image.convert("RGB")
 
     red_total = 0
     green_total = 0
@@ -53,7 +52,7 @@ def sqrt_algorithm(image: Image) -> Tuple[int, int, int, int]:
         round(math.sqrt(red_total / alpha_total)),
         round(math.sqrt(green_total / alpha_total)),
         round(math.sqrt(blue_total / alpha_total)),
-        round(alpha_total / count)
+        round(alpha_total / count),
     )
 
 
@@ -71,9 +70,9 @@ def draw_example(image: Image, margin=70) -> Image:
     return image_output
 
 
-if __name__ == '__main__':
-    for file_name in DIR.glob('input/*.*'):
+if __name__ == "__main__":
+    for file_name in DIR.glob("input/*.*"):
         image = Image.open(file_name)
         image_output = draw_example(image)
         # image_output.show()
-        image_output.save(DIR / 'output' / file_name.name)
+        image_output.save(DIR / "output" / file_name.name)
