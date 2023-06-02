@@ -29,9 +29,7 @@ def _get_processes() -> list[dict[str, str | int]]:
             continue
 
         connections = [
-            c
-            for c in proc.connections()
-            if c.status == psutil.CONN_LISTEN and c.laddr
+            c for c in proc.connections() if c.status == psutil.CONN_LISTEN and c.laddr
         ]
         if not connections:
             continue
@@ -60,17 +58,19 @@ class HttpProcessor(BaseHTTPRequestHandler):
 
         table_rows = []
         for i, p in enumerate(_get_processes(), 1):
-            table_rows.append(f"""
+            table_rows.append(
+                f"""
             <tr {'class="grayscale"' if p['pid'] == os.getpid() else ''}>
                 <td>{i}</td>
                 <td>{p['pid']}</td>
                 <td>{p['ports']}</td>
                 <td>{p['path']}</td>
             </tr>
-            """)
+            """
+            )
 
         text = (
-        """
+            """
         <!DOCTYPE html>
         <html lang="ru">
         <head>
@@ -114,7 +114,9 @@ class HttpProcessor(BaseHTTPRequestHandler):
             </table>
         </body>
         </html>
-        """.replace("{{ title }}", TITLE)
+        """.replace(
+                "{{ title }}", TITLE
+            )
             .replace("{{ headers }}", "".join(f"<th>{x}</th>" for x in HEADERS))
             .replace("{{ table_rows }}", "".join(table_rows))
         )
