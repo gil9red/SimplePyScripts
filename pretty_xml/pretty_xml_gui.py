@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import sys
+import traceback
 
 from os.path import split as path_split
-import traceback
 
 
 # TODO: избавиться от `import *`
@@ -23,22 +25,19 @@ except:
         from PySide.QtGui import *
         from PySide.QtCore import Qt
 
+from pretty_xml import pretty_xml_minidom as to_pretty_xml
+
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
+    text = "{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
-
-
-from pretty_xml import pretty_xml_minidom as to_pretty_xml
 
 
 class MainWindow(QWidget):
@@ -57,9 +56,9 @@ class MainWindow(QWidget):
         self.label_error.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.label_error.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
 
-        self.button_detail_error = QPushButton('...')
+        self.button_detail_error = QPushButton("...")
         self.button_detail_error.setFixedSize(20, 20)
-        self.button_detail_error.setToolTip('Detail error')
+        self.button_detail_error.setToolTip("Detail error")
         self.button_detail_error.hide()
 
         self.last_error_message = None
@@ -106,13 +105,13 @@ class MainWindow(QWidget):
             self.last_detail_error_message = str(tb)
             self.button_detail_error.show()
 
-            self.label_error.setText('Error: ' + self.last_error_message)
+            self.label_error.setText("Error: " + self.last_error_message)
 
     def show_detail_error_message(self):
-        message = self.last_error_message + '\n\n' + self.last_detail_error_message
+        message = self.last_error_message + "\n\n" + self.last_detail_error_message
 
         mb = QErrorMessage()
-        mb.setWindowTitle('Error')
+        mb.setWindowTitle("Error")
         # Сообщение ошибки содержит отступы, символы-переходы на следующую строку,
         # которые поломаются при вставке через QErrorMessage.showMessage, и нет возможности
         # выбрать тип текста, то делаем такой хак.
@@ -121,7 +120,7 @@ class MainWindow(QWidget):
         mb.exec_()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
