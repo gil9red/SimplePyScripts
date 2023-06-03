@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install pymorphy2
@@ -14,13 +14,7 @@ from tabulate import tabulate
 morph = pymorphy2.MorphAnalyzer()
 
 
-words = [
-    'программист',
-    'ёлка',
-    'фрукт',
-    'игр',
-    'барсук'
-]
+words = ["программист", "ёлка", "фрукт", "игр", "барсук"]
 parsed_words = [morph.parse(word)[0] for word in words]
 
 rows = []
@@ -28,7 +22,7 @@ for i in range(5 + 1):
     row = []
     for parsed_word in parsed_words:
         word = parsed_word.make_agree_with_number(i).word
-        row.append(f'{i} {word}')
+        row.append(f"{i} {word}")
     rows.append(row)
 
 print(tabulate(rows, headers=words, tablefmt="orgtbl"))

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install pymorphy2
@@ -10,9 +10,7 @@ import pymorphy2
 
 morph = pymorphy2.MorphAnalyzer()
 
-words = [
-    "Думала", "Подумала", "Согласен"
-]
+words = ["Думала", "Подумала", "Согласен"]
 
 for word in words:
     print(repr(word))
