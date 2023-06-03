@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://stackoverflow.com/a/42856051/5909792
@@ -12,12 +12,12 @@ from base64 import b64encode, b64decode
 import rsa
 
 
-msg1 = "Hello Tony, I am Jarvis!".encode('utf-8')
-msg2 = "Hello Toni, I am Jarvis!".encode('utf-8')
+msg1 = "Hello Tony, I am Jarvis!".encode("utf-8")
+msg2 = "Hello Toni, I am Jarvis!".encode("utf-8")
 
 public, private = rsa.new_keys(key_size=2048)
-print('private:', private.exportKey('PEM'))
-print('public:', public.exportKey('PEM'))
+print("private:", private.exportKey("PEM"))
+print("public:", public.exportKey("PEM"))
 print()
 
 # Encrypt-Decrypt: private -> private
@@ -39,7 +39,7 @@ verify = rsa.verify(msg2, b64decode(signature), private)
 print("Verify:", verify)  # False
 # Encrypt-Decrypt: private -> private
 
-print('\n')
+print("\n")
 
 # Encrypt-Decrypt: public -> private
 encrypted = b64encode(rsa.encrypt(msg1, public))

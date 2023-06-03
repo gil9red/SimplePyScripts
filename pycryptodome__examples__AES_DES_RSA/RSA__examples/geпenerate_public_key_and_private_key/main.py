@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/Legrandin/pycryptodome/blob/29810b96cefc900138523203f027a179a15ceffe/Doc/src/examples.rst#generate-public-key-and-private-key
@@ -10,8 +10,6 @@ __author__ = 'ipetrash'
 # pip install pycryptodome
 # OR:
 # pip install pycryptodomex
-
-
 from Crypto.PublicKey import RSA
 
 
