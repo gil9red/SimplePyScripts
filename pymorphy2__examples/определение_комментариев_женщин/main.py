@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install nltk
@@ -19,35 +19,35 @@ def is_ADJS_sing_femn(parsed: pymorphy2.analyzer.Parse) -> bool:
     """
     Имя прилагательное (краткое) + единственное число + женский род
     """
-    return {'ADJS', 'sing', 'femn'} in parsed.tag
+    return {"ADJS", "sing", "femn"} in parsed.tag
 
 
 def is_ADJS_sing_masc(parsed: pymorphy2.analyzer.Parse) -> bool:
     """
     Имя прилагательное (краткое) + единственное число + мужской род
     """
-    return {'ADJS', 'sing', 'masc'} in parsed.tag
+    return {"ADJS", "sing", "masc"} in parsed.tag
 
 
 def is_VERB_sing_femn(parsed: pymorphy2.analyzer.Parse) -> bool:
     """
     Глагол (личная форма) + единственное число + женский род
     """
-    return {'VERB', 'sing', 'femn'} in parsed.tag
+    return {"VERB", "sing", "femn"} in parsed.tag
 
 
 def is_VERB_sing_masc(parsed: pymorphy2.analyzer.Parse) -> bool:
     """
     Глагол (личная форма) + единственное число + мужской род
     """
-    return {'VERB', 'sing', 'masc'} in parsed.tag
+    return {"VERB", "sing", "masc"} in parsed.tag
 
 
 def is_NPRO_1per_sing(parsed: pymorphy2.analyzer.Parse) -> bool:
     """
     Местоимение-существительное + 1 лицо + единственное число
     """
-    return {'NPRO', '1per', 'sing'} in parsed.tag
+    return {"NPRO", "1per", "sing"} in parsed.tag
 
 
 LOG_DEBUG = False
@@ -58,11 +58,11 @@ morph = pymorphy2.MorphAnalyzer()
 
 def is_femn(text: str) -> bool:
     for line in text.splitlines():
-        LOG_DEBUG and print(f'[#] Comment: {line!r}')
+        LOG_DEBUG and print(f"[#] Comment: {line!r}")
 
         # Перебор предложений
-        for sent in nltk.sent_tokenize(line, language='russian'):
-            LOG_DEBUG and print(f'[#] Comment part: {sent!r}')
+        for sent in nltk.sent_tokenize(line, language="russian"):
+            LOG_DEBUG and print(f"[#] Comment part: {sent!r}")
 
             words = nltk.word_tokenize(sent)
             parsed_words = [morph.parse(word)[0] for word in words]
@@ -76,11 +76,11 @@ def is_femn(text: str) -> bool:
 
             has_NPRO_1per_sing = False
 
-            LOG_DEBUG and print(f'[#] ({len(words)}): {words}')
-            LOG_DEBUG and print(f'[#] ({len(parsed_words)}):')
+            LOG_DEBUG and print(f"[#] ({len(words)}): {words}")
+            LOG_DEBUG and print(f"[#] ({len(parsed_words)}):")
 
             for parsed in parsed_words:
-                LOG_DEBUG and print(f'[#]     {parsed.word} - {str(parsed.tag)!r}')
+                LOG_DEBUG and print(f"[#]     {parsed.word} - {str(parsed.tag)!r}")
 
                 if is_NPRO_1per_sing(parsed):
                     has_NPRO_1per_sing = True
@@ -99,26 +99,28 @@ def is_femn(text: str) -> bool:
     return False
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import json
 
-    with open('comments.json', encoding='utf-8') as f:
+    with open("comments.json", encoding="utf-8") as f:
         data = json.load(f)
 
-    comments = [(x['text'], x['expected']) for x in data]
+    comments = [(x["text"], x["expected"]) for x in data]
 
     matches = 0
     total = len(comments)
 
     for i, (text, expected) in enumerate(comments, 1):
         has_female = is_femn(text)
-        match = has_female == (expected == 'female')
+        match = has_female == (expected == "female")
         matches += match
 
-        print(f"{i}. {text!r}"
-              f"\n    [{'+' if match else '-'}] "
-              f"Expected={expected}, "
-              f"actual={'female' if has_female else 'male'}")
-        print('-' * 100)
+        print(
+            f"{i}. {text!r}"
+            f"\n    [{'+' if match else '-'}] "
+            f"Expected={expected}, "
+            f"actual={'female' if has_female else 'male'}"
+        )
+        print("-" * 100)
 
-    print(f'Total: {matches} / {total}')
+    print(f"Total: {matches} / {total}")
