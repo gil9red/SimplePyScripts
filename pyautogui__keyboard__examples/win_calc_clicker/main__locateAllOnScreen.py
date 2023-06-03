@@ -1,32 +1,34 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+# OpenCv -- for performance
+# pip install opencv-python
+#
+# pip install pyautogui
+import pyautogui
 
 from main import show_test_calc
+
+
 show_test_calc()
 
 
 BUTTONS = {
-    '+': 'buttons/add.png',
-    '-': 'buttons/sub.png',
-    '/': 'buttons/div.png',
-    '*': 'buttons/mul.png',
-    '=': 'buttons/equal.png',
+    "+": "buttons/add.png",
+    "-": "buttons/sub.png",
+    "/": "buttons/div.png",
+    "*": "buttons/mul.png",
+    "=": "buttons/equal.png",
 }
 for i in range(10):
-    BUTTONS[str(i)] = 'buttons/{}.png'.format(i)
+    BUTTONS[str(i)] = "buttons/{}.png".format(i)
 
 cache_pos_button = dict()
 
-# OpenCv -- for performance
-# pip install opencv-python
-
-# pip install pyautogui
-import pyautogui
-
-expression = '1234 * 222 + 3214 = '
+expression = "1234 * 222 + 3214 = "
 
 for x in expression:
     if x not in BUTTONS:
@@ -37,7 +39,9 @@ for x in expression:
         pos_list = cache_pos_button[x]
     else:
         file_name = BUTTONS[x]
-        pos_list = [pyautogui.center(pos) for pos in pyautogui.locateAllOnScreen(BUTTONS[x])]
+        pos_list = [
+            pyautogui.center(pos) for pos in pyautogui.locateAllOnScreen(BUTTONS[x])
+        ]
         if not pos_list:
             continue
 

@@ -1,29 +1,33 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import os
+import time
+
+# OpenCv -- for performance
+# pip install opencv-python
+#
+# pip install pyautogui
+import pyautogui
 
 
 BUTTONS = {
-    '+': 'buttons/add.png',
-    '-': 'buttons/sub.png',
-    '/': 'buttons/div.png',
-    '*': 'buttons/mul.png',
-    '=': 'buttons/equal.png',
+    "+": "buttons/add.png",
+    "-": "buttons/sub.png",
+    "/": "buttons/div.png",
+    "*": "buttons/mul.png",
+    "=": "buttons/equal.png",
 }
 for i in range(10):
-    BUTTONS[str(i)] = 'buttons/{}.png'.format(i)
+    BUTTONS[str(i)] = "buttons/{}.png".format(i)
 
 CACHE_POS_BUTTON = dict()
 
 
 def go(expression):
-    # OpenCv -- for performance
-    # pip install opencv-python
-
-    # pip install pyautogui
-    import pyautogui
-
     for x in expression:
         if x not in BUTTONS:
             print('Not found: "{}"'.format(x))
@@ -44,15 +48,12 @@ def go(expression):
 
 
 def show_test_calc():
-    import os
-    os.startfile('calc.exe')
-
-    import time
+    os.startfile("calc.exe")
     time.sleep(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     show_test_calc()
 
-    expression = '1234 * 222 + 3214 = '
+    expression = "1234 * 222 + 3214 = "
     go(expression)
