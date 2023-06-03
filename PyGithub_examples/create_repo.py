@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install pygithub
 from github import Github
+
 from config import LOGIN, PASSWORD
+
 
 # NOTE: delete repo: Settings -> <Danger Zone> -> <Delete this repository>
 #       or repo.delete()
-NEW_REPO = 'Test-Repo'
+NEW_REPO = "Test-Repo"
 
 
 gh = Github(LOGIN, PASSWORD)
