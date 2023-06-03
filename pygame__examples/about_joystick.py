@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://www.pygame.org/docs/ref/joystick.html
 
 
 import pygame
+
 
 # Define some colors
 BLACK = (0, 0, 0)

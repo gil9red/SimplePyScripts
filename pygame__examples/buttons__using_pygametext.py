@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -10,6 +10,7 @@ import sys
 # pip install pygametext
 import pygame
 import pygametext
+
 
 running = True
 
@@ -20,8 +21,12 @@ clock = pygame.time.Clock()
 
 pgt = pygametext.PGT(screen)  # Define pygametext object.
 
-pgt.button(10, 10, 100, 50, (255, 0, 0), "Hello!", (0, 0, 0), print, "Hello World!", 0)  # Add pgt Button
-pgt.button(120, 10, 100, 50, (255, 255, 0), "Bye bye", (0, 0, 0), print, "Goodbye World!", 0)  # Add pgt Button
+pgt.button(
+    10, 10, 100, 50, (255, 0, 0), "Hello!", (0, 0, 0), print, "Hello World!", 0
+)  # Add pgt Button
+pgt.button(
+    120, 10, 100, 50, (255, 255, 0), "Bye bye", (0, 0, 0), print, "Goodbye World!", 0
+)  # Add pgt Button
 pgt.text(10, 70, "Simple pygametext example.", (0, 120, 0), 20, 0)  # Add pgt Text
 
 
@@ -30,7 +35,9 @@ def update():  # Update & Eventd
 
     events = pygame.event.get()
 
-    pgt.update(events, 0)  # Update all pgt elements from layer 0. Takes events arg to process some elements.
+    pgt.update(
+        events, 0
+    )  # Update all pgt elements from layer 0. Takes events arg to process some elements.
 
     for event in events:
         if event.type == pygame.QUIT:
