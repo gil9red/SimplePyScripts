@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install pynput
@@ -13,11 +13,11 @@ import pyscreenshot as ImageGrab
 
 def on_release(key):
     if key == Key.f7:
-        print('screenshot')
+        print("screenshot")
 
         # Fullscreen
         im = ImageGrab.grab()
-        im.save('screenshot.png')
+        im.save("screenshot.png")
         im.show()
 
 

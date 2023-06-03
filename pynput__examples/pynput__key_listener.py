@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install pynput
@@ -9,11 +9,11 @@ from pynput.keyboard import Key, Listener
 
 
 def on_press(key):
-    print(f'{key} pressed')
+    print(f"{key} pressed")
 
 
 def on_release(key):
-    print(f'{key} release')
+    print(f"{key} release")
 
     if key == Key.esc:
         # Stop listener
