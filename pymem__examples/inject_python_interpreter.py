@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import os
@@ -43,16 +43,18 @@ from pymem import Pymem
 # RuntimeError: Could not allocate memory for shellcode
 
 
-notepad = subprocess.Popen(['notepad.exe'])
+notepad = subprocess.Popen(["notepad.exe"])
 
-pm = Pymem('notepad.exe')
+pm = Pymem("notepad.exe")
 pm.inject_python_interpreter()
-filepath = os.path.join(os.path.abspath('.'), 'pymem_injection.txt')
+filepath = os.path.join(os.path.abspath("."), "pymem_injection.txt")
 filepath = filepath.replace("\\", "\\\\")
 shellcode = """
 f = open("{}", "w+")
 f.write("pymem_injection")
 f.close()
-""".format(filepath)
+""".format(
+    filepath
+)
 pm.inject_python_shellcode(shellcode)
 notepad.kill()
