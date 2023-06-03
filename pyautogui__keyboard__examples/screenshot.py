@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import pyautogui
-im1 = pyautogui.screenshot()
-print(im1)
 
-im2 = pyautogui.screenshot('my_screenshot.png')  # save file
-print(im2)
+
+img1 = pyautogui.screenshot()
+print(img1)
+
+img2 = pyautogui.screenshot("my_screenshot.png")  # save file
+print(img2)
