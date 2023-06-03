@@ -32,7 +32,7 @@ def displayFun():
             y2 = y1 + CELL_SIZE
 
             if (i % 2 and not j % 2) or (not i % 2 and j % 2):
-                glColor3f(0xff, 0xff, 0xff)  # white
+                glColor3f(0xFF, 0xFF, 0xFF)  # white
             else:
                 glColor3f(0x0, 0x0, 0x0)  # black
 
@@ -41,7 +41,7 @@ def displayFun():
     glFlush()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     glutInit()
     glutInitWindowSize(640, 480)
     glutCreateWindow(b"DrawSquares")

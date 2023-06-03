@@ -56,7 +56,7 @@ def mouseFun(button, state, x, y):
     glutPostRedisplay()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     glutInit()
     glutInitWindowSize(640, 480)
     glutCreateWindow(b"Polyline")

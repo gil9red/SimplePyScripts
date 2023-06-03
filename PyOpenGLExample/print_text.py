@@ -54,7 +54,7 @@ def glDraw():
 
     # render objects here
 
-    # print text after rendering world so it is on top 
+    # print text after rendering world so it is on top
 
     glut_print(10, 15, GLUT_BITMAP_9_BY_15, "Hello World", 1.0, 1.0, 1.0, 1.0)
 
@@ -81,12 +81,12 @@ def glut_print(x, y, font, text, r, g, b, a):
 
 
 def keyPressed(*args):
-    ESCAPE = b'\x1b'
+    ESCAPE = b"\x1b"
     if args[0] == ESCAPE:
         sys.exit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     glutInit()
 
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
@@ -100,8 +100,8 @@ if __name__ == '__main__':
     glutReshapeFunc(glResize)
     glutKeyboardFunc(keyPressed)
 
-    #setup things up
+    # setup things up
     glSetup(640, 480)
 
-    #start rendering
+    # start rendering
     glutMainLoop()

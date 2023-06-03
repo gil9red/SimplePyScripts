@@ -71,32 +71,61 @@ class Maze:
             cell.visited = True
 
             # If a cell is not connected, see if we can connected it to the path
-            if cell.wall_north and cell.wall_east and cell.wall_south and cell.wall_north:
-                if cell.x > 0 and self.cells[(cell.x - 1) + (cell.y + 0) * dimx].visited:
+            if (
+                cell.wall_north
+                and cell.wall_east
+                and cell.wall_south
+                and cell.wall_north
+            ):
+                if (
+                    cell.x > 0
+                    and self.cells[(cell.x - 1) + (cell.y + 0) * dimx].visited
+                ):
                     cell.wall_west = False
                     self.cells[(cell.x - 1) + (cell.y + 0) * dimx].wall_east = False
-                elif cell.x < (dimx - 2) and self.cells[(cell.x + 1) + (cell.y + 0) * dimx].visited:
+                elif (
+                    cell.x < (dimx - 2)
+                    and self.cells[(cell.x + 1) + (cell.y + 0) * dimx].visited
+                ):
                     cell.wall_east = False
                     self.cells[(cell.x + 1) + (cell.y + 0) * dimx].wall_west = False
-                elif cell.y > 0 and self.cells[(cell.x + 0) + (cell.y - 1) * dimx].visited:
+                elif (
+                    cell.y > 0
+                    and self.cells[(cell.x + 0) + (cell.y - 1) * dimx].visited
+                ):
                     cell.wall_south = False
                     self.cells[(cell.x + 0) + (cell.y - 1) * dimx].wall_north = False
-                elif cell.y < (dimy - 2) and self.cells[(cell.x + 0) + (cell.y + 1) * dimx].visited:
+                elif (
+                    cell.y < (dimy - 2)
+                    and self.cells[(cell.x + 0) + (cell.y + 1) * dimx].visited
+                ):
                     cell.wall_north = False
                     self.cells[(cell.x + 0) + (cell.y + 1) * dimx].wall_south = False
 
             # Append neighbors if they are not yet in the path.
             num = 0
-            if cell.x > 0 and not self.cells[(cell.x - 1) + (cell.y + 0) * dimx].visited:
+            if (
+                cell.x > 0
+                and not self.cells[(cell.x - 1) + (cell.y + 0) * dimx].visited
+            ):
                 cell_list.append(self.cells[(cell.x - 1) + (cell.y + 0) * dimx])
                 num += 1
-            if cell.x < (dimx - 1) and not self.cells[(cell.x + 1) + (cell.y + 0) * dimx].visited:
+            if (
+                cell.x < (dimx - 1)
+                and not self.cells[(cell.x + 1) + (cell.y + 0) * dimx].visited
+            ):
                 cell_list.append(self.cells[(cell.x + 1) + (cell.y + 0) * dimx])
                 num += 1
-            if cell.y < (dimy - 1) and not self.cells[(cell.x + 0) + (cell.y + 1) * dimx].visited:
+            if (
+                cell.y < (dimy - 1)
+                and not self.cells[(cell.x + 0) + (cell.y + 1) * dimx].visited
+            ):
                 cell_list.append(self.cells[(cell.x + 0) + (cell.y + 1) * dimx])
                 num += 1
-            if cell.y > 0 and not self.cells[(cell.x + 0) + (cell.y - 1) * dimx].visited:
+            if (
+                cell.y > 0
+                and not self.cells[(cell.x + 0) + (cell.y - 1) * dimx].visited
+            ):
                 cell_list.append(self.cells[(cell.x + 0) + (cell.y - 1) * dimx])
                 num += 1
 
@@ -123,11 +152,11 @@ class Maze:
                         cell.wall_east = False
                         conn.wall_west = False
 
-                # Push it back on the list since this is our next node 
+                # Push it back on the list since this is our next node
                 cell_list.append(conn)
 
     def draw(self):
-        """ Draws the field """
+        """Draws the field"""
         glBegin(GL_LINES)
         for i in range(0, self.numx * self.numy):
             x = i % self.numx
@@ -170,7 +199,7 @@ def display_fun():
     glFlush()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     glutInit()
     glutInitWindowSize(WIDTH, HEIGHT)
     glutCreateWindow(b"Maze")
