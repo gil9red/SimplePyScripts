@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from random import randint
@@ -51,7 +51,14 @@ class Ball:
 
 
 class Game:
-    def __init__(self, width: int, height: int, caption='Balls!', background_color=(255, 255, 255), frame_rate=60):
+    def __init__(
+        self,
+        width: int,
+        height: int,
+        caption="Balls!",
+        background_color=(255, 255, 255),
+        frame_rate=60,
+    ):
         self.width = width
         self.height = height
         self.frame_rate = frame_rate
@@ -71,7 +78,9 @@ class Game:
         self.update_caption()
 
     def update_caption(self):
-        pygame.display.set_caption("{} [{} fps]".format(self.caption, int(self.clock.get_fps())))
+        pygame.display.set_caption(
+            "{} [{} fps]".format(self.caption, int(self.clock.get_fps()))
+        )
 
     def handle_events(self):
         # Получение всех событий
@@ -134,8 +143,8 @@ class Game:
         self.balls.append(ball)
 
 
-if __name__ == '__main__':
-    WIDTH = 600   # ширина экрана
+if __name__ == "__main__":
+    WIDTH = 600  # ширина экрана
     HEIGHT = 600  # высота экрана
     BALL_NUMBER = 100
 
