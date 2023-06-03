@@ -5,9 +5,11 @@
 # SOURCE: https://github.com/boppreh/keyboard/blob/master/examples/10_second_macro.py
 
 
+import time
+
 # pip install keyboard
 import keyboard
-import time
+
 
 keyboard.start_recording()
 time.sleep(10)
