@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from dataclasses import dataclass
@@ -10,7 +10,7 @@ import sys
 import pygame
 
 
-BLACK = (  0,   0,   0)
+BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 
@@ -27,8 +27,12 @@ def get_triangle_area(a: Point, b: Point, c: Point) -> float:
 def is_point_in_triangle(a: Point, b: Point, c: Point, p: Point) -> bool:
     tr_area = get_triangle_area(a, b, c)  # Площадь основного треугольника
 
-    tr_area2 = get_triangle_area(a, b, p)  # Площади треугольника, образованного из 2 точек основного
-    tr_area3 = get_triangle_area(a, p, c)  # и точки, которая проверяется на принадлежность
+    tr_area2 = get_triangle_area(
+        a, b, p
+    )  # Площади треугольника, образованного из 2 точек основного
+    tr_area3 = get_triangle_area(
+        a, p, c
+    )  # и точки, которая проверяется на принадлежность
     tr_area4 = get_triangle_area(b, p, c)  # к треугольнику
 
     # Если площади образованных треугольников равны, то точка в треугольнике
