@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/Legrandin/pycryptodome
@@ -10,8 +10,6 @@ __author__ = 'ipetrash'
 # pip install pycryptodome
 # OR:
 # pip install pycryptodomex
-
-
 from Crypto.Cipher import DES
 
 
@@ -26,11 +24,11 @@ def unpad(s: bytes) -> bytes:
     return s[:-pad_size]
 
 
-key = b'abcdefgh'
+key = b"abcdefgh"
 
 
 des = DES.new(key, DES.MODE_ECB)
-text = b'Hello World!'
+text = b"Hello World!"
 padded_text = pad(text)
 
 encrypted_text = des.encrypt(padded_text)
