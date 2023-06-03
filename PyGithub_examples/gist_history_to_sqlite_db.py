@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
+import sqlite3
 from config import TOKEN
 
 
 def create_connect():
-    import sqlite3
-    return sqlite3.connect('gist_commits.sqlite')
+    return sqlite3.connect("gist_commits.sqlite")
 
 
 def init_db():
     # Создание базы и таблицы
     with create_connect() as connect:
-        connect.execute('''
+        connect.execute(
+            """
             CREATE TABLE IF NOT EXISTS GistFile (
                 id INTEGER PRIMARY KEY,
                 commit_hash TEXT NOT NULL,
@@ -25,16 +26,20 @@ def init_db():
                 
                 CONSTRAINT raw_url_unique UNIQUE (commit_hash, raw_url)
             );
-        ''')
+        """
+        )
 
         connect.commit()
 
 
-if __name__ == '__main__':
-    init_db()
+if __name__ == "__main__":
+    import traceback
 
     # pip install pygithub
     from github import Github
+
+    init_db()
+
     gh = Github(TOKEN)
     # #
     # # OR:
@@ -43,31 +48,32 @@ if __name__ == '__main__':
     # # documentation for more details.)", 'documentation_url': 'https://developer.github.com/v3/#rate-limiting'}"
     # gh = Github()
 
-    gist = gh.get_gist('2f80a34fb601cd685353')
+    gist = gh.get_gist("2f80a34fb601cd685353")
     print(gist)
-    print('History ({}):'.format(len(gist.history)))
+    print("History ({}):".format(len(gist.history)))
 
     with create_connect() as connect:
         try:
             for history in reversed(gist.history):
-                print('  committed_at: {}, version: {}, files: {}'.format(
-                    history.committed_at, history.version, history.files)
+                print(
+                    "  committed_at: {}, version: {}, files: {}".format(
+                        history.committed_at, history.version, history.files
+                    )
                 )
 
-                if 'gistfile1.txt' not in history.files:
+                if "gistfile1.txt" not in history.files:
                     print('  Not found file "gistfile1.txt"!')
                     continue
 
-                file = history.files['gistfile1.txt']
+                file = history.files["gistfile1.txt"]
                 # print('    url: {}'.format(file.raw_url))
                 # print('    [{}]: {}'.format(len(file.content), repr(file.content)[:150]))
                 # print()
 
                 connect.execute(
-                    'INSERT OR IGNORE INTO GistFile (commit_hash, committed_at, raw_url, content) VALUES (?, ?, ?, ?)',
-                    (history.version, history.committed_at, file.raw_url, file.content)
+                    "INSERT OR IGNORE INTO GistFile (commit_hash, committed_at, raw_url, content) VALUES (?, ?, ?, ?)",
+                    (history.version, history.committed_at, file.raw_url, file.content),
                 )
 
         except Exception as e:
-            import traceback
-            print('ERROR: {}:\n\n{}'.format(e, traceback.format_exc()))
+            print("ERROR: {}:\n\n{}".format(e, traceback.format_exc()))

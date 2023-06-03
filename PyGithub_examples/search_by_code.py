@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+from base64 import b64decode as base64_to_text
 
 # pip install pygithub
 from github import Github
+
 from config import LOGIN, PASSWORD
+
 
 gh = Github(LOGIN, PASSWORD)
 # print(list(gh.search_code('requests auth github filename:.py language:python')[:5]))
 
-search_query = 'requests auth github filename:.py language:python'
+search_query = "requests auth github filename:.py language:python"
 # print(gh.search_code(search_query).totalCount)
 
 # The Search API has a custom rate limit. For requests using Basic Authentication, OAuth, or client ID and
@@ -35,12 +39,12 @@ print(data[0])
 print(dir(data[0]))
 print(data[0].url)
 print(data[0].content)
-from base64 import b64decode as base64_to_text
+
 print(base64_to_text(data[0].content.encode()).decode())
 print(data[0].html_url)
 
 # get user from repo url
-user = data[0].html_url.split('/')[3]
+user = data[0].html_url.split("/")[3]
 print(user)
 
 # i = 1
