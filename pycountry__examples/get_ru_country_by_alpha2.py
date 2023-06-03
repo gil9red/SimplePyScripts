@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import gettext
@@ -18,7 +18,7 @@ def get_country(code):
     return _(ru.name)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(get_country("RU"))
     # Российская Федерация
 
