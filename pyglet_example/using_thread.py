@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from threading import Thread
@@ -11,7 +11,7 @@ import pyglet
 
 
 def play_song():
-    song = pyglet.media.load('speak.mp3')
+    song = pyglet.media.load("speak.mp3")
     song.play()
     pyglet.app.run()
 

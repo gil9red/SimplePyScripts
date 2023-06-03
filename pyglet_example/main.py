@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import pyglet
 from pyglet.gl import *
+
 
 # Optional audio outputs (Linux examples):
 # pyglet.options['audio'] = ('alsa', 'openal', 'silent')
@@ -13,11 +14,11 @@ key = pyglet.window.key
 
 
 class main(pyglet.window.Window):
-    def __init__ (self):
-        super(main, self).__init__(800, 800, fullscreen = False)
+    def __init__(self):
+        super(main, self).__init__(800, 800, fullscreen=False)
         self.x, self.y = 0, 0
 
-        self.bg = pyglet.sprite.Sprite(pyglet.image.load('background.jpg'))
+        self.bg = pyglet.sprite.Sprite(pyglet.image.load("background.jpg"))
         self.sprites = {}
         self.player = pyglet.media.Player()
         self.alive = 1
@@ -37,10 +38,10 @@ class main(pyglet.window.Window):
         # You could also do a standard input() call and enter a string
         # on the command line.
         if symbol == key.ENTER:
-            self.player.queue(pyglet.media.load('speak.mp3', streaming = False))
+            self.player.queue(pyglet.media.load("speak.mp3", streaming=False))
             if not self.player.playing:
                 self.player.play()
-        if symbol == key.ESCAPE: # [ESC]
+        if symbol == key.ESCAPE:  # [ESC]
             self.alive = 0
 
     def render(self):
@@ -63,7 +64,7 @@ class main(pyglet.window.Window):
             # but is required for the GUI to not freeze
             #
             event = self.dispatch_events()
-        self.player.delete() # Free resources. (Not really needed but as an example)
+        self.player.delete()  # Free resources. (Not really needed but as an example)
 
 
 x = main()
