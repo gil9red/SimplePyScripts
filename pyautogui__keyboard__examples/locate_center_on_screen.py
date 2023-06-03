@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import pyautogui
@@ -16,8 +16,8 @@ def locate_center_on_screen(needle_image, screenshot_image=None):
     return pyautogui.locateCenterOnScreen(needle_image)
 
 
-if __name__ == '__main__':
-    needle_image = '<file_name>'
+if __name__ == "__main__":
+    needle_image = "<file_name>"
 
     import time
 
