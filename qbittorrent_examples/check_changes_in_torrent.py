@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -10,6 +10,21 @@ When serial torrent modify (example: append new series), script download new fil
 
 """
 
+import time
+import traceback
+import re
+
+from collections import defaultdict
+from datetime import datetime
+
+import requests
+import effbot_bencode
+
+from bs4 import BeautifulSoup
+
+# pip install simple-wait
+from simple_wait import wait
+
 
 def get_rutor_torrent_download_info(torrent_url):
     """
@@ -17,27 +32,23 @@ def get_rutor_torrent_download_info(torrent_url):
 
     """
 
-    import requests
     rs = requests.get(torrent_url)
+    root = BeautifulSoup(rs.content, "lxml")
 
-    from bs4 import BeautifulSoup
-    root = BeautifulSoup(rs.content, 'lxml')
-
-    magnet_url = root.select_one('#download > a[href^="magnet"]')['href']
+    magnet_url = root.select_one('#download > a[href^="magnet"]')["href"]
 
     # For get info hash from magnet url
-    import re
-    match = re.compile(r'btih:([abcdef\d]+?)&', flags=re.IGNORECASE).search(magnet_url)
+    match = re.compile(r"btih:([abcdef\d]+?)&", flags=re.IGNORECASE).search(magnet_url)
     if match:
         info_hash = match.group(1)
 
-    return torrent_url.replace('/torrent/', '/download/'), magnet_url, info_hash
+    return torrent_url.replace("/torrent/", "/download/"), magnet_url, info_hash
 
 
 def remove_previous_torrent_from_qbittorrent(qb, new_info_hash):
-    info_hash_by_name_dict = {torrent['hash']: torrent['name'] for torrent in qb.torrents()}
-
-    from collections import defaultdict
+    info_hash_by_name_dict = {
+        torrent["hash"]: torrent["name"] for torrent in qb.torrents()
+    }
     name_by_info_hash_list_dict = defaultdict(list)
 
     for info_hash, name in info_hash_by_name_dict.items():
@@ -56,57 +67,65 @@ def remove_previous_torrent_from_qbittorrent(qb, new_info_hash):
 
         # Remove previous torrents
         if info_hash_list:
-            print('Удаление предыдущих раздач этого торрента: {}'.format(info_hash_list))
+            print(
+                "Удаление предыдущих раздач этого торрента: {}".format(info_hash_list)
+            )
             qb.delete(info_hash_list)
 
     else:
         print("Предыдущие закачки не найдены")
 
-        
-# pip install simple-wait
-from simple_wait import wait
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     from config import API_ID, TO
     from common import get_client
 
     qb = get_client()
 
-    torrent_url = 'http://anti-tor.org/torrent/544942'
+    torrent_url = "http://anti-tor.org/torrent/544942"
 
     last_info_hash = None
     last_torrent_files = list()
 
     while True:
         try:
-            from datetime import datetime
             today = datetime.today()
 
-            torrent_file_url, _, info_hash = get_rutor_torrent_download_info(torrent_url)
-            print('{}: Проверка {}: {} / {}'.format(today, torrent_url, torrent_file_url, info_hash))
+            torrent_file_url, _, info_hash = get_rutor_torrent_download_info(
+                torrent_url
+            )
+            print(
+                "{}: Проверка {}: {} / {}".format(
+                    today, torrent_url, torrent_file_url, info_hash
+                )
+            )
 
             if qb.get_torrent(info_hash):
-                print('Торрент {} уже есть в списке раздачи'.format(info_hash))
+                print("Торрент {} уже есть в списке раздачи".format(info_hash))
 
             else:
                 if info_hash != last_info_hash:
-                    import requests
-                    data = requests.get(torrent_file_url).content.decode('latin1')
-
-                    import effbot_bencode
+                    data = requests.get(torrent_file_url).content.decode("latin1")
                     torrent = effbot_bencode.decode(data)
-                    files = ["/".join(file["path"]) for file in torrent["info"]["files"]]
+                    files = [
+                        "/".join(file["path"]) for file in torrent["info"]["files"]
+                    ]
 
                     # Использование множеств, чтобы узнать разницу списков, т.е. какие файлы были добавлены
                     # А чтобы узнать какие были удалены: list(set(last_torrent_files) - set(files))
                     new_files = list(set(files) - set(last_torrent_files))
 
                     if last_info_hash is None:
-                        print("Добавление торрента с {} файлами: {}".format(len(new_files), new_files))
+                        print(
+                            "Добавление торрента с {} файлами: {}".format(
+                                len(new_files), new_files
+                            )
+                        )
                     else:
-                        print('Торрент изменился, пора его перекачивать')
-                        print("Добавлено {} файлов: {}".format(len(new_files), new_files))
+                        print("Торрент изменился, пора его перекачивать")
+                        print(
+                            "Добавлено {} файлов: {}".format(len(new_files), new_files)
+                        )
 
                     last_info_hash = info_hash
                     last_torrent_files = files
@@ -116,22 +135,21 @@ if __name__ == '__main__':
                     qb.download_from_link(torrent_file_url)
 
                     # Отправляю смс на номер
-                    url = 'https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}'.format(
+                    url = "https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}".format(
                         api_id=API_ID,
                         to=TO,
-                        text="Вышла новая серия '{}'".format(torrent['info']['name'])
+                        text="Вышла новая серия '{}'".format(torrent["info"]["name"]),
                     )
                     rs = requests.get(url)
                     print(rs.text)
 
                     # Даем 5 секунд на добавление торрента в клиент
-                    import time
                     time.sleep(5)
 
                     remove_previous_torrent_from_qbittorrent(qb, info_hash)
 
                 else:
-                    print('Изменений нет')
+                    print("Изменений нет")
 
             print()
 
@@ -139,11 +157,10 @@ if __name__ == '__main__':
             wait(hours=3)
 
         except Exception:
-            import traceback
-            print('Ошибка:')
+            print("Ошибка:")
             print(traceback.format_exc())
 
-            print('Через 1 минуту попробую снова...')
+            print("Через 1 минуту попробую снова...")
 
             # Wait before next attempt
             wait(minutes=1)
