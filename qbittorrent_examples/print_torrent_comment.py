@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from common import get_client
 
 
 def get_comment(torrent):
-    return qb.get_torrent(torrent['hash'])['comment']
+    return qb.get_torrent(torrent["hash"])["comment"]
 
 
 qb = get_client()
@@ -21,4 +21,4 @@ for torrent in qb.torrents():
         comment_list.append(comment)
 
 comment_list.sort()
-print('\n'.join(comment_list))
+print("\n".join(comment_list))
