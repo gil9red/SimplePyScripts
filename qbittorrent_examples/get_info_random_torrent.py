@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import random
@@ -13,7 +13,7 @@ torrent = random.choice(qb.torrents())
 print(f"{torrent['name']} ({sizeof_fmt(torrent['total_size'])})")
 print()
 
-files = qb.get_torrent_files(torrent['hash'])
-print(f'Files ({len(files)}):')
+files = qb.get_torrent_files(torrent["hash"])
+print(f"Files ({len(files)}):")
 
 print_files_table(files)

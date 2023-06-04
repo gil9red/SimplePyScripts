@@ -17,7 +17,7 @@ def tokenize(text, match=re.compile("([idel])|(\d+):|(-?\d+)").match):
         i = m.end()
         if m.lastindex == 2:
             yield "s"
-            yield text[i:i+int(s)]
+            yield text[i : i + int(s)]
             i = i + int(s)
         else:
             yield s
@@ -50,7 +50,7 @@ def decode(text):
     try:
         src = tokenize(text)
         data = decode_item(src.__next__, next(src))
-        for token in src: # look for more tokens
+        for token in src:  # look for more tokens
             raise SyntaxError("trailing junk")
     except (AttributeError, ValueError, StopIteration):
         raise SyntaxError("syntax error")
