@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # NOTE: Run as administrator
@@ -12,22 +12,41 @@ import os
 # pip install pythonnet
 import clr
 
+from OpenHardwareMonitor import Hardware
+
 
 openhardwaremonitor_hwtypes = [
-    'Mainboard', 'SuperIO', 'CPU', 'RAM', 'GpuNvidia', 'GpuAti', 'TBalancer', 'Heatmaster', 'HDD'
+    "Mainboard",
+    "SuperIO",
+    "CPU",
+    "RAM",
+    "GpuNvidia",
+    "GpuAti",
+    "TBalancer",
+    "Heatmaster",
+    "HDD",
 ]
 openhardwaremonitor_sensortypes = [
-    'Voltage', 'Clock', 'Temperature', 'Load', 'Fan', 'Flow', 'Control', 'Level',
-    'Factor', 'Power', 'Data', 'SmallData'
+    "Voltage",
+    "Clock",
+    "Temperature",
+    "Load",
+    "Fan",
+    "Flow",
+    "Control",
+    "Level",
+    "Factor",
+    "Power",
+    "Data",
+    "SmallData",
 ]
 
 
 def initialize_openhardwaremonitor():
     DIR = os.path.abspath(os.path.dirname(__file__))
-    dll_file_name = DIR + R'\OpenHardwareMonitorLib.dll'
+    dll_file_name = DIR + R"\OpenHardwareMonitorLib.dll"
     clr.AddReference(dll_file_name)
 
-    from OpenHardwareMonitor import Hardware
     handle = Hardware.Computer()
     handle.MainboardEnabled = True
     handle.CPUEnabled = True
@@ -56,10 +75,12 @@ def parse_sensor(sensor):
         return
 
     # If SensorType is Temperature
-    if sensor.SensorType == openhardwaremonitor_sensortypes.index('Temperature'):
+    if sensor.SensorType == openhardwaremonitor_sensortypes.index("Temperature"):
         type_name = openhardwaremonitor_hwtypes[sensor.Hardware.HardwareType]
-        print(f"    {type_name}. {sensor.Hardware.Name!r} "
-              f"Temperature Sensor #{sensor.Index} {sensor.Name} - {sensor.Value}°C")
+        print(
+            f"    {type_name}. {sensor.Hardware.Name!r} "
+            f"Temperature Sensor #{sensor.Index} {sensor.Name} - {sensor.Value}°C"
+        )
 
 
 if __name__ == "__main__":
