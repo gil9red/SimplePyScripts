@@ -58,7 +58,7 @@ def display_fun():
     glFlush()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     glutInit()
     glutInitWindowSize(400, 400)
     glutCreateWindow(b"Rosette")

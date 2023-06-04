@@ -50,7 +50,7 @@ def display_fun():
     glFlush()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     glutInit()
     glutInitWindowSize(640, 480)
     glutCreateWindow(b"Viewport")

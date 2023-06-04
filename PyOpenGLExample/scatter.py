@@ -29,7 +29,7 @@ def initFun():
 
 
 def getRandom(mode):
-    """ 
+    """
     Wrapper around several RNG's. If mode is 0 random.randint() is used, if
     mode is one a guassian distribution is used.
     """
@@ -54,7 +54,7 @@ def displayFun():
     glFlush()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     glutInit()
     glutInitWindowSize(400, 400)
     glutCreateWindow(b"Scatter")

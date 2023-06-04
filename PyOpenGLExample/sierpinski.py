@@ -49,7 +49,7 @@ def displayFun():
     glFlush()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # This is the current implementation, note that all points are recalculated on
     # a window update, for any other purpose than showing off with how simply it is
     # to create this eyecode you'd probably want to precalculate the dots and put them
