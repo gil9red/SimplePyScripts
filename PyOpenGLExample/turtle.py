@@ -24,7 +24,7 @@ angle = 0.0
 
 
 def reset():
-    """ Reset the position to the origin """
+    """Reset the position to the origin"""
     global curX
     global curY
     global angle
@@ -35,19 +35,19 @@ def reset():
 
 
 def turnTo(deg):
-    """ Turn to a certain angle """
+    """Turn to a certain angle"""
     global angle
     angle = deg
 
 
 def turn(deg):
-    """ Turn a certain number of degrees """
+    """Turn a certain number of degrees"""
     global angle
     angle += deg
 
 
 def forw(len, visible):
-    """ Move forward over a certain distance """
+    """Move forward over a certain distance"""
     global curX
     global curY
     tmpX = curX
@@ -226,7 +226,7 @@ def turtle_10():
     glFlush()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     glutInit()
     glutInitWindowSize(400, 400)
     glutCreateWindow(b"Turtle")

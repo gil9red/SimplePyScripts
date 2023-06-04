@@ -13,7 +13,7 @@ http://www.de-brauwer.be/wiki/wikka.php?wakka=PyOpenGLWireframe
 
 
 def axis(length):
-    """ Draws an axis (basicly a line with a cone on top) """
+    """Draws an axis (basicly a line with a cone on top)"""
     glPushMatrix()
     glBegin(GL_LINES)
     glVertex3d(0, 0, 0)
@@ -25,7 +25,7 @@ def axis(length):
 
 
 def three_axis(length):
-    """ Draws an X, Y and Z-axis """
+    """Draws an X, Y and Z-axis"""
 
     glPushMatrix()
     # Z-axis
@@ -56,7 +56,7 @@ def display_fun():
 
     glColor3f(0.0, 0.0, 0.0)
     glPushMatrix()
-    glTranslated(0.5, 0.5, 0.5);
+    glTranslated(0.5, 0.5, 0.5)
     glutWireCube(1.0)
     glPopMatrix()
 
@@ -106,7 +106,7 @@ def display_fun():
     glFlush()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     glutInit()
     glutInitWindowSize(640, 480)
     glutCreateWindow(b"3D")
