@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sqlite3
@@ -16,7 +16,7 @@ with sqlite3.connect(":memory:") as connect:
     print(items)
     # ('Version: 3.29.0', '2020-07-20')
 
-text = '\n'.join(items)
+text = "\n".join(items)
 
 qr_code = pyqrcode.create(text)
-qr_code.png('sqlite3.png', scale=6)
+qr_code.png("sqlite3.png", scale=6)
