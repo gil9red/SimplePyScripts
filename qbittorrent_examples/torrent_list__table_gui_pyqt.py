@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/qbittorrent/qbittorrent/wiki/WebUI-API-Documentation#get-torrent-list
 
 
-from common import get_client
-
 from PyQt5.Qt import *
+
+from common import get_client
 
 
 class TorrentInfoWidget(QTableWidget):
@@ -20,7 +20,7 @@ class TorrentInfoWidget(QTableWidget):
         self.setSelectionBehavior(QTableWidget.SelectRows)
         self.setSelectionMode(QTableWidget.SingleSelection)
 
-        headers = ['KEY', 'VALUE']
+        headers = ["KEY", "VALUE"]
         self.setColumnCount(len(headers))
         self.setHorizontalHeaderLabels(headers)
 
@@ -88,12 +88,12 @@ class MainWindow(QMainWindow):
         torrent = items[0].data(Qt.UserRole)
 
         qb = get_client()
-        torrent_details = qb.get_torrent(torrent['hash'])
+        torrent_details = qb.get_torrent(torrent["hash"])
 
         self.torrent_info_widget.fill(torrent_details)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
