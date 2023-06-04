@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/madmaze/pytesseract
@@ -9,20 +9,22 @@ __author__ = 'ipetrash'
 
 import re
 
-# pip install pillow
-from PIL import Image
-
 # pip install pytesseract
 # Tesseract.exe from https://github.com/UB-Mannheim/tesseract/wiki
 import pytesseract
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+# pip install pillow
+from PIL import Image
+
+
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 
 # Simple image to string
-img = Image.open('test.jpg')
-text = pytesseract.image_to_string(img, lang='eng')
+img = Image.open("test.jpg")
+text = pytesseract.image_to_string(img, lang="eng")
 
-text = re.sub(r'(\s){2,}', '\1', text)
+text = re.sub(r"(\s){2,}", "\1", text)
 print(text)
 # At this Time. two Great Empires struggled
 # for Dominion over Ivalice:Archadia in the East. Rozarria. the West.
