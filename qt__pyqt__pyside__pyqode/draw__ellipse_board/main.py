@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5 import Qt
@@ -33,7 +33,7 @@ class Window(Qt.QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('draw__ellipse_board')
+        self.setWindowTitle("draw__ellipse_board")
 
         self.cell_widget = CellWidget()
 
@@ -41,7 +41,9 @@ class Window(Qt.QWidget):
         self.pb_ball_size.setRange(5, 1000)
 
         self.sl_ball_size = Qt.QSlider(Qt.Qt.Horizontal)
-        self.sl_ball_size.setRange(self.pb_ball_size.minimum(), self.pb_ball_size.maximum())
+        self.sl_ball_size.setRange(
+            self.pb_ball_size.minimum(), self.pb_ball_size.maximum()
+        )
 
         self.sl_ball_size.valueChanged.connect(self._set_ball_size)
         self.pb_ball_size.valueChanged.connect(self._set_ball_size)
@@ -66,7 +68,7 @@ class Window(Qt.QWidget):
         self.cell_widget.update()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = Qt.QApplication([])
 
     w = Window()

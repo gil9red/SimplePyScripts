@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5 import Qt
@@ -11,7 +11,7 @@ class Window(Qt.QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('draw__ellipse_board__chess_order__decrease')
+        self.setWindowTitle("draw__ellipse_board__chess_order__decrease")
 
     def paintEvent(self, event: Qt.QPaintEvent):
         painter = Qt.QPainter(self)
@@ -44,7 +44,7 @@ class Window(Qt.QWidget):
             y += h_indent
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = Qt.QApplication([])
 
     w = Window()
