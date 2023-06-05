@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -19,10 +19,10 @@ from PyQt5.QtCore import QThread, pyqtSignal
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    text += ''.join(traceback.format_tb(tb))
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
 
-    print('Error: ', text)
+    print("Error: ", text)
 
 
 sys.excepthook = log_uncaught_exceptions
@@ -37,7 +37,7 @@ class MyThread(QThread):
         self.executed = False
 
     def run(self):
-        print('start thread')
+        print("start thread")
 
         try:
             for i in range(1000000):
@@ -51,7 +51,7 @@ class MyThread(QThread):
                 time.sleep(0.005)
 
         finally:
-            print('finish thread')
+            print("finish thread")
 
     def start(self, priority=QThread.InheritPriority):
         self.executed = True
@@ -91,7 +91,7 @@ class Widget(QWidget):
         sys.exit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = Widget()

@@ -1,22 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import win32gui
 
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWinExtras import QtWin
 
-import win32gui
 
 
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.DEFAULT_MOUSE_PIXMAP = QPixmap('default_mouse.png').scaledToWidth(16)
+        self.DEFAULT_MOUSE_PIXMAP = QPixmap("default_mouse.png").scaledToWidth(16)
 
         self.label = QLabel()
 
@@ -42,7 +43,7 @@ class MainWindow(QWidget):
         self.label.setPixmap(pixmap)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()

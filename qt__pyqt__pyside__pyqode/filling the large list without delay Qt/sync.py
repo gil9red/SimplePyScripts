@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -17,10 +17,10 @@ from PyQt5.QtWidgets import QWidget, QListWidget, QApplication, QVBoxLayout
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    text += ''.join(traceback.format_tb(tb))
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
 
-    print('Error: ', text)
+    print("Error: ", text)
 
 
 sys.excepthook = log_uncaught_exceptions
@@ -54,7 +54,7 @@ class Widget(QWidget):
         sys.exit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = Widget()
