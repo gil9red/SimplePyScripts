@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import sys
+import traceback
 
 try:
     from PyQt5.QtWidgets import *
@@ -15,16 +18,14 @@ except:
 
 # Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
 
-    print('Error: ', text)
-    QMessageBox.critical(None, 'Error', text)
+    print("Error: ", text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -106,7 +107,7 @@ class MyDelegate_2(QStyledItemDelegate):
         # super().paint(painter, option, index)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     table = QTableWidget()
@@ -114,15 +115,15 @@ if __name__ == '__main__':
     table.show()
     table.resize(400, 200)
 
-    headers = ['Normal', 'Delegate v1', 'Delegate v1 (without img)', 'Delegate v2']
+    headers = ["Normal", "Delegate v1", "Delegate v1 (without img)", "Delegate v2"]
     table.setColumnCount(len(headers))
     table.setHorizontalHeaderLabels(headers)
     table.setRowCount(3)
     table.verticalHeader().hide()
 
-    pix_1 = QPixmap('favicon_google.png')
-    pix_2 = QPixmap('favicon_prog_org.png')
-    pix_3 = QPixmap('favicon_google_tr.png')
+    pix_1 = QPixmap("favicon_google.png")
+    pix_2 = QPixmap("favicon_prog_org.png")
+    pix_3 = QPixmap("favicon_google_tr.png")
 
     for col in range(table.columnCount()):
         if col == 2:
