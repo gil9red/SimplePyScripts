@@ -1,25 +1,33 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from PyQt5.QtWidgets import QWidget, QApplication, QLabel,  QHBoxLayout, QScrollArea, QMessageBox
+import sys
+import traceback
+
+from PyQt5.QtWidgets import (
+    QWidget,
+    QApplication,
+    QLabel,
+    QHBoxLayout,
+    QScrollArea,
+    QMessageBox,
+)
 from PyQt5.QtGui import QPainter, QColor, QPixmap, QPalette
 from PyQt5.QtCore import Qt, QEvent
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -29,7 +37,7 @@ class Example(QWidget):
 
         self.flag = False
 
-        self.image = QPixmap('image.jpg')
+        self.image = QPixmap("image.jpg")
 
         self.label = QLabel()
         self.label.setAlignment(Qt.AlignLeft)
@@ -48,7 +56,7 @@ class Example(QWidget):
 
         # Рисовать будем на картинке
         self.painter = QPainter(self.image)
-        self.painter.setBrush(QColor('yellow'))
+        self.painter.setBrush(QColor("yellow"))
 
     def eventFilter(self, obj, e):
         # Если событие пришло от self.label
@@ -74,7 +82,7 @@ class Example(QWidget):
         self.label.setPixmap(self.image)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = Example()
