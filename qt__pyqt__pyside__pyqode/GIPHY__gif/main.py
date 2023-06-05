@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://ru.stackoverflow.com/q/1134473/201445
@@ -14,8 +14,18 @@ import traceback
 import requests
 
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QFrame, QMessageBox,
-    QLineEdit, QPushButton, QLabel, QScrollArea, QWidget, QGridLayout
+    QApplication,
+    QMainWindow,
+    QVBoxLayout,
+    QHBoxLayout,
+    QFrame,
+    QMessageBox,
+    QLineEdit,
+    QPushButton,
+    QLabel,
+    QScrollArea,
+    QWidget,
+    QGridLayout,
 )
 from PyQt5.QtCore import QThread, pyqtSignal, Qt
 from PyQt5.QtGui import QMovie
@@ -24,11 +34,11 @@ from config import GIPHY_API_KEY, TEMP_DIR
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    text += ''.join(traceback.format_tb(tb))
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
@@ -36,7 +46,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class SearchGifThread(QThread):
-    SITE_URL = 'https://api.giphy.com/v1'
+    SITE_URL = "https://api.giphy.com/v1"
 
     about_add_gif = pyqtSignal(dict, int, int)
 
@@ -46,13 +56,13 @@ class SearchGifThread(QThread):
         self.name_gif = name_gif
 
     def get_gif(self) -> dict:
-        url = f'{self.SITE_URL}/gifs/search?api_key={GIPHY_API_KEY}&q={self.name_gif}'
+        url = f"{self.SITE_URL}/gifs/search?api_key={GIPHY_API_KEY}&q={self.name_gif}"
 
         try:
             rs = requests.get(url)
             rs.raise_for_status()
 
-            data = rs.json()['data']
+            data = rs.json()["data"]
             if data:
                 return data
 
@@ -61,29 +71,34 @@ class SearchGifThread(QThread):
             print(e)
 
         # TODO: emit 'not found' to MainWindow
-        return {'error': True}
+        return {"error": True}
 
     def _process_gif(self, img: dict, index: int) -> dict:
-        url_gif = img['images']['fixed_width']['url']
+        url_gif = img["images"]["fixed_width"]["url"]
         image_rs = requests.get(url_gif)
         image_rs.raise_for_status()
 
         file_name = TEMP_DIR / f"img{index}.gif"
-        with open(file_name, 'wb') as f:
+        with open(file_name, "wb") as f:
             f.write(image_rs.content)
 
-        data = {'row': index // 3, 'col': index % 3, 'error': None, 'file_name': str(file_name)}
+        data = {
+            "row": index // 3,
+            "col": index % 3,
+            "error": None,
+            "file_name": str(file_name),
+        }
         return data
 
     def run(self):
         data = self.get_gif()
-        if 'error' in data:
+        if "error" in data:
             # TODO: emit error to MainWindow
             return
 
         for i, img in enumerate(data):
             data_gif = self._process_gif(img, i)
-            self.about_add_gif.emit(data_gif, i+1, len(data))
+            self.about_add_gif.emit(data_gif, i + 1, len(data))
 
             time.sleep(1)
 
@@ -92,7 +107,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.title = 'Gif Manager'
+        self.title = "Gif Manager"
         self.setWindowTitle(self.title)
 
         self.search_gif_thread = SearchGifThread()
@@ -105,9 +120,9 @@ class MainWindow(QMainWindow):
     def init_ui(self):
         self.gif_edit = QLineEdit()
         self.gif_edit.returnPressed.connect(self.search_gif)
-        self.gif_edit.setPlaceholderText('Enter name gif')
+        self.gif_edit.setPlaceholderText("Enter name gif")
 
-        gif_search_button = QPushButton('Search gif')
+        gif_search_button = QPushButton("Search gif")
         gif_search_button.clicked.connect(self.search_gif)
 
         gif_data_layout = QHBoxLayout()
@@ -157,9 +172,9 @@ class MainWindow(QMainWindow):
         self.search_gif_thread.start()
 
     def add_gif(self, data: dict, num: int, total: int):
-        self.setWindowTitle(f'{self.title}. {num} / {total}')
+        self.setWindowTitle(f"{self.title}. {num} / {total}")
 
-        if data['error']:
+        if data["error"]:
             self.gif_data_frame.setEnabled(True)
             self.scroll.hide()
             self.info_label.show()
@@ -183,6 +198,6 @@ if __name__ == "__main__":
     mw.resize(800, 600)
     mw.show()
 
-    mw.gif_edit.setText('cat')
+    mw.gif_edit.setText("cat")
 
     sys.exit(app.exec_())
