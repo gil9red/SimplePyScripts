@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import os.path
 import traceback
 from urllib.request import urlretrieve
 
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QFormLayout, QTextEdit
+from PyQt5.QtWidgets import (
+    QApplication,
+    QWidget,
+    QPushButton,
+    QLineEdit,
+    QFormLayout,
+    QTextEdit,
+)
 from PyQt5.QtCore import QThread, pyqtSignal
 
 
@@ -32,7 +39,12 @@ class ThreadDownload(QThread):
                 percent = 100
                 readsofar = totalsize
 
-            s = "%5.1f%% %*d / %d" % (percent, len(str(totalsize)), readsofar, totalsize)
+            s = "%5.1f%% %*d / %d" % (
+                percent,
+                len(str(totalsize)),
+                readsofar,
+                totalsize,
+            )
             self.about_progress.emit(s)
 
         # Total size is unknown
@@ -41,7 +53,9 @@ class ThreadDownload(QThread):
 
     def run(self):
         try:
-            file_name, _ = urlretrieve(self.url, self.file_name, reporthook=self.reporthook)
+            file_name, _ = urlretrieve(
+                self.url, self.file_name, reporthook=self.reporthook
+            )
             file_name = os.path.abspath(file_name)
             self.about_file_name.emit(file_name)
 
@@ -53,17 +67,19 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.line_edit_url = QLineEdit('https://codeload.github.com/gil9red/SimplePyScripts/zip/master')
-        self.line_edit_file_name = QLineEdit('SimplePyScripts.zip')
+        self.line_edit_url = QLineEdit(
+            "https://codeload.github.com/gil9red/SimplePyScripts/zip/master"
+        )
+        self.line_edit_file_name = QLineEdit("SimplePyScripts.zip")
 
-        self.button_download = QPushButton('Download')
+        self.button_download = QPushButton("Download")
         self.button_download.clicked.connect(self.download)
 
         self.text_edit_log = QTextEdit()
 
         layout = QFormLayout()
-        layout.addRow('URL:', self.line_edit_url)
-        layout.addRow('File Name:', self.line_edit_file_name)
+        layout.addRow("URL:", self.line_edit_url)
+        layout.addRow("File Name:", self.line_edit_file_name)
         layout.addWidget(self.button_download)
         layout.addWidget(self.text_edit_log)
 
@@ -85,13 +101,15 @@ class MainWindow(QWidget):
         self.setWindowTitle(text)
 
     def _handle_about_file_name(self, text: str):
-        self.text_edit_log.append(f"""<b><p style="color:green">File name: {text}</p></b>""")
+        self.text_edit_log.append(
+            f"""<b><p style="color:green">File name: {text}</p></b>"""
+        )
 
     def _handle_about_error(self, text: str):
         self.text_edit_log.append(f"""<pre style="color:red">{text}</pre>""")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()

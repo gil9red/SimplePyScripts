@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import os.path
-from threading import Thread
 import traceback
+
+from threading import Thread
 from urllib.request import urlretrieve
 
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QFormLayout
@@ -24,15 +25,17 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.line_edit_url = QLineEdit('https://codeload.github.com/gil9red/SimplePyScripts/zip/master')
-        self.line_edit_file_name = QLineEdit('SimplePyScripts.zip')
+        self.line_edit_url = QLineEdit(
+            "https://codeload.github.com/gil9red/SimplePyScripts/zip/master"
+        )
+        self.line_edit_file_name = QLineEdit("SimplePyScripts.zip")
 
-        self.button_download = QPushButton('Download')
+        self.button_download = QPushButton("Download")
         self.button_download.clicked.connect(self.download)
 
         layout = QFormLayout()
-        layout.addRow('URL:', self.line_edit_url)
-        layout.addRow('File Name:', self.line_edit_file_name)
+        layout.addRow("URL:", self.line_edit_url)
+        layout.addRow("File Name:", self.line_edit_file_name)
         layout.addWidget(self.button_download)
 
         self.setLayout(layout)
@@ -45,7 +48,7 @@ class MainWindow(QWidget):
         thread.start()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()

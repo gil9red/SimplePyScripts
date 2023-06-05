@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QApplication, QWidget
@@ -9,7 +9,7 @@ from PyQt5.QtGui import QPainter, QPixmap
 from PyQt5.QtCore import Qt, QRect
 
 
-FILE_NAME = 'emoji-video-game-512x512.png'
+FILE_NAME = "emoji-video-game-512x512.png"
 
 
 class Widget(QWidget):
@@ -32,7 +32,7 @@ class Widget(QWidget):
         painter.drawPixmap(img_rect.topLeft(), self.img)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = Widget()
