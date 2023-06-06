@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from typing import Iterator
@@ -58,11 +58,11 @@ class IteratorListModel(QAbstractListModel):
         return len(self._items)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     model = IteratorListModel(it=range(1_000_000))
-    model.rowsInserted.connect(lambda: mw.setWindowTitle(f'Rows: {model.rowCount()}'))
+    model.rowsInserted.connect(lambda: mw.setWindowTitle(f"Rows: {model.rowCount()}"))
 
     mw = QListView()
     mw.setModel(model)
