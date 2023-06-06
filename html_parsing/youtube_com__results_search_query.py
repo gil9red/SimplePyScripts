@@ -198,7 +198,8 @@ class Video:
     @classmethod
     def parse_title(cls, data_video: dict) -> str:
         if title := data_video.get("title"):
-            return title
+            if title and isinstance(title, str):
+                return title
 
         try:
             return dpath.util.get(data_video, "title/runs/0/text")
