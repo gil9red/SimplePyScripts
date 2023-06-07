@@ -1,24 +1,33 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import json
 import sys
+import traceback
 
 from difflib import get_close_matches
-from PyQt5.Qt import QApplication, QMainWindow, QPushButton, QTextEdit, QVBoxLayout, QWidget, QMessageBox, QLineEdit
+from PyQt5.Qt import (
+    QApplication,
+    QMainWindow,
+    QPushButton,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+    QMessageBox,
+    QLineEdit,
+)
 
 
 # Для отлова исключений
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
@@ -29,12 +38,12 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.data = json.load(open("data.json", encoding='utf-8'))
+        self.data = json.load(open("data.json", encoding="utf-8"))
 
         self.input_word = QLineEdit()
         self.output_te = QTextEdit()
 
-        self.result_pb = QPushButton('Проверить!')
+        self.result_pb = QPushButton("Проверить!")
         self.result_pb.clicked.connect(self._check)
 
         main_layout = QVBoxLayout()
@@ -52,9 +61,9 @@ class MainWindow(QMainWindow):
         output = self._retrive_definition(word_user)
 
         if type(output) == list:
-            output = '\n'.join(' - ' + x for x in output)
+            output = "\n".join(" - " + x for x in output)
         else:
-            output = ' - ' + output
+            output = " - " + output
 
         self.output_te.setPlainText(output)
 
@@ -71,7 +80,7 @@ class MainWindow(QMainWindow):
             items = get_close_matches(word, self.data.keys())
             if items:
                 text = 'Может быть Вы имели в виду "{}"?'.format(items[0])
-                ok = QMessageBox.question(self, 'Вопрос', text)
+                ok = QMessageBox.question(self, "Вопрос", text)
                 if ok == QMessageBox.Yes:
                     return self.data[items[0]]
 
