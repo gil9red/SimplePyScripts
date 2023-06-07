@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://ru.stackoverflow.com/a/970882/201445
@@ -15,12 +15,12 @@ from PyQt5.Qt import QApplication, QWidget, QPainter, QTimer, Qt, QPoint, QPen
 
 
 class Ball:
-    r = 50     # Радиус шарика
-    x = 0      # Координата по х центра шарика
-    y = 0      # Координата по y центра шарика
+    r = 50  # Радиус шарика
+    x = 0  # Координата по х центра шарика
+    y = 0  # Координата по y центра шарика
     speed = 0  # Скорость движения
-    dir_x = 0   # Компонент x вектора движения шарика
-    dir_y = 0   # Компонент y вектора движения шарика
+    dir_x = 0  # Компонент x вектора движения шарика
+    dir_y = 0  # Компонент y вектора движения шарика
     damp = 10  # Скорость уменьшения скорости движения (сопротивление)
     collision = False  # Признак коллизии с внешним кругом
     speed_after_collision = 300  # Скорость движения шарика после столкновения
@@ -165,7 +165,7 @@ class MainWindow(QWidget):
         painter.drawEllipse(QPoint(self.ball.x, self.ball.y), self.ball.r, self.ball.r)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
