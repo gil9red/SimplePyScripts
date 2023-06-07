@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from pathlib import Path
-
 
 from PyQt5.QtGui import QGuiApplication  # NOTE: For only QML, QGuiApplication is enough
 from PyQt5.QtQml import QQmlApplicationEngine

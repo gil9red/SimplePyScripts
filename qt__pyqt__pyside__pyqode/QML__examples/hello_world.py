@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from pathlib import Path
@@ -17,7 +17,7 @@ qml_file = Path(__file__).parent.resolve() / "hello_text.qml"
 url_qml_file = QUrl.fromLocalFile(str(qml_file))
 
 view = QQuickView()
-view.setTitle('Hello World!')
+view.setTitle("Hello World!")
 view.setSource(url_qml_file)
 view.show()
 

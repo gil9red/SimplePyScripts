@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout
 from PyQt5.QtQuick import QQuickView, QQuickItem
@@ -20,12 +20,12 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('Hello World! (QML + Qt)')
+        self.setWindowTitle("Hello World! (QML + Qt)")
 
         self.view = QQuickView()
         self.view.setSource(URL_QML_FILE)
 
-        pb_click = QPushButton('Click me!')
+        pb_click = QPushButton("Click me!")
         pb_click.clicked.connect(self._on_clicked)
 
         main_layout = QVBoxLayout(self)
@@ -34,14 +34,14 @@ class MainWindow(QWidget):
 
     def _on_clicked(self):
         qml_hello_text = self.view.rootObject().findChild(QQuickItem, "helloText")
-        qml_hello_text.setProperty('text', f'Now: {datetime.now().time():%H:%M:%S}')
+        qml_hello_text.setProperty("text", f"Now: {datetime.now().time():%H:%M:%S}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     view = QQuickView()
-    view.setTitle('Hello World! (single)')
+    view.setTitle("Hello World! (single)")
     view.setSource(URL_QML_FILE)
     view.show()
 
