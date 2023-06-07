@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5 import Qt
@@ -14,7 +14,7 @@ html = """
 """
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = Qt.QApplication([])
 
     printer = Qt.QPrinter()
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     te.setHtml(html)
     te.show()
 
-    printer.setOutputFileName('result.pdf')
+    printer.setOutputFileName("result.pdf")
     te.print(printer)
 
     app.exec()
