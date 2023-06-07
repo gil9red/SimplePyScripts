@@ -2,36 +2,37 @@
 # -*- coding: utf-8 -*-
 
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import traceback
+import sys
 
 from PyQt5 import Qt
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    Qt.QMessageBox.critical(None, 'Error', text)
+    Qt.QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
 class Widget(Qt.QLabel):
-    dog_sound_1 = 'dog_sound_1.mp3'
-    dog_sound_2 = 'dog_sound_2.mp3'
+    dog_sound_1 = "dog_sound_1.mp3"
+    dog_sound_2 = "dog_sound_2.mp3"
 
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('Dog Bang!')
+        self.setWindowTitle("Dog Bang!")
 
-        self.setPixmap(Qt.QPixmap('dog.png'))
+        self.setPixmap(Qt.QPixmap("dog.png"))
         self.player = Qt.QMediaPlayer()
 
     def mouseReleaseEvent(self, event: Qt.QMouseEvent):
@@ -43,7 +44,7 @@ class Widget(Qt.QLabel):
         self.player.play()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = Qt.QApplication([])
 
     w = Widget()
