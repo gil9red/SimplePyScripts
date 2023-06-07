@@ -2,10 +2,17 @@
 # -*- coding: utf-8 -*-
 
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from PyQt5.QtWidgets import QApplication, QLabel, QGraphicsScene, QGraphicsView, QGraphicsLinearLayout, QGraphicsWidget
+from PyQt5.QtWidgets import (
+    QApplication,
+    QLabel,
+    QGraphicsScene,
+    QGraphicsView,
+    QGraphicsLinearLayout,
+    QGraphicsWidget,
+)
 from PyQt5.QtGui import QMovie
 from PyQt5.QtCore import Qt
 
@@ -14,7 +21,7 @@ class Window(QGraphicsView):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('loading_gif')
+        self.setWindowTitle("loading_gif")
         self.resize(250, 120)
 
         self.scene = QGraphicsScene()
@@ -40,14 +47,14 @@ class Window(QGraphicsView):
             main_layout.addItem(proxy_item)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw_1 = Window()
     mw_1.show()
 
     mw_2 = Window()
-    mw_2.setStyleSheet('background-color: green')
+    mw_2.setStyleSheet("background-color: green")
     mw_2.show()
 
     app.exec()

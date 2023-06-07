@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QWidget, QApplication, QHBoxLayout, QLabel
@@ -13,7 +13,7 @@ class Window(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('loading_gif')
+        self.setWindowTitle("loading_gif")
 
         self.main_layout = QHBoxLayout()
 
@@ -30,14 +30,14 @@ class Window(QWidget):
         self.setLayout(self.main_layout)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw_1 = Window()
     mw_1.show()
 
     mw_2 = Window()
-    mw_2.setStyleSheet('background-color: green')
+    mw_2.setStyleSheet("background-color: green")
     mw_2.show()
 
     app.exec()
