@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QApplication, QLabel
@@ -12,7 +12,7 @@ class Label(QLabel):
     def __init__(self):
         super().__init__()
 
-        self.pixmap = QPixmap('52rQ3.png')
+        self.pixmap = QPixmap("52rQ3.png")
         self.pixmap_leave = self.pixmap.copy(0, 0, 26, 26)
         self.pixmap_enter = self.pixmap.copy(26, 0, 52, 26)
 
@@ -25,7 +25,7 @@ class Label(QLabel):
         self.setPixmap(self.pixmap_leave)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = Label()
