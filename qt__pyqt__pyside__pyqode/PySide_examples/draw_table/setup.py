@@ -9,12 +9,8 @@
 
 from cx_Freeze import setup, Executable
 
-executables = [
-    Executable('draw_table.py')
-]
+executables = [Executable("draw_table.py")]
 
-setup(name='draw_table',
-      version='0.1',
-      description='draw_table',
-      executables=executables
-      )
+setup(
+    name="draw_table", version="0.1", description="draw_table", executables=executables
+)

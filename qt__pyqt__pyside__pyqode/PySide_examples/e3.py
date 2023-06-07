@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PySide.QtGui import *
@@ -27,15 +27,15 @@ class MainWindow(QMainWindow):
     def slot_save_as(self):
         file_name = QFileDialog.getSaveFileName()[0]
         if file_name:
-            with open(file_name, 'w') as f:
-                 f.write(self.editor.toPlainText())
+            with open(file_name, "w") as f:
+                f.write(self.editor.toPlainText())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
 
     app = QApplication(sys.argv)
-    app.setApplicationName('myWindow')
+    app.setApplicationName("myWindow")
 
     w = MainWindow()
     w.show()

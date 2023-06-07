@@ -1,21 +1,23 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import time
+from threading import Thread
 
 from grab import Grab
-import sys
 from PySide.QtGui import *
-from threading import Thread
-import time
 
 
 def get_confucius_quotes():
     g = Grab()
     # http://ru.wikiquote.org/wiki/Конфуций
-    url = "http://ru.wikiquote.org/wiki/%D0%9A%D0%BE%D0%BD%D1%84%D1%83%D1%86%D0%B8%D0%B9"
+    url = (
+        "http://ru.wikiquote.org/wiki/%D0%9A%D0%BE%D0%BD%D1%84%D1%83%D1%86%D0%B8%D0%B9"
+    )
     g.go(url)
 
     quotes = list()
-    for el in g.doc.select('//h2/following-sibling::ul/li'):
+    for el in g.doc.select("//h2/following-sibling::ul/li"):
         quotes.append(el.text())
 
     return quotes
@@ -45,7 +47,9 @@ class Window(QMainWindow):
         thread.start()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    import sys
+
     app = QApplication(sys.argv)
 
     w = Window()

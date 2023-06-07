@@ -1,4 +1,4 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Пример показывает как можно создать простое окно с небольшим функционалом,
@@ -36,9 +36,9 @@ class SimpleWindow(QtGui.QWidget):
             self.lw_log.addItem(text)
 
 
-import sys
+if __name__ == "__main__":
+    import sys
 
-if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
 
     w = SimpleWindow()

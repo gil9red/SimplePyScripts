@@ -1,14 +1,15 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Простой пример использования модуля PySide
 
 
 from PySide.QtGui import *
-# from PySide.QtCore import *
-import sys
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
+    import sys
+
     app = QApplication(sys.argv)
 
     def says():
