@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://ru.stackoverflow.com/a/1355594/201445
@@ -11,18 +11,25 @@ import sys
 
 from PyQt5.QtWidgets import QCheckBox
 from PyQt5.QtGui import QPainter, QColor
-from PyQt5.QtCore import Qt, QEasingCurve, QPropertyAnimation, pyqtProperty, QPoint, QRect
+from PyQt5.QtCore import (
+    Qt,
+    QEasingCurve,
+    QPropertyAnimation,
+    pyqtProperty,
+    QPoint,
+    QRect,
+)
 
 
 class ToggleButton(QCheckBox):
     def __init__(
-            self,
-            width=70,
-            height=40,
-            bg_color="#777",
-            circle_color="#DDD",
-            active_color="#00BCff",
-            animation_curve=QEasingCurve.OutBounce,
+        self,
+        width=70,
+        height=40,
+        bg_color="#777",
+        circle_color="#DDD",
+        active_color="#00BCff",
+        animation_curve=QEasingCurve.OutBounce,
     ):
         super().__init__()
 
@@ -72,20 +79,21 @@ class ToggleButton(QCheckBox):
 
         p.setBrush(QColor(self._active_color if self.isChecked() else self._bg_color))
         p.drawRoundedRect(
-            0, 0,
-            rect.width(),
-            self.height(),
-            self.height() / 2,
-            self.height() / 2
+            0, 0, rect.width(), self.height(), self.height() / 2, self.height() / 2
         )
 
         p.setBrush(QColor(self._circle_color))
 
         x, y = self._circle_position, self._circle_margin
-        p.drawEllipse(x, y, self._circle_size - self._circle_margin, self._circle_size - self._circle_margin)
+        p.drawEllipse(
+            x,
+            y,
+            self._circle_size - self._circle_margin,
+            self._circle_size - self._circle_margin,
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout
 
     class MainWindow(QWidget):
@@ -103,4 +111,3 @@ if __name__ == '__main__':
     w.resize(500, 500)
     w.show()
     sys.exit(app.exec_())
-

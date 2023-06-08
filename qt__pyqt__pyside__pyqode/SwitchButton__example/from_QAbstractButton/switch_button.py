@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://stackoverflow.com/a/51825815/5909792
 
 
-from PyQt5.QtWidgets import QAbstractButton, QApplication, QHBoxLayout, QSizePolicy, QWidget
+from PyQt5.QtWidgets import (
+    QAbstractButton,
+    QApplication,
+    QHBoxLayout,
+    QSizePolicy,
+    QWidget,
+)
 from PyQt5.QtCore import QPropertyAnimation, QRectF, QSize, Qt, pyqtProperty
 from PyQt5.QtGui import QPainter
 
@@ -44,8 +50,8 @@ class Switch(QAbstractButton):
                 False: palette.dark().color(),
             }
             self._thumb_text = {
-                True: '',
-                False: '',
+                True: "",
+                False: "",
             }
             self._track_opacity = 0.5
         else:
@@ -62,8 +68,8 @@ class Switch(QAbstractButton):
                 False: palette.dark().color(),
             }
             self._thumb_text = {
-                True: '✔',
-                False: '✕',
+                True: "✔",
+                False: "✕",
             }
             self._track_opacity = 1
 
@@ -144,7 +150,7 @@ class Switch(QAbstractButton):
     def mouseReleaseEvent(self, event):  # pylint: disable=invalid-name
         super().mouseReleaseEvent(event)
         if event.button() == Qt.LeftButton:
-            anim = QPropertyAnimation(self, b'offset', self)
+            anim = QPropertyAnimation(self, b"offset", self)
             anim.setDuration(120)
             anim.setStartValue(self.offset)
             anim.setEndValue(self._end_offset[self.isChecked()]())
@@ -160,10 +166,10 @@ def main():
 
     # Thumb size < track size (Gitlab style)
     s1 = Switch()
-    s1.toggled.connect(lambda c: print('toggled', c))
-    s1.clicked.connect(lambda c: print('clicked', c))
-    s1.pressed.connect(lambda: print('pressed'))
-    s1.released.connect(lambda: print('released'))
+    s1.toggled.connect(lambda c: print("toggled", c))
+    s1.clicked.connect(lambda c: print("clicked", c))
+    s1.pressed.connect(lambda: print("pressed"))
+    s1.released.connect(lambda: print("released"))
     s2 = Switch()
     s2.setEnabled(False)
 
@@ -184,5 +190,5 @@ def main():
     app.exec()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

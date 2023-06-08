@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://stackoverflow.com/a/51023362/5909792
@@ -19,17 +19,21 @@ class SwitchButton(QtWidgets.QWidget):
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.__labeloff = QtWidgets.QLabel(self)
         self.__labeloff.setText(w2)
-        self.__labeloff.setStyleSheet("""color: rgb(120, 120, 120); font-weight: bold;""")
-        self.__background  = Background(self)
+        self.__labeloff.setStyleSheet(
+            """color: rgb(120, 120, 120); font-weight: bold;"""
+        )
+        self.__background = Background(self)
         self.__labelon = QtWidgets.QLabel(self)
         self.__labelon.setText(w1)
-        self.__labelon.setStyleSheet("""color: rgb(255, 255, 255); font-weight: bold;""")
-        self.__circle      = Circle(self)
-        self.__circlemove  = None
+        self.__labelon.setStyleSheet(
+            """color: rgb(255, 255, 255); font-weight: bold;"""
+        )
+        self.__circle = Circle(self)
+        self.__circlemove = None
         self.__ellipsemove = None
-        self.__enabled     = True
-        self.__duration    = 100
-        self.__value       = False
+        self.__enabled = True
+        self.__duration = 100
+        self.__value = False
         self.setFixedSize(width, 24)
 
         self.__background.resize(20, 20)
@@ -58,16 +62,16 @@ class SwitchButton(QtWidgets.QWidget):
         self.__ellipsemove.setDuration(self.__duration)
 
         xs = 2
-        y  = 2
-        xf = self.width()-22
+        y = 2
+        xf = self.width() - 22
         hback = 20
         isize = QtCore.QSize(hback, hback)
-        bsize = QtCore.QSize(self.width()-4, hback)
+        bsize = QtCore.QSize(self.width() - 4, hback)
         if self.__value:
             xf = 2
-            xs = self.width()-22
+            xs = self.width() - 22
             bsize = QtCore.QSize(hback, hback)
-            isize = QtCore.QSize(self.width()-4, hback)
+            isize = QtCore.QSize(self.width() - 4, hback)
 
         self.__circlemove.setStartValue(QtCore.QPoint(xs, y))
         self.__circlemove.setEndValue(QtCore.QPoint(xf, y))
@@ -96,7 +100,7 @@ class SwitchButton(QtWidgets.QWidget):
         lg.setColorAt(0.82, QtGui.QColor(255, 255, 255, 255))
         lg.setColorAt(1, QtGui.QColor(210, 210, 210, 255))
         qp.setBrush(lg)
-        qp.drawRoundedRect(1, 1, s.width()-2, s.height()-2, 10, 10)
+        qp.drawRoundedRect(1, 1, s.width() - 2, s.height() - 2, 10, 10)
 
         qp.setBrush(QtGui.QColor(210, 210, 210))
         qp.drawRoundedRect(2, 2, s.width() - 4, s.height() - 4, 10, 10)
@@ -139,19 +143,19 @@ class Circle(QtWidgets.QWidget):
         rg.setColorAt(0.6, QtGui.QColor(255, 255, 255))
         rg.setColorAt(1, QtGui.QColor(205, 205, 205))
         qp.setBrush(QtGui.QBrush(rg))
-        qp.drawEllipse(1,1, 18, 18)
+        qp.drawEllipse(1, 1, 18, 18)
 
         qp.setBrush(QtGui.QColor(210, 210, 210))
         qp.drawEllipse(2, 2, 16, 16)
 
         if self.__enabled:
-            lg = QtGui.QLinearGradient(3, 18,20, 4)
+            lg = QtGui.QLinearGradient(3, 18, 20, 4)
             lg.setColorAt(0, QtGui.QColor(255, 255, 255, 255))
             lg.setColorAt(0.55, QtGui.QColor(230, 230, 230, 255))
             lg.setColorAt(0.72, QtGui.QColor(255, 255, 255, 255))
             lg.setColorAt(1, QtGui.QColor(255, 255, 255, 255))
             qp.setBrush(lg)
-            qp.drawEllipse(3,3, 14, 14)
+            qp.drawEllipse(3, 3, 14, 14)
         else:
             lg = QtGui.QLinearGradient(3, 18, 20, 4)
             lg.setColorAt(0, QtGui.QColor(230, 230, 230))
@@ -176,7 +180,7 @@ class Background(QtWidgets.QWidget):
         qp.setRenderHint(QtGui.QPainter.Antialiasing, True)
         pen = QtGui.QPen(QtCore.Qt.NoPen)
         qp.setPen(pen)
-        qp.setBrush(QtGui.QColor(154,205,50))
+        qp.setBrush(QtGui.QColor(154, 205, 50))
         if self.__enabled:
             qp.setBrush(QtGui.QColor(154, 190, 50))
             qp.drawRoundedRect(0, 0, s.width(), s.height(), 10, 10)
