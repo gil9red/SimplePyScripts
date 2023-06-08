@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtCore import QUrl, Qt
@@ -16,12 +16,13 @@ class MainWindow(QMainWindow):
         self.view = QWebEngineView()
         self.view.loadFinished.connect(self._on_load_finished)
 
-        with open('../QWebEngine__append_custom_javascript__jQuery/js/jquery-3.1.1.min.js') as f:
+        file_name = "../QWebEngine__append_custom_javascript__jQuery/js/jquery-3.1.1.min.js"
+        with open(file_name) as f:
             self.jquery_text = f.read()
             self.jquery_text += "\nvar qt = { 'jQuery': jQuery.noConflict(true) };"
 
-        tool_bar = self.addToolBar('General')
-        action = tool_bar.addAction('Change <a> background-color')
+        tool_bar = self.addToolBar("General")
+        action = tool_bar.addAction("Change <a> background-color")
         action.triggered.connect(self._change_background_color)
 
         self.setCentralWidget(self.view)
@@ -38,13 +39,13 @@ class MainWindow(QMainWindow):
         self.view.page().runJavaScript(code)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
     mw.resize(400, 400)
     mw.show()
 
-    mw.view.load(QUrl('https://store.steampowered.com/'))
+    mw.view.load(QUrl("https://store.steampowered.com/"))
 
     app.exec()
