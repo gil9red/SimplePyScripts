@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
-
-from typing import List, Tuple
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget
 from PyQt5.QtGui import QPainter
 from PyQt5.QtChart import QChart, QChartView, QLineSeries
 
 
-def get_themes() -> List[Tuple[str, QChart.ChartTheme]]:
-    NAME = 'ChartTheme'
+def get_themes() -> list[tuple[str, QChart.ChartTheme]]:
+    NAME = "ChartTheme"
 
     themes = []
     for theme_name in dir(QChart):
@@ -20,7 +18,7 @@ def get_themes() -> List[Tuple[str, QChart.ChartTheme]]:
             continue
 
         theme = getattr(QChart, theme_name)
-        theme_name = theme_name.replace(NAME, '')
+        theme_name = theme_name.replace(NAME, "")
 
         themes.append((theme_name, theme))
 
@@ -35,7 +33,7 @@ class MainWindow(QMainWindow):
         tab_widget = QTabWidget()
 
         chart_view = self.create_QChartView()
-        tab_widget.addTab(chart_view, '<DEFAULT>')
+        tab_widget.addTab(chart_view, "<DEFAULT>")
 
         for name, theme in get_themes():
             chart_view = self.create_QChartView()
@@ -67,7 +65,7 @@ class MainWindow(QMainWindow):
         return chart_view
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()

@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import math
 
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtGui import QPainter
-from PyQt5.QtCore import QRectF, QPoint, QSizeF
-from PyQt5.QtChart import QChart, QChartView, QLineSeries
+from PyQt5.QtChart import QChart, QLineSeries
 
 from chart_line__show_tooltip_on_series__QtChart import Callout, ChartViewToolTips
 
@@ -62,7 +60,7 @@ class MainWindow(ChartViewToolTips):
             self._tooltip.hide()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://doc.qt.io/qt-5/qtcharts-datetimeaxis-example.html
@@ -10,7 +10,6 @@ __author__ = 'ipetrash'
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QPainter
 from PyQt5.QtChart import QChart, QChartView, QLineSeries, QDateTimeAxis, QValueAxis
-
 from PyQt5.QtCore import QDateTime, Qt
 
 
@@ -43,12 +42,12 @@ class MainWindow(QMainWindow):
 
         axisX = QDateTimeAxis()
         axisX.setFormat("dd/MM/yyyy")
-        axisX.setTitleText('Date')
+        axisX.setTitleText("Date")
         chart.addAxis(axisX, Qt.AlignBottom)
         series.attachAxis(axisX)
 
         axisY = QValueAxis()
-        axisY.setTitleText('Value')
+        axisY.setTitleText("Value")
         chart.addAxis(axisY, Qt.AlignLeft)
         series.attachAxis(axisY)
 
@@ -59,7 +58,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(chart_view)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QApplication, QGraphicsItem, QGraphicsSceneMouseEvent
@@ -20,7 +20,7 @@ class Callout(QGraphicsItem):
         self._chart = chart
         self._chart.scene().addItem(self)
 
-        self._text = ''
+        self._text = ""
         self._textRect = QRectF()
         self._rect = QRectF()
         self._anchor = QPointF()
@@ -29,9 +29,9 @@ class Callout(QGraphicsItem):
     def setText(self, text: str):
         self._text = text
         metrics = QFontMetrics(self._font)
-        self._textRect = QRectF(metrics.boundingRect(
-            QRect(0, 0, 150, 150), Qt.AlignLeft, self._text
-        ))
+        self._textRect = QRectF(
+            metrics.boundingRect(QRect(0, 0, 150, 150), Qt.AlignLeft, self._text)
+        )
         self._textRect.translate(5, 5)
         self.prepareGeometryChange()
         self._rect = QRectF(self._textRect.adjusted(-5, -5, 5, 5))
@@ -73,39 +73,74 @@ class Callout(QGraphicsItem):
     def paint(self, painter: QPainter, option, widget=None):
         path = QPainterPath()
         path.addRoundedRect(self._rect, 5, 5)
-    
+
         anchor = self.mapFromParent(self._chart.mapToPosition(self._anchor))
         if not self._rect.contains(anchor):
             point1 = QPointF()
             point2 = QPointF()
-    
+
             # establish the position of the anchor point in relation to self._rect
             above = anchor.y() <= self._rect.top()
-            aboveCenter = anchor.y() > self._rect.top() and anchor.y() <= self._rect.center().y()
-            belowCenter = anchor.y() > self._rect.center().y() and anchor.y() <= self._rect.bottom()
+            aboveCenter = (
+                anchor.y() > self._rect.top() and anchor.y() <= self._rect.center().y()
+            )
+            belowCenter = (
+                anchor.y() > self._rect.center().y()
+                and anchor.y() <= self._rect.bottom()
+            )
             below = anchor.y() > self._rect.bottom()
-    
+
             onLeft = anchor.x() <= self._rect.left()
-            leftOfCenter = anchor.x() > self._rect.left() and anchor.x() <= self._rect.center().x()
-            rightOfCenter = anchor.x() > self._rect.center().x() and anchor.x() <= self._rect.right()
+            leftOfCenter = (
+                anchor.x() > self._rect.left() and anchor.x() <= self._rect.center().x()
+            )
+            rightOfCenter = (
+                anchor.x() > self._rect.center().x()
+                and anchor.x() <= self._rect.right()
+            )
             onRight = anchor.x() > self._rect.right()
-    
+
             # get the nearest self._rect corner.
             x = (onRight + rightOfCenter) * self._rect.width()
             y = (below + belowCenter) * self._rect.height()
-            cornerCase = (above and onLeft) or (above and onRight) or (below and onLeft) or (below and onRight)
+            cornerCase = (
+                (above and onLeft)
+                or (above and onRight)
+                or (below and onLeft)
+                or (below and onRight)
+            )
             vertical = abs(anchor.x() - x) > abs(anchor.y() - y)
-    
-            x1 = x + leftOfCenter * 10 - rightOfCenter * 20 + cornerCase * (not vertical) * (onLeft * 10 - onRight * 20)
-            y1 = y + aboveCenter * 10 - belowCenter * 20 + cornerCase * vertical * (above * 10 - below * 20)
+
+            x1 = (
+                x
+                + leftOfCenter * 10
+                - rightOfCenter * 20
+                + cornerCase * (not vertical) * (onLeft * 10 - onRight * 20)
+            )
+            y1 = (
+                y
+                + aboveCenter * 10
+                - belowCenter * 20
+                + cornerCase * vertical * (above * 10 - below * 20)
+            )
             point1.setX(x1)
             point1.setY(y1)
-    
-            x2 = x + leftOfCenter * 20 - rightOfCenter * 10 + cornerCase * (not vertical) * (onLeft * 20 - onRight * 10)
-            y2 = y + aboveCenter * 20 - belowCenter * 10 + cornerCase * vertical * (above * 20 - below * 10)
+
+            x2 = (
+                x
+                + leftOfCenter * 20
+                - rightOfCenter * 10
+                + cornerCase * (not vertical) * (onLeft * 20 - onRight * 10)
+            )
+            y2 = (
+                y
+                + aboveCenter * 20
+                - belowCenter * 10
+                + cornerCase * vertical * (above * 20 - below * 10)
+            )
             point2.setX(x2)
             point2.setY(y2)
-    
+
             path.moveTo(point1)
             path.lineTo(anchor)
             path.lineTo(point2)
@@ -121,7 +156,9 @@ class Callout(QGraphicsItem):
 
     def mouseMoveEvent(self, event: QGraphicsSceneMouseEvent):
         if event.buttons() & Qt.LeftButton:
-            self.setPos(self.mapToParent(event.pos() - event.buttonDownPos(Qt.LeftButton)))
+            self.setPos(
+                self.mapToParent(event.pos() - event.buttonDownPos(Qt.LeftButton))
+            )
             event.setAccepted(True)
         else:
             event.setAccepted(False)
@@ -225,7 +262,7 @@ class MainWindow(ChartViewToolTips):
         self.setChart(self._chart)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
