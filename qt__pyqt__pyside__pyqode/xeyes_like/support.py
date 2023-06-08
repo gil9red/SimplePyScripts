@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from dataclasses import dataclass
@@ -37,25 +37,36 @@ class UResultCrossLineAndEllipse:
     x2: float = 0
     y2: float = 0
 
+
 # TODO: rename
 class UIntersection:
     # Функция, которая считает пересечения эллипса и прямой
     # Когда пересечений нет, возвращает False, иначе True, а
     # в result присваивается точка пересечения
     @staticmethod
-    def isEllipseAndDirect(ellipse: UEllipse, line: ULine, result: UResultCrossLineAndEllipse) -> bool:
+    def isEllipseAndDirect(
+        ellipse: UEllipse, line: ULine, result: UResultCrossLineAndEllipse
+    ) -> bool:
         dx: float = line.x1 - line.x2
 
         # Если какой-то радиус равен 0
         if fabs(ellipse.rx) < eps or fabs(ellipse.ry) < eps:
-            if fabs(ellipse.rx) < eps and fabs(line.x1-ellipse.x1) < eps and fabs(line.x2-ellipse.x1) < eps:
+            if (
+                fabs(ellipse.rx) < eps
+                and fabs(line.x1 - ellipse.x1) < eps
+                and fabs(line.x2 - ellipse.x1) < eps
+            ):
                 result.x1 = ellipse.x1
                 result.y1 = ellipse.y1 - ellipse.ry
                 result.x2 = ellipse.x1
                 result.y2 = ellipse.y1 + ellipse.ry
                 return True
-            
-            if fabs(ellipse.ry) < eps and fabs(line.y1-ellipse.y1) < eps and fabs(line.y2-ellipse.y1) < eps:
+
+            if (
+                fabs(ellipse.ry) < eps
+                and fabs(line.y1 - ellipse.y1) < eps
+                and fabs(line.y2 - ellipse.y1) < eps
+            ):
                 result.x1 = ellipse.x1 - ellipse.rx
                 result.y1 = ellipse.y1
                 result.x2 = ellipse.x1 + ellipse.rx
@@ -71,7 +82,9 @@ class UIntersection:
                 return False
 
             result.x1 = nx
-            result.y1 = sqrt(ellipse.ry*ellipse.ry * (1 - nx*nx/(ellipse.rx*ellipse.rx)))
+            result.y1 = sqrt(
+                ellipse.ry * ellipse.ry * (1 - nx * nx / (ellipse.rx * ellipse.rx))
+            )
             result.x2 = nx
             result.y2 = -result.y1
 
@@ -80,16 +93,21 @@ class UIntersection:
 
             # lnk и lnb - коэффициенты прямой по формуле lnk * x + lnb  ==  y
             lnk: float = dy / dx
-            lnb: float = (ellipse.x1*dy + line.x1*line.y2 - line.y1 * line.x2 - ellipse.y1*dx) / dx
+            lnb: float = (
+                ellipse.x1 * dy
+                + line.x1 * line.y2
+                - line.y1 * line.x2
+                - ellipse.y1 * dx
+            ) / dx
 
             # Получаем уравнение пересечения: a0 x^2 + a1 x + a2  ==  0
-            a0: float = lnk * lnk + ellipse.ry * ellipse.ry / ( ellipse.rx * ellipse.rx)
+            a0: float = lnk * lnk + ellipse.ry * ellipse.ry / (ellipse.rx * ellipse.rx)
             a1: float = 2 * lnb * lnk
             a2: float = lnb * lnb - ellipse.ry * ellipse.ry
 
             # Решения квадратного уравнения a0 x^2 + a1 x + a2 == 0
             # Это и будет координаты X пересечений
-            disc: float = a1*a1 - 4 * a0 * a2
+            disc: float = a1 * a1 - 4 * a0 * a2
 
             # Пересечения нет
             if disc < 0 or fabs(a0) < eps:

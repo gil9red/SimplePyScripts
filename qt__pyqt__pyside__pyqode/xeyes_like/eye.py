@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from dataclasses import dataclass
@@ -61,22 +61,31 @@ class UEye(EllipseObject):
         x1 = self.center.x()
         y1 = self.center.y()
 
-        x2 = self.iris.center.x()        
+        x2 = self.iris.center.x()
         y2 = self.iris.center.y()
 
-        boundingWidth = self.radiusX - self.iris.radiusX        
+        boundingWidth = self.radiusX - self.iris.radiusX
         boundingHeight = self.radiusY - self.iris.radiusY
 
         # Установим размер ограничивающего эллипса, он будет в процентах от размера глаз
         boundingWidth = USupport.percentNumber(boundingWidth, 80)
         boundingHeight = USupport.percentNumber(boundingHeight, 80)
 
-        boundingEllipse = UEllipse(self.center.x(), self.center.y(), boundingWidth, boundingHeight)
+        boundingEllipse = UEllipse(
+            self.center.x(), self.center.y(), boundingWidth, boundingHeight
+        )
 
         a = pow(abs(x1 - x2), 2) + pow(abs(y1 - y2), 2)
-        b = pow(self.radiusX, 2) - pow(USupport.percentNumber(self.radiusX - self.iris.radiusX, 130), 2)
+        b = pow(self.radiusX, 2) - pow(
+            USupport.percentNumber(self.radiusX - self.iris.radiusX, 130), 2
+        )
         if a >= b:
-            line = ULine(self.center.x(), self.center.y(), self.iris.center.x(), self.iris.center.y())
+            line = ULine(
+                self.center.x(),
+                self.center.y(),
+                self.iris.center.x(),
+                self.iris.center.y(),
+            )
             result = UResultCrossLineAndEllipse()
 
             if UIntersection.isEllipseAndDirect(boundingEllipse, line, result):

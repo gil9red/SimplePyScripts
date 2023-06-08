@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QWidget, QApplication
@@ -55,18 +55,21 @@ class UEyesWidget(QWidget):
     def updateMinimumSize(self):
         if not self.eyes:
             return
-    
+
         widthEye: int = self.eyes[0].width()
         heightEye: int = self.eyes[0].height()
-    
+
         sumIndent: int = (len(self.eyes) - 1) * d_indentBetweenEyes
-    
+
         sumWidthEyes: int = len(self.eyes) * widthEye
 
         minWidth = sumWidthEyes + d_indentLeft + d_indentRight + sumIndent
         minHeight = heightEye + d_indentTop + d_indentBottom
 
-        self.setMinimumSize(minWidth + d_indentLeft + d_indentRight, minHeight + d_indentTop + d_indentBottom)
+        self.setMinimumSize(
+            minWidth + d_indentLeft + d_indentRight,
+            minHeight + d_indentTop + d_indentBottom,
+        )
 
     def updateSize(self):
         self.updateMinimumSize()
@@ -74,14 +77,18 @@ class UEyesWidget(QWidget):
 
     def resizeEvent(self, event: QResizeEvent):
         super().resizeEvent(event)
-        
+
         if not self.eyes:
             return
 
         x: int = d_indentLeft
         y: int = d_indentRight
 
-        w = (event.size().width() - (d_indentLeft + d_indentRight) - (len(self.eyes) - 1) * d_indentBetweenEyes) / len(self.eyes)
+        w = (
+            event.size().width()
+            - (d_indentLeft + d_indentRight)
+            - (len(self.eyes) - 1) * d_indentBetweenEyes
+        ) / len(self.eyes)
         h = event.size().height() - (d_indentTop + d_indentBottom)
 
         diameter: int = int(min(w, h))
