@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from PyQt5 import Qt
 from urllib import request
+from PyQt5 import Qt
 
 
 class LoadImageThread(Qt.QThread):
@@ -27,7 +27,7 @@ class URLView(Qt.QWidget):
         layout = Qt.QVBoxLayout(self)
 
         self.urlEdit = Qt.QLineEdit()
-        self.urlEdit.setText('https://www.python.org/static/img/python-logo.png')
+        self.urlEdit.setText("https://www.python.org/static/img/python-logo.png")
         layout.addWidget(self.urlEdit)
 
         self.imageLabel = Qt.QLabel("No image")
@@ -55,7 +55,7 @@ class URLView(Qt.QWidget):
         self.thread.start()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = Qt.QApplication([])
     w = URLView()
     w.show()
