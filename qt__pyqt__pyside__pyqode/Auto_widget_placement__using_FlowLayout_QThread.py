@@ -2,14 +2,23 @@
 # -*- coding: utf-8 -*-
 
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-import time
 import random
+import sys
+import time
+import traceback
 
 from PyQt5.QtWidgets import (
-    QWidget, QMessageBox, QVBoxLayout, QApplication, QLabel, QPushButton, QScrollArea, QSizePolicy
+    QWidget,
+    QMessageBox,
+    QVBoxLayout,
+    QApplication,
+    QLabel,
+    QPushButton,
+    QScrollArea,
+    QSizePolicy,
 )
 from PyQt5.QtGui import QPainter, QImage, QPixmap
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
@@ -19,17 +28,14 @@ from FlowLayout import FlowLayout
 
 # Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
 
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
-
-    print('Error: ', text)
-    QMessageBox.critical(None, 'Error', text)
+    print("Error: ", text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -71,7 +77,9 @@ class ImgThread(QThread):
             try:
                 # Алгоритм изменения размера текста взят из http://stackoverflow.com/a/2204501
                 # Для текущего пришлось немного адаптировать
-                factor = img.width() / painter.fontMetrics().width(text) / 1.5  # Ширина текста 2/3 от ширины
+                factor = (
+                    img.width() / painter.fontMetrics().width(text) / 1.5
+                )  # Ширина текста 2/3 от ширины
                 if factor < 1 or factor > 1.25:
                     f = painter.font()
                     point_size = f.pointSizeF() * factor
@@ -125,9 +133,9 @@ class Window(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle(__file__.split('/')[-1])
+        self.setWindowTitle(__file__.split("/")[-1])
 
-        button = QPushButton('Add')
+        button = QPushButton("Add")
         button.clicked.connect(self._on_push_add)
 
         self.items_layout = FlowLayout()
@@ -151,7 +159,7 @@ class Window(QWidget):
         self.items_layout.addWidget(w)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = Window()

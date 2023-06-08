@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QPushButton, QLabel
@@ -13,11 +13,11 @@ class MainWindow(QWidget):
 
         label_result = QLabel()
 
-        button_left = QPushButton('Left')
+        button_left = QPushButton("Left")
         button_left.setShortcut("Ctrl+Alt+Left")
         button_left.clicked.connect(lambda: label_result.setText("left"))
 
-        button_right = QPushButton('Right')
+        button_right = QPushButton("Right")
         button_right.setShortcut("Ctrl+Alt+Right")
         button_right.clicked.connect(lambda: label_result.setText("right"))
 
@@ -27,7 +27,7 @@ class MainWindow(QWidget):
         main_layout.addWidget(button_right)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
