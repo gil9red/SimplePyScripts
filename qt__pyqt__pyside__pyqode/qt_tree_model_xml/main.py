@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -11,35 +11,35 @@ from PySide.QtCore import *
 from PySide.QtXml import *
 
 
-TREE_CONFIG = 'tree.xml'
+TREE_CONFIG = "tree.xml"
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('tree_model')
+        self.setWindowTitle("tree_model")
 
         self.model = QStandardItemModel()
         self.model.setColumnCount(1)
-        self.model.setHorizontalHeaderLabels(['Animals'])
+        self.model.setHorizontalHeaderLabels(["Animals"])
 
         self.view = QTreeView()
         self.view.setModel(self.model)
 
-        self.pb_add = QPushButton('Add')
+        self.pb_add = QPushButton("Add")
         self.pb_add.clicked.connect(self.add)
 
-        self.pb_add_child = QPushButton('Add Child')
+        self.pb_add_child = QPushButton("Add Child")
         self.pb_add_child.clicked.connect(self.add_child)
 
-        self.pb_remove = QPushButton('Remove')
+        self.pb_remove = QPushButton("Remove")
         self.pb_remove.clicked.connect(self.remove)
 
-        self.pb_save_tree = QPushButton('Save tree')
+        self.pb_save_tree = QPushButton("Save tree")
         self.pb_save_tree.clicked.connect(self.save_tree)
 
-        self.pb_restore_tree = QPushButton('Restore tree')
+        self.pb_restore_tree = QPushButton("Restore tree")
         self.pb_restore_tree.clicked.connect(self.restore_tree)
 
         layout = QVBoxLayout()
@@ -128,7 +128,7 @@ class MainWindow(QMainWindow):
         children = xml_root.childNodes()
         for i in range(children.count()):
             xml_child = children.item(i)
-            name = xml_child.toElement().attribute('name')
+            name = xml_child.toElement().attribute("name")
 
             item_child = QStandardItem(name)
             item_root.appendRow(item_child)
@@ -138,9 +138,9 @@ class MainWindow(QMainWindow):
 
     def restore_tree(self):
         self.model.clear()
-        self.model.setHorizontalHeaderLabels(['Animals'])
+        self.model.setHorizontalHeaderLabels(["Animals"])
 
-        doc = QDomDocument();
+        doc = QDomDocument()
         file = QFile(TREE_CONFIG)
         if not file.open(QIODevice.ReadOnly):
             file.close()
@@ -159,7 +159,7 @@ class MainWindow(QMainWindow):
         self.view.expandAll()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     mw = MainWindow()

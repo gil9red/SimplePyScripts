@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import traceback
@@ -15,11 +15,11 @@ from PyQt5.QtCore import QTimer
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = f'{ex_cls.__name__}: {ex}:\n'
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
@@ -27,7 +27,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 DIR = Path(__file__).resolve().parent
-IMG_FILE_NAME = str(DIR / 'img.png')
+IMG_FILE_NAME = str(DIR / "img.png")
 
 
 class Widget(QWidget):
@@ -90,7 +90,7 @@ class Widget(QWidget):
         painter.drawImage(0 + self.img.width() + 10, 0, self.new_img)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = Widget()
