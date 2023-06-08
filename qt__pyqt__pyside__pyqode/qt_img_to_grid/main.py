@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 try:
@@ -18,7 +18,7 @@ ROW_COUNT = 3
 COLUMN_COUNT = 5
 
 grid_image = QImage(width * COLUMN_COUNT, height * ROW_COUNT, QImage.Format_RGB32)
-grid_image.fill(QColor('white'))
+grid_image.fill(QColor("white"))
 
 painter = QPainter(grid_image)
 
@@ -29,4 +29,4 @@ for row in range(ROW_COUNT):
         x = column * height
         painter.drawImage(x, y, image)
 
-grid_image.save('grid_img.jpg')
+grid_image.save("grid_img.jpg")

@@ -1,26 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
 import sqlite3
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
 
-if __name__ == '__main__':
-    con = sqlite3.connect('test.sqlite')
+if __name__ == "__main__":
+    con = sqlite3.connect("test.sqlite")
     cur = con.cursor()
-    cur.execute('''
+    cur.execute(
+        """
     CREATE TABLE IF NOT EXISTS Images (
         Data BLOB
     )
-    ''')
+    """
+    )
     con.commit()
 
-    with open('capture.png', mode='rb') as f:
+    with open("capture.png", mode="rb") as f:
         binary = sqlite3.Binary(f.read())
 
         cur.execute("INSERT INTO Images(Data) VALUES (?)", (binary,))

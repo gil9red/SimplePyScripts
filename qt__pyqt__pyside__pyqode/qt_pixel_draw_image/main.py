@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -14,32 +14,34 @@ from PyQt5.QtCore import Qt, QTimer
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = f'{ex_cls.__name__}: {ex}:\n'
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
 sys.excepthook = log_uncaught_exceptions
 
 
-IMG_FILE_NAME = 'img.png'
+IMG_FILE_NAME = "img.png"
 
 
 class Widget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('qt_pixel_draw_image')
+        self.setWindowTitle("qt_pixel_draw_image")
 
         self.img = QImage(IMG_FILE_NAME)
         self.img_width = self.img.size().width()
         self.img_height = self.img.size().height()
 
         # Сгенерируем список координат пикселей
-        self.pixel_list = [(y, x) for y in range(self.img_height) for x in range(self.img_width)]
+        self.pixel_list = [
+            (y, x) for y in range(self.img_height) for x in range(self.img_width)
+        ]
         # OR:
         # self.pixel_list = []
         # for y in range(self.img_height):
@@ -81,7 +83,7 @@ class Widget(QWidget):
         painter.drawImage(0 + self.img.width() + 10, 0, self.new_img)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = Widget()
