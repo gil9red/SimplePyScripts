@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5 import Qt
@@ -18,7 +18,7 @@ class Window(Qt.QWidget):
         for i in range(self.table.rowCount()):
             for j in range(self.table.columnCount()):
                 icon = Qt.QIcon()
-                icon.addFile('loading.gif')
+                icon.addFile("loading.gif")
 
                 item = Qt.QTableWidgetItem()
                 item.setIcon(icon)
@@ -31,7 +31,7 @@ class Window(Qt.QWidget):
         self.setLayout(main_layout)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = Qt.QApplication([])
 
     mw = Window()
