@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PySide.QtGui import QApplication, QKeyEvent
@@ -23,25 +23,28 @@ def key_press_release(widget, key, modifier=Qt.NoModifier):
     QApplication.sendEvent(widget, key_release)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    import random
     import sys
-    app = QApplication(sys.argv)
 
     from PySide.QtCore import QEventLoop, QTimer
     from PySide.QtNetwork import QNetworkProxyFactory
     from PySide.QtWebKit import QWebView, QWebSettings
-    import random
+
+    app = QApplication(sys.argv)
 
     # Чтобы не было проблем запуска компов с прокси:
     QNetworkProxyFactory.setUseSystemConfiguration(True)
 
-    QWebSettings.globalSettings().setAttribute(QWebSettings.DeveloperExtrasEnabled, True)
+    QWebSettings.globalSettings().setAttribute(
+        QWebSettings.DeveloperExtrasEnabled, True
+    )
 
     view = QWebView()
     view.resize(400, 600)
     view.show()
 
-    url = 'http://gabrielecirulli.github.io/2048/'
+    url = "http://gabrielecirulli.github.io/2048/"
     view.setWindowTitle(url)
 
     # Загрузка url и ожидание ее
@@ -62,3 +65,4 @@ if __name__ == '__main__':
     timer.start(333)
 
     app.exec_()
+
