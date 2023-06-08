@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import time
@@ -12,7 +12,7 @@ from base_camera import BaseCamera
 from config import PORT
 
 
-URL_SCREENSHOT = f'http://127.0.0.1:{PORT}/command/SCREENSHOT'
+URL_SCREENSHOT = f"http://127.0.0.1:{PORT}/command/SCREENSHOT"
 
 
 class Camera(BaseCamera):

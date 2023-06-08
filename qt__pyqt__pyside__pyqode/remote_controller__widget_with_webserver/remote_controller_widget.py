@@ -1,22 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from pathlib import Path
 from threading import Thread
 
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGridLayout, QPushButton, QSizePolicy
+import requests
+
+from PyQt5.QtWidgets import (
+    QApplication,
+    QWidget,
+    QLabel,
+    QGridLayout,
+    QPushButton,
+    QSizePolicy,
+)
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import QTimer, Qt
-
-import requests
 
 from config import PORT
 
 
-URL = 'http://127.0.0.1:%s/command/{}' % PORT
+URL = "http://127.0.0.1:%s/command/{}" % PORT
 
 
 class MainWindow(QWidget):
@@ -25,14 +32,14 @@ class MainWindow(QWidget):
 
         self.setWindowTitle(Path(__file__).name)
 
-        button_left = self._create_button('LEFT')
-        button_right = self._create_button('RIGHT')
-        button_top = self._create_button('UP')
-        button_bottom = self._create_button('DOWN')
+        button_left = self._create_button("LEFT")
+        button_right = self._create_button("RIGHT")
+        button_top = self._create_button("UP")
+        button_bottom = self._create_button("DOWN")
 
-        button_hide = self._create_button('HIDE', False)
-        button_show = self._create_button('SHOW', False)
-        button_move_to_cursor = self._create_button('MOVE_TO_CURSOR', False)
+        button_hide = self._create_button("HIDE", False)
+        button_show = self._create_button("SHOW", False)
+        button_move_to_cursor = self._create_button("MOVE_TO_CURSOR", False)
 
         self.label_image = QLabel()
         self.label_image.setFrameStyle(QLabel.Box)
@@ -68,7 +75,7 @@ class MainWindow(QWidget):
             rs = requests.post(URL.format(data))
             rs.raise_for_status()
 
-            if data == 'SCREENSHOT':
+            if data == "SCREENSHOT":
                 pixmap = QPixmap()
                 pixmap.loadFromData(rs.content)
 
@@ -82,10 +89,10 @@ class MainWindow(QWidget):
         Thread(target=self._send_command, args=[data]).start()
 
     def _on_tick(self):
-        Thread(target=self._send_command, args=['SCREENSHOT']).start()
+        Thread(target=self._send_command, args=["SCREENSHOT"]).start()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()

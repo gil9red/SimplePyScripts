@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from flask import Flask, jsonify
@@ -21,12 +21,12 @@ class CommandServerThread(QThread):
         self.port = port
         self.app = Flask(__name__)
 
-        @self.app.route("/command/<command>", methods=['POST'])
+        @self.app.route("/command/<command>", methods=["POST"])
         def command(command: str):
             print(command)
             self.about_command.emit(command)
 
-            return jsonify({'status': True})
+            return jsonify({"status": True})
 
     def run(self):
         self.app.run(port=self.port)
@@ -36,7 +36,7 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('MainWindow + CommandServerThread')
+        self.setWindowTitle("MainWindow + CommandServerThread")
 
         log_edit = QPlainTextEdit()
 
@@ -48,7 +48,7 @@ class MainWindow(QWidget):
         self.thread.start()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()

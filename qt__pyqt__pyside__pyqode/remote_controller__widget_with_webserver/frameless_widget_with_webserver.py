@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/00b9e4ec67e3413ffefa436a98381a75b99af6d3/qt__pyqt__pyside__pyqode/pyqt__frameless_window_with_part_transparent_body.py
@@ -13,9 +13,25 @@ from pathlib import Path
 
 from flask import Flask, jsonify
 
-from PyQt5.QtWidgets import QWidget, QApplication, QHBoxLayout, QVBoxLayout, QPushButton, QMessageBox
+from PyQt5.QtWidgets import (
+    QWidget,
+    QApplication,
+    QHBoxLayout,
+    QVBoxLayout,
+    QPushButton,
+    QMessageBox,
+)
 from PyQt5.QtCore import Qt, QPoint, QThread, pyqtSignal, QTimer, QByteArray, QBuffer
-from PyQt5.QtGui import QPainter, QPen, QColor, QPixmap, QCursor, QMouseEvent, QKeyEvent, QPaintEvent
+from PyQt5.QtGui import (
+    QPainter,
+    QPen,
+    QColor,
+    QPixmap,
+    QCursor,
+    QMouseEvent,
+    QKeyEvent,
+    QPaintEvent,
+)
 
 from config import PORT, PATH_DEFAULT_MOUSE
 
@@ -25,11 +41,11 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
     if isinstance(ex, KeyboardInterrupt):
         sys.exit()
 
-    text = f'{ex_cls.__name__}: {ex}:\n'
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
@@ -46,15 +62,15 @@ class CommandServerThread(QThread):
         self.pixmap_data = bytes()
         self.app = Flask(__name__)
 
-        @self.app.route("/command/<command>", methods=['POST'])
+        @self.app.route("/command/<command>", methods=["POST"])
         def command(command: str):
             print(command)
             self.about_command.emit(command)
 
-            if command == 'SCREENSHOT' and self.pixmap_data:
+            if command == "SCREENSHOT" and self.pixmap_data:
                 return self.pixmap_data
 
-            return jsonify({'status': True})
+            return jsonify({"status": True})
 
     def set_pixmap(self, pixmap_data: bytes):
         self.pixmap_data = pixmap_data
@@ -70,9 +86,7 @@ class MainWindow(QWidget):
         self.setWindowTitle(Path(__file__).name)
 
         self.setWindowFlags(
-            self.windowFlags()
-            | Qt.FramelessWindowHint
-            | Qt.WindowStaysOnTopHint
+            self.windowFlags() | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
         )
         self.setAttribute(Qt.WA_TranslucentBackground)
 
@@ -122,9 +136,10 @@ class MainWindow(QWidget):
         h = self.layout_buttons.geometry().y() - correct_frame_size
         w -= correct_frame_size * 2
 
-        pixmap = QApplication.instance().primaryScreen().grabWindow(
-            QApplication.desktop().winId(),
-            x, y, w, h
+        pixmap = (
+            QApplication.instance()
+            .primaryScreen()
+            .grabWindow(QApplication.desktop().winId(), x, y, w, h)
         )
 
         cursor_pos = QCursor.pos()
@@ -173,19 +188,19 @@ class MainWindow(QWidget):
     def process_command(self, command: str):
         command = command.upper()
 
-        if command == 'LEFT':
+        if command == "LEFT":
             self.move_left()
-        elif command == 'RIGHT':
+        elif command == "RIGHT":
             self.move_right()
-        elif command == 'UP':
+        elif command == "UP":
             self.move_up()
-        elif command == 'DOWN':
+        elif command == "DOWN":
             self.move_down()
-        elif command == 'HIDE':
+        elif command == "HIDE":
             self.hide()
-        elif command == 'SHOW':
+        elif command == "SHOW":
             self.show()
-        elif command == 'MOVE_TO_CURSOR':
+        elif command == "MOVE_TO_CURSOR":
             rect = self.geometry()
             rect.moveCenter(QCursor.pos())
             self.setGeometry(rect)
@@ -221,5 +236,5 @@ def main(port=PORT, is_visible=True, width=800, height=600, mouse_permeability=T
     app.exec()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(mouse_permeability=False)
