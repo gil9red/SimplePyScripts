@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QApplication, QWidget
-from PyQt5.QtGui import QPainter, QPainterPath, QTransform, QPolygonF
+from PyQt5.QtGui import QPainter, QPainterPath, QTransform
 from PyQt5.QtCore import QPointF, Qt, QRectF, QTimer
 
 
@@ -46,17 +46,19 @@ class MainWindow(QWidget):
             path.setElementPositionAt(i, point.x(), point.y())
 
         center = rect.center()
-        transform = QTransform()\
-            .translate(center.x() + x, center.y() + y)\
-            .rotate(self.angle)\
+        transform = (
+            QTransform()
+            .translate(center.x() + x, center.y() + y)
+            .rotate(self.angle)
             .translate(-center.x() - x, -center.y() - y)
+        )
 
         path = transform.map(path)
 
         painter.fillPath(path, Qt.blue)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()

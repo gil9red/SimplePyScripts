@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import math
@@ -47,9 +47,7 @@ class MainWindow(QWidget):
         x = self.x
         y = y0 + math.sin(x * frequency) * amplitude / 2 + amplitude / 2
 
-        triangle_points = [
-            QPointF(0, 0), QPointF(0, 50), QPointF(50, 50)
-        ]
+        triangle_points = [QPointF(0, 0), QPointF(0, 50), QPointF(50, 50)]
         for p in triangle_points:
             p.setX(p.x() + x)
             p.setY(p.y() + y)
@@ -67,10 +65,12 @@ class MainWindow(QWidget):
             p1 = p2
         painter.restore()
 
-        transform = QTransform() \
-            .translate(center.x(), center.y())\
-            .rotate(self.angle)\
+        transform = (
+            QTransform()
+            .translate(center.x(), center.y())
+            .rotate(self.angle)
             .translate(-center.x(), -center.y())
+        )
 
         p = transform.map(polygon)
 
@@ -78,7 +78,7 @@ class MainWindow(QWidget):
         painter.drawPolygon(p)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
