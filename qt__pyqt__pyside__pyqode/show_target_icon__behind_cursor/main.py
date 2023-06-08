@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -11,7 +11,7 @@ from PyQt5.Qt import QApplication, QWidget, QPixmap, QLabel, QTimer, QCursor, Qt
 
 
 # SOURCE: http://www.pngall.com/target-png/download/12907
-FILE_NAME = str(Path(__file__).resolve().parent / 'target.png')
+FILE_NAME = str(Path(__file__).resolve().parent / "target.png")
 
 
 def move_window_to_cursor(widget: QWidget):
@@ -23,7 +23,7 @@ def move_window_to_cursor(widget: QWidget):
     widget.move(pos)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     lifetime_ms = 3000

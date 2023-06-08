@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -16,13 +16,17 @@ from _test_widget import MainWindow
 app = QApplication(sys.argv)
 
 # SOURCE: https://codemyui.com/git-kraken-inspired-rotate-loading-animation/
-splash = QSplashScreen(QPixmap('rotate-pulsating-loading-animation.gif'))
+splash = QSplashScreen(QPixmap("rotate-pulsating-loading-animation.gif"))
 splash.show()
 
-splash.showMessage('Ожидание создания интерфейса', Qt.AlignHCenter | Qt.AlignBottom, Qt.white)
+splash.showMessage(
+    "Ожидание создания интерфейса", Qt.AlignHCenter | Qt.AlignBottom, Qt.white
+)
 w = MainWindow()
 
-splash.showMessage('Ожидание загрузки данных', Qt.AlignHCenter | Qt.AlignBottom, Qt.white)
+splash.showMessage(
+    "Ожидание загрузки данных", Qt.AlignHCenter | Qt.AlignBottom, Qt.white
+)
 w.do_load()
 
 w.show()

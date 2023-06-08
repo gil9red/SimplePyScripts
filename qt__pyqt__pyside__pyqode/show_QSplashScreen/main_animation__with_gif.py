@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QSplashScreen
@@ -30,7 +30,7 @@ class GifSplashScreen(QSplashScreen):
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
 
     from PyQt5.QtWidgets import QApplication
@@ -41,13 +41,17 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
 
     # SOURCE: https://codemyui.com/git-kraken-inspired-rotate-loading-animation/
-    splash = GifSplashScreen('rotate-pulsating-loading-animation.gif')
+    splash = GifSplashScreen("rotate-pulsating-loading-animation.gif")
     splash.show()
 
-    splash.showMessage('Ожидание создания интерфейса', Qt.AlignHCenter | Qt.AlignBottom, Qt.white)
+    splash.showMessage(
+        "Ожидание создания интерфейса", Qt.AlignHCenter | Qt.AlignBottom, Qt.white
+    )
     w = MainWindow()
 
-    splash.showMessage('Ожидание загрузки данных', Qt.AlignHCenter | Qt.AlignBottom, Qt.white)
+    splash.showMessage(
+        "Ожидание загрузки данных", Qt.AlignHCenter | Qt.AlignBottom, Qt.white
+    )
     w.do_load()
 
     w.show()

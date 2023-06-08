@@ -1,15 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-import json
 import glob
+import json
 
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QDockWidget, QLabel, QLineEdit, QPushButton,
-    QVBoxLayout, QHBoxLayout, QPlainTextEdit
+    QApplication,
+    QMainWindow,
+    QWidget,
+    QDockWidget,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QVBoxLayout,
+    QHBoxLayout,
+    QPlainTextEdit,
 )
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
@@ -20,7 +28,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self._current_index_image = 0
-        self._images = glob.glob('images/*.png')
+        self._images = glob.glob("images/*.png")
         self._data = dict()
 
         self.label_image = QLabel()
@@ -28,19 +36,19 @@ class MainWindow(QMainWindow):
         self.label_image.setScaledContents(True)
 
         self.line_edit_key = QLineEdit()
-        self.line_edit_key.setPlaceholderText('Введите ключ картинки...')
+        self.line_edit_key.setPlaceholderText("Введите ключ картинки...")
 
-        self.button_add_file_name = QPushButton('Добавить картинку')
+        self.button_add_file_name = QPushButton("Добавить картинку")
         self.button_add_file_name.clicked.connect(self._on_add_file_name)
 
-        self.button_prev = QPushButton('Предыдущая картинка')
+        self.button_prev = QPushButton("Предыдущая картинка")
         self.button_prev.clicked.connect(self.load_prev_image)
 
-        self.button_next = QPushButton('Следующая картинка')
+        self.button_next = QPushButton("Следующая картинка")
         self.button_next.clicked.connect(self.load_next_image)
 
         layout_control = QHBoxLayout()
-        layout_control.addWidget(QLabel('Ключ:'))
+        layout_control.addWidget(QLabel("Ключ:"))
         layout_control.addWidget(self.line_edit_key)
         layout_control.addWidget(self.button_add_file_name)
 
@@ -50,7 +58,7 @@ class MainWindow(QMainWindow):
 
         self.pl_text_json = QPlainTextEdit()
 
-        self._dock_widget = QDockWidget('JSON')
+        self._dock_widget = QDockWidget("JSON")
         self._dock_widget.setWidget(self.pl_text_json)
 
         self.addDockWidget(Qt.RightDockWidgetArea, self._dock_widget)
@@ -110,10 +118,12 @@ class MainWindow(QMainWindow):
 
     def update_states(self):
         file_name = self.get_current_image_file_name()
-        self.setWindowTitle(f'{self._current_index_image + 1} / {len(self._images)} : {file_name}')
+        self.setWindowTitle(
+            f"{self._current_index_image + 1} / {len(self._images)} : {file_name}"
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
