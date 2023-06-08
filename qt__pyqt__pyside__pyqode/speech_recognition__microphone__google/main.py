@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: http://pythono.ru/speech-recognition-python/
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/879912c8236a27a817c0284a51c9f61a034b407c/speech_recognition/microphone__google.py
+
+
+import sys
+import traceback
 
 
 # pip install pyaudio
@@ -16,16 +20,14 @@ from PyQt5 import Qt
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    Qt.QMessageBox.critical(None, 'Error', text)
+    Qt.QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -59,24 +61,24 @@ class SpeechRecognitionThread(Qt.QThread):
             self.about_text.emit("Ошибка: {}".format(e))
 
         finally:
-            self.about_text.emit('')
+            self.about_text.emit("")
 
 
 class Window(Qt.QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('speech_recognition__microphone__google')
+        self.setWindowTitle("speech_recognition__microphone__google")
 
-        self.pb_microphone = Qt.QPushButton('🎤 SPEAK')
-        self.pb_microphone.setFont(Qt.QFont('Arial', 16))
+        self.pb_microphone = Qt.QPushButton("🎤 SPEAK")
+        self.pb_microphone.setFont(Qt.QFont("Arial", 16))
 
         self.cb_lang = Qt.QComboBox()
         self.cb_lang.addItems(["en-US", "ru-RU"])
         self.cb_lang.setCurrentIndex(1)
 
         self.pte_result = Qt.QPlainTextEdit()
-        self.pte_result.setFont(Qt.QFont('Arial', 12))
+        self.pte_result.setFont(Qt.QFont("Arial", 12))
         self.pte_result.setReadOnly(True)
 
         self.progress_bar = Qt.QProgressBar()
@@ -112,7 +114,7 @@ class Window(Qt.QWidget):
         self.progress_bar.hide()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = Qt.QApplication([])
 
     w = Window()
