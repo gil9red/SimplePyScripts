@@ -1,25 +1,32 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
-
-
-from PyQt5.QtCore import QFile, QStringListModel, Qt
-from PyQt5.QtGui import QCursor, QKeySequence, QTextCursor
-from PyQt5.QtWidgets import QApplication, QCompleter, QMainWindow, QTextEdit, QMessageBox
-
-
-def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
-
-    print(text)
-    QMessageBox.critical(None, 'Error', text)
-    sys.exit(1)
+__author__ = "ipetrash"
 
 
 import sys
+import traceback
+
+from PyQt5.QtCore import QFile, QStringListModel, Qt
+from PyQt5.QtGui import QCursor, QKeySequence, QTextCursor
+from PyQt5.QtWidgets import (
+    QApplication,
+    QCompleter,
+    QMainWindow,
+    QTextEdit,
+    QMessageBox,
+)
+
+
+def log_uncaught_exceptions(ex_cls, ex, tb):
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
+
+    print(text)
+    QMessageBox.critical(None, "Error", text)
+    sys.exit(1)
+
+
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -63,7 +70,7 @@ class CompletingTextEdit(QTextEdit):
             line = f.readLine().trimmed()
             if line.length() != 0:
                 try:
-                    line = str(line, encoding='utf-8')
+                    line = str(line, encoding="utf-8")
                 except TypeError:
                     line = str(line)
 
@@ -81,7 +88,13 @@ class CompletingTextEdit(QTextEdit):
     def keyPressEvent(self, e):
         if self._completer.popup().isVisible():
             # The following keys are forwarded by the completer to the widget.
-            if e.key() in (Qt.Key_Enter, Qt.Key_Return, Qt.Key_Escape, Qt.Key_Tab, Qt.Key_Backtab):
+            if e.key() in (
+                Qt.Key_Enter,
+                Qt.Key_Return,
+                Qt.Key_Escape,
+                Qt.Key_Tab,
+                Qt.Key_Backtab,
+            ):
                 e.ignore()
                 # Let the completer do default behavior.
                 return
@@ -102,7 +115,12 @@ class CompletingTextEdit(QTextEdit):
         hasModifier = (e.modifiers() != Qt.NoModifier) and not ctrlOrShift
         completionPrefix = self.textUnderCursor()
 
-        if not isShortcut and (hasModifier or not e.text() or len(completionPrefix) < 3 or e.text()[-1] in eow):
+        if not isShortcut and (
+            hasModifier
+            or not e.text()
+            or len(completionPrefix) < 3
+            or e.text()[-1] in eow
+        ):
             self._completer.popup().hide()
             return
 
@@ -113,8 +131,10 @@ class CompletingTextEdit(QTextEdit):
             )
 
         cr = self.cursorRect()
-        cr.setWidth(self._completer.popup().sizeHintForColumn(0) +
-                    self._completer.popup().verticalScrollBar().sizeHint().width())
+        cr.setWidth(
+            self._completer.popup().sizeHintForColumn(0)
+            + self._completer.popup().verticalScrollBar().sizeHint().width()
+        )
         self._completer.complete(cr)
 
 
@@ -126,20 +146,23 @@ class MainWindow(QMainWindow):
 
         self.textEdit = CompletingTextEdit()
 
-        self.textEdit.loadFromList(['dog', 'cat', 'carry', 'python', 'собака', 'foobar'])
+        self.textEdit.loadFromList(
+            ["dog", "cat", "carry", "python", "собака", "foobar"]
+        )
         # OR:
         # self.textEdit.loadFromFile('wordlist.txt')
 
         self.textEdit.setPlainText(
             "This TextEdit provides autocompletions for words that have "
             "more than 3 characters. You can trigger autocompletion "
-            "using %s\n\n" % self.textEdit.completerSequence.toString(QKeySequence.NativeText))
+            "using %s\n\n"
+            % self.textEdit.completerSequence.toString(QKeySequence.NativeText)
+        )
 
         self.setCentralWidget(self.textEdit)
 
 
-if __name__ == '__main__':
-    import sys
+if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     mw = MainWindow()

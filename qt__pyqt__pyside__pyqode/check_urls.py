@@ -1,29 +1,35 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import traceback
 import sys
 
-from typing import List
+import requests
 
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QMessageBox, QPushButton,
-    QHBoxLayout, QVBoxLayout, QWidget, QPlainTextEdit
+    QApplication,
+    QMainWindow,
+    QTableWidget,
+    QTableWidgetItem,
+    QMessageBox,
+    QPushButton,
+    QHBoxLayout,
+    QVBoxLayout,
+    QWidget,
+    QPlainTextEdit,
 )
 from PyQt5.QtCore import QThread, pyqtSignal, Qt
 
-import requests
-
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    text += ''.join(traceback.format_tb(tb))
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit()
 
 
@@ -31,13 +37,15 @@ sys.excepthook = log_uncaught_exceptions
 
 
 session = requests.session()
-session.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0'
+session.headers[
+    "User-Agent"
+] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"
 
 
 class CheckUrlThread(QThread):
     about_check_url = pyqtSignal(str, str)
 
-    def __init__(self, urls: List[str] = None):
+    def __init__(self, urls: list[str] = None):
         super().__init__()
 
         self.urls = urls if urls else []
@@ -72,7 +80,7 @@ class MainWindow(QMainWindow):
         self.result_table.horizontalHeader().setStretchLastSection(True)
         self.result_table.horizontalHeader().resizeSection(0, 200)
 
-        self.pb_check = QPushButton('Check')
+        self.pb_check = QPushButton("Check")
         self.pb_check.clicked.connect(self._on_click_check)
 
         layout = QHBoxLayout()
@@ -117,13 +125,15 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication([])
 
-    text = '\n'.join([
-        'https://ru.stackoverflow.com',
-        'https://ru.stackoverflow.com/questions/893436/',
-        'https://google.com',
-        'http://ya.ru',
-        'http://not_found_site.123',
-    ])
+    text = "\n".join(
+        [
+            "https://ru.stackoverflow.com",
+            "https://ru.stackoverflow.com/questions/893436/",
+            "https://google.com",
+            "http://ya.ru",
+            "http://not_found_site.123",
+        ]
+    )
 
     mw = MainWindow()
     mw.urls.setPlainText(text)
