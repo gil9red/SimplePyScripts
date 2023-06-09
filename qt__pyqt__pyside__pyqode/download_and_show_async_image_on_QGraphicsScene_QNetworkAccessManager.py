@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import QUrl
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest
 from PyQt5.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QGraphicsScene, QGraphicsView, QGraphicsPixmapItem, QGraphicsTextItem
+    QApplication,
+    QWidget,
+    QVBoxLayout,
+    QGraphicsScene,
+    QGraphicsView,
+    QGraphicsPixmapItem,
+    QGraphicsTextItem,
 )
 
 
@@ -17,7 +23,7 @@ class Widget(QWidget):
         super().__init__()
 
         self.scene = QGraphicsScene()
-        self.scene.addItem(QGraphicsTextItem('loading...'))
+        self.scene.addItem(QGraphicsTextItem("loading..."))
 
         self.view = QGraphicsView()
         self.view.setScene(self.scene)
@@ -43,7 +49,7 @@ class Widget(QWidget):
         self.scene.addItem(item)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = Widget()
