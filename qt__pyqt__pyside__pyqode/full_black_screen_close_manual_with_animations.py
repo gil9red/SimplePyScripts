@@ -12,7 +12,11 @@ from PyQt5.QtGui import QPainter, QPaintEvent
 from PyQt5.QtCore import QTimer
 
 from full_black_screen_close_manual import MainWindow as BaseMainWindow
-from pyq5__simple_balls__with_part_transparent_body import Ball as BaseBall, get_random_vector, get_random_color
+from pyq5__simple_balls__with_part_transparent_body import (
+    Ball as BaseBall,
+    get_random_vector,
+    get_random_color,
+)
 
 
 class Animation:
@@ -54,7 +58,7 @@ class AnimationBalls(Animation):
         animation_ball_alpha_color: bool = True,
     ):
         super().__init__(owner)
-        
+
         self.balls: list[Ball] = []
         self.number_balls = number_balls
         self.min_ball_alpha_color = min_ball_alpha_color
@@ -66,14 +70,19 @@ class AnimationBalls(Animation):
             self.append_random_ball()
 
     def append_random_ball(self):
-        x = self.owner.width() // 2 + randint(-self.owner.width() // 3, self.owner.width() // 3)
-        y = self.owner.height() // 2 + randint(-self.owner.height() // 3, self.owner.height() // 3)
+        x = self.owner.width() // 2 + randint(
+            -self.owner.width() // 3, self.owner.width() // 3
+        )
+        y = self.owner.height() // 2 + randint(
+            -self.owner.height() // 3, self.owner.height() // 3
+        )
         v_x, v_y = get_random_vector()
         r, g, b = get_random_color()
         a = randint(self.min_ball_alpha_color, self.max_ball_alpha_color)
 
         ball = Ball(
-            x, y,
+            x,
+            y,
             r=randint(50, 70),
             v_x=v_x,
             v_y=v_y,
