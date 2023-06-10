@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget
@@ -35,13 +35,13 @@ class EgoDialog(QWidget):
         painter.drawRect(self.rect())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
-    ok = EgoDialog.exec('Question', 'Question?')
+    ok = EgoDialog.exec("Question", "Question?")
     if ok:
-        print('User select Ok')
+        print("User select Ok")
     else:
-        print('User select No')
+        print("User select No")
 
     # app.exec()

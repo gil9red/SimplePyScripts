@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QLabel
@@ -19,14 +19,14 @@ class ElidedLabel(QLabel):
         painter.drawText(self.rect(), self.alignment(), elided_text)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtGui import QFont
 
     app = QApplication([])
 
-    mw = ElidedLabel('abc123' * 100)
-    mw.setFont(QFont('Arial', 20))
+    mw = ElidedLabel("abc123" * 100)
+    mw.setFont(QFont("Arial", 20))
     mw.resize(100, 100)
     mw.show()
 

@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+from PyQt5.QtCore import QUrl
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWebEngineWidgets import QWebEnginePage
 
 
 # Основа взята из http://stackoverflow.com/a/37755811/5909792
 def get_html(url, check_content_func=None):
-    from PyQt5.QtCore import QUrl
-    from PyQt5.QtWidgets import QApplication
-    from PyQt5.QtWebEngineWidgets import QWebEnginePage
-
     class ExtractorHtml:
         def __init__(self, url):
             self.html = None
@@ -42,6 +43,6 @@ def get_html(url, check_content_func=None):
     return ExtractorHtml(url).html
 
 
-url = 'http://www.dns-shop.ru/'
-html = get_html(url, lambda html: 'price-list-downloader' in html)
+url = "http://www.dns-shop.ru/"
+html = get_html(url, lambda html: "price-list-downloader" in html)
 print(html)
