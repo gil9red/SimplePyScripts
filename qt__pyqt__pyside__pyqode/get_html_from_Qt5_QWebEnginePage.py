@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+from PyQt5.QtCore import QUrl
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWebEngineWidgets import QWebEnginePage
 
 
 # Основа взята из http://stackoverflow.com/a/37755811/5909792
 def get_html(url):
-    from PyQt5.QtCore import QUrl
-    from PyQt5.QtWidgets import QApplication
-    from PyQt5.QtWebEngineWidgets import QWebEnginePage
-
     class ExtractorHtml:
         def __init__(self, url):
             _app = QApplication([])
@@ -47,6 +48,6 @@ def get_html(url):
     return ExtractorHtml(url).html
 
 
-if __name__ == '__main__':
-    url = 'http://gama-gama.ru/search/?searchField=titan'
+if __name__ == "__main__":
+    url = "http://gama-gama.ru/search/?searchField=titan"
     print(get_html(url))
