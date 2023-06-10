@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QMainWindow, QTableWidget, QTableWidgetItem, QApplication
@@ -12,7 +12,7 @@ class Widget(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('Table')
+        self.setWindowTitle("Table")
 
         self.table_widget = QTableWidget()
         self.table_widget.cellClicked.connect(self._on_cell_clicked)
@@ -34,15 +34,15 @@ class Widget(QMainWindow):
     def fill(self):
         self.table_widget.clear()
 
-        labels = ['ID', 'NAME', 'PRICE']
+        labels = ["ID", "NAME", "PRICE"]
 
         self.table_widget.setColumnCount(len(labels))
         self.table_widget.setHorizontalHeaderLabels(labels)
 
         for id_, name, price in [
-            ['1', 'name_1', 'price_1'],
-            ['2', 'name_2', 'price_2'],
-            ['3', 'name_3', 'price_3'],
+            ["1", "name_1", "price_1"],
+            ["2", "name_2", "price_2"],
+            ["3", "name_3", "price_3"],
         ]:
             row = self.table_widget.rowCount()
             self.table_widget.setRowCount(row + 1)
@@ -52,7 +52,7 @@ class Widget(QMainWindow):
             self.table_widget.setItem(row, 2, QTableWidgetItem(price))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = Widget()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5 import Qt
@@ -16,7 +16,7 @@ class MainWindow(Qt.QMainWindow):
         self.table.setColumnCount(2)
         self.table.itemDoubleClicked.connect(self.on_cell_item_clicked)
 
-        rows = ['Vasya', 'Petya', 'Masha']
+        rows = ["Vasya", "Petya", "Masha"]
 
         for i, value in enumerate(rows):
             self.table.setItem(i, 0, Qt.QTableWidgetItem(str(i + 1)))
@@ -32,12 +32,14 @@ class MainWindow(Qt.QMainWindow):
     def on_cell_item_clicked(self, item):
         print(item)
 
-        new_text, ok = Qt.QInputDialog.getText(self, 'Change Name', 'Change Name', text=item.text())
+        new_text, ok = Qt.QInputDialog.getText(
+            self, "Change Name", "Change Name", text=item.text()
+        )
         if ok:
             item.setText(new_text)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = Qt.QApplication([])
 
     mw = MainWindow()

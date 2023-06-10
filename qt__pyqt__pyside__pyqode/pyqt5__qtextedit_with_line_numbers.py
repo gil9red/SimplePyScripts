@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5 import Qt
@@ -24,12 +24,14 @@ class CodeEditor(Qt.QPlainTextEdit):
     def __init__(self):
         super().__init__()
 
-        self.setStyleSheet("""
+        self.setStyleSheet(
+            """
             font-family:'Consolas'; 
             color: #ccc; 
             font-size: 20px;
             background-color: #2b2b2b;
-        """)
+        """
+        )
         self.highlight_color = Qt.QColor(Qt.Qt.darkGreen)
 
         self.line_number_area = LineNumberArea(self)
@@ -47,7 +49,7 @@ class CodeEditor(Qt.QPlainTextEdit):
             count /= 10
             digits += 1
 
-        space = 3 + self.fontMetrics().width('9') * digits
+        space = 3 + self.fontMetrics().width("9") * digits
         return space
 
     def update_line_number_area_width(self):
@@ -57,7 +59,9 @@ class CodeEditor(Qt.QPlainTextEdit):
         if dy:
             self.line_number_area.scroll(0, dy)
         else:
-            self.line_number_area.update(0, rect.y(), self.line_number_area.width(), rect.height())
+            self.line_number_area.update(
+                0, rect.y(), self.line_number_area.width(), rect.height()
+            )
 
         if rect.contains(self.viewport().rect()):
             self.update_line_number_area_width()
@@ -66,7 +70,9 @@ class CodeEditor(Qt.QPlainTextEdit):
         super().resizeEvent(event)
 
         cr = self.contentsRect()
-        self.line_number_area.setGeometry(Qt.QRect(cr.left(), cr.top(), self.line_number_area_width(), cr.height()))
+        self.line_number_area.setGeometry(
+            Qt.QRect(cr.left(), cr.top(), self.line_number_area_width(), cr.height())
+        )
 
     def line_number_area_paint_event(self, event):
         painter = Qt.QPainter(self.line_number_area)
@@ -83,7 +89,14 @@ class CodeEditor(Qt.QPlainTextEdit):
             if block.isVisible() and (bottom >= event.rect().top()):
                 number = str(block_number + 1)
                 painter.setPen(Qt.Qt.black)
-                painter.drawText(0, top, self.line_number_area.width(), height, Qt.Qt.AlignRight, number)
+                painter.drawText(
+                    0,
+                    top,
+                    self.line_number_area.width(),
+                    height,
+                    Qt.Qt.AlignRight,
+                    number,
+                )
 
             block = block.next()
             top = bottom
@@ -109,7 +122,7 @@ class CodeEditor(Qt.QPlainTextEdit):
 if __name__ == "__main__":
     app = Qt.QApplication([])
 
-    with open(__file__, encoding='utf-8') as f:
+    with open(__file__, encoding="utf-8") as f:
         text = f.read()
 
     code_editor = CodeEditor()
