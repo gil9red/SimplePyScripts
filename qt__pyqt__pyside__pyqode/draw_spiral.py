@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://doc.qt.io/qt-5/qtopengl-2dpainting-example.html
 
 
 from PyQt5.QtWidgets import QApplication, QWidget
-from PyQt5.QtGui import QBrush, QFont, QPen, QPainter, QPaintEvent, QLinearGradient, QColor
+from PyQt5.QtGui import (
+    QBrush,
+    QFont,
+    QPen,
+    QPainter,
+    QPaintEvent,
+    QLinearGradient,
+    QColor,
+)
 from PyQt5.QtCore import Qt, QPointF, QRectF, QTimer
 
 
@@ -21,7 +29,7 @@ class Helper:
 
         gradient = QLinearGradient(QPointF(50, -20), QPointF(80, 20))
         gradient.setColorAt(0.0, Qt.white)
-        gradient.setColorAt(1.0, QColor(0xa6, 0xce, 0x39))
+        gradient.setColorAt(1.0, QColor(0xA6, 0xCE, 0x39))
 
         self.background: QBrush = QBrush(QColor(64, 32, 64))
 
@@ -49,7 +57,9 @@ class Helper:
             factor = (i + r) / n
             radius = 0 + 120.0 * factor
             circleRadius = 1 + factor * 20
-            painter.drawEllipse(QRectF(radius, -circleRadius, circleRadius * 2, circleRadius * 2))
+            painter.drawEllipse(
+                QRectF(radius, -circleRadius, circleRadius * 2, circleRadius * 2)
+            )
 
         painter.restore()
 
@@ -86,7 +96,7 @@ class Widget(QWidget):
         painter.end()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from PyQt5.QtWidgets import QLabel, QHBoxLayout
 
     app = QApplication([])
@@ -99,9 +109,9 @@ if __name__ == '__main__':
 
     layout = QHBoxLayout(mw)
     layout.addWidget(w1)
-    layout.addWidget(QLabel('+'))
+    layout.addWidget(QLabel("+"))
     layout.addWidget(w2)
-    layout.addWidget(QLabel('='))
+    layout.addWidget(QLabel("="))
     layout.addWidget(w3)
 
     mw.show()
