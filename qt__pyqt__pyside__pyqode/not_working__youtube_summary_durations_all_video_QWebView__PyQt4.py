@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -32,7 +32,7 @@ def get_total_seconds(time_str):
 
     total_seconds = 0
 
-    time_part = list(map(int, time_str.split(':')))
+    time_part = list(map(int, time_str.split(":")))
     time_part_number = len(time_part)
 
     if time_part_number == 1:
@@ -57,11 +57,11 @@ def load_finished_handler(ok):
         global url_video_by_time_dict
 
         html = doc.toOuterXml()
-        root = BeautifulSoup(html, 'lxml')
+        root = BeautifulSoup(html, "lxml")
 
-        for item in root.select('.channels-content-item'):
-            url = item.select_one('.yt-uix-tile-link')['href']
-            time_str = item.select_one('.video-time').text
+        for item in root.select(".channels-content-item"):
+            url = item.select_one(".yt-uix-tile-link")["href"]
+            time_str = item.select_one(".video-time").text
 
             url_video_by_time_dict[url] = time_str
 
@@ -74,7 +74,7 @@ def load_finished_handler(ok):
 
     def timeout_handler():
         doc = view.page().mainFrame().documentElement()
-        button = doc.findFirst('.load-more-button')
+        button = doc.findFirst(".load-more-button")
 
         # If button "More" visible
         is_load_more = not button.isNull()
@@ -88,7 +88,7 @@ def load_finished_handler(ok):
 
         # Click on button "More"
         print("More")
-        button.evaluateJavaScript('this.click()')
+        button.evaluateJavaScript("this.click()")
 
     timer.timeout.connect(timeout_handler)
     timer.start()
@@ -98,9 +98,9 @@ def load_finished_handler(ok):
         QApplication.instance().processEvents()
 
     print()
-    print('Total:')
-    print('  Videos: {}'.format(len(url_video_by_time_dict)))
-    print('  Durations: {}'.format(list(url_video_by_time_dict.values())))
+    print("Total:")
+    print("  Videos: {}".format(len(url_video_by_time_dict)))
+    print("  Durations: {}".format(list(url_video_by_time_dict.values())))
 
     # Summary duration
     sum_seconds = 0
@@ -112,13 +112,13 @@ def load_finished_handler(ok):
     hh, mm = divmod(mm, 60)
     sum_time_str = "%d:%02d:%02d" % (hh, mm, ss)
 
-    print('  Summary duration (secs): {}'.format(sum_seconds))
-    print('  Summary duration: {}'.format(sum_time_str))
+    print("  Summary duration (secs): {}".format(sum_seconds))
+    print("  Summary duration: {}".format(sum_time_str))
 
     sys.exit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     view = QWebView()
@@ -126,7 +126,7 @@ if __name__ == '__main__':
 
     view.loadFinished.connect(load_finished_handler)
 
-    url = QUrl('https://www.youtube.com/channel/UCWvMAvbk23gFzZ3BRUfACRA/videos')
+    url = QUrl("https://www.youtube.com/channel/UCWvMAvbk23gFzZ3BRUfACRA/videos")
     view.load(url)
 
     app.exec()

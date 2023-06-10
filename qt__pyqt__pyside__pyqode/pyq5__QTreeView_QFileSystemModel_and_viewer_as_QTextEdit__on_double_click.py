@@ -1,17 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
-from PyQt5.Qt import QApplication, QMainWindow, QSplitter, QTreeView, QTextEdit, QFileSystemModel, QDir
+
 import os
+from PyQt5.Qt import (
+    QApplication,
+    QMainWindow,
+    QSplitter,
+    QTreeView,
+    QTextEdit,
+    QFileSystemModel,
+    QDir,
+)
 
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.setWindowTitle('Direct tree')
+        self.setWindowTitle("Direct tree")
 
         self.model = QFileSystemModel()
         self.model.setRootPath(QDir.rootPath())
@@ -37,7 +46,7 @@ class MainWindow(QMainWindow):
     def _on_double_clicked(self, index):
         file_name = self.model.filePath(index)
 
-        with open(file_name, encoding='utf-8') as f:
+        with open(file_name, encoding="utf-8") as f:
             text = f.read()
             self.textEdit.setPlainText(text)
 

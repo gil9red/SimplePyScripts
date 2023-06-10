@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -11,6 +11,7 @@ Maximum durations.
 
 
 import sys
+
 from bs4 import BeautifulSoup
 
 from PyQt4.QtGui import *
@@ -32,7 +33,7 @@ def get_total_seconds(time_str):
 
     total_seconds = 0
 
-    time_part = list(map(int, time_str.split(':')))
+    time_part = list(map(int, time_str.split(":")))
     time_part_number = len(time_part)
 
     if time_part_number == 1:
@@ -55,15 +56,15 @@ def load_finished_handler(ok):
 
     def get_video_time_list():
         html = doc.toOuterXml()
-        root = BeautifulSoup(html, 'lxml')
+        root = BeautifulSoup(html, "lxml")
 
-        return [title.text for title in root.select('.video-time')]
+        return [title.text for title in root.select(".video-time")]
 
     def get_video_link_list():
         html = doc.toOuterXml()
-        root = BeautifulSoup(html, 'lxml')
+        root = BeautifulSoup(html, "lxml")
 
-        return {a['href'] for a in root.select('.yt-uix-tile-link')}
+        return {a["href"] for a in root.select(".yt-uix-tile-link")}
 
     # Get video time and append to list
     global video_time_list
@@ -79,7 +80,7 @@ def load_finished_handler(ok):
 
     def timeout_handler():
         doc = view.page().mainFrame().documentElement()
-        button = doc.findFirst('.load-more-button')
+        button = doc.findFirst(".load-more-button")
 
         # If button "More" visible
         is_load_more = not button.isNull()
@@ -98,7 +99,7 @@ def load_finished_handler(ok):
 
         # Click on button "More"
         print("More")
-        button.evaluateJavaScript('this.click()')
+        button.evaluateJavaScript("this.click()")
 
     timer.timeout.connect(timeout_handler)
     timer.start()
@@ -108,9 +109,9 @@ def load_finished_handler(ok):
         QApplication.instance().processEvents()
 
     print()
-    print('Total:')
-    print('  Videos: {}, {}'.format(len(video_link_list), video_link_list))
-    print('  Durations: {}, {}'.format(len(video_time_list), video_time_list))
+    print("Total:")
+    print("  Videos: {}, {}".format(len(video_link_list), video_link_list))
+    print("  Durations: {}, {}".format(len(video_time_list), video_time_list))
 
     # Find maximum duration
     max_total_seconds = 0
@@ -122,12 +123,12 @@ def load_finished_handler(ok):
             max_total_seconds = total_seconds
             max_time_str = time_str
 
-    print('  Max durations: {}'.format(max_time_str))
+    print("  Max durations: {}".format(max_time_str))
 
     sys.exit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     view = QWebView()
@@ -135,7 +136,7 @@ if __name__ == '__main__':
 
     view.loadFinished.connect(load_finished_handler)
 
-    url = QUrl('https://www.youtube.com/channel/UCWvMAvbk23gFzZ3BRUfACRA/videos')
+    url = QUrl("https://www.youtube.com/channel/UCWvMAvbk23gFzZ3BRUfACRA/videos")
     view.load(url)
 
     app.exec()
