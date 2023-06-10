@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.Qt import *
@@ -16,13 +16,13 @@ class MyHighlighter(QSyntaxHighlighter):
         char_format = QTextCharFormat()
         char_format.setFontWeight(QFont.Bold)
         char_format.setForeground(Qt.darkMagenta)
-        self.regexp_by_format[r'\bsin\b'] = char_format
+        self.regexp_by_format[r"\bsin\b"] = char_format
 
         char_format = QTextCharFormat()
         char_format.setFontWeight(QFont.Bold)
         char_format.setFontItalic(True)
         char_format.setForeground(Qt.darkCyan)
-        self.regexp_by_format[r'\bcos\b'] = char_format
+        self.regexp_by_format[r"\bcos\b"] = char_format
 
     def highlightBlock(self, text):
         for regexp, char_format in self.regexp_by_format.items():
@@ -30,10 +30,12 @@ class MyHighlighter(QSyntaxHighlighter):
             it = expression.globalMatch(text)
             while it.hasNext():
                 match = it.next()
-                self.setFormat(match.capturedStart(), match.capturedLength(), char_format)
+                self.setFormat(
+                    match.capturedStart(), match.capturedLength(), char_format
+                )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = QTextEdit()

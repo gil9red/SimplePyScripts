@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.Qt import *
@@ -20,7 +20,7 @@ class MyHighlighter(QSyntaxHighlighter):
             self.setFormat(match.capturedStart(), match.capturedLength(), char_format)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = QTextEdit()

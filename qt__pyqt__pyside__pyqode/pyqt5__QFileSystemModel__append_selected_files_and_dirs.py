@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import (
-    QWidget, QFileSystemModel, QTreeView, QListWidget, QPushButton, QSplitter,
-    QVBoxLayout, QApplication
+    QWidget,
+    QFileSystemModel,
+    QTreeView,
+    QListWidget,
+    QPushButton,
+    QSplitter,
+    QVBoxLayout,
+    QApplication,
 )
 from PyQt5.QtCore import QDir, Qt
 
@@ -23,11 +29,13 @@ class Widget(QWidget):
         self.tree_view = QTreeView()
         self.tree_view.setModel(self.model)
         self.tree_view.setSelectionMode(QTreeView.ExtendedSelection)
-        self.tree_view.selectionModel().selectionChanged.connect(self._on_selection_changed)
+        self.tree_view.selectionModel().selectionChanged.connect(
+            self._on_selection_changed
+        )
 
         self.list_files = QListWidget()
 
-        self.button_add = QPushButton('Добавить!')
+        self.button_add = QPushButton("Добавить!")
         self.button_add.setEnabled(False)
         self.button_add.clicked.connect(self._on_add)
 
@@ -49,7 +57,7 @@ class Widget(QWidget):
             self.list_files.addItem(path)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = Widget()
