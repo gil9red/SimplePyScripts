@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -21,11 +21,11 @@ class MainWindow(QMainWindow):
         self.curr_tab_index = 0
 
         self.tab_widget = QTabWidget()
-        self.tab_widget.addTab(QLabel('1'), '1')
-        self.tab_widget.addTab(QLabel('2'), '2')
-        self.tab_widget.addTab(QLabel('3'), '3')
-        self.tab_widget.addTab(QLabel('4'), '4')
-        self.tab_widget.addTab(QLabel('5'), '5')
+        self.tab_widget.addTab(QLabel("1"), "1")
+        self.tab_widget.addTab(QLabel("2"), "2")
+        self.tab_widget.addTab(QLabel("3"), "3")
+        self.tab_widget.addTab(QLabel("4"), "4")
+        self.tab_widget.addTab(QLabel("5"), "5")
         self.tab_widget.setCurrentIndex(self.curr_tab_index)
 
         self.tab_widget.currentChanged.connect(self.current_tab_changed)
@@ -45,12 +45,12 @@ class MainWindow(QMainWindow):
 
         self.prev_tab_index = self.curr_tab_index
         prev_text = self.tab_widget.tabText(self.prev_tab_index)
-        self.tab_widget.setTabText(self.prev_tab_index, '_' + prev_text + '_')
+        self.tab_widget.setTabText(self.prev_tab_index, "_" + prev_text + "_")
 
         self.curr_tab_index = i
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()

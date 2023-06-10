@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtCore import QUrl
@@ -14,7 +14,7 @@ app = QApplication([])
 view = QWebEngineView()
 view.show()
 
-url = 'https://www.google.com/search?q=hello world'
+url = "https://www.google.com/search?q=hello world"
 view.load(QUrl(url))
 
 app.exec()
