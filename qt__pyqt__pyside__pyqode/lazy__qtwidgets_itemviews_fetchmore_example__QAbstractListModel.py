@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://doc.qt.io/qt-5.12/qtwidgets-itemviews-fetchmore-example.html
@@ -10,10 +10,24 @@ __author__ = 'ipetrash'
 from pathlib import Path
 
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QListView, QGridLayout, QLabel, QWidget,
-    QLineEdit, QTextBrowser, QSizePolicy
+    QApplication,
+    QMainWindow,
+    QListView,
+    QGridLayout,
+    QLabel,
+    QWidget,
+    QLineEdit,
+    QTextBrowser,
+    QSizePolicy,
 )
-from PyQt5.QtCore import QAbstractListModel, QModelIndex, Qt, pyqtSignal, QVariant, QLibraryInfo
+from PyQt5.QtCore import (
+    QAbstractListModel,
+    QModelIndex,
+    Qt,
+    pyqtSignal,
+    QVariant,
+    QLibraryInfo,
+)
 
 
 class FileListModel(QAbstractListModel):
@@ -57,7 +71,9 @@ class FileListModel(QAbstractListModel):
         if itemsToFetch <= 0:
             return
 
-        self.beginInsertRows(QModelIndex(), self.fileCount, self.fileCount + itemsToFetch - 1)
+        self.beginInsertRows(
+            QModelIndex(), self.fileCount, self.fileCount + itemsToFetch - 1
+        )
 
         self.fileCount += itemsToFetch
 
@@ -114,7 +130,7 @@ class MainWindow(QMainWindow):
         self.logViewer.append(f"{number} items added.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()

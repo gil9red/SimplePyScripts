@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5 import Qt
@@ -12,9 +12,9 @@ class Widget(Qt.QWidget):
         super().__init__()
 
         layout = Qt.QVBoxLayout()
-        layout.addWidget(self.create_label_framed('Hello'))
-        layout.addWidget(self.create_label_framed('World'))
-        layout.addWidget(self.create_label_framed('999'))
+        layout.addWidget(self.create_label_framed("Hello"))
+        layout.addWidget(self.create_label_framed("World"))
+        layout.addWidget(self.create_label_framed("999"))
 
         self.setLayout(layout)
 
@@ -26,7 +26,7 @@ class Widget(Qt.QWidget):
         return label
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = Qt.QApplication([])
 
     w = Widget()

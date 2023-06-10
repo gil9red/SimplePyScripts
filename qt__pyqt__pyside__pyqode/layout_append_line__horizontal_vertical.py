@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QFrame
@@ -25,18 +25,26 @@ class VerticalLineWidget(QFrame):
         self.setLineWidth(1)
 
 
-if __name__ == '__main__':
-    from PyQt5.QtWidgets import QApplication, QFormLayout, QHBoxLayout, QLineEdit, QCheckBox, QWidget, QLabel
+if __name__ == "__main__":
+    from PyQt5.QtWidgets import (
+        QApplication,
+        QFormLayout,
+        QHBoxLayout,
+        QLineEdit,
+        QCheckBox,
+        QWidget,
+        QLabel,
+    )
     from PyQt5.QtCore import Qt
 
     app = QApplication([])
 
     layout = QFormLayout()
-    layout.addRow('First', QLineEdit())
-    layout.addRow('Last', QLineEdit())
+    layout.addRow("First", QLineEdit())
+    layout.addRow("Last", QLineEdit())
     layout.addRow(HorizontalLineWidget())
 
-    layout.addRow('Phone', QLineEdit())
+    layout.addRow("Phone", QLineEdit())
     layout.addRow(HorizontalLineWidget())
 
     h_layout = QHBoxLayout()
@@ -56,7 +64,7 @@ if __name__ == '__main__':
 
     layout.addItem(h_layout)
 
-    layout.addRow('Ok?', QCheckBox())
+    layout.addRow("Ok?", QCheckBox())
 
     mw = QWidget()
     mw.setLayout(layout)
