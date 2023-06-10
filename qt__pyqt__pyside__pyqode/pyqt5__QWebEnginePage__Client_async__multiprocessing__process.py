@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QApplication
@@ -35,22 +35,23 @@ def go(urls):
     return client.response_list
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     urls = [
         [
-            'http://doc.qt.io/Qt-5/qwebenginepage.html',
-            'https://yandex.ru/',
+            "http://doc.qt.io/Qt-5/qwebenginepage.html",
+            "https://yandex.ru/",
         ],
         [
-            'http://doc.qt.io/Qt-5/qwebenginepage.html',
-            'https://www.google.ru/',
+            "http://doc.qt.io/Qt-5/qwebenginepage.html",
+            "https://www.google.ru/",
         ],
         [
-            'https://www.google.ru/',
-        ]
+            "https://www.google.ru/",
+        ],
     ]
 
     from multiprocessing import Pool
+
     with Pool() as p:
         results = p.map(go, urls)
         print(len(results))
@@ -61,7 +62,7 @@ if __name__ == '__main__':
         print(len(result))
 
         for html in result:
-            with open('result_{}.html'.format(number), 'w', encoding='utf-8') as f:
+            with open("result_{}.html".format(number), "w", encoding="utf-8") as f:
                 f.write(html)
 
             number += 1

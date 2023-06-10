@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QApplication
@@ -30,11 +30,12 @@ class Client(QWebEnginePage):
         self.app.quit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     urls = [
-        'http://doc.qt.io/Qt-5/qwebenginepage.html',
-        'https://www.google.ru/',
-        'https://yandex.ru/',
+        "http://doc.qt.io/Qt-5/qwebenginepage.html",
+        "https://www.google.ru/",
+        "https://yandex.ru/",
     ]
     client = Client(urls)
-    print(len(client.response_list), client.response_list)  # 3 ['<!--?xml version="1.0" ...
+    print(len(client.response_list), client.response_list)
+    # 3 ['<!--?xml version="1.0" ...

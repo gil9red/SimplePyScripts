@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
+import time
 from PyQt5.Qt import *
 
 
@@ -23,7 +24,7 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.pb_go = QPushButton('Go')
+        self.pb_go = QPushButton("Go")
         self.pb_go.clicked.connect(self.go)
 
         self.te_log = QPlainTextEdit()
@@ -41,7 +42,6 @@ class MainWindow(QWidget):
         progress_dialog = QProgressDialog(self)
 
         def foo():
-            import time
             items = []
 
             for i in range(10):
@@ -57,13 +57,13 @@ class MainWindow(QWidget):
         thread.run_finished.connect(progress_dialog.close)
         thread.start()
 
-        progress_dialog.setWindowTitle('Please wait...')
+        progress_dialog.setWindowTitle("Please wait...")
         progress_dialog.setLabelText(progress_dialog.windowTitle())
         progress_dialog.setRange(0, 0)
         progress_dialog.exec()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()

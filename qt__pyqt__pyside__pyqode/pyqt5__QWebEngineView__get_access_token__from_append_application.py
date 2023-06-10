@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import re
@@ -12,34 +12,36 @@ from PyQt5.QtWidgets import QApplication
 
 
 def authorize(token):
-    print(f'token: {token}')
+    print(f"token: {token}")
 
 
 def url_changed(url):
     url = url.toString()
-    print(f'url_changed: {url}')
+    print(f"url_changed: {url}")
 
-    match = re.search('access_token=([a-fA-F0-9]+)&?', url)
+    match = re.search("access_token=([a-fA-F0-9]+)&?", url)
     if match:
         access_token = match.group(1)
         authorize(access_token)
 
     else:
-        print(url, 'doesn\'t match')
+        print(url, "doesn't match")
 
 
 app_id = 5356487  # mini_vk_bot (никаких требований не запрашивает)
 app_id = 3088991  # Игра "Проклятье часовщика" (хочет "Доступ к общей информации")
 
 params = {
-    'client_id': str(app_id),
-    'display': 'page',
-    'redirect_uri': 'https://oauth.vk.com/blank.html',
-    'response_type': 'token',
+    "client_id": str(app_id),
+    "display": "page",
+    "redirect_uri": "https://oauth.vk.com/blank.html",
+    "response_type": "token",
     # 'scope': 'messages',
-    'v': '5.80'
+    "v": "5.80",
 }
-link = 'https://oauth.vk.com/authorize?' + '&'.join(f'{k}={v}' for k, v in params.items())
+link = "https://oauth.vk.com/authorize?" + "&".join(
+    f"{k}={v}" for k, v in params.items()
+)
 # link = 'https://vk.com/'
 
 app = QApplication([])
