@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -9,7 +9,13 @@ from glob import glob
 from pathlib import Path
 
 from PyQt5.QtWidgets import (
-    QApplication, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem, QStyledItemDelegate, QStyle
+    QApplication,
+    QListWidget,
+    QListWidgetItem,
+    QTableWidget,
+    QTableWidgetItem,
+    QStyledItemDelegate,
+    QStyle,
 )
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import QSize, Qt
@@ -40,14 +46,15 @@ ICON_WIDTH = 128
 ICON_HEIGHT = 128
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
-    file_names = glob(r'D:\все фотки\**\*.jpg', recursive=True)
-    print(f'Files: {len(file_names)}')
+    file_names = glob(r"D:\все фотки\**\*.jpg", recursive=True)
+    print(f"Files: {len(file_names)}")
 
     list_widget = QListWidget()
-    list_widget.setStyleSheet("""
+    list_widget.setStyleSheet(
+        """
         QListWidget::item {
             border: 1px solid gray;
         }
@@ -55,7 +62,8 @@ if __name__ == '__main__':
             color: black;
             background-color: #0087BD;
         }
-    """)
+    """
+    )
     list_widget.setMovement(QListWidget.Static)
     list_widget.setDragEnabled(False)
     list_widget.setDragDropMode(QListWidget.NoDragDrop)
@@ -70,7 +78,7 @@ if __name__ == '__main__':
     list_widget.resize(800, 600)
     list_widget.show()
 
-    headers = ['IMAGE', 'FILE NAME', 'DIRECTORY']
+    headers = ["IMAGE", "FILE NAME", "DIRECTORY"]
     table_widget = QTableWidget()
     table_widget.setColumnCount(len(headers))
     table_widget.setHorizontalHeaderLabels(headers)
@@ -86,8 +94,12 @@ if __name__ == '__main__':
     row = 0
 
     for i, file_name in enumerate(file_names, 1):
-        list_widget.setWindowTitle(f'{i} / {len(file_names)} ({i / len(file_names):.0%})')
-        table_widget.setWindowTitle(f'{i} / {len(file_names)} ({i / len(file_names):.0%})')
+        list_widget.setWindowTitle(
+            f"{i} / {len(file_names)} ({i / len(file_names):.0%})"
+        )
+        table_widget.setWindowTitle(
+            f"{i} / {len(file_names)} ({i / len(file_names):.0%})"
+        )
 
         pixmap = QPixmap(file_name)
         if pixmap.isNull():
@@ -98,10 +110,7 @@ if __name__ == '__main__':
         )
         base_file_name = Path(file_name).name
 
-        item = QListWidgetItem(
-            QIcon(pixmap),
-            base_file_name
-        )
+        item = QListWidgetItem(QIcon(pixmap), base_file_name)
         item.setTextAlignment(Qt.AlignHCenter | Qt.AlignBottom)
         item.setSizeHint(QSize(ICON_WIDTH, ICON_HEIGHT + 20))
         list_widget.addItem(item)
@@ -119,10 +128,14 @@ if __name__ == '__main__':
         QApplication.processEvents()
 
     list_widget.setWindowTitle(
-        list_widget.windowTitle() + '. Elapsed: ' + str(DT.datetime.now() - start_time).split('.')[0]
+        list_widget.windowTitle()
+        + ". Elapsed: "
+        + str(DT.datetime.now() - start_time).split(".")[0]
     )
     table_widget.setWindowTitle(
-        table_widget.windowTitle() + '. Elapsed: ' + str(DT.datetime.now() - start_time).split('.')[0]
+        table_widget.windowTitle()
+        + ". Elapsed: "
+        + str(DT.datetime.now() - start_time).split(".")[0]
     )
 
     app.exec()

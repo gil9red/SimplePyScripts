@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import requests
 
 try:
     from PyQt5.QtWidgets import *
@@ -20,13 +22,12 @@ except:
 
 
 def get_img_urls():
-    import requests
     rs = requests.get("https://api.vk.com/method/photos.search?v=5.64")
     img_urls = rs.json()["response"]["items"]
-    return [url['photo_130'] for url in img_urls]
+    return [url["photo_130"] for url in img_urls]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = QScrollArea()
@@ -40,9 +41,9 @@ if __name__ == '__main__':
     columns = 4
     i, j = 0, 0
 
-    mw.setWindowTitle('Loading...')
+    mw.setWindowTitle("Loading...")
 
-    print('Images:', len(img_urls))
+    print("Images:", len(img_urls))
 
     url_by_label = dict()
 
@@ -65,7 +66,6 @@ if __name__ == '__main__':
     mw.setWidget(w)
 
     for n, (url, label) in enumerate(url_by_label.items()):
-        import requests
         rs = requests.get(url)
 
         image = QImage.fromData(rs.content)
@@ -73,9 +73,9 @@ if __name__ == '__main__':
 
         label.setPixmap(pixmap)
 
-        mw.setWindowTitle('{}/{} Loading...'.format(n, len(url_by_label)))
+        mw.setWindowTitle("{}/{} Loading...".format(n, len(url_by_label)))
         QApplication.processEvents()
 
-    mw.setWindowTitle('Ok!')
+    mw.setWindowTitle("Ok!")
 
     app.exec()
