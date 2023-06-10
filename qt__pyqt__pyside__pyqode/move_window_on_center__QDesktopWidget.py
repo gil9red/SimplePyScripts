@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QApplication, QWidget
@@ -12,7 +12,8 @@ app = QApplication([])
 mw = QWidget()
 
 rect = mw.frameGeometry()
-center = app.desktop().availableGeometry().center()  # This is where QDesktopWidget is used
+# This is where QDesktopWidget is used
+center = app.desktop().availableGeometry().center()
 rect.moveCenter(center)
 mw.move(rect.topLeft())
 
