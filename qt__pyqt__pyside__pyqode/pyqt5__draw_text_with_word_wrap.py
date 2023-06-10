@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtGui import QPixmap, QPainter, QFont
@@ -17,7 +17,7 @@ pixmap = QPixmap(180, 130)
 pixmap.fill(Qt.white)
 
 painter = QPainter(pixmap)
-painter.setFont(QFont('Arial', 12))
+painter.setFont(QFont("Arial", 12))
 
 rect = QRect(0, 0, 70, 50)
 painter.drawRect(rect)

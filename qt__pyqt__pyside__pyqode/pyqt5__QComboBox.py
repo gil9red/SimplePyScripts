@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.Qt import *
@@ -15,8 +15,8 @@ class MainWindow(QWidget):
 
         self.cb_pets = QComboBox()
         self.cb_pets.currentIndexChanged.connect(self._on_pet_changed)
-        self.cb_pets.addItem('Собаки', userData='dogs')
-        self.cb_pets.addItem('Коты', userData='cats')
+        self.cb_pets.addItem("Собаки", userData="dogs")
+        self.cb_pets.addItem("Коты", userData="cats")
 
         layout = QVBoxLayout()
         layout.addWidget(self.cb_pets)
@@ -34,17 +34,17 @@ class MainWindow(QWidget):
         # print(self.cb_pets.currentData())     # dogs
         data = self.cb_pets.itemData(index)
 
-        if data == 'cats':
+        if data == "cats":
             text = "Вы любите кошек"
-        elif data == 'dogs':
+        elif data == "dogs":
             text = "Вы любите собак"
         else:
-            text = ''
+            text = ""
 
         self.tb_result.setHtml(text)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
