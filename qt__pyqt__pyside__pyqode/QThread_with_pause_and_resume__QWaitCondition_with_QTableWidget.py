@@ -1,24 +1,30 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
 import sys
 import time
 
-from typing import List
-
 from PyQt5.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QHBoxLayout, QGridLayout,
-    QTableWidget, QTableWidgetItem, QPushButton, QLabel, QCheckBox
+    QApplication,
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QGridLayout,
+    QTableWidget,
+    QTableWidgetItem,
+    QPushButton,
+    QLabel,
+    QCheckBox,
 )
 from PyQt5.QtCore import QThread, QTimer, QWaitCondition, QMutex, pyqtSignal, Qt
 
 
 def get_pretty_int(num: int) -> str:
-    return f'{num:,}'.replace(',', ' ')
+    return f"{num:,}".replace(",", " ")
 
 
 class Thread(QThread):
@@ -43,7 +49,7 @@ class Thread(QThread):
         self.about_sum.emit(value)
 
     def get_state(self) -> str:
-        return 'PAUSED' if self._is_pause else 'WORKING'
+        return "PAUSED" if self._is_pause else "WORKING"
 
     def set_pause(self, pause: bool):
         self._is_pause = pause
@@ -72,7 +78,7 @@ class Thread(QThread):
 
 
 class MainWindow(QWidget):
-    headers = ['NAME', 'STATE', 'SUM']
+    headers = ["NAME", "STATE", "SUM"]
 
     def __init__(self):
         super().__init__()
@@ -88,26 +94,28 @@ class MainWindow(QWidget):
         self.table_thread.setSelectionBehavior(QTableWidget.SelectRows)
         self.table_thread.setSelectionMode(QTableWidget.SingleSelection)
         self.table_thread.setMinimumHeight(250)
-        self.table_thread.selectionModel().currentRowChanged.connect(self._update_states)
+        self.table_thread.selectionModel().currentRowChanged.connect(
+            self._update_states
+        )
 
         self.label_result = QLabel()
 
-        self.button_add = QPushButton('Add')
+        self.button_add = QPushButton("Add")
         self.button_add.clicked.connect(self.add)
 
-        self.button_pause = QPushButton('Pause')
+        self.button_pause = QPushButton("Pause")
         self.button_pause.clicked.connect(self.pause)
 
-        self.button_pause_all = QPushButton('Pause all')
+        self.button_pause_all = QPushButton("Pause all")
         self.button_pause_all.clicked.connect(self.pause_all)
 
-        self.button_resume = QPushButton('Resume')
+        self.button_resume = QPushButton("Resume")
         self.button_resume.clicked.connect(self.resume)
 
-        self.button_resume_all = QPushButton('Resume all')
+        self.button_resume_all = QPushButton("Resume all")
         self.button_resume_all.clicked.connect(self.resume_all)
 
-        self.cb_reset_sum = QCheckBox('Reset sum')
+        self.cb_reset_sum = QCheckBox("Reset sum")
         self.cb_reset_sum.setChecked(True)
 
         left_layout = QVBoxLayout()
@@ -136,10 +144,10 @@ class MainWindow(QWidget):
     def _update_window_title(self):
         threads_num = self.table_thread.rowCount()
         if self.started:
-            elapsed = str(DT.datetime.now() - self.started).split('.')[0]
-            self.setWindowTitle(f'Threads: {threads_num}. Elapsed: {elapsed}')
+            elapsed = str(DT.datetime.now() - self.started).split(".")[0]
+            self.setWindowTitle(f"Threads: {threads_num}. Elapsed: {elapsed}")
         else:
-            self.setWindowTitle(f'Threads: {threads_num}')
+            self.setWindowTitle(f"Threads: {threads_num}")
 
     def _update_states(self):
         self._update_window_title()
@@ -152,8 +160,8 @@ class MainWindow(QWidget):
 
         if ok:
             title = self.table_thread.item(row, 0).text()
-            self.button_pause.setText(f'Pause - {title!r}')
-            self.button_resume.setText(f'Resume - {title!r}')
+            self.button_pause.setText(f"Pause - {title!r}")
+            self.button_resume.setText(f"Resume - {title!r}")
 
         threads_num = self.table_thread.rowCount()
         self.button_pause_all.setEnabled(threads_num)
@@ -162,7 +170,7 @@ class MainWindow(QWidget):
     def get_thread(self, row: int) -> Thread:
         return self.table_thread.item(row, 0).data(Qt.UserRole)
 
-    def get_all_thread(self) -> List[Thread]:
+    def get_all_thread(self) -> list[Thread]:
         return [self.get_thread(row) for row in range(self.table_thread.rowCount())]
 
     def update_info(self):
@@ -185,13 +193,17 @@ class MainWindow(QWidget):
             self.started = DT.datetime.now()
 
         thread = Thread(self)
-        thread.about_sum.connect(lambda _, thread=thread: self._on_thread_changed(thread))
-        thread.about_pause.connect(lambda _, thread=thread: self._on_thread_changed(thread))
+        thread.about_sum.connect(
+            lambda _, thread=thread: self._on_thread_changed(thread)
+        )
+        thread.about_pause.connect(
+            lambda _, thread=thread: self._on_thread_changed(thread)
+        )
 
         row = self.table_thread.rowCount()
         self.table_thread.setRowCount(row + 1)
 
-        title = f'Thread #{row + 1}'
+        title = f"Thread #{row + 1}"
         item_title = QTableWidgetItem(title)
         item_title.setData(Qt.UserRole, thread)
 
@@ -235,7 +247,7 @@ class MainWindow(QWidget):
         self._update_states()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     mw = MainWindow()

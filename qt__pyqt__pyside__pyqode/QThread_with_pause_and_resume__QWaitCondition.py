@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
 import time
 
-from typing import List
-
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QComboBox, QPushButton, QLabel
+from PyQt5.QtWidgets import (
+    QApplication,
+    QWidget,
+    QGridLayout,
+    QComboBox,
+    QPushButton,
+    QLabel,
+)
 from PyQt5.QtCore import QThread, QTimer, QWaitCondition, QMutex
 
 
@@ -51,19 +56,19 @@ class MainWindow(QWidget):
 
         self.label_result = QLabel()
 
-        self.button_add = QPushButton('Add')
+        self.button_add = QPushButton("Add")
         self.button_add.clicked.connect(self.add)
 
-        self.button_pause = QPushButton('Pause')
+        self.button_pause = QPushButton("Pause")
         self.button_pause.clicked.connect(self.pause)
 
-        self.button_pause_all = QPushButton('Pause all')
+        self.button_pause_all = QPushButton("Pause all")
         self.button_pause_all.clicked.connect(self.pause_all)
 
-        self.button_resume = QPushButton('Resume')
+        self.button_resume = QPushButton("Resume")
         self.button_resume.clicked.connect(self.resume)
 
-        self.button_resume_all = QPushButton('Resume all')
+        self.button_resume_all = QPushButton("Resume all")
         self.button_resume_all.clicked.connect(self.resume_all)
 
         layout = QGridLayout(self)
@@ -84,7 +89,7 @@ class MainWindow(QWidget):
 
     def _update_states(self):
         threads_num = self.combobox_thread.count()
-        self.setWindowTitle(f'Threads: {threads_num}')
+        self.setWindowTitle(f"Threads: {threads_num}")
 
         idx = self.combobox_thread.currentIndex()
         ok = idx != -1
@@ -94,8 +99,8 @@ class MainWindow(QWidget):
 
         if ok:
             title = self.combobox_thread.itemText(idx)
-            self.button_pause.setText(f'Pause - {title!r}')
-            self.button_resume.setText(f'Resume - {title!r}')
+            self.button_pause.setText(f"Pause - {title!r}")
+            self.button_resume.setText(f"Resume - {title!r}")
 
         self.button_pause_all.setEnabled(threads_num)
         self.button_resume_all.setEnabled(threads_num)
@@ -103,7 +108,7 @@ class MainWindow(QWidget):
     def get_thread(self, idx: int) -> Thread:
         return self.combobox_thread.itemData(idx)
 
-    def get_all_thread(self) -> List[Thread]:
+    def get_all_thread(self) -> list[Thread]:
         return [self.get_thread(i) for i in range(self.combobox_thread.count())]
 
     def update_info(self):
@@ -114,7 +119,9 @@ class MainWindow(QWidget):
         thread = Thread(self)
         thread.start()
 
-        self.combobox_thread.addItem(f'Thread #{self.combobox_thread.count() + 1}', thread)
+        self.combobox_thread.addItem(
+            f"Thread #{self.combobox_thread.count() + 1}", thread
+        )
         self._update_states()
 
     def pause(self):
@@ -144,7 +151,7 @@ class MainWindow(QWidget):
         self._update_states()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     mw = MainWindow()
