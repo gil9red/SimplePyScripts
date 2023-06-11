@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMdiSubWindow, QMdiArea, QTextEdit, QPushButton
+from PyQt5.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QMdiSubWindow,
+    QMdiArea,
+    QTextEdit,
+    QPushButton,
+)
 
 
 class MainWindow(QMainWindow):
@@ -15,7 +22,7 @@ class MainWindow(QMainWindow):
         self.sub_window_1.setWidget(QTextEdit("<h1>Hello World!</h1>"))
 
         self.sub_window_2 = QMdiSubWindow()
-        self.sub_window_2.setWidget(QPushButton('Click!'))
+        self.sub_window_2.setWidget(QPushButton("Click!"))
 
         self.mdi_area = QMdiArea()
         self.mdi_area.addSubWindow(self.sub_window_1)
@@ -24,7 +31,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.mdi_area)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
