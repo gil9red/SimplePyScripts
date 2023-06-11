@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from random import randint
@@ -11,7 +11,7 @@ from PyQt5.Qt import QWidget, QPainter, QApplication, Qt
 class MatrixWidget(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Widget')
+        self.setWindowTitle("Widget")
 
         self.cell_size = 20
         self.matrix_size = 9
@@ -52,7 +52,10 @@ class MatrixWidget(QWidget):
         painter = QPainter(self)
 
         # Если индекс ячейки под курсором валидный
-        if 0 <= self.x_highlight_cell < self.matrix_size and 0 <= self.y_highlight_cell < self.matrix_size:
+        if (
+            0 <= self.x_highlight_cell < self.matrix_size
+            and 0 <= self.y_highlight_cell < self.matrix_size
+        ):
             # Выделение всего столбца и строки пересекающих ячейку под курсором
             painter.save()
             painter.setBrush(Qt.lightGray)
@@ -63,7 +66,7 @@ class MatrixWidget(QWidget):
                     i * self.cell_size,
                     self.y_highlight_cell * self.cell_size,
                     self.cell_size,
-                    self.cell_size
+                    self.cell_size,
                 )
 
             # Выделение столбца
@@ -72,7 +75,7 @@ class MatrixWidget(QWidget):
                     self.x_highlight_cell * self.cell_size,
                     j * self.cell_size,
                     self.cell_size,
-                    self.cell_size
+                    self.cell_size,
                 )
 
             painter.restore()
@@ -84,7 +87,7 @@ class MatrixWidget(QWidget):
                 self.x_highlight_cell * self.cell_size,
                 self.y_highlight_cell * self.cell_size,
                 self.cell_size,
-                self.cell_size
+                self.cell_size,
             )
             painter.restore()
 
@@ -124,7 +127,7 @@ class MatrixWidget(QWidget):
             x2 += self.cell_size
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = MatrixWidget()

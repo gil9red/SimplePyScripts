@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import (
-    QGraphicsScene, QGraphicsView, QMainWindow, QApplication, QGraphicsRectItem
+    QGraphicsScene,
+    QGraphicsView,
+    QMainWindow,
+    QApplication,
+    QGraphicsRectItem,
 )
 from PyQt5.QtCore import QRectF, QPointF, Qt
 from PyQt5.QtGui import QColor, QPainter
@@ -67,7 +71,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.view)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
