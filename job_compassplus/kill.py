@@ -29,14 +29,14 @@ def get_processes() -> list[Process]:
 
 def kill_servers():
     for p in get_processes():
-        if is_explorer(p):
+        if is_server(p):
             print(f"Kill server #{p.pid}")
             p.kill()
 
 
 def kill_explorers():
     for p in get_processes():
-        if is_server(p):
+        if is_explorer(p):
             print(f"Kill explorer #{p.pid}")
             p.kill()
 
