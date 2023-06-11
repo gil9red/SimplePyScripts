@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import threading
@@ -16,7 +16,7 @@ class MainWindow(QMainWindow):
 
         self.label = QLabel()
         self.label.setAlignment(Qt.AlignCenter)
-        self.label.setFont(QFont('Courier', 25))
+        self.label.setFont(QFont("Courier", 25))
 
         def loop():
             i = 0
@@ -33,7 +33,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.label)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://doc.qt.io/qt-5/qlineedit.html#inputMask-prop
@@ -32,7 +32,7 @@ class MainWindow(QWidget):
         self.test_input.setText(text)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
