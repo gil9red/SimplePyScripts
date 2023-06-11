@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5 import Qt
@@ -15,7 +15,7 @@ class MainWindow(Qt.QMainWindow):
         self.sb_font_size.setRange(5, 40)
         self.sb_font_size.valueChanged.connect(self._on_font_size_changed)
 
-        self.text_edit = Qt.QTextEdit('Test this!')
+        self.text_edit = Qt.QTextEdit("Test this!")
 
         layout = Qt.QVBoxLayout()
         layout.addWidget(self.sb_font_size)
@@ -40,7 +40,7 @@ class MainWindow(Qt.QMainWindow):
         cursor.mergeCharFormat(text_char_format)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = Qt.QApplication([])
 
     mw = MainWindow()
