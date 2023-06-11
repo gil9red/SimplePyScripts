@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt6.QtWidgets import QApplication
@@ -28,4 +28,3 @@ PyQt6.QtCore.QRect(0, 0, 1920, 1080) PyQt6.QtCore.QSize(1920, 1080)
 PyQt6.QtCore.QRect(-3840, 0, 1536, 864) PyQt6.QtCore.QSize(1536, 864)
 PyQt6.QtCore.QRect(-1920, 0, 1920, 1080) PyQt6.QtCore.QSize(1920, 1080)
 """
-
