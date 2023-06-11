@@ -1,23 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
+import traceback
 
-from PyQt5.QtWidgets import QMessageBox, QMainWindow, QApplication, QUndoCommand, QUndoStack
+from PyQt5.QtWidgets import (
+    QMessageBox,
+    QMainWindow,
+    QApplication,
+    QUndoCommand,
+    QUndoStack,
+)
 from PyQt5.QtGui import QPainter, QColor, QImage
 from PyQt5.QtCore import Qt, QRectF
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
@@ -89,7 +95,7 @@ class Widget(QMainWindow):
         painter = QPainter(canvas)
         painter.setRenderHint(QPainter.HighQualityAntialiasing)
         painter.setPen(Qt.NoPen)
-        painter.setBrush(QColor('#AAFF0000'))
+        painter.setBrush(QColor("#AAFF0000"))
 
         painter.drawEllipse(QRectF(self.start_pos, self.end_pos))
 
@@ -119,7 +125,7 @@ class Widget(QMainWindow):
         self.update()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = Widget()
