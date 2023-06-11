@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QLabel, QApplication, QGridLayout, QWidget
@@ -9,7 +9,7 @@ from PyQt5.QtCore import Qt
 
 
 def create_label(alignment):
-    label = QLabel('Test')
+    label = QLabel("Test")
     label.setFixedSize(40, 40)
     label.setFrameStyle(QLabel.Box)
     label.setAlignment(alignment)

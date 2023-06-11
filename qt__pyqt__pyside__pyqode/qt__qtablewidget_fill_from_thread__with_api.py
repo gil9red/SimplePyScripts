@@ -1,15 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://ru.stackoverflow.com/a/806056/201445
 
 
 import time
+
 import requests
-from PyQt5.QtWidgets import QApplication, QMainWindow, QGridLayout, QWidget, QTableWidget, QTableWidgetItem
+
+from PyQt5.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QGridLayout,
+    QWidget,
+    QTableWidget,
+    QTableWidgetItem,
+)
 from PyQt5.QtCore import QSize, Qt, QThread, pyqtSignal as Signal
 
 
@@ -19,7 +28,9 @@ class CheckNewData(QThread):
     def run(self):
         while True:
             # API - start
-            rs = requests.get('https://bittrex.com/api/v1.1/public/getmarketsummary?market=BTC-TRX')
+            rs = requests.get(
+                "https://bittrex.com/api/v1.1/public/getmarketsummary?market=BTC-TRX"
+            )
             data = rs.json()
             print(data)
             # API - end
@@ -60,7 +71,7 @@ class Sheet(QMainWindow):
         self.setCentralWidget(central_widget)
 
     def update_table(self, data):
-        print('update_table:', data)
+        print("update_table:", data)
 
         k = data["result"][0]["Last"]
         btctrx = "%.8f" % k
@@ -81,6 +92,7 @@ class Sheet(QMainWindow):
 
 if __name__ == "__main__":
     import sys
+
     app = QApplication(sys.argv)
 
     mw = Sheet()
