@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -48,9 +48,9 @@ class MainWindow(QMainWindow):
         OUTPUT_LOGGER_STDERR.emit_write.connect(self.append_log)
 
         menu_bar = QMenuBar()
-        menu = menu_bar.addMenu('Say')
-        menu.addAction('hello', lambda: print('Hello!'))
-        menu.addAction('fail', lambda: print('Fail!', file=sys.stderr))
+        menu = menu_bar.addMenu("Say")
+        menu.addAction("hello", lambda: print("Hello!"))
+        menu.addAction("fail", lambda: print("Fail!", file=sys.stderr))
         self.setMenuBar(menu_bar)
 
         self.setCentralWidget(self.text_edit)
@@ -59,17 +59,17 @@ class MainWindow(QMainWindow):
         text = repr(text)
 
         if severity == OutputLogger.Severity.ERROR:
-            text = f'<b>{text}</b>'
+            text = f"<b>{text}</b>"
 
         self.text_edit.append(text)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
     mw.show()
 
-    print('Go!')
+    print("Go!")
 
     app.exec()

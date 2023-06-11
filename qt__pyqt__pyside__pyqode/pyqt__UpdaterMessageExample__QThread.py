@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from PyQt5.Qt import QThread, pyqtSignal, QMessageBox, QApplication, QWidget, QLabel, QPlainTextEdit, QVBoxLayout
+from PyQt5.Qt import (
+    QThread,
+    pyqtSignal,
+    QMessageBox,
+    QApplication,
+    QWidget,
+    QLabel,
+    QPlainTextEdit,
+    QVBoxLayout,
+)
 
 
 class AboutUpdateThread(QThread):
@@ -17,7 +26,7 @@ class AboutUpdateThread(QThread):
             # ...
             # if ...:
 
-            self.about_update.emit('Доступна новая версия 2.1.1')
+            self.about_update.emit("Доступна новая версия 2.1.1")
 
             # 6 hours
             QThread.sleep(6 * 60 * 60)
@@ -30,7 +39,7 @@ class Window(QWidget):
         self.log = QPlainTextEdit()
 
         layout = QVBoxLayout()
-        layout.addWidget(QLabel('Log:'))
+        layout.addWidget(QLabel("Log:"))
         layout.addWidget(self.log)
 
         self.setLayout(layout)
@@ -55,19 +64,19 @@ class Window(QWidget):
         mb.exec()
 
         if mb.clickedButton() == button_cancel:
-            self.add_log('Пользователь отказался от обновления...')
+            self.add_log("Пользователь отказался от обновления...")
             return
 
-        self.add_log('Выполняю обновление...')
+        self.add_log("Выполняю обновление...")
 
         # ...
         # Обновляемся
         # ...
 
-        self.add_log('Обновление поставлено успешно...')
+        self.add_log("Обновление поставлено успешно...")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = Window()
