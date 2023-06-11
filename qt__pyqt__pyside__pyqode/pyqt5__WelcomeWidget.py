@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QDialog, QLabel, QVBoxLayout, QApplication, QMainWindow
@@ -18,14 +18,16 @@ class WelcomeWidget(QDialog):
         self.setAttribute(Qt.WA_TranslucentBackground)
 
         label = QLabel(text)
-        label.setStyleSheet("""
+        label.setStyleSheet(
+            """
             color : #fff;
             margin-top: 6px;
             margin-bottom: 6px;
             margin-left: 10px;
             margin-right: 10px;
             font-size: 50px;
-        """)
+        """
+        )
         layout = QVBoxLayout()
         layout.addWidget(label)
         self.setLayout(layout)
@@ -53,25 +55,23 @@ class WelcomeWidget(QDialog):
         painter.drawRoundedRect(self.rect(), 10, 10)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     WelcomeWidget().exec()
-    WelcomeWidget('Еще, раз! Привет!', duration=1500).exec()
-
+    WelcomeWidget("Еще, раз! Привет!", duration=1500).exec()
 
     class MainWindow(QMainWindow):
         def __init__(self):
             super().__init__()
 
-            self.setWindowTitle('MAIN WINDOW')
+            self.setWindowTitle("MAIN WINDOW")
             self.setFixedSize(500, 500)
 
-            label = QLabel('MAIN WINDOW')
+            label = QLabel("MAIN WINDOW")
             label.setAlignment(Qt.AlignCenter)
             label.setStyleSheet("font-size: 50px;")
             self.setCentralWidget(label)
-
 
     mw = MainWindow()
     mw.show()

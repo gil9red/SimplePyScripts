@@ -1,21 +1,30 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from PyQt5.Qt import QWebEngineView, QApplication, QUrl, QWidget, QLineEdit, QVBoxLayout, QPushButton, QHBoxLayout
+from PyQt5.Qt import (
+    QWebEngineView,
+    QApplication,
+    QUrl,
+    QWidget,
+    QLineEdit,
+    QVBoxLayout,
+    QPushButton,
+    QHBoxLayout,
+)
 
 
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('...')
+        self.setWindowTitle("...")
 
-        self.url_le = QLineEdit('http://qt-project.org/')
+        self.url_le = QLineEdit("http://qt-project.org/")
 
-        self.go_pb = QPushButton('Go')
+        self.go_pb = QPushButton("Go")
         self.go_pb.clicked.connect(self._on_load_url)
 
         url_layout = QHBoxLayout()
@@ -39,7 +48,7 @@ class MainWindow(QWidget):
         self.url_le.setText(url.toString())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
