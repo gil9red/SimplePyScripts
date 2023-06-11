@@ -1,33 +1,32 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
-
-
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton
-from PyQt5.QtCore import Qt
+__author__ = "ipetrash"
 
 
 import ctypes
 from ctypes.wintypes import DWORD, ULONG
 from ctypes import windll, c_bool, c_int, POINTER, Structure
 
+from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton
+from PyQt5.QtCore import Qt
+
 
 class AccentPolicy(Structure):
     _fields_ = [
-        ('AccentState', DWORD),
-        ('AccentFlags', DWORD),
-        ('GradientColor', DWORD),
-        ('AnimationId', DWORD),
+        ("AccentState", DWORD),
+        ("AccentFlags", DWORD),
+        ("GradientColor", DWORD),
+        ("AnimationId", DWORD),
     ]
 
 
 # SOURCE: http://undoc.airesoft.co.uk/user32.dll/GetWindowCompositionAttribute.php
 class WINCOMPATTRDATA(Structure):
     _fields_ = [
-        ('Attribute', DWORD),
-        ('Data', POINTER(AccentPolicy)),
-        ('SizeOfData', ULONG),
+        ("Attribute", DWORD),
+        ("Data", POINTER(AccentPolicy)),
+        ("SizeOfData", ULONG),
     ]
 
 
@@ -90,7 +89,7 @@ class Widget(QWidget):
         self.move(self.pos() + delta)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = Widget()

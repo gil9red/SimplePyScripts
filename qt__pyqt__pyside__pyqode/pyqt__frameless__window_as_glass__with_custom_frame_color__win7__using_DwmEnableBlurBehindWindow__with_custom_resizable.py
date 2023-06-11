@@ -1,39 +1,45 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
-
-
-from PyQt5.QtGui import QPainter, QPen
-from PyQt5.QtWidgets import QApplication, QVBoxLayout, QPushButton
-from PyQt5.QtCore import Qt
-
-from pyqt__mouse_manual_move__FramelessWindowHint__with_custom_resizable import ResizableFramelessWidget
+__author__ = "ipetrash"
 
 
 from ctypes.wintypes import DWORD, HRGN
 from ctypes import windll, c_bool, c_int, POINTER, Structure
 from ctypes import WINFUNCTYPE
 
+from PyQt5.QtGui import QPainter, QPen
+from PyQt5.QtWidgets import QApplication, QVBoxLayout, QPushButton
+from PyQt5.QtCore import Qt
+
+from pyqt__mouse_manual_move__FramelessWindowHint__with_custom_resizable import (
+    ResizableFramelessWidget,
+)
+
 
 class DWM_BLURBEHIND(Structure):
     """
     http://msdn.microsoft.com/en-us/library/windows/desktop/aa969500%28v=vs.85%29.aspx
     """
+
     _fields_ = [
-        ('dwFlags', DWORD),
-        ('fEnable', c_bool),
-        ('hRgnBlur', HRGN),
-        ('fTransitionOnMaximized', c_bool)
+        ("dwFlags", DWORD),
+        ("fEnable", c_bool),
+        ("hRgnBlur", HRGN),
+        ("fTransitionOnMaximized", c_bool),
     ]
 
 
 prototype = WINFUNCTYPE(c_int, c_int, POINTER(DWM_BLURBEHIND))
 params = (1, "hWnd", 0), (1, "pBlurBehind", 0)
-_DwmEnableBlurBehindWindow = prototype(("DwmEnableBlurBehindWindow", windll.dwmapi), params)
+_DwmEnableBlurBehindWindow = prototype(
+    ("DwmEnableBlurBehindWindow", windll.dwmapi), params
+)
 
 # Before we get started, see if we have the DWM functions.
-has_dwm = hasattr(windll, 'dwmapi') and hasattr(windll.dwmapi, 'DwmIsCompositionEnabled')
+has_dwm = hasattr(windll, "dwmapi") and hasattr(
+    windll.dwmapi, "DwmIsCompositionEnabled"
+)
 
 
 # SOURCE: https://github.com/stendec/siding/blob/master/siding/_aeroglass.py
@@ -77,7 +83,7 @@ class Widget(ResizableFramelessWidget):
         painter.drawRect(self.rect())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = Widget()
