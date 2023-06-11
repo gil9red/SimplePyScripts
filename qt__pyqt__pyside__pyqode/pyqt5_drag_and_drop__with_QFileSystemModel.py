@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import (
-    QTreeView, QFileSystemModel, QApplication, QMainWindow, QLabel, QWidget, QVBoxLayout, QListWidget
+    QTreeView,
+    QFileSystemModel,
+    QApplication,
+    QMainWindow,
+    QLabel,
+    QWidget,
+    QVBoxLayout,
+    QListWidget,
 )
 from PyQt5.QtCore import QDir
 
@@ -14,7 +21,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('Drag & Drop')
+        self.setWindowTitle("Drag & Drop")
 
         # Даем разрешение на Drop
         self.setAcceptDrops(True)
@@ -34,7 +41,7 @@ class MainWindow(QMainWindow):
 
         main_layout = QVBoxLayout()
         main_layout.addWidget(self.tree)
-        main_layout.addWidget(QLabel('Перетащите файл:'))
+        main_layout.addWidget(QLabel("Перетащите файл:"))
         main_layout.addWidget(self.list_files)
         main_layout.addWidget(self.label_total_files)
 
@@ -46,7 +53,7 @@ class MainWindow(QMainWindow):
         self._update_states()
 
     def _update_states(self):
-        self.label_total_files.setText('Files: {}'.format(self.list_files.count()))
+        self.label_total_files.setText("Files: {}".format(self.list_files.count()))
 
     def dragEnterEvent(self, event):
         # Тут выполняются проверки и дается (или нет) разрешение на Drop
@@ -70,7 +77,7 @@ class MainWindow(QMainWindow):
         return super().dropEvent(event)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
