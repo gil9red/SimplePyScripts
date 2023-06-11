@@ -1,28 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
+import ctypes
 from PyQt5 import Qt
+
 
 COLOR_ACTIVEBORDER = 10
 
-import ctypes
 GetSysColorBrush = ctypes.windll.user32.GetSysColorBrush
 GetSysColor = ctypes.windll.user32.GetSysColor
 
 
 def GetRValue(value):
-    return value & 0xff
+    return value & 0xFF
 
 
 def GetGValue(value):
-    return value >> 8 & 0xff
+    return value >> 8 & 0xFF
 
 
 def GetBValue(value):
-    return value >> 16 & 0xff
+    return value >> 16 & 0xFF
 
 
 def getWindowFrameColor():
@@ -35,14 +36,14 @@ def getWindowFrameColor():
     return Qt.QColor()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = Qt.QApplication([])
 
     def get_color():
         color = getWindowFrameColor()
-        button.setStyleSheet('background-color: ' + color.name())
+        button.setStyleSheet("background-color: " + color.name())
 
-    button = Qt.QPushButton('Get')
+    button = Qt.QPushButton("Get")
     button.clicked.connect(get_color)
     button.resize(100, 100)
     button.show()
