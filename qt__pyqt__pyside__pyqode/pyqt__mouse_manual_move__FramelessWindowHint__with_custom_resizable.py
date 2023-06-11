@@ -1,29 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton
+import sys
+import traceback
+
+from enum import Enum, auto
+
+from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton, QMessageBox
 from PyQt5.QtCore import Qt
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    from PyQt5.QtWidgets import QMessageBox
-    QMessageBox.critical(None, 'Error', text)
+
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
-
-
-from enum import Enum, auto
 
 
 # Перечислить верхнюю левую, нижнюю правую и четыре неподвижные точки
@@ -95,21 +95,29 @@ class ResizableFramelessWidget(QWidget):
         return self.MARGINS <= x_pos <= wm and hm <= y_pos <= self.height()
 
     def mousePressEvent(self, event):
-        """ Событие клика мыши """
+        """Событие клика мыши"""
         super().mousePressEvent(event)
 
         if event.button() == Qt.LeftButton:
             self._old_pos = event.pos()
             self._is_margin_press = False
 
-            for func in (self._is_left_top, self._is_right_bottom, self._is_right_top, self._is_left_bottom,
-                         self._is_left, self._is_right, self._is_top, self._is_bottom):
+            for func in (
+                self._is_left_top,
+                self._is_right_bottom,
+                self._is_right_top,
+                self._is_left_bottom,
+                self._is_left,
+                self._is_right,
+                self._is_top,
+                self._is_bottom,
+            ):
                 if func(self._old_pos):
                     self._is_margin_press = True
                     break
 
     def mouseReleaseEvent(self, event):
-        """ Событие отказов мыши """
+        """Событие отказов мыши"""
         super().mouseReleaseEvent(event)
 
         self._old_pos = None
@@ -117,7 +125,7 @@ class ResizableFramelessWidget(QWidget):
         self._direction = None
 
     def mouseMoveEvent(self, event):
-        """ Событие перемещения мыши """
+        """Событие перемещения мыши"""
         super().mouseMoveEvent(event)
 
         if self.isMaximized() or self.isFullScreen():
@@ -183,7 +191,7 @@ class ResizableFramelessWidget(QWidget):
             self.setCursor(Qt.ArrowCursor)
 
     def _resizeWidget(self, pos):
-        """ Отрегулируйте размер окна """
+        """Отрегулируйте размер окна"""
         if self._direction is None:
             return
 
@@ -192,7 +200,7 @@ class ResizableFramelessWidget(QWidget):
         geometry = self.geometry()
         x, y, w, h = geometry.x(), geometry.y(), geometry.width(), geometry.height()
 
-        if self._direction == Direction.LEFT_TOP:          # Верхний левый угол
+        if self._direction == Direction.LEFT_TOP:  # Верхний левый угол
             if w - x_pos > self.minimumWidth():
                 x += x_pos
                 w -= x_pos
@@ -201,7 +209,7 @@ class ResizableFramelessWidget(QWidget):
                 y += y_pos
                 h -= y_pos
 
-        elif self._direction == Direction.RIGHT_BOTTOM:    # Нижний правый угол
+        elif self._direction == Direction.RIGHT_BOTTOM:  # Нижний правый угол
             if w + x_pos > self.minimumWidth():
                 w += x_pos
                 self._old_pos = pos
@@ -210,7 +218,7 @@ class ResizableFramelessWidget(QWidget):
                 h += y_pos
                 self._old_pos = pos
 
-        elif self._direction == Direction.RIGHT_TOP:       # верхний правый угол
+        elif self._direction == Direction.RIGHT_TOP:  # верхний правый угол
             if h - y_pos > self.minimumHeight():
                 y += y_pos
                 h -= y_pos
@@ -219,7 +227,7 @@ class ResizableFramelessWidget(QWidget):
                 w += x_pos
                 self._old_pos.setX(pos.x())
 
-        elif self._direction == Direction.LEFT_BOTTOM:     # Нижний левый угол
+        elif self._direction == Direction.LEFT_BOTTOM:  # Нижний левый угол
             if w - x_pos > self.minimumWidth():
                 x += x_pos
                 w -= x_pos
@@ -228,28 +236,28 @@ class ResizableFramelessWidget(QWidget):
                 h += y_pos
                 self._old_pos.setY(pos.y())
 
-        elif self._direction == Direction.LEFT:            # Влево
+        elif self._direction == Direction.LEFT:  # Влево
             if w - x_pos > self.minimumWidth():
                 x += x_pos
                 w -= x_pos
             else:
                 return
 
-        elif self._direction == Direction.RIGHT:           # Право
+        elif self._direction == Direction.RIGHT:  # Право
             if w + x_pos > self.minimumWidth():
                 w += x_pos
                 self._old_pos = pos
             else:
                 return
 
-        elif self._direction == Direction.TOP:             # выше
+        elif self._direction == Direction.TOP:  # выше
             if h - y_pos > self.minimumHeight():
                 y += y_pos
                 h -= y_pos
             else:
                 return
 
-        elif self._direction == Direction.BOTTOM:          # ниже
+        elif self._direction == Direction.BOTTOM:  # ниже
             if h + y_pos > self.minimumHeight():
                 h += y_pos
                 self._old_pos = pos
@@ -259,7 +267,7 @@ class ResizableFramelessWidget(QWidget):
         self.setGeometry(x, y, w, h)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = ResizableFramelessWidget()
