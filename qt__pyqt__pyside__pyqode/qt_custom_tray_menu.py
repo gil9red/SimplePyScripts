@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.Qt import QApplication, QSystemTrayIcon, QStyle, QLabel, QWidgetAction, QMenu
@@ -15,7 +15,7 @@ icon = app.style().standardIcon(QStyle.SP_DirOpenIcon)
 
 tray = QSystemTrayIcon(icon)
 
-menu_widget = QLabel('<b>Hello</b>, World!')
+menu_widget = QLabel("<b>Hello</b>, World!")
 menu_widget_action = QWidgetAction(menu_widget)
 menu_widget_action.setDefaultWidget(menu_widget)
 
