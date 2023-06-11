@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-from psutil import process_iter, Process, AccessDenied
+from psutil import process_iter, Process
 
 
 def is_server(p: Process) -> bool:
