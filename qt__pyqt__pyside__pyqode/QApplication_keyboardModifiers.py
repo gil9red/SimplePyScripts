@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton
@@ -12,7 +12,7 @@ class Window(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.button = QPushButton('Test')
+        self.button = QPushButton("Test")
         self.button.clicked.connect(self.on_clicked)
 
         main_layout = QVBoxLayout()
@@ -21,10 +21,10 @@ class Window(QWidget):
         self.setLayout(main_layout)
 
     def foo(self):
-        print('foo')
+        print("foo")
 
     def bar(self):
-        print('bar')
+        print("bar")
 
     def on_clicked(self):
         modifiers = QApplication.keyboardModifiers()
@@ -35,7 +35,7 @@ class Window(QWidget):
             self.foo()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = Window()
