@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QApplication, QWidget
@@ -13,7 +13,7 @@ class Example(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('Example')
+        self.setWindowTitle("Example")
         self.setGeometry(300, 300, 300, 220)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setWindowFlags(Qt.FramelessWindowHint)
@@ -42,7 +42,7 @@ class Example(QWidget):
         painter.drawRect(self.rect())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = Example()

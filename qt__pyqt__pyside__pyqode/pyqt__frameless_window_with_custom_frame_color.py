@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QVBoxLayout, QPushButton
@@ -22,7 +22,9 @@ class Widget(QWidget):
         self.frame_color = Qt.darkCyan
 
         layout = QVBoxLayout()
-        layout.addWidget(QLabel("Перетаскиваем окно, созданное без полей.", alignment=Qt.AlignCenter))
+        layout.addWidget(
+            QLabel("Перетаскиваем окно, созданное без полей.", alignment=Qt.AlignCenter)
+        )
         layout.addWidget(QPushButton("Закрыть окно", clicked=self.close))
 
         self.setLayout(layout)
@@ -51,7 +53,7 @@ class Widget(QWidget):
         painter.drawRect(self.rect())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = Widget()
