@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # http://doc.qt.io/qt-5/animation-overview.html
@@ -17,7 +17,7 @@ class MainWindow(Qt.QMainWindow):
         self.label = Qt.QLabel("Animated label", parent=self)
         self.label.move(0, 50)
 
-        self.button = Qt.QPushButton('Start!', parent=self, clicked=self._on_click)
+        self.button = Qt.QPushButton("Start!", parent=self, clicked=self._on_click)
 
         self.animation = Qt.QPropertyAnimation(self.label, b"geometry")
         self.animation.setDuration(10000)
@@ -28,7 +28,7 @@ class MainWindow(Qt.QMainWindow):
         self.animation.start()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = Qt.QApplication([])
 
     mw = MainWindow()
