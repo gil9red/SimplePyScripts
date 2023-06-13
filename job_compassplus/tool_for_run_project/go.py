@@ -15,7 +15,7 @@ from enum import Enum, auto
 from pathlib import Path
 from typing import Iterable
 
-sys.path.append('..')
+sys.path.append('../..')
 from from_ghbdtn import from_ghbdtn
 
 
