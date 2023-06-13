@@ -12,7 +12,7 @@ from common import session
 @dataclass
 class Bookmark:
     title: str
-    url: int
+    url: str
     status: str
 
 
