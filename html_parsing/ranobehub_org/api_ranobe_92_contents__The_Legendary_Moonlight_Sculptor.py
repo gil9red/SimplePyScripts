@@ -4,11 +4,11 @@
 __author__ = "ipetrash"
 
 
-import requests
+from common import session
 
 
 def get_chapters() -> list[str]:
-    rs = requests.get("https://ranobehub.org/api/ranobe/92/contents")
+    rs = session.get("https://ranobehub.org/api/ranobe/92/contents")
     rs.raise_for_status()
 
     items = []

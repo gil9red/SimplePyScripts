@@ -10,8 +10,9 @@ import time
 from pathlib import Path
 from urllib.parse import urljoin
 
-import requests
 from bs4 import BeautifulSoup
+
+from common import session
 
 
 def get_valid_filename(s: str) -> str:
@@ -20,11 +21,6 @@ def get_valid_filename(s: str) -> str:
 
 
 DIR = Path(__file__).resolve().parent
-
-session = requests.Session()
-session.headers[
-    "User-Agent"
-] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/110.0"
 
 
 def parse(start_url: str, download_path: Path = DIR):
