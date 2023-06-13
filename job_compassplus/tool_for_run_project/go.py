@@ -18,6 +18,9 @@ from typing import Iterable
 sys.path.append('../..')
 from from_ghbdtn import from_ghbdtn
 
+sys.path.append('..')
+from kill import kill_servers, kill_explorers
+
 
 class AvailabilityEnum(Enum):
     OPTIONAL = auto()
@@ -237,6 +240,26 @@ def _run_path(path: str, args: list[str] | None = None):
     _run_file(file_name)
 
 
+def _kill(path: str, args: list[str] | None = None):
+    # Если аргументы не заданы, то убиваем серверы и проводники из папки
+    if not args:
+        kill_servers(path)
+        kill_explorers(path)
+        return
+
+    arg = args[0].lower()
+
+    # all - убиваем все сервера и проводники из всех папок
+    if arg.startswith('a'):
+        kill_servers()
+        kill_explorers()
+    elif arg.startswith('s'):
+        kill_servers(path)
+    elif arg.startswith('e'):
+        kill_explorers(path)
+    else:
+        print(f'Unknown argument: {arg}')
+
 def _manager_up(path: str, _: list[str] | None = None):
     path = Path(path)
 
@@ -305,6 +328,7 @@ SETTINGS = {
                 'svn revert', 'start /b "" TortoiseProc /command:revert /path:"{path}"'
             ),
             'run': _run_path,
+            'kill': _kill,
         },
     },
     'tx': {
