@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import re
@@ -19,7 +19,7 @@ pattern = re.compile("[a-z]+|[0-9]+", re.DEBUG)
 print()
 print(type(pattern), pattern)
 
-print('\n')
+print("\n")
 
 pattern = re.compile(r"\d{2,6}", re.DEBUG)
 # MAX_REPEAT 2 6

@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-"""Скрипт, использую регулярные выражения, находит текст по шаблону и
+"""
+Скрипт, использую регулярные выражения, находит текст по шаблону и
 заменяет его на аналогичный, но в верхнем регистре.
 """
+
+
+import re
 
 
 text = """
@@ -35,6 +39,5 @@ text = """
 </xs:schema>
 """
 
-import re
 text = re.sub('name="(.+?)"', lambda x: 'name="{}"'.format(x.group(1).upper()), text)
 print(text)
