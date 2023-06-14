@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5 import Qt
-import sys
 
 
 class Example(Qt.QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('Hi')
+        self.setWindowTitle("Hi")
 
         self.text_edit = Qt.QTextEdit()
         self.setCentralWidget(self.text_edit)
 
-        menu = self.menuBar().addMenu('File')
-        save_file_action = menu.addAction('Save As ...')
+        menu = self.menuBar().addMenu("File")
+        save_file_action = menu.addAction("Save As ...")
         save_file_action.triggered.connect(self.save_as)
 
     def save_as(self):
@@ -26,12 +25,14 @@ class Example(Qt.QMainWindow):
         if not ok:
             return
 
-        with open(file_name, 'w', encoding='utf-8') as f:
+        with open(file_name, "w", encoding="utf-8") as f:
             text = self.text_edit.toPlainText()
             f.write(text)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    import sys
+
     app = Qt.QApplication(sys.argv)
 
     example = Example()

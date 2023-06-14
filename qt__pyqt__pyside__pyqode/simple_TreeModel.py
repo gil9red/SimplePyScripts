@@ -1,42 +1,45 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from typing import List, Optional, Union
+import sys
+import traceback
+
+from typing import Union, Optional
 
 from PyQt5.QtWidgets import QApplication, QTreeView, QMessageBox
 from PyQt5.QtCore import Qt, QAbstractItemModel, QModelIndex
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
 class TreeItem:
     def __init__(self, *args):
-        self._childItems: List[TreeItem] = []
+        self._childItems: list[TreeItem] = []
         self._itemData = args
-        self._parentItem: Optional[TreeItem] = None
-        self._model: Optional[QAbstractItemModel] = None
+        self._parentItem: TreeItem = None
+        self._model: QAbstractItemModel = None
 
-    def appendChild(self, child: Union['TreeItem', str]) -> 'TreeItem':
+    def appendChild(self, child: Union["TreeItem", str]) -> "TreeItem":
         if isinstance(child, str):
             child = TreeItem(child)
 
         if self._model:
-            self._model.beginInsertRows(self.index(), self.childCount(), self.childCount() + 1)
+            self._model.beginInsertRows(
+                self.index(), self.childCount(), self.childCount() + 1
+            )
 
         child._parentItem = self
         child._model = self._model
@@ -47,7 +50,7 @@ class TreeItem:
 
         return child
 
-    def appendChilds(self, childs: List['TreeItem']):
+    def appendChilds(self, childs: list["TreeItem"]):
         for x in childs:
             self.appendChild(x)
 
@@ -60,7 +63,7 @@ class TreeItem:
         if self._model:
             self._model.endRemoveRows()
 
-    def child(self, row: int) -> Optional['TreeItem']:
+    def child(self, row: int) -> Optional["TreeItem"]:
         if row < 0 or row >= len(self._childItems):
             return
 
@@ -80,7 +83,7 @@ class TreeItem:
             return self._parentItem._childItems.index(self)
         return 0
 
-    def parentItem(self) -> Optional['TreeItem']:
+    def parentItem(self) -> Optional["TreeItem"]:
         return self._parentItem
 
     def setModel(self, model: QAbstractItemModel):
@@ -97,7 +100,7 @@ class TreeItem:
 
 
 class TreeModel(QAbstractItemModel):
-    column_names = ['File name']
+    column_names = ["File name"]
 
     def __init__(self):
         super().__init__()
@@ -108,7 +111,7 @@ class TreeModel(QAbstractItemModel):
     def rootItem(self) -> TreeItem:
         return self._root_item
 
-    def setModelData(self, items: List[TreeItem]):
+    def setModelData(self, items: list[TreeItem]):
         self.beginResetModel()
 
         self._root_item.clearChilren()
@@ -168,7 +171,7 @@ class TreeModel(QAbstractItemModel):
         return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from timeit import default_timer
 
     app = QApplication(sys.argv)
@@ -176,15 +179,15 @@ if __name__ == '__main__':
     t = default_timer()
     items = []
     for i in range(9999):
-        item = TreeItem(f'root_{i:04}')
+        item = TreeItem(f"root_{i:04}")
         items.append(item)
 
         for j in range(10):
-            child = item.appendChild(f'item__{i:04}/{j}')
+            child = item.appendChild(f"item__{i:04}/{j}")
 
             for k in range(10):
-                child.appendChild(f'item__{i:04}/{j}/{k}')
-    print(f'Elapsed time: {default_timer() - t:.2f} secs')
+                child.appendChild(f"item__{i:04}/{j}/{k}")
+    print(f"Elapsed time: {default_timer() - t:.2f} secs")
 
     model = TreeModel()
     model.setModelData(items)
