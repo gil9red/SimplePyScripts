@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from multiprocessing import current_process
@@ -35,13 +35,13 @@ class MainWidget(QWidget):
         memory_bytes = self._process.memory_info().rss
 
         self._label_info.setText(
-            f'Current memory: {memory_bytes} bytes\n'
-            f'Current memory: {memory_bytes // 1024} KB\n'
-            f'Current memory: {memory_bytes // 1024 // 1024} MB'
+            f"Current memory: {memory_bytes} bytes\n"
+            f"Current memory: {memory_bytes // 1024} KB\n"
+            f"Current memory: {memory_bytes // 1024 // 1024} MB"
         )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWidget()

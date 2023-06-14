@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from multiprocessing import current_process
@@ -9,7 +9,16 @@ from multiprocessing import current_process
 # pip install psutil
 import psutil
 
-from PyQt5.Qt import QApplication, QWidget, QLabel, QTimer, QVBoxLayout, QPushButton, QSpinBox, QHBoxLayout
+from PyQt5.Qt import (
+    QApplication,
+    QWidget,
+    QLabel,
+    QTimer,
+    QVBoxLayout,
+    QPushButton,
+    QSpinBox,
+    QHBoxLayout,
+)
 
 
 class MainWidget(QWidget):
@@ -18,7 +27,7 @@ class MainWidget(QWidget):
 
         self._label_info = QLabel()
 
-        self._button_append = QPushButton('Add')
+        self._button_append = QPushButton("Add")
         self._button_append.clicked.connect(self._on_append_clicked)
 
         self._spin_box_numbers = QSpinBox()
@@ -28,7 +37,7 @@ class MainWidget(QWidget):
         h_layout = QHBoxLayout()
         h_layout.addWidget(self._button_append)
         h_layout.addWidget(self._spin_box_numbers)
-        h_layout.addWidget(QLabel('objects'))
+        h_layout.addWidget(QLabel("objects"))
 
         main_layout = QVBoxLayout()
         main_layout.addWidget(self._label_info)
@@ -54,13 +63,13 @@ class MainWidget(QWidget):
         memory_bytes = self._process.memory_info().rss
 
         self._label_info.setText(
-            f'Current memory: {memory_bytes} bytes\n'
-            f'Current memory: {memory_bytes // 1024} KB\n'
-            f'Current memory: {memory_bytes // 1024 // 1024} MB'
+            f"Current memory: {memory_bytes} bytes\n"
+            f"Current memory: {memory_bytes // 1024} KB\n"
+            f"Current memory: {memory_bytes // 1024 // 1024} MB"
         )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWidget()
