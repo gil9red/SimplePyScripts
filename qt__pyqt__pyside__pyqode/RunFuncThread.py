@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -19,8 +19,9 @@ class RunFuncThread(QThread):
         self.run_finished.emit(self.func())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from PyQt5.QtCore import QCoreApplication
+
     app = QCoreApplication([])
 
     thread = RunFuncThread(func=lambda: 2 + 2 * 2)

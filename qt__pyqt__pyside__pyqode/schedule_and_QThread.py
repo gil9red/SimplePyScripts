@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://ru.stackoverflow.com/a/1202691/201445
@@ -11,11 +11,12 @@ import time
 import sys
 from datetime import datetime
 
+import schedule
+
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-import schedule
 
 
 class Ui_MainWindow(object):
@@ -73,8 +74,8 @@ class Example(QMainWindow, Ui_MainWindow):
 
         self.setupUi(self)
 
-        self.lineEdit.setText('18:00')
-        
+        self.lineEdit.setText("18:00")
+
         self.pushButton.clicked.connect(self.go)
 
         self.thread = ScheduleThread()
@@ -82,12 +83,12 @@ class Example(QMainWindow, Ui_MainWindow):
         self.thread.start()
 
     def write(self, time: str):
-        print('красафчик', time)
+        print("красафчик", time)
 
     def go(self):
         try:
             t = self.lineEdit.text()
-            datetime_object = datetime.strptime(t, '%H:%M')
+            datetime_object = datetime.strptime(t, "%H:%M")
             time_str = str(datetime_object.time())
             print(time_str)
 
@@ -97,7 +98,7 @@ class Example(QMainWindow, Ui_MainWindow):
             print(e)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
     ex = Example()
     ex.show()
