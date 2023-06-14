@@ -2,13 +2,21 @@
 # -*- coding: utf-8 -*-
 
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
 
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGraphicsScene, \
-    QGraphicsView, QGraphicsLinearLayout, QGraphicsWidget, QHBoxLayout
+from PyQt5.QtWidgets import (
+    QApplication,
+    QWidget,
+    QPushButton,
+    QGraphicsScene,
+    QGraphicsView,
+    QGraphicsLinearLayout,
+    QGraphicsWidget,
+    QHBoxLayout,
+)
 from PyQt5.QtGui import QPainter
 from PyQt5.QtCore import Qt
 
@@ -56,7 +64,7 @@ class Window(QWidget):
         scene_layout.addItem(proxy_rb3)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     w = Window()

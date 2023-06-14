@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from typing import Any
@@ -34,16 +34,24 @@ def run_js(code: str) -> Any:
     return result
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(run_js("2+2"))
     print(run_js("let f = a => a*2; f(10)"))
-    print(run_js("""
-        let f = a => a*2;
-        f(10);
-    """))
-    print(run_js("""
-        function f(a) {
-            return a * 2;
-        }
-        f(10);
-    """))
+    print(
+        run_js(
+            """
+            let f = a => a*2;
+            f(10);
+            """
+        )
+    )
+    print(
+        run_js(
+            """
+            function f(a) {
+                return a * 2;
+            }
+            f(10);
+            """
+        )
+    )

@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-import sys
-from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QVBoxLayout, QMessageBox
-import subprocess
 import os
+import sys
+import subprocess
+import traceback
+
+from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QVBoxLayout, QMessageBox
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
+
 
 sys.excepthook = log_uncaught_exceptions
 
@@ -28,10 +30,10 @@ class MainWindow(QWidget):
 
         self.cmd_command = "start cmd.exe @cmd /k ipconfig"
 
-        button_run_subprocess = QPushButton('Run subprocess')
+        button_run_subprocess = QPushButton("Run subprocess")
         button_run_subprocess.clicked.connect(self.btn_clicked_subprocess)
 
-        button_os_system = QPushButton('Run os.system')
+        button_os_system = QPushButton("Run os.system")
         button_os_system.clicked.connect(self.btn_clicked_subprocess)
 
         layout = QVBoxLayout()
@@ -47,7 +49,7 @@ class MainWindow(QWidget):
         os.system(self.cmd_command)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     mw = MainWindow()
