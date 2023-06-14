@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
 
 import threading
 import time
 import random
 
 from PyQt5.QtCore import QThreadPool, QRunnable
+
 
 lock = threading.Lock()
 

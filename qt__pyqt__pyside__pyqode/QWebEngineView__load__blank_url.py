@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://ru.stackoverflow.com/a/971228/201445
@@ -30,12 +30,14 @@ class MainWindow(QMainWindow):
 
         self.browser = QWebEngineView()
         self.browser.setPage(WebEnginePage(self.browser))
-        self.browser.load(QUrl("https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_a_target"))
+        self.browser.load(
+            QUrl("https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_a_target")
+        )
 
         self.setCentralWidget(self.browser)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
