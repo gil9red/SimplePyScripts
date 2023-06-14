@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://stackoverflow.com/a/57957098/5909792
@@ -27,9 +27,7 @@ class Screenshot(QWebEngineView):
 
         # Create hidden view without scrollbars
         self.setAttribute(Qt.WA_DontShowOnScreen)
-        self.page().settings().setAttribute(
-            QWebEngineSettings.ShowScrollBars, False
-        )
+        self.page().settings().setAttribute(QWebEngineSettings.ShowScrollBars, False)
 
         self.show()
 
@@ -40,11 +38,11 @@ class Screenshot(QWebEngineView):
         QTimer.singleShot(1000, self.take_screenshot)
 
     def take_screenshot(self):
-        self.grab().save(self.output_file, 'PNG')
+        self.grab().save(self.output_file, "PNG")
         self.app.quit()
 
 
 app = QApplication(sys.argv)
 s = Screenshot(app)
-s.capture('https://pypi.org/project/PyQt5/', 'webpage.png')
+s.capture("https://pypi.org/project/PyQt5/", "webpage.png")
 sys.exit(app.exec_())

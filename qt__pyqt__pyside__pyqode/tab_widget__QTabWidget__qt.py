@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import *
@@ -15,11 +15,11 @@ class MainWindow(QMainWindow):
         self.tab_widget.setTabsClosable(True)
         self.tab_widget.tabCloseRequested.connect(self._on_close_tab)
 
-        tool_bar = self.addToolBar('General')
-        self.action_add_tab = tool_bar.addAction('Add tab')
+        tool_bar = self.addToolBar("General")
+        self.action_add_tab = tool_bar.addAction("Add tab")
         self.action_add_tab.triggered.connect(self.add_tab)
 
-        self.action_remove_tab = tool_bar.addAction('Remove tab')
+        self.action_remove_tab = tool_bar.addAction("Remove tab")
         self.action_remove_tab.triggered.connect(self.remove_tab)
 
         self.setCentralWidget(self.tab_widget)
@@ -49,7 +49,7 @@ class MainWindow(QMainWindow):
         self.update_states()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()

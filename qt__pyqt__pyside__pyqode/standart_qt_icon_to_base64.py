@@ -1,34 +1,35 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-"""Пример получения и сохранения стандартной иконки Qt в base64.
+"""
+Пример получения и сохранения стандартной иконки Qt в base64.
 
 Немного изменив, можно и сохранять их.
 
 """
 
 
+import base64
+import sys
 import traceback
 
-from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 
 # Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    text += ''.join(traceback.format_tb(tb))
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
 
-    print('Error: ', text)
-    QMessageBox.critical(None, 'Error', text)
+    print("Error: ", text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -47,5 +48,4 @@ for size in clear_icon.availableSizes():
     buffer.open(QIODevice.WriteOnly)
     pixmap.save(buffer, "PNG")
 
-    import base64
     print(size, base64.b64encode(bytes))

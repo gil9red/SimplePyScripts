@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+from ctypes import windll, c_int, byref
 
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton
 from PyQt5.QtCore import Qt
@@ -20,11 +22,12 @@ class Widget(QWidget):
 
         self.setLayout(layout)
 
-        from ctypes import windll, c_int, byref
-        windll.dwmapi.DwmExtendFrameIntoClientArea(c_int(self.winId()), byref(c_int(-1)))
+        windll.dwmapi.DwmExtendFrameIntoClientArea(
+            c_int(self.winId()), byref(c_int(-1))
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = Widget()
