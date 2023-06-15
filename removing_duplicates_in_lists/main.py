@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from copy import copy
@@ -16,11 +16,11 @@ print()
 
 
 for func in ALL_EXAMPLE_FUNC_REMOVE_DUPLICATES:
-    print('Call:', func.__name__)
+    print("Call:", func.__name__)
 
     new_items = func(ITEMS)
     assert CHECK_ITEMS == ITEMS
     assert NEED_ITEMS == sorted(new_items)
 
-    print('    {} {}'.format(len(new_items), new_items))
+    print("    {} {}".format(len(new_items), new_items))
     print()

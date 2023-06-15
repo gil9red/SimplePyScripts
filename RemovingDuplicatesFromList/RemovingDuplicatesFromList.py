@@ -1,8 +1,9 @@
 # coding=utf-8
 
-import argparse
+__author__ = "ipetrash"
 
-__author__ = 'ipetrash'
+
+import argparse
 
 
 def create_parser():
@@ -10,10 +11,10 @@ def create_parser():
     return parser
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     create_parser().parse_args()
-    list = raw_input("Enter a list of elements separated by a space: ").split(" ")
-    list = filter(lambda x: x is not "", list)
+    list = input("Enter a list of elements separated by a space: ").split(" ")
+    list = list(filter(None, list))
     print("Source list: %s" % list)
     list.sort()
     print("Sorted list: %s" % list)

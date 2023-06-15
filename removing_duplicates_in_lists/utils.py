@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://stackoverflow.com/questions/7961363/removing-duplicates-in-lists
@@ -58,7 +58,11 @@ def remove_duplicates__reduce_v1(items: list) -> list:
 
 # SOURCE: https://stackoverflow.com/a/29898868/5909792
 def remove_duplicates__reduce_v2(items: list) -> list:
-    return reduce(lambda r, v: v in r[1] and r or (r[0].append(v) or r[1].add(v)) or r, items, ([], set()))[0]
+    return reduce(
+        lambda r, v: v in r[1] and r or (r[0].append(v) or r[1].add(v)) or r,
+        items,
+        ([], set()),
+    )[0]
 
 
 def remove_duplicates__pandas(items: list) -> list:
@@ -70,4 +74,6 @@ def remove_duplicates__numpy(items: list) -> list:
 
 
 # Найдем все функции из этого файла по их названию
-ALL_EXAMPLE_FUNC_REMOVE_DUPLICATES = [globals()[name] for name in sorted(dir()) if name.startswith('remove_duplicates')]
+ALL_EXAMPLE_FUNC_REMOVE_DUPLICATES = [
+    globals()[name] for name in sorted(dir()) if name.startswith("remove_duplicates")
+]
