@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 def solution(roman):
     roman_by_arabic = {
-        'I': 1,
-        'V': 5,
-        'X': 10,
-        'L': 50,
-        'C': 100,
-        'D': 500,
-        'M': 1000,
+        "I": 1,
+        "V": 5,
+        "X": 10,
+        "L": 50,
+        "C": 100,
+        "D": 500,
+        "M": 1000,
     }
 
     total_number = 0
@@ -31,7 +31,7 @@ def solution(roman):
     return total_number
 
 
-if __name__ == '__main__':
-    assert solution('XXI') == 21
-    assert solution('XIX') == 19
+if __name__ == "__main__":
+    assert solution("XXI") == 21
+    assert solution("XIX") == 19
     assert solution("MDCLXVI") == 1666
