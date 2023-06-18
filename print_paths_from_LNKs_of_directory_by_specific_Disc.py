@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from glob import iglob
 import os
+from glob import iglob
 
 # pip install winshell
 import winshell
 
 
-path_desktop_lnk = os.path.expanduser(r'~\Desktop\Пройти\*.lnk')
+path_desktop_lnk = os.path.expanduser(r"~\Desktop\Пройти\*.lnk")
 need_disc = "E:"
 
 paths = []
