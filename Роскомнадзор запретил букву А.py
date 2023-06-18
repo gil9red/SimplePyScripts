@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 alp = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
@@ -15,5 +15,5 @@ for c in alp:
         print(result + c.upper())
 
         # Удаляем букву из надписи
-        result = result.replace(c, '')
-        result = result.replace(c.upper(), '')
+        result = result.replace(c, "")
+        result = result.replace(c.upper(), "")
