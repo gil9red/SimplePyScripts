@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 def split_text_by_fragments(text: str, fragment_length=50) -> list:
@@ -28,7 +28,7 @@ def split_text_by_fragments(text: str, fragment_length=50) -> list:
     return fragments
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     text = """\
 Брату в пору башмаки:
 Не малы, не велики.
@@ -51,15 +51,15 @@ if __name__ == '__main__':
 
     fragments = split_text_by_fragments(text)
     print(len(fragments), fragments)
-    assert ''.join(fragments) == text
+    assert "".join(fragments) == text
     assert len(fragments) == 7
 
     fragments = split_text_by_fragments(text, fragment_length=len(text))
     print(len(fragments), fragments)
-    assert ''.join(fragments) == text
+    assert "".join(fragments) == text
     assert len(fragments) == 1
 
     fragments = split_text_by_fragments(text, fragment_length=9999)
     print(len(fragments), fragments)
-    assert ''.join(fragments) == text
+    assert "".join(fragments) == text
     assert len(fragments) == 1
