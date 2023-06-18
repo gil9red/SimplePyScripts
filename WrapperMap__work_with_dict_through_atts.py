@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 class WrapperMap:
@@ -23,11 +23,11 @@ class WrapperMap:
 
 
 genMessage = {
-    'from_user': {
-        'id': 123,
-        'username': "username",
-        'full_name': "fullName"
-    }
+    "from_user": {
+        "id": 123,
+        "username": "username",
+        "full_name": "fullName",
+    },
 }
 x = WrapperMap(genMessage)
 
