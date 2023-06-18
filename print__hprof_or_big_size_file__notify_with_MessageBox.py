@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-import time
-from pathlib import Path
 import re
+import time
+
+from pathlib import Path
 
 from PyQt5.QtWidgets import QApplication, QMessageBox
 from PyQt5.QtCore import Qt
@@ -14,7 +15,7 @@ from PyQt5.QtCore import Qt
 from print__hprof_or_big_size_file import find_files_by_dirs, DIRS
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     while True:
@@ -22,11 +23,13 @@ if __name__ == '__main__':
         if not result:
             continue
 
-        text = f'Files .hprof ({len(result)}):\n' + '\n'.join(result)
+        text = f"Files .hprof ({len(result)}):\n" + "\n".join(result)
 
-        msg_box = QMessageBox(QMessageBox.Information, 'Found .hprof!', text)
+        msg_box = QMessageBox(QMessageBox.Information, "Found .hprof!", text)
         msg_box.setTextInteractionFlags(Qt.TextSelectableByMouse)
-        remove_all_files_button = msg_box.addButton("Remove all files", QMessageBox.DestructiveRole)
+        remove_all_files_button = msg_box.addButton(
+            "Remove all files", QMessageBox.DestructiveRole
+        )
         msg_box.addButton(QMessageBox.Ok)
         msg_box.exec()
 
@@ -40,6 +43,8 @@ if __name__ == '__main__':
                 try:
                     Path(file_name).unlink()
                 except Exception as e:
-                    QMessageBox.warning(None, "Warning", f"Error while removed {file_name!r}: {e}")
+                    QMessageBox.warning(
+                        None, "Warning", f"Error while removed {file_name!r}: {e}"
+                    )
 
         time.sleep(5 * 60 * 60)

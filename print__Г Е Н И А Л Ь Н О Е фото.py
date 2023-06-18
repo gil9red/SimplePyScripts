@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-text = 'Г Е Н И А Л Ь Н О Е фото '
+text = "Г Е Н И А Л Ь Н О Е фото "
 length = len(text)
 
 for start in range(length + 1):
-    new_text = ''
+    new_text = ""
     for i in range(length):
         j = (start + i) % length
         new_text += text[j]
 
-    if new_text[0] != ' ':
+    if new_text[0] != " ":
         print(new_text)
 
 # Г Е Н И А Л Ь Н О Е фото
