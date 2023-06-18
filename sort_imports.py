@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 text_import = """
@@ -12,9 +12,7 @@ from pathlib import Path
 import os
 """
 
-print('\n'.join(
-    sorted(text_import.strip().splitlines(), key=lambda x: x.split()[1])
-))
+print("\n".join(sorted(text_import.strip().splitlines(), key=lambda x: x.split()[1])))
 # import datetime as DT
 # import os
 # from pathlib import Path

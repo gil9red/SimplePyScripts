@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 def _sort_key(x: str):
     oper, *libs = x.split()
-    return 0 if oper == 'import' else 1, libs
+    return 0 if oper == "import" else 1, libs
 
 
 text = """
@@ -19,9 +19,7 @@ from pathlib import Path
 
 
 items = sorted(text.splitlines(), key=_sort_key)
-print(
-    *items, sep='\n'
-)
+print(*items, sep="\n")
 """
 import json
 import re
