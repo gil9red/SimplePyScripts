@@ -1,16 +1,16 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 def separate_conjoint_words(text):
     """Функция разделяет слитные слова, на пересечении разных регистров или при встрече с цифрой и оформляет строку
-       в виде предложения: первый символ заглавный, остальные строчные.
-       Пример: CardsPickedSinceCleaningCard -> Cards picked since cleaning card
-               TotalPickedInputHopper6      -> Total picked input hopper 6
+    в виде предложения: первый символ заглавный, остальные строчные.
+    Пример: CardsPickedSinceCleaningCard -> Cards picked since cleaning card
+            TotalPickedInputHopper6      -> Total picked input hopper 6
     """
     if not text:
         return text
 
-    res = ''
+    res = ""
     for c in text:
         res += " " + c if c.isupper() or c.isdigit() else c
 
@@ -21,6 +21,6 @@ def separate_conjoint_words(text):
     return res.capitalize()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(separate_conjoint_words("helloWorld!"))
     print(separate_conjoint_words("DogLike1234"))
