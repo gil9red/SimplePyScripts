@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from io import StringIO
 import token
 import tokenize
+
+from io import StringIO
+
 
 prog_example = """
 for i in range(100): # comment
