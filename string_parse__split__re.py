@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import re
 
 
 text = """\
@@ -10,14 +13,13 @@ text = """\
 """
 
 
-import re
-for name, start, end in re.findall(r'(\w+) (\d+)-(\d+)', text):
-    print('{}, {} лет'.format(name, int(end) - int(start)))
+for name, start, end in re.findall(r"(\w+) (\d+)-(\d+)", text):
+    print("{}, {} лет".format(name, int(end) - int(start)))
 
 print()
 
 for line in text.splitlines():
     name, age = line.split()
-    start, end = map(int, age.split('-'))
+    start, end = map(int, age.split("-"))
 
-    print('{}, {} лет'.format(name, end - start))
+    print("{}, {} лет".format(name, end - start))

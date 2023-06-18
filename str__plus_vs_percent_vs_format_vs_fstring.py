@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from timeit import timeit
 
 
-foo = 'FooBar'
+foo = "FooBar"
 test_globals = dict(foo=foo)
 
 t = timeit('name = "Thread #" + foo', globals=test_globals)
-print(f'Total time: {t:.3f} sec')
+print(f"Total time: {t:.3f} sec")
 
 t = timeit('name = "Thread #%s" % foo', globals=test_globals)
-print(f'Total time: {t:.3f} sec')
+print(f"Total time: {t:.3f} sec")
 
 t = timeit('name = "Thread #{}".format(foo)', globals=test_globals)
-print(f'Total time: {t:.3f} sec')
+print(f"Total time: {t:.3f} sec")
 
 t = timeit('name = f"Thread {foo}"', globals=test_globals)
-print(f'Total time: {t:.3f} sec')
+print(f"Total time: {t:.3f} sec")
 
 """
 Total time: 0.077 sec
