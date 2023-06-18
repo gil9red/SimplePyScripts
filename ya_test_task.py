@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
-
-URL_GET_ALL_STOPS = 'http://mobileapps.krd.ru:9000/api/v2/db/stops'
-URL_GET_STOP_ROUTE = 'http://mobileapps.krd.ru:9000/api/v2/db/routes?stopId='
 
 import requests
+
+from PySide.QtGui import *
+from PySide.QtCore import *
+
+
+URL_GET_ALL_STOPS = "http://mobileapps.krd.ru:9000/api/v2/db/stops"
+URL_GET_STOP_ROUTE = "http://mobileapps.krd.ru:9000/api/v2/db/routes?stopId="
 
 
 def get_all_stops():
@@ -19,10 +23,10 @@ def get_all_stops():
     rs = requests.get(URL_GET_ALL_STOPS)
     rs = rs.json()
 
-    if rs['status'] != 200:
-        raise Exception(rs['message'])
+    if rs["status"] != 200:
+        raise Exception(rs["message"])
 
-    return [(stop['id'], stop['name']) for stop in rs['data']]
+    return [(stop["id"], stop["name"]) for stop in rs["data"]]
 
 
 def get_stop_route(stop_id):
@@ -36,16 +40,10 @@ def get_stop_route(stop_id):
     rs = requests.get(URL_GET_STOP_ROUTE + stop_id)
     rs = rs.json()
 
-    if rs['status'] != 200:
-        raise Exception(rs['message'])
+    if rs["status"] != 200:
+        raise Exception(rs["message"])
 
-    return [(stop['shortName'], stop['name']) for stop in rs['data']]
-
-
-import sys
-
-from PySide.QtGui import *
-from PySide.QtCore import *
+    return [(stop["shortName"], stop["name"]) for stop in rs["data"]]
 
 
 class MainWindow(QWidget):
@@ -57,7 +55,7 @@ class MainWindow(QWidget):
 
         self.route_list_widget = QListWidget()
 
-        self.fill_stops_list_button = QPushButton('Заполнить список остановок')
+        self.fill_stops_list_button = QPushButton("Заполнить список остановок")
         self.fill_stops_list_button.clicked.connect(self.fill_list_stops)
 
         layout = QHBoxLayout()
@@ -93,11 +91,13 @@ class MainWindow(QWidget):
         for data in get_stop_route(stop_id):
             short_name, name = data
 
-            item = QListWidgetItem('{}: {}'.format(short_name, name))
+            item = QListWidgetItem("{}: {}".format(short_name, name))
             self.route_list_widget.addItem(item)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    import sys
+
     app = QApplication(sys.argv)
 
     w = MainWindow()
