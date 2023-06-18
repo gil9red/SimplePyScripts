@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # <span class="rateup
@@ -22,14 +22,15 @@ __author__ = 'ipetrash'
 
 from grab import Grab
 
-url = 'http://scpfoundation.ru/scp-'
+
+url = "http://scpfoundation.ru/scp-"
 
 g = Grab()
 
 scp_rate_list = list()
 
 for i in range(100):
-    scp_url = url + str(i).rjust(3, '0')
+    scp_url = url + str(i).rjust(3, "0")
 
     g.go(scp_url)
 
@@ -43,9 +44,7 @@ for i in range(100):
         print(scp_url, e)
         continue
 
-    scp_rate_list.append(
-        (scp_url, rate)
-    )
+    scp_rate_list.append((scp_url, rate))
 
 print()
 print()
