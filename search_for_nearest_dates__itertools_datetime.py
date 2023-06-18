@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -17,6 +17,9 @@ items = [
 ]
 
 for x in items:
-    found = any(abs((dt1 - dt2).total_seconds()) <= DIFF_SECS for dt1, dt2 in itertools.combinations(x, 2))
+    found = any(
+        abs((dt1 - dt2).total_seconds()) <= DIFF_SECS
+        for dt1, dt2 in itertools.combinations(x, 2)
+    )
     if found:
         print(x)
