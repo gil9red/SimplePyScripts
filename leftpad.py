@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Для интереса написать аналог NPM leftpad.
@@ -18,7 +18,7 @@ __author__ = 'ipetrash'
 # // => "01"
 
 
-def leftpad(text, size, ch=' '):
+def leftpad(text: str | int, size: int, ch: str | int = " "):
     text = str(text)
     ch = str(ch)
 
@@ -27,12 +27,12 @@ def leftpad(text, size, ch=' '):
 
 
 # Версия с использованием общего алгоритм
-def leftpad2(text, size, ch=' '):
+def leftpad2(text: str | int, size: int, ch: str | int = " "):
     text = str(text)
     ch = str(ch)
 
     text_size = len(text)
-    result = ''
+    result = ""
 
     pad_len = size - text_size
     if pad_len <= 0:
@@ -45,11 +45,11 @@ def leftpad2(text, size, ch=' '):
     return result
 
 
-if __name__ == '__main__':
-    assert leftpad('foo', 5) == "  foo"
-    assert leftpad('foobar', 6) == "foobar"
+if __name__ == "__main__":
+    assert leftpad("foo", 5) == "  foo"
+    assert leftpad("foobar", 6) == "foobar"
     assert leftpad(1, 2, 0) == "01"
 
-    assert leftpad('foo', 5) == leftpad2('foo', 5)
-    assert leftpad('foobar', 6) == leftpad2('foobar', 6)
-    assert leftpad(1, 2, 0) == leftpad(1, 2, 0)
+    assert leftpad("foo", 5) == leftpad2("foo", 5)
+    assert leftpad("foobar", 6) == leftpad2("foobar", 6)
+    assert leftpad(1, 2, 0) == leftpad2(1, 2, 0)
