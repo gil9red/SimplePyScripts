@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
+
+
 utc_datetime = DT.datetime.utcnow()
 
 for i in range(365 + 1):
