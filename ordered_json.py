@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://stackoverflow.com/a/6921760/5909792
@@ -10,17 +10,18 @@ __author__ = 'ipetrash'
 import json
 from collections import OrderedDict
 
+
 json_data = {"foo": 1, "bar": 2, "abc": {"a": 1, "b": 2, "c": 3}}
 
 ordered_json_data = OrderedDict()
-ordered_json_data['foo'] = 1
-ordered_json_data['bar'] = 2
-ordered_json_data['abc'] = OrderedDict()
-ordered_json_data['abc']['a'] = 1
-ordered_json_data['abc']['b'] = 2
-ordered_json_data['abc']['c'] = 3
+ordered_json_data["foo"] = 1
+ordered_json_data["bar"] = 2
+ordered_json_data["abc"] = OrderedDict()
+ordered_json_data["abc"]["a"] = 1
+ordered_json_data["abc"]["b"] = 2
+ordered_json_data["abc"]["c"] = 3
 
-print('Dumps:')
+print("Dumps:")
 
 print(json.dumps(json_data, indent=4))
 # {
@@ -46,7 +47,7 @@ print(ordered_json_str)
 # }
 
 print()
-print('Loads:')
+print("Loads:")
 
 data = json.loads(ordered_json_str)
 print(json.dumps(data, indent=4))

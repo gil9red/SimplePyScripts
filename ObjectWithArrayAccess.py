@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 class ObjectWithArrayAccess:
@@ -18,12 +18,12 @@ class ObjectWithArrayAccess:
         return len(self._fields)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     obj = ObjectWithArrayAccess()
-    print(bool(obj))       # False
-    obj[0] = 'Hello'
-    obj[1] = 'world'
-    print(obj._fields)     # {0: 'Hello', 1: 'world'}
-    print(len(obj))        # 2
-    print(bool(obj))       # True
+    print(bool(obj))  # False
+    obj[0] = "Hello"
+    obj[1] = "world"
+    print(obj._fields)  # {0: 'Hello', 1: 'world'}
+    print(len(obj))  # 2
+    print(bool(obj))  # True
     print(obj[0], obj[1])  # Hello world
