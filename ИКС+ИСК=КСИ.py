@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://stepik.org/lesson/360560/step/11?unit=345000
@@ -30,7 +30,7 @@ for i in range(10):
                 continue
 
             if iks + isk == ksi:
-                print(f'{iks}+{isk}={ksi}')
+                print(f"{iks}+{isk}={ksi}")
 
 """
 495+459=954

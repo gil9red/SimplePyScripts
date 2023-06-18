@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://stepik.org/lesson/360560/step/10?unit=345000
@@ -22,11 +22,11 @@ for d in range(1, 10):  # Число не может начинаться с 0
                     if len({d, a, n, e, t}) != 5:
                         continue
 
-                    da = (d * 10 + a)
-                    net = (n * 100 + e * 10 + t)
+                    da = d * 10 + a
+                    net = n * 100 + e * 10 + t
 
                     if da + da == net:
-                        print(f'{da}+{da}={net}')
+                        print(f"{da}+{da}={net}")
 
 """
 52+52=104
