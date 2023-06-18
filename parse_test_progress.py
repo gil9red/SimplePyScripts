@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import re
 
 
 def parse(text, append_test_case_list=True):
@@ -14,18 +17,17 @@ def parse(text, append_test_case_list=True):
             print(line)
             continue
 
-        import re
-        match = re.search(r'{@} +/ +(\d+)', line)
+        match = re.search(r"{@} +/ +(\d+)", line)
         if not match:
             print(line)
             continue
 
         max_value = int(match.group(1))
 
-        match = re.search('{#}:(.*)$', line)
+        match = re.search("{#}:(.*)$", line)
         if match:
             # Получение списка значений
-            values = match.group(1).split(',')
+            values = match.group(1).split(",")
 
             # Удаление пустых символов
             values = map(str.strip, values)
@@ -41,21 +43,25 @@ def parse(text, append_test_case_list=True):
         total_value += value
         total_max_value += max_value
 
-        line = line.replace('{@}', str(value))
-        line = line.replace('{#}', "({}%)".format(int(value / max_value * 100)))
+        line = line.replace("{@}", str(value))
+        line = line.replace("{#}", "({}%)".format(int(value / max_value * 100)))
 
         if not append_test_case_list:
-            index = line.rfind(':')
+            index = line.rfind(":")
             if index != -1:
                 line = line[:index]
 
         print(line)
 
     print()
-    print("Итого: {} / {} ({}%)".format(total_value, total_max_value, int(total_value / total_max_value * 100)))
+    print(
+        "Итого: {} / {} ({}%)".format(
+            total_value, total_max_value, int(total_value / total_max_value * 100)
+        )
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     text = """\
 Набивка тестов:
 ATM - VSDC Issuing:         {@}  / 48 {#}:
