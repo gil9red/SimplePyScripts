@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -30,7 +30,9 @@ class FactorEnum(enum.Enum):
     V_19 = 1.9
 
 
-def get_1918_for_male(weight_kg: int, height_cm, age: int, factor: FactorEnum = FactorEnum.V_12) -> int:
+def get_1918_for_male(
+    weight_kg: int, height_cm, age: int, factor: FactorEnum = FactorEnum.V_12
+) -> int:
     """
     Формула-Уравнение Харриса-Бенедикта для мужчин.
     """
@@ -38,7 +40,9 @@ def get_1918_for_male(weight_kg: int, height_cm, age: int, factor: FactorEnum = 
     return int(value * factor.value)
 
 
-def get_1918_for_female(weight_kg: int, height_cm, age: int, factor: FactorEnum = FactorEnum.V_12) -> int:
+def get_1918_for_female(
+    weight_kg: int, height_cm, age: int, factor: FactorEnum = FactorEnum.V_12
+) -> int:
     """
     Формула-Уравнение Харриса-Бенедикта для женщин.
     """
@@ -46,7 +50,9 @@ def get_1918_for_female(weight_kg: int, height_cm, age: int, factor: FactorEnum 
     return int(value * factor.value)
 
 
-def get_1984_for_male(weight_kg: int, height_cm, age: int, factor: FactorEnum = FactorEnum.V_12) -> int:
+def get_1984_for_male(
+    weight_kg: int, height_cm, age: int, factor: FactorEnum = FactorEnum.V_12
+) -> int:
     """
     Пересмотренная Формула-Уравнение Харриса-Бенедикта для мужчин.
     """
@@ -54,7 +60,9 @@ def get_1984_for_male(weight_kg: int, height_cm, age: int, factor: FactorEnum = 
     return int(value * factor.value)
 
 
-def get_1984_for_female(weight_kg: int, height_cm, age: int, factor: FactorEnum = FactorEnum.V_12) -> int:
+def get_1984_for_female(
+    weight_kg: int, height_cm, age: int, factor: FactorEnum = FactorEnum.V_12
+) -> int:
     """
     Пересмотренная Формула-Уравнение Харриса-Бенедикта для женщин.
     """
@@ -62,7 +70,9 @@ def get_1984_for_female(weight_kg: int, height_cm, age: int, factor: FactorEnum 
     return int(value * factor.value)
 
 
-def get_2005_for_male(weight_kg: int, height_cm, age: int, factor: FactorEnum = FactorEnum.V_12) -> int:
+def get_2005_for_male(
+    weight_kg: int, height_cm, age: int, factor: FactorEnum = FactorEnum.V_12
+) -> int:
     """
     Формула-Уравнение Миффлина-Санкт-Джеора для мужчин.
     """
@@ -70,7 +80,9 @@ def get_2005_for_male(weight_kg: int, height_cm, age: int, factor: FactorEnum = 
     return int(value * factor.value)
 
 
-def get_2005_for_female(weight_kg: int, height_cm, age: int, factor: FactorEnum = FactorEnum.V_12) -> int:
+def get_2005_for_female(
+    weight_kg: int, height_cm, age: int, factor: FactorEnum = FactorEnum.V_12
+) -> int:
     """
     Формула-Уравнение Миффлина-Санкт-Джеора для женщин.
     """
@@ -78,26 +90,26 @@ def get_2005_for_female(weight_kg: int, height_cm, age: int, factor: FactorEnum 
     return int(value * factor.value)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     weight_kg = 100
     height_cm = 190
     age = 30
 
-    print('male (1918):', get_1918_for_male(weight_kg, height_cm, age))
-    print('female (1918):', get_1918_for_female(weight_kg, height_cm, age))
+    print("male (1918):", get_1918_for_male(weight_kg, height_cm, age))
+    print("female (1918):", get_1918_for_female(weight_kg, height_cm, age))
     # male (1918): 2626
     # female (1918): 2199
 
     print()
 
-    print('male 1984:', get_1984_for_male(weight_kg, height_cm, age))
-    print('female 1984:', get_1984_for_female(weight_kg, height_cm, age))
+    print("male 1984:", get_1984_for_male(weight_kg, height_cm, age))
+    print("female 1984:", get_1984_for_female(weight_kg, height_cm, age))
     # male 1984: 2603
     # female 1984: 2197
 
     print()
 
-    print('male 2005:', get_2005_for_male(weight_kg, height_cm, age))
-    print('female 2005:', get_2005_for_female(weight_kg, height_cm, age))
+    print("male 2005:", get_2005_for_male(weight_kg, height_cm, age))
+    print("female 2005:", get_2005_for_female(weight_kg, height_cm, age))
     # male 2005: 2451
     # female 2005: 2251
