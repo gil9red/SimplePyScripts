@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://stackoverflow.com/a/7320664/5909792
@@ -16,21 +16,17 @@ def xpath_get(mydict, path):
     return elem
 
 
-if __name__ == '__main__':
-    data_1 = {
-        'data': {
-            'media': None
-        }
-    }
+if __name__ == "__main__":
+    data_1 = {"data": {"media": None}}
 
     data_2 = {
-        'data': {
-            'media': {
-                'thumbnails': {
-                    'original': {
-                        'url': [
-                            'http://...',
-                            'https://...',
+        "data": {
+            "media": {
+                "thumbnails": {
+                    "original": {
+                        "url": [
+                            "http://...",
+                            "https://...",
                         ]
                     }
                 }
