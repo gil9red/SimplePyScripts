@@ -7,9 +7,11 @@ __author__ = 'ipetrash'
 # SOURCE: https://stackoverflow.com/a/19719292/5909792
 
 
-def is_user_admin():
-    import os
+import os
+import traceback
 
+
+def is_user_admin():
     if os.name == 'nt':
         import ctypes
         try:
@@ -17,7 +19,6 @@ def is_user_admin():
             return bool(ctypes.windll.shell32.IsUserAnAdmin())
 
         except:
-            import traceback
             traceback.print_exc()
             print("Admin check failed, assuming not an admin.")
             return False
@@ -27,7 +28,7 @@ def is_user_admin():
         return os.getuid() == 0
 
     else:
-        raise RuntimeError("Unsupported operating system for this module: %s" % (os.name,))
+        raise RuntimeError(f"Unsupported operating system for this module: {os.name}")
 
 
 if __name__ == '__main__':
