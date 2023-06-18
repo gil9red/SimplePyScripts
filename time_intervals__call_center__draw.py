@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtGui import QGuiApplication, QPainter, QImage, QPen
@@ -9,11 +9,12 @@ from PyQt5.QtCore import Qt
 
 from time_intervals__call_center import Interval, find_max_intersection
 
+
 items = [
-    Interval('12:00:00', 20 * 60),
-    Interval('12:10:00', 10 * 60),
-    Interval('12:15:00', 30 * 60),
-    Interval('13:00:00', 30 * 60),
+    Interval("12:00:00", 20 * 60),
+    Interval("12:10:00", 10 * 60),
+    Interval("12:15:00", 30 * 60),
+    Interval("13:00:00", 30 * 60),
 ]
 items.sort(key=lambda x: x.start)
 print(find_max_intersection(items))
@@ -42,5 +43,4 @@ for interval in items:
 
     y += 10
 
-img.save(__file__ + '.png')
-
+img.save(__file__ + ".png")

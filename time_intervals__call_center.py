@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -15,7 +15,6 @@ __author__ = 'ipetrash'
 
 
 import datetime as DT
-from typing import List
 
 
 # Класс (структура) для хранения интервала звонка
@@ -24,17 +23,17 @@ class Interval:
     end: DT.datetime
 
     def __init__(self, start_time: str, duration: int):
-        self.start = DT.datetime.strptime(start_time, '%H:%M:%S')
+        self.start = DT.datetime.strptime(start_time, "%H:%M:%S")
         self.end = self.start + DT.timedelta(seconds=duration)
 
     def is_contains(self, datetime: DT.datetime) -> bool:
         return self.start <= datetime <= self.end
 
     def __repr__(self) -> str:
-        return f'<{self.start:%H:%M:%S} - {self.end:%H:%M:%S}>'
+        return f"<{self.start:%H:%M:%S} - {self.end:%H:%M:%S}>"
 
 
-def find_max_intersection(items: List[Interval]) -> int:
+def find_max_intersection(items: list[Interval]) -> int:
     max_value = 0
 
     for interval in items:
@@ -48,12 +47,12 @@ def find_max_intersection(items: List[Interval]) -> int:
     return max_value
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     items = [
-        Interval('12:00:00', 20 * 60),
-        Interval('12:10:00', 10 * 60),
-        Interval('12:15:00', 30 * 60),
-        Interval('13:00:00', 30 * 60),
+        Interval("12:00:00", 20 * 60),
+        Interval("12:10:00", 10 * 60),
+        Interval("12:15:00", 30 * 60),
+        Interval("13:00:00", 30 * 60),
     ]
     print(find_max_intersection(items))
     # 3
