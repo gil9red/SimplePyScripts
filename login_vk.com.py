@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -18,37 +18,39 @@ QNetworkProxyFactory.setUseSystemConfiguration(True)
 QWebSettings.globalSettings().setAttribute(QWebSettings.DeveloperExtrasEnabled, True)
 
 # Телефон или емейл
-LOGIN = '<phone_or_email>'
-PASSWORD = '<password>'
+LOGIN = "<phone_or_email>"
+PASSWORD = "<password>"
 
-URL = 'https://vk.com'
+URL = "https://vk.com"
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
 
-    view = QWebView()
-    view.show()
+app = QApplication(sys.argv)
 
-    view.load(URL)
+view = QWebView()
+view.show()
 
-    loop = QEventLoop()
-    view.loadFinished.connect(loop.quit)
-    loop.exec_()
+view.load(URL)
 
-    doc = view.page().mainFrame().documentElement()
+loop = QEventLoop()
+view.loadFinished.connect(loop.quit)
+loop.exec_()
 
-    email = doc.findFirst('#quick_email')
-    password = doc.findFirst('#quick_pass')
-    login_button = doc.findFirst('#quick_login_button')
+doc = view.page().mainFrame().documentElement()
 
-    if email.isNull() or password.isNull() or login_button.isNull():
-        raise Exception('Ошибка при авторизации: не найдены поля емейла или пароля, или кнопка "Войти".')
+email = doc.findFirst("#quick_email")
+password = doc.findFirst("#quick_pass")
+login_button = doc.findFirst("#quick_login_button")
 
-    # Заполняем поля емейла/телефона и пароля
-    email.setAttribute('value', LOGIN)
-    password.setAttribute('value', PASSWORD)
+if email.isNull() or password.isNull() or login_button.isNull():
+    raise Exception(
+        'Ошибка при авторизации: не найдены поля емейла или пароля, или кнопка "Войти".'
+    )
 
-    # Кликаем на кнопку "Войти"
-    login_button.evaluateJavaScript('this.click()')
+# Заполняем поля емейла/телефона и пароля
+email.setAttribute("value", LOGIN)
+password.setAttribute("value", PASSWORD)
 
-    sys.exit(app.exec_())
+# Кликаем на кнопку "Войти"
+login_button.evaluateJavaScript("this.click()")
+
+sys.exit(app.exec_())
