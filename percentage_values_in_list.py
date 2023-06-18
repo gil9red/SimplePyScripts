@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -26,10 +26,10 @@ def get_percentage_values(items):
     """Возвращает список с процентным значением элемента списка."""
 
     sum_items = sum(items)
-    return ['{:.1f}%'.format(i / sum_items * 100) for i in items]
+    return ["{:.1f}%".format(i / sum_items * 100) for i in items]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(get_percentage_values([100, 100]))
     print(get_percentage_values([100, 100, 200]))
     print(get_percentage_values([100, 100, 200, 400]))
