@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Ежемесячная стипендия студента составляет educational_grant руб., а расходы на проживание превышают стипендию
@@ -17,7 +17,7 @@ total_educational_grant = educational_grant * months
 total_expenses = 0
 
 while months > 0:
-    expenses *= (1 if months == 10 else infl)
+    expenses *= 1 if months == 10 else infl
     total_expenses += expenses
 
     months -= 1

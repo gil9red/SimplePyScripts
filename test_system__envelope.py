@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from contextlib import redirect_stdout
@@ -18,20 +18,24 @@ from io import StringIO
 
 
 envelop_x, envelop_y = 10, 7
-print(f'envelop_x={envelop_x}, envelop_y={envelop_y}')
+print(f"envelop_x={envelop_x}, envelop_y={envelop_y}")
 items = [
-    [9, 8, "НЕТ"], [6, 8, "ДА"], [8, 6, "ДА"],
-    [3, 4, "ДА"], [11, 9, "НЕТ"], [9, 11, "НЕТ"]
+    [9, 8, "НЕТ"],
+    [6, 8, "ДА"],
+    [8, 6, "ДА"],
+    [3, 4, "ДА"],
+    [11, 9, "НЕТ"],
+    [9, 11, "НЕТ"],
 ]
 
 
 def check_1(x, y):
     if envelop_x > x and envelop_y > y:
-        print('ДА')
+        print("ДА")
     elif envelop_y > x and envelop_x > y:
-        print('ДА')
+        print("ДА")
     else:
-        print('НЕТ')
+        print("НЕТ")
 
 
 for x, y, expected in items:
@@ -43,7 +47,7 @@ for x, y, expected in items:
     actual = f.getvalue().strip().upper()
     ok = actual != expected
     if ok:
-        print(f'{x}, {y}. expected: {expected}, actual: {actual}')
+        print(f"{x}, {y}. expected: {expected}, actual: {actual}")
 
 
 print()
@@ -56,32 +60,44 @@ print()
 # Определить, пройдет ли кирпич через отверстие (грани кирпича параллельны сторонам отверстия)
 
 hole_x, hole_y = 8, 9
-print(f'hole_x={hole_x}, hole_y={hole_y}')
+print(f"hole_x={hole_x}, hole_y={hole_y}")
 items = [
-    [11, 10, 2, "НЕТ"], [11, 2, 10, "НЕТ"], [10, 11, 2, "НЕТ"],
-    [10, 2, 11, "НЕТ"], [2, 10, 11, "НЕТ"], [2, 11, 10, "НЕТ"],
-    [3, 5, 6, "ДА"], [3, 6, 5, "ДА"], [6, 3, 5, "ДА"],
-    [6, 5, 3, "ДА"], [5, 6, 3, "ДА"], [5, 3, 6, "ДА"],
-    [11, 3, 6, "ДА"], [11, 6, 3, "ДА"], [6, 11, 3, "ДА"],
-    [6, 3, 11, "ДА"], [3, 6, 11, "ДА"], [3, 11, 6, "ДА"]
+    [11, 10, 2, "НЕТ"],
+    [11, 2, 10, "НЕТ"],
+    [10, 11, 2, "НЕТ"],
+    [10, 2, 11, "НЕТ"],
+    [2, 10, 11, "НЕТ"],
+    [2, 11, 10, "НЕТ"],
+    [3, 5, 6, "ДА"],
+    [3, 6, 5, "ДА"],
+    [6, 3, 5, "ДА"],
+    [6, 5, 3, "ДА"],
+    [5, 6, 3, "ДА"],
+    [5, 3, 6, "ДА"],
+    [11, 3, 6, "ДА"],
+    [11, 6, 3, "ДА"],
+    [6, 11, 3, "ДА"],
+    [6, 3, 11, "ДА"],
+    [3, 6, 11, "ДА"],
+    [3, 11, 6, "ДА"],
 ]
 
 
 def check_2(x, y, z):
     if hole_x > x and hole_y > y:
-        print('ДА')
+        print("ДА")
     elif hole_x > y and hole_y > x:
-        print('ДА')
+        print("ДА")
     elif hole_x > x and hole_y > z:
-        print('ДА')
+        print("ДА")
     elif hole_x > z and hole_y > x:
-        print('ДА')
+        print("ДА")
     elif hole_x > z and hole_y > y:
-        print('ДА')
+        print("ДА")
     elif hole_x > y and hole_y > z:
-        print('ДА')
+        print("ДА")
     else:
-        print('НЕТ')
+        print("НЕТ")
 
 
 for x, y, z, expected in items:
@@ -93,4 +109,4 @@ for x, y, z, expected in items:
     actual = f.getvalue().strip().upper()
     ok = actual != expected
     if ok:
-        print(f'{x}, {y}, {z}. expected: {expected}, actual: {actual}')
+        print(f"{x}, {y}, {z}. expected: {expected}, actual: {actual}")
