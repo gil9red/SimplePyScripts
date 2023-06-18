@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 def number_to_k_notation(number: int) -> str:
@@ -14,10 +14,10 @@ def number_to_k_notation(number: int) -> str:
         number /= 1000
         k += 1
 
-    return str(round(number)) + 'k' * k
+    return str(round(number)) + "k" * k
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(number_to_k_notation(123))
     assert number_to_k_notation(123) == "123"
 
