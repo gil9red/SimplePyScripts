@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 def logged_human_time_to_seconds(human_time: str) -> int:
@@ -25,26 +25,26 @@ def logged_human_time_to_seconds(human_time: str) -> int:
 
     total_seconds = 0
 
-    for part in human_time.split(', '):
+    for part in human_time.split(", "):
         value, metric = part.lower().split()
         value = int(value)
 
-        if 'minute' in metric:
+        if "minute" in metric:
             total_seconds += value * 60
 
-        elif 'hour' in metric:
+        elif "hour" in metric:
             total_seconds += value * 60 * 60
 
-        elif 'day' in metric:
+        elif "day" in metric:
             total_seconds += value * 8 * 60 * 60
 
-        elif 'week' in metric:
+        elif "week" in metric:
             total_seconds += value * 5 * 8 * 60 * 60
 
     return total_seconds
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     text = """\
 2 hours
 1 hour, 30 minutes
