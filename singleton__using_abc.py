@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://stackoverflow.com/a/39186313/5909792
@@ -23,7 +23,8 @@ def singleton(real_cls):
     return SingletonFactory
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     @singleton
     class MyClass:
         pass
