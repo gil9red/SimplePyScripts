@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 def plural_days(n: int) -> str:
-    days = ['день', 'дня', 'дней']
+    days = ["день", "дня", "дней"]
 
     if n % 10 == 1 and n % 100 != 11:
         p = 0
@@ -14,9 +14,9 @@ def plural_days(n: int) -> str:
     else:
         p = 2
 
-    return f'{n} {days[p]}'
+    return f"{n} {days[p]}"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     for i in range(100 + 1):
         print(plural_days(i))
