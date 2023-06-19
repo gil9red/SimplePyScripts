@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install requests-html
@@ -9,11 +9,11 @@ from requests_html import HTMLSession
 
 
 session = HTMLSession()
-rs = session.get('https://ru.sefon.cc/news/')
+rs = session.get("https://ru.sefon.cc/news/")
 rs.html.render()  # Без этого не будет выполнения js кода
 
-for a in rs.html.find('.mp3 > .btns > a[data-url]'):
-    print(a.attrs['data-url'])
+for a in rs.html.find(".mp3 > .btns > a[data-url]"):
+    print(a.attrs["data-url"])
 
 # https://cdn5.sefon.pro/files/prev/193/Sontry%20-%20%D0%94%D0%B8%D1%81%D0%B1%D0%B0%D0%BB%D0%B0%D0%BD%D1%81%20%28192kbps%29.mp3
 # https://cdn5.sefon.pro/files/prev/193/Orlando%20-%20%D0%9D%D0%B5%20%D0%A1%D1%82%D0%B5%D1%81%D0%BD%D1%8F%D0%B9%D1%81%D1%8F%20%28192kbps%29.mp3
