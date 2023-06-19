@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import json
@@ -11,12 +11,12 @@ import sys
 import requests
 
 
-rs = requests.get('https://go.mail.ru/search?q=cats')
+rs = requests.get("https://go.mail.ru/search?q=cats")
 print(rs)
 
-data = re.search('go.dataJson = (.+);', rs.text)
+data = re.search("go.dataJson = (.+);", rs.text)
 if not data:
-    print('Not data!')
+    print("Not data!")
     sys.exit()
 
 data = data.group(1)
@@ -24,11 +24,11 @@ data = data.group(1)
 rs_data = json.loads(data)
 print(rs_data)
 
-for result in rs_data['serp']['results']:
-    if 'url' not in result:
+for result in rs_data["serp"]["results"]:
+    if "url" not in result:
         continue
 
-    print(result['url'])
+    print(result["url"])
 
 # http://mau.ru/
 # https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D1%88%D0%BA%D0%B8_(%D0%BC%D1%8E%D0%B7%D0%B8%D0%BA%D0%BB)
