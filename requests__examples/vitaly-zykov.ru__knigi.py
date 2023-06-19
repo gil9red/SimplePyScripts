@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import requests
+from bs4 import BeautifulSoup
 
 
 def get_books():
-    import requests
-    rs = requests.get('http://vitaly-zykov.ru/knigi')
+    rs = requests.get("http://vitaly-zykov.ru/knigi")
+    root = BeautifulSoup(rs.content, "lxml")
 
-    from bs4 import BeautifulSoup
-    root = BeautifulSoup(rs.content, 'lxml')
-
-    return [x.text.strip().replace('"', '') for x in root.select('.book_tpl > h3')]
+    return [x.text.strip().replace('"', "") for x in root.select(".book_tpl > h3")]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     for i, book in enumerate(get_books(), 1):
-        print('{:>2}. {}'.format(i, book))
+        print("{:>2}. {}".format(i, book))
