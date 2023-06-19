@@ -29,15 +29,15 @@ def leftpad(text: str | int, size: int, ch: str | int = " "):
 # Версия с использованием общего алгоритм
 def leftpad2(text: str | int, size: int, ch: str | int = " "):
     text = str(text)
-    ch = str(ch)
-
     text_size = len(text)
-    result = ""
 
     pad_len = size - text_size
     if pad_len <= 0:
         return text
 
+    ch = str(ch)
+
+    result = ""
     for i in range(pad_len):
         result += ch
     result += text
