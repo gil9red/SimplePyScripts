@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import logging
@@ -11,7 +11,7 @@ import sys
 
 from flask import Flask, render_template_string, request, jsonify
 
-sys.path.append('..')
+sys.path.append("..")
 from rumble import set_vibration
 
 
@@ -22,7 +22,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/")
 def index():
-    return render_template_string('''\
+    return render_template_string(
+        """\
 <html>
     <head>
         <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
@@ -167,7 +168,8 @@ def index():
             </tr>
         </table>
     </body>
-</html>''')
+</html>"""
+    )
 
 
 # Для отладки состояния ENABLED, LEFT_MOTOR и RIGHT_MOTOR
@@ -178,30 +180,30 @@ LEFT_MOTOR = 0
 RIGHT_MOTOR = 0
 
 
-@app.route("/set_status", methods=['POST'])
+@app.route("/set_status", methods=["POST"])
 def set_status():
-    print('set_status')
+    print("set_status")
 
     data = request.get_json()
     print(data)
 
     global ENABLED, LEFT_MOTOR, RIGHT_MOTOR
-    if 'enabled' in data and 'left_motor' in data and 'right_motor' in data:
-        ENABLED = data['enabled']
-        LEFT_MOTOR = int(data['left_motor'])
-        RIGHT_MOTOR = int(data['right_motor'])
+    if "enabled" in data and "left_motor" in data and "right_motor" in data:
+        ENABLED = data["enabled"]
+        LEFT_MOTOR = int(data["left_motor"])
+        RIGHT_MOTOR = int(data["right_motor"])
 
     return jsonify(data)
 
 
 @app.route("/get_status")
 def get_status():
-    print('get_status')
+    print("get_status")
 
     data = {
-        'enabled': ENABLED,
-        'left_motor': LEFT_MOTOR,
-        'right_motor': RIGHT_MOTOR,
+        "enabled": ENABLED,
+        "left_motor": LEFT_MOTOR,
+        "right_motor": RIGHT_MOTOR,
     }
     print(data)
 
@@ -211,7 +213,10 @@ def get_status():
 def vibration_tick():
     while True:
         if DEBUG:
-            print(f'ENABLED: {ENABLED} ({type(ENABLED)}), LEFT_MOTOR: {LEFT_MOTOR}, RIGHT_MOTOR: {RIGHT_MOTOR}')
+            print(
+                f"ENABLED: {ENABLED} ({type(ENABLED)}), "
+                f"LEFT_MOTOR: {LEFT_MOTOR}, RIGHT_MOTOR: {RIGHT_MOTOR}"
+            )
 
         if ENABLED:
             set_vibration(LEFT_MOTOR, RIGHT_MOTOR)
@@ -234,4 +239,4 @@ if __name__ == "__main__":
     # )
 
     # # Public IP
-    app.run(host='0.0.0.0')
+    app.run(host="0.0.0.0")

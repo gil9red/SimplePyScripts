@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: http://stackoverflow.com/questions/19749404/
 
+
 import ctypes
+import time
 
 
 # Define necessary structures
 class XINPUT_VIBRATION(ctypes.Structure):
     _fields_ = [
         ("wLeftMotorSpeed", ctypes.c_ushort),
-        ("wRightMotorSpeed", ctypes.c_ushort)
+        ("wRightMotorSpeed", ctypes.c_ushort),
     ]
+
 
 # Load Xinput.dll
 xinput = ctypes.windll.xinput1_1
@@ -41,7 +44,6 @@ def set_vibration(left_motor, right_motor, controller=0):
 
 
 def set_vibration_with_duration(left_motor, right_motor, controller=0, duration=1.0):
-    import time
     t = time.time()
 
     while True:
@@ -52,7 +54,7 @@ def set_vibration_with_duration(left_motor, right_motor, controller=0, duration=
         time.sleep(0.1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # OR:
     # set_vibration_with_duration(65535, 32767, duration=2.0)
     set_vibration_with_duration(1.0, 0.5, controller=0, duration=2.0)
