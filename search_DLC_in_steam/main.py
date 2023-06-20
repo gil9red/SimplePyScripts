@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import re
@@ -12,23 +12,23 @@ from bs4 import BeautifulSoup
 
 def is_dlc(game: str) -> bool:
     def steam_search_DLC(name: str) -> list:
-        url = 'https://store.steampowered.com/search/?category1=21&term=' + name
+        url = "https://store.steampowered.com/search/?category1=21&term=" + name
 
         game_price_list = []
 
         while True:
             rs = requests.get(url)
-            root = BeautifulSoup(rs.content, 'html.parser')
+            root = BeautifulSoup(rs.content, "html.parser")
             break
 
-        for div in root.select('.search_result_row'):
-            name = div.select_one('.title').text.strip()
+        for div in root.select(".search_result_row"):
+            name = div.select_one(".title").text.strip()
 
             # Ищем тег скидки
-            if div.select_one('.search_discount > span'):
-                price = div.select_one('.search_price > span > strike').text.strip()
+            if div.select_one(".search_discount > span"):
+                price = div.select_one(".search_price > span > strike").text.strip()
             else:
-                price = div.select_one('.search_price').text.strip()
+                price = div.select_one(".search_price").text.strip()
 
             game_price_list.append((name, price))
 
@@ -47,14 +47,14 @@ def is_dlc(game: str) -> bool:
         name_2 = name_2.lower()
 
         def remove_postfix(text: str) -> str:
-            for postfix in ('dlc', 'expansion'):
+            for postfix in ("dlc", "expansion"):
                 if text.endswith(postfix):
-                    return text[:-len(postfix)]
+                    return text[: -len(postfix)]
             return text
 
         # Удаление символов кроме буквенных, цифр и _: "the witcher®3:___ вася! wild hunt" -> "thewitcher3___васяwildhunt"
         def clear_name(name: str) -> str:
-            return re.sub(r'\W', '', name)
+            return re.sub(r"\W", "", name)
 
         name_1 = clear_name(name_1)
         name_1 = remove_postfix(name_1)
@@ -85,26 +85,25 @@ def parse_played_games(text: str, silence: bool = False) -> dict:
     Функция для парсинга списка игр.
     """
 
-    FINISHED_GAME = 'FINISHED_GAME'
-    NOT_FINISHED_GAME = 'NOT_FINISHED_GAME'
-    FINISHED_WATCHED = 'FINISHED_WATCHED'
-    NOT_FINISHED_WATCHED = 'NOT_FINISHED_WATCHED'
+    FINISHED_GAME = "FINISHED_GAME"
+    NOT_FINISHED_GAME = "NOT_FINISHED_GAME"
+    FINISHED_WATCHED = "FINISHED_WATCHED"
+    NOT_FINISHED_WATCHED = "NOT_FINISHED_WATCHED"
 
     FLAG_BY_CATEGORY = {
-        '  ': FINISHED_GAME,
-        '- ': NOT_FINISHED_GAME,
-        ' -': NOT_FINISHED_GAME,
-        ' @': FINISHED_WATCHED,
-        '@ ': FINISHED_WATCHED,
-        '-@': NOT_FINISHED_WATCHED,
-        '@-': NOT_FINISHED_WATCHED,
+        "  ": FINISHED_GAME,
+        "- ": NOT_FINISHED_GAME,
+        " -": NOT_FINISHED_GAME,
+        " @": FINISHED_WATCHED,
+        "@ ": FINISHED_WATCHED,
+        "-@": NOT_FINISHED_WATCHED,
+        "@-": NOT_FINISHED_WATCHED,
     }
 
     # Регулярка вытаскивает выражения вида: 1, 2, 3 или 1-3, или римские цифры: III, IV
-    import re
     PARSE_GAME_NAME_PATTERN = re.compile(
-        r'(\d+(, *?\d+)+)|(\d+ *?- *?\d+)|([MDCLXVI]+(, ?[MDCLXVI]+)+)',
-        flags=re.IGNORECASE
+        r"(\d+(, *?\d+)+)|(\d+ *?- *?\d+)|([MDCLXVI]+(, ?[MDCLXVI]+)+)",
+        flags=re.IGNORECASE,
     )
 
     def parse_game_name(game_name: str) -> list:
@@ -129,14 +128,14 @@ def parse_played_games(text: str, silence: bool = False) -> dict:
         index = game_name.index(seq_str)
         base_name = game_name[:index].strip()
 
-        seq_str = seq_str.replace(' ', '')
+        seq_str = seq_str.replace(" ", "")
 
-        if ',' in seq_str:
+        if "," in seq_str:
             # '1,2,3' -> ['1', '2', '3']
-            seq = seq_str.split(',')
+            seq = seq_str.split(",")
 
-        elif '-' in seq_str:
-            seq = seq_str.split('-')
+        elif "-" in seq_str:
+            seq = seq_str.split("-")
 
             # ['1', '7'] -> [1, 7]
             seq = list(map(int, seq))
@@ -148,7 +147,7 @@ def parse_played_games(text: str, silence: bool = False) -> dict:
             return [game_name]
 
         # Сразу проверяем номер игры в серии и если она первая, то не добавляем в названии ее номер
-        return [base_name if num == '1' else base_name + " " + num for num in seq]
+        return [base_name if num == "1" else base_name + " " + num for num in seq]
 
     platforms = dict()
     platform = None
@@ -159,7 +158,7 @@ def parse_played_games(text: str, silence: bool = False) -> dict:
             continue
 
         flag = line[:2]
-        if flag not in FLAG_BY_CATEGORY and line.endswith(':'):
+        if flag not in FLAG_BY_CATEGORY and line.endswith(":"):
             platform_name = line[:-1]
 
             platform = {
@@ -195,25 +194,25 @@ def parse_played_games(text: str, silence: bool = False) -> dict:
     return platforms
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import time
 
-    with open('gistfile1.txt', encoding='utf-8') as f:
+    with open("gistfile1.txt", encoding="utf-8") as f:
         text = f.read()
 
     platforms = parse_played_games(text)
-    print('Platforms:', len(platforms))
+    print("Platforms:", len(platforms))
 
     games = []
-    for categories in platforms['PC'].values():
+    for categories in platforms["PC"].values():
         games += categories
 
     games = set(games)
-    print('Games:', len(games))
+    print("Games:", len(games))
 
-    print('DLC:')
+    print("DLC:")
     for game in sorted(games):
         if is_dlc(game):
-            print('    ' + game)
+            print("    " + game)
 
         time.sleep(10)
