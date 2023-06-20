@@ -6,7 +6,7 @@ __author__ = "ipetrash"
 
 import time
 
-from typing import Type, Optional, Iterable
+from typing import Type, Optional, Iterable, TypeVar
 from uuid import uuid4
 
 # pip install peewee
@@ -46,6 +46,9 @@ db = SqliteQueueDatabase(
 )
 
 
+ChildModel = TypeVar("ChildModel", bound="BaseModel")
+
+
 class BaseModel(Model):
     """
     Базовая модель классов-таблиц
@@ -54,15 +57,15 @@ class BaseModel(Model):
     class Meta:
         database = db
 
-    def get_new(self) -> Type["BaseModel"]:
+    def get_new(self) -> ChildModel:
         return type(self).get(self._pk_expr())
 
     @classmethod
-    def get_first(cls) -> Type["BaseModel"]:
+    def get_first(cls) -> ChildModel:
         return cls.select().first()
 
     @classmethod
-    def get_last(cls) -> Type["BaseModel"]:
+    def get_last(cls) -> ChildModel:
         return cls.select().order_by(cls.id.desc()).first()
 
     @classmethod
