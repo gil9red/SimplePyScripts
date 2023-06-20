@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import time
@@ -16,7 +16,7 @@ from PyQt5.QtCore import *
 
 # 60 * 1000 * 10 -- 10 minutes
 def show_message(text, timeout=60 * 1000 * 10):
-    print(f'show_message: {text!r}')
+    print(f"show_message: {text!r}")
 
     msg = QMessageBox()
     msg.setWindowFlags(msg.windowFlags() | Qt.WindowStaysOnTopHint)
@@ -26,7 +26,7 @@ def show_message(text, timeout=60 * 1000 * 10):
     msg.setStandardButtons(QMessageBox.Ok)
 
     font = msg.font()
-    font.setFamily('Times')
+    font.setFamily("Times")
     font.setPointSize(50)
     msg.setFont(font)
 
@@ -35,7 +35,7 @@ def show_message(text, timeout=60 * 1000 * 10):
     msg.exec()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     schedule.every().day.at("11:00").do(show_message, "Пора в столовку")
@@ -44,9 +44,9 @@ if __name__ == '__main__':
     schedule.every().day.at("17:00").do(show_message, "Иди прогуляйся")
     schedule.every().day.at("19:00").do(show_message, "Вали домой")
 
-    print('Jobs:')
+    print("Jobs:")
     for job in schedule.jobs:
-        print('    ' + str(job))
+        print("    " + str(job))
 
     print()
 

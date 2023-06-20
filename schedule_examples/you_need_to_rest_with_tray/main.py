@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import time
@@ -20,11 +20,11 @@ from PyQt5.QtCore import *
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = f'{ex_cls.__name__}: {ex}:\n'
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    QMessageBox.critical(None, 'Error', text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
@@ -32,7 +32,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 DIR = Path(__file__).resolve().parent
-TRAY_ICON = str(DIR / 'rest_32x32.png')
+TRAY_ICON = str(DIR / "rest_32x32.png")
 
 sys.path.append(str(DIR.parent))
 from you_need_to_rest import show_message
@@ -49,16 +49,16 @@ class RunSchedulerThread(QThread):
         schedule.every().day.at("17:00").do(self.about_show_message.emit, "Иди прогуляйся")
         schedule.every().day.at("19:00").do(self.about_show_message.emit, "Вали домой")
 
-        description = 'Jobs:\n'
-        description_gui = ''
+        description = "Jobs:\n"
+        description_gui = ""
         for job in schedule.jobs:
-            description += '    ' + str(job) + "\n"
+            description += "    " + str(job) + "\n"
             description_gui += str(job) + "\n"
 
         # Костыль для показа сообщения вида "Every 1 day at 11:00:00"
-        pattern = re.compile(r' do <lambda>\(\) \(last run: .+?, next run: .+?\)')
-        description = pattern.sub('', description)
-        description_gui = pattern.sub('', description_gui)
+        pattern = re.compile(r" do <lambda>\(\) \(last run: .+?, next run: .+?\)")
+        description = pattern.sub("", description)
+        description_gui = pattern.sub("", description_gui)
 
         print(description)
 
@@ -70,12 +70,12 @@ class RunSchedulerThread(QThread):
             idle_secs = int(schedule.idle_seconds())
 
             local_description_gui = description_gui
-            local_description_gui += '\n\n'
-            local_description_gui += f'Следующий перерыв будет в {next_job_time}, осталось {idle_secs} секунд'
+            local_description_gui += "\n\n"
+            local_description_gui += f"Следующий перерыв будет в {next_job_time}, осталось {idle_secs} секунд"
             self.about_description.emit(local_description_gui)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
     app.setQuitOnLastWindowClosed(False)
 
@@ -93,11 +93,11 @@ if __name__ == '__main__':
     button_box_layout.setContentsMargins(0, 0, 0, 0)
     button_box_layout.setSpacing(0)
 
-    button = QPushButton('Hide')
+    button = QPushButton("Hide")
     button.clicked.connect(menu.hide)
     button_box_layout.addWidget(button)
 
-    button = QPushButton('Quit')
+    button = QPushButton("Quit")
     button.clicked.connect(quit)
     button_box_layout.addWidget(button)
 
@@ -113,7 +113,7 @@ if __name__ == '__main__':
     tray.setContextMenu(menu)
     tray.activated.connect(lambda x: menu.exec(tray.geometry().center()))
 
-    tray.setToolTip('Уведомления об отдыхе')
+    tray.setToolTip("Уведомления об отдыхе")
     tray.show()
 
     # Для работы с schedule нужен свой цикл, наподобии цикла, создаваемого app.exec()
