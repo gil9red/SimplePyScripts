@@ -1,15 +1,15 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """Пример поиска по гуглу."""
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from urllib.parse import quote_plus
     from grab import Grab
 
-    url_pattern = 'https://www.google.ru/search?q='
-    search_text = 'манга читать онлайн'
+    url_pattern = "https://www.google.ru/search?q="
+    search_text = "манга читать онлайн"
 
     url = url_pattern + quote_plus(search_text)
 
@@ -22,4 +22,4 @@ if __name__ == '__main__':
 
     search_result = g.doc.select('//li[@class="g"]/*/h3/a')
     for i, c in enumerate(search_result, 1):
-        print('{}. "{}": {}'.format(i, c.text(), c.attr('href')))
+        print('{}. "{}": {}'.format(i, c.text(), c.attr("href")))
