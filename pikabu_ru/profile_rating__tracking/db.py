@@ -9,7 +9,7 @@ import shutil
 import sys
 
 from pathlib import Path
-from typing import Iterable, Type
+from typing import Iterable, Type, TypeVar
 
 # pip install peewee
 from peewee import (
@@ -46,6 +46,9 @@ def db_create_backup(backup_dir=DIR_BACKUP):
 db = SqliteDatabase(DB_FILE_NAME, pragmas={"foreign_keys": 1})
 
 
+ChildModel = TypeVar("ChildModel", bound="BaseModel")
+
+
 class BaseModel(Model):
     """
     Базовая модель классов-таблиц
@@ -54,15 +57,15 @@ class BaseModel(Model):
     class Meta:
         database = db
 
-    def get_new(self) -> Type["BaseModel"]:
+    def get_new(self) -> ChildModel:
         return type(self).get(self._pk_expr())
 
     @classmethod
-    def get_first(cls) -> Type["BaseModel"]:
+    def get_first(cls) -> ChildModel:
         return cls.select().first()
 
     @classmethod
-    def get_last(cls) -> Type["BaseModel"]:
+    def get_last(cls) -> ChildModel:
         return cls.select().order_by(cls.id.desc()).first()
 
     @classmethod
@@ -122,3 +125,5 @@ db.create_tables(BaseModel.get_inherited_models())
 if __name__ == "__main__":
     BaseModel.print_count_of_tables()
     print()
+
+    print(ProfileRating.get_last())
