@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from my_rtf_to_text import rtf_to_text
 
 
 # NOTE: file header: {\rtf1\adeflang1025\ansi\ansicpg1251\
-rtf = open('EULA_RUS.rtf', encoding='ansi').read()
+rtf = open("EULA_RUS.rtf", encoding="ansi").read()
 
-print(
-    rtf_to_text(rtf, encoding='cp1251')
-)
+print(rtf_to_text(rtf, encoding="cp1251"))
 # MICROSOFT SOFTWARE LICENSE TERMS
 # MICROSOFT SQL SERVER COMPACT 4.0 SERVICE PACK 1 (SP1)
 # Настоящие условия лицензии являются соглашением между корпорацией Microsoft (или, в зависимости от места вашего проживания, одним из ее аффилированных лиц) и вами. Прочтите их внимательно. Они применяются к вышеуказанному программному обеспечению, включая носители, на которых оно распространяется (если они есть). Эти условия распространяются также на все

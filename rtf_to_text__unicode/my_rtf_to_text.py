@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/joshy/striprtf/blob/73092d2322a8796444aee0c319e405ecdc770dbe/striprtf/striprtf.py
 
 
 import re
+
 """
 Taken from https://gist.github.com/gilsondev/7c1d2d753ddb522e7bc22511cfb08676
 and modified for better output of tables.
@@ -81,7 +82,7 @@ specialchars = {
     "row": "\n",
     "cell": "|",
     "nestcell": "|",
-    }
+}
 
 PATTERN = re.compile(
     r"\\([a-z]{1,32})(-?\d{1,10})?[ ]?|\\'([0-9a-f]{2})|\\([^a-z])|([{}])|[\r\n]+|(.)",
@@ -89,7 +90,7 @@ PATTERN = re.compile(
 )
 
 
-def rtf_to_text(text, encoding='utf-8'):
+def rtf_to_text(text, encoding="utf-8"):
     stack = []
     ignorable = False  # Whether this group (and all inside it) are "ignorable".
     ucskip = 1  # Number of ASCII characters to skip after a unicode character.
@@ -156,9 +157,7 @@ def rtf_to_text(text, encoding='utf-8'):
                 curskip -= 1
             elif not ignorable:
                 c = int(hex, 16)
-                out.append(
-                    bytes([c]).decode(encoding)
-                )
+                out.append(bytes([c]).decode(encoding))
                 # NOTE: It was tested here
                 # <<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 # if c > 127:
