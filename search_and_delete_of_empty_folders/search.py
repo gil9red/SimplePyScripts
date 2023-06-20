@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import os
@@ -43,8 +43,8 @@ def search_of_empty_folders(dir):
     return empty_folders
 
 
-if __name__ == '__main__':
-    path = r'C:\\'
+if __name__ == "__main__":
+    path = r"C:\\"
 
     empty_folders = search_of_empty_folders(path)
     for i in empty_folders:
@@ -54,4 +54,4 @@ if __name__ == '__main__':
     for i in empty_folders:
         for root, dirs, files in os.walk(i):
             if files:
-                assert True is False, '{}: {}'.format(root, files)
+                assert True is False, "{}: {}".format(root, files)
