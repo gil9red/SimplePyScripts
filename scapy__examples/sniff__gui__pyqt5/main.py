@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import sys
+import traceback
 
 # pip install pyqt5
 from PyQt5 import Qt
@@ -13,16 +16,14 @@ from scapy.all import sniff
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
+    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    Qt.QMessageBox.critical(None, 'Error', text)
+    Qt.QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -43,17 +44,17 @@ class MainWindow(Qt.QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('Sniff with scapy')
+        self.setWindowTitle("Sniff with scapy")
 
         self.lw_packet = Qt.QListWidget()
 
-        self.cb_log = Qt.QCheckBox('Write log')
+        self.cb_log = Qt.QCheckBox("Write log")
         self.cb_log.setChecked(True)
 
-        self.pb_clear = Qt.QPushButton('Clear')
+        self.pb_clear = Qt.QPushButton("Clear")
         self.pb_clear.clicked.connect(self.lw_packet.clear)
 
-        self.cb_autoscroll = Qt.QCheckBox('Autoscroll')
+        self.cb_autoscroll = Qt.QCheckBox("Autoscroll")
 
         layout = Qt.QHBoxLayout()
         layout.addWidget(self.cb_log)
