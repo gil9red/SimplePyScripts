@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import time
@@ -10,6 +10,7 @@ import shutil
 
 # If need use threads
 from multiprocessing.dummy import Pool
+
 # Or:
 # from multiprocessing import Pool
 
@@ -21,27 +22,31 @@ from humanize import naturalsize as sizeof_fmt
 
 def search_empty_folders(disk):
     disk_letter = disk[0]
-    file_name = f'log of {disk_letter}.txt'
+    file_name = f"log of {disk_letter}.txt"
 
     t = time.perf_counter()
 
     usage = shutil.disk_usage(disk)
-    print(f'  Start of {disk_letter} ({sizeof_fmt(usage.free)} free of {sizeof_fmt(usage.total)})')
+    print(
+        f"  Start of {disk_letter} ({sizeof_fmt(usage.free)} free of {sizeof_fmt(usage.total)})"
+    )
 
-    with open(file_name, mode='w', encoding='utf-8') as f:
+    with open(file_name, mode="w", encoding="utf-8") as f:
         for root, dirs, files in os.walk(disk):
             # If dir is empty
             if not dirs and not files:
-                f.write(root + '\n')
+                f.write(root + "\n")
 
     print(f'  Finish "{disk_letter}"! Elapsed time: {time.perf_counter() - t:.3f} secs')
 
 
-if __name__ == '__main__':
-    print('Start')
+if __name__ == "__main__":
+    print("Start")
 
-    disk_list = [disk.device for disk in psutil.disk_partitions() if 'fixed' in disk.opts]
-    print(f'  Found ({len(disk_list)}): {disk_list}')
+    disk_list = [
+        disk.device for disk in psutil.disk_partitions() if "fixed" in disk.opts
+    ]
+    print(f"  Found ({len(disk_list)}): {disk_list}")
     print()
 
     t = time.perf_counter()
@@ -56,4 +61,4 @@ if __name__ == '__main__':
     pool.close()
     pool.join()
 
-    print(f'Finish! Elapsed time: {time.perf_counter() - t:.3f} secs')
+    print(f"Finish! Elapsed time: {time.perf_counter() - t:.3f} secs")
