@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-# For import: shorten and sizeof_fmt
 import sys
-sys.path.append('../')
-
 from pathlib import Path
 
 from PyQt5.QtCore import QStandardPaths
 
+# For import: shorten and sizeof_fmt
+sys.path.append("../")
 from explore__windows import explore
 from human_byte_size import sizeof_fmt
 from shorten import shorten
@@ -27,9 +26,17 @@ from shorten import shorten
 #     return html_table
 
 
-DIR_IMAGES = str(Path(__file__).resolve().parent / 'images')
+DIR_IMAGES = str(Path(__file__).resolve().parent / "images")
 
-IMAGE_HASH_ALGO = ["average_hash", "phash", "phash_simple", "dhash", "dhash_vertical", "whash", "colorhash"]
+IMAGE_HASH_ALGO = [
+    "average_hash",
+    "phash",
+    "phash_simple",
+    "dhash",
+    "dhash_vertical",
+    "whash",
+    "colorhash",
+]
 DEFAULT_IMAGE_HASH_ALGO = "phash"
 DEFAULT_IMAGE_HASH_MAX_SCORE = 10
 
@@ -40,4 +47,4 @@ USER_PICTURES_DIR = QStandardPaths.standardLocations(QStandardPaths.PicturesLoca
 ICON_WIDTH = 128
 ICON_HEIGHT = 128
 
-SETTINGS_FILE_NAME = 'settings.ini'
+SETTINGS_FILE_NAME = "settings.ini"

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QLabel, QFormLayout
@@ -50,27 +50,33 @@ class KeyValueLabel(QLabel):
         return self._layout.sizeHint()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from PyQt5.QtWidgets import QApplication
 
     app = QApplication([])
 
     label = KeyValueLabel()
-    label.setFields({
-        "a": 1,
-        "b": 2,
-        "c": 3,
-        "d": 4,
-    })
+    label.setFields(
+        {
+            "a": 1,
+            "b": 2,
+            "c": 3,
+            "d": 4,
+        }
+    )
     label.show()
 
-    label.setFields({
-        "a": 1,
-        "d": 4,
-    })
-    label.setFields({
-        "abc": 123,
-        "x": 2 ** 3,
-    })
+    label.setFields(
+        {
+            "a": 1,
+            "d": 4,
+        }
+    )
+    label.setFields(
+        {
+            "abc": 123,
+            "x": 2**3,
+        }
+    )
 
     app.exec()

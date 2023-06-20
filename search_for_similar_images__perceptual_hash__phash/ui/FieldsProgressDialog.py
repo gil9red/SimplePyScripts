@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QProgressDialog
@@ -11,7 +11,14 @@ from .KeyValueLabel import KeyValueLabel
 
 
 class FieldsProgressDialog(QProgressDialog):
-    def __init__(self, minimum, maximum, window_title, label_text="Operation in progress...", parent=None):
+    def __init__(
+        self,
+        minimum,
+        maximum,
+        window_title,
+        label_text="Operation in progress...",
+        parent=None,
+    ):
         super().__init__(parent)
 
         self.setWindowModality(Qt.WindowModal)

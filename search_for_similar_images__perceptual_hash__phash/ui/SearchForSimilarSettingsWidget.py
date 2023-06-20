@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QWidget, QFormLayout, QComboBox, QSpinBox, QCheckBox
 from PyQt5.QtCore import QSettings, pyqtSignal
 
-from common import IMAGE_HASH_ALGO, DEFAULT_IMAGE_HASH_ALGO, DEFAULT_IMAGE_HASH_MAX_SCORE
+from common import (
+    IMAGE_HASH_ALGO,
+    DEFAULT_IMAGE_HASH_ALGO,
+    DEFAULT_IMAGE_HASH_MAX_SCORE,
+)
 
 
 class SearchForSimilarSettingsWidget(QWidget):
@@ -36,23 +40,19 @@ class SearchForSimilarSettingsWidget(QWidget):
     def read_settings(self, ini: QSettings):
         ini.beginGroup(self.__class__.__name__)
 
-        self.cb_algo.setCurrentText(
-            ini.value('algo', DEFAULT_IMAGE_HASH_ALGO)
-        )
+        self.cb_algo.setCurrentText(ini.value("algo", DEFAULT_IMAGE_HASH_ALGO))
         self.sb_max_score.setValue(
-            int(ini.value('max_score', DEFAULT_IMAGE_HASH_MAX_SCORE))
+            int(ini.value("max_score", DEFAULT_IMAGE_HASH_MAX_SCORE))
         )
-        self.cb_mark_matching.setChecked(
-            ini.value('mark_matching', 'true') == 'true'
-        )
+        self.cb_mark_matching.setChecked(ini.value("mark_matching", "true") == "true")
 
         ini.endGroup()
 
     def write_settings(self, ini: QSettings):
         ini.beginGroup(self.__class__.__name__)
 
-        ini.setValue('algo', self.cb_algo.currentText())
-        ini.setValue('max_score', self.sb_max_score.value())
-        ini.setValue('mark_matching', self.cb_mark_matching.isChecked())
+        ini.setValue("algo", self.cb_algo.currentText())
+        ini.setValue("max_score", self.sb_max_score.value())
+        ini.setValue("mark_matching", self.cb_mark_matching.isChecked())
 
         ini.endGroup()

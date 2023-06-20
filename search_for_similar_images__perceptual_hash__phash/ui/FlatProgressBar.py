@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QProgressBar
@@ -12,7 +12,8 @@ class FlatProgressBar(QProgressBar):
         super().__init__(*args)
 
         self.setTextVisible(False)
-        self.setStyleSheet("""
+        self.setStyleSheet(
+            """
             QProgressBar {
                 background-color: transparent;
                 border: 0px solid grey;
@@ -24,7 +25,8 @@ class FlatProgressBar(QProgressBar):
             QProgressBar::chunk {
                 background-color: gray;
             }
-        """)
+            """
+        )
 
     def setValue(self, value: int):
         super().setValue(value)

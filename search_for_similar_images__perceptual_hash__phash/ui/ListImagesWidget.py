@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
-
-from typing import Optional
 
 from PyQt5.QtWidgets import QListView
 from PyQt5.QtCore import Qt
@@ -25,10 +23,12 @@ class ListImagesWidget(QListView):
         self.setSpacing(5)
         self.setUniformItemSizes(True)
         self.setItemDelegate(
-            ThumbnailDelegate(self, icon_width, icon_height, image_cache, file_name_index)
+            ThumbnailDelegate(
+                self, icon_width, icon_height, image_cache, file_name_index
+            )
         )
 
-    def currentFileName(self) -> Optional[str]:
+    def currentFileName(self) -> str | None:
         index = self.currentIndex()
         if not index.isValid():
             return

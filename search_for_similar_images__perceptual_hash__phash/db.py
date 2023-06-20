@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from pathlib import Path
+import os
+import shutil
 import sqlite3
-from typing import List
+
+from datetime import datetime
+from pathlib import Path
 
 # pip install pillow
 from PIL import Image
@@ -15,7 +18,7 @@ from PIL import Image
 import imagehash
 
 
-DB_FILE_NAME = str(Path(__file__).resolve().parent / 'database.sqlite')
+DB_FILE_NAME = str(Path(__file__).resolve().parent / "database.sqlite")
 
 
 def create_connect() -> sqlite3.Connection:
@@ -25,7 +28,8 @@ def create_connect() -> sqlite3.Connection:
 def init_db():
     # Создание базы и таблицы
     with create_connect() as connect:
-        connect.execute('''\
+        connect.execute(
+            """\
             CREATE TABLE IF NOT EXISTS ImageHash (
                 id INTEGER PRIMARY KEY,
                 file_name TEXT NOT NULL UNIQUE,
@@ -37,16 +41,19 @@ def init_db():
                 whash TEXT NOT NULL,
                 colorhash TEXT NOT NULL
             );
-        ''')
+            """
+        )
 
 
 def db_add(
     file_name: str,
     average_hash: str,
-    phash: str, phash_simple: str,
-    dhash: str, dhash_vertical: str,
+    phash: str,
+    phash_simple: str,
+    dhash: str,
+    dhash_vertical: str,
     whash: str,
-    colorhash: str
+    colorhash: str,
 ) -> bool:
     sql = """\
         INSERT OR IGNORE INTO ImageHash (
@@ -64,16 +71,19 @@ def db_add(
     file_name = str(Path(file_name).resolve())
 
     with create_connect() as connect:
-        last_row_id = connect.execute(sql, [
-            file_name,
-            average_hash,
-            phash,
-            phash_simple,
-            dhash,
-            dhash_vertical,
-            whash,
-            colorhash
-        ]).lastrowid
+        last_row_id = connect.execute(
+            sql,
+            [
+                file_name,
+                average_hash,
+                phash,
+                phash_simple,
+                dhash,
+                dhash_vertical,
+                whash,
+                colorhash,
+            ],
+        ).lastrowid
 
         # True, if successful
         return bool(last_row_id)
@@ -89,7 +99,7 @@ def db_add_image(file_name: str) -> bool:
         str(imagehash.dhash(image)),
         str(imagehash.dhash_vertical(image)),
         str(imagehash.whash(image)),
-        str(imagehash.colorhash(image))
+        str(imagehash.colorhash(image)),
     )
 
 
@@ -98,33 +108,26 @@ def db_exists(file_name: str) -> bool:
     file_name = str(Path(file_name).resolve())
 
     with create_connect() as connect:
-        return bool(
-            connect.execute(sql, [file_name]).fetchone()
-        )
+        return bool(connect.execute(sql, [file_name]).fetchone())
 
 
-def db_get_all() -> List[dict]:
+def db_get_all() -> list[dict]:
     with create_connect() as connect:
         connect.row_factory = sqlite3.Row
 
         return connect.execute("SELECT * FROM ImageHash").fetchall()
 
 
-def db_create_backup(backup_dir='backup'):
-    from datetime import datetime
-    file_name = str(datetime.today().date()) + '.sqlite'
-
-    import os
+def db_create_backup(backup_dir="backup"):
+    file_name = str(datetime.today().date()) + ".sqlite"
     os.makedirs(backup_dir, exist_ok=True)
 
     file_name = os.path.join(backup_dir, file_name)
-
-    import shutil
     shutil.copy(DB_FILE_NAME, file_name)
 
 
 init_db()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(len(db_get_all()))

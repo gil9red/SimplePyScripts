@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from collections import defaultdict
 import itertools
-from typing import List
+from collections import defaultdict
 
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QTreeWidget, QTreeWidgetItem, QProgressBar, QHeaderView
+from PyQt5.QtWidgets import (
+    QDialog,
+    QVBoxLayout,
+    QTreeWidget,
+    QTreeWidgetItem,
+    QProgressBar,
+    QHeaderView,
+)
 from PyQt5.QtCore import Qt, pyqtSignal, QThread
 
 import imagehash
@@ -17,7 +23,9 @@ import imagehash
 class CrossSearchSimilarImagesThread(QThread):
     about_found_similars = pyqtSignal(str, list)
 
-    def __init__(self, image_by_hashes: dict = None, hash_algo: str = None, max_score: int = None):
+    def __init__(
+        self, image_by_hashes: dict = None, hash_algo: str = None, max_score: int = None
+    ):
         super().__init__()
 
         self.image_by_hashes = image_by_hashes
@@ -30,8 +38,9 @@ class CrossSearchSimilarImagesThread(QThread):
             hash_value = hashes[self.hash_algo]
 
             # TODO: Monkey patch. https://github.com/JohannesBuchner/imagehash/issues/112
-            if self.hash_algo == 'colorhash':
+            if self.hash_algo == "colorhash":
                 from PIL import Image
+
                 hash_value = imagehash.colorhash(Image.open(file_name))
 
             img_by_hash[file_name] = hash_value
@@ -62,7 +71,7 @@ class CrossSearchSimilarImagesThread(QThread):
 class CrossSearchSimilarImagesDialog(QDialog):
     itemDoubleClicked = pyqtSignal(str)
 
-    window_title = 'Cross search similar images'
+    window_title = "Cross search similar images"
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -71,7 +80,7 @@ class CrossSearchSimilarImagesDialog(QDialog):
         self.resize(600, 600)
 
         self.tree_widget = QTreeWidget()
-        self.tree_widget.setHeaderLabels(['FILE NAME', 'SCORE'])
+        self.tree_widget.setHeaderLabels(["FILE NAME", "SCORE"])
         self.tree_widget.header().setSectionResizeMode(1, QHeaderView.Fixed)
         self.tree_widget.header().resizeSection(0, 450)
         self.tree_widget.header().resizeSection(1, 75)
@@ -97,8 +106,8 @@ class CrossSearchSimilarImagesDialog(QDialog):
         layout.addWidget(self.tree_widget)
         self.setLayout(layout)
 
-    def _on_about_found_similars(self, file_name: str, similars: List[str]):
-        item = QTreeWidgetItem([f'{file_name} ({len(similars)})'])
+    def _on_about_found_similars(self, file_name: str, similars: list[str]):
+        item = QTreeWidgetItem([f"{file_name} ({len(similars)})"])
         item.setData(0, Qt.UserRole, file_name)
 
         self.tree_widget.addTopLevelItem(item)
@@ -109,7 +118,9 @@ class CrossSearchSimilarImagesDialog(QDialog):
             item.addChild(child)
 
     def start(self, image_by_hashes: dict, hash_algo: str, max_score: int):
-        self.setWindowTitle(f'{self.window_title}. hash_algo={hash_algo} max_score={max_score}')
+        self.setWindowTitle(
+            f"{self.window_title}. hash_algo={hash_algo} max_score={max_score}"
+        )
         self.tree_widget.clear()
 
         self.thread.image_by_hashes = image_by_hashes
