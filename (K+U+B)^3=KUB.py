@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://stepik.org/lesson/360560/step/13?unit=345000
@@ -23,5 +23,5 @@ for k in range(1, 10):
             kub = k * 100 + u * 10 + b
 
             # Проверка, что число трехзначное или не совпадает условие
-            if kub <= 999 and kub == (k+u+b) ** 3:
-                print(f'({k}+{u}+{b})^3={kub}')
+            if kub <= 999 and kub == (k + u + b) ** 3:
+                print(f"({k}+{u}+{b})^3={kub}")

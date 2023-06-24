@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/issues/13#issuecomment-943412289
@@ -15,5 +15,5 @@ __author__ = 'ipetrash'
 
 for num in range(100, 1000):
     kub = set(str(num))
-    if len(kub) == 3 and sum(map(int, kub))**3 == num:
+    if len(kub) == 3 and sum(map(int, kub)) ** 3 == num:
         print(f'({"+".join(str(num))})^3={num}')
