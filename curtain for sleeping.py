@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """Программа при клике на кнопку разворачивается на весь экран, закрашивается черным цветом. При
@@ -10,12 +10,25 @@ __author__ = 'ipetrash'
 
 
 try:
-    from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QSizePolicy, QApplication
+    from PyQt5.QtWidgets import (
+        QWidget,
+        QVBoxLayout,
+        QPushButton,
+        QSizePolicy,
+        QApplication,
+    )
     from PyQt5.QtGui import QPainter
     from PyQt5.QtCore import Qt, QTimer
 
 except ImportError:
-    from PyQt4.QtGui import QWidget, QPainter, QVBoxLayout, QPushButton, QSizePolicy, QApplication
+    from PyQt4.QtGui import (
+        QWidget,
+        QPainter,
+        QVBoxLayout,
+        QPushButton,
+        QSizePolicy,
+        QApplication,
+    )
     from PyQt4.QtCore import Qt, QTimer
 
 
@@ -23,12 +36,14 @@ class CurtainWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('Curtain for sleeping')
+        self.setWindowTitle("Curtain for sleeping")
 
         self._flags = self.windowFlags()
 
-        self._activate_button = QPushButton('Activate curtain for sleeping')
-        self._activate_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self._activate_button = QPushButton("Activate curtain for sleeping")
+        self._activate_button.setSizePolicy(
+            QSizePolicy.Expanding, QSizePolicy.Expanding
+        )
         self._activate_button.clicked.connect(self._activate)
 
         # Таймер не дает, в течении 2 секунд, движением мышки вернуть окно в нормальный вид
@@ -88,4 +103,3 @@ widget.resize(200, 200)
 widget.show()
 
 app.exec()
-
