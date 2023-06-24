@@ -4,8 +4,11 @@
 __author__ = 'ipetrash'
 
 
-def get_ip_name(ip):
-    from subprocess import Popen, PIPE
+import re
+from subprocess import Popen, PIPE
+
+
+def get_ip_name(ip: str) -> str | None:
     with Popen(("nslookup", ip), shell=True, stdout=PIPE, stderr=PIPE, universal_newlines=True) as proc:
         # Дождаться выполнения
         proc.wait()
@@ -15,9 +18,8 @@ def get_ip_name(ip):
         if err:
             return
 
-        import re
-        match = re.search('Name:(.+)', out)
-        if match is not None:
+        match = re.search('(?:Name|Имя):\s*(.+)', out)
+        if match:
             return match.group(1).strip()
 
         return out
