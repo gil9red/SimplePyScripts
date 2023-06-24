@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-globals()['abc'] = 123
+globals()["abc"] = 123
 print(abc)  # 123
 
 for key, value in {"a": 1, "b": 2}.items():
@@ -23,7 +23,7 @@ def counter():
     # if 'number' not in globals():
     #     globals()['number'] = 0
 
-    globals()['number'] += 1
+    globals()["number"] += 1
 
 
 counter()
