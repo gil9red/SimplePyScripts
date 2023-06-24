@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 class MyMeta(type):
@@ -29,4 +29,5 @@ a = MyClass()
 print(MyClass.instances)  # [<__main__.MyClass object at 0x00514AF0>]
 b = MyClass()
 c = MyClass()
-print(MyClass.instances)  # [<__main__.MyClass object at 0x00514AF0>, <__main__.MyClass object at 0x00736DF0>, <__main__.MyClass object at 0x00736C30>]
+print(MyClass.instances)
+# [<__main__.MyClass object at 0x00514AF0>, <__main__.MyClass object at 0x00736DF0>, <__main__.MyClass object at 0x00736C30>]
