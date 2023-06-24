@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # http://ru.stackoverflow.com/questions/495034
@@ -18,7 +18,7 @@ m = (1, 5, 3)
 def find_sublist(l, m):
     for i in range(len(l)):
         try:
-            if tuple(l[i: i + len(m)]) == tuple(m):
+            if tuple(l[i : i + len(m)]) == tuple(m):
                 yield i, i + len(m)
 
         except IndexError:
@@ -27,9 +27,9 @@ def find_sublist(l, m):
 
 def delete_sublist(l, m):
     for i, j in find_sublist(l, m):
-        del l[i: j]
+        del l[i:j]
 
 
-print('Before: {}.'.format(l))
+print("Before: {}.".format(l))
 delete_sublist(l, m)
-print('After: {}.'.format(l))
+print("After: {}.".format(l))
