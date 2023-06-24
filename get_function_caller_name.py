@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import inspect
@@ -12,20 +12,22 @@ def caller_name() -> str:
     return inspect.currentframe().f_back.f_code.co_name
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     def foo():
         print(caller_name())
-        assert caller_name() == 'foo'
+        assert caller_name() == "foo"
 
     foo()
 
     def bar():
         print(caller_name())
-        assert caller_name() == 'bar'
+        assert caller_name() == "bar"
 
         def zoo():
             print(caller_name())
-            assert caller_name() == 'zoo'
+            assert caller_name() == "zoo"
+
         zoo()
 
     bar()
