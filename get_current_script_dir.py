@@ -12,7 +12,7 @@ import sys
 
 def get_current_script_dir(follow_symlinks=True, normcase=False) -> str:
     # py2exe, PyInstaller, cx_Freeze
-    if getattr(sys, 'frozen', False):
+    if getattr(sys, "frozen", False):
         path = os.path.abspath(sys.executable)
     else:
         # Analog inspect.getabsfile without os.path.normcase
@@ -28,6 +28,6 @@ def get_current_script_dir(follow_symlinks=True, normcase=False) -> str:
     return os.path.dirname(path)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(get_current_script_dir())
     print(get_current_script_dir(normcase=True))

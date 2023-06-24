@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://stackoverflow.com/a/55026299/5909792
@@ -41,13 +41,14 @@ def get_all_objects():
     return olist
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Should return more values than gc.get_objects()
     print(len(get_all_objects()))
     print(len(gc.get_objects()))
 
     class Foo:
         def bar(self):
-            return f'Foo(id={hex(id(self))})'
+            return f"Foo(id={hex(id(self))})"
+
     items = [Foo() for _ in range(3)]
     print([o.bar() for o in get_all_objects() if isinstance(o, Foo)])
