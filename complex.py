@@ -1,7 +1,7 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Комплексные числа (complex)
     # В Python встроены также и комплексные числа:
 
