@@ -39,16 +39,19 @@ def parser_my_jira_time_logs(log):
     jira_time = defaultdict(int)
 
     for line in log.split("\n"):
-        if line:
-            m = pattern.match(line.strip())
+        line = line.strip()
+        if not line:
+            continue
 
-            jira = m.group(1)
-            t1 = m.group(2)
-            t2 = m.group(3)
-            delta = dt.strptime(t2, "%H:%M") - dt.strptime(t1, "%H:%M")
-            seconds = delta.seconds
+        m = pattern.match(line)
 
-            jira_time[jira] += seconds
+        jira = m.group(1)
+        t1 = m.group(2)
+        t2 = m.group(3)
+        delta = dt.strptime(t2, "%H:%M") - dt.strptime(t1, "%H:%M")
+        seconds = delta.seconds
+
+        jira_time[jira] += seconds
 
     for jira, secs in jira_time.items():
         t = time.gmtime(secs)
