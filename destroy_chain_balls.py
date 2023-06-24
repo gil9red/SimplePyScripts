@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 def destroy_chain_balls(balls):
@@ -41,7 +41,7 @@ def destroy_chain_balls(balls):
     return balls
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     balls = [0, 1, 2, 3]
     balls_2 = destroy_chain_balls(balls)
     print("{} -> {}, уничтожено: {}".format(balls, balls_2, len(balls) - len(balls_2)))
