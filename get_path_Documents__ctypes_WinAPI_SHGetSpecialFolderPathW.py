@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import ctypes
-from ctypes.wintypes import MAX_PATH
 import sys
+
+from ctypes.wintypes import MAX_PATH
 
 
 # SOURCE: https://github.com/mhammond/pywin32/blob/d64fac8d7bda2cb1d81e2c9366daf99e802e327f/com/win32comext/shell/shellcon.py#L284
