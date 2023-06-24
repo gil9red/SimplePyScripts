@@ -2,17 +2,17 @@
 # -*- coding: utf-8 -*-
 
 
-__author__ = 'legendmohe'
+__author__ = "legendmohe"
 
 
 # CODE: http://stackoverflow.com/a/32656429/5909792
 
 
-import os
 import argparse
+import os
 
 
-class FileTreeMaker(object):
+class FileTreeMaker:
     def _recurse(self, parent_path, file_list, prefix, output_buf, level):
         if len(file_list) == 0 or (self.max_level != -1 and self.max_level <= level):
             return
@@ -33,7 +33,13 @@ class FileTreeMaker(object):
                         tmp_prefix = prefix + "┃  "
                     else:
                         tmp_prefix = prefix + "    "
-                    self._recurse(full_path, os.listdir(full_path), tmp_prefix, output_buf, level + 1)
+                    self._recurse(
+                        full_path,
+                        os.listdir(full_path),
+                        tmp_prefix,
+                        output_buf,
+                        level + 1,
+                    )
                 elif os.path.isfile(full_path):
                     output_buf.append("%s%s%s" % (prefix, idc, sub_path))
 
@@ -52,7 +58,7 @@ class FileTreeMaker(object):
 
         output_str = "\n".join(buf)
         if len(args.output) != 0:
-            with open(args.output, 'w') as of:
+            with open(args.output, "w") as of:
                 of.write(output_str)
         return output_str
 
@@ -61,8 +67,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-r", "--root", help="root of file tree", default=".")
     parser.add_argument("-o", "--output", help="output file name", default="")
-    parser.add_argument("-xf", "--exclude_folder", nargs='*', help="exclude folder", default=[])
-    parser.add_argument("-xn", "--exclude_name", nargs='*', help="exclude name", default=[])
+    parser.add_argument(
+        "-xf", "--exclude_folder", nargs="*", help="exclude folder", default=[]
+    )
+    parser.add_argument(
+        "-xn", "--exclude_name", nargs="*", help="exclude name", default=[]
+    )
     parser.add_argument("-m", "--max_level", help="max level", type=int, default=-1)
     args = parser.parse_args()
     print(FileTreeMaker().make(args))
