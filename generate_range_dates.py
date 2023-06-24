@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -21,7 +21,8 @@ def generate_range_dates(start_date, end_date) -> list:
     return items
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     def d2s(date):
         return date.strftime("%d/%m/%Y")
 
@@ -30,7 +31,7 @@ if __name__ == '__main__':
     print(d2s(start_date), d2s(end_date))
 
     items = generate_range_dates(start_date, end_date)
-    print('Items ({}): {}'.format(len(items), items))
+    print("Items ({}): {}".format(len(items), items))
 
     for date in items:
         print(d2s(date))
