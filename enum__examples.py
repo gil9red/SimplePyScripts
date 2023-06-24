@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # https://docs.python.org/3.5/library/enum.html
@@ -22,7 +22,8 @@ print(Animal.ANT == 1)  # False
 print()
 
 print(Animal)  # <enum 'Animal'>
-print(list(Animal))  # [<Animal.ANT: 1>, <Animal.BEE: 2>, <Animal.CAT: 3>, <Animal.DOG: 4>]
+print(list(Animal))
+# [<Animal.ANT: 1>, <Animal.BEE: 2>, <Animal.CAT: 3>, <Animal.DOG: 4>]
 print()
 
 for x in Animal:
@@ -50,14 +51,14 @@ print()
 
 # https://docs.python.org/3.5/library/enum.html#planet
 class Planet(Enum):
-    MERCURY = (3.303e+23, 2.4397e6)
-    VENUS = (4.869e+24, 6.0518e6)
-    EARTH = (5.976e+24, 6.37814e6)
-    MARS = (6.421e+23, 3.3972e6)
-    JUPITER = (1.9e+27, 7.1492e7)
-    SATURN = (5.688e+26, 6.0268e7)
-    URANUS = (8.686e+25, 2.5559e7)
-    NEPTUNE = (1.024e+26, 2.4746e7)
+    MERCURY = (3.303e23, 2.4397e6)
+    VENUS = (4.869e24, 6.0518e6)
+    EARTH = (5.976e24, 6.37814e6)
+    MARS = (6.421e23, 3.3972e6)
+    JUPITER = (1.9e27, 7.1492e7)
+    SATURN = (5.688e26, 6.0268e7)
+    URANUS = (8.686e25, 2.5559e7)
+    NEPTUNE = (1.024e26, 2.4746e7)
 
     def __init__(self, mass, radius):
         self.mass = mass  # in kilograms
@@ -66,7 +67,7 @@ class Planet(Enum):
     @property
     def surface_gravity(self):
         # universal gravitational constant  (m3 kg-1 s-2)
-        G = 6.67300E-11
+        G = 6.67300e-11
         return G * self.mass / (self.radius * self.radius)
 
 
@@ -81,40 +82,41 @@ class StrEnum(str, Enum):
 
 @unique
 class Color(StrEnum):
-    RED = 'red'
-    GREEN = 'green'
-    BLUE = 'blue'
+    RED = "red"
+    GREEN = "green"
+    BLUE = "blue"
 
 
-print(Color.RED == 'red')  # True
-print(Color.GREEN == 'green')  # True
-print(Color.GREEN == 'red')  # False
+print(Color.RED == "red")  # True
+print(Color.GREEN == "green")  # True
+print(Color.GREEN == "red")  # False
 print()
 print(Color.RED in Color)  # True
 print("red" in Color)  # False
 print("red" in Color)  # False
 print()
-print('Color is ' + Color.RED)  # Color is red
-print('Color is ' + Color.RED + Color.GREEN)  # Color is redgreen
-print('Colors: ' + ', '.join(Color))  # Colors: red, green, blue
+print("Color is " + Color.RED)  # Color is red
+print("Color is " + Color.RED + Color.GREEN)  # Color is redgreen
+print("Colors: " + ", ".join(Color))  # Colors: red, green, blue
 print()
 
 data = [
     {
-        'name': 'car',
-        'color': Color.RED,
+        "name": "car",
+        "color": Color.RED,
     },
     {
-        'name': 'dog',
-        'color': Color.BLUE,
+        "name": "dog",
+        "color": Color.BLUE,
     },
 ]
 
 print(data)
-print(Color('red'))  # Color.red
-print(Color('blue'))  # Color.blue
+print(Color("red"))  # Color.red
+print(Color("blue"))  # Color.blue
 # print(Color('yellow'))  # ValueError: 'yellow' is not a valid Color
 print()
 
 import json
+
 print(json.dumps(data, indent=4))
