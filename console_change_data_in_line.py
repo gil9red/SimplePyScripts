@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -13,8 +13,8 @@ def f1(n):
 
     write, flush = sys.stdout.write, sys.stdout.flush
     while n >= 0:
-        write('\r' * last_num_chars)
-        last_num_chars = write('[1] Left: ' + str(n))
+        write("\r" * last_num_chars)
+        last_num_chars = write("[1] Left: " + str(n))
         flush()
 
         time.sleep(1)
@@ -28,8 +28,8 @@ def f2(n):
 
     write, flush = sys.stdout.write, sys.stdout.flush
     while n >= 0:
-        write('\b' * last_num_chars)
-        last_num_chars = write('[2] Left: ' + str(n))
+        write("\b" * last_num_chars)
+        last_num_chars = write("[2] Left: " + str(n))
         flush()
 
         time.sleep(1)
