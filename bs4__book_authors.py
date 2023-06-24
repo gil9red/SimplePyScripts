@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+from bs4 import BeautifulSoup
 
 
 text = """
@@ -173,17 +176,17 @@ def get_title_book(item) -> str:
 
 
 def get_author_full_name(author_node) -> str:
-    return author_node.lastname.text + ' ' + author_node.initials.text
+    return author_node.lastname.text + " " + author_node.initials.text
 
 
 def get_authors(item) -> list:
-    authors = item.select('authors > author')
+    authors = item.select("authors > author")
 
     # Словарь для хранения номера автора и списка на разных языках
     num_author_by_authors = dict()
 
     for author in authors:
-        num = author['num']
+        num = author["num"]
         if num not in num_author_by_authors:
             num_author_by_authors[num] = []
 
@@ -203,7 +206,7 @@ def get_authors(item) -> list:
 
             for author in authors:
                 # Приоритетный язык
-                if author['lang'] == "RU":
+                if author["lang"] == "RU":
                     full_name = get_author_full_name(author)
                     break
 
@@ -212,10 +215,9 @@ def get_authors(item) -> list:
     return authors_full_name
 
 
-from bs4 import BeautifulSoup
-root = BeautifulSoup(text, 'html.parser')
+root = BeautifulSoup(text, "html.parser")
 
-for item in root.select('item'):
+for item in root.select("item"):
     title_book = get_title_book(item)
     print(title_book)
 
