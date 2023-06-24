@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Functors
@@ -19,7 +19,7 @@ class MySum:
 
 class MyPow:
     def __call__(self, a, b):
-        return a ** b
+        return a**b
 
 
 class Bar:
@@ -31,7 +31,7 @@ class Bar:
         return self
 
     def __str__(self):
-        return '<Foo(value={self.value})>'.format(self=self)
+        return "<Foo(value={self.value})>".format(self=self)
 
 
 foo = Foo()
@@ -41,9 +41,9 @@ print(MySum()(1, 2, 3, 4))  # 10
 
 print(MyPow()(2, 10))  # 1024
 
-print(Bar())            # 0
-print(Bar()())          # 1
-print(Bar()()())        # 2
-print(Bar()()()())      # 3
-print(Bar()()()()())    # 4
+print(Bar())  # 0
+print(Bar()())  # 1
+print(Bar()()())  # 2
+print(Bar()()()())  # 3
+print(Bar()()()()())  # 4
 print(Bar()()()()()())  # 5
