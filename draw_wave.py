@@ -2,26 +2,21 @@
 # -*- coding: utf-8 -*-
 
 
-__author__ = 'igrishaev'
+__author__ = "igrishaev"
 
 
 """Рисование волны wav-файла. Взято из http://habrahabr.ru/post/113239/"""
 
 
+import math
 import wave
 
-import math
-
 import numpy as np
-
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 
-types = {
-    1: np.int8,
-    2: np.int16,
-    4: np.int32
-}
+
+types = {1: np.int8, 2: np.int16, 4: np.int32}
 
 
 duration = nframes = k = peak = None
@@ -58,7 +53,7 @@ def draw(file_name):
     w, h = 800, 300
     k = nframes / w / 32
     DPI = 72
-    peak = 256 ** sampwidth / 2
+    peak = 256**sampwidth / 2
 
     content = wav.readframes(nframes)
     samples = np.fromstring(content, dtype=types[sampwidth])
