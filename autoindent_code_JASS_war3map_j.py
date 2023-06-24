@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import re
@@ -12,7 +12,7 @@ DEBUG = False
 
 def merge_str_literal(text: str) -> str:
     def _on_match(m: re.Match):
-        return m.group().replace('"+"', '')
+        return m.group().replace('"+"', "")
 
     return re.sub(r'".+?"(\+".+?")+ ', _on_match, text)
 
@@ -42,59 +42,59 @@ endfunction
 stack = []
 items = []
 for line in lines:
-    if line.startswith('globals'):
-        stack.append('globals')
+    if line.startswith("globals"):
+        stack.append("globals")
 
-    elif line.startswith('endglobals'):
+    elif line.startswith("endglobals"):
         stack.pop(-1)
-        stack.append('endglobals')
+        stack.append("endglobals")
 
-    elif line.startswith('function'):
-        stack.append('function')
+    elif line.startswith("function"):
+        stack.append("function")
 
-    elif line.startswith('endfunction'):
+    elif line.startswith("endfunction"):
         stack.pop(-1)
-        stack.append('endfunction')
+        stack.append("endfunction")
 
-    elif line.startswith('loop'):
-        stack.append('loop')
+    elif line.startswith("loop"):
+        stack.append("loop")
 
-    elif line.startswith('endloop'):
+    elif line.startswith("endloop"):
         stack.pop(-1)
-        stack.append('endloop')
+        stack.append("endloop")
 
-    elif line.startswith('if'):
-        stack.append('if')
+    elif line.startswith("if"):
+        stack.append("if")
 
-    elif line.startswith('elseif'):
+    elif line.startswith("elseif"):
         stack.pop(-1)
-        stack.append('elseif')
+        stack.append("elseif")
 
-    elif line.startswith('else'):
+    elif line.startswith("else"):
         stack.pop(-1)
-        stack.append('else')
+        stack.append("else")
 
-    elif line.startswith('endif'):
+    elif line.startswith("endif"):
         stack.pop(-1)
-        stack.append('endif')
+        stack.append("endif")
     else:
-        stack.append(line[:8] + '...')
+        stack.append(line[:8] + "...")
 
     indent = len(stack) - 1
     line = merge_str_literal(line)
-    items.append('    ' * indent + line)
+    items.append("    " * indent + line)
 
-    DEBUG and print(f'{indent}. {line!r}', stack)
+    DEBUG and print(f"{indent}. {line!r}", stack)
 
     # Add empty line after endglobals and endfunction
-    if line.startswith('endglobals') or line.startswith('endfunction'):
-        items.append('')
+    if line.startswith("endglobals") or line.startswith("endfunction"):
+        items.append("")
 
-    if stack[-1] not in ['globals', 'function', 'loop', 'if', 'elseif', 'else']:
+    if stack[-1] not in ["globals", "function", "loop", "if", "elseif", "else"]:
         stack.pop(-1)
 
 
-new_text = '\n'.join(items).strip()
+new_text = "\n".join(items).strip()
 print(new_text)
 """
 function II1I1_II takes real II1I1__I returns nothing
