@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -34,10 +34,10 @@ def get_quarter(month_or_date=None) -> int:
 
 
 def get_quarter_num(month_or_date=None) -> str:
-    return ['I', 'II', 'III', 'IV'][get_quarter(month_or_date) - 1]
+    return ["I", "II", "III", "IV"][get_quarter(month_or_date) - 1]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(get_quarter())
     print()
     print(get_quarter(DT.datetime.today()))
