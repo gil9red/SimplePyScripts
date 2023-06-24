@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 def invert_number(number: int) -> int:
@@ -14,18 +14,18 @@ def invert_number(number: int) -> int:
     :return: invert number
     """
 
-    return int(''.join('1' if i == '0' else '0' for i in bin(number)[2:]), base=2)
+    return int("".join("1" if i == "0" else "0" for i in bin(number)[2:]), base=2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(invert_number(0))
     print(invert_number(1))
     print(invert_number(7))
     print(invert_number(111))
-    print(invert_number(10 ** 10))
+    print(invert_number(10**10))
 
     assert invert_number(0) == 1
     assert invert_number(1) == 0
     assert invert_number(7) == 0
     assert invert_number(111) == 16
-    assert invert_number(10 ** 10) == 7179869183
+    assert invert_number(10**10) == 7179869183
