@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import json
@@ -40,7 +40,6 @@ print(json_2)
 
 
 # TODO: нужно тестить, возможно, алгоритм где-то дырявый
-
 def jsonmerge(j1, j2):
     for k, v in j2.items():
         if k in j1 and isinstance(j1[k], dict) and isinstance(v, dict):

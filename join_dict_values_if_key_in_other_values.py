@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # https://ru.stackoverflow.com/questions/854015/
@@ -11,7 +11,7 @@ __author__ = 'ipetrash'
 """
 
 
-total = {'a': ['b', 'd'], 'b': ['c', 'd'], 'c': ['d']}
+total = {"a": ["b", "d"], "b": ["c", "d"], "c": ["d"]}
 
 for k in total:
     for k1, v1 in total.items():
