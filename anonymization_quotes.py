@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import re
+import string
 
 
 def anonymization_quotes(quote_text):
@@ -13,21 +17,19 @@ def anonymization_quotes(quote_text):
 
     """
 
-    import re
-    login_pattern = re.compile(r'^(.+?):')
+    login_pattern = re.compile(r"^(.+?):")
 
     # Словарь, в котором ключом является логин, а значением псевдоним
-    all_logins = {}
+    all_logins = dict()
 
     # Счетчик логинов
     count_logins = 0
 
     # Сгенерируем список с псевдонимами. Список будет вида: ['aaa', 'bbb', ..., 'zzz', 'AAA', ... 'ZZZ']
-    import string
-    login_aliases = [c*3 for c in string.ascii_letters]
+    login_aliases = [c * 3 for c in string.ascii_letters]
 
     # Разбиваем цитату по строчно
-    for line in quote_text.split('\n'):
+    for line in quote_text.split("\n"):
         # Ищем логин
         match = login_pattern.search(line)
 
@@ -50,7 +52,7 @@ def anonymization_quotes(quote_text):
     return quote
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     quote = """
 Аня: Не хочу и комп занят
 Кирилл: вредный старший брат окупировал комп?

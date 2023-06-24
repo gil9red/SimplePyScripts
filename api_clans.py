@@ -1,22 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import base64
+import json
 
 import requests
 
 
 class Api:
     # TODO: this
-    API_URL = '<HOST>/api_clans/1/index.php?request='
+    API_URL = "<HOST>/api_clans/1/index.php?request="
 
     def __init__(self, login: str, password: str):
         self.login = login
         self.password = password
 
         self.session = requests.Session()
-        self.session.headers['Authorization'] = self.make_authorization(login, password)
+        self.session.headers["Authorization"] = self.make_authorization(login, password)
         # # Or:
         # self.session = requests.Session()
         # self.auth = (login, password)
@@ -25,33 +28,31 @@ class Api:
         url = self.API_URL + method
 
         # Debug
-        print('POST: url: {}, data: {}'.format(url, data))
+        print("POST: url: {}, data: {}".format(url, data))
 
         rs = self.session.post(url, data)
 
         # Debug
         print(rs)
         print('rs.text: "{}"'.format(rs.text))
-        import json
-        print('pretty rs:', json.dumps(rs.json(), indent=4, ensure_ascii=False))
-        print('\n')
+        print("pretty rs:", json.dumps(rs.json(), indent=4, ensure_ascii=False))
+        print("\n")
 
         return rs
 
     def get_user_data(self, people_id=None) -> requests.Response:
-        return self.method('get_user_data', {'people_id': people_id})
+        return self.method("get_user_data", {"people_id": people_id})
 
     # Append more api methods
 
     @staticmethod
     def make_authorization(login: str, password: str) -> str:
-        credentials = login + ':' + password
+        credentials = login + ":" + password
 
         # As base64
-        import base64
         credentials = base64.b64encode(credentials.encode()).decode()
 
-        return 'Basic ' + credentials
+        return "Basic " + credentials
 
 
 # # NOTE: Requests debug
@@ -75,41 +76,41 @@ class Api:
 # requests_log.propagate = True
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # TODO: this
-    LOGIN = '<LOGIN>'
-    PASSWORD = '<PASSWORD>'
+    LOGIN = "<LOGIN>"
+    PASSWORD = "<PASSWORD>"
 
     api = Api(LOGIN, PASSWORD)
 
     # Получение информации о текущем пользователе
     rs = api.get_user_data()
     # Or:
-    rs = api.method('get_user_data')
+    rs = api.method("get_user_data")
 
     # Получение информации о пользователе с id = 1
     rs = api.get_user_data(people_id=1)
     # Or:
-    rs = api.method('get_user_data', data={'people_id': 1})
+    rs = api.method("get_user_data", data={"people_id": 1})
 
-    print('\n')
+    print("\n")
 
     # Создание пользователя
     data = {
-        'name': 'Вася',
-        'lastname': 'Пупкин',
-        'secondname': 'secondname',
-        'sex': 'man',
-        'phone': '79957777555',
-        'email': 'guvuwer@p33.org',
-        'pass': '123',
-        'is_live': '1',
+        "name": "Вася",
+        "lastname": "Пупкин",
+        "secondname": "secondname",
+        "sex": "man",
+        "phone": "79957777555",
+        "email": "guvuwer@p33.org",
+        "pass": "123",
+        "is_live": "1",
     }
-    rs = api.method('add_user', data)
+    rs = api.method("add_user", data)
     new_user_id = rs.json()
 
     # Регистрация (Проверка кода подтверждения e-mail)
-    rs = api.method('check_email_code', data={'people_id': new_user_id})
+    rs = api.method("check_email_code", data={"people_id": new_user_id})
     email_code = rs.json()
 
     # Получение информации о новом пользователе с id = new_user_id
