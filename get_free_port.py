@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-def get_open_port():
-    import socket
+import socket
+
+
+def get_open_port() -> int:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind(("", 0))
     port = s.getsockname()[1]
@@ -14,6 +16,6 @@ def get_open_port():
     return port
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(get_open_port())
     print(get_open_port())
