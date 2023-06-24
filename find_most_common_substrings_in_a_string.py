@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
-
-
-text = 'ACGTTGCATGTCGCATGATGCATGAGAGCT'
+__author__ = "ipetrash"
 
 
 from collections import defaultdict
+
+
+text = "ACGTTGCATGTCGCATGATGCATGAGAGCT"
+
+
 accumulator = defaultdict(int)
 
 for length in range(1, len(text) + 1):
     for start in range(len(text) - length):
-        sub_text = text[start: start + length]
+        sub_text = text[start : start + length]
         accumulator[sub_text] += 1
 
 print(accumulator)

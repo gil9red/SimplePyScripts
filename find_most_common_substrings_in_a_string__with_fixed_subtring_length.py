@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
-
-
-text = 'ACGTTGCATGTCGCATGATGCATGAGAGCT'
-key_len = 4
+__author__ = "ipetrash"
 
 
 from collections import defaultdict, Counter
-accumulator = Counter(text[i: i + key_len] for i in range(len(text) - key_len + 1))
 
+
+text = "ACGTTGCATGTCGCATGATGCATGAGAGCT"
+key_len = 4
+
+accumulator = Counter(text[i : i + key_len] for i in range(len(text) - key_len + 1))
 print(accumulator)  # {'A': 7, 'C': 6, 'G': 9, 'T': 7,
 
 max_items = defaultdict(list)
