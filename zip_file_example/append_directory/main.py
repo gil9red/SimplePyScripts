@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-import zipfile
 import os
+import zipfile
 
 
 def make_zipfile(source_dir, output_filename):
@@ -21,5 +21,5 @@ def make_zipfile(source_dir, output_filename):
                     zip.write(filename, arcname)
 
 
-DIR_NAME = 'dir_1'
-make_zipfile(DIR_NAME, DIR_NAME + '.zip')
+DIR_NAME = "dir_1"
+make_zipfile(DIR_NAME, DIR_NAME + ".zip")
