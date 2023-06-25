@@ -1,10 +1,12 @@
+__author__ = "ipetrash"
+
+
 import os
 import sys
 import zipfile
 
-__author__ = 'ipetrash'
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("Commands: read, readfile and write")
     command = input("Command: ")
 
@@ -19,7 +21,6 @@ if __name__ == '__main__':
                 print(file_info.filename)
 
             # zf.printdir()
-
 
     elif command == "readfile":
         path = input("Archive: ")

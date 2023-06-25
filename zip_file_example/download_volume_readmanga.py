@@ -1,47 +1,54 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """Скрипт для скачивания главы по указанному url."""
 
 
-def get_url_images(url):
-    print('Start get_url_images with url:', url)
+import re
+import os
+import zipfile
 
-    import requests
+from urllib.request import urlretrieve
+
+import requests
+
+
+def get_url_images(url):
+    print("Start get_url_images with url:", url)
+
     rs = requests.get(url)
 
-    pattern = '\.init\(.*(\[\[.+\]\]).*\)'
-
-    import re
+    pattern = "\.init\(.*(\[\[.+\]\]).*\)"
     match = re.search(pattern, rs.text)
     if match:
         match = match.group(1)
-        print('Match:', match)
+        print("Match:", match)
 
         # NOTE: если погуглить у меня примеры то можно найти более лучшие чем eval: через json или ast
         urls = eval(match)
-        print('After eval:', urls)
+        print("After eval:", urls)
 
         return [i[1] + i[0] + i[2] for i in urls]
 
-    raise Exception('Не получилось из страницы вытащить список картинок главы. '
-                    'Используемое регулярное выражение: ', pattern)
+    raise Exception(
+        "Не получилось из страницы вытащить список картинок главы. "
+        "Используемое регулярное выражение: ",
+        pattern,
+    )
 
 
 def save_urls_to_zip(zip_file_name, urls):
     if not urls:
-        print('Cписок изображений пустой.')
+        print("Cписок изображений пустой.")
         return
 
     # Создаем архив, у которого именем будет номер главы
-    import zipfile
-    with zipfile.ZipFile(zip_file_name, mode='w', compression=zipfile.ZIP_DEFLATED) as f:
-        import os
-        from urllib.request import urlretrieve
-
+    with zipfile.ZipFile(
+        zip_file_name, mode="w", compression=zipfile.ZIP_DEFLATED
+    ) as f:
         for img_url in urls:
             # Вытаскиваем имя файла
             file_name = os.path.basename(img_url)
@@ -59,19 +66,19 @@ def save_urls_to_zip(zip_file_name, urls):
             os.remove(file_name)
 
 
-if __name__ == '__main__':
-    url = 'http://readmanga.me/one__piece/vol60/591'
+if __name__ == "__main__":
+    import traceback
+
+    url = "http://readmanga.me/one__piece/vol60/591"
 
     try:
         urls = get_url_images(url)
-        print('Urls:', urls)
-        print('Images:', len(urls))
+        print("Urls:", urls)
+        print("Images:", len(urls))
 
-        import os
-        file_name = os.path.basename(url) + '.zip'
+        file_name = os.path.basename(url) + ".zip"
         save_urls_to_zip(file_name, urls)
-        print('Save to filename:', file_name)
+        print("Save to filename:", file_name)
 
     except Exception as e:
-        import traceback
-        print('Error: {}\n\n{}'.format(e, traceback.format_exc()))
+        print("Error: {}\n\n{}".format(e, traceback.format_exc()))
