@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -14,12 +14,13 @@ def download_youtube(url):
         try:
             retcode = ydl.download([url])
         except youtube_dl.MaxDownloadsReached:
-            ydl.to_screen('--max-download limit reached, aborting.')
+            ydl.to_screen("--max-download limit reached, aborting.")
             retcode = 101
 
     return retcode
 
-url = 'bupTAbtQYic'
+
+url = "bupTAbtQYic"
 code = download_youtube(url)
 sys.exit(code)
 
