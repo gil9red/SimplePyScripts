@@ -29,7 +29,7 @@ for hash_hex, files in hash_by_files.items():
     if len(files) == 1:
         continue
 
-    print("    {} ({}):".format(hash_hex, len(files)))
+    print(f"    {hash_hex} ({len(files)}):")
     for file_name in files:
         print("        " + file_name)
 

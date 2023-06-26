@@ -53,7 +53,7 @@ if __name__ == "__main__":
     for url in urls:
         try:
             url_image = upload_image_to_telegraph(url)
-            print("{} -> {}".format(url, url_image))
+            print(f"{url} -> {url_image}")
 
         except Exception as e:
-            print("{} -> {}\n\n{}".format(url, e, traceback.format_exc()))
+            print(f"{url} -> {e}\n\n{traceback.format_exc()}")

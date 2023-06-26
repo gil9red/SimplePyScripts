@@ -17,5 +17,5 @@ w = observation.get_weather()
 temperature = w.get_temperature("celsius")["temp"]
 status = w.get_status()
 
-print("Температура: {} °C".format(temperature))
-print("Небо: {}".format(status))
+print(f"Температура: {temperature} °C")
+print(f"Небо: {status}")

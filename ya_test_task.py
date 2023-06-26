@@ -91,7 +91,7 @@ class MainWindow(QWidget):
         for data in get_stop_route(stop_id):
             short_name, name = data
 
-            item = QListWidgetItem("{}: {}".format(short_name, name))
+            item = QListWidgetItem(f"{short_name}: {name}")
             self.route_list_widget.addItem(item)
 
 

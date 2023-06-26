@@ -18,9 +18,7 @@ class TimeThis:
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         print(
-            "[{}] total time: {} sec".format(
-                self.title, default_timer() - self.start_time
-            )
+            f"[{self.title}] total time: {default_timer() - self.start_time} sec"
         )
 
 

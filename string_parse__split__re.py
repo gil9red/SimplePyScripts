@@ -14,7 +14,7 @@ text = """\
 
 
 for name, start, end in re.findall(r"(\w+) (\d+)-(\d+)", text):
-    print("{}, {} лет".format(name, int(end) - int(start)))
+    print(f"{name}, {int(end) - int(start)} лет")
 
 print()
 
@@ -22,4 +22,4 @@ for line in text.splitlines():
     name, age = line.split()
     start, end = map(int, age.split("-"))
 
-    print("{}, {} лет".format(name, end - start))
+    print(f"{name}, {end - start} лет")

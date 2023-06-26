@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 def rgb2hex(r: int, g: int, b: int) -> str:
-    return "#{:02X}{:02X}{:02X}".format(r, g, b)
+    return f"#{r:02X}{g:02X}{b:02X}"
 
 
 if __name__ == "__main__":
