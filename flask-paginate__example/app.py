@@ -34,7 +34,7 @@ def index():
     g.cur.execute("select count(*) from users")
     total = g.cur.fetchone()[0]
     page, per_page, offset = get_page_args()
-    sql = "select name from users order by name limit {}, {}".format(offset, per_page)
+    sql = f"select name from users order by name limit {offset}, {per_page}"
     g.cur.execute(sql)
     users = g.cur.fetchall()
     pagination = get_pagination(
@@ -62,7 +62,7 @@ def users(page):
     g.cur.execute("select count(*) from users")
     total = g.cur.fetchone()[0]
     page, per_page, offset = get_page_args()
-    sql = "select name from users order by name limit {}, {}".format(offset, per_page)
+    sql = f"select name from users order by name limit {offset}, {per_page}"
     g.cur.execute(sql)
     users = g.cur.fetchall()
     pagination = get_pagination(
@@ -88,7 +88,7 @@ def users(page):
 def search(name):
     """The function is used to test multi values url."""
     sql = "select count(*) from users where name like ?"
-    args = ("%{}%".format(name),)
+    args = (f"%{name}%",)
     g.cur.execute(sql, args)
     total = g.cur.fetchone()[0]
 

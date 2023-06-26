@@ -34,7 +34,7 @@ if __name__ == "__main__":
         try:
             print(gm, game_mods[gm]["en"])
         except KeyError:
-            print('Could not find the game mode: "{}".'.format(gm))
+            print(f'Could not find the game mode: "{gm}".')
 
 
 # Game Commands

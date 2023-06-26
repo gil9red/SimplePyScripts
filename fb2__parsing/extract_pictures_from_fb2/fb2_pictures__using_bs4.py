@@ -53,9 +53,7 @@ def do(file_name, output_dir="output", debug=True):
 
                 im = Image.open(io.BytesIO(im_data))
                 debug and print(
-                    "    {}. {} {} format={} size={}".format(
-                        i, im_id, sizeof_fmt(count_bytes), im.format, im.size
-                    )
+                    f"    {i}. {im_id} {sizeof_fmt(count_bytes)} format={im.format} size={im.size}"
                 )
 
             except:
@@ -65,9 +63,7 @@ def do(file_name, output_dir="output", debug=True):
     debug and print()
     debug and print("fb2 file size =", sizeof_fmt(file_size))
     debug and print(
-        "total image size = {} ({:.2f}%)".format(
-            sizeof_fmt(total_image_size), total_image_size / file_size * 100
-        )
+        f"total image size = {sizeof_fmt(total_image_size)} ({total_image_size / file_size * 100:.2f}%)"
     )
 
 

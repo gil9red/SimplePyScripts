@@ -19,7 +19,7 @@ def get_cover_page_image(root) -> (bytes, str):
     id_image = id_image[1:]
 
     # Получится, например, такой css-селектор: "[id='cover.jpg']"
-    binary = root.select_one("[id='{}']".format(id_image))
+    binary = root.select_one(f"[id='{id_image}']")
 
     # image/jpeg -> jpeg
     content_type = binary.attrs["content-type"].split("/")[-1]

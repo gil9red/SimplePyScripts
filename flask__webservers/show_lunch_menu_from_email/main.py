@@ -119,7 +119,7 @@ def get_last_lunch_menu():
 
     logging.debug("Search emails from %s.", config.lunch_email)
 
-    typ, msgnums = connect.search(None, "(HEADER From {})".format(config.lunch_email))
+    typ, msgnums = connect.search(None, f"(HEADER From {config.lunch_email})")
     last_id = msgnums[0].split()[-1]
     typ, data = connect.fetch(last_id, "(RFC822)")
 
@@ -176,7 +176,7 @@ def get_info_lunch_menu():
                 continue
 
             rows.append((name, weight, price))
-            logging.debug("{} {} {}".format(name, weight, price))
+            logging.debug(f"{name} {weight} {price}")
 
         # Таблицы в меню дублируются
         break
@@ -193,7 +193,7 @@ def index():
     except BaseException as e:
         logging.error(e)
         logging.error(traceback.format_exc())
-        return 'Error: "{}".'.format(e), 500
+        return f'Error: "{e}".', 500
 
     return render_template_string(
         """\

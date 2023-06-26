@@ -86,7 +86,8 @@ def get_bosses(url: str) -> Dict[str, List[Boss]]:
 
 
 def print_bosses(url: str, bosses: Dict[str, List[Boss]]):
-    print("{} ({}):".format(url, sum(len(i) for i in bosses.values())))
+    total = sum(len(i) for i in bosses.values())
+    print(f"{url} ({total}):")
 
     for category, bosses in bosses.items():
         print(f"{category} ({len(bosses)}):")

@@ -81,7 +81,7 @@ def export():
 
     # Если архива с главой нет, качаем ее
     if not os.path.exists(static_file_name):
-        print('Архива "{}" нет, качаем и создаем.'.format(static_file_name))
+        print(f'Архива "{static_file_name}" нет, качаем и создаем.')
 
         images_urls = get_url_images(url)
         print("Urls images:", images_urls)

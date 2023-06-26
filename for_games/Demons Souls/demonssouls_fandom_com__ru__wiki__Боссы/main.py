@@ -56,13 +56,14 @@ def get_bosses(url: str) -> dict[str, list[Boss]]:
 
 
 def print_bosses(url: str, bosses: dict[str, list[Boss]]):
-    print("{} ({}):".format(url, sum(len(i) for i in bosses.values())))
+    total = sum(len(i) for i in bosses.values())
+    print(f"{url} ({total}):")
 
     for category, bosses in bosses.items():
-        print("{} ({}):".format(category, len(bosses)))
+        print(f"{category} ({len(bosses)}):")
 
         for i, boss in enumerate(bosses, 1):
-            print('    {}. "{}": {}'.format(i, boss.name, boss.url))
+            print(f'    {i}. "{boss.name}": {boss.url}')
 
         print()
 

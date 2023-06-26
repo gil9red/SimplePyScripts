@@ -8,7 +8,8 @@ from utils import get_bosses, Boss
 
 
 def print_bosses(bosses: dict[str, list[Boss]], only_names=False):
-    print("Salt and Sanctuary ({}):".format(sum(len(i) for i in bosses.values())))
+    total = sum(len(i) for i in bosses.values())
+    print(f"Salt and Sanctuary ({total}):")
 
     for category, bosses in bosses.items():
         print(f"    {category} ({len(bosses)}):")

@@ -24,4 +24,4 @@ if __name__ == "__main__":
     print()
 
     for title, description in items:
-        print("{:20}: {}".format(title, repr(description)))
+        print(f"{title:20}: {repr(description)}")

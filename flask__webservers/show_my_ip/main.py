@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/")
 def index():
-    return """Your IPv4 Address Is: {}""".format(request.remote_addr)
+    return f"""Your IPv4 Address Is: {request.remote_addr}"""
 
 
 if __name__ == "__main__":

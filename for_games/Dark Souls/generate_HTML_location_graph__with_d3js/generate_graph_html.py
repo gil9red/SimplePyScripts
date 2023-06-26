@@ -43,14 +43,12 @@ def get_dataset_text(links: list[tuple[str, str]]) -> str:
     #         {source: 8, target: 9}
     #     ]
     # };
-    text = """\
+    text = f"""\
     var dataset = {{
-        nodes: {},
-        edges: {}
+        nodes: {nodes_dict},
+        edges: {edges}
     }};
-    """.format(
-        nodes_dict, edges
-    )
+    """
 
     return text
 

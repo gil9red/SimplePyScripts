@@ -6,7 +6,7 @@ __author__ = "ipetrash"
 
 with open("input__seek.txt") as f:
     for i in range(3):
-        print("{}.".format(i))
+        print(f"{i}.")
 
         for line in f:
             print(line.strip(), end=" ")

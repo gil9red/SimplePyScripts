@@ -73,7 +73,7 @@ def index():
         )
 
     except BaseException as e:
-        print("Error: {}\n\n{}".format(e, traceback.format_exc()))
+        print(f"Error: {e}\n\n{traceback.format_exc()}")
         return "Error: " + str(e)
 
 

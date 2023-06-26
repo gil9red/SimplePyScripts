@@ -77,8 +77,8 @@ if __name__ == "__main__":
 
                     lines.append((
                         text,
-                        "{} символов".format(len_num),
-                        "{:.2%}".format(len_num / number_length_book_text),
+                        f"{len_num} символов",
+                        f"{len_num / number_length_book_text:.2%}",
                     ))
                 else:
                     lines.append((text, "", ""))
