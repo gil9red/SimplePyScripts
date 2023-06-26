@@ -13,15 +13,15 @@ from simplecrypt import encrypt
 message = "Hello World!"
 password = "secret"
 
-print('message: "{}"'.format(message))
-print('password: "{}"'.format(password))
+print(f'message: "{message}"')
+print(f'password: "{password}"')
 print()
 
 encrypt_text = encrypt(password, message)
-print('encrypt_text[{}]: "{}"'.format(len(encrypt_text), encrypt_text))
+print(f'encrypt_text[{len(encrypt_text)}]: "{encrypt_text}"')
 
 encrypt_text_hex = binascii.hexlify(encrypt_text)
-print('encrypt_text_hex[{}]: "{}"'.format(len(encrypt_text_hex), encrypt_text_hex))
+print(f'encrypt_text_hex[{len(encrypt_text_hex)}]: "{encrypt_text_hex}"')
 print()
 
 # Random uuid

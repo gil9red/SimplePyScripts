@@ -24,7 +24,7 @@ from selenium.webdriver.common.keys import Keys
 driver = webdriver.Firefox()
 driver.implicitly_wait(10)  # seconds
 driver.get("https://www.youtube.com/")
-print('Title: "{}"'.format(driver.title))
+print(f'Title: "{driver.title}"')
 
 driver.find_element_by_css_selector("input#search").send_keys(
     "Funny cats" + Keys.RETURN
@@ -33,7 +33,7 @@ driver.find_element_by_css_selector("input#search").send_keys(
 result_count = driver.find_element_by_id("result-count")
 print(result_count.text)
 
-print('Title: "{}"'.format(driver.title))
+print(f'Title: "{driver.title}"')
 
 video_list = driver.find_elements_by_id("dismissable")
 
@@ -45,8 +45,8 @@ video_title = driver.find_element_by_class_name("title")
 # Bad algo, see explicit_waits.py
 while True:
     if video_title.text:
-        print('Title: "{}"'.format(driver.title))
-        print('Video Title: "{}"'.format(video_title.text))
+        print(f'Title: "{driver.title}"')
+        print(f'Video Title: "{video_title.text}"')
         break
 
     time.sleep(1)

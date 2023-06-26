@@ -49,14 +49,14 @@ try:
         ("Hello World", 3, 1, 2),
         ("Not found: 777.png", 1, 777, 3),
     ]:
-        file_name = "index_{}_{}_{}.html".format(img1, img2, img3)
+        file_name = f"index_{img1}_{img2}_{img3}.html"
         file_name = abspath(join(DIR_NAME, file_name))
 
         # Render HTML and save in file
         with open(file_name, "w", encoding="utf-8") as f:
-            img1 = img_to_src_base64("input/{}.png".format(img1))
-            img2 = img_to_src_base64("input/{}.png".format(img2))
-            img3 = img_to_src_base64("input/{}.png".format(img3))
+            img1 = img_to_src_base64(f"input/{img1}.png")
+            img2 = img_to_src_base64(f"input/{img2}.png")
+            img3 = img_to_src_base64(f"input/{img3}.png")
 
             html = TEMPLATE__INDEX.render(
                 title=title, img_1=img1, img_2=img2, img_3=img3
@@ -64,7 +64,7 @@ try:
             f.write(html)
 
         driver.get("file:///" + file_name)
-        print('Title: "{}"'.format(driver.title))
+        print(f'Title: "{driver.title}"')
 
         with open(file_name + ".png", "wb") as f:
             image_data = driver.find_element_by_id("screenshot_this").screenshot_as_png

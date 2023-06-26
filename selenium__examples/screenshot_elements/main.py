@@ -17,7 +17,7 @@ driver.implicitly_wait(10)  # seconds
 
 try:
     driver.get("https://www.google.ru/")
-    print('Title: "{}"'.format(driver.title))
+    print(f'Title: "{driver.title}"')
 
     with open("hplogo.png", "wb") as f:
         image_data = driver.find_element_by_id("hplogo").screenshot_as_png

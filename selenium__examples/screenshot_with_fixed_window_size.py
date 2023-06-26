@@ -13,7 +13,7 @@ from selenium import webdriver
 driver = webdriver.Firefox()
 driver.set_window_size(500, 500)
 driver.get("https://www.youtube.com/")
-print('Title: "{}"'.format(driver.title))
+print(f'Title: "{driver.title}"')
 
 time.sleep(5)
 

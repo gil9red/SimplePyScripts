@@ -24,12 +24,12 @@ if __name__ == "__main__":
         message = f.read()
 
     message_digest = get_digest(message)
-    print("Message len: {}, digest: {}".format(len(message), message_digest))
+    print(f"Message len: {len(message)}, digest: {message_digest}")
 
     print()
     print("Encrypt message...")
     cipher_text = encrypt(PASSWORD, message)
-    print("Encrypt message len: {}".format(len(cipher_text)))
+    print(f"Encrypt message len: {len(cipher_text)}")
 
     with open(FILENAME + ".crypto", mode="wb") as f:
         f.write(cipher_text)
@@ -47,10 +47,8 @@ if __name__ == "__main__":
     decrypt_message = decrypt(PASSWORD, cipher_text)
     decrypt_message_digest = get_digest(decrypt_message)
     print(
-        "Decrypt message len: {}, digest: {}".format(
-            len(decrypt_message), decrypt_message_digest
-        )
+        f"Decrypt message len: {len(decrypt_message)}, digest: {decrypt_message_digest}"
     )
 
     print()
-    print("Digest is equal: {}".format(message_digest == decrypt_message_digest))
+    print(f"Digest is equal: {message_digest == decrypt_message_digest}")

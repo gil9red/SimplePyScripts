@@ -23,4 +23,4 @@ firefox_profile.set_preference("dom.ipc.plugins.enabled.libflashplayer.so", "fal
 driver = webdriver.Firefox(firefox_profile=firefox_profile)
 driver.implicitly_wait(10)  # seconds
 driver.get("https://pikabu.ru/story/ii_pobedil_5467581")
-print('Title: "{}"'.format(driver.title))
+print(f'Title: "{driver.title}"')

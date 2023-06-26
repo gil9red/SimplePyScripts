@@ -31,7 +31,7 @@ from main import sizeof_fmt
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
     print(text)
@@ -51,7 +51,7 @@ class SearchThread(QThread):
         # данные с stdout и stderr не будут получены
         command = [sys.executable, "-u", "main.py"]
 
-        self.about_new_text.emit('Execute: "{}"'.format(" ".join(command)))
+        self.about_new_text.emit(f'Execute: "{" ".join(command)}"')
 
         rs = Popen(command, universal_newlines=True, stdout=PIPE, stderr=STDOUT)
         for line in rs.stdout:
@@ -107,8 +107,8 @@ class EmptyFoldersTab(QWidget):
 
         file_name = self.model.data(index, Qt.DisplayRole)
 
-        cmd = 'Explorer /n,"{}"'.format(file_name)
-        self.about_new_text.emit("Run command: {}".format(cmd))
+        cmd = f'Explorer /n,"{file_name}"'
+        self.about_new_text.emit(f"Run command: {cmd}")
 
         os.system(cmd)
 
@@ -121,11 +121,11 @@ class EmptyFoldersTab(QWidget):
 
         if not os.path.exists(file_name):
             QMessageBox.information(
-                self, "Info", 'File "{}" not exists!'.format(file_name)
+                self, "Info", f'File "{file_name}" not exists!'
             )
 
         msg_box = QMessageBox(
-            QMessageBox.Question, "Question", 'Remove file: "{}"?'.format(file_name)
+            QMessageBox.Question, "Question", f'Remove file: "{file_name}"?'
         )
         msg_box.setStandardButtons(QMessageBox.Ok | QMessageBox.No)
         msg_box.setDefaultButton(QMessageBox.No)
@@ -134,7 +134,7 @@ class EmptyFoldersTab(QWidget):
         if result != QMessageBox.Ok:
             return
 
-        self.about_new_text.emit('Remove file: "{}"'.format(file_name))
+        self.about_new_text.emit(f'Remove file: "{file_name}"')
 
         try:
             os.rmdir(file_name)
@@ -171,16 +171,16 @@ class EmptyFoldersTab(QWidget):
             data = byte_data.decode("utf-8")
 
         self.about_new_text.emit(
-            '  Size of "{}": {}'.format(file_name, sizeof_fmt(len(byte_data)))
+            f'  Size of "{file_name}": {sizeof_fmt(len(byte_data))}'
         )
 
         self.line_list = data.splitlines()
-        self.about_new_text.emit("  Lines: {}".format(len(self.line_list)))
+        self.about_new_text.emit(f"  Lines: {len(self.line_list)}")
 
         self._reread_list()
 
         self.about_new_text.emit(
-            "Finish fill, elapsed time: {:.3f} secs".format(time.clock() - t)
+            f"Finish fill, elapsed time: {time.clock() - t:.3f} secs"
         )
 
 
@@ -188,7 +188,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("search_of_empty_folders [{}]".format(sys.executable))
+        self.setWindowTitle(f"search_of_empty_folders [{sys.executable}]")
 
         self.text_edit_log = QTextEdit()
 
@@ -248,7 +248,7 @@ class MainWindow(QMainWindow):
         self.append_log("")
 
         file_name_list = glob.glob("log of*.txt")
-        self.append_log("  Found logs: {}".format(", ".join(file_name_list)))
+        self.append_log(f"  Found logs: {', '.join(file_name_list)}")
 
         self.append_log("")
         self.append_log("  Create tabs")
@@ -263,7 +263,7 @@ class MainWindow(QMainWindow):
             empty_folders_tab_list.append((tab, file_name))
             self.tab_widget.addTab(tab, file_name)
 
-            self.append_log('    Create tab "{}"'.format(file_name))
+            self.append_log(f'    Create tab "{file_name}"')
 
         self.append_log("  Finish create tabs")
 
@@ -283,7 +283,7 @@ class MainWindow(QMainWindow):
         self.push_button_start.setEnabled(True)
 
         self.append_log(
-            "Finish search, elapsed time: {:.3f} secs".format(time.clock() - t)
+            f"Finish search, elapsed time: {time.clock() - t:.3f} secs"
         )
 
 

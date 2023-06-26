@@ -22,4 +22,4 @@ if __name__ == "__main__":
 
     search_result = g.doc.select('//li[@class="g"]/*/h3/a')
     for i, c in enumerate(search_result, 1):
-        print('{}. "{}": {}'.format(i, c.text(), c.attr("href")))
+        print(f'{i}. "{c.text()}": {c.attr("href")}')

@@ -72,8 +72,8 @@ def run_crypt_decrypt(message, password, use_zip=False, show_hex=False):
 
     text_hex = binascii.hexlify(message)
     message_digest = get_digest(message)
-    log.debug("Message len: {}, digest: {}".format(len(message), message_digest))
-    show_hex and log.debug('text_hex: "{}"'.format(text_hex))
+    log.debug(f"Message len: {len(message)}, digest: {message_digest}")
+    show_hex and log.debug(f'text_hex: "{text_hex}"')
     log.debug("")
 
     log.debug("Encrypt...")
@@ -81,11 +81,9 @@ def run_crypt_decrypt(message, password, use_zip=False, show_hex=False):
     encrypt_text_hex = binascii.hexlify(encrypt_text)
     encrypt_message_digest = get_digest(encrypt_text)
     log.debug(
-        "Encrypt message len: {}, digest: {}".format(
-            len(encrypt_text), encrypt_message_digest
-        )
+        f"Encrypt message len: {len(encrypt_text)}, digest: {encrypt_message_digest}"
     )
-    show_hex and log.debug('encrypt_text_hex: "{}"'.format(encrypt_text_hex))
+    show_hex and log.debug(f'encrypt_text_hex: "{encrypt_text_hex}"')
 
     log.debug("")
     log.debug("Decrypt...")
@@ -93,15 +91,13 @@ def run_crypt_decrypt(message, password, use_zip=False, show_hex=False):
     decrypt_text_hex = binascii.hexlify(decrypt_text)
     decrypt_message_digest = get_digest(decrypt_text)
     log.debug(
-        "Decrypt message len: {}, digest: {}".format(
-            len(decrypt_text), decrypt_message_digest
-        )
+        f"Decrypt message len: {len(decrypt_text)}, digest: {decrypt_message_digest}"
     )
-    show_hex and log.debug('decrypt_text_hex: "{}"'.format(decrypt_text_hex))
+    show_hex and log.debug(f'decrypt_text_hex: "{decrypt_text_hex}"')
 
     log.debug("")
-    log.debug("Digest is equal: {}".format(message_digest == decrypt_message_digest))
-    log.debug("Total time: {:.3f} seconds".format(time.time() - start_time))
+    log.debug(f"Digest is equal: {message_digest == decrypt_message_digest}")
+    log.debug(f"Total time: {time.time() - start_time:.3f} seconds")
 
 
 # Random message

@@ -17,7 +17,7 @@ from selenium.webdriver.common.by import By
 driver = webdriver.Firefox()
 driver.implicitly_wait(10)  # seconds
 driver.get("https://www.youtube.com/")
-print('Title: "{}"'.format(driver.title))
+print(f'Title: "{driver.title}"')
 
 # Делаем скриншот результата
 driver.save_screenshot("before_search.png")
@@ -29,7 +29,7 @@ driver.find_element_by_css_selector("input#search").send_keys(
 result_count = driver.find_element_by_id("result-count")
 print(result_count.text)
 
-print('Title: "{}"'.format(driver.title))
+print(f'Title: "{driver.title}"')
 
 # Делаем скриншот результата
 driver.save_screenshot("after_search.png")
@@ -44,8 +44,8 @@ video = WebDriverWait(driver, timeout=10).until(
 )
 
 video_title = driver.find_element_by_class_name("title")
-print('Title: "{}"'.format(driver.title))
-print('Video Title: "{}"'.format(video_title.text))
+print(f'Title: "{driver.title}"')
+print(f'Video Title: "{video_title.text}"')
 
 driver.save_screenshot("final.png")
 

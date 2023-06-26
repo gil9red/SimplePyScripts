@@ -17,7 +17,7 @@ PASSWORD = "<PASSWORD>"
 
 driver = webdriver.Firefox()
 driver.get("https://vk.com/")
-print('Title: "{}"'.format(driver.title))
+print(f'Title: "{driver.title}"')
 
 driver.find_element_by_id("index_email").send_keys(LOGIN)
 driver.find_element_by_id("index_pass").send_keys(PASSWORD)
@@ -31,7 +31,7 @@ wait = WebDriverWait(driver, timeout=10)
 
 l_msg = wait.until(EC.presence_of_element_located((By.ID, "l_msg")))
 
-print('Title: "{}"'.format(driver.title))
+print(f'Title: "{driver.title}"')
 
 # Делаем скриншот результата
 driver.save_screenshot("after_auth.png")
@@ -41,7 +41,7 @@ l_msg.click()
 im_dialogs = wait.until(EC.presence_of_element_located((By.ID, "im_dialogs")))
 im_dialogs.screenshot("dialogs_page.png")
 
-print('Title: "{}"'.format(driver.title))
+print(f'Title: "{driver.title}"')
 
 dialog_items = driver.find_elements_by_class_name("_im_dialog_link")
 

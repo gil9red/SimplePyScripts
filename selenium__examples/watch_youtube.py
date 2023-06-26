@@ -10,4 +10,4 @@ from selenium import webdriver
 
 driver = webdriver.Firefox()
 driver.get("https://www.youtube.com/watch?v=i-AXImNxCAE")
-print('Title: "{}"'.format(driver.title))
+print(f'Title: "{driver.title}"')

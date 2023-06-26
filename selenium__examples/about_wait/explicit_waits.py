@@ -32,7 +32,7 @@ from selenium.webdriver.common.by import By
 
 driver = webdriver.Firefox()
 driver.get("https://www.youtube.com/")
-print('Title: "{}"'.format(driver.title))
+print(f'Title: "{driver.title}"')
 
 driver.find_element_by_css_selector("input#search").send_keys(
     "Funny cats" + Keys.RETURN
@@ -43,7 +43,7 @@ wait = WebDriverWait(driver, timeout=10)
 result_count = wait.until(EC.presence_of_element_located((By.ID, "result-count")))
 print(result_count.text)
 
-print('Title: "{}"'.format(driver.title))
+print(f'Title: "{driver.title}"')
 
 video_list = driver.find_elements_by_id("dismissable")
 
@@ -53,7 +53,7 @@ random.choice(video_list).click()
 video = wait.until(EC.visibility_of_element_located((By.TAG_NAME, "video")))
 
 video_title = driver.find_element_by_class_name("title")
-print('Title: "{}"'.format(driver.title))
-print('Video Title: "{}"'.format(video_title.text))
+print(f'Title: "{driver.title}"')
+print(f'Video Title: "{video_title.text}"')
 
 driver.quit()

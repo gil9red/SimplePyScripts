@@ -56,13 +56,9 @@ class Monster:
         self.abilities = ["Eater"]
 
     def __str__(self):
-        return "Name: '{}' lv {}, health: {}, power: {}, abilities: {}: {}".format(
-            self.name,
-            self.level,
-            self.health,
-            self.power,
-            self.abilities,
-            hex(id(self)),
+        return (
+            f"Name: '{self.name}' lv {self.level}, health: {self.health}, "
+            f"power: {self.power}, abilities: {self.abilities}: {hex(id(self))}"
         )
 
     def say(self):

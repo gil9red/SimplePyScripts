@@ -14,6 +14,6 @@ options.add_argument("--headless")
 
 driver = webdriver.Firefox(options=options)
 driver.get("https://www.google.com/doodles")
+print(f'Title: "{driver.title}"')
 
-print('Title: "{}"'.format(driver.title))
 driver.quit()

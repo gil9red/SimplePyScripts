@@ -10,7 +10,7 @@ from selenium import webdriver
 
 driver = webdriver.Firefox()
 driver.get("https://www.youtube.com/")
-print('Title: "{}"'.format(driver.title))
+print(f'Title: "{driver.title}"')
 
 html = driver.page_source
 print("Length:", len(html))

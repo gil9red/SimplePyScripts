@@ -14,15 +14,15 @@ from simplecrypt import encrypt, decrypt
 message = "Hello World!"
 password = "secret"
 
-print('message: "{}"'.format(message))
-print('password: "{}"'.format(password))
+print(f'message: "{message}"')
+print(f'password: "{password}"')
 print()
 
 ciphertext = encrypt(password, message)
-print('ciphertext[{}]: "{}"'.format(len(ciphertext), ciphertext))
+print(f'ciphertext[{len(ciphertext)}]: "{ciphertext}"')
 
 ciphertext_hex = binascii.hexlify(ciphertext)
-print('ciphertext_hex[{}]: "{}"'.format(len(ciphertext_hex), ciphertext_hex))
+print(f'ciphertext_hex[{len(ciphertext_hex)}]: "{ciphertext_hex}"')
 print()
 
 print("After decrypt:")
