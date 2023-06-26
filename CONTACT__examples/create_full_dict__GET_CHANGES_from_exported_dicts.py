@@ -46,10 +46,10 @@ GLOBAL_VERSION="15.11.2013 12:37:40" GLOBAL_VERSION_SERVER="23.01.2014 16:33:23"
         bytes_xml = open(file_name, "rb").read()
         base64_str = bytes_to_compress_to_base64(bytes_xml)
 
-        child_list.append("<{0}>{1}</{0}>".format(dict_name, base64_str))
+        child_list.append(f"<{dict_name}>{base64_str}</{dict_name}>")
 
     with open(FILE_NAME_FULL_DICT, "w", encoding="utf-8") as f:
         f.write(HTML_PATTERN_RESPONSE__GET_CHANGES.format("".join(child_list)))
 
     print()
-    print("Write to {}".format(FILE_NAME_FULL_DICT))
+    print(f"Write to {FILE_NAME_FULL_DICT}")

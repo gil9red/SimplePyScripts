@@ -18,5 +18,5 @@ def mm2mils(mm: float) -> float:
 if __name__ == "__main__":
     mm = 50.0
     mils = 1968.0
-    print("{} mm -> {} mils".format(mm, mm2mils(mm)))
-    print("{} mils -> {} mm".format(mils, mils2mm(mils)))
+    print(f"{mm} mm -> {mm2mils(mm)} mils")
+    print(f"{mils} mils -> {mils2mm(mils)} mm")

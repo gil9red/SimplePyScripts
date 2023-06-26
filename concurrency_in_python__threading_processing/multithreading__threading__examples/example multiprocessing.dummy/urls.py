@@ -32,7 +32,7 @@ results = []
 for url in urls:
     result = urlopen(url)
     results.append(result)
-print("Single thread: {:.3f} seconds".format(time.clock() - t))
+print(f"Single thread: {time.clock() - t:.3f} seconds")
 
 # ------- VERSUS ------- #
 
@@ -43,7 +43,7 @@ def go(count=1):
     results = pool.map(urlopen, urls)
     # pool.close()
     # pool.join()
-    print("{} Pool: {:.3f} seconds".format(count, time.clock() - t))
+    print(f"{count} Pool: {time.clock() - t:.3f} seconds")
 
 
 # ------- 1 Pool ------- #

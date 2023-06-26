@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return "Current thread: {}".format(threading.current_thread())
+    return f"Current thread: {threading.current_thread()}"
 
 
 if __name__ == "__main__":

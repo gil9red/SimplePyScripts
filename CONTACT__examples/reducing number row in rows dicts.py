@@ -32,11 +32,11 @@ for file_name in glob.glob("mini_contact_dicts/*.xml"):
         row.decompose()
 
     rows = root.select("row")
-    print("  len {} -> {}".format(old_len, len(rows)))
+    print(f"  len {old_len} -> {len(rows)}")
 
     file_name = "mini_contact_dicts/" + os.path.basename(file_name)
     with open(file_name, "w", encoding="cp1251") as f:
         f.write(str(root))
 
-    print("  Write to {}".format(file_name))
+    print(f"  Write to {file_name}")
     print()

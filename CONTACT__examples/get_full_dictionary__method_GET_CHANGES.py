@@ -19,7 +19,7 @@ FILE_NAME_FULL_DICT = "full_dict__CONTACT.xml"
 
 
 if __name__ == "__main__":
-    post_data = """
+    post_data = f"""
     <?xml version="1.0"?>
     <REQUEST OBJECT_CLASS="TAbonentObject" ACTION="GET_CHANGES" VERSION="0" TYPE_VERSION="I" PACK="ZLIB"
     INT_SOFT_ID="{INT_SOFT_ID}"
@@ -27,9 +27,7 @@ if __name__ == "__main__":
     SignOut="No"
     ExpectSigned="No"
     />
-    """.format(
-        INT_SOFT_ID=INT_SOFT_ID, POINT_CODE=POINT_CODE
-    )
+    """
 
     rs = requests.post(URL_NG_SERVER, data=post_data)
     print(rs)
@@ -38,4 +36,4 @@ if __name__ == "__main__":
     with open(FILE_NAME_FULL_DICT, "wb") as f:
         f.write(rs.content)
 
-    print("Write to: {}".format(FILE_NAME_FULL_DICT))
+    print(f"Write to: {FILE_NAME_FULL_DICT}")

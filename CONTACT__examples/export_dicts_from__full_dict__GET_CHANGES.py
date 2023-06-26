@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     # Если ошибка
     if response["re"] != "0":
-        print('Error text: "{}"'.format(response["err_text"]))
+        print(f'Error text: "{response["err_text"]}"')
         sys.exit()
 
     print("Справочник полный?:", response["full"] == "1")

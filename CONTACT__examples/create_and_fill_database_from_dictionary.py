@@ -68,7 +68,7 @@ def build_sql_table(table_name: str, format_fields_of_table: [dict]) -> str:
             if field_name.upper() == "ID":
                 field_type += " PRIMARY KEY"
 
-        return indent + "{} {}".format(field_name, field_type)
+        return f"{indent}{field_name} {field_type}"
 
     fields_list = [
         build_field_table(format_field) for format_field in format_fields_of_table
@@ -140,7 +140,7 @@ if __name__ == "__main__":
     for file_name in glob.glob("contact_dicts/*.xml"):
         table_name = os.path.splitext(os.path.basename(file_name))[0]
 
-        print("Append {} from {}".format(table_name, file_name))
+        print(f"Append {table_name} from {file_name}")
 
         root = BeautifulSoup(open(file_name, "rb"), "lxml")
 
@@ -153,7 +153,7 @@ if __name__ == "__main__":
         sql_table_data_rows = build_sql_rows_data_table(table_name, rows_of_dict)
         # print(sql_table + "\n\n" + sql_table_data_rows)
 
-        print("  Append {} rows\n".format(len(rows_of_dict)))
+        print(f"  Append {len(rows_of_dict)} rows\n")
         create_table(table_name, sql_table, sql_table_data_rows)
 
         # print()

@@ -28,7 +28,7 @@ urls = [
 t = time.time()
 result = [go(url) for url in urls]
 print(result)
-print("Elapsed {:.3f} secs".format(time.time() - t))
+print(f"Elapsed {time.time() - t:.3f} secs")
 # ['Streletz', 'Kromster', 'Stepan Kasyanenko', 'Kromster', 'JamesJGoodwin']
 # Elapsed 6.030 secs
 
@@ -38,6 +38,6 @@ t = time.time()
 pool = ThreadPool()
 result = pool.map(go, urls)
 print(result)
-print("Elapsed {:.3f} secs".format(time.time() - t))
+print(f"Elapsed {time.time() - t:.3f} secs")
 # ['Streletz', 'Kromster', 'Stepan Kasyanenko', 'Kromster', 'JamesJGoodwin']
 # Elapsed 3.203 secs

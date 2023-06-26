@@ -16,7 +16,7 @@ HOST, PORT = HOST.split(":")
 PORT = int(PORT)
 
 
-post_data = """
+post_data = f"""
 <?xml version="1.0"?>
 <REQUEST OBJECT_CLASS="TAbonentObject" ACTION="GET_CHANGES" VERSION="0" TYPE_VERSION="I" PACK="ZLIB"
 INT_SOFT_ID="{INT_SOFT_ID}"
@@ -24,9 +24,7 @@ POINT_CODE="{POINT_CODE}"
 SignOut="No"
 ExpectSigned="No"
 />
-""".format(
-    INT_SOFT_ID=INT_SOFT_ID, POINT_CODE=POINT_CODE
-)
+"""
 
 
 http_request = (
@@ -56,7 +54,7 @@ sock = socket.socket()
 sock.connect((HOST, PORT))
 sock.send(http_request.encode())
 
-print("Socket name: {}".format(sock.getsockname()))
+print(f"Socket name: {sock.getsockname()}")
 print("\nResponse:")
 
 while True:

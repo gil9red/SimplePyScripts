@@ -16,7 +16,7 @@ def run(port: int = 80):
 
     @app.route("/")
     def index():
-        html = "Hello World! (port={})".format(port)
+        html = f"Hello World! (port={port})"
         print(html)
 
         return html

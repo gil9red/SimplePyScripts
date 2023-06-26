@@ -16,7 +16,7 @@ class User:
         time.sleep(3)
 
         # Написать пользователю
-        print("Hi, {}! current_thread: {}".format(self.name, current_thread()))
+        print(f"Hi, {self.name}! current_thread: {current_thread()}")
 
 
 user_1 = User("Vasya")
@@ -30,7 +30,7 @@ def foo(name):
     time.sleep(5)
 
     # Написать пользователю
-    print("Hi, {}! current_thread: {}".format(name, current_thread()))
+    print(f"Hi, {name}! current_thread: {current_thread()}")
 
 
 Thread(target=lambda: foo("Thread")).start()
