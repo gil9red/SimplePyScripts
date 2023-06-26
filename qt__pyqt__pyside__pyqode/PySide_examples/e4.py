@@ -30,7 +30,7 @@ class MyThread(Thread):
 
     def run(self):
         for i, quote in enumerate(get_confucius_quotes(), 1):
-            self.log.append('{}. "{}"\n'.format(i, quote))
+            self.log.append(f'{i}. "{quote}"\n')
             time.sleep(0.1)  # задержка каждые 100 миллисекунд
 
 

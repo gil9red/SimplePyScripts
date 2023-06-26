@@ -61,7 +61,7 @@ class MainWindow(Qt.QWidget):
         self.setLayout(layout)
 
     def _on_process_clicked(self):
-        self.textEdit.append("Нажата `Своя Кнопка` -> '{}'!".format(self.line_edit_my.text()))
+        self.textEdit.append(f"Нажата `Своя Кнопка` -> '{self.line_edit_my.text()}'!")
 
 
 if __name__ == '__main__':

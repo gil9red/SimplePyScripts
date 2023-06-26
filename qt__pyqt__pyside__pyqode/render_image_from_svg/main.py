@@ -28,7 +28,7 @@ for width, height in [(32, 32), (64, 64), (512, 512), (4096, 4096)]:
     renderer.render(painter)
 
     # Save, image format based on file extension
-    image.save("output_{}x{}.png".format(width, height))
+    image.save(f"output_{width}x{height}.png")
 
     # FIX error: "Process finished with exit code -1073741819 (0xC0000005)"
     painter.end()

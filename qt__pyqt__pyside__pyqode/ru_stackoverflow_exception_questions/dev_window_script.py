@@ -67,7 +67,7 @@ self.doc = self.view.page().mainFrame().documentElement()
 
 # Кликаем на "править"
 href = self.doc.findFirst(".question .suggest-edit-post").attribute("href")
-js = 'window.location.href = "{}";'.format(href)
+js = f'window.location.href = "{href}";'
 print(href, js)
 self.doc.evaluateJavaScript(js)
 
@@ -82,12 +82,10 @@ self.doc = self.view.page().mainFrame().documentElement()
 
 
 def add_tag(name, doc):
-    js = """
-    var script = '<span class="post-tag rendered-element">{}<span class="delete-tag" title="удалить эту метку"></span></span>';
+    js = f"""
+    var script = '<span class="post-tag rendered-element">{name}<span class="delete-tag" title="удалить эту метку"></span></span>';
     $('.tag-editor > span').append(script);
-    """.format(
-        name
-    )
+    """
     print(js)
     doc.evaluateJavaScript(js)
 
@@ -96,7 +94,7 @@ add_tag("исключения", self.doc)
 
 
 # Добавление описания метки
-js = '$("#edit-comment")[0].value = "{}";'.format("Добавлена метка: исключения")
+js = '$("#edit-comment")[0].value = "Добавлена метка: исключения";'
 self.doc.evaluateJavaScript(js)
 
 # TODO: при вводе тегов отправляет запрос вида. Без его вызова,
@@ -112,13 +110,11 @@ tags = tags.replace("исключения", qu)
 print(tags)
 
 # Имитация последствия ввода тега
-js = """
+js = f"""
 $.ajax({{
 'type': 'GET',
-'url': 'api/tags/langdiv?tags={}&_={}'
+'url': 'api/tags/langdiv?tags={tags}&_={int(datetime.now().timestamp() * 1000)}'
 }});
-""".format(
-    tags, int(datetime.now().timestamp() * 1000)
-)
+"""
 print(js)
 print(self.doc.evaluateJavaScript(js))

@@ -47,7 +47,7 @@ def _on_load_finished(ok: bool):
 
 
 view.loadProgress.connect(
-    lambda value: view.setWindowTitle("{} ({}%)".format(view.url().toString(), value))
+    lambda value: view.setWindowTitle(f"{view.url().toString()} ({value}%)")
 )
 view.loadFinished.connect(_on_load_finished)
 

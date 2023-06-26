@@ -130,9 +130,7 @@ class WebTagEditor(QWebView):
 
         # Добавление описания изменений
         logger.debug("Добавление описания изменений.")
-        js = '$("#edit-comment")[0].value = "{}";'.format(
-            "Добавлена метка: {}.".format(self.our_tag)
-        )
+        js = f'$("#edit-comment")[0].value = "Добавлена метка: {self.our_tag}.";'
         self.evaluate_java_script(js)
 
         quote_tags = "+".join([quote(tag) for tag in self.all_tags()])
@@ -140,14 +138,12 @@ class WebTagEditor(QWebView):
         # TODO: не сработало
         # Имитация последствия ввода тега
         logger.debug("Имитация последствия ввода тега.")
-        js = """
+        js = f"""
         $.ajax({{
         'type': 'GET',
-        'url': 'api/tags/langdiv?tags={}&_={}'
+        'url': 'api/tags/langdiv?tags={quote_tags}&_={int(datetime.now().timestamp() * 1000)}'
         }});
-        """.format(
-            quote_tags, int(datetime.now().timestamp() * 1000)
-        )
+        """
         self.evaluate_java_script(js)
 
         # Ждем немного пока выполняется ajax-запрос
@@ -187,12 +183,10 @@ class WebTagEditor(QWebView):
     def add_tag(self, name):
         logger.debug('Добавление тэга: "%s".', name)
 
-        js = """
-        var script = '<span class="post-tag rendered-element">{}<span class="delete-tag" title="удалить эту метку"></span></span>';
+        js = f"""
+        var script = '<span class="post-tag rendered-element">{name}<span class="delete-tag" title="удалить эту метку"></span></span>';
         $('.tag-editor > span').append(script);
-        """.format(
-            name
-        )
+        """
         self.evaluate_java_script(js)
 
     def all_tags(self):

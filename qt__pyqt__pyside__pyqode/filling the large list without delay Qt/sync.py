@@ -17,7 +17,7 @@ from PyQt5.QtWidgets import QWidget, QListWidget, QApplication, QVBoxLayout
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
     print("Error: ", text)

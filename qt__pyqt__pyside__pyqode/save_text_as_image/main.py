@@ -81,8 +81,8 @@ class MainWindow(QWidget):
         formats = [str(x, encoding="utf-8") for x in QImageWriter.supportedImageFormats()]
 
         # Описываем как фильтры диалога
-        filters = ["{} ( *.{} )".format(x.upper(), x) for x in formats]
-        default_filter = "{} ( *.{} )".format('PNG', 'png')
+        filters = [f"{x.upper()} ( *.{x} )" for x in formats]
+        default_filter = "PNG ( *.png )"
 
         # Получим путь к файлу
         file_name = QFileDialog.getSaveFileName(self, None, None, '\n'.join(filters), default_filter)[0]

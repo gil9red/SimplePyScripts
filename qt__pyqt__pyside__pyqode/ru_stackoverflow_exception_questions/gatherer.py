@@ -34,9 +34,7 @@ class Question:
         self.editable_date = None
 
     def __repr__(self):
-        return "<Question(#{}. Editable: {}. Editable_date: {})>".format(
-            self.id, self.editable, self.editable_date
-        )
+        return f"<Question(#{self.id}. Editable: {self.editable}. Editable_date: {self.editable_date})>"
 
     @property
     def url(self):
@@ -104,7 +102,7 @@ def search_questions(title, body):
             break
 
         if rs["quota_remaining"] == 0:
-            pickle.dump(questions, open("questions_{}".format(page), "wb"))
+            pickle.dump(questions, open(f"questions_{page}", "wb"))
             time.sleep(60 * 60 * 24 + 3600)
 
     return questions

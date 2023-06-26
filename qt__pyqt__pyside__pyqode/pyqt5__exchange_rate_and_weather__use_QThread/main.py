@@ -14,7 +14,7 @@ from utils import exchange_rate, get_weather
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
     print(text)
@@ -38,7 +38,7 @@ class ThreadExchangeRate(Qt.QThread):
             print("Start ThreadExchangeRate.currency: " + self.currency)
 
             value = exchange_rate(self.currency)
-            print("  ThreadExchangeRate.{} value: {}".format(self.currency, value))
+            print(f"  ThreadExchangeRate.{self.currency} value: {value}")
 
             self.about_exchange_rate.emit(value)
 
@@ -58,7 +58,7 @@ class ThreadGetWeather(Qt.QThread):
             print("Start ThreadGetWeather.city: " + self.city)
 
             weather = get_weather(self.city)
-            print("  ThreadGetWeather.{} weather: {}".format(self.city, weather))
+            print(f"  ThreadGetWeather.{self.city} weather: {weather}")
 
             self.about_weather.emit(weather)
 

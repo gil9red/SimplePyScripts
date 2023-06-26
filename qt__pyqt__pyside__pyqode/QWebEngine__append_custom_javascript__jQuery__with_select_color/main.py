@@ -35,7 +35,7 @@ class MainWindow(QMainWindow):
         if not color.isValid():
             return
 
-        code = "qt.jQuery('a').css('background-color', '{}');".format(color.name())
+        code = f"qt.jQuery('a').css('background-color', '{color.name()}');"
         self.view.page().runJavaScript(code)
 
 

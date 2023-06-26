@@ -112,4 +112,4 @@ def get_weather(city):
     code = condition["code"]
     text = CODE_WEATHER_BY_DESCRIPTION[code]
 
-    return "{} °C, {}".format(temp, text)
+    return f"{temp} °C, {text}"

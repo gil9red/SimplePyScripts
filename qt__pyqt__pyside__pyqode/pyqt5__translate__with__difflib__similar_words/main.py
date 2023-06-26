@@ -23,7 +23,7 @@ from PyQt5.Qt import (
 
 # Для отлова исключений
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
     print(text)
@@ -79,7 +79,7 @@ class MainWindow(QMainWindow):
         else:
             items = get_close_matches(word, self.data.keys())
             if items:
-                text = 'Может быть Вы имели в виду "{}"?'.format(items[0])
+                text = f'Может быть Вы имели в виду "{items[0]}"?'
                 ok = QMessageBox.question(self, "Вопрос", text)
                 if ok == QMessageBox.Yes:
                     return self.data[items[0]]

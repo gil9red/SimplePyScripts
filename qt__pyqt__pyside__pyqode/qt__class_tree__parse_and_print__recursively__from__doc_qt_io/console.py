@@ -45,7 +45,7 @@ def print_children(url, total_class_list, global_number=-1, indent_level=0):
     inherited_children = get_inherited_children(url, root)
     number_inherited_children = len(inherited_children)
     if number_inherited_children > 0:
-        print(indent + "{} ({}):".format(name_class, number_inherited_children))
+        print(indent + f"{name_class} ({number_inherited_children}):")
     else:
         print(indent + name_class)
 

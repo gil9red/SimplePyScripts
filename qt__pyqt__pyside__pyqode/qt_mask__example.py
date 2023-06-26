@@ -14,7 +14,7 @@ label_pin = QLabel()
 line_edit_pin = QLineEdit()
 line_edit_pin.setInputMask("999900000000")
 line_edit_pin.textEdited.connect(
-    lambda text: label_pin.setText('PIN: "{}"'.format(text))
+    lambda text: label_pin.setText(f'PIN: "{text}"')
 )
 
 # Payment card numbers can be up to 19 digits
@@ -22,7 +22,7 @@ label_pan = QLabel()
 line_edit_pan = QLineEdit()
 line_edit_pan.setInputMask("9999 9999 9999 0000 000")
 line_edit_pan.textEdited.connect(
-    lambda text: label_pan.setText('PAN: "{}"'.format(text))
+    lambda text: label_pan.setText(f'PAN: "{text}"')
 )
 
 layout = QFormLayout()
