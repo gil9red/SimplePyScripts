@@ -28,8 +28,8 @@ with open('myfile.zip', 'rb') as f:
         file_name = str(file_name, 'utf-8')
         start += file_name_size
 
-        print('file_name: {}, crc32: {}, comp_size: {}, uncomp_size: {}'.format(
-            file_name, hex(crc32), comp_size, uncomp_size)
+        print(
+            f'file_name: {file_name}, crc32: {hex(crc32)}, comp_size: {comp_size}, uncomp_size: {uncomp_size}'
         )
         rows.append((file_name, hex(crc32), comp_size, uncomp_size))
 

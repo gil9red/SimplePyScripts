@@ -100,7 +100,7 @@ for tag in so.all_tags(pagesize=100):
         i += 1
 
     except Exception as e:
-        print('Error! Tag "{}", error: {}'.format(tag.name, e))
+        print(f'Error! Tag "{tag.name}", error: {e}')
 
 
 document = docx.Document()
@@ -118,7 +118,7 @@ for row in rows:
     cells[0].text = str(i)
 
     p = cells[1].paragraphs[0]
-    add_hyperlink(p, "https://ru.stackoverflow.com/tags/{}/info".format(name), name)
+    add_hyperlink(p, f"https://ru.stackoverflow.com/tags/{name}/info", name)
 
     cells[2].text = description
 

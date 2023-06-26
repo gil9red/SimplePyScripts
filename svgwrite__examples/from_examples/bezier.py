@@ -72,7 +72,7 @@ def create_svg(name):
     vert_pt_weight = .80  # what weight is given to vertical distance? (distance to next point) x vert_pt_weight
     plus_minus = cycle([1, -1])  # create iterator which alternates between +1 and -1 forever.
 
-    s1 = 'M {0[0]} {0[1]}'.format(start)
+    s1 = f'M {start[0]} {start[1]}'
     p3 = dwg.path(d=s1, stroke_width=1, stroke='red', fill='none')
 
     # Top left to top right

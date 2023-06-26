@@ -39,7 +39,7 @@ if __name__ == '__main__':
             for j in range(256):
                 for k in range(256):
                     for m in range(256):
-                        ping = '{}.{}.{}.{}'.format(i, j, k, m)
+                        ping = f'{i}.{j}.{k}.{m}'
                         name = pc_name(ping)
 
                         if name is not None:

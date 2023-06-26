@@ -41,5 +41,5 @@ if __name__ == '__main__':
     for num in sys.stdin:
         num = num.strip()
 
-        rs = requests.get('http://numbersapi.com/{}/math?json=true'.format(num))
+        rs = requests.get(f'http://numbersapi.com/{num}/math?json=true')
         print('Interesting' if rs.json()['found'] else 'Boring')

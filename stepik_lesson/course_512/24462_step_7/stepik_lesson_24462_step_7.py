@@ -125,7 +125,7 @@ if __name__ == '__main__':
             return False
 
         def __str__(self):
-            return 'Class <"{}": {}>'.format(self.name, [cls.name for cls in self.list_parent_class])
+            return f'Class <"{self.name}": {[cls.name for cls in self.list_parent_class]}>'
 
         def __repr__(self):
             return self.__str__()

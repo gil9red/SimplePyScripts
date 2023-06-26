@@ -61,7 +61,7 @@ if __name__ == '__main__':
             return children
 
         def __str__(self):
-            return '<Class "{}": {}>'.format(self.name, [cls.name for cls in self.children])
+            return f'<Class "{self.name}": {[cls.name for cls in self.children]}>'
 
         def __repr__(self):
             return self.__str__()
@@ -86,4 +86,4 @@ if __name__ == '__main__':
         # Получение списка имен детей, из которого удаляются повторы (с помощью множества) и подсчет
         # количества элементов. По условию, класс является потомком самого себя, поэтому прибавляем 1
         number = len(set(child_cls.name for child_cls in cls.all_children()))
-        print('{} : {}'.format(name, number + 1))
+        print(f'{name} : {number + 1}')

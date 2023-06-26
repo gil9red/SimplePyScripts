@@ -40,7 +40,7 @@ STATE_FINISH = 'STATE_FINISH'
 def facts_to_str(user_data: dict) -> str:
     facts = []
     for key, value in user_data.items():
-        facts.append('{} - {}'.format(key, value))
+        facts.append(f'{key} - {value}')
     return "\n".join(facts).join(['\n', '\n'])
 
 
@@ -53,7 +53,7 @@ def on_main_menu(update: Update, context: CallbackContext):
 
     message = update.effective_message
     user_id = update.effective_user.id
-    print('User ID: {} '.format(user_id))
+    print(f'User ID: {user_id} ')
 
     keyboard = [
         [
@@ -283,10 +283,16 @@ def on_sing_contact(update: Update, context: CallbackContext):
 
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    message.reply_text('''*Вы зарегистрированы!*
+    message.reply_text(
+        f'''
+*Вы зарегистрированы!*
 
 _Ваши данные:_ 
-{}'''.format(facts_to_str(user_data)), parse_mode='Markdown', reply_markup=reply_markup)
+{facts_to_str(user_data)}
+        ''',
+        parse_mode='Markdown',
+        reply_markup=reply_markup,
+    )
 
     return STATE_FINISH
 

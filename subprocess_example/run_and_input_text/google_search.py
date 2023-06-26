@@ -4,8 +4,10 @@
 __author__ = 'ipetrash'
 
 
-key = input('Search: ')
-print('Search "{}"'.format(key))
-
 import webbrowser
-webbrowser.open_new_tab('https://www.google.ru/search?q=' + key)
+
+
+key = input('Search: ')
+print(f'Search "{key}"')
+
+webbrowser.open_new_tab(f'https://www.google.ru/search?q={key}')

@@ -49,7 +49,7 @@ def print_info(file_name: str):
         # print('Data precision:', data_precision)
 
         height, width = struct.unpack('>HH', f.read(4))
-        print('    Size: {}x{}'.format(width, height))
+        print(f'    Size: {width}x{height}')
 
         # Usually 1 = grey scaled, 3 = color YcbCr or YIQ 4 = color CMYK
         number_of_components, = struct.unpack('>b', f.read(1))

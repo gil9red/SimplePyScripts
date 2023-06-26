@@ -32,7 +32,7 @@ if __name__ == '__main__':
             for password in f.read().splitlines():
                 try:
                     plaintext = decrypt(password, encrypted_bin)
-                    print('Yes! Message is "{}".'.format(plaintext.decode()))
+                    print(f'Yes! Message is "{plaintext.decode()}".')
 
                 except DecryptionException:
-                    print('Password "{}" has not approached'.format(password))
+                    print(f'Password "{password}" has not approached')

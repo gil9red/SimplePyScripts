@@ -123,7 +123,7 @@ class Namespace:
         return None
 
     def __repr__(self):
-        return '<Namespace "{}", parent: "{}">'.format(self.name, self.parent.name if self.parent else 'None')
+        return f'<Namespace "{self.name}", parent: "{self.parent.name if self.parent else "None"}">'
 
 
 DEBUG = False

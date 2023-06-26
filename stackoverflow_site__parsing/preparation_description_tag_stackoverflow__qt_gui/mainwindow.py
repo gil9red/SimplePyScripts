@@ -120,7 +120,7 @@ class MainWindow(QMainWindow):
 
     @staticmethod
     def tag_title(tag):
-        return '#{}: {}'.format(tag['id'], ', '.join(tag['name']))
+        return f'#{tag["id"]}: {", ".join(tag["name"])}'
 
     def fill_tag_list(self):
         self.tags_dict.clear()
@@ -262,15 +262,15 @@ class MainWindow(QMainWindow):
         text = ''
 
         for k in order_key:
-            text += '{}:\n{}\n\n'.format(k, tag[k])
+            text += f'{k}:\n{tag[k]}\n\n'
 
         for k, v in sorted(tag.items()):
             if k not in order_key:
-                text += '{}:\n{}\n\n'.format(k, v)
+                text += f'{k}:\n{v}\n\n'
         self.ui.plain_text_edit_tag_info.setPlainText(text)
 
-        url = 'http://ru.stackoverflow.com/tags/{}/info'.format(tag['name'][0])
-        url = '<a href="{0}">{0}</a>'.format(url)
+        url = f'http://ru.stackoverflow.com/tags/{tag["name"][0]}/info'
+        url = f'<a href="{url}">{url}</a>'
         self.ui.url.setText(url)
 
         self.ui.ref_guide.blockSignals(True)
@@ -295,7 +295,7 @@ class MainWindow(QMainWindow):
 
         tag = self.tags_dict[tag_id]
 
-        file_name = DIR + '/{}.tag'.format(tag['id'])
+        file_name = DIR + f'/{tag["id"]}.tag'
         file_name_backup = file_name + '.backup'
 
         # Перед переписыванием файла, делаем его копию
@@ -319,13 +319,13 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             logger.exception("Error:")
-            logger.debug('Restore {} from {}.'.format(file_name, file_name_backup))
+            logger.debug(f'Restore {file_name} from {file_name_backup}.')
 
             # Произошла ошибка. Восстанавливаем файл из бекапа
             os.remove(file_name)
             os.rename(file_name_backup, file_name)
         else:
-            logger.debug('Update {} was successful, removed the backup: {}.'.format(file_name, file_name_backup))
+            logger.debug(f'Update {file_name} was successful, removed the backup: {file_name_backup}.')
 
             # Переписывание прошло хорошо, удаляем файл бекапа
             if os.path.exists(file_name_backup):

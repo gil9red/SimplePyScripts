@@ -63,7 +63,7 @@ def print_info(file_name: str):
         compression_method, \
         filter_method, \
         interlace_method = struct.unpack('>IIbbbbb', chunk_data)
-        print('    Size: {}x{}'.format(width, height))
+        print(f'    Size: {width}x{height}')
 
 
 if __name__ == '__main__':
