@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
     hex_text = "504F53542068747470733A"
     text = hex2str(hex_text)
-    print('"{}"'.format(text))
+    print(f'"{text}"')
 
     text = "POST https:"
     hex_text = str2hex(text)

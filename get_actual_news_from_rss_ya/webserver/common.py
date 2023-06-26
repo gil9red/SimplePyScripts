@@ -80,7 +80,7 @@ def append_list_news(list_news: [str, str], interest: str):
         if has:
             return
 
-        print('Добавляю новость "{}" ({})'.format(title, interest))
+        print(f'Добавляю новость "{title}" ({interest})')
         connect.execute(
             "INSERT OR IGNORE INTO News (title, url, interest) VALUES (?,?,?)",
             (title, url, interest),

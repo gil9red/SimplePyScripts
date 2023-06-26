@@ -43,14 +43,12 @@ for _from, _to in GLOBAL_TRANSITIONS:
 
 nodes_dict = [{"name": title, "color": color} for title, color in nodes]
 
-dataset_text = """\
+dataset_text = f"""\
     var dataset = {{
-        nodes: {},
-        edges: {}
+        nodes: {nodes_dict},
+        edges: {edges}
     }};
-""".format(
-    nodes_dict, edges
-)
+"""
 print(dataset_text)
 
 with open("template__graph_with_labeled_edges.html", "r", encoding="utf-8") as f:

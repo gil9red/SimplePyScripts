@@ -38,7 +38,7 @@ for i in range(1, 1000 + 1):
     repo.index.commit("#" + str(i))
 
 logs = repo.git.log("--pretty=format:%H%x09%an%x09%ad%x09%s").splitlines()
-print("\nLogs[{}]:".format(len(logs)))
+print(f"\nLogs[{len(logs)}]:")
 
 for log in logs:
     print(log)

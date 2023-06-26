@@ -23,7 +23,7 @@ def get_video_url(url):
         return
 
     video_id = match.group(1)
-    return "http://www.naughtymachinima.com/media/videos/iphone/{}.mp4".format(video_id)
+    return f"http://www.naughtymachinima.com/media/videos/iphone/{video_id}.mp4"
 
 
 if __name__ == "__main__":

@@ -25,7 +25,7 @@ REPO_PATH = os.path.abspath(NEW_REPO)
 
 # How use without input login and password:
 # git clone https://username:password@github.com/username/repository.git
-URL_GIT = "https://{0}:{1}@github.com/{0}/{2}.git".format(LOGIN, PASSWORD, NEW_REPO)
+URL_GIT = f"https://{LOGIN}:{PASSWORD}@github.com/{LOGIN}/{NEW_REPO}.git"
 
 
 def get_repo():

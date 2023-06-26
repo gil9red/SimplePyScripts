@@ -112,18 +112,16 @@ def send_num():
         game_data["response"] += "Победа!\n"
         return redirect("/")
 
-    elif num > hidden_num:
-        game_data["response"] += 'Неа, "?" < "{}"\n'.format(num)
-
+    if num > hidden_num:
+        game_data["response"] += f'Неа, "?" < "{num}"\n'
     else:
-        game_data["response"] += 'Неа, "?" > "{}"\n'.format(num)
+        game_data["response"] += f'Неа, "?" > "{num}"\n'
 
     trying -= 1
 
     if trying == 0:
-        game_data[
-            "response"
-        ] += "Закончились попытки. Проигрыш!\nЗагаданное число: {}".format(hidden_num)
+        text = f"Закончились попытки. Проигрыш!\nЗагаданное число: {hidden_num}"
+        game_data["response"] += text
         game_data["end_game"] = True
         return redirect("/")
 

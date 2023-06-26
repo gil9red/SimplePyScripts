@@ -105,14 +105,12 @@ for _from, _to in global_transitions:
     # };
     #
 
-text = """\
+text = f"""\
     var dataset = {{
 
-    nodes: {},
-    edges: {}
+    nodes: {nodes_dict},
+    edges: {edges}
     }};
-""".format(
-    nodes_dict, edges
-)
+"""
 
 print(text)

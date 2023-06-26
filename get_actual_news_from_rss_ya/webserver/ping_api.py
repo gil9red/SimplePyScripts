@@ -48,10 +48,10 @@ while True:
 
     else:
         for interest, news_list in rs_json["items"].items():
-            print("{} ({}):".format(interest, len(news_list)))
+            print(f"{interest} ({len(news_list)}):")
 
             for i, news in enumerate(news_list, 1):
-                print("    {}. {}: {}".format(i, news["title"], news["url"]))
+                print(f"    {i}. {news['title']}: {news['url']}")
 
         print()
 

@@ -156,7 +156,7 @@ print(
     f"Изменено {number} символов (всего {len(text)} символов, прогресс {number / len(text):.0%})."
 )
 print(" ".join(f"{c: <3}" for c in text))
-print(" ".join("{: <3x}".format(ord(c)) for c in text))
+print(" ".join(f"{ord(c): <3x}" for c in text))
 
 print()
 print(" ".join(f"{c: <3}" for c in new_text))

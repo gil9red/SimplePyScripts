@@ -21,8 +21,8 @@ if __name__ == "__main__":
 
     while True:
         try:
-            url = "http://ru.stackoverflow.com/tags?page={}&tab=name".format(page)
-            print("Go page (found tags: {}): {}".format(len(tag_list), url))
+            url = f"http://ru.stackoverflow.com/tags?page={page}&tab=name"
+            print(f"Go page (found tags: {len(tag_list)}): {url}")
             g.go(url)
 
             next_page = g.doc.select('//span[@class="page-numbers next"]')

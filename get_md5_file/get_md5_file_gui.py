@@ -50,7 +50,7 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
     text += "".join(traceback.format_tb(tb))
 
     ts = datetime.today().timestamp()
-    with open("error_text_{}".format(ts), "w", encoding="utf-8") as f:
+    with open(f"error_text_{ts}", "w", encoding="utf-8") as f:
         f.write(text)
 
     QMessageBox.critical(None, "Error", text)

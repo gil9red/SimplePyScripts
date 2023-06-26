@@ -25,7 +25,7 @@ if __name__ == "__main__":
                 number = 0
                 print(number)
 
-                message = "Start cycle #{}".format(number)
+                message = f"Start cycle #{number}"
 
             else:
                 with open(new_file_name, "r") as f:
@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
                     print(number)
 
-                message = "Cycle commit #{}".format(number)
+                message = f"Cycle commit #{number}"
 
             # Обновление значения
             with open(new_file_name, "w") as f:

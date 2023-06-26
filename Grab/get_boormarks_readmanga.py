@@ -45,7 +45,7 @@ if __name__ == "__main__":
         '//tr[@class="bookmark-row"]'
     )
     # Общее количество заметок
-    print("\nЗакладки({}):".format(g.doc.select(TEMPLATE_BOOKMARKS).count()))
+    print(f"\nЗакладки({g.doc.select(TEMPLATE_BOOKMARKS).count()}):")
 
     # Запрос на получение всех типов закладок
     TEMPLATE_TYPE_BOOKMARK = '//div[@class="bookmarks-lists"]/table[starts-with(@class, "cTable bookmarks_")]'

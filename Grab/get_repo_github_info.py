@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
     # Переход на страницу с репозиториями
     print("...Перехожу на страницу с репозиториями...")
-    g.go("https://github.com/{}?tab=repositories".format(login))
+    g.go(f"https://github.com/{login}?tab=repositories")
 
     # Получение списка репозиториев
     print("...Получаю список репозиториев...")
