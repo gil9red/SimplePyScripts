@@ -260,6 +260,7 @@ def _kill(path: str, args: list[str] | None = None):
     else:
         print(f'Unknown argument: {arg}')
 
+
 def _manager_up(path: str, _: list[str] | None = None):
     path = Path(path)
 
