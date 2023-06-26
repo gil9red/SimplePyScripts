@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """Задание:
@@ -51,7 +51,7 @@ class SlideShowWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('SlideShowWidget')
+        self.setWindowTitle("SlideShowWidget")
 
         self.current_index = 0
         self.source_image = None
@@ -61,7 +61,7 @@ class SlideShowWidget(QWidget):
         self.timer.setInterval(60 * 1000)
         self.timer.timeout.connect(self.next)
 
-        self.image_list = glob.glob(r'C:\Users\ipetrash\Pictures\*.png')
+        self.image_list = glob.glob(r"C:\Users\ipetrash\Pictures\*.png")
         self.next()
 
         self.resize(200, 200)
@@ -97,7 +97,7 @@ class SlideShowWidget(QWidget):
         painter.drawPixmap(0, 0, self.resize_image)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     w = SlideShowWidget()
