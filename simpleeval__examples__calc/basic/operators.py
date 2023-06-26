@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/danthedeckie/simpleeval#operators
@@ -45,19 +45,19 @@ from simpleeval import simple_eval
 
 print(simple_eval("21 + 21"))  # 42
 print(simple_eval("100 - 1"))  # 99
-print(simple_eval("2 / 3"))    # 0.6666666666666666
-print(simple_eval("2 // 3"))   # 0
+print(simple_eval("2 / 3"))  # 0.6666666666666666
+print(simple_eval("2 // 3"))  # 0
 print(simple_eval("10 * 10"))  # 100
 print(simple_eval("2 ** 10"))  # 1024
-print(simple_eval("15 % 4"))   # 3
+print(simple_eval("15 % 4"))  # 3
 print()
 print(simple_eval("15 == 4"))  # False
 print(simple_eval("15 != 4"))  # True
-print(simple_eval("1 < 4"))    # True
-print(simple_eval("1 > 4"))    # False
-print(simple_eval("1 <= 4"))   # True
-print(simple_eval("1 >= 4"))   # False
+print(simple_eval("1 < 4"))  # True
+print(simple_eval("1 > 4"))  # False
+print(simple_eval("1 <= 4"))  # True
+print(simple_eval("1 >= 4"))  # False
 print()
-print(simple_eval("'ell' in 'Hello'"))      # True
-print(simple_eval("'123' in 'ab123c'"))     # True
+print(simple_eval("'ell' in 'Hello'"))  # True
+print(simple_eval("'123' in 'ab123c'"))  # True
 print(simple_eval("'ell' not in 'Hello'"))  # False

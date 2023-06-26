@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/danthedeckie/simpleeval#operators
 
 
-# pip install simpleeval
-from simpleeval import SimpleEval
-
 import ast
 import operator as op
+
+# pip install simpleeval
+from simpleeval import SimpleEval
 
 
 s = SimpleEval()

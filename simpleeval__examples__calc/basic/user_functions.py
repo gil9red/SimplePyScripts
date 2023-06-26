@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/danthedeckie/simpleeval#functions
@@ -22,12 +22,12 @@ __author__ = 'ipetrash'
 
 
 # pip install simpleeval
-from simpleeval import simple_eval
+from simpleeval import simple_eval, DEFAULT_FUNCTIONS
 
 
-print(simple_eval("square(11)", functions={"square": lambda x: x * x}))         # 11
-print(simple_eval("double(21)", functions={"double": lambda x: x * 2}))         # 42
-print(simple_eval("my_pow(11, 2)", functions={"my_pow": lambda a, b: a ** b}))  # 121
+print(simple_eval("square(11)", functions={"square": lambda x: x * x}))  # 11
+print(simple_eval("double(21)", functions={"double": lambda x: x * 2}))  # 42
+print(simple_eval("my_pow(11, 2)", functions={"my_pow": lambda a, b: a**b}))  # 121
 print()
 
 
@@ -35,17 +35,13 @@ def double(x):
     return x * 2
 
 
-my_functions = {
-    "d": double,
-    "double": double
-}
+my_functions = {"d": double, "double": double}
 print(simple_eval("d(100) + double(1)", functions=my_functions))  # 202
 
 
-import simpleeval
-my_functions = simpleeval.DEFAULT_FUNCTIONS.copy()
+my_functions = DEFAULT_FUNCTIONS.copy()
 my_functions.update(
     square=lambda x: x * x,
     double=lambda x: x * 2,
 )
-print(simple_eval('square(randint(100))', functions=my_functions))  # 1024
+print(simple_eval("square(randint(100))", functions=my_functions))  # 1024
