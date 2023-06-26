@@ -8,6 +8,7 @@ import traceback
 
 # pip install selenium
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 
 URL = "https://vprognoze.ru/"
@@ -18,7 +19,7 @@ try:
     driver.get(URL)
     print(f"Title: {driver.title!r}")
 
-    for a in driver.find_elements_by_css_selector(".title_news > a"):
+    for a in driver.find_elements(By.CSS_SELECTOR, ".title_news > a"):
         print(a.text)
     # Фьолнир - Валюр от Football2020 | 27-07-2020
     # Стьярнан - Викингур Рейкьявик от Football2020 | 27-07-2020

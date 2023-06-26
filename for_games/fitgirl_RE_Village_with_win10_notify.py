@@ -13,6 +13,7 @@ from pathlib import Path
 # pip install selenium
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
 
 # pip install simple-wait
 from simple_wait import wait
@@ -50,7 +51,7 @@ if __name__ == "__main__":
                 driver.refresh()
                 print(f"Title: {driver.title!r}")
 
-            for title_el in driver.find_elements_by_css_selector(".entry-title"):
+            for title_el in driver.find_elements(By.CSS_SELECTOR, ".entry-title"):
                 title = title_el.text.strip()
 
                 if "VILLAGE" in title_el.text.upper():

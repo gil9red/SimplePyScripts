@@ -8,6 +8,7 @@ import time
 
 # pip install selenium
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 
 driver = webdriver.Firefox()
@@ -15,7 +16,7 @@ driver.implicitly_wait(20)  # seconds
 driver.get("https://online-pianino.ru/")
 print(f"Title: {driver.title!r}")
 
-for button in driver.find_elements_by_css_selector("#keyboardspot button[id]"):
+for button in driver.find_elements(By.CSS_SELECTOR, "#keyboardspot button[id]"):
     print(button.get_attribute("id"))
     button.click()
 

@@ -7,13 +7,14 @@ __author__ = "ipetrash"
 # pip install selenium
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
 
 
 def get_urls(driver) -> list[str]:
     urls = []
 
-    for link in driver.find_elements_by_css_selector(
-        "figure.media-thumb.desktop link[itemprop=contentUrl]"
+    for link in driver.find_elements(
+        By.CSS_SELECTOR, "figure.media-thumb.desktop link[itemprop=contentUrl]"
     ):
         url_gif = link.get_attribute("content")
         gif_id = url_gif.split("/")[-1]

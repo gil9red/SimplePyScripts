@@ -9,6 +9,7 @@ import traceback
 # pip install selenium
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
 
 
 URL = "https://ru.sefon.cc/news/"
@@ -23,7 +24,7 @@ try:
     driver.get(URL)
     print(f"Title: {driver.title!r}")
 
-    for a in driver.find_elements_by_css_selector(".mp3 > .btns > a[data-url]"):
+    for a in driver.find_elements(By.CSS_SELECTOR, ".mp3 > .btns > a[data-url]"):
         print(a.get_attribute("data-url"))
 
     # https://cdn5.sefon.pro/files/prev/193/Sontry%20-%20%D0%94%D0%B8%D1%81%D0%B1%D0%B0%D0%BB%D0%B0%D0%BD%D1%81%20%28192kbps%29.mp3
