@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install simpleeval
@@ -18,6 +18,6 @@ class Foo:
 
 
 my_eval = simpleeval.SimpleEval()
-my_eval.names['foo'] = Foo
+my_eval.names["foo"] = Foo
 
-print(my_eval.eval('foo.A.B.C.value * 10 + foo.A.value'))  # 55
+print(my_eval.eval("foo.A.B.C.value * 10 + foo.A.value"))  # 55
