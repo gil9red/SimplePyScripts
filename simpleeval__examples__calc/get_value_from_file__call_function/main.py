@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install simpleeval
@@ -14,7 +14,7 @@ def get_from_file(file_name):
 
 
 my_eval = SimpleEval()
-my_eval.functions['get'] = get_from_file
+my_eval.functions["get"] = get_from_file
 
-print(my_eval.eval("get('a_value.txt') + get('b_value.txt')"))            # '12345'
+print(my_eval.eval("get('a_value.txt') + get('b_value.txt')"))  # '12345'
 print(my_eval.eval("int(get('a_value.txt')) + int(get('b_value.txt'))"))  # 168
