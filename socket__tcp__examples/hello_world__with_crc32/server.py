@@ -18,14 +18,14 @@ with socket.socket() as sock:
     sock.bind(("", PORT))
     sock.listen()
 
-    print("Server: {}".format(sock.getsockname()))
+    print(f"Server: {sock.getsockname()}")
 
     while True:
         conn, addr = sock.accept()
         print("Connected:", addr)
 
         data = recv_msg__with_crc32(conn)
-        print("Receiving ({}): {}".format(len(data), data))
+        print(f"Receiving ({len(data)}): {data}")
 
         print("Sending")
         send_msg__with_crc32(conn, data.upper())

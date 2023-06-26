@@ -30,7 +30,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         print("Connected:", self.client_address)
 
         data = recv_msg(self.request)
-        print("Receiving ({}): {}".format(len(data), data))
+        print(f"Receiving ({len(data)}): {data}")
 
         print("Sending")
         send_msg(self.request, data.upper())
@@ -41,7 +41,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
 if __name__ == "__main__":
     # Create the server, binding to localhost on port 9999
     with socketserver.TCPServer((HOST, PORT), MyTCPHandler) as server:
-        print("Server: {}".format(server.server_address))
+        print(f"Server: {server.server_address}")
 
         # Activate the server; this will keep running until you
         # interrupt the program with Ctrl-C

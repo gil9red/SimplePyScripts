@@ -41,9 +41,7 @@ def recv_msg__with_crc32(sock) -> bytes | None:
     msg_crc32 = crc32_from_bytes(msg)
     if msg_crc32 != crc32:
         raise Exception(
-            "Incorrect message: invalid crc32. Receiving crc32: {}, current: {}".format(
-                crc32, msg_crc32
-            )
+            f"Incorrect message: invalid crc32. Receiving crc32: {crc32}, current: {msg_crc32}"
         )
 
     return msg

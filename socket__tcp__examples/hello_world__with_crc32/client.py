@@ -20,7 +20,7 @@ with socket.socket() as sock:
     # Send big data
     # data = ','.join(str(i) for i in range(10000))
     data = "HelloWorld!" * 10000
-    print("Sending ({}): {}".format(len(data), data))
+    print(f"Sending ({len(data)}): {data}")
     data = bytes(data, "utf-8")
     print()
 
@@ -29,6 +29,6 @@ with socket.socket() as sock:
     print("Receiving")
 
     response_data = recv_msg__with_crc32(sock)
-    print("Response ({}): {}".format(len(response_data), response_data))
+    print(f"Response ({len(response_data)}): {response_data}")
 
     print("Close\n")

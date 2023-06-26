@@ -24,7 +24,7 @@ if __name__ == "__main__":
     print("Reading message...")
     message = open("message.txt", mode="rb").read()
     message_digest = get_digest(message)
-    print("Message len: {}, digest: {}".format(len(message), message_digest))
+    print(f"Message len: {len(message)}, digest: {message_digest}")
 
     print()
     print("_" * 100)
@@ -43,7 +43,7 @@ if __name__ == "__main__":
 
     zip_data = zip_data_io.getvalue()
     zip_data_digest = get_digest(zip_data)
-    print("Zip len: {}, digest: {}".format(len(zip_data), zip_data_digest))
+    print(f"Zip len: {len(zip_data)}, digest: {zip_data_digest}")
 
     # # Save memory zip in file
     # open(FILENAME + '.zip', 'wb').write(data)
@@ -53,9 +53,7 @@ if __name__ == "__main__":
     cipher_zip_data = encrypt(PASSWORD, zip_data)
     cipher_zip_digest = get_digest(cipher_zip_data)
     print(
-        "Encrypt zip len: {}, digest: {}".format(
-            len(cipher_zip_data), cipher_zip_digest
-        )
+        f"Encrypt zip len: {len(cipher_zip_data)}, digest: {cipher_zip_digest}"
     )
 
     print()
@@ -67,9 +65,7 @@ if __name__ == "__main__":
     zip_data_io = io.BytesIO(decrypt_zip_data)
     decrypt_zip_data_digest = get_digest(decrypt_zip_data)
     print(
-        "Decrypt zip len: {}, digest: {}".format(
-            len(decrypt_zip_data), decrypt_zip_data_digest
-        )
+        f"Decrypt zip len: {len(decrypt_zip_data)}, digest: {decrypt_zip_data_digest}"
     )
 
     print()
@@ -79,9 +75,7 @@ if __name__ == "__main__":
 
     decompress_message_digest = get_digest(decompress_message)
     print(
-        "Decompress message len: {}, digest: {}".format(
-            len(decompress_message), decompress_message_digest
-        )
+        f"Decompress message len: {len(decompress_message)}, digest: {decompress_message_digest}"
     )
 
     print()
@@ -90,10 +84,8 @@ if __name__ == "__main__":
 
     print()
     print(
-        "Digest for zip is equal: {}".format(zip_data_digest == decrypt_zip_data_digest)
+        f"Digest for zip is equal: {zip_data_digest == decrypt_zip_data_digest}"
     )
     print(
-        "Digest for message is equal: {}".format(
-            message_digest == decompress_message_digest
-        )
+        f"Digest for message is equal: {message_digest == decompress_message_digest}"
     )
