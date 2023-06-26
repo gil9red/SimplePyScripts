@@ -13,6 +13,7 @@ from bs4 import Tag
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import MoveTargetOutOfBoundsException
+from selenium.webdriver.common.by import By
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/f0403620f7948306ad9e34a373f2aabc0237fb2a/seconds_to_str.py
@@ -53,10 +54,10 @@ def get_track(track_el) -> Track:
         raise ValueError(f"Not supported value with type {type(track_el)}")
 
     if isinstance(track_el, WebElement):
-        title = track_el.find_element_by_css_selector(".d-track__title").text
-        artists = track_el.find_element_by_css_selector(".d-track__artists").text
-        length = track_el.find_element_by_css_selector(
-            ".d-track__info > span.typo-track.deco-typo-secondary"
+        title = track_el.find_element(By.CSS_SELECTOR, ".d-track__title").text
+        artists = track_el.find_element(By.CSS_SELECTOR, ".d-track__artists").text
+        length = track_el.find_element(
+            By.CSS_SELECTOR, ".d-track__info > span.typo-track.deco-typo-secondary"
         ).text
         available = "d-track__unavailable" not in track_el.get_attribute("class")
 

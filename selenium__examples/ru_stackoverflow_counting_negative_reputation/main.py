@@ -11,6 +11,7 @@ import time
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
 
 
 def get_int(element) -> int:
@@ -64,7 +65,7 @@ try:
     time.sleep(2)
 
     current_rep = get_int(
-        driver.find_element_by_css_selector("#user-tab-reputation .count")
+        driver.find_element(By.CSS_SELECTOR, "#user-tab-reputation .count")
     )
     total_negative_rep_by_user_is_deleted = 0
     total_negative_rep_by_bounty = 0
@@ -72,12 +73,12 @@ try:
     max_negative_rep_by_day = 0
 
     while True:
-        for tr in driver.find_elements_by_css_selector(
-            "#rep-page-container .rep-table-row"
+        for tr in driver.find_elements(
+            By.CSS_SELECTOR, "#rep-page-container .rep-table-row"
         ):
-            rep_value = get_int(tr.find_element_by_css_selector(".rep-cell"))
+            rep_value = get_int(tr.find_element(By.CSS_SELECTOR, ".rep-cell"))
 
-            rep_day_el = tr.find_element_by_css_selector(".rep-day")
+            rep_day_el = tr.find_element(By.CSS_SELECTOR, ".rep-day")
             rep_day_title = rep_day_el.get_attribute("title")
             rep_day_text = rep_day_el.text.strip()
 
@@ -85,28 +86,28 @@ try:
 
             is_expanded = has_class(
                 "expander-arrow-small-show",
-                rep_day_el.find_element_by_css_selector(".load-body"),
+                rep_day_el.find_element(By.CSS_SELECTOR, ".load-body"),
             )
             if not is_expanded:
                 scroll_and_click(rep_day_el, sleep=1.5)
 
             # От текущего элемента ищем следующий tr с классом loaded-body
-            loaded_body_el = tr.find_element_by_xpath(
-                "following-sibling::tr[contains(@class, 'loaded-body')]"
+            loaded_body_el = tr.find_element(
+                By.XPATH, "following-sibling::tr[contains(@class, 'loaded-body')]"
             )
-            rep_change_items = loaded_body_el.find_elements_by_css_selector(
-                ".rep-breakdown-row"
+            rep_change_items = loaded_body_el.find_elements(
+                By.CSS_SELECTOR, ".rep-breakdown-row"
             )
             if rep_change_items:
                 sum_negative_rep = 0
 
                 for rep_row_el in rep_change_items:
-                    rep_left_value = rep_row_el.find_element_by_css_selector(
-                        ".rep-left"
+                    rep_left_value = rep_row_el.find_element(
+                        By.CSS_SELECTOR, ".rep-left"
                     ).text.strip()
                     rep_up, rep_down = parse_rep_left_value(rep_left_value)
 
-                    rep_desc_el = rep_row_el.find_element_by_css_selector(".rep-desc")
+                    rep_desc_el = rep_row_el.find_element(By.CSS_SELECTOR, ".rep-desc")
                     rep_desc = rep_desc_el.text.strip()
                     rep_desc_title = rep_desc_el.get_attribute("title")
 
@@ -141,8 +142,8 @@ try:
 
         # Переход на следующую страницу
         try:
-            next_el = driver.find_element_by_css_selector(
-                '.s-pagination > [rel="next"]'
+            next_el = driver.find_element(
+                By.CSS_SELECTOR, '.s-pagination > [rel="next"]'
             )
             print("[+] Move to next page:", next_el.get_attribute("href"))
 

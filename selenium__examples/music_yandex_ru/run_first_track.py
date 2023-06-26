@@ -31,13 +31,13 @@ def play_track(driver, track_title: str):
 
     track_el = None
     for x in tracks_el:
-        title = x.find_element_by_css_selector(".d-track__title").text
+        title = x.find_element(By.CSS_SELECTOR, ".d-track__title").text
         if title == track_title:
             track_el = x
             break
 
     if track_el:
-        el = track_el.find_element_by_css_selector(".d-track__start-column")
+        el = track_el.find_element(By.CSS_SELECTOR, ".d-track__start-column")
         ActionChains(driver).move_to_element(el).click().perform()
     else:
         print(f"Not result for: {track_title!r}")

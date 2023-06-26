@@ -14,6 +14,7 @@ import jinja2
 # pip install selenium
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
 
 
 def img_to_src_base64(file_name: str) -> str:
@@ -67,7 +68,7 @@ try:
         print(f'Title: "{driver.title}"')
 
         with open(file_name + ".png", "wb") as f:
-            image_data = driver.find_element_by_id("screenshot_this").screenshot_as_png
+            image_data = driver.find_element(By.ID, "screenshot_this").screenshot_as_png
             f.write(image_data)
 
 finally:

@@ -39,7 +39,7 @@ try:
 
     time.sleep(5)
 
-    footer_el = driver.find_element_by_class_name("footer")
+    footer_el = driver.find_element(By.CLASS_NAME, "footer")
 
     # Move down page to bottom
     y_position = 0

@@ -9,6 +9,7 @@ import time
 
 # pip install selenium
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 
 RIGHT_ANSWERS = [
@@ -34,20 +35,20 @@ print(f'Title: "{driver.title}"\n')
 
 # Scroll to test
 driver.execute_script(
-    "arguments[0].scrollIntoView();", driver.find_element_by_id("js-pc__article__descr")
+    "arguments[0].scrollIntoView();", driver.find_element(By.ID, "js-pc__article__descr")
 )
 
-start_button = driver.find_element_by_css_selector(".quiz__start-button")
+start_button = driver.find_element(By.CSS_SELECTOR, ".quiz__start-button")
 start_button.click()
 
 while True:
     time.sleep(1)
 
-    quiz_count_el = driver.find_element_by_class_name("quiz__count")
+    quiz_count_el = driver.find_element(By.CLASS_NAME, "quiz__count")
     quiz_count_text = quiz_count_el.text
     print(quiz_count_text)
 
-    answer_elements = driver.find_elements_by_css_selector(".quiz__answer-text")
+    answer_elements = driver.find_elements(By.CSS_SELECTOR, ".quiz__answer-text")
     print(f'Answers: {", ".join(repr(el.text.strip()) for el in answer_elements)}')
 
     selected_answer = None
@@ -64,7 +65,7 @@ while True:
     print(f"Select answer: {selected_answer.text.strip()!r}")
     selected_answer.click()
 
-    next_question_button = driver.find_element_by_class_name("quiz__next-question")
+    next_question_button = driver.find_element(By.CLASS_NAME, "quiz__next-question")
     next_question_button.click()
 
     print()
@@ -76,8 +77,8 @@ while True:
         break
 
 print("Result:")
-print(driver.find_element_by_class_name("quiz__question").text)
-print(driver.find_element_by_class_name("quiz__result").text)
+print(driver.find_element(By.CLASS_NAME, "quiz__question").text)
+print(driver.find_element(By.CLASS_NAME, "quiz__result").text)
 
 # Title: "Тест: мальчик или девочка — Игры Mail.ru"
 #

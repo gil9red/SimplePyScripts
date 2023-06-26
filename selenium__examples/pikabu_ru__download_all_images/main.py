@@ -14,6 +14,7 @@ from urllib.request import urlretrieve
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException, MoveTargetOutOfBoundsException
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
 
 
 def get_suffix(url: str) -> str:
@@ -50,9 +51,9 @@ try:
 
     print(f"Title: {driver.title!r}")
 
-    more_comments_el = driver.find_element_by_class_name("comments__more-button")
-    section_after_comments_el = driver.find_element_by_css_selector(
-        ".comments-wrapper ~ section"
+    more_comments_el = driver.find_element(By.CLASS_NAME, "comments__more-button")
+    section_after_comments_el = driver.find_element(
+        By.CSS_SELECTOR, ".comments-wrapper ~ section"
     )
 
     num_click = 0
@@ -82,7 +83,7 @@ try:
 
     print("Go search comments!")
 
-    images = driver.find_elements_by_css_selector(".page-story img.story-image__image")
+    images = driver.find_elements(By.CSS_SELECTOR, ".page-story img.story-image__image")
     num_images = len(images)
 
     for i, img_el in enumerate(images, 1):
@@ -92,19 +93,19 @@ try:
         file_name = dir_name / f"__story{num_img}{get_suffix(img_url)}"
         urlretrieve(img_url, file_name)
 
-    for comment_el in driver.find_elements_by_css_selector(
-        "div.page-story__comments div.comment"
+    for comment_el in driver.find_elements(
+        By.CSS_SELECTOR, "div.page-story__comments div.comment"
     ):
         comment_id = comment_el.get_attribute("id")
 
-        comment_body_el = comment_el.find_element_by_class_name("comment__body")
-        user_name = comment_body_el.find_element_by_css_selector(
-            ".comment__user"
+        comment_body_el = comment_el.find_element(By.CLASS_NAME, "comment__body")
+        user_name = comment_body_el.find_element(
+            By.CSS_SELECTOR, ".comment__user"
         ).get_attribute("data-name")
         # print(user_name, comment_id)
 
-        images = comment_body_el.find_elements_by_css_selector(
-            "div.comment-image__content > a > img"
+        images = comment_body_el.find_elements(
+            By.CSS_SELECTOR, "div.comment-image__content > a > img"
         )
         num_images += len(images)
 

@@ -15,6 +15,7 @@ from selenium.common.exceptions import (
     NoSuchElementException,
     StaleElementReferenceException,
 )
+from selenium.webdriver.common.by import By
 
 sys.path.append("get_all_tracks_playlist")
 from common import Track, get_track, seconds_to_str
@@ -49,14 +50,14 @@ try:
 
     play_track(driver, SEARCHING_TRACK)
 
-    player_progress_el = driver.find_element_by_css_selector(".player-progress")
-    progress__text_el = player_progress_el.find_element_by_css_selector(
-        ".progress__bar.progress__text"
+    player_progress_el = driver.find_element(By.CSS_SELECTOR, ".player-progress")
+    progress__text_el = player_progress_el.find_element(
+        By.CSS_SELECTOR, ".progress__bar.progress__text"
     )
 
     while True:
         try:
-            track_playing_el = driver.find_element_by_css_selector(".d-track_playing")
+            track_playing_el = driver.find_element(By.CSS_SELECTOR, ".d-track_playing")
             track = get_track(track_playing_el)
         except (NoSuchElementException, StaleElementReferenceException):
             continue

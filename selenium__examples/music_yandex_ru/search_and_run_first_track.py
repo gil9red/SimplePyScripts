@@ -66,7 +66,7 @@ except TimeoutException:
     tracks_el = []
 
 if tracks_el:
-    el = tracks_el[0].find_element_by_css_selector(".d-track__start-column")
+    el = tracks_el[0].find_element(By.CSS_SELECTOR, ".d-track__start-column")
     ActionChains(driver).move_to_element(el).click().perform()
 else:
     print(f"Not result for: {SEARCHING_TRACK!r}")
