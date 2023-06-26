@@ -130,11 +130,11 @@ class EmployeeInfo(QWidget):
         self.job.setText(employee.job)
         self.department.setText(employee.department)
         self.birthday.setText(employee.birthday)
-        self.url.setText('<a href="{0}">{0}</a>'.format(employee.url))
+        self.url.setText(f'<a href="{employee.url}">{employee.url}</a>')
         self.work_phone.setText(employee.work_phone)
         self.mobile_phone.setText(employee.mobile_phone)
         self.id.setText(employee.id)
-        self.email.setText('<a href="mailto:{0}">{0}</a>'.format(employee.email))
+        self.email.setText(f'<a href="mailto:{employee.email}">{employee.email}</a>')
 
 
 # TODO: ввод с клавы при фокусе на таблицу меняет редактор фильтра
@@ -253,8 +253,8 @@ start parsing for the collection of employees and populate the database."""
         if not rs.ok:
             QMessageBox.information(self, "Info", "Failed to login")
             print("Не удалось авторизоваться")
-            print("rs.status_code = {}".format(rs.status_code))
-            print("rs.headers = {}".format(rs.headers))
+            print(f"rs.status_code = {rs.status_code}")
+            print(f"rs.headers = {rs.headers}")
             return
 
         # TODO: move to db.py
@@ -303,16 +303,16 @@ start parsing for the collection of employees and populate the database."""
             employee_id = row["Id"]
 
             if exists(employee_id):
-                print("Employee with id = {} already exist.".format(employee_id))
+                print(f"Employee with id = {employee_id} already exist.")
                 continue
 
             rs = session.get(config.URL_GET_EMPLOYEE_INFO.format(employee_id))
             if not rs.ok:
                 print(
-                    "Request getting employee info (id={}) not ok.".format(employee_id)
+                    f"Request getting employee info (id={employee_id}) not ok."
                 )
-                print("rs.status_code = {}".format(rs.status_code))
-                print("rs.headers = {}".format(rs.headers))
+                print(f"rs.status_code = {rs.status_code}")
+                print(f"rs.headers = {rs.headers}")
                 continue
 
             employee = Employee.parse(rs.text, session)
@@ -343,7 +343,7 @@ start parsing for the collection of employees and populate the database."""
 
         # TODO: db.py
         filter_text = self.filter_line_edit.text()
-        filter_text = "%{}%".format(filter_text)
+        filter_text = f"%{filter_text}%"
         sql_filter = or_(
             Employee.name.like(filter_text),
             Employee.short_name.like(filter_text),

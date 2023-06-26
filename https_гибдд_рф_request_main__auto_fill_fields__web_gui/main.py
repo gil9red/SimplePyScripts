@@ -146,9 +146,7 @@ def _on_load_finished(ok: bool):
 
     run_js_code(
         page,
-        """qt.jQuery('#message_check > textarea').val({});""".format(
-            repr(TEXT_PATTERN)
-        ),
+        f"qt.jQuery('#message_check > textarea').val({TEXT_PATTERN!r});",
     )
 
     # code = """

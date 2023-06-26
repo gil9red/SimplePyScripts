@@ -135,9 +135,7 @@ class Employee(Base):
         return employee
 
     def __str__(self):
-        return '<Employee("{}" ({}), job: {}, department: {})>'.format(
-            self.name, self.short_name, self.job, self.department
-        )
+        return f'<Employee("{self.name}" ({self.short_name}), job: {self.job}, department: {self.department})>'
 
     def __repr__(self):
         return self.__str__()

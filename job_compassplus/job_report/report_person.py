@@ -56,7 +56,7 @@ class ReportPerson:
             return self._hours * 60 + self._minutes
 
         def __repr__(self):
-            return "{:0>2}:{:0>2}".format(self._hours, self._minutes)
+            return f"{self._hours:0>2}:{self._minutes:0>2}"
 
         def __eq__(self, other):
             return self.total == other.total

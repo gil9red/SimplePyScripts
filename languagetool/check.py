@@ -35,7 +35,7 @@ def check_ru(text: str) -> list():
 
     rs = requests.post(url, data=post_data)
     if not rs.ok:
-        raise Exception("Проблема с {}, status_code = {}".format(url, rs.status_code))
+        raise Exception(f"Проблема с {url}, status_code = {rs.status_code}")
 
     return rs.json()["matches"]
 
@@ -69,14 +69,9 @@ if __name__ == "__main__":
             length = context["length"]
 
             error_text = context["text"][offset : offset + length]
+            replacements = [i["value"] for i in match["replacements"]]
             print(
-                '"{}" [{}:{}]: "{}" -> {}'.format(
-                    error_text,
-                    offset,
-                    length,
-                    error,
-                    [i["value"] for i in match["replacements"]],
-                )
+                f'"{error_text}" [{offset}:{length}]: "{error}" -> {replacements}'
             )
 
     print()

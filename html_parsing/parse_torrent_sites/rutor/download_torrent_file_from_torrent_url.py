@@ -24,7 +24,7 @@ def download_torrent_file(torrent_file_url):
 
     rs = requests.get(torrent_file_url, headers={"User-Agent": user_agent})
     if not rs.ok:
-        print("Не получилось скачать: {}\n\n{}".format(rs.status_code, rs.text))
+        print(f"Не получилось скачать: {rs.status_code}\n\n{rs.text}")
         return
 
     # Теперь нужно вытащить название торрент-файла

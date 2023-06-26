@@ -115,9 +115,7 @@ class MovieInfoWidget(QWidget):
 
         for time, price in movie.seanses.items():
             seanses_table += (
-                "<tr><td>{}&nbsp;&nbsp;&nbsp;&nbsp;</td><td>{}</td></tr>".format(
-                    time, price
-                )
+                f"<tr><td>{time}&nbsp;&nbsp;&nbsp;&nbsp;</td><td>{price}</td></tr>"
             )
 
         seanses_table += "</table>"

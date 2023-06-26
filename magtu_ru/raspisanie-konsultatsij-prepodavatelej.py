@@ -28,9 +28,9 @@ for tag in root.select("[itemprop=articleBody] > *"):
     elif name == "ul":
         for li in tag.select("li"):
             if li.a:
-                print('    "{}": {}'.format(li.a.text, urljoin(rs.url, li.a["href"])))
+                print(f'    "{li.a.text}": {urljoin(rs.url, li.a["href"])}')
             else:
-                print('    "{}"'.format(li.text))
+                print(f'    "{li.text}"')
 
         print()
         continue

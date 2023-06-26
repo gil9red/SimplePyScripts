@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
     # Выводим данные с сортировкой по ключу: по возрастанию
     for year in sorted(populations):
-        print("{}: {}".format(year, populations[year]))
+        print(f"{year}: {populations[year]}")
 
     # 2010: 1,359,755,102
     # 2011: 1,367,480,264

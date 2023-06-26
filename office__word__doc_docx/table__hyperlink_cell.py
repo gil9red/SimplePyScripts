@@ -74,7 +74,7 @@ for row in rows:
 
     p = cells[0].paragraphs[0]
 
-    add_hyperlink(p, "https://ru.stackoverflow.com/tags/{}/info".format(name), name)
+    add_hyperlink(p, f"https://ru.stackoverflow.com/tags/{name}/info", name)
     cells[1].text = description
 
 # Save

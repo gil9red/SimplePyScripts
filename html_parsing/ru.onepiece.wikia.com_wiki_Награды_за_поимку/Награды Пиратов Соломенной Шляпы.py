@@ -23,7 +23,7 @@ items = [[process_td(td) for td in x.select("td")] for x in row_list[::2]]
 
 print("Награды:")
 for row, x in enumerate(items, 1):
-    print("{:2}. {}".format(row, x))
+    print(f"{row:2}. {x}")
 
 #  1. ['Монки Д. Луффи', '«Соломенная Шляпа» / «Пятый Император»', '1 500 000 000']
 #  2. ['Ророноа Зоро', '«Охотник на пиратов»', '320 000 000']
@@ -44,7 +44,7 @@ print("Награды (по убыванию):")
 items.sort(key=lambda x: int(re.sub(r"\D", "", x[-1])), reverse=True)
 
 for row, x in enumerate(items, 1):
-    print("{:2}. {}".format(row, x))
+    print(f"{row:2}. {x}")
 
 #  1. ['Монки Д. Луффи', '«Соломенная Шляпа» / «Пятый Император»', '1 500 000 000']
 #  2. ['Дзимбэй', '«Рыцарь Моря»', 'Более 400 000 000']

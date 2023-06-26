@@ -59,28 +59,22 @@ df_with_price = df[df["Стоимость руб. без НДС"] > 0]
 print("With price:", len(df_with_price))
 
 phone_list = sorted(set(df["Номер"].tolist()))
-print("\nPhones ({}): {}".format(len(phone_list), phone_list))
+print(f"\nPhones ({len(phone_list)}): {phone_list}")
 
 print("\nShow target phone:")
 df_dns_shop = df[df["Номер"].str.contains("sms:DNS-SHOP")]
 print(
-    "  DNS-SHOP: number: {}, total price: {}".format(
-        len(df_dns_shop), df_dns_shop["Стоимость руб. без НДС"].sum()
-    )
+    f"  DNS-SHOP: number: {len(df_dns_shop)}, total price: {df_dns_shop['Стоимость руб. без НДС'].sum()}"
 )
 
 df_maginfo = df[df["Номер"].str.contains("sms:Maginfo")]
 print(
-    "  Maginfo: number: {}, total price: {}".format(
-        len(df_maginfo), df_maginfo["Стоимость руб. без НДС"].sum()
-    )
+    f"  Maginfo: number: {len(df_maginfo)}, total price: {df_maginfo['Стоимость руб. без НДС'].sum()}"
 )
 
 df_sms_ru = df[df["Номер"].str.contains("sms:SMS.RU")]
 print(
-    "  SMS.RU: number: {}, total price: {}".format(
-        len(df_sms_ru), df_sms_ru["Стоимость руб. без НДС"].sum()
-    )
+    f"  SMS.RU: number: {len(df_sms_ru)}, total price: {df_sms_ru['Стоимость руб. без НДС'].sum()}"
 )
 
 print("\nPrint details (Maginfo):")

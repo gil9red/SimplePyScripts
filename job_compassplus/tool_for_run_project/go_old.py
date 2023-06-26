@@ -68,8 +68,8 @@ EXAMPLES:
   > go optt
     Version: ['2.1.7.1', 'trunk_optt']
 '''.format(
-        '\n'.join('  {:<10} {}'.format(k, v) for k, v in sorted(NAME_BY_PATH.items())),
-        '\n'.join('  {:<10} {}'.format(k, v) for k, v in sorted(WHAT_BY_FILE.items())),
+        '\n'.join(f'  {k:<10} {v}' for k, v in sorted(NAME_BY_PATH.items())),
+        '\n'.join(f'  {k:<10} {v}' for k, v in sorted(WHAT_BY_FILE.items())),
     )
 
 

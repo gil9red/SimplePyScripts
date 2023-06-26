@@ -30,10 +30,10 @@ import matplotlib__examples.ticker
 
 def funcForFormatter(x, pos):
     if x < 0:
-        return "минус {x}".format(x=abs(x))
+        return f"минус {abs(x)}"
 
     if x > 0:
-        return "плюс {x}".format(x=x)
+        return f"плюс {x}"
 
     return "0"
 

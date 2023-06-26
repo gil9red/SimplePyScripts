@@ -34,7 +34,7 @@ if __name__ == "__main__":
             border_list = schedule.select(".border")
             if schedule_date == today and border_list:
                 today_found = True
-                print("Расписание фильмов на сегодня {}:".format(schedule_date_str))
+                print(f"Расписание фильмов на сегодня {schedule_date_str}:")
 
                 # Получение фильмов в текущей вкладке (по идеи, текущая вкладка -- текущий день)
                 for border in border_list:

@@ -211,7 +211,7 @@ class MainWindow(QMainWindow):
                     self.table_logged.setItem(i, 0, QTableWidgetItem(date_str))
 
                     item = QTableWidgetItem(total_seconds_str)
-                    item.setToolTip("Total seconds: {}".format(total_seconds))
+                    item.setToolTip(f"Total seconds: {total_seconds}")
                     self.table_logged.setItem(i, 1, item)
 
                 self.table_logged.setCurrentCell(0, 0)

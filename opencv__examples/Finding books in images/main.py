@@ -68,7 +68,7 @@ for c in contours:
         2,
     )
 
-print("На картинке {0} книг(и)".format(total))
+print(f"На картинке {total} книг(и)")
 cv2.imwrite("output.jpg", image_result)
 cv2.imshow("image_result", image_result)
 
