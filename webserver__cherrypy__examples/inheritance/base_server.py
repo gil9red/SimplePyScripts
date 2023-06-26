@@ -40,13 +40,13 @@ class BaseServer:
     # publish methods that don't have the exposed attribute set to True.
     @cherrypy.expose
     def index(self):
-        return '''
-            This is: <b>{}</b><br>
+        return f'''
+            This is: <b>{self.name}</b><br>
             <a href="/error">Get error</a><br>
             <a href="/execute">Execute</a><br>
             <a href="/execute_func">Execute func</a><br>
             <a href="/get_name">Get name</a>
-        '''.format(self.name)
+        '''
 
     @cherrypy.expose
     def error(self):

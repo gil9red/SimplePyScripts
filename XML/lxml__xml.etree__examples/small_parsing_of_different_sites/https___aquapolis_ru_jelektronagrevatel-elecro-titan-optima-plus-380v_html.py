@@ -26,7 +26,7 @@ for tr in root.cssselect('#super-product-table tr'):
     value = tds[2].cssselect('input')[0].get('value')
     stock_status = "Нет в наличии" if value == "0" else "Есть"
 
-    print('{:65} | {:16} | {}'.format(name, price, stock_status))
+    print(f'{name:65} | {price:16} | {stock_status}')
 
 
 # Электронагреватель Elecro Titan Optima Plus СP-18 18 кВт (380В)   | 211 572,00 руб.  | Есть

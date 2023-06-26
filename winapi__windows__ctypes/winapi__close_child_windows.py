@@ -18,7 +18,7 @@ import win32con
 def all_ok(hwnd, param):
     text = win32gui.GetWindowText(hwnd)
     class_name = win32gui.GetClassName(hwnd)
-    print('#{:0>8x} "{}": {}'.format(hwnd, text, class_name))
+    print(f'#{hwnd:0>8x} "{text}": {class_name}')
 
     # Закрытие панели инструментов
     if class_name == 'ToolbarWindow32':

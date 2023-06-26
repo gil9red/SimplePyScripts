@@ -44,7 +44,7 @@ while True:  # цикл перереисовки формы
     ColorDot.setFill(color_rgb(r, g, b))  # Обновляем цвет
     RGBtext.setText(pyautogui.pixel(x, y))  # Обновляем RGB
     RGBstring.setText(color_rgb(r, g, b))  # Обновляем web цвет
-    Coordstring.setText("{} x {}".format(x, y))  # Обновляем координаты
+    Coordstring.setText(f"{x} x {y}")  # Обновляем координаты
 
     if win.isClosed():
         break

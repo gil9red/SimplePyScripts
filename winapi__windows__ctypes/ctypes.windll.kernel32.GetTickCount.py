@@ -11,4 +11,4 @@ t = GetTickCount()
 import time
 time.sleep(1)
 
-print('Elapsed: {} ms'.format(GetTickCount() - t))
+print(f'Elapsed: {GetTickCount() - t} ms')

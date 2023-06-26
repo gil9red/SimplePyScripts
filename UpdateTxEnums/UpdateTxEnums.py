@@ -727,7 +727,7 @@ def rowsToCSharpXmlComment(rows):
     # @param rows list[unicode] Список строк текста, который нужно "обернуть" в документирущий комментарий C# <summary>
     # @return unicode Текст в комментарии <summary>, строки которого разделены '\n'
 
-    return u'/// <summary> \n%s/// </summary>' % ''.join([u'/// {}\n'.format(row) + '' for row in rows])
+    return u'/// <summary> \n%s/// </summary>' % ''.join(f'/// {row}\n' + '' for row in rows)
 
 
 def getSortedEnumItems(enum_items):

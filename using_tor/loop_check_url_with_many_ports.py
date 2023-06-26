@@ -36,8 +36,8 @@ log.addHandler(handler)
 while True:
     for port in [9050, 9051, 9052, 9053]:
         proxies = {
-            'http': 'socks5://localhost:{}'.format(port),
-            'https': 'socks5://localhost:{}'.format(port),
+            'http': f'socks5://localhost:{port}',
+            'https': f'socks5://localhost:{port}',
         }
 
         try:

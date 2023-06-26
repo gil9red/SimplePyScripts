@@ -39,7 +39,7 @@ def GetTextLastError(error_code=None):
     LocalFree(message_buffer)
 
     error_message = error_message.decode('cp1251').strip()
-    return '{} - {}'.format(error_code, error_message)
+    return f'{error_code} - {error_message}'
 
 
 if __name__ == '__main__':

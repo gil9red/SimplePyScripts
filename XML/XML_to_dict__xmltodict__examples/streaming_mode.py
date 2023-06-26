@@ -12,7 +12,7 @@ import xmltodict
 
 
 def handle(path, item):
-    print('path: {} item: {}'.format(path, repr(item)))
+    print(f'path: {path} item: {item!r}')
     return True
 
 

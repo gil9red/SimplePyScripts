@@ -81,4 +81,4 @@ if __name__ == "__main__":
         print("Save to filename:", file_name)
 
     except Exception as e:
-        print("Error: {}\n\n{}".format(e, traceback.format_exc()))
+        print(f"Error: {e}\n\n{traceback.format_exc()}")

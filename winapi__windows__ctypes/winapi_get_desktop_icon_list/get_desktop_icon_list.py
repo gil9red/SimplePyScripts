@@ -196,9 +196,4 @@ if __name__ == '__main__':
 
     # Сортировка по индексу
     for i, name, pos, rect in sorted(icons_list, key=lambda x: x[0]):
-        print('{0: >3}. "{1}": {2.x}x{2.y}, {3}x{4}'.format(i + 1,
-                                                            name,
-                                                            pos,
-                                                            rect.right - rect.left,
-                                                            rect.bottom - rect.top,
-                                                            ))
+        print(f'{i + 1: >3}. "{name}": {pos.x}x{pos.y}, {rect.right - rect.left}x{rect.bottom - rect.top}')

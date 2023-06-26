@@ -25,7 +25,7 @@ def to_str(x):
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = '{}: {}:\n'.format(ex_cls.__name__, ex)
+    text = f'{ex_cls.__name__}: {ex}:\n'
     import traceback
     text += ''.join(traceback.format_tb(tb))
 
@@ -142,7 +142,7 @@ class MainWindow(Qt.QWidget):
             print(len(result), result)
 
             result = map(to_str, result)
-            output = '\n'.join('{}. {}'.format(i, x) for i, x in enumerate(result, 1))
+            output = '\n'.join(f'{i}. {x}' for i, x in enumerate(result, 1))
             self.text_edit_output.setPlainText(output)
 
         except Exception as e:

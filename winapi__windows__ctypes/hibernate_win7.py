@@ -15,7 +15,7 @@ try:
         import time
 
         while seconds_delay > 0:
-            print('\rDelay before hibernate: {} secs'.format(seconds_delay), end='')
+            print(f'\rDelay before hibernate: {seconds_delay} secs', end='')
             time.sleep(1)
             seconds_delay -= 1
 

@@ -23,7 +23,7 @@ def replace(file_name, save_file_name):
 
             # Заменяем дефисы одинарным, если они подряд идут от 2 и больше
             comment_text = re.sub('-{2,}', '-', comment_text)
-            comment_tag = '<!--{}-->'.format(comment_text)
+            comment_tag = f'<!--{comment_text}-->'
 
             if match != comment_tag:
                 print(match)

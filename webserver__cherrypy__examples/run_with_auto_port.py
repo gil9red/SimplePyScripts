@@ -17,7 +17,7 @@ class RootServer:
 
     @cherrypy.expose
     def index(self):
-        return '{}:{} / {}'.format(self.host, self.port, self.url)
+        return f'{self.host}:{self.port} / {self.url}'
 
     def on_start(self):
         def _wait_server_running():
@@ -30,7 +30,7 @@ class RootServer:
             self.host, self.port = cherrypy.server.bound_addr
             self.url = cherrypy.server.description
 
-            print('{}:{} / {}'.format(self.host, self.port, self.url))
+            print(f'{self.host}:{self.port} / {self.url}')
 
         from threading import Thread
         thread = Thread(target=_wait_server_running)
