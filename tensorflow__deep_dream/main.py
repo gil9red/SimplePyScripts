@@ -378,7 +378,7 @@ def main():
     # Url:   http://storage.googleapis.com/deepdream/visualz/tensorflow_inception/mixed4d_5x5_pre_relu.html
     # Url:   https://microscope.openai.com/models/inceptionv1/mixed4d_5x5_0/1
 
-    savearray(IMG_NOISE / 255.0, '{}/noise.png'.format(output_dir, 'noise'))
+    savearray(IMG_NOISE / 255.0, f'{output_dir}/noise.png')
     print()
 
     # layer = 'mixed4c'

@@ -16,7 +16,7 @@ if __name__ == '__main__':
     from config import APPLICATION_ID, SECRET, UNISTREAM_BANK_ID
 
     OPERATION_GUID = '<OPERATION_GUID>'
-    URL = 'https://test.api.unistream.com/v1/operations/{}/details'.format(OPERATION_GUID)
+    URL = f'https://test.api.unistream.com/v1/operations/{OPERATION_GUID}/details'
     TODAY_DATE = get_today_RFC1123_date()
 
     headers = dict()

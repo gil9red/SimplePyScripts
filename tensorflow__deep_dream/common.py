@@ -37,7 +37,7 @@ def download_tensorflow_model(data_dir='data/'):
 
     local_zip_file = os.path.join(data_dir, model_name)
     if not os.path.exists(local_zip_file):
-        print('Not found: {}. Step download...'.format(local_zip_file))
+        print(f'Not found: {local_zip_file}. Step download...')
 
         # Download
         model_url = urllib.request.urlopen(url)

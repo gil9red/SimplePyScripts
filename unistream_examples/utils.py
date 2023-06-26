@@ -50,4 +50,4 @@ def get_authorization_header(application_id, secret, today_date, url, headers):
     logging.debug('Message:\n%s', message)
     logging.debug('Signature:\n%s', signature)
 
-    return "UNIHMAC {}:{}".format(application_id, signature)
+    return f"UNIHMAC {application_id}:{signature}"

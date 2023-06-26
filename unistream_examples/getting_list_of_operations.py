@@ -37,7 +37,7 @@ if __name__ == '__main__':
     # URL = 'https://test.api.unistream.com/v1/operations' + '?' + urlencode(params)
 
     URL = 'https://test.api.unistream.com/v1/operations'
-    URL += '?' + '&'.join(['{}={}'.format(k, v) for k, v in params.items()])
+    URL += '?' + '&'.join(f'{k}={v}' for k, v in params.items())
 
     TODAY_DATE = get_today_RFC1123_date()
 
