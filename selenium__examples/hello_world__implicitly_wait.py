@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # https://pypi.python.org/pypi/selenium
@@ -25,22 +25,22 @@ driver = webdriver.Firefox()
 driver.implicitly_wait(10)
 
 try:
-    driver.get('https://yahoo.com')
+    driver.get("https://yahoo.com")
     print(f'Title: "{driver.title}"')
 
-    search_box = driver.find_element_by_id('ybar-sbq')
-    search_box.send_keys('Hello World!' + Keys.RETURN)
+    search_box = driver.find_element_by_id("ybar-sbq")
+    search_box.send_keys("Hello World!" + Keys.RETURN)
 
     # Делаем скриншот результата
-    driver.save_screenshot('before_search.png')
+    driver.save_screenshot("before_search.png")
 
-    elem = driver.find_element_by_id('web')
-    elem.screenshot('search_content.png')
+    elem = driver.find_element_by_id("web")
+    elem.screenshot("search_content.png")
 
     print(f'Title: "{driver.title}"')
 
     # Делаем скриншот результата
-    driver.save_screenshot('after_search.png')
+    driver.save_screenshot("after_search.png")
 
 finally:
     driver.quit()
