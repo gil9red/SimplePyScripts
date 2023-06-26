@@ -39,12 +39,12 @@ def get_all_tags(need_pages=None, need_tags=None, on_exception_stop=False, repea
         print('page:', page)
 
         try:
-            rs = requests.get('http://ru.stackoverflow.com/tags?page={}&tab=popular'.format(page), headers=headers)
+            rs = requests.get(f'http://ru.stackoverflow.com/tags?page={page}&tab=popular', headers=headers)
             root = BeautifulSoup(rs.content, 'html.parser')
 
             for tag in [a.text.strip() for a in root.select('.tag-cell > a')]:
-                print('  tag: "{}"'.format(tag))
-                url_info = 'http://ru.stackoverflow.com/tags/{}/info'.format(tag)
+                print(f'  tag: "{tag}"')
+                url_info = f'http://ru.stackoverflow.com/tags/{tag}/info'
 
                 while True:
                     try:
@@ -81,14 +81,14 @@ def get_all_tags(need_pages=None, need_tags=None, on_exception_stop=False, repea
 
                     except Exception as e:
                         import traceback
-                        print("ERROR: {}\n\n{}".format(e, traceback.format_exc()))
+                        print(f"ERROR: {e}\n\n{traceback.format_exc()}")
 
                         if not repeat_request_tag_on_error:
                             break
 
         except Exception as e:
             import traceback
-            print("ERROR: {}\n\n{}".format(e, traceback.format_exc()))
+            print(f"ERROR: {e}\n\n{traceback.format_exc()}")
 
             if on_exception_stop:
                 break

@@ -24,7 +24,7 @@ with socket.socket() as sock:
 </root>    
     """
     data = bytes(data, "utf-8")
-    print("Sending ({}): {}".format(len(data), data))
+    print(f"Sending ({len(data)}): {data}")
     print()
 
     send_msg(sock, data)
@@ -32,6 +32,6 @@ with socket.socket() as sock:
     print("Receiving")
 
     response_data = recv_msg(sock)
-    print("Response ({}): {}".format(len(response_data), response_data))
+    print(f"Response ({len(response_data)}): {response_data}")
 
     print("Close\n")

@@ -18,10 +18,10 @@ with sr.Microphone() as source:
 
 try:
     text = r.recognize_google(audio, language="ru-RU")
-    print('Фраза: "{}"'.format(text))
+    print(f'Фраза: "{text}"')
 
 except sr.UnknownValueError:
     print("Робот не расслышал фразу")
 
 except sr.RequestError as e:
-    print("Ошибка сервиса: {}".format(e))
+    print(f"Ошибка сервиса: {e}")

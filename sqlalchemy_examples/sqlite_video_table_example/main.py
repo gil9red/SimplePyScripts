@@ -43,7 +43,7 @@ class Serial(Base):
     Videos = relationship("SerialVideo", backref="Serial", order_by="SerialVideo.Id")
 
     def __repr__(self):
-        return '<Serial(EnglishName: "{}", Count: {})>'.format(self.EnglishName, len(self.Videos))
+        return f'<Serial(EnglishName: "{self.EnglishName}", Count: {len(self.Videos)})>'
 
 
 class SerialVideo(Base):
@@ -63,7 +63,7 @@ class SerialVideo(Base):
     Duration = Column(Integer)
 
     def __repr__(self):
-        return '<Serial(Number: "{}", Serial: {})>'.format(self.Number, self.Serial.EnglishName)
+        return f'<Serial(Number: "{self.Number}", Serial: {self.Serial.EnglishName})>'
 
 
 if __name__ == '__main__':

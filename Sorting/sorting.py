@@ -48,7 +48,7 @@ print(students)
 
 print()
 words = ["he", "He", "Ab", "ab", "Cc", "cC"]
-print("Words: {0}".format(words))
+print(f"Words: {words}")
 print("Sorting:")
 print(sorted(words))
 print(sorted(words, reverse=True))

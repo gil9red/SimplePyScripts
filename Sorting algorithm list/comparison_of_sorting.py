@@ -98,7 +98,7 @@ if __name__ == '__main__':
             print('    timeout!')
 
         except Exception as e:
-            print('    Error: {}: sort: {}'.format(e, name))
+            print(f'    Error: {e}: sort: {name}')
 
         t = time.clock() - t
         time_by_algo_name[t] = name
@@ -107,4 +107,4 @@ if __name__ == '__main__':
     print()
     print('Sorted by time:')
     for t, name in sorted(time_by_algo_name.items(), key=lambda x: x[0]):
-        print('{}: {:.3f} secs'.format(name, t))
+        print(f'{name}: {t:.3f} secs')

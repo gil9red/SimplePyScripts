@@ -28,7 +28,7 @@ if __name__ == '__main__':
     day_by_rep = get_day_by_rep(url)
 
     start_date, end_date = min(day_by_rep), max(day_by_rep)
-    print('Start: {}, end: {}'.format(start_date, end_date))
+    print(f'Start: {start_date}, end: {end_date}')
     print()
 
     # Сгенерируем диапазон дат
@@ -36,4 +36,4 @@ if __name__ == '__main__':
 
     # Print
     for day in reversed(dates):
-        print('{:%d/%m/%Y} : {}'.format(day, day_by_rep.get(day, 0)))
+        print(f'{day:%d/%m/%Y} : {day_by_rep.get(day, 0)}')

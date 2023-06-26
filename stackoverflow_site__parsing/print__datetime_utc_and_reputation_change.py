@@ -33,11 +33,11 @@ if __name__ == '__main__':
     day_by_rep = get_day_by_rep(url)
 
     start_date, end_date = min(day_by_rep), max(day_by_rep)
-    print('Start: {}, end: {}'.format(start_date, end_date))
+    print(f'Start: {start_date}, end: {end_date}')
     print()
 
     dates = sorted(day_by_rep.items(), key=lambda x: x[0])
 
     # Print
     for day, rep in reversed(dates):
-        print('{:%d/%m/%Y} : {}'.format(day, rep))
+        print(f'{day:%d/%m/%Y} : {rep}')

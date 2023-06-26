@@ -24,7 +24,7 @@ def check_ru(text: str) -> list():
     import requests
     rs = requests.post(url, data=post_data)
     if not rs.ok:
-        raise Exception('Проблема с {}, status_code = {}'.format(url, rs.status_code))
+        raise Exception(f'Проблема с {url}, status_code = {rs.status_code}')
 
     return rs.json()['matches']
 
@@ -54,8 +54,8 @@ for tag, value in sorted(tags.items(), key=lambda x: len(x[1]['description'])):
                     length = context['length']
 
                     error_text = context['text'][offset: offset + length]
-                    print('"{}" [{}:{}]: "{}" -> {}'.format(error_text, offset, length, error,
-                                                            [i['value'] for i in match['replacements']]))
+                    replacements = [i['value'] for i in match['replacements']]
+                    print(f'"{error_text}" [{offset}:{length}]: "{error}" -> {replacements}')
 
                 print('\n')
                 print('-' * 50)
@@ -65,7 +65,7 @@ for tag, value in sorted(tags.items(), key=lambda x: len(x[1]['description'])):
 
         except Exception as e:
             import traceback
-            print("ERROR: '{}'\n\n{}".format(e, traceback.format_exc()))
+            print(f"ERROR: '{e}'\n\n{traceback.format_exc()}")
 
             time.sleep(10)
 
