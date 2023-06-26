@@ -37,7 +37,7 @@ for author, logs in list_top5_author_by_log:
     ax.plot(
         df_month["year_month"],
         df_month["count"],
-        label="{} ({})".format(author, len(logs)),
+        label=f"{author} ({len(logs)})",
     )
 
 ax.legend()

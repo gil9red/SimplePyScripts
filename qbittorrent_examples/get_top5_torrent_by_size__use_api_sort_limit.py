@@ -15,7 +15,7 @@ torrents_min_top5 = qb.torrents(sort="size", limit="5")
 print("Max top5:")
 for i, torrent in enumerate(torrents_max_top5, 1):
     print(
-        "    {}. {} ({})".format(i, torrent["name"], sizeof_fmt(torrent["total_size"]))
+        f"    {i}. {torrent['name']} ({sizeof_fmt(torrent['total_size'])})"
     )
 
 print()
@@ -23,5 +23,5 @@ print()
 print("Min top5:")
 for i, torrent in enumerate(torrents_min_top5, 1):
     print(
-        "    {}. {} ({})".format(i, torrent["name"], sizeof_fmt(torrent["total_size"]))
+        f"    {i}. {torrent['name']} ({sizeof_fmt(torrent['total_size'])})"
     )

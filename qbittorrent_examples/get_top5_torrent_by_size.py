@@ -17,7 +17,7 @@ torrents_min_top5 = sorted(torrents, key=lambda x: x["total_size"])[:5]
 print("Max top5:")
 for i, torrent in enumerate(torrents_max_top5, 1):
     print(
-        "    {}. {} ({})".format(i, torrent["name"], sizeof_fmt(torrent["total_size"]))
+        f"    {i}. {torrent['name']} ({sizeof_fmt(torrent['total_size'])})"
     )
 
 print()
@@ -25,5 +25,5 @@ print()
 print("Min top5:")
 for i, torrent in enumerate(torrents_min_top5, 1):
     print(
-        "    {}. {} ({})".format(i, torrent["name"], sizeof_fmt(torrent["total_size"]))
+        f"    {i}. {torrent['name']} ({sizeof_fmt(torrent['total_size'])})"
     )

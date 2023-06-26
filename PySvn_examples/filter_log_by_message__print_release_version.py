@@ -22,11 +22,9 @@ print()
 release_version_log_list = [
     log for log in log_list if log.msg and "Release version" in log.msg
 ]
-print("Release version log ({}):".format(len(release_version_log_list)))
+print(f"Release version log ({len(release_version_log_list)}):")
 
 for i, log in enumerate(release_version_log_list, 1):
     print(
-        '    {:6}. [rev {}] {} {:15} "{}"'.format(
-            i, log.revision, log.date, log.author, log.msg
-        )
+        f'    {i:6}. [rev {log.revision}] {log.date} {log.author:15} "{log.msg}"'
     )

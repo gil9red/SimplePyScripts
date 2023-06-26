@@ -68,7 +68,7 @@ def remove_previous_torrent_from_qbittorrent(qb, new_info_hash):
         # Remove previous torrents
         if info_hash_list:
             print(
-                "Удаление предыдущих раздач этого торрента: {}".format(info_hash_list)
+                f"Удаление предыдущих раздач этого торрента: {info_hash_list}"
             )
             qb.delete(info_hash_list)
 
@@ -95,13 +95,11 @@ if __name__ == "__main__":
                 torrent_url
             )
             print(
-                "{}: Проверка {}: {} / {}".format(
-                    today, torrent_url, torrent_file_url, info_hash
-                )
+                f"{today}: Проверка {torrent_url}: {torrent_file_url} / {info_hash}"
             )
 
             if qb.get_torrent(info_hash):
-                print("Торрент {} уже есть в списке раздачи".format(info_hash))
+                print(f"Торрент {info_hash} уже есть в списке раздачи")
 
             else:
                 if info_hash != last_info_hash:
@@ -117,14 +115,12 @@ if __name__ == "__main__":
 
                     if last_info_hash is None:
                         print(
-                            "Добавление торрента с {} файлами: {}".format(
-                                len(new_files), new_files
-                            )
+                            f"Добавление торрента с {len(new_files)} файлами: {new_files}"
                         )
                     else:
                         print("Торрент изменился, пора его перекачивать")
                         print(
-                            "Добавлено {} файлов: {}".format(len(new_files), new_files)
+                            f"Добавлено {len(new_files)} файлов: {new_files}"
                         )
 
                     last_info_hash = info_hash
@@ -138,7 +134,7 @@ if __name__ == "__main__":
                     url = "https://sms.ru/sms/send?api_id={api_id}&to={to}&text={text}".format(
                         api_id=API_ID,
                         to=TO,
-                        text="Вышла новая серия '{}'".format(torrent["info"]["name"]),
+                        text=f"Вышла новая серия '{torrent['info']['name']}'",
                     )
                     rs = requests.get(url)
                     print(rs.text)

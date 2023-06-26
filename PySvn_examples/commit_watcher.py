@@ -15,9 +15,7 @@ url = config.URL_SVN
 last_log = get_log_list(url, limit=1)[0]
 last_revision = last_log.revision
 print(
-    'Start from commit rev{} by {}: "{}" in {}'.format(
-        last_revision, last_log.author, repr(last_log.msg), last_log.date
-    )
+    f'Start from commit rev{last_revision} by {last_log.author}: "{repr(last_log.msg)}" in {last_log.date}'
 )
 
 while True:
@@ -30,14 +28,8 @@ while True:
 
         if last_revision != last_log.revision:
             print(
-                'commits +{} from: rev{} by {}: "{}" in {}....{}\n'.format(
-                    len(log_list),
-                    last_revision,
-                    last_log.author,
-                    repr(last_log.msg),
-                    last_log.date,
-                    log_list,
-                )
+                f'commits +{len(log_list)} from: rev{last_revision} by {last_log.author}: '
+                f'"{repr(last_log.msg)}" in {last_log.date}....{log_list}\n'
             )
 
             last_revision = last_log.revision

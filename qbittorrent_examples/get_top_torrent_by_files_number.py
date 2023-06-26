@@ -12,10 +12,10 @@ qb = get_client()
 torrents = qb.torrents()
 torrent = max(torrents, key=lambda x: len(qb.get_torrent_files(x["hash"])))
 
-print("{} ({})".format(torrent["name"], sizeof_fmt(torrent["total_size"])))
+print(f"{torrent['name']} ({sizeof_fmt(torrent['total_size'])})")
 print()
 
 files = qb.get_torrent_files(torrent["hash"])
-print("Files ({}):".format(len(files)))
+print(f"Files ({len(files)}):")
 
 print_files_table(files)

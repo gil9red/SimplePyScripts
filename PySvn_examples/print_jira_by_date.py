@@ -54,4 +54,4 @@ for month, jira_items in month_by_jira_info.items():
         jira_items, key=lambda x: (x.split("-")[0], int(x.split("-")[1]))
     )
 
-    print("{}: ({})\t{}".format(month, len(jira_items), jira_items))
+    print(f"{month}: ({len(jira_items)})\t{jira_items}")

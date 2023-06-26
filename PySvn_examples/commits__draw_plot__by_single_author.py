@@ -39,7 +39,7 @@ ax = fig.add_subplot(111)
 ax.plot(
     df_month["year_month"],
     df_month["count"],
-    label="{} ({})".format(AUTHOR, len(author_by_log[AUTHOR])),
+    label=f"{AUTHOR} ({len(author_by_log[AUTHOR])})",
 )
 ax.legend()
 ax.grid()
