@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import pickle
+import socket
+
 
 BUFFER_SIZE = 4096
 
-
-import socket
 sock = socket.socket()
-sock.bind(('', 9090))
+sock.bind(("", 9090))
 sock.listen()
 
-print('Sock name: {}'.format(sock.getsockname()))
+print("Sock name: {}".format(sock.getsockname()))
 
 while True:
     conn, addr = sock.accept()
-    print('Connected:', addr)
+    print("Connected:", addr)
 
     all_data = bytearray()
 
@@ -27,12 +27,12 @@ while True:
         if not data:
             break
 
-        print('Recv: {}: {}'.format(len(data), data))
+        print("Recv: {}: {}".format(len(data), data))
         all_data += data
 
-    print('All data ({}): {}'.format(len(all_data), all_data))
+    print("All data ({}): {}".format(len(all_data), all_data))
     obj = pickle.loads(all_data)
-    print('Obj:', obj)
+    print("Obj:", obj)
 
-    print('Close')
+    print("Close")
     conn.close()
