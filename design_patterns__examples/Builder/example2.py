@@ -25,9 +25,7 @@ class Foo:
         return self.key_by_value[key]
 
     def __repr__(self):
-        return "Foo<items={}, values={}>".format(
-            len(self.items), len(self.key_by_value)
-        )
+        return f"Foo<items={len(self.items)}, values={len(self.key_by_value)}>"
 
 
 foo = Foo().add_item(1).add_items("abc").set_value("x", 1).set_value("x[]", [1, 2, 3])

@@ -167,9 +167,7 @@ class TextRevision(Base):
         self.diff = get_diff(old_text, new_text, full=False)
 
     def __repr__(self):
-        return "<TextRevision(id: {}, datetime: {}, text_hash: {})>".format(
-            self.id, self.datetime, self.text_hash
-        )
+        return f"<TextRevision(id: {self.id}, datetime: {self.datetime}, text_hash: {self.text_hash})>"
 
 
 def get_session():

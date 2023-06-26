@@ -83,9 +83,8 @@ class CurrentConditionsDisplay(Observer):
 
     def display(self):
         print(
-            "Сейчас значения: {:.1f} градусов цельсия и {:.1f}% влажности. Давление {} мм рт. ст.".format(
-                self.temperature, self.humidity, self.pressure
-            )
+            f"Сейчас значения: {self.temperature:.1f} градусов цельсия и {self.humidity:.1f}% влажности. "
+            f"Давление {self.pressure} мм рт. ст."
         )
 
 

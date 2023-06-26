@@ -49,7 +49,7 @@ class Foo:
 
     @staticmethod
     def strange_3(text):
-        return '"{}"'.format(text)
+        return f'"{text}"'
 
     def __format__(self, format_spec):
         format_spec = format_spec.strip()

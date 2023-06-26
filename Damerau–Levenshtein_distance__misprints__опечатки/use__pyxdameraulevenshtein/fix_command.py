@@ -68,7 +68,7 @@ if __name__ == "__main__":
 
         command = fix_command(text)
         if command is None:
-            result = 'is None (не удалось распознать команду: "{}")'.format(text)
+            result = f'is None (не удалось распознать команду: "{text}")'
             print(format_text.format(text, result))
         else:
             print(format_text.format(text, command))
@@ -98,9 +98,7 @@ if __name__ == "__main__":
     def run_tests():
         def test(text, expected):
             command = fix_command(text)
-            assert expected == command, 'Expected: "{}", get: "{}"'.format(
-                expected, command
-            )
+            assert expected == command, f'Expected: "{expected}", get: "{command}"'
 
         expected = "команды"
         test("команды", expected)

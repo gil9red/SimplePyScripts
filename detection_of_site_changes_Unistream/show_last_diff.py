@@ -25,7 +25,7 @@ if __name__ == "__main__":
         with open(file_name_b, mode="w", encoding="utf-8") as f:
             f.write(file_b.text)
 
-        os.system("kdiff3 {} {}".format(file_name_a, file_name_b))
+        os.system(f"kdiff3 {file_name_a} {file_name_b}")
 
         if os.path.exists(file_name_a):
             os.remove(file_name_a)

@@ -74,7 +74,7 @@ if __name__ == "__main__":
             return self
 
         def __exit__(self, exc_type, exc_value, exc_traceback):
-            print("Elapsed time: {:.6f} sec".format(time.clock() - self.start_time))
+            print(f"Elapsed time: {time.clock() - self.start_time:.6f} sec")
 
     url = "https://github.com/gil9red"
 

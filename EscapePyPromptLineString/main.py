@@ -112,7 +112,7 @@ class MainWindow(QWidget):
             out_text = "\n".join(new_out_text)
             self.text_edit_output.setPlainText(out_text)
 
-            print("Escape for {:.3f} secs".format(time.perf_counter() - t))
+            print(f"Escape for {time.perf_counter() - t:.3f} secs")
 
         except Exception as e:
             # Выводим ошибку в консоль

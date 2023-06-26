@@ -48,7 +48,7 @@ class Unit(ABC):
 
         :param direction: направление движения
         """
-        self._output("движется {} со скоростью {}".format(direction, self._speed))
+        self._output(f"движется {direction} со скоростью {self._speed}")
 
     def _output(self, message: str) -> None:
         """
@@ -56,7 +56,7 @@ class Unit(ABC):
 
         :param message: выводимое сообщение
         """
-        print("Отряд типа {} {}".format(self.__class__.__name__, message))
+        print(f"Отряд типа {self.__class__.__name__} {message}")
 
 
 class Archers(Unit):

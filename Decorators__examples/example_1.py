@@ -8,7 +8,7 @@ def getprint(str="hello world!"):
 def decor(func):
     def wrapper(*args, **kwargs):
         print("1 begin: " + func.__name__)
-        print("Args={} kwargs={}".format(args, kwargs))
+        print(f"Args={args} kwargs={kwargs}")
         f = func(*args, **kwargs)
         print("2 end: " + func.__name__ + "\n")
         return f
@@ -31,7 +31,7 @@ f("Py!")
 def rgb2hex(get_rgb_func):
     def wrapper(*args, **kwargs):
         r, g, b = get_rgb_func(*args, **kwargs)
-        return "#{:02x}{:02x}{:02x}".format(r, g, b)
+        return f"#{r:02x}{g:02x}{b:02x}"
 
     return wrapper
 
@@ -75,15 +75,15 @@ class RGB:
 
 
 rgb = RGB()
-print("rgb.r={}".format(rgb.r))
+print(f"rgb.r={rgb.r}")
 rgb.setrgb(0xFF, 0x1, 0xFF)
-print("rgb.getrgb(): %s" % rgb.getrgb())
+print(f"rgb.getrgb(): {rgb.getrgb()}")
 print()
 
 
 @decor
 def foo(a, b):
-    print("{} ^ {} = {}".format(a, b, (a**b)))
+    print(f"{a} ^ {b} = {(a ** b)}")
 
 
 foo(2, 3)

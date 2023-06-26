@@ -160,7 +160,7 @@ class Wok:
         for item in self.get_order_items():
             text += f"  {item.name:25} : {item.price} рублей\n"
 
-        text += "  {:25} : {} рублей".format("", self.get_order_price())
+        text += f"  {'':25} : {self.get_order_price()} рублей"
 
         return text
 

@@ -61,16 +61,16 @@ if __name__ == "__main__":
 
     date_req = date.today()
     value, rate_date = exchange_rate("USD", date_req)
-    print("{}: USD: {}".format(rate_date, value))
+    print(f"{rate_date}: USD: {value}")
 
     date_req = date.today() - timedelta(days=1)
     value, rate_date = exchange_rate("USD", date_req)
-    print("{}: USD: {}".format(rate_date, value))
+    print(f"{rate_date}: USD: {value}")
 
     date_req = date.today() + timedelta(days=1)
     value, rate_date = exchange_rate("USD", date_req)
-    print("{}: USD: {}".format(rate_date, value))
+    print(f"{rate_date}: USD: {value}")
 
     date_req = date.today() + timedelta(days=2)
     value, rate_date = exchange_rate("USD", date_req)
-    print("{}: USD: {}".format(rate_date, value))
+    print(f"{rate_date}: USD: {value}")

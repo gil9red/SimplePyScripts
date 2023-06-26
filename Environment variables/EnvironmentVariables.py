@@ -8,7 +8,7 @@ import os
 
 
 # Вывести все переменные окружения (environment variables)
-print("Environment variables:\n{}".format(os.environ))
+print(f"Environment variables:\n{os.environ}")
 
 print("\nEnvironment variables:")
 for var, value in os.environ.items():
