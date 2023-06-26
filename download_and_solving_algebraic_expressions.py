@@ -20,4 +20,4 @@ for i, line in enumerate(rs.text.split("\n"), 1):
 
     # Обрезание первого символа, удаление ' ', '\n', '\r' и т.п.
     line = line[1:].strip()
-    print("{}. {} = {}".format(i, line, eval(line)))
+    print(f"{i}. {line} = {eval(line)}")

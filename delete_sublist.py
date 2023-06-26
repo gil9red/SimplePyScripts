@@ -30,6 +30,6 @@ def delete_sublist(l, m):
         del l[i:j]
 
 
-print("Before: {}.".format(l))
+print(f"Before: {l}.")
 delete_sublist(l, m)
-print("After: {}.".format(l))
+print(f"After: {l}.")

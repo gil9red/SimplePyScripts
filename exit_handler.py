@@ -12,7 +12,7 @@ start_time = timer()
 
 
 def exit_handler():
-    print("Execution time: {:.3f} secs.".format(timer() - start_time))
+    print(f"Execution time: {timer() - start_time:.3f} secs.")
 
 
 atexit.register(exit_handler)
@@ -21,7 +21,7 @@ atexit.register(exit_handler)
 # OR with decorator:
 @atexit.register
 def exit_handler():
-    print("Execution time: {:.3f} secs.".format(timer() - start_time))
+    print(f"Execution time: {timer() - start_time:.3f} secs.")
 
 
 number = int(input("Input number: "))

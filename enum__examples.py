@@ -27,7 +27,7 @@ print(list(Animal))
 print()
 
 for x in Animal:
-    print('{}: "{}" = {}'.format(x, x.name, x.value))
+    print(f'{x}: "{x.name}" = {x.value}')
 
 print()
 

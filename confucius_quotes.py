@@ -26,4 +26,4 @@ def get_confucius_quotes():
 
 if __name__ == "__main__":
     for q in get_confucius_quotes():
-        print("'{}'".format(q))
+        print(f"'{q}'")

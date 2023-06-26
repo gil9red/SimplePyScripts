@@ -28,13 +28,13 @@ class Api:
         url = self.API_URL + method
 
         # Debug
-        print("POST: url: {}, data: {}".format(url, data))
+        print(f"POST: url: {url}, data: {data}")
 
         rs = self.session.post(url, data)
 
         # Debug
         print(rs)
-        print('rs.text: "{}"'.format(rs.text))
+        print(f'rs.text: "{rs.text}"')
         print("pretty rs:", json.dumps(rs.json(), indent=4, ensure_ascii=False))
         print("\n")
 

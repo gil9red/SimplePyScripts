@@ -21,4 +21,4 @@ for i in range(len(items) - 1):
     date_2 = datetime.strptime(date_str_2, "%d/%m/%Y")
     days = (date_2 - date_1).days
 
-    print("{} - {} -> {} days".format(date_str_1, date_str_2, days))
+    print(f"{date_str_1} - {date_str_2} -> {days} days")

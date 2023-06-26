@@ -31,7 +31,7 @@ if __name__ == "__main__":
     print(d2s(start_date), d2s(end_date))
 
     items = generate_range_dates(start_date, end_date)
-    print("Items ({}): {}".format(len(items), items))
+    print(f"Items ({len(items)}): {items}")
 
     for date in items:
         print(d2s(date))

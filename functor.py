@@ -31,7 +31,7 @@ class Bar:
         return self
 
     def __str__(self):
-        return "<Foo(value={self.value})>".format(self=self)
+        return f"<Foo(value={self.value})>"
 
 
 foo = Foo()

@@ -44,24 +44,24 @@ def destroy_chain_balls(balls):
 if __name__ == "__main__":
     balls = [0, 1, 2, 3]
     balls_2 = destroy_chain_balls(balls)
-    print("{} -> {}, уничтожено: {}".format(balls, balls_2, len(balls) - len(balls_2)))
+    print(f"{balls} -> {balls_2}, уничтожено: {len(balls) - len(balls_2)}")
 
     balls = [0, 1, 2, 2, 1, 2, 3]
     balls_2 = destroy_chain_balls(balls)
-    print("{} -> {}, уничтожено: {}".format(balls, balls_2, len(balls) - len(balls_2)))
+    print(f"{balls} -> {balls_2}, уничтожено: {len(balls) - len(balls_2)}")
 
     balls = [0, 1, 2, 2, 1, 1, 1, 2, 3]
     balls_2 = destroy_chain_balls(balls)
-    print("{} -> {}, уничтожено: {}".format(balls, balls_2, len(balls) - len(balls_2)))
+    print(f"{balls} -> {balls_2}, уничтожено: {len(balls) - len(balls_2)}")
 
     balls = [1, 3, 3, 3, 2]
     balls_2 = destroy_chain_balls(balls)
-    print("{} -> {}, уничтожено: {}".format(balls, balls_2, len(balls) - len(balls_2)))
+    print(f"{balls} -> {balls_2}, уничтожено: {len(balls) - len(balls_2)}")
 
     balls = [1, 1, 1]
     balls_2 = destroy_chain_balls(balls)
-    print("{} -> {}, уничтожено: {}".format(balls, balls_2, len(balls) - len(balls_2)))
+    print(f"{balls} -> {balls_2}, уничтожено: {len(balls) - len(balls_2)}")
 
     balls = [1, 1]
     balls_2 = destroy_chain_balls(balls)
-    print("{} -> {}, уничтожено: {}".format(balls, balls_2, len(balls) - len(balls_2)))
+    print(f"{balls} -> {balls_2}, уничтожено: {len(balls) - len(balls_2)}")

@@ -18,8 +18,8 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         text = " ".join(sys.argv[1:])
-        print('Text: "{}"'.format(text))
+        print(f'Text: "{text}"')
         to(text)
     else:
         file_name = os.path.basename(sys.argv[0])
-        print("usage: {} [-h] text".format(file_name))
+        print(f"usage: {file_name} [-h] text")
