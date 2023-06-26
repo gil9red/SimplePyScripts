@@ -22,4 +22,4 @@ print()
 # album: ['Bar']
 # title: ['Test']
 for k, v in mp3info.items():
-    print("{}: {}".format(k, v))
+    print(f"{k}: {v}")

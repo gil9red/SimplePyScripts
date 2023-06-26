@@ -15,4 +15,4 @@ for entry in rss.entries:
     quote = html.unescape(entry.summary)
     quote = quote.replace("<br>", "\n")
 
-    print("{0.title}: {0.link}\n{1}\n\n".format(entry, quote))
+    print(f"{entry.title}: {entry.link}\n{quote}\n\n")

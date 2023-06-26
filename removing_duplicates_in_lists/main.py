@@ -22,5 +22,5 @@ for func in ALL_EXAMPLE_FUNC_REMOVE_DUPLICATES:
     assert CHECK_ITEMS == ITEMS
     assert NEED_ITEMS == sorted(new_items)
 
-    print("    {} {}".format(len(new_items), new_items))
+    print(f"    {len(new_items)} {new_items}")
     print()

@@ -22,4 +22,4 @@ print(dobavki)
 
 for name, url in sorted(dobavki.items(), key=lambda x: int(x[0].replace("E-", ""))):
     # E-102  -> https://prodobavki.com/dobavki/E102.html
-    print("{:<6} -> {}".format(name, url))
+    print(f"{name:<6} -> {url}")

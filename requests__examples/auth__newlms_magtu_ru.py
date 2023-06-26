@@ -29,4 +29,4 @@ if success:
 
     print("Меню:")
     for a in root.select("a.menu-action"):
-        print("    {} -> {}".format(a.text, a["href"]))
+        print(f"    {a.text} -> {a['href']}")

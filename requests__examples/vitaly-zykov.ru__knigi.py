@@ -17,4 +17,4 @@ def get_books():
 
 if __name__ == "__main__":
     for i, book in enumerate(get_books(), 1):
-        print("{:>2}. {}".format(i, book))
+        print(f"{i:>2}. {book}")

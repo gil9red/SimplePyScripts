@@ -54,4 +54,4 @@ if __name__ == "__main__":
     for i in empty_folders:
         for root, dirs, files in os.walk(i):
             if files:
-                assert True is False, "{}: {}".format(root, files)
+                assert True is False, f"{root}: {files}"

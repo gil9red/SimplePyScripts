@@ -20,7 +20,7 @@ from PyQt5 import Qt
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = "{}: {}:\n".format(ex_cls.__name__, ex)
+    text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
     print(text)
@@ -49,16 +49,16 @@ class SpeechRecognitionThread(Qt.QThread):
 
             text = r.recognize_google(audio, language=self.language)
 
-            self.about_text.emit('Фраза: "{}"'.format(text))
+            self.about_text.emit(f'Фраза: "{text}"')
 
         except sr.UnknownValueError:
             self.about_text.emit("Робот не расслышал фразу")
 
         except sr.RequestError as e:
-            self.about_text.emit("Ошибка сервиса: {}".format(e))
+            self.about_text.emit(f"Ошибка сервиса: {e}")
 
         except Exception as e:
-            self.about_text.emit("Ошибка: {}".format(e))
+            self.about_text.emit(f"Ошибка: {e}")
 
         finally:
             self.about_text.emit("")

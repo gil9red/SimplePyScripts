@@ -41,7 +41,7 @@ def on_sub(_):
     global counter
     counter += 1
 
-    return 'id="{}"'.format(counter)
+    return f'id="{counter}"'
 
 
 new_text = re.sub(r'id="\d+"', on_sub, text)

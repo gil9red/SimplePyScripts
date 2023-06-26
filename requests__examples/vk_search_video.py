@@ -75,8 +75,8 @@ if __name__ == "__main__":
 
         # TODO: для мобильной ссылки работает поиск, однако качество всегдла -- 240
         # нужно научить парсер искать ссылки в другом формате, текущий -- через тег source работает
-        video_url = "https://m.vk.com/video{}_{}".format(owner, video_id)
+        video_url = f"https://m.vk.com/video{owner}_{video_id}"
         print(title, video_url)
         for file_url in get_video_file_urls(video_url):
-            print("    {}".format(file_url))
+            print(f"    {file_url}")
         print()

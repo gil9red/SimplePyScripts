@@ -39,5 +39,5 @@ text = """
 </xs:schema>
 """
 
-text = re.sub('name="(.+?)"', lambda x: 'name="{}"'.format(x.group(1).upper()), text)
+text = re.sub('name="(.+?)"', lambda x: f'name="{x.group(1).upper()}"', text)
 print(text)

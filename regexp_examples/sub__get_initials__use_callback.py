@@ -9,6 +9,6 @@ import re
 
 text = "Иванов Иван Иванович"
 
-replace_match = lambda x: "{} {}. {}.".format(x[1], x[2][0], x[3][0])
+replace_match = lambda x: f"{x[1]} {x[2][0]}. {x[3][0]}."
 new_text = re.sub(r"(\w+) (\w+) (\w+)", replace_match, text)
 print(new_text)  # Иванов И. И.
