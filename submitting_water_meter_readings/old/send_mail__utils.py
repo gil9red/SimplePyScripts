@@ -12,6 +12,7 @@ from threading import Thread
 # pip install selenium
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
 
 
 def get_logger(name=__file__):
@@ -67,7 +68,7 @@ def open_web_page_mail(value_cold: int, value_hot: int) -> (bool, str):
 
     log.info(f'Title: {driver.title!r}')
 
-    editor = driver.find_element_by_css_selector('[role="textbox"]')
+    editor = driver.find_element(By.CSS_SELECTOR, '[role="textbox"]')
     template_text = editor.text
 
     if 'value_cold' not in template_text and 'value_hot' not in template_text:

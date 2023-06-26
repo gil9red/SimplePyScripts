@@ -22,11 +22,11 @@ print(f'Title: "{driver.title}"')
 # Делаем скриншот результата
 driver.save_screenshot("before_search.png")
 
-driver.find_element_by_css_selector("input#search").send_keys(
+driver.find_element(By.CSS_SELECTOR, "input#search").send_keys(
     "Funny cats" + Keys.RETURN
 )
 
-result_count = driver.find_element_by_id("result-count")
+result_count = driver.find_element(By.ID, "result-count")
 print(result_count.text)
 
 print(f'Title: "{driver.title}"')
@@ -34,7 +34,7 @@ print(f'Title: "{driver.title}"')
 # Делаем скриншот результата
 driver.save_screenshot("after_search.png")
 
-video_list = driver.find_elements_by_id("dismissable")
+video_list = driver.find_elements(By.ID, "dismissable")
 
 # Click on random video
 random.choice(video_list).click()
@@ -43,7 +43,7 @@ video = WebDriverWait(driver, timeout=10).until(
     EC.visibility_of_element_located((By.TAG_NAME, "video"))
 )
 
-video_title = driver.find_element_by_class_name("title")
+video_title = driver.find_element(By.CLASS_NAME, "title")
 print(f'Title: "{driver.title}"')
 print(f'Video Title: "{video_title.text}"')
 

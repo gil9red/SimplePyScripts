@@ -23,13 +23,13 @@ driver = webdriver.Firefox()
 driver.get("https://vk.com/")
 print(f'Title: "{driver.title}"')
 
-driver.find_element_by_id("index_email").send_keys(LOGIN)
-driver.find_element_by_id("index_pass").send_keys(PASSWORD)
+driver.find_element(By.ID, "index_email").send_keys(LOGIN)
+driver.find_element(By.ID, "index_pass").send_keys(PASSWORD)
 
 # Делаем скриншот результата
 driver.save_screenshot("before_auth.png")
 
-driver.find_element_by_id("index_login_button").click()
+driver.find_element(By.ID, "index_login_button").click()
 
 wait = WebDriverWait(driver, timeout=10)
 
@@ -46,7 +46,7 @@ im_dialogs = wait.until(EC.presence_of_element_located((By.ID, "im_dialogs")))
 im_dialogs.screenshot("dialogs_page.png")
 print(f'Title: "{driver.title}"')
 
-dialog_items = driver.find_elements_by_class_name("_im_dialog_link")
+dialog_items = driver.find_elements(By.CLASS_NAME, "_im_dialog_link")
 
 for dialog in dialog_items:
     if dialog.text == "Майя Вернер":

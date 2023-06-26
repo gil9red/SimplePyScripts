@@ -10,6 +10,7 @@ import traceback
 # pip install selenium
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.webdriver.common.by import By
 
 from word_to_emoji import db
 
@@ -37,7 +38,7 @@ try:
 
                 while True:
                     try:
-                        emoji = driver.find_element_by_css_selector('#translation').text.strip()
+                        emoji = driver.find_element(By.CSS_SELECTOR, '#translation').text.strip()
 
                         # Перевод должен быть, если его нет, значит от сайта еще не пришел ответ
                         if not emoji:

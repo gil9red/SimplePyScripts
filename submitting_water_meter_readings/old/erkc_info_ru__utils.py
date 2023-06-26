@@ -12,6 +12,7 @@ from pathlib import Path
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
 
 
 TOKEN = Path(__file__).resolve().parent / 'TOKEN'
@@ -67,10 +68,10 @@ def open_web_page_water_meter(value_cold: int, value_hot: int) -> (bool, str):
     if '/Account/LogOn' in driver.current_url:
         log.info('Go auth')
 
-        input_login = driver.find_element_by_id('m_phone_log')
+        input_login = driver.find_element(By.ID, 'm_phone_log')
         input_login.send_keys(LOGIN)
 
-        input_password = driver.find_element_by_id('m_password_pas')
+        input_password = driver.find_element(By.ID, 'm_password_pas')
         input_password.send_keys(PASSWORD)
 
         while '/Account/LogOn' in driver.current_url:
@@ -79,11 +80,11 @@ def open_web_page_water_meter(value_cold: int, value_hot: int) -> (bool, str):
 
         driver.get(url)
 
-    input_cold = driver.find_element_by_id('inputModel_InputCounters_0__newVal')
+    input_cold = driver.find_element(By.ID, 'inputModel_InputCounters_0__newVal')
     input_cold.clear()
     input_cold.send_keys(value_cold)
 
-    input_hot = driver.find_element_by_id('inputModel_InputCounters_1__newVal')
+    input_hot = driver.find_element(By.ID, 'inputModel_InputCounters_1__newVal')
     input_hot.clear()
     input_hot.send_keys(value_hot)
 
