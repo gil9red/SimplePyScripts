@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: http://andreymal.org/socket3/
 
-import time
+
 import socket
+import time
+
 from threading import Thread
 
 
@@ -66,19 +68,19 @@ def parse(conn):  # Обработка соединения в отдельно�
         conn.close()
 
 
-HOST = 'localhost'
+HOST = "localhost"
 PORT = 9090
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sock = socket.socket()
-    print('Socket created')
+    print("Socket created")
 
     sock.bind((HOST, PORT))
-    print('Socket bind complete')
+    print("Socket bind complete")
 
     sock.listen()
-    print('Socket now listening: http://{}:{}'.format(*sock.getsockname()))
+    print("Socket now listening: http://{}:{}".format(*sock.getsockname()))
     print()
 
     try:

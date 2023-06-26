@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from urllib.parse import urlsplit
 import socket
 import ssl
 
+from urllib.parse import urlsplit
+
 
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-url = 'https://www.coursera.org/robots.txt'
+url = "https://www.coursera.org/robots.txt"
 
 result = urlsplit(url)
 
@@ -18,7 +19,7 @@ context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
 s_sock = context.wrap_socket(socket, server_hostname=result.netloc)
 s_sock.connect((result.netloc, 443))
 
-cmd = f'GET {result.path} HTTP/1.1\r\nHost: {result.netloc}\r\n\r\n'.encode()
+cmd = f"GET {result.path} HTTP/1.1\r\nHost: {result.netloc}\r\n\r\n".encode()
 s_sock.send(cmd)
 
 while True:
@@ -26,7 +27,7 @@ while True:
     if not data:
         break
 
-    print(data.decode(), end='')
+    print(data.decode(), end="")
 
 s_sock.close()
 

@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import socket
 
 
 request = b"GET / HTTP/1.1\nHost: stackoverflow.com\n\n"
 host = "stackoverflow.com"
 port = 80
 
-import socket
 sock = socket.socket()
 sock.settimeout(60)  # Если за 60 секунд данные не придут, соединение закрывается
 sock.connect((host, port))

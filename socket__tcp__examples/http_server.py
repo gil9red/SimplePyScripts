@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: http://andreymal.org/socket3/
@@ -63,7 +63,7 @@ sock = socket.socket()
 sock.bind(("", PORT))
 sock.listen()
 
-print(f'HTTP server running on http://127.0.0.1:{PORT}/time.html')
+print(f"HTTP server running on http://127.0.0.1:{PORT}/time.html")
 
 try:
     # Работаем постоянно
