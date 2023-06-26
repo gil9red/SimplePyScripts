@@ -21,7 +21,7 @@ with socket.socket() as sock:
     with open("img.jpg", "rb") as f:
         data = f.read()
 
-    print("Sending {} bytes".format(len(data)))
+    print(f"Sending {len(data)} bytes")
     print()
 
     send_msg__with_crc32(sock, data)
@@ -29,7 +29,7 @@ with socket.socket() as sock:
     print("Receiving")
 
     response_data = recv_msg__with_crc32(sock)
-    print("Response {} bytes".format(len(response_data)))
+    print(f"Response {len(response_data)} bytes")
 
     file_name = "img_thumbnail.jpg"
     print("Save in " + file_name)

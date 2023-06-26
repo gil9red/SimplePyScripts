@@ -21,14 +21,14 @@ with socket.socket() as sock:
     sock.bind(("", PORT))
     sock.listen()
 
-    print("Server: {}".format(sock.getsockname()))
+    print(f"Server: {sock.getsockname()}")
 
     while True:
         conn, addr = sock.accept()
         print("Connected:", addr)
 
         data = recv_msg__with_crc32(conn)
-        print("Receiving {} bytes".format(len(data)))
+        print(f"Receiving {len(data)} bytes")
 
         img = Image.open(io.BytesIO(data))
         print("Receiving image:", img)
@@ -46,7 +46,7 @@ with socket.socket() as sock:
 
         response_data = data_io.getvalue()
 
-        print("Sending {} bytes".format(len(response_data)))
+        print(f"Sending {len(response_data)} bytes")
 
         send_msg__with_crc32(conn, response_data)
 

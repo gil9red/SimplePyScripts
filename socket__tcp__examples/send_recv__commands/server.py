@@ -30,21 +30,21 @@ def execute_command(command: str) -> str:
         return "OK"
 
     else:
-        return '<UNKNOWN COMMAND: "{}">'.format(command)
+        return f'<UNKNOWN COMMAND: "{command}">'
 
 
 with socket.socket() as sock:
     sock.bind(("", PORT))
     sock.listen()
 
-    print("Server: {}".format(sock.getsockname()))
+    print(f"Server: {sock.getsockname()}")
 
     while True:
         conn, addr = sock.accept()
         print("Connected:", addr)
 
         data = recv_msg(conn)
-        print("Receiving ({}): {}".format(len(data), data))
+        print(f"Receiving ({len(data)}): {data}")
 
         command = str(data, "utf-8")
         response_data = execute_command(command)

@@ -14,7 +14,7 @@ sock = socket.socket()
 sock.bind(("", 9090))
 sock.listen()
 
-print("Sock name: {}".format(sock.getsockname()))
+print(f"Sock name: {sock.getsockname()}")
 
 while True:
     conn, addr = sock.accept()
@@ -27,10 +27,10 @@ while True:
         if not data:
             break
 
-        print("Recv: {}: {}".format(len(data), data))
+        print(f"Recv: {len(data)}: {data}")
         all_data += data
 
-    print("All data ({}): {}".format(len(all_data), all_data))
+    print(f"All data ({len(all_data)}): {all_data}")
     obj = pickle.loads(all_data)
     print("Obj:", obj)
 

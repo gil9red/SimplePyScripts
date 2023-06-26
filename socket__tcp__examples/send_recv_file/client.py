@@ -21,7 +21,7 @@ with socket.socket() as sock:
     with open("img.png", "rb") as f:
         data = f.read()
 
-    print("Sending ({}): {}".format(len(data), data))
+    print(f"Sending ({len(data)}): {data}")
     print()
 
     send_msg(sock, data)
@@ -29,6 +29,6 @@ with socket.socket() as sock:
     print("Receiving")
 
     response_data = recv_msg(sock)
-    print("Response ({}): {}".format(len(response_data), response_data))
+    print(f"Response ({len(response_data)}): {response_data}")
 
     print("Close\n")
