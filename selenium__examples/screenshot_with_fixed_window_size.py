@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import time
 
 # pip install selenium
 from selenium import webdriver
+
+
 driver = webdriver.Firefox()
 driver.set_window_size(500, 500)
-driver.get('https://www.youtube.com/')
+driver.get("https://www.youtube.com/")
 print('Title: "{}"'.format(driver.title))
 
-import time
 time.sleep(5)
 
-driver.save_screenshot('screenshot.png')
+driver.save_screenshot("screenshot.png")
 
 driver.quit()

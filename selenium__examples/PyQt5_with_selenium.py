@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from urllib.parse import urljoin
 import time
+from urllib.parse import urljoin
 
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout, QLineEdit, QHBoxLayout, QPushButton, QTextBrowser
+    QApplication,
+    QMainWindow,
+    QWidget,
+    QVBoxLayout,
+    QLineEdit,
+    QHBoxLayout,
+    QPushButton,
+    QTextBrowser,
 )
 from PyQt5.QtCore import QThread, pyqtSignal
 
@@ -18,7 +25,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
 
 
-URL = 'https://ru.stackoverflow.com'
+URL = "https://ru.stackoverflow.com"
 
 
 class StackOverFlowBotThread(QThread):
@@ -52,7 +59,9 @@ class StackOverFlowBotThread(QThread):
             # Чтобы поток не завершился
             while self.is_running:
                 if self._search:
-                    search_el = self.driver.find_element_by_css_selector('#search .s-input__search')
+                    search_el = self.driver.find_element_by_css_selector(
+                        "#search .s-input__search"
+                    )
                     search_el.clear()
                     search_el.send_keys(self._search + Keys.RETURN)
 
@@ -60,9 +69,11 @@ class StackOverFlowBotThread(QThread):
                     time.sleep(1)
                     self.about_change_title.emit(self.driver.title)
 
-                    for result_el in self.driver.find_elements_by_css_selector('.result-link a[href]'):
+                    for result_el in self.driver.find_elements_by_css_selector(
+                        ".result-link a[href]"
+                    ):
                         title = result_el.text.strip()
-                        url = urljoin(URL, result_el.get_attribute('href'))
+                        url = urljoin(URL, result_el.get_attribute("href"))
                         self.about_search_result.emit(title, url)
 
                     # Поиск уже выполнен
@@ -84,10 +95,10 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.search = QLineEdit('gil9red')
+        self.search = QLineEdit("gil9red")
         self.search.returnPressed.connect(self.on_search)
 
-        self.button_search = QPushButton('Search')
+        self.button_search = QPushButton("Search")
         self.button_search.clicked.connect(self.on_search)
 
         self.result = QTextBrowser()
@@ -123,7 +134,7 @@ class MainWindow(QMainWindow):
         self.bot_thread.quit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
