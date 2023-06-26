@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import json
 from dataclasses import dataclass, asdict
-from typing import List, Union
 from pathlib import Path
 
 from bs4 import Tag
@@ -33,7 +32,7 @@ class Track:
     is_available: bool
 
     def get_full_title(self) -> str:
-        return f'{self.artists}: {self.title}'
+        return f"{self.artists}: {self.title}"
 
     def get_seconds(self) -> int:
         """
@@ -43,7 +42,7 @@ class Track:
         if not self.length:
             return 0
 
-        parts = self.length.split(':')
+        parts = self.length.split(":")
         if len(parts) != 2:
             return 0
         return int(parts[0]) * 60 + int(parts[1])
@@ -51,24 +50,28 @@ class Track:
 
 def get_track(track_el) -> Track:
     if not isinstance(track_el, (WebElement, Tag)):
-        raise ValueError(f'Not supported value with type {type(track_el)}')
+        raise ValueError(f"Not supported value with type {type(track_el)}")
 
     if isinstance(track_el, WebElement):
-        title = track_el.find_element_by_css_selector('.d-track__title').text
-        artists = track_el.find_element_by_css_selector('.d-track__artists').text
-        length = track_el.find_element_by_css_selector('.d-track__info > span.typo-track.deco-typo-secondary').text
-        available = 'd-track__unavailable' not in track_el.get_attribute('class')
+        title = track_el.find_element_by_css_selector(".d-track__title").text
+        artists = track_el.find_element_by_css_selector(".d-track__artists").text
+        length = track_el.find_element_by_css_selector(
+            ".d-track__info > span.typo-track.deco-typo-secondary"
+        ).text
+        available = "d-track__unavailable" not in track_el.get_attribute("class")
 
     else:
-        title = track_el.select_one('.d-track__title').get_text(strip=True)
-        artists = track_el.select_one('.d-track__artists').get_text(strip=True)
-        length = track_el.select_one('.d-track__info > span.typo-track.deco-typo-secondary').get_text(strip=True)
-        available = 'd-track__unavailable' not in track_el['class']
+        title = track_el.select_one(".d-track__title").get_text(strip=True)
+        artists = track_el.select_one(".d-track__artists").get_text(strip=True)
+        length = track_el.select_one(
+            ".d-track__info > span.typo-track.deco-typo-secondary"
+        ).get_text(strip=True)
+        available = "d-track__unavailable" not in track_el["class"]
 
     return Track(title, artists, length, available)
 
 
-def print_statistic(tracks: List[Track]):
+def print_statistic(tracks: list[Track]):
     print_fmt = "{:%s}. {}" % len(str(len(tracks)))
 
     unavailable_tracks = []
@@ -80,22 +83,22 @@ def print_statistic(tracks: List[Track]):
 
         total_secs += track.get_seconds()
 
-    print('Total tracks:', len(tracks))
-    print(f'Total length: {seconds_to_str(total_secs)} ({total_secs} secs)')
+    print("Total tracks:", len(tracks))
+    print(f"Total length: {seconds_to_str(total_secs)} ({total_secs} secs)")
     print()
 
-    print(f'Unavailable tracks ({len(unavailable_tracks)}):')
+    print(f"Unavailable tracks ({len(unavailable_tracks)}):")
     for i, track in enumerate(unavailable_tracks, 1):
         print(print_fmt.format(i, track.get_full_title()))
 
 
-def dump(tracks: List[Track], file_name: Union[str, Path]):
+def dump(tracks: list[Track], file_name: str | Path):
     json.dump(
         tracks,
-        open(file_name, 'w', encoding='utf-8'),
+        open(file_name, "w", encoding="utf-8"),
         ensure_ascii=False,
         indent=4,
-        default=lambda obj: asdict(obj) if isinstance(obj, Track) else obj
+        default=lambda obj: asdict(obj) if isinstance(obj, Track) else obj,
     )
 
 
