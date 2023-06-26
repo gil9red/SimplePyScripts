@@ -38,13 +38,11 @@ for _, repos in repo_by_lang_dict.items():
 
 # Вывод репозиториев в соответствии их языку и популярности
 for lang, number in counter_langs:
-    print("{} ({}):".format(lang, number))
+    print(f"{lang} ({number}):")
 
     for i, repo in enumerate(repo_by_lang_dict[lang], 1):
         print(
-            "    {}. {}: '{}' ({} star): {}".format(
-                i, repo.name, repo.description, repo.stargazers_count, repo.html_url
-            )
+            f"    {i}. {repo.name}: '{repo.description}' ({repo.stargazers_count} star): {repo.html_url}"
         )
 
     print()

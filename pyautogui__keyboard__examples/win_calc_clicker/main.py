@@ -22,7 +22,7 @@ BUTTONS = {
     "=": "buttons/equal.png",
 }
 for i in range(10):
-    BUTTONS[str(i)] = "buttons/{}.png".format(i)
+    BUTTONS[str(i)] = f"buttons/{i}.png"
 
 CACHE_POS_BUTTON = dict()
 
@@ -30,7 +30,7 @@ CACHE_POS_BUTTON = dict()
 def go(expression):
     for x in expression:
         if x not in BUTTONS:
-            print('Not found: "{}"'.format(x))
+            print(f'Not found: "{x}"')
             continue
 
         if x in CACHE_POS_BUTTON:

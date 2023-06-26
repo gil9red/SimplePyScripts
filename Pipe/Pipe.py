@@ -16,7 +16,7 @@ if __name__ == "__main__":
     # list of even numbers
     l = (i for i in range(10)) | pipe.where(lambda x: x % 2 is 0) | pipe.as_list
     c = l | pipe.count  # count elements
-    print("List: {}, count: {}".format(l, c))
+    print(f"List: {l}, count: {c}")
     print()
 
     # custom pipe:

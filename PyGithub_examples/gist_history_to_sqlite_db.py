@@ -50,15 +50,13 @@ if __name__ == "__main__":
 
     gist = gh.get_gist("2f80a34fb601cd685353")
     print(gist)
-    print("History ({}):".format(len(gist.history)))
+    print(f"History ({len(gist.history)}):")
 
     with create_connect() as connect:
         try:
             for history in reversed(gist.history):
                 print(
-                    "  committed_at: {}, version: {}, files: {}".format(
-                        history.committed_at, history.version, history.files
-                    )
+                    f"  committed_at: {history.committed_at}, version: {history.version}, files: {history.files}"
                 )
 
                 if "gistfile1.txt" not in history.files:
@@ -76,4 +74,4 @@ if __name__ == "__main__":
                 )
 
         except Exception as e:
-            print("ERROR: {}:\n\n{}".format(e, traceback.format_exc()))
+            print(f"ERROR: {e}:\n\n{traceback.format_exc()}")

@@ -183,9 +183,7 @@ class MainWindow(Qt.QWidget):
         self.lb_image_view.setPixmap(pixmap)
 
         height, width = self.image_source.size
-        title = WINDOW_TITLE + ". {}x{} ({}x{}). {}".format(
-            width, height, size.width(), size.height(), self.file_name
-        )
+        title = f"{WINDOW_TITLE}. {width}x{height} ({size.width()}x{size.height()}). {self.file_name}"
         self.setWindowTitle(title)
 
     def resizeEvent(self, e):

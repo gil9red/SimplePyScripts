@@ -15,4 +15,4 @@ if __name__ == "__main__":
         play(sys.argv[1])
     else:
         file_name = os.path.basename(sys.argv[0])
-        print("usage: {} [-h] audio_file_name".format(file_name))
+        print(f"usage: {file_name} [-h] audio_file_name")

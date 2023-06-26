@@ -12,7 +12,7 @@ import pyautogui
 
 
 QUIT_COMBINATION = "Esc"
-print('Press "{}" for QUIT'.format(QUIT_COMBINATION))
+print(f'Press "{QUIT_COMBINATION}" for QUIT')
 
 
 keyboard.add_hotkey(QUIT_COMBINATION, lambda: print("Quit by Escape") or os._exit(0))

@@ -24,7 +24,7 @@ BUTTONS = {
     "=": "buttons/equal.png",
 }
 for i in range(10):
-    BUTTONS[str(i)] = "buttons/{}.png".format(i)
+    BUTTONS[str(i)] = f"buttons/{i}.png"
 
 cache_pos_button = dict()
 
@@ -32,7 +32,7 @@ expression = "1234 * 222 + 3214 = "
 
 for x in expression:
     if x not in BUTTONS:
-        print('Not found: "{}"'.format(x))
+        print(f'Not found: "{x}"')
         continue
 
     if x in cache_pos_button:

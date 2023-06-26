@@ -79,7 +79,7 @@ class Game:
 
     def update_caption(self):
         pygame.display.set_caption(
-            "{} [{} fps]".format(self.caption, int(self.clock.get_fps()))
+            f"{self.caption} [{int(self.clock.get_fps())} fps]"
         )
 
     def handle_events(self):

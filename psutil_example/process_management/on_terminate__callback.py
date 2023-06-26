@@ -40,7 +40,7 @@ if __name__ == "__main__":
     print()
 
     def on_terminate(proc):
-        print('Process "{}" terminated'.format(proc))
+        print(f'Process "{proc}" terminated')
 
     # waits for multiple processes to terminate
     gone, alive = psutil.wait_procs(

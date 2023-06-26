@@ -50,5 +50,5 @@ if __name__ == "__main__":
 
     for size in (16, 32, 48):
         image_pixelate = pixelate(image, pixel_size=size)
-        image_pixelate.save("image/output_{}.jpg".format(size))
+        image_pixelate.save(f"image/output_{size}.jpg")
         # image_pixelate.show()

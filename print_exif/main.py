@@ -23,7 +23,7 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
         print("Not tags")
         return tags_by_value
 
-    print("Tags ({}):".format(len(tags)))
+    print(f"Tags ({len(tags)}):")
 
     for tag, value in tags.items():
         # Process value
@@ -48,7 +48,7 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
             if type(value) == bytes:
                 value = base64.b64encode(value).decode()
 
-        print('  "{}": {}'.format(tag, value))
+        print(f'  "{tag}": {value}')
 
         if not as_category:
             tags_by_value[tag] = value

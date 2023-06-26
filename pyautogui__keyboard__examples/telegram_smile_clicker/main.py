@@ -32,7 +32,7 @@ def go():
         return log
 
     log = get_logger()
-    log_it = lambda pos, filename: log.debug("{} [{}]".format(pos, filename))
+    log_it = lambda pos, filename: log.debug(f"{pos} [{filename}]")
 
     # Ищем меню с смайлами
     pos = pyautogui.locateCenterOnScreen(OPEN_SMILE_MENU)

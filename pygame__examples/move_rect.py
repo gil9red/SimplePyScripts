@@ -55,7 +55,7 @@ while game_active:
 
     pygame.display.flip()
 
-    pygame.display.set_caption("move_rect [{} fps]".format(int(clock.get_fps())))
+    pygame.display.set_caption(f"move_rect [{int(clock.get_fps())} fps]")
 
     # will block execution until 1/60 seconds have passed
     # since the previous time clock.tick was called.

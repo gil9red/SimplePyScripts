@@ -25,7 +25,7 @@ morph = pymorphy2.MorphAnalyzer()
 
 for name in name_list:
     parsed_word = morph.parse(name)[0]
-    print("{:<15} {}".format(name, parsed_word.tag.gender))
+    print(f"{name:<15} {parsed_word.tag.gender}")
 
 # Константин      masc
 # Виктор          masc

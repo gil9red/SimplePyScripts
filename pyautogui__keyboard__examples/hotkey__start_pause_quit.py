@@ -30,9 +30,9 @@ def change_auto_attack():
     print("AUTO_ATTACK:", BOT_DATA["AUTO_ATTACK"])
 
 
-print('Press "{}" for RUN / PAUSE'.format(RUN_COMBINATION))
-print('Press "{}" for QUIT'.format(QUIT_COMBINATION))
-print('Press "{}" for AUTO_ATTACK'.format(AUTO_ATTACK_COMBINATION))
+print(f'Press "{RUN_COMBINATION}" for RUN / PAUSE')
+print(f'Press "{QUIT_COMBINATION}" for QUIT')
+print(f'Press "{AUTO_ATTACK_COMBINATION}" for AUTO_ATTACK')
 
 
 keyboard.add_hotkey(QUIT_COMBINATION, lambda: print("Quit by Escape") or os._exit(0))
