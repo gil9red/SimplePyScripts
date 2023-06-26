@@ -62,7 +62,7 @@ if __name__ == "__main__":
         print(len(result))
 
         for html in result:
-            with open("result_{}.html".format(number), "w", encoding="utf-8") as f:
+            with open(f"result_{number}.html", "w", encoding="utf-8") as f:
                 f.write(html)
 
             number += 1

@@ -99,8 +99,8 @@ def load_finished_handler(ok):
 
     print()
     print("Total:")
-    print("  Videos: {}".format(len(url_video_by_time_dict)))
-    print("  Durations: {}".format(list(url_video_by_time_dict.values())))
+    print(f"  Videos: {len(url_video_by_time_dict)}")
+    print(f"  Durations: {list(url_video_by_time_dict.values())}")
 
     # Summary duration
     sum_seconds = 0
@@ -112,8 +112,8 @@ def load_finished_handler(ok):
     hh, mm = divmod(mm, 60)
     sum_time_str = "%d:%02d:%02d" % (hh, mm, ss)
 
-    print("  Summary duration (secs): {}".format(sum_seconds))
-    print("  Summary duration: {}".format(sum_time_str))
+    print(f"  Summary duration (secs): {sum_seconds}")
+    print(f"  Summary duration: {sum_time_str}")
 
     sys.exit()
 

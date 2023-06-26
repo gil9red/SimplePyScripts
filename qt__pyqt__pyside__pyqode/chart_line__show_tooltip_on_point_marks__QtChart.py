@@ -51,7 +51,7 @@ class MainWindow(ChartViewToolTips):
                         + (p.y() - point.y()) * (p.y() - point.y())
                     )
                     if current_distance < distance:
-                        self._tooltip.setText("X: {}\nY: {}".format(p.x(), p.y()))
+                        self._tooltip.setText(f"X: {p.x()}\nY: {p.y()}")
                         self._tooltip.setAnchor(p)
                         self._tooltip.setZValue(11)
                         self._tooltip.updateGeometry()

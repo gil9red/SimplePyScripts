@@ -20,7 +20,7 @@ class MainWindow(Qt.QMainWindow):
         self.setCentralWidget(self.button)
 
     def on_reply_finished(self, reply):
-        self.setWindowTitle("After load: {}".format(reply))
+        self.setWindowTitle(f"After load: {reply}")
 
     def on_clicked(self):
         url = "https://github.com/gil9red/SimplePyScripts"

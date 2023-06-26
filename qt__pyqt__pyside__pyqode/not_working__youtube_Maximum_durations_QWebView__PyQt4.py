@@ -110,8 +110,8 @@ def load_finished_handler(ok):
 
     print()
     print("Total:")
-    print("  Videos: {}, {}".format(len(video_link_list), video_link_list))
-    print("  Durations: {}, {}".format(len(video_time_list), video_time_list))
+    print(f"  Videos: {len(video_link_list)}, {video_link_list}")
+    print(f"  Durations: {len(video_time_list)}, {video_time_list}")
 
     # Find maximum duration
     max_total_seconds = 0
@@ -123,7 +123,7 @@ def load_finished_handler(ok):
             max_total_seconds = total_seconds
             max_time_str = time_str
 
-    print("  Max durations: {}".format(max_time_str))
+    print(f"  Max durations: {max_time_str}")
 
     sys.exit()
 

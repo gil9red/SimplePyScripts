@@ -46,9 +46,9 @@ class ItemDateFormat(QtWidgets.QItemDelegate):
         self.drawBackground(painter, opt, index)
         self.drawFocus(painter, opt, opt.rect)
         try:
-            opt.text = "{0:%d %b %H:%M}".format(
-                datetime.strptime(index.model().data(index), "%Y-%m-%d %H:%M:%S.%f")
-            )
+            value = index.model().data(index)
+            dt = datetime.strptime(value, '%Y-%m-%d %H:%M:%S.%f')
+            opt.text = f"{dt:%d %b %H:%M}"
         except TypeError:
             pass
 

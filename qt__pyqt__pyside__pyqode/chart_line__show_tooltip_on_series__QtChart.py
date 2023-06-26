@@ -197,7 +197,7 @@ class ChartViewToolTips(QChartView):
             self._tooltip = self._add_Callout()
 
         if state:
-            self._tooltip.setText("X: {} \nY: {}".format(point.x(), point.y()))
+            self._tooltip.setText(f"X: {point.x()} \nY: {point.y()}")
             self._tooltip.setAnchor(point)
             self._tooltip.setZValue(11)
             self._tooltip.updateGeometry()

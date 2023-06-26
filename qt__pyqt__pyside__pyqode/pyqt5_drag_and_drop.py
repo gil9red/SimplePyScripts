@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
         self._update_states()
 
     def _update_states(self):
-        self.label_total_files.setText("Files: {}".format(self.list_files.count()))
+        self.label_total_files.setText(f"Files: {self.list_files.count()}")
 
     def dragEnterEvent(self, event):
         # Тут выполняются проверки и дается (или нет) разрешение на Drop

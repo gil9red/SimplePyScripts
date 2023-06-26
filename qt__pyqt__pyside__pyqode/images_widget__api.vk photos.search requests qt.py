@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
         label.setPixmap(pixmap)
 
-        mw.setWindowTitle("{}/{} Loading...".format(n, len(url_by_label)))
+        mw.setWindowTitle(f"{n}/{len(url_by_label)} Loading...")
         QApplication.processEvents()
 
     mw.setWindowTitle("Ok!")

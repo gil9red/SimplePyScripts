@@ -31,7 +31,7 @@ class MainWindow(Qt.QMainWindow):
         self.setCentralWidget(self.button)
 
     def on_finished_load_url(self, rs):
-        self.setWindowTitle("After load: {}".format(rs))
+        self.setWindowTitle(f"After load: {rs}")
 
     def on_clicked(self):
         url = "https://github.com/gil9red/SimplePyScripts"

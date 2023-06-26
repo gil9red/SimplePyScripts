@@ -52,7 +52,7 @@ class Window(QWidget):
         self.log.appendPlainText(text)
 
     def on_about_update(self, text):
-        self.add_log("Пришло обновление '{}'".format(text))
+        self.add_log(f"Пришло обновление '{text}'")
 
         mb = QMessageBox()
         mb.setWindowTitle("Доступно обновление")
