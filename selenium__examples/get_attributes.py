@@ -6,6 +6,7 @@ __author__ = "ipetrash"
 
 # pip install selenium
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 
 def get_attributes(driver, element) -> dict:
@@ -26,7 +27,7 @@ driver = webdriver.Firefox()
 driver.implicitly_wait(10)  # seconds
 driver.get("https://ru.stackoverflow.com/")
 
-input_el = driver.find_element_by_css_selector("input.s-input__search")
+input_el = driver.find_element(By.CSS_SELECTOR, "input.s-input__search")
 attrs = get_attributes(driver, input_el)
 print(attrs)
 # {'aria-controls': 'top-search', 'aria-label': 'Поиск', 'autocomplete': 'off',

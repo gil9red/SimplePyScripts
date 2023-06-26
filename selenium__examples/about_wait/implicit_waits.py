@@ -20,27 +20,29 @@ import time
 # pip install selenium
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+
 
 driver = webdriver.Firefox()
 driver.implicitly_wait(10)  # seconds
 driver.get("https://www.youtube.com/")
 print(f'Title: "{driver.title}"')
 
-driver.find_element_by_css_selector("input#search").send_keys(
+driver.find_element(By.CSS_SELECTOR, "input#search").send_keys(
     "Funny cats" + Keys.RETURN
 )
 
-result_count = driver.find_element_by_id("result-count")
+result_count = driver.find_element(By.ID, "result-count")
 print(result_count.text)
 
 print(f'Title: "{driver.title}"')
 
-video_list = driver.find_elements_by_id("dismissable")
+video_list = driver.find_elements(By.ID, "dismissable")
 
 # Click on random video
 random.choice(video_list).click()
 
-video_title = driver.find_element_by_class_name("title")
+video_title = driver.find_element(By.CLASS_NAME, "title")
 
 # Bad algo, see explicit_waits.py
 while True:

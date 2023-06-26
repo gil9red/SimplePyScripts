@@ -10,6 +10,7 @@ __author__ = "ipetrash"
 # pip install selenium
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 
 #
 # geckodriver: https://github.com/Mozilla/geckodriver/releases
@@ -28,13 +29,13 @@ try:
     driver.get("https://yahoo.com")
     print(f'Title: "{driver.title}"')
 
-    search_box = driver.find_element_by_id("ybar-sbq")
+    search_box = driver.find_element(By.ID, "ybar-sbq")
     search_box.send_keys("Hello World!" + Keys.RETURN)
 
     # Делаем скриншот результата
     driver.save_screenshot("before_search.png")
 
-    elem = driver.find_element_by_id("web")
+    elem = driver.find_element(By.ID, "web")
     elem.screenshot("search_content.png")
 
     print(f'Title: "{driver.title}"')

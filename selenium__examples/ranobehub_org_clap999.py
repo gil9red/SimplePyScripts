@@ -13,6 +13,7 @@ from random import randint
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.common.exceptions import ElementClickInterceptedException
+from selenium.webdriver.common.by import By
 
 
 URL = "https://ranobehub.org"
@@ -42,15 +43,15 @@ try:
     driver.get(URL_LOGIN)
     print(f"Title: {driver.title!r}")
 
-    driver.find_element_by_name("email").send_keys(LOGIN)
-    driver.find_element_by_name("password").send_keys(PASSWORD)
-    driver.find_element_by_css_selector("button[type=submit]").click()
+    driver.find_element(By.NAME, "email").send_keys(LOGIN)
+    driver.find_element(By.NAME, "password").send_keys(PASSWORD)
+    driver.find_element(By.CSS_SELECTOR, "button[type=submit]").click()
 
     driver.get(URL_VOLUME)
     print(f"Title: {driver.title!r}")
 
-    clap_el = driver.find_element_by_id("app-clap-button")
-    clap_counter_el = clap_el.find_element_by_class_name("total-counter")
+    clap_el = driver.find_element(By.ID, "app-clap-button")
+    clap_counter_el = clap_el.find_element(By.CLASS_NAME, "total-counter")
 
     # Scroll to
     driver.execute_script("arguments[0].scrollIntoView();", clap_el)

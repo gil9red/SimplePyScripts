@@ -8,6 +8,7 @@ from base64 import b64decode
 
 # pip install selenium
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 
 key = "яблоко"
@@ -20,8 +21,8 @@ driver.implicitly_wait(10)  # seconds
 driver.get(url)
 
 # Поиск первой картинки
-img = driver.find_element_by_xpath(
-    '//img[starts-with(@src, "data:image/jpeg;base64,")]'
+img = driver.find_element(
+    By.XPATH, '//img[starts-with(@src, "data:image/jpeg;base64,")]'
 )
 
 src = img.get_attribute("src")

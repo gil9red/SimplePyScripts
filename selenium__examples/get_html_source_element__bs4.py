@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 # pip install selenium
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 
 url = "https://bash.im/byrating"
@@ -18,7 +19,7 @@ try:
     driver.get(url)
     print(f"Title: {driver.title!r}\n")
 
-    quote__header_el = driver.find_element_by_class_name("quote__header")
+    quote__header_el = driver.find_element(By.CLASS_NAME, "quote__header")
 
     outer_HTML = quote__header_el.get_attribute("outerHTML").strip()
     print(outer_HTML)

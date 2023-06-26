@@ -23,6 +23,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
 
 
 URL = "https://ru.stackoverflow.com"
@@ -59,8 +60,8 @@ class StackOverFlowBotThread(QThread):
             # Чтобы поток не завершился
             while self.is_running:
                 if self._search:
-                    search_el = self.driver.find_element_by_css_selector(
-                        "#search .s-input__search"
+                    search_el = self.driver.find_element(
+                        By.CSS_SELECTOR, "#search .s-input__search"
                     )
                     search_el.clear()
                     search_el.send_keys(self._search + Keys.RETURN)
@@ -69,8 +70,8 @@ class StackOverFlowBotThread(QThread):
                     time.sleep(1)
                     self.about_change_title.emit(self.driver.title)
 
-                    for result_el in self.driver.find_elements_by_css_selector(
-                        ".result-link a[href]"
+                    for result_el in self.driver.find_elements(
+                        By.CSS_SELECTOR, ".result-link a[href]"
                     ):
                         title = result_el.text.strip()
                         url = urljoin(URL, result_el.get_attribute("href"))

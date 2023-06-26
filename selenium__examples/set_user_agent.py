@@ -9,6 +9,7 @@ __author__ = "ipetrash"
 
 # pip install selenium
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 
 USER_AGENT_MOBILE = "Mozilla/5.0 (Android 10; Mobile; rv:78.0) Gecko/78.0 Firefox/78.0"
@@ -20,7 +21,7 @@ try:
     print(f"Title: {driver.title!r}\n")
 
     print("From js.   User-Agent:", driver.execute_script("return navigator.userAgent"))
-    print("From site. User-Agent:", driver.find_element_by_id("detected_value").text)
+    print("From site. User-Agent:", driver.find_element(By.ID, "detected_value").text)
 
 finally:
     driver.quit()
@@ -39,7 +40,7 @@ try:
     print(f"Title: {driver.title!r}\n")
 
     print("From js.   User-Agent:", driver.execute_script("return navigator.userAgent"))
-    print("From site. User-Agent:", driver.find_element_by_id("detected_value").text)
+    print("From site. User-Agent:", driver.find_element(By.ID, "detected_value").text)
 
 finally:
     driver.quit()

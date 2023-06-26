@@ -30,7 +30,7 @@ try:
     driver.get("https://yahoo.com")
     print(f'Title: "{driver.title}"')
 
-    search_box = driver.find_element_by_id("ybar-sbq")
+    search_box = driver.find_element(By.ID, "ybar-sbq")
     search_box.send_keys("Hello World!" + Keys.RETURN)
 
     # Делаем скриншот результата

@@ -30,11 +30,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
+
 driver = webdriver.Firefox()
 driver.get("https://www.youtube.com/")
 print(f'Title: "{driver.title}"')
 
-driver.find_element_by_css_selector("input#search").send_keys(
+driver.find_element(By.CSS_SELECTOR, "input#search").send_keys(
     "Funny cats" + Keys.RETURN
 )
 
@@ -45,14 +46,14 @@ print(result_count.text)
 
 print(f'Title: "{driver.title}"')
 
-video_list = driver.find_elements_by_id("dismissable")
+video_list = driver.find_elements(By.ID, "dismissable")
 
 # Click on random video
 random.choice(video_list).click()
 
 video = wait.until(EC.visibility_of_element_located((By.TAG_NAME, "video")))
 
-video_title = driver.find_element_by_class_name("title")
+video_title = driver.find_element(By.CLASS_NAME, "title")
 print(f'Title: "{driver.title}"')
 print(f'Video Title: "{video_title.text}"')
 
