@@ -18,6 +18,6 @@ def is_even_2(num):
 
 if __name__ == "__main__":
     for i in range(10):
-        print("{} is even: {}, {}".format(i, is_even(i), is_even_2(i)))
-        print("{} is odd: {}".format(i, is_odd(i)))
+        print(f"{i} is even: {is_even(i)}, {is_even_2(i)}")
+        print(f"{i} is odd: {is_odd(i)}")
         print()

@@ -30,10 +30,10 @@ eur = g.doc.select('//span[@class="eur_c currencies"]').text()
 
 def get_amt(text):
     # Удаление всех символов, кроме цифр и точки
-    text = re.sub("[^\\d\.]+", "", text)
+    text = re.sub(r"[^\d.]+", "", text)
 
     # Вытаскивание строки, описывающей число
-    text = re.search("\\d+(\.\\d*)?", text).group()
+    text = re.search(r"\d+(\.\d*)?", text).group()
     return text
 
 
@@ -41,4 +41,4 @@ usd = get_amt(usd)
 rub = get_amt(rub)
 eur = get_amt(eur)
 
-print("1 BTC:\n  {} USD\n  {} RUB\n  {} EUR".format(usd, rub, eur))
+print(f"1 BTC:\n  {usd} USD\n  {rub} RUB\n  {eur} EUR")

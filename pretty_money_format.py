@@ -12,7 +12,7 @@ def pretty_money_format(money) -> str:
     money = re.sub(r"[^.,\d]", "", money)
 
     if money.count(".") + money.count(",") > 1:
-        raise Exception('Invalid money format: "{}".'.format(money))
+        raise Exception(f'Invalid money format: "{money}".')
 
     money_sep = ""
     if money.count("."):

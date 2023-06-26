@@ -32,7 +32,7 @@ while True:
         break
 
     except:
-        print("Неудача с таймаутом {}.".format(timeout))
+        print(f"Неудача с таймаутом {timeout}.")
 
         time.sleep(timeout)
         timeout += 0.1

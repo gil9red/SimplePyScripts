@@ -29,12 +29,12 @@ if __name__ == "__main__":
         zip_file_name = "screenshots_" + today.strftime("%d.%m.%Y") + ".zip"
 
         # Составляем имя файла, содержащее в названии текущее время
-        file_name = "screenshot_{}.png".format(str_today_time)
+        file_name = f"screenshot_{str_today_time}.png"
 
         # Делаем скриншот
         im = ImageGrab.grab()
 
-        print('Сделан скриншот "{}"'.format(file_name))
+        print(f'Сделан скриншот "{file_name}"')
 
         # Открываем zip-файл
         with ZipFile(zip_file_name, "a") as zip_file:
@@ -49,9 +49,7 @@ if __name__ == "__main__":
             zip_file.writestr(file_name, image_bytes)
 
             print(
-                '  Скриншот "{}" добавлен в архив "{}"\n'.format(
-                    file_name, zip_file_name
-                )
+                f'  Скриншот "{file_name}" добавлен в архив "{zip_file_name}"\n'
             )
 
         # Ожидание каждые 15 минут

@@ -26,7 +26,7 @@ def get_percentage_values(items):
     """Возвращает список с процентным значением элемента списка."""
 
     sum_items = sum(items)
-    return ["{:.1f}%".format(i / sum_items * 100) for i in items]
+    return [f"{i / sum_items * 100:.1f}%" for i in items]
 
 
 if __name__ == "__main__":

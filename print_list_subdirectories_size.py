@@ -10,7 +10,7 @@ from os.path import getsize, join
 from human_byte_size import sizeof_fmt
 
 
-# Словарь нужен чтобы помнить размер папки. Когда итератор дойдет до родительской папки
+# Словарь нужен, чтобы помнить размер папки. Когда итератор дойдет до родительской папки
 # в словаре уже будут размер вложенных папок
 dir_sizes = dict()
 
@@ -20,4 +20,4 @@ for root, dirs, files in os.walk(".", topdown=False):
     dir_sizes[root] = size
 
 for path, total_size in sorted(dir_sizes.items(), key=lambda x: x[0]):
-    print("{} : {} ({})".format(path, sizeof_fmt(total_size), total_size))
+    print(f"{path} : {sizeof_fmt(total_size)} ({total_size})")

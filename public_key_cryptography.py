@@ -47,5 +47,5 @@ def decrypt(encrypt_mess):
 
 encrypt_mess = encrypt(MESS)
 
-print("Encrypt: {} -> {}.".format(MESS, encrypt_mess))
-print("Decrypt: {} -> {}".format(encrypt_mess, decrypt(encrypt_mess)))
+print(f"Encrypt: {MESS} -> {encrypt_mess}.")
+print(f"Decrypt: {encrypt_mess} -> {decrypt(encrypt_mess)}")

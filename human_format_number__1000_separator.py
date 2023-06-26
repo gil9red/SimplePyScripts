@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-print("{:,d}".format(5213234))  # 5,213,234
-print("{:,d}".format(123))  # 123
-print("{:,d}".format(1004))  # 1,004
-print("{:,d}".format(4321))  # 4,321
+print(f"{5213234:,d}")  # 5,213,234
+print(f"{123:,d}")  # 123
+print(f"{1004:,d}")  # 1,004
+print(f"{4321:,d}")  # 4,321

@@ -30,4 +30,4 @@ if __name__ == "__main__":
 
     for i, link in enumerate(links, 1):
         data = parse(link)
-        print("{}.\n{}\n".format(i, pretty(data)))
+        print(f"{i}.\n{pretty(data)}\n")

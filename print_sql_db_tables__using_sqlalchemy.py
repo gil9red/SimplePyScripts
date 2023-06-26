@@ -25,7 +25,7 @@ inspector = reflection.Inspector.from_engine(engine)
 table_names = inspector.get_table_names()
 for table in table_names:
     columns = [column_info["name"] for column_info in inspector.get_columns(table)]
-    print("{}: {}".format(table, ", ".join(columns)))
+    print(f"{table}: {', '.join(columns)}")
 
-    for row in engine.execute("select * from {}".format(table)):
+    for row in engine.execute(f"select * from {table}"):
         print(row.values())

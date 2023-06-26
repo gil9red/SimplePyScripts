@@ -44,7 +44,7 @@ def parse(text, append_test_case_list=True):
         total_max_value += max_value
 
         line = line.replace("{@}", str(value))
-        line = line.replace("{#}", "({}%)".format(int(value / max_value * 100)))
+        line = line.replace("{#}", f"({int(value / max_value * 100)}%)")
 
         if not append_test_case_list:
             index = line.rfind(":")
@@ -55,9 +55,7 @@ def parse(text, append_test_case_list=True):
 
     print()
     print(
-        "Итого: {} / {} ({}%)".format(
-            total_value, total_max_value, int(total_value / total_max_value * 100)
-        )
+        f"Итого: {total_value} / {total_max_value} ({int(total_value / total_max_value * 100)}%)"
     )
 
 

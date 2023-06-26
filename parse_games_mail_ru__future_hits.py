@@ -38,9 +38,7 @@ if __name__ == "__main__":
     def print_list(items):
         for i, (title, description, release_date, url, img_url) in enumerate(items, 1):
             print(
-                '{:2}. "{}" ({}): {} [{}]\n{}\n'.format(
-                    i, title, release_date, url, img_url, description
-                )
+                f'{i:2}. "{title}" ({release_date}): {url} [{img_url}]\n{description}\n'
             )
 
     # Full

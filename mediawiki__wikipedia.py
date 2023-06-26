@@ -24,7 +24,7 @@ def wiki_search(query: str, lang="ru", unquote_percent_encoded=False) -> str:
     if unquote_percent_encoded:
         url = unquote(url)
 
-    return "{} ({})".format(text, url)
+    return f"{text} ({url})"
 
 
 if __name__ == "__main__":
