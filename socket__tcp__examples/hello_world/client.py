@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import socket
 
 import sys
-sys.path.append('..')
-
+sys.path.append("..")
 from common import send_msg, recv_msg
 
 
@@ -20,16 +19,16 @@ with socket.socket() as sock:
 
     # Send big data
     # data = ','.join(str(i) for i in range(10000))
-    data = 'HelloWorld!' * 10000
-    print('Sending ({}): {}'.format(len(data), data))
-    data = bytes(data, 'utf-8')
+    data = "HelloWorld!" * 10000
+    print("Sending ({}): {}".format(len(data), data))
+    data = bytes(data, "utf-8")
     print()
 
     send_msg(sock, data)
 
-    print('Receiving')
+    print("Receiving")
 
     response_data = recv_msg(sock)
-    print('Response ({}): {}'.format(len(response_data), response_data))
+    print("Response ({}): {}".format(len(response_data), response_data))
 
-    print('Close\n')
+    print("Close\n")

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://docs.python.org/3.6/library/socketserver.html#socketserver-tcpserver-example
@@ -10,8 +10,7 @@ __author__ = 'ipetrash'
 import socketserver
 
 import sys
-sys.path.append('..')
-
+sys.path.append("..")
 from common import send_msg, recv_msg
 
 
@@ -28,21 +27,21 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
     """
 
     def handle(self):
-        print('Connected:', self.client_address)
+        print("Connected:", self.client_address)
 
         data = recv_msg(self.request)
-        print('Receiving ({}): {}'.format(len(data), data))
+        print("Receiving ({}): {}".format(len(data), data))
 
-        print('Sending')
+        print("Sending")
         send_msg(self.request, data.upper())
 
-        print('Close\n')
+        print("Close\n")
 
 
 if __name__ == "__main__":
     # Create the server, binding to localhost on port 9999
     with socketserver.TCPServer((HOST, PORT), MyTCPHandler) as server:
-        print('Server: {}'.format(server.server_address))
+        print("Server: {}".format(server.server_address))
 
         # Activate the server; this will keep running until you
         # interrupt the program with Ctrl-C
