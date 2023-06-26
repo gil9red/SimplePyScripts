@@ -23,7 +23,7 @@ while True:
         if data != last_data:
             # First changed without notification
             if last_data is not None:
-                title = 'Clipboard changed (len: {})'.format(len(data))
+                title = f'Clipboard changed (len: {len(data)})'
 
                 # Max text: 20
                 text = data[:100]

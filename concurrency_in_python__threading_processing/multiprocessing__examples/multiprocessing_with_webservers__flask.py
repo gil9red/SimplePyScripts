@@ -29,7 +29,7 @@ def go_parser(urls):
         for url in urls:
             try:
                 rs = requests.get(url)
-                print('Parser: {}. "{}"'.format(rs, rs.text))
+                print(f'Parser: {rs}. "{rs.text}"')
 
             except:
                 pass

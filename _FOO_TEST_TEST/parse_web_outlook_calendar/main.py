@@ -22,7 +22,7 @@ driver = webdriver.Firefox()
 try:
     driver.implicitly_wait(10)  # seconds
     driver.get(URL)
-    print('Title: "{}"'.format(driver.title))
+    print(f'Title: "{driver.title}"')
 
     driver.find_element_by_id("username").send_keys(LOGIN)
     driver.find_element_by_id("password").send_keys(PASSWORD)
@@ -33,10 +33,10 @@ try:
     driver.find_element_by_class_name("signinbutton").click()
 
     driver.save_screenshot("after_auth.png")
-    print('Title: "{}"'.format(driver.title))
+    print(f'Title: "{driver.title}"')
 
     driver.save_screenshot("before_click_on_calendar.png")
-    print('Title: "{}"'.format(driver.title))
+    print(f'Title: "{driver.title}"')
 
     html = driver.page_source
     print("Length:", len(html))
@@ -50,7 +50,7 @@ try:
     open("driver.after_click_on_calendar.html", "w", encoding="utf-8").write(html)
 
     driver.save_screenshot("after_click_on_calendar.png")
-    print('Title: "{}"'.format(driver.title))
+    print(f'Title: "{driver.title}"')
 
     # Ждем пока появится элемент
     driver.find_element_by_css_selector('[aria-label="Представление календаря"]')
@@ -63,7 +63,7 @@ try:
     open("driver.after_click_on_calendar_2.html", "w", encoding="utf-8").write(html)
 
     driver.save_screenshot("after_click_on_calendar_2.png")
-    print('Title: "{}"'.format(driver.title))
+    print(f'Title: "{driver.title}"')
 
     # TODO: нужно
 

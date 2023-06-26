@@ -25,9 +25,7 @@ def current_rate(ccy_rq_id):
     date_req2 = date.today().strftime("%d/%m/%Y")
     # date_req2 = (date.today() + timedelta(days=1)).strftime('%d/%m/%Y')
 
-    url = "http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1={}&date_req2={}&VAL_NM_RQ={}".format(
-        date_req1, date_req2, ccy_rq_id
-    )
+    url = f"http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1={date_req1}&date_req2={date_req2}&VAL_NM_RQ={ccy_rq_id}"
 
     with urlopen(url) as f:
         root = BeautifulSoup(f.read(), "xml")
@@ -48,8 +46,8 @@ def current_rate(ccy_rq_id):
 if __name__ == "__main__":
     # R01235 -- USD, доллары, 840
     price, delta = current_rate("R01235")
-    print("USD: {} ({}{:.4f})".format(price, ("+" if delta > 0 else ""), delta))
+    print(f"USD: {price} ({('+' if delta > 0 else '')}{delta:.4f})")
 
     # R01239 -- EUR, евро, 978
     price, delta = current_rate("R01239")
-    print("EUR: {} ({}{:.4f})".format(price, ("+" if delta > 0 else ""), delta))
+    print(f"EUR: {price} ({('+' if delta > 0 else '')}{delta:.4f})")

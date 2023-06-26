@@ -12,7 +12,7 @@ def run(name="main", sleep_seconds=None):
     if sleep_seconds:
         time.sleep(sleep_seconds)
 
-    print('start: "{}": {}'.format(name, threading.current_thread()))
+    print(f'start: "{name}": {threading.current_thread()}')
 
 
 if __name__ == "__main__":

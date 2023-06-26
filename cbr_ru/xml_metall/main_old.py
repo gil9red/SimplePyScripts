@@ -55,13 +55,11 @@ if __name__ == "__main__":
     date_req1 = "01.01.2000"
     date_req2 = date.today().strftime("%d.%m.%Y")
 
-    file_name = "metall_{}-{}.xml".format(date_req1, date_req2)
+    file_name = f"metall_{date_req1}-{date_req2}.xml"
 
     # Кеширование. Если файла нет, то скачиваем его
     if not os.path.exists(file_name):
-        url = "http://www.cbr.ru/scripts/xml_metall.asp?date_req1={}&date_req2={}".format(
-            date_req1, date_req2
-        )
+        url = f"http://www.cbr.ru/scripts/xml_metall.asp?date_req1={date_req1}&date_req2={date_req2}"
 
         with open(file_name, "w") as f:
             rs = requests.get(url)
@@ -90,7 +88,7 @@ if __name__ == "__main__":
         for i, record in enumerate((records[0], records[-1]), 1):
             # b'<Record Date="06.01.2000" Code="1"><Buy>231,94</Buy><Sell>246,67</Sell></Record>\n\n'
             # record["Code"]
-            print("{}. {}: {}".format(i, record["Date"], record.findChild("Buy").text))
+            print(f"{i}. {record['Date']}: {record.findChild('Buy').text}")
 
         metall = root.findChild("Metall")
         from_date = datetime.strptime(metall["FromDate"], "%Y%m%d").strftime("%d.%m.%Y")
@@ -98,5 +96,5 @@ if __name__ == "__main__":
         gen_plot(
             dates,
             prices,
-            "Стоимость грамма золота в рублях за {} - {}".format(from_date, to_date),
+            f"Стоимость грамма золота в рублях за {from_date} - {to_date}",
         )

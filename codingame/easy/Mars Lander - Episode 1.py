@@ -27,9 +27,7 @@ while True:
     # power: the thrust power (0 to 4).
     x, y, h_speed, v_speed, fuel, rotate, power = [int(i) for i in input().split()]
     print(
-        "x={}, y={}, h_speed={}, v_speed={}, fuel={}, rotate={}, power={}".format(
-            x, y, h_speed, v_speed, fuel, rotate, power
-        ),
+        f"x={x}, y={y}, h_speed={h_speed}, v_speed={v_speed}, fuel={fuel}, rotate={rotate}, power={power}",
         file=sys.stderr,
     )
 

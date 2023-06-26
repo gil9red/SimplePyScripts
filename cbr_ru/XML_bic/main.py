@@ -19,4 +19,4 @@ with urlopen(url) as f:
         name = record.find("ShortName").text
         bic = record.find("Bic").text
 
-        print('{}. "{}", {}, {}'.format(i, name, bic, record["DU"]))
+        print(f'{i}. "{name}", {bic}, {record["DU"]}')

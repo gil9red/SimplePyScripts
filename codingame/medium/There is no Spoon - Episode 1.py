@@ -18,11 +18,11 @@ matrix = list()
 
 for i in range(height):
     line = input()  # width characters, each either 0 or .
-    print("line: {}".format(line), file=sys.stderr)
+    print(f"line: {line}", file=sys.stderr)
 
     matrix.append(list(line))
 
-print("matrix:\n{}".format(matrix), file=sys.stderr)
+print(f"matrix:\n{matrix}", file=sys.stderr)
 
 
 # Ищем соседей справа
