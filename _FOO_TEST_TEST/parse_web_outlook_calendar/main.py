@@ -8,8 +8,6 @@ import time
 
 # pip install selenium
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
 from config import LOGIN, PASSWORD
@@ -24,13 +22,13 @@ try:
     driver.get(URL)
     print(f'Title: "{driver.title}"')
 
-    driver.find_element_by_id("username").send_keys(LOGIN)
-    driver.find_element_by_id("password").send_keys(PASSWORD)
+    driver.find_element(By.ID, "username").send_keys(LOGIN)
+    driver.find_element(By.ID, "password").send_keys(PASSWORD)
 
     # Делаем скриншот результата
     driver.save_screenshot("before_auth.png")
 
-    driver.find_element_by_class_name("signinbutton").click()
+    driver.find_element(By.CLASS_NAME, "signinbutton").click()
 
     driver.save_screenshot("after_auth.png")
     print(f'Title: "{driver.title}"')
@@ -43,7 +41,7 @@ try:
     open("driver.before_click_on_calendar.html", "w", encoding="utf-8").write(html)
 
     # Ждем и кликаем на кнопку
-    driver.find_element_by_xpath('//*[text()="Календарь"]').click()
+    driver.find_element(By.XPATH, '//*[text()="Календарь"]').click()
 
     html = driver.page_source
     print("Length:", len(html))
@@ -53,7 +51,7 @@ try:
     print(f'Title: "{driver.title}"')
 
     # Ждем пока появится элемент
-    driver.find_element_by_css_selector('[aria-label="Представление календаря"]')
+    driver.find_element(By.CSS_SELECTOR, '[aria-label="Представление календаря"]')
 
     # Даем еще время на прогрузку календаря
     time.sleep(10)

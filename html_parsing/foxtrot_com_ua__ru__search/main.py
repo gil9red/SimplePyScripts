@@ -15,6 +15,7 @@ import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
 
 
 # TODO: Using logging instead print
@@ -23,7 +24,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 def get_text_by_css(parent, css_selector: str, default: str) -> str:
     try:
-        return parent.find_element_by_css_selector(css_selector).text
+        return parent.find_element(By.CSS_SELECTOR, css_selector).text
     except:
         return default
 
@@ -47,7 +48,7 @@ def parse(url_search: str) -> list[tuple[str, str, str]]:
             print(f"Load: {url}")
             driver.get(url)
 
-            for item_el in driver.find_elements_by_css_selector(".card[data-url]"):
+            for item_el in driver.find_elements(By.CSS_SELECTOR, ".card[data-url]"):
                 name = get_text_by_css(item_el, ".card__title", "Null")
                 price = get_text_by_css(item_el, ".card-price", "-")
                 nal = get_text_by_css(item_el, ".card__buttons", "-")
@@ -59,9 +60,7 @@ def parse(url_search: str) -> list[tuple[str, str, str]]:
 
             # Обновление номера последней страницы
             try:
-                pages_count_el = driver.find_element_by_css_selector(
-                    "*[data-pages-count]"
-                )
+                pages_count_el = driver.find_element(By.CSS_SELECTOR, "*[data-pages-count]")
                 last_page = int(pages_count_el.get_attribute("data-pages-count"))
 
             except NoSuchElementException:

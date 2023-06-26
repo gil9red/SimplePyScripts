@@ -12,6 +12,7 @@ from html import unescape
 # pip install selenium
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
 
 from config import URL_MODIX_BASE, URL_MODIX_UPDATE, FILE_NAME_IDS, LOGIN, PASSWORD
 
@@ -29,10 +30,10 @@ try:
     driver.get(URL_MODIX_BASE)
     print(f"Title: {driver.title!r}")
 
-    driver.find_element_by_id("modx-login-username").send_keys(LOGIN)
-    driver.find_element_by_id("modx-login-password").send_keys(PASSWORD)
+    driver.find_element(By.ID, "modx-login-username").send_keys(LOGIN)
+    driver.find_element(By.ID, "modx-login-password").send_keys(PASSWORD)
 
-    driver.find_element_by_id("modx-login-btn").click()
+    driver.find_element(By.ID, "modx-login-btn").click()
 
     for i, doc_id in enumerate(IDS, 1):
         print(f"#{i} / {len(IDS)}. doc_id={doc_id}")
@@ -43,13 +44,13 @@ try:
 
         need_save = False
 
-        published_el = driver.find_element_by_id("modx-resource-published")
+        published_el = driver.find_element(By.ID, "modx-resource-published")
         if not published_el.get_attribute("checked"):
             published_el.click()
             need_save = True
 
         # Replaced html entities
-        description_el = driver.find_element_by_id("ta")
+        description_el = driver.find_element(By.ID, "ta")
         description = description_el.get_attribute("value")
 
         new_description = unescape(description)
@@ -62,7 +63,7 @@ try:
             need_save = True
 
         if need_save:
-            driver.find_element_by_id("modx-abtn-save").click()
+            driver.find_element(By.ID, "modx-abtn-save").click()
 
         time.sleep(5)
 

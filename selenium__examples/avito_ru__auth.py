@@ -7,6 +7,7 @@ __author__ = "ipetrash"
 # pip install selenium
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 
 
 LOGIN = "<LOGIN>"
@@ -20,14 +21,14 @@ try:
     driver.get("https://www.avito.ru/")
     print(f'Title: "{driver.title}"')
 
-    login_button_el = driver.find_element_by_css_selector(
-        '[data-marker="header/login-button"]'
+    login_button_el = driver.find_element(
+        By.CSS_SELECTOR, '[data-marker="header/login-button"]'
     )
     login_button_el.click()
 
-    login_el = driver.find_element_by_css_selector('[data-marker="login-form/login"]')
-    password_el = driver.find_element_by_css_selector(
-        '[data-marker="login-form/password"]'
+    login_el = driver.find_element(By.CSS_SELECTOR, '[data-marker="login-form/login"]')
+    password_el = driver.find_element(
+        By.CSS_SELECTOR, '[data-marker="login-form/password"]'
     )
 
     login_el.send_keys(LOGIN)

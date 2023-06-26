@@ -7,6 +7,7 @@ __author__ = "ipetrash"
 # pip install selenium
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
 
 
 options = Options()
@@ -19,9 +20,9 @@ try:
     driver.get("https://2mz.me/")
     print(f'Title: "{driver.title}"')
 
-    for item in driver.find_elements_by_css_selector("#tracks .item"):
-        title = item.find_element_by_css_selector(".item-title").text
-        author = item.find_element_by_css_selector(".item-author").text
+    for item in driver.find_elements(By.CSS_SELECTOR, "#tracks .item"):
+        title = item.find_element(By.CSS_SELECTOR, ".item-title").text
+        author = item.find_element(By.CSS_SELECTOR, ".item-author").text
         print(title, author)
 
 finally:

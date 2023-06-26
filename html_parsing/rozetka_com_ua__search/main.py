@@ -15,6 +15,7 @@ import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
 
 
 # TODO: Using WebDriverWait instead implicitly_wait
@@ -35,19 +36,19 @@ def parse(url: str) -> list[tuple[str, str, str]]:
             print("Load:", url)
             driver.get(url)
 
-            for item_el in driver.find_elements_by_css_selector(".goods-tile"):
-                name = item_el.find_element_by_css_selector(".goods-tile__title").text
+            for item_el in driver.find_elements(By.CSS_SELECTOR, ".goods-tile"):
+                name = item_el.find_element(By.CSS_SELECTOR, ".goods-tile__title").text
 
                 # Не у всех товаров есть цена
                 try:
-                    price = item_el.find_element_by_css_selector(
-                        ".goods-tile__price-value"
+                    price = item_el.find_element(
+                        By.CSS_SELECTOR, ".goods-tile__price-value"
                     ).text
                 except NoSuchElementException:
                     price = "-"
 
-                nal = item_el.find_element_by_css_selector(
-                    ".goods-tile__availability"
+                nal = item_el.find_element(
+                    By.CSS_SELECTOR, ".goods-tile__availability"
                 ).text
 
                 row = name, price, nal
@@ -56,8 +57,8 @@ def parse(url: str) -> list[tuple[str, str, str]]:
 
             # Если есть кнопка перехода на следующую страницу, то продолжаем цикл, иначе завершаем
             try:
-                a_next_page = driver.find_element_by_css_selector(
-                    "a.pagination__direction_type_forward[href]"
+                a_next_page = driver.find_element(
+                    By.CSS_SELECTOR, "a.pagination__direction_type_forward[href]"
                 )
                 url = a_next_page.get_attribute("href")
 

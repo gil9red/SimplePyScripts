@@ -10,6 +10,7 @@ import traceback
 # pip install selenium
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
 
 
 URL = "https://www.s7.ru/"
@@ -27,10 +28,10 @@ try:
     # Заметил, что без дополнительного ожидания у <from_el> не весь текст
     time.sleep(10)
 
-    for item in driver.find_elements_by_css_selector(".special-offers__item"):
-        to_el = item.find_element_by_css_selector(".special-offers__to")
-        from_el = item.find_element_by_css_selector(".special-offers__from")
-        price_el = item.find_element_by_css_selector(".special-offers__price")
+    for item in driver.find_elements(By.CSS_SELECTOR, ".special-offers__item"):
+        to_el = item.find_element(By.CSS_SELECTOR, ".special-offers__to")
+        from_el = item.find_element(By.CSS_SELECTOR, ".special-offers__from")
+        price_el = item.find_element(By.CSS_SELECTOR, ".special-offers__price")
 
         print(f"{to_el.text:15} | {from_el.text} | {price_el.text}")
 
