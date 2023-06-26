@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # Example:
@@ -59,22 +59,69 @@ TEMPLATE = """
 """
 
 ITEMS = [
-    'CalcArpc', 'CalcArqc', 'CalcCsc', 'CalcCvv', 'CalcEmvMac', 'CalcHmac', 'CalcKeyCheck', 'CalcMac', 'CalcMacDukpt',
-    'CalcPinOffset', 'CalcPvv', 'CheckArpc', 'CheckArqc', 'CheckCapToken', 'CheckCsc', 'CheckCvc3', 'CheckCvv',
-    'CheckDcsc', 'CheckDcvv', 'CheckHmac', 'CheckKey', 'CheckMac', 'CheckMacDukpt', 'CheckPinOffset', 'CheckPvv',
-    'CheckRsaKey', 'DecryptDukpt', 'DesCrypt', 'DesRecrypt', 'EncryptDukpt', 'ExportEmvPinBlock', 'ExportHmacKey',
-    'ExportKey', 'ExportPinBlock', 'ExportRsaKey', 'GenHmacKey', 'GenKey', 'GenRsaKey', 'GeneratePin', 'GetHsmInfo',
-    'ImportClearPin', 'ImportHmacKey', 'ImportKey', 'ImportPinBlock', 'ImportPinBlockDukpt', 'ImportPinOffset',
-    'ImportRsaKey', 'JwtDecode', 'JwtEncode', 'MigrateKey', 'RebuildPinBlock', 'RklGenerateAndEncryptKey',
-    'RklImportPublicKey', 'RklImportRootPublicKey', 'RsaSign', 'RsaVerify', 'TdsSign', 'TranslateKey'
+    "CalcArpc",
+    "CalcArqc",
+    "CalcCsc",
+    "CalcCvv",
+    "CalcEmvMac",
+    "CalcHmac",
+    "CalcKeyCheck",
+    "CalcMac",
+    "CalcMacDukpt",
+    "CalcPinOffset",
+    "CalcPvv",
+    "CheckArpc",
+    "CheckArqc",
+    "CheckCapToken",
+    "CheckCsc",
+    "CheckCvc3",
+    "CheckCvv",
+    "CheckDcsc",
+    "CheckDcvv",
+    "CheckHmac",
+    "CheckKey",
+    "CheckMac",
+    "CheckMacDukpt",
+    "CheckPinOffset",
+    "CheckPvv",
+    "CheckRsaKey",
+    "DecryptDukpt",
+    "DesCrypt",
+    "DesRecrypt",
+    "EncryptDukpt",
+    "ExportEmvPinBlock",
+    "ExportHmacKey",
+    "ExportKey",
+    "ExportPinBlock",
+    "ExportRsaKey",
+    "GenHmacKey",
+    "GenKey",
+    "GenRsaKey",
+    "GeneratePin",
+    "GetHsmInfo",
+    "ImportClearPin",
+    "ImportHmacKey",
+    "ImportKey",
+    "ImportPinBlock",
+    "ImportPinBlockDukpt",
+    "ImportPinOffset",
+    "ImportRsaKey",
+    "JwtDecode",
+    "JwtEncode",
+    "MigrateKey",
+    "RebuildPinBlock",
+    "RklGenerateAndEncryptKey",
+    "RklImportPublicKey",
+    "RklImportRootPublicKey",
+    "RsaSign",
+    "RsaVerify",
+    "TdsSign",
+    "TranslateKey",
 ]
 
-cases = [
-    TEMPLATE_CASE.replace('{OPERATION}', operation)
-    for operation in ITEMS
-]
-text = TEMPLATE.replace('{SWITCHES}', '\n'.join(cases))
+cases = [TEMPLATE_CASE.replace("{OPERATION}", operation) for operation in ITEMS]
+text = TEMPLATE.replace("{SWITCHES}", "\n".join(cases))
 
-with open('switch_case.xml', 'w', encoding='utf-8') as f:
+with open("switch_case.xml", "w", encoding="utf-8") as f:
     print(text)
     print(text, file=f)

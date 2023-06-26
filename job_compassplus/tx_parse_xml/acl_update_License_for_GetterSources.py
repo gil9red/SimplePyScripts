@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from pathlib import Path
 import re
+from pathlib import Path
 
 from bs4 import BeautifulSoup
 
 
-FILE_NAME_ACL = Path(r'C:\DEV__TX\trunk_tx\com.tranzaxis\ads\Interfacing.W4\src\aclTJQ2GCOP7NFZPERU23FQA76GXQ.xml')
+FILE_NAME_ACL = Path(
+    r"C:\DEV__TX\trunk_tx\com.tranzaxis\ads\Interfacing.W4\src\aclTJQ2GCOP7NFZPERU23FQA76GXQ.xml"
+)
 LICENSE_PATH = "com.tranzaxis/Interface/Online/W4/"
 
 TEMPLATE_THIS_PROP = """
@@ -71,28 +73,32 @@ return </xsc:Java>
         </GetterSources>
 """
 
-ITEMS = [
-    ...
-]
+ITEMS = [...]
 
-root_acl = BeautifulSoup(open(FILE_NAME_ACL, 'rb'), 'xml')
+root_acl = BeautifulSoup(open(FILE_NAME_ACL, "rb"), "xml")
 root_acl_str = str(root_acl)
 
 for license_name, license_id, prop_name, prop_id in ITEMS:
     print(license_name, license_id, prop_name, prop_id)
 
-    new_getter_src = TEMPLATE \
-        .replace('{TEMPLATE_THIS_PROP}', TEMPLATE_THIS_PROP) \
-        .replace('{prop_id}', prop_id) \
-        .replace('{prop_name}', prop_name) \
-        .replace('{license_path}', LICENSE_PATH) \
-        .replace('{license_name}', license_id) \
-        .replace('{acl_id}', FILE_NAME_ACL.stem)
+    new_getter_src = (
+        TEMPLATE.replace("{TEMPLATE_THIS_PROP}", TEMPLATE_THIS_PROP)
+        .replace("{prop_id}", prop_id)
+        .replace("{prop_name}", prop_name)
+        .replace("{license_path}", LICENSE_PATH)
+        .replace("{license_name}", license_id)
+        .replace("{acl_id}", FILE_NAME_ACL.stem)
+    )
 
     prop_el = root_acl.select_one(f'[Id="{prop_id}"]')
     old_prop_el_str = str(prop_el)
-    new_prop_el_str = re.sub('<GetterSources>.+?</GetterSources>', new_getter_src, old_prop_el_str, flags=re.DOTALL)
+    new_prop_el_str = re.sub(
+        "<GetterSources>.+?</GetterSources>",
+        new_getter_src,
+        old_prop_el_str,
+        flags=re.DOTALL,
+    )
     root_acl_str = root_acl_str.replace(old_prop_el_str, new_prop_el_str)
 
-with open('new_' + FILE_NAME_ACL.name, 'w', encoding='utf-8') as f:
+with open("new_" + FILE_NAME_ACL.name, "w", encoding="utf-8") as f:
     f.write(root_acl_str)

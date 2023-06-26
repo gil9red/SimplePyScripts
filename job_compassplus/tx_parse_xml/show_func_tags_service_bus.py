@@ -1,35 +1,43 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from collections import defaultdict
 from bs4 import BeautifulSoup, Tag
 
 
-file_name = r'C:\DEV__TX\trunk_tx\com.tranzaxis\uds\Interfacing.Examples\etc\DinersClub\DinersClub.xml'
+file_name = r"C:\DEV__TX\trunk_tx\com.tranzaxis\uds\Interfacing.Examples\etc\DinersClub\DinersClub.xml"
 
 
-root = BeautifulSoup(open(file_name), 'xml')
+root = BeautifulSoup(open(file_name), "xml")
 
 
 def get_func_title(func_el: Tag) -> str:
-    description = func_el.Description.text if func_el.Description else ''
+    description = func_el.Description.text if func_el.Description else ""
     attrs_title = ", ".join(f"{k}={v}" for k, v in func_el.attrs.items())
-    return f'{attrs_title}. Description: {description}'
+    return f"{attrs_title}. Description: {description}"
 
 
 def get_funcs_from_user_funcs(node_el: Tag) -> list[Tag]:
     try:
-        return [func_el for func_el in node_el.find('UserFuncs', recursive=False).find_all('Func', recursive=False)]
+        return [
+            func_el
+            for func_el in node_el.find("UserFuncs", recursive=False).find_all(
+                "Func", recursive=False
+            )
+        ]
     except:
         return []
 
 
 def get_funcs_from_user_props(node_el: Tag) -> list[Tag]:
     try:
-        return [func_el for func_el in node_el.find('UserProps', recursive=False).find_all('Func')]
+        return [
+            func_el
+            for func_el in node_el.find("UserProps", recursive=False).find_all("Func")
+        ]
     except:
         return []
 
@@ -37,14 +45,14 @@ def get_funcs_from_user_props(node_el: Tag) -> list[Tag]:
 node_by_funcs = defaultdict(list)
 
 nodes = []
-if pipeline_nodes := root.find('PipelineNodes'):
-    nodes += pipeline_nodes.find_all('Node')
-if other_nodes := root.find('OtherNodes'):
-    nodes += other_nodes.find_all('Node')
+if pipeline_nodes := root.find("PipelineNodes"):
+    nodes += pipeline_nodes.find_all("Node")
+if other_nodes := root.find("OtherNodes"):
+    nodes += other_nodes.find_all("Node")
 
 for node_el in nodes:
-    node_title = node_el.Title.text if node_el.Title else ''
-    node_class_id = node_el['ClassId']
+    node_title = node_el.Title.text if node_el.Title else ""
+    node_class_id = node_el["ClassId"]
 
     parent_title = f"{node_el.name} (Title: {node_title}. ClassId: {node_el['ClassId']}, EntityPid: {node_el['EntityPid']})"
 
@@ -59,7 +67,9 @@ for node_el in nodes:
         node_by_funcs[parent_title].append(func_title)
 
     try:
-        for stage_el in node_el.TransformStages.find_all('TransformStage', recursive=False):
+        for stage_el in node_el.TransformStages.find_all(
+            "TransformStage", recursive=False
+        ):
             parent_title = f"{node_el.name}/Stage#{stage_el.Seq.text} (ClassId: {stage_el['ClassId']}, NodeTitle: {node_title}, NodeClassId: {node_el['ClassId']}, NodeEntityPid: {node_el['EntityPid']})"
 
             for func_el in get_funcs_from_user_funcs(stage_el):
@@ -75,9 +85,9 @@ for node_el in nodes:
 
 i = 1
 for node_title, funcs in node_by_funcs.items():
-    print(f'{node_title} ({len(funcs)}):')
+    print(f"{node_title} ({len(funcs)}):")
     for func_title in funcs:
-        print(f'    {i}. {func_title}')
+        print(f"    {i}. {func_title}")
         i += 1
 
     print()

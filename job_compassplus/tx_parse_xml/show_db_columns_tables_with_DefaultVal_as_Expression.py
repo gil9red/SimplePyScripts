@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import xml.etree.ElementTree as ET
 
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Union
-
-import xml.etree.ElementTree as ET
 
 
 @dataclass
@@ -21,41 +20,45 @@ class Column:
 
 def get_table_by_columns(model_path: Path) -> dict[str, list[Column]]:
     ns = dict(
-        dds='http://schemas.radixware.org/ddsdef.xsd',
-        com='http://schemas.radixware.org/commondef.xsd',
+        dds="http://schemas.radixware.org/ddsdef.xsd",
+        com="http://schemas.radixware.org/commondef.xsd",
     )
 
     table_by_columns = defaultdict(list)
-    model = ET.fromstring(model_path.read_text(encoding='utf-8'))
-    for table in model.findall('.//dds:Tables/dds:Table', namespaces=ns):
+    model = ET.fromstring(model_path.read_text(encoding="utf-8"))
+    for table in model.findall(".//dds:Tables/dds:Table", namespaces=ns):
         table_title = f"{table.attrib['Name']}({table.attrib['Id']})"
 
-        for column in table.findall('./dds:Columns/dds:Column', namespaces=ns):
-            default_value = column.find("./dds:DefaultVal[@Type='Expression']/com:Value", namespaces=ns)
+        for column in table.findall("./dds:Columns/dds:Column", namespaces=ns):
+            default_value = column.find(
+                "./dds:DefaultVal[@Type='Expression']/com:Value", namespaces=ns
+            )
             if default_value is not None:
-                table_by_columns[table_title].append(Column(
-                    id=column.attrib['Id'],
-                    name=column.attrib['Name'],
-                    default_value=default_value.text.strip(),
-                ))
+                table_by_columns[table_title].append(
+                    Column(
+                        id=column.attrib["Id"],
+                        name=column.attrib["Name"],
+                        default_value=default_value.text.strip(),
+                    )
+                )
 
     return table_by_columns
 
 
-def process(branch_dir: Union[Path, str]) -> dict[str, dict[str, list[Column]]]:
+def process(branch_dir: Path | str) -> dict[str, dict[str, list[Column]]]:
     if isinstance(branch_dir, str):
         branch_dir = Path(branch_dir)
 
     layer_module_by_tables = defaultdict(dict)
 
-    for layer_dir in branch_dir.glob('*'):
+    for layer_dir in branch_dir.glob("*"):
         if not layer_dir.is_dir():
             continue
 
-        layer_dds_dir = layer_dir / 'dds'
+        layer_dds_dir = layer_dir / "dds"
         if layer_dds_dir.is_dir():
             layer = layer_dir.name
-            for model_xml in layer_dds_dir.glob('*/model.xml'):
+            for model_xml in layer_dds_dir.glob("*/model.xml"):
                 module = model_xml.parent.name
 
                 for table, columns in get_table_by_columns(model_xml).items():
@@ -66,14 +69,14 @@ def process(branch_dir: Union[Path, str]) -> dict[str, dict[str, list[Column]]]:
 
 
 if __name__ == "__main__":
-    path = r'C:\DEV__OPTT\trunk_optt'
+    path = r"C:\DEV__OPTT\trunk_optt"
 
     for key, table_by_columns in process(path).items():
-        print(f'{key} ({len(table_by_columns)})')
+        print(f"{key} ({len(table_by_columns)})")
         for i, (table, columns) in enumerate(table_by_columns.items(), 1):
-            print(f'    {i}. {table}:')
+            print(f"    {i}. {table}:")
             for column in columns:
-                print(f'        {column.name}({column.id}) = {column.default_value!r}')
+                print(f"        {column.name}({column.id}) = {column.default_value!r}")
         print()
     """
     com.optt/ProtocolSetup (7)
