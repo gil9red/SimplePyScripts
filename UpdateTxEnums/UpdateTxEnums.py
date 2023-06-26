@@ -761,7 +761,7 @@ def addCommentBlockAboutTxEnum(enum):
     # @param enum TxEnum Перечисление, по которому нужно сгенерировать дополнительную информацию.
     # @return str Текст с комментарием c#, содержащий информацию об перечислении TX.
 
-    return "/// <RadixEnum id='%s' type='%s'></RadixEnum>\n" % (enum.getId(), enum.getStrValType())
+    return f"/// <RadixEnum id='{enum.getId()}' type='{enum.getStrValType()}'></RadixEnum>\n"
 
 
 def addStandartUsingDirective():
