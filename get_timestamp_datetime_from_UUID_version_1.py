@@ -36,7 +36,5 @@ if __name__ == "__main__":
         uuid_obj = uuid.UUID(uuid1_value)
         timestamp = get_timestamp_from_UUIDv1(uuid_obj)
         print(
-            "'{}': {} -> {}".format(
-                uuid_obj, timestamp, datetime.fromtimestamp(timestamp)
-            )
+            f"'{uuid_obj}': {timestamp} -> {datetime.fromtimestamp(timestamp)}"
         )

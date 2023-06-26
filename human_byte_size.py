@@ -21,6 +21,6 @@ if __name__ == "__main__":
     import shutil
 
     usage = shutil.disk_usage("C://")
-    print("total: {:>8} ({} bytes)".format(sizeof_fmt(usage.total), usage.total))
-    print("used:  {:>8} ({} bytes)".format(sizeof_fmt(usage.used), usage.used))
-    print("free:  {:>8} ({} bytes)".format(sizeof_fmt(usage.free), usage.free))
+    print(f"total: {sizeof_fmt(usage.total):>8} ({usage.total} bytes)")
+    print(f"used:  {sizeof_fmt(usage.used):>8} ({usage.used} bytes)")
+    print(f"free:  {sizeof_fmt(usage.free):>8} ({usage.free} bytes)")

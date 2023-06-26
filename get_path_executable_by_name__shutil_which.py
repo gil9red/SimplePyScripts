@@ -12,4 +12,4 @@ import shutil
 
 for name in ["python", "java", "cmd", "git", "svn"]:
     path = shutil.which(name)
-    print("{:10} {}".format(name, path))
+    print(f"{name:10} {path}")

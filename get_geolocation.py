@@ -26,6 +26,9 @@ def get_geolocation() -> dict:
         rs = urlopen("http://ip-api.com/json").read()
         data = json.loads(rs, encoding="utf-8")
 
+        latitude = data["lat"]
+        longitude = data["lon"]
+
         location["Ip"] = data["query"]
         location["Country"] = data["country"]
 
@@ -35,13 +38,11 @@ def get_geolocation() -> dict:
         location["Zipcode"] = data["zip"]
         location["Timezone"] = data["timezone"]
 
-        location["Latitude"] = data["lat"]
-        location["Longitude"] = data["lon"]
+        location["Latitude"] = latitude
+        location["Longitude"] = longitude
 
         # SOURCE: https://github.com/maldevel/IPGeoLocation/blob/master/core/IpGeoLocation.py#L97
-        link = "http://www.google.com/maps/place/{0},{1}/@{0},{1},16z".format(
-            location["Latitude"], location["Longitude"]
-        )
+        link = f"http://www.google.com/maps/place/{latitude},{longitude}/@{latitude},{longitude},16z"
         location["GoogleMapsLink"] = link
 
     except:

@@ -18,7 +18,7 @@ def github_io_git_repo_url(github_io_url: str) -> str | None:
         user = match.group(1)
         repo = match.group(2).split("/")[0]
 
-        return "https://github.com/{}/{}".format(user, repo)
+        return f"https://github.com/{user}/{repo}"
 
 
 if __name__ == "__main__":

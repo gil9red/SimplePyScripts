@@ -18,17 +18,11 @@ print()
 
 usage = shutil.disk_usage("C://")
 print(
-    "total: {:>8} ({} bytes)".format(
-        humanize.naturalsize(usage.total, binary=True), usage.total
-    )
+    f"total: {humanize.naturalsize(usage.total, binary=True):>8} ({usage.total} bytes)"
 )
 print(
-    "used:  {:>8} ({} bytes)".format(
-        humanize.naturalsize(usage.used, binary=True), usage.used
-    )
+    f"used:  {humanize.naturalsize(usage.used, binary=True):>8} ({usage.used} bytes)"
 )
 print(
-    "free:  {:>8} ({} bytes)".format(
-        humanize.naturalsize(usage.free, binary=True), usage.free
-    )
+    f"free:  {humanize.naturalsize(usage.free, binary=True):>8} ({usage.free} bytes)"
 )

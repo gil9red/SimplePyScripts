@@ -57,7 +57,7 @@ if __name__ == "__main__":
         """
         )
 
-        f.write("<capture>{}</capture>".format(dir_name))
+        f.write(f"<capture>{dir_name}</capture>")
 
         f.write(
             "<tr><td>{}</td><td>{}</td><td>{}</td></tr>".format(
@@ -70,7 +70,7 @@ if __name__ == "__main__":
 
             f.write(
                 "<td>{}</td><td>{}</td><td>{}</td>".format(
-                    '<a href="file://{f}">{f}</a>'.format(f=file_name),
+                    f'<a href="file://{file_name}">{file_name}</a>',
                     sizeof_fmt(file_stat.st_size),
                     get_date_as_string(file_stat.st_mtime),
                 )
