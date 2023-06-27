@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import logging
@@ -18,10 +18,10 @@ logging.basicConfig(level=logging.DEBUG)
 @app.route("/")
 def index():
     items = PeopleReached.select().order_by(PeopleReached.id.desc())
-    return render_template('index.html', people_reacheds=items)
+    return render_template("index.html", people_reacheds=items)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.debug = True
 
     # Localhost
