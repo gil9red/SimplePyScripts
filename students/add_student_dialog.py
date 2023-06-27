@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import random
@@ -12,15 +12,15 @@ from student import Student
 
 
 DEFAULT_NAMES = [
-    'Вася Пупкин',
-    'Иван Иванов',
-    'Катя Спилберг',
+    "Вася Пупкин",
+    "Иван Иванов",
+    "Катя Спилберг",
 ]
 
 DEFAULT_GROUPS = [
-    'Da-12',
-    'Bg-1',
-    'Aa-09',
+    "Da-12",
+    "Bg-1",
+    "Aa-09",
 ]
 
 
@@ -28,7 +28,7 @@ class AddStudentDialog(QDialog):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('Add student dialog')
+        self.setWindowTitle("Add student dialog")
 
         self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         self.buttonBox.accepted.connect(self.accept)
@@ -38,8 +38,8 @@ class AddStudentDialog(QDialog):
         self.group = QLineEdit(random.choice(DEFAULT_GROUPS))
 
         self.layout = QFormLayout()
-        self.layout.addRow('Name', self.name)
-        self.layout.addRow('Group', self.group)
+        self.layout.addRow("Name", self.name)
+        self.layout.addRow("Group", self.group)
 
         self.main_layout = QVBoxLayout()
         self.main_layout.addLayout(self.layout)
