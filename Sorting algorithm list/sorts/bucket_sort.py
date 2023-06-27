@@ -3,7 +3,7 @@
 # This program will illustrate how to implement bucket sort algorithm
 
 # Wikipedia says: Bucket sort, or bin sort, is a sorting algorithm that works by distributing the
-# elements of an array into a number of buckets. Each bucket is then sorted individually, either using 
+# elements of an array into a number of buckets. Each bucket is then sorted individually, either using
 # a different sorting algorithm, or by recursively applying the bucket sorting algorithm. It is a
 # distribution sort, and is a cousin of radix sort in the most to least significant digit flavour.
 # Bucket sort is a generalization of pigeonhole sort. Bucket sort can be implemented with comparisons
@@ -18,9 +18,10 @@ import math
 
 DEFAULT_BUCKET_SIZE = 5
 
+
 def bucketSort(myList, bucketSize=DEFAULT_BUCKET_SIZE):
-    if(len(myList) == 0):
-        print('You don\'t have any elements in array!')
+    if len(myList) == 0:
+        print("You don't have any elements in array!")
 
     minValue = myList[0]
     maxValue = myList[0]
@@ -51,6 +52,7 @@ def bucketSort(myList, bucketSize=DEFAULT_BUCKET_SIZE):
 
     return sortedArray
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     sortedArray = bucketSort([12, 23, 4, 5, 3, 2, 12, 81, 56, 95])
     print(sortedArray)

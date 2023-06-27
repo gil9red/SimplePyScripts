@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/master/timeout_block/main.py
@@ -37,14 +37,14 @@ class KThread(Thread):
         self.run = self.__run_backup
 
     def globaltrace(self, frame, why, arg):
-        if why == 'call':
+        if why == "call":
             return self.localtrace
         else:
             return None
 
     def localtrace(self, frame, why, arg):
         if self.killed:
-            if why == 'line':
+            if why == "line":
                 raise Kill()
         return self.localtrace
 
@@ -69,19 +69,20 @@ def timeout(seconds=None, raise_timeout=False):
 
     return wrapper
 
+
 ############################################################################################################
 
 
-if __name__ == '__main__':
-    items = list(range(10 ** 3))
+if __name__ == "__main__":
     import random
-    random.shuffle(items)
-
     import time
+    import sorts
+
+    items = list(range(10**3))
+    random.shuffle(items)
 
     time_by_algo_name = dict()
 
-    import sorts
     for name, algo in sorted(sorts.ALGO_LIST.items(), key=lambda x: x[0]):
         print(name)
 
@@ -95,16 +96,16 @@ if __name__ == '__main__':
             run()
 
         except TimeoutError:
-            print('    timeout!')
+            print("    timeout!")
 
         except Exception as e:
-            print(f'    Error: {e}: sort: {name}')
+            print(f"    Error: {e}: sort: {name}")
 
         t = time.clock() - t
         time_by_algo_name[t] = name
         # print('    duration: {:.3f} secs'.format(t))
 
     print()
-    print('Sorted by time:')
+    print("Sorted by time:")
     for t, name in sorted(time_by_algo_name.items(), key=lambda x: x[0]):
-        print(f'{name}: {t:.3f} secs')
+        print(f"{name}: {t:.3f} secs")

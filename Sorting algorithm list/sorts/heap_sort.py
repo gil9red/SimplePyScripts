@@ -1,4 +1,4 @@
-'''
+"""
 This is a pure python implementation of the heap sort algorithm.
 
 For doctests run following command:
@@ -8,7 +8,7 @@ python3 -m doctest -v heap_sort.py
 
 For manual testing run:
 python heap_sort.py
-'''
+"""
 
 from __future__ import print_function
 
@@ -29,7 +29,7 @@ def heapify(unsorted, index, heap_size):
 
 
 def heap_sort(unsorted):
-    '''
+    """
     Pure implementation of the heap sort algorithm in Python
     :param collection: some mutable ordered collection with heterogeneous
     comparable items inside
@@ -44,7 +44,7 @@ def heap_sort(unsorted):
 
     >>> heap_sort([-2, -5, -45])
     [-45, -5, -2]
-    '''
+    """
     n = len(unsorted)
     for i in range(n // 2 - 1, -1, -1):
         heapify(unsorted, i, n)
@@ -53,13 +53,15 @@ def heap_sort(unsorted):
         heapify(unsorted, 0, i)
     return unsorted
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     import sys
+
     if sys.version_info.major < 3:
         input_function = raw_input
     else:
         input_function = input
 
-    user_input = input_function('Enter numbers separated by a comma:\n')
-    unsorted = [int(item) for item in user_input.split(',')]
+    user_input = input_function("Enter numbers separated by a comma:\n")
+    unsorted = [int(item) for item in user_input.split(",")]
     print(heap_sort(unsorted))

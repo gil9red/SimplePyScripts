@@ -36,14 +36,13 @@ def selection_sort(collection):
         for k in range(i + 1, length):
             if collection[k] < collection[least]:
                 least = k
-        collection[least], collection[i] = (
-            collection[i], collection[least]
-        )
+        collection[least], collection[i] = (collection[i], collection[least])
     return collection
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
+
     # For python 2.x and 3.x compatibility: 3.x has not raw_input builtin
     # otherwise 2.x's input builtin function is too "smart"
     if sys.version_info.major < 3:
@@ -51,6 +50,6 @@ if __name__ == '__main__':
     else:
         input_function = input
 
-    user_input = input_function('Enter numbers separated by a comma:\n')
-    unsorted = [int(item) for item in user_input.split(',')]
+    user_input = input_function("Enter numbers separated by a comma:\n")
+    unsorted = [int(item) for item in user_input.split(",")]
     print(selection_sort(unsorted))

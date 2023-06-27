@@ -30,16 +30,16 @@ def quick_sort(ARRAY):
     [-45, -5, -2]
     """
     ARRAY_LENGTH = len(ARRAY)
-    if( ARRAY_LENGTH <= 1):
+    if ARRAY_LENGTH <= 1:
         return ARRAY
     else:
         PIVOT = ARRAY[0]
-        GREATER = [ element for element in ARRAY[1:] if element > PIVOT ]
-        LESSER = [ element for element in ARRAY[1:] if element <= PIVOT ]
+        GREATER = [element for element in ARRAY[1:] if element > PIVOT]
+        LESSER = [element for element in ARRAY[1:] if element <= PIVOT]
         return quick_sort(LESSER) + [PIVOT] + quick_sort(GREATER)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
 
     # For python 2.x and 3.x compatibility: 3.x has not raw_input builtin
@@ -49,6 +49,6 @@ if __name__ == '__main__':
     else:
         input_function = input
 
-    user_input = input_function('Enter numbers separated by a comma:\n')
-    unsorted = [ int(item) for item in user_input.split(',') ]
-    print( quick_sort(unsorted) )
+    user_input = input_function("Enter numbers separated by a comma:\n")
+    unsorted = [int(item) for item in user_input.split(",")]
+    print(quick_sort(unsorted))
