@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # ANALOG: https://github.com/gil9red/SimplePyScripts/blob/67bd8172e86df674b28e558e32990c8a20dbb345/stackoverflow/download_tags__and_export_docx.py
 
+
+import os
 
 # pip install Py-StackExchange
 import stackexchange
@@ -16,7 +18,7 @@ from docx.shared import Cm
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/c4320a990755c78f5e4291a8448ac35cf7c2b250/office__word__doc_docx/hyperlink.py
-def add_hyperlink(paragraph, url, text, color='1111FF', underline=True):
+def add_hyperlink(paragraph, url, text, color="1111FF", underline=True):
     """
     A function that places a hyperlink within a paragraph object.
 
@@ -30,32 +32,37 @@ def add_hyperlink(paragraph, url, text, color='1111FF', underline=True):
 
     # This gets access to the document.xml.rels file and gets a new relation id value
     part = paragraph.part
-    r_id = part.relate_to(url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True)
+    r_id = part.relate_to(
+        url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True
+    )
 
     # Create the w:hyperlink tag and add needed values
-    hyperlink = docx.oxml.shared.OxmlElement('w:hyperlink')
-    hyperlink.set(docx.oxml.shared.qn('r:id'), r_id, )
+    hyperlink = docx.oxml.shared.OxmlElement("w:hyperlink")
+    hyperlink.set(
+        docx.oxml.shared.qn("r:id"),
+        r_id,
+    )
 
     # Create a w:r element
-    new_run = docx.oxml.shared.OxmlElement('w:r')
+    new_run = docx.oxml.shared.OxmlElement("w:r")
 
     # Create a new w:rPr element
-    rPr = docx.oxml.shared.OxmlElement('w:rPr')
+    rPr = docx.oxml.shared.OxmlElement("w:rPr")
 
     # Add color if it is given
     if not color is None:
-      c = docx.oxml.shared.OxmlElement('w:color')
-      c.set(docx.oxml.shared.qn('w:val'), color)
-      rPr.append(c)
+        c = docx.oxml.shared.OxmlElement("w:color")
+        c.set(docx.oxml.shared.qn("w:val"), color)
+        rPr.append(c)
 
     # Remove underlining if it is requested
     if not underline:
-      u = docx.oxml.shared.OxmlElement('w:u')
-      u.set(docx.oxml.shared.qn('w:val'), 'none')
-      rPr.append(u)
+        u = docx.oxml.shared.OxmlElement("w:u")
+        u.set(docx.oxml.shared.qn("w:val"), "none")
+        rPr.append(u)
 
-    u = docx.oxml.shared.OxmlElement('w:u')
-    u.set(docx.oxml.shared.qn('w:val'), 'single')
+    u = docx.oxml.shared.OxmlElement("w:u")
+    u.set(docx.oxml.shared.qn("w:val"), "single")
     rPr.append(u)
 
     # Join all the xml elements together add add the required text to the w:r element
@@ -70,15 +77,15 @@ def add_hyperlink(paragraph, url, text, color='1111FF', underline=True):
 
 # SOURCE: https://stackapps.com/apps/oauth
 # APP_KEY was created for this script
-APP_KEY = 'wIafLSq0gVQiFK0Hn*F*VA(('
+APP_KEY = "wIafLSq0gVQiFK0Hn*F*VA(("
 
-so = stackexchange.Site('ru.stackoverflow.com', app_key=APP_KEY)
+so = stackexchange.Site("ru.stackoverflow.com", app_key=APP_KEY)
 
 # Флаги обеспечивают эффективное количество запросов в секунду
 so.impose_throttling = True
 so.throttle_stop = False
 
-headers = ['#', 'NAME', 'DESCRIPTION']
+headers = ["#", "NAME", "DESCRIPTION"]
 rows = []
 i = 1
 
@@ -104,7 +111,7 @@ for tag in so.all_tags(pagesize=100):
 
 
 document = docx.Document()
-table = document.add_table(rows=1, cols=len(headers), style='Table Grid')
+table = document.add_table(rows=1, cols=len(headers), style="Table Grid")
 heading_cells = table.rows[0].cells
 
 for i, value in enumerate(headers):
@@ -130,9 +137,8 @@ for i, size in enumerate(column_size):
         cell.width = size
 
 # Save
-file_name_doc = 'word.docx'
+file_name_doc = "word.docx"
 document.save(file_name_doc)
 
 # Open file
-import os
 os.startfile(file_name_doc)
