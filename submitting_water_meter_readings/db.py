@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
+import os
 import sqlite3
-from typing import List
+import shutil
 
 
-DB_FILE_NAME = 'database.sqlite'
+DB_FILE_NAME = "database.sqlite"
 
 SQL_INSERT = "INSERT INTO Water (cold, hot) VALUES (?, ?)"
-SQL_UPDATE = "UPDATE Water SET date = date('now', 'localtime'), cold = ?, hot = ? WHERE id = ?"
+SQL_UPDATE = (
+    "UPDATE Water SET date = date('now', 'localtime'), cold = ?, hot = ? WHERE id = ?"
+)
 
 
 def create_connect() -> sqlite3.Connection:
@@ -22,27 +25,25 @@ def create_connect() -> sqlite3.Connection:
 def init_db():
     # Создание базы и таблицы
     with create_connect() as connect:
-        connect.execute('''
+        connect.execute(
+            """
             CREATE TABLE IF NOT EXISTS Water (
                 id INTEGER PRIMARY KEY,
                 date DATE DEFAULT(date('now', 'localtime')) NOT NULL,
                 cold INTEGER NOT NULL,
                 hot INTEGER NOT NULL
             );
-        ''')
+        """
+        )
 
 
-def db_create_backup(backup_dir='backup'):
-    from datetime import datetime
-    file_name = str(datetime.today().date()) + '.sqlite'
+def db_create_backup(backup_dir="backup"):
+    file_name = str(DT.datetime.today().date()) + ".sqlite"
 
-    import os
     if not os.path.exists(backup_dir):
         os.mkdir(backup_dir)
 
     file_name = os.path.join(backup_dir, file_name)
-
-    import shutil
     shutil.copy(DB_FILE_NAME, file_name)
 
 
@@ -50,11 +51,12 @@ def get_last(date: DT.date = None) -> int:
     if date is None:
         date = DT.date.today()
 
-    yyyymm = date.strftime('%Y%m')
+    yyyymm = date.strftime("%Y%m")
 
     connect = create_connect()
     result = connect.execute(
-        "SELECT id FROM Water WHERE strftime('%Y%m', Water.date) = ? ORDER BY id DESC", [yyyymm]
+        "SELECT id FROM Water WHERE strftime('%Y%m', Water.date) = ? ORDER BY id DESC",
+        [yyyymm],
     ).fetchone()
     return -1 if result is None else result[0]
 
@@ -90,14 +92,16 @@ def add(value_cold: int, value_hot: int, forced=False) -> bool:
     return True
 
 
-def get_all(reversed=True) -> List[dict]:
-    sql = 'SELECT id, date, cold, hot FROM Water ORDER BY ID ' + ('DESC' if reversed else 'ASC')
+def get_all(reversed=True) -> list[dict]:
+    sql = "SELECT id, date, cold, hot FROM Water ORDER BY ID " + (
+        "DESC" if reversed else "ASC"
+    )
     connect = create_connect()
     connect.row_factory = sqlite3.Row
     return connect.execute(sql).fetchall()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     init_db()
 
     # # Only for test
