@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from subprocess import Popen, PIPE, STDOUT
 import re
+from subprocess import Popen, PIPE, STDOUT
 
 
 ping_res = Popen("ping ya.ru", stdout=PIPE, stderr=STDOUT)
 
-text = ''
+text = ""
 for line in ping_res.stdout.readlines():
-    text += line.decode('cp866')
+    text += line.decode("cp866")
 
 print(text)
 # Обмен пакетами с ya.ru [87.250.250.242] с 32 байтами данных:
@@ -27,11 +27,11 @@ print(text)
 # Приблизительное время приема-передачи в мс:
 #     Минимальное = 26мсек, Максимальное = 26 мсек, Среднее = 26 мсек
 
-items = re.findall(r'TTL=(\d+)', text)
+items = re.findall(r"TTL=(\d+)", text)
 print(items)
 # ['54', '54', '54', '54']
 
-m = re.search(r'Пакетов: отправлено = (\d+), получено = (\d+), потеряно = (\d+)', text)
+m = re.search(r"Пакетов: отправлено = (\d+), получено = (\d+), потеряно = (\d+)", text)
 if m:
     print(m.groups())
     # ('4', '4', '0')
