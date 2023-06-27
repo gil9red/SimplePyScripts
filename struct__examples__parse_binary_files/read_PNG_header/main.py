@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html
@@ -10,7 +10,6 @@ __author__ = 'ipetrash'
 
 import glob
 import struct
-
 import zlib
 
 
@@ -22,19 +21,19 @@ def print_info(file_name: str):
     print(file_name)
 
     def read_chunk(f) -> (int, bytes, bytes, int):
-        chunk_length, = struct.unpack('>I', f.read(4))
+        (chunk_length,) = struct.unpack(">I", f.read(4))
         chunk_type = f.read(4)
         chunk_data = f.read(chunk_length)
-        chunk_CRC, = struct.unpack('>I', f.read(4))
+        (chunk_CRC,) = struct.unpack(">I", f.read(4))
 
         return chunk_length, chunk_type, chunk_data, chunk_CRC
 
-    with open(file_name, 'rb') as f:
+    with open(file_name, "rb") as f:
         # HEADER
         data = f.read(8)
 
-        if data != b'\x89PNG\r\n\x1a\n':
-            print('Not valid PNG!')
+        if data != b"\x89PNG\r\n\x1a\n":
+            print("Not valid PNG!")
             return
 
         # After the header comes a series of chunks, each of which conveys certain information about the image.
@@ -56,17 +55,19 @@ def print_info(file_name: str):
         # Check CRC
         assert crc32_from_bytes(chunk_type + chunk_data) == chunk_CRC
 
-        width, \
-        height, \
-        bit_depth, \
-        color_type, \
-        compression_method, \
-        filter_method, \
-        interlace_method = struct.unpack('>IIbbbbb', chunk_data)
-        print(f'    Size: {width}x{height}')
+        (
+            width,
+            height,
+            bit_depth,
+            color_type,
+            compression_method,
+            filter_method,
+            interlace_method,
+        ) = struct.unpack(">IIbbbbb", chunk_data)
+        print(f"    Size: {width}x{height}")
 
 
-if __name__ == '__main__':
-    for file_name in glob.glob('*.png'):
+if __name__ == "__main__":
+    for file_name in glob.glob("*.png"):
         print_info(file_name)
         print()
