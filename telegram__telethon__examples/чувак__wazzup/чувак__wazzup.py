@@ -1,31 +1,32 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/LonamiWebs/Telethon
 # SOURCE: https://my.telegram.org/apps
 
 
-from glob import glob
 import random
 import sys
+
+from glob import glob
 
 # pip install telethon
 from telethon.sync import TelegramClient, events
 
-sys.path.append('..')
+sys.path.append("..")
 from config import API_ID, API_HASH
 
 
-IMAGES = glob('images/*.jpg')
+IMAGES = glob("images/*.jpg")
 
 
-with TelegramClient('../my', API_ID, API_HASH) as client:
+with TelegramClient("../my", API_ID, API_HASH) as client:
     me_id = client.get_me().id
 
-    @client.on(events.NewMessage(pattern='(?i).*чу+ва+к|wa+zz+u+p'))
+    @client.on(events.NewMessage(pattern="(?i).*чу+ва+к|wa+zz+u+p"))
     async def handler(event):
         print(event.stringify())
 
