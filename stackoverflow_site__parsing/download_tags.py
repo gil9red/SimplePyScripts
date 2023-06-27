@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -10,13 +10,20 @@ Download tags with description and save in file as JSON.
 """
 
 
+import itertools
+import time
+import traceback
+
 import requests
 from bs4 import BeautifulSoup
-import time
-import itertools
 
 
-def get_all_tags(need_pages=None, need_tags=None, on_exception_stop=False, repeat_request_tag_on_error=True) -> dict:
+def get_all_tags(
+    need_pages=None,
+    need_tags=None,
+    on_exception_stop=False,
+    repeat_request_tag_on_error=True,
+) -> dict:
     """
     Функция парсит страницу тегов/меток и возвращает их.
 
@@ -30,33 +37,36 @@ def get_all_tags(need_pages=None, need_tags=None, on_exception_stop=False, repea
     """
 
     headers = {
-        'User-Agent': "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:51.0) Gecko/20100101 Firefox/51.0"
+        "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:51.0) Gecko/20100101 Firefox/51.0"
     }
 
     tags = dict()
 
     for page in itertools.count(start=1):
-        print('page:', page)
+        print("page:", page)
 
         try:
-            rs = requests.get(f'http://ru.stackoverflow.com/tags?page={page}&tab=popular', headers=headers)
-            root = BeautifulSoup(rs.content, 'html.parser')
+            rs = requests.get(
+                f"http://ru.stackoverflow.com/tags?page={page}&tab=popular",
+                headers=headers,
+            )
+            root = BeautifulSoup(rs.content, "html.parser")
 
-            for tag in [a.text.strip() for a in root.select('.tag-cell > a')]:
+            for tag in [a.text.strip() for a in root.select(".tag-cell > a")]:
                 print(f'  tag: "{tag}"')
-                url_info = f'http://ru.stackoverflow.com/tags/{tag}/info'
+                url_info = f"http://ru.stackoverflow.com/tags/{tag}/info"
 
                 while True:
                     try:
                         rs = requests.get(url_info, headers=headers)
-                        root = BeautifulSoup(rs.content, 'html.parser')
+                        root = BeautifulSoup(rs.content, "html.parser")
 
                         # TODO: Ignore tags without description
-                        tag_text = root.select_one('.post-text')
+                        tag_text = root.select_one(".post-text")
                         if tag_text:
                             tags[tag] = {
-                                'url_info': url_info,
-                                'description': tag_text.text.strip(),
+                                "url_info": url_info,
+                                "description": tag_text.text.strip(),
                             }
 
                             # TODO: удалить текст
@@ -80,14 +90,12 @@ def get_all_tags(need_pages=None, need_tags=None, on_exception_stop=False, repea
                         break
 
                     except Exception as e:
-                        import traceback
                         print(f"ERROR: {e}\n\n{traceback.format_exc()}")
 
                         if not repeat_request_tag_on_error:
                             break
 
         except Exception as e:
-            import traceback
             print(f"ERROR: {e}\n\n{traceback.format_exc()}")
 
             if on_exception_stop:
@@ -101,7 +109,7 @@ def get_all_tags(need_pages=None, need_tags=None, on_exception_stop=False, repea
     return tags
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # # Parse all pages:
     # tags = get_all_tags()
 
@@ -112,4 +120,5 @@ if __name__ == '__main__':
     tags = get_all_tags(need_pages=20)
 
     import json
-    json.dump(tags, open('tags.json', 'w', encoding='utf-8'), ensure_ascii=False)
+
+    json.dump(tags, open("tags.json", "w", encoding="utf-8"), ensure_ascii=False)
