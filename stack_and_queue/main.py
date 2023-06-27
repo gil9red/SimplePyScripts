@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import *
@@ -11,30 +11,30 @@ class Widget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('Stack and Queue')
+        self.setWindowTitle("Stack and Queue")
 
         self.list_widget_stack = QListWidget()
         self.list_widget_queue = QListWidget()
 
         self.spinbox_number = QSpinBox()
 
-        self.push_button_push = QPushButton('Push')
+        self.push_button_push = QPushButton("Push")
         self.push_button_push.clicked.connect(self._on_push)
 
-        self.push_button_pop = QPushButton('Pop')
+        self.push_button_pop = QPushButton("Pop")
         self.push_button_pop.clicked.connect(self._on_pop)
 
-        self.radio_button_stack = QRadioButton('Stack')
+        self.radio_button_stack = QRadioButton("Stack")
         self.radio_button_stack.setChecked(True)
 
-        self.radio_button_queue = QRadioButton('Queue')
+        self.radio_button_queue = QRadioButton("Queue")
 
         layout_list_widget_stack = QVBoxLayout()
-        layout_list_widget_stack.addWidget(QLabel('Stack:'))
+        layout_list_widget_stack.addWidget(QLabel("Stack:"))
         layout_list_widget_stack.addWidget(self.list_widget_stack)
 
         layout_list_widget_queue = QVBoxLayout()
-        layout_list_widget_queue.addWidget(QLabel('Queue:'))
+        layout_list_widget_queue.addWidget(QLabel("Queue:"))
         layout_list_widget_queue.addWidget(self.list_widget_queue)
 
         left_layout = QHBoxLayout()
@@ -49,7 +49,7 @@ class Widget(QWidget):
         layout_buttons.addWidget(self.push_button_push)
         layout_buttons.addWidget(self.push_button_pop)
 
-        group_box_select = QGroupBox('Select')
+        group_box_select = QGroupBox("Select")
         group_box_select.setLayout(layout_group_box)
 
         right_layout = QVBoxLayout()
@@ -82,7 +82,7 @@ class Widget(QWidget):
             self.list_widget_queue.takeItem(last_index)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
 
     w = Widget()
