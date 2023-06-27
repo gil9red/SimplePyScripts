@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-# from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QAbstractListModel, QModelIndex, Qt, pyqtSignal, QVariant
 
 
@@ -50,7 +49,9 @@ class FileListModel(QAbstractListModel):
         if itemsToFetch <= 0:
             return
 
-        self.beginInsertRows(QModelIndex(), self.fileCount, self.fileCount + itemsToFetch - 1)
+        self.beginInsertRows(
+            QModelIndex(), self.fileCount, self.fileCount + itemsToFetch - 1
+        )
 
         self.fileCount += itemsToFetch
 

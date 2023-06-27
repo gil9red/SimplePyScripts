@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel
@@ -20,9 +20,7 @@ IMAGE_CACHE = dict()
 class SqlQueryModel(QSqlQueryModel):
     def data(self, index: QModelIndex, role: int = Qt.DisplayRole) -> object:
         if role == Qt.ToolTipRole:
-            return index.model().data(
-                index.model().index(index.row(), 1)
-            )
+            return index.model().data(index.model().index(index.row(), 1))
 
         return super().data(index, role)
 
@@ -64,23 +62,23 @@ class MainWindow(QWidget):
         self.model_files.setFileList(list_files)
 
         layout = QVBoxLayout()
-        layout.addWidget(QLabel('SQL:'))
+        layout.addWidget(QLabel("SQL:"))
         layout.addWidget(self.list_view_sql)
-        layout.addWidget(QLabel('FILES:'))
+        layout.addWidget(QLabel("FILES:"))
         layout.addWidget(self.list_view_files)
 
         self.setLayout(layout)
 
     def _on_added_new_items(self):
         self.setWindowTitle(
-            f'Items. '
-            f'SQL: {self.model_sql.rowCount()} / {self.total_rows_sql} ({self.model_sql.rowCount() / self.total_rows_sql:.1%}) | '
-            f'FILES: {self.model_files.rowCount()} / {self.total_rows_sql} ({self.model_files.rowCount() / self.total_rows_sql:.1%})'
+            f"Items. "
+            f"SQL: {self.model_sql.rowCount()} / {self.total_rows_sql} ({self.model_sql.rowCount() / self.total_rows_sql:.1%}) | "
+            f"FILES: {self.model_files.rowCount()} / {self.total_rows_sql} ({self.model_files.rowCount() / self.total_rows_sql:.1%})"
         )
 
 
-if __name__ == '__main__':
-    db = QSqlDatabase.addDatabase('QSQLITE')
+if __name__ == "__main__":
+    db = QSqlDatabase.addDatabase("QSQLITE")
     db.setDatabaseName(DB_FILE_NAME)
     if not db.open():
         raise Exception(db.lastError().text())

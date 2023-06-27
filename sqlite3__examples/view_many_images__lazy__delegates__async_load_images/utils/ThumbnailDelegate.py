@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from pathlib import Path
 
 from PyQt5.QtWidgets import (
-    QApplication, QStyledItemDelegate, QStyleOptionViewItem, QStyle, QAbstractItemView
+    QApplication,
+    QStyledItemDelegate,
+    QStyleOptionViewItem,
+    QStyle,
+    QAbstractItemView,
 )
 from PyQt5.QtGui import QPainter, QPalette, QFontMetrics, QImage, QBrush
 from PyQt5.QtCore import Qt, QSize, QRect, QModelIndex, QThreadPool, pyqtSignal
@@ -25,7 +29,14 @@ def get_half_alpha(brush: QBrush) -> QBrush:
 class ThumbnailDelegate(QStyledItemDelegate):
     about_append_image = pyqtSignal(str)
 
-    def __init__(self, view: QAbstractItemView, width, height, image_cache: dict, file_name_index=0):
+    def __init__(
+        self,
+        view: QAbstractItemView,
+        width,
+        height,
+        image_cache: dict,
+        file_name_index=0,
+    ):
         super().__init__()
 
         self.width = width
@@ -44,9 +55,9 @@ class ThumbnailDelegate(QStyledItemDelegate):
         rect = opt.rect
         self.initStyleOption(opt, index)
 
-        file_name = str(index.model().data(
-            index.model().index(index.row(), self.file_name_index)
-        ))
+        file_name = str(
+            index.model().data(index.model().index(index.row(), self.file_name_index))
+        )
         base_file_name = Path(file_name).name
         font_metrics = QFontMetrics(painter.font())
 
@@ -71,7 +82,7 @@ class ThumbnailDelegate(QStyledItemDelegate):
                 painter.drawImage(
                     rect.topLeft(),
                     # QRect(rect.left(), rect.top(), rect.width(), rect.height() - self.title_height),
-                    img
+                    img,
                 )
         else:
             self.image_cache[file_name] = None
@@ -82,10 +93,7 @@ class ThumbnailDelegate(QStyledItemDelegate):
             )
             QThreadPool.globalInstance().start(worker)
 
-        rect_title = QRect(
-            rect.left(), rect.top(),
-            rect.width(), rect.height()
-        )
+        rect_title = QRect(rect.left(), rect.top(), rect.width(), rect.height())
         rect_title.setLeft(rect_title.left() + self.title_margin)
         rect_title.setTop(rect_title.top() + rect_title.height() - self.title_height)
         rect_title.setRight(rect_title.right() - self.title_margin)
@@ -94,11 +102,7 @@ class ThumbnailDelegate(QStyledItemDelegate):
         elided_text = font_metrics.elidedText(
             base_file_name, Qt.ElideRight, rect.width() - self.title_margin * 2
         )
-        painter.drawText(
-            rect_title,
-            Qt.AlignVCenter | Qt.AlignLeft,
-            elided_text
-        )
+        painter.drawText(rect_title, Qt.AlignVCenter | Qt.AlignLeft, elided_text)
 
         if opt.state & QStyle.State_Selected:
             painter.fillRect(rect, get_half_alpha(opt.palette.highlight()))

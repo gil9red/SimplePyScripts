@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QListView
@@ -22,5 +22,7 @@ class ListImagesWidget(QListView):
         self.setSpacing(5)
         self.setUniformItemSizes(True)
         self.setItemDelegate(
-            ThumbnailDelegate(self, icon_width, icon_height, image_cache, file_name_index)
+            ThumbnailDelegate(
+                self, icon_width, icon_height, image_cache, file_name_index
+            )
         )
