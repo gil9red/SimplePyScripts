@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import random
+import re
 
 
 # Генерация списка
-items = ['KMS1.kmch.pos.out_dE_%s.mx' % i for i in range(20)]
+items = ["KMS1.kmch.pos.out_dE_%s.mx" % i for i in range(20)]
 
 # Перемешивание элементов списка
-import random
 random.shuffle(items)
 
 print(items)
@@ -19,12 +22,11 @@ print()
 
 
 def get_number_1(x):
-    return int(x.split('.')[-2].split('_')[-1])
+    return int(x.split(".")[-2].split("_")[-1])
 
 
 def get_number_2(x):
-    import re
-    match = re.search('KMS1.kmch.pos.out_dE_(\d+).mx', x)
+    match = re.search(r"KMS1.kmch.pos.out_dE_(\d+).mx", x)
     return int(match.group(1))
 
 

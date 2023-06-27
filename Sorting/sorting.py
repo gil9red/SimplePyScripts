@@ -1,8 +1,13 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
 
 # Sort / Сортировка
 # https://wiki.python.org/moin/HowTo/Sorting
+
+
 import random
+
+
 l = [x for x in range(20)]
 random.shuffle(l)
 print("List: %s" % l)
@@ -16,6 +21,7 @@ m = [x for x in range(20)]
 random.shuffle(m)
 print("Sorted list: %s" % sorted(m))
 print("Reversed Sorted list: %s" % sorted(m, reverse=True))
+
 
 class Student:
     def __init__(self, name, age):
