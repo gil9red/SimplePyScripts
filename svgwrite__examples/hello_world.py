@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE:   https://github.com/mozman/svgwrite
@@ -13,7 +13,7 @@ __author__ = 'ipetrash'
 import svgwrite
 
 
-dwg = svgwrite.Drawing('hello_world.svg')
+dwg = svgwrite.Drawing("hello_world.svg")
 
 paragraph = dwg.add(dwg.g(font_size=20))
 paragraph.add(dwg.text("Hello World!", (5, 20)))
