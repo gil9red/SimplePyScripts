@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
@@ -13,14 +13,13 @@ from telegram.ext import Updater, CommandHandler, CallbackContext, CallbackQuery
 # https://github.com/unmonoqueteclea/calendar-telegram
 import telegramcalendar
 
-sys.path.append('..')
+sys.path.append("..")
 import config
 
 
-def on_calendar(update: Update, context: CallbackContext):
+def on_calendar(update: Update, _: CallbackContext):
     update.effective_message.reply_text(
-        "Please select a date: ",
-        reply_markup=telegramcalendar.create_calendar()
+        "Please select a date: ", reply_markup=telegramcalendar.create_calendar()
     )
 
 
@@ -34,21 +33,18 @@ def on_callback_query(update: Update, context: CallbackContext):
     if selected:
         query.message.reply_text(
             text="You selected %s" % (date.strftime("%d/%m/%Y")),
-            reply_markup=ReplyKeyboardRemove()
+            reply_markup=ReplyKeyboardRemove(),
         )
 
 
 def main():
     # Create the EventHandler and pass it your bot's token.
-    updater = Updater(
-        config.TOKEN,
-        use_context=True
-    )
+    updater = Updater(config.TOKEN, use_context=True)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('calendar', on_calendar))
+    dp.add_handler(CommandHandler("calendar", on_calendar))
     dp.add_handler(CallbackQueryHandler(on_callback_query))
 
     updater.start_polling()
@@ -56,5 +52,5 @@ def main():
     updater.idle()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
