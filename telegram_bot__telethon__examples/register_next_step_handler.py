@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-# SOURCE: pip install pyTelegramBotAPI
+# pip install pyTelegramBotAPI
 import telebot
+
 from config import TOKEN
 
 
@@ -13,8 +14,8 @@ bot = telebot.TeleBot(TOKEN)
 
 
 data_year = {
-    '01.01': 'Новый год',
-    '23.02': '23 февраля',
+    "01.01": "Новый год",
+    "23.02": "23 февраля",
 }
 
 
@@ -25,9 +26,11 @@ def func(message):
     bot.send_message(message.from_user.id, result)
 
 
-@bot.message_handler(content_types=['text'])
+@bot.message_handler(content_types=["text"])
 def get_text_messages(message):
-    data = bot.send_message(message.from_user.id, "Введите дату в формате Д.ММ и нажмите ENTER")
+    data = bot.send_message(
+        message.from_user.id, "Введите дату в формате Д.ММ и нажмите ENTER"
+    )
     bot.register_next_step_handler(data, func)
 
 

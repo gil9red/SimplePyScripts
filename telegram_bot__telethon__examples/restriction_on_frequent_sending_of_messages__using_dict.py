@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
 
-# SOURCE: pip install pyTelegramBotAPI
+# pip install pyTelegramBotAPI
 import telebot
 
 from config import TOKEN
@@ -18,14 +18,14 @@ bot = telebot.TeleBot(TOKEN)
 CHAT_BY_DATETIME = dict()
 
 
-@bot.message_handler(commands=['help', 'start'])
+@bot.message_handler(commands=["help", "start"])
 def on_start(message: telebot.types.Message):
-    bot.send_message(message.chat.id, 'Write something')
+    bot.send_message(message.chat.id, "Write something")
 
 
 @bot.message_handler(func=lambda message: True)
 def on_request(message: telebot.types.Message):
-    text = 'Получено!'
+    text = "Получено!"
     need_seconds = 50
     current_time = DT.datetime.now()
     last_datetime = CHAT_BY_DATETIME.get(message.chat.id)
@@ -42,7 +42,7 @@ def on_request(message: telebot.types.Message):
 
         # Если время ожидания не закончилось
         if seconds_left > 0:
-            text = f'Подождите {seconds_left} секунд перед выполнение этой команды'
+            text = f"Подождите {seconds_left} секунд перед выполнение этой команды"
         else:
             CHAT_BY_DATETIME[message.chat.id] = current_time
 
