@@ -203,7 +203,7 @@ class CurrentAssignedOpenIssues(QWidget):
             self.table.setItem(i, 1, QTableWidgetItem(str(number)))
 
         self.label_last_refresh_date.setText(
-            f"Last refresh date: {datetime.now()}:%d/%m/%Y %H:%M:%S"
+            f"Last refresh date: {datetime.now():%d/%m/%Y %H:%M:%S}"
         )
 
     def _on_error(self, e: Exception):
