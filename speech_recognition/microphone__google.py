@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: http://pythono.ru/speech-recognition-python/
@@ -10,6 +10,8 @@ __author__ = 'ipetrash'
 # pip install pyaudio
 # pip install SpeechRecognition
 import speech_recognition as sr
+
+
 r = sr.Recognizer()
 
 with sr.Microphone() as source:

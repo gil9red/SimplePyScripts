@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # NOTE: this example requires PyAudio because it uses the Microphone class
@@ -9,6 +9,7 @@ __author__ = 'ipetrash'
 # pip install pyaudio
 # pip install SpeechRecognition
 import speech_recognition as sr
+
 
 # obtain audio from the microphone
 r = sr.Recognizer()
