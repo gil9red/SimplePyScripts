@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
+
+import os
 
 from sqlalchemy import Column, Integer, String, ForeignKey, create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, sessionmaker
+
 
 Base = declarative_base()
 
@@ -17,7 +20,7 @@ class Serial(Base):
 
     """
 
-    __tablename__ = 'Serial'
+    __tablename__ = "Serial"
 
     Id = Column(Integer, primary_key=True)
     OriginalName = Column(String)
@@ -52,10 +55,10 @@ class SerialVideo(Base):
 
     """
 
-    __tablename__ = 'SerialVideo'
+    __tablename__ = "SerialVideo"
 
     Id = Column(Integer, primary_key=True)
-    SerialId = Column(Integer, ForeignKey('Serial.Id'))
+    SerialId = Column(Integer, ForeignKey("Serial.Id"))
 
     FileName = Column(String)
     Number = Column(Integer)
@@ -66,7 +69,7 @@ class SerialVideo(Base):
         return f'<Serial(Number: "{self.Number}", Serial: {self.Serial.EnglishName})>'
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # http://docs.sqlalchemy.org/en/latest/orm/basic_relationships.html
     # http://docs.sqlalchemy.org/en/latest/orm/relationship_api.html
     # http://lectureswww.readthedocs.io/6.www.sync/2.codding/9.databases/2.sqlalchemy/3.orm.html
@@ -76,15 +79,13 @@ if __name__ == '__main__':
     # DEBUG = True
     DEBUG = False
 
-    import os
     DIR = os.path.dirname(__file__)
     # engine = sqlalchemy.create_engine('sqlite:///' + os.path.join(DIR, 'database'), echo=True)
-    engine = create_engine('sqlite:///:memory:', echo=DEBUG)
+    engine = create_engine("sqlite:///:memory:", echo=DEBUG)
 
     # Создание базы если ее нет
     Base.metadata.create_all(engine)
 
-    from sqlalchemy.orm import sessionmaker
     Session = sessionmaker(bind=engine)
     session = Session()
 
@@ -94,20 +95,18 @@ if __name__ == '__main__':
         RussianName="Вася",
         Genre="триллер;боевик",
     )
-    serial.Videos.append(SerialVideo(Number='1', FileName='1.avi'))
-    serial.Videos.append(SerialVideo(Number='2', FileName='2.avi'))
-    serial.Videos.append(SerialVideo(Number='3', FileName='3.avi'))
+    serial.Videos.append(SerialVideo(Number="1", FileName="1.avi"))
+    serial.Videos.append(SerialVideo(Number="2", FileName="2.avi"))
+    serial.Videos.append(SerialVideo(Number="3", FileName="3.avi"))
 
-    session.add(
-        serial
-    )
+    session.add(serial)
 
     session.commit()
 
     print()
     for _ in session.query(Serial).all():
-        print(_,)
+        print(_)
 
     print()
     for _ in session.query(SerialVideo).all():
-        print(_,)
+        print(_)
