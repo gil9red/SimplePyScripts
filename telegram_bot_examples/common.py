@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import functools
@@ -12,7 +12,7 @@ import re
 import time
 
 from pathlib import Path
-from typing import Callable, List
+from typing import Callable
 
 from telegram import Update
 from telegram.ext import Updater, CallbackContext, Handler, Defaults
@@ -20,18 +20,20 @@ from telegram.ext import Updater, CallbackContext, Handler, Defaults
 import config
 
 
-def get_logger(file_name: str, dir_name='logs'):
+def get_logger(file_name: str, dir_name="logs"):
     dir_name = Path(dir_name).resolve()
     dir_name.mkdir(parents=True, exist_ok=True)
 
-    file_name = str(dir_name / Path(file_name).resolve().name) + '.log'
+    file_name = str(dir_name / Path(file_name).resolve().name) + ".log"
 
     log = logging.getLogger(__name__)
     log.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter('[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s')
+    formatter = logging.Formatter(
+        "[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s"
+    )
 
-    fh = logging.FileHandler(file_name, encoding='utf-8')
+    fh = logging.FileHandler(file_name, encoding="utf-8")
     fh.setLevel(logging.DEBUG)
 
     ch = logging.StreamHandler(stream=sys.stdout)
@@ -66,17 +68,19 @@ def log_func(log: logging.Logger):
                 try:
                     message = update.effective_message.text
                 except:
-                    message = ''
+                    message = ""
 
                 try:
                     query_data = update.callback_query.data
                 except:
-                    query_data = ''
+                    query_data = ""
 
-                msg = f'[chat_id={chat_id}, user_id={user_id}, ' \
-                      f'first_name={first_name!r}, last_name={last_name!r}, ' \
-                      f'username={username!r}, language_code={language_code}, ' \
-                      f'message={message!r}, query_data={query_data!r}]'
+                msg = (
+                    f"[chat_id={chat_id}, user_id={user_id}, "
+                    f"first_name={first_name!r}, last_name={last_name!r}, "
+                    f"username={username!r}, language_code={language_code}, "
+                    f"message={message!r}, query_data={query_data!r}]"
+                )
                 msg = func.__name__ + msg
 
                 log.debug(msg)
@@ -84,32 +88,33 @@ def log_func(log: logging.Logger):
             return func(update, context)
 
         return wrapper
+
     return actual_decorator
 
 
 def reply_error(log: logging.Logger, update: Update, context: CallbackContext):
-    log.error('Error: %s\nUpdate: %s', context.error, update, exc_info=context.error)
+    log.error("Error: %s\nUpdate: %s", context.error, update, exc_info=context.error)
     if update:
         update.effective_message.reply_text(config.ERROR_TEXT)
 
 
 def fill_string_pattern(pattern: re.Pattern, *args) -> str:
     pattern = pattern.pattern
-    pattern = pattern.strip('^$')
-    return re.sub(r'\(.+?\)', '{}', pattern).format(*args)
+    pattern = pattern.strip("^$")
+    return re.sub(r"\(.+?\)", "{}", pattern).format(*args)
 
 
 def start_bot(
-        log: logging.Logger,
-        handlers: List[Handler],
-        before_start_func: Callable[[Updater], None] = None,
-        **updater_kwargs,
+    log: logging.Logger,
+    handlers: list[Handler],
+    before_start_func: Callable[[Updater], None] = None,
+    **updater_kwargs,
 ):
-    log.debug('Start')
+    log.debug("Start")
 
     cpu_count = os.cpu_count()
     workers = cpu_count
-    log.debug(f'System: CPU_COUNT={cpu_count}, WORKERS={workers}')
+    log.debug(f"System: CPU_COUNT={cpu_count}, WORKERS={workers}")
 
     # Create the EventHandler and pass it your bot's token.
     updater = Updater(
@@ -119,7 +124,7 @@ def start_bot(
         **updater_kwargs,
     )
     bot = updater.bot
-    log.debug(f'Bot name {bot.first_name!r} ({bot.name})')
+    log.debug(f"Bot name {bot.first_name!r} ({bot.name})")
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
@@ -141,7 +146,7 @@ def start_bot(
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
-    log.debug('Finish')
+    log.debug("Finish")
 
 
 def run_main(main_func: Callable, log: logging.Logger, timeout=15):
@@ -149,7 +154,7 @@ def run_main(main_func: Callable, log: logging.Logger, timeout=15):
         try:
             main_func()
         except:
-            log.exception('')
+            log.exception("")
 
-            log.info(f'Restarting the bot after {timeout} seconds')
+            log.info(f"Restarting the bot after {timeout} seconds")
             time.sleep(timeout)
