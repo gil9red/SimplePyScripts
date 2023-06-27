@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -18,17 +18,18 @@ Crimes.csv
 """
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import csv
-    with open('Crimes.csv') as csvfile:
+    from collections import Counter
+
+    with open("Crimes.csv") as csvfile:
         reader = csv.DictReader(csvfile)
 
         # Фильтр по 2015 году
-        select_by_2015_year = filter(lambda x: '2015' in x['Date'], reader)
+        select_by_2015_year = filter(lambda x: "2015" in x["Date"], reader)
 
         # Список словарей с преступлениями делаем списком с типом преступлений и подсчитываем их количество
-        from collections import Counter
-        counter = Counter(x['Primary Type'] for x in select_by_2015_year)
+        counter = Counter(x["Primary Type"] for x in select_by_2015_year)
 
         # Сортировка по количеству преступлений
         primary_counter = sorted(counter.items(), key=lambda x: x[1], reverse=True)

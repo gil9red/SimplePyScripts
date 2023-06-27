@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -57,8 +57,10 @@ Impossible
 # 3
 
 
+import time
+
+
 def work(s, a, b):
-    import time
     t = time.clock()
 
     count = 0
@@ -66,7 +68,7 @@ def work(s, a, b):
         # Хитрый способ обхода зацикливания, увиденный в комментах.
         # Если функция работает уже больше секунды, прерываем ее и считаем, что решения нет.
         if time.clock() - t > 1:
-            print('Impossible')
+            print("Impossible")
             return
 
         if a in s:
@@ -78,7 +80,7 @@ def work(s, a, b):
     print(count)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     s = input()
     a = input()
     b = input()

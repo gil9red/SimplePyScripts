@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -22,13 +22,13 @@ __author__ = 'ipetrash'
 """
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from simplecrypt import decrypt, DecryptionException
 
     with open("encrypted.bin", "rb") as f:
         encrypted_bin = f.read()
 
-        with open('passwords.txt') as f:
+        with open("passwords.txt") as f:
             for password in f.read().splitlines():
                 try:
                     plaintext = decrypt(password, encrypted_bin)

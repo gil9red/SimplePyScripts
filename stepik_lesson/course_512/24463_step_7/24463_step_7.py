@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -92,7 +92,7 @@ FileNotFoundError
 # > python 24463_step_7.py < in
 # FileNotFoundError
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Sample Input:
     # 4
     # ArithmeticError
@@ -130,13 +130,15 @@ if __name__ == '__main__':
             return False
 
         def __str__(self):
-            return f'Class <"{self.name}": {[cls.name for cls in self.list_parent_class]}>'
+            return (
+                f'Class <"{self.name}": {[cls.name for cls in self.list_parent_class]}>'
+            )
 
         def __repr__(self):
             return self.__str__()
 
-
     from collections import OrderedDict, defaultdict
+
     class_dict = OrderedDict()
 
     # Словарь, в котором по ключу находится объект класса, а по
@@ -154,7 +156,7 @@ if __name__ == '__main__':
         s = input()
         # print(s)
 
-        clsn = s.split(' : ')
+        clsn = s.split(" : ")
         cls1_name = clsn[0]
 
         # Добавление класса в словарь

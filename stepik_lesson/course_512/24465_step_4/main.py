@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -22,10 +22,10 @@ ab
 """
 
 
-if __name__ == '__main__':
-    with open('dataset_24465_4.txt') as f:
+if __name__ == "__main__":
+    with open("dataset_24465_4.txt") as f:
         lines = reversed(f.readlines())
 
-        with open('reverse_dataset_24465_4.txt', 'w') as f:
+        with open("reverse_dataset_24465_4.txt", "w") as f:
             for line in lines:
-                print(line, file=f, end='')
+                print(line, file=f, end="")

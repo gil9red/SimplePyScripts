@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -18,21 +18,23 @@ sample_ans.txt
 """
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import zipfile
     import os.path
 
-    with zipfile.ZipFile('main.zip') as zf:
+    with zipfile.ZipFile("main.zip") as zf:
         # Фильтруем список, оставляя только файлы формата .py
-        py_file_list = filter(lambda x: x.filename.endswith('.py'), zf.infolist())
+        py_file_list = filter(lambda x: x.filename.endswith(".py"), zf.infolist())
 
         # Получение директорий файлов и удаление дубликатов
-        py_file_list = {os.path.dirname(file_info.filename) for file_info in py_file_list}
+        py_file_list = {
+            os.path.dirname(file_info.filename) for file_info in py_file_list
+        }
 
         # Сортировка
         py_file_list = sorted(py_file_list)
 
-        with open('main_ans.txt', 'w') as f:
+        with open("main_ans.txt", "w") as f:
             for file_name in py_file_list:
                 print(file_name)
                 print(file_name, file=f)

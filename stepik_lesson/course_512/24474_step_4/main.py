@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -36,16 +36,18 @@ Sample Output:
 """
 
 
-if __name__ == '__main__':
-    # Ключом является цвет, значением -- сумма ценности
+if __name__ == "__main__":
     from collections import defaultdict
+    from lxml import etree
+
+    # Ключом является цвет, значением -- сумма ценности
     color_by_price_dict = defaultdict(int)
 
     def work(element, level=1):
         """Рекурсивная функция для перебора всех элементов и подсчета их ценности."""
 
         # Плюсуем ценность
-        color = element.attrib['color']
+        color = element.attrib["color"]
         color_by_price_dict[color] += level
 
         for child in element:
@@ -53,9 +55,12 @@ if __name__ == '__main__':
 
     xml = input()
 
-    from lxml import etree
     root = etree.XML(xml)
     work(root)
 
-    r, g, b = color_by_price_dict['red'], color_by_price_dict['green'], color_by_price_dict['blue']
+    r, g, b = (
+        color_by_price_dict["red"],
+        color_by_price_dict["green"],
+        color_by_price_dict["blue"],
+    )
     print(r, g, b)

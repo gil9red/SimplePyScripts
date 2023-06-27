@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -29,11 +29,11 @@ argh AaAaAaA
 # argh AaAaAaA
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
     import re
 
     for line in sys.stdin:
         line = line.rstrip()
 
-        print(re.sub(r'\ba+\b', 'argh', line, count=1, flags=re.IGNORECASE))
+        print(re.sub(r"\ba+\b", "argh", line, count=1, flags=re.IGNORECASE))

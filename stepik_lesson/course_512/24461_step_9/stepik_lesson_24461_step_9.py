@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -57,9 +57,9 @@ class Buffer:
         self._nums += a
 
         while len(self._nums) >= self._part_size:
-            print(sum(self._nums[:self._part_size]))
+            print(sum(self._nums[: self._part_size]))
 
-            self._nums = self._nums[self._part_size:]
+            self._nums = self._nums[self._part_size :]
 
     def get_current_part(self):
         # вернуть сохраненные в текущий момент элементы последовательности в порядке, в котором они были
@@ -67,7 +67,7 @@ class Buffer:
         return self._nums
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     buf = Buffer()
     buf.add(1, 2, 3)
     assert buf.get_current_part() == [1, 2, 3]
@@ -75,5 +75,7 @@ if __name__ == '__main__':
     assert buf.get_current_part() == [6]
     buf.add(7, 8, 9, 10)  # print(40) – вывод суммы второй пятерки элементов
     assert buf.get_current_part() == []
-    buf.add(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)  # print(5), print(5) – вывод сумм третьей и четвертой пятерки
+    buf.add(
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+    ) # print(5), print(5) – вывод сумм третьей и четвертой пятерки
     assert buf.get_current_part() == [1]

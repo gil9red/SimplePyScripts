@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -41,8 +41,8 @@ class LoggableList(list, Loggable):
         super().append(x)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     l = LoggableList()
-    l.append('dfs')
+    l.append("dfs")
     l.append(1)
     l.append([1, 2, 3])

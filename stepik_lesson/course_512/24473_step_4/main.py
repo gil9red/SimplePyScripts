@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -39,10 +39,11 @@ C : 2
 """
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    import json
+
     class_list = input()
 
-    import json
     class_list = json.loads(class_list)
 
     class Class:
@@ -66,8 +67,7 @@ if __name__ == '__main__':
         def __repr__(self):
             return self.__str__()
 
-
-    dict_class_by_name_dict = {cls['name']: cls for cls in class_list}
+    dict_class_by_name_dict = {cls["name"]: cls for cls in class_list}
 
     # Сначала создаем объекты всех классов и заполняем их в словаре
     class_by_name_dict = {name: Class(name) for name in dict_class_by_name_dict}
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     for name, dict_cls in dict_class_by_name_dict.items():
         cls = class_by_name_dict[name]
 
-        for parent_cls_name in dict_cls['parents']:
+        for parent_cls_name in dict_cls["parents"]:
             parent_cls = class_by_name_dict[parent_cls_name]
             parent_cls.children.append(cls)
 
@@ -86,4 +86,4 @@ if __name__ == '__main__':
         # Получение списка имен детей, из которого удаляются повторы (с помощью множества) и подсчет
         # количества элементов. По условию, класс является потомком самого себя, поэтому прибавляем 1
         number = len(set(child_cls.name for child_cls in cls.all_children()))
-        print(f'{name} : {number + 1}')
+        print(f"{name} : {number + 1}")

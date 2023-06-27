@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -92,7 +92,7 @@ No
 # Yes
 # No
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # A
     # B : A
     # C : A
@@ -125,13 +125,15 @@ if __name__ == '__main__':
             return False
 
         def __str__(self):
-            return f'Class <"{self.name}": {[cls.name for cls in self.list_parent_class]}>'
+            return (
+                f'Class <"{self.name}": {[cls.name for cls in self.list_parent_class]}>'
+            )
 
         def __repr__(self):
             return self.__str__()
 
-
     from collections import OrderedDict, defaultdict
+
     class_dict = OrderedDict()
 
     # Словарь, в котором по ключу находится объект класса, а по
@@ -149,7 +151,7 @@ if __name__ == '__main__':
         s = input()
         # print(s)
 
-        clsn = s.split(' : ')
+        clsn = s.split(" : ")
         cls1_name = clsn[0]
 
         # Добавление класса в словарь
@@ -173,7 +175,6 @@ if __name__ == '__main__':
         # Дурацкое у них условие: каждый класс является предком самого себя.
         # С второго теста есть такая проверка.
         if a == b:
-            print('Yes')
+            print("Yes")
         else:
-            print('Yes' if class_dict[b].has_parent(a) else 'No')
-
+            print("Yes" if class_dict[b].has_parent(a) else "No")

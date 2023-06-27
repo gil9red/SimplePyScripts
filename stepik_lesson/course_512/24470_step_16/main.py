@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -46,13 +46,13 @@ Sample Output:
 # 01001
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
     import re
 
     for line in sys.stdin:
         line = line.rstrip()
 
-        match = re.search(r'^[01]+$', line)
+        match = re.search(r"^[01]+$", line)
         if match and int(line, 2) % 3 == 0:
             print(line)

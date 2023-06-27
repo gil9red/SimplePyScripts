@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -26,7 +26,7 @@ htis si a etxt
 # "htis' !si. ?1nce,
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
     import re
 
@@ -35,4 +35,4 @@ if __name__ == '__main__':
 
         # Ищем слова с хотя бы двумя символами, запоминаем первый символ, второй и все остальные
         # При замене сначала вставляем второй символ, потом первый, и потом все остальные
-        print(re.sub(r'\b(\w)(\w)(\w*?)\b', r'\2\1\3', line))
+        print(re.sub(r"\b(\w)(\w)(\w*?)\b", r"\2\1\3", line))

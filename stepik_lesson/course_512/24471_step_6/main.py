@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -39,9 +39,10 @@ Yes
 
 """
 
-if __name__ == '__main__':
-    from urllib.request import urlopen
+if __name__ == "__main__":
     import urllib.error
+    from urllib.request import urlopen
+
     from lxml import etree
 
     url_a = input()
@@ -54,7 +55,7 @@ if __name__ == '__main__':
             root = etree.HTML(f.read())
 
             # Перебор ссылок в url_a (первый переход, т.е. A)
-            for url_c in root.xpath('//a/@href'):
+            for url_c in root.xpath("//a/@href"):
                 try:
                     with urlopen(url_c) as f:
                         if url_b in f.read().decode():
@@ -69,4 +70,4 @@ if __name__ == '__main__':
     except (etree.XMLSyntaxError, urllib.error.HTTPError):
         pass
 
-    print('Yes' if found else 'No')
+    print("Yes" if found else "No")

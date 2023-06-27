@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -55,7 +55,7 @@ class ExtendedStack(list):
         self.append(self.pop() // self.pop())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     stack = ExtendedStack()
     stack.append(1)
     print(stack)

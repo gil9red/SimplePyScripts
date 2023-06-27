@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -35,10 +35,9 @@ ya.ru
 """
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import re
-    from urllib.request import urlopen
-    from urllib.request import urlparse
+    from urllib.request import urlopen, urlparse
 
     # Скачивание страницы, декодирование из байтов в строку
     text = urlopen(input()).read().decode()
@@ -46,17 +45,17 @@ if __name__ == '__main__':
     urls = set()
 
     # Поиск ссылок в тексте
-    for url in re.findall(r'''<a.+href=["'](.+?)['"].*>''', text, flags=re.MULTILINE):
+    for url in re.findall(r"""<a.+href=["'](.+?)['"].*>""", text, flags=re.MULTILINE):
         # Разбор строки url на компоненты
         result = urlparse(url)
         result = result.path if not result.netloc else result.netloc
 
         # Избавляемся от порта
-        if ':' in result:
-            result = result.split(':')[0]
+        if ":" in result:
+            result = result.split(":")[0]
 
         # Избавляемся от относительных ссылок
-        if result.startswith('../'):
+        if result.startswith("../"):
             continue
 
         urls.add(result)

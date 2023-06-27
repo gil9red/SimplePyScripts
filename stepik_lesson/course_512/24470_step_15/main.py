@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -26,7 +26,7 @@ buz
 # buz
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
     import re
 
@@ -34,4 +34,4 @@ if __name__ == '__main__':
         line = line.rstrip()
 
         # Ищем буквенный символ и группу повторяющих его символов и заменяем их самим символом
-        print(re.sub(r'(\w)(\1)+', r'\1', line))
+        print(re.sub(r"(\w)(\1)+", r"\1", line))

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -34,12 +34,12 @@ Boring
 """
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
     import requests
 
     for num in sys.stdin:
         num = num.strip()
 
-        rs = requests.get(f'http://numbersapi.com/{num}/math?json=true')
-        print('Interesting' if rs.json()['found'] else 'Boring')
+        rs = requests.get(f"http://numbersapi.com/{num}/math?json=true")
+        print("Interesting" if rs.json()["found"] else "Boring")

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -27,7 +27,7 @@ blabla is a tandem repetition
 # 123123 is good too
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
     import re
 
@@ -35,5 +35,5 @@ if __name__ == '__main__':
         line = line.rstrip()
 
         # Находим слова, в которых находим две одинаковые последовательности
-        if re.search(r'\b(.+)\1\b', line):
+        if re.search(r"\b(.+)\1\b", line):
             print(line)

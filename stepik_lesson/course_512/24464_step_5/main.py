@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -34,7 +34,8 @@ def primes():
             yield i
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import itertools
+
     print(list(itertools.takewhile(lambda x: x <= 31, primes())))
     # [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31]

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -130,7 +130,8 @@ class multifilter:
                 yield value
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     def mul2(x):
         return x % 2 == 0
 
@@ -139,7 +140,6 @@ if __name__ == '__main__':
 
     def mul5(x):
         return x % 5 == 0
-
 
     a = [i for i in range(31)]  # [0, 1, 2, ... , 30]
     print(a)

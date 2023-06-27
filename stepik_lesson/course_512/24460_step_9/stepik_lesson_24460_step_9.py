@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -137,23 +137,23 @@ DEBUG = False
 # foo
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ns_list = dict()
-    ns_list['global'] = Namespace('global')
+    ns_list["global"] = Namespace("global")
 
     n = int(input())
     for _ in range(n):
         command, namespace, value = input().split()
-        DEBUG and print('<', command, namespace, value)
+        DEBUG and print("<", command, namespace, value)
 
-        if command == 'create':
+        if command == "create":
             ns = ns_list[value]
             ns_list[namespace] = Namespace(namespace, ns)
 
-        elif command == 'add':
+        elif command == "add":
             ns_list[namespace].vars[value] = value
 
-        elif command == 'get':
+        elif command == "get":
             ns = ns_list[namespace]
             ns_value = ns.get_ns_value(value)
             print(ns_value)

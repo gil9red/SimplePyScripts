@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -53,7 +53,7 @@ def count_sub_string(s, t):
 
     count = 0
     for i in range(len(s)):
-        part = s[i:i + len(t)]
+        part = s[i : i + len(t)]
         if not part:
             break
 
@@ -63,7 +63,7 @@ def count_sub_string(s, t):
     return count
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     s = input()
     t = input()
 

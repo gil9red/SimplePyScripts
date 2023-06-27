@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -86,14 +86,14 @@ import requests
 def get_token():
     """Функция возвращает токен api сайта artsy.net"""
 
-    token_url = 'https://api.artsy.net/api/tokens/xapp_token'
+    token_url = "https://api.artsy.net/api/tokens/xapp_token"
     params = {
-        'client_id': config.CLIENT_ID,
-        'client_secret': config.CLIENT_SECRET,
+        "client_id": config.CLIENT_ID,
+        "client_secret": config.CLIENT_SECRET,
     }
 
     rs = requests.post(token_url, params=params)
-    return rs.json()['token']
+    return rs.json()["token"]
 
 
 def get_artist_by_id(artist_id):
@@ -103,31 +103,34 @@ def get_artist_by_id(artist_id):
     """
 
     headers = {
-        'Accept': 'application/vnd.artsy-v2+json',
-        'X-Xapp-Token': get_token(),
+        "Accept": "application/vnd.artsy-v2+json",
+        "X-Xapp-Token": get_token(),
     }
 
-    url = 'https://api.artsy.net/api/artists/' + artist_id
+    url = "https://api.artsy.net/api/artists/" + artist_id
     rs = requests.get(url, headers=headers)
     return rs.json()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    import sys
+    from collections import defaultdict
+
     # Словарь дней рождений с списком имен творческих лиц.
     # Нужно для удобной сортировки имен при совпадении дат рождения
-    from collections import defaultdict
     birthday_by_artist = defaultdict(list)
 
-    import sys
     for line in sys.stdin:
         line = line.strip()
 
         artist = get_artist_by_id(line)
-        birthday_by_artist[artist['birthday']].append(artist['sortable_name'])
+        birthday_by_artist[artist["birthday"]].append(artist["sortable_name"])
 
-    with open('out', 'w', encoding='utf-8') as out:
+    with open("out", "w", encoding="utf-8") as out:
         # Сортировка по дате рождения
-        for birthday, artist_list in sorted(birthday_by_artist.items(), key=lambda x: x[0]):
+        for birthday, artist_list in sorted(
+            birthday_by_artist.items(), key=lambda x: x[0]
+        ):
             artist_list.sort()
             for artist in artist_list:
                 print(artist, file=out)
