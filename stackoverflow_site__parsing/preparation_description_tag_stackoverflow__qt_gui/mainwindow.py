@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import hashlib
 import pickle
 import os
 import shutil
-import sys
 
 from PySide.QtGui import *
 from PySide.QtCore import *
@@ -17,9 +16,9 @@ from mainwindow_ui import Ui_MainWindow
 from common import *
 
 
-logger = get_logger('mainwindow')
-DIR = 'tags'
-DIR = 'tags3'
+logger = get_logger("mainwindow")
+DIR = "tags"
+DIR = "tags3"
 
 os.makedirs(DIR, exist_ok=True)
 
@@ -31,7 +30,7 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.setWindowTitle('Preparation description tag stackoverflow')
+        self.setWindowTitle("Preparation description tag stackoverflow")
 
         # Все действия к прикрепляемым окнам поместим в меню
         for dock in self.findChildren(QDockWidget):
@@ -62,7 +61,9 @@ class MainWindow(QMainWindow):
         self.ui.list_view_modified_tags.setModel(self.modified_tags_model)
 
         self.ui.list_view_tag_list.clicked.connect(self.list_view_tag_list_clicked)
-        self.ui.list_view_modified_tags.clicked.connect(self.list_view_modified_tags_clicked)
+        self.ui.list_view_modified_tags.clicked.connect(
+            self.list_view_modified_tags_clicked
+        )
 
         self.ui.check_box_only_empty.clicked.connect(self.filter_list_tag_only_empty)
 
@@ -94,8 +95,13 @@ class MainWindow(QMainWindow):
 
         # Фильтр пустых тегов или измененных пользователем
         if has_filter:
-            tags = dict(filter(lambda x: (not x[1]['description'] and not x[1]['ref_guide']) or 'user_changed' in x[1],
-                               self.tags_dict.items()))
+            tags = dict(
+                filter(
+                    lambda x: (not x[1]["description"] and not x[1]["ref_guide"])
+                    or "user_changed" in x[1],
+                    self.tags_dict.items(),
+                )
+            )
 
         self._fill_tag_list(tags)
 
@@ -125,14 +131,16 @@ class MainWindow(QMainWindow):
     def fill_tag_list(self):
         self.tags_dict.clear()
 
-        tag_file_list = [DIR + '/' + tag for tag in os.listdir(DIR) if tag.endswith('.tag')]
+        tag_file_list = [
+            DIR + "/" + tag for tag in os.listdir(DIR) if tag.endswith(".tag")
+        ]
         for file_name in tag_file_list:
-            with open(file_name, 'rb') as f:
+            with open(file_name, "rb") as f:
                 # Пример: {'ref_guide': '', 'id': '1', 'description': '', 'name': ['python']}
                 data = pickle.load(f)
-                data['hash'] = self.hash_tag(data)
+                data["hash"] = self.hash_tag(data)
 
-                self.tags_dict[data['id']] = data
+                self.tags_dict[data["id"]] = data
 
         self.filter_list_tag_only_empty()
         # self._fill_tag_list(self.tags_dict)
@@ -150,13 +158,13 @@ class MainWindow(QMainWindow):
 
         self.ui.list_view_tag_list.blockSignals(True)
 
-        logger.debug('Total tags: %s.', len(tags_dict))
-        logger.debug('Fill list tags start.')
+        logger.debug("Total tags: %s.", len(tags_dict))
+        logger.debug("Fill list tags start.")
 
         # При долгой загрузкк показываем прогресс диалог
         progress = QProgressDialog("Adding tags...", "Abort", 0, len(tags_dict), self)
         progress.setWindowModality(Qt.WindowModal)
-        progress.setWindowTitle('Progress dialog')
+        progress.setWindowTitle("Progress dialog")
 
         tags = sorted(tags_dict.items(), key=lambda x: int(x[0]))
         for i, (tag_id, tag) in enumerate(tags):
@@ -172,13 +180,13 @@ class MainWindow(QMainWindow):
             self.tag_id_item_dict[tag_id] = item
 
         progress.setValue(len(tags_dict))
-        logger.debug('Fill list tags finish.')
+        logger.debug("Fill list tags finish.")
 
         self.ui.list_view_tag_list.blockSignals(False)
 
     @staticmethod
     def hash_tag(tag):
-        text = tag['ref_guide'] + tag['description']
+        text = tag["ref_guide"] + tag["description"]
 
         md5 = hashlib.md5()
         md5.update(text.encode())
@@ -189,7 +197,7 @@ class MainWindow(QMainWindow):
 
         new_hash = self.hash_tag(tag)
 
-        if tag['hash'] == new_hash:
+        if tag["hash"] == new_hash:
             if tag_id in self.modified_tags:
                 self.modified_tags.remove(tag_id)
         else:
@@ -235,7 +243,7 @@ class MainWindow(QMainWindow):
 
         tag_id = self.tag_id_from_index(index)
         tag = self.tags_dict[tag_id]
-        tag['ref_guide'] = self.ui.ref_guide.toPlainText()
+        tag["ref_guide"] = self.ui.ref_guide.toPlainText()
 
         self.check_modified_tag(tag_id)
         self.update_states()
@@ -244,7 +252,7 @@ class MainWindow(QMainWindow):
         index = self.ui.list_view_tag_list.currentIndex()
         tag_id = self.tag_id_from_index(index)
         tag = self.tags_dict[tag_id]
-        tag['description'] = self.ui.description.toPlainText()
+        tag["description"] = self.ui.description.toPlainText()
 
         self.check_modified_tag(tag_id)
         self.update_states()
@@ -258,15 +266,15 @@ class MainWindow(QMainWindow):
         logger.debug('Fill tag info from tag id: "%s", tag: %s', tag_id, tag)
 
         # Вывод внутреннего представления тега
-        order_key = ['id', 'name', 'ref_guide', 'description']
-        text = ''
+        order_key = ["id", "name", "ref_guide", "description"]
+        text = ""
 
         for k in order_key:
-            text += f'{k}:\n{tag[k]}\n\n'
+            text += f"{k}:\n{tag[k]}\n\n"
 
         for k, v in sorted(tag.items()):
             if k not in order_key:
-                text += f'{k}:\n{v}\n\n'
+                text += f"{k}:\n{v}\n\n"
         self.ui.plain_text_edit_tag_info.setPlainText(text)
 
         url = f'http://ru.stackoverflow.com/tags/{tag["name"][0]}/info'
@@ -276,8 +284,8 @@ class MainWindow(QMainWindow):
         self.ui.ref_guide.blockSignals(True)
         self.ui.description.blockSignals(True)
 
-        self.ui.ref_guide.setPlainText(tag['ref_guide'])
-        self.ui.description.setPlainText(tag['description'])
+        self.ui.ref_guide.setPlainText(tag["ref_guide"])
+        self.ui.description.setPlainText(tag["description"])
 
         self.ui.ref_guide.blockSignals(False)
         self.ui.description.blockSignals(False)
@@ -296,18 +304,18 @@ class MainWindow(QMainWindow):
         tag = self.tags_dict[tag_id]
 
         file_name = DIR + f'/{tag["id"]}.tag'
-        file_name_backup = file_name + '.backup'
+        file_name_backup = file_name + ".backup"
 
         # Перед переписыванием файла, делаем его копию
         shutil.copyfile(file_name, file_name_backup)
 
         try:
-            with open(file_name, mode='wb') as f:
+            with open(file_name, mode="wb") as f:
                 # Обновляем хеш
-                tag['hash'] = self.hash_tag(tag)
+                tag["hash"] = self.hash_tag(tag)
 
                 # Флаг, говорящий, что данный тег был изменен пользователем
-                tag['user_changed'] = True
+                tag["user_changed"] = True
 
                 self.modified_tags.remove(tag_id)
                 self.fill_list_modified_tags()
@@ -319,13 +327,15 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             logger.exception("Error:")
-            logger.debug(f'Restore {file_name} from {file_name_backup}.')
+            logger.debug(f"Restore {file_name} from {file_name_backup}.")
 
             # Произошла ошибка. Восстанавливаем файл из бекапа
             os.remove(file_name)
             os.rename(file_name_backup, file_name)
         else:
-            logger.debug(f'Update {file_name} was successful, removed the backup: {file_name_backup}.')
+            logger.debug(
+                f"Update {file_name} was successful, removed the backup: {file_name_backup}."
+            )
 
             # Переписывание прошло хорошо, удаляем файл бекапа
             if os.path.exists(file_name_backup):
@@ -345,17 +355,21 @@ class MainWindow(QMainWindow):
     def read_settings(self):
         # NOTE: при сложных настройках, лучше перейти на json или yaml
         config = QSettings(CONFIG_FILE, QSettings.IniFormat)
-        self.restoreState(config.value('MainWindow_State'))
-        self.restoreGeometry(config.value('MainWindow_Geometry'))
-        self.ui.splitter.restoreState(config.value('Splitter_State'))
-        self.ui.check_box_only_empty.setChecked(bool(config.value('Check_box_only_empty', False)))
+        self.restoreState(config.value("MainWindow_State"))
+        self.restoreGeometry(config.value("MainWindow_Geometry"))
+        self.ui.splitter.restoreState(config.value("Splitter_State"))
+        self.ui.check_box_only_empty.setChecked(
+            bool(config.value("Check_box_only_empty", False))
+        )
 
     def write_settings(self):
         config = QSettings(CONFIG_FILE, QSettings.IniFormat)
-        config.setValue('MainWindow_State', self.saveState())
-        config.setValue('MainWindow_Geometry', self.saveGeometry())
-        config.setValue('Splitter_State', self.ui.splitter.saveState())
-        config.setValue('Check_box_only_empty', self.ui.check_box_only_empty.isChecked())
+        config.setValue("MainWindow_State", self.saveState())
+        config.setValue("MainWindow_Geometry", self.saveGeometry())
+        config.setValue("Splitter_State", self.ui.splitter.saveState())
+        config.setValue(
+            "Check_box_only_empty", self.ui.check_box_only_empty.isChecked()
+        )
 
     def closeEvent(self, event):
         self.write_settings()

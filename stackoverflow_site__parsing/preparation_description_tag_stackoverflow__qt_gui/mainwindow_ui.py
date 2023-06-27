@@ -9,6 +9,7 @@
 
 from PySide import QtCore, QtGui
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -24,7 +25,9 @@ class Ui_MainWindow(object):
         self.label_4.setObjectName("label_4")
         self.formLayout.setWidget(0, QtGui.QFormLayout.LabelRole, self.label_4)
         self.url = QtGui.QLabel(self.centralwidget)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Ignored, QtGui.QSizePolicy.Preferred)
+        sizePolicy = QtGui.QSizePolicy(
+            QtGui.QSizePolicy.Ignored, QtGui.QSizePolicy.Preferred
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.url.sizePolicy().hasHeightForWidth())
@@ -101,11 +104,15 @@ class Ui_MainWindow(object):
         self.verticalLayout_5 = QtGui.QVBoxLayout(self.dockWidgetContents_2)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.list_view_modified_tags = QtGui.QListView(self.dockWidgetContents_2)
-        self.list_view_modified_tags.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        self.list_view_modified_tags.setEditTriggers(
+            QtGui.QAbstractItemView.NoEditTriggers
+        )
         self.list_view_modified_tags.setObjectName("list_view_modified_tags")
         self.verticalLayout_5.addWidget(self.list_view_modified_tags)
         self.dock_widget_modified_tags.setWidget(self.dockWidgetContents_2)
-        MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(2), self.dock_widget_modified_tags)
+        MainWindow.addDockWidget(
+            QtCore.Qt.DockWidgetArea(2), self.dock_widget_modified_tags
+        )
         self.dock_widget_tag_info = QtGui.QDockWidget(MainWindow)
         self.dock_widget_tag_info.setObjectName("dock_widget_tag_info")
         self.dockWidgetContents_4 = QtGui.QWidget()
@@ -131,18 +138,73 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        self.label_4.setText(QtGui.QApplication.translate("MainWindow", "Url:", None, QtGui.QApplication.UnicodeUTF8))
-        self.url.setText(QtGui.QApplication.translate("MainWindow", "<tag_url>", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_6.setText(QtGui.QApplication.translate("MainWindow", "Reference guide:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_7.setText(QtGui.QApplication.translate("MainWindow", "Description:", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuDockWindow.setTitle(QtGui.QApplication.translate("MainWindow", "Окна", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuTools.setTitle(QtGui.QApplication.translate("MainWindow", "Tools", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolBarGeneral.setWindowTitle(QtGui.QApplication.translate("MainWindow", "General", None, QtGui.QApplication.UnicodeUTF8))
-        self.dock_widget_tag_list.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Tag list", None, QtGui.QApplication.UnicodeUTF8))
-        self.check_box_only_empty.setText(QtGui.QApplication.translate("MainWindow", "Only empty tags", None, QtGui.QApplication.UnicodeUTF8))
-        self.dock_widget_modified_tags.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Modified tags", None, QtGui.QApplication.UnicodeUTF8))
-        self.dock_widget_tag_info.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Tag info", None, QtGui.QApplication.UnicodeUTF8))
-        self.action_save.setText(QtGui.QApplication.translate("MainWindow", "Save", None, QtGui.QApplication.UnicodeUTF8))
-        self.action_save_all.setText(QtGui.QApplication.translate("MainWindow", "Save All", None, QtGui.QApplication.UnicodeUTF8))
-        self.action_save_all.setToolTip(QtGui.QApplication.translate("MainWindow", "Save All Tags", None, QtGui.QApplication.UnicodeUTF8))
-
+        self.label_4.setText(
+            QtGui.QApplication.translate(
+                "MainWindow", "Url:", None, QtGui.QApplication.UnicodeUTF8
+            )
+        )
+        self.url.setText(
+            QtGui.QApplication.translate(
+                "MainWindow", "<tag_url>", None, QtGui.QApplication.UnicodeUTF8
+            )
+        )
+        self.label_6.setText(
+            QtGui.QApplication.translate(
+                "MainWindow", "Reference guide:", None, QtGui.QApplication.UnicodeUTF8
+            )
+        )
+        self.label_7.setText(
+            QtGui.QApplication.translate(
+                "MainWindow", "Description:", None, QtGui.QApplication.UnicodeUTF8
+            )
+        )
+        self.menuDockWindow.setTitle(
+            QtGui.QApplication.translate(
+                "MainWindow", "Окна", None, QtGui.QApplication.UnicodeUTF8
+            )
+        )
+        self.menuTools.setTitle(
+            QtGui.QApplication.translate(
+                "MainWindow", "Tools", None, QtGui.QApplication.UnicodeUTF8
+            )
+        )
+        self.toolBarGeneral.setWindowTitle(
+            QtGui.QApplication.translate(
+                "MainWindow", "General", None, QtGui.QApplication.UnicodeUTF8
+            )
+        )
+        self.dock_widget_tag_list.setWindowTitle(
+            QtGui.QApplication.translate(
+                "MainWindow", "Tag list", None, QtGui.QApplication.UnicodeUTF8
+            )
+        )
+        self.check_box_only_empty.setText(
+            QtGui.QApplication.translate(
+                "MainWindow", "Only empty tags", None, QtGui.QApplication.UnicodeUTF8
+            )
+        )
+        self.dock_widget_modified_tags.setWindowTitle(
+            QtGui.QApplication.translate(
+                "MainWindow", "Modified tags", None, QtGui.QApplication.UnicodeUTF8
+            )
+        )
+        self.dock_widget_tag_info.setWindowTitle(
+            QtGui.QApplication.translate(
+                "MainWindow", "Tag info", None, QtGui.QApplication.UnicodeUTF8
+            )
+        )
+        self.action_save.setText(
+            QtGui.QApplication.translate(
+                "MainWindow", "Save", None, QtGui.QApplication.UnicodeUTF8
+            )
+        )
+        self.action_save_all.setText(
+            QtGui.QApplication.translate(
+                "MainWindow", "Save All", None, QtGui.QApplication.UnicodeUTF8
+            )
+        )
+        self.action_save_all.setToolTip(
+            QtGui.QApplication.translate(
+                "MainWindow", "Save All Tags", None, QtGui.QApplication.UnicodeUTF8
+            )
+        )

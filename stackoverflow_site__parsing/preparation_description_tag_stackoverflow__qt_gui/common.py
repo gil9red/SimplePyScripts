@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-def get_logger(name, file='log.txt', encoding='utf8'):
-    import sys
-    import logging
+import logging
+import sys
 
+
+def get_logger(name, file="log.txt", encoding="utf8"):
     log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter('[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s')
+    formatter = logging.Formatter(
+        "[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s"
+    )
 
     fh = logging.FileHandler(file, encoding=encoding)
     fh.setLevel(logging.DEBUG)
@@ -28,4 +31,4 @@ def get_logger(name, file='log.txt', encoding='utf8'):
     return log
 
 
-CONFIG_FILE = 'config'
+CONFIG_FILE = "config"
