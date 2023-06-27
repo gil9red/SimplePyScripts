@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/mozman/svgwrite/blob/master/examples/defs_test.py
@@ -24,7 +24,7 @@ def create_svg(name):
     svg_size_height = 900
     font_size = 20
     triangle_size = 50
-    title = 'Example of creating your own colors and defs/use.'
+    title = "Example of creating your own colors and defs/use."
 
     dwg = svgwrite.Drawing(name, (svg_size_width, svg_size_height), debug=True)
 
@@ -36,15 +36,15 @@ def create_svg(name):
 
     # or use an external stylesheet
     else:
-        stylesheet = name + '.css'
+        stylesheet = name + ".css"
 
-        with open(stylesheet, 'w') as f:
+        with open(stylesheet, "w") as f:
             f.write(STYLES)
 
-        dwg.add_stylesheet(stylesheet, 'noname')
+        dwg.add_stylesheet(stylesheet, "noname")
 
     # Background will be dark but not black so the background does not overwhelm the colors.
-    dwg.add(dwg.rect(insert=(0, 0), size=('100%', '100%'), fill='grey'))
+    dwg.add(dwg.rect(insert=(0, 0), size=("100%", "100%"), fill="grey"))
 
     # http://www.w3.org/TR/SVG11/struct.html#Head
     # "sometimes it is desired to define a graphical object and prevent it from being directly
@@ -56,11 +56,11 @@ def create_svg(name):
     points = [
         (-half_size, -half_size),
         (half_size, -half_size),
-        (0, triangle_size * 0.433013)
+        (0, triangle_size * 0.433013),
     ]
 
     # 2. Create the symbol
-    symbol_without_fill = dwg.symbol(id='symbol_without_fill')
+    symbol_without_fill = dwg.symbol(id="symbol_without_fill")
 
     # 3. Add symbols to the defs section
     dwg.defs.add(symbol_without_fill)
@@ -77,19 +77,41 @@ def create_svg(name):
     symbol_without_fill.add(dwg.polygon(points))
 
     # 6. Use symbols - param size is necessary - and only unset params can be overwritten
-    dwg.add(dwg.use(symbol_without_fill, insert=(200, 200), size=(triangle_size, triangle_size), class_='yellow'))
-    dwg.add(dwg.use(symbol_without_fill, insert=(300, 300), size=(triangle_size*1.2, triangle_size*1.2), class_ ='red'))
-    dwg.add(dwg.use(symbol_without_fill, insert=(400, 400), size=(triangle_size*0.5, triangle_size*0.5), class_ ='blue'))
+    dwg.add(
+        dwg.use(
+            symbol_without_fill,
+            insert=(200, 200),
+            size=(triangle_size, triangle_size),
+            class_="yellow",
+        )
+    )
+    dwg.add(
+        dwg.use(
+            symbol_without_fill,
+            insert=(300, 300),
+            size=(triangle_size * 1.2, triangle_size * 1.2),
+            class_="red",
+        )
+    )
+    dwg.add(
+        dwg.use(
+            symbol_without_fill,
+            insert=(400, 400),
+            size=(triangle_size * 0.5, triangle_size * 0.5),
+            class_="blue",
+        )
+    )
 
     # Give the name of the example and a title.
     y = font_size + 5
-    dwg.add(dwg.text(title, insert=(0, y), class_='text', font_size=font_size))
+    dwg.add(dwg.text(title, insert=(0, y), class_="text", font_size=font_size))
 
     dwg.save()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
-    prog_name = sys.argv[0].rstrip('.py') + '.svg'
+
+    prog_name = sys.argv[0].rstrip(".py") + ".svg"
 
     create_svg(prog_name)

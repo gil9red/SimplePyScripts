@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/mozman/svgwrite/blob/master/examples/ltattrie/tenticles.py
@@ -27,9 +27,9 @@ def gen_colour(start_p, end_p, n_p):
     # end which is slightly off colour.
     for i in range(n):
         ccolour = (
-            int(c_start[0] + (float(i) / float(n))*(c_end[0] - c_start[0])),
-            int(c_start[1] + (float(i) / float(n))*(c_end[1] - c_start[1])),
-            int(c_start[2] + (float(i) / float(n))*(c_end[2] - c_start[2]))
+            int(c_start[0] + (float(i) / float(n)) * (c_end[0] - c_start[0])),
+            int(c_start[1] + (float(i) / float(n)) * (c_end[1] - c_start[1])),
+            int(c_start[2] + (float(i) / float(n)) * (c_end[2] - c_start[2])),
         )
         yield ccolour
 
@@ -47,8 +47,22 @@ UNIQUE_NUM = gen_incr_num()
 
 
 class Tendrile:
-    def __init__(self, p_x, p_y, p_width, p_angle, p_step, p_v, p_curl, p_n, p_scolour, p_ecolour, p_can_branch, dwg):
-        """tendrile class instance for each arm """
+    def __init__(
+        self,
+        p_x,
+        p_y,
+        p_width,
+        p_angle,
+        p_step,
+        p_v,
+        p_curl,
+        p_n,
+        p_scolour,
+        p_ecolour,
+        p_can_branch,
+        dwg,
+    ):
+        """tendrile class instance for each arm"""
         self.x = p_x
         self.y = p_y
         self.width = p_width
@@ -57,7 +71,7 @@ class Tendrile:
         self.step = p_step
         self.v = p_v
         self.curl = p_curl
-        self.n = p_n        # length of tendrile
+        self.n = p_n  # length of tendrile
         self.scolour = p_scolour  # starting colour
         self.ecolour = p_ecolour  # ending colour
         self.can_branch = p_can_branch  # Can tendrile branch?
@@ -79,7 +93,7 @@ class Tendrile:
         # branches near the end of the tendrile the new tendrile should be in front of any part of
         # of the beginning part of the old tendrile but instead the new tendrile will be behind all
         # of the old tendrile.
-        self.group = self.dwg.g(id='branch' + str(next(UNIQUE_NUM)))
+        self.group = self.dwg.g(id="branch" + str(next(UNIQUE_NUM)))
 
     def angle_set(self, p_val):
         # limit the angle to range -2*math.pi to 2*math.pi  which is +- full circle.
@@ -90,13 +104,17 @@ class Tendrile:
         for i in range(self.n):
             if i != 0:
                 if random.randint(1, 100) == 1 and self.can_branch:
-                    distance = self.r * .8  # The new circle is % of the previouse circle's width
+                    distance = (
+                        self.r * 0.8
+                    )  # The new circle is % of the previouse circle's width
                     x_temp = self.x + math.cos(self.angle) * distance
                     y_temp = self.y + math.sin(self.angle) * distance
 
                     v_delta_split = math.pi / 31.4  # .05 degrees
 
-                    self.v = self.v + v_delta_split + random.uniform(-self.step, self.step)
+                    self.v = (
+                        self.v + v_delta_split + random.uniform(-self.step, self.step)
+                    )
                     self.v *= 0.9 + self.curl * 0.1
 
                     self.angle_set(self.angle + self.v)  # limit value of angle
@@ -105,8 +123,20 @@ class Tendrile:
                     # The use of the original colour, usually darker green, to start the new tendrile
                     # gives a slight look of shadow on the the start of the new tendrile. It also gives a clear visual
                     # separation between the existing tendrile and the new tendrile.
-                    tend = Tendrile(x_temp, y_temp, self.r, self.angle, (self.step * 1.2), (-1.0 * self.v),
-                                    self.curl, (self.n - i - 1), self.scolour, self.ecolour, False, self.dwg)
+                    tend = Tendrile(
+                        x_temp,
+                        y_temp,
+                        self.r,
+                        self.angle,
+                        (self.step * 1.2),
+                        (-1.0 * self.v),
+                        self.curl,
+                        (self.n - i - 1),
+                        self.scolour,
+                        self.ecolour,
+                        False,
+                        self.dwg,
+                    )
 
                     # Create the tendrile as svg elements
                     tend.create()
@@ -123,7 +153,9 @@ class Tendrile:
                     self.angle_set(self.angle + self.v)  # limit value of angle
 
                 else:
-                    distance = self.r * .8  # The new circle is % of the previouse circle's width
+                    distance = (
+                        self.r * 0.8
+                    )  # The new circle is % of the previouse circle's width
                     self.x += math.cos(self.angle) * distance
                     self.y += math.sin(self.angle) * distance
 
@@ -132,18 +164,22 @@ class Tendrile:
 
                     self.angle_set(self.angle + self.v)  # limit value of angle
 
-            self.r = (1 - float(i) / self.n) * self.width  # radius size gradually decreases.
+            self.r = (
+                1 - float(i) / self.n
+            ) * self.width  # radius size gradually decreases.
 
             new_colour = next(self.lin_colour)
-            stroke_colour = 'rgb(%s,%s,%s)' % new_colour
-            fill_colour = 'rgb(%s,%s,%s)' % new_colour
-            self.group.add(self.dwg.circle(
-                center=(self.x, self.y),
-                r=self.r,
-                fill=fill_colour,
-                stroke=stroke_colour,
-                stroke_width=3
-            ))
+            stroke_colour = "rgb(%s,%s,%s)" % new_colour
+            fill_colour = "rgb(%s,%s,%s)" % new_colour
+            self.group.add(
+                self.dwg.circle(
+                    center=(self.x, self.y),
+                    r=self.r,
+                    fill=fill_colour,
+                    stroke=stroke_colour,
+                    stroke_width=3,
+                )
+            )
 
     def draw(self):
         self.dwg.add(self.group)
@@ -160,11 +196,13 @@ def create_svg(name):
     dwg = svgwrite.Drawing(name, (svg_size_width, svg_size_height), debug=True)
 
     # Background will be black so the background does not overwhelm the colors.
-    dwg.add(dwg.rect(insert=(0, 0), size=('100%', '100%'), rx=None, ry=None, fill='black'))
+    dwg.add(
+        dwg.rect(insert=(0, 0), size=("100%", "100%"), rx=None, ry=None, fill="black")
+    )
 
     # Create effect instance and apply it.
     # option values.
-    n = 100         # number of circles default 100
+    n = 100  # number of circles default 100
 
     num_arms = 5  # number of tendriles default 5
 
@@ -205,18 +243,33 @@ def create_svg(name):
         # Set start of arm x y
         x = d_height / 2
         y = d_width / 2
-        angle = random.uniform((-1.0 * math.pi), math.pi)  # random angle in radians. 2*pi radians = 360 degrees
+        angle = random.uniform(
+            (-1.0 * math.pi), math.pi
+        )  # random angle in radians. 2*pi radians = 360 degrees
         v = 0.0
 
         # Variety to the size of the starting circle
-        c_width = random.uniform((d_width * .015), (d_width * .025))
-        r = random.uniform((c_width * .9), (c_width * 1.1))
+        c_width = random.uniform((d_width * 0.015), (d_width * 0.025))
+        r = random.uniform((c_width * 0.9), (c_width * 1.1))
         new_start_colour = next(start_lin_colour)
 
         curl = 1.0
 
         # Create a tendrile
-        tend = Tendrile(x, y, r, angle, step, v, curl, n, new_start_colour, end_colour, can_branch, dwg)
+        tend = Tendrile(
+            x,
+            y,
+            r,
+            angle,
+            step,
+            v,
+            curl,
+            n,
+            new_start_colour,
+            end_colour,
+            can_branch,
+            dwg,
+        )
 
         # Create the tendrile as svg elements
         tend.create()
@@ -227,8 +280,9 @@ def create_svg(name):
     dwg.save()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
-    prog_name = sys.argv[0].rstrip('.py') + '.svg'
+
+    prog_name = sys.argv[0].rstrip(".py") + ".svg"
 
     create_svg(prog_name)

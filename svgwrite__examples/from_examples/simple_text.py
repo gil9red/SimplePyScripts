@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/mozman/svgwrite/blob/master/examples/simple_text.py
@@ -28,16 +28,17 @@ def simple_text(name):
     atext = dwg.text("A", insert=(10, 80), style="text-shadow: 2px 2px;")
 
     # text color is set by the 'fill' property and 'stroke sets the outline color.
-    atext.add(dwg.tspan(' Word', font_size='1.5em', fill='red'))
-    atext.add(dwg.tspan(' is a Word!', dy=['1em'], font_size='0.7em', fill='green'))
+    atext.add(dwg.tspan(" Word", font_size="1.5em", fill="red"))
+    atext.add(dwg.tspan(" is a Word!", dy=["1em"], font_size="0.7em", fill="green"))
     paragraph.add(dwg.text("Das ist ein Test mit ÖÄÜäüö!", (10, 120)))
     paragraph.add(atext)
 
     dwg.save()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
-    prog_name = sys.argv[0].rstrip('.py') + '.svg'
+
+    prog_name = sys.argv[0].rstrip(".py") + ".svg"
 
     simple_text(prog_name)

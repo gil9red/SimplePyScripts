@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/mozman/svgwrite/blob/master/examples/pattern.py
@@ -12,7 +12,7 @@ import svgwrite
 
 
 def create_svg(name):
-    dwg = svgwrite.Drawing(name, size=('20cm', '15cm'), profile='full', debug=True)
+    dwg = svgwrite.Drawing(name, size=("20cm", "15cm"), profile="full", debug=True)
 
     # Set user coordinate space
     dwg.viewbox(width=200, height=150)
@@ -24,8 +24,9 @@ def create_svg(name):
     dwg.save()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
-    prog_name = sys.argv[0].rstrip('.py') + '.svg'
+
+    prog_name = sys.argv[0].rstrip(".py") + ".svg"
 
     create_svg(prog_name)

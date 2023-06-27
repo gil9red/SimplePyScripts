@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/mozman/svgwrite/blob/master/examples/checkerboard.py
@@ -53,8 +53,8 @@ def draw_board(dwg):
             (white_squares if (x + y) % 2 else black_squares).add(square)
 
 
-if __name__ == '__main__':
-    prog_name = sys.argv[0].rstrip('.py') + '.svg'
+if __name__ == "__main__":
+    prog_name = sys.argv[0].rstrip(".py") + ".svg"
 
     dwg = svgwrite.Drawing(prog_name, size=BOARD_SIZE)
     dwg.viewbox(0, 0, 80, 80)
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     dwg.defs.add(dwg.style(CSS_STYLES))
 
     # set background
-    dwg.add(dwg.rect(size=('100%', '100%'), class_='background'))
+    dwg.add(dwg.rect(size=("100%", "100%"), class_="background"))
     draw_board(dwg)
 
     dwg.save()

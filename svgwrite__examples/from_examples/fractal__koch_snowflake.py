@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/mozman/svgwrite/blob/master/examples/koch_snowflake.py
@@ -70,7 +70,7 @@ def create_svg(name):
     imgy = 512
 
     # create a new drawing
-    dwg = svgwrite.Drawing(name, (imgx, imgy), profile='tiny', debug=True)
+    dwg = svgwrite.Drawing(name, (imgx, imgy), profile="tiny", debug=True)
 
     # Create a new <g /> element, we will insert the snowflake by the <use /> element
     # here we set stroke, fill and stroke-width for all subelements
@@ -111,8 +111,9 @@ def create_svg(name):
     dwg.save()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
-    prog_name = sys.argv[0].rstrip('.py') + '.svg'
+
+    prog_name = sys.argv[0].rstrip(".py") + ".svg"
 
     create_svg(prog_name)

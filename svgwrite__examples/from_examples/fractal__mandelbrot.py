@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/mozman/svgwrite/blob/master/examples/mandelbrot.py
@@ -25,12 +25,12 @@ def create_svg(name):
     imgy = 100
 
     # Drawing defines the output size
-    dwg = svgwrite.Drawing(name, ('32cm', '20cm'), debug=True)
+    dwg = svgwrite.Drawing(name, ("32cm", "20cm"), debug=True)
 
     # Define a user coordinate system with viewbox()
     dwg.viewbox(0, 0, imgx, imgy)
 
-    mandelbrot_group = dwg.add(dwg.g(stroke_width=0, stroke='none'))
+    mandelbrot_group = dwg.add(dwg.g(stroke_width=0, stroke="none"))
 
     # Drawing area
     xa = -2.0
@@ -57,8 +57,9 @@ def create_svg(name):
     dwg.save()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
-    prog_name = sys.argv[0].rstrip('.py') + '.svg'
+
+    prog_name = sys.argv[0].rstrip(".py") + ".svg"
 
     create_svg(prog_name)
