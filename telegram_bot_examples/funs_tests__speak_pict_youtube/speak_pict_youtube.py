@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import random
@@ -10,11 +10,18 @@ import os
 from pathlib import Path
 
 from telegram import Update, InputMediaPhoto
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, Defaults
+from telegram.ext import (
+    Updater,
+    CommandHandler,
+    MessageHandler,
+    Filters,
+    CallbackContext,
+    Defaults,
+)
 
-sys.path.append('..')
-sys.path.append('../../html_parsing')
-sys.path.append('../../exchange_rates')
+sys.path.append("..")
+sys.path.append("../../html_parsing")
+sys.path.append("../../exchange_rates")
 
 import config
 from common import get_logger, log_func, reply_error, start_bot, run_main
@@ -30,55 +37,55 @@ log = get_logger(__file__)
 # Define a few command handlers. These usually take the two arguments bot and
 # update. Error handlers also receive the raised TelegramError object in error.
 def start(update: Update, context: CallbackContext):
-    update.effective_message.reply_text(text='Hi!')
+    update.effective_message.reply_text(text="Hi!")
 
 
 def help(update: Update, context: CallbackContext):
-    text = 'Commands:\n' + '\n'.join(f'    /{x}' for x in ALL_COMMANDS)
+    text = "Commands:\n" + "\n".join(f"    /{x}" for x in ALL_COMMANDS)
     update.effective_message.reply_text(text)
 
 
 def echo(update: Update, context: CallbackContext):
     message = update.effective_message
-    message.reply_text(text=f'Echo: {message.text}')
+    message.reply_text(text=f"Echo: {message.text}")
 
 
-def on_exchange_rates(update: Update, context: CallbackContext):
-    text = 'Курс:'
-    for code in ['USD', 'EUR']:
-        text += f'\n    {code}: {exchange_rate(code)[0]}'
+def on_exchange_rates(update: Update, _: CallbackContext):
+    text = "Курс:"
+    for code in ["USD", "EUR"]:
+        text += f"\n    {code}: {exchange_rate(code)[0]}"
 
     log.debug(text)
     update.effective_message.reply_text(text=text)
 
 
-def pict(update: Update, context: CallbackContext):
-    update.effective_message.reply_photo('https://t8.mangas.rocks/auto/07/48/88/Onepunchman_t1_gl1_18.png')
+def pict(update: Update, _: CallbackContext):
+    update.effective_message.reply_photo(
+        "https://t8.mangas.rocks/auto/07/48/88/Onepunchman_t1_gl1_18.png"
+    )
 
 
-def pict2(update: Update, context: CallbackContext):
+def pict2(update: Update, _: CallbackContext):
     message = update.effective_message
-    
-    with open('files/Onepunchman_t1_gl1_18.png', 'rb') as f:
+
+    with open("files/Onepunchman_t1_gl1_18.png", "rb") as f:
         message.reply_photo(f)
 
 
-def pict3(update: Update, context: CallbackContext):
+def pict3(update: Update, _: CallbackContext):
     message = update.effective_message
 
     max_parts = 10
-    files = list(Path('files/readmanga.live_one_punch_man__A1bc88e_vol1_1').glob('*.*'))
+    files = list(Path("files/readmanga.live_one_punch_man__A1bc88e_vol1_1").glob("*.*"))
 
     media_groups = []
     for i in range(0, len(files), max_parts):
-        media = [
-            InputMediaPhoto(f.open('rb')) for f in files[i: i+max_parts]
-        ]
+        media = [InputMediaPhoto(f.open("rb")) for f in files[i : i + max_parts]]
         media_groups.append(media)
 
     for i, media_group in enumerate(media_groups, 1):
         if len(media_groups) > 1:
-            media_groups[0][0].caption = f'Часть #{i}'
+            media_groups[0][0].caption = f"Часть #{i}"
 
         message.reply_media_group(media_group)
 
@@ -90,17 +97,17 @@ def on_video(update: Update, context: CallbackContext):
     args = context.args
     log.debug(args)
     if not args:
-        message.reply_text(text='К команде добавьте запрос.')
+        message.reply_text(text="К команде добавьте запрос.")
         return
 
-    msg = ' '.join(args)
+    msg = " ".join(args)
     search_results = search_youtube(msg, maximum_items=10)
     if not search_results:
-        message.reply_text(text='Ничего не найдено.')
+        message.reply_text(text="Ничего не найдено.")
         return
 
     video = random.choice(search_results)
-    message.reply_text(text=video.title + '\n' + video.url)
+    message.reply_text(text=video.title + "\n" + video.url)
 
 
 # NOTE: not work, source: https://github.com/gil9red/SimplePyScripts/blob/b366323934eb0ed9557ba7d40c3c64cf6a7b8c36/speak__[does_not_work]
@@ -203,9 +210,9 @@ def on_error(update: Update, context: CallbackContext):
 def main():
     cpu_count = os.cpu_count()
     workers = cpu_count
-    log.debug('System: CPU_COUNT=%s, WORKERS=%s', cpu_count, workers)
+    log.debug("System: CPU_COUNT=%s, WORKERS=%s", cpu_count, workers)
 
-    log.debug('Start')
+    log.debug("Start")
 
     # Create the EventHandler and pass it your bot's token.
     updater = Updater(
@@ -220,8 +227,19 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
-    dp.add_handler(CommandHandler("hi", lambda update, context: update.effective_message.reply_text(text='hi')))
-    dp.add_handler(CommandHandler("say", lambda update, context: update.effective_message.reply_text(text=f'''I say: "{" ".join(context.args)}".''')))
+    dp.add_handler(
+        CommandHandler(
+            "hi", lambda update, context: update.effective_message.reply_text(text="hi")
+        )
+    )
+    dp.add_handler(
+        CommandHandler(
+            "say",
+            lambda update, context: update.effective_message.reply_text(
+                text=f"""I say: "{" ".join(context.args)}"."""
+            ),
+        )
+    )
     dp.add_handler(CommandHandler("exchange_rates", on_exchange_rates))
     dp.add_handler(CommandHandler("pict", pict))
     dp.add_handler(CommandHandler("pict2", pict2))
@@ -253,5 +271,5 @@ def main():
     updater.idle()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run_main(main, log)
