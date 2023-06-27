@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import string
 
 from PyQt5.QtWidgets import (
-    QApplication, QListView, QTableView, QStyledItemDelegate, QStyleOptionViewItem, QStyle
+    QApplication,
+    QListView,
+    QTableView,
+    QStyledItemDelegate,
+    QStyleOptionViewItem,
+    QStyle,
 )
 from PyQt5.QtGui import QPainter, QPalette, QFontMetrics
 from PyQt5.QtCore import Qt, QSize, QRect, QModelIndex
@@ -16,7 +21,9 @@ from PyQt5.QtSql import QSqlDatabase, QSqlQueryModel
 
 # SOURCE: https://stackoverflow.com/a/5346900/5909792
 class ListViewDelegate(QStyledItemDelegate):
-    def paint(self, painter: QPainter, option: QStyleOptionViewItem, index: QModelIndex):
+    def paint(
+        self, painter: QPainter, option: QStyleOptionViewItem, index: QModelIndex
+    ):
         opt = option
         self.initStyleOption(opt, index)
 
@@ -64,33 +71,58 @@ class ListViewDelegate(QStyledItemDelegate):
         # Line id
         painter.drawText(
             QRect(rect.left(), rect.top(), line_id_width, rect.height()),
-            Qt.AlignCenter, line_id
+            Qt.AlignCenter,
+            line_id,
         )
 
         # Line 1
         painter.drawText(
-            QRect(rect.left() + line_id_width, rect.top(), line_id_width + kv_width, rect.height() / 2),
-            opt.displayAlignment, key_text
+            QRect(
+                rect.left() + line_id_width,
+                rect.top(),
+                line_id_width + kv_width,
+                rect.height() / 2,
+            ),
+            opt.displayAlignment,
+            key_text,
         )
 
         # Line 2
         painter.drawText(
-            QRect(rect.left() + line_id_width, rect.top() + rect.height() / 2, line_id_width + kv_width, rect.height() / 2),
-            opt.displayAlignment, value_text
+            QRect(
+                rect.left() + line_id_width,
+                rect.top() + rect.height() / 2,
+                line_id_width + kv_width,
+                rect.height() / 2,
+            ),
+            opt.displayAlignment,
+            value_text,
         )
 
         painter.restore()
 
         # Line 1
         painter.drawText(
-            QRect(rect.left() + line_id_width + kv_width, rect.top(), rect.width(), rect.height() / 2),
-            opt.displayAlignment, line_key
+            QRect(
+                rect.left() + line_id_width + kv_width,
+                rect.top(),
+                rect.width(),
+                rect.height() / 2,
+            ),
+            opt.displayAlignment,
+            line_key,
         )
 
         # Line 2
         painter.drawText(
-            QRect(rect.left() + line_id_width + kv_width, rect.top() + rect.height() / 2, rect.width(), rect.height() / 2),
-            opt.displayAlignment, line_value
+            QRect(
+                rect.left() + line_id_width + kv_width,
+                rect.top() + rect.height() / 2,
+                rect.width(),
+                rect.height() / 2,
+            ),
+            opt.displayAlignment,
+            line_value,
         )
 
     def sizeHint(self, option: QStyleOptionViewItem, index: QModelIndex) -> QSize:
@@ -99,21 +131,23 @@ class ListViewDelegate(QStyledItemDelegate):
         return result
 
 
-db = QSqlDatabase.addDatabase('QSQLITE')
+db = QSqlDatabase.addDatabase("QSQLITE")
 db.setDatabaseName(":memory:")
 db.open()
 
-db.exec('''\
+db.exec(
+    """\
     CREATE TABLE IF NOT EXISTS Dict (
         id INTEGER PRIMARY KEY,
         key TEXT NOT NULL UNIQUE,
         value TEXT
     );
-''')
+"""
+)
 
 # Fill
 for i in range(1000 - 1):
-    value = ''.join(string.ascii_lowercase[j] for j in map(int, str(i).zfill(3)))
+    value = "".join(string.ascii_lowercase[j] for j in map(int, str(i).zfill(3)))
     db.exec(f"INSERT OR IGNORE INTO Dict (key, value) VALUES ({i}, {value!r})")
 
 
@@ -130,14 +164,14 @@ model.setHeaderData(1, Qt.Horizontal, "KEY")
 model.setHeaderData(2, Qt.Horizontal, "VALUE")
 
 list_view = QListView()
-list_view.setWindowTitle('QListView')
+list_view.setWindowTitle("QListView")
 list_view.setModel(model)
 list_view.move(100, 50)
 list_view.resize(WINDOW_WIDTH, WINDOW_HEIGHT)
 list_view.show()
 
 list_view_2 = QListView()
-list_view_2.setWindowTitle('QListView + ItemDelegate')
+list_view_2.setWindowTitle("QListView + ItemDelegate")
 list_view_2.setItemDelegate(ListViewDelegate())
 list_view_2.setModel(model)
 list_view_2.move(list_view.geometry().right(), 50)
@@ -145,7 +179,7 @@ list_view_2.resize(WINDOW_WIDTH, WINDOW_HEIGHT)
 list_view_2.show()
 
 table_view = QTableView()
-table_view.setWindowTitle('QTableView')
+table_view.setWindowTitle("QTableView")
 table_view.setModel(model)
 table_view.move(list_view.pos().x(), list_view.geometry().bottom())
 table_view.resize(WINDOW_WIDTH, WINDOW_HEIGHT)
