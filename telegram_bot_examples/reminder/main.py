@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -13,9 +13,15 @@ from threading import Thread
 
 # pip install python-telegram-bot
 from telegram import Update, Bot
-from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext
+from telegram.ext import (
+    Updater,
+    MessageHandler,
+    CommandHandler,
+    Filters,
+    CallbackContext,
+)
 
-sys.path.append('..')
+sys.path.append("..")
 
 from common import get_logger, log_func, start_bot, run_main
 from db import Reminder, User, Chat
@@ -27,8 +33,7 @@ def do_checking_reminders(log: Logger, bot: Bot):
         try:
             expected_time = DT.datetime.now() - DT.timedelta(seconds=1)
             query = (
-                Reminder
-                .select()
+                Reminder.select()
                 .where(
                     (Reminder.is_sent == False)
                     & (Reminder.finish_time <= expected_time)
@@ -37,18 +42,19 @@ def do_checking_reminders(log: Logger, bot: Bot):
             )
 
             for reminder in query:
-                log.info('Send reminder: %s', reminder)
+                log.info("Send reminder: %s", reminder)
 
                 bot.send_message(
-                    chat_id=reminder.chat_id, text='⌛',
-                    reply_to_message_id=reminder.message_id
+                    chat_id=reminder.chat_id,
+                    text="⌛",
+                    reply_to_message_id=reminder.message_id,
                 )
 
                 reminder.is_sent = True
                 reminder.save()
 
         except:
-            log.exception('')
+            log.exception("")
 
         finally:
             time.sleep(1)
@@ -58,7 +64,7 @@ log = get_logger(__file__)
 
 
 @log_func(log)
-def on_start(update: Update, context: CallbackContext):
+def on_start(update: Update, _: CallbackContext):
     update.effective_message.reply_text(
         'Введите что-нибудь, например: "напомни через 1 час".\n'
         'Для получения списка напоминаний, напишите: "список"'
@@ -66,15 +72,15 @@ def on_start(update: Update, context: CallbackContext):
 
 
 @log_func(log)
-def on_request(update: Update, context: CallbackContext):
+def on_request(update: Update, _: CallbackContext):
     message = update.effective_message
 
     command = message.text
-    log.debug(f'Command: {command!r}')
+    log.debug(f"Command: {command!r}")
 
     finish_time = parse_command(command)
     if not finish_time:
-        message.reply_text('Не получилось разобрать команду!')
+        message.reply_text("Не получилось разобрать команду!")
         return
 
     Reminder.create(
@@ -85,18 +91,17 @@ def on_request(update: Update, context: CallbackContext):
         chat=Chat.get_from(update.effective_chat),
     )
 
-    message.reply_text(f'Напоминание установлено на {get_pretty_datetime(finish_time)}')
+    message.reply_text(f"Напоминание установлено на {get_pretty_datetime(finish_time)}")
 
 
 @log_func(log)
-def on_get_reminders(update: Update, context: CallbackContext):
+def on_get_reminders(update: Update, _: CallbackContext):
     message = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
 
     query = (
-        Reminder
-        .select()
+        Reminder.select()
         .where(
             (Reminder.chat_id == chat.id)
             & (Reminder.user_id == user.id)
@@ -108,19 +113,19 @@ def on_get_reminders(update: Update, context: CallbackContext):
     number = query.count()
 
     if number:
-        text = f'Напоминаний ({number}):\n'
+        text = f"Напоминаний ({number}):\n"
         for x in query:
-            text += '    ' + get_pretty_datetime(x.finish_time) + '\n'
+            text += "    " + get_pretty_datetime(x.finish_time) + "\n"
     else:
-        text = 'Напоминаний нет'
+        text = "Напоминаний нет"
 
     message.reply_text(text)
 
 
 def main():
     handlers = [
-        CommandHandler('start', on_start),
-        MessageHandler(Filters.regex('(?i)^список$'), on_get_reminders),
+        CommandHandler("start", on_start),
+        MessageHandler(Filters.regex("(?i)^список$"), on_get_reminders),
         MessageHandler(Filters.text, on_request),
     ]
 
@@ -133,5 +138,5 @@ def main():
     start_bot(log, handlers, before_start_func)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run_main(main, log)
