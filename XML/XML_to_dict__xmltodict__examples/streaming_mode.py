@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/martinblech/xmltodict#streaming-mode
@@ -12,7 +12,7 @@ import xmltodict
 
 
 def handle(path, item):
-    print(f'path: {path} item: {item!r}')
+    print(f"path: {path} item: {item!r}")
     return True
 
 

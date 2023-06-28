@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://ru.stackoverflow.com/q/861914/201445
@@ -18,11 +18,9 @@ items = [
 root = dict()
 
 for i, item in enumerate(items, 1):
-    root['person' + str(i)] = item
+    root["person" + str(i)] = item
 
-my_dict = {
-    'root': root
-}
+my_dict = {"root": root}
 # my_dict = {
 #     'root': {
 #         'person1': {"first_name": "Ivan", "last_name": "Ivanov", "city": "Moscow"},

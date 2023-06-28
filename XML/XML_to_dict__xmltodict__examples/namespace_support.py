@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/martinblech/xmltodict#namespace-support
 
+
+import json
 
 # pip install xmltodict
 import xmltodict
@@ -24,7 +26,6 @@ xml = """
 """
 doc = xmltodict.parse(xml, process_namespaces=True)
 
-import json
 print(json.dumps(doc, indent=4))
 # {
 #     "http://defaultns.com/:root": {
@@ -34,13 +35,13 @@ print(json.dumps(doc, indent=4))
 #     }
 # }
 
-print('\n')
+print("\n")
 
 
 # It also lets you collapse certain namespaces to shorthand prefixes, or skip them altogether:
 namespaces = {
-    'http://defaultns.com/': None,  # skip this namespace
-    'http://a.com/': 'ns_a',        # collapse "http://a.com/" -> "ns_a"
+    "http://defaultns.com/": None,  # skip this namespace
+    "http://a.com/": "ns_a",  # collapse "http://a.com/" -> "ns_a"
 }
 doc = xmltodict.parse(xml, process_namespaces=True, namespaces=namespaces)
 print(json.dumps(doc, indent=4))

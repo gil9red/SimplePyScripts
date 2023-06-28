@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/martinblech/xmltodict
 
 
+import json
+
 # pip install xmltodict
 import xmltodict
 
 
-doc = xmltodict.parse("""
+doc = xmltodict.parse(
+    """
 <mydocument has="an attribute">
     <and>
         <many>elements</many>
@@ -19,16 +22,18 @@ doc = xmltodict.parse("""
     </and>
     <plus a="complex">element as well</plus>
 </mydocument>
-""")
+"""
+)
 
-print(doc['mydocument']['@has'])           # an attribute
-print(doc['mydocument']['and']["many"])    # ['elements', 'more elements']
-print(doc['mydocument']['plus'])           # OrderedDict([('@a', 'complex'), ('#text', 'element as well')])
-print(doc['mydocument']['plus']['@a'])     # complex
-print(doc['mydocument']['plus']['#text'])  # element as well
+print(doc["mydocument"]["@has"])  # an attribute
+print(doc["mydocument"]["and"]["many"])  # ['elements', 'more elements']
+print(
+    doc["mydocument"]["plus"]
+)  # OrderedDict([('@a', 'complex'), ('#text', 'element as well')])
+print(doc["mydocument"]["plus"]["@a"])  # complex
+print(doc["mydocument"]["plus"]["#text"])  # element as well
 print()
 
-import json
 print(json.dumps(doc, indent=4))
 # {
 #     "mydocument": {
