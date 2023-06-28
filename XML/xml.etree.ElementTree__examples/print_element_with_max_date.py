@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
+import xml.etree.ElementTree as ET
 from datetime import datetime
+
 
 # SOURCE: https://ru.stackoverflow.com/questions/905565/
 text = """\
@@ -25,18 +27,16 @@ text = """\
 
 
 def to_date(date_str):
-    return datetime.strptime(date_str, '%Y-%m-%d')
+    return datetime.strptime(date_str, "%Y-%m-%d")
 
 
-# Из стандартной библиотеки
-import xml.etree.ElementTree as ET
 root = ET.fromstring(text)
 
-items = root.iter('Leader')
+items = root.iter("Leader")
 # OR:
 # items = root.findall('.//Leader')
-leader = max(items, key=lambda x: to_date(x.attrib['ActualDate']))
+leader = max(items, key=lambda x: to_date(x.attrib["ActualDate"]))
 
-print(leader.attrib['FIO'])         # Шxxxxxxx Аxxxxx Шxxxxxx
-print(leader.attrib['ActualDate'])  # 2009-12-01
-print(leader.attrib['Position'])    # генеральный директор
+print(leader.attrib["FIO"])  # Шxxxxxxx Аxxxxx Шxxxxxx
+print(leader.attrib["ActualDate"])  # 2009-12-01
+print(leader.attrib["Position"])  # генеральный директор

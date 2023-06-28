@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import xml.etree.ElementTree as ET
@@ -12,16 +12,16 @@ items = [
     {"first_name": "Sergey", "last_name": "Sidorov", "city": "Sochi"},
 ]
 
-root = ET.Element('root')
+root = ET.Element("root")
 
 for i, item in enumerate(items, 1):
-    person = ET.SubElement(root, f'person{i}')
+    person = ET.SubElement(root, f"person{i}")
 
     for k, v in item.items():
         ET.SubElement(person, k).text = v
 
 tree = ET.ElementTree(root)
-tree.write('person.xml')
+tree.write("person.xml")
 # <root>
 #     <person1>
 #         <first_name>Ivan</first_name>
