@@ -27,11 +27,10 @@ class HitCounter:
 
         # And display a silly hit count message!
         return (
-            """
+            f"""
             During your current session, you've viewed this
-            page %s times! Your life is a patio of fun!
+            page {count} times! Your life is a patio of fun!
         """
-            % count
         )
 
 
