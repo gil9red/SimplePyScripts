@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install python-telegram-bot
@@ -15,28 +15,24 @@ log = get_logger(__file__)
 
 
 @log_func(log)
-def on_start(update: Update, context: CallbackContext):
-    update.effective_message.reply_text(
-        'Write something'
-    )
+def on_start(update: Update, _: CallbackContext):
+    update.effective_message.reply_text("Write something")
 
 
 @log_func(log)
-def on_request(update: Update, context: CallbackContext):
+def on_request(update: Update, _: CallbackContext):
     message = update.effective_message
 
-    message.reply_text(
-        'Echo: ' + message.text
-    )
+    message.reply_text("Echo: " + message.text)
 
 
 def main():
     handlers = [
-        CommandHandler('start', on_start),
+        CommandHandler("start", on_start),
         MessageHandler(Filters.text, on_request),
     ]
     start_bot(log, handlers)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run_main(main, log)

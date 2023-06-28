@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import threading
@@ -13,12 +13,10 @@ from telegram.ext import Updater, MessageHandler, Filters, CallbackContext, Defa
 import config
 
 
-def on_request(update: Update, context: CallbackContext):
+def on_request(update: Update, _: CallbackContext):
     message = update.effective_message
 
-    message.reply_text(
-        f'Thread: {threading.current_thread()}'
-    )
+    message.reply_text(f"Thread: {threading.current_thread()}")
 
 
 def main():
@@ -43,5 +41,5 @@ def main():
     updater.idle()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
