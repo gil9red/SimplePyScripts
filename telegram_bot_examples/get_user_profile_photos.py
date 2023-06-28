@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://core.telegram.org/bots/api#getuserprofilephotos
@@ -19,10 +19,8 @@ log = get_logger(__file__)
 
 
 @log_func(log)
-def on_start(update: Update, context: CallbackContext):
-    update.effective_message.reply_text(
-        'Write something'
-    )
+def on_start(update: Update, _: CallbackContext):
+    update.effective_message.reply_text("Write something")
 
 
 @log_func(log)
@@ -32,24 +30,24 @@ def on_request(update: Update, context: CallbackContext):
 
     result = context.bot.get_user_profile_photos(user_id)
 
-    photos = result['photos']
+    photos = result["photos"]
     if not photos:
-        message.reply_text('No profile photos!')
+        message.reply_text("No profile photos!")
         return
 
     for photo_sizes in photos:
-        photo = max(photo_sizes, key=lambda x: x['width'])
-        file_id = photo['file_id']
+        photo = max(photo_sizes, key=lambda x: x["width"])
+        file_id = photo["file_id"]
         message.reply_photo(file_id, caption=file_id)
 
 
 def main():
     handlers = [
-        CommandHandler('start', on_start),
+        CommandHandler("start", on_start),
         MessageHandler(Filters.text, on_request),
     ]
     start_bot(log, handlers)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run_main(main, log)

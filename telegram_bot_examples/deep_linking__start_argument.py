@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://core.telegram.org/bots#deep-linking
@@ -20,32 +20,28 @@ log = get_logger(__file__)
 
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
-    start_argument = ''
+    start_argument = ""
     if context.args:
         # https://t.me/<bot>?start=<start_argument>
         start_argument = context.args[0]
 
-    update.effective_message.reply_text(
-        'Start argument: ' + start_argument
-    )
+    update.effective_message.reply_text("Start argument: " + start_argument)
 
 
 @log_func(log)
-def on_request(update: Update, context: CallbackContext):
+def on_request(update: Update, _: CallbackContext):
     message = update.effective_message
 
-    message.reply_text(
-        message.text
-    )
+    message.reply_text(message.text)
 
 
 def main():
     handlers = [
-        CommandHandler('start', on_start),
+        CommandHandler("start", on_start),
         MessageHandler(Filters.text, on_request),
     ]
     start_bot(log, handlers)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run_main(main, log)

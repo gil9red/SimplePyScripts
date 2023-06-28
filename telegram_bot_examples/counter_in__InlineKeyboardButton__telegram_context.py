@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install python-telegram-bot
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler
+from telegram.ext import (
+    MessageHandler,
+    CommandHandler,
+    Filters,
+    CallbackContext,
+    CallbackQueryHandler,
+)
 
 from common import get_logger, log_func, start_bot, run_main
 
@@ -15,33 +21,32 @@ log = get_logger(__file__)
 
 
 DATA_TEMPLATE = {
-    'number_1': 0,
-    'number_2': 0,
-    'number_3': 0,
+    "number_1": 0,
+    "number_2": 0,
+    "number_3": 0,
 }
 
 
 @log_func(log)
-def on_start(update: Update, context: CallbackContext):
-    update.effective_message.reply_text('Write something')
+def on_start(update: Update, _: CallbackContext):
+    update.effective_message.reply_text("Write something")
 
 
 @log_func(log)
-def on_request(update: Update, context: CallbackContext):
-    keyboard = [[
-        InlineKeyboardButton(str(value), callback_data=data)
-        for data, value in DATA_TEMPLATE.items()
-    ]]
+def on_request(update: Update, _: CallbackContext):
+    keyboard = [
+        [
+            InlineKeyboardButton(str(value), callback_data=data)
+            for data, value in DATA_TEMPLATE.items()
+        ]
+    ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    update.effective_message.reply_text(
-        'Ok',
-        reply_markup=reply_markup
-    )
+    update.effective_message.reply_text("Ok", reply_markup=reply_markup)
 
 
 @log_func(log)
-def on_callback_query(update: Update, context: CallbackContext):
+def on_callback_query(update: Update, _: CallbackContext):
     query = update.callback_query
     query.answer()
 
@@ -59,12 +64,12 @@ def on_callback_query(update: Update, context: CallbackContext):
 
 def main():
     handlers = [
-        CommandHandler('start', on_start),
+        CommandHandler("start", on_start),
         MessageHandler(Filters.text, on_request),
         CallbackQueryHandler(on_callback_query),
     ]
     start_bot(log, handlers)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run_main(main, log)

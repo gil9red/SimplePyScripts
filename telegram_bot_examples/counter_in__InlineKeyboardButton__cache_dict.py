@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import threading
-from typing import Dict
 
 # pip install python-telegram-bot
-from telegram import (
-    Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import (
+    MessageHandler,
+    CommandHandler,
+    Filters,
+    CallbackContext,
+    CallbackQueryHandler,
 )
-from telegram.ext import MessageHandler, CommandHandler, Filters, CallbackContext, CallbackQueryHandler
 
 from common import get_logger, log_func, start_bot, run_main
 
@@ -21,32 +24,32 @@ log = get_logger(__file__)
 
 lock = threading.Lock()
 DATA_TEMPLATE = {
-    'number_1': 0,
-    'number_2': 0,
-    'number_3': 0,
+    "number_1": 0,
+    "number_2": 0,
+    "number_3": 0,
 }
 
 # chat_id -> message_id -> DATA_TEMPLATE
-CACHE_NUMBERS: Dict[int, Dict[int, Dict[str, int]]] = dict()
+CACHE_NUMBERS: dict[int, dict[int, dict[str, int]]] = dict()
 
 
-def get_reply_markup(data: Dict[str, int]) -> InlineKeyboardMarkup:
-    keyboard = [[
-        InlineKeyboardButton(str(value), callback_data=data)
-        for data, value in data.items()
-    ]]
+def get_reply_markup(data: dict[str, int]) -> InlineKeyboardMarkup:
+    keyboard = [
+        [
+            InlineKeyboardButton(str(value), callback_data=data)
+            for data, value in data.items()
+        ]
+    ]
     return InlineKeyboardMarkup(keyboard)
 
 
 @log_func(log)
-def on_start(update: Update, context: CallbackContext):
-    update.effective_message.reply_text(
-        'Write something'
-    )
+def on_start(update: Update, _: CallbackContext):
+    update.effective_message.reply_text("Write something")
 
 
 @log_func(log)
-def on_request(update: Update, context: CallbackContext):
+def on_request(update: Update, _: CallbackContext):
     chat_id = update.effective_chat.id
     message_id = update.effective_message.message_id
 
@@ -57,14 +60,11 @@ def on_request(update: Update, context: CallbackContext):
 
     data = CACHE_NUMBERS[chat_id][message_id]
 
-    update.effective_message.reply_text(
-        'Ok',
-        reply_markup=get_reply_markup(data)
-    )
+    update.effective_message.reply_text("Ok", reply_markup=get_reply_markup(data))
 
 
 @log_func(log)
-def on_callback_query(update: Update, context: CallbackContext):
+def on_callback_query(update: Update, _: CallbackContext):
     query = update.callback_query
     query.answer()
 
@@ -88,19 +88,17 @@ def on_callback_query(update: Update, context: CallbackContext):
     with lock:
         data[query.data] += 1
 
-    query.message.edit_reply_markup(
-        reply_markup=get_reply_markup(data)
-    )
+    query.message.edit_reply_markup(reply_markup=get_reply_markup(data))
 
 
 def main():
     handlers = [
-        CommandHandler('start', on_start),
+        CommandHandler("start", on_start),
         MessageHandler(Filters.text, on_request),
         CallbackQueryHandler(on_callback_query),
     ]
     start_bot(log, handlers)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run_main(main, log)
