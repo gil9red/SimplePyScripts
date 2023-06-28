@@ -36,14 +36,14 @@ class KThread(Thread):
         self.run = self.__run_backup
 
     def globaltrace(self, frame, why, arg):
-        if why == 'call':
+        if why == "call":
             return self.localtrace
         else:
             return None
 
     def localtrace(self, frame, why, arg):
         if self.killed:
-            if why == 'line':
+            if why == "line":
                 raise Kill()
         return self.localtrace
 
@@ -51,17 +51,16 @@ class KThread(Thread):
         self.killed = True
 
 
-if __name__ == '__main__':
-    def unlimited_wait():
-        import time
+if __name__ == "__main__":
+    import time
 
+    def unlimited_wait():
         i = 0
 
         while True:
             i += 1
             print(i)
             time.sleep(1)
-
 
     thread = KThread(target=unlimited_wait)
     thread.start()
