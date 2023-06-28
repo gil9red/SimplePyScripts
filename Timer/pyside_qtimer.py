@@ -1,11 +1,11 @@
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """Пример таймера."""
 
 
-from PySide.QtCore import *
 import sys
+from PySide.QtCore import *
 
 
 def say():
