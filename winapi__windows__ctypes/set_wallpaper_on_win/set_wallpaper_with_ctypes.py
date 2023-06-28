@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # http://www.blog.pythonlibrary.org/2014/10/22/pywin32-how-to-set-desktop-background/
 
 
 import ctypes
+
+
 SPI_SETDESKWALLPAPER = 20
 
 
@@ -20,5 +22,5 @@ def set_wallpaper_with_ctypes(file_name):
 
 
 if __name__ == "__main__":
-    file_name = r'C:\Users\Public\Pictures\Sample Pictures\Jellyfish.jpg'
+    file_name = r"C:\Users\Public\Pictures\Sample Pictures\Jellyfish.jpg"
     set_wallpaper_with_ctypes(file_name)
