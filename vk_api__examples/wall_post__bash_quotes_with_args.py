@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -17,17 +17,25 @@ from wall_post__bash_quotes import main
 
 
 def create_parser():
-    parser = argparse.ArgumentParser(description="The script receives a quote from the site bash.im "
-                                                 "and puts it on the wall by vk.com")
+    parser = argparse.ArgumentParser(
+        description="The script receives a quote from the site bash.im "
+        "and puts it on the wall by vk.com"
+    )
     parser.add_argument("login", help="Login from which the message will be sent.")
     parser.add_argument("psw", help="User password.")
-    parser.add_argument("owner_id", type=int, nargs='?', const=1, help="ID on who will get the message.")
-    parser.add_argument("-timeout", type=int, default=3600, help="The frequency of sending messages in seconds."
-                                                                 "\nDefault 3600 sec.")
+    parser.add_argument(
+        "owner_id", type=int, nargs="?", const=1, help="ID on who will get the message."
+    )
+    parser.add_argument(
+        "-timeout",
+        type=int,
+        default=3600,
+        help="The frequency of sending messages in seconds." "\nDefault 3600 sec.",
+    )
     return parser
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = create_parser()
 
     # Если не указаны параметры, выводим справку и выходим
@@ -41,5 +49,5 @@ if __name__ == '__main__':
         login=args.login,
         password=args.psw,
         owner_id=args.owner_id,
-        timeout=args.timeout
+        timeout=args.timeout,
     )

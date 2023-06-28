@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
 import traceback
 
 from PyQt5.QtWidgets import (
-    QApplication, QWidget, QLineEdit, QSpinBox, QPushButton, QTextEdit, QFormLayout, QVBoxLayout, QMessageBox
+    QApplication,
+    QWidget,
+    QLineEdit,
+    QSpinBox,
+    QPushButton,
+    QTextEdit,
+    QFormLayout,
+    QVBoxLayout,
+    QMessageBox,
 )
 
 from root_common import vk_auth, LOGIN, PASSWORD
@@ -25,7 +33,7 @@ class Widget(QWidget):
         self.spibox_count_newsfeed = QSpinBox()
         self.spibox_count_newsfeed.setValue(15)
 
-        self.button_get_newsfeeds = QPushButton('Get newsfeeds')
+        self.button_get_newsfeeds = QPushButton("Get newsfeeds")
         self.button_get_newsfeeds.clicked.connect(self.get_newsfeed)
 
         self.newsfeed = QTextEdit()
@@ -44,24 +52,26 @@ class Widget(QWidget):
 
     def get_newsfeed(self):
         try:
-            vk_session = vk_auth(self.line_edit_login.text(), self.line_edit_password.text())
-            newsfeed = vk_session.method('newsfeed.get', values={
-                'filters': 'post',
-                'count': self.spibox_count_newsfeed.value()
-            })
+            vk_session = vk_auth(
+                self.line_edit_login.text(), self.line_edit_password.text()
+            )
+            newsfeed = vk_session.method(
+                "newsfeed.get",
+                values={"filters": "post", "count": self.spibox_count_newsfeed.value()},
+            )
 
             items = []
-            for i, feed in enumerate(newsfeed['items'], 1):
+            for i, feed in enumerate(newsfeed["items"], 1):
                 items.append(f"{i}. {feed['source_id']} {feed['date']}: {feed['text']}")
 
-            self.newsfeed.setText('\n'.join(items))
+            self.newsfeed.setText("\n".join(items))
 
         except Exception as e:
-            print('Error:', traceback.format_exc())
+            print("Error:", traceback.format_exc())
             QMessageBox.warning(self, None, str(e))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     w = Widget()

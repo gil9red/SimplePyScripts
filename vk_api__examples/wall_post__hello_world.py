@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from root_common import get_vk_session
@@ -18,6 +18,6 @@ vk = vk_session.get_api()
 # Если не указывать owner_id, то сообщение будет отправлено себе на стену
 rs = vk.wall.post(
     owner_id=OWNER_ID,
-    message='Hello World!\nПривет мир!',
+    message="Hello World!\nПривет мир!",
 )
-print('rs:', rs)
+print("rs:", rs)

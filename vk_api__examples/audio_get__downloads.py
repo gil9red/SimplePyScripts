@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -49,10 +49,10 @@ def make_pretty_id3(audio_file_name: str, performer: str, title: str):
     try:
         audio.load(audio_file_name)
 
-        album = audio.get('TALB')
-        genre = audio.get('TCON')
-        record_time = audio.get('TDRC')
-        picture = audio.get('APIC')
+        album = audio.get("TALB")
+        genre = audio.get("TCON")
+        record_time = audio.get("TDRC")
+        picture = audio.get("APIC")
 
         audio.delete()
 
@@ -91,15 +91,15 @@ def file_name_clear(name: str) -> str:
     # TODO: Замена символов, которых в названиях файлов запрещено
     # Windows: \/:*?"<>|
 
-    name = name.replace('\\', '-')
-    name = name.replace('/', '-')
-    name = name.replace(':', '.')
-    name = name.replace('*', '.')
-    name = name.replace('?', '')
+    name = name.replace("\\", "-")
+    name = name.replace("/", "-")
+    name = name.replace(":", ".")
+    name = name.replace("*", ".")
+    name = name.replace("?", "")
     name = name.replace('"', "'")
-    name = name.replace('<', '')
-    name = name.replace('>', '')
-    name = name.replace('|', '')
+    name = name.replace("<", "")
+    name = name.replace(">", "")
+    name = name.replace("|", "")
     return name
 
 
@@ -108,19 +108,21 @@ def download_file(url: str, audio_file_name: str):
     r = requests.get(url, stream=True)
     if r.status_code == 200:
         # Создаем файл и в него записываем файл с сервера
-        with open(audio_file_name, 'wb') as f:
+        with open(audio_file_name, "wb") as f:
             for chunk in r.iter_content(1024):
                 f.write(chunk)
     else:
-        raise DownloadFileError(f'Ошибка при скачивании "{url}": {r.status_code} - {r.reason}')
+        raise DownloadFileError(
+            f'Ошибка при скачивании "{url}": {r.status_code} - {r.reason}'
+        )
 
 
 DIR = Path(__file__).resolve().parent
-DOWNLOAD_DIR = str(DIR / 'downloads')
+DOWNLOAD_DIR = str(DIR / "downloads")
 
 
-if __name__ == '__main__':
-    print('Авторизация...\n')
+if __name__ == "__main__":
+    print("Авторизация...\n")
 
     vk_session = get_vk_session()
     vk_audio = VkAudio(vk_session)
@@ -131,18 +133,18 @@ if __name__ == '__main__':
     os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
     # Вывод списка всех аудиозаписей
-    print(f'Всего песен: {len(audio_list)}')
+    print(f"Всего песен: {len(audio_list)}")
 
     for i, audio in enumerate(audio_list, 1):
         try:
-            artist = audio['artist'].strip().title()
-            title = audio['title'].strip().capitalize()
-            url = audio['url']
+            artist = audio["artist"].strip().title()
+            title = audio["title"].strip().capitalize()
+            url = audio["url"]
 
-            audio_name = f'{artist} - {title}'
+            audio_name = f"{artist} - {title}"
 
             # Название файла аудиозаписи
-            audio_file_name = audio_name + '.mp3'
+            audio_file_name = audio_name + ".mp3"
 
             # Замена символов, которых в названиях файлов запрещено
             audio_file_name = file_name_clear(audio_file_name)
@@ -151,16 +153,16 @@ if __name__ == '__main__':
             download_path = os.path.join(DOWNLOAD_DIR, audio_file_name)
 
             if os.path.exists(download_path):
-                print(f'File is exist: {download_path}')
+                print(f"File is exist: {download_path}")
                 continue
 
-            print(f'{i}. {audio_name!r}', end='')
+            print(f"{i}. {audio_name!r}", end="")
             download_file(url, download_path)
             make_pretty_id3(download_path, artist, title)
-            print(' download finished...')
+            print(" download finished...")
 
         except KeyboardInterrupt:
-            print('\n\nСкачивание прервано.')
+            print("\n\nСкачивание прервано.")
             sys.exit()
 
         except Exception as e:
