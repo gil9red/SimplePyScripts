@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -15,29 +15,28 @@ GET https://test.api.unistream.com/v1/agents/{agentId}/poses?plainlist={plainlis
 """
 
 
-if __name__ == '__main__':
-    from utils import get_today_RFC1123_date, get_authorization_header
-    from config import APPLICATION_ID, SECRET
+import requests
 
-    # Идентификатор партнера
-    AGENT_ID = -1
+from utils import get_today_RFC1123_date, get_authorization_header
+from config import APPLICATION_ID, SECRET
 
-    # Признак получения всех потомков
-    PLAINLIST = False
 
-    params = {
-        'agentId': AGENT_ID,
-        'plainlist': PLAINLIST,
-    }
-    URL = 'https://test.api.unistream.com/v1/agents/{agentId}/poses?plainlist={plainlist}'.format(**params)
+# Идентификатор партнера
+AGENT_ID = -1
 
-    TODAY_DATE = get_today_RFC1123_date()
+# Признак получения всех потомков
+PLAINLIST = False
 
-    headers = dict()
-    headers['Date'] = TODAY_DATE
-    headers['Authorization'] = get_authorization_header(APPLICATION_ID, SECRET, TODAY_DATE, URL, headers)
+URL = f"https://test.api.unistream.com/v1/agents/{AGENT_ID}/poses?plainlist={PLAINLIST}"
 
-    import requests
-    rs = requests.get(URL, headers=headers)
-    print(rs)
-    print(rs.text)
+TODAY_DATE = get_today_RFC1123_date()
+
+headers = dict()
+headers["Date"] = TODAY_DATE
+headers["Authorization"] = get_authorization_header(
+    APPLICATION_ID, SECRET, TODAY_DATE, URL, headers
+)
+
+rs = requests.get(URL, headers=headers)
+print(rs)
+print(rs.text)
