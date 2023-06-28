@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import datetime as DT
@@ -10,7 +10,7 @@ import time
 from common import RegistryKey
 
 
-key = RegistryKey(r'HKEY_CURRENT_USER\Software\SigmaTeam\AlienShooter2LegendPC')
+key = RegistryKey(r"HKEY_CURRENT_USER\Software\SigmaTeam\AlienShooter2LegendPC")
 name_by_value = key.get_str_values_as_dict()
 
 while True:
@@ -25,7 +25,7 @@ while True:
 
     if modified_keys:
         print(DT.datetime.now())
-        print(*modified_keys, sep='\n')
+        print(*modified_keys, sep="\n")
         print()
 
     time.sleep(5)

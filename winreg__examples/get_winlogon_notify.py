@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://www.saule-spb.ru/library/autorun.html
@@ -13,7 +13,7 @@ __author__ = 'ipetrash'
 from common import RegistryKey
 
 
-PATH = r'HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify'
+PATH = r"HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify"
 
 
 def get_winlogon_notify() -> dict[str, dict[str, str]]:
@@ -26,5 +26,5 @@ def get_winlogon_notify() -> dict[str, dict[str, str]]:
     }
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(get_winlogon_notify())

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://www.windxp.com.ru/autrun.htm
@@ -114,12 +114,12 @@ def get_run_paths() -> dict[str, str]:
     run_paths = dict()
     for path, name_by_value in get_key_by_values().items():
         for name, value in name_by_value.items():
-            run_paths[f'{path}, {name}'] = value
+            run_paths[f"{path}, {name}"] = value
 
     return run_paths
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     for path, name_by_value in get_key_by_values().items():
         if not name_by_value:
             continue
@@ -127,7 +127,7 @@ if __name__ == '__main__':
         print(path)
 
         for i, (name, value) in enumerate(name_by_value.items(), 1):
-            print(f'    {i}. {name}: {value}')
+            print(f"    {i}. {name}: {value}")
 
         print()
     r"""

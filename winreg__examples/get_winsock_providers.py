@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://www.saule-spb.ru/library/autorun.html
@@ -12,15 +12,21 @@ from common import RegistryKey
 
 
 PATHS = [
-    (r"HKLM\SYSTEM\CurrentControlSet\Services\WinSock2\Parameters\NameSpace_Catalog5", "DisplayString"),
-    (r"HKLM\SYSTEM\CurrentControlSet\Services\WinSock2\Parameters\Protocol_Catalog9", "ProtocolName"),
+    (
+        r"HKLM\SYSTEM\CurrentControlSet\Services\WinSock2\Parameters\NameSpace_Catalog5",
+        "DisplayString",
+    ),
+    (
+        r"HKLM\SYSTEM\CurrentControlSet\Services\WinSock2\Parameters\Protocol_Catalog9",
+        "ProtocolName",
+    ),
 ]
 
 
 def get_winsock_providers() -> dict[str, str]:
     path_by_value = dict()
     for path, name in PATHS:
-        for catalog in ['Catalog_Entries', 'Catalog_Entries64']:
+        for catalog in ["Catalog_Entries", "Catalog_Entries64"]:
             key = RegistryKey(path) / catalog
             for sub_key in key.subkeys():
                 if value := sub_key.get_str_value(name):
@@ -29,7 +35,7 @@ def get_winsock_providers() -> dict[str, str]:
     return path_by_value
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     path_by_value = get_winsock_providers()
     print(path_by_value)
     print()
