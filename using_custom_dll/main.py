@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """This example by create and build dll and using in python scripts."""
 
 
-if __name__ == '__main__':
-    import ctypes
+import ctypes
 
-    dll_name = 'mydll2.dll'
-    mydll2 = ctypes.CDLL(dll_name)
-    print(mydll2.add(1, 2))
-    print(mydll2.sub(1, 2))
+
+dll_name = "mydll2.dll"
+mydll2 = ctypes.CDLL(dll_name)
+print(mydll2.add(1, 2))
+print(mydll2.sub(1, 2))

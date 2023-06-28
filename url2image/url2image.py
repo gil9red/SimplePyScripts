@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # TODO: лучше попробовать переписать на селениум, пример: https://github.com/gil9red/SimplePyScripts/blob/59322c5da8ce17ca5c68424b9db5fb82eda5e4dd/selenium__examples/screenshot.py
@@ -16,13 +16,16 @@ from PyQt4.QtGui import QApplication, QImage, QPainter
 from PyQt4.QtCore import QEventLoop, QSize, QUrl
 from PyQt4.QtNetwork import QNetworkProxyFactory
 
+
 # Чтобы не было проблем запуска компов с прокси
 QNetworkProxyFactory.setUseSystemConfiguration(True)
 
 
 class WebPage(QWebPage):
     def userAgentForUrl(self, url):
-        return 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0'
+        return (
+            "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"
+        )
 
 
 qApp = None
@@ -52,8 +55,12 @@ def url2image(url, file_name=None):
     loop.exec_()
 
     # Запрашиваем через javascript размеры страницы сайта
-    width = view.page().mainFrame().evaluateJavaScript("window.document.body.scrollWidth")
-    height = view.page().mainFrame().evaluateJavaScript("window.document.body.scrollHeight")
+    width = (
+        view.page().mainFrame().evaluateJavaScript("window.document.body.scrollWidth")
+    )
+    height = (
+        view.page().mainFrame().evaluateJavaScript("window.document.body.scrollHeight")
+    )
 
     # Устанавливаем границы документа
     view.page().setViewportSize(QSize(width, height))
@@ -70,13 +77,13 @@ def url2image(url, file_name=None):
     return img
 
 
-if __name__ == '__main__':
-    img = url2image('https://www.google.ru/search?q=google+qwidget')
+if __name__ == "__main__":
+    img = url2image("https://www.google.ru/search?q=google+qwidget")
     img.save("html.png")
     # # Or:
     # img = url2image('https://www.google.ru/search?q=google+qwidget', "html.png")
 
-    url2image('https://www.google.ru/search?q=cats&tbm=isch', 'cats.png')
+    url2image("https://www.google.ru/search?q=cats&tbm=isch", "cats.png")
 
     # TODO: слишком большая высота получилась, нужно разобраться
-    url2image('https://en.wikipedia.org/wiki/Python_(programming_language)', 'wiki.jpg')
+    url2image("https://en.wikipedia.org/wiki/Python_(programming_language)", "wiki.jpg")
