@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import logging
 import time
 import sys
@@ -55,27 +55,28 @@ log = get_logger(
 
 
 def run(dirs: list[str | Path]):
-    print(f"\n{DT.datetime.today()}")
+    print(f"\n{dt.datetime.today()}")
 
     for dir_path in dirs:
         print(dir_path)
+        path = Path(dir_path)
 
-        for file_name in Path(dir_path).glob("*/*.hprof"):
-            ctime_timestamp = file_name.stat().st_ctime
-            ctime = DT.datetime.fromtimestamp(ctime_timestamp)
+        files = list(path.glob("*/*.hprof"))
+        files += list(path.rglob("*/.config/**/*.hprof*"))
+        for f in files:
+            ctime_timestamp = f.stat().st_ctime
+            ctime = dt.datetime.fromtimestamp(ctime_timestamp)
             ctime = ctime.replace(microsecond=0)
 
-            file_size = file_name.stat().st_size
+            file_size = f.stat().st_size
 
-            text = (
-                f"{file_name} (date creation: {ctime}, size: {sizeof_fmt(file_size)})"
-            )
+            text = f"{f} (date creation: {ctime}, size: {sizeof_fmt(file_size)})"
             print(text)
 
             # Удаление, если с даты создания прошло больше 1 часа
-            if DT.datetime.today() > ctime + DT.timedelta(hours=1):
+            if dt.datetime.today() > ctime + dt.timedelta(hours=1):
                 log.info(text)
-                file_name.unlink(missing_ok=True)
+                f.unlink(missing_ok=True)
 
 
 if __name__ == "__main__":
