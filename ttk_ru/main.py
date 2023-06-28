@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import time
@@ -16,12 +16,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from config import LOGIN, PASSWORD
 
 
-URL_LOGIN = 'https://lk.ttk.ru/po/login.jsf#/'
+URL_LOGIN = "https://lk.ttk.ru/po/login.jsf#/"
 
 
 def get_price() -> str:
     options = Options()
-    options.add_argument('--headless')
+    options.add_argument("--headless")
 
     driver = webdriver.Firefox(options=options)
     wait = WebDriverWait(driver, timeout=30)
@@ -40,8 +40,8 @@ def get_price() -> str:
         )
         password_el.send_keys(PASSWORD)
 
-        while 'login' in driver.current_url:
-            driver.find_element(By.ID, 'submit').click()
+        while "login" in driver.current_url:
+            driver.find_element(By.ID, "submit").click()
             time.sleep(1)
 
         print(f'Title: "{driver.title}", url: {driver.current_url}')
@@ -58,14 +58,14 @@ def get_price() -> str:
             # Scrolling to an element so it generates text
             driver.execute_script("arguments[0].scrollIntoView();", price_internet_el)
 
-            price_str = ''.join(c for c in price_internet_el.text if c.isdigit())
+            price_str = "".join(c for c in price_internet_el.text if c.isdigit())
             if price_str:
                 break
 
             time.sleep(1)
 
         if not price_str:
-            raise Exception('Не удалось получить цену!')
+            raise Exception("Не удалось получить цену!")
 
         return price_str
 
@@ -73,6 +73,6 @@ def get_price() -> str:
         driver.quit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(get_price())
     # 300
