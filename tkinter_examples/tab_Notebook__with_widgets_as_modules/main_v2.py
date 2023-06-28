@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from tkinter import Tk, ttk
-import tkinter as tk
+from tkinter import ttk, Tk
 
 from tab_a import Example as TabA
 from tab_b import Example as TabB
@@ -14,14 +13,14 @@ from tab_c import Example as TabC
 
 class MainInterface:
     def __init__(self):
-        self.window = tk.Tk()
-        self.window.title('version')
+        self.window = Tk()
+        self.window.title("version")
         self.window.geometry("300x250")
         self.create_widgets()
 
     def create_widgets(self):
-        self.window['padx'] = 10
-        self.window['pady'] = 10
+        self.window["padx"] = 10
+        self.window["pady"] = 10
 
         self.notebook = ttk.Notebook(self.window, width=1000, height=700)
 
@@ -36,6 +35,6 @@ class MainInterface:
         self.notebook.pack()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     program = MainInterface()
     program.window.mainloop()
