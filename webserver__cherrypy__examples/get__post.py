@@ -14,7 +14,7 @@ class WelcomePage:
     @cherrypy.expose
     def index(self):
         # Ask for the user's name.
-        return '''
+        return """
             <p>GET:<p>
             <form action="greet_user" method="GET">
                 What is your name?
@@ -29,7 +29,7 @@ class WelcomePage:
                 <input type="text" name="name" />
                 <input type="submit" />
             </form>
-        '''
+        """
 
     @cherrypy.expose
     def greet_user(self, name=None):
@@ -52,7 +52,7 @@ class WelcomePage:
                 return 'No, really, enter your name <a href="./">here</a>.'
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # CherryPy always starts with app.root when trying to map request URIs
     # to objects, so we need to mount a request handler root. A request
     # to '/' will be mapped to HelloWorld().index().

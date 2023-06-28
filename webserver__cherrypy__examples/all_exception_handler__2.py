@@ -2,30 +2,32 @@
 # -*- coding: utf-8 -*-
 
 
+import json
+
 # pip install cherrypy
 # https://github.com/cherrypy/cherrypy
-
 import cherrypy
 
 
 def all_exception_handler(status, message, traceback, version):
     response = cherrypy.response
-    response.headers['Content-Type'] = 'application/json'
+    response.headers["Content-Type"] = "application/json"
 
-    import json
-    return json.dumps({
-        'about': 'Catch error!',
-        'status': status,
-        'message': message,
-        'text': traceback.strip().split('\n')[-1],
-        'traceback': traceback,
-        'version': version,
-    })
+    return json.dumps(
+        {
+            "about": "Catch error!",
+            "status": status,
+            "message": message,
+            "text": traceback.strip().split("\n")[-1],
+            "traceback": traceback,
+            "version": version,
+        }
+    )
 
 
 class Root:
     # Set a custom response for errors.
-    _cp_config = {'error_page.default': all_exception_handler}
+    _cp_config = {"error_page.default": all_exception_handler}
 
     # Expose the index method through the web. CherryPy will never
     # publish methods that don't have the exposed attribute set to True.
@@ -41,18 +43,18 @@ class Root:
     def error(self):
         _ = 1 / 0
 
-        return 'Bad!'
+        return "Bad!"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # CherryPy always starts with app.root when trying to map request URIs
     # to objects, so we need to mount a request handler root. A request
     # to '/' will be mapped to HelloWorld().index().
 
     # Set port
-    cherrypy.config.update({'server.socket_port': 9090})
+    cherrypy.config.update({"server.socket_port": 9090})
 
     # Autoreload off
-    cherrypy.config.update({'engine.autoreload.on': False})
+    cherrypy.config.update({"engine.autoreload.on": False})
 
     cherrypy.quickstart(Root())

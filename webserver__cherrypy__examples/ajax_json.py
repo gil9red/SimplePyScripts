@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://stackoverflow.com/a/3753314/5909792
@@ -15,7 +15,7 @@ class Root(object):
     @cherrypy.tools.json_in()
     def update(self):
         input_json = cherrypy.request.json
-        print('input_json:', input_json)
+        print("input_json:", input_json)
         # do_something_with(input_json)
 
         return "Updated %r." % (input_json,)
@@ -49,5 +49,6 @@ class Root(object):
 </html>
 """
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     cherrypy.quickstart(Root())
