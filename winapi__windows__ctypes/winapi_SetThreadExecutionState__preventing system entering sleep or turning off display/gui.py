@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from PyQt5 import QtWidgets as qtw
 from main import preventing_on, preventing_off
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = qtw.QApplication([])
 
     w = qtw.QWidget()
-    w.setWindowTitle('Preventing entering sleep or turning off the display')
+    w.setWindowTitle("Preventing entering sleep or turning off the display")
     w.setLayout(qtw.QVBoxLayout())
 
     def button_clicked(checked):
         if checked:
-            button.setText('On')
+            button.setText("On")
             preventing_on()
         else:
-            button.setText('Off')
+            button.setText("Off")
             preventing_off()
 
     button = qtw.QPushButton()
