@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # MOTE: То, что эта нейронная сеть делает называется "Инцепционизм" -- картины, «написанные» нейронными сетями.
@@ -43,7 +43,6 @@ __author__ = 'ipetrash'
 import os
 import io
 from timeit import default_timer
-from typing import Union
 
 # pip install tensorflow==1.15
 # pip install tensorflow-gpu==1.15
@@ -51,6 +50,7 @@ from typing import Union
 import tensorflow as tf
 import numpy as np
 import PIL.Image
+
 # import matplotlib.pyplot as plt
 
 from common import download_tensorflow_model, IMG_NOISE, showarray, savearray
@@ -96,8 +96,9 @@ from common import download_tensorflow_model, IMG_NOISE, showarray, savearray
 #     '''Normalize the image range for visualization'''
 #     return (a - a.mean()) / max(a.std(), 1e-4) * s + 0.5
 
+
 def T(layer):
-    '''Helper for getting layer output tensor'''
+    """Helper for getting layer output tensor"""
     return graph.get_tensor_by_name("import/%s:0" % layer)
 
 
@@ -113,31 +114,37 @@ def T(layer):
 #         img += g * step
 #     showarray(visstd(img))
 
-data_dir = 'data/'
+data_dir = "data/"
 
 # Step 1 - download google's pre-trained neural network
 download_tensorflow_model(data_dir)
 
-model_fn = 'tensorflow_inception_graph.pb'
+model_fn = "tensorflow_inception_graph.pb"
 
 # Step 2 - Creating Tensorflow session and loading the model
 graph = tf.Graph()
 sess = tf.compat.v1.InteractiveSession(graph=graph)
 
-with tf.io.gfile.GFile(os.path.join(data_dir, model_fn), 'rb') as f:
+with tf.io.gfile.GFile(os.path.join(data_dir, model_fn), "rb") as f:
     graph_def = tf.compat.v1.GraphDef()
     graph_def.ParseFromString(f.read())
 
-t_input = tf.compat.v1.placeholder(np.float32, name='input')  # define the input tensor
+t_input = tf.compat.v1.placeholder(np.float32, name="input")  # define the input tensor
 imagenet_mean = 117.0
 t_preprocessed = tf.expand_dims(t_input - imagenet_mean, 0)
-tf.import_graph_def(graph_def, {'input': t_preprocessed})
+tf.import_graph_def(graph_def, {"input": t_preprocessed})
 
-layers = [op.name for op in graph.get_operations() if op.type == 'Conv2D' and 'import/' in op.name]
-feature_nums = [int(graph.get_tensor_by_name(name + ':0').get_shape()[-1]) for name in layers]
+layers = [
+    op.name
+    for op in graph.get_operations()
+    if op.type == "Conv2D" and "import/" in op.name
+]
+feature_nums = [
+    int(graph.get_tensor_by_name(name + ":0").get_shape()[-1]) for name in layers
+]
 
-print('Number of layers', len(layers))
-print('Total number of feature units:', sum(feature_nums))
+print("Number of layers", len(layers))
+print("Total number of feature units:", sum(feature_nums))
 
 # import webbrowser
 # for layer in layers:
@@ -245,22 +252,22 @@ print('Total number of feature units:', sum(feature_nums))
 # unit = 63  # Cars
 
 
-output_dir = 'output'
+output_dir = "output"
 if not os.path.exists(output_dir):
     os.mkdir(output_dir)
 
 
 def tffunc(*argtypes):
-    '''Helper that transforms TF-graph generating function into a regular one.
+    """Helper that transforms TF-graph generating function into a regular one.
     See "resize" function below.
-    '''
+    """
     placeholders = list(map(tf.compat.v1.placeholder, argtypes))
 
     def wrap(f):
         out = f(*placeholders)
 
         def wrapper(*args, **kw):
-            return out.eval(dict(zip(placeholders, args)), session=kw.get('session'))
+            return out.eval(dict(zip(placeholders, args)), session=kw.get("session"))
 
         return wrapper
 
@@ -276,9 +283,9 @@ resize = tffunc(np.float32, np.int32)(resize)
 
 
 def calc_grad_tiled(img, t_grad, sess, tile_size=512):
-    '''Compute the value of tensor t_grad over the image in a tiled way.
+    """Compute the value of tensor t_grad over the image in a tiled way.
     Random shifts are applied to the image to blur tile boundaries over
-    multiple iterations.'''
+    multiple iterations."""
     sz = tile_size
     h, w = img.shape[:2]
     sx, sy = np.random.randint(sz, size=2)
@@ -286,9 +293,9 @@ def calc_grad_tiled(img, t_grad, sess, tile_size=512):
     grad = np.zeros_like(img)
     for y in range(0, max(h - sz // 2, sz), sz):
         for x in range(0, max(w - sz // 2, sz), sz):
-            sub = img_shift[y:y + sz, x:x + sz]
+            sub = img_shift[y : y + sz, x : x + sz]
             g = sess.run(t_grad, {t_input: sub})
-            grad[y:y + sz, x:x + sz] = g
+            grad[y : y + sz, x : x + sz] = g
     return np.roll(np.roll(grad, -sx, 1), -sy, 0)
 
 
@@ -296,23 +303,30 @@ def calc_grad_tiled(img, t_grad, sess, tile_size=512):
 # SOURCE: https://github.com/samkit-jain/Data-Science-by-Siraj-Raval/blob/a66b7791a4628f815dc683605dd224acad9bc277/deep_dream_challenge.py#L149
 def render_deepdreamvideo(sess):
     import imageio
-    reader = imageio.get_reader('cockatoo.mp4')
-    fps = reader.get_meta_data()['fps']
-    writer = imageio.get_writer('output.mp4', fps=fps)
+
+    reader = imageio.get_reader("cockatoo.mp4")
+    fps = reader.get_meta_data()["fps"]
+    writer = imageio.get_writer("output.mp4", fps=fps)
 
     for i, image in enumerate(reader):
         image = np.float32(image)
 
         # Apply gradient ascent to that layer and append to video
-        image = writer.append_data(render_deepdream(tf.square(T('mixed4c')), sess, image))
+        image = writer.append_data(
+            render_deepdream(tf.square(T("mixed4c")), sess, image)
+        )
         writer.append_data(image)
 
     writer.close()
 
 
-def render_deepdream(t_obj, sess, img0=IMG_NOISE, iter_n=10, step=1.5, octave_n=4, octave_scale=1.4):
+def render_deepdream(
+    t_obj, sess, img0=IMG_NOISE, iter_n=10, step=1.5, octave_n=4, octave_scale=1.4
+):
     t_score = tf.reduce_mean(t_obj)  # defining the optimization objective
-    t_grad = tf.gradients(t_score, t_input)[0]  # behold the power of automatic differentiation!
+    t_grad = tf.gradients(t_score, t_input)[
+        0
+    ]  # behold the power of automatic differentiation!
 
     # split the image into a number of octaves
     img = img0
@@ -340,7 +354,9 @@ def render_deepdream(t_obj, sess, img0=IMG_NOISE, iter_n=10, step=1.5, octave_n=
     return img
 
 
-def render_deepdream_from_layer_by_unit(img0, name: Union[str, io.BytesIO], layer, unit=None) -> Union[str, io.BytesIO]:
+def render_deepdream_from_layer_by_unit(
+    img0, name: str | io.BytesIO, layer, unit=None
+) -> Union[str, io.BytesIO]:
     t = default_timer()
 
     # t_obj = tf.square(T(layer)[:, :, :, unit])
@@ -353,15 +369,15 @@ def render_deepdream_from_layer_by_unit(img0, name: Union[str, io.BytesIO], laye
 
     if isinstance(name, str):
         if unit:
-            name = f'{output_dir}/{name}__{layer}__{unit}.jpg'
+            name = f"{output_dir}/{name}__{layer}__{unit}.jpg"
         else:
-            name = f'{output_dir}/{name}__{layer}.jpg'
+            name = f"{output_dir}/{name}__{layer}.jpg"
     else:
         name = name
 
     savearray(img / 255.0, name)
 
-    print(f'Elapsed {default_timer() - t:.2f} secs\n')
+    print(f"Elapsed {default_timer() - t:.2f} secs\n")
 
     return name
 
@@ -378,28 +394,34 @@ def main():
     # Url:   http://storage.googleapis.com/deepdream/visualz/tensorflow_inception/mixed4d_5x5_pre_relu.html
     # Url:   https://microscope.openai.com/models/inceptionv1/mixed4d_5x5_0/1
 
-    savearray(IMG_NOISE / 255.0, f'{output_dir}/noise.png')
+    savearray(IMG_NOISE / 255.0, f"{output_dir}/noise.png")
     print()
 
     # layer = 'mixed4c'
     # t_obj = tf.square(T(layer))
 
     # FROM NOISE
-    render_deepdream_from_layer_by_unit(IMG_NOISE, 'noise', 'mixed4d_5x5_pre_relu', 61)
-    render_deepdream_from_layer_by_unit(IMG_NOISE, 'noise', 'head1_bottleneck_pre_relu', 1)
+    render_deepdream_from_layer_by_unit(IMG_NOISE, "noise", "mixed4d_5x5_pre_relu", 61)
+    render_deepdream_from_layer_by_unit(
+        IMG_NOISE, "noise", "head1_bottleneck_pre_relu", 1
+    )
 
     # FROM FILENAME
-    img0 = PIL.Image.open('pilatus800.jpg')
+    img0 = PIL.Image.open("pilatus800.jpg")
     img0 = np.float32(img0)
 
-    render_deepdream_from_layer_by_unit(img0, 'pilatus800', 'mixed4d_1x1_pre_relu', 39)
-    render_deepdream_from_layer_by_unit(img0, 'pilatus800', 'mixed4d_5x5_pre_relu', 61)
-    render_deepdream_from_layer_by_unit(img0, 'pilatus800', 'mixed4c_3x3_bottleneck_pre_relu', 64)
-    render_deepdream_from_layer_by_unit(img0, 'pilatus800', 'mixed4c_3x3_bottleneck_pre_relu', 104)
+    render_deepdream_from_layer_by_unit(img0, "pilatus800", "mixed4d_1x1_pre_relu", 39)
+    render_deepdream_from_layer_by_unit(img0, "pilatus800", "mixed4d_5x5_pre_relu", 61)
+    render_deepdream_from_layer_by_unit(
+        img0, "pilatus800", "mixed4c_3x3_bottleneck_pre_relu", 64
+    )
+    render_deepdream_from_layer_by_unit(
+        img0, "pilatus800", "mixed4c_3x3_bottleneck_pre_relu", 104
+    )
 
     # Save to memory
     bytes_io = io.BytesIO()
-    render_deepdream_from_layer_by_unit(IMG_NOISE, bytes_io, 'mixed4d_5x5_pre_relu', 61)
+    render_deepdream_from_layer_by_unit(IMG_NOISE, bytes_io, "mixed4d_5x5_pre_relu", 61)
     bytes_io.seek(0)
     print(bytes_io.read(10))
     # b'\xff\xd8\xff\xe0\x00\x10JFIF'
@@ -453,5 +475,5 @@ def main():
     # quit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
