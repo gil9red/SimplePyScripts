@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from winreg import *
 
 
 UNINSTALL_PATH_LIST = [
-    r'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall',
-    r'SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall',
+    r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
+    r"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall",
 ]
 
 programs_dict = dict()
@@ -31,10 +31,10 @@ for path in UNINSTALL_PATH_LIST:
                     k, v = EnumValue(subkey, j)[:2]
                     subkey_dict[k] = v
 
-                if 'DisplayName' not in subkey_dict:
+                if "DisplayName" not in subkey_dict:
                     continue
 
-                name = subkey_dict['DisplayName'].strip()
+                name = subkey_dict["DisplayName"].strip()
                 if not name:
                     continue
 
@@ -46,7 +46,7 @@ for path in UNINSTALL_PATH_LIST:
 
 for i, name in enumerate(sorted(programs_dict.keys()), 1):
     subkey_dict = programs_dict[name]
-    print(f'{i}. {name}:')
+    print(f"{i}. {name}:")
     print(f'    DisplayVersion: {subkey_dict.get("DisplayVersion", "")}')
     print(f'    Publisher: {subkey_dict.get("Publisher", "")}')
     print(f'    InstallDate: {subkey_dict.get("InstallDate", "")}')
