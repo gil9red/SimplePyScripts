@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
+import xml.dom.minidom
 from datetime import datetime
+
 
 # SOURCE: https://ru.stackoverflow.com/questions/905565/
 text = """\
@@ -25,16 +27,13 @@ text = """\
 
 
 def to_date(date_str):
-    return datetime.strptime(date_str, '%Y-%m-%d')
+    return datetime.strptime(date_str, "%Y-%m-%d")
 
-
-# Из стандартной библиотеки
-import xml.dom.minidom
 
 dom = xml.dom.minidom.parseString(text)
-items = dom.getElementsByTagName('Leader')
-leader = max(items, key=lambda x: to_date(x.attributes['ActualDate'].value))
+items = dom.getElementsByTagName("Leader")
+leader = max(items, key=lambda x: to_date(x.attributes["ActualDate"].value))
 
-print(leader.attributes['FIO'].value)         # Шxxxxxxx Аxxxxx Шxxxxxx
-print(leader.attributes['ActualDate'].value)  # 2009-12-01
-print(leader.attributes['Position'].value)    # генеральный директор
+print(leader.attributes["FIO"].value)  # Шxxxxxxx Аxxxxx Шxxxxxx
+print(leader.attributes["ActualDate"].value)  # 2009-12-01
+print(leader.attributes["Position"].value)  # генеральный директор
