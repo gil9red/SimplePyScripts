@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: http://www.davekuhlman.org/generateDS.html
@@ -14,8 +14,8 @@ from pathlib import Path
 import task
 
 
-dir_tasks = Path(r'C:\Windows\System32\Tasks')
-files = [f for f in dir_tasks.rglob('*') if f.is_file()]
+dir_tasks = Path(r"C:\Windows\System32\Tasks")
+files = [f for f in dir_tasks.rglob("*") if f.is_file()]
 for f in files:
     print(f)
     task_obj = task.parse(f, silence=True)
@@ -25,7 +25,7 @@ for f in files:
     actions += task_obj.Actions.SendEmail
     actions += task_obj.Actions.ShowMessage
 
-    print(f'    URI: {task_obj.RegistrationInfo.URI}')
-    print(f'    Enabled: {task_obj.Settings.Enabled}')
-    print(f'    Actions ({len(actions)}):', actions)
+    print(f"    URI: {task_obj.RegistrationInfo.URI}")
+    print(f"    Enabled: {task_obj.Settings.Enabled}")
+    print(f"    Actions ({len(actions)}):", actions)
     print()

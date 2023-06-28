@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
+import sys
 import traceback
-
 
 from PyQt5 import Qt
 
@@ -19,22 +19,20 @@ from lxml.cssselect import CSSSelector
 def to_str(x):
     try:
         # return etree.tounicode(x, method='html')
-        return etree.tostring(x, method='html', encoding='unicode')
+        return etree.tostring(x, method="html", encoding="unicode")
     except:
         return x
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = f'{ex_cls.__name__}: {ex}:\n'
-    import traceback
-    text += ''.join(traceback.format_tb(tb))
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
 
     print(text)
-    Qt.QMessageBox.critical(None, 'Error', text)
+    Qt.QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
-import sys
 sys.excepthook = log_uncaught_exceptions
 
 
@@ -42,12 +40,12 @@ class MainWindow(Qt.QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('xml_html__xpath__css_selector__gui')
+        self.setWindowTitle("xml_html__xpath__css_selector__gui")
 
         self.le_xpath_css = Qt.QLineEdit()
 
-        self.rb_xpath = Qt.QRadioButton('XPath')
-        self.rb_css_selector = Qt.QRadioButton('CSS selector')
+        self.rb_xpath = Qt.QRadioButton("XPath")
+        self.rb_css_selector = Qt.QRadioButton("CSS selector")
         self.rb_css_selector.setChecked(True)
 
         self.text_edit_input = Qt.QPlainTextEdit()
@@ -56,11 +54,13 @@ class MainWindow(Qt.QWidget):
         self.label_error = Qt.QLabel()
         self.label_error.setStyleSheet("QLabel { color : red; }")
         self.label_error.setTextInteractionFlags(Qt.Qt.TextSelectableByMouse)
-        self.label_error.setSizePolicy(Qt.QSizePolicy.Expanding, Qt.QSizePolicy.Preferred)
+        self.label_error.setSizePolicy(
+            Qt.QSizePolicy.Expanding, Qt.QSizePolicy.Preferred
+        )
 
-        self.button_detail_error = Qt.QPushButton('...')
+        self.button_detail_error = Qt.QPushButton("...")
         self.button_detail_error.setFixedSize(20, 20)
-        self.button_detail_error.setToolTip('Detail error')
+        self.button_detail_error.setToolTip("Detail error")
         self.button_detail_error.hide()
 
         self.last_error_message = None
@@ -72,9 +72,9 @@ class MainWindow(Qt.QWidget):
         self.text_edit_input.textChanged.connect(self.on_process)
         self.button_detail_error.clicked.connect(self.show_detail_error_message)
 
-        self.rb_parser_html = Qt.QRadioButton('HTML')
+        self.rb_parser_html = Qt.QRadioButton("HTML")
         self.rb_parser_html.setChecked(True)
-        self.rb_parser_xml = Qt.QRadioButton('XML')
+        self.rb_parser_xml = Qt.QRadioButton("XML")
 
         self.button_parser_group = Qt.QButtonGroup()
         self.button_parser_group.addButton(self.rb_parser_xml)
@@ -97,7 +97,7 @@ class MainWindow(Qt.QWidget):
         layout.addWidget(splitter)
 
         layout_input_parser = Qt.QHBoxLayout()
-        layout_input_parser.addWidget(Qt.QLabel('Parser:'))
+        layout_input_parser.addWidget(Qt.QLabel("Parser:"))
         layout_input_parser.addWidget(self.rb_parser_html)
         layout_input_parser.addWidget(self.rb_parser_xml)
         layout_input_parser.addStretch()
@@ -136,13 +136,15 @@ class MainWindow(Qt.QWidget):
             if self.rb_xpath.isChecked():
                 result = root.xpath(search_text)
             else:
-                selector = CSSSelector(search_text, translator='html' if is_html_parser else 'xml')
+                selector = CSSSelector(
+                    search_text, translator="html" if is_html_parser else "xml"
+                )
                 result = selector(root)
 
             print(len(result), result)
 
             result = map(to_str, result)
-            output = '\n'.join(f'{i}. {x}' for i, x in enumerate(result, 1))
+            output = "\n".join(f"{i}. {x}" for i, x in enumerate(result, 1))
             self.text_edit_output.setPlainText(output)
 
         except Exception as e:
@@ -156,13 +158,13 @@ class MainWindow(Qt.QWidget):
             self.last_detail_error_message = str(tb)
             self.button_detail_error.show()
 
-            self.label_error.setText('Error: ' + self.last_error_message)
+            self.label_error.setText("Error: " + self.last_error_message)
 
     def show_detail_error_message(self):
-        message = self.last_error_message + '\n\n' + self.last_detail_error_message
+        message = self.last_error_message + "\n\n" + self.last_detail_error_message
 
         mb = Qt.QErrorMessage()
-        mb.setWindowTitle('Error')
+        mb.setWindowTitle("Error")
         # Сообщение ошибки содержит отступы, символы-переходы на следующую строку,
         # которые поломаются при вставке через QErrorMessage.showMessage, и нет возможности
         # выбрать тип текста, то делаем такой хак.
@@ -171,7 +173,7 @@ class MainWindow(Qt.QWidget):
         mb.exec_()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = Qt.QApplication([])
 
     mw = MainWindow()
@@ -179,7 +181,8 @@ if __name__ == '__main__':
     mw.show()
 
     # For example
-    mw.text_edit_input.setPlainText('''\
+    mw.text_edit_input.setPlainText(
+        """\
 <Recipe name="хлеб" preptime="5min" cooktime="180min">
    <Title>Простой хлеб</Title>
    <Composition>
@@ -188,7 +191,8 @@ if __name__ == '__main__':
       <Ingredient amount="1.5" unit="стакан">Тёплая вода</Ingredient>
    </Composition>
 </Recipe>
-    ''')
+    """
+    )
     # //Ingredient[@amount=0.25]
     mw.le_xpath_css.setText("Ingredient[amount='0.25']")
     mw.on_process()
