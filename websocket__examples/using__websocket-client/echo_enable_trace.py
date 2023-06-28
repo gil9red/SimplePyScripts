@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/websocket-client/websocket-client#short-lived-one-off-send-receive
@@ -14,7 +14,7 @@ import websocket
 websocket.enableTrace(True)
 
 # From http://websocket.org/echo.html
-url = 'wss://echo.websocket.org'
+url = "wss://echo.websocket.org"
 
 ws = websocket.create_connection(url)
 
