@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import re
@@ -11,15 +11,15 @@ from pathlib import Path
 
 
 DIR = Path(__file__).resolve().parent
-DIR_RESULT = DIR / 'result'
+DIR_RESULT = DIR / "result"
 DIR_RESULT.mkdir(parents=True, exist_ok=True)
 
 
-BASE_URL = 'https://ru.wikipedia.org/wiki/'
+BASE_URL = "https://ru.wikipedia.org/wiki/"
 CHAR_TO_DESCRIPTION = {
-    ' ': 'Пробел',
-    '\n': 'Перевод_строки',
-    '\t': 'Табуляция',
+    " ": "Пробел",
+    "\n": "Перевод_строки",
+    "\t": "Табуляция",
 }
 
 
@@ -30,12 +30,12 @@ def _on_match(m: re.Match) -> str:
 
 
 def process(text: str) -> str:
-    return re.sub(r'\w+|\s+|[%s]' % string.punctuation, _on_match, text)
+    return re.sub(r"\w+|\s+|[%s]" % string.punctuation, _on_match, text)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     text = "Съешь ещё этих мягких французских булок, да выпей чаю"
     text = process(text)
 
-    f = DIR_RESULT / 'wiki.html'
-    f.write_text(text, encoding='utf-8')
+    f = DIR_RESULT / "wiki.html"
+    f.write_text(text, encoding="utf-8")
