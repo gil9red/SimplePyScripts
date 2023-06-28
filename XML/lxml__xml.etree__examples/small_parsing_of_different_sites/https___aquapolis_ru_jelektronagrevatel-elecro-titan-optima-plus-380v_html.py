@@ -1,32 +1,35 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-from lxml import html
 import requests
+from lxml import html
 
-rs = requests.get('https://aquapolis.ru/jelektronagrevatel-elecro-titan-optima-plus-380v.html')
+
+rs = requests.get(
+    "https://aquapolis.ru/jelektronagrevatel-elecro-titan-optima-plus-380v.html"
+)
 root = html.fromstring(rs.content)
 
 
 def get_text(node):
-    return html.tostring(node, method='text', encoding='unicode').strip()
+    return html.tostring(node, method="text", encoding="unicode").strip()
 
 
-for tr in root.cssselect('#super-product-table tr'):
-    tds = tr.cssselect('td')
+for tr in root.cssselect("#super-product-table tr"):
+    tds = tr.cssselect("td")
     if not tds:
         continue
 
     name = get_text(tds[0])
-    price = get_text(tds[1].cssselect('.price-box > .regular-price > .price')[0])
+    price = get_text(tds[1].cssselect(".price-box > .regular-price > .price")[0])
 
-    value = tds[2].cssselect('input')[0].get('value')
+    value = tds[2].cssselect("input")[0].get("value")
     stock_status = "Нет в наличии" if value == "0" else "Есть"
 
-    print(f'{name:65} | {price:16} | {stock_status}')
+    print(f"{name:65} | {price:16} | {stock_status}")
 
 
 # Электронагреватель Elecro Titan Optima Plus СP-18 18 кВт (380В)   | 211 572,00 руб.  | Есть
