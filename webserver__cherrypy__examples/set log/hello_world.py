@@ -2,15 +2,16 @@
 # -*- coding: utf-8 -*-
 
 
-# pip install cherrypy
-# https://github.com/cherrypy/cherrypy
 # SOURCE: https://github.com/cherrypy/cherrypy/blob/master/cherrypy/tutorial/tut01_helloworld.py
 
+
+# pip install cherrypy
+# https://github.com/cherrypy/cherrypy
 import cherrypy
 
 
 class HelloWorld:
-    """ Sample request handler class. """
+    """Sample request handler class."""
 
     # Expose the index method through the web. CherryPy will never
     # publish methods that don't have the exposed attribute set to True.
@@ -26,21 +27,23 @@ class HelloWorld:
     def error(self):
         1 / 0
 
-        return 'Bad!'
+        return "Bad!"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # CherryPy always starts with app.root when trying to map request URIs
     # to objects, so we need to mount a request handler root. A request
     # to '/' will be mapped to HelloWorld().index().
 
     # Set port
-    cherrypy.config.update({'server.socket_port': 9090})
+    cherrypy.config.update({"server.socket_port": 9090})
 
     # Set log file
-    cherrypy.config.update({
-        'log.error_file': 'web.log',
-        'log.access_file': 'access.log',
-    })
+    cherrypy.config.update(
+        {
+            "log.error_file": "web.log",
+            "log.access_file": "access.log",
+        }
+    )
 
     cherrypy.quickstart(HelloWorld())

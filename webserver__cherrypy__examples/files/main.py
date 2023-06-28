@@ -39,6 +39,7 @@ import os
 import cherrypy
 from cherrypy.lib import static
 
+
 localDir = os.path.dirname(__file__)
 absDir = os.path.join(os.getcwd(), localDir)
 
@@ -84,11 +85,13 @@ class FileDemo(object):
 
     @cherrypy.expose
     def download(self):
-        path = os.path.join(absDir, 'pdf_file.pdf')
-        return static.serve_file(path, 'application/x-download', 'attachment', os.path.basename(path))
+        path = os.path.join(absDir, "pdf_file.pdf")
+        return static.serve_file(
+            path, "application/x-download", "attachment", os.path.basename(path)
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # CherryPy always starts with app.root when trying to map request URIs
     # to objects, so we need to mount a request handler root. A request
     # to '/' will be mapped to HelloWorld().index().

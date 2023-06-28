@@ -24,23 +24,26 @@ class RootServer:
 """
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    import pathlib
+
     # Autoreload off
-    cherrypy.config.update({'engine.autoreload.on': False})
+    cherrypy.config.update({"engine.autoreload.on": False})
 
     # Set port
-    cherrypy.config.update({'server.socket_port': 9090})
+    cherrypy.config.update({"server.socket_port": 9090})
 
     # # Public IP
     # cherrypy.config.update({'server.socket_host': '0.0.0.0'})
 
-    import pathlib
     static_dir = str((pathlib.Path(__file__).parent / "static").resolve())
 
     # For include css, js in html
-    cherrypy.config.update({
-        'tools.staticdir.on': True,
-        'tools.staticdir.dir': static_dir,
-    })
+    cherrypy.config.update(
+        {
+            "tools.staticdir.on": True,
+            "tools.staticdir.dir": static_dir,
+        }
+    )
 
     cherrypy.quickstart(RootServer())
