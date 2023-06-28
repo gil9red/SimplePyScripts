@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import time
@@ -17,7 +17,7 @@ from word_to_emoji import db
 from html_parsing.emojipedia_org__search import get_emoji
 
 
-translator = Translator(from_lang="ru", to_lang='en')
+translator = Translator(from_lang="ru", to_lang="en")
 gs = goslate.Goslate()
 
 
@@ -25,8 +25,11 @@ def ru2en(text: str) -> str:
     text_en = translator.translate(text)
 
     # Если translate перестал работать попробуем через другой перевести
-    if 'MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY' in text_en:
-        text_en = gs.translate(text, 'en')
+    if (
+        "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY"
+        in text_en
+    ):
+        text_en = gs.translate(text, "en")
 
     return text_en
 
@@ -42,7 +45,7 @@ while True:
                 # На emojipedia поиск нужен на английском
                 word = ru2en(word_ru)
                 emoji = get_emoji(word)
-                print(f'Add {word_ru!r} ({word!r}) -> {emoji!r}')
+                print(f"Add {word_ru!r} ({word!r}) -> {emoji!r}")
                 if not emoji:
                     continue
 

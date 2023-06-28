@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import time
@@ -15,7 +15,7 @@ from selenium.webdriver.common.by import By
 from word_to_emoji import db
 
 
-URL = 'https://translate.yandex.ru/?lang=ru-emj&text='
+URL = "https://translate.yandex.ru/?lang=ru-emj&text="
 
 
 driver = webdriver.Firefox()
@@ -24,7 +24,7 @@ driver.implicitly_wait(5)
 try:
     while True:
         words = db.Word2Emoji.get_unprocessed_words()
-        print('Unprocessed words:', len(words))
+        print("Unprocessed words:", len(words))
 
         for word in words:
             # Если эмодзи уже есть
@@ -34,18 +34,20 @@ try:
             try:
                 url = URL + word
                 driver.get(url)
-                print(f'Title: {driver.title!r}')
+                print(f"Title: {driver.title!r}")
 
                 while True:
                     try:
-                        emoji = driver.find_element(By.CSS_SELECTOR, '#translation').text.strip()
+                        emoji = driver.find_element(
+                            By.CSS_SELECTOR, "#translation"
+                        ).text.strip()
 
                         # Перевод должен быть, если его нет, значит от сайта еще не пришел ответ
                         if not emoji:
                             time.sleep(2)
                             continue
 
-                        print(f'Add {word!r} -> {emoji!r}')
+                        print(f"Add {word!r} -> {emoji!r}")
                         db.Word2Emoji.add(word, emoji)
                         break
 
