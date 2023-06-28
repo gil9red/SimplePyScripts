@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import xml.sax
 from tqdm import tqdm
 
 
-f = open('all_house_guid.json', 'w')
-f.write('[')
+f = open("all_house_guid.json", "w")
+f.write("[")
 
 
 class AttrHandler(xml.sax.handler.ContentHandler):
@@ -18,10 +18,10 @@ class AttrHandler(xml.sax.handler.ContentHandler):
         self.number = 0
 
     def startElement(self, name, attrs):
-        if 'HOUSEGUID' in attrs:
-            guid = attrs['HOUSEGUID']
+        if "HOUSEGUID" in attrs:
+            guid = attrs["HOUSEGUID"]
             if self.number > 0:
-                f.write(',')
+                f.write(",")
             f.write(f'"{guid}"')
 
             self.number += 1
@@ -29,11 +29,11 @@ class AttrHandler(xml.sax.handler.ContentHandler):
         next(self.it)
 
 
-print('Сбор HOUSEGUID и сохранение в JSON')
+print("Сбор HOUSEGUID и сохранение в JSON")
 
 parser = xml.sax.make_parser()
 parser.setContentHandler(AttrHandler())
-parser.parse('AS_HOUSE_20210318_88f2df80-430a-400f-9373-da5b2c80e051.XML')
+parser.parse("AS_HOUSE_20210318_88f2df80-430a-400f-9373-da5b2c80e051.XML")
 
-f.write(']')
+f.write("]")
 f.close()
