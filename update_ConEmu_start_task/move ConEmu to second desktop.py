@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install psutil
@@ -35,7 +35,7 @@ def get_hwnd_for_pid(pid: int):
 
 
 for proc in psutil.process_iter():
-    if not proc.is_running() or proc.name() not in ['ConEmu.exe', 'ConEmu64.exe']:
+    if not proc.is_running() or proc.name() not in ["ConEmu.exe", "ConEmu64.exe"]:
         continue
 
     hwnd = get_hwnd_for_pid(proc.pid)
@@ -45,5 +45,7 @@ for proc in psutil.process_iter():
     if hwnd == -1 or app_view.desktop.number == NEED_WINDOW_DESKTOP_NUMBER:
         continue
 
-    print(f'Moved window (pid={proc.pid}) to window desktop #{NEED_WINDOW_DESKTOP_NUMBER}')
+    print(
+        f"Moved window (pid={proc.pid}) to window desktop #{NEED_WINDOW_DESKTOP_NUMBER}"
+    )
     app_view.move(VirtualDesktop(NEED_WINDOW_DESKTOP_NUMBER))
