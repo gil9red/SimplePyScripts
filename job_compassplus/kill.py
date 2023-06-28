@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 from pathlib import Path
-from psutil import process_iter, Process, AccessDenied
+from psutil import process_iter, Process, AccessDenied, NoSuchProcess
 
 
 def is_found(p: Process, cwd: str | Path = None) -> bool:
@@ -25,7 +25,7 @@ def get_processes(cwd: str | Path = None) -> list[Process]:
         try:
             if is_found(p, cwd):
                 items.append(p)
-        except AccessDenied:
+        except AccessDenied | NoSuchProcess:
             pass
     return items
 
