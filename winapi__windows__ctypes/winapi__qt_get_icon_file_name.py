@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import ctypes
+from ctypes import wintypes
+
+from PySide.QtGui import QImage
+
+from win32gui import DrawIconEx, GetIconInfo
 
 
 def get_file_icon(path, large=True):
-    import ctypes
     SHGetFileInfo = ctypes.windll.shell32.SHGetFileInfoW
 
     SHGFI_ICON = 0x100
@@ -22,7 +26,8 @@ def get_file_icon(path, large=True):
             ("iIcon", ctypes.c_int32),
             ("dwAttributes", ctypes.c_uint32),
             ("szDisplayName", ctypes.c_wchar * 260),
-            ("szTypeName", ctypes.c_wchar * 80)]
+            ("szTypeName", ctypes.c_wchar * 80),
+        ]
 
     info = SHFILEINFO()
     flags = SHGFI_ICON | SHGFI_SYSICONINDEX
@@ -40,9 +45,6 @@ def get_file_icon(path, large=True):
     return info.hIcon
 
 
-from ctypes import wintypes
-
-
 class BITMAPINFOHEADER(ctypes.Structure):
     _fields_ = [
         ("biSize", wintypes.DWORD),
@@ -55,14 +57,12 @@ class BITMAPINFOHEADER(ctypes.Structure):
         ("biXPelsPerMeter", ctypes.c_long),
         ("biYPelsPerMeter", ctypes.c_long),
         ("biClrUsed", wintypes.DWORD),
-        ("biClrImportant", wintypes.DWORD)
+        ("biClrImportant", wintypes.DWORD),
     ]
 
 
 class BITMAPINFO(ctypes.Structure):
-    _fields_ = [
-        ("bmiHeader", BITMAPINFOHEADER)
-    ]
+    _fields_ = [("bmiHeader", BITMAPINFOHEADER)]
 
 
 def qt_fromWinHBITMAP(hdc, h_bitmap, w, h):
@@ -104,7 +104,6 @@ def qt_fromWinHBITMAP(hdc, h_bitmap, w, h):
     }
     """
 
-    import ctypes
     GetDIBits = ctypes.windll.gdi32.GetDIBits
     DIB_RGB_COLORS = 0
     BI_RGB = 0
@@ -118,7 +117,6 @@ def qt_fromWinHBITMAP(hdc, h_bitmap, w, h):
     bitmapInfo.bmiHeader.biCompression = BI_RGB
     bitmapInfo.bmiHeader.biSizeImage = w * h * 4
 
-    from PySide.QtGui import QImage
     image = QImage(w, h, QImage.Format_ARGB32_Premultiplied)
     if image.isNull():
         return image
@@ -126,12 +124,23 @@ def qt_fromWinHBITMAP(hdc, h_bitmap, w, h):
     # Get bitmap bits
     data = ctypes.create_string_buffer(bitmapInfo.bmiHeader.biSizeImage)
 
-    if GetDIBits(hdc, h_bitmap, 0, h, ctypes.byref(data), ctypes.byref(bitmapInfo), DIB_RGB_COLORS):
+    if GetDIBits(
+        hdc,
+        h_bitmap,
+        0,
+        h,
+        ctypes.byref(data),
+        ctypes.byref(bitmapInfo),
+        DIB_RGB_COLORS,
+    ):
         # Create image and copy data into image.
         for y in range(h):
             dest = image.scanLine(y)
 
-            src = data[y * image.bytesPerLine(): y * image.bytesPerLine() + image.bytesPerLine()]
+            src = data[
+                y * image.bytesPerLine() : y * image.bytesPerLine()
+                + image.bytesPerLine()
+            ]
             for i in range(image.bytesPerLine()):
                 dest[i] = src[i]
 
@@ -216,7 +225,6 @@ def fromWinHICON(h_icon):
     }
     """
 
-    import ctypes
     BI_RGB = 0
 
     GetDC = ctypes.windll.user32.GetDC
@@ -233,7 +241,6 @@ def fromWinHICON(h_icon):
     hdc = CreateCompatibleDC(screenDevice)
     ReleaseDC(0, screenDevice)
 
-    from win32gui import GetIconInfo
     iconinfo = GetIconInfo(h_icon)
     flag, xHotspot, yHotspot, hbmMask, hbmColor = iconinfo
 
@@ -258,7 +265,6 @@ def fromWinHICON(h_icon):
     winBitmap = CreateDIBSection(hdc, ctypes.byref(bitmapInfo), DIB_RGB_COLORS, 0, 0, 0)
     oldhdc = SelectObject(hdc, winBitmap)
 
-    from win32gui import DrawIconEx
     DI_NORMAL = 0x0003
     DrawIconEx(hdc, 0, 0, h_icon, w, h, 0, 0, DI_NORMAL)
 
@@ -304,18 +310,19 @@ def fromWinHICON(h_icon):
     return image
 
 
-if __name__ == '__main__':
-    h_icon = get_file_icon(r'C:\Users\ipetrash\Projects\alarm-clock\main.py')
-    h_icon = get_file_icon(r'C:\Users\ipetrash\Desktop\Будильник.lnk')
-    print('h_icon:', h_icon)
-
+if __name__ == "__main__":
     import sys
     from PySide.QtGui import QApplication
+    from win32gui import DestroyIcon
+
+    h_icon = get_file_icon(r"C:\Users\ipetrash\Projects\alarm-clock\main.py")
+    h_icon = get_file_icon(r"C:\Users\ipetrash\Desktop\Будильник.lnk")
+    print("h_icon:", h_icon)
+
     QApplication(sys.argv)
 
     px = fromWinHICON(h_icon)
     print(px, px.size())
-    px.save('winapi_qt_get_icon_file_name.py.png')
+    px.save("winapi_qt_get_icon_file_name.py.png")
 
-    from win32gui import DestroyIcon
     DestroyIcon(h_icon)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """Скрипт для получения правильного значения раскладки клавиатуры в Windows для консольных
@@ -16,6 +16,8 @@ __author__ = 'ipetrash'
 
 
 from ctypes import *
+
+
 user32 = windll.user32
 kernel32 = windll.kernel32
 
@@ -25,7 +27,7 @@ class RECT(Structure):
         ("left", c_ulong),
         ("top", c_ulong),
         ("right", c_ulong),
-        ("bottom", c_ulong)
+        ("bottom", c_ulong),
     ]
 
 
@@ -39,11 +41,11 @@ class GUITHREADINFO(Structure):
         ("hwndMenuOwner", c_ulong),
         ("hwndMoveSize", c_ulong),
         ("hwndCaret", c_ulong),
-        ("rcCaret", RECT)
+        ("rcCaret", RECT),
     ]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     gti = GUITHREADINFO(cbSize=sizeof(GUITHREADINFO))
     user32.GetGUIThreadInfo(0, byref(gti))
 

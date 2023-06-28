@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """
@@ -21,14 +21,14 @@ def all_ok(hwnd, param):
     print(f'#{hwnd:0>8x} "{text}": {class_name}')
 
     # Закрытие панели инструментов
-    if class_name == 'ToolbarWindow32':
+    if class_name == "ToolbarWindow32":
         win32gui.PostMessage(hwnd, win32con.WM_CLOSE, 0, 0)
 
     return True
 
 
 def close_toolbars():
-    hwnd = win32gui.FindWindow('Notepad++', None)
+    hwnd = win32gui.FindWindow("Notepad++", None)
     if not hwnd:
         print('Window "Notepad++" not found!')
         return
@@ -36,5 +36,5 @@ def close_toolbars():
     win32gui.EnumChildWindows(hwnd, all_ok, None)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     close_toolbars()

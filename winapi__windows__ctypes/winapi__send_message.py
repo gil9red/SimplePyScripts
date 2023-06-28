@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # TODO: почему-то не работает
@@ -10,13 +10,14 @@ import win32gui
 import win32api
 import win32con
 
-hwnd = win32gui.FindWindow('TAIMPTrayControl', None)
+
+hwnd = win32gui.FindWindow("TAIMPTrayControl", None)
 print(hwnd)
 
 # hwnd = win32gui.FindWindow('TApplication', '')
 # print(hwnd)
 
-hwnd = win32gui.FindWindow('TAIMPMainForm', None)
+hwnd = win32gui.FindWindow("TAIMPMainForm", None)
 print(hwnd)
 
 key = win32con.VK_F2

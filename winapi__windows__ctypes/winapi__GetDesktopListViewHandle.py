@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import ctypes
+from win32con import GW_CHILD
 
 
 def GetDesktopListViewHandle():
@@ -24,7 +28,6 @@ def GetDesktopListViewHandle():
 
     """
 
-    import ctypes
     FindWindow = ctypes.windll.user32.FindWindowW
     GetWindow = ctypes.windll.user32.GetWindow
 
@@ -33,19 +36,17 @@ def GetDesktopListViewHandle():
         ctypes.windll.user32.GetClassNameW(hwnd, buff, 99)
         return buff.value
 
-    from win32con import GW_CHILD
-
     # Ищем окно с классом "Progman" ("Program Manager")
-    hwnd = FindWindow('Progman', None)
+    hwnd = FindWindow("Progman", None)
     hwnd = GetWindow(hwnd, GW_CHILD)  # SHELLDLL_DefView
     hwnd = GetWindow(hwnd, GW_CHILD)  # SysListView32
 
-    if GetClassName(hwnd) != 'SysListView32':
+    if GetClassName(hwnd) != "SysListView32":
         return 0
 
     return hwnd
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     handle = GetDesktopListViewHandle()
-    print('handle:', handle)
+    print("handle:", handle)

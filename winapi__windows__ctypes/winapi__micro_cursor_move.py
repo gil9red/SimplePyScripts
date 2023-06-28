@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 """Для того, чтобы винда не разлогинивалась от бездействия."""
 
 
-if __name__ == '__main__':
-    import time
-    import win32api
+import time
+import win32api
 
-    delay = 60
 
-    try:
-        while True:
-            x, y = win32api.GetCursorPos()
+delay = 60
 
-            win32api.SetCursorPos((x + 1, y))
-            win32api.SetCursorPos((x - 1, y))
+try:
+    while True:
+        x, y = win32api.GetCursorPos()
 
-            time.sleep(delay)
+        win32api.SetCursorPos((x + 1, y))
+        win32api.SetCursorPos((x - 1, y))
 
-    except KeyboardInterrupt:
-        pass
+        time.sleep(delay)
+
+except KeyboardInterrupt:
+    pass

@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
+
+
+import win32file
+from winapi__get_logical_drives import get_logical_drives
 
 
 def locate_usb() -> list:
-    import win32file
-    from winapi__get_logical_drives import get_logical_drives
-
     usb_list = list()
 
     for drive_name in get_logical_drives():
@@ -19,5 +20,5 @@ def locate_usb() -> list:
     return usb_list
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(locate_usb())

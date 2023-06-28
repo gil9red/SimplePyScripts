@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # https://mail.python.org/pipermail/python-win32/2007-June/006174.html
+
 
 import copy
 import ctypes
@@ -13,34 +14,37 @@ import sys
 
 import win32con
 
+
 TH32CS_SNAPPROCESS = 0x00000002
 
 
 class PROCESSENTRY32(ctypes.Structure):
-    _fields_ = [("dwSize", ctypes.c_ulong),
-                ("cntUsage", ctypes.c_ulong),
-                ("th32ProcessID", ctypes.c_ulong),
-                ("th32DefaultHeapID", ctypes.c_ulong),
-                ("th32ModuleID", ctypes.c_ulong),
-                ("cntThreads", ctypes.c_ulong),
-                ("th32ParentProcessID", ctypes.c_ulong),
-                ("pcPriClassBase", ctypes.c_ulong),
-                ("dwFlags", ctypes.c_ulong),
-                ("szExeFile", ctypes.c_char * 260)]
+    _fields_ = [
+        ("dwSize", ctypes.c_ulong),
+        ("cntUsage", ctypes.c_ulong),
+        ("th32ProcessID", ctypes.c_ulong),
+        ("th32DefaultHeapID", ctypes.c_ulong),
+        ("th32ModuleID", ctypes.c_ulong),
+        ("cntThreads", ctypes.c_ulong),
+        ("th32ParentProcessID", ctypes.c_ulong),
+        ("pcPriClassBase", ctypes.c_ulong),
+        ("dwFlags", ctypes.c_ulong),
+        ("szExeFile", ctypes.c_char * 260),
+    ]
 
     def __str__(self):
         return (
-            'szExeFile={} '
-            'th32ProcessID={} '
-            'cntThreads={} '
-            'cntUsage={} '
-            'dwFlags={} '
-            'dwSize={} '
-            'pcPriClassBase={} '
-            'th32DefaultHeapID={} '
-            'th32ModuleID={} '
-            'th32ParentProcessID={} '
-            ''.format(
+            "szExeFile={} "
+            "th32ProcessID={} "
+            "cntThreads={} "
+            "cntUsage={} "
+            "dwFlags={} "
+            "dwSize={} "
+            "pcPriClassBase={} "
+            "th32DefaultHeapID={} "
+            "th32ModuleID={} "
+            "th32ParentProcessID={} "
+            "".format(
                 self.szExeFile,
                 self.th32ProcessID,
                 self.cntThreads,
@@ -51,7 +55,8 @@ class PROCESSENTRY32(ctypes.Structure):
                 self.th32DefaultHeapID,
                 self.th32ModuleID,
                 self.th32ParentProcessID,
-            ))
+            )
+        )
 
 
 def process_list():
