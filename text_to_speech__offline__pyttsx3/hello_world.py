@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/nateshmbhat/pyttsx3
@@ -9,6 +9,7 @@ __author__ = 'ipetrash'
 
 # pip install pyttsx3
 import pyttsx3
+
 
 engine = pyttsx3.init()
 engine.say("I will speak this text")
