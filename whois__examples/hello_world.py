@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # pip install python-whois
 import whois
 
 
-w = whois.whois('ru.stackoverflow.com')
+w = whois.whois("ru.stackoverflow.com")
 print(w)
 """
 {
