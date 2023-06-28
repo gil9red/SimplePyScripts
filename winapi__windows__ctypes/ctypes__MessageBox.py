@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import ctypes
@@ -33,15 +33,15 @@ button_id = MessageBox(
     None,
     "Resource not available\nDo you want to try again?",
     "Account Details",
-    MB_ICONWARNING | MB_CANCELTRYCONTINUE | MB_DEFBUTTON2
+    MB_ICONWARNING | MB_CANCELTRYCONTINUE | MB_DEFBUTTON2,
 )
-print('button_id:', button_id)
+print("button_id:", button_id)
 
 if button_id == IDCANCEL:
-    print('IDCANCEL')
+    print("IDCANCEL")
 
 elif button_id == IDTRYAGAIN:
-    print('IDTRYAGAIN')
+    print("IDTRYAGAIN")
 
 elif button_id == IDCONTINUE:
-    print('IDCONTINUE')
+    print("IDCONTINUE")

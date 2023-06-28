@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://docs.microsoft.com/en-us/windows/win32/taskschd/taskschedulerschema-task-element
@@ -13,8 +13,9 @@ __author__ = 'ipetrash'
 
 import datetime as DT
 import enum
+
 from dataclasses import dataclass, field
-from typing import List, TypeVar
+from typing import TypeVar
 
 # pip install pywin32
 import win32com.client
@@ -49,7 +50,7 @@ class ExecAction:
     arguments: str
 
     @classmethod
-    def get_from(cls, action: win32com.client.CDispatch) -> 'ExecAction':
+    def get_from(cls, action: win32com.client.CDispatch) -> "ExecAction":
         return cls(
             path=action.Path,
             working_directory=action.WorkingDirectory,
@@ -63,7 +64,7 @@ class ComHandlerAction:
     data: str
 
     @classmethod
-    def get_from(cls, action: win32com.client.CDispatch) -> 'ComHandlerAction':
+    def get_from(cls, action: win32com.client.CDispatch) -> "ComHandlerAction":
         return cls(
             class_id=action.ClassId,
             data=action.Data,
@@ -84,7 +85,7 @@ class EmailAction:
     reply_to: str
 
     @classmethod
-    def get_from(cls, action: win32com.client.CDispatch) -> 'EmailAction':
+    def get_from(cls, action: win32com.client.CDispatch) -> "EmailAction":
         return cls(
             from_=action.From,
             to=action.To,
@@ -105,14 +106,16 @@ class ShowMessageAction:
     message_body: str
 
     @classmethod
-    def get_from(cls, action: win32com.client.CDispatch) -> 'ShowMessageAction':
+    def get_from(cls, action: win32com.client.CDispatch) -> "ShowMessageAction":
         return cls(
             title=action.Title,
             message_body=action.MessageBody,
         )
 
 
-ActionType = TypeVar('ActionType', ExecAction, ComHandlerAction, EmailAction, ShowMessageAction)
+ActionType = TypeVar(
+    "ActionType", ExecAction, ComHandlerAction, EmailAction, ShowMessageAction
+)
 
 
 @dataclass
@@ -126,10 +129,10 @@ class Task:
     last_task_result: int
     next_run_time: DT.datetime
     number_of_missed_runs: int
-    actions: List[ActionType] = field(default_factory=list)
+    actions: list[ActionType] = field(default_factory=list)
 
     @classmethod
-    def get_from(cls, task: win32com.client.CDispatch) -> 'Task':
+    def get_from(cls, task: win32com.client.CDispatch) -> "Task":
         try:
             hidden = task.Definition.Settings.Hidden
         except:
@@ -168,39 +171,37 @@ class Task:
         )
 
 
-def get_tasks() -> List[Task]:
+def get_tasks() -> list[Task]:
     items = []
 
-    scheduler = win32com.client.Dispatch('Schedule.Service')
+    scheduler = win32com.client.Dispatch("Schedule.Service")
     scheduler.Connect()
 
-    folders = [scheduler.GetFolder('\\')]
+    folders = [scheduler.GetFolder("\\")]
     while folders:
         folder = folders.pop(0)
         folders += list(folder.GetFolders(0))
         for task_com_obj in folder.GetTasks(TASK_ENUM_HIDDEN):
-            items.append(
-                Task.get_from(task_com_obj)
-            )
+            items.append(Task.get_from(task_com_obj))
 
     return items
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     items = get_tasks()
-    print(f'Total task: {len(items)}')
+    print(f"Total task: {len(items)}")
 
     hidden_tasks = [task for task in items if task.hidden]
-    print(f'Total hidden tasks: {len(hidden_tasks)}')
+    print(f"Total hidden tasks: {len(hidden_tasks)}")
 
     enabled_tasks = [task for task in items if task.enabled]
-    print(f'Total enabled tasks: {len(enabled_tasks)}')
+    print(f"Total enabled tasks: {len(enabled_tasks)}")
 
     hidden_and_enabled_tasks = [task for task in items if task.hidden and task.enabled]
-    print(f'Total hidden and enabled tasks: {len(hidden_and_enabled_tasks)}')
+    print(f"Total hidden and enabled tasks: {len(hidden_and_enabled_tasks)}")
 
     print()
 
-    print('First 10 tasks:')
+    print("First 10 tasks:")
     for i, task in enumerate(items[:10], 1):
-        print(f'    {i}. {task}')
+        print(f"    {i}. {task}")

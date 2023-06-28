@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import ctypes
+
 
 # SOURCE: https://docs.microsoft.com/ru-ru/windows/desktop/api/winuser/nf-winuser-messagebeep
 #
