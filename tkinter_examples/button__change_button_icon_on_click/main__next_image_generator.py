@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import tkinter as tk
@@ -24,12 +24,13 @@ def next_image_generator():
 
 NEXT_IMAGE = next_image_generator()
 
+
 def get_next_image():
     return next(NEXT_IMAGE)
 
 
 root = tk.Tk()
-root.geometry('200x200')
+root.geometry("200x200")
 
 button = tk.Button(root, text="ClickMe!", image=get_next_image())
 button.config(command=lambda: _on_button_click(button))

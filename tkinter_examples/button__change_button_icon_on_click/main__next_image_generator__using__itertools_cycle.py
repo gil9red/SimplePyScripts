@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import itertools
@@ -9,14 +9,16 @@ import tkinter as tk
 
 
 root = tk.Tk()
-root.geometry('200x200')
+root.geometry("200x200")
 
 
-CYCLED_IMAGES = itertools.cycle([
-    tk.PhotoImage(file="icons/ok.png"),
-    tk.PhotoImage(file="icons/no.png"),
-    tk.PhotoImage(file="icons/help.png"),
-])
+CYCLED_IMAGES = itertools.cycle(
+    [
+        tk.PhotoImage(file="icons/ok.png"),
+        tk.PhotoImage(file="icons/no.png"),
+        tk.PhotoImage(file="icons/help.png"),
+    ]
+)
 
 
 def get_next_image() -> tk.PhotoImage:
