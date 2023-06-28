@@ -62,7 +62,7 @@ def run(dirs: list[str | Path]):
         path = Path(dir_path)
 
         files = list(path.glob("*/*.hprof"))
-        files += list(path.rglob("*/.config/**/*.hprof*"))
+        files += list(path.rglob(r"*/.config\var\log\heapdump.hprof.old"))
         for f in files:
             ctime_timestamp = f.stat().st_ctime
             ctime = dt.datetime.fromtimestamp(ctime_timestamp)
