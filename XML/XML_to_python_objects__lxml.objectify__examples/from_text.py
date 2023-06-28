@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://lxml.de/objectify.html
@@ -11,6 +11,7 @@ from datetime import datetime
 
 # pip install lxml
 from lxml import objectify
+
 
 text = """\
 <Response>
@@ -30,13 +31,13 @@ text = """\
 
 
 def to_date(date_str):
-    return datetime.strptime(date_str, '%Y-%m-%d')
+    return datetime.strptime(date_str, "%Y-%m-%d")
 
 
 root = objectify.fromstring(text)
 items = root.Data.Report.LeaderList.Leader
 
-leader = max(items, key=lambda x: to_date(x.attrib['ActualDate']))
-print(leader.attrib['FIO'])         # Шxxxxxxx Аxxxxx Шxxxxxx
-print(leader.attrib['ActualDate'])  # 2009-12-01
-print(leader.attrib['Position'])    # генеральный директор
+leader = max(items, key=lambda x: to_date(x.attrib["ActualDate"]))
+print(leader.attrib["FIO"])  # Шxxxxxxx Аxxxxx Шxxxxxx
+print(leader.attrib["ActualDate"])  # 2009-12-01
+print(leader.attrib["Position"])  # генеральный директор
