@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://github.com/gorakhargosh/watchdog
 
 
-import logging
 import time
 from pathlib import Path
 
@@ -22,25 +21,25 @@ class CustomEventHandler(FileSystemEventHandler):
     def on_moved(self, event):
         super().on_moved(event)
 
-        what = 'directory' if event.is_directory else 'file'
+        what = "directory" if event.is_directory else "file"
         print(f"Moved {what}: from {event.src_path} to {event.dest_path}")
 
     def on_created(self, event):
         super().on_created(event)
 
-        what = 'directory' if event.is_directory else 'file'
+        what = "directory" if event.is_directory else "file"
         print(f"Created {what}: {event.src_path}")
 
     def on_deleted(self, event):
         super().on_deleted(event)
 
-        what = 'directory' if event.is_directory else 'file'
+        what = "directory" if event.is_directory else "file"
         print(f"Deleted {what}: {event.src_path}")
 
     def on_modified(self, event):
         super().on_modified(event)
 
-        what = 'directory' if event.is_directory else 'file'
+        what = "directory" if event.is_directory else "file"
         print(f"Modified {what}: {event.src_path}")
 
 
