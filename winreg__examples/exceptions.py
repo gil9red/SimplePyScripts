@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 class RegistryException(Exception):
@@ -20,4 +20,6 @@ class RegistryValueNotFoundException(RegistryException):
         self.path = path
         self.name = name
 
-        super().__init__(f"Registry value not found, path='{self.path}', name='{self.name}'")
+        super().__init__(
+            f"Registry value not found, path='{self.path}', name='{self.name}'"
+        )

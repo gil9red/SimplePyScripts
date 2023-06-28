@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import winreg
-from typing import Dict
 
 
 # SOURCE: https://docs.python.org/3/library/winreg.html#value-types
-TYPE_BY_VALUE: Dict[str, int] = {
+TYPE_BY_VALUE: dict[str, int] = {
     "REG_SZ": winreg.REG_SZ,
     "REG_EXPAND_SZ": winreg.REG_EXPAND_SZ,
     "REG_BINARY": winreg.REG_BINARY,
@@ -23,4 +22,4 @@ TYPE_BY_VALUE: Dict[str, int] = {
     "REG_FULL_RESOURCE_DESCRIPTOR": winreg.REG_FULL_RESOURCE_DESCRIPTOR,
     "REG_RESOURCE_REQUIREMENTS_LIST": winreg.REG_RESOURCE_REQUIREMENTS_LIST,
 }
-VALUE_BY_TYPE: Dict[int, str] = {v: k for k, v in TYPE_BY_VALUE.items()}
+VALUE_BY_TYPE: dict[int, str] = {v: k for k, v in TYPE_BY_VALUE.items()}

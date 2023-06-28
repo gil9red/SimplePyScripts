@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://www.saule-spb.ru/library/autorun.html
@@ -26,11 +26,11 @@ def get_boot_execute() -> dict[str, list[str]]:
             continue
 
         if value := key.get_str_value(name):
-            key_by_value[f'{key.path}, {name}'] = value
+            key_by_value[f"{key.path}, {name}"] = value
 
     return key_by_value
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(get_boot_execute())
     # {'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager, BootExecute': ['autocheck autochk /m /P \\Device\\HarddiskVolume10', 'autocheck autochk /m /P \\Device\\HarddiskVolume38', 'autocheck autochk /m /P \\Device\\HarddiskVolume30', 'autocheck autochk *']}
