@@ -1,38 +1,34 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import sys
-from typing import List, Tuple
 
-sys.path.append('../html_parsing')
+sys.path.append("../html_parsing")
 from youtube_com__results_search_query import Playlist
 
 
-def parse_playlist_time(url_or_id: str) -> Tuple[str, int, List[Tuple[str, str]]]:
+def parse_playlist_time(url_or_id: str) -> tuple[str, int, list[tuple[str, str]]]:
     """Функция парсит страницу плейлиста и подсчитывает сумму продолжительности роликов."""
 
     playlist = Playlist.get_from(url_or_id)
-    items = [
-        (video.title, video.duration_text)
-        for video in playlist.video_list
-    ]
+    items = [(video.title, video.duration_text) for video in playlist.video_list]
     return playlist.title, playlist.duration_seconds, playlist.duration_text, items
 
 
-if __name__ == '__main__':
-    url = 'https://www.youtube.com/playlist?list=PLndO6DOY2cLyxQYX7pkDspTJ42JWx07AO'
+if __name__ == "__main__":
+    url = "https://www.youtube.com/playlist?list=PLndO6DOY2cLyxQYX7pkDspTJ42JWx07AO"
 
     title, total_seconds, total_seconds_text, items = parse_playlist_time(url)
 
-    print(f'Playlist {title!r}:')
+    print(f"Playlist {title!r}:")
     for i, (title, time) in enumerate(items, 1):
-        print(f'  {i}. {title!r} ({time})')
+        print(f"  {i}. {title!r} ({time})")
 
     print()
-    print(f'Total time: {total_seconds_text} ({total_seconds} total seconds)')
+    print(f"Total time: {total_seconds_text} ({total_seconds} total seconds)")
 
     """
     Playlist 'Dark Souls':
