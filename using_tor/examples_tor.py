@@ -110,7 +110,7 @@ view = QWebView()
 view.show()
 
 # view.load('http://httpbin.org/ip')
-view.load('https://2ip.ru/')
+view.load("https://2ip.ru/")
 # view.load('http://myip.ru/')
 
 sys.exit(app.exec_())
