@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import re
 import time
 
@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
             title = a.get_text(strip=True)
             datetime_str = article_el.select_one(".info > time")["datetime"]
-            date = DT.datetime.fromisoformat(datetime_str).date()
+            date = dt.datetime.fromisoformat(datetime_str).date()
 
             items = parse_dossier(session, url_article)
             if not items:

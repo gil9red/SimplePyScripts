@@ -4,12 +4,12 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
 import logging
 import time
 import traceback
 import sys
-from typing import Optional, Tuple
+
+from datetime import date
 
 # pip install pyautogui
 # pip install pillow
@@ -35,7 +35,7 @@ def is_exists_rdp_process() -> bool:
     return any(process.name() == "mstsc.exe" for process in psutil.process_iter())
 
 
-def get_pos_rdp_task_icon() -> Optional[Tuple[int, int]]:
+def get_pos_rdp_task_icon() -> tuple[int, int] | None:
     try:
         return pyautogui.locateCenterOnScreen("RDP_task_icon.png", minSearchTime=5)
     except:
@@ -46,7 +46,7 @@ def run():
     logging.info("")
     logging.info("Run")
 
-    if DT.date.today().weekday() in [5, 6]:
+    if date.today().weekday() in [5, 6]:
         logging.info("Today is a weekend, skip")
         return
 

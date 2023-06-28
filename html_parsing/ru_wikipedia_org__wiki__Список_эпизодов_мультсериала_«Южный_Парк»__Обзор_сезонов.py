@@ -4,14 +4,14 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 from dataclasses import dataclass
 
 import requests
 from bs4 import BeautifulSoup
 
 
-def parse_date(date_str: str) -> DT.date:
+def parse_date(date_str: str) -> dt.date:
     """
     Example: "20 января 1999"
     """
@@ -34,16 +34,16 @@ def parse_date(date_str: str) -> DT.date:
     ].index(month) + 1
     year = int(year)
 
-    return DT.date(year, month, day)
+    return dt.date(year, month, day)
 
 
 @dataclass
 class Season:
     season: int
     num_episodes: int
-    start_date: DT.date
-    end_date: DT.date
-    diff_dates: DT.timedelta
+    start_date: dt.date
+    end_date: dt.date
+    diff_dates: dt.timedelta
 
 
 def parse() -> list[Season]:

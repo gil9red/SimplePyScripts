@@ -4,10 +4,10 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
 import traceback
 import sys
 
+from datetime import datetime
 from pathlib import Path
 
 # pip install selenium
@@ -26,7 +26,7 @@ from run_notify import run_in_thread
 
 
 def show_notify(name: str):
-    title = f"Уведомление за {DT.datetime.now():%Y/%m/%d %H:%M:%S}"
+    title = f"Уведомление за {datetime.now():%Y/%m/%d %H:%M:%S}"
     print(f"{title}\n{name}\n")
 
     run_in_thread(title, name, duration=10 * 3600)

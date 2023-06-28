@@ -8,9 +8,10 @@ __author__ = "ipetrash"
 # SOURCE: http://www.jeasyui.com/tutorial/app/crud.php
 
 
-import datetime as DT
 import logging
 import sqlite3
+
+from datetime import datetime
 
 from flask import Flask, render_template, jsonify, request
 
@@ -53,7 +54,7 @@ def save_game():
         price = request.form["price"]
 
         # 2017-06-03 21:21:17
-        append_date = DT.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        append_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         with create_connect() as connect:
             sql = "INSERT INTO Game (name, price, append_date) VALUES (?,?,?)"

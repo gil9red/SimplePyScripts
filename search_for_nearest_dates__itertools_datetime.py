@@ -4,16 +4,16 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
 import itertools
+from datetime import datetime, timedelta
 
 
 DIFF_SECS = 60
 
 items = [
-    [DT.datetime.now(), DT.datetime.now() + DT.timedelta(hours=1), DT.datetime.now() + DT.timedelta(seconds=30)],
-    [DT.datetime.now(), DT.datetime.now() + DT.timedelta(hours=1)],
-    [DT.datetime.now()],
+    [datetime.now(), datetime.now() + timedelta(hours=1), datetime.now() + timedelta(seconds=30)],
+    [datetime.now(), datetime.now() + timedelta(hours=1)],
+    [datetime.now()],
 ]
 
 for x in items:

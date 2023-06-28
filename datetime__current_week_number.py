@@ -4,8 +4,8 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+from datetime import datetime
 
 
-week_number = DT.datetime.now().isocalendar()[1]
+week_number = datetime.now().isocalendar()[1]
 print("week_number:", week_number)

@@ -4,10 +4,11 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
 import time
 import traceback
 import sys
+
+from datetime import datetime
 
 # pip install simple-wait
 from simple_wait import wait
@@ -23,7 +24,7 @@ checked_products = []
 
 
 while True:
-    print(f"Started at {DT.datetime.now():%d/%m/%Y %H:%M:%S}\n")
+    print(f"Started at {datetime.now():%d/%m/%Y %H:%M:%S}\n")
 
     db_create_backup()
 

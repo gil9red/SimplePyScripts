@@ -4,12 +4,13 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import pathlib
 import os
 import shutil
 
 from peewee import *
+
 
 # Absolute file name
 DB_FILE_NAME = str(pathlib.Path(__file__).resolve().parent / "tracked_products.sqlite")
@@ -18,7 +19,7 @@ DB_FILE_NAME = str(pathlib.Path(__file__).resolve().parent / "tracked_products.s
 def db_create_backup(backup_dir="backup"):
     os.makedirs(backup_dir, exist_ok=True)
 
-    file_name = str(DT.datetime.today().date()) + ".sqlite"
+    file_name = str(dt.datetime.today().date()) + ".sqlite"
     file_name = os.path.join(backup_dir, file_name)
 
     shutil.copy(DB_FILE_NAME, file_name)
@@ -84,7 +85,7 @@ class Product(BaseModel):
 class Price(BaseModel):
     value_dns = DecimalField(null=True)
     value_technopoint = DecimalField(null=True)
-    date = DateTimeField(default=DT.datetime.now)
+    date = DateTimeField(default=dt.datetime.now)
     product = ForeignKeyField(Product, backref="prices")
 
     class Meta:

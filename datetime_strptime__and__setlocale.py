@@ -4,14 +4,14 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
 import locale
+from datetime import datetime
 
 
 def check():
     try:
         print(
-            DT.datetime.strptime(
+            datetime.strptime(
                 "Fri, 06-Nov-2020 21:36:45 GMT", "%a, %d-%b-%Y %H:%M:%S %Z"
             )
         )

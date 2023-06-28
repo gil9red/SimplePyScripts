@@ -14,20 +14,20 @@ __author__ = "ipetrash"
 """
 
 
-import datetime as DT
+from datetime import datetime, timedelta
 
 
 # Класс (структура) для хранения интервала звонка
 class Interval:
-    start: DT.datetime
-    end: DT.datetime
+    start: datetime
+    end: datetime
 
     def __init__(self, start_time: str, duration: int):
-        self.start = DT.datetime.strptime(start_time, "%H:%M:%S")
-        self.end = self.start + DT.timedelta(seconds=duration)
+        self.start = datetime.strptime(start_time, "%H:%M:%S")
+        self.end = self.start + timedelta(seconds=duration)
 
-    def is_contains(self, datetime: DT.datetime) -> bool:
-        return self.start <= datetime <= self.end
+    def is_contains(self, dt: datetime) -> bool:
+        return self.start <= dt <= self.end
 
     def __repr__(self) -> str:
         return f"<{self.start:%H:%M:%S} - {self.end:%H:%M:%S}>"

@@ -4,10 +4,11 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
 import json
 import re
 import sys
+
+from datetime import datetime
 
 from bs4 import BeautifulSoup
 import requests
@@ -38,7 +39,7 @@ print(script_el.text)
 
 m = JS_SHARED_DATA_PATTERN.search(script_el.text)
 if not m:
-    file_name_dump = str(DT.datetime.now()).replace(":", "") + ".html"
+    file_name_dump = str(datetime.now()).replace(":", "") + ".html"
     with open(file_name_dump, "wb") as f:
         f.write(rs.content)
     print(f'Not found "window._sharedData = ", see: {file_name_dump}!')

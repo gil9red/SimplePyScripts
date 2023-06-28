@@ -4,11 +4,11 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+from datetime import datetime, timedelta
 
 
-utc_datetime = DT.datetime.utcnow()
+utc_datetime = datetime.utcnow()
 
 for i in range(365 + 1):
-    date = utc_datetime - DT.timedelta(days=i)
+    date = utc_datetime - timedelta(days=i)
     print(date.strftime("%d/%m/%Y %H:%M:%S"))

@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import pathlib
 import os
 import shutil
@@ -23,7 +23,7 @@ DB_FILE_NAME = str(pathlib.Path(__file__).resolve().parent / "database.sqlite")
 def db_create_backup(backup_dir="backup"):
     os.makedirs(backup_dir, exist_ok=True)
 
-    file_name = str(DT.datetime.today().date()) + ".sqlite"
+    file_name = str(dt.datetime.today().date()) + ".sqlite"
     file_name = os.path.join(backup_dir, file_name)
 
     shutil.copy(DB_FILE_NAME, file_name)
@@ -41,7 +41,7 @@ class BaseModel(Model):
 class Dossier(BaseModel):
     title = TextField()
     url = TextField(unique=True)
-    date = DateField(default=DT.date.today)
+    date = DateField(default=dt.date.today)
 
     def __str__(self):
         return (
@@ -62,7 +62,7 @@ class QuestionAnswer(BaseModel):
         )
 
 
-def add(url: str, title: str, date: DT.date, question_answer_pairs) -> bool:
+def add(url: str, title: str, date: dt.date, question_answer_pairs) -> bool:
     dossier, created = Dossier.get_or_create(title=title, url=url, date=date)
     if not created:
         return False

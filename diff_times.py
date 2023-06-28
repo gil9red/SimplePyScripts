@@ -4,12 +4,12 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+from datetime import datetime
 
 
 check_hours, check_minutes = 16, 29
 
-dt = DT.datetime.now()
+dt = datetime.now()
 check_dt = dt.replace(hour=check_hours, minute=check_minutes)
 
 if dt > check_dt:

@@ -7,8 +7,8 @@ __author__ = "ipetrash"
 # SOURCE: https://stackoverflow.com/a/7153449/5909792
 
 
-import datetime as DT
+from datetime import date, timedelta
 
 
-prev_month = DT.date.today().replace(day=1) - DT.timedelta(days=1)
+prev_month = date.today().replace(day=1) - timedelta(days=1)
 print(prev_month)

@@ -4,13 +4,12 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+from datetime import datetime
 
 import numpy as np
 
 from PIL import ImageGrab
 from PyQt5.QtGui import qRgb, QImage
-
 
 
 GRAY_COLOR_TABLE = [qRgb(i, i, i) for i in range(256)]
@@ -65,7 +64,7 @@ if __name__ == "__main__":
     img = convert_numpy_array_to_QImage(print_screen_numpy)
     print(img.size())
 
-    file_name = f"print_screen_{DT.datetime.now():%Y-%m-%d_%H%M%S}.png"
+    file_name = f"print_screen_{datetime.now():%Y-%m-%d_%H%M%S}.png"
     print(file_name)
 
     img.save(file_name)

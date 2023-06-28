@@ -4,8 +4,8 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
 import uuid
+from datetime import datetime
 
 from flask import Flask, render_template, session, request
 from flask_socketio import SocketIO, emit
@@ -35,7 +35,7 @@ def test_message(message):
     data = message["data"]
 
     if data == "CURRENT_DATE_TIME":
-        response = DT.datetime.now().strftime("%Y-%m-%d_%H%M%S")
+        response = datetime.now().strftime("%Y-%m-%d_%H%M%S")
 
     elif data == "UUID":
         response = str(uuid.uuid4())

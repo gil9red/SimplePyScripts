@@ -5,7 +5,7 @@
 # SOURCE: https://thispointer.com/python-check-if-a-process-is-running-by-name-and-find-its-process-id-pid/
 
 
-import datetime as DT
+from datetime import datetime
 
 # pip install psutil
 import psutil
@@ -53,6 +53,6 @@ def get_process_run_time(provided_process_name: str) -> str:
     process = find_process(provided_process_name)
 
     epoch_created_time = process.create_time()
-    dt_created_time = DT.datetime.fromtimestamp(epoch_created_time)
-    time_elapsed = DT.datetime.now() - dt_created_time
+    dt_created_time = datetime.fromtimestamp(epoch_created_time)
+    time_elapsed = datetime.now() - dt_created_time
     return str(time_elapsed).rsplit(".")[0]

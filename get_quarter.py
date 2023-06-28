@@ -4,13 +4,13 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+from datetime import date, datetime
 
 
 def get_quarter(month_or_date=None) -> int:
     dt = month_or_date
     if dt is None:
-        dt = DT.date.today()
+        dt = date.today()
 
     if isinstance(dt, int):
         month = dt
@@ -40,13 +40,13 @@ def get_quarter_num(month_or_date=None) -> str:
 if __name__ == "__main__":
     print(get_quarter())
     print()
-    print(get_quarter(DT.datetime.today()))
-    print(get_quarter(DT.date.today()))
+    print(get_quarter(datetime.today()))
+    print(get_quarter(date.today()))
     print()
     print(get_quarter_num())
     print()
 
-    for dt in [DT.date(2018, month=i + 1, day=1) for i in range(12)]:
+    for dt in [date(2018, month=i + 1, day=1) for i in range(12)]:
         print(dt, get_quarter(dt))
 
     assert get_quarter(1) == 1

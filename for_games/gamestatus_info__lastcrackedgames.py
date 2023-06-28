@@ -4,10 +4,10 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
 import json
 
 from dataclasses import dataclass
+from datetime import date
 
 import requests
 
@@ -26,8 +26,8 @@ class Game:
     title: str
     url: str
     protection: str
-    release_date: DT.date
-    crack_date: DT.date
+    release_date: date
+    crack_date: date
 
     @classmethod
     def parse_from(cls, data: dict) -> "Game":
@@ -40,8 +40,8 @@ class Game:
             title=data["title"],
             url=f'{URL_BASE}/{data["slug"]}',
             protection=protection,
-            release_date=DT.date.fromisoformat(data["release_date"]),
-            crack_date=DT.date.fromisoformat(data["crack_date"]),
+            release_date=date.fromisoformat(data["release_date"]),
+            crack_date=date.fromisoformat(data["crack_date"]),
         )
 
 

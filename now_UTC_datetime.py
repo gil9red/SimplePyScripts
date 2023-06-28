@@ -4,8 +4,8 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+from datetime import datetime
 
 
-utc_datetime = DT.datetime.utcnow()
+utc_datetime = datetime.utcnow()
 print(utc_datetime.strftime("%d/%m/%Y %H:%M:%S"))
