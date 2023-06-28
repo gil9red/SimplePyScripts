@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://ru.stackoverflow.com/questions/929442/
@@ -10,7 +10,7 @@ __author__ = 'ipetrash'
 import tkinter as tk
 
 
-alphabet = 'abcdefghijklmnopqrstuvwxyz'
+alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 
 def on_selecting_file():
@@ -22,14 +22,14 @@ def on_change_symbols():
 
 
 def on_window_deleted():
-    print('Window closed')
+    print("Window closed")
     root.quit()
 
 
 root = tk.Tk()
 root.title("Example")
 root.geometry("400x550+300+300")
-root.protocol('WM_DELETE_WINDOW', on_window_deleted)
+root.protocol("WM_DELETE_WINDOW", on_window_deleted)
 
 select_file_button = tk.Button(text="Select file", command=on_selecting_file)
 select_file_button.place(relx=0.5, y=10)
@@ -50,10 +50,10 @@ try:
             label.place(x=x, y=y)
 
             entry = tk.Entry()
-            entry.place(x=x+30, y=y, width=30)
+            entry.place(x=x + 30, y=y, width=30)
 
-            globals()['label_' + letter] = label
-            globals()['letter_' + letter] = entry
+            globals()["label_" + letter] = label
+            globals()["letter_" + letter] = entry
 
             pos += 1
             y += 50

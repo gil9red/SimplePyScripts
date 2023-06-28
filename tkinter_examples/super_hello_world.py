@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # https://docs.python.org/3/library/tkinter.html
@@ -19,7 +19,7 @@ def center_window(root, width=300, height=200):
     # calculate position x and y coordinates
     x = (screen_width / 2) - (width / 2)
     y = (screen_height / 2) - (height / 2)
-    root.geometry('%dx%d+%d+%d' % (width, height, x, y))
+    root.geometry("%dx%d+%d+%d" % (width, height, x, y))
 
 
 def on_btn_1():
@@ -38,7 +38,7 @@ app = tk.Tk()
 app.title("super_hello_world")
 center_window(app)
 
-label = tk.Label(app, text="Hello World!", font="Arial 16", fg='red')
+label = tk.Label(app, text="Hello World!", font="Arial 16", fg="red")
 label.pack()
 
 btn_1 = tk.Button(app, text="Hello World!", command=on_btn_1)

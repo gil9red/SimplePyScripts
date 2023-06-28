@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import tkinter as tk
@@ -17,7 +17,7 @@ class Example(tk.Frame):
     def init_ui(self):
         self.pack(fill=tk.BOTH, expand=1)
 
-        acts = ['Scarlett Johansson', 'Rachel Weiss', 'Natalie Portman', 'Jessica Alba']
+        acts = ["Scarlett Johansson", "Rachel Weiss", "Natalie Portman", "Jessica Alba"]
 
         self.lb = tk.Listbox(self)
         for i in acts:
@@ -39,9 +39,9 @@ class Example(tk.Frame):
         self.var.set(value)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     root = tk.Tk()
-    root.title('Example')
+    root.title("Example")
     ex = Example(root)
     root.geometry("300x250+300+300")
     root.mainloop()

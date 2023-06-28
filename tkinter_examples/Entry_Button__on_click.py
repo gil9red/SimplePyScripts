@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from tkinter import *
@@ -14,7 +14,9 @@ def on_button_clicked():
         h = int(height.get())
 
     except ValueError:
-        messagebox.showwarning("Warning", 'Поля вес и рост должны быть заполнены числами')
+        messagebox.showwarning(
+            "Warning", "Поля вес и рост должны быть заполнены числами"
+        )
         return
 
     print(w)

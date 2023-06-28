@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # https://docs.python.org/3/library/tkinter.html
@@ -31,7 +31,7 @@ class Application(tk.Frame):
         print("hi there, everyone!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     root = tk.Tk()
     app = Application(parent=root)
     app.mainloop()

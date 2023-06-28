@@ -1,20 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-import sys
-sys.path.append('..')
-
-import tkinter as tk
-from center_window import center_window
-import requests
 import base64
+import sys
+import tkinter as tk
+
+import requests
+
+sys.path.append("..")
+from center_window import center_window
 
 
 # Download image and convert to base64
-url = 'https://www.python.org/static/img/python-logo.png'
+url = "https://www.python.org/static/img/python-logo.png"
 img_data = requests.get(url).content
 img_base64_data = base64.b64encode(img_data)
 

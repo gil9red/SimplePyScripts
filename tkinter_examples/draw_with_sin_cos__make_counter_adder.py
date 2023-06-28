@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 # SOURCE: https://ru.stackoverflow.com/a/818915
@@ -25,7 +25,7 @@ def make_counter_adder(start=0):
 
 
 root = tk.Tk()
-root.geometry('760x710')
+root.geometry("760x710")
 
 canv = tk.Canvas(root, width=700, height=700, bg="white")
 canv.place(x=0, y=0)
@@ -47,7 +47,9 @@ def but(event):
         inc(0.1)
 
 
-button1 = tk.Button(root, text='start', width=3, height=4, bg='gold', fg='black', font=10)
+button1 = tk.Button(
+    root, text="start", width=3, height=4, bg="gold", fg="black", font=10
+)
 button1.place(x=720, y=355)
 button1.bind("<Button-1>", but)
 

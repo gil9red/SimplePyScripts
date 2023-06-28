@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from tkinter import Tk, Label
@@ -9,7 +9,7 @@ from tkinter import Tk, Label
 
 def turn(event):
     value = event.widget["text"]
-    value = 1 if value == '.' else int(value) + 1
+    value = 1 if value == "." else int(value) + 1
 
     event.widget["text"] = value
 

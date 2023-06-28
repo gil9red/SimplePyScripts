@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import tkinter as tk
@@ -15,7 +15,7 @@ def on_button_perevod_clicked():
         if b[i] < 100:
             b[i] = "0" + str(b[i])
 
-    label_info['text'] = b
+    label_info["text"] = b
 
 
 root = tk.Tk()

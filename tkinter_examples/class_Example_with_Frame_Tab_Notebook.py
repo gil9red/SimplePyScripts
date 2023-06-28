@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
-import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, Frame
 
 
-class Example(tk.Frame):
+class Example(Frame):
     def __init__(self, parent):
         super().__init__(parent)
 
@@ -30,9 +29,11 @@ class Example(tk.Frame):
         self.pack()
 
 
-if __name__ == '__main__':
-    root = tk.Tk()
-    root.title('Example')
+if __name__ == "__main__":
+    from tkinter import Tk
+
+    root = Tk()
+    root.title("Example")
     ex = Example(root)
     root.geometry("300x250+300+300")
     root.mainloop()

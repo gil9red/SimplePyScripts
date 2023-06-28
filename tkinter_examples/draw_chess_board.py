@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 from tkinter import *
 
-root = Tk()
-root.title('Chess board')
 
-canvas = Canvas(root, width=700, height=700, bg='#fff')
+root = Tk()
+root.title("Chess board")
+
+canvas = Canvas(root, width=700, height=700, bg="#fff")
 canvas.pack()
 
-fill = '#fff'
-outline = '#000'
+fill = "#fff"
+outline = "#000"
 size = 88
 
 for i in range(8):
