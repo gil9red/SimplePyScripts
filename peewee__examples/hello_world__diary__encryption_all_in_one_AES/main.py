@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 # SOURCE: https://github.com/coleifer/peewee/blob/afdf7b752dcadbf440faaa91a7fb0f403eac9a69/examples/diary.py
 
 
-import datetime as DT
+import datetime as dt
 import hashlib
 import sys
 
@@ -48,7 +48,7 @@ if not ENCRYPT_KEY:
 
 class Diary(BaseModel):
     encrypted_content = TextField()
-    created_date = DateTimeField(default=DT.datetime.now)
+    created_date = DateTimeField(default=dt.datetime.now)
 
     @staticmethod
     def create_encrypted_content(content: str, key: str) -> "Diary":

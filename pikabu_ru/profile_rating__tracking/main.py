@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import sys
 import traceback
 
@@ -24,7 +24,7 @@ URL = "https://pikabu.ru/@RytsarSvezhego"
 
 
 while True:
-    print(f"Started at {DT.datetime.now():%d/%m/%Y %H:%M:%S}\n")
+    print(f"Started at {dt.datetime.now():%d/%m/%Y %H:%M:%S}\n")
 
     db_create_backup()
 

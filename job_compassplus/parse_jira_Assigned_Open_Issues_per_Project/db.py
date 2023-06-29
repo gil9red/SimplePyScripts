@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import os
 import shutil
 import sys
@@ -33,7 +33,7 @@ DB_FILE_NAME = str(DIR / "database.sqlite")
 def db_create_backup(backup_dir=DIR / "backup"):
     os.makedirs(backup_dir, exist_ok=True)
 
-    file_name = str(DT.datetime.today().date()) + ".sqlite"
+    file_name = str(dt.datetime.today().date()) + ".sqlite"
     file_name = os.path.join(backup_dir, file_name)
 
     shutil.copy(DB_FILE_NAME, file_name)
@@ -67,7 +67,7 @@ class BaseModel(Model):
 
 
 class Run(BaseModel):
-    date = DateField(default=DT.date.today)
+    date = DateField(default=dt.date.today)
 
     def get_total_issues(self) -> int:
         return sum(x.value for x in self.issue_numbers)
@@ -94,7 +94,7 @@ def add(assigned_open_issues_per_project: dict[str, int]) -> bool | None:
     if assigned_open_issues_per_project == last_run.get_project_by_issue_numbers():
         return
 
-    run, created = Run.get_or_create(date=DT.date.today())
+    run, created = Run.get_or_create(date=dt.date.today())
     if not created:
         return False
 

@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import traceback
 import re
 import shutil
@@ -59,7 +59,7 @@ session.headers["User-Agent"] = USER_AGENT
 class Quote:
     url: str
     text: str
-    date: DT.date
+    date: dt.date
     rating: int
     comics_urls: List[str] = field(default_factory=list)
 
@@ -170,7 +170,7 @@ class Quote:
             quote_el.select_one(".quote__header_date").get_text(),
         )
         day, month, year = map(int, m.groups())
-        date = DT.date(year, month, day)
+        date = dt.date(year, month, day)
 
         return Quote(url, quote_text, date, rating, comics_urls)
 
@@ -277,7 +277,7 @@ def parser_health_check(raise_error=False) -> Optional[str]:
 
         assert quote.date, f"Поле date цитаты #{expected_id} должно быть заполнено!"
         assert isinstance(
-            quote.date, DT.date
+            quote.date, dt.date
         ), f"Поле date цитаты #{expected_id} должно иметь тип date!"
 
         assert quote.rating, f"Поле rating цитаты #{expected_id} должно быть заполнено!"

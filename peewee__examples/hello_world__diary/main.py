@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 # SOURCE: https://github.com/coleifer/peewee/blob/afdf7b752dcadbf440faaa91a7fb0f403eac9a69/examples/diary.py
 
 
-import datetime as DT
+import datetime as dt
 
 from textwrap import shorten
 
@@ -25,7 +25,7 @@ class BaseModel(Model):
 
 class Diary(BaseModel):
     content = TextField()
-    created_date = DateTimeField(default=DT.datetime.now)
+    created_date = DateTimeField(default=dt.datetime.now)
 
     @staticmethod
     def print_table(search_text: str = None):

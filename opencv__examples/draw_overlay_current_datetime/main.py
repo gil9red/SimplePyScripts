@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import sys
 
 # pip install opencv-python
@@ -47,7 +47,7 @@ def draw_overlay_current_datetime(
     color_text=(255, 255, 255),
     max_text_height_percent=5,
 ):
-    text = DT.datetime.now().strftime(datetime_fmt)
+    text = dt.datetime.now().strftime(datetime_fmt)
     draw_overlay(img, text, color_text, max_text_height_percent)
 
 

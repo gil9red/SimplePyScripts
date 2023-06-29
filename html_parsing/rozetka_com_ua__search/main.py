@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 
 from pathlib import Path
 
@@ -85,6 +85,6 @@ if __name__ == "__main__":
     items = parse(url)
     print(f"Total goods: {len(items)}")
 
-    file_name = f"rozetka_parser_{DT.datetime.now():%Y-%m-%d}.csv"
+    file_name = f"rozetka_parser_{dt.datetime.now():%Y-%m-%d}.csv"
     print(f"Saved to {file_name}")
     save_goods(file_name, items)

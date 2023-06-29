@@ -5,7 +5,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import re
 import sys
 
@@ -51,7 +51,7 @@ def _send_data(data: dict) -> str:
 
 
 def get_report_context() -> str:
-    today = DT.datetime.today()
+    today = dt.datetime.today()
     data = {
         "dep": "all",
         "rep": "rep1",
@@ -63,7 +63,7 @@ def get_report_context() -> str:
 
 
 def get_quarter_report_context() -> str:
-    today = DT.datetime.today()
+    today = dt.datetime.today()
     data = {
         "dep": "all",
         "rep": "rep1",

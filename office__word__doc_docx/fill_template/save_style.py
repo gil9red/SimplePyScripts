@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 
 # pip install python-docx
 import docx
@@ -118,7 +118,7 @@ if __name__ == "__main__":
 
     REPLACING = {
         "title": "My pretty title!",
-        "date_time": DT.datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
+        "date_time": dt.datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
     }
 
     doc = docx.Document(from_filename)

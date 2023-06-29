@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import shutil
 import sys
 
@@ -36,7 +36,7 @@ DIR_BACKUP = DIR / "backup"
 def db_create_backup(backup_dir=DIR_BACKUP):
     backup_dir.mkdir(parents=True, exist_ok=True)
 
-    file_name = str(DT.datetime.today().date()) + ".sqlite"
+    file_name = str(dt.datetime.today().date()) + ".sqlite"
     file_name = backup_dir / file_name
 
     shutil.copy(DB_FILE_NAME, file_name)
@@ -110,7 +110,7 @@ class BaseModel(Model):
 
 class ProfileRating(BaseModel):
     url = TextField()
-    date = DateTimeField(default=DT.datetime.now)
+    date = DateTimeField(default=dt.datetime.now)
     value = IntegerField()
 
     @classmethod

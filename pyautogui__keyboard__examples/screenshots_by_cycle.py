@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import time
 
 from pathlib import Path
@@ -19,7 +19,7 @@ DIR_SCREENSHOTS.mkdir(parents=True, exist_ok=True)
 
 
 while True:
-    file_name = str(DIR_SCREENSHOTS / f"{DT.datetime.now():%Y-%m-%d_%H%M%S.%f}.png")
+    file_name = str(DIR_SCREENSHOTS / f"{dt.datetime.now():%Y-%m-%d_%H%M%S.%f}.png")
     print(file_name)
 
     pyautogui.screenshot(file_name)  # Save file

@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import os
 import shutil
 import sqlite3
@@ -105,7 +105,7 @@ def init_db():
 def db_create_backup(backup_dir="backup"):
     os.makedirs(backup_dir, exist_ok=True)
 
-    file_name = str(DT.datetime.today().date()) + ".sqlite"
+    file_name = str(dt.datetime.today().date()) + ".sqlite"
     file_name = os.path.join(backup_dir, file_name)
 
     shutil.copy(DB_FILE_NAME, file_name)

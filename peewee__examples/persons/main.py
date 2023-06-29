@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import json
 
 # pip install peewee
@@ -34,7 +34,7 @@ db.connect()
 db.create_tables([Person, Pet])
 
 for person_data in json.load(open("persons.json", encoding="utf-8")):
-    birthday = DT.datetime.strptime(person_data["birthday"], "%Y-%M-%d")
+    birthday = dt.datetime.strptime(person_data["birthday"], "%Y-%M-%d")
     person, _ = Person.get_or_create(name=person_data["name"], birthday=birthday)
 
     for pet in person_data["pets"]:

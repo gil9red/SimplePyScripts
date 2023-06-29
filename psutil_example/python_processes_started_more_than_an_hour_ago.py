@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 
 # pip install psutil
 import psutil
@@ -15,6 +15,6 @@ for proc in psutil.process_iter():
         continue
 
     secs = proc.create_time()
-    started = DT.datetime.fromtimestamp(secs)
-    if (DT.datetime.now() - started) >= DT.timedelta(hours=1):
+    started = dt.datetime.fromtimestamp(secs)
+    if (dt.datetime.now() - started) >= dt.timedelta(hours=1):
         print(proc)

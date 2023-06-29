@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import json
 import re
 import shutil
@@ -23,14 +23,14 @@ class Cover(NamedTuple):
     url: str
 
 
-def parse_date(date_str: str) -> DT.date:
+def parse_date(date_str: str) -> dt.date:
     fmts = (
         "%B %d, %Y",
         "%b %d, %Y",
     )
     for fmt in fmts:
         try:
-            return DT.datetime.strptime(date_str, fmt).date()
+            return dt.datetime.strptime(date_str, fmt).date()
         except ValueError:
             pass
 
@@ -113,7 +113,7 @@ def dump_covers(
 
 
 if __name__ == "__main__":
-    YEAR = DT.datetime.now().year
+    YEAR = dt.datetime.now().year
 
     items = get_covers(YEAR)
     print(f"Covers for {YEAR} year ({len(items)}):")

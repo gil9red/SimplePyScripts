@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import logging
 import time
 import sys
@@ -53,20 +53,20 @@ DIRS = [r"C:\DEV__TX", r"C:\DEV__OPTT", r"C:\DEV__RADIX"]
 
 
 def run(dirs: list[str | Path]):
-    print(f"\n{DT.datetime.today()}")
+    print(f"\n{dt.datetime.today()}")
 
     for dir_path in dirs:
         print(dir_path)
         for file_name in Path(dir_path).glob("*/hs_err_pid*.log"):
             ctime_timestamp = file_name.stat().st_ctime
-            ctime = DT.datetime.fromtimestamp(ctime_timestamp)
+            ctime = dt.datetime.fromtimestamp(ctime_timestamp)
             ctime = ctime.replace(microsecond=0)
 
             text = f"{file_name} (date creation: {ctime})"
             print(text)
 
             # Удаление, если с даты создания прошло больше 1 часа
-            if DT.datetime.today() > ctime + DT.timedelta(hours=1):
+            if dt.datetime.today() > ctime + dt.timedelta(hours=1):
                 log.info(text)
                 file_name.unlink(missing_ok=True)
 

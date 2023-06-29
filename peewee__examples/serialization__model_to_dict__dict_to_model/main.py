@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 
 # pip install peewee
 from peewee import *
@@ -43,7 +43,7 @@ class Pet(BaseModel):
 db.connect()
 db.create_tables([Person, Pet])
 
-person = Person.create(name="Ivan", birthday=DT.date.today())
+person = Person.create(name="Ivan", birthday=dt.date.today())
 
 Pet.create(owner=person, name="Oval", animal_type="Dog")
 Pet.create(owner=person, name="Bortik", animal_type="Cat")
