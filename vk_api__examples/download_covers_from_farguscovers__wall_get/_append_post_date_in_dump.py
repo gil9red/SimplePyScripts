@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import json
 import sys
 from collections import defaultdict
@@ -28,7 +28,7 @@ for post in get_wall_it():
     if post_id not in id_by_dumps:
         continue
 
-    date_time = DT.datetime.fromtimestamp(post["date"])
+    date_time = dt.datetime.fromtimestamp(post["date"])
 
     for x in id_by_dumps[post_id]:
         x["date_time"] = str(date_time)

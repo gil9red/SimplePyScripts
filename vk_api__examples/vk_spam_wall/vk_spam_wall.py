@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import json
 import time
 import sys
@@ -93,13 +93,13 @@ if __name__ == "__main__":
     else:
         owner_id = None
 
-    at_time = DT.datetime.strptime(at, "%H:%M").time()
+    at_time = dt.datetime.strptime(at, "%H:%M").time()
 
     while True:
         # Ждем наступления времени, указанного в at
         while True:
             # Убираем микросекунды, иначе совпадения вряд ли дождемся в этой жизни
-            now = DT.datetime.today().time()
+            now = dt.datetime.today().time()
             now = now.replace(microsecond=0)
             if now == at_time:
                 break

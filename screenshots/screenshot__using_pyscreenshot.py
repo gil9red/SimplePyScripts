@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 # Fullscreen
 
 
-import datetime as DT
+import datetime as dt
 
 # pip install pyscreenshot
 import pyscreenshot as ImageGrab
@@ -24,7 +24,7 @@ img.save(f"{PATTERN}.jpg")
 # img.show()
 
 # Filename with datetime
-file_name = f"{PATTERN}_{DT.datetime.now():%Y-%m-%d_%H%M%S}.jpg"
+file_name = f"{PATTERN}_{dt.datetime.now():%Y-%m-%d_%H%M%S}.jpg"
 print(file_name)
 
 img.save(file_name)

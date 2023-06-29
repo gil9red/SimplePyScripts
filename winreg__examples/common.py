@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import winreg
 
 from typing import Optional, Any
@@ -89,8 +89,8 @@ class RegistryKey:
         self.number_of_values: int = number_of_values
         self.last_modified_timestamp: int = last_modified_timestamp
 
-        delta = DT.timedelta(seconds=self.last_modified_timestamp / 1e7)
-        self.last_modified: DT.datetime = DT.datetime(1601, 1, 1) + delta
+        delta = dt.timedelta(seconds=self.last_modified_timestamp / 1e7)
+        self.last_modified: dt.datetime = dt.datetime(1601, 1, 1) + delta
 
     def __getitem__(self, name: str) -> RegistryValue:
         return self.value(name)

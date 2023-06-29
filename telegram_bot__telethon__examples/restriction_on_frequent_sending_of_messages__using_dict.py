@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 
 # pip install pyTelegramBotAPI
 import telebot
@@ -27,7 +27,7 @@ def on_start(message: telebot.types.Message):
 def on_request(message: telebot.types.Message):
     text = "Получено!"
     need_seconds = 50
-    current_time = DT.datetime.now()
+    current_time = dt.datetime.now()
     last_datetime = CHAT_BY_DATETIME.get(message.chat.id)
 
     # Если первое сообщение (время не задано)

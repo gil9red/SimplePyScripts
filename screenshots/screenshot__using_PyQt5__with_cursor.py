@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 # Fullscreen
 
 
-import datetime as DT
+import datetime as dt
 
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QPixmap, QPainter, QCursor
@@ -32,7 +32,7 @@ img.save(f"{PATTERN}.png")
 img.save(f"{PATTERN}.jpg")
 
 # Filename with datetime
-file_name = f"{PATTERN}_{DT.datetime.now():%Y-%m-%d_%H%M%S}.jpg"
+file_name = f"{PATTERN}_{dt.datetime.now():%Y-%m-%d_%H%M%S}.jpg"
 print(file_name)
 
 img.save(file_name)

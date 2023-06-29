@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import random
 import socket
 import sys
@@ -18,10 +18,10 @@ PORT = 9090
 
 def execute_command(command: str) -> str:
     if command == "CURRENT_DATETIME":
-        return DT.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        return dt.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
     elif command == "CURRENT_TIMESTAMP":
-        return str(DT.datetime.now().timestamp())
+        return str(dt.datetime.now().timestamp())
 
     elif command == "RANDOM":
         return str(random.randint(0, 1000000))

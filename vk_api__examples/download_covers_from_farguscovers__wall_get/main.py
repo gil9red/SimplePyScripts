@@ -10,7 +10,7 @@ __author__ = "ipetrash"
 """
 
 
-import datetime as DT
+import datetime as dt
 import json
 import re
 import time
@@ -66,7 +66,7 @@ if __name__ == "__main__":
         owner_id = post["owner_id"]
         post_url = f"https://vk.com/farguscovers?w=wall{owner_id}_{post_id}"
 
-        date_time = DT.datetime.fromtimestamp(post["date"])
+        date_time = dt.datetime.fromtimestamp(post["date"])
         date_time_str = str(date_time)
 
         post_text = post["text"]

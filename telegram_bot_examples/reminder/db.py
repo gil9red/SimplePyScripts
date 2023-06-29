@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import shutil
 import sys
 
@@ -33,7 +33,7 @@ def db_create_backup(backup_dir="backup", date_fmt="%Y-%m-%d"):
     backup_path = Path(backup_dir)
     backup_path.mkdir(parents=True, exist_ok=True)
 
-    zip_name = DT.datetime.today().strftime(date_fmt)
+    zip_name = dt.datetime.today().strftime(date_fmt)
     zip_name = backup_path / zip_name
 
     shutil.make_archive(zip_name, "zip", DB_DIR_NAME)
@@ -84,10 +84,10 @@ class User(BaseModel):
     last_name = TextField(null=True)
     username = TextField(null=True)
     language_code = TextField(null=True)
-    last_activity = DateTimeField(default=DT.datetime.now)
+    last_activity = DateTimeField(default=dt.datetime.now)
 
     def update_last_activity(self):
-        self.last_activity = DT.datetime.now()
+        self.last_activity = dt.datetime.now()
         self.save()
 
     @classmethod
@@ -115,10 +115,10 @@ class Chat(BaseModel):
     first_name = TextField(null=True)
     last_name = TextField(null=True)
     description = TextField(null=True)
-    last_activity = DateTimeField(default=DT.datetime.now)
+    last_activity = DateTimeField(default=dt.datetime.now)
 
     def update_last_activity(self):
-        self.last_activity = DT.datetime.now()
+        self.last_activity = dt.datetime.now()
         self.save()
 
     @classmethod
@@ -141,10 +141,10 @@ class Chat(BaseModel):
 
 
 class Reminder(BaseModel):
-    date_time = DateTimeField(default=DT.datetime.now)
+    date_time = DateTimeField(default=dt.datetime.now)
     message_id = IntegerField()
     command = TextField()
-    finish_time = DateTimeField(default=DT.datetime.now)
+    finish_time = DateTimeField(default=dt.datetime.now)
     is_sent = BooleanField(default=False)
     user = ForeignKeyField(User, backref="reminders")
     chat = ForeignKeyField(Chat, backref="reminders")

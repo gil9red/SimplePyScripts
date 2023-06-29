@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import sys
 import time
 
@@ -17,8 +17,8 @@ def wait(
     try:
         progress_bar = cycle(("|", "/", "-", "\\"))
 
-        today = DT.datetime.today()
-        timeout_date = today + DT.timedelta(
+        today = dt.datetime.today()
+        timeout_date = today + dt.timedelta(
             days=days,
             seconds=seconds,
             microseconds=microseconds,
@@ -28,7 +28,7 @@ def wait(
             weeks=weeks,
         )
 
-        def str_timedelta(td: DT.timedelta) -> str:
+        def str_timedelta(td: dt.timedelta) -> str:
             td = str(td)
 
             # Remove ms
@@ -53,7 +53,7 @@ def wait(
             # Delay 1 seconds
             time.sleep(1)
 
-            today = DT.datetime.today()
+            today = dt.datetime.today()
 
         print("\r" + " " * 100 + "\r", end="")
 
@@ -73,6 +73,6 @@ if __name__ == "__main__":
 
     while True:
         print()
-        print("Current datetime:", DT.datetime.now())
+        print("Current datetime:", dt.datetime.now())
         print()
         wait(minutes=1, seconds=30)

@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import time
 
 from common import RegistryKey
@@ -24,7 +24,7 @@ while True:
             name_by_value[name] = v.value
 
     if modified_keys:
-        print(DT.datetime.now())
+        print(dt.datetime.now())
         print(*modified_keys, sep="\n")
         print()
 

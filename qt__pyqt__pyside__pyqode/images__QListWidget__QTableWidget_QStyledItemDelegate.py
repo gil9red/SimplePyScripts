@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 from glob import glob
 from pathlib import Path
 
@@ -90,7 +90,7 @@ if __name__ == "__main__":
     table_widget.resize(800, 600)
     table_widget.show()
 
-    start_time = DT.datetime.now()
+    start_time = dt.datetime.now()
     row = 0
 
     for i, file_name in enumerate(file_names, 1):
@@ -130,12 +130,12 @@ if __name__ == "__main__":
     list_widget.setWindowTitle(
         list_widget.windowTitle()
         + ". Elapsed: "
-        + str(DT.datetime.now() - start_time).split(".")[0]
+        + str(dt.datetime.now() - start_time).split(".")[0]
     )
     table_widget.setWindowTitle(
         table_widget.windowTitle()
         + ". Elapsed: "
-        + str(DT.datetime.now() - start_time).split(".")[0]
+        + str(dt.datetime.now() - start_time).split(".")[0]
     )
 
     app.exec()

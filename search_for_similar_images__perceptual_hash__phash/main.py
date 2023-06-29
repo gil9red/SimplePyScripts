@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import os
 import sys
 import traceback
@@ -388,7 +388,7 @@ class MainWindow(QMainWindow):
         progress.show()
 
         time_start = default_timer()
-        start_datetime = DT.datetime.now()
+        start_datetime = dt.datetime.now()
         processed_nums = 0
         file_names = []
 
@@ -418,7 +418,7 @@ class MainWindow(QMainWindow):
                     "Suffixes": ", ".join(suffixes),
                     "Files processed": processed_nums,
                     "Files found": len(file_names),
-                    "Elapsed time": str(DT.datetime.now() - start_datetime).rsplit(
+                    "Elapsed time": str(dt.datetime.now() - start_datetime).rsplit(
                         ".", maxsplit=1
                     )[0],
                     "Last file": last_file_name,
@@ -454,7 +454,7 @@ class MainWindow(QMainWindow):
         progress.show()
 
         time_start = default_timer()
-        start_datetime = DT.datetime.now()
+        start_datetime = dt.datetime.now()
         number = 0
 
         for i, file_name in enumerate(file_names, 1):
@@ -469,7 +469,7 @@ class MainWindow(QMainWindow):
             progress.setFields(
                 {
                     "Progress": f"{i} / {number_file_names}",
-                    "Elapsed time": str(DT.datetime.now() - start_datetime).rsplit(
+                    "Elapsed time": str(dt.datetime.now() - start_datetime).rsplit(
                         ".", maxsplit=1
                     )[0],
                     "File name": f"{last_file_name} ({file_size})",
@@ -496,7 +496,7 @@ class MainWindow(QMainWindow):
                 progress.setFields(
                     {
                         "Progress": f"{i} / {number_file_names}",
-                        "Elapsed time": str(DT.datetime.now() - start_datetime).rsplit(
+                        "Elapsed time": str(dt.datetime.now() - start_datetime).rsplit(
                             ".", maxsplit=1
                         )[0],
                         "Last file": f"{last_file_name} ({file_size})",
@@ -543,7 +543,7 @@ class MainWindow(QMainWindow):
         progress.show()
 
         time_start = default_timer()
-        start_datetime = DT.datetime.now()
+        start_datetime = dt.datetime.now()
         results = []
 
         for i, (other_file_name, hashes) in enumerate(self.image_by_hashes.items(), 1):
@@ -556,7 +556,7 @@ class MainWindow(QMainWindow):
                     "Hash algo": hash_algo,
                     "Max score": max_score,
                     "Progress": f"{i} / {number_image_by_hashes}",
-                    "Elapsed time": str(DT.datetime.now() - start_datetime).rsplit(
+                    "Elapsed time": str(dt.datetime.now() - start_datetime).rsplit(
                         ".", maxsplit=1
                     )[0],
                 }

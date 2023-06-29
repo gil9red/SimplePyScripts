@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 
 from PyQt5.QtWidgets import (
     QApplication,
@@ -23,12 +23,12 @@ class ListItem(QFrame):
         host: str,
         port: int,
         status: str = "Not checked!",
-        last_check_time: DT.datetime = None,
+        last_check_time: dt.datetime = None,
     ):
         super().__init__()
 
         if not last_check_time:
-            last_check_time = DT.datetime.now()
+            last_check_time = dt.datetime.now()
 
         self.setFrameShape(QFrame.Box)
         self.setFrameShadow(QFrame.Plain)

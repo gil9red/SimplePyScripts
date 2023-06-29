@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import xml.etree.ElementTree as ET
 import sys
 
@@ -21,7 +21,7 @@ from common import (
 
 
 def get_current_datetime() -> str:
-    return DT.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 def update_tasks(tasks_el: ET.Element):

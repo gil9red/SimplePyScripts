@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import time
 import sys
 
@@ -31,7 +31,7 @@ from utils import parse_command, get_pretty_datetime
 def do_checking_reminders(log: Logger, bot: Bot):
     while True:
         try:
-            expected_time = DT.datetime.now() - DT.timedelta(seconds=1)
+            expected_time = dt.datetime.now() - dt.timedelta(seconds=1)
             query = (
                 Reminder.select()
                 .where(

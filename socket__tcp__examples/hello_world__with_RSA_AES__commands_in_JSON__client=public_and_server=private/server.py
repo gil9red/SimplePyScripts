@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import json
 import socket
 import threading
@@ -34,10 +34,10 @@ def process_command(data: bytes, conn, addr) -> bytes:
     command = CommandEnum[command_name]
 
     if command == CommandEnum.CURRENT_DATETIME:
-        rq["data"] = DT.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        rq["data"] = dt.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
     elif command == CommandEnum.CURRENT_TIMESTAMP:
-        rq["data"] = str(DT.datetime.now().timestamp())
+        rq["data"] = str(dt.datetime.now().timestamp())
 
     elif command == CommandEnum.RANDOM:
         rq["data"] = str(random.randint(0, 1000000))

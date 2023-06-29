@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import time
 from pathlib import Path
 
@@ -47,7 +47,7 @@ def do_check(
                 dir_screenshots.mkdir(parents=True, exist_ok=True)
 
                 file_name = str(
-                    dir_screenshots / DT.datetime.today().strftime(file_format)
+                    dir_screenshots / dt.datetime.today().strftime(file_format)
                 )
                 driver.save_screenshot(file_name)
 

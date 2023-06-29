@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import os
 import sqlite3
 import shutil
@@ -38,7 +38,7 @@ def init_db():
 
 
 def db_create_backup(backup_dir="backup"):
-    file_name = str(DT.datetime.today().date()) + ".sqlite"
+    file_name = str(dt.datetime.today().date()) + ".sqlite"
 
     if not os.path.exists(backup_dir):
         os.mkdir(backup_dir)
@@ -47,9 +47,9 @@ def db_create_backup(backup_dir="backup"):
     shutil.copy(DB_FILE_NAME, file_name)
 
 
-def get_last(date: DT.date = None) -> int:
+def get_last(date: dt.date = None) -> int:
     if date is None:
-        date = DT.date.today()
+        date = dt.date.today()
 
     yyyymm = date.strftime("%Y%m")
 
@@ -67,7 +67,7 @@ def delete_last():
         connect.execute("DELETE FROM Water WHERE id = ?", [last_id])
 
 
-def is_exist(date: DT.date = None) -> bool:
+def is_exist(date: dt.date = None) -> bool:
     return get_last(date) != -1
 
 

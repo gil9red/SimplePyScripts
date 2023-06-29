@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 
 import requests
 from bs4 import BeautifulSoup
@@ -22,7 +22,7 @@ def get_day_by_rep(url: str) -> dict:
         rep = row.select_one(".rep-cell").text.strip()
 
         year, month, day = map(int, day.split("-"))
-        day = DT.date(year, month, day)
+        day = dt.date(year, month, day)
 
         day_by_rep[day] = rep
 

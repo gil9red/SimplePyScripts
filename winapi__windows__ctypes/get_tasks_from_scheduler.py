@@ -11,7 +11,7 @@ __author__ = "ipetrash"
 # SOURCE: https://docs.microsoft.com/en-us/windows/win32/taskschd/showmessageaction
 
 
-import datetime as DT
+import datetime as dt
 import enum
 
 from dataclasses import dataclass, field
@@ -125,9 +125,9 @@ class Task:
     hidden: bool
     state: str
     enabled: bool
-    last_run_time: DT.datetime
+    last_run_time: dt.datetime
     last_task_result: int
-    next_run_time: DT.datetime
+    next_run_time: dt.datetime
     number_of_missed_runs: int
     actions: list[ActionType] = field(default_factory=list)
 

@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 # SOURCE: https://doc.qt.io/qt-5/qtcharts-datetimeaxis-example.html
 
 
-import datetime as DT
+import datetime as dt
 
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QPainter
@@ -32,7 +32,7 @@ class MainWindow(QMainWindow):
         series = QLineSeries()
 
         for date, value in DATA:
-            date_value = DT.datetime(*date).timestamp() * 1000
+            date_value = dt.datetime(*date).timestamp() * 1000
             series.append(date_value, value)
 
         chart = QChart()

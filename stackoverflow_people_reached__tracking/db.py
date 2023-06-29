@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import os
 import pathlib
 import re
@@ -20,7 +20,7 @@ DB_FILE_NAME = str(pathlib.Path(__file__).resolve().parent / "db.sqlite")
 def db_create_backup(backup_dir="backup"):
     os.makedirs(backup_dir, exist_ok=True)
 
-    file_name = str(DT.datetime.today().date()) + ".sqlite"
+    file_name = str(dt.datetime.today().date()) + ".sqlite"
     file_name = os.path.join(backup_dir, file_name)
 
     shutil.copy(DB_FILE_NAME, file_name)
@@ -37,7 +37,7 @@ class BaseModel(Model):
 
 class PeopleReached(BaseModel):
     url = TextField()
-    date = DateTimeField(default=DT.datetime.now)
+    date = DateTimeField(default=dt.datetime.now)
     value_human = TextField()
     value = IntegerField()
 

@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 
 
 def generate_range_dates(start_date, end_date) -> list:
@@ -15,7 +15,7 @@ def generate_range_dates(start_date, end_date) -> list:
     items = [date_1]
 
     while date_1 < date_2:
-        date_1 += DT.timedelta(days=1)
+        date_1 += dt.timedelta(days=1)
         items.append(date_1)
 
     return items

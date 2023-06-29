@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 import base64
-import datetime as DT
+import datetime as dt
 import io
 import re
 import os
@@ -37,7 +37,7 @@ def error_sound():
 
 def run():
     try:
-        file_name = f"screenshot_{DT.datetime.now():%Y-%m-%d_%H%M%S}.html"
+        file_name = f"screenshot_{dt.datetime.now():%Y-%m-%d_%H%M%S}.html"
         print(file_name)
 
         img = ImageGrab.grab()

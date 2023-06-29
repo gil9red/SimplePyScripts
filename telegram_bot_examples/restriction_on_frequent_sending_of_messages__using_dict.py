@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 
 # pip install python-telegram-bot
 from telegram import Update
@@ -30,7 +30,7 @@ def on_request(update: Update, _: CallbackContext):
 
     text = "Получено!"
     need_seconds = 50
-    current_time = DT.datetime.now()
+    current_time = dt.datetime.now()
     last_datetime = CHAT_BY_DATETIME.get(message.chat_id)
 
     # Если первое сообщение (время не задано)

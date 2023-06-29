@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 from pathlib import Path
 
 from PyQt5.QtCore import QCoreApplication, QFileSystemWatcher
@@ -17,11 +17,11 @@ app = QCoreApplication([])
 watcher = QFileSystemWatcher([current_dir])
 watcher.directoryChanged.connect(
     lambda directory: print(
-        f"[{DT.datetime.now():%d/%m/%Y %H:%M:%S}] Directory: {directory!r}"
+        f"[{dt.datetime.now():%d/%m/%Y %H:%M:%S}] Directory: {directory!r}"
     )
 )
 watcher.fileChanged.connect(
-    lambda file: print(f"[{DT.datetime.now():%d/%m/%Y %H:%M:%S}] File: {file!r}")
+    lambda file: print(f"[{dt.datetime.now():%d/%m/%Y %H:%M:%S}] File: {file!r}")
 )
 
 app.exec_()

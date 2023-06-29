@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import re
 
 
@@ -14,7 +14,7 @@ PATTERN = re.compile(
 )
 
 
-def parse_command(command: str) -> DT.datetime | None:
+def parse_command(command: str) -> dt.datetime | None:
     m = PATTERN.search(command)
     if not m:
         return
@@ -36,15 +36,15 @@ def parse_command(command: str) -> DT.datetime | None:
     else:
         return
 
-    return DT.datetime.now() + DT.timedelta(**data)
+    return dt.datetime.now() + dt.timedelta(**data)
 
 
-def get_pretty_datetime(finish_time: DT.datetime) -> str:
+def get_pretty_datetime(finish_time: dt.datetime) -> str:
     return finish_time.strftime("%d.%m.%Y %H:%M:%S")
 
 
 if __name__ == "__main__":
-    date_time = DT.datetime.now()
+    date_time = dt.datetime.now()
     print("Current datetime:", get_pretty_datetime(date_time))
     print()
 

@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-import datetime as DT
+import datetime as dt
 import sys
 import time
 
@@ -83,7 +83,7 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.started: DT.datetime = None
+        self.started: dt.datetime = None
         self._sum = 0
 
         self.table_thread = QTableWidget()
@@ -144,7 +144,7 @@ class MainWindow(QWidget):
     def _update_window_title(self):
         threads_num = self.table_thread.rowCount()
         if self.started:
-            elapsed = str(DT.datetime.now() - self.started).split(".")[0]
+            elapsed = str(dt.datetime.now() - self.started).split(".")[0]
             self.setWindowTitle(f"Threads: {threads_num}. Elapsed: {elapsed}")
         else:
             self.setWindowTitle(f"Threads: {threads_num}")
@@ -190,7 +190,7 @@ class MainWindow(QWidget):
 
     def add(self):
         if not self.started:
-            self.started = DT.datetime.now()
+            self.started = dt.datetime.now()
 
         thread = Thread(self)
         thread.about_sum.connect(
