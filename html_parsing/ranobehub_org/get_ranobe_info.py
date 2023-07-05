@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from bs4 import BeautifulSoup
 
@@ -17,6 +17,8 @@ class Ranobe:
     release_year: int
     country: str
     status: str
+    genres: list[str] = field(default_factory=list, repr=False)
+    tags: list[str] = field(default_factory=list, repr=False)
 
 
 def get_ranobe_info(url: str) -> Ranobe:
@@ -25,14 +27,14 @@ def get_ranobe_info(url: str) -> Ranobe:
 
     soup = BeautifulSoup(rs.content, "html.parser")
 
-    title = soup.select_one('.book-header .ui.huge.header').get_text(strip=True)
+    title = soup.select_one(".book-header .ui.huge.header").get_text(strip=True)
 
     release_year = 0
     country = ""
     status = ""
     for row in soup.select(".book-meta-row"):
-        key = row.select_one('.book-meta-key').get_text(strip=True)
-        value = row.select_one('.book-meta-value').get_text(strip=True)
+        key = row.select_one(".book-meta-key").get_text(strip=True)
+        value = row.select_one(".book-meta-value").get_text(strip=True)
 
         match key:
             case "Год выпуска":
@@ -42,16 +44,36 @@ def get_ranobe_info(url: str) -> Ranobe:
             case "Статус перевода":
                 status = value
 
+    genres = [
+        el.get_text(strip=True)
+        for el in soup.select(".book-meta-value.book-tags > .book-tag")
+    ]
+    genres = sorted(set(genres))
+
+    tags = [
+        el.get_text(strip=True)
+        for el in soup.select(".book-container--footer .book-tags .book-tag")
+    ]
+    tags = sorted(set(tags))
+
     return Ranobe(
         title=title,
         release_year=release_year,
         country=country,
         status=status,
+        genres=genres,
+        tags=tags,
     )
 
 
-if __name__ == '__main__':
-    url = 'https://ranobehub.org/ranobe/72-god-and-devil-world'
+if __name__ == "__main__":
+    url = "https://ranobehub.org/ranobe/72-god-and-devil-world"
     ranobe = get_ranobe_info(url)
     print(ranobe)
     # Ranobe(title='Мир Бога и Дьявола', release_year=2013, country='Китай', status='Завершено')
+
+    print(f"Genres: ({len(ranobe.genres)}): {ranobe.genres}")
+    # Genres: (13): ['Боевые искусства', 'Гарем', 'Для взрослых', ..., 'Фэнтези', 'Экшн', 'Эччи']
+
+    print(f"Tags: ({len(ranobe.tags)}): {ranobe.tags}")
+    # Tags: (57): ['Антигерой', 'Апокалипсис', 'Армия', ..., 'Фарминг', 'Эволюция', 'Эгоистичный главный герой']
