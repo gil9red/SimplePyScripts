@@ -15,7 +15,9 @@ sys.path.append(str(ROOT_DIR))
 from root_common import session
 
 
-URL_PROFILE_FORMAT = "https://helpdesk.compassluxe.com/secure/ViewProfile.jspa?name={name}"
+URL_PROFILE_FORMAT = (
+    "https://helpdesk.compassluxe.com/secure/ViewProfile.jspa?name={name}"
+)
 
 
 def search_by_avatar(avatar_id: int) -> list[dict]:
@@ -37,10 +39,11 @@ def search_by_avatar(avatar_id: int) -> list[dict]:
         rs = session.get(url, params=params)
         rs.raise_for_status()
 
-        if not rs.json():
+        result = rs.json()
+        if not result:
             break
 
-        for user in rs.json():
+        for user in result:
             if avatar_id in user["avatarUrls"]["48x48"]:
                 items.append(user)
 
@@ -51,7 +54,7 @@ def search_by_avatar(avatar_id: int) -> list[dict]:
     return items
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     avatar_id = 17250  # pirate
     users = search_by_avatar(avatar_id)
     print(f"Users ({len(users)}):")
