@@ -26,16 +26,15 @@ def search_game_price_list(name: str) -> list:
     for div in root.select(".search_result_row"):
         name = div.select_one(".title").text.strip()
 
-        # Ищем тег скидки
-        if div.select_one(".search_discount > span"):
-            price = div.select_one(".search_price > span > strike").text.strip()
-        else:
-            price = div.select_one(".search_price").text.strip()
+        # Ищем тег скидки, чтобы вытащить оригинальную цену, а не ту, что получилась со скидкой
+        price_el = div.select_one(".discount_original_price") or div.select_one(".discount_final_price")
 
         # Если цены нет (например, игра еще не продается)
-        if not price:
+        if not price_el:
             price = None
         else:
+            price = price_el.get_text(strip=True)
+
             # Если в цене нет цифры считаем что это "Free To Play" или что-то подобное
             match = re.search(r"\d", price)
             if not match:
