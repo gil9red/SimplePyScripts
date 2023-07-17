@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'ipetrash'
+__author__ = "ipetrash"
 
 
 import copy
+import json
 import os
 import shutil
 import sys
@@ -15,11 +16,11 @@ from enum import Enum, auto
 from pathlib import Path
 from typing import Iterable
 
-sys.path.append('../..')
+sys.path.append("../..")
 from from_ghbdtn import from_ghbdtn
 
-sys.path.append('..')
-from kill import kill_servers, kill_explorers
+sys.path.append("..")
+from kill import kill_servers, kill_explorers, kill_designers
 
 
 class AvailabilityEnum(Enum):
@@ -37,7 +38,7 @@ class UnknownNameException(GoException):
         self.name = name
         self.supported = list(supported)
 
-        super().__init__(f'Unknown name {self.name!r}, supported: {self.supported}')
+        super().__init__(f"Unknown name {self.name!r}, supported: {self.supported}")
 
 
 class UnknownWhatException(GoException):
@@ -45,7 +46,7 @@ class UnknownWhatException(GoException):
         self.what = what
         self.supported = list(supported)
 
-        super().__init__(f'Unknown what {self.what!r}, supported: {self.supported}')
+        super().__init__(f"Unknown what {self.what!r}, supported: {self.supported}")
 
 
 class UnknownVersionException(GoException):
@@ -53,7 +54,9 @@ class UnknownVersionException(GoException):
         self.version = version
         self.supported = list(supported)
 
-        super().__init__(f'Unknown version {self.version!r}, supported: {self.supported}')
+        super().__init__(
+            f"Unknown version {self.version!r}, supported: {self.supported}"
+        )
 
 
 class ParameterMissing(GoException):
@@ -61,23 +64,25 @@ class ParameterMissing(GoException):
         self.name = name
         self.param = param
 
-        super().__init__(f'For {self.name!r} the value <{self.param}> must not be set!')
+        super().__init__(f"For {self.name!r} the value <{self.param}> must not be set!")
 
 
 class ParameterAvailabilityException(GoException):
-    def __init__(self, command: 'Command', param: str, availability: AvailabilityEnum):
+    def __init__(self, command: "Command", param: str, availability: AvailabilityEnum):
         if availability == AvailabilityEnum.REQUIRED:
-            post_fix = 'must be set!'
+            post_fix = "must be set!"
         elif availability == AvailabilityEnum.PROHIBITED:
-            post_fix = 'must not be set!'
+            post_fix = "must not be set!"
         else:
-            raise GoException(f'Not supported availability: {availability}!')
+            raise GoException(f"Not supported availability: {availability}!")
 
         self.command = command
         self.param = param
         self.availability = availability
 
-        super().__init__(f'For {self.command.name!r} the value <{self.param}> ' + post_fix)
+        super().__init__(
+            f"For {self.command.name!r} the value <{self.param}> " + post_fix
+        )
 
 
 @dataclass
@@ -91,7 +96,7 @@ class Command:
         settings = SETTINGS[self.name]
 
         value = getattr(self, param)
-        settings_param = settings['options'][param]
+        settings_param = settings["options"][param]
         if settings_param == AvailabilityEnum.REQUIRED:
             if not value:
                 raise ParameterAvailabilityException(self, param, settings_param)
@@ -103,13 +108,15 @@ class Command:
     def run(self):
         settings = SETTINGS[self.name]
 
-        settings_version = settings['options']['version']
+        settings_version = settings["options"]["version"]
         if settings_version == AvailabilityEnum.OPTIONAL and not self.version:
-            self.version = resolve_version(self.name, settings['options']['default_version'])
+            self.version = resolve_version(
+                self.name, settings["options"]["default_version"]
+            )
 
-        self._check_parameter('version')
-        self._check_parameter('what')
-        self._check_parameter('args')
+        self._check_parameter("version")
+        self._check_parameter("what")
+        self._check_parameter("args")
 
         go_run(self.name, self.version, self.what, self.args)
 
@@ -149,15 +156,15 @@ def is_like_a_short_version(value: str) -> bool:
 
 
 def is_like_a_version(value: str) -> bool:
-    trunk = 'trunk'
+    trunk = "trunk"
     trunk_invert = from_ghbdtn(trunk)  # from_ghbdtn('trunk') = 'екгтл'
     return (
         trunk in value  # Для файлов
         or bool(get_similar_value(value, [trunk, trunk_invert]))
-        or bool(re.search(r'\d+(\.\d+)+', value))
+        or bool(re.search(r"\d+(\.\d+)+", value))
         or is_like_a_short_version(value)
-        or '-' in value  # Example: "23-25" or "23-trunk"
-        or ',' in value  # Example: "23,24,25" or "23,24,25,trunk"
+        or "-" in value  # Example: "23-25" or "23-trunk"
+        or "," in value  # Example: "23,24,25" or "23,24,25,trunk"
     )
 
 
@@ -168,7 +175,7 @@ def get_settings(name: str) -> dict:
 
 def get_path_by_name(name: str) -> str:
     settings = get_settings(name)
-    return settings['path']
+    return settings["path"]
 
 
 def get_versions_by_path(path: str) -> dict[str, str]:
@@ -185,7 +192,6 @@ def get_versions_by_path(path: str) -> dict[str, str]:
 
 
 def _print_pretty_settings():
-    import json
     print(json.dumps(SETTINGS, indent=4, default=str))
     sys.exit()
 
@@ -195,9 +201,9 @@ def settings_preprocess(settings: dict[str, dict]) -> dict[str, dict]:
 
     # Update from bases
     for name, values in settings.items():
-        if 'base' in values:
+        if "base" in values:
             # Removing base name
-            base_name = values.pop('base')
+            base_name = values.pop("base")
             base_values = settings[base_name]
             new_settings[name] = copy.deepcopy(base_values)
 
@@ -206,12 +212,15 @@ def settings_preprocess(settings: dict[str, dict]) -> dict[str, dict]:
 
         merge_dicts(values, new_settings[name])
 
-        if 'path' in new_settings[name] and new_settings[name]['options']['version'] != AvailabilityEnum.PROHIBITED:
-            path = new_settings[name]['path']
-            new_settings[name]['versions'] = get_versions_by_path(path)
+        if (
+            "path" in new_settings[name]
+            and new_settings[name]["options"]["version"] != AvailabilityEnum.PROHIBITED
+        ):
+            path = new_settings[name]["path"]
+            new_settings[name]["versions"] = get_versions_by_path(path)
 
     # Removing private names
-    private_names = [name for name in new_settings if name.startswith('__')]
+    private_names = [name for name in new_settings if name.startswith("__")]
     for name in private_names:
         new_settings.pop(name)
 
@@ -220,20 +229,20 @@ def settings_preprocess(settings: dict[str, dict]) -> dict[str, dict]:
 
 def _run_path(path: str, args: list[str] | None = None):
     if not args:
-        print('Need specify file mask')
+        print("Need specify file mask")
         return
 
     file_mask = args[0]
 
     files = list(Path(path).glob(file_mask))
     if not files:
-        print('Not found file')
+        print("Not found file")
         return
 
     if len(files) > 1:
-        print(f'The file mask must match one file.\nFound ({len(files)}):')
+        print(f"The file mask must match one file.\nFound ({len(files)}):")
         for name in files:
-            print(f'    {name}')
+            print(f"    {name}")
         return
 
     file_name = str(files[0])
@@ -241,24 +250,33 @@ def _run_path(path: str, args: list[str] | None = None):
 
 
 def _kill(path: str, args: list[str] | None = None):
-    # Если аргументы не заданы, то убиваем серверы и проводники из папки
+    pids = []
+
+    # Если аргументы не заданы, то убиваем все процессы
     if not args:
-        kill_servers(path)
-        kill_explorers(path)
-        return
+        pids += kill_servers(path)
+        pids += kill_explorers(path)
+        pids += kill_designers(path)
 
-    arg = args[0].lower()
-
-    # all - убиваем все сервера и проводники из всех папок
-    if arg.startswith('a'):
-        kill_servers()
-        kill_explorers()
-    elif arg.startswith('s'):
-        kill_servers(path)
-    elif arg.startswith('e'):
-        kill_explorers(path)
     else:
-        print(f'Unknown argument: {arg}')
+        arg = args[0].lower()
+
+        # all - убиваем все сервера и проводники из всех папок
+        if arg.startswith("a"):
+            pids += kill_servers()
+            pids += kill_explorers()
+            pids += kill_designers()
+        elif arg.startswith("s"):
+            pids += kill_servers(path)
+        elif arg.startswith("e"):
+            pids += kill_explorers(path)
+        elif arg.startswith("d"):
+            pids += kill_designers(path)
+        else:
+            print(f"Unknown argument: {arg}")
+
+    if not pids:
+        print("Could not find processes")
 
 
 def _manager_up(path: str, _: list[str] | None = None):
@@ -266,17 +284,17 @@ def _manager_up(path: str, _: list[str] | None = None):
 
     # NOTE: "C:\DEV__RADIX\manager\manager\bin\manager.cmd" -> "C:\DEV__RADIX\manager"
     root_dir = path.parent.parent.parent
-    path_from = root_dir / 'radix_manager/distrib'
-    files = list(path_from.rglob('*.zip'))
+    path_from = root_dir / "radix_manager/distrib"
+    files = list(path_from.rglob("*.zip"))
     if not files:
-        print(f'Not found files in {path_from}')
+        print(f"Not found files in {path_from}")
         return
 
-    path_to = root_dir / 'optt_manager/upgrades'
-    print(f'Moving files to {path_to}:')
+    path_to = root_dir / "optt_manager/upgrades"
+    print(f"Moving files to {path_to}:")
 
     for file in files:
-        print(f'    File: {file.name}')
+        print(f"    File: {file.name}")
 
         new_file = path_to / file.name
 
@@ -292,88 +310,94 @@ def _manager_clean(path: str, _: list[str] | None = None):
 
     # NOTE: "C:\DEV__RADIX\manager\manager\bin\manager.cmd" -> "C:\DEV__RADIX\manager"
     root_dir = path.parent.parent.parent
-    path_from = root_dir / 'optt_manager/upgrades.backup'
-    files = list(path_from.rglob('*.zip'))
+    path_from = root_dir / "optt_manager/upgrades.backup"
+    files = list(path_from.rglob("*.zip"))
     if not files:
-        print(f'Not found files in {path_from}')
+        print(f"Not found files in {path_from}")
         return
 
-    print(f'Deleting files from {path_from}:')
+    print(f"Deleting files from {path_from}:")
     for file in files:
-        print(f'    File: {file.name}')
+        print(f"    File: {file.name}")
         file.unlink()
 
 
 SETTINGS = {
-    '__radix_base': {
-        'options': {
-            'version': AvailabilityEnum.OPTIONAL,
-            'what': AvailabilityEnum.REQUIRED,
-            'args': AvailabilityEnum.OPTIONAL,
-            'default_version': 'trunk',
+    "__radix_base": {
+        "options": {
+            "version": AvailabilityEnum.OPTIONAL,
+            "what": AvailabilityEnum.REQUIRED,
+            "args": AvailabilityEnum.OPTIONAL,
+            "default_version": "trunk",
         },
-        'whats': {
-            'designer': '!!designer.cmd',
-            'explorer': '!!explorer.cmd',
-            'server':   '!!server.cmd',
-            'compile':  '!build_ads__pause.bat',
-            'build':    '!build_kernel__pause.cmd',
-            'update':   ('svn update', r'start /b "" TortoiseProc /command:update /path:"{path}"'),
-            'log':      (
-                'svn log', r'start /b "" TortoiseProc /command:log /path:"{path}" /findstring:"{find_string}"'
+        "whats": {
+            "designer": "!!designer.cmd",
+            "explorer": "!!explorer.cmd",
+            "server": "!!server.cmd",
+            "compile": "!build_ads__pause.bat",
+            "build": "!build_kernel__pause.cmd",
+            "update": (
+                "svn update",
+                r'start /b "" TortoiseProc /command:update /path:"{path}"',
             ),
-            'cleanup':  (
-                'svn cleanup', 'start /b "" TortoiseProc /command:cleanup /path:"{path}" /cleanup /nodlg /closeonend:2'
+            "log": (
+                "svn log",
+                r'start /b "" TortoiseProc /command:log /path:"{path}" /findstring:"{find_string}"',
             ),
-            'revert':   (
-                'svn revert', 'start /b "" TortoiseProc /command:revert /path:"{path}"'
+            "cleanup": (
+                "svn cleanup",
+                'start /b "" TortoiseProc /command:cleanup /path:"{path}" /cleanup /nodlg /closeonend:2',
             ),
-            'run': _run_path,
-            'kill': _kill,
+            "revert": (
+                "svn revert",
+                'start /b "" TortoiseProc /command:revert /path:"{path}"',
+            ),
+            "run": _run_path,
+            "kill": _kill,
         },
     },
-    'tx': {
-        'base': '__radix_base',
-        'path': 'C:/DEV__TX',
-        'base_version': '3.2.',
+    "tx": {
+        "base": "__radix_base",
+        "path": "C:/DEV__TX",
+        "base_version": "3.2.",
     },
-    'optt': {
-        'base': '__radix_base',
-        'path': 'C:/DEV__OPTT',
-        'base_version': '2.1.',
+    "optt": {
+        "base": "__radix_base",
+        "path": "C:/DEV__OPTT",
+        "base_version": "2.1.",
     },
-    '__simple_base': {
-        'options': {
-            'version': AvailabilityEnum.PROHIBITED,
-            'what': AvailabilityEnum.PROHIBITED,
-            'args': AvailabilityEnum.PROHIBITED,
+    "__simple_base": {
+        "options": {
+            "version": AvailabilityEnum.PROHIBITED,
+            "what": AvailabilityEnum.PROHIBITED,
+            "args": AvailabilityEnum.PROHIBITED,
         }
     },
-    'manager': {
-        'base': '__simple_base',
-        'path': 'C:/DEV__RADIX/manager/manager/bin/manager.cmd',
-        'options': {
-            'what': AvailabilityEnum.OPTIONAL,
+    "manager": {
+        "base": "__simple_base",
+        "path": "C:/DEV__RADIX/manager/manager/bin/manager.cmd",
+        "options": {
+            "what": AvailabilityEnum.OPTIONAL,
         },
-        'whats': {
-            'up': _manager_up,
-            'clean': _manager_clean,
-        }
+        "whats": {
+            "up": _manager_up,
+            "clean": _manager_clean,
+        },
     },
-    'doc': {
-        'base': '__simple_base',
-        'path': 'C:/Program Files (x86)/DocFetcher/DocFetcher.exe',
+    "doc": {
+        "base": "__simple_base",
+        "path": "C:/Program Files (x86)/DocFetcher/DocFetcher.exe",
     },
-    'specifications': {
-        'base': '__simple_base',
-        'path': 'C:/DOC/Specifications',
+    "specifications": {
+        "base": "__simple_base",
+        "path": "C:/DOC/Specifications",
     },
 }
 
 SETTINGS = settings_preprocess(SETTINGS)
 # _print_pretty_SETTINGS()
 
-ABOUT_TEXT = '''\
+ABOUT_TEXT = """\
 RUN:
   go <name> <version> <what> - Run tool
   go <name> <what>           - Run tool (trunk version)
@@ -412,17 +436,17 @@ EXAMPLES:
   > go optt
     Supported versions: 2.1.10, trunk_optt
     Supported <what>: build, cleanup, compile, designer, explorer, log, server, update
-'''.format(
-    ', '.join(SETTINGS.keys()),
+""".format(
+    ", ".join(SETTINGS.keys()),
 )
 
 
 def all_options_is_prohibited(name: str) -> bool:
-    options = get_settings(name)['options']
+    options = get_settings(name)["options"]
     return (
-        options['version'] == AvailabilityEnum.PROHIBITED
-        and options['what'] == AvailabilityEnum.PROHIBITED
-        and options['args'] == AvailabilityEnum.PROHIBITED
+        options["version"] == AvailabilityEnum.PROHIBITED
+        and options["what"] == AvailabilityEnum.PROHIBITED
+        and options["args"] == AvailabilityEnum.PROHIBITED
     )
 
 
@@ -449,10 +473,10 @@ def resolve_whats(name: str, alias: str | None) -> list[str]:
     if not alias:
         return items
 
-    supported = list(get_settings(name)['whats'])
+    supported = list(get_settings(name)["whats"])
     shadow_supported = {from_ghbdtn(x): x for x in supported}
 
-    for alias_what in alias.split('+'):
+    for alias_what in alias.split("+"):
         # Поиск среди списка
         what = get_similar_value(alias_what, supported)
         if not what:
@@ -469,25 +493,23 @@ def resolve_whats(name: str, alias: str | None) -> list[str]:
     return items
 
 
-def resolve_version(
-        name: str,
-        alias: str,
-        versions: list[str] | None = None
-) -> str:
+def resolve_version(name: str, alias: str, versions: list[str] | None = None) -> str:
     settings = get_settings(name)
 
     supported = versions
     if not supported:
-        supported = settings['versions']
+        supported = settings["versions"]
 
     shadow_supported = {from_ghbdtn(x): x for x in supported}
 
     # Если короткая версия, нужно ее расширить, добавив основание версии
     if is_like_a_short_version(alias):
-        base_version = settings.get('base_version')
+        base_version = settings.get("base_version")
         if not base_version:
-            text = f'Attribute "base_settings", using with short versions (="{alias}"), ' \
-                   f'must be defined in SETTINGS for "{name}"'
+            text = (
+                f'Attribute "base_settings", using with short versions (="{alias}"), '
+                f'must be defined in SETTINGS for "{name}"'
+            )
             raise GoException(text)
 
         # Составление полной версии
@@ -512,11 +534,11 @@ def get_file_by_what(name: str, alias: str | None) -> str | tuple[str, str] | No
     if not whats:
         return
     what = whats[0]
-    return get_settings(name)['whats'][what]
+    return get_settings(name)["whats"][what]
 
 
 def get_similar_version_path(name: str, version: str) -> str:
-    supported = get_settings(name)['versions']
+    supported = get_settings(name)["versions"]
     version = resolve_version(name, version, supported)
     return supported[version]
 
@@ -525,7 +547,7 @@ def _run_file(file_name: str):
     dir_file_name = os.path.dirname(file_name)
     file_name = os.path.normpath(file_name)
 
-    print(f'Run: {file_name!r}')
+    print(f"Run: {file_name!r}")
 
     # Move to active dir
     os.chdir(dir_file_name)
@@ -540,17 +562,17 @@ def _open_dir(path: str):
     else:
         dir_file_name = path
 
-    print(f'Open: {dir_file_name!r}')
+    print(f"Open: {dir_file_name!r}")
 
     # Open
     os.startfile(dir_file_name)
 
 
 def go_run(
-        name: str,
-        version: str | None = None,
-        what: str | None = None,
-        args: list[str] | None = None
+    name: str,
+    version: str | None = None,
+    what: str | None = None,
+    args: list[str] | None = None,
 ):
     if args is None:
         args = []
@@ -561,7 +583,7 @@ def go_run(
 
     # Если в <whats> функция, вызываем её
     if callable(value):
-        print(f'Run: {name} call {what!r}' + (f' ({args})' if args else ''))
+        print(f"Run: {name} call {what!r}" + (f" ({args})" if args else ""))
         if version:
             path = get_similar_version_path(name, version)
 
@@ -579,15 +601,15 @@ def go_run(
     os.chdir(dir_file_name)
 
     if isinstance(value, str):
-        file_name = dir_file_name + '/' + value
+        file_name = dir_file_name + "/" + value
         _run_file(file_name)
     else:
         description, command = value
 
-        find_string = '' if not args else args[0]
+        find_string = "" if not args else args[0]
         command = command.format(path=dir_file_name, find_string=find_string)
 
-        print(f'Run: {description} in {dir_file_name}')
+        print(f"Run: {description} in {dir_file_name}")
         os.system(command)
 
 
@@ -601,28 +623,31 @@ def parse_cmd_args(arguments: list[str]) -> list[Command]:
         name = arguments.pop(0).lower()
         name = resolve_name(name)
 
-    options = get_settings(name)['options']
-    maybe_version = options['version'] != AvailabilityEnum.PROHIBITED
-    maybe_what = options['what'] != AvailabilityEnum.PROHIBITED
+    options = get_settings(name)["options"]
+    maybe_version = options["version"] != AvailabilityEnum.PROHIBITED
+    maybe_what = options["what"] != AvailabilityEnum.PROHIBITED
 
     # Второй аргумент это или <version>, или <what>
     if (maybe_version or maybe_what) and arguments:
         alias = arguments.pop(0).lower()
 
-        if is_like_a_version(alias) and options['version'] != AvailabilityEnum.PROHIBITED:
+        if (
+            is_like_a_version(alias)
+            and options["version"] != AvailabilityEnum.PROHIBITED
+        ):
             # Например, "3.2.23,3.2.24,3.2.25,trunk"
-            if ',' in alias:
-                for x in alias.split(','):
+            if "," in alias:
+                for x in alias.split(","):
                     version = resolve_version(name, x)
                     versions.append(version)
 
-            elif '-' in alias:  # Например, "3.2.23-trunk"
-                start, end = alias.split('-')
+            elif "-" in alias:  # Например, "3.2.23-trunk"
+                start, end = alias.split("-")
                 start = resolve_version(name, start)
                 end = resolve_version(name, end)
 
                 found = False
-                for version in get_settings(name)['versions']:
+                for version in get_settings(name)["versions"]:
                     if start == version:
                         found = True
 
@@ -638,7 +663,7 @@ def parse_cmd_args(arguments: list[str]) -> list[Command]:
                 version = resolve_version(name, alias)
                 versions.append(version)
 
-        elif options['what'] != AvailabilityEnum.PROHIBITED:
+        elif options["what"] != AvailabilityEnum.PROHIBITED:
             whats = resolve_whats(name, alias)
 
     # Третий аргумент <what>
@@ -664,7 +689,7 @@ def parse_cmd_args(arguments: list[str]) -> list[Command]:
 
 
 def run(arguments: list[str]):
-    if arguments[0] in ['open', from_ghbdtn('open')]:
+    if arguments[0] in ["open", from_ghbdtn("open")]:
         arguments.pop(0)
 
         if len(arguments) == 1:
@@ -689,14 +714,14 @@ def run(arguments: list[str]):
             settings = get_settings(name)
 
             # Если для сущности параметр версии возможен
-            if settings['options']['version'] != AvailabilityEnum.PROHIBITED:
-                supported_versions = ", ".join(sorted(settings['versions']))
-                print(f'Supported versions: {supported_versions}')
+            if settings["options"]["version"] != AvailabilityEnum.PROHIBITED:
+                supported_versions = ", ".join(sorted(settings["versions"]))
+                print(f"Supported versions: {supported_versions}")
 
             # Если для сущности параметр what возможен
-            if settings['options']['what'] != AvailabilityEnum.PROHIBITED:
-                supported_whats = ", ".join(sorted(settings['whats']))
-                print(f'Supported <what>: {supported_whats}')
+            if settings["options"]["what"] != AvailabilityEnum.PROHIBITED:
+                supported_whats = ", ".join(sorted(settings["whats"]))
+                print(f"Supported <what>: {supported_whats}")
 
 
 def _print_help():
@@ -704,7 +729,7 @@ def _print_help():
     sys.exit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = sys.argv[1:]
     if not args:
         _print_help()
