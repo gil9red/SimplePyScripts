@@ -5,7 +5,6 @@ __author__ = "ipetrash"
 
 
 import re
-
 import xml.etree.ElementTree as ET
 
 from collections import defaultdict
@@ -48,7 +47,9 @@ def get_xml_object_title(el: ET.Element) -> str:
     return f"{el_name}({el_id})"
 
 
-def get_databases_specific_sqml_expression(el: ET.Element, tag_name: str) -> list[tuple[str, str]]:
+def get_databases_specific_sqml_expression(
+    el: ET.Element, tag_name: str
+) -> list[tuple[str, str]]:
     items = []
     if not el:
         return items
@@ -79,18 +80,22 @@ def get_sqml_text(el: ET.Element) -> str:
             if child.tag.endswith("Sql"):
                 if inner_text := get_text(child):
                     # Пропуск комментариев
-                    if not inner_text.startswith('--'):
+                    if not inner_text.startswith("--"):
                         lines.append(process_sqml_text(inner_text))
             else:
                 # Например: [('TableId', 'tbl42K4K2TTGLNRDHRZABQAQH3XQ4'), ('PropId', 'colXJ7GB2ILWZGAVHRCJAZCMCM6E4'), ('Owner', 'CHILD')]
                 if child.items():
-                    if owner_type := child.get('Owner'):
-                        attr_str = owner_type + "." + ".".join(v for k, v in child.items() if k != 'Owner')
+                    if owner_type := child.get("Owner"):
+                        attr_str = (
+                            owner_type
+                            + "."
+                            + ".".join(v for k, v in child.items() if k != "Owner")
+                        )
                     else:
                         attr_str = ",".join(f"{k}={v}" for k, v in child.items())
                     lines.append(f"[{attr_str}]")
 
-    return ''.join(lines)
+    return "".join(lines)
 
 
 def get_exists_condition_sqml_text(condition_el: ET.Element) -> list[str]:
@@ -107,7 +112,9 @@ def get_exists_condition_sqml_text(condition_el: ET.Element) -> list[str]:
         items.append(sqml_text)
 
     for tag_name in ["SpecificConditionWhere", "SpecificConditionFrom"]:
-        for database, sqml_text in get_databases_specific_sqml_expression(condition_el, tag_name):
+        for database, sqml_text in get_databases_specific_sqml_expression(
+            condition_el, tag_name
+        ):
             items.append(f"{database}:{sqml_text}")
 
     return items
@@ -134,7 +141,9 @@ def get_ads_filters(ads_el: ET.Element) -> dict[str, list[str]]:
             obj_by_items[filter_title].append(sqml_text)
 
         for tag_name in ["SpecificCondition", "SpecificConditionFrom", "SpecificHint"]:
-            for database, sqml_text in get_databases_specific_sqml_expression(filter_el, tag_name):
+            for database, sqml_text in get_databases_specific_sqml_expression(
+                filter_el, tag_name
+            ):
                 obj_by_items[filter_title].append(f"{database}:{sqml_text}")
 
         enabled_sorting_el = filter_el.find("./ads:EnabledSorting", namespaces=NS)
@@ -309,62 +318,45 @@ def get_ads_list(branch_dir: Path | str) -> dict[str, list[ADS]]:
 def process(path: str):
     indent1 = "    "
     indent2 = indent1 * 2
-    # indent3 = indent1 * 3
-    # indent4 = indent1 * 4
 
     sqml_text_by_ids: dict[str, list[str]] = defaultdict(list)
 
     for layer_module, ads_list in get_ads_list(path).items():
-        # print(layer_module)
-
         for ads in ads_list:
-            # print(indent1 + ads.title)
-
             prop_by_sqmls = ads.props
             if prop_by_sqmls:
-                # print(indent2 + "Props:")
                 for prop, items in prop_by_sqmls.items():
-                    # print(indent3 + f'{prop}: {", ".join(items)}')
                     for sqml_text in items:
                         sqml_text_by_ids[sqml_text].append(prop)
 
             editor_by_sqmls = ads.editors
             if editor_by_sqmls:
-                # print(indent2 + "Editor presentations:")
                 for editor, items in editor_by_sqmls.items():
-                    # print(indent3 + f"{editor}:")
                     for sqml in items:
-                        id_str, sqml_text = sqml.split(': ')
+                        id_str, sqml_text = sqml.split(": ")
                         sqml_text_by_ids[sqml_text].append(id_str)
-                        # print(indent4 + f"{sqml}")
 
             selector_by_sqmls = ads.selectors
             if selector_by_sqmls:
-                # print(indent2 + "Selector presentations:")
                 for selector, items in selector_by_sqmls.items():
-                    # print(indent3 + f'{selector}: {", ".join(items)}')
                     for sqml_text in items:
                         sqml_text_by_ids[sqml_text].append(selector)
 
             filter_by_sqmls = ads.filters
             if filter_by_sqmls:
-                # print(indent2 + "Filters:")
                 for filter_name, items in filter_by_sqmls.items():
-                    # print(indent3 + f'{filter_name}: {", ".join(items)}')
                     for sqml_text in items:
                         sqml_text_by_ids[sqml_text].append(filter_name)
 
             sorting_by_sqmls = ads.sortings
             if sorting_by_sqmls:
-                # print(indent2 + "Sortings:")
                 for sorting, items in sorting_by_sqmls.items():
-                    # print(indent3 + f'{sorting}: {", ".join(items)}')
                     for sqml_text in items:
                         sqml_text_by_ids[sqml_text].append(sorting)
 
-            # print()
-
-    for sqml_text, ids in sorted(sqml_text_by_ids.items(), key=lambda x: len(x[1]), reverse=True):
+    for sqml_text, ids in sorted(
+        sqml_text_by_ids.items(), key=lambda x: len(x[1]), reverse=True
+    ):
         # Если меньше 5, то пропускаем
         if len(ids) < 5:
             continue
@@ -380,7 +372,7 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="Shows ADS entities with SQL definitions"
+        description="Shows ADS entities with duplicates SQL definitions"
     )
     parser.add_argument(
         "path_trunk",
