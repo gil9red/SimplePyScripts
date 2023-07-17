@@ -5,6 +5,7 @@ __author__ = "ipetrash"
 
 
 import copy
+import enum
 import json
 import os
 import shutil
@@ -12,6 +13,7 @@ import sys
 import re
 
 from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum, auto
 from pathlib import Path
 from typing import Iterable
@@ -20,7 +22,7 @@ sys.path.append("../..")
 from from_ghbdtn import from_ghbdtn
 
 sys.path.append("..")
-from kill import kill_servers, kill_explorers, kill_designers
+from kill import kill_servers, kill_explorers, kill_designers, get_processes, is_server, is_explorer, is_designer
 
 
 class AvailabilityEnum(Enum):
@@ -279,6 +281,43 @@ def _kill(path: str, args: list[str] | None = None):
         print("Could not find processes")
 
 
+def _processes(path: str, args: list[str] | None = None):
+    class ProcessEnum(enum.Enum):
+        Server = enum.auto()
+        Explorer = enum.auto()
+        Designer = enum.auto()
+
+    type_by_processes = {
+        ProcessEnum.Server: [],
+        ProcessEnum.Explorer: [],
+        ProcessEnum.Designer: [],
+    }
+
+    # all - показываем все процессы
+    if args and args[0].lower().startswith("a"):
+        path = None
+
+    for p in get_processes(path):
+        if is_server(p):
+            type_by_processes[ProcessEnum.Server].append(p)
+        elif is_explorer(p):
+            type_by_processes[ProcessEnum.Explorer].append(p)
+        elif is_designer(p):
+            type_by_processes[ProcessEnum.Designer].append(p)
+
+    for process_type, processes in type_by_processes.items():
+        if not processes:
+            continue
+
+        print(f"{process_type.name} ({len(processes)}):")
+        for p in processes:
+            started_time = datetime.fromtimestamp(p.create_time())
+            print(f"    #{p.pid}, started: {started_time:%d/%m/%Y %H:%M:%S}")
+
+    if not any(type_by_processes.values()):
+        print("Could not find processes")
+
+
 def _manager_up(path: str, _: list[str] | None = None):
     path = Path(path)
 
@@ -354,6 +393,7 @@ SETTINGS = {
             ),
             "run": _run_path,
             "kill": _kill,
+            "processes": _processes,
         },
     },
     "tx": {
