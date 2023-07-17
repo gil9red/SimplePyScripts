@@ -9,7 +9,7 @@ from common import session, load
 
 def get_feeds_by_manga_chapters() -> list[str]:
     # Auth and load
-    load("https://grouple.co/private/bookmarks/index#")
+    rs = load("https://grouple.co/private/bookmarks/index#")
 
     data = {
         "bookmarkSort": "NAME",
@@ -17,9 +17,15 @@ def get_feeds_by_manga_chapters() -> list[str]:
         "statusFilter": ["ANOTHER_UPDATES"],
         "includeUpdates": True,
         "limit": 50,
-        "offset": 0
+        "offset": 0,
     }
-    session.headers["Authorization"] = f'Bearer {session.cookies["gwt"]}'
+
+    session.headers.update(
+        {
+            "Authorization": f'Bearer {session.cookies["gwt"]}',
+            "Referer": rs.url,
+        }
+    )
 
     rs = session.post("https://grouple.co/api/bookmark/activitiesList", json=data)
     rs.raise_for_status()
