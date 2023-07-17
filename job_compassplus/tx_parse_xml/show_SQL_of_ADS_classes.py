@@ -253,6 +253,9 @@ def get_ads_list(branch_dir: Path | str) -> dict[str, list[ADS]]:
     if isinstance(branch_dir, str):
         branch_dir = Path(branch_dir)
 
+    if not branch_dir.exists():
+        raise Exception(f"Not exists: {branch_dir}")
+
     layer_module_by_ads_list = defaultdict(list)
 
     for layer_dir in branch_dir.glob("*"):
