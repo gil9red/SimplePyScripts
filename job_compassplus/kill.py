@@ -24,7 +24,7 @@ def is_found(p: Process, cwd: str | Path = None) -> bool:
     if isinstance(cwd, str):
         cwd = Path(cwd)
     if cwd:
-        is_equal_path = cwd.exists() and cwd == Path(p.cwd())
+        is_equal_path = cwd.exists() and Path(p.cwd()).is_relative_to(cwd)
     else:
         is_equal_path = True
 
