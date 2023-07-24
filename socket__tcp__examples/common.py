@@ -47,22 +47,22 @@ def recv_msg__with_crc32(sock) -> bytes | None:
     return msg
 
 
-def send_msg(sock, msg):
-    # Prefix each message with a 8-byte length (network byte order)
-    msg = struct.pack(">Q", len(msg)) + msg
+def send_msg(sock, msg, msg_len_format: str = ">Q"):
+    # Prefix each message with a 8-byte (>Q) length (network byte order)
+    msg = struct.pack(msg_len_format, len(msg)) + msg
     sock.sendall(msg)
 
 
-def recv_msg(sock) -> bytes | None:
-    # 8-byte
-    payload_size = struct.calcsize(">Q")
+def recv_msg(sock, msg_len_format: str = ">Q") -> bytes | None:
+    # >Q - 8-byte
+    payload_size = struct.calcsize(msg_len_format)
 
     # Read message length and unpack it into an integer
     raw_msg_len = recv_all(sock, payload_size)
     if not raw_msg_len:
         return None
 
-    msg_len = struct.unpack(">Q", raw_msg_len)[0]
+    msg_len = struct.unpack(msg_len_format, raw_msg_len)[0]
 
     # Read the message data
     return recv_all(sock, msg_len)
