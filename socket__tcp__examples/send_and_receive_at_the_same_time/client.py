@@ -24,7 +24,9 @@ sock.connect((HOST, PORT))
 def read_from():
     while True:
         response_data = recv_msg(sock)
-        print(f"Response ({len(response_data)}): {response_data}")
+        if response_data:
+            print(f"Response ({len(response_data)}): {response_data}")
+        time.sleep(0.1)
 
 
 Thread(target=read_from).start()
