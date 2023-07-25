@@ -26,7 +26,7 @@ def get_seasons() -> dict[str, list[str]]:
             continue
 
         series_list = []
-        for title_el in table_series.select("tr td.summary a"):
+        for title_el in table_series.select("tr td.summary b>a"):
             series_title = title_el.get_text(strip=True)
             series_list.append(series_title)
 
