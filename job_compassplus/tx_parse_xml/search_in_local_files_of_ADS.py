@@ -25,7 +25,11 @@ def process(path: str, regexp: str):
     pattern = re.compile(regexp)
 
     for p in Path(path).glob("*/ads/*/locale/*/mlb*.xml"):
-        mlb = ET.fromstring(p.read_bytes())
+        try:
+            mlb = ET.fromstring(p.read_bytes())
+        except Exception:
+            # Ignore
+            continue
 
         for string_el in mlb.findall(".//ads:String", namespaces=NS):
             string_value_el = string_el.find("./ads:Value", namespaces=NS)
