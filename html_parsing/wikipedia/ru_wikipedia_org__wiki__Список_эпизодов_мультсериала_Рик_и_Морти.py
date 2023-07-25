@@ -31,12 +31,20 @@ def get_seasons() -> dict[str, list[str]]:
             continue
 
         series_list = []
-        for title_el in table_series.select("tr td.summary b"):
+        for row in table_series.select("tr"):
+            title_el = row.select_one("td.summary b")
+            if not title_el:
+                continue
+
+            number_str = row.select_one("td").get_text(strip=True)
+
             # Удаление сносок, типа "«Солярикс[en]»"
             if sup_el := title_el.find("sup"):
                 sup_el.decompose()
 
-            series_title = title_el.get_text(strip=True)
+            name = title_el.get_text(strip=True)
+
+            series_title = f"Серия {number_str}. {name}"
             series_list.append(series_title)
 
         assert series_list, f"Не найдена ни одна серия! Сезон: {season_title}"
