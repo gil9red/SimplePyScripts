@@ -61,7 +61,6 @@ def get_all_series() -> list[str]:
     ]
 
 
-
 if __name__ == "__main__":
     season_by_series = get_seasons()
     for season, series_list in season_by_series.items():
