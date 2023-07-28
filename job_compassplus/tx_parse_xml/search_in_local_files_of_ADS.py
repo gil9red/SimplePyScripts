@@ -31,6 +31,7 @@ def process(path: str, regexp: str):
             # Ignore
             continue
 
+        items = []
         for string_el in mlb.findall(".//ads:String", namespaces=NS):
             string_value_el = string_el.find("./ads:Value", namespaces=NS)
             string_value = get_text(string_value_el)
@@ -39,7 +40,11 @@ def process(path: str, regexp: str):
                 string_id = string_el.attrib["Id"]
                 string_lang = string_value_el.attrib["Language"]
 
-                print(f"Found with id={string_id} language={string_lang}: {string_value!r}")
+                items.append(f"Found with id={string_id} language={string_lang}: {string_value!r}")
+
+        if items:
+            items.sort()
+            print(*items, sep="\n")
 
 
 if __name__ == "__main__":
