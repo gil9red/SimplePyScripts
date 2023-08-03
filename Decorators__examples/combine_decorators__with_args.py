@@ -47,6 +47,21 @@ def upper(func):
     return wrapped
 
 
+def custom_tag(
+    name: str,
+    **arguments,
+):
+    def actual_decorator(func):
+        @functools.wraps(func)
+        def wrapped(*args, **kwargs):
+            attrs = get_attrs_str(arguments)
+            return f"<{name}{attrs}>{func(*args, **kwargs)}</{name}>"
+
+        return wrapped
+
+    return actual_decorator
+
+
 def composed(*decs):
     def deco(f):
         for dec in reversed(decs):
@@ -69,21 +84,6 @@ def multi(func):
     )(func)
 
 
-def custom_tag(
-    name: str,
-    **arguments,
-):
-    def actual_decorator(func):
-        @functools.wraps(func)
-        def wrapped(*args, **kwargs):
-            attrs = get_attrs_str(arguments)
-            return f"<{name}{attrs}>{func(*args, **kwargs)}</{name}>"
-
-        return wrapped
-
-    return actual_decorator
-
-
 @custom_tag(
     name="a",
     href="https://example.com",
@@ -101,8 +101,9 @@ def hello_2(text):
     return text
 
 
-print(hello("Hello World!"))
-# <a href="https://example.com" title="Hint!"><b foo="1"><i bar="2">HELLO WORLD!</i></b></a>
+if __name__ == '__main__':
+    print(hello("Hello World!"))
+    # <a href="https://example.com" title="Hint!"><b foo="1"><i bar="2">HELLO WORLD!</i></b></a>
 
-print(hello_2("Hello World!"))
-# <a href="https://example.com" title="Hint!"><b foo="1"><i bar="2">HELLO WORLD!</i></b></a>
+    print(hello_2("Hello World!"))
+    # <a href="https://example.com" title="Hint!"><b foo="1"><i bar="2">HELLO WORLD!</i></b></a>
