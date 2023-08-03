@@ -20,7 +20,7 @@ def makebold(**decorator_kwargs):
         @functools.wraps(func)
         def wrapped(*args, **kwargs):
             attrs = get_attrs_str(decorator_kwargs)
-            return f"<b{attrs}>" + func(*args, **kwargs) + "</b>"
+            return f"<b{attrs}>{func(*args, **kwargs)}</b>"
 
         return wrapped
 
@@ -32,7 +32,7 @@ def makeitalic(**decorator_kwargs):
         @functools.wraps(func)
         def wrapped(*args, **kwargs):
             attrs = get_attrs_str(decorator_kwargs)
-            return f"<i{attrs}>" + func(*args, **kwargs) + "</i>"
+            return f"<i{attrs}>{func(*args, **kwargs)}</i>"
 
         return wrapped
 
@@ -58,12 +58,37 @@ def composed(*decs):
 
 def multi(func):
     return composed(
+        custom_tag(
+            name="a",
+            href="https://example.com",
+            title="Hint!",
+        ),
         makebold(foo="1"),
         makeitalic(bar="2"),
         upper,
     )(func)
 
 
+def custom_tag(
+    name: str,
+    **arguments,
+):
+    def actual_decorator(func):
+        @functools.wraps(func)
+        def wrapped(*args, **kwargs):
+            attrs = get_attrs_str(arguments)
+            return f"<{name}{attrs}>{func(*args, **kwargs)}</{name}>"
+
+        return wrapped
+
+    return actual_decorator
+
+
+@custom_tag(
+    name="a",
+    href="https://example.com",
+    title="Hint!",
+)
 @makebold(foo="1")
 @makeitalic(bar="2")
 @upper
@@ -77,7 +102,7 @@ def hello_2(text):
 
 
 print(hello("Hello World!"))
-# <b foo="1"><i bar="2">HELLO WORLD!</i></b>
+# <a href="https://example.com" title="Hint!"><b foo="1"><i bar="2">HELLO WORLD!</i></b></a>
 
 print(hello_2("Hello World!"))
-# <b foo="1"><i bar="2">HELLO WORLD!</i></b>
+# <a href="https://example.com" title="Hint!"><b foo="1"><i bar="2">HELLO WORLD!</i></b></a>
