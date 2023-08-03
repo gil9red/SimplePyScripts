@@ -33,18 +33,17 @@ def process(path: str):
         if not layer_ads_dir.is_dir():
             continue
 
-        for module_path in layer_ads_dir.glob("*/src"):
-            for class_path in module_path.glob("*.xml"):
-                model = ET.fromstring(class_path.read_bytes())
-                for task_el in model.findall(".//xsc:Task", namespaces=NS):
-                    assignee = task_el.attrib["Assignee"].strip()
-                    if not assignee:
-                        assignee = "<unknown>"
+        for class_path in layer_ads_dir.glob("*/src/*.xml"):
+            model = ET.fromstring(class_path.read_bytes())
+            for task_el in model.findall(".//xsc:Task", namespaces=NS):
+                assignee = task_el.attrib["Assignee"].strip()
+                if not assignee:
+                    assignee = "<unknown>"
 
-                    assignee_by_number[assignee] += 1
+                assignee_by_number[assignee] += 1
 
-                    task_type = task_el.attrib["Type"]
-                    type_by_number[task_type] += 1
+                task_type = task_el.attrib["Type"]
+                type_by_number[task_type] += 1
 
     indent1 = "    "
 
