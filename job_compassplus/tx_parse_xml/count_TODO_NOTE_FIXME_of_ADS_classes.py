@@ -48,6 +48,9 @@ def process(path: str):
 
     indent1 = "    "
 
+    print("Total:", sum(assignee_by_number.values()))
+    print()
+
     print(f"assignee_by_number ({len(assignee_by_number)}):")
     for assignee, number in sorted(
         assignee_by_number.items(), key=lambda x: x[1], reverse=True
