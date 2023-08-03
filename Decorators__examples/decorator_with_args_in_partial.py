@@ -24,6 +24,7 @@ custom_tag_a = partial(
     title="Hint!",
 )
 
+
 @custom_tag_a()
 def hello2(text):
     return text
