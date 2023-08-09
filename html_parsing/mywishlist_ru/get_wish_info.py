@@ -14,6 +14,7 @@ from common import session
 
 @dataclass
 class Wish:
+    id: int
     user: str
     title: str
     created_at: datetime
@@ -33,6 +34,7 @@ class Wish:
         img_url = img_el["src"] if img_el else ""
 
         return cls(
+            id=int(url.split("/")[-1]),
             user=soup.select_one(".pWishFull .pProfile a").get_text(strip=True),
             title=soup.select_one(".pWishData h5").get_text(strip=True),
             created_at=created_at,
