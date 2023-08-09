@@ -4,39 +4,82 @@
 __author__ = "ipetrash"
 
 
-import json
 import time
 
 from pathlib import Path
+from typing import Type
 
-from get_wish_info import Wish
+# pip install peewee
+from peewee import SqliteDatabase, Model, TextField, CharField
+
+from get_wish_info import Wish as WishInfo
 from get_last_id_wish import get_last_id_wish
 
 
 DIR = Path(__file__).resolve().parent
-FILE_NAME_DUMP = DIR / "dump.json"
+
+
+db = SqliteDatabase(DIR / "dump.sqlite")
+
+
+class BaseModel(Model):
+    class Meta:
+        database = db
+
+    @classmethod
+    def get_inherited_models(cls) -> list[Type["BaseModel"]]:
+        return sorted(cls.__subclasses__(), key=lambda x: x.__name__)
+
+    @classmethod
+    def print_count_of_tables(cls):
+        items = []
+        for sub_cls in cls.get_inherited_models():
+            name = sub_cls.__name__
+            count = sub_cls.select().count()
+            items.append(f"{name}: {count}")
+
+        print(", ".join(items))
+
+    def __str__(self):
+        fields = []
+        for k, field in self._meta.fields.items():
+            v = getattr(self, k)
+
+            if isinstance(field, (TextField, CharField)):
+                v = repr(v)
+
+            fields.append(f"{k}={v}")
+
+        return self.__class__.__name__ + "(" + ", ".join(fields) + ")"
+
+
+class Wish(BaseModel):
+    user = TextField()
+    user_url = TextField()
+    title = TextField()
+    created_at = TextField()
+    img_url = TextField()
+
+
+db.connect()
+db.create_tables(BaseModel.get_inherited_models())
 
 
 def run():
     wish_id = 1
     last_id_wish = get_last_id_wish()
 
-    if FILE_NAME_DUMP.exists():
-        with open(FILE_NAME_DUMP, encoding="utf-8") as f:
-            items = json.load(f)
-        wish_id = max(items, key=lambda x: x["id"])["id"] + 1
-    else:
-        items = []
+    current_last_id = Wish.select(Wish.id).order_by(Wish.id.desc()).scalar()
+    if current_last_id:
+        wish_id = current_last_id + 1
 
     while wish_id < last_id_wish:
         print(f"#{wish_id}")
 
         try:
-            wish = Wish.parse_from(wish_id)
-            if wish:
-                items.append(wish.as_dict())
-                with open(FILE_NAME_DUMP, "w", encoding="utf-8") as f:
-                    json.dump(items, f, ensure_ascii=False, indent=4)
+            wish_info = WishInfo.parse_from(wish_id)
+            if wish_info:
+                Wish.create(**wish_info.as_dict())
             else:
                 print(f"#{wish_id} не найдено!")
 
@@ -46,7 +89,7 @@ def run():
             continue
 
         wish_id += 1
-        time.sleep(1)
+        time.sleep(0.050)
 
         # Достигли максимального известного id - попробуем его обновить
         if wish_id == last_id_wish:
