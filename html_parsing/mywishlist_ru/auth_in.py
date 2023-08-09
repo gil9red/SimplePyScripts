@@ -4,11 +4,10 @@
 __author__ = "ipetrash"
 
 
-from bs4 import BeautifulSoup
-from common import session
+from common import BASE_URL, do_get, do_post
 
 
-URL_LOGIN = "http://mywishlist.ru/login/login"
+URL_LOGIN = f"{BASE_URL}/login/login"
 
 LOGIN = ""
 PASSWORD = ""
@@ -20,14 +19,12 @@ DATA = {
     "login[password]": PASSWORD,
 }
 
-rs = session.post(URL_LOGIN, data=DATA)
+rs, root = do_post(URL_LOGIN, data=DATA)
 print(rs.url)  # http://mywishlist.ru/me/ladywerner
-rs.raise_for_status()
 
 if "/me/" not in rs.url:
     raise Exception("Не получилось авторизоваться!")
 
-root = BeautifulSoup(rs.content, "html.parser")
 user_name = root.select_one(".pProfileMain > h2 > a").text
 print(f"user_name: {user_name}")
 # user_name: Ladywerner
@@ -37,10 +34,8 @@ print(f"Tags ({len(user_tags)}): {user_tags}")
 # Tags (96): ['abh', 'anastasia_beverly_hills', 'beauty', ...
 
 url_friends = rs.url + "/friends/list"
-rs = session.get(url_friends)
-rs.raise_for_status()
+rs, root = do_get(url_friends)
 
-root = BeautifulSoup(rs.content, "html.parser")
 user_friends = [el.text for el in root.select(".pFriendList .pProfile a")]
 print(f"Friends ({len(user_friends)}): {user_friends}")
 # Friends (3): ['Foxmellis', 'Nastiapooh', 'wannabeanarchy']

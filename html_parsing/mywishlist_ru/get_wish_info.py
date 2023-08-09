@@ -7,12 +7,10 @@ __author__ = "ipetrash"
 from dataclasses import dataclass
 from typing import Optional
 
-from bs4 import BeautifulSoup
-
-from common import session
+from common import BASE_URL, do_get
 
 
-BASE_URL = "http://mywishlist.ru/wish"
+URL_WISH = f"{BASE_URL}/wish"
 
 
 @dataclass
@@ -25,18 +23,16 @@ class Wish:
 
     @classmethod
     def parse_from(cls, wish_id: int) -> Optional["Wish"]:
-        url = f"{BASE_URL}/{wish_id}"
+        url = f"{URL_WISH}/{wish_id}"
 
-        rs = session.get(url)
-        rs.raise_for_status()
-
-        soup = BeautifulSoup(rs.content, "html.parser")
+        _, soup = do_get(url)
 
         user_el = soup.select_one(".pWishFull .pProfile a")
         if not user_el:
             return None
 
-        created_at_str = soup.select_one(".pWishData .pPostText .Date").get_text(strip=True)
+        created_at_el = soup.select_one(".pWishData .pPostText .Date")
+        created_at_str = created_at_el.get_text(strip=True)
 
         img_el = soup.select_one(".pWishFull noindex > a > img[src]")
         img_url = img_el["src"] if img_el else ""
