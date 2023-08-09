@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from typing import Optional
 
 from common import BASE_URL, do_get
@@ -17,6 +17,7 @@ URL_WISH = f"{BASE_URL}/wish"
 class Wish:
     id: int
     user: str
+    user_url: str
     title: str
     created_at: str
     img_url: str
@@ -40,16 +41,20 @@ class Wish:
         return cls(
             id=wish_id,
             user=user_el.get_text(strip=True),
+            user_url=user_el["href"],
             title=soup.select_one(".pWishData h5").get_text(strip=True),
             created_at=created_at_str,
             img_url=img_url,
         )
 
+    def as_dict(self) -> dict:
+        return asdict(self)
+
 
 if __name__ == "__main__":
     wish = Wish.parse_from(8888)
     print(wish)
-    # Wish(id=8888, user='Olesialirika', title='стать спутницей жизни для того,кого люблю', created_at='2006-09-12 21:47', img_url='/pic/i/wish/300x300/000/008/888.gif')
+    # Wish(id=8888, user='Olesialirika', user_url='/wishlist/olesialirika', title='стать спутницей жизни для того,кого люблю', created_at='2006-09-12 21:47', img_url='/pic/i/wish/300x300/000/008/888.gif')
 
     wish = Wish.parse_from(446)
     print(wish)
