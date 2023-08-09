@@ -6,11 +6,12 @@ __author__ = "ipetrash"
 
 import time
 
+from datetime import datetime
 from pathlib import Path
 from typing import Type
 
 # pip install peewee
-from peewee import SqliteDatabase, Model, TextField, CharField
+from peewee import SqliteDatabase, Model, TextField, CharField, DateTimeField
 
 from get_wish_info import Wish as WishInfo
 from get_last_id_wish import get_last_id_wish
@@ -57,7 +58,7 @@ class Wish(BaseModel):
     user = TextField()
     user_url = TextField()
     title = TextField()
-    created_at = TextField()
+    created_at = DateTimeField()
     img_url = TextField()
 
 
@@ -79,7 +80,11 @@ def run():
         try:
             wish_info = WishInfo.parse_from(wish_id)
             if wish_info:
-                Wish.create(**wish_info.as_dict())
+                wish_data = wish_info.as_dict()
+                wish_data["created_at"] = datetime.strptime(
+                    wish_data["created_at"], "%Y-%m-%d %H:%M"
+                )
+                Wish.create(**wish_data)
             else:
                 print(f"#{wish_id} не найдено!")
 
