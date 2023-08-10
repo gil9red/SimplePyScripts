@@ -14,6 +14,8 @@ from typing import Type
 # pip install peewee
 from peewee import SqliteDatabase, Model, TextField, CharField, DateTimeField
 
+from requests.exceptions import HTTPError
+
 from get_wish_info import Wish as WishInfo
 from get_last_id_wish import get_last_id_wish
 
@@ -56,11 +58,12 @@ class BaseModel(Model):
 
 
 class Wish(BaseModel):
-    user = TextField()
-    user_url = TextField()
-    title = TextField()
+    user = TextField(null=True)
+    user_url = TextField(null=True)
+    title = TextField(null=True)
     created_at = DateTimeField(null=True)
-    img_url = TextField()
+    img_url = TextField(null=True)
+    error = TextField(null=True)
 
 
 db.connect()
@@ -95,10 +98,20 @@ def run():
             else:
                 print(f"#{wish_id} не найдено!")
 
-        except Exception:
-            print(traceback.format_exc())
-            time.sleep(60)
-            continue
+        except Exception as e:
+            error_text = traceback.format_exc()
+
+            # Если ошибка сети, но главная страница доступна
+            # Например, у "http://mywishlist.ru/wish/41985" стабильно выдавало 500 ошибку
+            if isinstance(e, HTTPError) and get_last_id_wish():
+                Wish.create(
+                    id=wish_id,
+                    error=error_text,
+                )
+            else:
+                print(error_text)
+                time.sleep(60)
+                continue
 
         wish_id += 1
         time.sleep(0.050)
