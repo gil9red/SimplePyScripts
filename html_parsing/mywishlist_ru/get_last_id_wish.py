@@ -7,10 +7,15 @@ __author__ = "ipetrash"
 from common import BASE_URL, do_get
 
 
-def get_last_id_wish() -> int:
-    _, soup = do_get(BASE_URL)
-    wish_url = soup.select_one(".pWishList .pWishLite a[href]")["href"]
-    return int(wish_url.split("/")[-1])
+def get_last_id_wish(safe: bool = False) -> int | None:
+    try:
+        _, soup = do_get(BASE_URL)
+        wish_url = soup.select_one(".pWishList .pWishLite a[href]")["href"]
+        return int(wish_url.split("/")[-1])
+    except Exception as e:
+        if safe:
+            return
+        raise e
 
 
 if __name__ == "__main__":
