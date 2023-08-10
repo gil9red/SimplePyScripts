@@ -4,27 +4,12 @@
 __author__ = "ipetrash"
 
 
-# SOURCE: https://github.com/hellysmile/fake-useragent
-
+# SOURCE: https://github.com/fake-useragent/fake-useragent
 
 # pip install fake-useragent
 from fake_useragent import UserAgent
 
-
 ua = UserAgent()
-
-
-print(ua.ie)
-# Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0; Trident/4.0; GTB7.4; InfoPath.3; SV1; .NET CLR 3.1.76908; WOW64; en-US)
-
-print(ua.msie)
-# Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; InfoPath.2; SLCC1; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET CLR 2.0.50727)
-
-print(ua["Internet Explorer"])
-# Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; Zune 4.0; InfoPath.3; MS-RTC LM 8; .NET4.0C; .NET4.0E)
-
-print(ua.opera)
-# Opera/9.80 (Windows NT 6.1; WOW64; U; pt) Presto/2.10.229 Version/11.62
 
 print(ua.chrome)
 # Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.67 Safari/537.36
