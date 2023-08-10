@@ -5,6 +5,7 @@ __author__ = "ipetrash"
 
 
 import time
+import traceback
 
 from datetime import datetime
 from pathlib import Path
@@ -58,7 +59,7 @@ class Wish(BaseModel):
     user = TextField()
     user_url = TextField()
     title = TextField()
-    created_at = DateTimeField()
+    created_at = DateTimeField(null=True)
     img_url = TextField()
 
 
@@ -81,15 +82,21 @@ def run():
             wish_info = WishInfo.parse_from(wish_id)
             if wish_info:
                 wish_data = wish_info.as_dict()
-                wish_data["created_at"] = datetime.strptime(
-                    wish_data["created_at"], "%Y-%m-%d %H:%M"
-                )
+
+                created_at_str = wish_data["created_at"]
+                if created_at_str:
+                    created_at = datetime.strptime(created_at_str, "%Y-%m-%d %H:%M")
+                else:
+                    created_at = None
+
+                wish_data["created_at"] = created_at
+
                 Wish.create(**wish_data)
             else:
                 print(f"#{wish_id} не найдено!")
 
-        except Exception as e:
-            print(f"Error: {e}")
+        except Exception:
+            print(traceback.format_exc())
             time.sleep(60)
             continue
 

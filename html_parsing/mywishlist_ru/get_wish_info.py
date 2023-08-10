@@ -33,7 +33,10 @@ class Wish:
             return None
 
         created_at_el = soup.select_one(".pWishData .pPostText .Date")
-        created_at_str = created_at_el.get_text(strip=True)
+        if created_at_el:
+            created_at_str = created_at_el.get_text(strip=True)
+        else:
+            created_at_str = ""
 
         img_el = soup.select_one(".pWishFull noindex > a > img[src]")
         img_url = img_el["src"] if img_el else ""
@@ -59,3 +62,7 @@ if __name__ == "__main__":
     wish = Wish.parse_from(446)
     print(wish)
     # None
+
+    wish = Wish.parse_from(3255)
+    print(wish)
+    # Wish(id=3255, user='', user_url='/wishlist/woofwoof', title='Портмоне', created_at='', img_url='/pic/i/wish/300x300/000/003/255.jpeg')
