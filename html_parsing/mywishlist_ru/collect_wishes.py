@@ -23,6 +23,17 @@ from get_last_id_wish import get_last_id_wish
 DIR = Path(__file__).resolve().parent
 
 
+def get_mandatory_last_id_wish() -> int:
+    while True:
+        try:
+            return get_last_id_wish()
+        except Exception:
+            print(
+                f"Ошибка при получении id последнего желания:\n{traceback.format_exc()}"
+            )
+            time.sleep(60)
+
+
 db = SqliteDatabase(DIR / "dump.sqlite")
 
 
@@ -72,7 +83,7 @@ db.create_tables(BaseModel.get_inherited_models())
 
 def run():
     wish_id = 1
-    last_id_wish = get_last_id_wish()
+    last_id_wish = get_mandatory_last_id_wish()
 
     current_last_id = Wish.select(Wish.id).order_by(Wish.id.desc()).scalar()
     if current_last_id:
@@ -103,7 +114,7 @@ def run():
 
             # Если ошибка сети, но главная страница доступна
             # Например, у "http://mywishlist.ru/wish/41985" стабильно выдавало 500 ошибку
-            if isinstance(e, HTTPError) and get_last_id_wish():
+            if isinstance(e, HTTPError) and get_last_id_wish(safe=True):
                 Wish.create(
                     id=wish_id,
                     error=error_text,
@@ -118,7 +129,7 @@ def run():
 
         # Достигли максимального известного id - попробуем его обновить
         if wish_id == last_id_wish:
-            last_id_wish = get_last_id_wish()
+            last_id_wish = get_mandatory_last_id_wish()
 
 
 if __name__ == "__main__":
