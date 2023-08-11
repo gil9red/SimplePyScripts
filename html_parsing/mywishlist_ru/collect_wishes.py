@@ -34,6 +34,20 @@ def get_mandatory_last_id_wish() -> int:
             time.sleep(60)
 
 
+def get_wish_data(wish: WishInfo) -> dict:
+    wish_data = wish.as_dict()
+
+    created_at_str = wish_data["created_at"]
+    if created_at_str:
+        created_at = datetime.strptime(created_at_str, "%Y-%m-%d %H:%M")
+    else:
+        created_at = None
+
+    wish_data["created_at"] = created_at
+
+    return wish_data
+
+
 db = SqliteDatabase(DIR / "dump.sqlite")
 
 
@@ -95,16 +109,7 @@ def run():
         try:
             wish_info = WishInfo.parse_from(wish_id)
             if wish_info:
-                wish_data = wish_info.as_dict()
-
-                created_at_str = wish_data["created_at"]
-                if created_at_str:
-                    created_at = datetime.strptime(created_at_str, "%Y-%m-%d %H:%M")
-                else:
-                    created_at = None
-
-                wish_data["created_at"] = created_at
-
+                wish_data = get_wish_data(wish_info)
                 Wish.create(**wish_data)
             else:
                 print(f"#{wish_id} не найдено!")
