@@ -99,23 +99,25 @@ def run():
     wish_id = 1
     last_id_wish = get_mandatory_last_id_wish()
 
-    current_last_id = Wish.select(Wish.id).order_by(Wish.id.desc()).scalar()
-    if current_last_id:
+    if current_last_id := Wish.select(Wish.id).order_by(Wish.id.desc()).scalar():
         wish_id = current_last_id + 1
 
     while wish_id < last_id_wish:
         print(f"#{wish_id}")
 
-        wish_info = None
         try:
-            wish_info = WishInfo.parse_from(wish_id)
+            if wish_info := WishInfo.parse_from(wish_id):
+                wish_data = get_wish_data(wish_info)
+                Wish.create(**wish_data)
+            else:
+                print(f"#{wish_id} не найдено!")
 
-        except Exception as e:
+        except HTTPError:
             error_text = traceback.format_exc()
 
             # Если ошибка сети, но главная страница доступна
             # Например, у "http://mywishlist.ru/wish/41985" стабильно выдавало 500 ошибку
-            if isinstance(e, HTTPError) and get_last_id_wish(safe=True):
+            if get_last_id_wish(safe=True):
                 Wish.create(
                     id=wish_id,
                     error=error_text,
@@ -124,12 +126,6 @@ def run():
                 print(error_text)
                 time.sleep(60)
                 continue
-
-        if wish_info:
-            wish_data = get_wish_data(wish_info)
-            Wish.create(**wish_data)
-        else:
-            print(f"#{wish_id} не найдено!")
 
         wish_id += 1
         time.sleep(0.050)
