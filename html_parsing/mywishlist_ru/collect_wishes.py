@@ -106,13 +106,9 @@ def run():
     while wish_id < last_id_wish:
         print(f"#{wish_id}")
 
+        wish_info = None
         try:
             wish_info = WishInfo.parse_from(wish_id)
-            if wish_info:
-                wish_data = get_wish_data(wish_info)
-                Wish.create(**wish_data)
-            else:
-                print(f"#{wish_id} не найдено!")
 
         except Exception as e:
             error_text = traceback.format_exc()
@@ -128,6 +124,12 @@ def run():
                 print(error_text)
                 time.sleep(60)
                 continue
+
+        if wish_info:
+            wish_data = get_wish_data(wish_info)
+            Wish.create(**wish_data)
+        else:
+            print(f"#{wish_id} не найдено!")
 
         wish_id += 1
         time.sleep(0.050)
