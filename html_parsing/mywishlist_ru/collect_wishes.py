@@ -16,11 +16,23 @@ from peewee import SqliteDatabase, Model, TextField, CharField, DateTimeField
 
 from requests.exceptions import HTTPError
 
+from common import BASE_URL, do_get
 from get_wish_info import Wish as WishInfo
 from get_last_id_wish import get_last_id_wish
 
 
 DIR = Path(__file__).resolve().parent
+
+
+def check_availability() -> bool:
+    # У сайта бывает отваливаются страницы желаний, но при этом
+    # доступна главная страница и часть страниц желаний
+    # У справки такой неоднозначности нет
+    try:
+        do_get(f"{BASE_URL}/docs/help")
+        return True
+    except Exception:
+        return False
 
 
 def get_mandatory_last_id_wish() -> int:
@@ -115,9 +127,9 @@ def run():
         except Exception as e:
             error_text = traceback.format_exc()
 
-            # Если ошибка сети, но главная страница доступна
+            # Если ошибка сети при попытке загрузить желание, но проблема именно с этим желанием
             # Например, у "http://mywishlist.ru/wish/41985" стабильно выдавало 500 ошибку
-            if isinstance(e, HTTPError) and get_last_id_wish(safe=True):
+            if isinstance(e, HTTPError) and check_availability():
                 Wish.create(
                     id=wish_id,
                     error=error_text,
