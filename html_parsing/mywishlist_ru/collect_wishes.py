@@ -112,12 +112,12 @@ def run():
             else:
                 print(f"#{wish_id} не найдено!")
 
-        except HTTPError:
+        except Exception as e:
             error_text = traceback.format_exc()
 
             # Если ошибка сети, но главная страница доступна
             # Например, у "http://mywishlist.ru/wish/41985" стабильно выдавало 500 ошибку
-            if get_last_id_wish(safe=True):
+            if isinstance(e, HTTPError) and get_last_id_wish(safe=True):
                 Wish.create(
                     id=wish_id,
                     error=error_text,
