@@ -70,4 +70,5 @@ if __name__ == "__main__":
         app,
         host=HOST,
         port=PORT,
+        allow_unsafe_werkzeug=True,
     )
