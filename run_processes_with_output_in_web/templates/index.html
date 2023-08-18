@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
 </head>
 <body>
-    <select id="commands">
+    <select id="commands" size="{{ commands|length }}">
         {% for value in commands %}
         <option>{{ value }}</option>
         {% endfor %}
