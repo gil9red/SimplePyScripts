@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>{{ title }}</title>
+
+    <script type="text/javascript" src="{{url_for('static', filename='js/jquery.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/socket.io.min.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/index.js') }}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+    <select id="commands">
+        {% for value in commands %}
+        <option>{{ value }}</option>
+        {% endfor %}
+    </select>
+    <button onclick="run()">Go</button>
+    <div id="tasks"></div>
+</body>
+</html>
