@@ -6,7 +6,11 @@ __author__ = "ipetrash"
 
 from pathlib import Path
 
+# pip install flask
 from flask import Flask, render_template
+
+# pip install flask-socketio
+# pip install simple-websocket
 from flask_socketio import SocketIO, emit
 from engineio.payload import Payload
 
