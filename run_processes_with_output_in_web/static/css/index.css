@@ -15,6 +15,15 @@
     width: 150px;
     height: 150px;
 }
+[data-status="Pending"] {
+    background-color: gray;
+}
+[data-status="Running"] {
+    background-color: green;
+}
+[data-process-return-code]:not([data-process-return-code="0"]) {
+    background-color: red;
+}
 .log-out, .log-err {
     white-space: pre;
     overflow-wrap: normal;

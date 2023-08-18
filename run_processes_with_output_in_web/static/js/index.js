@@ -7,7 +7,7 @@ function create_task_el(msg) {
     }
 
     let template = `
-        <div id="${msg.id}" class="task">
+        <div id="${msg.id}" class="task" data-status="${msg.status}">
             <table>
                 <tr><td>Command:</td><td class="task-command">${msg.command}</td></tr>
                 <tr><td>Id:</td><td class="task-id">${msg.id}</td></tr>
@@ -43,6 +43,7 @@ socket.on('update_task', function(msg, callback) {
 
     if (msg.status != null) {
         task_el.find(".task-status").text(msg.status);
+        task_el.attr("data-status", msg.status);
     }
 
     if (msg.process_id != null) {
@@ -51,6 +52,7 @@ socket.on('update_task', function(msg, callback) {
 
     if (msg.process_return_code != null) {
         task_el.find(".task-process-return-code").text(msg.process_return_code);
+        task_el.attr("data-process-return-code", msg.process_return_code);
     }
 
     if (msg.stdout_add != null) {
