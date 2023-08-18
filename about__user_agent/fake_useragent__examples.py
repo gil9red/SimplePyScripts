@@ -9,6 +9,7 @@ __author__ = "ipetrash"
 # pip install fake-useragent
 from fake_useragent import UserAgent
 
+
 ua = UserAgent()
 
 print(ua.chrome)
