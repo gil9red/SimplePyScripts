@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import requests
 from bs4 import BeautifulSoup
@@ -43,27 +43,27 @@ def do_post(url: str, *args, **kwargs) -> tuple[requests.Response, BeautifulSoup
 class Api:
     login: str
     password: str
+    last_rs: requests.Response = field(init=False, repr=False, default=None)
+    last_soup: BeautifulSoup = field(init=False, repr=False, default=None)
 
-    def auth(self) -> tuple[requests.Response, BeautifulSoup]:
-        do_get(URL_GET_LOGIN)
+    def auth(self):
+        self.last_rs, self.last_soup = do_get(URL_GET_LOGIN)
 
         params = {
             "login[login]": self.login,
             "login[password]": self.password,
         }
 
-        rs, root = do_post(URL_POST_LOGIN, data=params)
+        self.last_rs, self.last_soup = do_post(URL_POST_LOGIN, data=params)
+        if "/me/" not in self.last_rs.url:
+            raise Exception(f"Не получилось авторизоваться! {self.last_rs} - {self.last_rs.url}")
 
-        if "/me/" not in rs.url:
-            raise Exception("Не получилось авторизоваться!")
 
-        return rs, root
-
-    def add_wish(self, title: str, img_path: str = None) -> tuple[requests.Response, BeautifulSoup]:
+    def add_wish(self, title: str, img_path: str = None) -> int:
         url_get_add_wish = f"{BASE_URL}/me/{self.login}/wish/add"
         url_post_add_wish = url_get_add_wish + "?autocomplete=false"
 
-        do_get(url_get_add_wish)
+        self.last_rs, self.last_soup = do_get(url_get_add_wish)
 
         params = {
             "wish[wish]": title,
@@ -85,7 +85,17 @@ class Api:
                 ("wish[picture]", (img_path, open(img_path, "rb")))
             )
 
-        return do_post(url_post_add_wish, data=params, files=files)
+        self.last_rs, self.last_soup = do_post(
+            url_post_add_wish,
+            data=params,
+            files=files
+        )
+
+        wish_el = self.last_soup.select_one('.pWishList .pWishData a[href*="/wish"]')
+        if not wish_el:
+            raise Exception("Не удалось найти желание!")
+
+        return int(wish_el["href"].split("/")[-1])
 
 
 if __name__ == "__main__":
@@ -96,10 +106,14 @@ if __name__ == "__main__":
 
     api = Api(login, password)
     api.auth()
-    api.add_wish(
+
+    wish_id = api.add_wish(
         title=f"Желание #{int(datetime.now().timestamp())}",
     )
-    api.add_wish(
+    print(f"Добавлено желание #{wish_id}")
+
+    wish_id = api.add_wish(
         title=f"Желание #{int(datetime.now().timestamp())}",
         img_path=r"..\..\pil_pillow__examples\blur\input.jpg",
     )
+    print(f"Добавлено желание #{wish_id}")
