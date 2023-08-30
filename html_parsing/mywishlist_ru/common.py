@@ -97,6 +97,22 @@ class Api:
 
         return int(wish_el["href"].split("/")[-1])
 
+    def set_wish_as_granted(self, wish_id: int, thanks: str = ""):
+        url_get = f"{BASE_URL}/me/{self.login}/wish/check/{wish_id}"
+        url_post = f"{BASE_URL}/me/{self.login}/wish/check_save/{wish_id}"
+
+        self.last_rs, self.last_soup = do_get(url_get)
+
+        params = {
+            "wish[realized]": "false",
+            "wish[thanks]": thanks,
+        }
+
+        self.last_rs, self.last_soup = do_post(
+            url_post,
+            data=params,
+        )
+
 
 if __name__ == "__main__":
     from datetime import datetime
@@ -117,3 +133,6 @@ if __name__ == "__main__":
         img_path=r"..\..\pil_pillow__examples\blur\input.jpg",
     )
     print(f"Добавлено желание #{wish_id}")
+
+    api.set_wish_as_granted(wish_id, thanks="Благодарности моем коту!")
+    print(f"Желание #{wish_id} исполнено!")
