@@ -18,6 +18,8 @@ from enum import Enum, auto
 from pathlib import Path
 from typing import Iterable
 
+import requests
+
 sys.path.append("../..")
 from from_ghbdtn import from_ghbdtn
 
@@ -87,6 +89,30 @@ class ParameterAvailabilityException(GoException):
         )
 
 
+class JenkinsJobCheckException(GoException):
+    pass
+
+
+URL_JENKINS = "http://10.77.204.68:8080"
+
+
+def do_check_jenkins_job(url: str, version: str):
+    url = url.format(URL_JENKINS=URL_JENKINS, version=version)
+
+    rs = requests.get(url)
+    if rs.status_code == 404:
+        raise JenkinsJobCheckException(f"Сборки для версии {version} нет.\nURL: {url}")
+
+    rs.raise_for_status()
+
+    result = rs.json()["result"]
+    if not result:
+        raise JenkinsJobCheckException(f"Сборка еще в процессе.\nURL: {url}")
+
+    if result != "SUCCESS":
+        raise JenkinsJobCheckException(f"Сборка поломанная, обновление прервано.\nURL: {url}")
+
+
 @dataclass
 class Command:
     name: str
@@ -120,7 +146,14 @@ class Command:
         self._check_parameter("what")
         self._check_parameter("args")
 
-        go_run(self.name, self.version, self.what, self.args)
+        # TODO: Переписать do_run для использования только Command
+        go_run(self.name, self.version, self.what, self.args, self)
+
+
+@dataclass
+class RunContext:
+    command: Command
+    description: str = ""
 
 
 # SOURCE: https://stackoverflow.com/a/20666342/5909792
@@ -229,7 +262,7 @@ def settings_preprocess(settings: dict[str, dict]) -> dict[str, dict]:
     return new_settings
 
 
-def _run_path(path: str, args: list[str] | None = None):
+def _run_path(path: str, args: list[str] | None = None, context: RunContext = None):
     if not args:
         print("Need specify file mask")
         return
@@ -251,7 +284,7 @@ def _run_path(path: str, args: list[str] | None = None):
     _run_file(file_name)
 
 
-def _kill(path: str, args: list[str] | None = None):
+def _kill(path: str, args: list[str] | None = None, context: RunContext = None):
     pids = []
 
     # Если аргументы не заданы, то убиваем все процессы
@@ -281,7 +314,7 @@ def _kill(path: str, args: list[str] | None = None):
         print("Could not find processes")
 
 
-def _processes(path: str, args: list[str] | None = None):
+def _processes(path: str, args: list[str] | None = None, context: RunContext = None):
     class ProcessEnum(enum.Enum):
         Server = enum.auto()
         Explorer = enum.auto()
@@ -318,7 +351,7 @@ def _processes(path: str, args: list[str] | None = None):
         print("Could not find processes")
 
 
-def _manager_up(path: str, _: list[str] | None = None):
+def _manager_up(path: str, _: list[str] | None = None, context: RunContext = None):
     path = Path(path)
 
     # NOTE: "C:\DEV__RADIX\manager\manager\bin\manager.cmd" -> "C:\DEV__RADIX\manager"
@@ -344,7 +377,7 @@ def _manager_up(path: str, _: list[str] | None = None):
         shutil.move(file, new_file)
 
 
-def _manager_clean(path: str, _: list[str] | None = None):
+def _manager_clean(path: str, _: list[str] | None = None, context: RunContext = None):
     path = Path(path)
 
     # NOTE: "C:\DEV__RADIX\manager\manager\bin\manager.cmd" -> "C:\DEV__RADIX\manager"
@@ -359,6 +392,33 @@ def _manager_clean(path: str, _: list[str] | None = None):
     for file in files:
         print(f"    File: {file.name}")
         file.unlink()
+
+
+def _svn_update(path, args: list[str] | None = None, context: RunContext = None):
+    force = False
+
+    # force - обновляемся, даже если сборка сломана
+    if args and args[0].lower().startswith("f"):
+        force = True
+
+    command = context.command
+    settings = get_settings(command.name)
+
+    jenkins_url = settings.get("jenkins_url")
+    if jenkins_url:
+        try:
+            do_check_jenkins_job(jenkins_url, command.version)
+        except JenkinsJobCheckException as e:
+            if not force:
+                text = "Чтобы все-равно загрузить повторите с аргументом force"
+                print(f"{e}\n{text}")
+                return
+
+    command_svn = r'start /b "" TortoiseProc /command:update /path:"{path}"'
+    command_svn = command_svn.format(path=path)
+
+    print(f"Run: {context.description} in {path}")
+    os.system(command_svn)
 
 
 SETTINGS = {
@@ -377,7 +437,7 @@ SETTINGS = {
             "build": "!build_kernel__pause.cmd",
             "update": (
                 "svn update",
-                r'start /b "" TortoiseProc /command:update /path:"{path}"',
+                _svn_update,
             ),
             "log": (
                 "svn log",
@@ -400,11 +460,13 @@ SETTINGS = {
         "base": "__radix_base",
         "path": "C:/DEV__TX",
         "base_version": "3.2.",
+        "jenkins_url": "{URL_JENKINS}/job/TX_{version}_build/lastBuild/api/json?tree=result",
     },
     "optt": {
         "base": "__radix_base",
         "path": "C:/DEV__OPTT",
         "base_version": "2.1.",
+        "jenkins_url": "{URL_JENKINS}/job/OPTT_{version}_build/lastBuild/api/json?tree=result",
     },
     "__simple_base": {
         "options": {
@@ -613,6 +675,7 @@ def go_run(
     version: str | None = None,
     what: str | None = None,
     args: list[str] | None = None,
+    context_command: Command = None,
 ):
     if args is None:
         args = []
@@ -621,36 +684,42 @@ def go_run(
     path = get_path_by_name(name)
     value = get_file_by_what(name, what)
 
-    # Если в <whats> функция, вызываем её
-    if callable(value):
-        print(f"Run: {name} call {what!r}" + (f" ({args})" if args else ""))
-        if version:
-            path = get_similar_version_path(name, version)
-
-        value(path, args)
-        return
-
     # Если по <name> указывается файл, то сразу его и запускаем
     if os.path.isfile(path) or all_options_is_prohibited(name):
         _run_file(path)
         return
+
+    if version:
+        path = get_similar_version_path(name, version)
 
     dir_file_name = get_similar_version_path(name, version)
 
     # Move to active dir
     os.chdir(dir_file_name)
 
+    # Если в <whats> функция, вызываем её
+    if callable(value):
+        print(f"Run: {name} call {what!r}" + (f" ({args})" if args else ""))
+        value(path, args, RunContext(context_command))
+        return
+
     if isinstance(value, str):
         file_name = dir_file_name + "/" + value
         _run_file(file_name)
-    else:
-        description, command = value
+        return
 
-        find_string = "" if not args else args[0]
-        command = command.format(path=dir_file_name, find_string=find_string)
+    description, command = value
 
-        print(f"Run: {description} in {dir_file_name}")
-        os.system(command)
+    # Если функция - вызываем
+    if callable(command):
+        command(path, args, RunContext(context_command, description))
+        return
+
+    find_string = "" if not args else args[0]
+    command = command.format(path=dir_file_name, find_string=find_string)
+
+    print(f"Run: {description} in {dir_file_name}")
+    os.system(command)
 
 
 def parse_cmd_args(arguments: list[str]) -> list[Command]:
