@@ -411,7 +411,7 @@ def _svn_update(path, args: list[str] | None = None, context: RunContext = None)
         except JenkinsJobCheckException as e:
             if not force:
                 text = "Чтобы все-равно загрузить повторите с аргументом force"
-                print(f"{e}\n{text}")
+                print(f"{e}\n\n{text}")
                 return
 
     command_svn = r'start /b "" TortoiseProc /command:update /path:"{path}"'
