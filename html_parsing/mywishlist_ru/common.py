@@ -74,6 +74,7 @@ class Api:
     def add_wish(
         self,
         title: str,
+        tags: list[str] = None,
         img_path: str = None,
         price_description: str = "",
         rating: RatingEnum = RatingEnum.MEDIUM,
@@ -84,9 +85,10 @@ class Api:
 
         self.last_rs, self.last_soup = do_get(url_get_add_wish)
 
+        tags_value = ",".join(tags) if tags else ""
         params = {
             "wish[wish]": title,
-            "wish[tags]": "",
+            "wish[tags]": tags_value,
             "wish[link]": "",
             "wish[picture_delete]": "0",
             "wish[picture_url]": "",
@@ -144,6 +146,7 @@ if __name__ == "__main__":
 
     wish_id = api.add_wish(
         title=f"Желание #{int(datetime.now().timestamp())}",
+        tags=["zombie", "zzz", "eateateat"],
         price_description="овердофига",
         rating=RatingEnum.HIGH,
     )
@@ -151,6 +154,7 @@ if __name__ == "__main__":
 
     wish_id = api.add_wish(
         title=f"Желание #{int(datetime.now().timestamp())}",
+        tags=["omnonom"],
         visible_mode=VisibleModeEnum.PRIVATE,
     )
     print(f"Добавлено желание #{wish_id}")
