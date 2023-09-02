@@ -5,6 +5,7 @@ __author__ = "ipetrash"
 
 
 from dataclasses import dataclass, field
+from enum import Enum
 
 import requests
 from bs4 import BeautifulSoup
@@ -13,6 +14,18 @@ from bs4 import BeautifulSoup
 BASE_URL = "http://mywishlist.ru"
 URL_GET_LOGIN = f"{BASE_URL}/login"
 URL_POST_LOGIN = f"{BASE_URL}/login/login"
+
+
+class VisibleModeEnum(Enum):
+    PRIVATE = 0
+    PUBLIC = 3
+    FRIENDS = 2
+
+
+class RatingEnum(Enum):
+    LOW = 1
+    MEDIUM = 2
+    HIGH = 3
 
 
 session = requests.session()
@@ -58,8 +71,14 @@ class Api:
         if "/me/" not in self.last_rs.url:
             raise Exception(f"Не получилось авторизоваться! {self.last_rs} - {self.last_rs.url}")
 
-
-    def add_wish(self, title: str, img_path: str = None) -> int:
+    def add_wish(
+        self,
+        title: str,
+        img_path: str = None,
+        price_description: str = "",
+        rating: RatingEnum = RatingEnum.MEDIUM,
+        visible_mode: VisibleModeEnum = VisibleModeEnum.PUBLIC,
+    ) -> int:
         url_get_add_wish = f"{BASE_URL}/me/{self.login}/wish/add"
         url_post_add_wish = url_get_add_wish + "?autocomplete=false"
 
@@ -71,11 +90,11 @@ class Api:
             "wish[link]": "",
             "wish[picture_delete]": "0",
             "wish[picture_url]": "",
-            "wish[price]": "",
+            "wish[price]": price_description,
             "wish[event]": "",
             "wish[post_current]": "",
-            "wish[rating]": "2",
-            "wish[visible]": "0",
+            "wish[rating]": rating.value,
+            "wish[visible]": visible_mode.value,
             "wish[commentable]": "1",
         }
 
@@ -125,12 +144,21 @@ if __name__ == "__main__":
 
     wish_id = api.add_wish(
         title=f"Желание #{int(datetime.now().timestamp())}",
+        price_description="овердофига",
+        rating=RatingEnum.HIGH,
+    )
+    print(f"Добавлено желание #{wish_id}")
+
+    wish_id = api.add_wish(
+        title=f"Желание #{int(datetime.now().timestamp())}",
+        visible_mode=VisibleModeEnum.PRIVATE,
     )
     print(f"Добавлено желание #{wish_id}")
 
     wish_id = api.add_wish(
         title=f"Желание #{int(datetime.now().timestamp())}",
         img_path=r"..\..\pil_pillow__examples\blur\input.jpg",
+        visible_mode=VisibleModeEnum.FRIENDS,
     )
     print(f"Добавлено желание #{wish_id}")
 
