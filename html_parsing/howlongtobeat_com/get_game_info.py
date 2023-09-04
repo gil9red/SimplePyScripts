@@ -39,3 +39,8 @@ if __name__ == "__main__":
         get_game_info(game_id=3505)
     )
     # Game(id=3505, title='Final Fantasy IX', aliases=['Final Fantasy 9', 'FF9'], duration_main_seconds=138721, duration_main_title='38:32:01', duration_plus_seconds=189924, duration_plus_title='52:45:24', duration_100_seconds=299502, duration_100_title='83:11:42', duration_all_seconds=171503, duration_all_title='47:38:23', release_world='2000-02-16', profile_platforms=['Mobile', 'Nintendo Switch', 'PC', 'PlayStation', 'PlayStation 4', 'Xbox One'], profile_genres=['Role-Playing'])
+
+    print(
+        get_game_info(game_id=3519)
+    )
+    # Game(id=3519, title='Final Fantasy VI', aliases=['Final Fantasy III [NA]', 'Final Fantasy 3 [NA]', 'Final Fantasy 6', 'FF6', 'Final Fantasy VI Advance', 'Final Fantasy VI: Pixel Remaster'], duration_main_seconds=124906, duration_main_title='34:41:46', duration_plus_seconds=147288, duration_plus_title='40:54:48', duration_100_seconds=220653, duration_100_title='61:17:33', duration_all_seconds=148583, duration_all_title='41:16:23', release_world='1994-04-02', profile_platforms=['Game Boy Advance', 'Mobile', 'Nintendo Switch', 'PC', 'PlayStation', 'PlayStation 4', 'Super Nintendo'], profile_genres=['Turn-Based', 'Role-Playing'])
