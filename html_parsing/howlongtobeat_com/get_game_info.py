@@ -30,7 +30,7 @@ def get_game_info(game_id: int) -> Game:
 
     next_data = json.loads(next_data_str)
     return Game.parse(
-        dpath.util.get(next_data, "**/data/game/0")
+        data=dpath.util.get(next_data, "**/data/game/0")
     )
 
 
