@@ -51,7 +51,12 @@ def get_price() -> str:
             # Кнопка "Войти"
             driver.find_element(By.CSS_SELECTOR, 'button[type="submit"]').click()
 
+            attempts = 30
             while "/auth" in driver.current_url:
+                if attempts == 0:
+                    raise Exception("Не удалось покинуть страницу /auth")
+
+                attempts -= 1
                 time.sleep(1)
 
             # Попытаемся пройти дальше
