@@ -5,9 +5,13 @@ __author__ = "ipetrash"
 
 
 import os
+import time
+
 from config import DIR_STARTUP, PREFIX_LINK
 
 
 for f in DIR_STARTUP.glob(f"{PREFIX_LINK}*.lnk"):
     print(f'Run "{f}"')
     os.startfile(f)
+
+    time.sleep(5)
