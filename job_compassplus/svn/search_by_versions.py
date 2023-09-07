@@ -9,13 +9,17 @@ import subprocess
 import xml.etree.ElementTree as ET
 
 from collections import defaultdict
+from datetime import date, timedelta
 
 
 PATTERN_VERSION = re.compile(r"/dev/(.+?)/")
 URL_DEFAULT_SVN_PATH = "svn+cplus://svn2.compassplus.ru/twrbs/trunk/dev"
 
 
-def search(text: str, limit: int = 100, url: str = URL_DEFAULT_SVN_PATH) -> list[str]:
+def search(text: str, last_days: int = 30, url: str = URL_DEFAULT_SVN_PATH) -> list[str]:
+    end_date = date.today()
+    start_date = date.today() - timedelta(days=last_days)
+
     data: bytes = subprocess.check_output(
         [
             "svn",
@@ -24,8 +28,8 @@ def search(text: str, limit: int = 100, url: str = URL_DEFAULT_SVN_PATH) -> list
             "--xml",
             "--search",
             text,
-            "--limit",
-            str(limit),
+            "--revision",
+            f"{{{start_date}}}:{{{end_date}}}",
             url,
         ]
     )
@@ -55,7 +59,7 @@ if __name__ == "__main__":
 
     versions: list[str] = search(
         text="OPTT-441",
-        limit=10_000,
+        last_days=365,
         url="svn+cplus://svn2.compassplus.ru/twrbs/csm/optt",
     )
     print(versions)
