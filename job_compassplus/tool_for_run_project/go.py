@@ -29,6 +29,7 @@ from kill import kill_servers, kill_explorers, kill_designers, get_processes, is
 sys.path.append("../svn")
 from get_last_release_version import get_last_release_version
 from search_by_versions import search as search_by_versions
+from find_release_version import find_release_version
 
 
 class AvailabilityEnum(Enum):
@@ -375,10 +376,40 @@ def _get_last_release_version(path: str, args: list[str] | None = None, context:
     except Exception as e:
         result = str(e)
 
-    print(f"{version}: {result}\n")
+    print(f"Последняя версия релиза для {version}: {result}\n")
 
 
-def _find_release_version(path: str, args: list[str] | None = None, context: RunContext = None):
+def _find_release_versions(path: str, args: list[str] | None = None, context: RunContext = None):
+    if not args:
+        raise Exception("Текста для поиска не указан!")
+
+    text = args[0]
+
+    # Значение в днях передается в аргументах
+    last_days = 30
+    if len(args) > 1 and args[1].isdigit():
+        last_days = int(args[1])
+
+    command = context.command
+    version = command.version
+
+    url_svn_path = get_settings(command.name)["svn_dev_url"]
+
+    try:
+        result = find_release_version(
+            text=text,
+            version=version,
+            last_days=last_days,
+            url_svn_path=url_svn_path,
+        )
+
+    except Exception as e:
+        result = str(e)
+
+    print(f"Коммит с {text!r} в {version} попал в версию: {result}\n")
+
+
+def _find_versions(path: str, args: list[str] | None = None, context: RunContext = None):
     command = context.command
 
     if not args:
@@ -397,7 +428,7 @@ def _find_release_version(path: str, args: list[str] | None = None, context: Run
         versions = search_by_versions(
             text=text,
             last_days=last_days,
-            url=url_svn_path,
+            url_svn_path=url_svn_path,
         )
         result = ", ".join(versions)
 
@@ -511,7 +542,8 @@ SETTINGS = {
             "kill": _kill,
             "processes": _processes,
             "get_last_release_version": _get_last_release_version,
-            "find_release_version": _find_release_version,
+            "find_release_versions": _find_release_versions,
+            "find_versions": _find_versions,
         },
     },
     "tx": {
