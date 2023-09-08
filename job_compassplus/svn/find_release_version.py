@@ -10,12 +10,7 @@ import xml.etree.ElementTree as ET
 
 from datetime import date, timedelta
 
-from get_last_release_version import get_last_release_version
-
-
-PATTERN_RELEASE_VERSION = re.compile(r"Release version ([\d.]+) ")
-
-URL_DEFAULT_SVN_PATH = "svn+cplus://svn2.compassplus.ru/twrbs/trunk/dev"
+from get_last_release_version import get_last_release_version, URL_DEFAULT_SVN_PATH
 
 
 def find_release_version(
