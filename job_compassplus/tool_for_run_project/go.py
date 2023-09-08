@@ -26,6 +26,9 @@ from from_ghbdtn import from_ghbdtn
 sys.path.append("..")
 from kill import kill_servers, kill_explorers, kill_designers, get_processes, is_server, is_explorer, is_designer
 
+sys.path.append("../svn")
+from get_last_release_version import get_last_release_version
+
 
 class AvailabilityEnum(Enum):
     OPTIONAL = auto()
@@ -351,6 +354,29 @@ def _processes(path: str, args: list[str] | None = None, context: RunContext = N
         print("Could not find processes")
 
 
+def _get_last_release_version(path: str, args: list[str] | None = None, context: RunContext = None):
+    command = context.command
+    version = command.version
+
+    # Значение в днях передается в аргументах
+    last_days = 30
+    if args and args[0].isdigit():
+        last_days = int(args[0])
+
+    settings = get_settings(command.name)
+
+    try:
+        result = get_last_release_version(
+            version=version,
+            last_days=last_days,
+            url_svn_path=settings["svn_dev_url"],
+        )
+    except Exception as e:
+        result = str(e)
+
+    print(f"{version}: {result}\n")
+
+
 def _manager_up(path: str, _: list[str] | None = None, context: RunContext = None):
     path = Path(path)
 
@@ -454,6 +480,7 @@ SETTINGS = {
             "run": _run_path,
             "kill": _kill,
             "processes": _processes,
+            "get_last_release_version": _get_last_release_version,
         },
     },
     "tx": {
@@ -461,12 +488,14 @@ SETTINGS = {
         "path": "C:/DEV__TX",
         "base_version": "3.2.",
         "jenkins_url": "{URL_JENKINS}/job/TX_{version}_build/lastBuild/api/json?tree=result",
+        "svn_dev_url": "svn+cplus://svn2.compassplus.ru/twrbs/trunk/dev",
     },
     "optt": {
         "base": "__radix_base",
         "path": "C:/DEV__OPTT",
         "base_version": "2.1.",
         "jenkins_url": "{URL_JENKINS}/job/OPTT_{version}_build/lastBuild/api/json?tree=result",
+        "svn_dev_url": "svn+cplus://svn2.compassplus.ru/twrbs/csm/optt/dev",
     },
     "__simple_base": {
         "options": {
