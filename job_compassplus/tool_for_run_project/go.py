@@ -621,6 +621,25 @@ EXAMPLES:
   > go tx designer
     Run: "C:/DEV__TX/trunk_tx/!!designer.cmd"
 
+  > go tx get_last
+    Run: tx call 'get_last_release_version'
+    Последняя версия релиза для trunk: 3.2.36.10
+    
+  > go tx 34 get_last
+    Run: tx call 'get_last_release_version'
+    Последняя версия релиза для 3.2.34.10: 3.2.34.10.17
+
+  > go tx find_ver TXI-8197
+    Run: tx call 'find_versions' (['TXI-8197'])
+    Строка 'TXI-8197' встречается в версиях: trunk, 3.2.36.10, 3.2.35.10, 3.2.34.10
+    
+  > go tx 34-35 find_rele TXI-8197
+    Run: tx call 'find_release_versions' (['TXI-8197'])
+    Коммит с 'TXI-8197' в 3.2.34.10 попал в версию: 3.2.34.10.18
+    
+    Run: tx call 'find_release_versions' (['TXI-8197'])
+    Коммит с 'TXI-8197' в 3.2.35.10 попал в версию: 3.2.35.10.11
+
   > go open optt trunk
     Open: "C:/DEV__OPTT/trunk_optt"
 
