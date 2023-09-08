@@ -16,7 +16,11 @@ PATTERN_VERSION = re.compile(r"/dev/(.+?)/")
 URL_DEFAULT_SVN_PATH = "svn+cplus://svn2.compassplus.ru/twrbs/trunk/dev"
 
 
-def search(text: str, last_days: int = 30, url: str = URL_DEFAULT_SVN_PATH) -> list[str]:
+def search(
+    text: str,
+    last_days: int = 30,
+    url_svn_path: str = URL_DEFAULT_SVN_PATH,
+) -> list[str]:
     end_date = date.today()
     start_date = date.today() - timedelta(days=last_days)
 
@@ -30,7 +34,7 @@ def search(text: str, last_days: int = 30, url: str = URL_DEFAULT_SVN_PATH) -> l
             text,
             "--revision",
             f"{{{start_date}}}:{{{end_date}}}",
-            url,
+            url_svn_path,
         ]
     )
 
@@ -60,7 +64,7 @@ if __name__ == "__main__":
     versions: list[str] = search(
         text="OPTT-441",
         last_days=365,
-        url="svn+cplus://svn2.compassplus.ru/twrbs/csm/optt",
+        url_svn_path="svn+cplus://svn2.compassplus.ru/twrbs/csm/optt",
     )
     print(versions)
     # ['trunk', '2.1.12.1']
