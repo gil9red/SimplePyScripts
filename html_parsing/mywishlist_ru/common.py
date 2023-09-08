@@ -75,8 +75,11 @@ class Api:
         self,
         title: str,
         tags: list[str] = None,
+        link: str = "",
         img_path: str = None,
         price_description: str = "",
+        event: str = "",
+        post_current: str = "",
         rating: RatingEnum = RatingEnum.MEDIUM,
         visible_mode: VisibleModeEnum = VisibleModeEnum.PUBLIC,
     ) -> int:
@@ -89,12 +92,12 @@ class Api:
         params = {
             "wish[wish]": title,
             "wish[tags]": tags_value,
-            "wish[link]": "",
+            "wish[link]": link,
             "wish[picture_delete]": "0",
             "wish[picture_url]": "",
             "wish[price]": price_description,
-            "wish[event]": "",
-            "wish[post_current]": "",
+            "wish[event]": event,
+            "wish[post_current]": post_current,
             "wish[rating]": rating.value,
             "wish[visible]": visible_mode.value,
             "wish[commentable]": "1",
@@ -145,8 +148,12 @@ if __name__ == "__main__":
     api.auth()
 
     wish_id = api.add_wish(
-        title=f"Желание #{int(datetime.now().timestamp())}",
-        tags=["zombie", "zzz", "eateateat"],
+        title="Черника",
+        tags=["еда", "eateateat", "черника","ягоды", "тыгодки"],
+        link="http://lesnayalavka.ru/product/svezhaya-chernika/",
+        # img_path=r"E:\downloads\svezhuyu-cherniku-kupit-optom.jpg",
+        event="хочу жрат",
+        post_current="Хочу свеженькую тыгодку. Только, хуй, ее найдешь!",
         price_description="овердофига",
         rating=RatingEnum.HIGH,
     )
