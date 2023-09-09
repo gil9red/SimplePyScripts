@@ -56,6 +56,7 @@ def do_post(url: str, *args, **kwargs) -> tuple[requests.Response, BeautifulSoup
 class Api:
     login: str
     password: str
+    url_profile: str = None
     last_rs: requests.Response = field(init=False, repr=False, default=None)
     last_soup: BeautifulSoup = field(init=False, repr=False, default=None)
 
@@ -71,6 +72,13 @@ class Api:
         if "/me/" not in self.last_rs.url:
             raise Exception(f"Не получилось авторизоваться! {self.last_rs} - {self.last_rs.url}")
 
+        self.url_profile = self.last_rs.url
+
+    @classmethod
+    def _get_authenticity_token(cls, soup: BeautifulSoup) -> str:
+        authenticity_token_el = soup.select_one('[name="authenticity_token"]')
+        return authenticity_token_el["value"]
+
     def add_wish(
         self,
         title: str,
@@ -83,13 +91,12 @@ class Api:
         rating: RatingEnum = RatingEnum.MEDIUM,
         visible_mode: VisibleModeEnum = VisibleModeEnum.PUBLIC,
     ) -> int:
-        url_get_add_wish = f"{BASE_URL}/me/{self.login}/wish/add"
-        url_post_add_wish = url_get_add_wish + "?autocomplete=false"
-
+        url_get_add_wish = f"{self.url_profile}/wish/add"
         self.last_rs, self.last_soup = do_get(url_get_add_wish)
 
         tags_value = ",".join(tags) if tags else ""
         params = {
+            "authenticity_token": self._get_authenticity_token(self.last_soup),
             "wish[wish]": title,
             "wish[tags]": tags_value,
             "wish[link]": link,
@@ -109,6 +116,7 @@ class Api:
                 ("wish[picture]", (img_path, open(img_path, "rb")))
             )
 
+        url_post_add_wish = url_get_add_wish + "?autocomplete=false"
         self.last_rs, self.last_soup = do_post(
             url_post_add_wish,
             data=params,
@@ -122,16 +130,16 @@ class Api:
         return int(wish_el["href"].split("/")[-1])
 
     def set_wish_as_granted(self, wish_id: int, thanks: str = ""):
-        url_get = f"{BASE_URL}/me/{self.login}/wish/check/{wish_id}"
-        url_post = f"{BASE_URL}/me/{self.login}/wish/check_save/{wish_id}"
-
+        url_get = f"{self.url_profile}/wish/check/{wish_id}"
         self.last_rs, self.last_soup = do_get(url_get)
 
         params = {
+            "authenticity_token": self._get_authenticity_token(self.last_soup),
             "wish[realized]": "false",
             "wish[thanks]": thanks,
         }
 
+        url_post = f"{self.url_profile}/wish/check_save/{wish_id}"
         self.last_rs, self.last_soup = do_post(
             url_post,
             data=params,
