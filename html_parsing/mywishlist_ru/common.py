@@ -12,8 +12,6 @@ from bs4 import BeautifulSoup
 
 
 BASE_URL = "http://mywishlist.ru"
-URL_GET_LOGIN = f"{BASE_URL}/login"
-URL_POST_LOGIN = f"{BASE_URL}/login/login"
 
 
 class VisibleModeEnum(Enum):
@@ -60,17 +58,28 @@ class Api:
     last_rs: requests.Response = field(init=False, repr=False, default=None)
     last_soup: BeautifulSoup = field(init=False, repr=False, default=None)
 
+    def _do_get(self, url: str, *args, **kwargs):
+        self.last_rs, self.last_soup = do_get(url, *args, **kwargs)
+
+    def _do_post(self, url: str, *args, **kwargs):
+        self.last_rs, self.last_soup = do_post(url, *args, **kwargs)
+
     def auth(self):
-        self.last_rs, self.last_soup = do_get(URL_GET_LOGIN)
+        url_get_login = f"{BASE_URL}/login"
+        url_post_login = f"{BASE_URL}/login/login"
+
+        self._do_get(url_get_login)
 
         params = {
             "login[login]": self.login,
             "login[password]": self.password,
         }
 
-        self.last_rs, self.last_soup = do_post(URL_POST_LOGIN, data=params)
+        self._do_post(url_post_login, data=params)
         if "/me/" not in self.last_rs.url:
-            raise Exception(f"Не получилось авторизоваться! {self.last_rs} - {self.last_rs.url}")
+            raise Exception(
+                f"Не получилось авторизоваться! {self.last_rs} - {self.last_rs.url}"
+            )
 
         self.url_profile = self.last_rs.url
 
@@ -92,7 +101,7 @@ class Api:
         visible_mode: VisibleModeEnum = VisibleModeEnum.PUBLIC,
     ) -> int:
         url_get_add_wish = f"{self.url_profile}/wish/add"
-        self.last_rs, self.last_soup = do_get(url_get_add_wish)
+        self._do_get(url_get_add_wish)
 
         tags_value = ",".join(tags) if tags else ""
         params = {
@@ -117,7 +126,7 @@ class Api:
             )
 
         url_post_add_wish = url_get_add_wish + "?autocomplete=false"
-        self.last_rs, self.last_soup = do_post(
+        self._do_post(
             url_post_add_wish,
             data=params,
             files=files
@@ -131,7 +140,7 @@ class Api:
 
     def set_wish_as_granted(self, wish_id: int, thanks: str = ""):
         url_get = f"{self.url_profile}/wish/check/{wish_id}"
-        self.last_rs, self.last_soup = do_get(url_get)
+        self._do_get(url_get)
 
         params = {
             "authenticity_token": self._get_authenticity_token(self.last_soup),
@@ -140,7 +149,7 @@ class Api:
         }
 
         url_post = f"{self.url_profile}/wish/check_save/{wish_id}"
-        self.last_rs, self.last_soup = do_post(
+        self._do_post(
             url_post,
             data=params,
         )
@@ -157,7 +166,7 @@ if __name__ == "__main__":
 
     wish_id = api.add_wish(
         title="Черника",
-        tags=["еда", "eateateat", "черника","ягоды", "тыгодки"],
+        tags=["еда", "eateateat", "черника", "ягоды", "тыгодки"],
         link="http://lesnayalavka.ru/product/svezhaya-chernika/",
         # img_path=r"E:\downloads\svezhuyu-cherniku-kupit-optom.jpg",
         event="хочу жрат",
