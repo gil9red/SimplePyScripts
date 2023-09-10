@@ -4,8 +4,13 @@
 __author__ = "ipetrash"
 
 
+import logging
+import sys
+
 from dataclasses import dataclass, field
 from enum import Enum
+from logging.handlers import RotatingFileHandler
+from pathlib import Path
 
 import requests
 from bs4 import BeautifulSoup
@@ -24,6 +29,41 @@ class RatingEnum(Enum):
     LOW = 1
     MEDIUM = 2
     HIGH = 3
+
+
+def get_logger(
+    name: str,
+    fmt: str = "[%(asctime)s] %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
+    file: str | Path = "log.txt",
+    encoding: str = "utf-8",
+    log_stdout: bool = True,
+    log_file: bool = True,
+) -> "logging.Logger":
+    log = logging.getLogger(name)
+    log.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter(fmt)
+
+    if log_file:
+        fh = RotatingFileHandler(
+            file, maxBytes=10000000, backupCount=5, encoding=encoding
+        )
+        fh.setFormatter(formatter)
+        log.addHandler(fh)
+
+    if log_stdout:
+        sh = logging.StreamHandler(stream=sys.stdout)
+        sh.setFormatter(formatter)
+        log.addHandler(sh)
+
+    return log
+
+
+log = get_logger(
+    name=__file__,
+    fmt="%(message)s",
+    log_file=False,
+)
 
 
 session = requests.session()
@@ -59,12 +99,18 @@ class Api:
     last_soup: BeautifulSoup = field(init=False, repr=False, default=None)
 
     def _do_get(self, url: str, *args, **kwargs):
+        log.debug(f"GET. url={url}, args: {args}, kwargs: {kwargs}")
         self.last_rs, self.last_soup = do_get(url, *args, **kwargs)
+        log.debug(f"GET. response url: {self.last_rs.url}")
 
     def _do_post(self, url: str, *args, **kwargs):
+        log.debug(f"POST. url={url}, args: {args}, kwargs: {kwargs}")
         self.last_rs, self.last_soup = do_post(url, *args, **kwargs)
+        log.debug(f"POST. response url: {self.last_rs.url}")
 
     def auth(self):
+        log.debug(f"Auth. {self.login}/{self.password}")
+
         url_get_login = f"{BASE_URL}/login"
         url_post_login = f"{BASE_URL}/login/login"
 
@@ -100,6 +146,8 @@ class Api:
         rating: RatingEnum = RatingEnum.MEDIUM,
         visible_mode: VisibleModeEnum = VisibleModeEnum.PUBLIC,
     ) -> int:
+        log.info(f"Add wish. title: {title!r}")
+
         url_get_add_wish = f"{self.url_profile}/wish/add"
         self._do_get(url_get_add_wish)
 
@@ -139,6 +187,8 @@ class Api:
         return int(wish_el["href"].split("/")[-1])
 
     def set_wish_as_granted(self, wish_id: int, thanks: str = ""):
+        log.info(f"Set wish as granted. wish_id: {wish_id}")
+
         url_get = f"{self.url_profile}/wish/check/{wish_id}"
         self._do_get(url_get)
 
