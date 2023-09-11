@@ -99,12 +99,12 @@ class Api:
     last_soup: BeautifulSoup = field(init=False, repr=False, default=None)
 
     def _do_get(self, url: str, *args, **kwargs):
-        log.debug(f"GET. url={url}, args: {args}, kwargs: {kwargs}")
+        log.debug(f"GET. url: {url}, args: {args}, kwargs: {kwargs}")
         self.last_rs, self.last_soup = do_get(url, *args, **kwargs)
         log.debug(f"GET. response url: {self.last_rs.url}")
 
     def _do_post(self, url: str, *args, **kwargs):
-        log.debug(f"POST. url={url}, args: {args}, kwargs: {kwargs}")
+        log.debug(f"POST. url: {url}, args: {args}, kwargs: {kwargs}")
         self.last_rs, self.last_soup = do_post(url, *args, **kwargs)
         log.debug(f"POST. response url: {self.last_rs.url}")
 
