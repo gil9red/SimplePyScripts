@@ -59,13 +59,6 @@ def get_logger(
     return log
 
 
-log = get_logger(
-    name=__file__,
-    fmt="%(message)s",
-    log_file=False,
-)
-
-
 session = requests.session()
 session.headers[
     "User-Agent"
@@ -97,19 +90,28 @@ class Api:
     url_profile: str = None
     last_rs: requests.Response = field(init=False, repr=False, default=None)
     last_soup: BeautifulSoup = field(init=False, repr=False, default=None)
+    log: logging.Logger = field(repr=False, default=None)
+
+    def __post_init__(self):
+        if not self.log:
+            self.log = get_logger(
+                name=__file__,
+                fmt="%(message)s",
+                log_file=False,
+            )
 
     def _do_get(self, url: str, *args, **kwargs):
-        log.debug(f"GET. url: {url}, args: {args}, kwargs: {kwargs}")
+        self.log.debug(f"GET. url: {url}, args: {args}, kwargs: {kwargs}")
         self.last_rs, self.last_soup = do_get(url, *args, **kwargs)
-        log.debug(f"GET. response url: {self.last_rs.url}")
+        self.log.debug(f"GET. response url: {self.last_rs.url}")
 
     def _do_post(self, url: str, *args, **kwargs):
-        log.debug(f"POST. url: {url}, args: {args}, kwargs: {kwargs}")
+        self.log.debug(f"POST. url: {url}, args: {args}, kwargs: {kwargs}")
         self.last_rs, self.last_soup = do_post(url, *args, **kwargs)
-        log.debug(f"POST. response url: {self.last_rs.url}")
+        self.log.debug(f"POST. response url: {self.last_rs.url}")
 
     def auth(self):
-        log.debug(f"Auth. {self.login}/{self.password}")
+        self.log.debug(f"Auth. {self.login}/{self.password}")
 
         url_get_login = f"{BASE_URL}/login"
         url_post_login = f"{BASE_URL}/login/login"
@@ -146,7 +148,7 @@ class Api:
         rating: RatingEnum = RatingEnum.MEDIUM,
         visible_mode: VisibleModeEnum = VisibleModeEnum.PUBLIC,
     ) -> int:
-        log.info(f"Add wish. title: {title!r}")
+        self.log.info(f"Add wish. title: {title!r}")
 
         url_get_add_wish = f"{self.url_profile}/wish/add"
         self._do_get(url_get_add_wish)
@@ -187,7 +189,7 @@ class Api:
         return int(wish_el["href"].split("/")[-1])
 
     def set_wish_as_granted(self, wish_id: int, thanks: str = ""):
-        log.info(f"Set wish as granted. wish_id: {wish_id}")
+        self.log.info(f"Set wish as granted. wish_id: {wish_id}")
 
         url_get = f"{self.url_profile}/wish/check/{wish_id}"
         self._do_get(url_get)
