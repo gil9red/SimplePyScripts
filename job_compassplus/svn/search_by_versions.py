@@ -21,7 +21,6 @@ def search(
     last_days: int = 30,
     url_svn_path: str = URL_DEFAULT_SVN_PATH,
 ) -> list[str]:
-    end_date = date.today()
     start_date = date.today() - timedelta(days=last_days)
 
     data: bytes = subprocess.check_output(
@@ -33,25 +32,21 @@ def search(
             "--search",
             text,
             "--revision",
-            f"{{{start_date}}}:{{{end_date}}}",
+            # Порядок имеет значение - выдача ревизий тут будет от меньшей к большей
+            f"{{{start_date}}}:HEAD",
             url_svn_path,
         ]
     )
 
     root = ET.fromstring(data)
 
-    revision_by_versions: dict[int, set[str]] = defaultdict(set)
+    versions = []
     for logentry_el in root.findall(".//logentry"):
-        revision = int(logentry_el.attrib["revision"])
         for path_el in logentry_el.findall("./paths/path"):
             if m := PATTERN_VERSION.search(path_el.text):
-                revision_by_versions[revision].add(m.group(1))
-
-    versions = []
-    for _, rev_versions in sorted(revision_by_versions.items(), key=lambda x: x[0]):
-        for version in rev_versions:
-            if version not in versions:
-                versions.append(version)
+                version = m.group(1)
+                if version not in versions:
+                    versions.append(version)
 
     return versions
 
