@@ -5,6 +5,7 @@ __author__ = "ipetrash"
 
 
 import logging
+import io
 import sys
 
 from dataclasses import dataclass, field
@@ -171,8 +172,14 @@ class Api:
 
         files = []
         if img_path:
+            if img_path.startswith("http"):
+                self._do_get(img_path)
+                buffer = io.BytesIO(self.last_rs.content)
+            else:
+                buffer = open(img_path, "rb")
+
             files.append(
-                ("wish[picture]", (img_path, open(img_path, "rb")))
+                ("wish[picture]", (img_path, buffer))
             )
 
         url_post_add_wish = url_get_add_wish + "?autocomplete=false"
@@ -220,7 +227,7 @@ if __name__ == "__main__":
         title="Черника",
         tags=["еда", "eateateat", "черника", "ягоды", "тыгодки"],
         link="http://lesnayalavka.ru/product/svezhaya-chernika/",
-        # img_path=r"E:\downloads\svezhuyu-cherniku-kupit-optom.jpg",
+        img_path="https://calorizator.ru/sites/default/files/imagecache/product_512/product/bilberry.jpg",
         event="хочу жрат",
         post_current="Хочу свеженькую тыгодку. Только, хуй, ее найдешь!",
         price_description="овердофига",
