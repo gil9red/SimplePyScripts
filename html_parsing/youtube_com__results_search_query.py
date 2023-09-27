@@ -598,13 +598,9 @@ def get_generator_raw_video_list_from_data(
         time.sleep(0.5)
 
         try:
-            continuation_item = dpath.util.get(data, "**/continuationItemRenderer")
-        except KeyError:
-            break
-        except ValueError:
-            # TODO: fix it for "Mix"
-            # Ignore
-            print("Warning:\n" + traceback.format_exc())
+            # Может вернуться несколько continuationItemRenderer, берем первый
+            continuation_item = dpath.util.values(data, "**/continuationItemRenderer")[0]
+        except (KeyError, IndexError):
             break
 
         url_next_page_data = urljoin(
