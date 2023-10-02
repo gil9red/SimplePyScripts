@@ -796,23 +796,23 @@ def go_run(
     value = get_file_by_what(name, what)
 
     # Если по <name> указывается файл, то сразу его и запускаем
-    if os.path.isfile(path) or all_options_is_prohibited(name):
+    if (os.path.isfile(path) and not what and not args) or all_options_is_prohibited(name):
         _run_file(path)
         return
 
     if version:
         path = get_similar_version_path(name, version)
 
-    dir_file_name = get_similar_version_path(name, version)
-
-    # Move to active dir
-    os.chdir(dir_file_name)
-
     # Если в <whats> функция, вызываем её
     if callable(value):
         print(f"Run: {name} call {what!r}" + (f" ({args})" if args else ""))
         value(path, args, RunContext(context_command))
         return
+
+    dir_file_name = get_similar_version_path(name, version)
+
+    # Move to active dir
+    os.chdir(dir_file_name)
 
     if isinstance(value, str):
         file_name = dir_file_name + "/" + value
