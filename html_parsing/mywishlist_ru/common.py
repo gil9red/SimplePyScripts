@@ -16,6 +16,9 @@ from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
 
+# pip install Pillow
+from PIL import Image
+
 
 BASE_URL = "http://mywishlist.ru"
 
@@ -177,6 +180,15 @@ class Api:
                 buffer = io.BytesIO(self.last_rs.content)
             else:
                 buffer = open(img_path, "rb")
+
+            # Принудительно отправляем картинки в jpeg
+            img = Image.open(buffer).convert("RGB")
+
+            buffer = io.BytesIO()
+            img.save(buffer, "jpeg")
+
+            # После сохранения картинки нужно переместить внутренний указатель в начало
+            buffer.seek(0)
 
             files.append(
                 ("wish[picture]", (img_path, buffer))
