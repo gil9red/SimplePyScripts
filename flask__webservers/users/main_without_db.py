@@ -6,10 +6,10 @@ __author__ = "ipetrash"
 
 import os
 
-# pip install flask
+# pip install flask==3.0.0
 import flask
 
-# pip install flask-login
+# pip install flask-login==0.6.2
 # TODO: Bug fix:
 #     pip install Werkzeug==2.3.7
 import flask_login
