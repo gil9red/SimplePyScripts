@@ -12,8 +12,6 @@ import flask
 # pip install flask-login
 import flask_login
 
-from flask import render_template_string
-
 
 LOGIN = os.environ.get("ADMIN_LOGIN", "foo@bar.example")
 PASSWORD = os.environ.get("ADMIN_PASSWORD", "secret")
@@ -62,7 +60,7 @@ def request_loader(request):
 
 @app.route("/")
 def index():
-    return render_template_string(
+    return flask.render_template_string(
         """
 <!DOCTYPE html>
 <html>
