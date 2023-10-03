@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 from requests_ntlm2 import HttpNtlmAuth
 
 DIR = Path(__file__).resolve().parent
-ROOT_DIR = DIR.parent
+ROOT_DIR = DIR.parent.parent
 
 sys.path.append(str(ROOT_DIR))
 from root_common import session
