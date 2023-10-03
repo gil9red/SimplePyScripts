@@ -4,23 +4,11 @@
 __author__ = "ipetrash"
 
 
-import sys
-
 from dataclasses import dataclass
-from pathlib import Path
 
 from bs4 import BeautifulSoup
 
-# pip install requests_ntlm2
-from requests_ntlm2 import HttpNtlmAuth
-
-DIR = Path(__file__).resolve().parent
-ROOT_DIR = DIR.parent.parent
-
-sys.path.append(str(ROOT_DIR))
-from root_common import session
-
-from config import USERNAME, PASSWORD
+from common import session, URL
 
 
 @dataclass
@@ -29,11 +17,6 @@ class Employee:
     user_name: str
     position: str
     url: str
-
-
-session.auth = HttpNtlmAuth(USERNAME, PASSWORD)
-
-URL = "https://mysite.compassplus.com/Person.aspx?accountname={}"
 
 
 def get_employees(boss_username: str) -> list[Employee]:
