@@ -10,8 +10,6 @@ import os
 import flask
 
 # pip install flask-login==0.6.2
-# TODO: Bug fix:
-#     pip install Werkzeug==2.3.7
 import flask_login
 
 
