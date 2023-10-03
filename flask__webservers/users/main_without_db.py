@@ -4,6 +4,8 @@
 __author__ = "ipetrash"
 
 
+import os
+
 # pip install flask
 import flask
 
@@ -13,18 +15,22 @@ import flask_login
 from flask import render_template_string
 
 
+LOGIN = os.environ.get("ADMIN_LOGIN", "foo@bar.example")
+PASSWORD = os.environ.get("ADMIN_PASSWORD", "secret")
+
+# Our mock database.
+USERS = {
+    LOGIN: {
+        "password": PASSWORD,
+    },
+}
+
+
 app = flask.Flask(__name__)
 app.secret_key = "super secret string"  # Change this!
 
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
-
-# Our mock database.
-users = {
-    "foo@bar.example": {
-        "password": "secret"
-    },
-}
 
 
 class User(flask_login.UserMixin):
@@ -38,7 +44,7 @@ class User(flask_login.UserMixin):
 # Если авторизован
 @login_manager.user_loader
 def user_loader(email):
-    if email not in users:
+    if email not in USERS:
         return
 
     return User.create(email)
@@ -48,7 +54,7 @@ def user_loader(email):
 @login_manager.request_loader
 def request_loader(request):
     email = request.form.get("email")
-    if email not in users:
+    if email not in USERS:
         return
 
     return User.create(email)
@@ -105,7 +111,7 @@ def login():
         """
 
     email = flask.request.form["email"]
-    if email in users and flask.request.form["password"] == users[email]["password"]:
+    if email in USERS and flask.request.form["password"] == USERS[email]["password"]:
         user = User.create(email)
         flask_login.login_user(user)
         return flask.redirect(flask.url_for("index"))
