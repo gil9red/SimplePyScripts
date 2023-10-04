@@ -14,9 +14,9 @@ from flask_caching import Cache
 
 
 config = {
-    "DEBUG": True,          # some Flask specific configs
+    "DEBUG": True,  # some Flask specific configs
     "CACHE_TYPE": "SimpleCache",  # Flask-Caching related configs
-    "CACHE_DEFAULT_TIMEOUT": 300
+    "CACHE_DEFAULT_TIMEOUT": 300,
 }
 
 app = Flask(__name__)
@@ -52,7 +52,7 @@ def index():
 </body>
 </html>
         """,
-        text=str(datetime.now())
+        text=str(datetime.now()),
     )
 
 
