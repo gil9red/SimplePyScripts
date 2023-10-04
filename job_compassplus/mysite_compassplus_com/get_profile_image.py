@@ -9,15 +9,18 @@ from bs4 import BeautifulSoup
 from common import session, URL
 
 
-def get_profile_image(username: str, domain: str = "CP") -> bytes:
+def get_profile_image(username: str, domain: str = "CP") -> bytes | None:
     url = URL.format(fr"{domain}\{username}")
 
     rs = session.get(url)
     rs.raise_for_status()
 
     root = BeautifulSoup(rs.content, "html.parser")
-    img_src = root.select_one("#ctl00_PictureUrlImage")["src"]
-    img_url = urljoin(rs.url, img_src)
+    img_el = root.select_one("#ctl00_PictureUrlImage")
+    if not img_el:  # Сайт не умеет показывать 404 при отсутствующем пользователе
+        return
+
+    img_url = urljoin(rs.url, img_el["src"])
 
     rs = session.get(img_url)
     rs.raise_for_status()
