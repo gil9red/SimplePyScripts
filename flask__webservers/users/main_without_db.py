@@ -124,6 +124,7 @@ def protected():
 
 
 @app.route("/logout")
+@flask_login.login_required
 def logout():
     flask_login.logout_user()
     return flask.redirect(flask.url_for("index"))
