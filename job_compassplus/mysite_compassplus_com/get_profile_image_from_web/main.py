@@ -4,6 +4,8 @@
 __author__ = "ipetrash"
 
 
+import sys
+
 from base64 import b64encode
 
 # pip install flask==2.3.3
@@ -17,6 +19,7 @@ from flask_cors import CORS
 
 from requests.exceptions import RequestException
 
+sys.path.append("..")
 from get_profile_image import get_profile_image
 
 
@@ -57,5 +60,5 @@ if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=50000,
-        ssl_context="adhoc",
+        ssl_context=("for_https/cert.pem", "for_https/key.pem"),
     )
