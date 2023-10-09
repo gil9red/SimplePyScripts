@@ -60,5 +60,6 @@ if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=50000,
-        ssl_context=("for_https/cert.pem", "for_https/key.pem"),
+        # TODO: for https
+        # ssl_context=("for_https/cert.pem", "for_https/key.pem"),
     )
