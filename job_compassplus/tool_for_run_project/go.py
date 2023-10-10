@@ -384,7 +384,7 @@ def _find_release_versions(path: str, args: list[str] | None = None, context: Ru
         raise Exception("Команду нужно вызывать в релизных версиях!")
 
     if not args:
-        raise Exception("Текста для поиска не указан!")
+        raise Exception("Текст для поиска не указан!")
 
     text = args[0]
 
