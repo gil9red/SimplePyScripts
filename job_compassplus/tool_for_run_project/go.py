@@ -380,6 +380,9 @@ def _get_last_release_version(path: str, args: list[str] | None = None, context:
 
 
 def _find_release_versions(path: str, args: list[str] | None = None, context: RunContext = None):
+    if context.command.version == "trunk":
+        raise Exception("Команду нужно вызывать в релизных версиях!")
+
     if not args:
         raise Exception("Текста для поиска не указан!")
 
