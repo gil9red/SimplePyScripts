@@ -11,6 +11,7 @@ import os
 import shutil
 import sys
 import re
+import traceback
 
 from dataclasses import dataclass
 from datetime import datetime
@@ -381,10 +382,10 @@ def _get_last_release_version(path: str, args: list[str] | None = None, context:
 
 def _find_release_versions(path: str, args: list[str] | None = None, context: RunContext = None):
     if context.command.version == "trunk":
-        raise Exception("Команду нужно вызывать в релизных версиях!")
+        raise GoException("Команду нужно вызывать в релизных версиях!")
 
     if not args:
-        raise Exception("Текст для поиска не указан!")
+        raise GoException("Текст для поиска не указан!")
 
     text = args[0]
 
@@ -416,7 +417,7 @@ def _find_versions(path: str, args: list[str] | None = None, context: RunContext
     command = context.command
 
     if not args:
-        raise Exception("Текста для поиска не указан!")
+        raise GoException("Текст для поиска не указан!")
 
     text = args[0]
 
@@ -912,39 +913,47 @@ def parse_cmd_args(arguments: list[str]) -> list[Command]:
 
 
 def run(arguments: list[str]):
-    if arguments[0] in ["open", from_ghbdtn("open")]:
-        arguments.pop(0)
+    try:
+        if arguments[0] in ["open", from_ghbdtn("open")]:
+            arguments.pop(0)
 
-        if len(arguments) == 1:
-            path = get_path_by_name(arguments[0])
-            _open_dir(path)
+            if len(arguments) == 1:
+                path = get_path_by_name(arguments[0])
+                _open_dir(path)
 
-        elif len(arguments) >= 2:
-            name, version = arguments[:2]
-            path = get_similar_version_path(name, version)
-            _open_dir(path)
+            elif len(arguments) >= 2:
+                name, version = arguments[:2]
+                path = get_similar_version_path(name, version)
+                _open_dir(path)
 
-        else:
-            _print_help()
+            else:
+                _print_help()
 
-        return
+            return
 
-    for command in parse_cmd_args(arguments):
-        try:
+        for command in parse_cmd_args(arguments):
             command.run()
-        except ParameterAvailabilityException as e:
-            name = e.command.name
-            settings = get_settings(name)
 
-            # Если для сущности параметр версии возможен
-            if settings["options"]["version"] != AvailabilityEnum.PROHIBITED:
-                supported_versions = ", ".join(sorted(settings["versions"]))
-                print(f"Supported versions: {supported_versions}")
+    except ParameterAvailabilityException as e:
+        name = e.command.name
+        settings = get_settings(name)
 
-            # Если для сущности параметр what возможен
-            if settings["options"]["what"] != AvailabilityEnum.PROHIBITED:
-                supported_whats = ", ".join(sorted(settings["whats"]))
-                print(f"Supported <what>: {supported_whats}")
+        # Если для сущности параметр версии возможен
+        if settings["options"]["version"] != AvailabilityEnum.PROHIBITED:
+            supported_versions = ", ".join(sorted(settings["versions"]))
+            print(f"Supported versions: {supported_versions}")
+
+        # Если для сущности параметр what возможен
+        if settings["options"]["what"] != AvailabilityEnum.PROHIBITED:
+            supported_whats = ", ".join(sorted(settings["whats"]))
+            print(f"Supported <what>: {supported_whats}")
+
+    except GoException as e:
+        # Если передан флаг отладки
+        if arguments and arguments[-1].lower().startswith("-d"):
+            print(traceback.format_exc())
+        else:
+            print(e)
 
 
 def _print_help():
