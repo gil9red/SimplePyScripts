@@ -950,7 +950,7 @@ def run(arguments: list[str]):
 
     except GoException as e:
         # Если передан флаг отладки
-        if arguments and arguments[-1].lower().startswith("-d"):
+        if arguments[-1].lower().startswith("-d"):
             print(traceback.format_exc())
         else:
             print(e)
