@@ -4,12 +4,11 @@
 __author__ = "ipetrash"
 
 
+import io
 import sys
 
-from base64 import b64encode
-
 # pip install flask==2.3.3
-from flask import Flask, Response, abort
+from flask import Flask, Response, abort, send_file
 
 # pip install flask-caching=2.0.2
 from flask_caching import Cache
@@ -39,15 +38,14 @@ CORS(app)
 
 
 @app.route("/api/get_profile_image/<username>")
-@cache.cached()
+@cache.cached(timeout=24 * 3600)  # 1 день
 def api_get_profile_image(username: str):
     try:
         img_data: bytes = get_profile_image(username)
         if not img_data:
             abort(404)
 
-        img_base64 = b64encode(img_data).decode("utf-8")
-        return f"data:image/jpg;base64, {img_base64}"
+        return send_file(io.BytesIO(img_data), mimetype="image/jpg")
 
     except RequestException as e:
         return Response(
