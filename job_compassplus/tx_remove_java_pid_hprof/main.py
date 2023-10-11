@@ -80,6 +80,10 @@ def run(dirs: list[str | Path]):
 
 
 if __name__ == "__main__":
+    if "--one" in sys.argv:
+        run(DIRS)
+        sys.exit()
+
     while True:
         run(DIRS)
         time.sleep(2 * 60 * 60)
