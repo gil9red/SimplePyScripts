@@ -15,13 +15,15 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 
 # pip install Pillow
 from PIL import Image
 
 
 BASE_URL = "http://mywishlist.ru"
+
+PATTERN_GET_WISH_ID = re.compile(r"/wish/index/(\d+)")
 
 
 class VisibleModeEnum(Enum):
@@ -141,6 +143,13 @@ class Api:
         authenticity_token_el = soup.select_one('[name="authenticity_token"]')
         return authenticity_token_el["value"]
 
+    @classmethod
+    def _get_wish_list(cls, soup: BeautifulSoup) -> list[Tag]:
+        return soup.select_one(".pWishList").find_all(
+            name="a",
+            attrs=dict(href=PATTERN_GET_WISH_ID),
+        )
+
     def add_wish(
         self,
         title: str,
@@ -196,7 +205,7 @@ class Api:
         url_post_add_wish = url_get_add_wish + "?autocomplete=false"
         self._do_post(url_post_add_wish, data=params, files=files)
 
-        wish_el_list = self.last_soup.select('.pWishList .pWishData a[href*="/wish"]')
+        wish_el_list = self._get_wish_list(self.last_soup)
         if not wish_el_list:
             raise Exception("Не удалось найти список желаний!")
 
@@ -241,7 +250,6 @@ class Api:
     def get_waiting_ids(self, get_all: bool = False) -> list[id]:
         self.log.info(f"Get waiting ids. get_all: {get_all}")
 
-        pattern_get_wish_id = re.compile(r"/wish/index/(\d+)")
         url_get = f"{self.url_profile}/waiting"
 
         page = 1
@@ -255,11 +263,8 @@ class Api:
             self._do_get(url_get, params=params)
 
             # Поиск ид желаний по регулярке
-            for a in self.last_soup.select_one(".pWishList").find_all(
-                name="a",
-                attrs=dict(href=pattern_get_wish_id),
-            ):
-                m = pattern_get_wish_id.search(a["href"])
+            for a in self._get_wish_list(self.last_soup):
+                m = PATTERN_GET_WISH_ID.search(a["href"])
                 wish_id = int(m.group(1))
                 if wish_id not in ids:
                     ids.append(wish_id)
