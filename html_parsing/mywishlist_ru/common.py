@@ -6,6 +6,7 @@ __author__ = "ipetrash"
 
 import logging
 import io
+import re
 import sys
 
 from dataclasses import dataclass, field
@@ -190,22 +191,22 @@ class Api:
             # После сохранения картинки нужно переместить внутренний указатель в начало
             buffer.seek(0)
 
-            files.append(
-                ("wish[picture]", (img_path, buffer))
-            )
+            files.append(("wish[picture]", (img_path, buffer)))
 
         url_post_add_wish = url_get_add_wish + "?autocomplete=false"
-        self._do_post(
-            url_post_add_wish,
-            data=params,
-            files=files
-        )
+        self._do_post(url_post_add_wish, data=params, files=files)
 
-        wish_el = self.last_soup.select_one('.pWishList .pWishData a[href*="/wish"]')
-        if not wish_el:
-            raise Exception("Не удалось найти желание!")
+        wish_el_list = self.last_soup.select('.pWishList .pWishData a[href*="/wish"]')
+        if not wish_el_list:
+            raise Exception("Не удалось найти список желаний!")
 
-        return int(wish_el["href"].split("/")[-1])
+        # Попробуем найти текущее желание по названию
+        for wish_el in wish_el_list:
+            if title in wish_el.text:
+                wish_id = int(wish_el["href"].split("/")[-1])
+                return wish_id
+
+        raise Exception("Не удалось найти желание!")
 
     def set_wish_as_granted(self, wish_id: int, thanks: str = ""):
         self.log.info(f"Set wish as granted. wish_id: {wish_id}")
@@ -237,6 +238,44 @@ class Api:
         # Если ссылки нет - желание исполнено
         return f"/wish/check/{wish_id}" not in self.last_rs.text
 
+    def get_waiting_ids(self, get_all: bool = False) -> list[id]:
+        self.log.info(f"Get waiting ids. get_all: {get_all}")
+
+        pattern_get_wish_id = re.compile(r"/wish/index/(\d+)")
+        url_get = f"{self.url_profile}/waiting"
+
+        page = 1
+
+        ids = []
+        while True:
+            params = {
+                "view[sort]": "m",  # По времени
+                "waiting_page": page,
+            }
+            self._do_get(url_get, params=params)
+
+            # Поиск ид желаний по регулярке
+            for a in self.last_soup.select_one(".pWishList").find_all(
+                name="a",
+                attrs=dict(href=pattern_get_wish_id),
+            ):
+                m = pattern_get_wish_id.search(a["href"])
+                wish_id = int(m.group(1))
+                if wish_id not in ids:
+                    ids.append(wish_id)
+
+            page += 1
+
+            last_page_el = self.last_soup.select(
+                ".pWishList > .pContainer .pNumbers a"
+            )[-1]
+            last_page = int(last_page_el.text)
+
+            if not get_all or page > last_page:
+                break
+
+        return ids
+
 
 if __name__ == "__main__":
     from datetime import datetime
@@ -247,24 +286,30 @@ if __name__ == "__main__":
     api = Api(login, password)
     api.auth()
 
-    # wish_id = api.add_wish(
-    #     title="Черника",
-    #     tags=["еда", "eateateat", "черника", "ягоды", "тыгодки"],
-    #     link="http://lesnayalavka.ru/product/svezhaya-chernika/",
-    #     img_path="https://calorizator.ru/sites/default/files/imagecache/product_512/product/bilberry.jpg",
-    #     event="хочу жрат",
-    #     post_current="Хочу свеженькую тыгодку. Только, хуй, ее найдешь!",
-    #     price_description="овердофига",
-    #     rating=RatingEnum.HIGH,
-    # )
-    # print(f"Добавлено желание #{wish_id}")
-    #
-    # wish_id = api.add_wish(
-    #     title=f"Желание #{int(datetime.now().timestamp())}",
-    #     tags=["omnonom"],
-    #     visible_mode=VisibleModeEnum.PRIVATE,
-    # )
-    # print(f"Добавлено желание #{wish_id}")
+    ids = api.get_waiting_ids()
+    print(f"Ids first page ({len(ids)}): {ids}")
+
+    ids = api.get_waiting_ids(get_all=True)
+    print(f"Ids all ({len(ids)}): {ids}")
+
+    wish_id = api.add_wish(
+        title="Черника",
+        tags=["еда", "eateateat", "черника", "ягоды", "тыгодки"],
+        link="http://lesnayalavka.ru/product/svezhaya-chernika/",
+        img_path="https://calorizator.ru/sites/default/files/imagecache/product_512/product/bilberry.jpg",
+        event="хочу жрат",
+        post_current="Хочу свеженькую тыгодку. Только, хуй, ее найдешь!",
+        price_description="овердофига",
+        rating=RatingEnum.HIGH,
+    )
+    print(f"Добавлено желание #{wish_id}")
+
+    wish_id = api.add_wish(
+        title=f"Желание #{int(datetime.now().timestamp())}",
+        tags=["omnonom"],
+        visible_mode=VisibleModeEnum.PRIVATE,
+    )
+    print(f"Добавлено желание #{wish_id}")
 
     wish_id = api.add_wish(
         title=f"Желание #{int(datetime.now().timestamp())}",
