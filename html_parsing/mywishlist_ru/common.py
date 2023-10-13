@@ -225,6 +225,18 @@ class Api:
             data=params,
         )
 
+        if not self.get_wish_is_granted(wish_id):
+            raise Exception(f"Желание #{wish_id} не было отмечено как выполненное")
+
+    def get_wish_is_granted(self, wish_id: int) -> bool:
+        self.log.info(f"Get wish is granted. wish_id: {wish_id}")
+
+        url_get = f"{self.url_profile}/wish/index/{wish_id}"
+        self._do_get(url_get)
+
+        # Если ссылки нет - желание исполнено
+        return f"/wish/check/{wish_id}" not in self.last_rs.text
+
 
 if __name__ == "__main__":
     from datetime import datetime
@@ -235,24 +247,24 @@ if __name__ == "__main__":
     api = Api(login, password)
     api.auth()
 
-    wish_id = api.add_wish(
-        title="Черника",
-        tags=["еда", "eateateat", "черника", "ягоды", "тыгодки"],
-        link="http://lesnayalavka.ru/product/svezhaya-chernika/",
-        img_path="https://calorizator.ru/sites/default/files/imagecache/product_512/product/bilberry.jpg",
-        event="хочу жрат",
-        post_current="Хочу свеженькую тыгодку. Только, хуй, ее найдешь!",
-        price_description="овердофига",
-        rating=RatingEnum.HIGH,
-    )
-    print(f"Добавлено желание #{wish_id}")
-
-    wish_id = api.add_wish(
-        title=f"Желание #{int(datetime.now().timestamp())}",
-        tags=["omnonom"],
-        visible_mode=VisibleModeEnum.PRIVATE,
-    )
-    print(f"Добавлено желание #{wish_id}")
+    # wish_id = api.add_wish(
+    #     title="Черника",
+    #     tags=["еда", "eateateat", "черника", "ягоды", "тыгодки"],
+    #     link="http://lesnayalavka.ru/product/svezhaya-chernika/",
+    #     img_path="https://calorizator.ru/sites/default/files/imagecache/product_512/product/bilberry.jpg",
+    #     event="хочу жрат",
+    #     post_current="Хочу свеженькую тыгодку. Только, хуй, ее найдешь!",
+    #     price_description="овердофига",
+    #     rating=RatingEnum.HIGH,
+    # )
+    # print(f"Добавлено желание #{wish_id}")
+    #
+    # wish_id = api.add_wish(
+    #     title=f"Желание #{int(datetime.now().timestamp())}",
+    #     tags=["omnonom"],
+    #     visible_mode=VisibleModeEnum.PRIVATE,
+    # )
+    # print(f"Добавлено желание #{wish_id}")
 
     wish_id = api.add_wish(
         title=f"Желание #{int(datetime.now().timestamp())}",
@@ -260,6 +272,8 @@ if __name__ == "__main__":
         visible_mode=VisibleModeEnum.FRIENDS,
     )
     print(f"Добавлено желание #{wish_id}")
+    assert not api.get_wish_is_granted(wish_id)
 
     api.set_wish_as_granted(wish_id, thanks="Благодарности моем коту!")
     print(f"Желание #{wish_id} исполнено!")
+    assert api.get_wish_is_granted(wish_id)
