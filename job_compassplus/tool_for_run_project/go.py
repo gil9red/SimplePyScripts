@@ -300,21 +300,19 @@ def _kill(path: str, args: list[str] | None = None, context: RunContext = None):
         pids += kill_designers(path)
 
     else:
-        arg = args[0].lower()
-
-        # all - убиваем все сервера и проводники из всех папок
-        if arg.startswith("a"):
+        # -a - убиваем все сервера и проводники из всех папок
+        if "-a" in args:
             pids += kill_servers()
             pids += kill_explorers()
             pids += kill_designers()
-        elif arg.startswith("s"):
+        elif "-s" in args:
             pids += kill_servers(path)
-        elif arg.startswith("e"):
+        elif "-e" in args:
             pids += kill_explorers(path)
-        elif arg.startswith("d"):
+        elif "-d" in args:
             pids += kill_designers(path)
         else:
-            print(f"Unknown argument: {arg}")
+            print(f"Unknown argument: {args}")
 
     if not pids:
         print("Could not find processes")
@@ -489,7 +487,7 @@ def _svn_update(path, args: list[str] | None = None, context: RunContext = None)
     force = False
 
     # force - обновляемся, даже если сборка сломана
-    if args and args[0].lower().startswith("f"):
+    if args and "-f" in args:
         force = True
 
     command = context.command
@@ -501,7 +499,7 @@ def _svn_update(path, args: list[str] | None = None, context: RunContext = None)
             do_check_jenkins_job(jenkins_url, command.version)
         except JenkinsJobCheckException as e:
             if not force:
-                text = "Чтобы все-равно загрузить повторите с аргументом force"
+                text = "Чтобы все-равно загрузить повторите с аргументом -f"
                 print(f"{e}\n\n{text}")
                 return
 
@@ -595,7 +593,7 @@ SETTINGS = {
 SETTINGS = settings_preprocess(SETTINGS)
 # _print_pretty_SETTINGS()
 
-ABOUT_TEXT = """\
+ABOUT_TEXT = r"""
 RUN:
   go <name> <version> <what> - Run tool
   go <name> <what>           - Run tool (trunk version)
@@ -621,6 +619,12 @@ EXAMPLES:
 
   > go tx 3.2.6-trunk server
     Run: "C:/DEV__TX/3.2.6.10/!!server.cmd"
+
+  > $ go tx 35 u
+    Run: svn update in C:\DEV__TX\3.2.35.10
+
+  > $ go tx 35 u -f
+    Run: svn update in C:\DEV__TX\3.2.35.10
 
   > go tx designer
     Run: "C:/DEV__TX/trunk_tx/!!designer.cmd"
@@ -653,9 +657,15 @@ EXAMPLES:
   > go optt
     Supported versions: 2.1.10, trunk_optt
     Supported <what>: build, cleanup, compile, designer, explorer, log, server, update
+    
+  > go optt kill
+  > go optt kill -d
+  > go optt kill -s
+  > go optt kill -e
+  > go optt kill -a
 """.format(
     ", ".join(SETTINGS.keys()),
-)
+).strip()
 
 
 def all_options_is_prohibited(name: str) -> bool:
