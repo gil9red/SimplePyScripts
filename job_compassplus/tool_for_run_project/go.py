@@ -837,14 +837,14 @@ def go_run(
     os.system(command)
 
 
-def parse_cmd_args(arguments: list[str]) -> list[Command]:
-    arguments = arguments.copy()
-    name, whats, args = [None] * 3
+def parse_cmd_args(args: list[str]) -> list[Command]:
+    args = args.copy()
+    name, whats = [None] * 2
     versions = []
 
     # Первый аргумент <name>
-    if arguments:
-        name = arguments.pop(0).lower()
+    if args:
+        name = args.pop(0).lower()
         name = resolve_name(name)
 
     options = get_settings(name)["options"]
@@ -852,8 +852,8 @@ def parse_cmd_args(arguments: list[str]) -> list[Command]:
     maybe_what = options["what"] != AvailabilityEnum.PROHIBITED
 
     # Второй аргумент это или <version>, или <what>
-    if (maybe_version or maybe_what) and arguments:
-        alias = arguments.pop(0).lower()
+    if (maybe_version or maybe_what) and args:
+        alias = args.pop(0).lower()
 
         if (
             is_like_a_version(alias)
@@ -891,8 +891,8 @@ def parse_cmd_args(arguments: list[str]) -> list[Command]:
             whats = resolve_whats(name, alias)
 
     # Третий аргумент <what>
-    if maybe_what and arguments and not whats:
-        whats = arguments.pop(0).lower()
+    if maybe_what and args and not whats:
+        whats = args.pop(0).lower()
         whats = resolve_whats(name, whats)
 
     if not versions:
@@ -900,8 +900,6 @@ def parse_cmd_args(arguments: list[str]) -> list[Command]:
 
     if not whats:
         whats = [None]
-
-    args = arguments
 
     commands = []
     for version in versions:
@@ -912,17 +910,17 @@ def parse_cmd_args(arguments: list[str]) -> list[Command]:
     return commands
 
 
-def run(arguments: list[str]):
+def run(args: list[str]):
     try:
-        if arguments[0] in ["open", from_ghbdtn("open")]:
-            arguments.pop(0)
+        if args[0] in ["open", from_ghbdtn("open")]:
+            args.pop(0)
 
-            if len(arguments) == 1:
-                path = get_path_by_name(arguments[0])
+            if len(args) == 1:
+                path = get_path_by_name(args[0])
                 _open_dir(path)
 
-            elif len(arguments) >= 2:
-                name, version = arguments[:2]
+            elif len(args) >= 2:
+                name, version = args[:2]
                 path = get_similar_version_path(name, version)
                 _open_dir(path)
 
@@ -931,7 +929,7 @@ def run(arguments: list[str]):
 
             return
 
-        for command in parse_cmd_args(arguments):
+        for command in parse_cmd_args(args):
             command.run()
 
     except ParameterAvailabilityException as e:
@@ -950,7 +948,7 @@ def run(arguments: list[str]):
 
     except GoException as e:
         # Если передан флаг отладки
-        if arguments[-1].lower().startswith("-d"):
+        if args[-1].lower().startswith("-d"):
             print(traceback.format_exc())
         else:
             print(e)
