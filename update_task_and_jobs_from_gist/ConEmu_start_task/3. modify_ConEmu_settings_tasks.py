@@ -8,7 +8,7 @@ import datetime as dt
 import xml.etree.ElementTree as ET
 import sys
 
-sys.path.append(r"../XML/xml.etree.ElementTree__examples")
+sys.path.append(r"../../XML/xml.etree.ElementTree__examples")
 from pretty_print import indent
 
 from config import FILE_NAME_CONEMU_SETTINGS
