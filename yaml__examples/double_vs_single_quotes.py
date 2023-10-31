@@ -14,7 +14,7 @@ single: '123\n456'
 """)
 
 import json
-print(json.dumps(data, indent=4))
+print(json.dumps(data, indent=4, ensure_ascii=False))
 r"""
 {
     "double": "123\n456",

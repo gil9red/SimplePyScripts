@@ -34,7 +34,7 @@ server_2:
 )
 
 import json
-print(json.dumps(data, indent=4))
+print(json.dumps(data, indent=4, ensure_ascii=False))
 """
 {
     "__base_server": {
