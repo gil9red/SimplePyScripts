@@ -4,21 +4,9 @@
 __author__ = "ipetrash"
 
 
-import sys
 import re
-
-# pip install PyYAML
-import yaml
-
-# pip install api4jenkins
-from api4jenkins import Jenkins
-
 from bs4 import BeautifulSoup
-
-from config import DIR, LOGIN, PASSWORD, JENKINS_URL, GIST_URL
-
-sys.path.append(str(DIR.parent))
-from root_common import get_gist_file
+from common import get_jobs, client
 
 
 def is_equals_config(config_1: str, config_2: str) -> bool:
@@ -45,15 +33,6 @@ XML_JOB_TEMPLATE = r"""
   </builders>
 </project>
 """.strip()
-
-
-def get_jobs(name: str) -> dict[str, dict]:
-    text = get_gist_file(GIST_URL, name)
-    jobs: dict[str, dict] = yaml.safe_load(text)
-    return {k: v for k, v in jobs.items() if not k.startswith("__")}
-
-
-client = Jenkins(JENKINS_URL, auth=(LOGIN, PASSWORD))
 
 jobs = get_jobs("jenkins.yaml")
 for job_name, job_data in jobs.items():
