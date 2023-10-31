@@ -5,21 +5,21 @@ __author__ = "ipetrash"
 
 
 import re
+import sys
 
 from collections import defaultdict
-from urllib.parse import urljoin
 from pathlib import Path
 
-import requests
-from bs4 import BeautifulSoup
-
-from config import GIST_URL, DIR_GIST_FILES
+from config import DIR, GIST_URL, DIR_GIST_FILES
 from common import (
     PATTERN_FILE_TASK,
     PATTERN_GIST_GROUP,
     fill_string_pattern,
     get_gist_files,
 )
+
+sys.path.append(str(DIR.parent))
+from root_common import get_gist_file
 
 
 DEBUG_LOG = False
@@ -29,17 +29,11 @@ DEBUG_LOG = False
 for f in get_gist_files():
     f.unlink()
 
-rs = requests.get(GIST_URL)
-root = BeautifulSoup(rs.content, "html.parser")
-
-a_all = root.find("a", {"href": re.compile(r"/raw/.+/all\.txt")})
-url_all = urljoin(rs.url, a_all["href"])
-
-rs = requests.get(url_all)
+file_text = get_gist_file(GIST_URL, "all.txt")
 
 group: str = ""
 group_by_lines = defaultdict(list)
-for line in rs.text.splitlines():
+for line in file_text.splitlines():
     if not line:
         continue
     elif line.startswith("# IGNORED"):
@@ -62,7 +56,9 @@ for line in rs.text.splitlines():
         assert script_dir_path.exists(), f"{script_dir_path} not exists!"
 
     line = line.format(
-        root_dir=script_dir_path.parent, dir=script_dir_path, group=group
+        root_dir=script_dir_path.parent,
+        dir=script_dir_path,
+        group=group,
     )
     DEBUG_LOG and print(line)
 
