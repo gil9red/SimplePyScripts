@@ -6,7 +6,7 @@ __author__ = "ipetrash"
 
 from dataclasses import dataclass
 from bs4 import BeautifulSoup
-from common import session, URL
+from common import URL, do_get
 
 
 @dataclass
@@ -19,8 +19,7 @@ class Employee:
 
 def get_employees(boss_username: str) -> list[Employee]:
     url = URL.format(boss_username)
-    rs = session.get(url)
-    rs.raise_for_status()
+    rs = do_get(url)
 
     root = BeautifulSoup(rs.content, "html.parser")
     root_table = root.select_one("#ReportingHierarchy")

@@ -6,14 +6,13 @@ __author__ = "ipetrash"
 
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
-from common import session, URL
+from common import URL, do_get
 
 
 def get_profile_image(username: str, domain: str = "CP") -> bytes | None:
     url = URL.format(fr"{domain}\{username}")
 
-    rs = session.get(url)
-    rs.raise_for_status()
+    rs = do_get(url)
 
     root = BeautifulSoup(rs.content, "html.parser")
     img_el = root.select_one("#ctl00_PictureUrlImage")
@@ -22,9 +21,7 @@ def get_profile_image(username: str, domain: str = "CP") -> bytes | None:
 
     img_url = urljoin(rs.url, img_el["src"])
 
-    rs = session.get(img_url)
-    rs.raise_for_status()
-
+    rs = do_get(img_url)
     return rs.content
 
 
