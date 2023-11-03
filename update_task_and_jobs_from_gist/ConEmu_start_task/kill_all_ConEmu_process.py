@@ -9,14 +9,18 @@ import psutil
 
 
 for process in psutil.process_iter():
-    if "conemu64" in process.name().lower():
-        children = process.children(recursive=True)
-        print(
-            f"Kill process. Pid={process.pid}, name={process.name()}, children: {len(children)}"
-        )
+    try:
+        if "conemu64" in process.name().lower():
+            children = process.children(recursive=True)
+            print(
+                f"Kill process. Pid={process.pid}, name={process.name()}, children: {len(children)}"
+            )
 
-        # Если убивать только процесс, то его дочерние процессы останутся как отдельные окна консоли
-        for child in children:
-            child.kill()
+            # Если убивать только процесс, то его дочерние процессы останутся как отдельные окна консоли
+            for child in children:
+                child.kill()
 
-        process.kill()
+            process.kill()
+
+    except psutil.NoSuchProcess:
+        pass
