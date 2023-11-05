@@ -24,4 +24,12 @@ def get_jobs(name: str) -> dict[str, dict]:
     return {k: v for k, v in jobs.items() if not k.startswith("__")}
 
 
+def get_jobs_for_run() -> dict[str, dict]:
+    return get_jobs("jenkins.yaml")
+
+
+def get_jobs_for_delete() -> dict[str, dict]:
+    return get_jobs("jenkins.yaml.deprecated")
+
+
 client = Jenkins(JENKINS_URL, auth=(LOGIN, PASSWORD))

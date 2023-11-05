@@ -6,7 +6,7 @@ __author__ = "ipetrash"
 
 import re
 from bs4 import BeautifulSoup
-from common import get_jobs, client
+from common import get_jobs_for_run, get_jobs_for_delete, client
 
 
 def is_equals_config(config_1: str, config_2: str) -> bool:
@@ -34,7 +34,7 @@ XML_JOB_TEMPLATE = r"""
 </project>
 """.strip()
 
-jobs = get_jobs("jenkins.yaml")
+jobs = get_jobs_for_run()
 for job_name, job_data in jobs.items():
     description = job_data["description"]
     cron = job_data["cron"]
@@ -64,7 +64,7 @@ for job_name, job_data in jobs.items():
 
     print()
 
-jobs_deprecated = get_jobs("jenkins.yaml.deprecated")
+jobs_deprecated = get_jobs_for_delete()
 for job_name in jobs_deprecated.keys():
     job = client.get_job(job_name)
     if job:
