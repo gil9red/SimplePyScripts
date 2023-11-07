@@ -9,12 +9,16 @@ import re
 
 # pip install selenium
 from selenium import webdriver
+from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.firefox.options import Options
 from selenium.common.exceptions import MoveTargetOutOfBoundsException
 from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 from selenium.webdriver.remote.webdriver import WebElement
+
+# pip install webdriver-manager
+from webdriver_manager.firefox import GeckoDriverManager
 
 # pip install tabulate
 from tabulate import tabulate
@@ -49,7 +53,10 @@ def print_the_most_profitable_dish(url: str):
 
     driver = None
     try:
-        driver = webdriver.Firefox(options=options)
+        driver = webdriver.Firefox(
+            options=options,
+            service=FirefoxService(GeckoDriverManager().install()),
+        )
         driver.implicitly_wait(2)
         driver.get(url)
 
