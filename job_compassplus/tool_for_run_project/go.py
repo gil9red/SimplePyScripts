@@ -300,19 +300,26 @@ def _kill(path: str, args: list[str] | None = None, context: RunContext = None):
         pids += kill_designers(path)
 
     else:
+        flags = []
+        for arg in args:
+            if arg.startswith("-"):
+                arg = arg.strip("-").lower()
+                flags += arg  # NOTE: "se" будут добавлены как "s" и "e"
+
         # -a - убиваем все сервера и проводники из всех папок
-        if "-a" in args:
+        if "a" in flags:
             pids += kill_servers()
             pids += kill_explorers()
             pids += kill_designers()
-        elif "-s" in args:
-            pids += kill_servers(path)
-        elif "-e" in args:
-            pids += kill_explorers(path)
-        elif "-d" in args:
-            pids += kill_designers(path)
         else:
-            print(f"Unknown argument: {args}")
+            if "s" in flags:
+                pids += kill_servers(path)
+
+            if "e" in flags:
+                pids += kill_explorers(path)
+
+            if "d" in flags:
+                pids += kill_designers(path)
 
     if not pids:
         print("Could not find processes")
@@ -663,6 +670,7 @@ EXAMPLES:
   > go optt kill -s
   > go optt kill -e
   > go optt kill -a
+  > go optt kill -se
 """.format(
     ", ".join(SETTINGS.keys()),
 ).strip()
