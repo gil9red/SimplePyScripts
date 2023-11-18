@@ -41,10 +41,10 @@ DIR: Path = Path(__file__).parent.resolve()
 FILE_NAME_IMAGE: str = str(DIR / "favicon.png")
 
 
-def draw_text_to_bottom_right(img: QPixmap, text: str):
+def draw_text_to_bottom_right(img: QPixmap, text: str, scale_text_from_img: float = 0.5):
     p = QPainter(img)
 
-    factor = (img.width() / 2) / p.fontMetrics().width(text)
+    factor = (img.width() * scale_text_from_img) / p.fontMetrics().width(text)
     if factor < 1 or factor > 1.25:
         f = p.font()
         point_size = f.pointSizeF() * factor
