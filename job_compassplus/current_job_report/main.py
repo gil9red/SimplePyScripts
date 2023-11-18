@@ -8,7 +8,8 @@ import datetime as dt
 import sys
 import time
 import traceback
-import os.path
+
+from pathlib import Path
 
 from PyQt5.QtWidgets import (
     QApplication,
@@ -23,8 +24,8 @@ from PyQt5.QtWidgets import (
     QWidgetAction,
     QMessageBox,
 )
-from PyQt5.QtGui import QColor, QPainter, QIcon
-from PyQt5.QtCore import Qt, pyqtSignal, QThread
+from PyQt5.QtGui import QColor, QPainter, QIcon, QPixmap
+from PyQt5.QtCore import Qt, pyqtSignal, QThread, QRectF
 
 from get_user_and_deviation_hours import (
     get_user_and_deviation_hours,
@@ -32,6 +33,31 @@ from get_user_and_deviation_hours import (
     get_quarter_num,
     NotFoundReport,
 )
+
+# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/405f08fcbf8b99ea64a58a73ee699cb1c0b5230e/qt__pyqt__pyside__pyqode/pyqt__QPainter__dynamic_draw_emoji_on_img/main.py#L44-L66
+def draw_text_to_bottom_right(img: QPixmap, text: str, scale_text_from_img: float = 0.5):
+    p = QPainter(img)
+
+    factor = (img.width() * scale_text_from_img) / p.fontMetrics().width(text)
+    if factor < 1 or factor > 1.25:
+        f = p.font()
+        point_size = f.pointSizeF() * factor
+        if point_size > 0:
+            f.setPointSizeF(point_size)
+            p.setFont(f)
+
+    # Bottom + right
+    text_rect = p.fontMetrics().boundingRect(text)
+    rect = QRectF(
+        img.width() - text_rect.width(),
+        img.height() - text_rect.height(),
+        img.width(),
+        img.height(),
+    )
+
+    p.drawText(rect, text)
+
+    p = None  # NOTE: Иначе, почему-то будет ошибка
 
 
 # Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
@@ -46,7 +72,9 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
 
 sys.excepthook = log_uncaught_exceptions
 
-TRAY_ICON = os.path.join(os.path.dirname(__file__), "favicon.ico")
+
+DIR: Path = Path(__file__).parent.resolve()
+TRAY_ICON: str = str(DIR / "favicon.png")
 
 
 class CheckJobReportThread(QThread):
@@ -132,7 +160,7 @@ class JobReportWidget(QWidget):
         super().__init__()
 
         self.info = QLabel()
-        self.ok = None
+        self.ok: bool = None
 
         self.quit_button = QToolButton()
         self.quit_button.setText("Quit")
@@ -188,7 +216,7 @@ class JobReportWidget(QWidget):
 
         button_refresh.clicked.connect(self.thread.do_run)
 
-    def _set_ok(self, val):
+    def _set_ok(self, val: bool):
         self.ok = val
         self.update()
 
@@ -214,8 +242,21 @@ if __name__ == "__main__":
 
     tray = QSystemTrayIcon(QIcon(TRAY_ICON))
 
+    def _on_about_log_or_ok(value: str | bool):
+        if isinstance(value, str):
+            text = "🔄"
+        else:
+            text = "✔️" if value else "❌"
+
+        img = QPixmap(TRAY_ICON)
+        draw_text_to_bottom_right(img, text, 0.8)
+        tray.setIcon(QIcon(img))
+
     job_report_widget = JobReportWidget()
     job_report_widget.setFixedSize(230, 130)
+    job_report_widget.thread.about_log.connect(_on_about_log_or_ok)
+    job_report_widget.thread.about_ok.connect(_on_about_log_or_ok)
+
     job_report_widget_action = QWidgetAction(job_report_widget)
     job_report_widget_action.setDefaultWidget(job_report_widget)
 
