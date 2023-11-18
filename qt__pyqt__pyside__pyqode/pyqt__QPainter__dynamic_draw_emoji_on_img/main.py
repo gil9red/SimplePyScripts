@@ -41,6 +41,31 @@ DIR: Path = Path(__file__).parent.resolve()
 FILE_NAME_IMAGE: str = str(DIR / "favicon.png")
 
 
+def draw_text_to_bottom_right(img: QPixmap, text: str):
+    p = QPainter(img)
+
+    factor = (img.width() / 2) / p.fontMetrics().width(text)
+    if factor < 1 or factor > 1.25:
+        f = p.font()
+        point_size = f.pointSizeF() * factor
+        if point_size > 0:
+            f.setPointSizeF(point_size)
+            p.setFont(f)
+
+    # Bottom + right
+    text_rect = p.fontMetrics().boundingRect(text)
+    rect = QRectF(
+        img.width() - text_rect.width(),
+        img.height() - text_rect.height(),
+        img.width(),
+        img.height(),
+    )
+
+    p.drawText(rect, text)
+
+    p = None  # NOTE: Иначе, почему-то будет ошибка
+
+
 class Window(QWidget):
     def __init__(self):
         super().__init__()
@@ -70,33 +95,11 @@ class Window(QWidget):
 
     def _on_button_clicked(self, button: QAbstractButton):
         text = button.text()
-
         img = QPixmap(FILE_NAME_IMAGE)
-
-        p = QPainter(img)
-
-        factor = (img.width() / 2) / p.fontMetrics().width(text)
-        if factor < 1 or factor > 1.25:
-            f = p.font()
-            point_size = f.pointSizeF() * factor
-            if point_size > 0:
-                f.setPointSizeF(point_size)
-                p.setFont(f)
-
-        # Bottom + right
-        text_rect = p.fontMetrics().boundingRect(text)
-        rect = QRectF(
-            img.width() - text_rect.width(),
-            img.height() - text_rect.height(),
-            img.width(),
-            img.height(),
-        )
-
-        p.drawText(rect, text)
+        draw_text_to_bottom_right(img, text)
 
         self._update_img_view(img)
 
-        p = None  # NOTE: Иначе, почему-то будет ошибка
 
 
 if __name__ == "__main__":
