@@ -101,7 +101,6 @@ class Window(QWidget):
         self._update_img_view(img)
 
 
-
 if __name__ == "__main__":
     app = QApplication([])
 
