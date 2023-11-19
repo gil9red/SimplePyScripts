@@ -139,9 +139,8 @@ class CheckJobReportThread(QThread):
         else:
             self.about_log.emit("    Ничего не изменилось\n")
 
-        if self.ok != ok:
-            self.ok = ok
-            self.about_ok.emit(self.ok)
+        self.ok = ok
+        self.about_ok.emit(self.ok)
 
     def run(self):
         while True:
