@@ -245,10 +245,10 @@ if __name__ == "__main__":
         if isinstance(value, str):
             text = "🔄"
         else:
-            text = "✔️" if value else "❌"
+            text = "✅" if value else "⛔"
 
         img = QPixmap(TRAY_ICON)
-        draw_text_to_bottom_right(img, text, 0.8)
+        draw_text_to_bottom_right(img, text, 0.65)
         tray.setIcon(QIcon(img))
 
     job_report_widget = JobReportWidget()
