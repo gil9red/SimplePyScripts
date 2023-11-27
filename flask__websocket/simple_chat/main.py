@@ -5,6 +5,8 @@ __author__ = "ipetrash"
 
 
 from flask import Flask, render_template, session, request
+
+# pip install flask-socketio==5.3.6
 from flask_socketio import SocketIO, emit
 
 
@@ -61,4 +63,5 @@ if __name__ == "__main__":
         app,
         host=HOST,
         port=PORT,
+        allow_unsafe_werkzeug=True,
     )
