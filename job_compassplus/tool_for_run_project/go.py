@@ -107,7 +107,7 @@ def do_check_jenkins_job(url: str, version: str):
 
     rs = requests.get(url)
     if rs.status_code == 404:
-        raise JenkinsJobCheckException(f"Сборки для версии {version} нет.\nURL: {url}")
+        raise JenkinsJobCheckException(f"Сборки для версии {version} нет.")
 
     rs.raise_for_status()
 
@@ -120,10 +120,10 @@ def do_check_jenkins_job(url: str, version: str):
         # "0:39:56.476184" -> "0:39:56"
         duration_str = str(duration).split(".")[0]
 
-        raise JenkinsJobCheckException(f"Сборка еще в процессе, прошло {duration_str}.\nURL: {url}")
+        raise JenkinsJobCheckException(f"Сборка еще в процессе, прошло {duration_str}.")
 
     if result != "SUCCESS":
-        raise JenkinsJobCheckException(f"Сборка поломанная, обновление прервано.\nURL: {url}")
+        raise JenkinsJobCheckException(f"Сборка поломанная, обновление прервано.")
 
 
 @dataclass
