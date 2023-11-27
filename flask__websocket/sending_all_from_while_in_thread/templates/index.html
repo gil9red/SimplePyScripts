@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Hello World!</title>
+    <script type="text/javascript" src="{{url_for('static', filename='jquery.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='socket.io.min.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='index.js') }}"></script>
+</head>
+<body>
+    <h1>Hello World!</h1>
+    <p>Average ping/pong latency: <b><span id="ping-pong"></span>ms</b></p>
+    <p>Current data from server: <b><span id="server_data"></span></b></p>
+    <h2>Send:</h2>
+    <form id="emit" method="POST" action='#'>
+        <input type="text" name="emit_data" id="emit_data" placeholder="Message">
+        <input type="submit" value="Echo">
+    </form>
+    <h2>Receive:</h2>
+    <div id="log"></div>
+</body>
+</html>
