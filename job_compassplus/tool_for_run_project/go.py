@@ -111,9 +111,16 @@ def do_check_jenkins_job(url: str, version: str):
 
     rs.raise_for_status()
 
-    result = rs.json()["result"]
+    data = rs.json()
+
+    result = data["result"]
     if not result:
-        raise JenkinsJobCheckException(f"Сборка еще в процессе.\nURL: {url}")
+        duration = datetime.now() - datetime.fromtimestamp(data["timestamp"] / 1000)
+
+        # "0:39:56.476184" -> "0:39:56"
+        duration_str = str(duration).split(".")[0]
+
+        raise JenkinsJobCheckException(f"Сборка еще в процессе, прошло {duration_str}.\nURL: {url}")
 
     if result != "SUCCESS":
         raise JenkinsJobCheckException(f"Сборка поломанная, обновление прервано.\nURL: {url}")
@@ -559,14 +566,14 @@ SETTINGS = {
         "base": "__radix_base",
         "path": "C:/DEV__TX",
         "base_version": "3.2.",
-        "jenkins_url": "{URL_JENKINS}/job/TX_{version}_build/lastBuild/api/json?tree=result",
+        "jenkins_url": "{URL_JENKINS}/job/TX_{version}_build/lastBuild/api/json?tree=result,timestamp",
         "svn_dev_url": "svn+cplus://svn2.compassplus.ru/twrbs/trunk/dev",
     },
     "optt": {
         "base": "__radix_base",
         "path": "C:/DEV__OPTT",
         "base_version": "2.1.",
-        "jenkins_url": "{URL_JENKINS}/job/OPTT_{version}_build/lastBuild/api/json?tree=result",
+        "jenkins_url": "{URL_JENKINS}/job/OPTT_{version}_build/lastBuild/api/json?tree=result,timestamp",
         "svn_dev_url": "svn+cplus://svn2.compassplus.ru/twrbs/csm/optt/dev",
     },
     "__simple_base": {
