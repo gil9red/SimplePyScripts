@@ -80,18 +80,18 @@ class ParameterMissing(GoException):
 class ParameterAvailabilityException(GoException):
     def __init__(self, command: "Command", param: str, availability: AvailabilityEnum):
         if availability == AvailabilityEnum.REQUIRED:
-            post_fix = "must be set!"
+            post_fix = "должно быть установлено!"
         elif availability == AvailabilityEnum.PROHIBITED:
-            post_fix = "must not be set!"
+            post_fix = "не может быть установлено!"
         else:
-            raise GoException(f"Not supported availability: {availability}!")
+            raise GoException(f"Не поддерживается: {availability}!")
 
         self.command = command
         self.param = param
         self.availability = availability
 
         super().__init__(
-            f"For {self.command.name!r} the value <{self.param}> " + post_fix
+            f"Для {self.command.name!r} значение <{self.param}> " + post_fix
         )
 
 
@@ -277,18 +277,18 @@ def settings_preprocess(settings: dict[str, dict]) -> dict[str, dict]:
 
 def _run_path(path: str, args: list[str] | None = None, context: RunContext = None):
     if not args:
-        print("Need specify file mask")
+        print("Нужно задать маску файла")
         return
 
     file_mask = args[0]
 
     files = list(Path(path).glob(file_mask))
     if not files:
-        print("Not found file")
+        print("Не найден файл")
         return
 
     if len(files) > 1:
-        print(f"The file mask must match one file.\nFound ({len(files)}):")
+        print(f"Маска файла должна соответствовать одному файлу.\nНайдено ({len(files)}):")
         for name in files:
             print(f"    {name}")
         return
@@ -329,7 +329,7 @@ def _kill(path: str, args: list[str] | None = None, context: RunContext = None):
                 pids += kill_designers(path)
 
     if not pids:
-        print("Could not find processes")
+        print("Не удалось найти процессы!")
 
 
 def _processes(path: str, args: list[str] | None = None, context: RunContext = None):
@@ -363,10 +363,10 @@ def _processes(path: str, args: list[str] | None = None, context: RunContext = N
         print(f"{process_type.name} ({len(processes)}):")
         for p in processes:
             started_time = datetime.fromtimestamp(p.create_time())
-            print(f"    #{p.pid}, started: {started_time:%d/%m/%Y %H:%M:%S}")
+            print(f"    #{p.pid}, запущено: {started_time:%d/%m/%Y %H:%M:%S}")
 
     if not any(type_by_processes.values()):
-        print("Could not find processes")
+        print("Не удалось найти процессы!")
 
 
 def _get_last_release_version(path: str, args: list[str] | None = None, context: RunContext = None):
@@ -462,11 +462,11 @@ def _manager_up(path: str, _: list[str] | None = None, context: RunContext = Non
     path_from = root_dir / "radix_manager/distrib"
     files = list(path_from.rglob("*.zip"))
     if not files:
-        print(f"Not found files in {path_from}")
+        print(f"Не найдены файлы в {path_from}")
         return
 
     path_to = root_dir / "optt_manager/upgrades"
-    print(f"Moving files to {path_to}:")
+    print(f"Перемещение файлов в {path_to}:")
 
     for file in files:
         print(f"    File: {file.name}")
@@ -488,12 +488,12 @@ def _manager_clean(path: str, _: list[str] | None = None, context: RunContext = 
     path_from = root_dir / "optt_manager/upgrades.backup"
     files = list(path_from.rglob("*.zip"))
     if not files:
-        print(f"Not found files in {path_from}")
+        print(f"Не найдены файлы в {path_from}")
         return
 
-    print(f"Deleting files from {path_from}:")
+    print(f"Удаление файлов из {path_from}:")
     for file in files:
-        print(f"    File: {file.name}")
+        print(f"    Файл: {file.name}")
         file.unlink()
 
 
@@ -520,7 +520,7 @@ def _svn_update(path, args: list[str] | None = None, context: RunContext = None)
     command_svn = r'start /b "" TortoiseProc /command:update /path:"{path}"'
     command_svn = command_svn.format(path=path)
 
-    print(f"Run: {context.description} in {path}")
+    print(f"Запуск: {context.description} в {path}")
     os.system(command_svn)
 
 
@@ -749,8 +749,8 @@ def resolve_version(name: str, alias: str, versions: list[str] | None = None) ->
         base_version = settings.get("base_version")
         if not base_version:
             text = (
-                f'Attribute "base_settings", using with short versions (="{alias}"), '
-                f'must be defined in SETTINGS for "{name}"'
+                f'Атрибут "base_settings", используемый с короткой версией (="{alias}"), '
+                f'должен быть определен в SETTINGS для "{name}"'
             )
             raise GoException(text)
 
@@ -789,7 +789,7 @@ def _run_file(file_name: str):
     dir_file_name = os.path.dirname(file_name)
     file_name = os.path.normpath(file_name)
 
-    print(f"Run: {file_name!r}")
+    print(f"Запуск: {file_name!r}")
 
     # Move to active dir
     os.chdir(dir_file_name)
@@ -804,7 +804,7 @@ def _open_dir(path: str):
     else:
         dir_file_name = path
 
-    print(f"Open: {dir_file_name!r}")
+    print(f"Открытие: {dir_file_name!r}")
 
     # Open
     os.startfile(dir_file_name)
@@ -834,7 +834,7 @@ def go_run(
 
     # Если в <whats> функция, вызываем её
     if callable(value):
-        print(f"Run: {name} call {what!r}" + (f" ({args})" if args else ""))
+        print(f"Запуск: {name} вызов {what!r}" + (f" ({args})" if args else ""))
         value(path, args, RunContext(context_command))
         return
 
@@ -858,7 +858,7 @@ def go_run(
     find_string = "" if not args else args[0]
     command = command.format(path=dir_file_name, find_string=find_string)
 
-    print(f"Run: {description} in {dir_file_name}")
+    print(f"Запуск: {description} в {dir_file_name}")
     os.system(command)
 
 
@@ -964,12 +964,12 @@ def run(args: list[str]):
         # Если для сущности параметр версии возможен
         if settings["options"]["version"] != AvailabilityEnum.PROHIBITED:
             supported_versions = ", ".join(sorted(settings["versions"]))
-            print(f"Supported versions: {supported_versions}")
+            print(f"Поддерживаемые версии: {supported_versions}")
 
         # Если для сущности параметр what возможен
         if settings["options"]["what"] != AvailabilityEnum.PROHIBITED:
             supported_whats = ", ".join(sorted(settings["whats"]))
-            print(f"Supported <what>: {supported_whats}")
+            print(f"Поддерживаемые <what>: {supported_whats}")
 
     except GoException as e:
         # Если передан флаг отладки
