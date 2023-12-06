@@ -55,13 +55,13 @@ def process(path_layer: str):
         else:
             module_without_maintainters.append((module_name, module_id))
 
-    print(f"Modules without maintainters ({len(module_without_maintainters)}):")
+    print(f"Modules ({len(module_without_maintainters)}):")
     for module_name, module_id in module_without_maintainters:
         print(f"    {module_name} ({module_id})")
 
     print()
 
-    print(f"Deprecated modules without maintainters ({len(deprecated_module_without_maintainters)}):")
+    print(f"Deprecated modules ({len(deprecated_module_without_maintainters)}):")
     for module_name, module_id in deprecated_module_without_maintainters:
         print(f"    {module_name} ({module_id})")
 
