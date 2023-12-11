@@ -186,7 +186,12 @@ class Api:
         files = []
         if img_path:
             if img_path.startswith("http"):
-                self._do_get(img_path)
+                try:
+                    self._do_get(img_path)
+                except requests.exceptions.SSLError as e:
+                    self.log.warning(f'Ssl error "{e}" when loading "{img_path}", now trying without verification')
+                    self._do_get(img_path, verify=False)
+
                 buffer = io.BytesIO(self.last_rs.content)
             else:
                 buffer = open(img_path, "rb")
