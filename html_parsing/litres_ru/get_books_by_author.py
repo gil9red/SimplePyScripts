@@ -41,8 +41,12 @@ def get_books(url: str) -> list[Book]:
     for div_el in letter_els:
         series_name = div_el.get_text(strip=True).replace("\xa0", " ")
 
-        arts_by_letter = div_el.find_next_sibling("div", attrs={"class": "arts_by_letter"})
-        assert arts_by_letter, f"Не удалось найти тег с списком книг (серия {series_name!r})"
+        arts_by_letter = div_el.find_next_sibling(
+            "div", attrs={"class": "arts_by_letter"}
+        )
+        assert (
+            arts_by_letter
+        ), f"Не удалось найти тег с списком книг (серия {series_name!r})"
 
         book_els = arts_by_letter.select(".arts_by_alphabet_item")
         assert book_els, f"Не удалось найти список книг (серия {series_name!r})"
@@ -60,7 +64,9 @@ def get_books(url: str) -> list[Book]:
 
             seq_el = el.select_one(".art_name_link_seq")
             if seq_el:
-                seq: int = int("".join(c for c in seq_el.get_text(strip=True) if c.isdigit()))
+                seq: int = int(
+                    "".join(c for c in seq_el.get_text(strip=True) if c.isdigit())
+                )
             else:
                 seq = 0
 
@@ -79,7 +85,7 @@ def get_books(url: str) -> list[Book]:
     return all_books
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     url = "https://www.litres.ru/author/vitaliy-zykov/"
     books = get_books(url)
     print(f"Книги ({len(books)}):")
