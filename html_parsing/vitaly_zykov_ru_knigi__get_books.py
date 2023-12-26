@@ -13,7 +13,8 @@ def get_books() -> list[str]:
     root = BeautifulSoup(rs.content, "html.parser")
 
     return [
-        x.get_text(strip=True).replace('"', "") for x in root.select(".book_tpl > h3")
+        x.get_text(strip=True).replace('"', "")
+        for x in root.select(".book_tpl > h3")
     ]
 
 
