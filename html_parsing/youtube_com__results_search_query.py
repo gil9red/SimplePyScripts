@@ -7,7 +7,6 @@ __author__ = "ipetrash"
 import json
 import re
 import time
-import traceback
 
 from dataclasses import dataclass, field
 from datetime import datetime
