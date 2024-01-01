@@ -25,7 +25,7 @@ def get_games(name: str) -> list[tuple[str, str]]:
     data = rs.json()
 
     return [
-        (game["title"], game["price"]["amount"])
+        (game["title"], game["price"]["baseAmount"])
         for game in data["products"]
     ]
 
@@ -36,6 +36,9 @@ if __name__ == "__main__":
 
     print(get_games("Titan Quest: Atlantis"))
     # [('Titan Quest: Atlantis', '449')]
+
+    print(get_games("Prodeus"))
+    # [('Prodeus', '465')]
 
     print(get_games("dfsfsdfdsf"))
     # []
