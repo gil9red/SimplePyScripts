@@ -14,17 +14,17 @@ session.headers[
 
 
 def get_games(name: str) -> list[tuple[str, int]]:
-    url = f"https://www.gog.com/games/ajax/filtered?language=ru&mediaType=game&page=1&search={name}"
+    url = (
+        "https://www.gog.com/games/ajax/filtered?"
+        f"language=ru&mediaType=game&page=1&search={name}"
+    )
 
     rs = session.get(url)
     rs.raise_for_status()
 
     data = rs.json()
 
-    return [
-        (game["title"], game["price"]["amount"])
-        for game in data["products"]
-    ]
+    return [(game["title"], game["price"]["amount"]) for game in data["products"]]
 
 
 if __name__ == "__main__":
