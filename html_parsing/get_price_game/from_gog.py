@@ -4,25 +4,35 @@
 __author__ = "ipetrash"
 
 
-import sys
 import requests
 
 
-text = "titan quest"
-url = (
-    "https://www.gog.com/games/ajax/filtered?language=en&mediaType=game&page=1&sort=bestselling"
-    f"&system=windows_10,windows_7,windows_8,windows_vista,windows_xp&search={text}"
-)
+session = requests.Session()
+session.headers[
+    "User-Agent"
+] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0"
 
-rs = requests.get(url)
-print(rs)
 
-data = rs.json()
-print(data)
+def get_games(name: str) -> list[tuple[str, int]]:
+    url = f"https://www.gog.com/games/ajax/filtered?language=ru&mediaType=game&page=1&search={name}"
 
-if not data["totalGamesFound"]:
-    print("Not found game")
-    sys.exit()
+    rs = session.get(url)
+    rs.raise_for_status()
 
-for game in data["products"]:
-    print(game["title"], game["price"]["amount"] + game["price"]["symbol"])
+    data = rs.json()
+
+    return [
+        (game["title"], game["price"]["amount"])
+        for game in data["products"]
+    ]
+
+
+if __name__ == "__main__":
+    print(get_games("titan quest"))
+    # [('Titan Quest: Eternal Embers', '649'), ('Titan Quest Anniversary Edition', '649'), ('Titan Quest: Atlantis', '449'), ('Titan Quest: Ragnarök', '649')]
+
+    print(get_games("Titan Quest: Atlantis"))
+    # [('Titan Quest: Atlantis', '449')]
+
+    print(get_games("dfsfsdfdsf"))
+    # []
