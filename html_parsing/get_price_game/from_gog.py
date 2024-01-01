@@ -13,7 +13,7 @@ session.headers[
 ] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0"
 
 
-def get_games(name: str) -> list[tuple[str, int]]:
+def get_games(name: str) -> list[tuple[str, str]]:
     url = (
         "https://www.gog.com/games/ajax/filtered?"
         f"language=ru&mediaType=game&page=1&search={name}"
@@ -24,7 +24,10 @@ def get_games(name: str) -> list[tuple[str, int]]:
 
     data = rs.json()
 
-    return [(game["title"], game["price"]["amount"]) for game in data["products"]]
+    return [
+        (game["title"], game["price"]["amount"])
+        for game in data["products"]
+    ]
 
 
 if __name__ == "__main__":
