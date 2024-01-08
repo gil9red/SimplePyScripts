@@ -53,4 +53,4 @@ def do_get(url: str, *args, **kwargs) -> Response:
             if attempts >= max_attempts:
                 raise e
 
-        time.sleep(5)  # 5 seconds
+            time.sleep(5)  # 5 seconds
