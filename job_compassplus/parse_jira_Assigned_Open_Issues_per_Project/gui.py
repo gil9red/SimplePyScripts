@@ -55,7 +55,8 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
 sys.excepthook = log_uncaught_exceptions
 
 
-WINDOW_TITLE = DIR.name
+WINDOW_TITLE: str = DIR.name
+DATE_FORMAT: str = "%d/%m/%Y"
 
 
 def get_table_widget(header_labels: list) -> QTableWidget:
@@ -116,7 +117,7 @@ class TableWidgetRun(QWidget):
         for i, run in enumerate(items):
             self.table_run.setRowCount(self.table_run.rowCount() + 1)
 
-            item = QTableWidgetItem(run.date.strftime("%d/%m/%Y"))
+            item = QTableWidgetItem(run.date.strftime(DATE_FORMAT))
             item.setData(Qt.UserRole, run.get_project_by_issue_numbers())
             self.table_run.setItem(i, 0, item)
 
@@ -219,11 +220,11 @@ class CurrentAssignedOpenIssues(QWidget):
 
 
 class MyChartViewToolTips(ChartViewToolTips):
-    def __init__(self, timestamp_by_run: dict):
+    def __init__(self, timestamp_by_run: dict[int, Run]):
         super().__init__()
 
         self._callout_font_family = "Courier"
-        self.timestamp_by_run = timestamp_by_run
+        self.timestamp_by_run: dict[int, Run] = timestamp_by_run
 
     def show_series_tooltip(self, point, state: bool):
         # value -> pos
@@ -245,10 +246,16 @@ class MyChartViewToolTips(ChartViewToolTips):
                     )
 
                     if current_distance < distance:
-                        date_value = int(p_value.x())
-                        run = self.timestamp_by_run[date_value]
+                        time_ms = int(p_value.x())
+                        run = self.timestamp_by_run[time_ms]
                         table = get_table(run.get_project_by_issue_numbers())
-                        text = f"Total issues: {run.get_total_issues()}\n\n{table}"
+                        text = (
+                            f"{date.fromtimestamp(time_ms / 1000).strftime(DATE_FORMAT)}"
+                            "\n\n"
+                            f"Total issues: {run.get_total_issues()}"
+                            "\n"
+                            f"{table}"
+                        )
 
                         self._tooltip.setText(text)
                         self._tooltip.setAnchor(p_value)
@@ -269,7 +276,7 @@ class MainWindow(QMainWindow):
         icon = QIcon(file_name)
         self.setWindowIcon(icon)
 
-        self.timestamp_by_run = dict()
+        self.timestamp_by_run: dict[int, Run] = dict()
 
         menu = QMenu()
         menu.addAction("Show / hide", (lambda: self.setVisible(not self.isVisible())))

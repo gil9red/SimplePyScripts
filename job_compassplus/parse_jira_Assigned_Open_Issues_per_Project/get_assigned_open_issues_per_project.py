@@ -19,6 +19,8 @@ URL = "https://helpdesk.compassluxe.com/secure/ViewProfile.jspa?name=ipetrash"
 
 def get_assigned_open_issues_per_project() -> dict[str, int]:
     rs = session.get(URL)
+    rs.raise_for_status()
+
     root = BeautifulSoup(rs.content, "html.parser")
 
     data = dict()
