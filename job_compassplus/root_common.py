@@ -34,3 +34,8 @@ if __name__ == "__main__":
     # Check
     rs = session.get("https://helpdesk.compassluxe.com/pa-reports/")
     print(rs)
+    rs.raise_for_status()
+
+    rs = session.get("https://helpdesk.compassluxe.com/secure/ViewProfile.jspa?name=ipetrash")
+    print(rs)
+    rs.raise_for_status()
