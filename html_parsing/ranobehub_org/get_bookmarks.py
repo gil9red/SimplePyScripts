@@ -28,6 +28,8 @@ def get_bookmarks(user_id: int) -> list[Bookmark]:
         ranobe = relation["ranobe"]
         title = ranobe["names"]["rus"]
         url = ranobe["url"]
+
+        # TODO: StatusEnum: value and title
         status = relation["status"]["title"]
 
         items.append(
