@@ -4,10 +4,12 @@
 __author__ = "ipetrash"
 
 
+import functools
 import logging
 import io
 import re
 import sys
+import time
 
 from dataclasses import dataclass, field
 from enum import Enum
@@ -15,6 +17,8 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 import requests
+from requests.exceptions import RequestException
+
 from bs4 import BeautifulSoup, Tag
 
 # pip install Pillow
@@ -76,6 +80,34 @@ def parse(rs: requests.Response) -> BeautifulSoup:
     return BeautifulSoup(rs.content, "html.parser")
 
 
+def attempts(
+    max_number: int = 10,
+    sleep: int = 60,
+    ignored_exceptions: tuple[type(Exception)] = (RequestException,),
+):
+    def actual_decorator(func):
+        @functools.wraps(func)
+        def wrapped(*args, **kwargs):
+            number = 0
+            while True:
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    number += 1
+                    print(f"ERROR on {number}/{max_number}: {e}")
+
+                    if number >= max_number or not isinstance(e, ignored_exceptions):
+                        raise e
+
+                    print(f"Sleep {sleep} seconds")
+                    time.sleep(sleep)
+
+        return wrapped
+
+    return actual_decorator
+
+
+@attempts()
 def do_get(url: str, *args, **kwargs) -> tuple[requests.Response, BeautifulSoup]:
     rs = session.get(url, *args, **kwargs)
     rs.raise_for_status()
@@ -83,6 +115,7 @@ def do_get(url: str, *args, **kwargs) -> tuple[requests.Response, BeautifulSoup]
     return rs, parse(rs)
 
 
+@attempts()
 def do_post(url: str, *args, **kwargs) -> tuple[requests.Response, BeautifulSoup]:
     rs = session.post(url, *args, **kwargs)
     rs.raise_for_status()
