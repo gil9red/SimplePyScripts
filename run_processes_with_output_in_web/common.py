@@ -67,30 +67,32 @@ if __name__ == "__main__":
     def process_stderr(text):
         print("process_stderr:", repr(text))
 
-    task_threaded = Task(
-        command="ping google.com",
-        stdout=lambda text: process_stdout(f"[{task_threaded.command}]: {text}"),
-        stderr=lambda text: process_stderr(f"[{task_threaded.command}]: {text}"),
+    task = Task(
+        command="ping 127.0.0.1",
+        stdout=lambda text: process_stdout(f"[{task.command}]: {text}"),
+        stderr=lambda text: process_stderr(f"[{task.command}]: {text}"),
         encoding="cp866",
     )
-    print(task_threaded)
-    task_threaded.run(threaded=False)
+    print(task)
+    task.run(threaded=False)
+
+    print()
 
     stdout_queue = queue.Queue()
     stderr_queue = queue.Queue()
 
-    task = Task(
-        command="ping 127.0.0.1",
+    task_threaded = Task(
+        command=task.command,
         stdout=stdout_queue,
         stderr=stderr_queue,
-        encoding="cp866",
+        encoding=task.encoding,
     )
-    print(task)
+    print(task_threaded)
 
-    task.run(threaded=True)
-    print(task)
+    task_threaded.run(threaded=True)
+    print(task_threaded)
 
-    while task.status == TaskStatusEnum.Running:
+    while True:
         try:
             stdout_line = stdout_queue.get(timeout=0.1)
         except queue.Empty:
@@ -106,3 +108,6 @@ if __name__ == "__main__":
         else:
             if stderr_line is not None:
                 process_stderr(stderr_line)
+
+        if task_threaded.status == TaskStatusEnum.Finished:
+            break
