@@ -122,6 +122,8 @@ if __name__ == "__main__":
         if task_threaded.status == TaskStatusEnum.Finished and not stdout_line and not stderr_line:
             break
 
+    print(task_threaded)
+
     print()
 
     import threading
