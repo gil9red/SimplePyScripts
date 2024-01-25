@@ -30,20 +30,19 @@ class Task:
     stdout: queue.Queue | Callable = field(repr=False, default=None)
     stderr: queue.Queue | Callable = field(repr=False, default=None)
     encoding: str = "utf-8"
+    shell: bool = False
     status: TaskStatusEnum = TaskStatusEnum.Pending
     process: Popen = field(init=False, repr=False, default=None)
+    process_id: int = field(default=None)
     process_return_code: int = None
     __need_stop: bool = field(init=False, repr=False, default=False)
-
-    @property
-    def process_id(self) -> int | None:
-        return self.process.pid if self.process else None
 
     def run(self, threaded: bool = False):
         self.status = TaskStatusEnum.Running
 
         def process_callback(process: Popen):
             self.process = process
+            self.process_id = self.process.pid
 
         def on_exit():
             self.status = TaskStatusEnum.Stopped if self.__need_stop else TaskStatusEnum.Finished
@@ -57,6 +56,7 @@ class Task:
             self.command,
             method="poller",
             encoding=self.encoding,
+            shell=self.shell,
             stdout=self.stdout,
             stderr=self.stderr,
             process_callback=process_callback,
