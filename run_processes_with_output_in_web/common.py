@@ -75,6 +75,7 @@ if __name__ == "__main__":
     )
     print(task)
     task.run(threaded=False)
+    print(task)
 
     print()
 
@@ -109,5 +110,5 @@ if __name__ == "__main__":
             if stderr_line is not None:
                 process_stderr(stderr_line)
 
-        if task_threaded.status == TaskStatusEnum.Finished:
+        if task_threaded.status == TaskStatusEnum.Finished and not stdout_line and not stderr_line:
             break
