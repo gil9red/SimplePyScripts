@@ -106,7 +106,7 @@ if __name__ == "__main__":
         try:
             stdout_line = stdout_queue.get(timeout=0.1)
         except queue.Empty:
-            pass
+            stdout_line = None
         else:
             if stdout_line is not None:
                 process_stdout(stdout_line)
@@ -114,7 +114,7 @@ if __name__ == "__main__":
         try:
             stderr_line = stderr_queue.get(timeout=0.1)
         except queue.Empty:
-            pass
+            stderr_line = None
         else:
             if stderr_line is not None:
                 process_stderr(stderr_line)
