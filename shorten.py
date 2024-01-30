@@ -9,7 +9,7 @@ def shorten(text: str, length: int = 30, placeholder: str = "...") -> str:
         return text
 
     if len(text) > length:
-        text = text[:length - len(placeholder)] + placeholder
+        text = text[: length - len(placeholder)] + placeholder
     return text
 
 
