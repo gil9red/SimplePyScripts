@@ -82,7 +82,7 @@ def parse(rs: requests.Response) -> BeautifulSoup:
 
 ATTEMPTS_MAX_NUMBER: int = 10
 ATTEMPTS_SLEEP: int = 60
-ATTEMPTS_IGNORED_EXCEPTIONS: tuple[type(Exception)] = (RequestException,),
+ATTEMPTS_IGNORED_EXCEPTIONS: tuple[type(Exception)] = (RequestException,)
 
 
 def do_request(func: Callable, url: str, *args, **kwargs) -> tuple[requests.Response, BeautifulSoup]:
