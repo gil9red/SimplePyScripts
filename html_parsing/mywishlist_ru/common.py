@@ -4,7 +4,6 @@
 __author__ = "ipetrash"
 
 
-import functools
 import logging
 import io
 import re
@@ -15,6 +14,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
+from typing import Callable
 
 import requests
 from requests.exceptions import RequestException
@@ -80,47 +80,37 @@ def parse(rs: requests.Response) -> BeautifulSoup:
     return BeautifulSoup(rs.content, "html.parser")
 
 
-def attempts(
-    max_number: int = 10,
-    sleep: int = 60,
-    ignored_exceptions: tuple[type(Exception)] = (RequestException,),
-):
-    def actual_decorator(func):
-        @functools.wraps(func)
-        def wrapped(*args, **kwargs):
-            number = 0
-            while True:
-                try:
-                    return func(*args, **kwargs)
-                except Exception as e:
-                    number += 1
-                    print(f"ERROR on {number}/{max_number}: {e}")
-
-                    if number >= max_number or not isinstance(e, ignored_exceptions):
-                        raise e
-
-                    print(f"Sleep {sleep} seconds")
-                    time.sleep(sleep)
-
-        return wrapped
-
-    return actual_decorator
+ATTEMPTS_MAX_NUMBER: int = 10
+ATTEMPTS_SLEEP: int = 60
+ATTEMPTS_IGNORED_EXCEPTIONS: tuple[type(Exception)] = (RequestException,),
 
 
-@attempts()
+def do_request(func: Callable, url: str, *args, **kwargs) -> tuple[requests.Response, BeautifulSoup]:
+    number = 0
+    while True:
+        try:
+            rs = func(url, *args, **kwargs)
+            rs.raise_for_status()
+
+            return rs, parse(rs)
+
+        except Exception as e:
+            number += 1
+            print(f"ERROR on {number}/{ATTEMPTS_MAX_NUMBER}: {e}")
+
+            if number >= ATTEMPTS_MAX_NUMBER or not isinstance(e, ATTEMPTS_IGNORED_EXCEPTIONS):
+                raise e
+
+            print(f"Sleep {ATTEMPTS_SLEEP} seconds")
+            time.sleep(ATTEMPTS_SLEEP)
+
+
 def do_get(url: str, *args, **kwargs) -> tuple[requests.Response, BeautifulSoup]:
-    rs = session.get(url, *args, **kwargs)
-    rs.raise_for_status()
-
-    return rs, parse(rs)
+    return do_request(session.get, url, *args, **kwargs)
 
 
-@attempts()
 def do_post(url: str, *args, **kwargs) -> tuple[requests.Response, BeautifulSoup]:
-    rs = session.post(url, *args, **kwargs)
-    rs.raise_for_status()
-
-    return rs, parse(rs)
+    return do_request(session.post, url, *args, **kwargs)
 
 
 @dataclass
