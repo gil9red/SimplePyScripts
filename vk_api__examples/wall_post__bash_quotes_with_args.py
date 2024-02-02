@@ -16,21 +16,24 @@ import sys
 from wall_post__bash_quotes import main
 
 
-def create_parser():
+def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="The script receives a quote from the site bash.im "
-        "and puts it on the wall by vk.com"
+        description="The script receives a quote from the site bash.im and puts it on the wall by vk.com"
     )
     parser.add_argument("login", help="Login from which the message will be sent.")
     parser.add_argument("psw", help="User password.")
     parser.add_argument(
-        "owner_id", type=int, nargs="?", const=1, help="ID on who will get the message."
+        "owner_id",
+        type=int,
+        nargs="?",
+        const=1,
+        help="ID on who will get the message.",
     )
     parser.add_argument(
         "-timeout",
         type=int,
         default=3600,
-        help="The frequency of sending messages in seconds." "\nDefault 3600 sec.",
+        help="The frequency of sending messages in seconds.\nDefault 3600 sec.",
     )
     return parser
 
