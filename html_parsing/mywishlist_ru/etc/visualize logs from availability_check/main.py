@@ -18,19 +18,35 @@ FILE_NAME_LOGS = DIR / "logs.txt"
 
 
 def get_date_by_hours(text: str) -> dict[date, list[bool]]:
-    items = re.findall(r"\[(.+?),\d+]", text)
-    dates = [
-        datetime.strptime(item, "%Y-%m-%d %H:%M:%S")
-        for item in items
-    ]
-    dates = sorted(set(dates))
+    date_by_hours: dict[date, list[bool | None]] = dict()
 
-    date_by_hours: dict[date, list[bool]] = dict()
-    for d in dates:
-        if d.date() not in date_by_hours:
-            date_by_hours[d.date()] = [False for _ in range(24)]
+    for line in text.splitlines():
+        m = re.search(r"\[(.+?),\d+]", line)
+        if not m:
+            continue
 
-        date_by_hours[d.date()][d.hour] = True
+        dt = datetime.strptime(m.group(1), "%Y-%m-%d %H:%M:%S")
+
+        date_obj = dt.date()
+        if date_obj not in date_by_hours:
+            date_by_hours[date_obj] = [None for _ in range(24)]
+
+        date_by_hours[date_obj][dt.hour] = "Сайт доступен" in line
+
+    # Нужно заполнить промежутки между часами - например,
+    # сайт был доступен с 13 до 17, но в логах будут только 13 и 17
+    last_available = None
+    for hours in date_by_hours.values():
+        for i, flag in enumerate(hours):
+            if flag is not None:
+                last_available = flag
+                continue
+
+            if last_available is None:
+                continue
+
+            if flag is None:
+                hours[i] = last_available
 
     return date_by_hours
 
@@ -40,6 +56,7 @@ if __name__ == "__main__":
 
     table_widget = QTableWidget()
     table_widget.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+    table_widget.setSelectionMode(QTableWidget.SelectionMode.NoSelection)
 
     table_widget.show()
 
@@ -61,11 +78,12 @@ if __name__ == "__main__":
         for col, hour_flag in enumerate(hours):
             item = QTableWidgetItem()
 
-            if hour_flag:
-                item.setBackground(Qt.GlobalColor.red)
-                item.setForeground(Qt.GlobalColor.white)
-            else:
-                item.setBackground(Qt.GlobalColor.green)
+            if hour_flag is not None:
+                if hour_flag:
+                    item.setBackground(Qt.GlobalColor.green)
+                else:
+                    item.setBackground(Qt.GlobalColor.red)
+                    item.setForeground(Qt.GlobalColor.white)
 
             table_widget.setItem(row, col, item)
 
