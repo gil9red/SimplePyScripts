@@ -4,14 +4,14 @@
 __author__ = "ipetrash"
 
 
-import requests
 from bs4 import BeautifulSoup
+from common import session
 
 
 def get_seasons() -> dict[str, list[str]]:
     url = "https://ru.wikipedia.org/wiki/Список_эпизодов_мультсериала_«Южный_Парк»"
 
-    rs = requests.get(url)
+    rs = session.get(url)
     root = BeautifulSoup(rs.content, "html.parser")
 
     season_by_series = dict()

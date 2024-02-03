@@ -5,10 +5,10 @@ __author__ = "ipetrash"
 
 
 from bs4 import BeautifulSoup
-import requests
+from common import session
 
 
-rs = requests.get("https://ru.wikipedia.org/wiki/ISO_3166-1")
+rs = session.get("https://ru.wikipedia.org/wiki/ISO_3166-1")
 root = BeautifulSoup(rs.content, "html.parser")
 
 for tr in root.select_one(".wikitable").select("tr"):

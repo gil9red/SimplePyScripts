@@ -4,13 +4,13 @@
 __author__ = "ipetrash"
 
 
-import requests
 from bs4 import BeautifulSoup
+from common import session
 
 
 url = "https://ru.wikipedia.org/wiki/Разрешение_(компьютерная_графика)"
 
-rs = requests.get(url)
+rs = session.get(url)
 root = BeautifulSoup(rs.content, "html.parser")
 
 table = root.select(".wikitable")[0]
