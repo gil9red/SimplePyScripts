@@ -33,10 +33,12 @@ def get_date_by_hours(text: str) -> dict[date, list[bool]]:
 
         date_by_hours[date_obj][dt.hour] = "Сайт доступен" in line
 
+    last_date = max(date_by_hours.keys())
+
     # Нужно заполнить промежутки между часами - например,
     # сайт был доступен с 13 до 17, но в логах будут только 13 и 17
     last_available = None
-    for hours in date_by_hours.values():
+    for date_obj, hours in date_by_hours.items():
         for i, flag in enumerate(hours):
             if flag is not None:
                 last_available = flag
@@ -47,6 +49,10 @@ def get_date_by_hours(text: str) -> dict[date, list[bool]]:
 
             if flag is None:
                 hours[i] = last_available
+
+                # Дошли до последней даты
+                if date_obj == last_date:
+                    break
 
     return date_by_hours
 
