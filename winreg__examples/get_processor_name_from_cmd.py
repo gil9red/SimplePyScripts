@@ -13,7 +13,7 @@ VALUE = "ProcessorNameString"
 # Example:
 # "HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\0
 #     ProcessorNameString    REG_SZ    Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz"
-result: str = subprocess.check_output(rf'Reg Query "{PATH}" /v {VALUE}', encoding="utf-8")
+result: str = subprocess.check_output(rf'REG QUERY "{PATH}" /v {VALUE}', encoding="utf-8")
 
 value = None
 for line in result.splitlines():
