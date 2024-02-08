@@ -6,7 +6,6 @@ __author__ = "ipetrash"
 
 import copy
 import enum
-import json
 import os
 import shutil
 import sys
@@ -237,11 +236,6 @@ def get_versions_by_path(path: str) -> dict[str, str]:
                 version_by_path[path.name] = str(path)
 
     return version_by_path
-
-
-def _print_pretty_settings():
-    print(json.dumps(SETTINGS, indent=4, default=str))
-    sys.exit()
 
 
 def settings_preprocess(settings: dict[str, dict]) -> dict[str, dict]:
@@ -524,7 +518,7 @@ def _svn_update(path, args: list[str] | None = None, context: RunContext = None)
     os.system(command_svn)
 
 
-SETTINGS = {
+__SETTINGS = {
     "__radix_base": {
         "options": {
             "version": AvailabilityEnum.OPTIONAL,
@@ -603,9 +597,7 @@ SETTINGS = {
         "path": "C:/DOC/Specifications",
     },
 }
-
-SETTINGS = settings_preprocess(SETTINGS)
-# _print_pretty_SETTINGS()
+SETTINGS = settings_preprocess(__SETTINGS)
 
 ABOUT_TEXT = r"""
 RUN:
