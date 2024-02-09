@@ -491,7 +491,24 @@ def _manager_clean(path: str, _: list[str] | None = None, context: RunContext = 
         file.unlink()
 
 
-def _svn_update(path, args: list[str] | None = None, context: RunContext = None):
+def _server(path: str, args: list[str] | None = None, _: RunContext = None):
+    default_file: str = "!!server.cmd"
+    arg_by_file: dict[str, str] = {
+        "ora": default_file,
+        "pg": "!!server-postgres.cmd",
+    }
+    file_name: str = default_file
+    if args:
+        for arg, value in arg_by_file.items():
+            if arg in args:
+                file_name = value
+                break
+
+    full_file_name: str = str(Path(path) / file_name)
+    _run_file(full_file_name)
+
+
+def _svn_update(path: str, args: list[str] | None = None, context: RunContext = None):
     force = False
 
     # force - обновляемся, даже если сборка сломана
@@ -529,7 +546,10 @@ __SETTINGS = {
         "whats": {
             "designer": "!!designer.cmd",
             "explorer": "!!explorer.cmd",
-            "server": "!!server.cmd",
+            "server": (
+                "server",
+                _server,
+            ),
             "compile": "!build_ads__pause.bat",
             "build": "!build_kernel__pause.cmd",
             "update": (
