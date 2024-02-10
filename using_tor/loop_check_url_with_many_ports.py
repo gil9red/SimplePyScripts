@@ -30,7 +30,7 @@ import requests
 url = "http://httpbin.org/ip"
 
 
-log = logging.getLogger(__name__)
+log = logging.getLogger(__file__)
 log.setLevel(logging.DEBUG)
 handler = logging.StreamHandler(sys.stdout)
 handler.setFormatter(logging.Formatter("[%(asctime)s] %(message)s"))

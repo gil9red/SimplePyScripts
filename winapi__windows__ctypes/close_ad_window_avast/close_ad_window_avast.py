@@ -15,7 +15,7 @@ import win32con
 
 
 def get_logger():
-    log = logging.getLogger(__name__)
+    log = logging.getLogger(__file__)
     log.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter(

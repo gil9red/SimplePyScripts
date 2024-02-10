@@ -21,7 +21,7 @@ def get_logger(file_name: str, dir_name=DIR_LOGS):
 
     file_name = dir_name / (Path(file_name).resolve().name + ".log")
 
-    log = logging.getLogger(__name__)
+    log = logging.getLogger(__file__)
     log.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter(
