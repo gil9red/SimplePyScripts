@@ -23,7 +23,7 @@ def get_logger(name, file="log.txt", encoding="utf-8"):
     # Simple file handler
     # fh = logging.FileHandler(file, encoding=encoding)
     # or:
-    fh = RotatingFileHandler(file, maxBytes=10000000, backupCount=5, encoding=encoding)
+    fh = RotatingFileHandler(file, maxBytes=10_000_000, backupCount=5, encoding=encoding)
     fh.setFormatter(formatter)
     log.addHandler(fh)
 

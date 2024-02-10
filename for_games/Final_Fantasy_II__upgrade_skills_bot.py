@@ -31,7 +31,7 @@ def get_logger(name, file="log.txt", encoding="utf-8", log_stdout=True, log_file
 
     if log_file:
         fh = RotatingFileHandler(
-            file, maxBytes=10000000, backupCount=5, encoding=encoding
+            file, maxBytes=10_000_000, backupCount=5, encoding=encoding
         )
         fh.setFormatter(formatter)
         log.addHandler(fh)
