@@ -8,7 +8,7 @@ from pathlib import Path
 
 import docx
 from docx.text.run import Run
-from docx.text.paragraph import Paragraph, Run
+from docx.text.paragraph import Paragraph
 
 
 def get_font_name_and_size(doc: docx.Document, p: Paragraph, r: Run) -> tuple[str | None, int | None]:
