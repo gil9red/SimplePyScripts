@@ -33,6 +33,7 @@ def get_feeds_by_manga_chapters() -> list[str]:
     return [
         f'{item["element"]["name"]} {item["title"]}'
         for item in rs.json()["list"]
+        if item["type"] == "CHAPTER_NEW"
     ]
 
 
