@@ -18,7 +18,7 @@ def get_layer_version(path: Path) -> str:
     if not path.exists():
         raise Exception(f"Path {str(path)!r} is not exists!")
 
-    m = re.search(r' ReleaseNumber="(.+?)" ', path.read_text("utf-8"))
+    m = re.search(r'\bReleaseNumber="(.+?)"', path.read_text("utf-8"))
     if not m:
         raise Exception(f'Not found "ReleaseNumber" in path {str(path)!r}!')
 
