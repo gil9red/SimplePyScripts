@@ -40,5 +40,8 @@ if __name__ == "__main__":
     print(get_games("Prodeus"))
     # [('Prodeus', '465')]
 
+    print(get_games("Psychonauts 2"))
+    # []
+
     print(get_games("dfsfsdfdsf"))
     # []
