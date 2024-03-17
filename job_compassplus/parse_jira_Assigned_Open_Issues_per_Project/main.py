@@ -22,7 +22,7 @@ IS_SINGLE: bool = "--single" in sys.argv
 
 
 def run():
-    attempts: int = 5
+    attempts_for_single: int = 5
 
     while True:
         try:
@@ -50,8 +50,8 @@ def run():
 
         except Exception as e:
             if IS_SINGLE:
-                attempts -= 1
-                if attempts <= 0:
+                attempts_for_single -= 1
+                if attempts_for_single <= 0:
                     raise e
 
             logger.exception("Ошибка:")
