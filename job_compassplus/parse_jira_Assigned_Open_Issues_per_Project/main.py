@@ -5,6 +5,7 @@ __author__ = "ipetrash"
 
 
 import time
+import sys
 
 # pip install schedule
 import schedule
@@ -17,7 +18,12 @@ from common import get_table, logger
 from get_assigned_open_issues_per_project import get_assigned_open_issues_per_project
 
 
+IS_SINGLE: bool = "--single" in sys.argv
+
+
 def run():
+    attempts: int = 5
+
     while True:
         try:
             logger.info(f"Начало")
@@ -42,7 +48,12 @@ def run():
             logger.info("\n" + "-" * 100 + "\n")
             break
 
-        except Exception:
+        except Exception as e:
+            if IS_SINGLE:
+                attempts -= 1
+                if attempts <= 0:
+                    raise e
+
             logger.exception("Ошибка:")
 
             logger.info("Через 15 минут попробую снова...")
@@ -50,6 +61,10 @@ def run():
 
 
 if __name__ == "__main__":
+    if IS_SINGLE:
+        run()
+        sys.exit()
+
     # Каждую неделю, в субботу, в 12:00
     schedule.every().week.saturday.at("12:00").do(run)
 
