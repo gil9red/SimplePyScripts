@@ -22,7 +22,7 @@ session.headers[
 ] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0"
 
 
-def get_series_list() -> list[Video]:
+def get_all_series() -> list[Video]:
     rs = session.get("https://theboys.fun/")
     rs.raise_for_status()
 
@@ -47,7 +47,7 @@ def get_series_list() -> list[Video]:
 
 
 if __name__ == "__main__":
-    items = get_series_list()
+    items = get_all_series()
     print(f"Video {len(items)}:")
     for video in items:
         print(f"    {video.title!r}: {video.url}")
