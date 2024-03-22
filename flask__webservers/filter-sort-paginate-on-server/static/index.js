@@ -2,8 +2,8 @@ $(function() {
     new DataTable('table', {
         ajax: 'api/get_items',
         rowId: 'id',
-        processing: true,
         serverSide: true,
+        processing: true,
         lengthMenu: [
             [5, 10, 25, 50, -1],
             ["5 records", "10 records", "25 records", "50 records", "All records"]
