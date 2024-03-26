@@ -49,7 +49,7 @@ def print_the_most_profitable_dish(url: str):
     print(url)
 
     options = Options()
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
 
     unknown_metrics_items = []
     items = []
