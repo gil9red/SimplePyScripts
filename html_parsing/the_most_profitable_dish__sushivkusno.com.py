@@ -13,7 +13,10 @@ from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.firefox.options import Options
-from selenium.common.exceptions import MoveTargetOutOfBoundsException
+from selenium.common.exceptions import (
+    MoveTargetOutOfBoundsException,
+    NoSuchElementException,
+)
 from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 from selenium.webdriver.remote.webdriver import WebElement
 
@@ -46,7 +49,7 @@ def print_the_most_profitable_dish(url: str):
     print(url)
 
     options = Options()
-    options.add_argument("--headless")
+    # options.add_argument("--headless")
 
     unknown_metrics_items = []
     items = []
@@ -57,8 +60,23 @@ def print_the_most_profitable_dish(url: str):
             options=options,
             service=FirefoxService(GeckoDriverManager().install()),
         )
-        driver.implicitly_wait(2)
+        driver.implicitly_wait(5)
         driver.get(url)
+
+        time.sleep(10)
+
+        # Модальный диалог самовывоза или доставки
+        try:
+            delivery_el = driver.find_element(
+                By.CSS_SELECTOR, ".delivery-choice__item:has(.icon-geo__delivery)"
+            )
+            delivery_el.click()
+
+            close_el = driver.find_element(By.CSS_SELECTOR, ".modal__close-icon")
+            close_el.click()
+
+        except NoSuchElementException:
+            pass
 
         # Пролистывание страницы до низа
         footer_el = driver.find_element(By.CSS_SELECTOR, "footer")
