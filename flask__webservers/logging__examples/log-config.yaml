@@ -1,0 +1,28 @@
+version: 1
+
+formatters:
+  default:
+    format: "[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s"
+
+handlers:
+  console:
+    class: "logging.StreamHandler"
+    formatter: "default"
+    stream: "ext://sys.stdout"
+
+  webserver-file:
+    class: "logging.handlers.RotatingFileHandler"
+    formatter: "default"
+    filename: "main_new.log"
+    encoding: "utf-8"
+    backupCount: 5
+    maxBytes: 10000000
+
+loggers:
+  webserser:
+    handlers: ["console", "webserver-file"]
+    level: "DEBUG"
+
+  werkzeug:
+    handlers: ["console", "webserver-file"]
+    level: "DEBUG"
