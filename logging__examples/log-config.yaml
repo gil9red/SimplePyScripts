@@ -13,18 +13,18 @@ handlers:
   __base_file_handlers: &__base_file_handlers
     class: "logging.handlers.RotatingFileHandler"
     formatter: "default"
-    filename: main.log
+    filename: "main.log"
     encoding: "utf-8"
     backupCount: 5
     maxBytes: 10000000
 
   main-file:
     <<: *__base_file_handlers
-    filename: main.log
+    filename: "main.log"
 
   main2-file:
     <<: *__base_file_handlers
-    filename: main2.log
+    filename: "main2.log"
 
 loggers:
   main:
