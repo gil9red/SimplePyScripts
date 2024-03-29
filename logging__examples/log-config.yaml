@@ -10,7 +10,7 @@ handlers:
     formatter: "default"
     stream: "ext://sys.stdout"
 
-  __base_file_handlers: &__base_file_handlers
+  __base_file_handler: &__base_file_handler
     class: "logging.handlers.RotatingFileHandler"
     formatter: "default"
     filename: "main.log"
@@ -19,11 +19,11 @@ handlers:
     maxBytes: 10000000
 
   main-file:
-    <<: *__base_file_handlers
+    <<: *__base_file_handler
     filename: "main.log"
 
   main2-file:
-    <<: *__base_file_handlers
+    <<: *__base_file_handler
     filename: "main2.log"
 
 loggers:
