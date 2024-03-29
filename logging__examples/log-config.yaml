@@ -28,13 +28,9 @@ handlers:
 
 loggers:
   main:
-    handlers:
-    - "console"
-    - "main-file"
+    handlers: ["console", "main-file"]
     level: "DEBUG"
 
   main2:
-    handlers:
-    - "console"
-    - "main2-file"
+    handlers: ["console", "main2-file"]
     level: "INFO"
