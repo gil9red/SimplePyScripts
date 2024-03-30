@@ -17,6 +17,7 @@ handlers:
     encoding: "utf-8"
     backupCount: 5
     maxBytes: 10000000
+    delay: true
 
   main2-file:
     <<: *main-file

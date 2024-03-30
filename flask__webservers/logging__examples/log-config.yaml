@@ -17,6 +17,7 @@ handlers:
     encoding: "utf-8"
     backupCount: 5
     maxBytes: 10000000
+    delay: true
 
 loggers:
   web-server: &web-server
