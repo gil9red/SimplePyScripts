@@ -33,7 +33,7 @@ for handler in LOGGING["handlers"].values():
 
 logging.config.dictConfig(LOGGING)
 
-log = logging.getLogger("webserser")
+log = logging.getLogger("web-server")
 
 
 app = Flask(__name__)

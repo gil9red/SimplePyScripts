@@ -19,7 +19,7 @@ handlers:
     maxBytes: 10000000
 
 loggers:
-  webserser:
+  web-server:
     handlers: ["console", "webserver-file"]
     level: "DEBUG"
 
