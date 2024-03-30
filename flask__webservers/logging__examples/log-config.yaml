@@ -10,7 +10,7 @@ handlers:
     formatter: "default"
     stream: "ext://sys.stdout"
 
-  webserver-file:
+  web-server-file:
     class: "logging.handlers.RotatingFileHandler"
     formatter: "default"
     filename: "main_new.log"
@@ -20,7 +20,7 @@ handlers:
 
 loggers:
   web-server: &web-server
-    handlers: ["console", "webserver-file"]
+    handlers: ["console", "web-server-file"]
     level: "DEBUG"
 
   werkzeug: *web-server
