@@ -83,6 +83,13 @@ XML_JOB_TEMPLATE = r"""
 """.strip()
 
 jobs = get_jobs_for_run()
+
+total = len(jobs)
+updated = 0
+created = 0
+deleted = 0
+nothing = 0
+
 for job_name, job_data in jobs.items():
     description = job_data["description"]
     cron = job_data["cron"]
@@ -103,12 +110,15 @@ for job_name, job_data in jobs.items():
         config = job.configure()
         if is_equals_config(xml, config):
             print("Изменений нет")
+            nothing += 1
         else:
             print("Обновление задачи")
             job.configure(xml)
+            updated += 1
     else:
         print("Создание задачи")
         client.create_job(job_name, xml)
+        created += 1
 
     print()
 
@@ -118,3 +128,14 @@ for job_name in jobs_deprecated.keys():
     if job:
         print(f"Удаление устаревшей задачи {job_name!r}")
         job.delete()
+        deleted += 1
+
+print("\n" + "-" * 10 + "\n")
+
+print(f"""
+Всего задач: {total}
+Обновлено: {updated}
+Создано: {created}
+Удалено: {deleted}
+Без изменений: {nothing}
+""".strip())
