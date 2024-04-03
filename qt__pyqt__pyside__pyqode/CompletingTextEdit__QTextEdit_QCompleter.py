@@ -147,7 +147,7 @@ class MainWindow(QMainWindow):
         self.textEdit = CompletingTextEdit()
 
         self.textEdit.loadFromList(
-            ["dog", "cat", "carry", "python", "собака", "foobar"]
+            ["dog", "cat", "carry", "python", "собака", "foobar", "editor", "egg", "foo", "bar", "tester"]
         )
         # OR:
         # self.textEdit.loadFromFile('wordlist.txt')
