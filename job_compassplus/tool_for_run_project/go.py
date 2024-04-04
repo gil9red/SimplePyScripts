@@ -568,6 +568,10 @@ __SETTINGS = {
                 "svn revert",
                 'start /b "" TortoiseProc /command:revert /path:"{path}"',
             ),
+            "modifications": (
+                "svn show modifications dialog",
+                'start /b "" TortoiseProc /command:repostatus /path:"{path}"',
+            ),
             "run": _run_path,
             "kill": _kill,
             "processes": _processes,
