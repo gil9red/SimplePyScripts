@@ -4,10 +4,10 @@
 __author__ = "ipetrash"
 
 
+import re
 from dataclasses import dataclass
 
 import requests
-from bs4 import BeautifulSoup
 
 
 @dataclass
@@ -27,62 +27,49 @@ session.headers[
 ] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0"
 
 
+URL_API_PATTERN: str = (
+    "https://api.litres.ru/foundation/api/authors/{name}/arts"
+    "?art_groups=1&limit=50&o=series&show_unavailable=true"
+)
+
+
 def get_books(url: str) -> list[Book]:
+    def _process_title(text: str) -> str:
+        return text.replace("\xa0", " ")
+
+    m = re.search(r"/author/(.+?)/", url)
+    if not m:
+        raise Exception(f"Не получилось найти имя автора из ссылки {url}")
+
+    name = m.group(1)
+
+    # TODO: Поддержка загрузки всех страниц [payload][pagination][next_page]
+    url: str = URL_API_PATTERN.format(name=name)
+
     rs = session.get(url)
+    rs.raise_for_status()
 
-    soup = BeautifulSoup(rs.content, "html.parser")
+    books: list[Book] = []
+    for book in rs.json()["payload"]["data"]:
+        name: str = _process_title(book["title"])
 
-    # Список серии книг
-    letter_els = soup.select(".person-page-list__content_sequence > div.letter_icon")
-    assert letter_els, "Не удалось найти список серий!"
+        if book["series"]:
+            series_name: str = _process_title(book["series"][0]["name"])
+            seq: int = book["series"][0]["art_order"]
+        else:
+            series_name: str = "Без серии"
+            seq: int = 0
 
-    all_books: list[Book] = []
-
-    for div_el in letter_els:
-        series_name = div_el.get_text(strip=True).replace("\xa0", " ")
-
-        arts_by_letter = div_el.find_next_sibling(
-            "div", attrs={"class": "arts_by_letter"}
-        )
-        assert (
-            arts_by_letter
-        ), f"Не удалось найти тег с списком книг (серия {series_name!r})"
-
-        book_els = arts_by_letter.select(".arts_by_alphabet_item")
-        assert book_els, f"Не удалось найти список книг (серия {series_name!r})"
-
-        books: list[Book] = []
-        for el in book_els:
-            # Оставляем только текстовые книги, аудио не нужны
-            if not el.select_one(".format-icons__block .text"):
-                continue
-
-            name_el = el.select_one("a.art_name_link")
-            assert name_el, f"Не удалось найти название книги (серия {series_name!r})"
-
-            name = name_el["title"].replace("\xa0", " ")
-
-            seq_el = el.select_one(".art_name_link_seq")
-            if seq_el:
-                seq: int = int(
-                    "".join(c for c in seq_el.get_text(strip=True) if c.isdigit())
-                )
-            else:
-                seq = 0
-
-            books.append(
-                Book(
-                    name=name,
-                    series=series_name,
-                    seq=seq,
-                )
+        books.append(
+            Book(
+                name=name,
+                series=series_name,
+                seq=seq,
             )
+        )
 
-        assert books, f"Вернулся пустой список книг (серия {series_name!r})"
-        all_books += books
-
-    assert all_books, "Вернулся пустой список книг"
-    return all_books
+    assert books, "Вернулся пустой список книг"
+    return books
 
 
 if __name__ == "__main__":
