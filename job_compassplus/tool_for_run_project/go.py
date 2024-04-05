@@ -45,7 +45,7 @@ class GoException(Exception):
 class UnknownNameException(GoException):
     def __init__(self, name: str, supported: Iterable[str]):
         self.name = name
-        self.supported = list(supported)
+        self.supported = list(sorted(supported))
 
         super().__init__(f"Unknown name {self.name!r}, supported: {self.supported}")
 
@@ -53,7 +53,7 @@ class UnknownNameException(GoException):
 class UnknownWhatException(GoException):
     def __init__(self, what: str, supported: Iterable[str]):
         self.what = what
-        self.supported = list(supported)
+        self.supported = list(sorted(supported))
 
         super().__init__(f"Unknown what {self.what!r}, supported: {self.supported}")
 
