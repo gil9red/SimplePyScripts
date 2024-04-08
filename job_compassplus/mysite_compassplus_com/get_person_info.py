@@ -22,7 +22,7 @@ class Person:
 
 
 def get_person_info(name: str, domain: str = "CP") -> Person | None:
-    url = URL.format(fr"{domain}\{username}")
+    url = URL.format(fr"{domain}\{name}")
 
     rs = do_get(url)
     soup = BeautifulSoup(rs.content, "html.parser")
