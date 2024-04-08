@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import Iterable
 
 import requests
+import psutil
 
 sys.path.append("../..")
 from from_ghbdtn import from_ghbdtn
@@ -343,12 +344,15 @@ def _processes(path: str, args: list[str] | None = None, context: RunContext = N
         path = None
 
     for p in get_processes(path):
-        if is_server(p):
-            type_by_processes[ProcessEnum.Server].append(p)
-        elif is_explorer(p):
-            type_by_processes[ProcessEnum.Explorer].append(p)
-        elif is_designer(p):
-            type_by_processes[ProcessEnum.Designer].append(p)
+        try:
+            if is_server(p):
+                type_by_processes[ProcessEnum.Server].append(p)
+            elif is_explorer(p):
+                type_by_processes[ProcessEnum.Explorer].append(p)
+            elif is_designer(p):
+                type_by_processes[ProcessEnum.Designer].append(p)
+        except psutil.NoSuchProcess:
+            pass
 
     for process_type, processes in type_by_processes.items():
         if not processes:
