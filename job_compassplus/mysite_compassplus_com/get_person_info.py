@@ -13,7 +13,7 @@ from common import URL, do_get
 
 @dataclass
 class Person:
-    username: str
+    name: str
     position: str
     department: str
     img_url: str
@@ -21,7 +21,7 @@ class Person:
     birthday: str
 
 
-def get_person_info(username: str, domain: str = "CP") -> Person | None:
+def get_person_info(name: str, domain: str = "CP") -> Person | None:
     url = URL.format(fr"{domain}\{username}")
 
     rs = do_get(url)
@@ -32,7 +32,7 @@ def get_person_info(username: str, domain: str = "CP") -> Person | None:
         return
 
     return Person(
-        username=username,
+        name=name,
         position=soup.select_one("#ProfileViewer_ValueTitle").get_text(strip=True),
         department=soup.select_one("#ProfileViewer_ValueDepartment").get_text(strip=True),
         img_url=urljoin(rs.url, img_el["src"]),
@@ -46,4 +46,4 @@ if __name__ == "__main__":
 
     info = get_person_info(username)
     print(info)
-    # Person(username='ipetrash', position='Senior Software Engineer', department='TX SPD, Application Platforms Division', img_url='https://portal.compassplus.com/my/User%20Photos/Profile%20Pictures/ipetrash.jpg', location='Magnitogorsk', birthday='August 18')
+    # Person(name='ipetrash', position='Senior Software Engineer', department='TX SPD, Application Platforms Division', img_url='https://portal.compassplus.com/my/User%20Photos/Profile%20Pictures/ipetrash.jpg', location='Magnitogorsk', birthday='August 18')
