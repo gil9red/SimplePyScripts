@@ -117,6 +117,7 @@ class Person(BaseModel):
     location = TextField()
     birthday = TextField()
     create_date = DateField(default=date.today)
+    last_check_date = DateField(default=date.today)
 
     class Meta:
         indexes = (
