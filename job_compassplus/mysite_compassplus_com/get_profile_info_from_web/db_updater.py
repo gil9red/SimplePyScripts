@@ -47,12 +47,14 @@ def is_person_eq_info(person: db.Person, info: Person) -> bool:
     return True
 
 
-def add_or_get_db(name: str) -> db.Person:
+def add_or_get_db(name: str) -> db.Person | None:
     person = db.Person.get_last_by_name(name)
 
     # Если нет, то создать
     if not person:
         info = get_person_info(name)
+        if not info:
+            return
         return create_person_from_info(info)
 
     # Проверить дату проверку
