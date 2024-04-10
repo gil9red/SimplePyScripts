@@ -84,6 +84,7 @@ def do_update_db():
             names: list[str] = [x.name for x in query]
             for name in names:
                 add_or_get_db(name)
+                time.sleep(10)
 
         except Exception:
             # Выводим ошибку в консоль
