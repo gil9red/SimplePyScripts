@@ -34,13 +34,29 @@ def get_person_info(name: str, domain: str = "CP") -> Person | None:
     if not img_el:  # Сайт не умеет показывать 404 при отсутствующем пользователе
         return
 
+    default_value = "N/A"
+
+    try:
+        location = soup.select_one('div[id *= "_ProfileViewer_SPS-Location"] > .ms-profile-detailsValue').get_text(strip=True)
+        if not location:
+            location = default_value
+    except Exception:
+        location = default_value
+
+    try:
+        birthday = soup.select_one('div[id *= "_ProfileViewer_SPS-Birthday"] > .ms-profile-detailsValue').get_text(strip=True)
+        if not birthday:
+            birthday = default_value
+    except Exception:
+        birthday = default_value
+
     return Person(
         name=name,
         position=soup.select_one("#ProfileViewer_ValueTitle").get_text(strip=True),
         department=soup.select_one("#ProfileViewer_ValueDepartment").get_text(strip=True),
         img_url=urljoin(rs.url, img_el["src"]),
-        location=soup.select_one('div[id *= "_ProfileViewer_SPS-Location"] > .ms-profile-detailsValue').get_text(strip=True),
-        birthday=soup.select_one('div[id *= "_ProfileViewer_SPS-Birthday"] > .ms-profile-detailsValue').get_text(strip=True),
+        location=location,
+        birthday=birthday,
     )
 
 
