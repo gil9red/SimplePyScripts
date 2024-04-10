@@ -21,7 +21,7 @@ ROOT_DIR = DIR.parent
 sys.path.append(str(ROOT_DIR))
 from root_common import session
 
-from config import USERNAME, PASSWORD
+from config_token import USERNAME, PASSWORD
 
 
 URL = "https://mysite.compassplus.com/Person.aspx?accountname={}"

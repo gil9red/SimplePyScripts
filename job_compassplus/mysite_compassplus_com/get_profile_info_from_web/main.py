@@ -5,21 +5,17 @@ __author__ = "ipetrash"
 
 
 import io
-import sys
 
 # pip install flask==2.3.3
-from flask import Flask, Response, abort, send_file
-
-# pip install flask-caching=2.0.2
-from flask_caching import Cache
+from flask import Flask, Response, abort, send_file, jsonify, url_for
 
 # pip install flask-cors==4.0.0
 from flask_cors import CORS
 
 from requests.exceptions import RequestException
 
-sys.path.append("..")
-from get_profile_image import get_profile_image
+import db
+from db_updater import add_or_get_db
 
 
 config = {
@@ -33,19 +29,41 @@ app = Flask(__name__)
 # tell Flask to use the above defined config
 app.config.from_mapping(config)
 
-cache = Cache(app)
 CORS(app)
 
 
 @app.route("/api/get_profile_image/<username>")
-@cache.cached(timeout=24 * 3600)  # 1 день
 def api_get_profile_image(username: str):
     try:
-        img_data: bytes = get_profile_image(username)
-        if not img_data:
+        person: db.Person = add_or_get_db(username)
+        if not person:
             abort(404)
 
-        return send_file(io.BytesIO(img_data), mimetype="image/jpg")
+        return send_file(io.BytesIO(person.img), mimetype="image/jpg")
+
+    except RequestException as e:
+        return Response(
+            response=str(e),
+            status=e.response.status_code,
+        )
+
+
+@app.route("/api/get_person_info/<username>")
+def api_get_person_info(username: str):
+    try:
+        person: db.Person = add_or_get_db(username)
+        if not person:
+            abort(404)
+
+        data = person.to_dict()
+        # Замена байтов картинки на ее ссылку
+        data["img"] = url_for(
+            "api_get_profile_image",
+            username=username,
+            _external=True,
+        )
+
+        return jsonify(data)
 
     except RequestException as e:
         return Response(

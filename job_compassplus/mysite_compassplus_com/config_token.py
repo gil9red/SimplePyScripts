@@ -11,6 +11,7 @@ from pathlib import Path
 
 
 DIR = Path(__file__).resolve().parent
+
 TOKEN_FILE_NAME = DIR / "TOKEN.txt"
 SEP = "|"
 
