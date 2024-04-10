@@ -73,6 +73,10 @@ def api_get_person_info(username: str):
 
 
 if __name__ == "__main__":
+    from threading import Thread
+    from db_updater import do_update_db
+    Thread(target=do_update_db, daemon=True).start()
+
     app.run(
         host="0.0.0.0",
         port=50000,

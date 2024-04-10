@@ -20,6 +20,9 @@ class Person:
     location: str
     birthday: str
 
+    def download_img(self) -> bytes:
+        return do_get(self.img_url).content
+
 
 def get_person_info(name: str, domain: str = "CP") -> Person | None:
     url = URL.format(fr"{domain}\{name}")

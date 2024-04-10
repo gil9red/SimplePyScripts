@@ -13,3 +13,5 @@ DB_DIR_NAME: Path = DIR / "database"
 DB_DIR_NAME.mkdir(parents=True, exist_ok=True)
 
 DB_FILE_NAME: Path = DB_DIR_NAME / "db.sqlite"
+
+MAX_LAST_CHECK_DATE_DAYS: int = 30

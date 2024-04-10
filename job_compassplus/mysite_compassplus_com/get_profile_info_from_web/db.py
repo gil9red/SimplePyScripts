@@ -96,7 +96,7 @@ class BaseModel(Model):
                 if v:
                     v = repr(shorten(v, length=30))
 
-            if isinstance(field, BlobField):
+            if isinstance(field, BlobField) and v is not None:
                 v = f"<{len(v)} bytes>"
 
             elif isinstance(field, ForeignKeyField):
