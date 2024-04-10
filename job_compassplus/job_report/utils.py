@@ -16,7 +16,6 @@ from pathlib import Path
 DIR = Path(__file__).resolve().parent
 
 sys.path.append(str(DIR.parent))
-from root_common import session
 from current_job_report.get_user_and_deviation_hours import get_report_context
 
 from bs4 import BeautifulSoup
