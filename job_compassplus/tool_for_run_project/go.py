@@ -582,6 +582,7 @@ __SETTINGS = {
             "get_last_release_version": _get_last_release_version,
             "find_release_versions": _find_release_versions,
             "find_versions": _find_versions,
+            "trace": "!!trace_viewer.cmd",
         },
     },
     "tx": {
