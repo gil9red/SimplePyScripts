@@ -37,6 +37,20 @@ def get_person_info(name: str, domain: str = "CP") -> Person | None:
     default_value = "N/A"
 
     try:
+        position = soup.select_one("#ProfileViewer_ValueTitle").get_text(strip=True)
+        if not position:
+            position = default_value
+    except Exception:
+        position = default_value
+
+    try:
+        department = soup.select_one("#ProfileViewer_ValueDepartment").get_text(strip=True)
+        if not department:
+            department = default_value
+    except Exception:
+        department = default_value
+
+    try:
         location = soup.select_one('div[id *= "_ProfileViewer_SPS-Location"] > .ms-profile-detailsValue').get_text(strip=True)
         if not location:
             location = default_value
@@ -52,8 +66,8 @@ def get_person_info(name: str, domain: str = "CP") -> Person | None:
 
     return Person(
         name=name,
-        position=soup.select_one("#ProfileViewer_ValueTitle").get_text(strip=True),
-        department=soup.select_one("#ProfileViewer_ValueDepartment").get_text(strip=True),
+        position=position,
+        department=department,
         img_url=urljoin(rs.url, img_el["src"]),
         location=location,
         birthday=birthday,
