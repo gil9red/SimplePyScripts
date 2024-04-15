@@ -23,11 +23,12 @@ def index():
     year_by_number: dict[int, int] = dict()
     for date_str, dtp, died, children_died, wounded, wounded_children in rows:
         date = dt.datetime.strptime(date_str, "%d.%m.%Y").date()
+        dtp = int(dtp)
 
         data.append({
             "date": date_str,
             "date_iso": date.isoformat(),
-            "dtp": int(dtp),
+            "dtp": dtp,
             "died": int(died),
             "children_died": int(children_died),
             "wounded": int(wounded),
@@ -36,7 +37,7 @@ def index():
 
         if date.year not in year_by_number:
             year_by_number[date.year] = 0
-        year_by_number[date.year] += 1
+        year_by_number[date.year] += dtp
 
     return render_template(
         "index.html",
