@@ -16,7 +16,7 @@ for line in text.strip().splitlines():
         continue
 
     users = []
-    for brackets in re.findall("\[(.+?)\]", line):
+    for brackets in re.findall(r"\[(.*?)]", line):
         if "@" in brackets:
             emails = brackets.split(", ")
             users += [email.split("@")[0] for email in emails]
