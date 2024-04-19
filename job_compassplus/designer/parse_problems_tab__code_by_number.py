@@ -16,10 +16,8 @@ for line in text.strip().splitlines():
         continue
 
     m = re.search(r"\* (\d+) - ", line)
-    if not m:
-        continue
+    code: str = m.group(1) if m else "<unknown>"
 
-    code: str = m.group(1)
     if code not in code_by_number:
         code_by_number[code] = 0
     code_by_number[code] += 1
