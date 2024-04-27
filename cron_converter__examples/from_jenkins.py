@@ -12,10 +12,7 @@ def do_convert(cron: str) -> str:
         case "@hourly":
             cron = "H * * * *"
 
-        case "@daily":
-            cron = "H H * * *"
-
-        case "@midnight":
+        case "@daily" | "@midnight":
             cron = "H 0 * * *"
 
         case "@weekly":
