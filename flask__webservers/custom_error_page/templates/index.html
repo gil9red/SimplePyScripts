@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}Start page{% endblock %}
+
+{% block content %}
+<h1>Start page</h1>
+<p><a href="/404">Go 404</a></p>
+<p><a href="{{ url_for('do_500') }}">Go 500</a></p>
+{% endblock %}

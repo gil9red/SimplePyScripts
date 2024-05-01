@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}Internal Server Error{% endblock %}
+
+{% block content %}
+<h1>Internal Server Error</h1>
+<img height="400" src="{{ url_for('static', filename='images/500.jpg') }}"/>
+<p>Something unexpected happened... Please try again later</p>
+<p>Error: {{ e }}</p>
+{% endblock %}
