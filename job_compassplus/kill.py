@@ -5,19 +5,28 @@ __author__ = "ipetrash"
 
 
 from pathlib import Path
-from psutil import process_iter, Process, Error
+from psutil import process_iter, Process, Error, NoSuchProcess
 
 
 def is_server(p: Process) -> bool:
-    return "org.radixware.kernel.server.Server" in p.cmdline()
+    try:
+        return "org.radixware.kernel.server.Server" in p.cmdline()
+    except NoSuchProcess:
+        return False
 
 
 def is_explorer(p: Process) -> bool:
-    return "org.radixware.kernel.explorer.Explorer" in p.cmdline()
+    try:
+        return "org.radixware.kernel.explorer.Explorer" in p.cmdline()
+    except NoSuchProcess:
+        return False
 
 
 def is_designer(p: Process) -> bool:
-    return p.name().startswith("designer")
+    try:
+        return p.name().startswith("designer")
+    except NoSuchProcess:
+        return False
 
 
 def is_found(p: Process, cwd: str | Path = None) -> bool:
