@@ -21,6 +21,8 @@ def is_early_access(app_id_or_url: int | str) -> bool:
         url = f"https://store.steampowered.com/app/{app_id}/"
 
     rs = session.get(url)
+    rs.raise_for_status()
+
     return 'id="earlyAccess' in rs.text
 
 
