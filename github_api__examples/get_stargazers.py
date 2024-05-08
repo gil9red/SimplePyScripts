@@ -4,14 +4,8 @@
 __author__ = "ipetrash"
 
 
-from dataclasses import dataclass
 import requests
-
-
-@dataclass
-class User:
-    login: str
-    url: str
+from common import User
 
 
 def get_stargazers(owner: str, repository: str) -> list[User]:
@@ -46,4 +40,21 @@ def get_stargazers(owner: str, repository: str) -> list[User]:
 
 if __name__ == "__main__":
     users = get_stargazers("gil9red", "SimplePyScripts")
-    print(len(users), users)
+    print(f"Stargazers ({len(users)}):")
+    print(*users[:5], sep="\n")
+    print("...")
+    print(*users[-5:], sep="\n")
+    """
+    Stargazers (148):
+    User(login='numb7', url='https://github.com/numb7')
+    User(login='Martin-Winter', url='https://github.com/Martin-Winter')
+    User(login='Shaar68', url='https://github.com/Shaar68')
+    User(login='triplekill', url='https://github.com/triplekill')
+    User(login='JMSwag', url='https://github.com/JMSwag')
+    ...
+    User(login='Aarab228', url='https://github.com/Aarab228')
+    User(login='jjh4568520', url='https://github.com/jjh4568520')
+    User(login='eplord', url='https://github.com/eplord')
+    User(login='EzzalddeenAli', url='https://github.com/EzzalddeenAli')
+    User(login='techbrain19', url='https://github.com/techbrain19')
+    """
