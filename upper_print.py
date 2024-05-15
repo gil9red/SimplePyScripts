@@ -20,6 +20,9 @@ if __name__ == "__main__":
     print = upper_print(print)
 
     print(text)  # HELLO WORLD!
+    print(text, 123, ["abc", 123], True, None, "foo")
+    # HELLO WORLD! 123 ['abc', 123] True None FOO
 
     print = old_print
     print(text)  # hello world!
+
