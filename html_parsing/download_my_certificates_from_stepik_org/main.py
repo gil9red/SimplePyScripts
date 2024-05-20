@@ -7,6 +7,7 @@ __author__ = "ipetrash"
 from pathlib import Path
 from urllib.request import urlretrieve
 
+# pip install pathvalidate
 from pathvalidate import sanitize_filename
 
 from get_certificates import get_certificates
