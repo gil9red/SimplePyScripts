@@ -32,6 +32,7 @@ for cert in certificates:
         continue
 
     print(
-        f"Downloading certificate file for {course_title!r} course: {file_name.relative_to(DIR)}"
+        f"Downloading certificate file for {course_title!r} "
+        f"course: {file_name.relative_to(DIR)}"
     )
     urlretrieve(cert["url"], file_name)
