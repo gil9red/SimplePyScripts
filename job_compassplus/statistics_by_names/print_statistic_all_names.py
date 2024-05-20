@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 
 DIR = Path(__file__).resolve().parent
 sys.path.append(str(DIR.parent))
-from current_job_report.get_user_and_deviation_hours import get_report_context
+from current_job_report.utils import get_report_context
 
 
 def get_all_names(split_name=False):

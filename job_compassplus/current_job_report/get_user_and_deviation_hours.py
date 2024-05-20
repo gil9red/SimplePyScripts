@@ -5,77 +5,26 @@
 __author__ = "ipetrash"
 
 
-import datetime as dt
 import re
-import sys
-
-from pathlib import Path
+from datetime import date
 
 from lxml import etree
 
-
-DIR = Path(__file__).resolve().parent
-
-sys.path.append(str(DIR.parent))
-from root_common import session
-
-sys.path.append(str(DIR.parent.parent))
-from get_quarter import (
-    get_quarter,
-    get_quarter_num,
-)  # NOTE: оставить get_quarter_num для main.py
-
-
-class NotFoundReport(Exception):
-    pass
-
-
-URL = "https://helpdesk.compassluxe.com/pa-reports/"
+from utils import NotFoundReport, get_report_context, get_quarter_report_context, get_year_report_context
 
 
 def clear_hours(hours: str) -> str:
     return re.sub(r"[^\d:-]", "", hours)
 
 
-def _send_data(data: dict) -> str:
-    # В какой-то момент адрес временно поменялся, тогда предварительный GET поможет получить актуальный адрес
-    rs = session.get(URL)
-    if not rs.ok:
-        raise NotFoundReport(f"HTTP status is {rs.status_code}")
-
-    rs = session.post(rs.url, data=data)
-    if not rs.ok:
-        raise NotFoundReport(f"HTTP status is {rs.status_code}")
-
-    return rs.text
+def get_text_children(el: etree._Element, idx) -> str:
+    try:
+        return el.getchildren()[idx].text.strip()
+    except IndexError:
+        return ""
 
 
-def get_report_context() -> str:
-    today = dt.datetime.today()
-    data = {
-        "dep": "all",
-        "rep": "rep1",
-        "period": today.strftime("%Y-%m"),
-        "v": int(today.timestamp() * 1000),
-        "type": "normal",
-    }
-    return _send_data(data)
-
-
-def get_quarter_report_context() -> str:
-    today = dt.datetime.today()
-    data = {
-        "dep": "all",
-        "rep": "rep1",
-        "quarter": "quarter",
-        "period": f"{today.year}-q{get_quarter(today)}",
-        "v": int(today.timestamp() * 1000),
-        "type": "normal",
-    }
-    return _send_data(data)
-
-
-def parse_current_user_deviation_hours(html: str) -> tuple[str, str]:
+def get_tr_for_current_user(html: str) -> etree._Element:
     root = etree.HTML(html)
 
     xpath_1 = '//table[@id="report"]/tbody/tr[th[contains(text(),"Текущий пользователь")]]'
@@ -87,25 +36,29 @@ def parse_current_user_deviation_hours(html: str) -> tuple[str, str]:
         if not items:
             items = root.xpath(xpath_2)
 
-        current_user_tr = items[0]
+        return items[0]
 
     except IndexError:
         raise NotFoundReport()
 
-    # Получение следующего элемента после текущего, у него получение первого ребенка, у которого вытаскивается текст
-    name = next(current_user_tr.getnext().iterchildren()).text.strip()
 
-    # Получение следующего следующего элемента после текущего, у него получение последнего
+def parse_current_user_deviation_hours(html: str) -> tuple[str, str]:
+    current_user_tr = get_tr_for_current_user(html)
+
+    # Получение следующего элемента после текущего, у него получение первого ребенка, у которого вытаскивается текст
+    name = get_text_children(current_user_tr.getnext(), idx=0)
+
+    # Получение следующего элемента после текущего, у него получение последнего
     # ребенка, у которого вытаскивается текст
-    # Ищем последную строку текущего пользователя -- в ней и находится время работы
+    # Ищем последнюю строку текущего пользователя -- в ней и находится время работы
     # Ее легко найти -- ее первая ячейка пустая
     deviation_tr = current_user_tr.getnext()
 
     # Ищем строку с пустой ячейкой
-    while next(deviation_tr.iterchildren()).text.strip():
+    while get_text_children(deviation_tr, idx=0):
         deviation_tr = deviation_tr.getnext()
 
-    deviation_hours = deviation_tr.getchildren()[-1].text.strip()
+    deviation_hours = get_text_children(deviation_tr, idx=-1)
     return name, clear_hours(deviation_hours)
 
 
@@ -127,20 +80,74 @@ def parse_user_deviation_hours(html: str, user_name: str = "Петраш") -> tu
         raise NotFoundReport()
 
     # Получение текста текущего элемента
-    name = next(current_user_tr.iterchildren()).text.strip()
+    name = get_text_children(current_user_tr, idx=0)
 
-    # Получение следующего следующего элемента после текущего, у него получение последнего
+    # Получение следующего элемента после текущего, у него получение последнего
     # ребенка, у которого вытаскивается текст
-    # Ищем последную строку текущего пользователя -- в ней и находится время работы
+    # Ищем последнюю строку текущего пользователя -- в ней и находится время работы
     # Ее легко найти -- ее первая ячейка пустая
     deviation_tr = current_user_tr.getnext()
 
     # Ищем строку с пустой ячейкой
-    while next(deviation_tr.iterchildren()).text.strip():
+    while get_text_children(deviation_tr, idx=0):
         deviation_tr = deviation_tr.getnext()
 
-    deviation_hours = deviation_tr.getchildren()[-1].text.strip()
+    deviation_hours = get_text_children(deviation_tr, idx=-1)
     return name, clear_hours(deviation_hours)
+
+
+def get_current_user_for_year_vacations() -> tuple[str, list[date]]:
+    html = get_year_report_context()
+    current_user_tr = get_tr_for_current_user(html).getnext()
+
+    # Получение текста текущего элемента
+    name = get_text_children(current_user_tr, idx=0)
+
+    vacations = []
+
+    # Ищем строку с пустой ячейкой
+    tr = current_user_tr
+    while True:
+        try:
+            key = get_text_children(tr, idx=0)
+            if not key:
+                break
+
+            if key.lower() != "отпуск":
+                continue
+
+            value = get_text_children(tr, idx=1)
+            if not value:
+                continue
+
+            vacations.append(
+                date.fromisoformat(value)
+            )
+
+        finally:
+            tr = tr.getnext()
+
+    return name, vacations
+
+
+def get_human_list_of_vacations(vacations: list[date]) -> list[str]:
+    def get_date_range(date1: date, date2: date, fmt: str = "%d.%m") -> str:
+        return f"{date1.strftime(fmt)}-{date2.strftime(fmt)}"
+
+    items = []
+    if not vacations:
+        return items
+
+    prev_date = start_date = vacations[0]
+    for d in vacations[1:]:
+        if (d - prev_date).days > 1:
+            items.append(get_date_range(start_date, prev_date))
+            start_date = d
+
+        prev_date = d
+
+    items.append(get_date_range(start_date, prev_date))
+    return items
 
 
 def get_user_and_deviation_hours() -> tuple[str, str]:
@@ -161,6 +168,11 @@ if __name__ == "__main__":
         + " "
         + deviation_hours
     )
+    """
+    Петраш Илья Андреевич
+    Переработка 04:19:57
+    """
+
     print()
 
     name, deviation_hours = get_quarter_user_and_deviation_hours()
@@ -170,3 +182,20 @@ if __name__ == "__main__":
         + " за квартал "
         + deviation_hours
     )
+    """
+    Петраш Илья Андреевич
+    Переработка за квартал 15:09
+    """
+
+    print()
+
+    name, vacations = get_current_user_for_year_vacations()
+    print(name)
+    print(f"Использовано отпускных дней: {len(vacations)}")
+    if vacations:
+        print(", ".join(get_human_list_of_vacations(vacations)))
+    """
+    Петраш Илья Андреевич
+    Использовано отпускных дней: 14
+    17.01-18.01, 29.02-01.03, 18.03-22.03, 25.03-29.03
+    """

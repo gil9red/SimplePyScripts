@@ -10,6 +10,7 @@ import time
 import traceback
 
 from pathlib import Path
+from threading import Thread
 
 from PyQt5.QtWidgets import (
     QApplication,
@@ -24,15 +25,20 @@ from PyQt5.QtWidgets import (
     QWidgetAction,
     QMessageBox,
 )
-from PyQt5.QtGui import QColor, QPainter, QIcon, QPixmap
+from PyQt5.QtGui import QColor, QPainter, QIcon, QPixmap, QCursor
 from PyQt5.QtCore import Qt, pyqtSignal, QThread, QRectF
+
+# pip install schedule
+import schedule
 
 from get_user_and_deviation_hours import (
     get_user_and_deviation_hours,
     get_quarter_user_and_deviation_hours,
-    get_quarter_num,
-    NotFoundReport,
+    get_current_user_for_year_vacations,
+    get_human_list_of_vacations,
 )
+from utils import NotFoundReport, get_quarter_num
+
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/405f08fcbf8b99ea64a58a73ee699cb1c0b5230e/qt__pyqt__pyside__pyqode/pyqt__QPainter__dynamic_draw_emoji_on_img/main.py#L44-L66
 def draw_text_to_bottom_right(img: QPixmap, text: str, scale_text_from_img: float = 0.5):
@@ -93,8 +99,8 @@ class CheckJobReportThread(QThread):
             ok = deviation_hours[0] != "-"
             return "Переработка" if ok else "Недоработка"
 
-        today = dt.datetime.today().strftime("%d/%m/%Y %H:%M:%S")
-        self.about_log.emit(f"Check for {today}")
+        today = dt.datetime.today().strftime("%d.%m.%Y %H:%M:%S")
+        self.about_log.emit(f"Проверка за {today}")
 
         text = ""
         deviation_hours = None
@@ -105,11 +111,6 @@ class CheckJobReportThread(QThread):
             ok = deviation_hours[0] != "-"
             text += name + "\n\n" + _get_title(deviation_hours) + " " + deviation_hours
 
-        except NotFoundReport:
-            text = "Отчет на сегодня еще не готов."
-            ok = True
-
-        try:
             _, quarter_deviation_hours = get_quarter_user_and_deviation_hours()
             if quarter_deviation_hours.count(":") == 1:
                 quarter_deviation_hours += ":00"
@@ -123,8 +124,14 @@ class CheckJobReportThread(QThread):
                 + quarter_deviation_hours
             )
 
+            _, vacations = get_current_user_for_year_vacations()
+            text += f"\n\nИспользовано отпускных дней: {len(vacations)}"
+            if vacations:
+                text += "\n" + ", ".join(get_human_list_of_vacations(vacations))
+
         except NotFoundReport:
-            pass
+            text = "Отчет на сегодня еще не готов."
+            ok = True
 
         # Если часы за месяц не готовы, но часы за квартал есть
         if not deviation_hours and quarter_deviation_hours:
@@ -143,15 +150,17 @@ class CheckJobReportThread(QThread):
         self.about_ok.emit(self.ok)
 
     def run(self):
+        # Каждый день, в 12:00
+        schedule.every().day.at("12:00").do(self.do_run)
+
         while True:
             try:
-                self.do_run()
-                time.sleep(3600)
-
+                schedule.run_pending()
             except Exception as e:
                 self.about_log.emit(f"Error: {e}")
                 self.about_log.emit("Wait 60 secs")
-                time.sleep(60)
+
+            time.sleep(60)
 
 
 class JobReportWidget(QWidget):
@@ -159,6 +168,8 @@ class JobReportWidget(QWidget):
         super().__init__()
 
         self.info = QLabel()
+        self.info.setWordWrap(True)
+
         self.ok: bool = None
 
         self.quit_button = QToolButton()
@@ -208,12 +219,22 @@ class JobReportWidget(QWidget):
         self.setLayout(layout)
 
         self.thread = CheckJobReportThread()
-        self.thread.about_new_text.connect(self.info.setText)
+        self.thread.about_new_text.connect(self.set_text)
         self.thread.about_ok.connect(self._set_ok)
         self.thread.about_log.connect(self._add_log)
         self.thread.start()
 
-        button_refresh.clicked.connect(self.thread.do_run)
+        button_refresh.clicked.connect(self.refresh)
+
+    def set_text(self, text: str):
+        self.info.setText(text)
+
+        # TODO: Считать высоту динамически
+        self.setFixedHeight(210 if len(text.splitlines()) > 6 else 130)
+
+    def refresh(self):
+        # Выполнение метода в отдельном потоке, а не в GUI
+        Thread(target=self.thread.do_run, daemon=True).start()
 
     def _set_ok(self, val: bool):
         self.ok = val
@@ -256,6 +277,9 @@ if __name__ == "__main__":
     job_report_widget.thread.about_log.connect(_on_about_log_or_ok)
     job_report_widget.thread.about_ok.connect(_on_about_log_or_ok)
 
+    # Запрос информации после запуска
+    job_report_widget.refresh()
+
     job_report_widget_action = QWidgetAction(job_report_widget)
     job_report_widget_action.setDefaultWidget(job_report_widget)
 
@@ -263,7 +287,7 @@ if __name__ == "__main__":
     menu.addAction(job_report_widget_action)
 
     tray.setContextMenu(menu)
-    tray.activated.connect(lambda x: menu.exec(tray.geometry().center()))
+    tray.activated.connect(lambda x: tray.contextMenu().popup(QCursor.pos()))
 
     tray.setToolTip("Compass Plus. Рапорт учета рабочего времени")
     tray.show()
