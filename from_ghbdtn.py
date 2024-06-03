@@ -5,18 +5,13 @@ __author__ = "ipetrash"
 
 
 def from_ghbdtn(text: str) -> str:
-    # SOURCE: https://ru.stackoverflow.com/a/812203/201445
-    layout = dict(
-        zip(
-            map(
-                ord,
-                """qwertyuiop[]asdfghjkl;'zxcvbnm,./`QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?~""",
-            ),
-            """йцукенгшщзхъфывапролджэячсмитьбю.ёЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,Ё""",
-        )
-    )
+    en = """qwertyuiop[]asdfghjkl;'zxcvbnm,./`QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?~"""
+    ru = """йцукенгшщзхъфывапролджэячсмитьбю.ёЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,Ё"""
 
-    return text.translate(layout)
+    translator = dict(zip(en, ru))
+    table = str.maketrans(translator)
+
+    return text.translate(table)
 
 
 if __name__ == "__main__":
