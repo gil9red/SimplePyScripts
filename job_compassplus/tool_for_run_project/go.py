@@ -699,6 +699,13 @@ EXAMPLES:
   > go optt kill -e
   > go optt kill -a
   > go optt kill -se
+  
+  > go tx s pg
+    Запуск: 'C:\\DEV__TX\\trunk\\!!server-postgres.cmd'
+    
+  > go tx s+e pg
+    Запуск: 'C:\\DEV__TX\\trunk\\!!server-postgres.cmd'
+    Запуск: 'C:\\DEV__TX\\trunk\\!!explorer.cmd'
 """.format(
     ", ".join(SETTINGS.keys()),
 ).strip()
