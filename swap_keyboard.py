@@ -8,8 +8,11 @@ def swap_keyboard(text: str) -> str:
     en = """qwertyuiop[]asdfghjkl;'zxcvbnm,./`QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?~"""
     ru = """йцукенгшщзхъфывапролджэячсмитьбю.ёЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,Ё"""
 
-    translator = {**dict(zip(ru, en)), **dict(zip(en, ru))}
-    table = str.maketrans(translator)
+    translator: dict[str, str] = {
+        **dict(zip(ru, en)),
+        **dict(zip(en, ru)),
+    }
+    table: dict[int, str] = str.maketrans(translator)
 
     return text.translate(table)
 
