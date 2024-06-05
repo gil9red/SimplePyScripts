@@ -3,3 +3,6 @@ venv
 .DS_Store
 .idea
 *.db
+.bak
+.dat
+.dir
