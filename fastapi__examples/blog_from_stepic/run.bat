@@ -1,0 +1,1 @@
+uvicorn blog.main:app --reload --app-dir src/
