@@ -107,7 +107,8 @@ def do_check_jenkins_job(url: str, version: str):
 
     rs = requests.get(url)
     if rs.status_code == 404:
-        raise JenkinsJobCheckException(f"Сборки для версии {version} нет.")
+        print(f"[!] Сборки для версии {version} нет.")
+        return
 
     rs.raise_for_status()
 
