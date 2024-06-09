@@ -19,7 +19,7 @@ from market import services
 from market.repositories import ShelveArticlesRepository, MemoryUsersRepository
 
 
-router = APIRouter()  # это роутер, он нужен для FastAPI, чтобы определять эндпоинты
+router = APIRouter()
 
 
 @router.get("/", response_class=HTMLResponse)
