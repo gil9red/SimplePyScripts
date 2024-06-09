@@ -1,0 +1,1 @@
+uvicorn market.main:app --reload --app-dir src/
