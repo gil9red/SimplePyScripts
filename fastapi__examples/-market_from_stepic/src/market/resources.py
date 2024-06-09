@@ -22,15 +22,14 @@ from market.repositories import ShelveArticlesRepository, MemoryUsersRepository
 router = APIRouter()  # это роутер, он нужен для FastAPI, чтобы определять эндпоинты
 
 
-@router.get("/")
+@router.get("/", response_class=HTMLResponse)
 def index():
-    html_content = """
+    return """
 <div><a href="https://stepik.org/lesson/1186984/step/8?unit=1222202">Урок</a></div>
 <br/>
 <div><a href="/docs">/docs</a></div>
 <div><a href="/redoc">/redoc</a></div>
     """
-    return HTMLResponse(content=html_content)
 
 
 @router.get("/articles", response_model=GetArticlesModel)
