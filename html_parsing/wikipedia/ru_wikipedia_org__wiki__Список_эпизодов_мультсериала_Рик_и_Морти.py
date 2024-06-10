@@ -21,6 +21,7 @@ def get_seasons() -> dict[str, list[str]]:
 
     season_by_series: dict[str, list[str]] = dict()
 
+    # TODO: с span старый вариант (на всякий), id - новый вариант (текущий)
     items = root.select('h3[id ^= "Сезон"]') + root.select('span[id ^= "Сезон"]')
     for season_title_el in items:
         season_title = season_title_el.text
