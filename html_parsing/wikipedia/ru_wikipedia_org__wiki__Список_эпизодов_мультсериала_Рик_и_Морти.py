@@ -15,11 +15,14 @@ def get_seasons() -> dict[str, list[str]]:
     url = "https://ru.wikipedia.org/wiki/Список_эпизодов_мультсериала_«Рик_и_Морти»"
 
     rs = session.get(url)
+    rs.raise_for_status()
+
     root = BeautifulSoup(rs.content, "html.parser")
 
-    season_by_series = dict()
+    season_by_series: dict[str, list[str]] = dict()
 
-    for season_title_el in root.select('span[id ^= "Сезон"]'):
+    items = root.select('h3[id ^= "Сезон"]') + root.select('span[id ^= "Сезон"]')
+    for season_title_el in items:
         season_title = season_title_el.text
 
         # "Сезон 6 (2022)" -> "Сезон 6"
@@ -31,7 +34,7 @@ def get_seasons() -> dict[str, list[str]]:
         if not table_series:
             continue
 
-        series_list = []
+        series_list: list[str] = []
         for row in table_series.select("tr"):
             title_el = row.select_one("td.summary b")
             if not title_el:
