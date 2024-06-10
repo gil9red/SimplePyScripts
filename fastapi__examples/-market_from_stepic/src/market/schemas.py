@@ -5,21 +5,45 @@ __author__ = "ipetrash"
 
 
 from pydantic import BaseModel
+from market.models import UserRole
 
 
-class GetArticleModel(BaseModel):
+class GetUserModel(BaseModel):
     id: str
-    title: str
-    content: str
+    role: UserRole
+    username: str
 
 
-class GetArticlesModel(BaseModel):
-    items: list[GetArticleModel]
+class GetUsersModel(BaseModel):
+    items: list[GetUserModel]
 
 
-class CreateArticleModel(BaseModel):
-    title: str
-    content: str
+# TODO: Product из models.py
+class GetProductModel(BaseModel):
+    id: str
+    name: str
+    price_minor: int  # Копейки
+    description: str
+
+
+class GetProductsModel(BaseModel):
+    items: list[GetProductModel]
+
+
+class CreateProductModel(BaseModel):
+    name: str
+    price_minor: int  # Копейки
+    description: str
+
+
+class GetShoppingCartModel(BaseModel):
+    id: str
+    user_id: str
+    products: list[GetProductModel]
+
+
+class GetShoppingCartsModel(BaseModel):
+    items: list[GetShoppingCartModel]
 
 
 class LoginModel(BaseModel):

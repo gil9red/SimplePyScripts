@@ -4,27 +4,24 @@
 __author__ = "ipetrash"
 
 
+import enum
+
+# TODO: Мб использовать pydantic? Разве это не про одно и тоже в schemas.py
 from dataclasses import dataclass
+
+
+class UserRole(enum.StrEnum):
+    USER = enum.auto()
+    MANAGER = enum.auto()
+    ADMIN = enum.auto()
 
 
 @dataclass
 class User:
-    """Обычный пользователь"""
-
     id: str
-
-
-@dataclass
-class Manager(User):
-    """Пользователь, наделенный правами менеджера"""
-
-    username: str
-    password: str
-
-
-@dataclass
-class Admin(Manager):
-    """Пользователь, наделенный правами администратора"""
+    role: UserRole
+    username: str = None
+    password: str = None
 
 
 @dataclass

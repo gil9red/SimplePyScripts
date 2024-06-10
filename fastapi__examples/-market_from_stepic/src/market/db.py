@@ -6,8 +6,7 @@ __author__ = "ipetrash"
 
 import shelve
 
-from models import User, Manager, Admin, Product, ShoppingCart
-# from market.models import User, Manager, Admin, Product, ShoppingCart
+from market.models import User, Product, ShoppingCart, UserRole
 
 
 class DB:
@@ -24,9 +23,10 @@ class DB:
             db[self.KEY_SHOPPING_CARTS] = dict()
 
             if "admin" not in db[self.KEY_USERS]:
-                admin = Admin(
+                admin = User(
                     # Это uuid4 – уникальный идентификатор пользователя
                     id="29ae7ebf-4445-42f2-9548-a3a54f095220",
+                    role=UserRole.ADMIN,
                     username="admin",
                     password="Admin_4321!",
                 )
