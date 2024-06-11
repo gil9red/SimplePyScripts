@@ -86,6 +86,7 @@ if __name__ == "__main__":
       55. Game(name='Defenders of Ardania', url='https://www.gamesvoice.ru/doa', date_str='26 мая 2012')
     """
 
+    assert items, "Empty list"
     for game in [
         Game(
             name="A Plague Tale: Innocence",
