@@ -6,6 +6,7 @@ __author__ = "ipetrash"
 
 import shelve
 
+from market.config import DB_FILE_NAME
 from market.models import User, Product, ShoppingCart, UserRole
 
 
@@ -14,13 +15,18 @@ class DB:
     KEY_PRODUCTS: str = "products"
     KEY_SHOPPING_CARTS: str = "shopping_carts"
 
-    db_name: str = "db"
+    db_name: str = str(DB_FILE_NAME)
 
     def __init__(self):
         with self.get_shelve() as db:
-            db[self.KEY_USERS] = dict()
-            db[self.KEY_PRODUCTS] = dict()
-            db[self.KEY_SHOPPING_CARTS] = dict()
+            if self.KEY_USERS not in db:
+                db[self.KEY_USERS] = dict()
+
+            if self.KEY_PRODUCTS not in db:
+                db[self.KEY_PRODUCTS] = dict()
+
+            if self.KEY_SHOPPING_CARTS not in db:
+                db[self.KEY_SHOPPING_CARTS] = dict()
 
             if "admin" not in db[self.KEY_USERS]:
                 admin = User(

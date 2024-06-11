@@ -10,9 +10,14 @@ from market.models import UserRole
 
 
 @dataclass
-# class GetUserModel(BaseModel):
-class GetUserModel:
+class IdBasedObjModel:
     id: str
+
+
+@dataclass
+# class GetUserModel(BaseModel):
+class GetUserModel(IdBasedObjModel):
+    # id: str
     role: UserRole
     username: str
 
@@ -24,13 +29,21 @@ class GetUsersModel:
 
 
 @dataclass
-class GetProductModel:
-# TODO: Product из models.py
-# class GetProductModel(BaseModel):
-    id: str
+class CreateProductModel:
     name: str
     price_minor: int  # Копейки
     description: str
+
+
+@dataclass
+class GetProductModel(CreateProductModel, IdBasedObjModel):
+# TODO: Product из models.py
+# class GetProductModel(BaseModel):
+#     id: str
+    # name: str
+    # price_minor: int  # Копейки
+    # description: str
+    pass
 
 
 @dataclass
@@ -48,9 +61,9 @@ class CreateProductModel:
 
 
 @dataclass
-class GetShoppingCartModel:
+class GetShoppingCartModel(IdBasedObjModel):
 # class GetShoppingCartModel(BaseModel):
-    id: str
+#     id: str
     # user_id: str
     products: list[GetProductModel]
 
@@ -68,7 +81,8 @@ class LoginModel:
     password: str
 
 
-@dataclass
-class ErrorModel:
-# class ErrorModel(BaseModel):
-    detail: str
+# TODO: Под вопросом зачем оно - в случаи ошибок fastapi использует свои модели
+# @dataclass
+# class ErrorModel:
+# # class ErrorModel(BaseModel):
+#     detail: str

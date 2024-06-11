@@ -19,6 +19,24 @@ def get_products() -> list[Product]:
     return db.get_products()
 
 
+def create_product(
+        name: str,
+        price_minor: int,  # Копейки
+        description: str,
+) -> Product:
+    # TODO: Несколько странно, что Product создается вне базы
+    #       Нужно бы внутрь базы перенести
+    obj = Product(
+        id=str(uuid4()),
+        name=name,
+        price_minor=price_minor,
+        description=description
+    )
+    db.create_product(obj)
+
+    return obj
+
+
 def get_shopping_carts() -> list[ShoppingCart]:
     return db.get_shopping_carts()
 

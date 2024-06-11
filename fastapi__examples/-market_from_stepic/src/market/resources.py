@@ -16,7 +16,8 @@ from market.schemas import (
     GetShoppingCartModel,
     GetShoppingCartsModel,
     LoginModel,
-    ErrorModel,
+    # ErrorModel,
+    CreateProductModel,
 )
 from market import services
 
@@ -69,6 +70,54 @@ def get_products() -> GetProductsModel:
             )
             for product in services.get_products()
         ]
+    )
+
+
+# TODO: Мб в адресе явно указать, что это создание
+@router.post(
+    "/products",
+    response_model=GetProductModel,
+    # 201 статус код потому что мы создаем объект – стандарт HTTP
+    status_code=status.HTTP_201_CREATED,
+    # TODO:
+    # # Это нужно для сваггера. Мы перечисляем ответы эндпоинта, чтобы получить четкую документацию.
+    # responses={201: {"model": GetArticleModel}, 401: {"model": ErrorModel}, 403: {"model": ErrorModel}},
+)
+def create_product(
+    product: CreateProductModel,
+    # TODO:
+    # # credentials – тело с логином и паролем. Обычно аутентификация выглядит сложнее, но для нашего случая пойдет и так.
+    # credentials: LoginModel,
+):
+    # TODO:
+    # current_user = services.login(
+    #     username=credentials.username,
+    #     password=credentials.password,
+    #     users_repository=MemoryUsersRepository(),
+    # )
+    #
+    # # Это аутентификация
+    # if not current_user:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized user"
+    #     )
+    # # а это авторизация
+    # if not isinstance(current_user, Admin):
+    #     raise HTTPException(
+    #         status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden resource"
+    #     )
+
+    obj = services.create_product(
+        name=product.name,
+        price_minor=product.price_minor,
+        description=product.description,
+    )
+
+    return GetProductModel(
+        id=obj.id,
+        name=obj.name,
+        price_minor=obj.price_minor,
+        description=obj.description,
     )
 
 
