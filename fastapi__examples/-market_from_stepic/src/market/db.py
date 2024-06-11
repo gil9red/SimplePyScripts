@@ -81,5 +81,21 @@ class DB:
         with self.get_shelve() as db:
             return list(db[self.KEY_SHOPPING_CARTS].values())
 
+    def get_shopping_cart(self, id: str) -> ShoppingCart | None:
+        with self.get_shelve() as db:
+            return db[self.KEY_SHOPPING_CARTS].get(id)
+
+    # TODO: Для добавления продукта нужен только id
+    def add_product_in_shopping_cart(self, product: Product, shopping_cart: ShoppingCart):
+        shopping_cart.products.append(product)
+        # TODO: ?
+        self.create_shopping_cart(shopping_cart)
+
+    # TODO: Для удаления продукта нужен только id
+    def remove_product_from_shopping_cart(self, product: Product, shopping_cart: ShoppingCart):
+        shopping_cart.products.remove(product)
+        # TODO: ?
+        self.create_shopping_cart(shopping_cart)
+
 
 db = DB()

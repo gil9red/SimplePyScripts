@@ -23,6 +23,10 @@ def get_shopping_carts() -> list[ShoppingCart]:
     return db.get_shopping_carts()
 
 
+def get_shopping_cart(id: str) -> ShoppingCart | None:
+    return db.get_shopping_cart(id)
+
+
 #
 # def create_article(
 #     title: str, content: str, articles_repository: ArticlesRepository
@@ -33,7 +37,8 @@ def get_shopping_carts() -> list[ShoppingCart]:
 
 
 def login(
-    username: str, password: str
+    username: str,
+    password: str,
 ) -> User | None:
     users = db.get_users(username=username, password=password)
     if users:

@@ -72,13 +72,13 @@ def get_products() -> GetProductsModel:
     )
 
 
-@router.get("/shopping-cart", response_model=GetShoppingCartsModel)
-def get_shopping_cart() -> GetShoppingCartsModel:
+@router.get("/shopping-carts", response_model=GetShoppingCartsModel)
+def get_shopping_carts() -> GetShoppingCartsModel:
     return GetShoppingCartsModel(
         items=[
             GetShoppingCartModel(
                 id=obj.id,
-                user_id=obj.user_id,
+                # user_id=obj.user_id,
                 products=[
                     # TODO: Дублирует выше
                     GetProductModel(
@@ -94,6 +94,29 @@ def get_shopping_cart() -> GetShoppingCartsModel:
         ]
     )
 
+
+@router.get("/shopping-cart/{id}", response_model=GetShoppingCartModel)
+def get_shopping_cart(id: str) -> GetShoppingCartModel:
+    obj = services.get_shopping_cart(id)
+    if not obj:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Shopping cart #{id} not found!",
+        )
+
+    return GetShoppingCartModel(
+        id=obj.id,
+        products=[
+            # TODO: Дублирует выше
+            GetProductModel(
+                id=p.id,
+                name=p.name,
+                price_minor=p.price_minor,
+                description=p.description,
+            )
+            for p in obj.products
+        ],
+    )
 
 
 # @router.post(

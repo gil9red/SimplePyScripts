@@ -18,6 +18,8 @@ class UserRole(enum.StrEnum):
 
 @dataclass
 class User:
+    """Пользователь"""
+
     id: str
     role: UserRole
     username: str = None
@@ -39,5 +41,22 @@ class ShoppingCart:
     """Корзина с товарами"""
 
     id: str
-    user_id: str
+    # # TODO: А откуда взять, если не будет аутентификации
+    # #       т.е. клиенты сами должны помнить id корзин, иначе корзины потеряются
+    # # TODO: Мб еще время создания корзины добавить?
+    # user_id: str
     products: list[Product]
+
+
+@dataclass
+class Order:
+    """Заказ"""
+
+    id: str
+    email: str
+    # user_id: str  # TODO: ?
+    # TODO: Мб еще время создания заказа добавить?
+    # TODO: Мб еще статус заказа добавить
+    #       + Enum
+    shopping_cart: ShoppingCart
+
