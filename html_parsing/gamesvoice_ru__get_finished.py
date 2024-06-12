@@ -18,10 +18,27 @@ class Game:
     date_str: str
 
 
-def get_text(el: Tag) -> str:
+def _get_text(el: Tag) -> str:
     if not el:
         return ""
     return el.get_text().replace("\u200b", " ").replace("\xa0", " ").strip()
+
+
+def _check_result(items: list[Game]):
+    assert items, "Empty list"
+    for game in [
+        Game(
+            name="A Plague Tale: Innocence",
+            url="https://www.gamesvoice.ru/innocence",
+            date_str="11 марта 2024",
+        ),
+        Game(
+            name="Defenders of Ardania",
+            url="https://www.gamesvoice.ru/doa",
+            date_str="26 мая 2012",
+        ),
+    ]:
+        assert game in items, f"Game not found: {game}"
 
 
 session = requests.session()
@@ -53,8 +70,8 @@ def get_games() -> list[Game]:
             div_url, div_name, div_date = divs
 
             a_el = div_url.select_one("a[href]")
-            name = get_text(div_name.select_one("h4"))
-            date_str = get_text(div_date.select_one("h1"))
+            name = _get_text(div_name.select_one("h4"))
+            date_str = _get_text(div_date.select_one("h1"))
 
             if not a_el or not name or not date_str:
                 continue
@@ -67,6 +84,7 @@ def get_games() -> list[Game]:
                 )
             )
 
+    _check_result(items)
     return items
 
 
@@ -85,18 +103,3 @@ if __name__ == "__main__":
       54. Game(name='Mad Riders', url='https://www.gamesvoice.ru/madriders', date_str='3 июля 2012')
       55. Game(name='Defenders of Ardania', url='https://www.gamesvoice.ru/doa', date_str='26 мая 2012')
     """
-
-    assert items, "Empty list"
-    for game in [
-        Game(
-            name="A Plague Tale: Innocence",
-            url="https://www.gamesvoice.ru/innocence",
-            date_str="11 марта 2024",
-        ),
-        Game(
-            name="Defenders of Ardania",
-            url="https://www.gamesvoice.ru/doa",
-            date_str="26 мая 2012",
-        ),
-    ]:
-        assert game in items, f"Game not found: {game}"
