@@ -17,12 +17,7 @@ DB_FILE_NAME: Path = DIR / "db.shelve"
 
 
 class DB:
-    KEY_USERS: str = "users"
-    KEY_PRODUCTS: str = "products"
-    KEY_SHOPPING_CARTS: str = "shopping_carts"
-
     db_name: str = str(DB_FILE_NAME)
-    # db: shelve.Shelf | None = None
 
     def __init__(self):
         self.db: shelve.Shelf | None = None
@@ -32,25 +27,18 @@ class DB:
             @functools.wraps(func)
             def wrapped(self, *args, **kwargs):
                 has_db: bool = self.db is not None
-                print("[wrapped]", has_db, self.db)
                 try:
                     if not has_db:
-                        print("[wrapped] open")
                         self.db = shelve.open(self.db_name, writeback=True)
                     return func(self, *args, **kwargs)
                 finally:
-                    print("[wrapped] close", has_db, self.db)
                     if not has_db and self.db is not None:
-                        print("[wrapped] closed")
                         self.db.close()
                         self.db = None
 
             return wrapped
 
         return actual_decorator
-
-    def _generate_id(self) -> str:
-        return str(uuid4())
 
     @session()
     def get_value(self, name: str, default: Any = None) -> Any:
@@ -64,6 +52,12 @@ class DB:
     @session()
     def set_value(self, name: str, value: Any):
         self.db[name] = value
+
+    def inc_value(self, name: str) -> int:
+        value = self.get_value(name, default=0)
+        value += 1
+        self.set_value(name, value)
+        return value
 
 
 db = DB()
@@ -84,5 +78,7 @@ if "value" not in counter:
     counter["value"] = 0
 counter["value"] += 1
 db.set_value("counter", counter)
+
+print([db.inc_value("age") for _ in range(3)])
 
 print(dict(db.get_value("")))
