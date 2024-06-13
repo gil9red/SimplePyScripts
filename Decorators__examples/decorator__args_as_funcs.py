@@ -22,7 +22,7 @@ class TextBuilder:
             # Декоратор возвращает обертку
             return wrapper
 
-        # Возаращаем сам декоратор
+        # Возвращаем сам декоратор
         return decorator
 
     # Функция, принимающая аргументы и возвращающая декоратор
@@ -41,7 +41,7 @@ class TextBuilder:
             # Декоратор возвращает обертку
             return wrapper
 
-        # Возаращаем сам декоратор
+        # Возвращаем сам декоратор
         return decorator
 
     @_call_before(lambda self: self.result.append("+" + "-" * 10 + "+"))
