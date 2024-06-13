@@ -5,6 +5,7 @@ __author__ = "ipetrash"
 
 
 import shelve
+from uuid import uuid4
 
 from market.config import DB_FILE_NAME
 from market.models import User, Product, ShoppingCart, UserRole
@@ -17,8 +18,10 @@ class DB:
 
     db_name: str = str(DB_FILE_NAME)
 
-    def __init__(self):
+    def _do_init_db_objects(self):
         with self.get_shelve() as db:
+            print(dict(db))
+
             if self.KEY_USERS not in db:
                 db[self.KEY_USERS] = dict()
 
@@ -28,7 +31,7 @@ class DB:
             if self.KEY_SHOPPING_CARTS not in db:
                 db[self.KEY_SHOPPING_CARTS] = dict()
 
-            if "admin" not in db[self.KEY_USERS]:
+            if not db[self.KEY_USERS]:
                 admin = User(
                     # Это uuid4 – уникальный идентификатор пользователя
                     id="29ae7ebf-4445-42f2-9548-a3a54f095220",
@@ -38,7 +41,33 @@ class DB:
                 )
                 db[self.KEY_USERS][admin.id] = admin
 
-            # TODO: products
+            has_key_products = bool(db[self.KEY_PRODUCTS])
+
+        # В create_product и так открывается get_shelve
+        if not has_key_products:
+            self.create_product(
+                name="Coca Cola 1л.",
+                price_minor=8000,
+                description="Газированный напиток",
+            )
+            self.create_product(
+                name="Coca Cola 2л.",
+                price_minor=13000,
+                description="Газированный напиток",
+            )
+            self.create_product(
+                name="Pepsi 1л.",
+                price_minor=8000,
+                description="Газированный напиток",
+            )
+            self.create_product(
+                name="Сникерс",
+                price_minor=4000,
+                description="Шоколадный батончик",
+            )
+
+    def __init__(self):
+        self._do_init_db_objects()
 
     def get_shelve(self) -> shelve.Shelf:
         return shelve.open(self.db_name, writeback=True)
@@ -71,9 +100,16 @@ class DB:
         with self.get_shelve() as db:
             db[self.KEY_USERS][user.id] = user
 
-    def create_product(self, product: Product):
+    def create_product(self, name: str, price_minor: int, description: str):
         with self.get_shelve() as db:
-            db[self.KEY_PRODUCTS][product.id] = product
+            obj = Product(
+                id=str(uuid4()),
+                name=name,
+                price_minor=price_minor,
+                description=description,
+            )
+
+            db[self.KEY_PRODUCTS][obj.id] = obj
 
     def get_products(self) -> list[Product]:
         with self.get_shelve() as db:
@@ -92,13 +128,17 @@ class DB:
             return db[self.KEY_SHOPPING_CARTS].get(id)
 
     # TODO: Для добавления продукта нужен только id
-    def add_product_in_shopping_cart(self, product: Product, shopping_cart: ShoppingCart):
+    def add_product_in_shopping_cart(
+        self, product: Product, shopping_cart: ShoppingCart
+    ):
         shopping_cart.products.append(product)
         # TODO: ?
         self.create_shopping_cart(shopping_cart)
 
     # TODO: Для удаления продукта нужен только id
-    def remove_product_from_shopping_cart(self, product: Product, shopping_cart: ShoppingCart):
+    def remove_product_from_shopping_cart(
+        self, product: Product, shopping_cart: ShoppingCart
+    ):
         shopping_cart.products.remove(product)
         # TODO: ?
         self.create_shopping_cart(shopping_cart)
