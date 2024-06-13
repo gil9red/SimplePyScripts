@@ -1,0 +1,1 @@
+C:\Users\ipetrash\AppData\Local\Programs\Python\Python312\python.exe -m uvicorn market.main:app --reload --app-dir=src/ --port=7777

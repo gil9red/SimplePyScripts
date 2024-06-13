@@ -4,9 +4,6 @@
 __author__ = "ipetrash"
 
 
-# TODO:
-from uuid import uuid4
-
 from market.models import User, Product, ShoppingCart
 from market.db import db
 
@@ -20,11 +17,39 @@ def get_products() -> list[Product]:
 
 
 def create_product(
-        name: str,
-        price_minor: int,  # Копейки
-        description: str,
+    name: str,
+    price_minor: int,  # Копейки
+    description: str,
 ) -> Product:
-    return db.create_product(name=name, price_minor=price_minor, description=description)
+    return db.create_product(
+        name=name, price_minor=price_minor, description=description
+    )
+
+
+def create_shopping_cart() -> ShoppingCart:
+    return db.create_shopping_cart(
+        product_ids=[],
+    )
+
+
+def add_product_in_shopping_cart(
+    shopping_cart_id: str,
+    product_id: str,
+):
+    return db.add_product_in_shopping_cart(
+        shopping_cart_id=shopping_cart_id,
+        product_id=product_id,
+    )
+
+
+def remove_product_from_shopping_cart(
+    shopping_cart_id: str,
+    product_id: str,
+):
+    return db.remove_product_from_shopping_cart(
+        shopping_cart_id=shopping_cart_id,
+        product_id=product_id,
+    )
 
 
 def get_shopping_carts() -> list[ShoppingCart]:

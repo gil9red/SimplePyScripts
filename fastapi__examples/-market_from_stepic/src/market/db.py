@@ -11,6 +11,10 @@ from market.config import DB_FILE_NAME
 from market.models import User, Product, ShoppingCart, UserRole
 
 
+class NotFoundException(Exception):
+    pass
+
+
 class DB:
     KEY_USERS: str = "users"
     KEY_PRODUCTS: str = "products"
@@ -18,10 +22,11 @@ class DB:
 
     db_name: str = str(DB_FILE_NAME)
 
+    def _generate_id(self) -> str:
+        return str(uuid4())
+
     def _do_init_db_objects(self):
         with self.get_shelve() as db:
-            print(dict(db))
-
             if self.KEY_USERS not in db:
                 db[self.KEY_USERS] = dict()
 
@@ -31,17 +36,17 @@ class DB:
             if self.KEY_SHOPPING_CARTS not in db:
                 db[self.KEY_SHOPPING_CARTS] = dict()
 
-            if not db[self.KEY_USERS]:
-                admin = User(
-                    # Это uuid4 – уникальный идентификатор пользователя
-                    id="29ae7ebf-4445-42f2-9548-a3a54f095220",
-                    role=UserRole.ADMIN,
-                    username="admin",
-                    password="Admin_4321!",
-                )
-                db[self.KEY_USERS][admin.id] = admin
-
+            has_key_users = bool(db[self.KEY_USERS])
             has_key_products = bool(db[self.KEY_PRODUCTS])
+
+        # В create_user и так открывается get_shelve
+        if not has_key_users:
+            self.create_user(
+                role=UserRole.ADMIN,
+                username="admin",
+                password="Admin_4321!",
+                id="29ae7ebf-4445-42f2-9548-a3a54f095220",
+            )
 
         # В create_product и так открывается get_shelve
         if not has_key_products:
@@ -96,28 +101,59 @@ class DB:
 
             return filtered_users
 
-    def create_user(self, user: User):
+    def create_user(
+        self,
+        role: UserRole,
+        username: str,
+        password: str,
+        id: str | None = None,
+    ) -> User:
         with self.get_shelve() as db:
-            db[self.KEY_USERS][user.id] = user
+            obj = User(
+                id=id if id else self._generate_id(),
+                role=role,
+                username=username,
+                password=password,
+            )
+            db[self.KEY_USERS][obj.id] = obj
+            return obj
 
-    def create_product(self, name: str, price_minor: int, description: str):
+    def create_product(self, name: str, price_minor: int, description: str) -> Product:
         with self.get_shelve() as db:
             obj = Product(
-                id=str(uuid4()),
+                id=self._generate_id(),
                 name=name,
                 price_minor=price_minor,
                 description=description,
             )
-
             db[self.KEY_PRODUCTS][obj.id] = obj
+            return obj
 
     def get_products(self) -> list[Product]:
         with self.get_shelve() as db:
             return list(db[self.KEY_PRODUCTS].values())
 
-    def create_shopping_cart(self, shopping_cart: ShoppingCart):
+    def create_shopping_cart(self, product_ids: list[str]) -> ShoppingCart:
         with self.get_shelve() as db:
-            db[self.KEY_SHOPPING_CARTS][shopping_cart.id] = shopping_cart
+            obj = ShoppingCart(
+                id=self._generate_id(),
+                product_ids=product_ids,
+            )
+            db[self.KEY_SHOPPING_CARTS][obj.id] = obj
+            return obj
+
+    def update_shopping_cart(
+        self,
+        shopping_cart_id: str,
+        product_ids: list[str],
+    ):
+        # TODO: дублирует
+        with self.get_shelve() as db:
+            shopping_cart: ShoppingCart | None = self.get_shopping_cart(shopping_cart_id)
+            if not shopping_cart:
+                raise NotFoundException(f"Shopping cart #{shopping_cart_id} not found!")
+
+            shopping_cart.product_ids = product_ids
 
     def get_shopping_carts(self) -> list[ShoppingCart]:
         with self.get_shelve() as db:
@@ -127,21 +163,39 @@ class DB:
         with self.get_shelve() as db:
             return db[self.KEY_SHOPPING_CARTS].get(id)
 
-    # TODO: Для добавления продукта нужен только id
     def add_product_in_shopping_cart(
-        self, product: Product, shopping_cart: ShoppingCart
+        self,
+        shopping_cart_id: str,
+        product_id: str,
     ):
-        shopping_cart.products.append(product)
-        # TODO: ?
-        self.create_shopping_cart(shopping_cart)
+        # TODO: дублирует
+        with self.get_shelve() as db:
+            if product_id not in db[self.KEY_PRODUCTS]:
+                raise NotFoundException(f"Product #{product_id} not found!")
 
-    # TODO: Для удаления продукта нужен только id
+            shopping_cart: ShoppingCart | None = self.get_shopping_cart(shopping_cart_id)
+            if not shopping_cart:
+                raise NotFoundException(f"Shopping cart #{shopping_cart_id} not found!")
+
+        shopping_cart.product_ids.append(product_id)
+        self.update_shopping_cart(shopping_cart_id, shopping_cart.product_ids)
+
     def remove_product_from_shopping_cart(
-        self, product: Product, shopping_cart: ShoppingCart
+        self,
+        shopping_cart_id: str,
+        product_id: str,
     ):
-        shopping_cart.products.remove(product)
-        # TODO: ?
-        self.create_shopping_cart(shopping_cart)
+        # TODO: дублирует
+        with self.get_shelve() as db:
+            if product_id not in db[self.KEY_PRODUCTS]:
+                raise NotFoundException(f"Product #{product_id} not found!")
+
+            shopping_cart: ShoppingCart | None = self.get_shopping_cart(shopping_cart_id)
+            if not shopping_cart:
+                raise NotFoundException(f"Shopping cart #{shopping_cart_id} not found!")
+
+        shopping_cart.product_ids.remove(product_id)
+        self.update_shopping_cart(shopping_cart_id, shopping_cart.product_ids)
 
 
 db = DB()
