@@ -4,7 +4,10 @@
 __author__ = "ipetrash"
 
 
+import functools
 import shelve
+
+from typing import Any
 from uuid import uuid4
 
 from market.config import DB_FILE_NAME
@@ -22,25 +25,56 @@ class DB:
 
     db_name: str = str(DB_FILE_NAME)
 
+    def session(*decorator_args, **decorator_kwargs):
+        def actual_decorator(func):
+            @functools.wraps(func)
+            def wrapped(self, *args, **kwargs):
+                has_db: bool = self.db is not None
+                try:
+                    if not has_db:
+                        self.db = shelve.open(self.db_name, writeback=True)
+                    return func(self, *args, **kwargs)
+                finally:
+                    if not has_db and self.db is not None:
+                        self.db.close()
+                        self.db = None
+
+            return wrapped
+
+        return actual_decorator
+
+    @session()
+    def get_value(self, name: str, default: Any = None) -> Any:
+        if not name:
+            return dict(self.db)
+
+        if name not in self.db:
+            return default
+        return self.db.get(name)
+
+    @session()
+    def set_value(self, name: str, value: Any):
+        self.db[name] = value
+
+    def __init__(self):
+        self.db: shelve.Shelf | None = None
+
+        self._do_init_db_objects()
+
     def _generate_id(self) -> str:
         return str(uuid4())
 
     def _do_init_db_objects(self):
-        with self.get_shelve() as db:
-            if self.KEY_USERS not in db:
-                db[self.KEY_USERS] = dict()
+        if self.KEY_USERS not in self.get_value(""):
+            self.set_value(self.KEY_USERS, dict())
 
-            if self.KEY_PRODUCTS not in db:
-                db[self.KEY_PRODUCTS] = dict()
+        if self.KEY_PRODUCTS not in self.get_value(""):
+            self.set_value(self.KEY_PRODUCTS, dict())
 
-            if self.KEY_SHOPPING_CARTS not in db:
-                db[self.KEY_SHOPPING_CARTS] = dict()
+        if self.KEY_SHOPPING_CARTS not in self.get_value(""):
+            self.set_value(self.KEY_SHOPPING_CARTS, dict())
 
-            has_key_users = bool(db[self.KEY_USERS])
-            has_key_products = bool(db[self.KEY_PRODUCTS])
-
-        # В create_user и так открывается get_shelve
-        if not has_key_users:
+        if not self.get_value(self.KEY_USERS):
             self.create_user(
                 role=UserRole.ADMIN,
                 username="admin",
@@ -48,8 +82,7 @@ class DB:
                 id="29ae7ebf-4445-42f2-9548-a3a54f095220",
             )
 
-        # В create_product и так открывается get_shelve
-        if not has_key_products:
+        if not self.get_value(self.KEY_PRODUCTS):
             self.create_product(
                 name="Coca Cola 1л.",
                 price_minor=8000,
@@ -57,7 +90,7 @@ class DB:
             )
             self.create_product(
                 name="Coca Cola 2л.",
-                price_minor=13000,
+                price_minor=13500,
                 description="Газированный напиток",
             )
             self.create_product(
@@ -71,12 +104,6 @@ class DB:
                 description="Шоколадный батончик",
             )
 
-    def __init__(self):
-        self._do_init_db_objects()
-
-    def get_shelve(self) -> shelve.Shelf:
-        return shelve.open(self.db_name, writeback=True)
-
     def get_users(
         self,
         username: str | None = None,
@@ -88,18 +115,17 @@ class DB:
         :return: отфильтрованные пользователи
         """
 
-        with self.get_shelve() as db:
-            filtered_users = []  # Тут собираются отфильтрованные пользователи
+        filtered_users = []  # Тут собираются отфильтрованные пользователи
 
-            # Перебираем всех пользователей и оставляем только тех, кто прошел фильтры
-            for user in db[self.KEY_USERS].values():
-                if username is not None and user.username != username:
-                    continue
-                if password is not None and user.password != password:
-                    continue
-                filtered_users.append(user)
+        # Перебираем всех пользователей и оставляем только тех, кто прошел фильтры
+        for user in self.get_value(self.KEY_USERS).values():
+            if username is not None and user.username != username:
+                continue
+            if password is not None and user.password != password:
+                continue
+            filtered_users.append(user)
 
-            return filtered_users
+        return filtered_users
 
     def create_user(
         self,
@@ -108,74 +134,77 @@ class DB:
         password: str,
         id: str | None = None,
     ) -> User:
-        with self.get_shelve() as db:
-            obj = User(
-                id=id if id else self._generate_id(),
-                role=role,
-                username=username,
-                password=password,
-            )
-            db[self.KEY_USERS][obj.id] = obj
-            return obj
+        obj = User(
+            id=id if id else self._generate_id(),
+            role=role,
+            username=username,
+            password=password,
+        )
+        users = self.get_value(self.KEY_USERS)
+        users[obj.id] = obj
+        self.set_value(self.KEY_USERS, users)
+        return obj
 
     def create_product(self, name: str, price_minor: int, description: str) -> Product:
-        with self.get_shelve() as db:
-            obj = Product(
-                id=self._generate_id(),
-                name=name,
-                price_minor=price_minor,
-                description=description,
-            )
-            db[self.KEY_PRODUCTS][obj.id] = obj
-            return obj
+        obj = Product(
+            id=self._generate_id(),
+            name=name,
+            price_minor=price_minor,
+            description=description,
+        )
+        products = self.get_value(self.KEY_PRODUCTS)
+        products[obj.id] = obj
+        self.set_value(self.KEY_PRODUCTS, products)
+        return obj
 
     def get_products(self) -> list[Product]:
-        with self.get_shelve() as db:
-            return list(db[self.KEY_PRODUCTS].values())
+        return list(self.get_value(self.KEY_PRODUCTS).values())
+
+    def get_product(self, id: str, check_exists: bool = False) -> Product | None:
+        obj = self.get_value(self.KEY_PRODUCTS).get(id)
+        if obj is None and check_exists:
+            raise NotFoundException(f"Product #{id} not found!")
+        return obj
 
     def create_shopping_cart(self, product_ids: list[str]) -> ShoppingCart:
-        with self.get_shelve() as db:
-            obj = ShoppingCart(
-                id=self._generate_id(),
-                product_ids=product_ids,
-            )
-            db[self.KEY_SHOPPING_CARTS][obj.id] = obj
-            return obj
+        obj = ShoppingCart(
+            id=self._generate_id(),
+            product_ids=product_ids,
+        )
+        shopping_carts = self.get_value(self.KEY_SHOPPING_CARTS)
+        shopping_carts[obj.id] = obj
+        self.set_value(self.KEY_SHOPPING_CARTS, shopping_carts)
+        return obj
 
     def update_shopping_cart(
         self,
         shopping_cart_id: str,
         product_ids: list[str],
     ):
-        # TODO: дублирует
-        with self.get_shelve() as db:
-            shopping_cart: ShoppingCart | None = self.get_shopping_cart(shopping_cart_id)
-            if not shopping_cart:
-                raise NotFoundException(f"Shopping cart #{shopping_cart_id} not found!")
+        shopping_cart: ShoppingCart | None = self.get_shopping_cart(shopping_cart_id, check_exists=True)
+        shopping_cart.product_ids = product_ids
 
-            shopping_cart.product_ids = product_ids
+        shopping_carts = self.get_value(self.KEY_SHOPPING_CARTS)
+        self.set_value(self.KEY_SHOPPING_CARTS, shopping_carts)
 
     def get_shopping_carts(self) -> list[ShoppingCart]:
-        with self.get_shelve() as db:
-            return list(db[self.KEY_SHOPPING_CARTS].values())
+        return list(self.get_value(self.KEY_SHOPPING_CARTS).values())
 
-    def get_shopping_cart(self, id: str) -> ShoppingCart | None:
-        with self.get_shelve() as db:
-            return db[self.KEY_SHOPPING_CARTS].get(id)
+    def get_shopping_cart(self, id: str, check_exists: bool = False) -> ShoppingCart | None:
+        obj = self.get_value(self.KEY_SHOPPING_CARTS).get(id)
+        if obj is None and check_exists:
+            raise NotFoundException(f"Shopping cart #{id} not found!")
+        return obj
 
     def add_product_in_shopping_cart(
         self,
         shopping_cart_id: str,
         product_id: str,
     ):
-        # TODO: дублирует
-        with self.get_shelve() as db:
-            if product_id not in db[self.KEY_PRODUCTS]:
-                raise NotFoundException(f"Product #{product_id} not found!")
+        # Проверка наличия
+        self.get_product(product_id, check_exists=True)
 
-            shopping_cart: ShoppingCart | None = self.get_shopping_cart(shopping_cart_id)
-            if not shopping_cart:
-                raise NotFoundException(f"Shopping cart #{shopping_cart_id} not found!")
+        shopping_cart: ShoppingCart | None = self.get_shopping_cart(shopping_cart_id, check_exists=True)
 
         shopping_cart.product_ids.append(product_id)
         self.update_shopping_cart(shopping_cart_id, shopping_cart.product_ids)
@@ -185,15 +214,10 @@ class DB:
         shopping_cart_id: str,
         product_id: str,
     ):
-        # TODO: дублирует
-        with self.get_shelve() as db:
-            if product_id not in db[self.KEY_PRODUCTS]:
-                raise NotFoundException(f"Product #{product_id} not found!")
+        # Проверка наличия
+        self.get_product(product_id, check_exists=True)
 
-            shopping_cart: ShoppingCart | None = self.get_shopping_cart(shopping_cart_id)
-            if not shopping_cart:
-                raise NotFoundException(f"Shopping cart #{shopping_cart_id} not found!")
-
+        shopping_cart: ShoppingCart | None = self.get_shopping_cart(shopping_cart_id, check_exists=True)
         shopping_cart.product_ids.remove(product_id)
         self.update_shopping_cart(shopping_cart_id, shopping_cart.product_ids)
 
