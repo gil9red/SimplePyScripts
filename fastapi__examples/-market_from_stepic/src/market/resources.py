@@ -12,7 +12,7 @@ from market.schemas import (
     GetUsersModel,
     GetProductModel,
     GetProductsModel,
-    CreateProductModel,
+    IdBasedObjModel,
     GetShoppingCartModel,
     GetShoppingCartsModel,
     LoginModel,
@@ -86,7 +86,7 @@ def get_product(id: str) -> GetProductModel:
 # TODO: Мб в адресе явно указать, что это создание
 @router.post(
     "/products",
-    response_model=GetProductModel,
+    response_model=IdBasedObjModel,
     # 201 статус код потому что мы создаем объект – стандарт HTTP
     status_code=status.HTTP_201_CREATED,
     # TODO:
@@ -123,11 +123,8 @@ def create_product(
         description=product.description,
     )
 
-    return GetProductModel(
+    return IdBasedObjModel(
         id=obj.id,
-        name=obj.name,
-        price_minor=obj.price_minor,
-        description=obj.description,
     )
 
 
