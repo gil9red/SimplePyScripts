@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, status
 from fastapi.responses import HTMLResponse
 
 from market.schemas import (
@@ -70,6 +70,17 @@ def get_products() -> GetProductsModel:
             )
             for product in services.get_products()
         ]
+    )
+
+
+@router.get("/product/{id}", response_model=GetProductModel)
+def get_product(id: str) -> GetProductModel:
+    obj = services.get_product(id)
+    return GetProductModel(
+        id=obj.id,
+        name=obj.name,
+        price_minor=obj.price_minor,
+        description=obj.description,
     )
 
 
@@ -147,11 +158,6 @@ def get_shopping_carts() -> GetShoppingCartsModel:
 @router.get("/shopping-cart/{id}", response_model=GetShoppingCartModel)
 def get_shopping_cart(id: str) -> GetShoppingCartModel:
     obj = services.get_shopping_cart(id)
-    if not obj:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Shopping cart #{id} not found!",
-        )
 
     return GetShoppingCartModel(
         id=obj.id,
