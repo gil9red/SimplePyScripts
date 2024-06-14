@@ -4,20 +4,47 @@
 __author__ = "ipetrash"
 
 
-from market.models import User, Product, ShoppingCart
 from market.db import db
+from market.models import User, Product, ShoppingCart
+from market import schemas
 
 
-def get_users() -> list[User]:
-    return db.get_users()
+class Converter:
+    @classmethod
+    def get_GetProductModel(cls, obj: Product) -> schemas.GetProductModel:
+        return schemas.GetProductModel(
+            id=obj.id,
+            name=obj.name,
+            price_minor=obj.price_minor,
+            description=obj.description,
+        )
 
 
-def get_products() -> list[Product]:
-    return db.get_products()
+def get_users() -> schemas.GetUsersModel:
+    return schemas.GetUsersModel(
+        items=[
+            schemas.GetUserModel(
+                id=user.id,
+                role=user.role,
+                username=user.username,
+            )
+            for user in db.get_users()
+        ]
+    )
 
 
-def get_product(id: str) -> Product:
-    return db.get_product(id, check_exists=True)
+def get_products() -> schemas.GetProductsModel:
+    return schemas.GetProductsModel(
+        items=[
+            Converter.get_GetProductModel(product)
+            for product in db.get_products()
+        ]
+    )
+
+
+def get_product(id: str) -> schemas.GetProductModel:
+    product = db.get_product(id, check_exists=True)
+    return Converter.get_GetProductModel(product)
 
 
 def create_product(

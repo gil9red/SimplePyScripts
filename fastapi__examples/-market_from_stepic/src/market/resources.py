@@ -45,42 +45,17 @@ def index():
 
 @router.get("/users", response_model=GetUsersModel)
 def get_users() -> GetUsersModel:
-    return GetUsersModel(
-        items=[
-            GetUserModel(
-                id=user.id,
-                role=user.role,
-                username=user.username,
-            )
-            for user in services.get_users()
-        ]
-    )
+    return services.get_users()
 
 
 @router.get("/products", response_model=GetProductsModel)
 def get_products() -> GetProductsModel:
-    return GetProductsModel(
-        items=[
-            GetProductModel(
-                id=product.id,
-                name=product.name,
-                price_minor=product.price_minor,
-                description=product.description,
-            )
-            for product in services.get_products()
-        ]
-    )
+    return services.get_products()
 
 
 @router.get("/product/{id}", response_model=GetProductModel)
 def get_product(id: str) -> GetProductModel:
-    obj = services.get_product(id)
-    return GetProductModel(
-        id=obj.id,
-        name=obj.name,
-        price_minor=obj.price_minor,
-        description=obj.description,
-    )
+    return services.get_product(id)
 
 
 # TODO: Мб в адресе явно указать, что это создание
@@ -155,18 +130,21 @@ def get_shopping_carts() -> GetShoppingCartsModel:
 def get_shopping_cart(id: str) -> GetShoppingCartModel:
     obj = services.get_shopping_cart(id)
 
-    return GetShoppingCartModel(
-        id=obj.id,
-        products=[
+    products = []
+    for product_id in obj.product_ids:
+        product = services.get_product(product_id)
+        products.append(
             # TODO: Дублирует выше
             GetProductModel(
-                id=p.id,
-                name=p.name,
-                price_minor=p.price_minor,
-                description=p.description,
+                id=product.id,
+                name=product.name,
+                price_minor=product.price_minor,
+                description=product.description,
             )
-            for p in obj.products
-        ],
+        )
+    return GetShoppingCartModel(
+        id=obj.id,
+        products=products,
     )
 
 
