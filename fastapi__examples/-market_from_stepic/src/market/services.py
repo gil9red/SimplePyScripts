@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 from market.models import User, Product, ShoppingCart
-from market.db import db, NotFoundException
+from market.db import db
 
 
 def get_users() -> list[User]:

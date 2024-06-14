@@ -16,7 +16,6 @@ from market.schemas import (
     GetShoppingCartModel,
     GetShoppingCartsModel,
     LoginModel,
-    # ErrorModel,
     CreateProductModel,
 )
 from market import services

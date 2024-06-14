@@ -5,7 +5,6 @@ __author__ = "ipetrash"
 
 
 from dataclasses import dataclass
-# from pydantic import BaseModel
 from market.models import UserRole
 
 
@@ -15,16 +14,13 @@ class IdBasedObjModel:
 
 
 @dataclass
-# class GetUserModel(BaseModel):
 class GetUserModel(IdBasedObjModel):
-    # id: str
     role: UserRole
     username: str
 
 
 @dataclass
 class GetUsersModel:
-# class GetUsersModel(BaseModel):
     items: list[GetUserModel]
 
 
@@ -37,24 +33,16 @@ class CreateProductModel:
 
 @dataclass
 class GetProductModel(CreateProductModel, IdBasedObjModel):
-# TODO: Product из models.py
-# class GetProductModel(BaseModel):
-#     id: str
-    # name: str
-    # price_minor: int  # Копейки
-    # description: str
     pass
 
 
 @dataclass
-# class GetProductsModel(BaseModel):
 class GetProductsModel:
     items: list[GetProductModel]
 
 
 @dataclass
 class CreateProductModel:
-# class CreateProductModel(BaseModel):
     name: str
     price_minor: int  # Копейки
     description: str
@@ -62,27 +50,15 @@ class CreateProductModel:
 
 @dataclass
 class GetShoppingCartModel(IdBasedObjModel):
-# class GetShoppingCartModel(BaseModel):
-#     id: str
-    # user_id: str
     products: list[GetProductModel]
 
 
 @dataclass
 class GetShoppingCartsModel:
-# class GetShoppingCartsModel(BaseModel):
     items: list[GetShoppingCartModel]
 
 
 @dataclass
 class LoginModel:
-# class LoginModel(BaseModel):
     username: str
     password: str
-
-
-# TODO: Под вопросом зачем оно - в случаи ошибок fastapi использует свои модели
-# @dataclass
-# class ErrorModel:
-# # class ErrorModel(BaseModel):
-#     detail: str
