@@ -8,14 +8,14 @@ from fastapi import APIRouter, status
 from fastapi.responses import HTMLResponse
 
 from market.schemas import (
-    GetUserModel,
+    GetUserModel,  # TODO: добавить маршрут
     GetUsersModel,
     GetProductModel,
     GetProductsModel,
     IdBasedObjModel,
     GetShoppingCartModel,
     GetShoppingCartsModel,
-    LoginModel,
+    CreateShoppingCartModel,
     CreateProductModel,
 )
 from market import services
@@ -73,7 +73,7 @@ def create_product(
     # TODO:
     # # credentials – тело с логином и паролем. Обычно аутентификация выглядит сложнее, но для нашего случая пойдет и так.
     # credentials: LoginModel,
-):
+) -> IdBasedObjModel:
     # TODO:
     # current_user = services.login(
     #     username=credentials.username,
@@ -92,59 +92,59 @@ def create_product(
     #         status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden resource"
     #     )
 
-    obj = services.create_product(
+    return services.create_product(
         name=product.name,
         price_minor=product.price_minor,
         description=product.description,
     )
 
-    return IdBasedObjModel(
-        id=obj.id,
-    )
-
 
 @router.get("/shopping-carts", response_model=GetShoppingCartsModel)
 def get_shopping_carts() -> GetShoppingCartsModel:
-    return GetShoppingCartsModel(
-        items=[
-            GetShoppingCartModel(
-                id=obj.id,
-                # user_id=obj.user_id,
-                products=[
-                    # TODO: Дублирует выше
-                    GetProductModel(
-                        id=p.id,
-                        name=p.name,
-                        price_minor=p.price_minor,
-                        description=p.description,
-                    )
-                    for p in obj.products
-                ],
-            )
-            for obj in services.get_shopping_carts()
-        ]
-    )
+    return services.get_shopping_carts()
 
 
 @router.get("/shopping-cart/{id}", response_model=GetShoppingCartModel)
 def get_shopping_cart(id: str) -> GetShoppingCartModel:
-    obj = services.get_shopping_cart(id)
+    return services.get_shopping_cart(id)
 
-    products = []
-    for product_id in obj.product_ids:
-        product = services.get_product(product_id)
-        products.append(
-            # TODO: Дублирует выше
-            GetProductModel(
-                id=product.id,
-                name=product.name,
-                price_minor=product.price_minor,
-                description=product.description,
-            )
-        )
-    return GetShoppingCartModel(
-        id=obj.id,
-        products=products,
+
+# TODO: Мб в адресе явно указать, что это создание
+@router.post(
+    "/shopping-carts",
+    response_model=IdBasedObjModel,
+    # 201 статус код потому что мы создаем объект – стандарт HTTP
+    status_code=status.HTTP_201_CREATED,
+    # TODO:
+    # # Это нужно для сваггера. Мы перечисляем ответы эндпоинта, чтобы получить четкую документацию.
+    # responses={201: {"model": GetArticleModel}, 401: {"model": ErrorModel}, 403: {"model": ErrorModel}},
+)
+def create_shopping_cart(
+    shopping_cart: CreateShoppingCartModel,
+    # TODO:
+    # # credentials – тело с логином и паролем. Обычно аутентификация выглядит сложнее, но для нашего случая пойдет и так.
+    # credentials: LoginModel,
+) -> IdBasedObjModel:
+    # TODO:
+    # current_user = services.login(
+    #     username=credentials.username,
+    #     password=credentials.password,
+    #     users_repository=MemoryUsersRepository(),
+    # )
+    #
+    # # Это аутентификация
+    # if not current_user:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized user"
+    #     )
+    # # а это авторизация
+    # if not isinstance(current_user, Admin):
+    #     raise HTTPException(
+    #         status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden resource"
+    #     )
+
+    return services.create_shopping_cart(
+        product_ids=shopping_cart.product_ids,
     )
 
 

@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from market.models import UserRole
 
 
@@ -42,15 +42,13 @@ class GetProductsModel:
 
 
 @dataclass
-class CreateProductModel:
-    name: str
-    price_minor: int  # Копейки
-    description: str
+class CreateShoppingCartModel:
+    product_ids: list[str] = field(default_factory=list)
 
 
 @dataclass
-class GetShoppingCartModel(IdBasedObjModel):
-    products: list[GetProductModel]
+class GetShoppingCartModel(CreateShoppingCartModel, IdBasedObjModel):
+    pass
 
 
 @dataclass
