@@ -5,13 +5,20 @@ __author__ = "ipetrash"
 
 
 import enum
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
-class UserRole(enum.StrEnum):
+class UserRoleEnum(enum.StrEnum):
     USER = enum.auto()
     MANAGER = enum.auto()
     ADMIN = enum.auto()
+
+
+class StatusOrderEnum(enum.StrEnum):
+    CREATED = enum.auto()
+    IN_PROCESSED = enum.auto()
+    FINISHED = enum.auto()
+    CANCELED = enum.auto()
 
 
 @dataclass
@@ -19,7 +26,7 @@ class User:
     """Пользователь"""
 
     id: str
-    role: UserRole
+    role: UserRoleEnum
     username: str = None
     password: str = None
 
@@ -39,14 +46,15 @@ class ShoppingCart:
     """Корзина с товарами"""
 
     id: str
-    product_ids: list[str]
+    name: str = ""
+    product_ids: list[str] = field(default_factory=list)
 
 
 @dataclass
 class Order:
     """Заказ"""
 
-    # TODO: Статус заказа - создан, в обработке, завершен, отменен
     id: str
     email: str
     shopping_cart_id: str
+    status: StatusOrderEnum = StatusOrderEnum.CREATED

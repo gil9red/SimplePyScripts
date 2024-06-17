@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 from dataclasses import dataclass, field
-from market.models import UserRole
+from market.models import UserRoleEnum
 
 
 @dataclass
@@ -15,7 +15,7 @@ class IdBasedObjModel:
 
 @dataclass
 class GetUserModel(IdBasedObjModel):
-    role: UserRole
+    role: UserRoleEnum
     username: str
 
 
@@ -43,6 +43,7 @@ class GetProductsModel:
 
 @dataclass
 class CreateShoppingCartModel:
+    name: str = ""
     product_ids: list[str] = field(default_factory=list)
 
 

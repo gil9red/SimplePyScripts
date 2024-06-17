@@ -11,7 +11,7 @@ from typing import Any
 from uuid import uuid4
 
 from market.config import DB_FILE_NAME
-from market.models import User, Product, ShoppingCart, UserRole
+from market.models import User, Product, ShoppingCart, UserRoleEnum
 
 
 class NotFoundException(Exception):
@@ -76,7 +76,7 @@ class DB:
 
         if not self.get_value(self.KEY_USERS):
             self.create_user(
-                role=UserRole.ADMIN,
+                role=UserRoleEnum.ADMIN,
                 username="admin",
                 password="Admin_4321!",
                 id="29ae7ebf-4445-42f2-9548-a3a54f095220",
@@ -129,7 +129,7 @@ class DB:
 
     def create_user(
         self,
-        role: UserRole,
+        role: UserRoleEnum,
         username: str,
         password: str,
         id: str | None = None,
