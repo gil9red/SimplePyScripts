@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 
 from market.db import NotFoundException
 from market.resources import router
@@ -22,4 +22,23 @@ async def unicorn_exception_handler(_: Request, exc: NotFoundException):
     )
 
 
-app.include_router(router)
+@app.get("/", response_class=HTMLResponse)
+def index():
+    return """\
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div><a href="https://stepik.org/lesson/1186984/step/8?unit=1222202">Урок</a></div>
+    <br/>
+    <div><a href="/docs">/docs</a></div>
+    <div><a href="/redoc">/redoc</a></div>
+</body>
+</html>
+    """
+
+
+app.include_router(router, prefix="/api/v1")

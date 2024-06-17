@@ -5,7 +5,6 @@ __author__ = "ipetrash"
 
 
 from fastapi import APIRouter, status
-from fastapi.responses import HTMLResponse
 
 from market.schemas import (
     GetUserModel,  # TODO: добавить маршрут
@@ -22,25 +21,6 @@ from market import services
 
 
 router = APIRouter()
-
-
-@router.get("/", response_class=HTMLResponse)
-def index():
-    return """\
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-    <div><a href="https://stepik.org/lesson/1186984/step/8?unit=1222202">Урок</a></div>
-    <br/>
-    <div><a href="/docs">/docs</a></div>
-    <div><a href="/redoc">/redoc</a></div>
-</body>
-</html>
-    """
 
 
 @router.get("/users", response_model=GetUsersModel)
