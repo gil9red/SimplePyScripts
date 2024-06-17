@@ -12,11 +12,14 @@ def get_seasons() -> dict[str, list[str]]:
     url = "https://ru.wikipedia.org/wiki/Список_эпизодов_мультсериала_«Южный_Парк»"
 
     rs = session.get(url)
+    rs.raise_for_status()
+
     root = BeautifulSoup(rs.content, "html.parser")
 
-    season_by_series = dict()
+    season_by_series: dict[str, list[str]] = dict()
 
-    for season_title_el in root.select('span[id ^= "Сезон"]'):
+    items = root.select('h3[id ^= "Сезон"]') + root.select('span[id ^= "Сезон"]')
+    for season_title_el in items:
         season_title = season_title_el.get_text(strip=True)
 
         table_series = season_title_el.parent.find_next_sibling(
