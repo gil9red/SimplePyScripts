@@ -20,6 +20,13 @@ class GetUserModel(IdBasedObjModel):
 
 
 @dataclass
+class CreateUserModel:
+    role: UserRoleEnum
+    username: str
+    password: str
+
+
+@dataclass
 class GetUsersModel:
     items: list[GetUserModel]
 

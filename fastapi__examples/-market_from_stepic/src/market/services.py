@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-from market.db import db
+from market.db import db, UserRoleEnum
 from market.models import User, Product, ShoppingCart
 from market import schemas
 
@@ -29,11 +29,12 @@ class Converter:
 
     @classmethod
     def get_GetShoppingCartModel(
-        cls, shopping_card: ShoppingCart
+        cls,
+        shopping_cart: ShoppingCart,
     ) -> schemas.GetShoppingCartModel:
         return schemas.GetShoppingCartModel(
-            id=shopping_card.id,
-            product_ids=shopping_card.product_ids,
+            id=shopping_cart.id,
+            product_ids=shopping_cart.product_ids,
         )
 
 
@@ -43,6 +44,25 @@ def get_users() -> schemas.GetUsersModel:
     )
 
 
+def get_user(id: str) -> schemas.GetUserModel:
+    return Converter.get_GetUserModel(
+        user=db.get_user(id, check_exists=True),
+    )
+
+
+def create_user(
+    role: UserRoleEnum,
+    username: str,
+    password: str,
+) -> schemas.IdBasedObjModel:
+    user = db.create_user(
+        role=role,
+        username=username,
+        password=password,
+    )
+    return schemas.IdBasedObjModel(id=user.id)
+
+
 def get_products() -> schemas.GetProductsModel:
     return schemas.GetProductsModel(
         items=[Converter.get_GetProductModel(product) for product in db.get_products()]
@@ -50,7 +70,9 @@ def get_products() -> schemas.GetProductsModel:
 
 
 def get_product(id: str) -> schemas.GetProductModel:
-    return Converter.get_GetProductModel(db.get_product(id, check_exists=True))
+    return Converter.get_GetProductModel(
+        product=db.get_product(id, check_exists=True),
+    )
 
 
 def create_product(
@@ -99,25 +121,15 @@ def remove_product_from_shopping_cart(
 def get_shopping_carts() -> schemas.GetShoppingCartsModel:
     return schemas.GetShoppingCartsModel(
         items=[
-            Converter.get_GetShoppingCartModel(obj)
-            for obj in db.get_shopping_carts()
+            Converter.get_GetShoppingCartModel(obj) for obj in db.get_shopping_carts()
         ]
     )
 
 
 def get_shopping_cart(id: str) -> schemas.GetShoppingCartModel:
     return Converter.get_GetShoppingCartModel(
-        db.get_shopping_cart(id, check_exists=True)
+        shopping_cart=db.get_shopping_cart(id, check_exists=True),
     )
-
-
-#
-# def create_article(
-#     title: str, content: str, articles_repository: ArticlesRepository
-# ) -> Article:
-#     article = Article(id=str(uuid4()), title=title, content=content)
-#     articles_repository.create_article(article=article)
-#     return article
 
 
 def login(

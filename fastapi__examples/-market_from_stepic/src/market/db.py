@@ -107,11 +107,10 @@ class DB:
     def get_users(
         self,
         username: str | None = None,
-        password: str | None = None,
     ) -> list[User]:
         """
         :param username: фильтр по логину
-        :param password: фильтр по паролю
+
         :return: отфильтрованные пользователи
         """
 
@@ -121,11 +120,15 @@ class DB:
         for user in self.get_value(self.KEY_USERS).values():
             if username is not None and user.username != username:
                 continue
-            if password is not None and user.password != password:
-                continue
             filtered_users.append(user)
 
         return filtered_users
+
+    def get_user(self, id: str, check_exists: bool = False) -> User | None:
+        obj = self.get_value(self.KEY_USERS).get(id)
+        if obj is None and check_exists:
+            raise NotFoundException(f"User #{id} not found!")
+        return obj
 
     def create_user(
         self,

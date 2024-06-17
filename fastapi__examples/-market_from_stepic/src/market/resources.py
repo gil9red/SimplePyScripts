@@ -7,8 +7,9 @@ __author__ = "ipetrash"
 from fastapi import APIRouter, status
 
 from market.schemas import (
-    GetUserModel,  # TODO: добавить маршрут
+    GetUserModel,
     GetUsersModel,
+    CreateUserModel,
     GetProductModel,
     GetProductsModel,
     IdBasedObjModel,
@@ -26,6 +27,24 @@ router = APIRouter()
 @router.get("/users", response_model=GetUsersModel)
 def get_users() -> GetUsersModel:
     return services.get_users()
+
+
+@router.get("/user/{id}", response_model=GetUserModel)
+def get_user(id: str) -> GetUserModel:
+    return services.get_user(id)
+
+
+@router.post(
+    "/users",
+    response_model=IdBasedObjModel,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_user(user: CreateUserModel) -> IdBasedObjModel:
+    return services.create_user(
+        role=user.role,
+        username=user.username,
+        password=user.password,
+    )
 
 
 @router.get("/products", response_model=GetProductsModel)
