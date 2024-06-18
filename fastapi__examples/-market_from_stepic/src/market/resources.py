@@ -4,9 +4,16 @@
 __author__ = "ipetrash"
 
 
-from fastapi import APIRouter, status
+import jwt
 
+from fastapi import APIRouter, status, Depends, HTTPException
+
+# TODO:
+# from market.auth import check_admin_role, TokenPayload
+from market.security import verify_password
 from market.schemas import (
+    LoginResponse,
+    UserLogin,
     GetUserModel,
     GetUsersModel,
     CreateUserModel,
@@ -24,6 +31,36 @@ from market import services
 router = APIRouter()
 
 
+@router.post("/login")
+def login(credentials: UserLogin) -> LoginResponse:
+    if not credentials.username or not credentials.password:
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+
+    # TODO: через services?
+    from market.db import db, User
+    user: User = db.get_user_by_username(credentials.username)
+
+    if verify_password(credentials.password, user.hashed_password):
+        # Generate a JWT token
+        access_token = jwt.encode(
+            {"sub": credentials.username, "role": user.role},
+            "secret",
+            algorithm="HS256"
+        )
+
+        # Return the access token and user details
+        return LoginResponse(
+            token=access_token,
+            user=GetUserModel(
+                id=user.id,
+                username=user.username,
+                role=user.role,
+            ),
+        )
+
+    raise HTTPException(status_code=400, detail="Incorrect email or password")
+
+
 @router.get("/users", response_model=GetUsersModel)
 def get_users() -> GetUsersModel:
     return services.get_users()
@@ -39,7 +76,11 @@ def get_user(id: str) -> GetUserModel:
     response_model=IdBasedObjModel,
     status_code=status.HTTP_201_CREATED,
 )
-def create_user(user: CreateUserModel) -> IdBasedObjModel:
+def create_user(
+    user: CreateUserModel,
+    # TODO:
+    # token_data: TokenPayload = Depends(check_admin_role)
+) -> IdBasedObjModel:
     return services.create_user(
         role=user.role,
         username=user.username,

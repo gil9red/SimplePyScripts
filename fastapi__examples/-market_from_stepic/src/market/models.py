@@ -28,7 +28,7 @@ class User:
     id: str
     role: UserRoleEnum
     username: str = None
-    password: str = None
+    hashed_password: str = None
 
 
 @dataclass

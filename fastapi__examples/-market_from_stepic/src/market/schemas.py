@@ -20,7 +20,19 @@ class GetUserModel(IdBasedObjModel):
 
 
 @dataclass
-class CreateUserModel:
+class LoginResponse:
+    token: str
+    user: GetUserModel
+
+
+@dataclass
+class UserLogin:
+    username: str
+    password: str
+
+
+@dataclass
+class CreateUserModel(UserLogin):
     role: UserRoleEnum
     username: str
     password: str
@@ -62,9 +74,3 @@ class GetShoppingCartModel(CreateShoppingCartModel, IdBasedObjModel):
 @dataclass
 class GetShoppingCartsModel:
     items: list[GetShoppingCartModel]
-
-
-@dataclass
-class LoginModel:
-    username: str
-    password: str

@@ -13,6 +13,8 @@ from uuid import uuid4
 from market.config import DB_FILE_NAME
 from market.models import User, Product, ShoppingCart, UserRoleEnum
 
+from market.security import get_password_hash
+
 
 class NotFoundException(Exception):
     pass
@@ -130,6 +132,15 @@ class DB:
             raise NotFoundException(f"User #{id} not found!")
         return obj
 
+    # TODO:
+    def get_user_by_username(self, username: str, check_exists: bool = False) -> User | None:
+        # TODO:
+        for user in self.get_value(self.KEY_USERS).values():
+            if user.username == username:
+                return user
+        if check_exists:
+            raise NotFoundException(f'User "{username}" not found!')
+
     def create_user(
         self,
         role: UserRoleEnum,
@@ -141,7 +152,7 @@ class DB:
             id=id if id else self._generate_id(),
             role=role,
             username=username,
-            password=password,
+            hashed_password=get_password_hash(password),
         )
         users = self.get_value(self.KEY_USERS)
         users[obj.id] = obj
