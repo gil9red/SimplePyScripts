@@ -31,6 +31,8 @@ def check_admin_role(credentials: HTTPAuthorizationCredentials = Depends(securit
         raise HTTPException(status_code=401, detail="Bearer token missing")
     try:
         token = credentials.credentials
+        # TODO: замена "secret" на SECRET_KEY
+        # TODO: переменная для algorithms
         payload = jwt.decode(token, "secret", algorithms=["HS256"])
         token_data = TokenPayload(**payload)
         if token_data.role != UserRoleEnum.ADMIN:

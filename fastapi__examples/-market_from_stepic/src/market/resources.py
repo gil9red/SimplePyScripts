@@ -44,8 +44,10 @@ def login(credentials: UserLogin) -> LoginResponse:
         # Generate a JWT token
         access_token = jwt.encode(
             {"sub": credentials.username, "role": user.role},
+            # TODO: замена "secret" на SECRET_KEY
             "secret",
-            algorithm="HS256"
+            # TODO: переменная для algorithms
+            algorithm="HS256",
         )
 
         # Return the access token and user details
