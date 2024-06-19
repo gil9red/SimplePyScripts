@@ -10,6 +10,7 @@ from fastapi import APIRouter, status, Depends, HTTPException
 
 # TODO:
 # from market.auth import check_admin_role, TokenPayload
+from market.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 from market.security import verify_password
 from market.schemas import (
     LoginResponse,
@@ -44,10 +45,8 @@ def login(credentials: UserLogin) -> LoginResponse:
         # Generate a JWT token
         access_token = jwt.encode(
             {"sub": credentials.username, "role": user.role},
-            # TODO: замена "secret" на SECRET_KEY
-            "secret",
-            # TODO: переменная для algorithms
-            algorithm="HS256",
+            SECRET_KEY,
+            algorithm=ALGORITHM,
         )
 
         # Return the access token and user details

@@ -6,3 +6,6 @@ venv
 .bak
 .dat
 .dir
+
+SECRET_KEY.txt
+database/
