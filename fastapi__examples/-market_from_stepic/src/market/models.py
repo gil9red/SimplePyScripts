@@ -9,7 +9,8 @@ from dataclasses import dataclass, field
 
 
 class UserRoleEnum(enum.StrEnum):
-    USER = enum.auto()
+    # TODO:
+    # USER = enum.auto()
     MANAGER = enum.auto()
     ADMIN = enum.auto()
 
