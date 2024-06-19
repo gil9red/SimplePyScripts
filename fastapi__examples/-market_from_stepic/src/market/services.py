@@ -50,6 +50,10 @@ def get_user(id: str) -> schemas.GetUserModel:
     )
 
 
+def get_user_by_username(username: str) -> User:
+    return db.get_user_by_username(username, check_exists=True)
+
+
 def create_user(
     role: UserRoleEnum,
     username: str,

@@ -4,13 +4,13 @@
 __author__ = "ipetrash"
 
 
-import jwt
-
-from fastapi import APIRouter, status, Depends, HTTPException
+from typing import Annotated
 
 # TODO:
-# from market.auth import check_admin_role, TokenPayload
-from market.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from fastapi import APIRouter, status, Depends, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
+
+from market import db
 from market.security import verify_password
 from market.schemas import (
     LoginResponse,
@@ -27,26 +27,25 @@ from market.schemas import (
     CreateProductModel,
 )
 from market import services
+from market import auth
 
 
 router = APIRouter()
 
 
-@router.post("/login")
-def login(credentials: UserLogin) -> LoginResponse:
+@router.post("/token")
+def login_for_access_token(
+        # credentials: UserLogin
+        credentials: Annotated[OAuth2PasswordRequestForm, Depends()],
+) -> LoginResponse:
     if not credentials.username or not credentials.password:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
 
-    # TODO: через services?
-    from market.db import db, User
-    user: User = db.get_user_by_username(credentials.username)
-
+    user: db.User = services.get_user_by_username(credentials.username)
     if verify_password(credentials.password, user.hashed_password):
         # Generate a JWT token
-        access_token = jwt.encode(
-            {"sub": credentials.username, "role": user.role},
-            SECRET_KEY,
-            algorithm=ALGORITHM,
+        access_token = auth.create_access_token(
+            token=auth.TokenPayload(user.id, user.role),
         )
 
         # Return the access token and user details
@@ -59,29 +58,43 @@ def login(credentials: UserLogin) -> LoginResponse:
             ),
         )
 
-    raise HTTPException(status_code=400, detail="Incorrect email or password")
+    raise HTTPException(status_code=400, detail="Incorrect username or password")
 
 
-@router.get("/users", response_model=GetUsersModel)
-def get_users() -> GetUsersModel:
+@router.get("/users/me/")
+def read_users_me(
+    # TODO:
+    current_user: Annotated[GetUserModel, Depends(auth.get_current_user)],
+    # current_user: Annotated[GetUserModel, Depends(auth.get_current_user)],
+) -> GetUserModel:
+    return current_user
+
+
+@router.get("/users")
+def get_users(
+    current_user: Annotated[GetUserModel, Depends(auth.get_current_user)],
+) -> GetUsersModel:
+    # TODO:
+    print(current_user)
     return services.get_users()
 
 
-@router.get("/user/{id}", response_model=GetUserModel)
+@router.get("/user/{id}")
 def get_user(id: str) -> GetUserModel:
     return services.get_user(id)
 
 
 @router.post(
     "/users",
-    response_model=IdBasedObjModel,
     status_code=status.HTTP_201_CREATED,
 )
 def create_user(
     user: CreateUserModel,
-    # TODO:
-    # token_data: TokenPayload = Depends(check_admin_role)
+    current_user: Annotated[GetUserModel, Depends(auth.get_current_user)],
 ) -> IdBasedObjModel:
+    # TODO:
+    print(current_user)
+
     return services.create_user(
         role=user.role,
         username=user.username,
@@ -89,12 +102,12 @@ def create_user(
     )
 
 
-@router.get("/products", response_model=GetProductsModel)
+@router.get("/products")
 def get_products() -> GetProductsModel:
     return services.get_products()
 
 
-@router.get("/product/{id}", response_model=GetProductModel)
+@router.get("/product/{id}")
 def get_product(id: str) -> GetProductModel:
     return services.get_product(id)
 
@@ -102,7 +115,6 @@ def get_product(id: str) -> GetProductModel:
 # TODO: Мб в адресе явно указать, что это создание
 @router.post(
     "/products",
-    response_model=IdBasedObjModel,
     # 201 статус код потому что мы создаем объект – стандарт HTTP
     status_code=status.HTTP_201_CREATED,
     # TODO:
@@ -140,12 +152,12 @@ def create_product(
     )
 
 
-@router.get("/shopping-carts", response_model=GetShoppingCartsModel)
+@router.get("/shopping-carts")
 def get_shopping_carts() -> GetShoppingCartsModel:
     return services.get_shopping_carts()
 
 
-@router.get("/shopping-cart/{id}", response_model=GetShoppingCartModel)
+@router.get("/shopping-cart/{id}")
 def get_shopping_cart(id: str) -> GetShoppingCartModel:
     return services.get_shopping_cart(id)
 
@@ -153,7 +165,6 @@ def get_shopping_cart(id: str) -> GetShoppingCartModel:
 # TODO: Мб в адресе явно указать, что это создание
 @router.post(
     "/shopping-carts",
-    response_model=IdBasedObjModel,
     # 201 статус код потому что мы создаем объект – стандарт HTTP
     status_code=status.HTTP_201_CREATED,
     # TODO:
@@ -189,6 +200,7 @@ def create_shopping_cart(
     )
 
 
+# TODO:
 # @router.post(
 #     "/articles",
 #     response_model=GetArticleModel,
