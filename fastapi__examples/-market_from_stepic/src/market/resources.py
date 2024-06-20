@@ -12,20 +12,9 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from market import db
 from market.security import verify_password
-from market.schemas import (
-    LoginResponse,
-    UserLogin,
-    GetUserModel,
-    GetUsersModel,
-    CreateUserModel,
-    GetProductModel,
-    GetProductsModel,
-    IdBasedObjModel,
-    GetShoppingCartModel,
-    GetShoppingCartsModel,
-    CreateShoppingCartModel,
-    CreateProductModel,
-)
+from market.models import IdBasedObjModel, GetUserModel, LoginResponse, UserLogin, CreateUserModel, GetUsersModel, \
+    CreateProductModel, GetProductModel, GetProductsModel, CreateShoppingCartModel, GetShoppingCartModel, \
+    GetShoppingCartsModel
 from market import services
 from market import auth
 

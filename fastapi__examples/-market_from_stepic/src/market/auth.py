@@ -14,6 +14,7 @@ from fastapi import Depends, HTTPException, status
 # TODO:
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, OAuth2PasswordBearer
 
+import market.models
 from market.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 from market.models import UserRoleEnum
 from market import services
@@ -62,7 +63,7 @@ def parse_access_token(token_data: str) -> TokenPayload:
 # TODO:
 # TODO: проверка для разных ролей
 # Function to check the user's role based on the bearer token
-def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> schemas.GetUserModel:
+def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> market.models.GetUserModel:
     if not credentials:
         raise credentials_exception
     try:
@@ -74,7 +75,7 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
         # TODO: Проверить, что токен не истек
 
         # TODO: Проверить, что роль юзера совпадает с тем, что в токене
-        user: schemas.GetUserModel = services.get_user(token_data.sub)
+        user: market.models.GetUserModel = services.get_user(token_data.sub)
         if not user:
             raise credentials_exception
         return user
