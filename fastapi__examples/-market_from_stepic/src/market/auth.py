@@ -17,9 +17,14 @@ from market import services
 from market.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
 
-security = HTTPBearer()
+optional_security = HTTPBearer(auto_error=False)
 
 
+not_authenticated_exception = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED,
+    detail="Not authenticated",
+    headers={"WWW-Authenticate": "Bearer"},
+)
 credentials_exception = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail="Could not validate credentials",
@@ -62,12 +67,11 @@ def parse_access_token(token_data: str) -> TokenPayload:
         raise credentials_exception
 
 
-# TODO: проверка для разных ролей
-def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security),
-) -> models.User:
+def get_current_user_or_none(
+    credentials: HTTPAuthorizationCredentials | None = Depends(optional_security),
+) -> models.User | None:
     if not credentials:
-        raise credentials_exception
+        return
 
     token = credentials.credentials
     token_data = parse_access_token(token)
@@ -86,6 +90,15 @@ def get_current_user(
     return user
 
 
+def get_current_user(
+    current_user: Annotated[models.User | None, Depends(get_current_user_or_none)],
+) -> models.User:
+    if not current_user:
+        raise not_authenticated_exception
+
+    return current_user
+
+
 def get_current_user_admin(
     current_user: Annotated[models.User, Depends(get_current_user)],
 ):
@@ -97,7 +110,6 @@ def get_current_user_admin(
     return current_user
 
 
-# TODO: Проверить
 def get_current_user_manager_or_admin(
     current_user: Annotated[models.User, Depends(get_current_user)],
 ):
