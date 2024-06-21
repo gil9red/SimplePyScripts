@@ -6,13 +6,11 @@ __author__ = "ipetrash"
 
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta, timezone
-from typing import Any, Annotated
+from typing import Any
 
 import jwt
-# TODO:
 from fastapi import Depends, HTTPException, status
-# TODO:
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, OAuth2PasswordBearer
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from market import models
 from market import services
@@ -22,13 +20,14 @@ from market.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 security = HTTPBearer()
 
 
-# TODO:
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/token")
-
-
 credentials_exception = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail="Could not validate credentials",
+    headers={"WWW-Authenticate": "Bearer"},
+)
+signature_has_expired_exception = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED,
+    detail="Signature has expired",
     headers={"WWW-Authenticate": "Bearer"},
 )
 
@@ -51,38 +50,34 @@ def create_access_token(
 
 
 def parse_access_token(token_data: str) -> TokenPayload:
-    payload: dict[str, Any] = jwt.decode(token_data, SECRET_KEY, algorithms=[ALGORITHM])
     try:
+        payload: dict[str, Any] = jwt.decode(token_data, SECRET_KEY, algorithms=[ALGORITHM])
         return TokenPayload(**payload)
+
+    except jwt.exceptions.ExpiredSignatureError:
+        raise signature_has_expired_exception
+
     except Exception:
         raise credentials_exception
 
 
-# TODO:
 # TODO: проверка для разных ролей
-# Function to check the user's role based on the bearer token
 def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> models.User:
     if not credentials:
         raise credentials_exception
-    try:
-        token = credentials.credentials
-        token_data = parse_access_token(token)
-        if token_data.role != models.UserRoleEnum.ADMIN:
-            raise HTTPException(status_code=403, detail="Not authorized to access this resource")
 
-        # TODO: Проверить, что токен не истек
+    token = credentials.credentials
+    token_data = parse_access_token(token)
 
-        # TODO: Проверить, что роль юзера совпадает с тем, что в токене
-        user: models.User = services.get_user(token_data.sub)
-        if not user:
-            raise credentials_exception
-        return user
-
-        # return token_data
-
-    except jwt.exceptions.InvalidTokenError:
+    user: models.User = services.get_user(token_data.sub)
+    if not user:
         raise credentials_exception
 
+    # NOTE: Если было понижение в роли? :D
+    if token_data.role != user.role:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to access this resource")
+
+    return user
 
 
 if __name__ == "__main__":

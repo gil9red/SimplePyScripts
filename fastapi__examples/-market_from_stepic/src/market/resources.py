@@ -23,7 +23,7 @@ def login_for_access_token(
         credentials: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> models.LoginResponse:
     if not credentials.username or not credentials.password:
-        raise HTTPException(status_code=400, detail="Incorrect username or password")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect username or password")
 
     user: models.UserInDb = services.get_user_by_username(credentials.username)
     if verify_password(credentials.password, user.hashed_password):
@@ -42,7 +42,7 @@ def login_for_access_token(
             ),
         )
 
-    raise HTTPException(status_code=400, detail="Incorrect username or password")
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect username or password")
 
 
 @router.get("/users/me/")
