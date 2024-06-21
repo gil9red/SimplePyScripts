@@ -47,7 +47,6 @@ def login_for_access_token(
 
 @router.get("/users/me/")
 def read_users_me(
-    # TODO:
     current_user: Annotated[models.User, Depends(auth.get_current_user)],
 ) -> models.User:
     return current_user
@@ -55,10 +54,8 @@ def read_users_me(
 
 @router.get("/users")
 def get_users(
-    current_user: Annotated[models.Users, Depends(auth.get_current_user_admin)],
+    _: Annotated[models.Users, Depends(auth.get_current_user_admin)],
 ) -> models.Users:
-    # TODO:
-    print(current_user)
     return services.get_users()
 
 
@@ -73,11 +70,8 @@ def get_user(id: str) -> models.User:
 )
 def create_user(
     user: models.CreateUser,
-    current_user: Annotated[models.User, Depends(auth.get_current_user)],
+    _: Annotated[models.User, Depends(auth.get_current_user_admin)],
 ) -> models.IdBasedObj:
-    # TODO:
-    print(current_user)
-
     return services.create_user(
         role=user.role,
         username=user.username,
@@ -95,39 +89,14 @@ def get_product(id: str) -> models.Product:
     return services.get_product(id)
 
 
-# TODO: Мб в адресе явно указать, что это создание
 @router.post(
     "/products",
-    # 201 статус код потому что мы создаем объект – стандарт HTTP
     status_code=status.HTTP_201_CREATED,
-    # TODO:
-    # # Это нужно для сваггера. Мы перечисляем ответы эндпоинта, чтобы получить четкую документацию.
-    # responses={201: {"model": GetArticleModel}, 401: {"model": ErrorModel}, 403: {"model": ErrorModel}},
 )
 def create_product(
     product: models.CreateProduct,
-    # TODO:
-    # # credentials – тело с логином и паролем. Обычно аутентификация выглядит сложнее, но для нашего случая пойдет и так.
-    # credentials: LoginModel,
+    _: Annotated[models.User, Depends(auth.get_current_user_admin)],
 ) -> models.IdBasedObj:
-    # TODO:
-    # current_user = services.login(
-    #     username=credentials.username,
-    #     password=credentials.password,
-    #     users_repository=MemoryUsersRepository(),
-    # )
-    #
-    # # Это аутентификация
-    # if not current_user:
-    #     raise HTTPException(
-    #         status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized user"
-    #     )
-    # # а это авторизация
-    # if not isinstance(current_user, Admin):
-    #     raise HTTPException(
-    #         status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden resource"
-    #     )
-
     return services.create_product(
         name=product.name,
         price_minor=product.price_minor,
@@ -136,7 +105,9 @@ def create_product(
 
 
 @router.get("/shopping-carts")
-def get_shopping_carts() -> models.ShoppingCarts:
+def get_shopping_carts(
+    _: Annotated[models.User, Depends(auth.get_current_user_manager_or_admin)],
+) -> models.ShoppingCarts:
     return services.get_shopping_carts()
 
 
@@ -145,79 +116,38 @@ def get_shopping_cart(id: str) -> models.ShoppingCart:
     return services.get_shopping_cart(id)
 
 
-# TODO: Мб в адресе явно указать, что это создание
 @router.post(
     "/shopping-carts",
-    # 201 статус код потому что мы создаем объект – стандарт HTTP
     status_code=status.HTTP_201_CREATED,
-    # TODO:
-    # # Это нужно для сваггера. Мы перечисляем ответы эндпоинта, чтобы получить четкую документацию.
-    # responses={201: {"model": GetArticleModel}, 401: {"model": ErrorModel}, 403: {"model": ErrorModel}},
 )
 def create_shopping_cart(
     shopping_cart: models.CreateShoppingCart,
-    # TODO:
-    # # credentials – тело с логином и паролем. Обычно аутентификация выглядит сложнее, но для нашего случая пойдет и так.
-    # credentials: LoginModel,
 ) -> models.IdBasedObj:
-    # TODO:
-    # current_user = services.login(
-    #     username=credentials.username,
-    #     password=credentials.password,
-    #     users_repository=MemoryUsersRepository(),
-    # )
-    #
-    # # Это аутентификация
-    # if not current_user:
-    #     raise HTTPException(
-    #         status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized user"
-    #     )
-    # # а это авторизация
-    # if not isinstance(current_user, Admin):
-    #     raise HTTPException(
-    #         status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden resource"
-    #     )
-
     return services.create_shopping_cart(
         product_ids=shopping_cart.product_ids,
     )
 
 
-# TODO:
-# @router.post(
-#     "/articles",
-#     response_model=GetArticleModel,
-#     # 201 статус код потому что мы создаем объект – стандарт HTTP
-#     status_code=status.HTTP_201_CREATED,
-#     # Это нужно для сваггера. Мы перечисляем ответы эндпоинта, чтобы получить четкую документацию.
-#     responses={201: {"model": GetArticleModel}, 401: {"model": ErrorModel}, 403: {"model": ErrorModel}},
-# )
-# def create_article(
-#     article: CreateArticleModel,
-#     # credentials – тело с логином и паролем. Обычно аутентификация выглядит сложнее, но для нашего случая пойдет и так.
-#     credentials: LoginModel,
-# ):
-#     current_user = services.login(
-#         username=credentials.username,
-#         password=credentials.password,
-#         users_repository=MemoryUsersRepository(),
-#     )
-#
-#     # Это аутентификация
-#     if not current_user:
-#         raise HTTPException(
-#             status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized user"
-#         )
-#     # а это авторизация
-#     if not isinstance(current_user, Admin):
-#         raise HTTPException(
-#             status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden resource"
-#         )
-#
-#     article = services.create_article(
-#         title=article.title,
-#         content=article.content,
-#         articles_repository=ShelveArticlesRepository(),
-#     )
-#
-#     return GetArticleModel(id=article.id, title=article.title, content=article.content)
+@router.get("/orders")
+def get_orders(
+    _: Annotated[models.User, Depends(auth.get_current_user_manager_or_admin)],
+) -> models.Orders:
+    return services.get_orders()
+
+
+@router.get("/order/{id}")
+def get_order(id: str) -> models.Order:
+    return services.get_order(id)
+
+
+@router.post(
+    "/orders",
+    status_code=status.HTTP_201_CREATED,
+)
+def create_order(
+    order: models.CreateOrder,
+) -> models.IdBasedObj:
+    return services.create_order(
+        email=order.email,
+        shopping_cart_id=order.shopping_cart_id,
+    )

@@ -25,6 +25,7 @@ class DB:
     KEY_USERS: str = "users"
     KEY_PRODUCTS: str = "products"
     KEY_SHOPPING_CARTS: str = "shopping_carts"
+    KEY_ORDERS: str = "orders"
 
     _mutex = threading.RLock()
 
@@ -180,7 +181,10 @@ class DB:
 
     @lock()
     def create_product(
-        self, name: str, price_minor: int, description: str
+        self,
+        name: str,
+        price_minor: int,
+        description: str,
     ) -> models.Product:
         obj = models.Product(
             id=self._generate_id(),
@@ -274,6 +278,40 @@ class DB:
         )
         shopping_cart.product_ids.remove(product_id)
         self.update_shopping_cart(shopping_cart_id, shopping_cart.product_ids)
+
+    @lock()
+    def create_order(
+        self,
+        email: str,
+        shopping_cart_id: str,
+    ) -> models.Order:
+        # Проверка наличия
+        self.get_shopping_cart(shopping_cart_id, check_exists=True)
+
+        obj = models.Order(
+            id=self._generate_id(),
+            email=email,
+            shopping_cart_id=shopping_cart_id,
+        )
+        orders = self.get_value(self.KEY_ORDERS)
+        orders[obj.id] = obj
+        self.set_value(self.KEY_ORDERS, orders)
+        return obj
+
+    @lock()
+    def get_orders(self) -> list[models.Order]:
+        return list(self.get_value(self.KEY_ORDERS).values())
+
+    @lock()
+    def get_order(
+        self,
+        id: str,
+        check_exists: bool = False,
+    ) -> models.Order | None:
+        obj = self.get_value(self.KEY_ORDERS).get(id)
+        if obj is None and check_exists:
+            raise NotFoundException(f"Order #{id} not found!")
+        return obj
 
 
 db = DB()

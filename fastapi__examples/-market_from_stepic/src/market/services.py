@@ -95,3 +95,22 @@ def get_shopping_carts() -> models.ShoppingCarts:
 
 def get_shopping_cart(id: str) -> models.ShoppingCart:
     return db.get_shopping_cart(id, check_exists=True)
+
+
+def get_orders() -> models.Orders:
+    return models.Orders(items=db.get_orders())
+
+
+def get_order(id: str) -> models.Order:
+    return db.get_order(id, check_exists=True)
+
+
+def create_order(
+    email: str,
+    shopping_cart_id: str,
+) -> models.IdBasedObj:
+    obj = db.create_order(
+        email=email,
+        shopping_cart_id=shopping_cart_id,
+    )
+    return models.IdBasedObj(id=obj.id)

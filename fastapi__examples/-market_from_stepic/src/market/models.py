@@ -114,6 +114,7 @@ class ShoppingCarts:
     items: list[ShoppingCart]
 
 
+@dataclass
 class CreateOrder:
     """Заказ"""
 
@@ -125,6 +126,11 @@ class CreateOrder:
 @dataclass
 class Order(CreateOrder, IdBasedObj):
     """Заказ"""
+
+
+@dataclass
+class Orders:
+    items: list[Order]
 
 
 # TODO: в тесты
