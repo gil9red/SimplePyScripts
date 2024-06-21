@@ -9,3 +9,4 @@ venv
 
 SECRET_KEY.txt
 database/
+database-test/

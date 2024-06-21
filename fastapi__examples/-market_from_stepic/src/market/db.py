@@ -5,8 +5,10 @@ __author__ = "ipetrash"
 
 
 import functools
+import threading
 import shelve
 
+from pathlib import Path
 from typing import Any
 from uuid import uuid4
 
@@ -24,24 +26,32 @@ class DB:
     KEY_PRODUCTS: str = "products"
     KEY_SHOPPING_CARTS: str = "shopping_carts"
 
-    db_name: str = str(DB_FILE_NAME)
+    _mutex = threading.RLock()
 
     def session(*decorator_args, **decorator_kwargs):
         def actual_decorator(func):
             @functools.wraps(func)
             def wrapped(self, *args, **kwargs):
-                has_db: bool = self.db is not None
-                try:
-                    if not has_db:
-                        self.db = shelve.open(self.db_name, writeback=True)
-                    return func(self, *args, **kwargs)
-                finally:
-                    if not has_db and self.db is not None:
-                        self.db.close()
-                        self.db = None
-
+                with self._mutex:
+                    has_db: bool = self.db is not None
+                    try:
+                        if not has_db:
+                            self.db = shelve.open(self.file_name, writeback=True)
+                        return func(self, *args, **kwargs)
+                    finally:
+                        if not has_db and self.db is not None:
+                            self.db.close()
+                            self.db = None
             return wrapped
+        return actual_decorator
 
+    def lock(*decorator_args, **decorator_kwargs):
+        def actual_decorator(func):
+            @functools.wraps(func)
+            def wrapped(self, *args, **kwargs):
+                with self._mutex:
+                    return func(self, *args, **kwargs)
+            return wrapped
         return actual_decorator
 
     @session()
@@ -57,7 +67,8 @@ class DB:
     def set_value(self, name: str, value: Any):
         self.db[name] = value
 
-    def __init__(self):
+    def __init__(self, file_name: Path | str = DB_FILE_NAME):
+        self.file_name: str = str(file_name)
         self.db: shelve.Shelf | None = None
 
         self._do_init_db_objects()
@@ -65,6 +76,7 @@ class DB:
     def _generate_id(self) -> str:
         return str(uuid4())
 
+    @lock()
     def _do_init_db_objects(self):
         if self.KEY_USERS not in self.get_value(""):
             self.set_value(self.KEY_USERS, dict())
@@ -105,6 +117,7 @@ class DB:
                 description="Шоколадный батончик",
             )
 
+    @lock()
     def get_users(
         self,
         username: str | None = None,
@@ -125,23 +138,27 @@ class DB:
 
         return filtered_users
 
+    @lock()
     def get_user(self, id: str, check_exists: bool = False) -> models.UserInDb | None:
         obj = self.get_value(self.KEY_USERS).get(id)
         if obj is None and check_exists:
             raise NotFoundException(f"User #{id} not found!")
         return obj
 
-    # TODO:
+    @lock()
     def get_user_by_username(
-        self, username: str, check_exists: bool = False
+        self,
+        username: str,
+        check_exists: bool = False,
     ) -> models.UserInDb | None:
-        # TODO:
-        for user in self.get_value(self.KEY_USERS).values():
-            if user.username == username:
-                return user
+        users = self.get_users(username=username)
+        if users:
+            return users[0]
+
         if check_exists:
             raise NotFoundException(f'User "{username}" not found!')
 
+    @lock()
     def create_user(
         self,
         role: models.UserRoleEnum,
@@ -160,6 +177,7 @@ class DB:
         self.set_value(self.KEY_USERS, users)
         return obj
 
+    @lock()
     def create_product(
         self, name: str, price_minor: int, description: str
     ) -> models.Product:
@@ -174,15 +192,18 @@ class DB:
         self.set_value(self.KEY_PRODUCTS, products)
         return obj
 
+    @lock()
     def get_products(self) -> list[models.Product]:
         return list(self.get_value(self.KEY_PRODUCTS).values())
 
+    @lock()
     def get_product(self, id: str, check_exists: bool = False) -> models.Product | None:
         obj = self.get_value(self.KEY_PRODUCTS).get(id)
         if obj is None and check_exists:
             raise NotFoundException(f"Product #{id} not found!")
         return obj
 
+    @lock()
     def create_shopping_cart(self, product_ids: list[str]) -> models.ShoppingCart:
         obj = models.ShoppingCart(
             id=self._generate_id(),
@@ -193,6 +214,7 @@ class DB:
         self.set_value(self.KEY_SHOPPING_CARTS, shopping_carts)
         return obj
 
+    @lock()
     def update_shopping_cart(
         self,
         shopping_cart_id: str,
@@ -206,17 +228,22 @@ class DB:
         shopping_carts = self.get_value(self.KEY_SHOPPING_CARTS)
         self.set_value(self.KEY_SHOPPING_CARTS, shopping_carts)
 
+    @lock()
     def get_shopping_carts(self) -> list[models.ShoppingCart]:
         return list(self.get_value(self.KEY_SHOPPING_CARTS).values())
 
+    @lock()
     def get_shopping_cart(
-        self, id: str, check_exists: bool = False
+        self,
+        id: str,
+        check_exists: bool = False,
     ) -> models.ShoppingCart | None:
         obj = self.get_value(self.KEY_SHOPPING_CARTS).get(id)
         if obj is None and check_exists:
             raise NotFoundException(f"Shopping cart #{id} not found!")
         return obj
 
+    @lock()
     def add_product_in_shopping_cart(
         self,
         shopping_cart_id: str,
@@ -232,6 +259,7 @@ class DB:
         shopping_cart.product_ids.append(product_id)
         self.update_shopping_cart(shopping_cart_id, shopping_cart.product_ids)
 
+    @lock()
     def remove_product_from_shopping_cart(
         self,
         shopping_cart_id: str,
@@ -248,3 +276,32 @@ class DB:
 
 
 db = DB()
+
+
+if __name__ == "__main__":
+    # TODO: В тесты
+    from market.config import DB_TEST_FILE_NAME
+    db_test = DB(file_name=DB_TEST_FILE_NAME)
+
+    value = db_test.get_value("counter", default=1)
+    print(f"Counter: {value}")
+
+    def inc_counter():
+        value = db_test.get_value("counter", default=1)
+        db_test.set_value("counter", value + 1)
+
+    inc_counter()
+
+    # TODO: не рабочий вариант, нужно использовать методы самого DB
+    # current_value = db_test.get_value("counter", default=1)
+    #
+    # max_workers = 5
+    # number = 50
+    # expected_value = current_value + number
+    #
+    # import concurrent.futures
+    # with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+    #     futures = [executor.submit(inc_counter) for _ in range(number)]
+    #     concurrent.futures.wait(futures)
+    #
+    # print(expected_value, db_test.get_value("counter", default=1))

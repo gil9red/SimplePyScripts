@@ -16,6 +16,11 @@ DB_DIR_NAME.mkdir(parents=True, exist_ok=True)
 
 DB_FILE_NAME: Path = DB_DIR_NAME / "db.shelve"
 
+DB_TEST_DIR_NAME: Path = DIR / "database-test"
+DB_TEST_DIR_NAME.mkdir(parents=True, exist_ok=True)
+
+DB_TEST_FILE_NAME: Path = DB_TEST_DIR_NAME / "db.shelve"
+
 SECRET_KEY_FILE_NAME = DIR / "SECRET_KEY.txt"
 SECRET_KEY = (
     os.environ.get("SECRET_KEY")
