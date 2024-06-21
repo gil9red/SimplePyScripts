@@ -166,6 +166,7 @@ class DB:
         password: str,
         id: str | None = None,
     ) -> models.UserInDb:
+        # TODO: Проверка уникальности username
         obj = models.UserInDb(
             id=id if id else self._generate_id(),
             role=role,
