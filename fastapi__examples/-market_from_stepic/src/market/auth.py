@@ -6,7 +6,7 @@ __author__ = "ipetrash"
 
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta, timezone
-from typing import Any
+from typing import Any, Annotated
 
 import jwt
 from fastapi import Depends, HTTPException, status
@@ -36,13 +36,12 @@ signature_has_expired_exception = HTTPException(
 class TokenPayload:
     sub: str
     role: models.UserRoleEnum
-    # TODO: Проверка того, что токен свежий
     exp: datetime | None = None
 
 
 def create_access_token(
-        token: TokenPayload,
-        expires_delta: timedelta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    token: TokenPayload,
+    expires_delta: timedelta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
 ) -> str:
     data: dict[str, Any] = asdict(token)
     data["exp"] = datetime.now(timezone.utc) + expires_delta
@@ -51,7 +50,9 @@ def create_access_token(
 
 def parse_access_token(token_data: str) -> TokenPayload:
     try:
-        payload: dict[str, Any] = jwt.decode(token_data, SECRET_KEY, algorithms=[ALGORITHM])
+        payload: dict[str, Any] = jwt.decode(
+            token_data, SECRET_KEY, algorithms=[ALGORITHM]
+        )
         return TokenPayload(**payload)
 
     except jwt.exceptions.ExpiredSignatureError:
@@ -62,7 +63,9 @@ def parse_access_token(token_data: str) -> TokenPayload:
 
 
 # TODO: проверка для разных ролей
-def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> models.User:
+def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+) -> models.User:
     if not credentials:
         raise credentials_exception
 
@@ -75,13 +78,41 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
 
     # NOTE: Если было понижение в роли? :D
     if token_data.role != user.role:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to access this resource")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Role in the token and in the database does not match",
+        )
 
     return user
 
 
+def get_current_user_admin(
+    current_user: Annotated[models.User, Depends(get_current_user)],
+):
+    if current_user.role != models.UserRoleEnum.ADMIN:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Allowed only for admin",
+        )
+    return current_user
+
+
+# TODO: Проверить
+def get_current_user_manager_or_admin(
+    current_user: Annotated[models.User, Depends(get_current_user)],
+):
+    if current_user.role not in [models.UserRoleEnum.MANAGER, models.UserRoleEnum.ADMIN]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Allowed only for admin and manager",
+        )
+    return current_user
+
+
 if __name__ == "__main__":
     # TODO: в тесты
-    token_data = create_access_token(TokenPayload(sub="dfsdfsdfsdfsdf", role=models.UserRoleEnum.ADMIN))
+    token_data = create_access_token(
+        TokenPayload(sub="dfsdfsdfsdfsdf", role=models.UserRoleEnum.ADMIN)
+    )
     print(token_data)
     print(parse_access_token(token_data))

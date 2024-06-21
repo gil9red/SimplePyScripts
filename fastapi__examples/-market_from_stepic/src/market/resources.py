@@ -55,7 +55,7 @@ def read_users_me(
 
 @router.get("/users")
 def get_users(
-    current_user: Annotated[models.Users, Depends(auth.get_current_user)],
+    current_user: Annotated[models.Users, Depends(auth.get_current_user_admin)],
 ) -> models.Users:
     # TODO:
     print(current_user)
