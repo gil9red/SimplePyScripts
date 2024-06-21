@@ -10,9 +10,8 @@ import shelve
 from typing import Any
 from uuid import uuid4
 
+from market import models
 from market.config import DB_FILE_NAME
-from market.models import User, Product, ShoppingCart, UserRoleEnum
-
 from market.security import get_password_hash
 
 
@@ -78,7 +77,7 @@ class DB:
 
         if not self.get_value(self.KEY_USERS):
             self.create_user(
-                role=UserRoleEnum.ADMIN,
+                role=models.UserRoleEnum.ADMIN,
                 username="admin",
                 password="Admin_4321!",
                 id="29ae7ebf-4445-42f2-9548-a3a54f095220",
@@ -109,7 +108,7 @@ class DB:
     def get_users(
         self,
         username: str | None = None,
-    ) -> list[User]:
+    ) -> list[models.UserInDb]:
         """
         :param username: фильтр по логину
 
@@ -126,14 +125,16 @@ class DB:
 
         return filtered_users
 
-    def get_user(self, id: str, check_exists: bool = False) -> User | None:
+    def get_user(self, id: str, check_exists: bool = False) -> models.UserInDb | None:
         obj = self.get_value(self.KEY_USERS).get(id)
         if obj is None and check_exists:
             raise NotFoundException(f"User #{id} not found!")
         return obj
 
     # TODO:
-    def get_user_by_username(self, username: str, check_exists: bool = False) -> User | None:
+    def get_user_by_username(
+        self, username: str, check_exists: bool = False
+    ) -> models.UserInDb | None:
         # TODO:
         for user in self.get_value(self.KEY_USERS).values():
             if user.username == username:
@@ -143,12 +144,12 @@ class DB:
 
     def create_user(
         self,
-        role: UserRoleEnum,
+        role: models.UserRoleEnum,
         username: str,
         password: str,
         id: str | None = None,
-    ) -> User:
-        obj = User(
+    ) -> models.UserInDb:
+        obj = models.UserInDb(
             id=id if id else self._generate_id(),
             role=role,
             username=username,
@@ -159,8 +160,10 @@ class DB:
         self.set_value(self.KEY_USERS, users)
         return obj
 
-    def create_product(self, name: str, price_minor: int, description: str) -> Product:
-        obj = Product(
+    def create_product(
+        self, name: str, price_minor: int, description: str
+    ) -> models.Product:
+        obj = models.Product(
             id=self._generate_id(),
             name=name,
             price_minor=price_minor,
@@ -171,17 +174,17 @@ class DB:
         self.set_value(self.KEY_PRODUCTS, products)
         return obj
 
-    def get_products(self) -> list[Product]:
+    def get_products(self) -> list[models.Product]:
         return list(self.get_value(self.KEY_PRODUCTS).values())
 
-    def get_product(self, id: str, check_exists: bool = False) -> Product | None:
+    def get_product(self, id: str, check_exists: bool = False) -> models.Product | None:
         obj = self.get_value(self.KEY_PRODUCTS).get(id)
         if obj is None and check_exists:
             raise NotFoundException(f"Product #{id} not found!")
         return obj
 
-    def create_shopping_cart(self, product_ids: list[str]) -> ShoppingCart:
-        obj = ShoppingCart(
+    def create_shopping_cart(self, product_ids: list[str]) -> models.ShoppingCart:
+        obj = models.ShoppingCart(
             id=self._generate_id(),
             product_ids=product_ids,
         )
@@ -195,16 +198,20 @@ class DB:
         shopping_cart_id: str,
         product_ids: list[str],
     ):
-        shopping_cart: ShoppingCart | None = self.get_shopping_cart(shopping_cart_id, check_exists=True)
+        shopping_cart: models.ShoppingCart | None = self.get_shopping_cart(
+            shopping_cart_id, check_exists=True
+        )
         shopping_cart.product_ids = product_ids
 
         shopping_carts = self.get_value(self.KEY_SHOPPING_CARTS)
         self.set_value(self.KEY_SHOPPING_CARTS, shopping_carts)
 
-    def get_shopping_carts(self) -> list[ShoppingCart]:
+    def get_shopping_carts(self) -> list[models.ShoppingCart]:
         return list(self.get_value(self.KEY_SHOPPING_CARTS).values())
 
-    def get_shopping_cart(self, id: str, check_exists: bool = False) -> ShoppingCart | None:
+    def get_shopping_cart(
+        self, id: str, check_exists: bool = False
+    ) -> models.ShoppingCart | None:
         obj = self.get_value(self.KEY_SHOPPING_CARTS).get(id)
         if obj is None and check_exists:
             raise NotFoundException(f"Shopping cart #{id} not found!")
@@ -218,7 +225,9 @@ class DB:
         # Проверка наличия
         self.get_product(product_id, check_exists=True)
 
-        shopping_cart: ShoppingCart | None = self.get_shopping_cart(shopping_cart_id, check_exists=True)
+        shopping_cart: models.ShoppingCart | None = self.get_shopping_cart(
+            shopping_cart_id, check_exists=True
+        )
 
         shopping_cart.product_ids.append(product_id)
         self.update_shopping_cart(shopping_cart_id, shopping_cart.product_ids)
@@ -231,7 +240,9 @@ class DB:
         # Проверка наличия
         self.get_product(product_id, check_exists=True)
 
-        shopping_cart: ShoppingCart | None = self.get_shopping_cart(shopping_cart_id, check_exists=True)
+        shopping_cart: models.ShoppingCart | None = self.get_shopping_cart(
+            shopping_cart_id, check_exists=True
+        )
         shopping_cart.product_ids.remove(product_id)
         self.update_shopping_cart(shopping_cart_id, shopping_cart.product_ids)
 

@@ -14,11 +14,9 @@ from fastapi import Depends, HTTPException, status
 # TODO:
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, OAuth2PasswordBearer
 
-import market.models
-from market.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
-from market.models import UserRoleEnum
+from market import models
 from market import services
-from market import schemas
+from market.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
 
 security = HTTPBearer()
@@ -38,7 +36,7 @@ credentials_exception = HTTPException(
 @dataclass
 class TokenPayload:
     sub: str
-    role: UserRoleEnum
+    role: models.UserRoleEnum
     # TODO: Проверка того, что токен свежий
     exp: datetime | None = None
 
@@ -63,19 +61,19 @@ def parse_access_token(token_data: str) -> TokenPayload:
 # TODO:
 # TODO: проверка для разных ролей
 # Function to check the user's role based on the bearer token
-def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> market.models.GetUserModel:
+def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> models.User:
     if not credentials:
         raise credentials_exception
     try:
         token = credentials.credentials
         token_data = parse_access_token(token)
-        if token_data.role != UserRoleEnum.ADMIN:
+        if token_data.role != models.UserRoleEnum.ADMIN:
             raise HTTPException(status_code=403, detail="Not authorized to access this resource")
 
         # TODO: Проверить, что токен не истек
 
         # TODO: Проверить, что роль юзера совпадает с тем, что в токене
-        user: market.models.GetUserModel = services.get_user(token_data.sub)
+        user: models.User = services.get_user(token_data.sub)
         if not user:
             raise credentials_exception
         return user
@@ -86,38 +84,9 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
         raise credentials_exception
 
 
-# async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]) -> schemas.GetUserModel:
-#     # TODO:
-#     # try:
-#     #     payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-#     #     username: str = payload.get("sub")
-#     #     if username is None:
-#     #         raise credentials_exception
-#     #     token_data = TokenData(username=username)
-#     # except InvalidTokenError:
-#     #     raise credentials_exception
-#     # user = get_user(fake_users_db, username=token_data.username)
-#     # if user is None:
-#     #     raise credentials_exception
-#     # return user
-#
-#     try:
-#         token_data = parse_access_token(token)
-#         if token_data.role != UserRoleEnum.ADMIN:
-#             raise HTTPException(status_code=403, detail="Not authorized to access this resource")
-#
-#         # TODO: Проверить, что такой юзер есть
-#         user: schemas.GetUserModel = services.get_user(token_data.sub)
-#         if not user:
-#             raise credentials_exception
-#         return user
-#
-#     except jwt.exceptions.InvalidTokenError:
-#         raise credentials_exception
-
 
 if __name__ == "__main__":
     # TODO: в тесты
-    token_data = create_access_token(TokenPayload(sub="dfsdfsdfsdfsdf", role=UserRoleEnum.ADMIN))
+    token_data = create_access_token(TokenPayload(sub="dfsdfsdfsdfsdf", role=models.UserRoleEnum.ADMIN))
     print(token_data)
     print(parse_access_token(token_data))

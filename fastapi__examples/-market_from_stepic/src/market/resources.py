@@ -6,17 +6,13 @@ __author__ = "ipetrash"
 
 from typing import Annotated
 
-# TODO:
 from fastapi import APIRouter, status, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 
-from market import db
-from market.security import verify_password
-from market.models import IdBasedObjModel, GetUserModel, LoginResponse, UserLogin, CreateUserModel, GetUsersModel, \
-    CreateProductModel, GetProductModel, GetProductsModel, CreateShoppingCartModel, GetShoppingCartModel, \
-    GetShoppingCartsModel
-from market import services
 from market import auth
+from market import models
+from market import services
+from market.security import verify_password
 
 
 router = APIRouter()
@@ -24,13 +20,12 @@ router = APIRouter()
 
 @router.post("/token")
 def login_for_access_token(
-        # credentials: UserLogin
         credentials: Annotated[OAuth2PasswordRequestForm, Depends()],
-) -> LoginResponse:
+) -> models.LoginResponse:
     if not credentials.username or not credentials.password:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
 
-    user: db.User = services.get_user_by_username(credentials.username)
+    user: models.UserInDb = services.get_user_by_username(credentials.username)
     if verify_password(credentials.password, user.hashed_password):
         # Generate a JWT token
         access_token = auth.create_access_token(
@@ -38,9 +33,9 @@ def login_for_access_token(
         )
 
         # Return the access token and user details
-        return LoginResponse(
+        return models.LoginResponse(
             token=access_token,
-            user=GetUserModel(
+            user=models.User(
                 id=user.id,
                 username=user.username,
                 role=user.role,
@@ -53,23 +48,22 @@ def login_for_access_token(
 @router.get("/users/me/")
 def read_users_me(
     # TODO:
-    current_user: Annotated[GetUserModel, Depends(auth.get_current_user)],
-    # current_user: Annotated[GetUserModel, Depends(auth.get_current_user)],
-) -> GetUserModel:
+    current_user: Annotated[models.User, Depends(auth.get_current_user)],
+) -> models.User:
     return current_user
 
 
 @router.get("/users")
 def get_users(
-    current_user: Annotated[GetUserModel, Depends(auth.get_current_user)],
-) -> GetUsersModel:
+    current_user: Annotated[models.Users, Depends(auth.get_current_user)],
+) -> models.Users:
     # TODO:
     print(current_user)
     return services.get_users()
 
 
 @router.get("/user/{id}")
-def get_user(id: str) -> GetUserModel:
+def get_user(id: str) -> models.User:
     return services.get_user(id)
 
 
@@ -78,9 +72,9 @@ def get_user(id: str) -> GetUserModel:
     status_code=status.HTTP_201_CREATED,
 )
 def create_user(
-    user: CreateUserModel,
-    current_user: Annotated[GetUserModel, Depends(auth.get_current_user)],
-) -> IdBasedObjModel:
+    user: models.CreateUser,
+    current_user: Annotated[models.User, Depends(auth.get_current_user)],
+) -> models.IdBasedObj:
     # TODO:
     print(current_user)
 
@@ -92,12 +86,12 @@ def create_user(
 
 
 @router.get("/products")
-def get_products() -> GetProductsModel:
+def get_products() -> models.Products:
     return services.get_products()
 
 
 @router.get("/product/{id}")
-def get_product(id: str) -> GetProductModel:
+def get_product(id: str) -> models.Product:
     return services.get_product(id)
 
 
@@ -111,11 +105,11 @@ def get_product(id: str) -> GetProductModel:
     # responses={201: {"model": GetArticleModel}, 401: {"model": ErrorModel}, 403: {"model": ErrorModel}},
 )
 def create_product(
-    product: CreateProductModel,
+    product: models.CreateProduct,
     # TODO:
     # # credentials – тело с логином и паролем. Обычно аутентификация выглядит сложнее, но для нашего случая пойдет и так.
     # credentials: LoginModel,
-) -> IdBasedObjModel:
+) -> models.IdBasedObj:
     # TODO:
     # current_user = services.login(
     #     username=credentials.username,
@@ -142,12 +136,12 @@ def create_product(
 
 
 @router.get("/shopping-carts")
-def get_shopping_carts() -> GetShoppingCartsModel:
+def get_shopping_carts() -> models.ShoppingCarts:
     return services.get_shopping_carts()
 
 
 @router.get("/shopping-cart/{id}")
-def get_shopping_cart(id: str) -> GetShoppingCartModel:
+def get_shopping_cart(id: str) -> models.ShoppingCart:
     return services.get_shopping_cart(id)
 
 
@@ -161,11 +155,11 @@ def get_shopping_cart(id: str) -> GetShoppingCartModel:
     # responses={201: {"model": GetArticleModel}, 401: {"model": ErrorModel}, 403: {"model": ErrorModel}},
 )
 def create_shopping_cart(
-    shopping_cart: CreateShoppingCartModel,
+    shopping_cart: models.CreateShoppingCart,
     # TODO:
     # # credentials – тело с логином и паролем. Обычно аутентификация выглядит сложнее, но для нашего случая пойдет и так.
     # credentials: LoginModel,
-) -> IdBasedObjModel:
+) -> models.IdBasedObj:
     # TODO:
     # current_user = services.login(
     #     username=credentials.username,

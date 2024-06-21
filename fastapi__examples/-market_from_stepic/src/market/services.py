@@ -3,103 +3,70 @@
 
 __author__ = "ipetrash"
 
-import market.models
-from market.db import db, UserRoleEnum
-from market.models import User, Product, ShoppingCart
-from market import schemas
+
+from market import models
+from market.db import db
 
 
-class Converter:
-    @classmethod
-    def get_GetUserModel(cls, user: User) -> market.models.GetUserModel:
-        return market.models.GetUserModel(
-            id=user.id,
-            role=user.role,
-            username=user.username,
-        )
-
-    @classmethod
-    def get_GetProductModel(cls, product: Product) -> market.models.GetProductModel:
-        return market.models.GetProductModel(
-            id=product.id,
-            name=product.name,
-            price_minor=product.price_minor,
-            description=product.description,
-        )
-
-    @classmethod
-    def get_GetShoppingCartModel(
-        cls,
-        shopping_cart: ShoppingCart,
-    ) -> market.models.GetShoppingCartModel:
-        return market.models.GetShoppingCartModel(
-            id=shopping_cart.id,
-            product_ids=shopping_cart.product_ids,
-        )
-
-
-def get_users() -> market.models.GetUsersModel:
-    return market.models.GetUsersModel(
-        items=[Converter.get_GetUserModel(user) for user in db.get_users()]
+def get_users() -> models.Users:
+    return models.Users(
+        items=[models.create_from(models.User, user) for user in db.get_users()]
     )
 
 
-def get_user(id: str) -> market.models.GetUserModel:
-    return Converter.get_GetUserModel(
-        user=db.get_user(id, check_exists=True),
+def get_user(id: str) -> models.User:
+    return models.create_from(
+        models.User,
+        db.get_user(id, check_exists=True),
     )
 
 
-def get_user_by_username(username: str) -> User:
+def get_user_by_username(username: str) -> models.UserInDb:
     return db.get_user_by_username(username, check_exists=True)
 
 
 def create_user(
-    role: UserRoleEnum,
+    role: models.UserRoleEnum,
     username: str,
     password: str,
-) -> market.models.IdBasedObjModel:
+) -> models.IdBasedObj:
     user = db.create_user(
         role=role,
         username=username,
         password=password,
     )
-    return market.models.IdBasedObjModel(id=user.id)
+    return models.IdBasedObj(id=user.id)
 
 
-def get_products() -> market.models.GetProductsModel:
-    return market.models.GetProductsModel(
-        items=[Converter.get_GetProductModel(product) for product in db.get_products()]
-    )
+def get_products() -> models.Products:
+    return models.Products(items=db.get_products())
 
 
-def get_product(id: str) -> market.models.GetProductModel:
-    return Converter.get_GetProductModel(
-        product=db.get_product(id, check_exists=True),
-    )
+def get_product(id: str) -> models.Product:
+    return db.get_product(id, check_exists=True)
 
 
 def create_product(
     name: str,
     price_minor: int,  # Копейки
     description: str,
-) -> market.models.IdBasedObjModel:
+) -> models.IdBasedObj:
     product = db.create_product(
         name=name,
         price_minor=price_minor,
         description=description,
     )
-    return market.models.IdBasedObjModel(id=product.id)
+    return models.IdBasedObj(id=product.id)
 
 
-def create_shopping_cart(product_ids: list[str] = None) -> market.models.IdBasedObjModel:
+def create_shopping_cart(product_ids: list[str] = None) -> models.IdBasedObj:
     if product_ids is None:
         product_ids = []
 
     shopping_cart = db.create_shopping_cart(
         product_ids=product_ids,
     )
-    return market.models.IdBasedObjModel(id=shopping_cart.id)
+    return models.IdBasedObj(id=shopping_cart.id)
 
 
 def add_product_in_shopping_cart(
@@ -122,24 +89,9 @@ def remove_product_from_shopping_cart(
     )
 
 
-def get_shopping_carts() -> market.models.GetShoppingCartsModel:
-    return market.models.GetShoppingCartsModel(
-        items=[
-            Converter.get_GetShoppingCartModel(obj) for obj in db.get_shopping_carts()
-        ]
-    )
+def get_shopping_carts() -> models.ShoppingCarts:
+    return models.ShoppingCarts(items=db.get_shopping_carts())
 
 
-def get_shopping_cart(id: str) -> market.models.GetShoppingCartModel:
-    return Converter.get_GetShoppingCartModel(
-        shopping_cart=db.get_shopping_cart(id, check_exists=True),
-    )
-
-
-def login(
-    username: str,
-    password: str,
-) -> User | None:
-    users = db.get_users(username=username, password=password)
-    if users:
-        return users[0]
+def get_shopping_cart(id: str) -> models.ShoppingCart:
+    return db.get_shopping_cart(id, check_exists=True)
