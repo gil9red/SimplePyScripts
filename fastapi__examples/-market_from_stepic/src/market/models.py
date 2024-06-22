@@ -83,6 +83,15 @@ class Product(CreateProduct, IdBasedObj):
 
 
 @dataclass
+class UpdateProduct:
+    """Товар"""
+
+    name: str | None = None
+    price_minor: int | None = None  # Копейки
+    description: str | None = None
+
+
+@dataclass
 class Product(IdBasedObj):
     """Товар"""
 

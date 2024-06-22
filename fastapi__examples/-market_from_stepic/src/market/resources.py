@@ -22,8 +22,13 @@ router = APIRouter()
 def login_for_access_token(
         credentials: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> models.LoginResponse:
+    exception_400 = HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Incorrect username or password",
+    )
+
     if not credentials.username or not credentials.password:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect username or password")
+        raise exception_400
 
     user: models.UserInDb = services.get_user_by_username(credentials.username)
     if verify_password(credentials.password, user.hashed_password):
@@ -42,7 +47,7 @@ def login_for_access_token(
             ),
         )
 
-    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect username or password")
+    raise exception_400
 
 
 @router.get("/users/me/")
@@ -86,6 +91,30 @@ def get_products() -> models.Products:
 
 @router.get("/product/{id}")
 def get_product(id: str) -> models.Product:
+    return services.get_product(id)
+
+
+@router.patch("/product/{id}")
+def update_product(
+    id: str,
+    other: models.UpdateProduct,
+    current_user: Annotated[models.User, Depends(auth.get_current_user_manager_or_admin)],
+) -> models.Product:
+    if current_user.role == models.UserRoleEnum.MANAGER:
+        # У менеджера нет прав на переименование продукта
+        if other.name is not None:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="No rights to edit the name field",
+            )
+
+    services.update_product(
+        id=id,
+        name=other.name,
+        price_minor=other.price_minor,
+        description=other.description,
+    )
+
     return services.get_product(id)
 
 
@@ -151,3 +180,18 @@ def create_order(
         email=order.email,
         shopping_cart_id=order.shopping_cart_id,
     )
+
+
+# TODO:
+# @router.patch("/orders/{id}")
+# def update_order(
+#     id: str,
+#     other: models.Order, # TODO:
+#     current_user: Annotated[models.User | None, Depends(auth.get_current_user_or_none)] = None,
+# ) -> models.Order: # TODO:
+#     order = services.get_order(id)
+#
+#     print(other, current_user)
+#
+#     return order
+

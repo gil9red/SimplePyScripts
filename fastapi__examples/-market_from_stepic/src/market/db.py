@@ -198,6 +198,30 @@ class DB:
         return obj
 
     @lock()
+    def update_product(
+        self,
+        id: str,
+        name: str | None = None,
+        price_minor: int | None = None,
+        description: str | None = None,
+    ):
+        product = self.get_product(id, check_exists=True)
+
+        if name is not None:
+            product.name = name
+
+        if price_minor is not None:
+            product.price_minor = price_minor
+
+        if description is not None:
+            product.description = description
+
+        products = self.get_value(self.KEY_PRODUCTS)
+        products[id] = product
+
+        self.set_value(self.KEY_PRODUCTS, products)
+
+    @lock()
     def get_products(self) -> list[models.Product]:
         return list(self.get_value(self.KEY_PRODUCTS).values())
 

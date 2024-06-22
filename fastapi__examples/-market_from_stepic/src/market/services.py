@@ -59,6 +59,20 @@ def create_product(
     return models.IdBasedObj(id=product.id)
 
 
+def update_product(
+    id: str,
+    name: str | None = None,
+    price_minor: int | None = None,  # Копейки
+    description: str | None = None,
+):
+    db.update_product(
+        id=id,
+        name=name,
+        price_minor=price_minor,
+        description=description,
+    )
+
+
 def create_shopping_cart(product_ids: list[str] = None) -> models.IdBasedObj:
     if product_ids is None:
         product_ids = []
