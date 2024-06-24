@@ -106,15 +106,19 @@ class Products:
 
 
 @dataclass
-class CreateShoppingCart:
-    """Корзина с товарами"""
-
-    name: str = ""
+class ProductsBasedObj:
     product_ids: list[str] = field(default_factory=list)
 
 
 @dataclass
-class ShoppingCart(CreateShoppingCart, IdBasedObj):
+class CreateShoppingCart(ProductsBasedObj):
+    """Корзина с товарами"""
+
+    name: str = ""
+
+
+@dataclass
+class ShoppingCart(ProductsBasedObj, IdBasedObj):
     """Корзина с товарами"""
 
 

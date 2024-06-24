@@ -145,6 +145,26 @@ def get_shopping_cart(id: str) -> models.ShoppingCart:
     return services.get_shopping_cart(id)
 
 
+@router.post("/shopping-cart/{id}/products")
+def add_product_in_shopping_cart(id: str, add_to: models.ProductsBasedObj) -> models.ShoppingCart:
+    for product_id in add_to.product_ids:
+        services.add_product_in_shopping_cart(
+            shopping_cart_id=id, product_id=product_id
+        )
+
+    return services.get_shopping_cart(id)
+
+
+@router.delete("/shopping-cart/{id}/products")
+def remove_product_from_shopping_cart(id: str, remove_from: models.ProductsBasedObj) -> models.ShoppingCart:
+    for product_id in remove_from.product_ids:
+        services.remove_product_from_shopping_cart(
+            shopping_cart_id=id, product_id=product_id
+        )
+
+    return services.get_shopping_cart(id)
+
+
 @router.post(
     "/shopping-carts",
     status_code=status.HTTP_201_CREATED,

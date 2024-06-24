@@ -255,6 +255,8 @@ class DB:
         shopping_cart.product_ids = product_ids
 
         shopping_carts = self.get_value(self.KEY_SHOPPING_CARTS)
+        shopping_carts[shopping_cart_id] = shopping_cart
+
         self.set_value(self.KEY_SHOPPING_CARTS, shopping_carts)
 
     @lock()
@@ -278,12 +280,12 @@ class DB:
         shopping_cart_id: str,
         product_id: str,
     ):
-        # Проверка наличия
-        self.get_product(product_id, check_exists=True)
-
         shopping_cart: models.ShoppingCart | None = self.get_shopping_cart(
             shopping_cart_id, check_exists=True
         )
+
+        # Проверка наличия
+        self.get_product(product_id, check_exists=True)
 
         shopping_cart.product_ids.append(product_id)
         self.update_shopping_cart(shopping_cart_id, shopping_cart.product_ids)
@@ -294,13 +296,16 @@ class DB:
         shopping_cart_id: str,
         product_id: str,
     ):
-        # Проверка наличия
-        self.get_product(product_id, check_exists=True)
-
         shopping_cart: models.ShoppingCart | None = self.get_shopping_cart(
             shopping_cart_id, check_exists=True
         )
-        shopping_cart.product_ids.remove(product_id)
+
+        # Проверка наличия
+        self.get_product(product_id, check_exists=True)
+
+        if product_id in shopping_cart.product_ids:
+            shopping_cart.product_ids.remove(product_id)
+
         self.update_shopping_cart(shopping_cart_id, shopping_cart.product_ids)
 
     @lock()
