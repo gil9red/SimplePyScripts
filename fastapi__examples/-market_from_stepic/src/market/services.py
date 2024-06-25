@@ -165,8 +165,9 @@ def submit_order(
     status: models.StatusOrderEnum,
     context_user: models.User | None = None,
 ):
-    db.update_order(
+    update_order(
         id=id,
         status=status,
+        context_user=context_user,
     )
 

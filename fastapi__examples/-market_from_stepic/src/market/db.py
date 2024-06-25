@@ -354,6 +354,11 @@ class DB:
         cancel_reason: str | None = None,
     ):
         order = self.get_order(id, check_exists=True)
+
+        complete_statuses = (models.StatusOrderEnum.FINISHED, models.StatusOrderEnum.CANCELED)
+        if order.status in complete_statuses:
+            raise DbException(f"It is forbidden to update an order with status {order.status.value!r}")
+
         if email is not None:
             order.email = email
 
@@ -370,7 +375,8 @@ class DB:
                 case models.StatusOrderEnum.CREATED:
                     pass
                 case models.StatusOrderEnum.IN_PROCESSED:
-                    if status not in (models.StatusOrderEnum.FINISHED, models.StatusOrderEnum.CANCELED):
+                    # Если текущий статус "в процессе", то следующий может быть или отмена, или завершение
+                    if status not in complete_statuses:
                         raise invalid_status_exception
                 case models.StatusOrderEnum.CANCELED:
                     raise invalid_status_exception
@@ -381,7 +387,7 @@ class DB:
 
             order.status = status
 
-            if status in (models.StatusOrderEnum.FINISHED, models.StatusOrderEnum.CANCELED):
+            if status in complete_statuses:
                 order.closed_date = datetime.now()
 
         if cancel_reason is not None:
