@@ -40,6 +40,7 @@ class DB:
     KEY_PRODUCTS: str = "products"
     KEY_SHOPPING_CARTS: str = "shopping_carts"
     KEY_ORDERS: str = "orders"
+    KEY_INDEXES: str = "[indexes]"
 
     _mutex = threading.RLock()
 
@@ -92,7 +93,43 @@ class DB:
         return str(uuid4())
 
     @lock()
+    def rebuild_indexes(self, init: bool = False):
+        indexes: dict[str, dict[str, str]] = self.get_value(self.KEY_INDEXES, default=dict())
+
+        if init:
+            indexes[self.KEY_USERS] = dict()
+            indexes[self.KEY_PRODUCTS] = dict()
+        else:
+            indexes.clear()
+
+            indexes[self.KEY_USERS] = {obj.username: obj.id for obj in self.get_users()}
+            indexes[self.KEY_PRODUCTS] = {obj.name: obj.id for obj in self.get_products()}
+
+        self.set_value(self.KEY_INDEXES, indexes)
+
+    @lock()
+    def add_index(self, table: str, key: str, id: str):
+        indexes: dict[str, dict[str, str]] = self.get_value(self.KEY_INDEXES)
+        indexes[table][key] = id
+
+        self.set_value(self.KEY_INDEXES, indexes)
+
+    @lock()
+    def remove_index(self, table: str, key: str):
+        indexes: dict[str, dict[str, str]] = self.get_value(self.KEY_INDEXES)
+        indexes[table].pop(key)
+
+        self.set_value(self.KEY_INDEXES, indexes)
+
+    @lock()
+    def get_id_from_index(self, table: str, key: str) -> str | None:
+        indexes: dict[str, dict[str, str]] = self.get_value(self.KEY_INDEXES)
+        return indexes[table].get(key)
+
+    @lock()
     def _do_init_db_objects(self):
+        self.rebuild_indexes(init=True)
+
         if self.KEY_USERS not in self.get_value(""):
             self.set_value(self.KEY_USERS, dict())
 
@@ -169,12 +206,11 @@ class DB:
         username: str,
         check_exists: bool = False,
     ) -> models.UserInDb | None:
-        users = self.get_users(username=username)
-        if users:
-            return users[0]
-
-        if check_exists:
-            raise NotFoundException(f'User "{username}" not found!')
+        obj_id: str | None = self.get_id_from_index(self.KEY_USERS, username)
+        return self.get_user(
+            id=obj_id,
+            check_exists=check_exists,
+        )
 
     @lock()
     def create_user(
@@ -184,13 +220,18 @@ class DB:
         password: str,
         id: str | None = None,
     ) -> models.UserInDb:
-        # TODO: Проверка уникальности username
+        obj_id: str | None = self.get_id_from_index(self.KEY_USERS, username)
+        if obj_id:
+            raise DbException(f"Cannot create user {username!r} - this nickname is taken")
+
         obj = models.UserInDb(
             id=id if id else self._generate_id(),
             role=role,
             username=username,
             hashed_password=get_password_hash(password),
         )
+        self.add_index(self.KEY_USERS, username, obj.id)
+
         users = self.get_value(self.KEY_USERS)
         users[obj.id] = obj
         self.set_value(self.KEY_USERS, users)
@@ -203,12 +244,18 @@ class DB:
         price_minor: int,
         description: str,
     ) -> models.Product:
+        obj_id: str | None = self.get_id_from_index(self.KEY_PRODUCTS, name)
+        if obj_id:
+            raise DbException(f"Cannot create product {name!r} - this name is taken")
+
         obj = models.Product(
             id=self._generate_id(),
             name=name,
             price_minor=price_minor,
             description=description,
         )
+        self.add_index(self.KEY_PRODUCTS, name, obj.id)
+
         products = self.get_value(self.KEY_PRODUCTS)
         products[obj.id] = obj
         self.set_value(self.KEY_PRODUCTS, products)
@@ -428,18 +475,21 @@ db = DB()
 
 
 if __name__ == "__main__":
-    # TODO: В тесты
-    from market.config import DB_TEST_FILE_NAME
-    db_test = DB(file_name=DB_TEST_FILE_NAME)
+    # db.rebuild_indexes()
+    print(db.get_value(""))
 
-    value = db_test.get_value("counter", default=1)
-    print(f"Counter: {value}")
-
-    def inc_counter():
-        value = db_test.get_value("counter", default=1)
-        db_test.set_value("counter", value + 1)
-
-    inc_counter()
+    # # TODO: В тесты
+    # from market.config import DB_TEST_FILE_NAME
+    # db_test = DB(file_name=DB_TEST_FILE_NAME)
+    #
+    # value = db_test.get_value("counter", default=1)
+    # print(f"Counter: {value}")
+    #
+    # def inc_counter():
+    #     value = db_test.get_value("counter", default=1)
+    #     db_test.set_value("counter", value + 1)
+    #
+    # inc_counter()
 
     # TODO: не рабочий вариант, нужно использовать методы самого DB
     # current_value = db_test.get_value("counter", default=1)
