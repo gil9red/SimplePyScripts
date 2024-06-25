@@ -20,7 +20,7 @@ router = APIRouter()
 
 @router.post("/token")
 def login_for_access_token(
-        credentials: Annotated[OAuth2PasswordRequestForm, Depends()],
+    credentials: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> models.LoginResponse:
     exception_400 = HTTPException(
         status_code=status.HTTP_400_BAD_REQUEST,
@@ -229,7 +229,9 @@ def update_order(
 def submit_order(
     id: str,
     other: models.SubmitOrder,
-    current_user: Annotated[models.User | None, Depends(auth.get_current_user_or_none)] = None,
+    current_user: Annotated[
+        models.User | None, Depends(auth.get_current_user_or_none)
+    ] = None,
 ) -> models.Order:
     services.submit_order(
         id=id,
