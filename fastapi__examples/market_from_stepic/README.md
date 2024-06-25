@@ -12,3 +12,7 @@ http://127.0.0.1:7777/redoc
 Используется POST запрос на "/api/v1/token".
 
 Пример: [src/examples/auth_to_api.py](./src/examples/auth_to_api.py)
+
+# База данных
+
+Как и [прошлый учебный проект](../blog_from_stepic) использует shelve - ~~для прикола~~ в образовательных целях.
