@@ -177,6 +177,11 @@ def create_shopping_cart(
     )
 
 
+@router.delete("/shopping-cart/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_shopping_cart(id: str):
+    services.delete_shopping_cart(id)
+
+
 @router.get("/orders")
 def get_orders(
     _: Annotated[models.User, Depends(auth.get_current_user_manager_or_admin)],

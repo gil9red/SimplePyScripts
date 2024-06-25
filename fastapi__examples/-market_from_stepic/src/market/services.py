@@ -85,6 +85,10 @@ def create_shopping_cart(product_ids: list[str] = None) -> models.IdBasedObj:
     return models.IdBasedObj(id=shopping_cart.id)
 
 
+def delete_shopping_cart(shopping_cart_id: str):
+    db.delete_shopping_cart(shopping_cart_id)
+
+
 def add_product_in_shopping_cart(
     shopping_cart_id: str,
     product_id: str,

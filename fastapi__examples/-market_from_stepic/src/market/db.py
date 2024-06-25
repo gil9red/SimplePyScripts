@@ -261,12 +261,22 @@ class DB:
         return obj
 
     @lock()
+    def delete_shopping_cart(self, shopping_cart_id: str):
+        # Проверка наличия
+        self.get_shopping_cart(shopping_cart_id, check_exists=True)
+
+        shopping_carts: dict = self.get_value(self.KEY_SHOPPING_CARTS)
+        shopping_carts.pop(shopping_cart_id)
+
+        self.set_value(self.KEY_SHOPPING_CARTS, shopping_carts)
+
+    @lock()
     def update_shopping_cart(
         self,
         shopping_cart_id: str,
         product_ids: list[str],
     ):
-        shopping_cart: models.ShoppingCart | None = self.get_shopping_cart(
+        shopping_cart: models.ShoppingCart = self.get_shopping_cart(
             shopping_cart_id, check_exists=True
         )
         shopping_cart.product_ids = product_ids
@@ -297,7 +307,7 @@ class DB:
         shopping_cart_id: str,
         product_id: str,
     ):
-        shopping_cart: models.ShoppingCart | None = self.get_shopping_cart(
+        shopping_cart: models.ShoppingCart = self.get_shopping_cart(
             shopping_cart_id, check_exists=True
         )
 
@@ -313,7 +323,7 @@ class DB:
         shopping_cart_id: str,
         product_id: str,
     ):
-        shopping_cart: models.ShoppingCart | None = self.get_shopping_cart(
+        shopping_cart: models.ShoppingCart = self.get_shopping_cart(
             shopping_cart_id, check_exists=True
         )
 
