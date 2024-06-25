@@ -97,8 +97,11 @@ class DB:
         indexes: dict[str, dict[str, str]] = self.get_value(self.KEY_INDEXES, default=dict())
 
         if init:
-            indexes[self.KEY_USERS] = dict()
-            indexes[self.KEY_PRODUCTS] = dict()
+            if self.KEY_USERS not in indexes:
+                indexes[self.KEY_USERS] = dict()
+
+            if self.KEY_PRODUCTS not in indexes:
+                indexes[self.KEY_PRODUCTS] = dict()
         else:
             indexes.clear()
 
