@@ -4,6 +4,8 @@
 __author__ = "ipetrash"
 
 
+import fastapi
+
 from market import models
 from market.db import db
 
@@ -138,6 +140,13 @@ def update_order(
     cancel_reason: str | None = None,
     context_user: models.User | None = None,
 ):
+    # Клиент не может сам запускать выполнение заказа или завершать его
+    if context_user is None and status in (models.StatusOrderEnum.IN_PROCESSED, models.StatusOrderEnum.FINISHED):
+        raise fastapi.HTTPException(
+            status_code=fastapi.status.HTTP_403_FORBIDDEN,
+            detail=f"No rights to set status {status.value!r}",
+        )
+
     cancel_reason: str | None = cancel_reason
 
     # Если причина отмены не задана и статус отмена
@@ -145,11 +154,11 @@ def update_order(
         user_role: models.UserRoleEnum | None = context_user.role if context_user else None
         match user_role:
             case models.UserRoleEnum.ADMIN:
-                cancel_reason = f"Отменено администратором {context_user.username!r}"
+                cancel_reason = f"Canceled by admin {context_user.username!r}"
             case models.UserRoleEnum.MANAGER:
-                cancel_reason = f"Отменено менеджером {context_user.username!r}"
+                cancel_reason = f"Canceled by manager {context_user.username!r}"
             case _:
-                cancel_reason = "Отменено клиентом"
+                cancel_reason = "Canceled by user"
 
     db.update_order(
         id=id,
