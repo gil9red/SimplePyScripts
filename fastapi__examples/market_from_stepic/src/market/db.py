@@ -93,16 +93,16 @@ class DB:
         return str(uuid4())
 
     @lock()
-    def rebuild_indexes(self, init: bool = False):
+    def rebuild_indexes(self, clear: bool = True):
         indexes: dict[str, dict[str, str]] = self.get_value(self.KEY_INDEXES, default=dict())
 
-        if init:
-            if self.KEY_USERS not in indexes:
-                indexes[self.KEY_USERS] = dict()
+        if self.KEY_USERS not in indexes:
+            indexes[self.KEY_USERS] = dict()
 
-            if self.KEY_PRODUCTS not in indexes:
-                indexes[self.KEY_PRODUCTS] = dict()
-        else:
+        if self.KEY_PRODUCTS not in indexes:
+            indexes[self.KEY_PRODUCTS] = dict()
+
+        if clear:
             indexes.clear()
 
             indexes[self.KEY_USERS] = {obj.username: obj.id for obj in self.get_users()}
@@ -131,7 +131,7 @@ class DB:
 
     @lock()
     def _do_init_db_objects(self):
-        self.rebuild_indexes(init=True)
+        self.rebuild_indexes(clear=False)
 
         if self.KEY_USERS not in self.get_value(""):
             self.set_value(self.KEY_USERS, dict())
