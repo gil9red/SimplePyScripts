@@ -7,17 +7,22 @@ __author__ = "ipetrash"
 from fastapi import FastAPI, Request, status
 from fastapi.responses import HTMLResponse, JSONResponse
 
-from market.db import NotFoundException
+from market.db import DbException, NotFoundException
 from market.resources import router
 
 
 app = FastAPI()
 
 
-@app.exception_handler(NotFoundException)
-async def unicorn_exception_handler(_: Request, exc: NotFoundException):
+@app.exception_handler(DbException)
+async def unicorn_exception_handler(_: Request, exc: DbException):
+    status_code = (
+        status.HTTP_404_NOT_FOUND
+        if isinstance(exc, NotFoundException)
+        else status.HTTP_400_BAD_REQUEST
+    )
     return JSONResponse(
-        status_code=status.HTTP_404_NOT_FOUND,
+        status_code=status_code,
         content={"detail": str(exc)},
     )
 

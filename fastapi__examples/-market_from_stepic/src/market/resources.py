@@ -194,7 +194,7 @@ def get_order(id: str) -> models.Order:
     status_code=status.HTTP_201_CREATED,
 )
 def create_order(
-    order: models.CreateOrder,
+    order: models.BaseOrder,
 ) -> models.IdBasedObj:
     return services.create_order(
         email=order.email,
@@ -202,16 +202,34 @@ def create_order(
     )
 
 
-# TODO:
-# @router.patch("/orders/{id}")
-# def update_order(
-#     id: str,
-#     other: models.Order, # TODO:
-#     current_user: Annotated[models.User | None, Depends(auth.get_current_user_or_none)] = None,
-# ) -> models.Order: # TODO:
-#     order = services.get_order(id)
-#
-#     print(other, current_user)
-#
-#     return order
+@router.patch("/order/{id}")
+def update_order(
+    id: str,
+    other: models.UpdateOrder,
+    current_user: Annotated[models.User | None, Depends(auth.get_current_user_or_none)] = None,
+) -> models.Order:
+    services.update_order(
+        id=id,
+        email=other.email,
+        shopping_cart_id=other.shopping_cart_id,
+        status=other.status,
+        cancel_reason=other.cancel_reason,
+        context_user=current_user,
+    )
 
+    return services.get_order(id)
+
+
+@router.post("/order/{id}/submit")
+def submit_order(
+    id: str,
+    other: models.SubmitOrder,
+    current_user: Annotated[models.User | None, Depends(auth.get_current_user_or_none)] = None,
+) -> models.Order:
+    services.submit_order(
+        id=id,
+        status=other.status,
+        context_user=current_user,
+    )
+
+    return services.get_order(id)

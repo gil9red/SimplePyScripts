@@ -128,3 +128,45 @@ def create_order(
         shopping_cart_id=shopping_cart_id,
     )
     return models.IdBasedObj(id=obj.id)
+
+
+def update_order(
+    id: str,
+    email: str | None = None,
+    shopping_cart_id: str | None = None,
+    status: models.StatusOrderEnum | None = None,
+    cancel_reason: str | None = None,
+    context_user: models.User | None = None,
+):
+    cancel_reason: str | None = cancel_reason
+
+    # Если причина отмены не задана и статус отмена
+    if cancel_reason is None and status == models.StatusOrderEnum.CANCELED:
+        user_role: models.UserRoleEnum | None = context_user.role if context_user else None
+        match user_role:
+            case models.UserRoleEnum.ADMIN:
+                cancel_reason = f"Отменено администратором {context_user.username!r}"
+            case models.UserRoleEnum.MANAGER:
+                cancel_reason = f"Отменено менеджером {context_user.username!r}"
+            case _:
+                cancel_reason = "Отменено клиентом"
+
+    db.update_order(
+        id=id,
+        email=email,
+        shopping_cart_id=shopping_cart_id,
+        status=status,
+        cancel_reason=cancel_reason,
+    )
+
+
+def submit_order(
+    id: str,
+    status: models.StatusOrderEnum,
+    context_user: models.User | None = None,
+):
+    db.update_order(
+        id=id,
+        status=status,
+    )
+

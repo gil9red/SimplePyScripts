@@ -8,6 +8,7 @@ import functools
 import threading
 import shelve
 
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 from uuid import uuid4
@@ -17,8 +18,21 @@ from market.config import DB_FILE_NAME
 from market.security import get_password_hash
 
 
-class NotFoundException(Exception):
+class DbException(Exception):
     pass
+
+
+class NotFoundException(DbException):
+    pass
+
+
+class InvalidException(DbException):
+    pass
+
+
+class InvalidOrderStatusException(InvalidException):
+    def __init__(self, prev_status: models.StatusOrderEnum, new_status: models.StatusOrderEnum):
+        super().__init__(f"Unable to change order status {prev_status.value!r} to {new_status.value!r}")
 
 
 class DB:
@@ -87,6 +101,9 @@ class DB:
 
         if self.KEY_SHOPPING_CARTS not in self.get_value(""):
             self.set_value(self.KEY_SHOPPING_CARTS, dict())
+
+        if self.KEY_ORDERS not in self.get_value(""):
+            self.set_value(self.KEY_ORDERS, dict())
 
         if not self.get_value(self.KEY_USERS):
             self.create_user(
@@ -326,6 +343,54 @@ class DB:
         orders[obj.id] = obj
         self.set_value(self.KEY_ORDERS, orders)
         return obj
+
+    @lock()
+    def update_order(
+        self,
+        id: str,
+        email: str | None = None,
+        shopping_cart_id: str | None = None,
+        status: models.StatusOrderEnum | None = None,
+        cancel_reason: str | None = None,
+    ):
+        order = self.get_order(id, check_exists=True)
+        if email is not None:
+            order.email = email
+
+        if shopping_cart_id is not None:
+            # Проверка наличия
+            self.get_shopping_cart(shopping_cart_id, check_exists=True)
+
+            order.shopping_cart_id = shopping_cart_id
+
+        if status is not None and status != order.status:
+            invalid_status_exception = InvalidOrderStatusException(order.status, status)
+
+            match order.status:
+                case models.StatusOrderEnum.CREATED:
+                    pass
+                case models.StatusOrderEnum.IN_PROCESSED:
+                    if status not in (models.StatusOrderEnum.FINISHED, models.StatusOrderEnum.CANCELED):
+                        raise invalid_status_exception
+                case models.StatusOrderEnum.CANCELED:
+                    raise invalid_status_exception
+                case models.StatusOrderEnum.FINISHED:
+                    raise invalid_status_exception
+                case _:
+                    raise InvalidException(f"Unsupported status {status.value!r}!")
+
+            order.status = status
+
+            if status in (models.StatusOrderEnum.FINISHED, models.StatusOrderEnum.CANCELED):
+                order.closed_date = datetime.now()
+
+        if cancel_reason is not None:
+            order.cancel_reason = cancel_reason
+
+        orders = self.get_value(self.KEY_ORDERS)
+        orders[id] = order
+
+        self.set_value(self.KEY_ORDERS, orders)
 
     @lock()
     def get_orders(self) -> list[models.Order]:

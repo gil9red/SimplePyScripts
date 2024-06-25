@@ -5,7 +5,9 @@ __author__ = "ipetrash"
 
 
 import enum
+
 from dataclasses import dataclass, field, fields
+from datetime import datetime
 from typing import Any
 
 
@@ -128,17 +130,38 @@ class ShoppingCarts:
 
 
 @dataclass
-class CreateOrder:
+class BaseOrder:
     """Заказ"""
 
     email: str
     shopping_cart_id: str
-    status: StatusOrderEnum = StatusOrderEnum.CREATED
 
 
 @dataclass
-class Order(CreateOrder, IdBasedObj):
+class Order(BaseOrder, IdBasedObj):
     """Заказ"""
+
+    status: StatusOrderEnum = StatusOrderEnum.CREATED
+    created_date: datetime = datetime.now()
+    cancel_reason: str | None = None
+    closed_date: datetime | None = None
+
+
+@dataclass
+class UpdateOrder:
+    """Заказ"""
+
+    email: str | None = None
+    shopping_cart_id: str | None = None
+    status: StatusOrderEnum | None = None
+    cancel_reason: str | None = None
+
+
+@dataclass
+class SubmitOrder:
+    """Заказ"""
+
+    status: StatusOrderEnum
 
 
 @dataclass
