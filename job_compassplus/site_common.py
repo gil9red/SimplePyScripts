@@ -43,3 +43,11 @@ def do_get(url: str, *args, **kwargs) -> Response:
                 raise e
 
             time.sleep(5)  # 5 seconds
+
+
+if __name__ == "__main__":
+    rs = do_get("https://mysite.compassplus.com:443/Person.aspx?accountname=CP%5Cipetrash")
+    print(rs)
+
+    rs = do_get("https://portal.compassplus.com/Pages/default.aspx")
+    print(rs)
