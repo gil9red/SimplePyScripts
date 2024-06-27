@@ -16,14 +16,14 @@ from root_common import session
 from site_config_token import USERNAME, PASSWORD
 
 
-def do_get(url: str, *args, **kwargs) -> Response:
+def do_request(method, url: str, *args, **kwargs) -> Response:
     attempts = 0
     max_attempts = 5
 
     while True:
         attempts += 1
         try:
-            rs = session.get(
+            rs = method(
                 url,
                 auth=HttpNtlmAuth(USERNAME, PASSWORD),
                 *args,
@@ -43,6 +43,14 @@ def do_get(url: str, *args, **kwargs) -> Response:
                 raise e
 
             time.sleep(5)  # 5 seconds
+
+
+def do_get(url: str, *args, **kwargs) -> Response:
+    return do_request(session.get, url, *args, **kwargs)
+
+
+def do_post(url: str, *args, **kwargs) -> Response:
+    return do_request(session.post, url, *args, **kwargs)
 
 
 if __name__ == "__main__":
