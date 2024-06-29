@@ -1,0 +1,30 @@
+version: 1
+
+formatters:
+  default:
+    format: "[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s"
+
+handlers:
+  console:
+    class: "logging.StreamHandler"
+    formatter: "default"
+    stream: "ext://sys.stdout"
+
+  web-server-file:
+    class: "logging.handlers.RotatingFileHandler"
+    formatter: "default"
+    filename: "main_new.log"
+    encoding: "utf-8"
+    backupCount: 5
+    maxBytes: 10000000
+    delay: true
+
+filters:
+  filter_remove_date_from_werkzeug_logs:
+    (): utils.FilterRemoveDateFromWerkzeugLogs
+
+loggers:
+  werkzeug:
+    handlers: ["console", "web-server-file"]
+    level: "DEBUG"
+    filters: ["filter_remove_date_from_werkzeug_logs"]
