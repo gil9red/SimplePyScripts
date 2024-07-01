@@ -7,8 +7,17 @@ __author__ = "ipetrash"
 # https://docs.python.org/3.4/library/sqlite3.html
 import sqlite3
 
+from pathlib import Path
 
-conn = sqlite3.connect("example.db")
+
+FILE_NAME = Path(__file__).resolve()
+DIR = FILE_NAME.parent
+
+DIR_DB = DIR / "databases"
+DIR_DB.mkdir(parents=True, exist_ok=True)
+
+
+conn = sqlite3.connect(str(DIR_DB / FILE_NAME.stem) + ".db")
 c = conn.cursor()
 
 # Create table
