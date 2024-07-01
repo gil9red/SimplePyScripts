@@ -5,6 +5,7 @@ __author__ = "ipetrash"
 
 
 import time
+import sys
 
 from pathlib import Path
 from typing import Callable
@@ -16,6 +17,7 @@ from filelock import FileLock, Timeout
 def run_with_lock(
     file_name: Path,
     on_duplicated_text: str = "Detected launch of second application. Shutting down",
+    sys_exit: int | None = 1,
     func: Callable = None,
     *func_args,
     **func_kwargs,
@@ -29,6 +31,8 @@ def run_with_lock(
             func(*func_args, **func_kwargs)
     except Timeout:
         print(on_duplicated_text)
+        if sys_exit is not None:
+            sys.exit(sys_exit)
 
 
 if __name__ == "__main__":
