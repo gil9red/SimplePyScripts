@@ -3,9 +3,13 @@
 
 __author__ = "ipetrash"
 
+
 import sqlite3
 import zipfile
+
+from datetime import date
 from pathlib import Path
+from typing import Callable
 
 
 def create_zip_for_file(
@@ -37,3 +41,33 @@ def _process_test(connect: sqlite3.Connection):
     )
 
     print(connect.execute("select * from stocks").fetchall())
+
+
+def run_test(
+    backup: Callable,
+    file_name: Path,
+    dir_db: Path,
+    dir_db_backup: Path,
+    use_zip: bool = True,
+    delete_file_name_after_zip: bool = True,
+):
+    with sqlite3.connect(":memory:") as connect:
+        _process_test(connect)
+
+        file_name_backup = dir_db_backup / f"{file_name.stem}_memory_{date.today()}.db"
+        # TODO: use_zip, delete_file_name_after_zip
+        file_name_backup_zip = backup(connect, file_name_backup)
+        print(f"Создан бэкап базы данных в: {file_name_backup_zip}")
+
+    with sqlite3.connect(
+        str(dir_db / file_name.stem) + ".db",
+        isolation_level=None,
+    ) as connect:
+        connect.execute('pragma journal_mode=wal')
+
+        _process_test(connect)
+
+        file_name_backup = dir_db_backup / f"{file_name.stem}_wal_{date.today()}.db"
+        # TODO: use_zip, delete_file_name_after_zip
+        file_name_backup_zip = backup(connect, file_name_backup)
+        print(f"Создан бэкап базы данных в: {file_name_backup_zip}")
