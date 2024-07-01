@@ -4,7 +4,6 @@
 __author__ = "ipetrash"
 
 
-# https://docs.python.org/3.4/library/sqlite3.html
 import sqlite3
 from pathlib import Path
 
@@ -14,7 +13,17 @@ from root_config import DIR_DB
 FILE_NAME = Path(__file__).resolve()
 
 
-conn = sqlite3.connect(str(DIR_DB / FILE_NAME.stem) + ".db")
+conn = sqlite3.connect(
+    str(DIR_DB / FILE_NAME.stem) + ".db",
+    isolation_level=None,
+)
+conn.execute('pragma journal_mode=wal')
+
+print([f.name for f in DIR_DB.glob(f"*{FILE_NAME.stem}*")])
+# ['journal_mode_wal.db', 'journal_mode_wal.db-shm', 'journal_mode_wal.db-wal']
+
+print("\n")
+
 c = conn.cursor()
 
 # Create table
@@ -50,3 +59,8 @@ for row in c.execute("SELECT * FROM stocks ORDER BY price"):
 # We can also close the connection if we are done with it.
 # Just be sure any changes have been committed or they will be lost.
 conn.close()
+
+print("\n")
+
+print([f.name for f in DIR_DB.glob(f"*{FILE_NAME.stem}*")])
+# ['journal_mode_wal.db']
