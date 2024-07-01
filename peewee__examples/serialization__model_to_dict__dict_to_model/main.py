@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 import datetime as dt
 
 # pip install peewee
-from peewee import *
+from peewee import SqliteDatabase, Model, CharField, DateField, ForeignKeyField
 
 from playhouse.shortcuts import model_to_dict, dict_to_model
 

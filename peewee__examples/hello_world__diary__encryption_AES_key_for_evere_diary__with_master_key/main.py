@@ -14,7 +14,7 @@ import sys
 from getpass import getpass
 
 # pip install peewee
-from peewee import *
+from peewee import Model, SqliteDatabase, TextField, DateTimeField
 
 sys.path.append("../hello_world__diary__encryption_all_in_one_AES")
 from utils.security import CryptoAES, AuthenticationError

@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 # pip install peewee
-from peewee import *
+from peewee import SqliteDatabase, Model, CharField, TextField, ForeignKeyField
 
 
 db = SqliteDatabase("games.sqlite", pragmas={"foreign_keys": 1})

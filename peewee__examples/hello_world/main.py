@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 # pip install peewee
-from peewee import *
+from peewee import Model, SqliteDatabase, TextField, IntegerField
 
 
 db = SqliteDatabase("my_database.sqlite")

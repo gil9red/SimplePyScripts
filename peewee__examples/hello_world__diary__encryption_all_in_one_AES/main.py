@@ -14,7 +14,7 @@ import sys
 from getpass import getpass
 
 # pip install peewee
-from peewee import *
+from peewee import Model, SqliteDatabase, TextField, DateTimeField
 
 from utils.security import CryptoAES, AuthenticationError
 from utils.utils import shorten

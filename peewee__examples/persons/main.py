@@ -8,7 +8,7 @@ import datetime as dt
 import json
 
 # pip install peewee
-from peewee import *
+from peewee import SqliteDatabase, Model, CharField, DateField, ForeignKeyField
 
 
 db = SqliteDatabase("persons.sqlite", pragmas={"foreign_keys": 1})

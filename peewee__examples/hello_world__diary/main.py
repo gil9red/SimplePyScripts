@@ -12,7 +12,7 @@ import datetime as dt
 from textwrap import shorten
 
 # pip install peewee
-from peewee import *
+from peewee import Model, SqliteDatabase, TextField, DateTimeField
 
 
 db = SqliteDatabase("my_database.sqlite")

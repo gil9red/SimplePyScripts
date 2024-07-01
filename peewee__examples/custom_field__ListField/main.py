@@ -8,7 +8,7 @@ import json
 from typing import Iterable
 
 # pip install peewee
-from peewee import *
+from peewee import SqliteDatabase, Model, Field, CharField
 
 
 class ListField(Field):
