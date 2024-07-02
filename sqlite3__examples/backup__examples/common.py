@@ -13,11 +13,13 @@ from typing import Callable
 
 
 def create_zip_for_file(
-        file_name_zip: str | Path,
-        file_name: Path,
-        delete_file_name: bool = True,
+    file_name_zip: str | Path,
+    file_name: Path,
+    delete_file_name: bool = True,
 ):
-    with zipfile.ZipFile(file_name_zip, mode="w", compression=zipfile.ZIP_DEFLATED) as f:
+    with zipfile.ZipFile(
+        file_name_zip, mode="w", compression=zipfile.ZIP_DEFLATED
+    ) as f:
         f.write(file_name, arcname=file_name.name)
 
     if delete_file_name:
@@ -52,22 +54,35 @@ def run_test(
     delete_file_name_after_zip: bool = True,
 ):
     with sqlite3.connect(":memory:") as connect:
+        print("MEMORY")
         _process_test(connect)
 
         file_name_backup = dir_db_backup / f"{file_name.stem}_memory_{date.today()}.db"
-        # TODO: use_zip, delete_file_name_after_zip
-        file_name_backup_zip = backup(connect, file_name_backup)
+        file_name_backup_zip = backup(
+            connect,
+            file_name_backup,
+            use_zip=use_zip,
+            delete_file_name_after_zip=delete_file_name_after_zip,
+        )
         print(f"Создан бэкап базы данных в: {file_name_backup_zip}")
 
+    print()
+
+    # WAL
     with sqlite3.connect(
         str(dir_db / file_name.stem) + ".db",
         isolation_level=None,
     ) as connect:
-        connect.execute('pragma journal_mode=wal')
+        connect.execute("pragma journal_mode=wal")
 
+        print("FILE")
         _process_test(connect)
 
         file_name_backup = dir_db_backup / f"{file_name.stem}_wal_{date.today()}.db"
-        # TODO: use_zip, delete_file_name_after_zip
-        file_name_backup_zip = backup(connect, file_name_backup)
+        file_name_backup_zip = backup(
+            connect,
+            file_name_backup,
+            use_zip=use_zip,
+            delete_file_name_after_zip=delete_file_name_after_zip,
+        )
         print(f"Создан бэкап базы данных в: {file_name_backup_zip}")
