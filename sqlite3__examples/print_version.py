@@ -8,5 +8,6 @@ import sqlite3
 
 
 with sqlite3.connect(":memory:") as connect:
-    version = connect.execute("SELECT SQLITE_VERSION()").fetchone()
-    print("SQLite version: %s" % version)
+    version = connect.execute("SELECT SQLITE_VERSION()").fetchone()[0]
+    print(f"SQLite version: {version}")
+    # SQLite version: 3.35.5
