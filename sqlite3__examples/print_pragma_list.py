@@ -8,7 +8,8 @@ import sqlite3
 
 
 with sqlite3.connect(":memory:") as connect:
-    for i, (name, ) in enumerate(connect.execute("PRAGMA pragma_list"), 1):
+    cursor = connect.execute("PRAGMA pragma_list")
+    for i, (name, ) in enumerate(cursor, 1):
         print(f"{i}. {name!r}")
     """
     1. 'analysis_limit'
