@@ -28,9 +28,6 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import QColor, QPainter, QIcon, QPixmap, QCursor
 from PyQt5.QtCore import Qt, pyqtSignal, QThread, QRectF
 
-# pip install schedule
-import schedule
-
 from get_user_and_deviation_hours import (
     get_user_and_deviation_hours,
     get_quarter_user_and_deviation_hours,
@@ -150,17 +147,18 @@ class CheckJobReportThread(QThread):
         self.about_ok.emit(self.ok)
 
     def run(self):
-        # Каждый день, в 12:00
-        schedule.every().day.at("12:00").do(self.do_run)
-
         while True:
             try:
-                schedule.run_pending()
+                # Если между 08:00 и 20:00
+                now_hour = dt.datetime.now().hour
+                if now_hour in range(8, 20+1):
+                    self.do_run()
+                time.sleep(3600)
+
             except Exception as e:
                 self.about_log.emit(f"Error: {e}")
                 self.about_log.emit("Wait 60 secs")
-
-            time.sleep(60)
+                time.sleep(60)
 
 
 class JobReportWidget(QWidget):
