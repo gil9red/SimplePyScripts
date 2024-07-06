@@ -37,6 +37,13 @@ from get_user_and_deviation_hours import (
 from utils import NotFoundReport, get_quarter_num
 
 
+# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/ae40ba98eab4253a7572b281310ec3a668c0b4c6/split_list_into_evenly_sized_chunks.py
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i : i + n]
+
+
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/405f08fcbf8b99ea64a58a73ee699cb1c0b5230e/qt__pyqt__pyside__pyqode/pyqt__QPainter__dynamic_draw_emoji_on_img/main.py#L44-L66
 def draw_text_to_bottom_right(img: QPixmap, text: str, scale_text_from_img: float = 0.5):
     p = QPainter(img)
@@ -124,7 +131,9 @@ class CheckJobReportThread(QThread):
             _, vacations = get_current_user_for_year_vacations()
             text += f"\n\nИспользовано отпускных дней: {len(vacations)}"
             if vacations:
-                text += "\n" + ", ".join(get_human_list_of_vacations(vacations))
+                items = get_human_list_of_vacations(vacations)
+                # По два в ряд
+                text += "\n" + ",\n".join(", ".join(x) for x in chunks(items, 2))
 
         except NotFoundReport:
             text = "Отчет на сегодня еще не готов."
@@ -227,9 +236,6 @@ class JobReportWidget(QWidget):
     def set_text(self, text: str):
         self.info.setText(text)
 
-        # TODO: Считать высоту динамически
-        self.setFixedHeight(210 if len(text.splitlines()) > 6 else 130)
-
     def refresh(self):
         # Выполнение метода в отдельном потоке, а не в GUI
         Thread(target=self.thread.do_run, daemon=True).start()
@@ -247,7 +253,7 @@ class JobReportWidget(QWidget):
 
         if self.ok is None:
             return
-        
+
         color = QColor("#29AB87") if self.ok else QColor(255, 0, 0, 128)
 
         painter = QPainter(self)
@@ -274,12 +280,8 @@ if __name__ == "__main__":
         tray.setIcon(QIcon(img))
 
     job_report_widget = JobReportWidget()
-    job_report_widget.setFixedSize(230, 130)
     job_report_widget.thread.about_log.connect(_on_about_log_or_ok)
     job_report_widget.thread.about_ok.connect(_on_about_log_or_ok)
-
-    # Запрос информации после запуска
-    job_report_widget.refresh()
 
     job_report_widget_action = QWidgetAction(job_report_widget)
     job_report_widget_action.setDefaultWidget(job_report_widget)
@@ -288,7 +290,12 @@ if __name__ == "__main__":
     menu.addAction(job_report_widget_action)
 
     tray.setContextMenu(menu)
-    tray.activated.connect(lambda x: tray.contextMenu().popup(QCursor.pos()))
+    tray.activated.connect(
+        lambda _: (
+            tray.contextMenu().resize(job_report_widget.sizeHint()),
+            tray.contextMenu().popup(QCursor.pos()),
+        )
+   )
 
     tray.setToolTip("Compass Plus. Рапорт учета рабочего времени")
     tray.show()
