@@ -168,7 +168,7 @@ class JobReportWidget(QWidget):
         self.info = QLabel()
         self.info.setWordWrap(True)
 
-        self.ok: bool = None
+        self.ok: bool | None = None
 
         self.quit_button = QToolButton()
         self.quit_button.setText("Quit")
@@ -245,6 +245,9 @@ class JobReportWidget(QWidget):
     def paintEvent(self, event):
         super().paintEvent(event)
 
+        if self.ok is None:
+            return
+        
         color = QColor("#29AB87") if self.ok else QColor(255, 0, 0, 128)
 
         painter = QPainter(self)
