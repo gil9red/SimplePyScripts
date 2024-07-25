@@ -5,49 +5,12 @@ __author__ = "ipetrash"
 
 
 import json
-import logging
 import re
 import time
-import sys
 
-from dataclasses import dataclass
 from typing import Any
-from urllib.parse import ParseResult, urlparse, urlencode, parse_qsl
 
-import requests
-
-
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/3377693e6b875394f0617a7c74fbd7fa834e1a0e/merge_url_params.py#L7-L17
-def merge_url_params(url: str, params: dict) -> str:
-    result: ParseResult = urlparse(url)
-
-    current_params = dict(parse_qsl(result.query))
-    merged_params = {**current_params, **params}
-
-    new_query = urlencode(merged_params, doseq=True)
-    return result._replace(query=new_query).geturl()
-
-
-@dataclass
-class Video:
-    title: str
-    url: str
-
-
-logger = logging.getLogger("rutube-parser")
-logger.setLevel(logging.WARNING)
-default_handler = logging.StreamHandler(stream=sys.stdout)
-default_handler.setFormatter(
-    logging.Formatter(
-        "[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s"
-    )
-)
-logger.addHandler(default_handler)
-
-session = requests.session()
-session.headers[
-    "User-Agent"
-] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/127.0"
+from common import Video, merge_url_params, logger, session
 
 
 def _get_playlist_videos(data: dict[str, Any]) -> dict[str, Any]:
@@ -117,7 +80,7 @@ def _get_next_page_url(playlist_videos_data: dict[str, Any]) -> str | None:
     return playlist_videos_data["next"]
 
 
-def get_all_series(url: str, max_items: int | None = None) -> list[Video]:
+def get_videos(url: str, max_items: int | None = None) -> list[Video]:
     logger.info(f"Загрузка {url!r} (max_items: {max_items})")
 
     def _has_max_items(items: list[Video]) -> bool:
@@ -194,13 +157,13 @@ def get_all_series(url: str, max_items: int | None = None) -> list[Video]:
 
 
 if __name__ == "__main__":
-    items = get_all_series("https://rutube.ru/plst/337761/", max_items=10)
+    items = get_videos("https://rutube.ru/plst/337761/", max_items=10)
     assert len(items) == 10
 
     # NOTE: Для получения всех логов
     # logger.setLevel(logging.DEBUG)
 
-    items = get_all_series("https://rutube.ru/plst/337761/")
+    items = get_videos("https://rutube.ru/plst/337761/")
     print(f"Video ({len(items)}):")
     for video in items:
         print(f"    {video.title!r}: {video.url}")
