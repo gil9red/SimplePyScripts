@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 import time
 from typing import Any
 
-from common import Video, get_redux_state, logger, session, get_page, get_next_page_url
+from common import Video, get_redux_state, logger, do_get, get_page, get_next_page_url
 
 
 def _get_channel_videos(data: dict[str, Any]) -> dict[str, Any]:
@@ -42,9 +42,7 @@ def get_videos(url: str, max_items: int | None = None) -> list[Video]:
     def _has_max_items(items: list[Video]) -> bool:
         return max_items is not None and len(items) >= max_items
 
-    rs = session.get(url)
-    rs.raise_for_status()
-
+    rs = do_get(url)
     data: dict[str, Any] = get_redux_state(rs.text)
 
     channel_videos_data: dict[str, Any] = _get_channel_videos(data)
@@ -64,9 +62,7 @@ def get_videos(url: str, max_items: int | None = None) -> list[Video]:
 
         logger.info(f"Загрузка {next_page_url!r}")
 
-        rs = session.get(next_page_url)
-        rs.raise_for_status()
-
+        rs = do_get(next_page_url)
         channel_videos_data = rs.json()
         logger.debug(f"channel_videos_data: {channel_videos_data}")
 
@@ -115,8 +111,8 @@ if __name__ == "__main__":
         'Кокаиновый медведь | Cocaine Bear (2023)': https://rutube.ru/video/4c97fde96b97082aea94f5721f0d94fd/
     """
 
-    print()
-
+    # print()
+    #
     # items = get_videos("https://rutube.ru/channel/32311072/videos/")
     # print(f"Video ({len(items)}):")
     # for video in items:

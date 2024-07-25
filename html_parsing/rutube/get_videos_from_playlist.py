@@ -11,7 +11,7 @@ from common import (
     Video,
     get_redux_state,
     logger,
-    session,
+    do_get,
     merge_url_params,
     get_page,
     get_next_page_url,
@@ -75,9 +75,7 @@ def get_videos(url: str, max_items: int | None = None) -> list[Video]:
     def _has_max_items(items: list[Video]) -> bool:
         return max_items is not None and len(items) >= max_items
 
-    rs = session.get(url)
-    rs.raise_for_status()
-
+    rs = do_get(url)
     data: dict[str, Any] = get_redux_state(rs.text)
 
     playlist_videos: dict[str, Any] = _get_playlist_videos(data)
@@ -103,9 +101,7 @@ def get_videos(url: str, max_items: int | None = None) -> list[Video]:
 
         logger.info(f"Загрузка {next_page_url!r}")
 
-        rs = session.get(next_page_url)
-        rs.raise_for_status()
-
+        rs = do_get(next_page_url)
         playlist_videos_data = rs.json()
         logger.debug(f"playlist_videos_data: {playlist_videos_data}")
 

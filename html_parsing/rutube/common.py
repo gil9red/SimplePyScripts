@@ -38,6 +38,12 @@ session.headers[
 ] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/127.0"
 
 
+def do_get(url: str, *args, **kwargs) -> requests.Response:
+    rs = session.get(url, *args, **kwargs)
+    rs.raise_for_status()
+    return rs
+
+
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/3377693e6b875394f0617a7c74fbd7fa834e1a0e/merge_url_params.py#L7-L17
 def merge_url_params(url: str, params: dict) -> str:
     result: ParseResult = urlparse(url)
