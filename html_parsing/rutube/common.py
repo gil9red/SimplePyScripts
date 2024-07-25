@@ -22,6 +22,22 @@ class Video:
     url: str
 
 
+default_handler = logging.StreamHandler(stream=sys.stdout)
+default_handler.setFormatter(
+    logging.Formatter(
+        "[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s"
+    )
+)
+logger = logging.getLogger("rutube-parser")
+logger.setLevel(logging.WARNING)
+logger.addHandler(default_handler)
+
+session = requests.session()
+session.headers[
+    "User-Agent"
+] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/127.0"
+
+
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/3377693e6b875394f0617a7c74fbd7fa834e1a0e/merge_url_params.py#L7-L17
 def merge_url_params(url: str, params: dict) -> str:
     result: ParseResult = urlparse(url)
@@ -52,17 +68,17 @@ def get_redux_state(html: str) -> dict[str, Any]:
     return data
 
 
-default_handler = logging.StreamHandler(stream=sys.stdout)
-default_handler.setFormatter(
-    logging.Formatter(
-        "[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s"
-    )
-)
-logger = logging.getLogger("rutube-parser")
-logger.setLevel(logging.WARNING)
-logger.addHandler(default_handler)
+def get_page(playlist_videos_data: dict[str, Any]) -> int:
+    try:
+        page = playlist_videos_data["page"]
+    except KeyError:
+        raise Exception("Не удалось найти page!")
 
-session = requests.session()
-session.headers[
-    "User-Agent"
-] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/127.0"
+    if not page:
+        raise Exception("Пустое значение page!")
+
+    return page
+
+
+def get_next_page_url(playlist_videos_data: dict[str, Any]) -> str | None:
+    return playlist_videos_data["next"]

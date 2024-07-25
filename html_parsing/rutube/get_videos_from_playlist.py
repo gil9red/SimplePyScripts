@@ -7,7 +7,15 @@ __author__ = "ipetrash"
 import time
 from typing import Any
 
-from common import Video, merge_url_params, get_redux_state, logger, session
+from common import (
+    Video,
+    get_redux_state,
+    logger,
+    session,
+    merge_url_params,
+    get_page,
+    get_next_page_url,
+)
 
 
 def _get_playlist_videos(data: dict[str, Any]) -> dict[str, Any]:
@@ -21,6 +29,20 @@ def _get_playlist_videos(data: dict[str, Any]) -> dict[str, Any]:
         raise Exception("Не удалось найти getPlaylistVideos!")
 
     return items[0]
+
+
+def _get_playlist_id(playlist_videos: dict[str, Any]) -> int:
+    # NOTE: Еще можно получать из URL, но это кажется надежнее
+
+    try:
+        playlist_id = playlist_videos["originalArgs"]["playlistId"]
+    except KeyError:
+        raise Exception("Не удалось найти playlistId!")
+
+    if not playlist_id:
+        raise Exception("Пустое значение playlistId!")
+
+    return playlist_id
 
 
 def _get_video_list(
@@ -47,36 +69,6 @@ def _get_video_list(
     ]
 
 
-def _get_playlist_id(playlist_videos: dict[str, Any]) -> int:
-    # NOTE: Еще можно получать из URL, но это кажется надежнее
-
-    try:
-        playlist_id = playlist_videos["originalArgs"]["playlistId"]
-    except KeyError:
-        raise Exception("Не удалось найти playlistId!")
-
-    if not playlist_id:
-        raise Exception("Пустое значение playlistId!")
-
-    return playlist_id
-
-
-def _get_page(playlist_videos_data: dict[str, Any]) -> int:
-    try:
-        page = playlist_videos_data["page"]
-    except KeyError:
-        raise Exception("Не удалось найти page!")
-
-    if not page:
-        raise Exception("Пустое значение page!")
-
-    return page
-
-
-def _get_next_page_url(playlist_videos_data: dict[str, Any]) -> str | None:
-    return playlist_videos_data["next"]
-
-
 def get_videos(url: str, max_items: int | None = None) -> list[Video]:
     logger.info(f"Загрузка {url!r} (max_items: {max_items})")
 
@@ -93,7 +85,7 @@ def get_videos(url: str, max_items: int | None = None) -> list[Video]:
     playlist_id: int = _get_playlist_id(playlist_videos)
 
     playlist_videos_data = playlist_videos["data"]
-    page: int = _get_page(playlist_videos_data)
+    page: int = get_page(playlist_videos_data)
     logger.debug(f"playlist_id: {playlist_id}")
     logger.debug(f"page: {page}")
 
@@ -104,7 +96,7 @@ def get_videos(url: str, max_items: int | None = None) -> list[Video]:
 
     # Последующие порции вытаскиваются отдельными запросами в API
     while True:
-        next_page_url: str | None = _get_next_page_url(playlist_videos_data)
+        next_page_url: str | None = get_next_page_url(playlist_videos_data)
         logger.debug(f"next_page_url {next_page_url!r}")
         if not next_page_url:
             break
@@ -117,7 +109,7 @@ def get_videos(url: str, max_items: int | None = None) -> list[Video]:
         playlist_videos_data = rs.json()
         logger.debug(f"playlist_videos_data: {playlist_videos_data}")
 
-        page: int = _get_page(playlist_videos_data)
+        page: int = get_page(playlist_videos_data)
         logger.debug(f"page: {page}")
 
         new_videos = _get_video_list(
@@ -141,13 +133,16 @@ def get_videos(url: str, max_items: int | None = None) -> list[Video]:
 
 
 if __name__ == "__main__":
-    items = get_videos("https://rutube.ru/plst/337761/", max_items=10)
+    url = "https://rutube.ru/plst/337761/"
+
+    items = get_videos(url, max_items=10)
     assert len(items) == 10
 
     # NOTE: Для получения всех логов
+    # import logging
     # logger.setLevel(logging.DEBUG)
 
-    items = get_videos("https://rutube.ru/plst/337761/")
+    items = get_videos(url)
     print(f"Video ({len(items)}):")
     for video in items:
         print(f"    {video.title!r}: {video.url}")
