@@ -4,13 +4,10 @@
 __author__ = "ipetrash"
 
 
-import json
-import re
 import time
-
 from typing import Any
 
-from common import Video, merge_url_params, logger, session
+from common import Video, merge_url_params, get_redux_state, logger, session
 
 
 def _get_playlist_videos(data: dict[str, Any]) -> dict[str, Any]:
@@ -89,20 +86,7 @@ def get_videos(url: str, max_items: int | None = None) -> list[Video]:
     rs = session.get(url)
     rs.raise_for_status()
 
-    # Первая порция данных находится в странице как объект js
-    m = re.search(r"window\.reduxState\s*=\s*(\{.+});", rs.text)
-    if not m:
-        raise Exception('Не найдено "window.reduxState"!')
-
-    # Подмена всяких "\x3d" на конкретные символы
-    js_text = re.sub(
-        r"\\x([0-9a-fA-F]{2})",
-        lambda x: chr(int(x.group(1), 16)),
-        m.group(1),
-    )
-
-    data: dict[str, Any] = json.loads(js_text)
-    logger.debug(f"data: {data}")
+    data: dict[str, Any] = get_redux_state(rs.text)
 
     playlist_videos: dict[str, Any] = _get_playlist_videos(data)
 
