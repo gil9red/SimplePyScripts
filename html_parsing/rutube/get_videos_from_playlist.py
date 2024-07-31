@@ -7,15 +7,26 @@ __author__ = "ipetrash"
 import time
 from typing import Any
 
-from common import (
-    Video,
-    get_redux_state,
-    logger,
-    do_get,
-    merge_url_params,
-    get_page,
-    get_next_page_url,
-)
+try:
+    from .common import (
+        Video,
+        get_redux_state,
+        logger,
+        do_get,
+        merge_url_params,
+        get_page,
+        get_next_page_url,
+    )
+except ImportError:
+    from common import (
+        Video,
+        get_redux_state,
+        logger,
+        do_get,
+        merge_url_params,
+        get_page,
+        get_next_page_url,
+    )
 
 
 def _get_playlist_videos(data: dict[str, Any]) -> dict[str, Any]:
