@@ -9,6 +9,8 @@ import time
 import traceback
 from datetime import date, timedelta
 
+from requests.exceptions import RequestException
+
 import db
 
 from config import DIR, MAX_LAST_CHECK_DATE_DAYS
@@ -74,22 +76,30 @@ def add_or_get_db(name: str) -> db.Person | None:
 
 
 def do_update_db():
-    print("[do_update_db] Start")
+    prefix: str = "[do_update_db]"
+
+    print(f"{prefix} Start")
 
     while True:
-        print("[do_update_db] Check")
+        print(f"{prefix} Check")
         try:
             # Запрос для получения ников
             query = db.Person.select(db.Person.name).distinct()
             names: list[str] = [x.name for x in query]
             for name in names:
-                add_or_get_db(name)
+                try:
+                    add_or_get_db(name)
+                except RequestException as e:
+                    print(f"{prefix} Request error: {e}")
+
                 time.sleep(10)
+
+            time.sleep(24 * 60 * 60)  # Раз в сутки
 
         except Exception:
             # Выводим ошибку в консоль
             tb = traceback.format_exc()
-            print(f"[do_update_db] Error:\n{tb}")
+            print(f"{prefix} Error:\n{tb}")
 
         finally:
             time.sleep(24 * 60 * 60)  # Раз в сутки
