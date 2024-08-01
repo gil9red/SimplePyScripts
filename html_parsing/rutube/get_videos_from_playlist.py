@@ -127,7 +127,10 @@ def get_videos(url: str, max_items: int | None = None) -> list[Video]:
             logger.info("Вернулся пустой список видео, завершение цикла")
             break
 
-        items += new_videos
+        for video in new_videos:
+            if video not in items:
+                items.append(video)
+
         if _has_max_items(items):
             break
 
