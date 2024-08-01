@@ -124,7 +124,14 @@ class Person(BaseModel):
 
     @classmethod
     def get_last_by_name(cls, name: str) -> Optional["Person"]:
-        return cls.select().where(cls.name == name).order_by(cls.id.desc()).first()
+        items: list[Person] = cls.get_all(name)
+        return items[0] if items else None
+
+    @classmethod
+    def get_all(cls, name: str) -> list["Person"]:
+        return list(
+            cls.select().where(cls.name == name).order_by(cls.id.desc())
+        )
 
 
 db.connect()
