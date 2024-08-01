@@ -6,19 +6,17 @@ __author__ = "ipetrash"
 
 import enum
 import time
-from datetime import datetime, date
+import sys
+
+from datetime import date
 from typing import Type, Iterable, Optional, Any
-from urllib.parse import urljoin
 
 # pip install peewee
 from peewee import (
     Model,
     TextField,
     ForeignKeyField,
-    DateTimeField,
-    BooleanField,
     CharField,
-    IntegerField,
     DateField,
     BlobField,
 )
@@ -27,7 +25,6 @@ from playhouse.sqliteq import SqliteQueueDatabase
 
 from config import DIR, DB_FILE_NAME
 
-import sys
 sys.path.append(str(DIR.parent.parent.parent))
 from shorten import shorten
 
