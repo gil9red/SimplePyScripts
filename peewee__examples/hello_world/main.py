@@ -20,7 +20,7 @@ class Info(Model):
         database = db
 
     def __str__(self):
-        return f"Info<#{self.id} first_name={self.first_name} second_name={self.second_name} state={self.state}>"
+        return f"Info<#{self.id} first_name={self.first_name!r} second_name={self.second_name!r} state={self.state}>"
 
 
 db.connect()
@@ -39,12 +39,13 @@ if __name__ == "__main__":
 
     for info in Info.select():
         print(info)
-    #
-    # Info<#1 first_name=first_name_0 second_name=second_name_0 state=0>
-    # Info<#2 first_name=first_name_1 second_name=second_name_1 state=1>
-    # Info<#3 first_name=first_name_2 second_name=second_name_2 state=2>
-    # Info<#4 first_name=first_name_3 second_name=second_name_3 state=3>
-    # Info<#5 first_name=first_name_4 second_name=second_name_4 state=4>
+    """
+    Info<#1 first_name='Четный state!' second_name='second_name_0' state=0>
+    Info<#2 first_name='first_name_1' second_name='second_name_1' state=1>
+    Info<#3 first_name='Четный state!' second_name='second_name_2' state=2>
+    Info<#4 first_name='first_name_3' second_name='second_name_3' state=3>
+    Info<#5 first_name='Четный state!' second_name='second_name_4' state=4>
+    """
 
     for info in Info.select():
         if info.state % 2 == 0:
@@ -55,9 +56,10 @@ if __name__ == "__main__":
 
     for info in Info.select():
         print(info)
-    #
-    # Info<#1 first_name=Четный state! second_name=second_name_0 state=0>
-    # Info<#2 first_name=first_name_1 second_name=second_name_1 state=1>
-    # Info<#3 first_name=Четный state! second_name=second_name_2 state=2>
-    # Info<#4 first_name=first_name_3 second_name=second_name_3 state=3>
-    # Info<#5 first_name=Четный state! second_name=second_name_4 state=4>
+    """
+    Info<#1 first_name='Четный state!' second_name='second_name_0' state=0>
+    Info<#2 first_name='first_name_1' second_name='second_name_1' state=1>
+    Info<#3 first_name='Четный state!' second_name='second_name_2' state=2>
+    Info<#4 first_name='first_name_3' second_name='second_name_3' state=3>
+    Info<#5 first_name='Четный state!' second_name='second_name_4' state=4>
+    """
