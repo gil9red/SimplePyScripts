@@ -104,7 +104,10 @@ def api_get_all_person_info(username: str):
 
 if __name__ == "__main__":
     from threading import Thread
+    from db_backup import do_backup_db
     from db_updater import do_update_db
+
+    Thread(target=do_backup_db, daemon=True).start()
     Thread(target=do_update_db, daemon=True).start()
 
     app.run(
