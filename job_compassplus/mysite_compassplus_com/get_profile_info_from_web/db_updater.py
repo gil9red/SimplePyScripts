@@ -91,10 +91,8 @@ def do_update_db():
                     add_or_get_db(name)
                 except RequestException as e:
                     print(f"{prefix} Request error: {e}")
-
-                time.sleep(10)
-
-            time.sleep(24 * 60 * 60)  # Раз в сутки
+                finally:
+                    time.sleep(10)
 
         except Exception:
             # Выводим ошибку в консоль
