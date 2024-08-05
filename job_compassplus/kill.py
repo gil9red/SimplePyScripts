@@ -5,12 +5,15 @@ __author__ = "ipetrash"
 
 
 from pathlib import Path
-from psutil import process_iter, Process, Error, NoSuchProcess
+from psutil import process_iter, Process, Error, NoSuchProcess, AccessDenied
 
 
 def is_server(p: Process) -> bool:
     try:
         return "org.radixware.kernel.server.Server" in p.cmdline()
+    except AccessDenied as e:
+        print(f"Access denied: {e}")
+        return False
     except NoSuchProcess:
         return False
 
@@ -18,6 +21,9 @@ def is_server(p: Process) -> bool:
 def is_explorer(p: Process) -> bool:
     try:
         return "org.radixware.kernel.explorer.Explorer" in p.cmdline()
+    except AccessDenied as e:
+        print(f"Access denied: {e}")
+        return False
     except NoSuchProcess:
         return False
 
@@ -25,6 +31,9 @@ def is_explorer(p: Process) -> bool:
 def is_designer(p: Process) -> bool:
     try:
         return p.name().startswith("designer")
+    except AccessDenied as e:
+        print(f"Access denied: {e}")
+        return False
     except NoSuchProcess:
         return False
 
