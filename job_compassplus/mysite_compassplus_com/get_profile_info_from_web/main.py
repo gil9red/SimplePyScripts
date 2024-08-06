@@ -4,19 +4,18 @@
 __author__ = "ipetrash"
 
 
-import io
+import base64
 import os
 from datetime import date, datetime
 
 # pip install flask==2.3.3
-from flask import Flask, Response, abort, send_file, jsonify, url_for
+from flask import Flask, Response, abort, jsonify
 from flask.json.provider import DefaultJSONProvider
 
 # pip install flask-cors==4.0.0
 from flask_cors import CORS
 
 from requests.exceptions import RequestException
-from peewee import DoesNotExist
 
 import db
 from db_updater import add_or_get_db
@@ -56,29 +55,6 @@ def handle_requests_error(e: RequestException) -> Response:
     )
 
 
-def get_response_jpg(img: bytes) -> Response:
-    return send_file(io.BytesIO(img), mimetype="image/jpg")
-
-
-@app.route("/api/get_profile_image/<username>")
-def api_get_profile_image(username: str):
-    person: db.Person = add_or_get_db(username)
-    if not person:
-        abort(404)
-
-    return get_response_jpg(person.img)
-
-
-@app.route("/api/get_profile_image_by_id/<int:person_id>")
-def api_get_profile_image_by_id(person_id: int):
-    try:
-        person: db.Person = db.Person.get_by_id(person_id)
-    except DoesNotExist:
-        abort(404)
-
-    return get_response_jpg(person.img)
-
-
 @app.route("/api/get_all_person_info/<username>")
 def api_get_all_person_info(username: str):
     # Проверка наличия и попытка добавить в базу для первого раза
@@ -86,16 +62,23 @@ def api_get_all_person_info(username: str):
     if not person:
         abort(404)
 
-    items = []
-    for person in db.Person.get_all(username):
+    img_by_idx: dict[str, int] = dict()
+    items: list[dict] = []
+
+    for i, person in enumerate(db.Person.get_all(username)):
         data = person.to_dict()
 
-        # Ссылка на картинку
-        data["img"] = url_for(
-            "api_get_profile_image_by_id",
-            person_id=person.id,
-            _external=True,
-        )
+        # NOTE: Картинки возвращаются в одном запросе
+        data_base64 = base64.b64encode(person.img).decode("utf-8")
+        img_base64 = f"data:image/jpg;base64,{data_base64}"
+
+        # Оптимизация, чтобы не возвращать одинаковые картинки
+        if img_base64 not in img_by_idx:
+            img_by_idx[img_base64] = i
+        else:
+            img_base64 = f"={img_by_idx[img_base64]}"  # Символа "=" нет в base64
+
+        data["img"] = img_base64
 
         items.append(data)
 
