@@ -6,6 +6,8 @@ __author__ = "ipetrash"
 
 import os
 
+from dataclasses import dataclass
+
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlsplit
 
@@ -13,8 +15,16 @@ from urllib.parse import urlsplit
 import psutil
 
 
+@dataclass
+class Process:
+    pid: int
+    name: str
+    path: str
+    cwd: str
+    ports: str
+
+
 TITLE = "Список запущенных серверов"
-HEADERS = ["#", "PID", "Название", "Порт(ы)", "Путь"]
 
 
 def _get_processes() -> list:
@@ -31,18 +41,19 @@ def _get_processes() -> list:
 
             ports = sorted(set(c.laddr.port for c in connections))
             processes.append(
-                {
-                    "pid": proc.pid,
-                    "name": proc.name(),
-                    "path": " ".join(os.path.normpath(x) for x in proc.cmdline()),
-                    "ports": ", ".join(map(str, ports)),
-                }
+                Process(
+                    pid=proc.pid,
+                    name=proc.name(),
+                    path=" ".join(os.path.normpath(x) for x in proc.cmdline()),
+                    cwd=proc.cwd(),
+                    ports=", ".join(map(str, ports)),
+                )
             )
 
         except psutil.AccessDenied:
             pass
 
-    processes.sort(key=lambda p: int("".join(c for c in p["ports"] if c.isdigit())))
+    processes.sort(key=lambda p: p.name)
 
     return processes
 
@@ -56,19 +67,19 @@ class HttpProcessor(BaseHTTPRequestHandler):
             self.send_error(404)
             return
 
-        table_rows = []
+        table_rows: list[str] = []
         for i, p in enumerate(_get_processes(), 1):
             table_rows.append(
                 f"""
-            <tr {'class="grayscale"' if p['pid'] == os.getpid() else ''}>
-                <td>{i}</td>
-                <td>{p['pid']}</td>
-                <td>{p['name']}</td>
-                <td>{p['ports']}</td>
-                <td>{p['path']}</td>
-            </tr>
-            """
-            )
+<tr {'class="grayscale"' if p.pid == os.getpid() else ''}>
+    <td>{i}</td>
+    <td>{p.pid}</td>
+    <td>{p.name}</td>
+    <td class="ports"><div>{p.ports}</div></td>
+    <td class="path"><div>{p.path}</div></td>
+    <td class="cwd"><div>{p.cwd}</div></td>
+</tr>
+            """)
 
         text = (
             """
@@ -81,6 +92,8 @@ class HttpProcessor(BaseHTTPRequestHandler):
             <style type="text/css">
                 table {
                     border-collapse: collapse; /* Убираем двойные линии между ячейками */
+                    width: 1200px;
+                    margin:0 auto;
                 }
                     /* Увеличим заголовок таблиц */
                     table > caption {
@@ -89,27 +102,44 @@ class HttpProcessor(BaseHTTPRequestHandler):
 
                     .frame th {
                         font-size: 120%;
+                        background: lightGrey;
                     }
                     .frame td, .frame th {
                         border: 1px double #333; /* Рамка таблицы */
                         padding: 5px;
                     }
-
+                    
+                    .frame td.ports > div {
+                        inline-size: 150px;
+                    }
+                    .frame td.path > div {
+                        inline-size: 400px;
+                        overflow-wrap: break-word;
+                    }
+                    .frame td.cwd > div {
+                        inline-size: 300px;
+                        overflow-wrap: break-word;
+                    }
+                    
                 .grayscale { 
                     color: grey;
                 }
             </style>
         </head>
         <body>   
-            <table class="frame" style="width: 1000px; margin:0 auto;">
+            <table class="frame">
                 <caption>{{ title }}</caption>
-                <colgroup>
-                    <col span="1">
-                </colgroup>
-                <tbody>
+                <thead>
                     <tr>
-                        {{ headers }}
+                        <th>#</th>
+                        <th>PID</th>
+                        <th>Название</th>
+                        <th>Порт(ы)</th>
+                        <th>Путь</th>
+                        <th>Cwd</th>
                     </tr>
+                </thead>
+                <tbody>
                     {{ table_rows }}
                 </tbody>
             </table>
@@ -118,7 +148,6 @@ class HttpProcessor(BaseHTTPRequestHandler):
         """.replace(
                 "{{ title }}", TITLE
             )
-            .replace("{{ headers }}", "".join(f"<th>{x}</th>" for x in HEADERS))
             .replace("{{ table_rows }}", "".join(table_rows))
         )
 
@@ -139,4 +168,6 @@ def run(server_class=HTTPServer, handler_class=HttpProcessor, port=8080):
 
 
 if __name__ == "__main__":
-    run(port=10013)
+    run(
+        port=int(os.environ.get("PORT", 50010)),
+    )
