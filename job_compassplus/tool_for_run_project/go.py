@@ -586,6 +586,11 @@ __SETTINGS = {
             "trace": "!!trace_viewer.cmd",
         },
     },
+    "radix": {
+        "base": "__radix_base",
+        "path": "C:/DEV__RADIX",
+        "base_version": "2.1.",
+    },
     "tx": {
         "base": "__radix_base",
         "path": "C:/DEV__TX",
