@@ -9,3 +9,4 @@ from selenium import __version__
 
 
 print(__version__)
+# 4.1.0
