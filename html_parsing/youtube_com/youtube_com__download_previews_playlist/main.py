@@ -7,17 +7,20 @@ __author__ = "ipetrash"
 import sys
 from pathlib import Path
 
-sys.path.append("..")
-sys.path.append("../..")
+DIR = Path(__file__).resolve().parent
+
+sys.path.append(str(DIR.parent.parent.parent))
 from get_valid_filename import get_valid_filename
+
+sys.path.append(str(DIR.parent))
 from youtube_com__results_search_query import Playlist
 
 
-def download_playlist_video_previews(url_or_id: str):
+def download_playlist_video_previews(url_or_id: str, save_dir: Path = DIR):
     playlist = Playlist.get_from(url_or_id)
     safe_playlist_title = get_valid_filename(playlist.title)
 
-    dir_name = Path(f"{safe_playlist_title}. {playlist.id}")
+    dir_name = save_dir / f"{safe_playlist_title}. {playlist.id}"
     dir_name.mkdir(parents=True, exist_ok=True)
 
     for video in playlist.video_list:

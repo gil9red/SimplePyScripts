@@ -9,7 +9,7 @@ import time
 
 from collections import defaultdict
 
-from html_parsing.youtube_com__results_search_query import (
+from youtube_com__results_search_query import (
     Playlist,
     Video,
     get_raw_video_list,
