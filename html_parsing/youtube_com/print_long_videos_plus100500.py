@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-from youtube_com__results_search_query import Playlist
+from results_search_query import Playlist
 
 
 URL = "https://www.youtube.com/playlist?list=PLC6A0625DCA9AAE2D"

@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-from youtube_com__results_search_query import Video
+from results_search_query import Video
 
 
 url = "https://www.youtube.com/watch?v=OIVXORUjzTE"
