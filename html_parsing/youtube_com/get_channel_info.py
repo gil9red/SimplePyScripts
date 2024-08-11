@@ -10,7 +10,13 @@ from urllib.parse import urlparse, parse_qsl
 # pip install dpath
 import dpath.util
 
-from common import session, load, get_yt_cfg_data, get_context_with_continuation, get_api_url_from_continuation_item
+from common import (
+    session,
+    load,
+    get_yt_cfg_data,
+    get_context_with_continuation,
+    get_api_url_from_continuation_item,
+)
 
 
 def process_text(text: str) -> str:
@@ -62,7 +68,9 @@ class ChannelInfo:
             description=process_text(data["description"]),
             subscriber_count_text=process_text(data["subscriberCountText"]),
             view_count_text=process_text(data["videoCountText"]),
-            joined_date_text=process_text(dpath.util.get(data, "joinedDateText/content")),
+            joined_date_text=process_text(
+                dpath.util.get(data, "joinedDateText/content")
+            ),
             links=[
                 Link.parse_from(item["channelExternalLinkViewModel"])
                 for item in data["links"]
@@ -76,11 +84,17 @@ def get_channel_info(url: str) -> ChannelInfo:
     yt_cfg_data: dict = get_yt_cfg_data(rs.text)
 
     # Действие на странице в профиле, открывающее "О канале"
-    description_data: dict = dpath.util.get(yt_initial_data, "header/**/descriptionPreviewViewModel")
+    description_data: dict = dpath.util.get(
+        yt_initial_data, "header/**/descriptionPreviewViewModel"
+    )
     description_on_tap_data: dict = dpath.util.get(description_data, "**/onTap")
-    continuation_item: dict = dpath.util.get(description_on_tap_data, "**/continuationItemRenderer")
+    continuation_item: dict = dpath.util.get(
+        description_on_tap_data, "**/continuationItemRenderer"
+    )
 
-    context: dict = get_context_with_continuation(rs.url, yt_cfg_data, continuation_item)
+    context: dict = get_context_with_continuation(
+        rs.url, yt_cfg_data, continuation_item
+    )
 
     url_browse: str = get_api_url_from_continuation_item(rs.url, continuation_item)
 
@@ -111,6 +125,7 @@ if __name__ == "__main__":
 
     import json
     from dataclasses import asdict
+
     print(json.dumps(asdict(channel_info), ensure_ascii=False, indent=4))
     """
     {
