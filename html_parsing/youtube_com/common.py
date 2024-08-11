@@ -135,6 +135,7 @@ def get_yt_initial_data(html: str) -> dict | None:
 
 def load(url: str) -> tuple[requests.Response, dict]:
     rs = session.get(url)
+    rs.raise_for_status()
 
     data = get_yt_initial_data(rs.text)
     if not data:
@@ -230,7 +231,7 @@ def get_context_data(url: str, innertube_context: dict) -> dict:
     return context_data
 
 
-def get_data_for_next_page(
+def get_context_with_continuation(
     url: str,
     yt_cfg_data: dict,
     continuation_item: dict,
@@ -250,6 +251,11 @@ def get_data_for_next_page(
     }
 
     return pattern_next_page_data
+
+
+def get_api_url_from_continuation_item(url: str, continuation_item: dict) -> str:
+    api_url = dpath.util.get(continuation_item, "**/webCommandMetadata/apiUrl")
+    return urljoin(url, api_url)
 
 
 def get_raw_video_renderer_items(yt_initial_data: dict) -> list[dict]:
@@ -288,11 +294,9 @@ def get_generator_raw_video_list_from_data(
         except (KeyError, IndexError):
             break
 
-        url_next_page_data = urljoin(
-            rs.url, dpath.util.get(continuation_item, "**/webCommandMetadata/apiUrl")
-        )
+        url_next_page_data = get_api_url_from_continuation_item(rs.url, continuation_item)
 
-        next_page_data = get_data_for_next_page(rs.url, yt_cfg_data, continuation_item)
+        next_page_data = get_context_with_continuation(rs.url, yt_cfg_data, continuation_item)
         rs = session.post(
             url_next_page_data,
             params={"key": innertube_api_key},
