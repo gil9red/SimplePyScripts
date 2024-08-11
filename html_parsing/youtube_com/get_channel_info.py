@@ -99,6 +99,8 @@ def get_channel_info(url: str) -> ChannelInfo:
     url_browse: str = get_api_url_from_continuation_item(rs.url, continuation_item)
 
     rs = session.post(url_browse, json=context, params={"prettyPrint": "false"})
+    rs.raise_for_status()
+
     rs_data = rs.json()
 
     about_channel_data: dict = dpath.util.get(rs_data, "**/aboutChannelViewModel")
