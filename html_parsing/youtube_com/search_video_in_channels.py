@@ -9,11 +9,8 @@ import time
 
 from collections import defaultdict
 
-from results_search_query import (
-    Playlist,
-    Video,
-    get_raw_video_list,
-)
+from common import Video, Playlist
+from results_search_query import get_raw_video_list
 
 
 def smart_comparing(game_name: str, playlist_title: str) -> bool:

@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-from results_search_query import Video
+from common import Video
 
 
 url = "https://www.youtube.com/watch?v=OIVXORUjzTE"

@@ -13,7 +13,7 @@ sys.path.append(str(DIR.parent.parent.parent))
 from get_valid_filename import get_valid_filename
 
 sys.path.append(str(DIR.parent))
-from results_search_query import Playlist
+from common import Playlist
 
 
 def download_playlist_video_previews(url_or_id: str, save_dir: Path = DIR):
