@@ -52,7 +52,9 @@ def search_youtube(text_or_url: str, *args, **kwargs) -> list[Video]:
 
 
 def search_youtube_with_filter(
-    url: str, sort=False, filter_func: Callable[[Any], bool] = None
+    url: str,
+    sort: bool = False,
+    filter_func: Callable[[Any], bool] = None,
 ) -> list[str]:
     video_title_list = [video.title for video in search_youtube(url)]
     if sort:

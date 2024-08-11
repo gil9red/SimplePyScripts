@@ -120,25 +120,7 @@ def dict_merge(d1: dict, d2: dict):
             d1[k] = v
 
 
-def load(url: str) -> tuple[requests.Response, dict]:
-    rs = session.get(url)
-
-    data = get_ytInitialData(rs.text)
-    if not data:
-        raise Exception("Could not find ytInitialData!")
-
-    return rs, data
-
-
-def get_yt_initial_player_response(html: str) -> dict:
-    m = re.search(r"ytInitialPlayerResponse = (\{.+?\});", html)
-    if not m:
-        raise Exception("Не удалось найти на странице ytInitialPlayerResponse!")
-
-    return json.loads(m.group(1))
-
-
-def get_ytInitialData(html: str) -> dict | None:
+def get_yt_initial_data(html: str) -> dict | None:
     patterns = [
         re.compile(r'window\["ytInitialData"\] = (\{.+?\});'),
         re.compile(r"var ytInitialData = (\{.+?\});"),
@@ -149,6 +131,26 @@ def get_ytInitialData(html: str) -> dict | None:
         if m:
             data_str = m.group(1)
             return json.loads(data_str)
+
+
+def load(url: str) -> tuple[requests.Response, dict]:
+    rs = session.get(url)
+
+    data = get_yt_initial_data(rs.text)
+    if not data:
+        raise Exception("Could not find ytInitialData!")
+
+    raise_if_error(data)
+
+    return rs, data
+
+
+def get_yt_initial_player_response(html: str) -> dict:
+    m = re.search(r"ytInitialPlayerResponse = (\{.+?\});", html)
+    if not m:
+        raise Exception("Не удалось найти на странице ytInitialPlayerResponse!")
+
+    return json.loads(m.group(1))
 
 
 def get_context_data(url: str, innertube_context: dict) -> dict:
@@ -229,7 +231,9 @@ def get_context_data(url: str, innertube_context: dict) -> dict:
 
 
 def get_data_for_next_page(
-    url: str, yt_cfg_data: dict, continuation_item: dict
+    url: str,
+    yt_cfg_data: dict,
+    continuation_item: dict,
 ) -> dict:
     innertube_context = yt_cfg_data.get("INNERTUBE_CONTEXT")
     if not innertube_context:
@@ -263,7 +267,8 @@ def get_raw_video_renderer_items(yt_initial_data: dict) -> list[dict]:
 
 
 def get_generator_raw_video_list_from_data(
-    yt_initial_data: dict, rs: requests.Response
+    yt_initial_data: dict,
+    rs: requests.Response,
 ) -> Generator[dict, None, None]:
     yt_cfg_data = get_yt_cfg_data(rs.text)
     innertube_api_key = yt_cfg_data["INNERTUBE_API_KEY"]
@@ -279,9 +284,7 @@ def get_generator_raw_video_list_from_data(
 
         try:
             # Может вернуться несколько continuationItemRenderer, берем первый
-            continuation_item = dpath.util.values(data, "**/continuationItemRenderer")[
-                0
-            ]
+            continuation_item = dpath.util.values(data, "**/continuationItemRenderer")[0]
         except (KeyError, IndexError):
             break
 
@@ -291,7 +294,9 @@ def get_generator_raw_video_list_from_data(
 
         next_page_data = get_data_for_next_page(rs.url, yt_cfg_data, continuation_item)
         rs = session.post(
-            url_next_page_data, params={"key": innertube_api_key}, json=next_page_data
+            url_next_page_data,
+            params={"key": innertube_api_key},
+            json=next_page_data,
         )
         data = rs.json()
 
@@ -345,9 +350,9 @@ class Video:
     id: str
     url: str
     title: str
-    duration_seconds: int = None
-    duration_text: str = None
-    seq: int = None
+    duration_seconds: int | None = None
+    duration_text: str | None = None
+    seq: int | None = None
     is_live_now: bool = False
     thumbnails: list[Thumbnail] = field(default_factory=list, repr=False, compare=False)
     context: Context = field(default=None, repr=False, compare=False)
@@ -423,7 +428,7 @@ class Video:
     def parse_from(
         cls,
         data_video: dict,
-        parent_context: Context = None,
+        parent_context: Context | None = None,
         url_video: str = "",
     ) -> "Video":
         if parent_context and parent_context.yt_initial_data:
@@ -485,7 +490,6 @@ class Video:
             url = cls.get_url(url_or_id)
 
         rs, yt_initial_data = load(url)
-        raise_if_error(yt_initial_data)
 
         # NOTE: Оригинальный url может поменяться, лучше брать тот, что будет после запроса
         url = rs.url
@@ -543,8 +547,8 @@ class Playlist:
     url: str
     title: str
     video_list: list[Video] = field(default_factory=list, repr=False)
-    duration_seconds: int = None
-    duration_text: str = None
+    duration_seconds: int | None = None
+    duration_text: str | None = None
     context: Context = field(default=None, repr=False, compare=False)
 
     @classmethod
@@ -585,8 +589,6 @@ class Playlist:
             url = cls.get_url(playlist_id)
 
         rs, yt_initial_data = load(url)
-
-        raise_if_error(yt_initial_data)
 
         # NOTE: Оригинальный url может поменяться, лучше брать тот, что будет после запроса
         url = rs.url
@@ -661,7 +663,7 @@ if __name__ == "__main__":
         "https://www.youtube.com/playlist?list=PLWKjhJtqVAbknyJ7hSrf1WKh_Xnv9RL1r"
     )
     rs = session.get(url_playlist)
-    data = get_ytInitialData(rs.text)
+    data = get_yt_initial_data(rs.text)
     playlist_title = Playlist.get_title(data)
     print(f"Playlist title: {playlist_title!r}")
     # Playlist title: 'Live Coding with Jesse'
