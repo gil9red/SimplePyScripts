@@ -80,3 +80,18 @@ if __name__ == "__main__":
     info = get_person_info(username)
     print(info)
     # Person(name='ipetrash', position='Senior Software Engineer', department='TX SPD, Application Platforms Division', img_url='https://portal.compassplus.com/my/User%20Photos/Profile%20Pictures/ipetrash.jpg', location='Magnitogorsk', birthday='August 18')
+
+    import json
+    from dataclasses import asdict
+
+    print(json.dumps(asdict(info), ensure_ascii=False, indent=4))
+    """
+    {
+        "name": "ipetrash",
+        "position": "Senior Software Engineer",
+        "department": "TX SPD, Application Platforms Division",
+        "img_url": "https://portal.compassplus.com/my/User%20Photos/Profile%20Pictures/ipetrash.jpg",
+        "location": "Magnitogorsk",
+        "birthday": "August 18"
+    }
+    """
