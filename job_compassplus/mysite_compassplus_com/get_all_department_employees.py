@@ -6,7 +6,7 @@ __author__ = "ipetrash"
 
 from dataclasses import dataclass
 from bs4 import BeautifulSoup
-from common import URL, do_get
+from common import URL, do_get, get_text
 
 
 @dataclass
@@ -31,11 +31,11 @@ def get_employees(boss_username: str) -> list[Employee]:
         url = a["href"]
         items.append(
             Employee(
-                full_name=a.get_text(strip=True),
+                full_name=get_text(a),
                 # Example: "https://.../Person.aspx?accountname=CP%5Cipetrash" -> "ipetrash"
                 user_name=url.split("%5C")[-1],
                 url=url,
-                position=td.select_one(".ms_metadata").get_text(strip=True),
+                position=get_text(td.select_one(".ms_metadata")),
             )
         )
 

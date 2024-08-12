@@ -7,6 +7,8 @@ __author__ = "ipetrash"
 import sys
 from pathlib import Path
 
+from bs4 import Tag
+
 DIR = Path(__file__).resolve().parent
 ROOT_DIR = DIR.parent
 
@@ -15,6 +17,10 @@ from site_common import do_get
 
 
 URL = "https://mysite.compassplus.com/Person.aspx?accountname={}"
+
+
+def get_text(el: Tag) -> str:
+    return el.get_text(strip=True)
 
 
 if __name__ == "__main__":

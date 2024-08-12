@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
-from common import URL, do_get
+from common import URL, do_get, get_text
 
 
 @dataclass
@@ -25,7 +25,7 @@ class Person:
 
 
 def get_person_info(name: str, domain: str = "CP") -> Person | None:
-    url = URL.format(fr"{domain}\{name}")
+    url = URL.format(rf"{domain}\{name}")
 
     rs = do_get(url)
     soup = BeautifulSoup(rs.content, "html.parser")
@@ -37,28 +37,30 @@ def get_person_info(name: str, domain: str = "CP") -> Person | None:
     default_value = "N/A"
 
     try:
-        position = soup.select_one("#ProfileViewer_ValueTitle").get_text(strip=True)
+        position = get_text(soup.select_one("#ProfileViewer_ValueTitle"))
         if not position:
             position = default_value
     except Exception:
         position = default_value
 
     try:
-        department = soup.select_one("#ProfileViewer_ValueDepartment").get_text(strip=True)
+        department = get_text(soup.select_one("#ProfileViewer_ValueDepartment"))
         if not department:
             department = default_value
     except Exception:
         department = default_value
 
     try:
-        location = soup.select_one('div[id *= "_ProfileViewer_SPS-Location"] > .ms-profile-detailsValue').get_text(strip=True)
+        css_path = 'div[id *= "_ProfileViewer_SPS-Location"] > .ms-profile-detailsValue'
+        location = get_text(soup.select_one(css_path))
         if not location:
             location = default_value
     except Exception:
         location = default_value
 
     try:
-        birthday = soup.select_one('div[id *= "_ProfileViewer_SPS-Birthday"] > .ms-profile-detailsValue').get_text(strip=True)
+        css_path = 'div[id *= "_ProfileViewer_SPS-Birthday"] > .ms-profile-detailsValue'
+        birthday = get_text(soup.select_one(css_path))
         if not birthday:
             birthday = default_value
     except Exception:
