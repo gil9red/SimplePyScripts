@@ -73,7 +73,7 @@ class ChannelInfo:
             ),
             links=[
                 Link.parse_from(item["channelExternalLinkViewModel"])
-                for item in data["links"]
+                for item in data.get("links", [])
             ],
         )
 
