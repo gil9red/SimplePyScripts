@@ -27,6 +27,7 @@ def create_person_from_info(info: Person) -> db.Person:
         img=info.download_img(),
         location=info.location,
         birthday=info.birthday,
+        is_active=info.is_active,
     )
 
 
@@ -43,7 +44,10 @@ def is_person_eq_info(person: db.Person, info: Person) -> bool:
     if person.location != info.location:
         return False
 
-    if person.birthday != info.birthday:  # Мало ли, ошибка была
+    if person.birthday != info.birthday:
+        return False
+
+    if person.is_active != info.is_active:
         return False
 
     return True

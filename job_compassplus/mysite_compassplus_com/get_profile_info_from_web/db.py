@@ -19,6 +19,7 @@ from peewee import (
     CharField,
     DateField,
     BlobField,
+    BooleanField,
 )
 from playhouse.shortcuts import model_to_dict
 from playhouse.sqliteq import SqliteQueueDatabase
@@ -115,6 +116,7 @@ class Person(BaseModel):
     birthday = TextField()
     create_date = DateField(default=date.today)
     last_check_date = DateField(default=date.today)
+    is_active = BooleanField(default=None, null=True)
 
     class Meta:
         indexes = (
