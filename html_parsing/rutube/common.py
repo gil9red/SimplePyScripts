@@ -67,11 +67,9 @@ def get_redux_state(html: str) -> dict[str, Any]:
         lambda x: chr(int(x.group(1), 16)),
         m.group(1),
     )
+    logger.debug(f"Raw data:\n{js_text}")
 
-    data: dict[str, Any] = json.loads(js_text)
-    logger.debug(f"data: {data}")
-
-    return data
+    return json.loads(js_text)
 
 
 def get_page(playlist_videos_data: dict[str, Any]) -> int:
