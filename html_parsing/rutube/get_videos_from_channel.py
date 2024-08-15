@@ -108,13 +108,13 @@ def get_videos(url: str, max_items: int | None = None) -> list[Video]:
 
 
 if __name__ == "__main__":
-    url = "https://rutube.ru/channel/32869212/videos/"
-    items = get_videos(url, max_items=10)
-    assert len(items) == 10
-
     # # NOTE: Для получения всех логов
     # import logging
     # logger.setLevel(logging.DEBUG)
+
+    url = "https://rutube.ru/channel/32869212/videos/"
+    items = get_videos(url, max_items=10)
+    assert len(items) == 10
 
     items = get_videos(url, max_items=50)
     print(f"Video ({len(items)}):")
