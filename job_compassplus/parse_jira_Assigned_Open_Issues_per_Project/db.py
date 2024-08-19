@@ -89,11 +89,7 @@ class IssueNumber(BaseModel):
     project = ForeignKeyField(Project, backref="issue_numbers")
 
 
-def add(assigned_open_issues_per_project: dict[str, int]) -> bool | None:
-    last_run = Run.select().order_by(Run.id.desc()).get()
-    if assigned_open_issues_per_project == last_run.get_project_by_issue_numbers():
-        return
-
+def add(assigned_open_issues_per_project: dict[str, int]) -> bool:
     run, created = Run.get_or_create(date=dt.date.today())
     if not created:
         return False

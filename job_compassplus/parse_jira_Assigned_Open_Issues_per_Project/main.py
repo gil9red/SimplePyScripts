@@ -36,11 +36,7 @@ def run():
             )
 
             ok = db.add(assigned_open_issues_per_project)
-            if ok is None:
-                logger.info(
-                    "Количество открытых задач в проектах не поменялось. Пропускаю..."
-                )
-            elif ok:
+            if ok:
                 logger.info("Добавляю запись")
             else:
                 logger.info("Сегодня запись уже была добавлена. Пропускаю...")
