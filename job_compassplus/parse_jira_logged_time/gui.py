@@ -83,7 +83,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle(WINDOW_TITLE)
 
-        file_name = str(DIR / "favicon.ico")
+        file_name = str(DIR / "favicon.png")
         icon = QIcon(file_name)
 
         self.setWindowIcon(icon)
