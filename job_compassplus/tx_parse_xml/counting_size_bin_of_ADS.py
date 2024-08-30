@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 from pathlib import Path
-from collections import Counter, defaultdict
+from collections import Counter
 
 # pip install humanize
 from humanize import naturalsize as sizeof_fmt
