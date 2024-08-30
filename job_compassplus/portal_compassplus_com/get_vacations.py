@@ -83,4 +83,4 @@ if __name__ == "__main__":
     vacations = get_vacations()
     print(f"Vacations ({len(vacations)}):")
     for i, vacation in enumerate(vacations, 1):
-        print(f"{i}. {vacation}")
+        print(f"    {i}. {vacation}")
