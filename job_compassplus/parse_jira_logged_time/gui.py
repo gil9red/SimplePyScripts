@@ -39,7 +39,7 @@ from PyQt5.Qt import (
     QTimer,
 )
 
-from common import DIR
+from config import PATH_FAVICON
 from main import (
     get_rss_jira_log,
     parse_logged_dict,
@@ -83,7 +83,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle(WINDOW_TITLE)
 
-        file_name = str(DIR / "favicon.png")
+        file_name = str(PATH_FAVICON)
         icon = QIcon(file_name)
 
         self.setWindowIcon(icon)

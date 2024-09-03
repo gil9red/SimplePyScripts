@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 
 from bs4 import BeautifulSoup
 
-from common import ROOT_DIR
+from config import USERNAME, ROOT_DIR
 
 sys.path.append(str(ROOT_DIR))
 from root_common import session
@@ -22,7 +22,7 @@ from logged_human_time_to_seconds import logged_human_time_to_seconds
 from seconds_to_str import seconds_to_str
 
 
-URL = "https://helpdesk.compassluxe.com/activity?maxResults=100&streams=user+IS+ipetrash&os_authType=basic&title=undefined"
+URL = f"https://helpdesk.compassluxe.com/activity?maxResults=100&streams=user+IS+{USERNAME}&os_authType=basic&title=undefined"
 
 
 # SOURCE: https://stackoverflow.com/a/13287083/5909792
