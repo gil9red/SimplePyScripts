@@ -204,13 +204,21 @@ class MainWindow(QMainWindow):
                     row = date_str, total_seconds_str, total_seconds
                     lines.append(row)
 
+                    date: datetime = datetime.strptime(date_str, "%d/%m/%Y")
+                    is_odd_week: int = date.isocalendar().week % 2 == 1
+
                     self.table_logged.setRowCount(self.table_logged.rowCount() + 1)
 
-                    self.table_logged.setItem(i, 0, QTableWidgetItem(date_str))
+                    item1 = QTableWidgetItem(date_str)
 
-                    item = QTableWidgetItem(total_seconds_str)
-                    item.setToolTip(f"Total seconds: {total_seconds}")
-                    self.table_logged.setItem(i, 1, item)
+                    item2 = QTableWidgetItem(total_seconds_str)
+                    item2.setToolTip(f"Total seconds: {total_seconds}")
+
+                    for j, item in enumerate([item1, item2]):
+                        if is_odd_week:
+                            item.setBackground(Qt.lightGray)
+
+                        self.table_logged.setItem(i, j, item)
 
                 self.table_logged.setCurrentCell(0, 0)
                 self.table_logged.setFocus()
