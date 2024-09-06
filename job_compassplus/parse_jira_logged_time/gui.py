@@ -83,8 +83,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle(WINDOW_TITLE)
 
-        file_name = str(PATH_FAVICON)
-        icon = QIcon(file_name)
+        icon = QIcon(str(PATH_FAVICON))
 
         self.setWindowIcon(icon)
 
@@ -93,7 +92,7 @@ class MainWindow(QMainWindow):
         self.tray.activated.connect(self._on_tray_activated)
         self.tray.show()
 
-        self.logged_dict = dict()
+        self.logged_dict: dict[str, list[dict]] = dict()
 
         self.pb_refresh = QPushButton("REFRESH")
         self.pb_refresh.clicked.connect(self.refresh)
@@ -166,9 +165,12 @@ class MainWindow(QMainWindow):
         buffer_io = io.StringIO()
         try:
             with redirect_stdout(buffer_io):
-                print(len(xml_data), repr(xml_data[:50]))
+                print(
+                    f"Xml data ({len(xml_data)} bytes):\n"
+                    f"{xml_data[:150] + b'...' if len(xml_data) > 150 else xml_data!r}"
+                )
 
-                # Структура документа -- xml
+                # Структура документа - xml
                 self.logged_dict = parse_logged_dict(xml_data)
                 print(self.logged_dict)
 
@@ -178,13 +180,13 @@ class MainWindow(QMainWindow):
                 print(json.dumps(self.logged_dict, indent=4, ensure_ascii=False))
                 print()
 
-                logged_list = get_logged_list_by_now_utc_date(self.logged_dict)
+                logged_list: list[dict] = get_logged_list_by_now_utc_date(self.logged_dict)
 
                 logged_total_seconds = get_logged_total_seconds(logged_list)
                 logged_total_seconds_str = seconds_to_str(logged_total_seconds)
-                print("entry_logged_list:", logged_list)
-                print("today seconds:", logged_total_seconds)
-                print("today time:", logged_total_seconds_str)
+                print("Entry_logged_list:", logged_list)
+                print("Today seconds:", logged_total_seconds)
+                print("Today time:", logged_total_seconds_str)
                 print()
 
                 # Для красоты выводим результат в табличном виде
@@ -244,11 +246,8 @@ class MainWindow(QMainWindow):
         progress_dialog.setRange(0, 0)
         progress_dialog.exec()
 
-        self.setWindowTitle(
-            WINDOW_TITLE
-            + ". Last refresh date: "
-            + datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        )
+        self.setWindowTitle(f"{WINDOW_TITLE}. Last refresh date: {datetime.now():%d/%m/%Y %H:%M:%S}")
+        self.tray.setToolTip(self.windowTitle())
 
     def _on_table_logged_item_clicked(self, item: QTableWidgetItem):
         # Удаление строк таблицы
@@ -276,7 +275,7 @@ class MainWindow(QMainWindow):
         row = item.row()
         jira_id = self.table_logged_info.item(row, 2).text()
 
-        url = "https://helpdesk.compassluxe.com/browse/" + jira_id
+        url = f"https://helpdesk.compassluxe.com/browse/{jira_id}"
         webbrowser.open(url)
 
     def _on_tray_activated(self, reason):
