@@ -190,7 +190,7 @@ class MainWindow(QMainWindow):
                 print()
 
                 # Для красоты выводим результат в табличном виде
-                lines = []
+                lines: list[tuple[str, str, int]] = []
 
                 # Удаление строк таблицы
                 while self.table_logged.rowCount():
