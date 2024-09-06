@@ -149,8 +149,8 @@ class MainWindow(QMainWindow):
         splitter_table.setSizes([300, 600])
 
         layout_log = QVBoxLayout()
-        layout_log.addWidget(self.cb_show_log)
         layout_log.addWidget(self.log)
+        layout_log.addWidget(self.cb_show_log)
 
         layout_content = QVBoxLayout()
         layout_content.addWidget(splitter_table)
