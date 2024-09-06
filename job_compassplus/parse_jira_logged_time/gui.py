@@ -151,20 +151,16 @@ class MainWindow(QMainWindow):
         h_layout.addWidget(self.pb_refresh)
         h_layout.addWidget(self.cb_show_log)
 
-        layout_table_widget = QVBoxLayout()
-        layout_table_widget.setContentsMargins(0, 0, 0, 0)
-        layout_table_widget.addWidget(self.table_logged)
-        layout_table_widget.addWidget(self.table_logged_info)
+        splitter_table = QSplitter(Qt.Vertical)
+        splitter_table.addWidget(self.table_logged)
+        splitter_table.addWidget(self.table_logged_info)
 
-        table_widget = QWidget()
-        table_widget.setLayout(layout_table_widget)
-
-        splitter = QSplitter(Qt.Horizontal)
-        splitter.addWidget(table_widget)
-        splitter.addWidget(self.log)
+        splitter_main = QSplitter(Qt.Horizontal)
+        splitter_main.addWidget(splitter_table)
+        splitter_main.addWidget(self.log)
 
         main_layout.addLayout(h_layout)
-        main_layout.addWidget(splitter)
+        main_layout.addWidget(splitter_main)
 
     def _fill_tables(self, xml_data: bytes):
         buffer_io = io.StringIO()
