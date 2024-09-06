@@ -128,7 +128,9 @@ class MainWindow(QMainWindow):
         self.table_logged = create_table(
             header_labels=["DATE", "TOTAL LOGGED TIME"],
         )
-        self.table_logged.itemClicked.connect(self._on_table_logged_item_clicked)
+        self.table_logged.itemSelectionChanged.connect(
+            lambda: self._on_table_logged_item_clicked(self.table_logged.currentItem())
+        )
 
         self.table_logged_info = create_table(
             header_labels=["TIME", "LOGGED", "JIRA", "TITLE"],
