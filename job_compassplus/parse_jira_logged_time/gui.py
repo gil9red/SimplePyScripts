@@ -99,7 +99,7 @@ class MainWindow(QMainWindow):
         self.pb_refresh.clicked.connect(self.refresh)
 
         self.cb_show_log = QCheckBox()
-        self.cb_show_log.setChecked(True)
+        self.cb_show_log.setChecked(False)
 
         self.log = QPlainTextEdit()
         self.log.setReadOnly(True)
