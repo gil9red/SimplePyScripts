@@ -22,7 +22,7 @@ from logged_human_time_to_seconds import logged_human_time_to_seconds
 from seconds_to_str import seconds_to_str
 
 
-URL = f"https://helpdesk.compassluxe.com/activity?maxResults=100&streams=user+IS+{USERNAME}&os_authType=basic&title=undefined"
+URL = f"https://helpdesk.compassluxe.com/activity?maxResults=500&streams=user+IS+{USERNAME}&os_authType=basic&title=undefined"
 
 
 # SOURCE: https://stackoverflow.com/a/13287083/5909792
