@@ -12,4 +12,5 @@ DIR = Path(__file__).resolve().parent
 ROOT_DIR = DIR.parent
 PATH_FAVICON = DIR / "favicon.png"
 
-USERNAME = "ipetrash"
+USERNAME: str = "ipetrash"
+MAX_RESULTS: int = 500
