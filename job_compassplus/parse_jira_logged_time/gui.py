@@ -13,29 +13,30 @@ import webbrowser
 from contextlib import redirect_stdout
 from datetime import datetime
 
-from PyQt5.Qt import (
+from PyQt5.QtWidgets import (
     QApplication,
     QMessageBox,
-    QThread,
-    pyqtSignal,
     QMainWindow,
     QPushButton,
     QCheckBox,
     QPlainTextEdit,
     QVBoxLayout,
-    QTextOption,
     QTableWidget,
     QWidget,
     QSplitter,
-    Qt,
     QTableWidgetItem,
     QProgressDialog,
     QHeaderView,
     QSystemTrayIcon,
-    QIcon,
+)
+from PyQt5.QtCore import (
+    QThread,
+    pyqtSignal,
+    Qt,
     QEvent,
     QTimer,
 )
+from PyQt5.QtGui import QTextOption, QIcon
 
 from config import PATH_FAVICON
 from main import (
@@ -260,8 +261,11 @@ class MainWindow(QMainWindow):
         )
         self.tray.setToolTip(self.windowTitle())
 
-    def _on_table_logged_item_clicked(self, item: QTableWidgetItem):
+    def _on_table_logged_item_clicked(self, item: QTableWidgetItem | None):
         clear_table(self.table_logged_info)
+
+        if not item:
+            return
 
         row = item.row()
         item1 = self.table_logged.item(row, 0)
