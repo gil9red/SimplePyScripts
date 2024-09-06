@@ -120,7 +120,7 @@ class MainWindow(QMainWindow):
         self.table_logged.horizontalHeader().setStretchLastSection(True)
         self.table_logged.itemClicked.connect(self._on_table_logged_item_clicked)
 
-        header_labels = ["TIME", "LOGGED", "JIRA"]
+        header_labels = ["TIME", "LOGGED", "JIRA", "TITLE"]
         self.table_logged_info = QTableWidget()
         self.table_logged_info.setEditTriggers(QTableWidget.NoEditTriggers)
         self.table_logged_info.setSelectionBehavior(QTableWidget.SelectRows)
@@ -270,14 +270,16 @@ class MainWindow(QMainWindow):
         for i, logged in enumerate(logged_list):
             self.table_logged_info.setRowCount(self.table_logged_info.rowCount() + 1)
 
-            self.table_logged_info.setItem(i, 0, QTableWidgetItem(logged["time"]))
-            self.table_logged_info.setItem(
-                i, 1, QTableWidgetItem(logged["logged_human_time"])
-            )
+            item1 = QTableWidgetItem(logged["time"])
+            item2 = QTableWidgetItem(logged["logged_human_time"])
 
-            item = QTableWidgetItem(logged["jira_id"])
-            item.setToolTip(logged["jira_title"])
-            self.table_logged_info.setItem(i, 2, item)
+            item3 = QTableWidgetItem(logged["jira_id"])
+            item3.setToolTip(logged["jira_title"])
+
+            item4 = QTableWidgetItem(logged["jira_title"])
+
+            for j, item in enumerate([item1, item2, item3, item4]):
+                self.table_logged_info.setItem(i, j, item)
 
     def _on_table_logged_info_item_double_clicked(self, item: QTableWidgetItem):
         row = item.row()
