@@ -94,10 +94,11 @@ class MainWindow(QMainWindow):
 
         self.logged_dict: dict[str, list[dict]] = dict()
 
-        self.pb_refresh = QPushButton("REFRESH")
+        self.pb_refresh = QPushButton("🔄 REFRESH")
         self.pb_refresh.clicked.connect(self.refresh)
 
         self.cb_show_log = QCheckBox()
+        self.cb_show_log.setText("Show log")
         self.cb_show_log.setChecked(False)
 
         self.log = QPlainTextEdit()
@@ -135,31 +136,27 @@ class MainWindow(QMainWindow):
             self._on_table_logged_info_item_double_clicked
         )
 
-        main_layout = QVBoxLayout()
-
-        central_widget = QWidget()
-        central_widget.setLayout(main_layout)
-
-        self.setCentralWidget(central_widget)
-
-        self.pb_refresh.setSizePolicy(
-            QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
-        )
-
-        h_layout = QHBoxLayout()
-        h_layout.addWidget(self.pb_refresh)
-        h_layout.addWidget(self.cb_show_log)
-
-        splitter_table = QSplitter(Qt.Vertical)
+        splitter_table = QSplitter(Qt.Horizontal)
         splitter_table.addWidget(self.table_logged)
         splitter_table.addWidget(self.table_logged_info)
+        splitter_table.setSizes([300, 600])
 
-        splitter_main = QSplitter(Qt.Horizontal)
-        splitter_main.addWidget(splitter_table)
-        splitter_main.addWidget(self.log)
+        layout_log = QVBoxLayout()
+        layout_log.addWidget(self.cb_show_log)
+        layout_log.addWidget(self.log)
 
-        main_layout.addLayout(h_layout)
-        main_layout.addWidget(splitter_main)
+        layout_content = QVBoxLayout()
+        layout_content.addWidget(splitter_table)
+        layout_content.addLayout(layout_log)
+
+        layout_main = QVBoxLayout()
+        layout_main.addWidget(self.pb_refresh)
+        layout_main.addLayout(layout_content)
+
+        central_widget = QWidget()
+        central_widget.setLayout(layout_main)
+
+        self.setCentralWidget(central_widget)
 
     def _fill_tables(self, xml_data: bytes):
         buffer_io = io.StringIO()
