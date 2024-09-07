@@ -180,9 +180,12 @@ class MainWindow(QMainWindow):
         self.table_logged_info = create_table(
             header_labels=["TIME", "LOGGED", "JIRA", "TITLE"],
         )
-        self.table_logged_info.horizontalHeader().setSectionResizeMode(
-            1, QHeaderView.ResizeToContents
-        )
+
+        # Первые 3 колонки (кроме названия) имеют размер под содержимое
+        for j in range(3):
+            self.table_logged_info.horizontalHeader().setSectionResizeMode(
+                j, QHeaderView.ResizeToContents
+            )
         self.table_logged_info.itemDoubleClicked.connect(
             self._on_table_logged_info_item_double_clicked
         )
