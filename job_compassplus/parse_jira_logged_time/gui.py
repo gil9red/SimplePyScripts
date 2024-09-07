@@ -12,6 +12,7 @@ import webbrowser
 
 from contextlib import redirect_stdout
 from datetime import datetime
+from typing import Any
 
 from PyQt5.QtWidgets import (
     QApplication,
@@ -89,6 +90,22 @@ def create_table(header_labels: list[str]) -> QTableWidget:
     return table_widget
 
 
+def create_table_item(
+    text: str,
+    tool_tip: str | None = None,
+    data: Any = None,
+) -> QTableWidgetItem:
+    item = QTableWidgetItem(text)
+
+    if tool_tip:
+        item.setToolTip(tool_tip)
+
+    if data:
+        item.setData(Qt.UserRole, data)
+
+    return item
+
+
 def clear_table(table_widget: QTableWidget):
     # Удаление строк таблицы
     while table_widget.rowCount():
@@ -111,11 +128,11 @@ class MainWindow(QMainWindow):
         self.tray.show()
 
         self.pb_refresh = QPushButton("🔄 REFRESH")
-        self.pb_refresh.setFixedHeight(40)
+        self.pb_refresh.setObjectName("pb_refresh")
         self.pb_refresh.clicked.connect(self.refresh)
 
         self.progress_refresh = QProgressBar()
-        self.progress_refresh.setFixedHeight(15)
+        self.progress_refresh.setObjectName("progress_refresh")
         self.progress_refresh.setRange(0, 0)
         self.progress_refresh.setTextVisible(False)
         self.progress_refresh.hide()
@@ -125,11 +142,9 @@ class MainWindow(QMainWindow):
         self.cb_show_log.setChecked(False)
 
         self.log = QPlainTextEdit()
+        self.log.setObjectName("log")
         self.log.setReadOnly(True)
         self.log.setWordWrapMode(QTextOption.NoWrap)
-        log_font = self.log.font()
-        log_font.setFamily("Courier New")
-        self.log.setFont(log_font)
 
         self.cb_show_log.clicked.connect(self.log.setVisible)
         self.log.setVisible(self.cb_show_log.isChecked())
@@ -173,6 +188,19 @@ class MainWindow(QMainWindow):
         central_widget.setLayout(layout_main)
 
         self.setCentralWidget(central_widget)
+
+        self.setStyleSheet("""
+            #pb_refresh {
+                font-size: 18px;
+            }
+            #progress_refresh {
+                height: 0.5em;
+            }
+            
+            #log {
+                font-family: Courier New;
+            }
+        """)
 
     def _fill_tables(self, xml_data: bytes):
         buffer_io = io.StringIO()
@@ -218,14 +246,16 @@ class MainWindow(QMainWindow):
                     date: datetime = datetime.strptime(date_str, "%d/%m/%Y")
                     is_odd_week: int = date.isocalendar().week % 2 == 1
 
-                    item1 = QTableWidgetItem(date_str)
-                    item1.setData(Qt.UserRole, logged_list)
-
-                    item2 = QTableWidgetItem(total_seconds_str)
-                    item2.setToolTip(f"Total seconds: {total_seconds}")
+                    items = [
+                        create_table_item(date_str, data=logged_list),
+                        create_table_item(
+                            total_seconds_str,
+                            tool_tip=f"Total seconds: {total_seconds}",
+                        ),
+                    ]
 
                     self.table_logged.setRowCount(self.table_logged.rowCount() + 1)
-                    for j, item in enumerate([item1, item2]):
+                    for j, item in enumerate(items):
                         if is_odd_week:
                             item.setBackground(Qt.lightGray)
 
@@ -286,10 +316,10 @@ class MainWindow(QMainWindow):
 
         for i, logged in enumerate(reversed(logged_list)):
             items = [
-                QTableWidgetItem(logged["time"]),
-                QTableWidgetItem(logged["logged_human_time"]),
-                QTableWidgetItem(logged["jira_id"]),
-                QTableWidgetItem(logged["jira_title"]),
+                create_table_item(logged["time"]),
+                create_table_item(logged["logged_human_time"]),
+                create_table_item(logged["jira_id"]),
+                create_table_item(logged["jira_title"], tool_tip=logged["jira_title"]),
             ]
 
             self.table_logged_info.setRowCount(self.table_logged_info.rowCount() + 1)
