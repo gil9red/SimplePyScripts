@@ -5,12 +5,11 @@ __author__ = "ipetrash"
 
 
 import re
+import xml.etree.ElementTree as ET
 import sys
 
 from collections import defaultdict
 from datetime import datetime, timezone
-
-from bs4 import BeautifulSoup
 
 from config import ROOT_DIR, USERNAME, MAX_RESULTS
 
@@ -42,19 +41,27 @@ def get_rss_jira_log() -> bytes:
 def get_logged_dict(root) -> dict[str, list[dict]]:
     logged_dict = defaultdict(list)
 
-    for entry in root.select("entry"):
+    ns = {
+        "": "http://www.w3.org/2005/Atom",
+        "activity": "http://activitystrea.ms/spec/1.0/",
+    }
+
+    for entry in root.findall("./entry", namespaces=ns):
         # Ищем в <entry> строку с логированием
-        match = re.search("logged '(.+?)'", entry.text, flags=re.IGNORECASE)
+        match = re.search("logged '(.+?)'", "".join(entry.itertext()), flags=re.IGNORECASE)
         if not match:
             continue
 
         logged_human_time = match.group(1)
         logged_seconds = logged_human_time_to_seconds(logged_human_time)
 
-        jira_id = entry.object.title.text.strip()
-        jira_title = entry.object.summary.text.strip()
+        jira_id = entry.find("./activity:object/title", namespaces=ns).text.strip()
+        jira_title = entry.find("./activity:object/summary", namespaces=ns).text.strip()
 
-        entry_dt = datetime.strptime(entry.published.text, "%Y-%m-%dT%H:%M:%S.%fZ")
+        entry_dt = datetime.strptime(
+            entry.find("./published", namespaces=ns).text,
+            "%Y-%m-%dT%H:%M:%S.%fZ",
+        )
 
         # Переменная entry_dt имеет время в UTC, и желательно его привести в локальное время
         entry_dt = utc_to_local(entry_dt)
@@ -76,9 +83,7 @@ def get_logged_dict(root) -> dict[str, list[dict]]:
 
 
 def parse_logged_dict(xml_data: bytes) -> dict[str, list[dict]]:
-    # Структура документа -- xml
-    root = BeautifulSoup(xml_data, "xml")
-
+    root = ET.fromstring(xml_data)
     return get_logged_dict(root)
 
 
