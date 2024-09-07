@@ -190,13 +190,16 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(central_widget)
 
         self.setStyleSheet("""
+            * {
+                font-size: 16px;
+            }
             #pb_refresh {
                 font-size: 18px;
             }
             #progress_refresh {
-                height: 0.5em;
+                min-height: 14px;
+                max-height: 14px;
             }
-            
             #log {
                 font-family: Courier New;
             }
