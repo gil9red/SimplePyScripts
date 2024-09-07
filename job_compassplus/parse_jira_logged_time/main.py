@@ -105,6 +105,8 @@ def get_logged_total_seconds(entry_logged_list: list[dict]) -> int:
 
 
 if __name__ == "__main__":
+    print(URL)
+
     xml_data = get_rss_jira_log()
     print(len(xml_data), repr(xml_data[:50]))
 
