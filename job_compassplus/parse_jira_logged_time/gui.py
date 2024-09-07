@@ -22,6 +22,7 @@ from PyQt5.QtWidgets import (
     QCheckBox,
     QPlainTextEdit,
     QVBoxLayout,
+    QHBoxLayout,
     QTableWidget,
     QWidget,
     QSplitter,
@@ -29,6 +30,8 @@ from PyQt5.QtWidgets import (
     QHeaderView,
     QSystemTrayIcon,
     QProgressBar,
+    QSizePolicy,
+    QToolTip,
 )
 from PyQt5.QtCore import (
     QThread,
@@ -129,6 +132,7 @@ class MainWindow(QMainWindow):
 
         self.pb_refresh = QPushButton("🔄 REFRESH")
         self.pb_refresh.setObjectName("pb_refresh")
+        self.pb_refresh.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         self.pb_refresh.clicked.connect(self.refresh)
 
         self.progress_refresh = QProgressBar()
@@ -140,6 +144,19 @@ class MainWindow(QMainWindow):
         self.cb_show_log = QCheckBox()
         self.cb_show_log.setText("Show log")
         self.cb_show_log.setChecked(False)
+
+        self.timer_auto_refresh = QTimer()
+        self.timer_auto_refresh.setInterval(60 * 60 * 1000)  # 1 hour
+        self.timer_auto_refresh.timeout.connect(self.refresh)
+
+        self.cb_auto_refresh = QCheckBox()
+        self.cb_auto_refresh.setText("Auto")
+        self.cb_auto_refresh.setToolTip("Every 1 hour")
+        self.cb_auto_refresh.setChecked(True)
+
+        self.cb_auto_refresh.clicked.connect(self.set_auto_refresh)
+        if self.cb_auto_refresh.isChecked():
+            self.timer_auto_refresh.start()
 
         self.log = QPlainTextEdit()
         self.log.setObjectName("log")
@@ -179,8 +196,12 @@ class MainWindow(QMainWindow):
         layout_content.addWidget(splitter_table)
         layout_content.addLayout(layout_log)
 
+        layout_refresh = QHBoxLayout()
+        layout_refresh.addWidget(self.pb_refresh)
+        layout_refresh.addWidget(self.cb_auto_refresh)
+
         layout_main = QVBoxLayout()
-        layout_main.addWidget(self.pb_refresh)
+        layout_main.addLayout(layout_refresh)
         layout_main.addWidget(self.progress_refresh)
         layout_main.addLayout(layout_content)
 
@@ -189,7 +210,8 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(central_widget)
 
-        self.setStyleSheet("""
+        self.setStyleSheet(
+            """
             * {
                 font-size: 16px;
             }
@@ -203,7 +225,18 @@ class MainWindow(QMainWindow):
             #log {
                 font-family: Courier New;
             }
-        """)
+        """
+        )
+
+    def set_auto_refresh(self, checked: bool):
+        if checked:
+            self.timer_auto_refresh.start()
+        else:
+            self.timer_auto_refresh.stop()
+
+        pos = self.cb_auto_refresh.geometry().topRight()
+        pos = self.mapToGlobal(pos)
+        QToolTip.showText(pos, f"Timer {'started' if checked else 'stopped'}")
 
     def _fill_tables(self, xml_data: bytes):
         buffer_io = io.StringIO()
@@ -286,25 +319,31 @@ class MainWindow(QMainWindow):
             print(text)
 
     def refresh(self):
+        # Если обновление уже запущено
+        if not self.pb_refresh.isEnabled():
+            return
+
         self.pb_refresh.setEnabled(False)
         self.progress_refresh.show()
 
-        loop = QEventLoop()
+        try:
+            loop = QEventLoop()
 
-        thread = RunFuncThread(func=get_rss_jira_log)
-        thread.run_finished.connect(self._fill_tables)
-        thread.run_finished.connect(loop.quit)
-        thread.start()
+            thread = RunFuncThread(func=get_rss_jira_log)
+            thread.run_finished.connect(self._fill_tables)
+            thread.run_finished.connect(loop.quit)
+            thread.start()
 
-        loop.exec()
+            loop.exec()
 
-        self.pb_refresh.setEnabled(True)
-        self.progress_refresh.hide()
+        finally:
+            self.pb_refresh.setEnabled(True)
+            self.progress_refresh.hide()
 
-        self.setWindowTitle(
-            f"{WINDOW_TITLE}. Last refresh date: {datetime.now():%d/%m/%Y %H:%M:%S}"
-        )
-        self.tray.setToolTip(self.windowTitle())
+            self.setWindowTitle(
+                f"{WINDOW_TITLE}. Last refresh date: {datetime.now():%d/%m/%Y %H:%M:%S}"
+            )
+            self.tray.setToolTip(self.windowTitle())
 
     def _on_table_logged_item_clicked(self, item: QTableWidgetItem | None):
         clear_table(self.table_logged_info)
