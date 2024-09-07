@@ -39,7 +39,6 @@ from PyQt5.QtCore import (
     Qt,
     QEvent,
     QTimer,
-    QEventLoop,
 )
 from PyQt5.QtGui import QTextOption, QIcon
 
@@ -157,6 +156,11 @@ class MainWindow(QMainWindow):
         self.cb_auto_refresh.clicked.connect(self.set_auto_refresh)
         if self.cb_auto_refresh.isChecked():
             self.timer_auto_refresh.start()
+
+        self.thread_get_data = RunFuncThread(func=get_rss_jira_log)
+        self.thread_get_data.started.connect(self._before_refresh)
+        self.thread_get_data.run_finished.connect(self._fill_tables)
+        self.thread_get_data.finished.connect(self._after_refresh)
 
         self.log = QPlainTextEdit()
         self.log.setObjectName("log")
@@ -318,32 +322,25 @@ class MainWindow(QMainWindow):
 
             print(text)
 
-    def refresh(self):
-        # Если обновление уже запущено
-        if not self.pb_refresh.isEnabled():
-            return
-
+    def _before_refresh(self):
         self.pb_refresh.setEnabled(False)
         self.progress_refresh.show()
 
-        try:
-            loop = QEventLoop()
+    def _after_refresh(self):
+        self.pb_refresh.setEnabled(True)
+        self.progress_refresh.hide()
 
-            thread = RunFuncThread(func=get_rss_jira_log)
-            thread.run_finished.connect(self._fill_tables)
-            thread.run_finished.connect(loop.quit)
-            thread.start()
+        self.setWindowTitle(
+            f"{WINDOW_TITLE}. Last refresh date: {datetime.now():%d/%m/%Y %H:%M:%S}"
+        )
+        self.tray.setToolTip(self.windowTitle())
 
-            loop.exec()
+    def refresh(self):
+        # Если обновление уже запущено
+        if self.thread_get_data.isRunning():
+            return
 
-        finally:
-            self.pb_refresh.setEnabled(True)
-            self.progress_refresh.hide()
-
-            self.setWindowTitle(
-                f"{WINDOW_TITLE}. Last refresh date: {datetime.now():%d/%m/%Y %H:%M:%S}"
-            )
-            self.tray.setToolTip(self.windowTitle())
+        self.thread_get_data.start()
 
     def _on_table_logged_item_clicked(self, item: QTableWidgetItem | None):
         clear_table(self.table_logged_info)
