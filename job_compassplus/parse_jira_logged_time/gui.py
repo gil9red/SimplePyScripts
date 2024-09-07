@@ -25,9 +25,9 @@ from PyQt5.QtWidgets import (
     QWidget,
     QSplitter,
     QTableWidgetItem,
-    QProgressDialog,
     QHeaderView,
     QSystemTrayIcon,
+    QProgressBar,
 )
 from PyQt5.QtCore import (
     QThread,
@@ -35,6 +35,7 @@ from PyQt5.QtCore import (
     Qt,
     QEvent,
     QTimer,
+    QEventLoop,
 )
 from PyQt5.QtGui import QTextOption, QIcon
 
@@ -110,7 +111,14 @@ class MainWindow(QMainWindow):
         self.tray.show()
 
         self.pb_refresh = QPushButton("🔄 REFRESH")
+        self.pb_refresh.setFixedHeight(40)
         self.pb_refresh.clicked.connect(self.refresh)
+
+        self.progress_refresh = QProgressBar()
+        self.progress_refresh.setFixedHeight(15)
+        self.progress_refresh.setRange(0, 0)
+        self.progress_refresh.setTextVisible(False)
+        self.progress_refresh.hide()
 
         self.cb_show_log = QCheckBox()
         self.cb_show_log.setText("Show log")
@@ -158,6 +166,7 @@ class MainWindow(QMainWindow):
 
         layout_main = QVBoxLayout()
         layout_main.addWidget(self.pb_refresh)
+        layout_main.addWidget(self.progress_refresh)
         layout_main.addLayout(layout_content)
 
         central_widget = QWidget()
@@ -244,17 +253,20 @@ class MainWindow(QMainWindow):
             print(text)
 
     def refresh(self):
-        progress_dialog = QProgressDialog(self)
+        self.pb_refresh.setEnabled(False)
+        self.progress_refresh.show()
+
+        loop = QEventLoop()
 
         thread = RunFuncThread(func=get_rss_jira_log)
         thread.run_finished.connect(self._fill_tables)
-        thread.run_finished.connect(progress_dialog.close)
+        thread.run_finished.connect(loop.quit)
         thread.start()
 
-        progress_dialog.setWindowTitle("Please wait...")
-        progress_dialog.setLabelText(progress_dialog.windowTitle())
-        progress_dialog.setRange(0, 0)
-        progress_dialog.exec()
+        loop.exec()
+
+        self.pb_refresh.setEnabled(True)
+        self.progress_refresh.hide()
 
         self.setWindowTitle(
             f"{WINDOW_TITLE}. Last refresh date: {datetime.now():%d/%m/%Y %H:%M:%S}"
