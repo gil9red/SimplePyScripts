@@ -232,7 +232,7 @@ class MainWindow(QMainWindow):
             #log {
                 font-family: Courier New;
             }
-        """
+            """
         )
 
     def set_auto_refresh(self, checked: bool):
