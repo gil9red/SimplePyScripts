@@ -14,3 +14,5 @@ PATH_FAVICON = DIR / "favicon.png"
 
 USERNAME: str = "ipetrash"
 MAX_RESULTS: int = 500
+
+JIRA_HOST: str = "https://helpdesk.compassluxe.com"

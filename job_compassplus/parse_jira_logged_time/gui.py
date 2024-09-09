@@ -42,8 +42,8 @@ from PyQt5.QtCore import (
 )
 from PyQt5.QtGui import QTextOption, QIcon
 
-from config import PATH_FAVICON
-from main import (
+from config import PATH_FAVICON, JIRA_HOST
+from console import (
     get_rss_jira_log,
     parse_logged_dict,
     get_logged_list_by_now_utc_date,
@@ -372,7 +372,7 @@ class MainWindow(QMainWindow):
         row = item.row()
         jira_id = self.table_logged_info.item(row, 2).text()
 
-        url = f"https://helpdesk.compassluxe.com/browse/{jira_id}"
+        url = f"{JIRA_HOST}/browse/{jira_id}"
         webbrowser.open(url)
 
     def _on_tray_activated(self, reason):

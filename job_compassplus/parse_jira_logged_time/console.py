@@ -11,7 +11,7 @@ import sys
 from collections import defaultdict
 from datetime import datetime, timezone
 
-from config import ROOT_DIR, USERNAME, MAX_RESULTS
+from config import ROOT_DIR, USERNAME, MAX_RESULTS, JIRA_HOST
 
 sys.path.append(str(ROOT_DIR))
 from root_common import session
@@ -22,7 +22,7 @@ from seconds_to_str import seconds_to_str
 
 
 URL: str = (
-    f"https://helpdesk.compassluxe.com/activity?maxResults={MAX_RESULTS}"
+    f"{JIRA_HOST}/activity?maxResults={MAX_RESULTS}"
     f"&streams=user+IS+{USERNAME}&os_authType=basic&title=undefined"
 )
 
