@@ -42,7 +42,7 @@ from PyQt5.QtCore import (
 )
 from PyQt5.QtGui import QTextOption, QIcon
 
-from config import PATH_FAVICON, JIRA_HOST
+from config import PATH_FAVICON, JIRA_HOST, USERNAME
 from console import (
     get_rss_jira_log,
     parse_logged_dict,
@@ -77,7 +77,7 @@ class RunFuncThread(QThread):
         self.run_finished.emit(self.func())
 
 
-WINDOW_TITLE = "parse_jira_logged_time"
+WINDOW_TITLE: str = f"parse_jira_logged_time. {USERNAME}"
 
 
 def create_table(header_labels: list[str]) -> QTableWidget:
