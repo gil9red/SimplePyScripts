@@ -67,6 +67,7 @@ sys.excepthook = log_uncaught_exceptions
 
 class RunFuncThread(QThread):
     run_finished = pyqtSignal(object)
+    about_error = pyqtSignal(str)
 
     def __init__(self, func):
         super().__init__()
@@ -74,7 +75,11 @@ class RunFuncThread(QThread):
         self.func = func
 
     def run(self):
-        self.run_finished.emit(self.func())
+        try:
+            self.run_finished.emit(self.func())
+        except Exception as e:
+            print(f"Error: {e}")
+            self.about_error.emit(traceback.format_exc())
 
 
 WINDOW_TITLE: str = f"parse_jira_logged_time. {USERNAME}"
@@ -157,11 +162,6 @@ class MainWindow(QMainWindow):
         if self.cb_auto_refresh.isChecked():
             self.timer_auto_refresh.start()
 
-        self.thread_get_data = RunFuncThread(func=get_rss_jira_log)
-        self.thread_get_data.started.connect(self._before_refresh)
-        self.thread_get_data.run_finished.connect(self._fill_tables)
-        self.thread_get_data.finished.connect(self._after_refresh)
-
         self.log = QPlainTextEdit()
         self.log.setObjectName("log")
         self.log.setReadOnly(True)
@@ -169,6 +169,12 @@ class MainWindow(QMainWindow):
 
         self.cb_show_log.clicked.connect(self.log.setVisible)
         self.log.setVisible(self.cb_show_log.isChecked())
+
+        self.thread_get_data = RunFuncThread(func=get_rss_jira_log)
+        self.thread_get_data.started.connect(self._before_refresh)
+        self.thread_get_data.about_error.connect(self._set_error_log)
+        self.thread_get_data.run_finished.connect(self._fill_tables)
+        self.thread_get_data.finished.connect(self._after_refresh)
 
         self.table_logged = create_table(
             header_labels=["DATE", "TOTAL LOGGED TIME"],
@@ -244,6 +250,13 @@ class MainWindow(QMainWindow):
         pos = self.cb_auto_refresh.geometry().topRight()
         pos = self.mapToGlobal(pos)
         QToolTip.showText(pos, f"Timer {'started' if checked else 'stopped'}")
+
+    def _set_error_log(self, text: str):
+        self.log.setPlainText(text)
+
+        # Отображение лога
+        self.cb_show_log.setChecked(False)
+        self.cb_show_log.click()
 
     def _fill_tables(self, xml_data: bytes):
         buffer_io = io.StringIO()
