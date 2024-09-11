@@ -1,0 +1,1 @@
+C:\Users\ipetrash\AppData\Local\Programs\Python\Python310\python.exe -m uvicorn main:app --reload --port=7777

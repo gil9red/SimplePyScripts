@@ -8,8 +8,7 @@ import enum
 import time
 import sys
 
-from datetime import date
-from typing import Type, Iterable, Optional, Any
+from typing import Type, Iterable, Any
 
 # pip install peewee
 from peewee import (
@@ -17,26 +16,16 @@ from peewee import (
     TextField,
     ForeignKeyField,
     CharField,
-    DateField,
     BlobField,
     IntegerField,
-    BooleanField,
 )
 from playhouse.shortcuts import model_to_dict
 from playhouse.sqliteq import SqliteQueueDatabase
 
 from config import DIR, DB_FILE_NAME
 
-sys.path.append(str(DIR.parent.parent.parent))
+sys.path.append(str(DIR.parent.parent))
 from shorten import shorten
-
-
-class NotDefinedParameterException(ValueError):
-    def __init__(self, parameter_name: str):
-        self.parameter_name = parameter_name
-        text = f'Parameter "{self.parameter_name}" must be defined!'
-
-        super().__init__(text)
 
 
 # This working with multithreading
@@ -119,9 +108,13 @@ class Counter(BaseModel):
             obj = cls.create(name=name)
         return obj
 
-    def inc(self):
-        cls = type(self)
-        cls.update(value=cls.value + 1).where(cls.name == self.name).execute()
+    @classmethod
+    def increment(cls, name: str) -> int:
+        # Create or ignore
+        cls.get_or_create(name)
+
+        cls.update(value=cls.value + 1).where(cls.name == name).execute()
+        return cls.get_or_create(name).value
 
 
 db.connect()
@@ -135,7 +128,3 @@ time.sleep(0.050)
 
 if __name__ == "__main__":
     BaseModel.print_count_of_tables()
-
-    counter_foo: Counter = Counter.get_or_create(name="foo")
-    counter_foo.inc()
-    print(counter_foo)
