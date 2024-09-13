@@ -25,5 +25,6 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
         data: db.Parameter = future.result()
         items.append(data)
 
-    print(len(items))
+    print("items:", len(items))
+    print("count:", db.Parameter.count())
     assert len(items) == N
