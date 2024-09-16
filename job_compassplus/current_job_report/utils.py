@@ -15,9 +15,9 @@ from root_common import session
 
 sys.path.append(str(DIR.parent.parent))
 from get_quarter import (
-    get_quarter,
     get_quarter_num,
-)  # NOTE: оставить get_quarter_num для main.py
+    get_quarter_roman,  # NOTE: оставить get_quarter_roman для main.py
+)
 
 
 class NotFoundReport(Exception):
@@ -58,7 +58,7 @@ def get_quarter_report_context() -> str:
         "dep": "all",
         "rep": "rep1",
         "quarter": "quarter",
-        "period": f"{today.year}-q{get_quarter(today)}",
+        "period": f"{today.year}-q{get_quarter_num(today)}",
         "v": int(today.timestamp() * 1000),
         "type": "normal",
     }
@@ -78,3 +78,8 @@ def get_year_report_context() -> str:
         "type": "normal",
     }
     return _send_data(data)
+
+
+if __name__ == "__main__":
+    dt = dt.datetime.now()
+    print(dt, get_quarter_num(dt), get_quarter_roman(dt))
