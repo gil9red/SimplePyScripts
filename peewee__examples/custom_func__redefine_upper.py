@@ -19,14 +19,25 @@ def db_func():
     print("[db_func]")
 
     db = SqliteDatabase(":memory:")
+    db.connect()
+
+    with db.connection() as connect:
+        run_sql(connect)
+        """
+        ('ы', 'ы')
+        ('s', 'S')
+        None
+        None
+        (1,)
+        """
+
+    print()
 
     @db.func("upper")
     def upper(value: str) -> str | None:
         if value is None:
             return
         return value.upper()
-
-    db.connect()
 
     with db.connection() as connect:
         run_sql(connect)
