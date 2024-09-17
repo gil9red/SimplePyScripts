@@ -8,13 +8,12 @@ __author__ = "ipetrash"
 import sqlite3
 from pathlib import Path
 
-from root_config import DIR_DB
 
-
+DIR = Path(__file__).parent
 FILE_NAME = Path(__file__).resolve()
 
 
-conn = sqlite3.connect(str(DIR_DB / FILE_NAME.stem) + ".db")
+conn = sqlite3.connect(str(DIR / FILE_NAME.stem) + ".db")
 c = conn.cursor()
 
 # Create table
