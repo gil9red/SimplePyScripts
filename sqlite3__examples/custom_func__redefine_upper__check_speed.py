@@ -50,14 +50,17 @@ with sqlite3.connect(":memory:") as c:
 
     print()
 
+    def run_test():
+        sql = "SELECT COUNT(*) FROM stocks WHERE UPPER(trans) LIKE UPPER('%SELL%')"
+        elapsed = timeit(
+            stmt="c.execute(sql).fetchone()",
+            globals=dict(sql=sql, c=c),
+            number=100,
+        )
+        print(f"Elapsed {elapsed:.3f} secs")
+
     print("SELECT COUNT DEFAULT UPPER...")
-    sql = "SELECT COUNT(*) FROM stocks WHERE UPPER(trans) LIKE UPPER('%SELL%')"
-    elapsed = timeit(
-        stmt="c.execute(sql).fetchone()",
-        globals=dict(sql=sql, c=c),
-        number=100,
-    )
-    print(f"Elapsed {elapsed:.3f} secs")
+    run_test()
     # Elapsed 7.677 secs
 
     print()
@@ -65,11 +68,5 @@ with sqlite3.connect(":memory:") as c:
     c.create_function("upper", narg=1, func=str.upper)
 
     print("SELECT COUNT PYTHON UPPER...")
-    sql = "SELECT COUNT(*) FROM stocks WHERE UPPER(trans) LIKE UPPER('%SELL%')"
-    elapsed = timeit(
-        stmt="c.execute(sql).fetchone()",
-        globals=dict(sql=sql, c=c),
-        number=100,
-    )
-    print(f"Elapsed {elapsed:.3f} secs")
+    run_test()
     # Elapsed 18.656 secs
