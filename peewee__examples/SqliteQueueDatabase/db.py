@@ -44,7 +44,6 @@ db = SqliteQueueDatabase(
 class BaseModel(Model):
     class Meta:
         database = db
-        only_save_dirty = True
 
     def get_new(self) -> Self:
         return type(self).get(self._pk_expr())
