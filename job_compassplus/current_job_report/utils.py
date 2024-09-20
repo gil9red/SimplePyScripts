@@ -40,11 +40,11 @@ def _send_data(data: dict) -> str:
     return rs.text
 
 
-def get_report_context() -> str:
+def get_report_context(rep: str = "rep1") -> str:
     today = dt.datetime.today()
     data = {
         "dep": "all",
-        "rep": "rep1",
+        "rep": rep,
         "period": today.strftime("%Y-%m"),
         "v": int(today.timestamp() * 1000),
         "type": "normal",
