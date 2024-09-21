@@ -5,30 +5,26 @@
 __author__ = "ipetrash"
 
 
-import re
-from dataclasses import dataclass
-
 from lxml import etree
 
-from utils import NotFoundReport, get_report_context, get_quarter_report_context
-
-
-def clear_hours(hours: str) -> str:
-    return re.sub(r"[^\d:-]", "", hours)
-
-
-def get_text_children(el: etree._Element, idx) -> str:
-    try:
-        return el.getchildren()[idx].text.strip()
-    except IndexError:
-        return ""
+from utils import (
+    NotFoundReport,
+    get_report_context,
+    get_quarter_report_context,
+    clear_hours,
+    get_text_children,
+)
 
 
 def get_tr_for_current_user(html: str) -> etree._Element:
     root = etree.HTML(html)
 
-    xpath_1 = '//table[@id="report"]/tbody/tr[th[contains(text(),"Текущий пользователь")]]'
-    xpath_2 = '//table[@class="report"]/tbody/tr[th[contains(text(),"Текущий пользователь")]]'
+    xpath_1 = (
+        '//table[@id="report"]/tbody/tr[th[contains(text(),"Текущий пользователь")]]'
+    )
+    xpath_2 = (
+        '//table[@class="report"]/tbody/tr[th[contains(text(),"Текущий пользователь")]]'
+    )
 
     # Вытаскивание tr, у которого есть вложенный th, имеющий в содержимом текст "Текущий пользователь"
     try:
@@ -106,44 +102,6 @@ def get_quarter_user_and_deviation_hours() -> tuple[str, str]:
     return parse_current_user_deviation_hours(content)
 
 
-@dataclass
-class Worklog:
-    actually: str  # Отработано фактически (чч:мм:сс)
-    logged: str  # Зафиксировано трудозатрат (чч:мм)
-    logged_percent: int  # Процент зафиксированного времени
-
-    @classmethod
-    def parse_from(cls, data: tuple[str, str, str]) -> "Worklog":
-        return cls(
-            actually=data[0],
-            logged=data[1],
-            logged_percent=int(data[2].replace("%", "")),
-        )
-
-
-def get_worklog() -> Worklog:
-    content = get_report_context(rep="worklog")
-
-    root = etree.HTML(content)
-    items = root.xpath('//table/tbody/tr[contains(@class,"current")]')
-    if not items:
-        raise NotFoundReport()
-
-    current_user_tr = items[0]
-    return Worklog.parse_from(
-        (
-            # Отработано фактически (чч:мм:сс)
-            get_text_children(current_user_tr, 1),
-
-            # Зафиксировано трудозатрат (чч:мм)
-            get_text_children(current_user_tr, 2),
-
-            # Процент зафиксированного времени
-            get_text_children(current_user_tr, 3),
-        )
-    )
-
-
 if __name__ == "__main__":
     name, deviation_hours = get_user_and_deviation_hours()
     print(name)
@@ -172,6 +130,8 @@ if __name__ == "__main__":
     """
 
     print()
+
+    from get_worklog import get_worklog
 
     print(get_worklog())
     """

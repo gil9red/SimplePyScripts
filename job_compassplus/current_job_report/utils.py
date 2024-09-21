@@ -5,9 +5,12 @@ __author__ = "ipetrash"
 
 
 import datetime as dt
+import re
 import sys
 
 from pathlib import Path
+
+from lxml import etree
 
 DIR = Path(__file__).resolve().parent
 sys.path.append(str(DIR.parent))
@@ -83,3 +86,14 @@ def get_year_report_context() -> str:
 if __name__ == "__main__":
     dt = dt.datetime.now()
     print(dt, get_quarter_num(dt), get_quarter_roman(dt))
+
+
+def clear_hours(hours: str) -> str:
+    return re.sub(r"[^\d:-]", "", hours)
+
+
+def get_text_children(el: etree._Element, idx) -> str:
+    try:
+        return el.getchildren()[idx].text.strip()
+    except IndexError:
+        return ""
