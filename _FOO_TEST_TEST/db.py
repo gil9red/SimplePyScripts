@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 from dataclasses import dataclass, fields
-from typing import Any, Optional
+from typing import Any, Generator, Optional, Type
 
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 
@@ -24,7 +24,15 @@ if not db.open():
 
 class BaseModel:
     @classmethod
-    def select(cls, where: dict[str, Any] = None):  # TODO: typing генератор
+    def get_table_name(cls) -> str:
+        return cls.__name__
+
+    @classmethod
+    def create_table(cls):
+        raise NotImplemented()
+
+    @classmethod
+    def select(cls, where: dict[str, Any] = None) -> Generator[Type["BaseModel"], None, None]:
         this_fields: list[str] = get_fields(cls)
 
         if where:
@@ -37,7 +45,7 @@ class BaseModel:
         query.prepare(
             f"""
             SELECT {",".join(this_fields)}
-            FROM {cls.__name__}
+            FROM {cls.get_table_name()}
             {where_str}
             """
         )
@@ -53,9 +61,20 @@ class BaseModel:
             }
             yield cls(**data)
 
+    @classmethod
+    def select_one(cls, where: dict[str, Any] = None) -> Optional[Type["BaseModel"]]:
+        return next(
+            cls.select(where=where),
+            None,
+        )
+
+    @classmethod
+    def get_inherited_models(cls) -> list[Type["BaseModel"]]:
+        return sorted(cls.__subclasses__(), key=lambda x: x.__name__)
+
 
 @dataclass
-class LoggedDate(BaseModel):
+class Logged(BaseModel):
     id: int
     date: str
     total_seconds: int
@@ -64,8 +83,8 @@ class LoggedDate(BaseModel):
     @classmethod
     def create_table(cls):
         QSqlQuery(
-            """
-            CREATE TABLE IF NOT EXISTS LoggedDate(
+            f"""
+            CREATE TABLE IF NOT EXISTS {cls.get_table_name()}(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 date VARCHAR(10) UNIQUE,
                 total_seconds INTEGER DEFAULT 0,
@@ -76,10 +95,7 @@ class LoggedDate(BaseModel):
 
     @classmethod
     def get_by_date(cls, date: str) -> Optional["LoggedDate"]:
-        return next(
-            cls.select(dict(date=date)),
-            None
-        )
+        return cls.select_one(where=dict(date=date))
 
     @classmethod
     def add(cls, date: str) -> "LoggedDate":
@@ -88,7 +104,7 @@ class LoggedDate(BaseModel):
             return obj
 
         query = QSqlQuery()
-        query.prepare("INSERT INTO LoggedDate (date) VALUES (:date)")
+        query.prepare(f"INSERT INTO {cls.get_table_name()} (date) VALUES (:date)")
         query.bindValue(":date", date)
         query.exec()
 
@@ -96,9 +112,9 @@ class LoggedDate(BaseModel):
 
 
 @dataclass
-class LoggedDateItem:
+class LoggedItem(BaseModel):
     uuid: str
-    logged_date: LoggedDate
+    logged: Logged
     time: str
     seconds: int
     seconds_human: str
@@ -108,32 +124,32 @@ class LoggedDateItem:
     @classmethod
     def create_table(cls):
         QSqlQuery(
-            """
-            CREATE TABLE IF NOT EXISTS LoggedDateItem(
+            f"""
+            CREATE TABLE IF NOT EXISTS {cls.get_table_name()}(
                 uuid TEXT PRIMARY KEY,
-                logged_date_id INTEGER,
+                logged_id INTEGER,
                 time VARCHAR(8),
                 seconds INTEGER DEFAULT 0,
                 seconds_human TEXT,
                 jira_id TEXT,
                 jira_title TEXT,
                 
-                FOREIGN KEY (logged_date_id) REFERENCES LoggedDate (id) ON DELETE CASCADE
+                FOREIGN KEY (logged_id) REFERENCES Logged (id) ON DELETE CASCADE
             )
             """
         ).exec()
 
 
-LoggedDate.create_table()
-LoggedDateItem.create_table()
+for model in BaseModel.get_inherited_models():
+    model.create_table()
 
 
 date = "2024-09-23"
-print(LoggedDate.get_by_date(date))
-print(LoggedDate.add(date))
-print(LoggedDate.add(date))
-print(LoggedDate.get_by_date(date))
+print(Logged.get_by_date(date))
+print(Logged.add(date))
+print(Logged.add(date))
+print(Logged.get_by_date(date))
 print()
 
-for obj in LoggedDate.select():
+for obj in Logged.select():
     print(obj)
