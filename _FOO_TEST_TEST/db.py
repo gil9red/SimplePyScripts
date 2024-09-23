@@ -111,6 +111,28 @@ class Logged(BaseModel):
 
         return cls.get_by_date(date)
 
+    @classmethod
+    def update(
+        cls,
+        id: int,
+        total_seconds: int,
+        total_seconds_human: str,
+    ):
+        query = QSqlQuery()
+        query.prepare(
+            f"""
+            UPDATE {cls.get_table_name()}
+            SET
+                total_seconds = :total_seconds,
+                total_seconds_human = :total_seconds_human
+            WHERE id = :id
+            """
+        )
+        query.bindValue(":id", id)
+        query.bindValue(":total_seconds", total_seconds)
+        query.bindValue(":total_seconds_human", total_seconds_human)
+        query.exec()
+
 
 @dataclass
 class LoggedItem(BaseModel):
@@ -148,7 +170,8 @@ class LoggedItem(BaseModel):
     def add(
         cls,
         uuid: str,
-        date_time: datetime,
+        logged_id: int,
+        time_str: str,
         seconds: int,
         seconds_human: str,
         jira_id: str,
@@ -157,9 +180,6 @@ class LoggedItem(BaseModel):
         # Если уже есть
         if obj := cls.get_by_uuid(uuid):
             return obj
-
-        date_str = date_time.date().isoformat()
-        logged_id = Logged.add(date_str).id
 
         query = QSqlQuery()
         query.prepare(
@@ -170,7 +190,7 @@ class LoggedItem(BaseModel):
         )
         query.bindValue(":uuid", uuid)
         query.bindValue(":logged_id", logged_id)
-        query.bindValue(":time", date_time.time().isoformat())
+        query.bindValue(":time", time_str)
         query.bindValue(":seconds", seconds)
         query.bindValue(":seconds_human", seconds_human)
         query.bindValue(":jira_id", jira_id)
@@ -218,15 +238,50 @@ items = [
         "logged_seconds": 3600,
         "jira_id": "FOO-10468",
         "jira_title": "January 2025"
-    }
+    },
+    {
+        "uuid": "1f5540c1-2614-4521-898c-64fcd2222c1d",
+        "date_time": "25/08/2024 11:23:11",
+        "logged_human_time": "1 hour",
+        "logged_seconds": 3600,
+        "jira_id": "FOO-11202",
+        "jira_title": "Учет времени, не связанного с конкретной джирой"
+    },
 ]
+from collections import defaultdict
+date_by_items = defaultdict(list)
 for item in items:
     date_time = datetime.strptime(item["date_time"], "%d/%m/%Y %H:%M:%S")
-    LoggedItem.add(
-        uuid=item["uuid"],
-        date_time=date_time,
-        seconds=item["logged_seconds"],
-        seconds_human=item["logged_human_time"],
-        jira_id=item["jira_id"],
-        jira_title=item["jira_title"],
+    date_str = date_time.date().isoformat()
+    date_by_items[date_str].append(item)
+
+for date_str, items in date_by_items.items():
+    logged_id = Logged.add(date_str).id
+
+    total_seconds: int = 0
+    for item in items:
+        date_time = datetime.strptime(item["date_time"], "%d/%m/%Y %H:%M:%S")
+        time_str = date_time.time().isoformat()
+
+        logged_seconds = item["logged_seconds"]
+        total_seconds += logged_seconds
+
+        LoggedItem.add(
+            uuid=item["uuid"],
+            logged_id=logged_id,
+            time_str=time_str,
+            seconds=logged_seconds,
+            seconds_human=item["logged_human_time"],
+            jira_id=item["jira_id"],
+            jira_title=item["jira_title"],
+        )
+
+    # TODO:
+    from datetime import timedelta
+    total_seconds_human = str(timedelta(seconds=total_seconds))
+
+    Logged.update(
+        id=logged_id,
+        total_seconds=total_seconds,
+        total_seconds_human=total_seconds_human,
     )
