@@ -198,8 +198,6 @@ items = [
     {
         "uuid": "bf5540c1-2614-4521-898c-64fcd2222c1d",
         "date_time": "24/08/2024 21:46:41",
-        "date": "24/08/2024",
-        "time": "21:46:41",
         "logged_human_time": "1 hour",
         "logged_seconds": 3600,
         "jira_id": "FOO-11202",
@@ -208,8 +206,6 @@ items = [
     {
         "uuid": "e8ea6140-daa2-46ca-981f-bee449fe4a34",
         "date_time": "24/08/2024 20:56:56",
-        "date": "24/08/2024",
-        "time": "20:56:56",
         "logged_human_time": "4 hours",
         "logged_seconds": 14400,
         "jira_id": "FOO-10238",
@@ -218,8 +214,6 @@ items = [
     {
         "uuid": "64469ae4-325d-4fae-833d-7b3c61e4d8ce",
         "date_time": "24/08/2024 20:28:38",
-        "date": "24/08/2024",
-        "time": "20:28:38",
         "logged_human_time": "1 hour",
         "logged_seconds": 3600,
         "jira_id": "FOO-10468",
