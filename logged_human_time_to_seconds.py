@@ -69,6 +69,13 @@ if __name__ == "__main__":
         ("3 hours, 30 minutes", 3 * 3600 + 1800),
         ("15 minutes", 15 * 60),
         ("3 hours", 3 * 3600),
+        ("1 week", 5 * 8 * 3600),
+        (
+            "1 week, 2 days, 1 hour",
+            logged_human_time_to_seconds("5 day")
+            + logged_human_time_to_seconds("2 day")
+            + logged_human_time_to_seconds("1 hour")
+        ),
     ]
     for value, expected in items:
         seconds = logged_human_time_to_seconds(value)
