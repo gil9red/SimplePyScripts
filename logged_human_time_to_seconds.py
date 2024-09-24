@@ -71,3 +71,6 @@ if __name__ == "__main__":
 
     for line in list(set(text.splitlines())):
         print(line, logged_human_time_to_seconds(line))
+
+    assert logged_human_time_to_seconds("1 day") == logged_human_time_to_seconds("8 hours")
+    assert logged_human_time_to_seconds("5 days") == logged_human_time_to_seconds("1 week")
