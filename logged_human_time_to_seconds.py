@@ -4,6 +4,16 @@
 __author__ = "ipetrash"
 
 
+from enum import IntEnum
+
+
+class UnitSeconds(IntEnum):
+    MINUTE = 60
+    HOUR = 60 * 60
+    DAY = 8 * 60 * 60
+    WEEK = 5 * 8 * 60 * 60
+
+
 def logged_human_time_to_seconds(human_time: str) -> int:
     """Конвертирование человеко-читаемого времени в секунды.
 
@@ -24,29 +34,36 @@ def logged_human_time_to_seconds(human_time: str) -> int:
     #   Your current conversion rates are 1w = 5d and 1d = 8h.
 
     total_seconds = 0
-
     for part in human_time.split(", "):
-        value, metric = part.lower().split()
+        value, metric = part.upper().split()
+
         value = int(value)
+        metric = metric.removesuffix("S")  # NOTE: "HOURS" -> "HOUR"
 
-        if "minute" in metric:
-            total_seconds += value * 60
-
-        elif "hour" in metric:
-            total_seconds += value * 60 * 60
-
-        elif "day" in metric:
-            total_seconds += value * 8 * 60 * 60
-
-        elif "week" in metric:
-            total_seconds += value * 5 * 8 * 60 * 60
+        total_seconds += value * UnitSeconds[metric]
 
     return total_seconds
 
 
+def seconds_to_logged_human_time(seconds: int) -> str:
+    weeks, seconds = divmod(seconds, UnitSeconds.WEEK)
+    days, seconds = divmod(seconds, UnitSeconds.DAY)
+    hours, seconds = divmod(seconds, UnitSeconds.HOUR)
+    minutes, _ = divmod(seconds, UnitSeconds.MINUTE)
+
+    get_suffix = lambda n: 's' if n > 1 else ''
+    items = [
+        f"{weeks} week{get_suffix(weeks)}" if weeks else '',
+        f"{days} day{get_suffix(days)}" if days else '',
+        f"{hours} hour{get_suffix(hours)}" if hours else '',
+        f"{minutes} minute{get_suffix(minutes)}" if minutes else '',
+    ]
+    return ", ".join(filter(None, items))
+
+
 if __name__ == "__main__":
     items = [
-        ("2 hours", 2 * 3600),
+        ("2 hours", 2 * 60 * 60),
         ("1 hour, 15 minutes", 3600 + 15 * 60),
         ("1 hour, 30 minutes", 3600 + 1800),
         ("4 hours", 4 * 3600),
@@ -79,8 +96,17 @@ if __name__ == "__main__":
     ]
     for value, expected in items:
         seconds = logged_human_time_to_seconds(value)
-        print(value, seconds)
+        print(f"{value!r} -> {seconds} seconds")
         assert expected == seconds
+
+        logged_human = seconds_to_logged_human_time(seconds)
+        print(f"{seconds} seconds -> {logged_human!r}")
+        assert value == logged_human
+
+        print()
 
     assert logged_human_time_to_seconds("1 day") == logged_human_time_to_seconds("8 hours")
     assert logged_human_time_to_seconds("5 days") == logged_human_time_to_seconds("1 week")
+
+    value = "1 day, 4 hours, 15 minutes"
+    assert seconds_to_logged_human_time(logged_human_time_to_seconds(value)) == value
