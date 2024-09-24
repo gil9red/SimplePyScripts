@@ -45,32 +45,35 @@ def logged_human_time_to_seconds(human_time: str) -> int:
 
 
 if __name__ == "__main__":
-    text = """\
-2 hours
-1 hour, 30 minutes
-4 hours
-7 hours
-1 day, 1 hour
-6 hours, 30 minutes
-30 minutes
-1 day
-1 hour
-4 hours, 30 minutes
-40 minutes
-7 hours, 30 minutes
-1 day, 30 minutes
-5 hours
-5 hours, 30 minutes
-1 minute
-1 hour, 20 minutes
-6 hours
-3 hours, 30 minutes
-15 minutes
-3 hours
-"""
-
-    for line in list(set(text.splitlines())):
-        print(line, logged_human_time_to_seconds(line))
+    items = [
+        ("2 hours", 2 * 3600),
+        ("1 hour, 15 minutes", 3600 + 15 * 60),
+        ("1 hour, 30 minutes", 3600 + 1800),
+        ("4 hours", 4 * 3600),
+        ("7 hours", 7 * 3600),
+        ("1 day, 1 hour", 8 * 3600 + 3600),
+        ("6 hours, 30 minutes", 6 * 3600 + 1800),
+        ("30 minutes", 30 * 60),
+        ("1 day", 8 * 3600),
+        ("1 hour", 3600),
+        ("4 hours, 30 minutes", 4 * 3600 + 1800),
+        ("40 minutes", 40 * 60),
+        ("45 minutes", 45 * 60),
+        ("7 hours, 30 minutes", 7 * 3600 + 1800),
+        ("1 day, 30 minutes", 8 * 3600 + 1800),
+        ("5 hours", 5 * 3600),
+        ("5 hours, 30 minutes", 5 * 3600 + 1800),
+        ("1 minute", 60),
+        ("1 hour, 20 minutes", 3600 + 20 * 60),
+        ("6 hours", 6 * 3600),
+        ("3 hours, 30 minutes", 3 * 3600 + 1800),
+        ("15 minutes", 15 * 60),
+        ("3 hours", 3 * 3600),
+    ]
+    for value, expected in items:
+        seconds = logged_human_time_to_seconds(value)
+        print(value, seconds)
+        assert expected == seconds
 
     assert logged_human_time_to_seconds("1 day") == logged_human_time_to_seconds("8 hours")
     assert logged_human_time_to_seconds("5 days") == logged_human_time_to_seconds("1 week")
