@@ -29,7 +29,7 @@ def get_games(name: str) -> list[tuple[str, str]]:
     return [
         (game["title"], game["price"]["baseMoney"]["amount"])
         for game in data["products"]
-        if game["price"]["baseMoney"]["currency"] == "RUB"
+        if game["price"] and game["price"]["baseMoney"]["currency"] == "RUB"
     ]
 
 
