@@ -44,7 +44,7 @@ def get_text_children(el: etree._Element, idx: int) -> str:
 
 def _send_data(data: dict) -> str:
     # В какой-то момент адрес временно поменялся, тогда предварительный GET поможет получить актуальный адрес
-    rs = session.get(url)
+    rs = session.get(URL)
     if not rs.ok:
         raise NotFoundReport(f"HTTP status is {rs.status_code}")
 
