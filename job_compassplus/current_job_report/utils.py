@@ -27,12 +27,24 @@ class NotFoundReport(Exception):
     pass
 
 
-URL = "https://helpdesk.compassluxe.com/pa-reports/"
+HOST = "https://helpdesk.compassluxe.com"
+URL = f"{HOST}/pa-reports/"
+
+
+def clear_hours(hours: str) -> str:
+    return re.sub(r"[^\d:-]", "", hours)
+
+
+def get_text_children(el: etree._Element, idx: int) -> str:
+    try:
+        return el.getchildren()[idx].text.strip()
+    except IndexError:
+        return ""
 
 
 def _send_data(data: dict) -> str:
     # В какой-то момент адрес временно поменялся, тогда предварительный GET поможет получить актуальный адрес
-    rs = session.get(URL)
+    rs = session.get(url)
     if not rs.ok:
         raise NotFoundReport(f"HTTP status is {rs.status_code}")
 
@@ -86,14 +98,3 @@ def get_year_report_context() -> str:
 if __name__ == "__main__":
     dt = dt.datetime.now()
     print(dt, get_quarter_num(dt), get_quarter_roman(dt))
-
-
-def clear_hours(hours: str) -> str:
-    return re.sub(r"[^\d:-]", "", hours)
-
-
-def get_text_children(el: etree._Element, idx) -> str:
-    try:
-        return el.getchildren()[idx].text.strip()
-    except IndexError:
-        return ""
