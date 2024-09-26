@@ -15,14 +15,12 @@ sys.path.append(str(ROOT_DIR))
 from root_common import session
 
 
-URL_PROFILE_FORMAT = (
-    "https://helpdesk.compassluxe.com/secure/ViewProfile.jspa?name={name}"
-)
+HOST = "https://helpdesk.compassluxe.com"
+URL_PROFILE_FORMAT = f"{HOST}/secure/ViewProfile.jspa?name={{name}}"
+URL_USER_SEARCH = f"{HOST}/rest/api/latest/user/search"
 
 
 def search_by_avatar(avatar_id: int) -> list[dict]:
-    url = "https://helpdesk.compassluxe.com/rest/api/latest/user/search"
-
     start_at = 0
     max_results = 500
 
@@ -36,7 +34,7 @@ def search_by_avatar(avatar_id: int) -> list[dict]:
             "maxResults": max_results,
         }
 
-        rs = session.get(url, params=params)
+        rs = session.get(URL_USER_SEARCH, params=params)
         rs.raise_for_status()
 
         result = rs.json()
