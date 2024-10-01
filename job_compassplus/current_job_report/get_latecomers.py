@@ -100,13 +100,15 @@ def get_latecomers(
 
 
 if __name__ == "__main__":
+    DEP: str = "dep12"
+
     period_date: date = date.today()
     # NOTE: За конкретную дату
     # period_date: date = date(year=2024, month=9, day=1)
     print(f"Отчет за {period_date:%Y-%m}")
 
     person_by_dates: dict[str, list[datetime]] | None = get_latecomers(
-        dep="dep12", period_date=period_date
+        dep=DEP, period_date=period_date
     )
     if person_by_dates is None:
         print("Не готов")
@@ -118,3 +120,24 @@ if __name__ == "__main__":
                 print(f"        {day}")
 
             print()
+
+    # NOTE: За период
+    # print()
+    #
+    # for month in [7, 8, 9]:
+    #     result = get_latecomers(
+    #         dep=DEP, period_date=date(year=2024, month=month, day=1)
+    #     )
+    #     if not result:
+    #         continue
+    #
+    #     for person, days in result.items():
+    #         person_by_dates[person] += days
+    #
+    # print(f"Опоздавшие ({len(person_by_dates)}):")
+    # for person, days in person_by_dates.items():
+    #     print(f"    {person} ({len(days)}):")
+    #     for day in days:
+    #         print(f"        {day}")
+    #
+    #     print()
