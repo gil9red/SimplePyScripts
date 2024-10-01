@@ -9,7 +9,8 @@ import xml.etree.ElementTree as ET
 import sys
 
 from collections import defaultdict
-from datetime import datetime, timezone
+from dataclasses import dataclass
+from datetime import datetime, date, timezone
 
 from config import ROOT_DIR, USERNAME, MAX_RESULTS, JIRA_HOST
 
@@ -27,6 +28,15 @@ URL: str = (
 )
 
 
+@dataclass
+class Activity:
+    entry_dt: datetime
+    jira_id: str
+    jira_title: str
+    logged_human_time: str | None = None
+    logged_seconds: int | None = None
+
+
 # SOURCE: https://stackoverflow.com/a/13287083/5909792
 def utc_to_local(utc_dt: datetime) -> datetime:
     return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
@@ -38,46 +48,77 @@ def get_rss_jira_log() -> bytes:
     return rs.content
 
 
-def get_logged_dict(root) -> dict[str, list[dict]]:
-    logged_dict = defaultdict(list)
-
+def get_date_by_activities(root) -> dict[date, list[Activity]]:
     ns = {
         "": "http://www.w3.org/2005/Atom",
         "activity": "http://activitystrea.ms/spec/1.0/",
     }
 
+    def _get_text(el, xpath: str) -> str:
+        return el.find(xpath, namespaces=ns).text.strip()
+
+    result = defaultdict(list)
+
+    pattern_logged = re.compile("logged '(.+?)'", flags=re.IGNORECASE)
+
     for entry in root.findall("./entry", namespaces=ns):
         # Ищем в <entry> строку с логированием
-        match = re.search("logged '(.+?)'", "".join(entry.itertext()), flags=re.IGNORECASE)
-        if not match:
-            continue
+        if m := pattern_logged.search("".join(entry.itertext())):
+            logged_human_time = m.group(1)
+            logged_seconds = logged_human_time_to_seconds(logged_human_time)
+        else:
+            logged_human_time = logged_seconds = None
 
-        logged_human_time = match.group(1)
-        logged_seconds = logged_human_time_to_seconds(logged_human_time)
-
-        jira_id = entry.find("./activity:object/title", namespaces=ns).text.strip()
-        jira_title = entry.find("./activity:object/summary", namespaces=ns).text.strip()
-
-        entry_dt = datetime.strptime(
-            entry.find("./published", namespaces=ns).text,
-            "%Y-%m-%dT%H:%M:%S.%fZ",
-        )
+        try:
+            jira_id = _get_text(entry, "./activity:object/title")
+            jira_title = _get_text(entry, "./activity:object/summary")
+        except:
+            jira_id = _get_text(entry, "./activity:target/title")
+            jira_title = _get_text(entry, "./activity:target/summary")
 
         # Переменная entry_dt имеет время в UTC, и желательно его привести в локальное время
+        entry_dt = datetime.strptime(
+            _get_text(entry, "./published"),
+            "%Y-%m-%dT%H:%M:%S.%fZ",
+        )
         entry_dt = utc_to_local(entry_dt)
-
         entry_date = entry_dt.date()
+
+        result[entry_date].append(
+            Activity(
+                entry_dt=entry_dt,
+                jira_id=jira_id,
+                jira_title=jira_title,
+                logged_human_time=logged_human_time,
+                logged_seconds=logged_seconds,
+            )
+        )
+
+    return result
+
+
+def get_logged_dict(root) -> dict[str, list[dict]]:
+    logged_dict = defaultdict(list)
+
+    date_by_activities: dict[date, list[Activity]] = get_date_by_activities(root)
+    for entry_date, activities in date_by_activities.items():
         date_str = entry_date.strftime("%d/%m/%Y")
 
-        logged_dict[date_str].append({
-            "date_time": entry_dt.strftime("%d/%m/%Y %H:%M:%S"),
-            "date": entry_dt.strftime("%d/%m/%Y"),
-            "time": entry_dt.strftime("%H:%M:%S"),
-            "logged_human_time": logged_human_time,
-            "logged_seconds": logged_seconds,
-            "jira_id": jira_id,
-            "jira_title": jira_title,
-        })
+        for activity in activities:
+            if not activity.logged_human_time:
+                continue
+
+            logged_dict[date_str].append(
+                {
+                    "date_time": activity.entry_dt.strftime("%d/%m/%Y %H:%M:%S"),
+                    "date": activity.entry_dt.strftime("%d/%m/%Y"),
+                    "time": activity.entry_dt.strftime("%H:%M:%S"),
+                    "logged_human_time": activity.logged_human_time,
+                    "logged_seconds": activity.logged_seconds,
+                    "jira_id": activity.jira_id,
+                    "jira_title": activity.jira_title,
+                }
+            )
 
     return logged_dict
 
@@ -123,6 +164,7 @@ if __name__ == "__main__":
     print(logged_dict)
 
     import json
+
     print(json.dumps(logged_dict, indent=4, ensure_ascii=False))
     print()
 
