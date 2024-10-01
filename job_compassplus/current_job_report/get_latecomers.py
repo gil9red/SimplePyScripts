@@ -10,14 +10,14 @@ from datetime import date, datetime
 from typing import Callable
 
 from bs4 import BeautifulSoup, Tag
-from utils import get_report_context
+from utils import NotFoundReport, get_report_context
 
 
 def get_latecomers(
     dep: str = "dep12",
     period_date: date = None,
     is_latecome: Callable[[datetime], bool] = lambda day: day.hour >= 11,
-) -> dict[str, list[datetime]] | None:
+) -> dict[str, list[datetime]]:
     html = get_report_context(
         dep=dep,
         rep="rep2",  # Детальный отчет
@@ -30,7 +30,7 @@ def get_latecomers(
 
     report_table = root.select_one("table#report")
     if not report_table:  # Отчет еще не готов
-        return None
+        raise NotFoundReport()
 
     dates: list[str | None] = []
     for el in report_table.select("thead > tr:nth-child(2) > th"):
@@ -107,13 +107,12 @@ if __name__ == "__main__":
     # period_date: date = date(year=2024, month=9, day=1)
     print(f"Отчет за {period_date:%Y-%m}")
 
-    person_by_dates: dict[str, list[datetime]] | None = get_latecomers(
-        dep=DEP, period_date=period_date
-    )
-    if person_by_dates is None:
-        print("Не готов")
-    else:
+    try:
+        person_by_dates: dict[str, list[datetime]] = get_latecomers(
+            dep=DEP, period_date=period_date
+        )
         print(f"Опоздавшие ({len(person_by_dates)}):")
+
         for person, days in person_by_dates.items():
             print(f"    {person} ({len(days)}):")
             for day in days:
@@ -121,14 +120,19 @@ if __name__ == "__main__":
 
             print()
 
+    except NotFoundReport:
+        print("Не готов")
+
     # NOTE: За период
     # print()
     #
+    # person_by_dates: dict[str, list[datetime]] = defaultdict(list)
     # for month in [7, 8, 9]:
-    #     result = get_latecomers(
-    #         dep=DEP, period_date=date(year=2024, month=month, day=1)
-    #     )
-    #     if not result:
+    #     try:
+    #         result = get_latecomers(
+    #             dep=DEP, period_date=date(year=2024, month=month, day=1)
+    #         )
+    #     except NotFoundReport:
     #         continue
     #
     #     for person, days in result.items():
