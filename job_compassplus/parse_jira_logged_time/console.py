@@ -11,6 +11,7 @@ import sys
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime, date, timezone
+from typing import Any
 
 from config import ROOT_DIR, USERNAME, MAX_RESULTS, JIRA_HOST
 
@@ -57,7 +58,7 @@ def get_date_by_activities(root) -> dict[date, list[Activity]]:
     def _get_text(el, xpath: str) -> str:
         return el.find(xpath, namespaces=ns).text.strip()
 
-    result = defaultdict(list)
+    result: dict[date, list[Activity]] = defaultdict(list)
 
     pattern_logged = re.compile("logged '(.+?)'", flags=re.IGNORECASE)
 
@@ -98,7 +99,7 @@ def get_date_by_activities(root) -> dict[date, list[Activity]]:
 
 
 def get_logged_dict(root) -> dict[str, list[dict]]:
-    logged_dict = defaultdict(list)
+    logged_dict: dict[str, list[dict[str, Any]]] = defaultdict(list)
 
     date_by_activities: dict[date, list[Activity]] = get_date_by_activities(root)
     for entry_date, activities in date_by_activities.items():
