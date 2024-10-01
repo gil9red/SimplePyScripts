@@ -18,7 +18,7 @@ NEED_ISSUE_ID: int = 999
 
 while True:
     last_issue_key: str = get_last_issue_key(NEED_PROJECT)
-    print(f'{datetime.now():%d/%m/%Y %H:%M:%S} last_issue_key: {last_issue_key}')
+    print(f'[{datetime.now():%d/%m/%Y %H:%M:%S}] last_issue_key: {last_issue_key}')
 
     # NOTE: "OPTT-1234" -> 1234
     issue_id: int = int(last_issue_key.split("-")[-1])
