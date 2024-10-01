@@ -4,10 +4,10 @@
 __author__ = "ipetrash"
 
 
-import datetime as dt
 import re
 import sys
 
+from datetime import datetime
 from pathlib import Path
 
 from lxml import etree
@@ -55,12 +55,16 @@ def _send_data(data: dict) -> str:
     return rs.text
 
 
-def get_report_context(rep: str = "rep1") -> str:
-    today = dt.datetime.today()
+def get_report_context(dep: str = "all", rep: str = "rep1", period: str | None = None) -> str:
+    today = datetime.today()
+
+    if not period:
+        period = today.strftime("%Y-%m")
+
     data = {
-        "dep": "all",
+        "dep": dep,
         "rep": rep,
-        "period": today.strftime("%Y-%m"),
+        "period": period,
         "v": int(today.timestamp() * 1000),
         "type": "normal",
     }
@@ -68,7 +72,7 @@ def get_report_context(rep: str = "rep1") -> str:
 
 
 def get_quarter_report_context() -> str:
-    today = dt.datetime.today()
+    today = datetime.today()
     data = {
         "dep": "all",
         "rep": "rep1",
@@ -81,7 +85,7 @@ def get_quarter_report_context() -> str:
 
 
 def get_year_report_context() -> str:
-    today = dt.datetime.today()
+    today = datetime.today()
     data = {
         "dep": "all",
         "rep": "rep1",
@@ -96,5 +100,5 @@ def get_year_report_context() -> str:
 
 
 if __name__ == "__main__":
-    dt = dt.datetime.now()
+    dt = datetime.now()
     print(dt, get_quarter_num(dt), get_quarter_roman(dt))
