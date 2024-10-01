@@ -4,14 +4,13 @@
 __author__ = "ipetrash"
 
 
-import json
 import io
 import sys
 import traceback
 import webbrowser
 
 from contextlib import redirect_stdout
-from datetime import datetime
+from datetime import datetime, date
 from typing import Any
 
 from PyQt5.QtWidgets import (
@@ -44,12 +43,12 @@ from PyQt5.QtGui import QTextOption, QIcon
 
 from config import PATH_FAVICON, JIRA_HOST, USERNAME
 from console import (
+    URL,
+    Activity,
     get_rss_jira_log,
-    parse_logged_dict,
-    get_logged_list_by_now_utc_date,
-    get_logged_total_seconds,
-    get_sorted_logged,
     seconds_to_str,
+    parse_date_by_activities,
+    get_logged_total_seconds,
 )
 
 
@@ -261,56 +260,53 @@ class MainWindow(QMainWindow):
     def _fill_tables(self, xml_data: bytes):
         buffer_io = io.StringIO()
         try:
+            print(f"{URL}\n")
+
             with redirect_stdout(buffer_io):
                 print(
                     f"Xml data ({len(xml_data)} bytes):\n"
                     f"{xml_data[:150] + b'...' if len(xml_data) > 150 else xml_data!r}"
                 )
 
-                # Структура документа - xml
-                logged_dict: dict[str, list[dict]] = parse_logged_dict(xml_data)
-                print(logged_dict)
-
-                if not logged_dict:
+                date_by_activities: dict[date, list[Activity]] = parse_date_by_activities(xml_data)
+                if not date_by_activities:
                     return
 
-                print(json.dumps(logged_dict, indent=4, ensure_ascii=False))
-                print()
-
-                logged_list: list[dict] = get_logged_list_by_now_utc_date(logged_dict)
-
-                logged_total_seconds = get_logged_total_seconds(logged_list)
-                logged_total_seconds_str = seconds_to_str(logged_total_seconds)
-                print("Entry_logged_list:", logged_list)
-                print("Today seconds:", logged_total_seconds)
-                print("Today time:", logged_total_seconds_str)
-                print()
-
                 # Для красоты выводим результат в табличном виде
-                lines: list[tuple[str, str, int]] = []
+                table_header: tuple = ("DATE", "LOGGED", "SECONDS", "ACTIVITIES")
+                table_lines: list[tuple[str, str, int, int]] = []
 
                 clear_table(self.table_logged)
 
-                for i, (date_str, logged_list) in enumerate(
-                    get_sorted_logged(logged_dict)
-                ):
-                    total_seconds = get_logged_total_seconds(logged_list)
-                    total_seconds_str = seconds_to_str(total_seconds)
-                    row = date_str, total_seconds_str, total_seconds
-                    lines.append(row)
+                for entry_date, activities in sorted(date_by_activities.items(), key=lambda x: x[0], reverse=True):
+                    activities_number = len(activities)
 
-                    date: datetime = datetime.strptime(date_str, "%d/%m/%Y")
-                    is_odd_week: int = date.isocalendar().week % 2 == 1
+                    activities: list[Activity] = [
+                        obj for obj in reversed(activities) if obj.is_logged()
+                    ]
+
+                    total_seconds: int = get_logged_total_seconds(activities)
+                    total_seconds_str: str = seconds_to_str(total_seconds)
+
+                    date_str: str = entry_date.strftime("%d/%m/%Y")
+                    table_lines.append((date_str, total_seconds_str, total_seconds, activities_number))
+
+                    is_odd_week: int = entry_date.isocalendar().week % 2 == 1
+
+                    # Не показывать даты, в которых не было залогировано
+                    if not total_seconds:
+                        continue
 
                     items = [
-                        create_table_item(date_str, data=logged_list),
+                        create_table_item(date_str, data=activities),
                         create_table_item(
                             total_seconds_str,
                             tool_tip=f"Total seconds: {total_seconds}",
                         ),
                     ]
 
-                    self.table_logged.setRowCount(self.table_logged.rowCount() + 1)
+                    i = self.table_logged.rowCount()
+                    self.table_logged.setRowCount(i + 1)
                     for j, item in enumerate(items):
                         if is_odd_week:
                             item.setBackground(Qt.lightGray)
@@ -321,15 +317,17 @@ class MainWindow(QMainWindow):
                 self.table_logged.setFocus()
                 self._on_table_logged_item_clicked(self.table_logged.currentItem())
 
+                print()
+
                 # Список строк станет списком столбцов, у каждого столбца подсчитается максимальная длина
-                max_len_columns = [max(map(len, map(str, col))) for col in zip(*lines)]
+                table: list = [table_header] + table_lines
+                max_len_columns = [max(map(len, map(str, col))) for col in zip(*table)]
 
                 # Создание строки форматирования: [30, 14, 5] -> "{:<30} | {:<14} | {:<5}"
                 my_table_format = " | ".join(
                     "{:<%s}" % max_len for max_len in max_len_columns
                 )
-
-                for line in lines:
+                for line in table:
                     print(my_table_format.format(*line))
 
         finally:
@@ -367,17 +365,20 @@ class MainWindow(QMainWindow):
         row = item.row()
         item1 = self.table_logged.item(row, 0)
 
-        logged_list: list[dict] = item1.data(Qt.UserRole)
+        activities: list[Activity] = item1.data(Qt.UserRole)
+        if not activities:
+            return
 
-        for i, logged in enumerate(reversed(logged_list)):
+        for activity in activities:
             items = [
-                create_table_item(logged["time"]),
-                create_table_item(logged["logged_human_time"]),
-                create_table_item(logged["jira_id"]),
-                create_table_item(logged["jira_title"], tool_tip=logged["jira_title"]),
+                create_table_item(activity.entry_dt.strftime("%H:%M:%S")),
+                create_table_item(activity.logged_human_time),
+                create_table_item(activity.jira_id),
+                create_table_item(activity.jira_title, tool_tip=activity.jira_title),
             ]
 
-            self.table_logged_info.setRowCount(self.table_logged_info.rowCount() + 1)
+            i = self.table_logged_info.rowCount()
+            self.table_logged_info.setRowCount(i + 1)
             for j, item in enumerate(items):
                 self.table_logged_info.setItem(i, j, item)
 

@@ -11,7 +11,6 @@ import sys
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime, date, timezone
-from typing import Any
 
 from config import ROOT_DIR, USERNAME, MAX_RESULTS, JIRA_HOST
 
@@ -36,6 +35,9 @@ class Activity:
     jira_title: str
     logged_human_time: str | None = None
     logged_seconds: int | None = None
+
+    def is_logged(self) -> bool:
+        return bool(self.logged_seconds)
 
 
 # SOURCE: https://stackoverflow.com/a/13287083/5909792
@@ -98,57 +100,13 @@ def get_date_by_activities(root) -> dict[date, list[Activity]]:
     return result
 
 
-def get_logged_dict(root) -> dict[str, list[dict]]:
-    logged_dict: dict[str, list[dict[str, Any]]] = defaultdict(list)
-
-    date_by_activities: dict[date, list[Activity]] = get_date_by_activities(root)
-    for entry_date, activities in date_by_activities.items():
-        date_str = entry_date.strftime("%d/%m/%Y")
-
-        for activity in activities:
-            if not activity.logged_human_time:
-                continue
-
-            logged_dict[date_str].append(
-                {
-                    "date_time": activity.entry_dt.strftime("%d/%m/%Y %H:%M:%S"),
-                    "date": activity.entry_dt.strftime("%d/%m/%Y"),
-                    "time": activity.entry_dt.strftime("%H:%M:%S"),
-                    "logged_human_time": activity.logged_human_time,
-                    "logged_seconds": activity.logged_seconds,
-                    "jira_id": activity.jira_id,
-                    "jira_title": activity.jira_title,
-                }
-            )
-
-    return logged_dict
-
-
-def parse_logged_dict(xml_data: bytes) -> dict[str, list[dict]]:
+def parse_date_by_activities(xml_data: bytes) -> dict[date, list[Activity]]:
     root = ET.fromstring(xml_data)
-    return get_logged_dict(root)
+    return get_date_by_activities(root)
 
 
-def get_sorted_logged(
-    date_str_by_logged_list: dict, reverse=True
-) -> list[tuple[str, list[dict]]]:
-    sorted_items = date_str_by_logged_list.items()
-    sorted_items = sorted(
-        sorted_items, key=lambda x: datetime.strptime(x[0], "%d/%m/%Y"), reverse=reverse
-    )
-
-    return list(sorted_items)
-
-
-def get_logged_list_by_now_utc_date(
-    date_str_by_entry_logged_list: dict[str, list[dict]]
-) -> list[dict]:
-    current_utc_date_str = datetime.utcnow().strftime("%d/%m/%Y")
-    return date_str_by_entry_logged_list.get(current_utc_date_str, [])
-
-
-def get_logged_total_seconds(entry_logged_list: list[dict]) -> int:
-    return sum(entry["logged_seconds"] for entry in entry_logged_list)
+def get_logged_total_seconds(activities: list[Activity]) -> int:
+    return sum(obj.logged_seconds for obj in activities if obj.is_logged())
 
 
 if __name__ == "__main__":
@@ -156,31 +114,23 @@ if __name__ == "__main__":
 
     xml_data = get_rss_jira_log()
     print(len(xml_data), repr(xml_data[:50]))
-
-    # open('rs.xml', 'wb').write(xml_data)
-    # xml_data = open('rs.xml', 'rb').read()
-
-    # Структура документа -- xml
-    logged_dict = parse_logged_dict(xml_data)
-    print(logged_dict)
-
-    import json
-
-    print(json.dumps(logged_dict, indent=4, ensure_ascii=False))
     print()
 
-    logged_list = get_logged_list_by_now_utc_date(logged_dict)
-    logged_total_seconds = get_logged_total_seconds(logged_list)
-    print("entry_logged_list:", logged_list)
-    print("today seconds:", logged_total_seconds)
-    print("today time:", seconds_to_str(logged_total_seconds))
-    print()
+    # Структура документа - xml
+    date_by_activities: dict[date, list[Activity]] = parse_date_by_activities(xml_data)
+    # print(date_by_activities)
+    # print()
 
     # Для красоты выводим результат в табличном виде
-    lines = []
-    for date_str, logged_list in get_sorted_logged(logged_dict):
-        total_seconds = get_logged_total_seconds(logged_list)
-        lines.append((date_str, total_seconds, seconds_to_str(total_seconds)))
+    lines = [
+        ("DATE", "LOGGED", "SECONDS", "ACTIVITIES"),
+    ]
+    for entry_date, activities in sorted(date_by_activities.items(), key=lambda x: x[0], reverse=True):
+        total_seconds: int = get_logged_total_seconds(activities)
+        total_seconds_str: str = seconds_to_str(total_seconds)
+
+        date_str: str = entry_date.strftime("%d/%m/%Y")
+        lines.append((date_str, total_seconds_str, total_seconds, len(activities)))
 
     # Список строк станет списком столбцов, у каждого столбца подсчитается максимальная длина
     max_len_columns = [max(map(len, map(str, col))) for col in zip(*lines)]
