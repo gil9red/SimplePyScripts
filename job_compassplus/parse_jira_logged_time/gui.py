@@ -268,7 +268,9 @@ class MainWindow(QMainWindow):
                     f"{xml_data[:150] + b'...' if len(xml_data) > 150 else xml_data!r}"
                 )
 
-                date_by_activities: dict[date, list[Activity]] = parse_date_by_activities(xml_data)
+                date_by_activities: dict[
+                    date, list[Activity]
+                ] = parse_date_by_activities(xml_data)
                 if not date_by_activities:
                     return
 
@@ -278,7 +280,9 @@ class MainWindow(QMainWindow):
 
                 clear_table(self.table_logged)
 
-                for entry_date, activities in sorted(date_by_activities.items(), key=lambda x: x[0], reverse=True):
+                for entry_date, activities in sorted(
+                    date_by_activities.items(), key=lambda x: x[0], reverse=True
+                ):
                     activities_number = len(activities)
 
                     activities: list[Activity] = [
@@ -289,7 +293,9 @@ class MainWindow(QMainWindow):
                     total_seconds_str: str = seconds_to_str(total_seconds)
 
                     date_str: str = entry_date.strftime("%d/%m/%Y")
-                    table_lines.append((date_str, total_seconds_str, total_seconds, activities_number))
+                    table_lines.append(
+                        (date_str, total_seconds_str, total_seconds, activities_number)
+                    )
 
                     is_odd_week: int = entry_date.isocalendar().week % 2 == 1
 

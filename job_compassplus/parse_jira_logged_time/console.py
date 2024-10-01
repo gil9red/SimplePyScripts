@@ -125,7 +125,9 @@ if __name__ == "__main__":
     lines = [
         ("DATE", "LOGGED", "SECONDS", "ACTIVITIES"),
     ]
-    for entry_date, activities in sorted(date_by_activities.items(), key=lambda x: x[0], reverse=True):
+    for entry_date, activities in sorted(
+        date_by_activities.items(), key=lambda x: x[0], reverse=True
+    ):
         total_seconds: int = get_logged_total_seconds(activities)
         total_seconds_str: str = seconds_to_str(total_seconds)
 
