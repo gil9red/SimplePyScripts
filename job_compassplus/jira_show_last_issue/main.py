@@ -5,19 +5,19 @@ __author__ = "ipetrash"
 
 
 import sys
+from pathlib import Path
 
 from bs4 import BeautifulSoup
 
-from common import ROOT_DIR
-
+DIR = Path(__file__).resolve().parent
+ROOT_DIR = DIR.parent
 sys.path.append(str(ROOT_DIR))
 from root_common import session
 
 
-URL_FORMAT = (
-    "https://helpdesk.compassluxe.com/issues/?jql=project %3D {project} "
-    "AND resolution %3D Unresolved "
-    "ORDER BY created DESC"
+URL_FORMAT: str = (
+    "https://helpdesk.compassluxe.com/issues/"
+    "?jql=project={project} ORDER BY created DESC"
 )
 
 
@@ -25,6 +25,7 @@ def get_last_issue_key(project: str) -> str:
     url = URL_FORMAT.format(project=project)
 
     rs = session.get(url)
+    rs.raise_for_status()
 
     root = BeautifulSoup(rs.content, "html.parser")
     issue_row_el = root.select_one("tr[data-issuekey]")
@@ -32,6 +33,18 @@ def get_last_issue_key(project: str) -> str:
 
 
 if __name__ == "__main__":
-    print(get_last_issue_key(project="OPTT"))
-    print(get_last_issue_key(project="RADIX"))
-    print(get_last_issue_key(project="TXPG"))
+    import time
+
+    for project in [
+        "OPTT",
+        "RADIX",
+        "TXI",
+        "TXACQ",
+        "TXCORE",
+        "TXISS",
+        "TXPG",
+        "TWO",
+        "FLORA",
+    ]:
+        print(get_last_issue_key(project=project))
+        time.sleep(0.5)
