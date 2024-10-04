@@ -29,9 +29,14 @@ URL: str = (
 )
 
 
-class ActivityTypeEnum(enum.Enum):
+class ActivityActionEnum(enum.Enum):
     COMMENTED = enum.auto()
     UPDATED = enum.auto()
+    CHANGED = enum.auto()
+    ADDED = enum.auto()
+    REMOVED = enum.auto()
+    STARTED_PROGRESS = enum.auto()
+    STOPPED_PROGRESS = enum.auto()
     ATTACHED = enum.auto()
     LOGGED = enum.auto()
     LINKED = enum.auto()
@@ -43,7 +48,7 @@ class ActivityTypeEnum(enum.Enum):
 @dataclass
 class Activity:
     entry_dt: datetime
-    type: ActivityTypeEnum
+    action: ActivityActionEnum
     jira_id: str
     jira_title: str
     logged_human_time: str | None = None
@@ -73,16 +78,16 @@ def get_date_by_activities(root) -> dict[date, list[Activity]]:
     def _get_text(el, xpath: str) -> str:
         return el.find(xpath, namespaces=ns).text.strip()
 
-    def _get_activity_type(text: str) -> ActivityTypeEnum:
+    def _get_activity_action(text: str) -> ActivityActionEnum:
         text = text.lower()
-        for t in ActivityTypeEnum:
-            if t == ActivityTypeEnum.UNKNOWN:
+        for action in ActivityActionEnum:
+            if action == ActivityActionEnum.UNKNOWN:
                 continue
 
-            if re.search(f" {t.name.lower()} ", text):
-                return t
+            if re.search(f" {action.name.lower().replace('_', ' ')} ", text):
+                return action
 
-        return ActivityTypeEnum.UNKNOWN
+        return ActivityActionEnum.UNKNOWN
 
     result: dict[date, list[Activity]] = defaultdict(list)
 
@@ -91,10 +96,10 @@ def get_date_by_activities(root) -> dict[date, list[Activity]]:
     for entry in root.findall("./entry", namespaces=ns):
         title: str = _get_text(entry, "./title")
 
-        activity_type: ActivityTypeEnum = _get_activity_type(title)
+        action: ActivityActionEnum = _get_activity_action(title)
 
         logged_human_time = logged_seconds = None
-        if activity_type == ActivityTypeEnum.LOGGED:
+        if action == ActivityActionEnum.LOGGED:
             # Ищем в <entry> строку с логированием
             if m := pattern_logged.search(title):
                 logged_human_time = m.group(1)
@@ -118,7 +123,7 @@ def get_date_by_activities(root) -> dict[date, list[Activity]]:
         result[entry_date].append(
             Activity(
                 entry_dt=entry_dt,
-                type=activity_type,
+                action=action,
                 jira_id=jira_id,
                 jira_title=jira_title,
                 logged_human_time=logged_human_time,
