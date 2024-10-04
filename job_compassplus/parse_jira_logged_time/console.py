@@ -22,11 +22,23 @@ sys.path.append(str(ROOT_DIR.parent))
 from logged_human_time_to_seconds import logged_human_time_to_seconds
 from seconds_to_str import seconds_to_str
 
+from third_party.decode_escapes_telegram_bot.utils import decode
+
 
 URL: str = (
     f"{JIRA_HOST}/activity?maxResults={MAX_RESULTS}"
     f"&streams=user+IS+{USERNAME}&os_authType=basic&title=undefined"
 )
+
+
+PATTERN_TAGS: re.Pattern = re.compile("<.*?>")
+PATTERN_SPACES: re.Pattern = re.compile(r"\s{2,}")
+
+
+def get_clean_html(raw_html: str) -> str:
+    text = PATTERN_TAGS.sub("", raw_html)
+    text = PATTERN_SPACES.sub(" ", text).strip()
+    return decode(text)
 
 
 class ActivityActionEnum(enum.Enum):
@@ -49,6 +61,7 @@ class ActivityActionEnum(enum.Enum):
 class Activity:
     entry_dt: datetime
     action: ActivityActionEnum
+    action_text: str
     jira_id: str
     jira_title: str
     logged_human_time: str | None = None
@@ -91,19 +104,26 @@ def get_date_by_activities(root) -> dict[date, list[Activity]]:
 
     result: dict[date, list[Activity]] = defaultdict(list)
 
-    pattern_logged = re.compile(" logged '(.+?)'", flags=re.IGNORECASE)
+    pattern_logged = re.compile("logged '(.+?)'", flags=re.IGNORECASE)
 
     for entry in root.findall("./entry", namespaces=ns):
         title: str = _get_text(entry, "./title")
 
+        # Удаление тегов HTML, лишних пробелов
+        title = get_clean_html(title)
+
         action: ActivityActionEnum = _get_activity_action(title)
 
-        logged_human_time = logged_seconds = None
-        if action == ActivityActionEnum.LOGGED:
-            # Ищем в <entry> строку с логированием
-            if m := pattern_logged.search(title):
-                logged_human_time = m.group(1)
-                logged_seconds = logged_human_time_to_seconds(logged_human_time)
+        # Ищем в <entry> строку с логированием
+        if m := pattern_logged.search(
+            # Не всегда у title есть строка с логами
+            # Если несколько полей менялось, то инфа по залогированному будет в другом теге
+            "".join(entry.itertext())
+        ):
+            logged_human_time = m.group(1)
+            logged_seconds = logged_human_time_to_seconds(logged_human_time)
+        else:
+            logged_human_time = logged_seconds = None
 
         try:
             jira_id = _get_text(entry, "./activity:object/title")
@@ -124,6 +144,7 @@ def get_date_by_activities(root) -> dict[date, list[Activity]]:
             Activity(
                 entry_dt=entry_dt,
                 action=action,
+                action_text=title,
                 jira_id=jira_id,
                 jira_title=jira_title,
                 logged_human_time=logged_human_time,
