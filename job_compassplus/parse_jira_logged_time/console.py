@@ -4,6 +4,7 @@
 __author__ = "ipetrash"
 
 
+import enum
 import re
 import xml.etree.ElementTree as ET
 import sys
@@ -28,9 +29,21 @@ URL: str = (
 )
 
 
+class ActivityTypeEnum(enum.Enum):
+    COMMENTED = enum.auto()
+    UPDATED = enum.auto()
+    ATTACHED = enum.auto()
+    LOGGED = enum.auto()
+    LINKED = enum.auto()
+    RESOLVED = enum.auto()
+    CREATED = enum.auto()
+    UNKNOWN = enum.auto()
+
+
 @dataclass
 class Activity:
     entry_dt: datetime
+    type: ActivityTypeEnum
     jira_id: str
     jira_title: str
     logged_human_time: str | None = None
@@ -60,17 +73,32 @@ def get_date_by_activities(root) -> dict[date, list[Activity]]:
     def _get_text(el, xpath: str) -> str:
         return el.find(xpath, namespaces=ns).text.strip()
 
+    def _get_activity_type(text: str) -> ActivityTypeEnum:
+        text = text.lower()
+        for t in ActivityTypeEnum:
+            if t == ActivityTypeEnum.UNKNOWN:
+                continue
+
+            if re.search(f" {t.name.lower()} ", text):
+                return t
+
+        return ActivityTypeEnum.UNKNOWN
+
     result: dict[date, list[Activity]] = defaultdict(list)
 
-    pattern_logged = re.compile("logged '(.+?)'", flags=re.IGNORECASE)
+    pattern_logged = re.compile(" logged '(.+?)'", flags=re.IGNORECASE)
 
     for entry in root.findall("./entry", namespaces=ns):
-        # Ищем в <entry> строку с логированием
-        if m := pattern_logged.search("".join(entry.itertext())):
-            logged_human_time = m.group(1)
-            logged_seconds = logged_human_time_to_seconds(logged_human_time)
-        else:
-            logged_human_time = logged_seconds = None
+        title: str = _get_text(entry, "./title")
+
+        activity_type: ActivityTypeEnum = _get_activity_type(title)
+
+        logged_human_time = logged_seconds = None
+        if activity_type == ActivityTypeEnum.LOGGED:
+            # Ищем в <entry> строку с логированием
+            if m := pattern_logged.search(title):
+                logged_human_time = m.group(1)
+                logged_seconds = logged_human_time_to_seconds(logged_human_time)
 
         try:
             jira_id = _get_text(entry, "./activity:object/title")
@@ -90,6 +118,7 @@ def get_date_by_activities(root) -> dict[date, list[Activity]]:
         result[entry_date].append(
             Activity(
                 entry_dt=entry_dt,
+                type=activity_type,
                 jira_id=jira_id,
                 jira_title=jira_title,
                 logged_human_time=logged_human_time,
