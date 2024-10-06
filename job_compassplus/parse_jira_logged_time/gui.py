@@ -144,7 +144,7 @@ class LoggedWidget(QWidget):
         )
 
         self.table_logged_info = create_table(
-            header_labels=["TIME", "LOGGED", "JIRA", "TITLE"],
+            header_labels=["TIME", "LOGGED", "JIRA", "TITLE", "DESCRIPTION"],
         )
 
         # Первые 3 колонки (кроме названия) имеют размер под содержимое
@@ -177,7 +177,7 @@ class LoggedWidget(QWidget):
             date_by_activities.items(), key=lambda x: x[0], reverse=True
         ):
             activities: list[Activity] = [
-                obj for obj in reversed(activities) if obj.is_logged()
+                obj for obj in reversed(activities) if obj.logged
             ]
 
             total_seconds: int = get_logged_total_seconds(activities)
@@ -221,11 +221,18 @@ class LoggedWidget(QWidget):
             return
 
         for activity in activities:
+            if activity.logged:
+                logged_human_time = activity.logged.human_time
+                logged_description = activity.logged.description
+            else:
+                logged_human_time = logged_description = None
+
             items = [
                 create_table_item(activity.entry_dt.strftime("%H:%M:%S")),
-                create_table_item(activity.logged_human_time),
+                create_table_item(logged_human_time),
                 create_table_item(activity.jira_id),
                 create_table_item(activity.jira_title, tool_tip=activity.jira_title),
+                create_table_item(logged_description, tool_tip=logged_description),
             ]
             add_table_row(self.table_logged_info, items)
 
@@ -261,7 +268,7 @@ class ActivitiesWidget(QWidget):
             )
 
         self.table_jira_by_activities = create_table(
-            header_labels=["TIME", "LOGGED", "ACTION", "TEXT"],
+            header_labels=["TIME", "LOGGED", "ACTION", "LOG", "TEXT"],
         )
         for j in [0, 1, 2]:
             self.table_jira_by_activities.horizontalHeader().setSectionResizeMode(
@@ -379,10 +386,17 @@ class ActivitiesWidget(QWidget):
         activities.sort(key=lambda x: x.entry_dt)
 
         for activity in activities:
+            if activity.logged:
+                logged_human_time = activity.logged.human_time
+                logged_description = activity.logged.description
+            else:
+                logged_human_time = logged_description = None
+
             items = [
                 create_table_item(activity.entry_dt.strftime("%H:%M:%S")),
-                create_table_item(activity.logged_human_time),
+                create_table_item(logged_human_time),
                 create_table_item(activity.action.name),
+                create_table_item(logged_description, tool_tip=logged_description),
                 create_table_item(activity.action_text, tool_tip=activity.action_text),
             ]
             add_table_row(self.table_jira_by_activities, items)
@@ -550,7 +564,7 @@ class MainWindow(QMainWindow):
                     activities_number = len(activities)
 
                     activities: list[Activity] = [
-                        obj for obj in reversed(activities) if obj.is_logged()
+                        obj for obj in reversed(activities) if obj.logged
                     ]
 
                     total_seconds: int = get_logged_total_seconds(activities)

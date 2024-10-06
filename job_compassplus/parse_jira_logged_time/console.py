@@ -58,17 +58,23 @@ class ActivityActionEnum(enum.Enum):
 
 
 @dataclass
+class Logged:
+    human_time: str
+    seconds: int
+    description: str | None = None
+
+
+@dataclass
 class Activity:
     entry_dt: datetime
     action: ActivityActionEnum
     action_text: str
     jira_id: str
     jira_title: str
-    logged_human_time: str | None = None
-    logged_seconds: int | None = None
+    logged: Logged | None = None
 
     def is_logged(self) -> bool:
-        return bool(self.logged_seconds)
+        return self.logged is not None
 
 
 # SOURCE: https://stackoverflow.com/a/13287083/5909792
@@ -125,6 +131,21 @@ def get_date_by_activities(root) -> dict[date, list[Activity]]:
         else:
             logged_human_time = logged_seconds = None
 
+        logged_description = None
+        if action == ActivityActionEnum.LOGGED:
+            content_el = entry.find("./content", namespaces=ns)
+            if content_el is not None:
+                logged_description = get_clean_html(content_el.text)
+
+        if logged_seconds:
+            logged = Logged(
+                human_time=logged_human_time,
+                seconds=logged_seconds,
+                description=logged_description,
+            )
+        else:
+            logged = None
+
         try:
             jira_id = _get_text(entry, "./activity:object/title")
             jira_title = _get_text(entry, "./activity:object/summary")
@@ -147,8 +168,7 @@ def get_date_by_activities(root) -> dict[date, list[Activity]]:
                 action_text=title,
                 jira_id=jira_id,
                 jira_title=jira_title,
-                logged_human_time=logged_human_time,
-                logged_seconds=logged_seconds,
+                logged=logged,
             )
         )
 
@@ -161,7 +181,7 @@ def parse_date_by_activities(xml_data: bytes) -> dict[date, list[Activity]]:
 
 
 def get_logged_total_seconds(activities: list[Activity]) -> int:
-    return sum(obj.logged_seconds for obj in activities if obj.is_logged())
+    return sum(obj.logged.seconds for obj in activities if obj.logged)
 
 
 if __name__ == "__main__":
