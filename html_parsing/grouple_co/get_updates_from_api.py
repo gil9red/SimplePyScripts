@@ -4,12 +4,12 @@
 __author__ = "ipetrash"
 
 
-from common import session, load
+from common import session, do_post, load
 
 
 def get_feeds_by_manga_chapters() -> list[str]:
     # Auth and load
-    rs = load("https://grouple.co/private/bookmarks/index#")
+    rs = load("/private/bookmarks/index#")
 
     data = {
         "bookmarkSort": "NAME",
@@ -27,9 +27,7 @@ def get_feeds_by_manga_chapters() -> list[str]:
         }
     )
 
-    rs = session.post("https://grouple.co/api/bookmark/activitiesList", json=data)
-    rs.raise_for_status()
-
+    rs = do_post("/api/bookmark/activitiesList", json=data)
     return [
         f'{item["element"]["name"]} {item["title"]}'
         for item in rs.json()["list"]

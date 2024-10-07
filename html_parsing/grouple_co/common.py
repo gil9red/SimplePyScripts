@@ -10,6 +10,7 @@ import re
 import time
 
 from dataclasses import dataclass, field
+from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup, Tag
@@ -41,10 +42,31 @@ class Status(AutoName):
     FAVORITE = enum.auto()  # Любимая
 
 
+HOST: str = "https://grouple.co"
+
+
 session = requests.Session()
 session.headers[
     "User-Agent"
 ] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0"
+
+
+def get_url(uri: str) -> str:
+    return urljoin(HOST, uri)
+
+
+def do_get(uri: str, **kwargs) -> requests.Response:
+    rs = session.get(get_url(uri), **kwargs)
+    rs.raise_for_status()
+
+    return rs
+
+
+def do_post(uri: str, **kwargs) -> requests.Response:
+    rs = session.post(get_url(uri), **kwargs)
+    rs.raise_for_status()
+
+    return rs
 
 
 def do_auth() -> requests.Response:
@@ -53,8 +75,7 @@ def do_auth() -> requests.Response:
         "password": PASSWORD,
     }
 
-    rs = session.post("https://grouple.co/login/authenticate", data=form_data)
-    rs.raise_for_status()
+    rs = do_post("/login/authenticate", data=form_data)
 
     # Example: https://grouple.co/internal/auth/login?login_error=1
     if "error" in rs.url:
@@ -63,11 +84,15 @@ def do_auth() -> requests.Response:
     return rs
 
 
-def load(url: str, **kwargs) -> requests.Response:
-    while True:
-        rs = session.get(url, **kwargs)
-        rs.raise_for_status()
+def load(uri: str, **kwargs) -> requests.Response:
+    # NOTE: Была замечена смена домена
+    global HOST
+    rs = do_get("/")
+    if not rs.url.startswith(HOST):
+        HOST = rs.url
 
+    while True:
+        rs = do_get(uri, **kwargs)
         time.sleep(1)
 
         # Если нужно авторизоваться
@@ -93,8 +118,7 @@ def parse_bookmark(el: Tag) -> Bookmark:
 
 
 def get_bookmarks_by_status(status: Status) -> list[Bookmark]:
-    url_bookmarks = "https://grouple.co/private/bookmarks"
-    rs = load(url_bookmarks)
+    rs = load("/private/bookmarks")
 
     m = re.search(r"var SITES = (\[.+]);", rs.text)
     if not m:
@@ -121,12 +145,9 @@ def get_bookmarks_by_status(status: Status) -> list[Bookmark]:
         }
         headers = {
             "Authorization": f'Bearer {session.cookies["gwt"]}',
-            "Referer": url_bookmarks,
+            "Referer": rs.url,
         }
-        rs = session.post(
-            "https://grouple.co/api/bookmark/list", json=data, headers=headers
-        )
-        rs.raise_for_status()
+        rs = do_post("/api/bookmark/list", json=data, headers=headers)
 
         result = rs.json()
         for item in result["list"]:
@@ -159,8 +180,7 @@ def get_bookmarks_by_status(status: Status) -> list[Bookmark]:
 
 
 def get_plain_all_bookmarks_from_user(user_id: int) -> list[Bookmark]:
-    url = f"https://grouple.co/user/{user_id}/bookmarks"
-    rs = load(url)
+    rs = load(f"/user/{user_id}/bookmarks")
     root = BeautifulSoup(rs.content, "html.parser")
 
     return [
@@ -181,6 +201,7 @@ if __name__ == "__main__":
     assert Status.WATCHING.name == "WATCHING"
 
     print(session.cookies)
+    print(load("/"))
     print(do_auth())
     print(session.cookies)
 
