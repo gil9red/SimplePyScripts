@@ -307,10 +307,6 @@ class ActivitiesWidget(QWidget):
             date_str: str = entry_date.strftime("%d/%m/%Y")
             is_odd_week: int = entry_date.isocalendar().week % 2 == 1
 
-            # Не показывать даты, в которых не было залогировано
-            if not total_seconds:
-                continue
-
             items = [
                 create_table_item(date_str, data=activities),
                 create_table_item(
