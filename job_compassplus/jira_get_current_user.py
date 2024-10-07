@@ -9,11 +9,11 @@ from root_common import session
 
 
 HOST = "https://helpdesk.compassluxe.com"
-URL_MYSELF = f"{HOST}/rest/api/latest/myself"
+URL_API_MYSELF = f"{HOST}/rest/api/latest/myself"
 
 
 def get_current_user() -> dict[str, Any]:
-    rs = session.get(URL_MYSELF)
+    rs = session.get(URL_API_MYSELF)
     rs.raise_for_status()
 
     return rs.json()
