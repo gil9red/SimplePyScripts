@@ -426,6 +426,7 @@ class MainWindow(QMainWindow):
 
         self.pb_refresh = QPushButton("🔄 REFRESH")
         self.pb_refresh.setObjectName("pb_refresh")
+        self.pb_refresh.setShortcut("F5")
         self.pb_refresh.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         self.pb_refresh.clicked.connect(self.refresh)
 
