@@ -12,8 +12,14 @@ from utils import (
     get_report_context,
     get_quarter_report_context,
     clear_hours,
-    get_text_children,
 )
+
+
+def get_text_children(el: etree._Element, idx: int) -> str:
+    try:
+        return el.getchildren()[idx].text.strip()
+    except IndexError:
+        return ""
 
 
 def get_tr_for_current_user(html: str) -> etree._Element:

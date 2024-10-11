@@ -10,8 +10,6 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from lxml import etree
-
 DIR = Path(__file__).resolve().parent
 sys.path.append(str(DIR.parent))
 from root_common import session
@@ -33,13 +31,6 @@ URL = f"{HOST}/pa-reports/"
 
 def clear_hours(hours: str) -> str:
     return re.sub(r"[^\d:-]", "", hours)
-
-
-def get_text_children(el: etree._Element, idx: int) -> str:
-    try:
-        return el.getchildren()[idx].text.strip()
-    except IndexError:
-        return ""
 
 
 def _send_data(data: dict) -> str:
