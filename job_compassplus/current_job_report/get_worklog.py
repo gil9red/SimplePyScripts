@@ -5,10 +5,8 @@ __author__ = "ipetrash"
 
 
 from dataclasses import dataclass
-
-from lxml import etree
-
-from utils import get_report_context, NotFoundReport, get_text_children
+from bs4 import BeautifulSoup
+from utils import get_report_context, NotFoundReport
 
 
 @dataclass
@@ -29,22 +27,22 @@ class Worklog:
 def get_worklog() -> Worklog:
     content = get_report_context(rep="worklog")
 
-    root = etree.HTML(content)
-    items = root.xpath('//table/tbody/tr[contains(@class,"current")]')
-    if not items:
+    root = BeautifulSoup(content, "html.parser")
+    current_user_tr = root.select_one("table > tbody > tr.current")
+    if not current_user_tr:
         raise NotFoundReport()
 
-    current_user_tr = items[0]
+    td_list = current_user_tr.select("td")
     return Worklog.parse_from(
         (
             # Отработано фактически (чч:мм:сс)
-            get_text_children(current_user_tr, 1),
+            td_list[1].get_text(strip=True),
 
             # Зафиксировано трудозатрат (чч:мм)
-            get_text_children(current_user_tr, 2),
+            td_list[2].get_text(strip=True),
 
             # Процент зафиксированного времени
-            get_text_children(current_user_tr, 3),
+            td_list[3].get_text(strip=True),
         )
     )
 
