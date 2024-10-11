@@ -30,7 +30,7 @@ def get_tr_for_current_user(html: str) -> Tag:
         if not tbody_el:
             raise NotFoundReport()
 
-    tr_el = tbody_el.find("tr", text=re.compile(".*Текущий пользователь.*"))
+    tr_el = tbody_el.find("tr", string=re.compile(".*Текущий пользователь.*"))
     if not tr_el:
         raise NotFoundReport()
 
