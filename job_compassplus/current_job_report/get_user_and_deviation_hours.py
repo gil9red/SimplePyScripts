@@ -68,16 +68,6 @@ def get_quarter_user_and_deviation_hours() -> tuple[str, str]:
 
 
 if __name__ == "__main__":
-    """
-    Петраш Илья Андреевич
-    Переработка 03:27:13
-
-    Петраш Илья Андреевич
-    Переработка за квартал 03:27
-
-    Worklog(actually='59:57:13', logged='47:35', logged_percent=79)
-    """
-
     name, deviation_hours = get_user_and_deviation_hours()
     print(name)
     print(
