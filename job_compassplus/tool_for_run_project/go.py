@@ -24,7 +24,6 @@ import psutil
 sys.path.append("../..")
 from from_ghbdtn import from_ghbdtn
 
-sys.path.append("..")
 from kill import kill_servers, kill_explorers, kill_designers, get_processes, is_server, is_explorer, is_designer
 
 sys.path.append("../svn")
