@@ -28,7 +28,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import QColor, QPainter, QIcon, QPixmap, QCursor
 from PyQt5.QtCore import Qt, pyqtSignal, QThread, QRectF
 
-from get_user_and_deviation_hours import (
+from get_hours_worked import (
     get_user_and_deviation_hours,
     get_quarter_user_and_deviation_hours,
 )
