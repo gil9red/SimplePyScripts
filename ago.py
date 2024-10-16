@@ -7,6 +7,7 @@ __author__ = "ipetrash"
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import IntEnum
+from typing import Callable
 
 
 class UnitSeconds(IntEnum):
@@ -23,6 +24,14 @@ class UnitSeconds(IntEnum):
 class L10N:
     singular: dict[UnitSeconds, str]
     plural: dict[UnitSeconds, str]
+
+    choice: Callable[[int], str] = (
+        lambda self, value: self.singular if value == 1 else self.plural
+    )
+
+    def get_value(self, value: int, unit: UnitSeconds) -> str:
+        template = self.choice(self, value)[unit]
+        return template.format(value=value)
 
 
 L10N_EN = L10N(
@@ -50,17 +59,12 @@ L10N_EN = L10N(
 def ago(seconds: timedelta, l10n: L10N = L10N_EN) -> str:
     seconds = int(seconds.total_seconds())
 
-    def _get_value_template(value: int, unit: UnitSeconds):
-        return l10n.singular[unit] if value == 1 else l10n.plural[unit]
-
     for unit in sorted(UnitSeconds, reverse=True):
         value, seconds = divmod(seconds, unit)
         if value:
-            template = _get_value_template(value, unit)
-            return template.format(value=value)
+            return l10n.get_value(value, unit)
 
-    template = _get_value_template(seconds, UnitSeconds.SECOND)
-    return template.format(value=seconds)
+    return l10n.get_value(seconds, UnitSeconds.SECOND)
 
 
 if __name__ == "__main__":
