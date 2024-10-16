@@ -15,7 +15,7 @@ class UnitSeconds(IntEnum):
     HOUR = 60 * MINUTE
     DAY = 24 * HOUR
     WEEK = 7 * DAY
-    MONTH = 30 * DAY  # NOTE: 4 * WEEK = ~28 days in year
+    MONTH = 4 * WEEK
     YEAR = 12 * MONTH
 
 
@@ -51,7 +51,7 @@ def ago(seconds: timedelta, l10n: L10N = L10N_EN) -> str:
     seconds = int(seconds.total_seconds())
 
     def _get_value_template(value: int, unit: UnitSeconds):
-        return l10n.plural[unit] if value > 1 else l10n.singular[unit]
+        return l10n.singular[unit] if value == 1 else l10n.plural[unit]
 
     for unit in sorted(UnitSeconds, reverse=True):
         value, seconds = divmod(seconds, unit)
@@ -59,9 +59,41 @@ def ago(seconds: timedelta, l10n: L10N = L10N_EN) -> str:
             template = _get_value_template(value, unit)
             return template.format(value=value)
 
-    raise Exception(f"Unsupported: {seconds}")
+    template = _get_value_template(seconds, UnitSeconds.SECOND)
+    return template.format(value=seconds)
 
 
 if __name__ == "__main__":
     from datetime import datetime
-    print(ago(datetime(year=2024, month=12, day=12) - datetime(year=2024, month=12, day=10)))
+
+    dt = datetime(year=2024, month=12, day=12)
+
+    items = [
+        (timedelta(seconds=0), "0 seconds ago"),
+        (timedelta(seconds=1), "1 second ago"),
+        (timedelta(seconds=59), "59 seconds ago"),
+        (timedelta(seconds=60), "1 minute ago"),
+        (timedelta(seconds=90), "1 minute ago"),
+        (timedelta(minutes=1), "1 minute ago"),
+        (timedelta(minutes=5), "5 minutes ago"),
+        (timedelta(minutes=45), "45 minutes ago"),
+        (timedelta(hours=1, minutes=45), "1 hour ago"),
+        (timedelta(hours=4, minutes=50), "4 hours ago"),
+        (timedelta(hours=23, minutes=50), "23 hours ago"),
+        (timedelta(hours=40, minutes=50), "1 day ago"),
+        (timedelta(days=1), "1 day ago"),
+        (timedelta(hours=48), "2 days ago"),
+        (timedelta(days=2), "2 days ago"),
+        (timedelta(days=7), "1 week ago"),
+        (timedelta(days=8), "1 week ago"),
+        (timedelta(weeks=1), "1 week ago"),
+        (timedelta(weeks=2), "2 weeks ago"),
+        (timedelta(weeks=4), "1 month ago"),
+        (timedelta(weeks=8), "2 months ago"),
+        (timedelta(weeks=12 * 4), "1 year ago"),
+        (timedelta(weeks=5 * 12 * 4), "5 years ago"),
+    ]
+    for value, expected in items:
+        actual = ago(dt - (dt - value))
+        print(f"{value!r} -> {actual!r}")
+        assert expected == actual, f"{expected!r} != {actual!r}"
