@@ -9,9 +9,9 @@ from enum import IntEnum
 
 class UnitSeconds(IntEnum):
     MINUTE = 60
-    HOUR = 60 * 60
-    DAY = 8 * 60 * 60
-    WEEK = 5 * 8 * 60 * 60
+    HOUR = 60 * MINUTE
+    DAY = 8 * HOUR
+    WEEK = 5 * DAY
 
 
 def logged_human_time_to_seconds(human_time: str) -> int:
