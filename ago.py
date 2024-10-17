@@ -58,6 +58,8 @@ L10N_EN = L10N(
 
 def ago(seconds: timedelta, l10n: L10N = L10N_EN) -> str:
     seconds = int(seconds.total_seconds())
+    if seconds < 0:
+        seconds = -seconds
 
     for unit in sorted(UnitSeconds, reverse=True):
         value, seconds = divmod(seconds, unit)
@@ -101,3 +103,6 @@ if __name__ == "__main__":
         actual = ago(dt - (dt - value))
         print(f"{value!r} -> {actual!r}")
         assert expected == actual, f"{expected!r} != {actual!r}"
+
+    dt2 = datetime(year=2024, month=12, day=10)
+    assert ago(dt2 - dt) == "2 days ago"
