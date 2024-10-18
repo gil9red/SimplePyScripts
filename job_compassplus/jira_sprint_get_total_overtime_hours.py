@@ -7,11 +7,14 @@ __author__ = "ipetrash"
 import logging
 import sys
 
+from dataclasses import dataclass
+from datetime import datetime
+
 from root_common import session
 
 
-HOST = "https://helpdesk.compassluxe.com"
-URL_SEARCH = f"{HOST}/rest/api/latest/search"
+JIRA_HOST = "https://helpdesk.compassluxe.com"
+URL_SEARCH = f"{JIRA_HOST}/rest/api/latest/search"
 
 FIELD_OVERTIME_HOURS = "customfield_13440"
 
@@ -19,10 +22,18 @@ QUERY = {
     "jql": (
         "assignee = currentUser()"
         " AND project = Sprint AND type = Sub-task"
-        " AND updatedDate >= startOfMonth() AND updatedDate <= endOfMonth()"  # NOTE: Current month
+        " AND createdDate >= startOfYear() AND createdDate <= endOfYear()"
     ),
-    "fields": f"key,{FIELD_OVERTIME_HOURS}",
+    "fields": f"key,created,{FIELD_OVERTIME_HOURS}",
 }
+
+
+@dataclass
+class Sprint:
+    key: str
+    created: datetime
+    overtime_hours: int
+
 
 default_handler = logging.StreamHandler(stream=sys.stdout)
 default_handler.setFormatter(
@@ -35,34 +46,48 @@ logger.setLevel(logging.WARNING)
 logger.addHandler(default_handler)
 
 
-def get_total_overtime_hours() -> int:
+def get_sprints_with_overtime_hours() -> list[Sprint]:
     logger.debug(f"Load: {URL_SEARCH}")
 
     rs = session.get(URL_SEARCH, params=QUERY)
     logger.debug(f"Response: {rs}")
     rs.raise_for_status()
 
-    total_overtime_hours: int = 0
+    items: list[Sprint] = []
 
     issues = rs.json()["issues"]
     logger.info(f"Total issues: {len(issues)}")
 
     for issue in issues:
         key = issue["key"]
+        created_str = issue["fields"]["created"]
 
         overtime_hours = issue["fields"][FIELD_OVERTIME_HOURS]
         overtime_hours: int = int(overtime_hours) if overtime_hours else 0
 
-        logger.info(f"Issue: {key}, overtime hours: {overtime_hours}")
-        total_overtime_hours += overtime_hours
+        logger.info(f"Issue: {key}, created_str: {created_str}, overtime hours: {overtime_hours}")
 
-    logger.info(f"Total overtime hours: {total_overtime_hours}")
+        items.append(
+            Sprint(
+                key=key,
+                created=datetime.strptime(created_str, "%Y-%m-%dT%H:%M:%S.%f%z"),
+                overtime_hours=overtime_hours,
+            )
+        )
 
-    return total_overtime_hours
+    return items
 
 
 if __name__ == "__main__":
     # NOTE: Debug
     # logger.setLevel(logging.DEBUG)
 
-    print("Total overtime hours:", get_total_overtime_hours())
+    total_overtime_hours = 0
+    sprints = get_sprints_with_overtime_hours()
+    print(f"Sprints ({len(sprints)}):")
+    for i, sprint in enumerate(sprints, 1):
+        print(f"    {i}. {sprint}")
+        total_overtime_hours += sprint.overtime_hours
+
+    print()
+    print(f"Total overtime hours: {total_overtime_hours}")
