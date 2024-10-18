@@ -22,7 +22,8 @@ QUERY = {
     "jql": (
         "assignee = currentUser()"
         " AND project = Sprint AND type = Sub-task"
-        " AND createdDate >= startOfYear() AND createdDate <= endOfYear()"
+        " AND created >= startOfYear() AND created <= endOfYear()"
+        " ORDER BY created DESC"
     ),
     "fields": f"key,created,{FIELD_OVERTIME_HOURS}",
 }
