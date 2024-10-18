@@ -25,7 +25,7 @@ class L10N:
     singular: dict[UnitSeconds, str]
     plural: dict[UnitSeconds, str]
 
-    choice: Callable[[int], str] = (
+    choice: Callable[[int], dict[UnitSeconds, str]] = (
         lambda self, value: self.singular if value == 1 else self.plural
     )
 
