@@ -56,7 +56,27 @@ sys.excepthook = log_uncaught_exceptions
 
 
 WINDOW_TITLE: str = DIR.name
-DATE_FORMAT: str = "%d/%m/%Y"
+
+DATE_FORMAT: str = "%d.%m.%Y"
+TIME_FORMAT: str = "%H:%M:%S"
+
+
+def get_human_datetime(dt: datetime | None = None) -> str:
+    if not dt:
+        dt = datetime.now()
+    return dt.strftime(f"{DATE_FORMAT} {TIME_FORMAT}")
+
+
+def get_human_date(d: datetime | date | None = None) -> str:
+    if not d:
+        d = date.today()
+    return d.strftime(DATE_FORMAT)
+
+
+def get_human_time(dt: datetime | None = None) -> str:
+    if not dt:
+        dt = datetime.now()
+    return dt.strftime(TIME_FORMAT)
 
 
 def get_table_widget(header_labels: list) -> QTableWidget:
@@ -77,7 +97,7 @@ class GetAssignedOpenIssuesPerProjectThread(QThread):
 
     def run(self):
         try:
-            items = get_assigned_open_issues_per_project()
+            items: dict[str, int] = get_assigned_open_issues_per_project()
             self.about_items.emit(items)
 
             # Даем время на отображение и анимацию прогресс-бара
@@ -117,7 +137,7 @@ class TableWidgetRun(QWidget):
         for i, run in enumerate(items):
             self.table_run.setRowCount(self.table_run.rowCount() + 1)
 
-            item = QTableWidgetItem(run.date.strftime(DATE_FORMAT))
+            item = QTableWidgetItem(get_human_date(run.date))
             item.setData(Qt.UserRole, run.get_project_by_issue_numbers())
             self.table_run.setItem(i, 0, item)
 
@@ -185,26 +205,29 @@ class CurrentAssignedOpenIssues(QWidget):
         self.thread.about_items.connect(self._on_set_items)
         self.thread.about_error.connect(self._on_error)
 
+        self.current_items: dict[str, int] | None = None
         self._update_total_issues("-")
 
     def _update_total_issues(self, value):
         self.label_total.setText(f"<b>Total issues:</b> {value}")
 
     def _on_set_items(self, items: dict[str, int]):
-        self._update_total_issues(sum(items.values()))
+        self.current_items = items
+
+        self._update_total_issues(sum(self.current_items.values()))
 
         # Удаление строк таблицы
         while self.table.rowCount():
             self.table.removeRow(0)
 
-        for i, (project_name, number) in enumerate(items.items()):
+        for i, (project_name, number) in enumerate(self.current_items.items()):
             self.table.setRowCount(self.table.rowCount() + 1)
 
             self.table.setItem(i, 0, QTableWidgetItem(project_name))
             self.table.setItem(i, 1, QTableWidgetItem(str(number)))
 
         self.label_last_refresh_date.setText(
-            f"Last refresh date: {datetime.now():%d/%m/%Y %H:%M:%S}"
+            f"Last refresh date: {get_human_datetime()}"
         )
 
     def _on_error(self, e: Exception):
@@ -213,18 +236,17 @@ class CurrentAssignedOpenIssues(QWidget):
         QMessageBox.warning(self, "ERROR", str(e))
 
     def refresh(self):
-        if self.thread.isRunning():
-            return
+        self.current_items = None
 
         self.thread.start()
 
 
 class MyChartViewToolTips(ChartViewToolTips):
-    def __init__(self, timestamp_by_run: dict[int, Run]):
+    def __init__(self, timestamp_by_info: dict[int, dict[str, int]]):
         super().__init__()
 
         self._callout_font_family = "Courier"
-        self.timestamp_by_run: dict[int, Run] = timestamp_by_run
+        self.timestamp_by_info: dict[int, dict[str, int]] = timestamp_by_info
 
     def show_series_tooltip(self, point, state: bool):
         # value -> pos
@@ -247,12 +269,12 @@ class MyChartViewToolTips(ChartViewToolTips):
 
                     if current_distance < distance:
                         time_ms = int(p_value.x())
-                        run = self.timestamp_by_run[time_ms]
-                        table = get_table(run.get_project_by_issue_numbers())
+                        info: dict[str, int] = self.timestamp_by_info[time_ms]
+                        table = get_table(info)
                         text = (
-                            f"{date.fromtimestamp(time_ms / 1000).strftime(DATE_FORMAT)}"
+                            f"{get_human_date(date.fromtimestamp(time_ms / 1000))}"
                             "\n\n"
-                            f"Total issues: {run.get_total_issues()}"
+                            f"Total issues: {sum(info.values())}"
                             "\n"
                             f"{table}"
                         )
@@ -276,7 +298,7 @@ class MainWindow(QMainWindow):
         icon = QIcon(file_name)
         self.setWindowIcon(icon)
 
-        self.timestamp_by_run: dict[int, Run] = dict()
+        self.timestamp_by_info: dict[int, dict[str, int]] = dict()
 
         menu = QMenu()
         menu.addAction("Show / hide", (lambda: self.setVisible(not self.isVisible())))
@@ -289,7 +311,7 @@ class MainWindow(QMainWindow):
         self.tray.activated.connect(self._on_tray_activated)
         self.tray.show()
 
-        self.chart_view = MyChartViewToolTips(self.timestamp_by_run)
+        self.chart_view = MyChartViewToolTips(self.timestamp_by_info)
         self.chart_view.setRenderHint(QPainter.Antialiasing)
 
         self.cb_chart_filter = QComboBox()
@@ -357,7 +379,7 @@ class MainWindow(QMainWindow):
         series.setPointLabelsFormat("@yPoint")
         series.hovered.connect(self.chart_view.show_series_tooltip)
 
-        self.timestamp_by_run.clear()
+        self.timestamp_by_info.clear()
 
         issues_number = []
         for run in items:
@@ -366,7 +388,17 @@ class MainWindow(QMainWindow):
             series.append(date_value, total_issues)
             issues_number.append(total_issues)
 
-            self.timestamp_by_run[date_value] = run
+            self.timestamp_by_info[date_value] = run.get_project_by_issue_numbers()
+
+        now_date_timestamp = self._get_timegm(date.today())
+        if now_date_timestamp not in self.timestamp_by_info:
+            # Использование данных из соседнего виджета
+            self.current_assigned_open_issues.refresh()
+            while not self.current_assigned_open_issues.current_items:
+                QApplication.instance().processEvents()
+
+            self.timestamp_by_info[now_date_timestamp] = self.current_assigned_open_issues.current_items
+            series.append(now_date_timestamp, sum(self.current_assigned_open_issues.current_items.values()))
 
         chart = QChart()
         chart.setTheme(QChart.ChartThemeDark)
@@ -391,10 +423,7 @@ class MainWindow(QMainWindow):
 
         axisY = QValueAxis()
         if issues_number:
-            axisY.setRange(
-                min(issues_number) * 0.8,
-                max(issues_number) * 1.2
-            )
+            axisY.setRange(min(issues_number) * 0.8, max(issues_number) * 1.2)
         axisY.setLabelFormat("%d")
         axisY.setTitleText("Total issues")
         chart.addAxis(axisY, Qt.AlignLeft)
@@ -416,7 +445,7 @@ class MainWindow(QMainWindow):
         self.table_run.refresh(items)
 
         self.setWindowTitle(
-            f"{WINDOW_TITLE}. Last refresh date: {datetime.now():%d/%m/%Y %H:%M:%S}"
+            f"{WINDOW_TITLE}. Last refresh date: {get_human_datetime()}"
         )
 
     def _on_tray_activated(self, reason: QSystemTrayIcon.ActivationReason):
