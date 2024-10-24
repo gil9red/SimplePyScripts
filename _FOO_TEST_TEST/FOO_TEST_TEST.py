@@ -4,11 +4,9 @@
 __author__ = "ipetrash"
 
 
+import multiprocessing as mp
 import random
-
-import multiprocessing
 from multiprocessing.pool import Pool
-from multiprocessing import current_process
 
 import requests
 
@@ -31,10 +29,10 @@ POOL: Pool | None = None
 
 def do_get_process(url: str) -> str:
     crash = random.randint(0, 1) == 1
-    print(current_process(), url, f"CRASH={crash}")
+    print(mp.current_process(), url, f"CRASH={crash}")
 
     if crash:
-        print(current_process(), url, "")
+        print(mp.current_process(), url, "")
         crash_python.main()
 
     rs = session.get(url)
@@ -45,9 +43,10 @@ def do_get_process(url: str) -> str:
 def do_get(url: str) -> str | None:
     print("before apply", url)
     result = POOL.apply_async(do_get_process, args=[url])
+    print(result, result._event, result._job, result._pool)
     try:
         return result.get(timeout=60)
-    except multiprocessing.context.TimeoutError:
+    except mp.context.TimeoutError:
         return
     except Exception as e:
         print("after apply error", e, type(e), url)
@@ -128,9 +127,9 @@ class MainWindow(QWidget):
 
 
 if __name__ == "__main__":
-    print(current_process())
+    print(mp.current_process())
 
-    with Pool(processes=10) as pool:
+    with mp.Pool(processes=10) as pool:
         POOL = pool
 
         app = QApplication([])
