@@ -5,17 +5,50 @@ __author__ = "ipetrash"
 
 
 import multiprocessing as mp
-import random
 from multiprocessing.pool import Pool
+from typing import Callable, Any
 
 import requests
 
 from PyQt5.QtCore import QThread, QTimer, pyqtSignal
 from PyQt5.QtGui import QTextOption
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QGridLayout, QPlainTextEdit
+from PyQt5.QtWidgets import (
+    QApplication,
+    QWidget,
+    QVBoxLayout,
+    QGridLayout,
+    QPlainTextEdit,
+    QProgressBar,
+)
 
-# import crash_python
-import crash_on_windows as crash_python
+
+POOL: Pool | None = None
+
+
+class CustomAdapter(requests.adapters.HTTPAdapter):
+    timeout: int = 60
+    max_attempts: int = 3
+
+    def send(self, *args, **kwargs) -> requests.Response:
+        # Установка таймаута, если оно не было задано
+        if not kwargs.get("timeout"):
+            kwargs["timeout"] = self.timeout
+
+        # В дочернем процессе будет None
+        if POOL:
+            last_error: Exception | None = None
+            for _ in range(self.max_attempts):
+                try:
+                    apply = POOL.apply_async(super().send, args=args, kwds=kwargs)
+                    return apply.get(timeout=self.timeout)
+
+                except Exception as e:
+                    last_error = e
+
+            raise last_error
+
+        print("[CustomAdapter]", mp.current_process(), args[0].url)
+        return super().send(*args, **kwargs)
 
 
 USER_AGENT = (
@@ -23,45 +56,18 @@ USER_AGENT = (
 )
 session = requests.session()
 session.headers["User-Agent"] = USER_AGENT
-
-POOL: Pool | None = None
-
-
-def do_get_process(url: str) -> str:
-    crash = random.randint(0, 1) == 1
-    print(mp.current_process(), url, f"CRASH={crash}")
-
-    if crash:
-        print(mp.current_process(), url, "")
-        crash_python.main()
-
-    rs = session.get(url)
-    rs.raise_for_status()
-    return f"[{rs.status_code}] {rs.url}"
-
-
-def do_get(url: str) -> str | None:
-    print("before apply", url)
-    result = POOL.apply_async(do_get_process, args=[url])
-    print(result, result._event, result._job, result._pool)
-    try:
-        return result.get(timeout=60)
-    except mp.context.TimeoutError:
-        return
-    except Exception as e:
-        print("after apply error", e, type(e), url)
-    finally:
-        print("after apply", url)
+session.mount("https://", CustomAdapter())
+session.mount("http://", CustomAdapter())
 
 
 class RunFuncThread(QThread):
     run_finished = pyqtSignal(object)
     about_error = pyqtSignal(Exception)
 
-    def __init__(self, func):
+    def __init__(self, func: Callable[[], Any]):
         super().__init__()
 
-        self.func = func
+        self.func: Callable[[], Any] = func
 
     def run(self):
         try:
@@ -70,31 +76,76 @@ class RunFuncThread(QThread):
             self.about_error.emit(e)
 
 
+def do_get(url: str) -> str:
+    rs = session.get(url)
+    rs.raise_for_status()
+    return f"[{rs.status_code}] {rs.url}"
+
+
 class Addon(QWidget):
-    def __init__(self, url: str):
+    def __init__(self):
         super().__init__()
+
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setRange(0, 0)
+        self.progress_bar.setTextVisible(False)
+        self.progress_bar.hide()
 
         self.log = QPlainTextEdit()
         self.log.setWordWrapMode(QTextOption.NoWrap)
 
-        self.url: str = url
         self.n: int = 0
 
-        self.thread_run = RunFuncThread(func=lambda: do_get(url))
+        self.thread_run = RunFuncThread(func=self.get_data)
         self.thread_run.started.connect(self._started)
-        self.thread_run.run_finished.connect(lambda data: self.log.appendPlainText(f"Data: {data}"))
-        self.thread_run.about_error.connect(lambda e: self.log.appendPlainText(f"Error: {e}"))
-        self.thread_run.finished.connect(lambda: self.log.appendPlainText("Finished\n"))
+        self.thread_run.run_finished.connect(
+            lambda data: self.log.appendPlainText(f"Data: {data}")
+        )
+        self.thread_run.about_error.connect(
+            lambda e: self.log.appendPlainText(f"Error: {e} ({type(e)})")
+        )
+        self.thread_run.finished.connect(self._finished)
 
         main_layout = QVBoxLayout(self)
+        main_layout.addWidget(self.progress_bar)
         main_layout.addWidget(self.log)
+
+    def get_data(self) -> Any:
+        raise NotImplementedError()
 
     def refresh(self):
         self.thread_run.start()
 
     def _started(self):
+        self.progress_bar.show()
+
         self.n += 1
-        self.log.appendPlainText(f"[{self.n}] Started {self.url}")
+        self.log.appendPlainText(f"[{self.n}] Started")
+
+    def _finished(self):
+        self.progress_bar.hide()
+        self.log.appendPlainText("Finished\n")
+
+
+class AddonGetUrl1(Addon):
+    def get_data(self) -> Any:
+        return do_get("https://jut.su/mushoku-tensei/season-1/episode-14.html")
+
+
+class AddonGetUrl2(Addon):
+    def get_data(self) -> Any:
+        return do_get("https://github.com")
+
+
+class AddonGetUrl3(Addon):
+    def get_data(self) -> Any:
+        return do_get("https://404")
+
+
+class AddonGetUrl4(Addon):
+    def get_data(self) -> Any:
+        # NOTE: 10 - max
+        return do_get("https://httpbin.org/delay/10")
 
 
 class MainWindow(QWidget):
@@ -104,12 +155,10 @@ class MainWindow(QWidget):
         main_layout = QGridLayout(self)
 
         self.addons = [
-            Addon(url="https://jut.su/mushoku-tensei/season-1/episode-14.html"),
-            Addon(url="https://github.com"),
-            Addon(url="https://jut.su/"),
-            Addon(url="https://ya.ru"),
-            Addon(url="https://404"),
-            Addon(url="https://ru.wikipedia.org/"),
+            AddonGetUrl1(),
+            AddonGetUrl2(),
+            AddonGetUrl3(),
+            AddonGetUrl4(),
         ]
         columns: int = 2
         for row, addon in enumerate(self.addons):
@@ -122,6 +171,8 @@ class MainWindow(QWidget):
         self.timer.start()
 
     def refresh(self):
+        print("\n[REFRESH]")
+
         for addon in self.addons:
             addon.refresh()
 
