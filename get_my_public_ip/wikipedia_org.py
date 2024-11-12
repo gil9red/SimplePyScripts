@@ -4,12 +4,12 @@
 __author__ = "ipetrash"
 
 
-import requests
+from urllib.request import urlopen
 
 
-# SOURCE: https://stackoverflow.com/a/54585203/5909792
 def get_my_public_ip() -> str:
-    return requests.get("https://www.wikipedia.org").headers["X-Client-IP"]
+    with urlopen("https://www.wikipedia.org") as f:
+        return f.getheader("X-Client-IP")
 
 
 if __name__ == "__main__":
