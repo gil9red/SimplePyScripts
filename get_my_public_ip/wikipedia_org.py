@@ -8,9 +8,10 @@ import requests
 
 
 # SOURCE: https://stackoverflow.com/a/54585203/5909792
-def get_external_ip() -> str:
+def get_my_public_ip() -> str:
     return requests.get("https://www.wikipedia.org").headers["X-Client-IP"]
 
 
 if __name__ == "__main__":
-    print(get_external_ip())
+    ip = get_my_public_ip()
+    print(f"My IP: {ip}")
