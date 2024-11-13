@@ -8,10 +8,35 @@ __author__ = "ipetrash"
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/d50de0f237d778f7d69ee75e328503f8c8344743/qt__pyqt__pyside__pyqode/QWebEngineView__one_ball__in_outer_circle_area__collision_with_mouse/index.html
 
 
+import traceback
+import sys
+
 from pathlib import Path
 from timeit import default_timer
 
-from PyQt5.Qt import QApplication, QWidget, QPainter, QTimer, Qt, QPoint, QPen
+from PyQt5.QtCore import QTimer, Qt, QPointF
+from PyQt5.QtGui import QPainter, QPen
+from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget
+
+
+def log_uncaught_exceptions(ex_cls, ex, tb):
+    text = f"{ex_cls.__name__}: {ex}\n"
+    text += "".join(traceback.format_tb(tb))
+    print(text)
+
+    if QApplication.instance():
+        msg_box = QMessageBox(
+            QMessageBox.Critical,
+            "Error",
+            f"Error: {ex}",
+            parent=None,
+        )
+        msg_box.setDetailedText(text)
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        msg_box.exec()
+
+
+sys.excepthook = log_uncaught_exceptions
 
 
 class Ball:
@@ -161,8 +186,8 @@ class MainWindow(QWidget):
 
         painter.translate(self.width() / 2, self.height() / 2)
 
-        painter.drawEllipse(QPoint(0, 0), self.outer_circle, self.outer_circle)
-        painter.drawEllipse(QPoint(self.ball.x, self.ball.y), self.ball.r, self.ball.r)
+        painter.drawEllipse(QPointF(0, 0), self.outer_circle, self.outer_circle)
+        painter.drawEllipse(QPointF(self.ball.x, self.ball.y), self.ball.r, self.ball.r)
 
 
 if __name__ == "__main__":
