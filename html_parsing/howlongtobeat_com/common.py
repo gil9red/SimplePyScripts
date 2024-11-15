@@ -60,8 +60,8 @@ class Game:
             duration_100_seconds=data["comp_100"],
             duration_all_seconds=data["comp_all"],
             release_world=data["release_world"],
-            profile_platforms=data["profile_platform"].split(", "),
 
-            # В случаи поиска жанры недоступны в результатах - нужно на страницу игры идти
+            # В случаи поиска некоторые из полей недоступны в результатах - нужно на страницу игры идти
+            profile_platforms=data.get("profile_platform", "").split(", "),
             profile_genres=data.get("profile_genre", "").split(", "),
         )
