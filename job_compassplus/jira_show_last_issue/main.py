@@ -7,29 +7,27 @@ __author__ = "ipetrash"
 import sys
 from pathlib import Path
 
-from bs4 import BeautifulSoup
-
 DIR = Path(__file__).resolve().parent
 ROOT_DIR = DIR.parent
 sys.path.append(str(ROOT_DIR))
 from root_common import session
 
 
-URL_FORMAT: str = (
-    "https://helpdesk.compassluxe.com/issues/"
-    "?jql=project={project} ORDER BY created DESC"
-)
+JIRA_HOST = "https://helpdesk.compassluxe.com"
+URL_SEARCH = f"{JIRA_HOST}/rest/api/latest/search"
 
 
 def get_last_issue_key(project: str) -> str:
-    url = URL_FORMAT.format(project=project)
+    query = {
+        "jql": f"project={project} ORDER BY created DESC",
+        "fields": "key",
+        "maxResults": 1,
+    }
 
-    rs = session.get(url)
+    rs = session.get(URL_SEARCH, params=query)
     rs.raise_for_status()
 
-    root = BeautifulSoup(rs.content, "html.parser")
-    issue_row_el = root.select_one("tr[data-issuekey]")
-    return issue_row_el["data-issuekey"]
+    return rs.json()["issues"][0]["key"]
 
 
 if __name__ == "__main__":
