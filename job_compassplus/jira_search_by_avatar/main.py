@@ -12,12 +12,12 @@ DIR = Path(__file__).resolve().parent
 ROOT_DIR = DIR.parent
 
 sys.path.append(str(ROOT_DIR))
+from root_config import JIRA_HOST
 from root_common import session
 
 
-HOST = "https://helpdesk.compassluxe.com"
-URL_PROFILE_FORMAT = f"{HOST}/secure/ViewProfile.jspa?name={{name}}"
-URL_USER_SEARCH = f"{HOST}/rest/api/latest/user/search"
+URL_PROFILE_FORMAT = f"{JIRA_HOST}/secure/ViewProfile.jspa?name={{name}}"
+URL_USER_SEARCH = f"{JIRA_HOST}/rest/api/latest/user/search"
 
 
 def search_by_avatar(avatar_id: int) -> list[dict]:

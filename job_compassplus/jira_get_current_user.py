@@ -5,11 +5,12 @@ __author__ = "ipetrash"
 
 
 from typing import Any
+
+from root_config import JIRA_HOST
 from root_common import session
 
 
-HOST = "https://helpdesk.compassluxe.com"
-URL_API_MYSELF = f"{HOST}/rest/api/latest/myself"
+URL_API_MYSELF = f"{JIRA_HOST}/rest/api/latest/myself"
 
 
 def get_current_user() -> dict[str, Any]:

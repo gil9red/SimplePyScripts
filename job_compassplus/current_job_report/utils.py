@@ -12,6 +12,7 @@ from pathlib import Path
 
 DIR = Path(__file__).resolve().parent
 sys.path.append(str(DIR.parent))
+from root_config import JIRA_HOST
 from root_common import session
 
 sys.path.append(str(DIR.parent.parent))
@@ -25,8 +26,7 @@ class NotFoundReport(Exception):
     pass
 
 
-HOST = "https://helpdesk.compassluxe.com"
-URL = f"{HOST}/pa-reports/"
+URL = f"{JIRA_HOST}/pa-reports/"
 
 
 def clear_hours(hours: str) -> str:

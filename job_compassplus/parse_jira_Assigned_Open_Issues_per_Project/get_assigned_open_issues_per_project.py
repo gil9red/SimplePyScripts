@@ -11,10 +11,11 @@ from bs4 import BeautifulSoup
 from common import ROOT_DIR, print_table
 
 sys.path.append(str(ROOT_DIR))
+from root_config import JIRA_HOST
 from root_common import session
 
 
-URL = "https://helpdesk.compassluxe.com/secure/ViewProfile.jspa?name=ipetrash"
+URL = f"{JIRA_HOST}/secure/ViewProfile.jspa?name=ipetrash"
 
 
 def get_assigned_open_issues_per_project() -> dict[str, int]:

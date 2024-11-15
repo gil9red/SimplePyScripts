@@ -7,6 +7,8 @@ __author__ = "ipetrash"
 from pathlib import Path
 
 
+JIRA_HOST = "https://helpdesk.compassluxe.com"
+
 # NOTE: Get <PEM_FILE_NAME>: openssl pkcs12 -nodes -out ipetrash.pem -in ipetrash.p12
 NAME_CERT = "ipetrash.pem"
 

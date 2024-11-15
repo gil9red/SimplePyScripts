@@ -31,11 +31,13 @@ session.headers["User-Agent"] = USER_AGENT
 
 
 if __name__ == "__main__":
+    from root_config import JIRA_HOST
+
     # Check
-    rs = session.get("https://helpdesk.compassluxe.com/pa-reports/")
+    rs = session.get(f"{JIRA_HOST}/pa-reports/")
     print(rs)
     rs.raise_for_status()
 
-    rs = session.get("https://helpdesk.compassluxe.com/secure/ViewProfile.jspa?name=ipetrash")
+    rs = session.get(f"{JIRA_HOST}/secure/ViewProfile.jspa?name=ipetrash")
     print(rs)
     rs.raise_for_status()

@@ -10,10 +10,10 @@ from pathlib import Path
 DIR = Path(__file__).resolve().parent
 ROOT_DIR = DIR.parent
 sys.path.append(str(ROOT_DIR))
+from root_config import JIRA_HOST
 from root_common import session
 
 
-JIRA_HOST = "https://helpdesk.compassluxe.com"
 URL_SEARCH = f"{JIRA_HOST}/rest/api/latest/search"
 
 

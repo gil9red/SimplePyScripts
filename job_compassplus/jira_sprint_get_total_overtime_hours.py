@@ -10,10 +10,10 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime
 
+from root_config import JIRA_HOST
 from root_common import session
 
 
-JIRA_HOST = "https://helpdesk.compassluxe.com"
 URL_SEARCH = f"{JIRA_HOST}/rest/api/latest/search"
 
 FIELD_OVERTIME_HOURS = "customfield_13440"

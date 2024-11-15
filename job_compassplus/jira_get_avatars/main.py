@@ -11,10 +11,11 @@ DIR = Path(__file__).resolve().parent
 ROOT_DIR = DIR.parent
 
 sys.path.append(str(ROOT_DIR))
+from root_config import JIRA_HOST
 from root_common import session
 
 
-url = "https://helpdesk.compassluxe.com/rest/api/latest/user/avatars?username=ipetrash"
+url = f"{JIRA_HOST}/rest/api/latest/user/avatars?username=ipetrash"
 
 rs = session.get(url)
 print(rs)
