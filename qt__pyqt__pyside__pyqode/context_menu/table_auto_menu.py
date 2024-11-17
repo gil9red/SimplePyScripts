@@ -19,6 +19,10 @@ from PyQt5.QtWidgets import (
 )
 
 
+def copy_to_clipboard(value: str):
+    QApplication.clipboard().setText(value)
+
+
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -98,12 +102,12 @@ class MainWindow(QWidget):
         for column in range(model.columnCount()):
             title = model.headerData(column, Qt.Horizontal)
 
-            idx = model.index(row, column)
-            value = model.data(idx)
+            idx: QModelIndex = model.index(row, column)
+            value: str = str(model.data(idx))
 
             menu.addAction(
                 f'Copy "{title}"',
-                lambda value=value: QApplication.clipboard().setText(value),
+                lambda value=value: copy_to_clipboard(value),
             )
 
         url = self._get_url(table, row)
