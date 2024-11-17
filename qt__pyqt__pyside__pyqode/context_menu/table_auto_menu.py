@@ -117,14 +117,20 @@ class MainWindow(QWidget):
 
         def _get_additional_actions(table: QTableView, row: int) -> list[QAction]:
             model = table.model()
-            idx = model.index(row, 1)
 
-            url: str = str(model.data(idx))
+            actions = []
+            for column in range(model.columnCount()):
+                idx = model.index(row, column)
+                value: str = str(model.data(idx))
+                if not value.startswith("http"):
+                    continue
 
-            action_url = QAction("Open URL")
-            action_url.triggered.connect(lambda: os.startfile(url))
+                action_open_url = QAction(f'Open "{value}"')
+                action_open_url.triggered.connect(lambda: os.startfile(value))
 
-            return [action_url]
+                actions.append(action_open_url)
+
+            return actions
 
         open_context_menu(table, p, _get_additional_actions)
 
