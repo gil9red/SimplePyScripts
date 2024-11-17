@@ -21,8 +21,39 @@ from PyQt5.QtWidgets import (
 )
 
 
-def copy_to_clipboard(value: str):
-    QApplication.clipboard().setText(value)
+def open_context_menu(
+    table: QTableView,
+    p: QPoint,
+    get_additional_actions_func: Callable[[QTableView, int], list[QAction]] = None,
+):
+    index: QModelIndex = table.indexAt(p)
+    if not index.isValid():
+        return
+
+    menu = QMenu(table)
+    menu.addAction(table.__class__.__name__).setEnabled(False)
+    menu.addSeparator()
+
+    row: int = index.row()
+    model = table.model()
+
+    for column in range(model.columnCount()):
+        title = model.headerData(column, Qt.Horizontal)
+
+        idx: QModelIndex = model.index(row, column)
+        value: str = str(model.data(idx))
+
+        menu.addAction(
+            f'Copy "{title}"',
+            lambda value=value: QApplication.clipboard().setText(value),
+        )
+
+    if get_additional_actions_func:
+        if actions := get_additional_actions_func(table, row):
+            menu.addSeparator()
+            menu.addActions(actions)
+
+    menu.exec(table.viewport().mapToGlobal(p))
 
 
 class MainWindow(QWidget):
@@ -61,41 +92,6 @@ class MainWindow(QWidget):
 
         self.fill_tables()
 
-    def _open_context_menu(
-        self,
-        table: QTableView,
-        p: QPoint,
-        get_additional_actions_func: Callable[[QTableView, int], list[QAction]] = None,
-    ):
-        index: QModelIndex = table.indexAt(p)
-        if not index.isValid():
-            return
-
-        menu = QMenu(self)
-        menu.addAction(table.__class__.__name__).setEnabled(False)
-        menu.addSeparator()
-
-        row: int = index.row()
-        model = table.model()
-
-        for column in range(model.columnCount()):
-            title = model.headerData(column, Qt.Horizontal)
-
-            idx: QModelIndex = model.index(row, column)
-            value: str = str(model.data(idx))
-
-            menu.addAction(
-                f'Copy "{title}"',
-                lambda value=value: copy_to_clipboard(value),
-            )
-
-        if get_additional_actions_func:
-            if actions := get_additional_actions_func(table, row):
-                menu.addSeparator()
-                menu.addActions(actions)
-
-        menu.exec(table.viewport().mapToGlobal(p))
-
     def fill_tables(self):
         self.model.appendRow(
             [QStandardItem("rutube"), QStandardItem("https://rutube.ru/")]
@@ -130,7 +126,7 @@ class MainWindow(QWidget):
 
             return [action_url]
 
-        self._open_context_menu(table, p, _get_additional_actions)
+        open_context_menu(table, p, _get_additional_actions)
 
 
 if __name__ == "__main__":
