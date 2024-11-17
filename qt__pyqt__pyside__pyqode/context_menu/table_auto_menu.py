@@ -113,8 +113,6 @@ class MainWindow(QWidget):
                 self.table_widget.setItem(row, column, QTableWidgetItem(text))
 
     def _custom_menu_requested(self, p: QPoint):
-        table: QTableView = self.sender()
-
         def _get_additional_actions(table: QTableView, row: int) -> list[QAction]:
             model = table.model()
 
@@ -132,6 +130,7 @@ class MainWindow(QWidget):
 
             return actions
 
+        table: QTableView = self.sender()
         open_context_menu(table, p, _get_additional_actions)
 
 
