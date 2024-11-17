@@ -5,6 +5,7 @@ __author__ = "ipetrash"
 
 
 import os
+from typing import Callable
 
 from PyQt5.QtCore import QPoint, Qt, QModelIndex
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
@@ -16,6 +17,7 @@ from PyQt5.QtWidgets import (
     QTableWidgetItem,
     QTableView,
     QMenu,
+    QAction,
 )
 
 
@@ -59,35 +61,12 @@ class MainWindow(QWidget):
 
         self.fill_tables()
 
-    def fill_tables(self):
-        self.model.appendRow(
-            [QStandardItem("rutube"), QStandardItem("https://rutube.ru/")]
-        )
-        self.model.appendRow(
-            [QStandardItem("yandex"), QStandardItem("https://yandex.ru/")]
-        )
-        self.model.appendRow(
-            [QStandardItem("youtube"), QStandardItem("https://www.youtube.com")]
-        )
-        self.model.appendRow(
-            [QStandardItem("google"), QStandardItem("https://google.com/")]
-        )
-
-        self.table_widget.setRowCount(self.model.rowCount())
-        for row in range(self.model.rowCount()):
-            for column in range(self.model.columnCount()):
-                text = self.model.item(row, column).text()
-                self.table_widget.setItem(row, column, QTableWidgetItem(text))
-
-    def _get_url(self, table, row: int) -> str:
-        model = table.model()
-
-        idx = model.index(row, 1)
-        return model.data(idx)
-
-    def _custom_menu_requested(self, p: QPoint):
-        table = self.sender()
-
+    def _open_context_menu(
+        self,
+        table: QTableView,
+        p: QPoint,
+        get_additional_actions_func: Callable[[QTableView, int], list[QAction]] = None,
+    ):
         index: QModelIndex = table.indexAt(p)
         if not index.isValid():
             return
@@ -110,12 +89,48 @@ class MainWindow(QWidget):
                 lambda value=value: copy_to_clipboard(value),
             )
 
-        url = self._get_url(table, row)
-        if url:
-            menu.addSeparator()
-            menu.addAction("Open URL", lambda: os.startfile(url))
+        if get_additional_actions_func:
+            if actions := get_additional_actions_func(table, row):
+                menu.addSeparator()
+                menu.addActions(actions)
 
         menu.exec(table.viewport().mapToGlobal(p))
+
+    def fill_tables(self):
+        self.model.appendRow(
+            [QStandardItem("rutube"), QStandardItem("https://rutube.ru/")]
+        )
+        self.model.appendRow(
+            [QStandardItem("yandex"), QStandardItem("https://yandex.ru/")]
+        )
+        self.model.appendRow(
+            [QStandardItem("youtube"), QStandardItem("https://www.youtube.com")]
+        )
+        self.model.appendRow(
+            [QStandardItem("google"), QStandardItem("https://google.com/")]
+        )
+
+        self.table_widget.setRowCount(self.model.rowCount())
+        for row in range(self.model.rowCount()):
+            for column in range(self.model.columnCount()):
+                text = self.model.item(row, column).text()
+                self.table_widget.setItem(row, column, QTableWidgetItem(text))
+
+    def _custom_menu_requested(self, p: QPoint):
+        table: QTableView = self.sender()
+
+        def _get_additional_actions(table: QTableView, row: int) -> list[QAction]:
+            model = table.model()
+            idx = model.index(row, 1)
+
+            url: str = str(model.data(idx))
+
+            action_url = QAction("Open URL")
+            action_url.triggered.connect(lambda: os.startfile(url))
+
+            return [action_url]
+
+        self._open_context_menu(table, p, _get_additional_actions)
 
 
 if __name__ == "__main__":
