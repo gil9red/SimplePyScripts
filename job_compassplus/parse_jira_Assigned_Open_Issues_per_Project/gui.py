@@ -255,37 +255,38 @@ class MyChartViewToolTips(ChartViewToolTips):
         if not self._tooltip:
             self._tooltip = self._add_Callout()
 
-        if state:
-            distance = 25
+        if not state:
+            self._tooltip.hide()
+            return
 
-            for series in self.chart().series():
-                for p_value in series.pointsVector():
-                    p = self.chart().mapToPosition(p_value)
+        distance = 25
 
-                    current_distance = math.sqrt(
-                        (p.x() - point.x()) * (p.x() - point.x())
-                        + (p.y() - point.y()) * (p.y() - point.y())
+        for series in self.chart().series():
+            for p_value in series.pointsVector():
+                p = self.chart().mapToPosition(p_value)
+
+                current_distance = math.sqrt(
+                    (p.x() - point.x()) * (p.x() - point.x())
+                    + (p.y() - point.y()) * (p.y() - point.y())
+                )
+
+                if current_distance < distance:
+                    time_ms = int(p_value.x())
+                    info: dict[str, int] = self.timestamp_by_info[time_ms]
+                    table = get_table(info)
+                    text = (
+                        f"{get_human_date(date.fromtimestamp(time_ms / 1000))}"
+                        "\n\n"
+                        f"Total issues: {sum(info.values())}"
+                        "\n"
+                        f"{table}"
                     )
 
-                    if current_distance < distance:
-                        time_ms = int(p_value.x())
-                        info: dict[str, int] = self.timestamp_by_info[time_ms]
-                        table = get_table(info)
-                        text = (
-                            f"{get_human_date(date.fromtimestamp(time_ms / 1000))}"
-                            "\n\n"
-                            f"Total issues: {sum(info.values())}"
-                            "\n"
-                            f"{table}"
-                        )
-
-                        self._tooltip.setText(text)
-                        self._tooltip.setAnchor(p_value)
-                        self._tooltip.setZValue(11)
-                        self._tooltip.updateGeometry()
-                        self._tooltip.show()
-        else:
-            self._tooltip.hide()
+                    self._tooltip.setText(text)
+                    self._tooltip.setAnchor(p_value)
+                    self._tooltip.setZValue(11)
+                    self._tooltip.updateGeometry()
+                    self._tooltip.show()
 
 
 class MainWindow(QMainWindow):
