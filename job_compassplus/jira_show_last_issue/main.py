@@ -7,8 +7,6 @@ __author__ = "ipetrash"
 import sys
 from pathlib import Path
 
-from requests import HTTPError
-
 DIR = Path(__file__).resolve().parent
 ROOT_DIR = DIR.parent
 sys.path.append(str(ROOT_DIR))
