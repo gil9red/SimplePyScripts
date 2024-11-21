@@ -14,10 +14,10 @@ from root_common import session
 URL_SEARCH = f"{JIRA_HOST}/rest/api/latest/search"
 
 JQL_RESOLUTION_DATE = "assignee = currentUser() AND resolutiondate "
-JQL_CURRENT_USER_TOTAL = f"{JQL_RESOLUTION_DATE} IS NOT EMPTY"
-JQL_CURRENT_USER_LAST_WEEK = f"{JQL_RESOLUTION_DATE} >= startOfDay(-7)"
-JQL_CURRENT_USER_LAST_MONTH = f"{JQL_RESOLUTION_DATE} >= startOfMonth(-1)"
-JQL_CURRENT_USER_LAST_YEAR = f"{JQL_RESOLUTION_DATE} >= startOfMonth(-12)"
+JQL_TOTAL = f"{JQL_RESOLUTION_DATE} IS NOT EMPTY"
+JQL_LAST_WEEK = f"{JQL_RESOLUTION_DATE} >= startOfDay(-7)"
+JQL_LAST_MONTH = f"{JQL_RESOLUTION_DATE} >= startOfMonth(-1)"
+JQL_LAST_YEAR = f"{JQL_RESOLUTION_DATE} >= startOfMonth(-12)"
 
 
 @dataclass
@@ -42,16 +42,16 @@ def get_total(jql: str) -> int:
 
 
 def get_stats(sleep: float = 0.5) -> Stats:
-    total = get_total(JQL_CURRENT_USER_TOTAL)
+    total = get_total(JQL_TOTAL)
     time.sleep(sleep)
 
-    last_7_days = get_total(JQL_CURRENT_USER_LAST_WEEK)
+    last_7_days = get_total(JQL_LAST_WEEK)
     time.sleep(sleep)
 
-    last_month = get_total(JQL_CURRENT_USER_LAST_MONTH)
+    last_month = get_total(JQL_LAST_MONTH)
     time.sleep(sleep)
 
-    last_year = get_total(JQL_CURRENT_USER_LAST_YEAR)
+    last_year = get_total(JQL_LAST_YEAR)
 
     return Stats(
         total=total,
