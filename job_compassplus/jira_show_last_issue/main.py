@@ -30,7 +30,10 @@ def get_last_issue_key(project: str) -> str | None:
 
     rs.raise_for_status()
 
-    return rs.json()["issues"][0]["key"]
+    try:
+        return rs.json()["issues"][0]["key"]
+    except Exception:
+        return
 
 
 if __name__ == "__main__":
