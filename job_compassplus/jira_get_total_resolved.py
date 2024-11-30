@@ -13,7 +13,7 @@ from root_common import session
 
 URL_SEARCH = f"{JIRA_HOST}/rest/api/latest/search"
 
-JQL_RESOLUTION_DATE = "assignee = currentUser() AND resolutiondate "
+JQL_RESOLUTION_DATE = "assignee = currentUser() AND resolutiondate"
 JQL_TOTAL = f"{JQL_RESOLUTION_DATE} IS NOT EMPTY"
 JQL_LAST_WEEK = f"{JQL_RESOLUTION_DATE} >= startOfDay(-7)"
 JQL_LAST_MONTH = f"{JQL_RESOLUTION_DATE} >= startOfMonth(-1)"
