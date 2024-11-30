@@ -70,6 +70,10 @@ class AdvancedListWidget(QWidget):
 
         self._move_item(current_row, current_row + 1)
 
+    def set_items(self, items: list[str]):
+        self.clear()
+        self.append_all(items)
+
     def append(self, text: str) -> QListWidgetItem:
         item = QListWidgetItem(text)
         item.setFlags(item.flags() | Qt.ItemIsEditable)
@@ -101,7 +105,7 @@ if __name__ == "__main__":
     app = QApplication([])
 
     mw = AdvancedListWidget()
-    mw.append_all(
+    mw.set_items(
         [
             "FOO",
             "BAR",
