@@ -22,10 +22,10 @@ JQL_LAST_YEAR = f"{JQL_RESOLUTION_DATE} >= startOfMonth(-12)"
 
 @dataclass
 class Stats:
-    total: int
     last_7_days: int
     last_month: int
     last_year: int
+    total: int
 
 
 def get_total(jql: str) -> int:
@@ -42,9 +42,6 @@ def get_total(jql: str) -> int:
 
 
 def get_stats(sleep: float = 0.5) -> Stats:
-    total = get_total(JQL_TOTAL)
-    time.sleep(sleep)
-
     last_7_days = get_total(JQL_LAST_WEEK)
     time.sleep(sleep)
 
@@ -52,12 +49,15 @@ def get_stats(sleep: float = 0.5) -> Stats:
     time.sleep(sleep)
 
     last_year = get_total(JQL_LAST_YEAR)
+    time.sleep(sleep)
+
+    total = get_total(JQL_TOTAL)
 
     return Stats(
-        total=total,
         last_7_days=last_7_days,
         last_month=last_month,
         last_year=last_year,
+        total=total,
     )
 
 
