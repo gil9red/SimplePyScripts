@@ -39,15 +39,23 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
                 "platform": "",
                 "sortCategory": "popular",
                 "rangeCategory": "main",
-                "rangeTime": {"min": 0, "max": 0},
-                "gameplay": {"perspective": "", "flow": "", "genre": ""},
+                "rangeTime": {"min": None, "max": None},
+                "gameplay": {
+                    "perspective": "",
+                    "flow": "",
+                    "genre": "",
+                    "subGenre": " ",
+                },
+                "rangeYear": {"min": "", "max": ""},
                 "modifier": "",
             },
             "users": {"sortCategory": "postcount"},
+            "lists": {"sortCategory": "follows"},
             "filter": "",
             "sort": 0,
             "randomizer": 0,
         },
+        "useCache": True,
     }
 
     text_js: str = rs.text
