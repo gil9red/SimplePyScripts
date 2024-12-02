@@ -17,10 +17,15 @@ class Worklog:
 
     @classmethod
     def parse_from(cls, data: tuple[str, str, str]) -> "Worklog":
+        try:
+            logged_percent: int = int(data[2].replace("%", ""))
+        except Exception:
+            raise NotFoundReport()
+
         return cls(
             actually=data[0],
             logged=data[1],
-            logged_percent=int(data[2].replace("%", "")),
+            logged_percent=logged_percent,
         )
 
 
