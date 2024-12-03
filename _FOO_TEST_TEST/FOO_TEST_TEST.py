@@ -18,18 +18,18 @@ def get_items(
 ) -> list[tuple[datetime, datetime]]:
     items = []
 
-    dt = start_dt
+    dt = end_dt
     while True:
-        if dt >= end_dt:
+        if dt <= start_dt:
             break
 
         dt1 = dt
-        dt += delta
+        dt -= delta
 
-        if dt > end_dt:
-            dt = end_dt
+        if dt < start_dt:
+            dt = start_dt
 
-        items.append((dt1, dt))
+        items.append((dt, dt1))
 
     return items
 
