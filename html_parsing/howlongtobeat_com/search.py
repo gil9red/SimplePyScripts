@@ -45,7 +45,7 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
                     "perspective": "",
                     "flow": "",
                     "genre": "",
-                    "subGenre": "",
+                    "subGenre": " ",
                 },
                 "rangeYear": {"min": "", "max": ""},
                 "modifier": "",
@@ -78,6 +78,12 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
     if m_search_user_id:
         search_user_id = m_search_user_id.group(1)
         data["searchOptions"]["users"]["id"] = search_user_id
+
+    # NOTE: ,subGenre:""
+    m_sub_genre = re.search(r"""subGenre:['"](.*?)['"]""", text_js)
+    if m_sub_genre:
+        sub_genre = m_sub_genre.group(1)
+        data["searchOptions"]["games"]["gameplay"]["subGenre"] = sub_genre
 
     rs = session.post(
         url_api_search,
