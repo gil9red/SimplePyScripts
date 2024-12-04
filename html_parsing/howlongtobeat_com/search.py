@@ -45,7 +45,7 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
                     "perspective": "",
                     "flow": "",
                     "genre": "",
-                    "subGenre": "  ",
+                    "subGenre": "",
                 },
                 "rangeYear": {"min": "", "max": ""},
                 "modifier": "",
