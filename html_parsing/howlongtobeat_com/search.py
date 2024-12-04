@@ -28,6 +28,7 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
     rs.raise_for_status()
 
     url_api_search = f"{URL_BASE}/api/search/"
+
     data = {
         "searchType": "games",
         "searchTerms": text.split(),
@@ -44,7 +45,7 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
                     "perspective": "",
                     "flow": "",
                     "genre": "",
-                    "subGenre": " ",
+                    "subGenre": "  ",
                 },
                 "rangeYear": {"min": "", "max": ""},
                 "modifier": "",
