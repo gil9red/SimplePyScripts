@@ -4,11 +4,11 @@
 __author__ = "ipetrash"
 
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta, date
 
 
-def change_month(d: date, inc: bool = True, number: int = 1) -> date:
+def add_to_month(d: date, inc: bool = True, number: int = 1) -> date:
     d = d.replace(day=1)
 
     year = d.year
@@ -40,13 +40,16 @@ Date: 05 ноября 2024 г. 19:40:28 | Release version 3.2.43.10 (release bas
 class Release:
     date: date
     version: int
-    # TODO: Дата + месяц, когда можно коммитить без согласования
-    # TODO: Дата окончания поддержки
-    # TODO: post_init
+    free_commit_date: date = field(init=False)
+    support_end_date: date = field(init=False)
+
+    def __post_init__(self):
+        self.free_commit_date = add_to_month(self.date, number=1) - timedelta(days=1)
+        self.support_end_date = add_to_month(self.date, number=11)
 
     def get_next_release(self) -> "Release":
         return Release(
-            date=change_month(self.date, number=2),
+            date=add_to_month(self.date, number=2),
             version=self.version + 1,
         )
 
