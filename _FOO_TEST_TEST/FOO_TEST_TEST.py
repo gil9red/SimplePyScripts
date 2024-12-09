@@ -116,6 +116,10 @@ class Release:
     def get_by_version(cls, version: int) -> "Release":
         return cls.get_by(version=version)
 
+    @classmethod
+    def get_last_release(cls) -> "Release":
+        return cls.get_by_date(date.today())
+
     def get_next_release(self) -> "Release":
         return Release(
             version=self.version + 1,
@@ -128,19 +132,19 @@ class Release:
             date=add_to_month(self.date, inc=False, number=2),
         )
 
-    # TODO: is_last?
+    def is_last_release(self) -> bool:
+        return self == self.get_last_release()
 
 
-last_release: Release = Release.get_by_date(date.today())
+last_release: Release = Release.get_last_release()
 print("last_release:", last_release)
 
 releases: list[Release] = [
     Release.get_by_version(version)
     for version in range(last_release.version - 6, last_release.version + 6 + 1)
-    # for version in range(last_release.version - 17, last_release.version + 6 + 1)
 ]
 for release in releases:
-    print(release, release == last_release)
+    print(release, release.is_last_release())
 
 
 # for _ in range(15):
