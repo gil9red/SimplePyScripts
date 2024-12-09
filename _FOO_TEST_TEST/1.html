@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
 <style>
     td, th {
         width: 30px;
@@ -33,17 +25,21 @@
     table {
     	border-collapse: collapse;
     }
+    .alternate {
+    	background: #C0C0C0;
+    }
 </style>
 
 <table>
+
 <tr>
-	<td>40</td>
-    <td></td><td></td>
-    <td></td><td></td>
-    <td class="tasks current-month"></td><td class="minor-bugs"></td>
+	<td>38</td>
+    <td class="tasks"></td><td class="minor-bugs"></td>
     <td class="minor-bugs"></td><td class="major-bugs"></td>
+    <td class="major-bugs current-month"></td><td class="major-bugs"></td>
     <td class="major-bugs"></td><td class="major-bugs"></td>
     <td class="major-bugs"></td><td class="major-bugs"></td>
+    <td class="major-bugs"></td><td></td>
 </tr>
 <tr>
 	<td>39</td>
@@ -55,13 +51,13 @@
     <td class="major-bugs"></td><td class="major-bugs"></td>
 </tr>
 <tr>
-	<td>38</td>
-    <td class="tasks"></td><td class="minor-bugs"></td>
+	<td>40</td>
+    <td></td><td></td>
+    <td></td><td></td>
+    <td class="tasks current-month"></td><td class="minor-bugs"></td>
     <td class="minor-bugs"></td><td class="major-bugs"></td>
-    <td class="major-bugs current-month"></td><td class="major-bugs"></td>
     <td class="major-bugs"></td><td class="major-bugs"></td>
     <td class="major-bugs"></td><td class="major-bugs"></td>
-    <td class="major-bugs"></td><td></td>
 </tr>
 <tr>
 	<td class="empty" rowspan="2"></td>
@@ -72,39 +68,35 @@
 <tr>
 	<td colspan="12">2024</td>
 </tr>
+</table>
 
-<tr>
-    <td class="empty"></td>
-</tr>
+<br/><br/>
 
+<table>
 <tr>
 	<td class="empty" rowspan="2"></td>
-    <td>09</td><td>10</td><td>11</td><td>12</td>
+    <td class="alternate">09</td><td class="alternate">10</td><td class="alternate">11</td><td class="alternate">12</td>
     <td>01</td><td>02</td><td>03</td><td>04</td>
-    <td>05</td><td>06</td><td>07</td><td>08</td>
+    <td class="current-month">05</td><td>06</td><td>07</td><td>08</td>
 </tr>
 <tr>
-	<td colspan="4">2023</td>
+	<td class="alternate" colspan="4">2023</td>
     <td colspan="8">2024</td>
 </tr>
+</table>
 
+<br/><br/>
 
-<tr>
-    <td class="empty"></td>
-</tr>
-
+<table>
 <tr>
 	<td class="empty" rowspan="2"></td>
-    <td>12</td><td>01</td><td>02</td><td>03</td>
-    <td>04</td><td>05</td><td>06</td><td>07</td>
-    <td>08</td><td>09</td><td>10</td><td>11</td>
+    <td>12</td><td class="alternate">01</td><td class="alternate">02</td><td class="alternate">03</td>
+    <td class="alternate">04</td><td class="alternate">05</td><td class="alternate">06</td><td class="alternate">07</td>
+    <td class="alternate">08</td><td class="alternate">09</td><td class="alternate">10</td><td class="alternate">11</td>
 </tr>
 <tr>
 	<td colspan="1">2022</td>
-    <td colspan="11">2023</td>
+    <td  class="alternate" colspan="11">2023</td>
 </tr>
 
 </table>
-
-</body>
-</html>
