@@ -27,8 +27,6 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
     rs = session.get(url_js)
     rs.raise_for_status()
 
-    url_api_search = f"{URL_BASE}/api/search/"
-
     data = {
         "searchType": "games",
         "searchTerms": text.split(),
@@ -42,6 +40,7 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
                 "rangeCategory": "main",
                 "rangeTime": {"min": None, "max": None},
                 "gameplay": {
+                    "difficulty": "",
                     "perspective": "",
                     "flow": "",
                     "genre": "",
@@ -61,9 +60,17 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
 
     text_js: str = rs.text
 
+    m_uri_api_search = re.search("/api/(search|find)/", text_js)
+    if m_uri_api_search:
+        uri_api_search = m_uri_api_search.group()
+    else:
+        raise Exception("Не найден URI api search!")
+
+    url_api_search = f"{URL_BASE}{uri_api_search}"
+
     # NOTE: fetch("/api/search/".concat("foo").concat("bar"),
     #       fetch("/api/search/".concat("foobar"),
-    m_concat_search_key = re.search(r'"/api/search/"(.+?),', text_js)
+    m_concat_search_key = re.search(rf'"{uri_api_search}"(.+?),', text_js)
     if m_concat_search_key:
         concat_search_key = m_concat_search_key.group(1)
 
@@ -79,11 +86,10 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
         search_user_id = m_search_user_id.group(1)
         data["searchOptions"]["users"]["id"] = search_user_id
 
-    # NOTE: ,subGenre:""
-    m_sub_genre = re.search(r"""subGenre:['"](.*?)['"]""", text_js)
-    if m_sub_genre:
-        sub_genre = m_sub_genre.group(1)
-        data["searchOptions"]["games"]["gameplay"]["subGenre"] = sub_genre
+    for k in ["subGenre", "difficulty"]:
+        m_k = re.search(r"""{f}:['"](.*?)['"]""", text_js)
+        if m_k:
+            data["searchOptions"]["games"]["gameplay"][k] = m_k.group(1)
 
     rs = session.post(
         url_api_search,
