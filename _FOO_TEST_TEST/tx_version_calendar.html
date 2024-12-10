@@ -1,0 +1,283 @@
+<!DOCTYPE html>  
+<html lang="en">  
+    <head>
+        <title>TX Version Calendar</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <style>
+            .bgGray {
+                background: #DCDCDC;
+            }
+            .bgLightGray {
+                background: #f5f5f5;
+            }
+            .bgRed {
+                background: #ffdfd4;
+            }
+            .bgYellow {
+                background: #FFFADD;
+            }
+            .bgBlue {
+                background: #f0fbff;
+            }
+            .bgGreen {
+                background: #ecffec;
+            }
+            .select {
+                filter: brightness(95%);
+            }            
+            .today {
+                filter: brightness(90%);
+            }
+            td {
+                text-align: center;
+                vertical-align: middle;
+                padding: 3px 10px;
+                border: 1px solid white;
+            }
+            .tdVersion {
+                text-align: left;
+            }
+            .tdRelease {
+                color: white;
+                background: #ffdfd4;
+            }
+            table { 
+                border-spacing: 0;
+                border-collapse: separate;
+            }
+        </style>
+    </head>    
+    
+<body>  
+<p>TX Version Calendar</p>
+<button id="btn1D" onclick="switchD(this)">1D</button>
+<button id="btn2D" onclick="switchD(this)" disabled>2D</button>
+<div id="calendar1D" style="display: none;"></div>
+<div id="calendar2D">
+    <table>
+        <tr><td class="bgGreen">Task</td>
+        <td class="bgYellow">Minor Bug</td>
+        <td class="bgRed">Important Bug</td>
+        <td class="bgBlue">End of Support</td></tr>
+    </table>
+</div>
+
+<script>  
+    function switchD(element) {
+        if (element.id == "btn1D") {
+            document.getElementById('btn1D').disabled = true;
+            document.getElementById('calendar1D').style.display = "block";
+            document.getElementById('btn2D').disabled = false;
+            document.getElementById('calendar2D').style.display = "none";
+        } else {
+            document.getElementById('btn2D').disabled = true;
+            document.getElementById('calendar2D').style.display = "block";
+            document.getElementById('btn1D').disabled = false;
+            document.getElementById('calendar1D').style.display = "none";
+        }
+    }
+    // All date in month year*12+month
+    function getMonthId(date) {
+        return date.getFullYear() * 12 + date.getMonth();
+    }
+    function getDate(monthId) {
+        var month = monthId % 12;
+        var year = (monthId - month) / 12;
+        return new Date(year, month, 1);
+    }
+
+    const constReleaseVersion = 41;
+    const constReleaseVersionMonthId = getMonthId(new Date(2024, 6, 1)); // Nov 2024
+    const nextVersionAfterMonths = 2;
+
+    function getVersion(monthId) {
+        return constReleaseVersion + Math.ceil((monthId - constReleaseVersionMonthId) / nextVersionAfterMonths);
+    }
+    function getVersionFirstMonthId(version) {
+        return constReleaseVersionMonthId + ((version - constReleaseVersion) * nextVersionAfterMonths);
+    }
+
+
+    const todayMonthId = getMonthId(new Date());
+    const todayVersion = getVersion(todayMonthId);
+    const verHigh = todayVersion + 5;
+    const verLow = todayVersion - 6;
+
+    function get1DTable() {
+        const table = document.createElement("table");
+        const dateOptions = { year:"numeric", month:"short"};
+
+        var row = document.createElement("tr");
+        // Version
+        var cell = document.createElement("td");
+        cell.innerHTML = "Allowed<br>commits";
+        cell.rowSpan = 2;
+        row.appendChild(cell);
+        // High month
+        cell = document.createElement("td");
+        cell.innerHTML = "Bug (Minor)";
+        cell.classList.add('bgYellow');
+        row.appendChild(cell);
+        table.appendChild(row);
+        // Low month
+        row = document.createElement("tr")
+        cell = document.createElement("td");
+        cell.innerHTML = "Task";
+        cell.classList.add('bgGreen');
+        row.appendChild(cell);
+        table.appendChild(row);
+
+
+        // 1D
+        var tmpMonthId = getVersionFirstMonthId(verHigh+1);
+        for (let verId = verHigh; verId >= verLow; verId--) {
+            row = document.createElement("tr");
+            // Version
+            cell = document.createElement("td");
+            cell.innerHTML = "3.2." + verId;
+            cell.rowSpan = 2;
+            cell.classList.add('cellVersion');
+            if (verId % 2 != 0)
+            cell.classList.add('bgGray');
+            row.appendChild(cell);
+            // High month
+            var cell = document.createElement("td");
+            tmpMonthId--;
+            cell.innerHTML = getDate(tmpMonthId).toLocaleDateString('en-us', dateOptions);
+            cell.classList.add('bgYellow');
+            if (tmpMonthId == todayMonthId)
+                cell.classList.add('today');
+            row.appendChild(cell);
+            table.appendChild(row);
+            // Low month
+            row = document.createElement("tr")
+            cell = document.createElement("td");
+            tmpMonthId--;
+            cell.innerHTML = getDate(tmpMonthId).toLocaleDateString('en-us', dateOptions);
+            cell.classList.add('bgGreen');
+            if (tmpMonthId == todayMonthId)
+                cell.classList.add('today');
+            row.appendChild(cell);
+            table.appendChild(row);
+        }
+        return table;
+    }
+
+    function table2DCellHandler(event) {
+        const table = document.getElementById("table2D");
+        const isselect = event.type == 'mouseover';
+        var rId = event.target.parentElement.rowIndex + 1;
+        var cId = event.target.cellIndex + 1;
+        var r=1;
+        while(row=table.rows[r++]) {
+            var c=0;
+            while(cell=row.cells[c++]) {
+                if (r == rId || (r == 2 ? c + 1 : (rId == 2 ? c -1 : c)) == cId) {
+                    if (isselect) {
+                        cell.classList.add('select');
+                    } else {
+                        cell.classList.remove('select');
+                    }
+                }
+            }
+        }
+    }
+    function get2DTable() {
+        const table = document.createElement("table");
+        table.id = "table2D";
+        const dateOptions = { month:"short"};
+        const monthCount = (verHigh - verLow)*2;
+        var tmpMonthId = getVersionFirstMonthId(verLow);
+        var monthArray = new Array();
+        var yearMap = new Map();
+        
+        for (let m = 0; m <= monthCount+1; m++) {
+            monthArray.push(tmpMonthId);
+            yearMap.set(getDate(tmpMonthId).getFullYear(), (yearMap.get(getDate(tmpMonthId).getFullYear()) ?? 0) + 1);
+            tmpMonthId++;
+        }
+        // -----------------
+        // Versions
+        row = document.createElement("tr");
+        cell = document.createElement("td");
+        cell.innerHTML = "Version";
+        cell.rowSpan = 2;
+        cell.classList.add('bgLightGray');
+        row.appendChild(cell);
+        // Versions
+        // -----------------
+        // Years
+        for (const y of Array.from(yearMap.keys())) {
+            cell = document.createElement("td");
+            cell.colSpan = yearMap.get(y);
+            cell.innerHTML = y;
+            cell.classList.add('bgLightGray');
+            row.appendChild(cell);
+        }
+        table.appendChild(row);
+        // Years
+        // -----------------
+        // Months
+        row = document.createElement("tr");
+        for (const tmpMonthId of monthArray) {
+            cell = document.createElement("td");
+            cell.innerHTML = getDate(tmpMonthId).toLocaleDateString('en-us', dateOptions);
+            cell.classList.add('bgLightGray');
+            cell.onmouseover = cell.onmouseout = table2DCellHandler;
+            if (tmpMonthId == todayMonthId)
+                cell.classList.add('today');            
+            row.appendChild(cell);
+        }
+        table.appendChild(row);
+        // Months
+        // -----------------
+        // Versions
+        for (let verId = verHigh; verId >= verLow; verId--) {
+            var isRelease = ((verId - constReleaseVersion) % 3) == 0;
+            row = document.createElement("tr");
+            // Version
+            cell = document.createElement("td");
+            cell.innerHTML = "3.2." + verId + (isRelease ? ' ®' : '');
+            cell.classList.add('bgLightGray');
+            cell.classList.add('tdVersion');
+            cell.onmouseover = cell.onmouseout = table2DCellHandler;
+            row.appendChild(cell);
+            const verFirstMonthId = getVersionFirstMonthId(verId);
+
+            // Version Months
+            for (const tmpMonthId of monthArray) {
+                cell = document.createElement("td");
+                cell.onmouseover = cell.onmouseout = table2DCellHandler;
+
+                var diff = tmpMonthId - verFirstMonthId;
+                if (diff == 0) {
+                    cell.classList.add('bgGreen');
+                    cell.innerHTML = '+';
+                } else if (diff == 1) {
+                    cell.classList.add('bgYellow');
+                    cell.innerHTML = '#';
+                } else if (diff > 1 && diff < (isRelease ? 11 : 10)) {
+                    cell.classList.add('bgRed');
+                    cell.innerHTML = '.';
+                } else if (diff == (isRelease ? 11 : 10)) {
+                    cell.classList.add('bgBlue');
+                    cell.innerHTML = 'x';
+                } else {
+                    cell.classList.add('bgLightGray');
+                }
+                if (tmpMonthId == todayMonthId)
+                    cell.classList.add('today'); 
+
+                row.appendChild(cell);
+            }
+
+            table.appendChild(row);
+        }        
+        return table;
+    }
+    document.getElementById("calendar1D").appendChild(get1DTable());
+    document.getElementById("calendar2D").appendChild(get2DTable());
+</script>  
+</body>  
+</html>
