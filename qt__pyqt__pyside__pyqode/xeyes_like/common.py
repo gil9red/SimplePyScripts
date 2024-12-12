@@ -7,6 +7,15 @@ __author__ = "ipetrash"
 from dataclasses import dataclass
 from math import fabs, sqrt
 
+from PyQt5.QtCore import QPoint, Qt
+from PyQt5.QtWidgets import QWidget
+
+
+MINIMAL_WIDTH_EYE: int = 50
+MINIMAL_HEIGHT_EYE: int = 50
+
+MAXIMAL_WIDTH_EYE: int = 350
+MAXIMAL_HEIGHT_EYE: int = 350
 
 EPS: float = 0.00001
 
@@ -133,8 +142,15 @@ def percent_number(number: float, percent: int) -> float:
     return number if percent < 0 else (number / 100) * percent
 
 
-MINIMAL_WIDTH_EYE: int = 50
-MINIMAL_HEIGHT_EYE: int = 50
+def set_top_of_all_windows(widget: QWidget, top: bool):
+    old_pos: QPoint = widget.pos()
 
-MAXIMAL_WIDTH_EYE: int = 350
-MAXIMAL_HEIGHT_EYE: int = 350
+    if top:
+        flags = Qt.Tool | Qt.WindowStaysOnTopHint
+    else:
+        flags = Qt.FramelessWindowHint | Qt.Tool | Qt.WindowStaysOnBottomHint
+
+    widget.setWindowFlags(flags)
+
+    widget.showNormal()
+    widget.move(old_pos)

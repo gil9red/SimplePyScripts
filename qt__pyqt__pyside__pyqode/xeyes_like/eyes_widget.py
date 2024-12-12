@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QWidget, QApplication
-from PyQt5.QtGui import QCursor, QResizeEvent, QCloseEvent
+from PyQt5.QtGui import QCursor, QResizeEvent
 from PyQt5.QtCore import QTimer, QPoint, Qt
 
 from eye_widget import EyeWidget
@@ -28,27 +28,12 @@ class EyesWidget(QWidget):
         self.timerCursorPos.timeout.connect(self.refresh_look_there)
         self.timerCursorPos.start(30)
 
-        self.set_top_of_all_windows(True)
-
     def refresh_look_there(self):
         self.update()
 
         position: QPoint = QCursor.pos()
         for eye in self.eyes:
             eye.look_there(position)
-
-    def set_top_of_all_windows(self, top: bool):
-        old_pos: QPoint = self.pos()
-
-        if top:
-            flags = Qt.Tool | Qt.WindowStaysOnTopHint
-        else:
-            flags = Qt.FramelessWindowHint | Qt.Tool | Qt.WindowStaysOnBottomHint
-
-        self.setWindowFlags(flags)
-
-        self.showNormal()
-        self.move(old_pos)
 
     def update_minimum_size(self):
         if not self.eyes:
@@ -96,6 +81,3 @@ class EyesWidget(QWidget):
             eye.setFixedSize(diameter, diameter)
 
             x = eye.x() + eye.width() + D_INDENT_BETWEEN_EYES
-
-    def closeEvent(self, _: QCloseEvent):
-        QApplication.instance().quit()

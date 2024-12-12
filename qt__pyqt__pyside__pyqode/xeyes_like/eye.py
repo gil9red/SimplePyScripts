@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 from PyQt5.QtGui import QBrush, QPen, QPainter
 from PyQt5.QtCore import QPoint, Qt
 
-from support import Ellipse, Line, ResultCrossLineAndEllipse, is_ellipse_and_direct, percent_number
+from common import Ellipse, Line, ResultCrossLineAndEllipse, is_ellipse_and_direct, percent_number
 
 
 @dataclass

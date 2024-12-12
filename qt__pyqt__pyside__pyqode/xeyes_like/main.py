@@ -10,6 +10,8 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
 from eyes_widget import EyesWidget
+# TODO:
+# from support import set_top_of_all_windows
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
@@ -32,5 +34,8 @@ w.resize(200, 100)
 w.move(100, 100)
 w.show()
 w.update_size()
+
+# TODO: On closing EyesWidget needs to finish of QApplication
+# set_top_of_all_windows(w, True)
 
 app.exec()
