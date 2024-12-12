@@ -13,12 +13,12 @@ from datetime import datetime
 from typing import Generator
 from urllib.parse import urljoin, urlparse, parse_qs
 
-# pip install dpath
+# pip install dpath==2.0.5
 import dpath.util
 
 import requests
 
-# pip install tzlocal
+# pip install tzlocal==4.1
 import tzlocal
 
 
@@ -584,8 +584,8 @@ class Playlist:
             url = url_or_id
             playlist_id = cls.get_id_from_url(url)
 
-            # Extracting playlist url from url video
-            if "/watch?" in url:
+            # Extracting playlist id from url video
+            if "/playlist?" not in url:
                 url = cls.get_url(playlist_id)
 
         else:
@@ -703,5 +703,11 @@ if __name__ == "__main__":
 
     # Getting "playlist" from url video
     url_video = "https://www.youtube.com/watch?v=m1bPr3FRV1w&list=PLgqDz7CZ-6NbDjtcYuPFW2wb2LS7BQJMb&index=3"
-    print("From url video:")
+    print(f"From url video: {url_video}")
+    print(Playlist.get_from(url_video))
+    print()
+
+    url_video = "https://youtu.be/LSkNXxwrjLg?list=PLscFx0v8PvufteVzSldK135ymdvxncLEe"
+    playlist = Playlist.get_from(url_video)
+    print(f"From short url video: {url_video}")
     print(Playlist.get_from(url_video))
