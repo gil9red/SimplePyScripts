@@ -21,7 +21,13 @@ class Game:
 def _get_text(el: Tag) -> str:
     if not el:
         return ""
-    return el.get_text().replace("\u200b", " ").replace("\xa0", " ").strip()
+    return (
+        el.get_text()
+        .replace("\u200b", " ")
+        .replace("\xa0", " ")
+        .replace("\u0000", "")
+        .strip()
+    )
 
 
 def _check_result(items: list[Game]):
