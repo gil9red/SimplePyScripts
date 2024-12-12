@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from PyQt5.QtGui import QBrush, QPen, QPainter
 from PyQt5.QtCore import QPoint, Qt
 
-from support import USupport, UEllipse, ULine, UResultCrossLineAndEllipse, UIntersection
+from support import Ellipse, Line, ResultCrossLineAndEllipse, is_ellipse_and_direct, percent_number
 
 
 @dataclass
@@ -23,21 +23,21 @@ class EllipseObject:
 
 
 @dataclass
-class UIris(EllipseObject):
+class Iris(EllipseObject):
     """Радужка"""
 
 
 @dataclass
-class UPupil(EllipseObject):
+class Pupil(EllipseObject):
     """Зрачок"""
 
 
 @dataclass
-class UEye(EllipseObject):
+class Eye(EllipseObject):
     """Глаз"""
 
-    iris: UIris = UIris()
-    pupil: UPupil = UPupil()
+    iris: Iris = Iris()
+    pupil: Pupil = Pupil()
 
     visible_iris: bool = True
     visible_pupil: bool = True
@@ -64,31 +64,31 @@ class UEye(EllipseObject):
         x2 = self.iris.center.x()
         y2 = self.iris.center.y()
 
-        boundingWidth = self.radiusX - self.iris.radiusX
-        boundingHeight = self.radiusY - self.iris.radiusY
+        bounding_width = self.radiusX - self.iris.radiusX
+        bounding_height = self.radiusY - self.iris.radiusY
 
         # Установим размер ограничивающего эллипса, он будет в процентах от размера глаз
-        boundingWidth = USupport.percentNumber(boundingWidth, 80)
-        boundingHeight = USupport.percentNumber(boundingHeight, 80)
+        bounding_width = percent_number(bounding_width, 80)
+        bounding_height = percent_number(bounding_height, 80)
 
-        boundingEllipse = UEllipse(
-            self.center.x(), self.center.y(), boundingWidth, boundingHeight
+        bounding_ellipse = Ellipse(
+            self.center.x(), self.center.y(), bounding_width, bounding_height
         )
 
         a = pow(abs(x1 - x2), 2) + pow(abs(y1 - y2), 2)
         b = pow(self.radiusX, 2) - pow(
-            USupport.percentNumber(self.radiusX - self.iris.radiusX, 130), 2
+            percent_number(self.radiusX - self.iris.radiusX, 130), 2
         )
         if a >= b:
-            line = ULine(
+            line = Line(
                 self.center.x(),
                 self.center.y(),
                 self.iris.center.x(),
                 self.iris.center.y(),
             )
-            result = UResultCrossLineAndEllipse()
+            result = ResultCrossLineAndEllipse()
 
-            if UIntersection.isEllipseAndDirect(boundingEllipse, line, result):
+            if is_ellipse_and_direct(bounding_ellipse, line, result):
                 # TODO:
                 result.x1 = int(result.x1)
                 result.y1 = int(result.y1)

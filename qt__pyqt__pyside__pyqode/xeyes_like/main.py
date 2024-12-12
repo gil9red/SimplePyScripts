@@ -9,7 +9,7 @@ import sys
 
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
-from eyes_widget import UEyesWidget
+from eyes_widget import EyesWidget
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
@@ -26,20 +26,11 @@ sys.excepthook = log_uncaught_exceptions
 
 app = QApplication([])
 app.setApplicationName("Eyes")
-# app.setApplicationVersion("0.0.1")
-# app.setQuitOnLastWindowClosed(False)
 
-
-# TODO:
-w = UEyesWidget()
-# w.setNumberEyes(2)
-# w.setOrientation(Qt::Horizontal)
-# w.setOpacity(0.6)
-# w.setBrush(Qt::black)
+w = EyesWidget()
 w.resize(200, 100)
 w.move(100, 100)
 w.show()
-# w.showFrame()
-w.updateSize()
+w.update_size()
 
 app.exec()

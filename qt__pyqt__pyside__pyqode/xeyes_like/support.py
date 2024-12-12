@@ -8,135 +8,133 @@ from dataclasses import dataclass
 from math import fabs, sqrt
 
 
-# TODO: upper
-eps: float = 0.00001
+EPS: float = 0.00001
 
 
-# TODO: rename
 @dataclass
-class UEllipse:
+class Ellipse:
     x1: float = 0.0
     y1: float = 0.0
     rx: float = 0.0
     ry: float = 0.0
 
 
-# TODO: rename
 @dataclass
-class ULine:
+class Line:
     x1: float = 0.0
     y1: float = 0.0
     x2: float = 0.0
     y2: float = 0.0
 
 
-# TODO: rename
-class UResultCrossLineAndEllipse:
+class ResultCrossLineAndEllipse:
     x1: float = 0
     y1: float = 0
     x2: float = 0
     y2: float = 0
 
 
-# TODO: rename
-class UIntersection:
-    # Функция, которая считает пересечения эллипса и прямой
-    # Когда пересечений нет, возвращает False, иначе True, а
-    # в result присваивается точка пересечения
-    @staticmethod
-    def isEllipseAndDirect(
-        ellipse: UEllipse, line: ULine, result: UResultCrossLineAndEllipse
-    ) -> bool:
-        dx: float = line.x1 - line.x2
+def is_ellipse_and_direct(
+    ellipse: Ellipse,
+    line: Line,
+    result: ResultCrossLineAndEllipse,
+) -> bool:
+    """
+    Функция, которая считает пересечения эллипса и прямой
+    Когда пересечений нет, возвращает False, иначе True, а
+    в result присваивается точка пересечения
 
-        # Если какой-то радиус равен 0
-        if fabs(ellipse.rx) < eps or fabs(ellipse.ry) < eps:
-            if (
-                fabs(ellipse.rx) < eps
-                and fabs(line.x1 - ellipse.x1) < eps
-                and fabs(line.x2 - ellipse.x1) < eps
-            ):
-                result.x1 = ellipse.x1
-                result.y1 = ellipse.y1 - ellipse.ry
-                result.x2 = ellipse.x1
-                result.y2 = ellipse.y1 + ellipse.ry
-                return True
+    :param ellipse:
+    :param line:
+    :param result:
+    :return:
+    """
 
-            if (
-                fabs(ellipse.ry) < eps
-                and fabs(line.y1 - ellipse.y1) < eps
-                and fabs(line.y2 - ellipse.y1) < eps
-            ):
-                result.x1 = ellipse.x1 - ellipse.rx
-                result.y1 = ellipse.y1
-                result.x2 = ellipse.x1 + ellipse.rx
-                result.y2 = ellipse.y1
-                return True
+    dx: float = line.x1 - line.x2
 
-        if fabs(dx) < eps:
-            # Вертикальная прямая
-            nx: float = line.x1 - ellipse.x1
+    # Если какой-то радиус равен 0
+    if fabs(ellipse.rx) < EPS or fabs(ellipse.ry) < EPS:
+        if (
+            fabs(ellipse.rx) < EPS
+            and fabs(line.x1 - ellipse.x1) < EPS
+            and fabs(line.x2 - ellipse.x1) < EPS
+        ):
+            result.x1 = ellipse.x1
+            result.y1 = ellipse.y1 - ellipse.ry
+            result.x2 = ellipse.x1
+            result.y2 = ellipse.y1 + ellipse.ry
+            return True
 
-            # Пересечения нет
-            if nx < -ellipse.rx or ellipse.rx < nx or fabs(ellipse.rx) < eps:
-                return False
+        if (
+            fabs(ellipse.ry) < EPS
+            and fabs(line.y1 - ellipse.y1) < EPS
+            and fabs(line.y2 - ellipse.y1) < EPS
+        ):
+            result.x1 = ellipse.x1 - ellipse.rx
+            result.y1 = ellipse.y1
+            result.x2 = ellipse.x1 + ellipse.rx
+            result.y2 = ellipse.y1
+            return True
 
-            result.x1 = nx
-            result.y1 = sqrt(
-                ellipse.ry * ellipse.ry * (1 - nx * nx / (ellipse.rx * ellipse.rx))
-            )
-            result.x2 = nx
-            result.y2 = -result.y1
+    if fabs(dx) < EPS:
+        # Вертикальная прямая
+        nx: float = line.x1 - ellipse.x1
 
-        else:
-            dy: float = line.y1 - line.y2
+        # Пересечения нет
+        if nx < -ellipse.rx or ellipse.rx < nx or fabs(ellipse.rx) < EPS:
+            return False
 
-            # lnk и lnb - коэффициенты прямой по формуле lnk * x + lnb  ==  y
-            lnk: float = dy / dx
-            lnb: float = (
-                ellipse.x1 * dy
-                + line.x1 * line.y2
-                - line.y1 * line.x2
-                - ellipse.y1 * dx
-            ) / dx
+        result.x1 = nx
+        result.y1 = sqrt(
+            ellipse.ry * ellipse.ry * (1 - nx * nx / (ellipse.rx * ellipse.rx))
+        )
+        result.x2 = nx
+        result.y2 = -result.y1
 
-            # Получаем уравнение пересечения: a0 x^2 + a1 x + a2  ==  0
-            a0: float = lnk * lnk + ellipse.ry * ellipse.ry / (ellipse.rx * ellipse.rx)
-            a1: float = 2 * lnb * lnk
-            a2: float = lnb * lnb - ellipse.ry * ellipse.ry
+    else:
+        dy: float = line.y1 - line.y2
 
-            # Решения квадратного уравнения a0 x^2 + a1 x + a2 == 0
-            # Это и будет координаты X пересечений
-            disc: float = a1 * a1 - 4 * a0 * a2
+        # lnk и lnb - коэффициенты прямой по формуле lnk * x + lnb  ==  y
+        lnk: float = dy / dx
+        lnb: float = (
+            ellipse.x1 * dy
+            + line.x1 * line.y2
+            - line.y1 * line.x2
+            - ellipse.y1 * dx
+        ) / dx
 
-            # Пересечения нет
-            if disc < 0 or fabs(a0) < eps:
-                return False
+        # Получаем уравнение пересечения: a0 x^2 + a1 x + a2  ==  0
+        a0: float = lnk * lnk + ellipse.ry * ellipse.ry / (ellipse.rx * ellipse.rx)
+        a1: float = 2 * lnb * lnk
+        a2: float = lnb * lnb - ellipse.ry * ellipse.ry
 
-            result.x1 = (-a1 - sqrt(disc)) / (2 * a0)
-            result.y1 = lnk * result.x1 + lnb
-            result.x2 = (-a1 + sqrt(disc)) / (2 * a0)
-            result.y2 = lnk * result.x2 + lnb
+        # Решения квадратного уравнения a0 x^2 + a1 x + a2 == 0
+        # Это и будет координаты X пересечений
+        disc: float = a1 * a1 - 4 * a0 * a2
 
-        result.x1 += ellipse.x1
-        result.y1 += ellipse.y1
-        result.x2 += ellipse.x1
-        result.y2 += ellipse.y1
+        # Пересечения нет
+        if disc < 0 or fabs(a0) < EPS:
+            return False
 
-        return True
+        result.x1 = (-a1 - sqrt(disc)) / (2 * a0)
+        result.y1 = lnk * result.x1 + lnb
+        result.x2 = (-a1 + sqrt(disc)) / (2 * a0)
+        result.y2 = lnk * result.x2 + lnb
+
+    result.x1 += ellipse.x1
+    result.y1 += ellipse.y1
+    result.x2 += ellipse.x1
+    result.y2 += ellipse.y1
+
+    return True
 
 
-# TODO: rename
-class USupport:
-    # Процент от числа
-    @staticmethod
-    def percentNumber(number: float, percent: int) -> float:
-        return number if percent < 0 else (number / 100) * percent
+def percent_number(number: float, percent: int) -> float:
+    return number if percent < 0 else (number / 100) * percent
 
 
-# TODO: rename
-minimalWidthEye: int = 50
-minimalHeightEye: int = 50
+MINIMAL_WIDTH_EYE: int = 50
+MINIMAL_HEIGHT_EYE: int = 50
 
-maximalWidthEye: int = 350
-maximalHeightEye: int = 350
+MAXIMAL_WIDTH_EYE: int = 350
+MAXIMAL_HEIGHT_EYE: int = 350

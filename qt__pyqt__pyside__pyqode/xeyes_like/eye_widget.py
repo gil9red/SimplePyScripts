@@ -5,22 +5,22 @@ __author__ = "ipetrash"
 
 
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtGui import QPaintEvent, QPainter, QBrush, QPen
+from PyQt5.QtGui import QPaintEvent, QPainter, QPen
 from PyQt5.QtCore import QPoint, Qt
 
-from eye import UEye, UIris, UPupil
-from support import USupport, minimalWidthEye
+from eye import Eye, Iris, Pupil
+from support import MINIMAL_WIDTH_EYE, percent_number
 
 
-class UEyeWidget(QWidget):
-    eye: UEye = UEye(
+class EyeWidget(QWidget):
+    eye: Eye = Eye(
         brush=Qt.white,
         pen=QPen(Qt.black, 2.0),
-        iris=UIris(
+        iris=Iris(
             brush=Qt.black,
             pen=QPen(Qt.black, 1.0),
         ),
-        pupil=UPupil(
+        pupil=Pupil(
             brush=Qt.black,
             pen=QPen(Qt.white, 1.0),
         ),
@@ -37,59 +37,14 @@ class UEyeWidget(QWidget):
     def __init__(self, parent: QWidget = None):
         super().__init__(parent)
 
-        self.setDiameter(minimalWidthEye)
+        self.set_diameter(MINIMAL_WIDTH_EYE)
 
-    # def setBrush(self, brush: QBrush):
-    #     self.eye.brush = brush
-
-    def setDiameter(self, diameter: int):
+    def set_diameter(self, diameter: int):
         self.setFixedSize(diameter, diameter)
 
-    # def setBrush(const QBrush brush)
-    # def setPen(const QPen pen)
-    # QPoint center()
-    # float radiusX()
-    # float radiusY()
-    # QBrush brush()
-    # QPen pen()
-    #
-    #
-    # def setBrushIris(const QBrush brush)
-    # def setPenIris(const QPen pen)
-    # QPoint centerIris()
-    # def setRadiusXIris(float radius)
-    # def setRadiusYIris(float radius)
-    # float radiusXIris()
-    # float radiusYIris()
-    # QBrush brushIris()
-    # QPen penIris()
-    #
-    #
-    # def setBrushPupil(const QBrush brush)
-    # def setPenPupil(const QPen pen)
-    # QPoint centerPupil()
-    # def setRadiusXPupil(float radius)
-    # def setRadiusYPupil(float radius)
-    # float radiusXPupil()
-    # float radiusYPupil()
-    # QBrush brushPupil()
-    # QPen penPupil()
-    #
-    # int percentIrisRadiusX()
-    # int percentIrisRadiusY()
-    #
-    # int percentPupilRadiusX()
-    # int percentPupilRadiusY()
-
-    def lookThere(self, position: QPoint):
+    def look_there(self, position: QPoint):
         self.positionLook = self.mapFromGlobal(position)
         self.update()
-
-    # def setPercentIrisRadiusX(int percent)
-    # def setPercentIrisRadiusY(int percent)
-    #
-    # def setPercentPupilRadiusX(int percent)
-    # def setPercentPupilRadiusY(int percent)
 
     def paintEvent(self, event: QPaintEvent):
         painter = QPainter(self)
@@ -99,44 +54,38 @@ class UEyeWidget(QWidget):
 
         # По размерам окна определим примерно размер глаз
         # расчет будет по высоте и ширине
-        rXFromWidth: float = (self.width() - indent * 2) / 2
-        rYFromHeigth: float = (self.height() - indent * 2) / 2
+        r_x_from_width: float = (self.width() - indent * 2) / 2
+        r_y_from_heigth: float = (self.height() - indent * 2) / 2
 
-        radiusXEye: float = min(rXFromWidth, rYFromHeigth)
-        radiusYEye: float = radiusXEye
+        radius_x_eye: float = min(r_x_from_width, r_y_from_heigth)
+        radius_y_eye: float = radius_x_eye
 
-        radiusXIris: float = USupport.percentNumber(
-            radiusXEye, self.d_percentIrisRadiusX
-        )
-        radiusYIris: float = USupport.percentNumber(
-            radiusYEye, self.d_percentIrisRadiusY
-        )
+        radius_x_iris: float = percent_number(radius_x_eye, self.d_percentIrisRadiusX)
+        radius_y_iris: float = percent_number(radius_y_eye, self.d_percentIrisRadiusY)
 
-        radiusXPupil: float = USupport.percentNumber(
-            radiusXIris, self.d_percentPupilRadiusX
+        radius_x_pupil: float = percent_number(
+            radius_x_iris, self.d_percentPupilRadiusX
         )
-        radiusYPupil: float = USupport.percentNumber(
-            radiusYIris, self.d_percentPupilRadiusY
+        radius_y_pupil: float = percent_number(
+            radius_y_iris, self.d_percentPupilRadiusY
         )
 
-        x: int = int(radiusXEye + indent)
-        y: int = int(radiusYEye + indent)
+        x: int = int(radius_x_eye + indent)
+        y: int = int(radius_y_eye + indent)
 
-        self.eye.radiusX = radiusXEye
-        self.eye.radiusY = radiusYEye
+        self.eye.radiusX = radius_x_eye
+        self.eye.radiusY = radius_y_eye
         self.eye.center = QPoint(x, y)
 
         # Радужка глаза
         iris = self.eye.iris
-        iris.radiusX = radiusXIris
-        iris.radiusY = radiusYIris
+        iris.radiusX = radius_x_iris
+        iris.radiusY = radius_y_iris
         iris.center = self.positionLook
-        # Радужка глаза
 
         # Зрачок глаза
         pupil = self.eye.pupil
-        pupil.radiusX = radiusXPupil
-        pupil.radiusY = radiusYPupil
-        # Зрачок глаза
+        pupil.radiusX = radius_x_pupil
+        pupil.radiusY = radius_y_pupil
 
         self.eye.draw(painter)
