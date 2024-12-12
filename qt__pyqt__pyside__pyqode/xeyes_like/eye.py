@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from PyQt5.QtGui import QBrush, QPen, QPainter
 from PyQt5.QtCore import QPoint, Qt
@@ -14,12 +14,12 @@ from support import Ellipse, Line, ResultCrossLineAndEllipse, is_ellipse_and_dir
 
 @dataclass
 class EllipseObject:
-    center: QPoint = QPoint(0, 0)
+    center: QPoint = field(default_factory=lambda: QPoint(0, 0))
     radiusX: float = 0.0
     radiusY: float = 0.0
 
     brush: QBrush = Qt.black
-    pen: QPen = QPen(Qt.black, 1.0)
+    pen: QPen = field(default_factory=lambda: QPen(Qt.black, 1.0))
 
 
 @dataclass
@@ -36,8 +36,8 @@ class Pupil(EllipseObject):
 class Eye(EllipseObject):
     """Глаз"""
 
-    iris: Iris = Iris()
-    pupil: Pupil = Pupil()
+    iris: Iris = field(default_factory=Iris)
+    pupil: Pupil = field(default_factory=Pupil)
 
     visible_iris: bool = True
     visible_pupil: bool = True
