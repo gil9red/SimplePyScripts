@@ -4,7 +4,6 @@
 __author__ = "ipetrash"
 
 
-import uvicorn
 from fastapi import FastAPI
 
 
@@ -18,10 +17,9 @@ def index():
 
 if __name__ == "__main__":
     from pathlib import Path
+    import uvicorn
 
     uvicorn.run(
-        # NOTE: Тоже самое
-        # app="running-programmatically:app",
         app=f"{Path(__file__).stem}:app",
         host="127.0.0.1",
         port=8000,
