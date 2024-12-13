@@ -4,9 +4,7 @@
 __author__ = "ipetrash"
 
 
-import uvicorn
 from fastapi import FastAPI
-
 from config import LOGGING_CONFIG
 
 
@@ -20,6 +18,7 @@ def index():
 
 if __name__ == "__main__":
     from pathlib import Path
+    import uvicorn
 
     uvicorn.run(
         # NOTE: Тоже самое
