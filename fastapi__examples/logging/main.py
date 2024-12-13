@@ -21,8 +21,6 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(
-        # NOTE: Тоже самое
-        # app="running-programmatically:app",
         app=f"{Path(__file__).stem}:app",
         host="127.0.0.1",
         port=8000,
