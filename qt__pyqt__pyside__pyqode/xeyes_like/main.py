@@ -9,7 +9,7 @@ import sys
 
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
-from eyes_widget import EyesWidget
+from eyes.eyes_widget import EyesWidget
 # TODO:
 # from support import set_top_of_all_windows
 

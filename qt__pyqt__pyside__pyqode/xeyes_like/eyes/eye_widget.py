@@ -8,8 +8,8 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QPaintEvent, QPainter, QPen
 from PyQt5.QtCore import QPoint, Qt
 
-from common import MINIMAL_WIDTH_EYE, percent_number
-from eye import Eye, Iris, Pupil
+from .common import MINIMAL_WIDTH_EYE, percent_number
+from .eye import Eye, Iris, Pupil
 
 
 class EyeWidget(QWidget):

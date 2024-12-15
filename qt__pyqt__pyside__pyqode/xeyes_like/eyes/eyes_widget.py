@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QWidget, QApplication
 from PyQt5.QtGui import QCursor, QResizeEvent
 from PyQt5.QtCore import QTimer, QPoint
 
-from eye_widget import EyeWidget
+from .eye_widget import EyeWidget
 
 
 D_INDENT_TOP = 20
