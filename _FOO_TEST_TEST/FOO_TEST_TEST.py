@@ -58,8 +58,20 @@ if __name__ == "__main__":
     # print(search_game("Final Fantasy VII"))
 
     from multiprocessing.dummy import Pool as ThreadPool
+
     with ThreadPool() as p:
-        result = p.map(search_game, ["Half-Life 2", "Half-Life", "Final Fantasy", "Final Fantasy IX", "Final Fantasy 9", "Final Fantasy VII"])
+        result = p.map(
+            search_game,
+            [
+                "dfsdfsdfsdfsdfsdfsdfdsf",
+                "Half-Life 2",
+                "Half-Life",
+                "Final Fantasy",
+                "Final Fantasy IX",
+                "Final Fantasy 9",
+                "Final Fantasy VII",
+            ],
+        )
         print(len(result))
         for obj in result:
             print(obj)
