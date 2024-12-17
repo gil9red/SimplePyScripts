@@ -22,7 +22,6 @@ def get_api_search_raw(game: str) -> dict[str, Any]:
 
         def is_api_search(rs: Response) -> bool:
             url: str = rs.url.lower()
-
             return ("/api/search" in url or "/api/find" in url) and rs.status == 200
 
         with page.expect_response(is_api_search) as response_info:
