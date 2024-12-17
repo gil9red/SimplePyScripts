@@ -27,7 +27,7 @@ class Process:
 TITLE = "Список запущенных серверов"
 
 
-def _get_processes() -> list:
+def _get_processes() -> list[Process]:
     processes = []
     for proc in psutil.process_iter():
         try:
@@ -58,6 +58,97 @@ def _get_processes() -> list:
     return processes
 
 
+def get_html_info() -> str:
+    table_rows: list[str] = [
+        f"""
+        <tr {'class="grayscale"' if p.pid == os.getpid() else ''}>
+            <td>{i}</td>
+            <td>{p.pid}</td>
+            <td>{p.name}</td>
+            <td class="ports"><div>{p.ports}</div></td>
+            <td class="path"><div>{p.path}</div></td>
+            <td class="cwd"><div>{p.cwd}</div></td>
+        </tr>
+        """
+        for i, p in enumerate(_get_processes(), 1)
+    ]
+
+    text = """
+    <!DOCTYPE html>
+    <html lang="ru">
+    <head>
+        <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+        <title>{{ title }}</title>
+
+        <style type="text/css">
+            table {
+                border-collapse: collapse; /* Убираем двойные линии между ячейками */
+                width: 1200px;
+                margin:0 auto;
+            }
+                /* Увеличим заголовок таблиц */
+                table > caption {
+                    font-size: 150%;
+                }
+
+                th {
+                    font-size: 120%;
+                    background: lightGrey;
+                }
+                td, th {
+                    border: 1px double #333; /* Рамка таблицы */
+                    padding: 5px;
+                }
+                td {
+                    text-align: left;
+                    vertical-align: top;
+                }
+
+                td.ports > div {
+                    inline-size: 150px;
+                }
+                td.path > div {
+                    inline-size: 400px;
+                    overflow-wrap: break-word;
+                }
+                td.cwd > div {
+                    inline-size: 300px;
+                    overflow-wrap: break-word;
+                }
+
+            .grayscale { 
+                color: grey;
+            }
+        </style>
+    </head>
+    <body>   
+        <table>
+            <caption>{{ title }}</caption>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>PID</th>
+                    <th>Название</th>
+                    <th>Порт(ы)</th>
+                    <th>Путь</th>
+                    <th>Cwd</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ table_rows }}
+            </tbody>
+        </table>
+    </body>
+    </html>
+    """.replace(
+        "{{ title }}", TITLE
+    ).replace(
+        "{{ table_rows }}", "\n".join(table_rows)
+    )
+
+    return text
+
+
 class HttpProcessor(BaseHTTPRequestHandler):
     def do_GET(self):
         o = urlsplit(self.path)
@@ -67,89 +158,7 @@ class HttpProcessor(BaseHTTPRequestHandler):
             self.send_error(404)
             return
 
-        table_rows: list[str] = []
-        for i, p in enumerate(_get_processes(), 1):
-            table_rows.append(
-                f"""
-<tr {'class="grayscale"' if p.pid == os.getpid() else ''}>
-    <td>{i}</td>
-    <td>{p.pid}</td>
-    <td>{p.name}</td>
-    <td class="ports"><div>{p.ports}</div></td>
-    <td class="path"><div>{p.path}</div></td>
-    <td class="cwd"><div>{p.cwd}</div></td>
-</tr>
-            """)
-
-        text = (
-            """
-        <!DOCTYPE html>
-        <html lang="ru">
-        <head>
-            <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
-            <title>{{ title }}</title>
-
-            <style type="text/css">
-                table {
-                    border-collapse: collapse; /* Убираем двойные линии между ячейками */
-                    width: 1200px;
-                    margin:0 auto;
-                }
-                    /* Увеличим заголовок таблиц */
-                    table > caption {
-                        font-size: 150%;
-                    }
-
-                    .frame th {
-                        font-size: 120%;
-                        background: lightGrey;
-                    }
-                    .frame td, .frame th {
-                        border: 1px double #333; /* Рамка таблицы */
-                        padding: 5px;
-                    }
-                    
-                    .frame td.ports > div {
-                        inline-size: 150px;
-                    }
-                    .frame td.path > div {
-                        inline-size: 400px;
-                        overflow-wrap: break-word;
-                    }
-                    .frame td.cwd > div {
-                        inline-size: 300px;
-                        overflow-wrap: break-word;
-                    }
-                    
-                .grayscale { 
-                    color: grey;
-                }
-            </style>
-        </head>
-        <body>   
-            <table class="frame">
-                <caption>{{ title }}</caption>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>PID</th>
-                        <th>Название</th>
-                        <th>Порт(ы)</th>
-                        <th>Путь</th>
-                        <th>Cwd</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{ table_rows }}
-                </tbody>
-            </table>
-        </body>
-        </html>
-        """.replace(
-                "{{ title }}", TITLE
-            )
-            .replace("{{ table_rows }}", "".join(table_rows))
-        )
+        text = get_html_info()
 
         self.send_response(200)
         self.send_header("Content-Type", "text/html; charset=utf-8")
@@ -169,5 +178,5 @@ def run(server_class=HTTPServer, handler_class=HttpProcessor, port=8080):
 
 if __name__ == "__main__":
     run(
-        port=int(os.environ.get("PORT", 50010)),
+        port=int(os.environ.get("PORT", 50012)),
     )
