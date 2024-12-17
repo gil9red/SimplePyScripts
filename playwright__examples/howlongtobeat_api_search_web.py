@@ -14,10 +14,7 @@ app = FastAPI()
 
 @app.get("/search-game/{name}")
 def index(name: str) -> dict[str, Any] | None:
-    print(name)
-    result = search_game(name)
-    print(result)
-    return result
+    return search_game(name)
 
 
 if __name__ == "__main__":
