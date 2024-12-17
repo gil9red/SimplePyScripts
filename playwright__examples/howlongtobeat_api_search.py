@@ -34,7 +34,7 @@ def search_game(game: str) -> dict[str, Any] | None:
 
     def _is_found_game(game1: str, game2: str):
         def _process_name(name: str):
-            return re.sub(r"\W/", "", name).lower()
+            return re.sub(r"\W", "", name).lower()
 
         return _process_name(game1) == _process_name(game2)
 
