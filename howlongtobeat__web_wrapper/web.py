@@ -6,7 +6,7 @@ __author__ = "ipetrash"
 
 from typing import Any
 from fastapi import FastAPI
-from howlongtobeat_api_search import search_game
+from api_search import search_game
 
 
 app = FastAPI()
