@@ -11,7 +11,7 @@ from PyQt5.QtCore import QTimer, QPoint
 from .eye_widget import EyeWidget
 
 
-D_INDENT_TOP = 20
+D_INDENT_TOP = 4
 D_INDENT_LEFT = 4
 D_INDENT_RIGHT = 4
 D_INDENT_BOTTOM = 4
@@ -24,9 +24,9 @@ class EyesWidget(QWidget):
 
         self.eyes: list[EyeWidget] = [EyeWidget(self) for _ in range(2)]
 
-        self.timerCursorPos = QTimer(self)
-        self.timerCursorPos.timeout.connect(self.refresh_look_there)
-        self.timerCursorPos.start(30)
+        self.timer_cursor_pos = QTimer(self)
+        self.timer_cursor_pos.timeout.connect(self.refresh_look_there)
+        self.timer_cursor_pos.start(30)
 
     def refresh_look_there(self):
         self.update()
