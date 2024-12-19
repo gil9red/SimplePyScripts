@@ -78,6 +78,6 @@ class EyesWidget(QWidget):
 
         for eye in self.eyes:
             eye.move(x, y)
-            eye.setFixedSize(diameter, diameter)
+            eye.set_diameter(diameter)
 
             x = eye.x() + eye.width() + D_INDENT_BETWEEN_EYES

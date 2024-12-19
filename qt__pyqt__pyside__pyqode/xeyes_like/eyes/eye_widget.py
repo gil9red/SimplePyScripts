@@ -12,6 +12,9 @@ from .common import percent_number
 from .eye import Eye, Iris, Pupil
 
 
+MINIMAL_SIZE_EYE: int = 50
+
+
 class EyeWidget(QWidget):
     eye: Eye = Eye(
         brush=Qt.white,
@@ -26,24 +29,26 @@ class EyeWidget(QWidget):
         ),
     )
 
-    d_percentIrisRadiusX: int = 30
-    d_percentIrisRadiusY: int = 30
+    d_percent_iris_radius_x: int = 30
+    d_percent_iris_radius_y: int = 30
 
-    d_percentPupilRadiusX: int = 55
-    d_percentPupilRadiusY: int = 55
+    d_percent_pupil_radius_x: int = 55
+    d_percent_pupil_radius_y: int = 55
 
-    positionLook: QPoint = QPoint(0, 0)
+    position_look: QPoint = QPoint(0, 0)
 
     def __init__(self, parent: QWidget = None):
         super().__init__(parent)
 
-        self.set_diameter(MINIMAL_WIDTH_EYE)
+        self.set_diameter(MINIMAL_SIZE_EYE)
 
     def set_diameter(self, diameter: int):
+        diameter = max(diameter, MINIMAL_SIZE_EYE)
+
         self.setFixedSize(diameter, diameter)
 
     def look_there(self, position: QPoint):
-        self.positionLook = self.mapFromGlobal(position)
+        self.position_look = self.mapFromGlobal(position)
         self.update()
 
     def paintEvent(self, event: QPaintEvent):
@@ -60,14 +65,14 @@ class EyeWidget(QWidget):
         radius_x_eye: float = min(r_x_from_width, r_y_from_heigth)
         radius_y_eye: float = radius_x_eye
 
-        radius_x_iris: float = percent_number(radius_x_eye, self.d_percentIrisRadiusX)
-        radius_y_iris: float = percent_number(radius_y_eye, self.d_percentIrisRadiusY)
+        radius_x_iris: float = percent_number(radius_x_eye, self.d_percent_iris_radius_x)
+        radius_y_iris: float = percent_number(radius_y_eye, self.d_percent_iris_radius_y)
 
         radius_x_pupil: float = percent_number(
-            radius_x_iris, self.d_percentPupilRadiusX
+            radius_x_iris, self.d_percent_pupil_radius_x
         )
         radius_y_pupil: float = percent_number(
-            radius_y_iris, self.d_percentPupilRadiusY
+            radius_y_iris, self.d_percent_pupil_radius_y
         )
 
         x: int = int(radius_x_eye + indent)
@@ -81,7 +86,7 @@ class EyeWidget(QWidget):
         iris = self.eye.iris
         iris.radiusX = radius_x_iris
         iris.radiusY = radius_y_iris
-        iris.center = self.positionLook
+        iris.center = self.position_look
 
         # Зрачок глаза
         pupil = self.eye.pupil
@@ -89,7 +94,3 @@ class EyeWidget(QWidget):
         pupil.radiusY = radius_y_pupil
 
         self.eye.draw(painter)
-
-
-MINIMAL_WIDTH_EYE: int = 50
-MINIMAL_HEIGHT_EYE: int = 50
