@@ -11,12 +11,6 @@ from PyQt5.QtCore import QPoint, Qt
 from PyQt5.QtWidgets import QWidget
 
 
-MINIMAL_WIDTH_EYE: int = 50
-MINIMAL_HEIGHT_EYE: int = 50
-
-MAXIMAL_WIDTH_EYE: int = 350
-MAXIMAL_HEIGHT_EYE: int = 350
-
 EPS: float = 0.00001
 
 

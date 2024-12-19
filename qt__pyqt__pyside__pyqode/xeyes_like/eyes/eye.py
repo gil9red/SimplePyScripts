@@ -95,7 +95,6 @@ class Eye(EllipseObject):
             result = ResultCrossLineAndEllipse()
 
             if is_ellipse_and_direct(bounding_ellipse, line, result):
-                # TODO:
                 result.x1 = int(result.x1)
                 result.y1 = int(result.y1)
                 result.x2 = int(result.x2)
