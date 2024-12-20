@@ -16,6 +16,7 @@ default_handler.setFormatter(
         "[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s"
     )
 )
+
 logger = logging.getLogger("tetris")
 logger.setLevel(logging.DEBUG if DEBUG else logging.WARNING)
 logger.addHandler(default_handler)
