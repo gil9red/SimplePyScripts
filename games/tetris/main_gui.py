@@ -12,7 +12,6 @@ from PyQt5.QtGui import QPainter, QPaintEvent, QKeyEvent, QColor
 from PyQt5.QtCore import Qt, QTimer
 
 from core.board import Board
-from core.config import DEBUG
 from core.common import logger
 from core.piece import Piece
 
@@ -115,12 +114,6 @@ class MainWindow(QWidget):
 
         for x, y in self.current_piece.get_points():
             self._draw_cell_board(painter, x, y, self.current_piece.get_color())
-
-        # Рисуем центр фигуры
-        if DEBUG:
-            self._draw_cell_board(
-                painter, self.current_piece.x, self.current_piece.y, Qt.black
-            )
 
         x_next = self.board.COLS + 3
         y_next = 1
