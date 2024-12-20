@@ -11,10 +11,10 @@ from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox
 from PyQt5.QtGui import QPainter, QPaintEvent, QKeyEvent, QColor
 from PyQt5.QtCore import Qt, QTimer
 
-from board import Board
-from config import DEBUG
-from common import logger
-from piece import Piece
+from core.board import Board
+from core.config import DEBUG
+from core.common import logger
+from core.piece import Piece
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
@@ -30,10 +30,10 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class MainWindow(QWidget):
-    CELL_SIZE = 20
-    SPEED_MS = 400
+    CELL_SIZE: int = 20
+    SPEED_MS: int = 400
 
-    TITLE = "Tetris"
+    TITLE: str = "Tetris"
 
     def __init__(self):
         super().__init__()
@@ -41,8 +41,8 @@ class MainWindow(QWidget):
         self.board = Board()
         self.board.on_update_score.connect(self._update_states)
 
-        self.current_piece: Piece = None
-        self.next_piece: Piece = None
+        self.current_piece: Piece | None = None
+        self.next_piece: Piece | None = None
 
         self.timer = QTimer()
         self.timer.timeout.connect(self._on_tick)

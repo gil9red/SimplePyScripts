@@ -10,7 +10,7 @@ from random import choice, randrange
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
 
-from common import logger
+from .common import logger
 
 
 class Piece(abc.ABC):
@@ -32,7 +32,8 @@ class Piece(abc.ABC):
     @classmethod
     def get_random(
         cls,
-        x: int, y: int,
+        x: int,
+        y: int,
         parent: "Board",
         rand_x: bool = False,
     ) -> "Piece":
@@ -101,12 +102,14 @@ class Piece(abc.ABC):
         for i, row in enumerate(points_board):
             for j, value in enumerate(row):
                 if value != ".":
-                    points.append((
-                        # Рассчитываем разницу между X и остальными значениями
-                        # и прибавляем текущие координаты центра фигуры
-                        (j - idx_x) + x,
-                        (i - idx_y) + y
-                    ))
+                    points.append(
+                        (
+                            # Рассчитываем разницу между X и остальными значениями
+                            # и прибавляем текущие координаты центра фигуры
+                            (j - idx_x) + x,
+                            (i - idx_y) + y,
+                        )
+                    )
         return points
 
     def get_min_x(self) -> int:

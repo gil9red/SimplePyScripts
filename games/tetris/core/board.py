@@ -7,13 +7,13 @@ __author__ = "ipetrash"
 from PyQt5.QtCore import QObject, pyqtSignal
 from PyQt5.QtGui import QColor
 
-from common import logger
-from piece import Piece
+from .common import logger
+from .piece import Piece
 
 
 class Board(QObject):
-    ROWS = 20
-    COLS = 10
+    ROWS: int = 20
+    COLS: int = 10
 
     on_update_score = pyqtSignal(int)
 
@@ -21,12 +21,11 @@ class Board(QObject):
         super().__init__()
 
         self.matrix: list[list[QColor | None]] = [
-            [None for _ in range(self.COLS)]
-            for _ in range(self.ROWS)
+            [None for _ in range(self.COLS)] for _ in range(self.ROWS)
         ]
 
-        self.current_piece: Piece = None
-        self.next_piece: Piece = None
+        self.current_piece: Piece | None = None
+        self.next_piece: Piece | None = None
 
         self.__score: int = 0
 
@@ -45,7 +44,7 @@ class Board(QObject):
             self.matrix[y][x] = piece.get_color()
 
     def _do_make_collapse_of_rows(self):
-        to_delete = []
+        to_delete: list[list[QColor | None]] = []
         for row in reversed(self.matrix):
             if all(color for color in row):
                 to_delete.append(row)
