@@ -115,6 +115,14 @@ class MainWindow(QWidget):
         for x, y in self.current_piece.get_points():
             self._draw_cell_board(painter, x, y, self.current_piece.get_color())
 
+        painter.restore()
+
+    def _draw_next_piece(self, painter: QPainter):
+        if not self.next_piece:
+            return
+
+        painter.save()
+
         x_next = self.board.COLS + 3
         y_next = 1
         for x, y in self.next_piece.get_points_for_state(x=x_next, y=y_next):
@@ -138,6 +146,7 @@ class MainWindow(QWidget):
 
         self._draw_board(painter)
         self._draw_current_piece(painter)
+        self._draw_next_piece(painter)
         self._draw_score(painter)
 
     def keyReleaseEvent(self, event: QKeyEvent):
