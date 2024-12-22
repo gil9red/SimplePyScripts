@@ -46,7 +46,7 @@ class Board(QObject):
     @score.setter
     def score(self, value: int):
         self.__score = value
-        self.on_update_score.emit(self.score)
+        self.on_update_score.emit(value)
 
     def add_piece(self, piece: Piece):
         logger.debug("[add_piece]")
