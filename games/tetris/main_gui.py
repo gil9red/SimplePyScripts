@@ -179,9 +179,9 @@ class MainWindow(QWidget):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
 
-        self._draw_board(painter)
         self._draw_current_piece(painter)
         self._draw_shadow_of_current_piece(painter)
+        self._draw_board(painter)
         self._draw_next_piece(painter)
         self._draw_score(painter)
 
