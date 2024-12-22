@@ -15,6 +15,7 @@ class Board(QObject):
     ROWS: int = 20
     COLS: int = 10
 
+    on_next_piece = pyqtSignal(Piece)
     on_update_score = pyqtSignal(int)
 
     def __init__(self):
@@ -25,9 +26,18 @@ class Board(QObject):
         ]
 
         self.current_piece: Piece | None = None
-        self.next_piece: Piece | None = None
+        self.__next_piece: Piece | None = None
 
         self.__score: int = 0
+
+    @property
+    def next_piece(self) -> Piece | None:
+        return self.__next_piece
+
+    @next_piece.setter
+    def next_piece(self, value: Piece | None):
+        self.__next_piece = value
+        self.on_next_piece.emit(value)
 
     @property
     def score(self) -> int:
