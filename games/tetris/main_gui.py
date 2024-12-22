@@ -117,6 +117,41 @@ class MainWindow(QWidget):
 
         painter.restore()
 
+    def _draw_shadow_of_current_piece(self, painter: QPainter):
+        if not self.current_piece:
+            return
+
+        painter.save()
+
+        points: list[tuple[int, int]] = self.current_piece.get_points()
+
+        color: QColor = self.current_piece.get_color()
+        color.setAlphaF(0.2)
+
+        # Рисование тени
+        for y, row in enumerate(self.board.matrix):
+            for x, _ in enumerate(row):
+                max_piece_y = max((py for px, py in points if px == x), default=-1)
+
+                min_field_y = -1
+                for y_, row_ in enumerate(self.board.matrix):
+                    cell_color: QColor | None = row_[x]
+                    if not cell_color:
+                        continue
+
+                    min_field_y = y_
+                    break
+
+                if y <= max_piece_y or (min_field_y != -1 and y >= min_field_y):
+                    continue
+
+                if x < self.current_piece.get_min_x() or x > self.current_piece.get_max_x():
+                    continue
+
+                self._draw_cell_board(painter, x, y, color)
+
+        painter.restore()
+
     def _draw_next_piece(self, painter: QPainter):
         if not self.next_piece:
             return
@@ -146,6 +181,7 @@ class MainWindow(QWidget):
 
         self._draw_board(painter)
         self._draw_current_piece(painter)
+        self._draw_shadow_of_current_piece(painter)
         self._draw_next_piece(painter)
         self._draw_score(painter)
 
