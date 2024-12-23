@@ -4,6 +4,7 @@
 __author__ = "ipetrash"
 
 
+import functools
 import sys
 import traceback
 
@@ -26,6 +27,26 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
 
 
 sys.excepthook = log_uncaught_exceptions
+
+
+def painter_context(func):
+    @functools.wraps(func)
+    def decorated(*args, **kwargs):
+        painter: QPainter | None = None
+        for arg in args + tuple(kwargs.values()):
+            if isinstance(arg, QPainter):
+                painter = arg
+                break
+
+        if painter:
+            painter.save()
+        try:
+            return func(*args, **kwargs)
+        finally:
+            if painter:
+                painter.restore()
+
+    return decorated
 
 
 class MainWindow(QWidget):
@@ -77,9 +98,8 @@ class MainWindow(QWidget):
             x * self.CELL_SIZE, y * self.CELL_SIZE, self.CELL_SIZE, self.CELL_SIZE
         )
 
+    @painter_context
     def _draw_board(self, painter: QPainter):
-        painter.save()
-
         # Рисование заполненных ячеек
         for y, row in enumerate(self.board.matrix):
             for x, cell_color in enumerate(row):
@@ -104,24 +124,18 @@ class MainWindow(QWidget):
             x1 += self.CELL_SIZE
             x2 += self.CELL_SIZE
 
-        painter.restore()
-
+    @painter_context
     def _draw_current_piece(self, painter: QPainter):
         if not self.current_piece:
             return
 
-        painter.save()
-
         for x, y in self.current_piece.get_points():
             self._draw_cell_board(painter, x, y, self.current_piece.get_color())
 
-        painter.restore()
-
+    @painter_context
     def _draw_shadow_of_current_piece(self, painter: QPainter):
         if not self.current_piece:
             return
-
-        painter.save()
 
         points: list[tuple[int, int]] = self.current_piece.get_points()
 
@@ -150,30 +164,22 @@ class MainWindow(QWidget):
 
                 self._draw_cell_board(painter, x, y, color)
 
-        painter.restore()
-
+    @painter_context
     def _draw_next_piece(self, painter: QPainter):
         if not self.next_piece:
             return
-
-        painter.save()
 
         x_next = self.board.COLS + 3
         y_next = 1
         for x, y in self.next_piece.get_points_for_state(x=x_next, y=y_next):
             self._draw_cell_board(painter, x, y, self.next_piece.get_color())
 
-        painter.restore()
-
+    @painter_context
     def _draw_score(self, painter: QPainter):
-        painter.save()
-
         painter.setPen(Qt.black)
 
         x, y = self.CELL_SIZE * (self.board.COLS + 1), self.CELL_SIZE * 5
         painter.drawText(x, y, f"Score: {self.board.score}")
-
-        painter.restore()
 
     def paintEvent(self, event: QPaintEvent):
         painter = QPainter(self)
