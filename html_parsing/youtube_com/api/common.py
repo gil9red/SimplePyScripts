@@ -9,7 +9,7 @@ import re
 import time
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, date
 from typing import Generator
 from urllib.parse import urljoin, urlparse, parse_qs
 
@@ -39,6 +39,31 @@ session.headers["User-Agent"] = USER_AGENT
 
 def process_text(text: str) -> str:
     return text.strip().replace("\xa0", " ").replace("\u202f", " ")
+
+
+def parse_date(value: str) -> date | None:
+    for regex_pattern, months in [
+        (
+            r"(?P<month>%s) (?P<day>\d{,2}), (?P<year>\d{4})",
+            ['jan', 'feb', 'mar', 'apr', 'may', 'june', 'july', 'aug', 'sep', 'oct', 'nov', 'dec'],
+        ),
+        (
+            r"(?P<day>\d{,2}) (?P<month>%s)\.? (?P<year>\d{4})",
+            ['янв', 'февр', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сент', 'окт', 'нояб', 'дек'],
+        ),
+    ]:
+        regex = regex_pattern % "|".join(months)
+        m = re.search(regex, value, flags=re.IGNORECASE)
+        if not m:
+            continue
+
+        return date(
+            year=int(m["year"]),
+            month=months.index(m["month"]) + 1,
+            day=int(m["day"]),
+        )
+
+    return
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/f0403620f7948306ad9e34a373f2aabc0237fb2a/seconds_to_str.py
@@ -369,6 +394,9 @@ class Video:
     is_live_now: bool = False
     thumbnails: list[Thumbnail] = field(default_factory=list, repr=False, compare=False)
     view_count: int | None = None
+    create_date: date | None = None
+    create_date_raw: str | None = None
+    is_lasy: bool = True
     context: Context = field(default=None, repr=False, compare=False)
 
     @classmethod
@@ -464,6 +492,18 @@ class Video:
         except:
             seq = None
 
+        try:
+            create_date_raw: str | None = process_text(
+                data_video["dateText"]["simpleText"]
+            )
+        except:
+            create_date_raw = None
+
+        try:
+            create_date: date | None = parse_date(create_date_raw)
+        except:
+            create_date = None
+
         thumbnails = [
             Thumbnail.get_from(thumbnail)
             for thumbnail in dpath.util.values(data_video, "thumbnail/thumbnails/*")
@@ -490,6 +530,8 @@ class Video:
             is_live_now=cls.get_is_live_now(data_video),
             thumbnails=thumbnails,
             view_count=view_count,
+            create_date=create_date,
+            create_date_raw=create_date_raw,
             context=context,
         )
 
@@ -528,11 +570,14 @@ class Video:
         #       в parse_from смог разобрать
         dict_merge(data_video, yt_initial_player_response["videoDetails"])
 
-        return cls.parse_from(
+        video = cls.parse_from(
             data_video=data_video,
             parent_context=context,
             url_video=url,
         )
+        video.is_lasy = False
+
+        return video
 
     def get_transcripts(self) -> list[TranscriptItem]:
         yt_cfg_data = self.context.yt_cfg_data
