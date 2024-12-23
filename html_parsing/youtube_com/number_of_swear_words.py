@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-from common import Video
+from api.common import Video
 
 
 url = "https://www.youtube.com/watch?v=OIVXORUjzTE"

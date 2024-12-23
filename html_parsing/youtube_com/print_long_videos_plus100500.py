@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-from common import Playlist
+from api.common import Playlist
 
 
 URL = "https://www.youtube.com/playlist?list=PLC6A0625DCA9AAE2D"
