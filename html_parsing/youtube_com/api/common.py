@@ -360,6 +360,7 @@ class Video:
     seq: int | None = None
     is_live_now: bool = False
     thumbnails: list[Thumbnail] = field(default_factory=list, repr=False, compare=False)
+    view_count: int | None = None
     context: Context = field(default=None, repr=False, compare=False)
 
     @classmethod
@@ -445,10 +446,10 @@ class Video:
             url_video = cls.parse_url(data_video)
 
         duration_seconds = cls.parse_duration_seconds(data_video)
-
-        duration_text = None
         if duration_seconds:
             duration_text = seconds_to_str(duration_seconds)
+        else:
+            duration_text = None
 
         try:
             seq = int(data_video["index"]["simpleText"])
@@ -459,6 +460,8 @@ class Video:
             Thumbnail.get_from(thumbnail)
             for thumbnail in dpath.util.values(data_video, "thumbnail/thumbnails/*")
         ]
+
+        view_count = int(data_video["viewCount"])
 
         context = Context(data_video=data_video)
         if parent_context:
@@ -475,6 +478,7 @@ class Video:
             seq=seq,
             is_live_now=cls.get_is_live_now(data_video),
             thumbnails=thumbnails,
+            view_count=view_count,
             context=context,
         )
 
