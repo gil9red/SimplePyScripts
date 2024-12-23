@@ -16,11 +16,8 @@ from .common import (
     get_yt_cfg_data,
     get_context_with_continuation,
     get_api_url_from_continuation_item,
+    process_text,
 )
-
-
-def process_text(text: str) -> str:
-    return text.strip().replace("\xa0", " ").replace("\u202f", " ")
 
 
 def get_original_url(url: str) -> str:

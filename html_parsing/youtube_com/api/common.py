@@ -37,6 +37,10 @@ session = requests.Session()
 session.headers["User-Agent"] = USER_AGENT
 
 
+def process_text(text: str) -> str:
+    return text.strip().replace("\xa0", " ").replace("\u202f", " ")
+
+
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/f0403620f7948306ad9e34a373f2aabc0237fb2a/seconds_to_str.py
 def seconds_to_str(seconds: int) -> str:
     hh, mm = divmod(seconds, 3600)
@@ -295,9 +299,13 @@ def get_generator_raw_video_list_from_data(
         except (KeyError, IndexError):
             break
 
-        url_next_page_data = get_api_url_from_continuation_item(rs.url, continuation_item)
+        url_next_page_data = get_api_url_from_continuation_item(
+            rs.url, continuation_item
+        )
 
-        next_page_data = get_context_with_continuation(rs.url, yt_cfg_data, continuation_item)
+        next_page_data = get_context_with_continuation(
+            rs.url, yt_cfg_data, continuation_item
+        )
         rs = session.post(
             url_next_page_data,
             params={"key": innertube_api_key},
