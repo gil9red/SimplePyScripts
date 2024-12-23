@@ -461,7 +461,10 @@ class Video:
             for thumbnail in dpath.util.values(data_video, "thumbnail/thumbnails/*")
         ]
 
-        view_count = int(data_video["viewCount"])
+        try:
+            view_count = int(data_video["viewCount"])
+        except:
+            view_count = None
 
         context = Context(data_video=data_video)
         if parent_context:
