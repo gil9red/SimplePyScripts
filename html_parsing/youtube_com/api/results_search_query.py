@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from typing import Generator, Callable, Any
 from urllib.parse import urljoin
 
-from common import (
+from .common import (
     AlertError,
     BASE_URL,
     Video,

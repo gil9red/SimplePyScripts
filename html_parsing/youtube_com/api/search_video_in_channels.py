@@ -9,7 +9,7 @@ import time
 
 from collections import defaultdict
 
-from common import Video, Playlist
+from .common import Video, Playlist
 from results_search_query import get_raw_video_list
 
 
