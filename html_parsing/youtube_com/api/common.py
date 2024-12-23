@@ -16,6 +16,7 @@ from urllib.parse import urljoin, urlparse, parse_qs
 # pip install dpath==2.0.5
 import dpath.util
 
+# pip install requests==2.32.2
 import requests
 
 # pip install tzlocal==4.1
