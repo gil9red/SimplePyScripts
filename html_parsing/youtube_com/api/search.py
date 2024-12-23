@@ -8,10 +8,8 @@ from typing import Generator, Callable, Any
 from urllib.parse import urljoin
 
 from .common import (
-    AlertError,
     BASE_URL,
     Video,
-    Playlist,
     load,
     get_generator_raw_video_list_from_data,
 )
