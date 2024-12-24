@@ -95,7 +95,10 @@ class MainWindow(QWidget):
         painter.setPen(Qt.NoPen)
         painter.setBrush(color)
         painter.drawRect(
-            x * self.CELL_SIZE, y * self.CELL_SIZE, self.CELL_SIZE, self.CELL_SIZE
+            x * self.CELL_SIZE + self.INDENT,
+            y * self.CELL_SIZE + self.INDENT,
+            self.CELL_SIZE,
+            self.CELL_SIZE,
         )
 
     @painter_context
@@ -111,16 +114,20 @@ class MainWindow(QWidget):
         painter.setPen(Qt.black)
 
         # Горизонтальные линии
-        y1, y2 = 0, 0
+        y1 = y2 = self.INDENT
+        x1 = self.INDENT
+        x2 = self.CELL_SIZE * self.board.COLS + self.INDENT
         for i in range(self.board.ROWS + 1):
-            painter.drawLine(0, y1, self.CELL_SIZE * self.board.COLS, y2)
+            painter.drawLine(x1, y1, x2, y2)
             y1 += self.CELL_SIZE
             y2 += self.CELL_SIZE
 
         # Вертикальные линии
-        x1, x2 = 0, 0
+        x1 = x2 = self.INDENT
+        y1 = self.INDENT
+        y2 = self.CELL_SIZE * self.board.ROWS + self.INDENT
         for i in range(self.board.COLS + 1):
-            painter.drawLine(x1, 0, x2, self.CELL_SIZE * self.board.ROWS)
+            painter.drawLine(x1, y1, x2, y2)
             x1 += self.CELL_SIZE
             x2 += self.CELL_SIZE
 
@@ -159,7 +166,10 @@ class MainWindow(QWidget):
                 if y <= max_piece_y or (min_field_y != -1 and y >= min_field_y):
                     continue
 
-                if x < self.current_piece.get_min_x() or x > self.current_piece.get_max_x():
+                if (
+                    x < self.current_piece.get_min_x()
+                    or x > self.current_piece.get_max_x()
+                ):
                     continue
 
                 self._draw_cell_board(painter, x, y, color)
@@ -178,7 +188,8 @@ class MainWindow(QWidget):
     def _draw_score(self, painter: QPainter):
         painter.setPen(Qt.black)
 
-        x, y = self.CELL_SIZE * (self.board.COLS + 1), self.CELL_SIZE * 5
+        x = self.CELL_SIZE * (self.board.COLS + 1) + self.INDENT
+        y = self.CELL_SIZE * 5 + self.INDENT
         painter.drawText(x, y, f"Score: {self.board.score}")
 
     def paintEvent(self, event: QPaintEvent):
