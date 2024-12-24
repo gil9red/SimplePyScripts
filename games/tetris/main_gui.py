@@ -10,7 +10,7 @@ import traceback
 
 from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox
 from PyQt5.QtGui import QPainter, QPaintEvent, QKeyEvent, QColor
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtCore import Qt, QTimer, QSize
 
 from core.board import Board
 from core.common import logger
@@ -51,6 +51,8 @@ def painter_context(func):
 
 class MainWindow(QWidget):
     CELL_SIZE: int = 20
+    INDENT: int = 10
+
     SPEED_MS: int = 400
 
     TITLE: str = "Tetris"
@@ -70,6 +72,18 @@ class MainWindow(QWidget):
         self.timer.start()
 
         self._update_states()
+
+    def sizeHint(self) -> QSize:
+        columns = len(self.board.matrix[0])
+        width = self.CELL_SIZE * columns
+        width += self.INDENT * 2
+
+        added_panel_cells: int = 6
+        width += self.CELL_SIZE * added_panel_cells
+
+        rows = len(self.board.matrix)
+        height = self.CELL_SIZE * rows + self.INDENT * 2
+        return QSize(width, height)
 
     def _update_states(self):
         self.setWindowTitle(f"{self.TITLE}. Score: {self.board.score}{'' if self.timer.isActive() else '. Paused'}")
@@ -235,7 +249,6 @@ if __name__ == "__main__":
     app = QApplication([])
 
     mw = MainWindow()
-    mw.resize(360, 480)
     mw.show()
 
     app.exec()
