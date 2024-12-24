@@ -27,6 +27,7 @@ year_by_values: dict[int, list[tuple[date, int]]] = defaultdict(list)
 for create_date, duration_seconds in items:
     year_by_values[create_date.year].append((create_date, duration_seconds))
 
+last_date: date | None = None
 for year, values in year_by_values.items():
     number = len(values)
     print(f"{year}. Video: {number}")
@@ -34,7 +35,6 @@ for year, values in year_by_values.items():
     dates: list[date] = []
     durations: list[int] = []
 
-    last_date: date | None = None
     for d, duration in values:
         delta_prev: int = (d - last_date).days if last_date else 0
         last_date = d
@@ -69,7 +69,7 @@ for year, values in year_by_values.items():
     Delta days (min / max / mean): 34 / 43 / 25
 
 2019. Video: 22
-    2019-01-11: 00:15:31 [delta 0 days]
+    2019-01-11: 00:15:31 [delta 35 days]
     2019-02-02: 00:18:47 [delta 22 days]
     2019-02-17: 00:11:28 [delta 15 days]
     2019-03-30: 00:23:33 [delta 41 days]
@@ -96,7 +96,7 @@ for year, values in year_by_values.items():
     Delta days (min / max / mean): 5 / 41 / 16
 
 2020. Video: 20
-    2020-01-13: 00:20:14 [delta 0 days]
+    2020-01-13: 00:20:14 [delta 14 days]
     2020-02-04: 00:27:15 [delta 22 days]
     2020-02-21: 00:17:02 [delta 17 days]
     2020-03-01: 00:10:47 [delta 9 days]
@@ -121,7 +121,7 @@ for year, values in year_by_values.items():
     Delta days (min / max / mean): 9 / 33 / 17
 
 2021. Video: 13
-    2021-01-30: 00:36:57 [delta 0 days]
+    2021-01-30: 00:36:57 [delta 35 days]
     2021-02-21: 00:18:08 [delta 22 days]
     2021-03-26: 00:25:44 [delta 33 days]
     2021-04-25: 00:20:05 [delta 30 days]
@@ -139,7 +139,7 @@ for year, values in year_by_values.items():
     Delta days (min / max / mean): 13 / 36 / 25
 
 2022. Video: 9
-    2022-01-26: 00:33:07 [delta 0 days]
+    2022-01-26: 00:33:07 [delta 32 days]
     2022-02-20: 00:24:41 [delta 25 days]
     2022-04-09: 00:32:01 [delta 48 days]
     2022-05-24: 00:31:31 [delta 45 days]
@@ -153,7 +153,7 @@ for year, values in year_by_values.items():
     Delta days (min / max / mean): 25 / 48 / 34
 
 2023. Video: 7
-    2023-01-03: 00:22:37 [delta 0 days]
+    2023-01-03: 00:22:37 [delta 33 days]
     2023-02-17: 00:55:16 [delta 45 days]
     2023-03-17: 00:24:09 [delta 28 days]
     2023-05-16: 01:04:21 [delta 60 days]
@@ -165,7 +165,7 @@ for year, values in year_by_values.items():
     Delta days (min / max / mean): 28 / 64 / 44
 
 2024. Video: 6
-    2024-01-09: 01:12:18 [delta 0 days]
+    2024-01-09: 01:12:18 [delta 63 days]
     2024-03-11: 00:52:00 [delta 62 days]
     2024-05-10: 00:54:33 [delta 60 days]
     2024-07-09: 00:51:58 [delta 60 days]
