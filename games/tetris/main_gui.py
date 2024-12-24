@@ -208,6 +208,33 @@ class MainWindow(QWidget):
         y = self.CELL_SIZE * 5 + self.INDENT
         painter.drawText(x, y, f"Score: {self.board.score}")
 
+    @painter_context
+    def _draw_glass(self, painter: QPainter):
+        if self.timer.isActive():
+            return
+
+        text = "PAUSE"
+
+        # Алгоритм изменения размера текста взят из http://stackoverflow.com/a/2204501
+        # Для текущего пришлось немного адаптировать
+        factor = min(self.width(), self.height()) / painter.fontMetrics().width(text)
+        if factor < 1 or factor > 1.25:
+            f = painter.font()
+            point_size = f.pointSizeF() * factor
+            if point_size > 0:
+                f.setPointSizeF(point_size)
+                painter.setFont(f)
+
+        painter.setPen(Qt.black)
+
+        brush = QColor(Qt.lightGray)
+        brush.setAlphaF(0.6)
+
+        painter.setBrush(brush)
+
+        painter.drawRect(self.rect())
+        painter.drawText(self.rect(), Qt.AlignCenter, text)
+
     def paintEvent(self, event: QPaintEvent):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
@@ -217,6 +244,7 @@ class MainWindow(QWidget):
         self._draw_board(painter)
         self._draw_next_piece(painter)
         self._draw_score(painter)
+        self._draw_glass(painter)
 
     def keyReleaseEvent(self, event: QKeyEvent):
         if event.key() == Qt.Key_Space:
@@ -226,6 +254,7 @@ class MainWindow(QWidget):
                 self.timer.start()
 
             self._update_states()
+            self.update()
             return
 
         if self.current_piece and self.timer.isActive():
