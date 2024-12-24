@@ -72,7 +72,7 @@ class MainWindow(QWidget):
         self._update_states()
 
     def _update_states(self):
-        self.setWindowTitle(f"{self.TITLE}. Score: {self.board.score}")
+        self.setWindowTitle(f"{self.TITLE}. Score: {self.board.score}{'' if self.timer.isActive() else '. Paused'}")
 
     def abort_game(self):
         self.timer.stop()
@@ -192,22 +192,32 @@ class MainWindow(QWidget):
         self._draw_score(painter)
 
     def keyReleaseEvent(self, event: QKeyEvent):
-        match event.key():
-            case Qt.Key_Left if self.current_piece:
-                if self.current_piece.move_left():
-                    self.update()
+        if event.key() == Qt.Key_Space:
+            if self.timer.isActive():
+                self.timer.stop()
+            else:
+                self.timer.start()
 
-            case Qt.Key_Right if self.current_piece:
-                if self.current_piece.move_right():
-                    self.update()
+            self._update_states()
+            return
 
-            case Qt.Key_Up if self.current_piece:
-                if self.current_piece.turn():
-                    self.update()
+        if self.current_piece and self.timer.isActive():
+            match event.key():
+                case Qt.Key_Left:
+                    self.current_piece.move_left()
 
-            case Qt.Key_Down if self.current_piece:
-                while self.current_piece.move_down():
-                    self.update()
+                case Qt.Key_Right:
+                    self.current_piece.move_right()
+
+                case Qt.Key_Up:
+                    self.current_piece.turn()
+
+                case Qt.Key_Down:
+                    while self.current_piece.move_down():
+                        pass
+
+            self.update()
+            return
 
 
 if __name__ == "__main__":
