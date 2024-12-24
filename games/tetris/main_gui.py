@@ -86,7 +86,9 @@ class MainWindow(QWidget):
         return QSize(width, height)
 
     def _update_states(self):
-        self.setWindowTitle(f"{self.TITLE}. Score: {self.board.score}{'' if self.timer.isActive() else '. Paused'}")
+        self.setWindowTitle(
+            f"{self.TITLE}. Score: {self.board.score}{'' if self.timer.isActive() else '. Paused'}"
+        )
 
     def abort_game(self):
         self.timer.stop()
