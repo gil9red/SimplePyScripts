@@ -7,6 +7,7 @@ __author__ = "ipetrash"
 import functools
 import sys
 import traceback
+from typing import Callable
 
 from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox
 from PyQt5.QtGui import QPainter, QPaintEvent, QKeyEvent, QColor
@@ -29,7 +30,7 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
 sys.excepthook = log_uncaught_exceptions
 
 
-def painter_context(func):
+def painter_context(func: Callable):
     @functools.wraps(func)
     def decorated(*args, **kwargs):
         painter: QPainter | None = None
