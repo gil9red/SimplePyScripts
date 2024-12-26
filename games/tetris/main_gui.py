@@ -9,9 +9,16 @@ import sys
 import traceback
 from typing import Callable
 
-from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox
+from PyQt5.QtWidgets import (
+    QWidget,
+    QApplication,
+    QMessageBox,
+    QVBoxLayout,
+    QHBoxLayout,
+    QLabel,
+)
 from PyQt5.QtGui import QPainter, QPaintEvent, QKeyEvent, QColor
-from PyQt5.QtCore import Qt, QTimer, QSize
+from PyQt5.QtCore import Qt, QTimer, QSize, pyqtSignal
 
 from core.board import Board
 from core.common import logger
@@ -50,19 +57,62 @@ def painter_context(func: Callable):
     return decorated
 
 
-class MainWindow(QWidget):
-    CELL_SIZE: int = 20
-    INDENT: int = 10
+CELL_SIZE: int = 20
 
+
+def draw_cell_board(
+    painter: QPainter,
+    x: int,
+    y: int,
+    color: QColor,
+    cell_size: int = CELL_SIZE,
+    indent: int = 0,
+):
+    painter.setPen(Qt.NoPen)
+    painter.setBrush(color)
+    painter.drawRect(
+        (x * cell_size) + indent,
+        (y * cell_size) + indent,
+        cell_size,
+        cell_size,
+    )
+
+
+class PieceWidget(QWidget):
+    def __init__(self, parent: QWidget | None = None):
+        super().__init__(parent)
+
+        self.piece: Piece | None = None
+
+    def set_piece(self, piece: Piece):
+        self.piece = piece
+        self.update()
+
+    def sizeHint(self) -> QSize:
+        size = CELL_SIZE * 4
+        return QSize(size, size)
+
+    def paintEvent(self, event: QPaintEvent):
+        if not self.piece:
+            return
+
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+
+        for x, y in self.piece.get_points_for_state(x=2, y=1):
+            draw_cell_board(painter, x, y, self.piece.get_color())
+
+
+class BoardWidget(QWidget):
+    INDENT: int = 1
     SPEED_MS: int = 400
 
-    TITLE: str = "Tetris"
+    on_finish = pyqtSignal()
 
     def __init__(self):
         super().__init__()
 
         self.board = Board()
-        self.board.on_update_score.connect(self._update_states)
 
         self.current_piece: Piece | None = None
         self.next_piece: Piece | None = None
@@ -72,28 +122,18 @@ class MainWindow(QWidget):
         self.timer.setInterval(self.SPEED_MS)
         self.timer.start()
 
-        self._update_states()
-
     def sizeHint(self) -> QSize:
         columns = len(self.board.matrix[0])
-        width = self.CELL_SIZE * columns
+        width = CELL_SIZE * columns
         width += self.INDENT * 2
 
-        added_panel_cells: int = 6
-        width += self.CELL_SIZE * added_panel_cells
-
         rows = len(self.board.matrix)
-        height = self.CELL_SIZE * rows + self.INDENT * 2
+        height = CELL_SIZE * rows + self.INDENT * 2
         return QSize(width, height)
-
-    def _update_states(self):
-        self.setWindowTitle(
-            f"{self.TITLE}. Score: {self.board.score}{'' if self.timer.isActive() else '. Paused'}"
-        )
 
     def abort_game(self):
         self.timer.stop()
-        QMessageBox.information(self, "Информация", "Проигрыш!")
+        self.on_finish.emit()
 
     def _on_logic(self):
         if not self.board.do_step():
@@ -105,18 +145,7 @@ class MainWindow(QWidget):
 
     def _on_tick(self):
         self._on_logic()
-        self._update_states()
         self.update()
-
-    def _draw_cell_board(self, painter: QPainter, x: int, y: int, color: QColor):
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(color)
-        painter.drawRect(
-            x * self.CELL_SIZE + self.INDENT,
-            y * self.CELL_SIZE + self.INDENT,
-            self.CELL_SIZE,
-            self.CELL_SIZE,
-        )
 
     @painter_context
     def _draw_board(self, painter: QPainter):
@@ -126,27 +155,27 @@ class MainWindow(QWidget):
                 if not cell_color:
                     continue
 
-                self._draw_cell_board(painter, x, y, cell_color)
+                draw_cell_board(painter, x, y, cell_color, indent=self.INDENT)
 
         painter.setPen(Qt.black)
 
         # Горизонтальные линии
         y1 = y2 = self.INDENT
         x1 = self.INDENT
-        x2 = self.CELL_SIZE * self.board.COLS + self.INDENT
+        x2 = CELL_SIZE * self.board.COLS + self.INDENT
         for i in range(self.board.ROWS + 1):
             painter.drawLine(x1, y1, x2, y2)
-            y1 += self.CELL_SIZE
-            y2 += self.CELL_SIZE
+            y1 += CELL_SIZE
+            y2 += CELL_SIZE
 
         # Вертикальные линии
         x1 = x2 = self.INDENT
         y1 = self.INDENT
-        y2 = self.CELL_SIZE * self.board.ROWS + self.INDENT
+        y2 = CELL_SIZE * self.board.ROWS + self.INDENT
         for i in range(self.board.COLS + 1):
             painter.drawLine(x1, y1, x2, y2)
-            x1 += self.CELL_SIZE
-            x2 += self.CELL_SIZE
+            x1 += CELL_SIZE
+            x2 += CELL_SIZE
 
     @painter_context
     def _draw_current_piece(self, painter: QPainter):
@@ -154,7 +183,13 @@ class MainWindow(QWidget):
             return
 
         for x, y in self.current_piece.get_points():
-            self._draw_cell_board(painter, x, y, self.current_piece.get_color())
+            draw_cell_board(
+                painter,
+                x,
+                y,
+                self.current_piece.get_color(),
+                indent=self.INDENT,
+            )
 
     @painter_context
     def _draw_shadow_of_current_piece(self, painter: QPainter):
@@ -189,25 +224,7 @@ class MainWindow(QWidget):
                 ):
                     continue
 
-                self._draw_cell_board(painter, x, y, color)
-
-    @painter_context
-    def _draw_next_piece(self, painter: QPainter):
-        if not self.next_piece:
-            return
-
-        x_next = self.board.COLS + 3
-        y_next = 1
-        for x, y in self.next_piece.get_points_for_state(x=x_next, y=y_next):
-            self._draw_cell_board(painter, x, y, self.next_piece.get_color())
-
-    @painter_context
-    def _draw_score(self, painter: QPainter):
-        painter.setPen(Qt.black)
-
-        x = self.CELL_SIZE * (self.board.COLS + 1) + self.INDENT
-        y = self.CELL_SIZE * 5 + self.INDENT
-        painter.drawText(x, y, f"Score: {self.board.score}")
+                draw_cell_board(painter, x, y, color, indent=self.INDENT)
 
     @painter_context
     def _draw_glass(self, painter: QPainter):
@@ -236,30 +253,18 @@ class MainWindow(QWidget):
         painter.drawRect(self.rect())
         painter.drawText(self.rect(), Qt.AlignCenter, text)
 
-    def paintEvent(self, event: QPaintEvent):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-
-        self._draw_current_piece(painter)
-        self._draw_shadow_of_current_piece(painter)
-        self._draw_board(painter)
-        self._draw_next_piece(painter)
-        self._draw_score(painter)
-        self._draw_glass(painter)
-
-    def keyReleaseEvent(self, event: QKeyEvent):
-        if event.key() == Qt.Key_Space:
+    def process_key(self, key: int):
+        if key == Qt.Key_Space:
             if self.timer.isActive():
                 self.timer.stop()
             else:
                 self.timer.start()
 
-            self._update_states()
             self.update()
             return
 
         if self.current_piece and self.timer.isActive():
-            match event.key():
+            match key:
                 case Qt.Key_Left:
                     self.current_piece.move_left()
 
@@ -275,6 +280,55 @@ class MainWindow(QWidget):
 
             self.update()
             return
+
+    def paintEvent(self, event: QPaintEvent):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+
+        self._draw_current_piece(painter)
+        self._draw_shadow_of_current_piece(painter)
+        self._draw_board(painter)
+        self._draw_glass(painter)
+
+
+class MainWindow(QWidget):
+    TITLE: str = "Tetris"
+
+    def __init__(self):
+        super().__init__()
+
+        self.next_piece_widget = PieceWidget()
+        self.score_label = QLabel()
+
+        self.board_widget = BoardWidget()
+        self.board_widget.board.on_next_piece.connect(self.next_piece_widget.set_piece)
+        self.board_widget.board.on_update_score.connect(self._update_states)
+        self.board_widget.timer.timeout.connect(self._update_states)
+        self.board_widget.on_finish.connect(
+            lambda: QMessageBox.information(self, "Информация", "Проигрыш!")
+        )
+
+        right_layout = QVBoxLayout()
+        right_layout.addWidget(self.next_piece_widget)
+        right_layout.addWidget(self.score_label)
+        right_layout.addStretch()
+
+        main_layout = QHBoxLayout(self)
+        main_layout.addWidget(self.board_widget)
+        main_layout.addLayout(right_layout)
+
+        self._update_states()
+
+    def _update_states(self):
+        score: int = self.board_widget.board.score
+
+        self.setWindowTitle(
+            f"{self.TITLE}. Score: {score}{'' if self.board_widget.timer.isActive() else '. Paused'}"
+        )
+        self.score_label.setText(f"Score: {score}")
+
+    def keyReleaseEvent(self, event: QKeyEvent):
+        self.board_widget.process_key(event.key())
 
 
 if __name__ == "__main__":
