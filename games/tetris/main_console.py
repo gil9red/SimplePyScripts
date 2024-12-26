@@ -17,8 +17,8 @@ from asciimatics.scene import Scene
 from asciimatics.widgets import Frame
 from asciimatics.exceptions import StopApplication, NextScene, ResizeScreenError
 
-from board import Board
-from piece import PieceO, PieceI, PieceS, PieceZ, PieceL, PieceJ, PieceT
+from core.board import Board
+from core.piece import PieceO, PieceI, PieceS, PieceZ, PieceL, PieceJ, PieceT
 
 
 # SOURCE: https://asciimatics.readthedocs.io/en/stable/io.html#colours
@@ -155,7 +155,10 @@ class NextPieceWidget(Frame):
         self,
         board: Board,
         screen: Screen,
-        y: int, x: int, height: int, width: int,
+        y: int,
+        x: int,
+        height: int,
+        width: int,
     ):
         self.y = y
         self.x = x
@@ -201,7 +204,10 @@ class ScoreWidget(Frame):
         self,
         board: Board,
         screen: Screen,
-        y: int, x: int, height: int, width: int,
+        y: int,
+        x: int,
+        height: int,
+        width: int,
     ):
         self.y = y
         self.x = x
