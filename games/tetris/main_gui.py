@@ -65,10 +65,11 @@ def draw_cell_board(
     x: int,
     y: int,
     color: QColor,
+    pen: Qt.GlobalColor = Qt.NoPen,
     cell_size: int = CELL_SIZE,
     indent: int = 0,
 ):
-    painter.setPen(Qt.NoPen)
+    painter.setPen(pen)
     painter.setBrush(color)
     painter.drawRect(
         (x * cell_size) + indent,
@@ -79,6 +80,8 @@ def draw_cell_board(
 
 
 class PieceWidget(QWidget):
+    INDENT: int = 1
+
     def __init__(self, parent: QWidget | None = None):
         super().__init__(parent)
 
@@ -89,7 +92,7 @@ class PieceWidget(QWidget):
         self.update()
 
     def sizeHint(self) -> QSize:
-        size = CELL_SIZE * 4
+        size = (CELL_SIZE * 4) + (self.INDENT * 2)
         return QSize(size, size)
 
     def paintEvent(self, event: QPaintEvent):
@@ -100,7 +103,7 @@ class PieceWidget(QWidget):
         painter.setRenderHint(QPainter.Antialiasing)
 
         for x, y in self.piece.get_points_for_state(x=2, y=1):
-            draw_cell_board(painter, x, y, self.piece.get_color())
+            draw_cell_board(painter, x, y, self.piece.get_color(), pen=Qt.black)
 
 
 class BoardWidget(QWidget):
