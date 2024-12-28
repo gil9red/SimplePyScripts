@@ -9,6 +9,8 @@ import sys
 import traceback
 from typing import Callable
 
+from PyQt5.QtCore import Qt, QTimer, QSize, pyqtSignal
+from PyQt5.QtGui import QPainter, QPaintEvent, QKeyEvent, QColor
 from PyQt5.QtWidgets import (
     QWidget,
     QApplication,
@@ -17,8 +19,6 @@ from PyQt5.QtWidgets import (
     QHBoxLayout,
     QLabel,
 )
-from PyQt5.QtGui import QPainter, QPaintEvent, QKeyEvent, QColor
-from PyQt5.QtCore import Qt, QTimer, QSize, pyqtSignal
 
 from core.board import Board
 from core.common import logger
