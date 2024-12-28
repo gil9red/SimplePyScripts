@@ -131,7 +131,7 @@ class BoardWidget(QWidget):
         width += self.INDENT * 2
 
         rows = len(self.board.matrix)
-        height = CELL_SIZE * rows + self.INDENT * 2
+        height = (CELL_SIZE * rows) + (self.INDENT * 2)
         return QSize(width, height)
 
     def abort_game(self):
