@@ -4,33 +4,6 @@
 __author__ = "ipetrash"
 
 
-# from PyQt5.QtWidgets import QApplication, QTextBrowser
-#
-#
-# app = QApplication([])
-#
-# mw = QTextBrowser()
-# mw.setHtml("""
-# <style>
-#     #test {
-#         color: red;
-#         font-size: 30px;
-#     }
-# </style>
-# <div id="test">Test<div>
-#
-# <script>
-#     document.getElementById("test").style.color = "blue";
-# </script>
-# """)
-# mw.show()
-#
-# app.exec()
-#
-#
-# quit()
-
-
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, date
 
@@ -61,7 +34,7 @@ Date: 03 июля 2024 г. 19:11:35 | Release version 3.2.41.10 (release based o
 Date: 04 сентября 2024 г. 15:08:49 | Release version 3.2.42.10 (release based on revision 330920)
 Date: 05 ноября 2024 г. 19:40:28 | Release version 3.2.43.10 (release based on revision 335027)
 
-26, 11.01.2022, 14.03.2022, 15.11.2022 +8, 
+26, 11.01.2022, 14.03.2022, 15.11.2022 +8,
 
 27, 03.03.2022, 27.05.2022, 09.12.2022 +7, +1
 28, 05.05.2022, 15.07.2022, 10.02.2023 +7, +2
