@@ -442,6 +442,7 @@ class MainWindow(QWidget):
         self.left_button.setEnabled(is_started)
         self.right_button.setEnabled(is_started)
         self.down_button.setEnabled(is_started)
+
         self.pause_resume_button.setEnabled(
             is_started or self.board_widget.status == StatusGameEnum.PAUSED
         )
