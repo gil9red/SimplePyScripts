@@ -91,7 +91,7 @@ class PieceWidget(QWidget):
         self.piece = piece
         self.update()
 
-    def sizeHint(self) -> QSize:
+    def minimumSizeHint(self) -> QSize:
         size = (CELL_SIZE * 4) + (self.INDENT * 2)
         return QSize(size, size)
 
@@ -125,7 +125,7 @@ class BoardWidget(QWidget):
         self.timer.setInterval(self.SPEED_MS)
         self.timer.start()
 
-    def sizeHint(self) -> QSize:
+    def minimumSizeHint(self) -> QSize:
         columns = len(self.board.matrix[0])
         width = CELL_SIZE * columns
         width += self.INDENT * 2
