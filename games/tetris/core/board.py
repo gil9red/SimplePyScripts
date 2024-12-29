@@ -53,6 +53,13 @@ class Board(QObject):
         for x, y in piece.get_points():
             self.matrix[y][x] = piece.get_color()
 
+    def clear(self):
+        self.score = 0
+
+        for row in self.matrix:
+            for i in range(len(row)):
+                row[i] = None
+
     def _do_make_collapse_of_rows(self):
         to_delete: list[list[QColor | None]] = []
         for row in reversed(self.matrix):

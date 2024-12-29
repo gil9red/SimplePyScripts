@@ -4,6 +4,7 @@
 __author__ = "ipetrash"
 
 
+import enum
 import functools
 import sys
 import traceback
@@ -20,6 +21,7 @@ from PyQt5.QtWidgets import (
     QLabel,
     QGridLayout,
     QToolButton,
+    QPushButton,
 )
 
 from core.board import Board
@@ -108,10 +110,18 @@ class PieceWidget(QWidget):
             draw_cell_board(painter, x, y, self.piece.get_color(), pen=Qt.black)
 
 
+class StatusGameEnum(enum.IntEnum):
+    INITED = enum.auto()
+    STARTED = enum.auto()
+    PAUSED = enum.auto()
+    FINISHED = enum.auto()
+
+
 class BoardWidget(QWidget):
     INDENT: int = 1
     SPEED_MS: int = 400
 
+    on_tick = pyqtSignal()
     on_finish = pyqtSignal()
 
     def __init__(self):
@@ -122,10 +132,37 @@ class BoardWidget(QWidget):
         self.current_piece: Piece | None = None
         self.next_piece: Piece | None = None
 
-        self.timer = QTimer()
-        self.timer.timeout.connect(self._on_tick)
-        self.timer.setInterval(self.SPEED_MS)
-        self.timer.start()
+        self.__timer = QTimer()
+        self.__timer.timeout.connect(self._on_tick)
+        self.__timer.setInterval(self.SPEED_MS)
+
+        self.__status = StatusGameEnum.INITED
+
+    @property
+    def status(self) -> StatusGameEnum:
+        return self.__status
+
+    @status.setter
+    def status(self, value: StatusGameEnum):
+        if self.__status == value:
+            return
+
+        self.__status = value
+
+        match value:
+            case StatusGameEnum.INITED:
+                self.__timer.stop()
+                self.board.clear()
+
+            case StatusGameEnum.STARTED:
+                self.__timer.start()
+
+            case StatusGameEnum.PAUSED:
+                self.__timer.stop()
+
+            case StatusGameEnum.FINISHED:
+                self.__timer.stop()
+                self.on_finish.emit()
 
     def minimumSizeHint(self) -> QSize:
         columns = len(self.board.matrix[0])
@@ -137,8 +174,7 @@ class BoardWidget(QWidget):
         return QSize(width, height)
 
     def abort_game(self):
-        self.timer.stop()
-        self.on_finish.emit()
+        self.status = StatusGameEnum.FINISHED
 
     def _on_logic(self):
         if not self.board.do_step():
@@ -151,6 +187,7 @@ class BoardWidget(QWidget):
     def _on_tick(self):
         self._on_logic()
         self.update()
+        self.on_tick.emit()
 
     @painter_context
     def _draw_board(self, painter: QPainter):
@@ -233,10 +270,15 @@ class BoardWidget(QWidget):
 
     @painter_context
     def _draw_glass(self, painter: QPainter):
-        if self.timer.isActive():
-            return
-
-        text = "PAUSE"
+        match self.status:
+            case StatusGameEnum.INITED:
+                text = "Press START"
+            case StatusGameEnum.STARTED:
+                return
+            case StatusGameEnum.PAUSED:
+                text = "PAUSE"
+            case StatusGameEnum.FINISHED:
+                text = f"FINISHED\nYour score: {self.board.score}"
 
         # Алгоритм изменения размера текста взят из http://stackoverflow.com/a/2204501
         # Для текущего пришлось немного адаптировать
@@ -259,16 +301,28 @@ class BoardWidget(QWidget):
         painter.drawText(self.rect(), Qt.AlignCenter, text)
 
     def process_key(self, key: int):
-        if key == Qt.Key_Space:
-            if self.timer.isActive():
-                self.timer.stop()
+        if key == Qt.Key_Space and self.status in [
+            StatusGameEnum.STARTED,
+            StatusGameEnum.PAUSED,
+        ]:
+            if self.status == StatusGameEnum.STARTED:
+                self.status = StatusGameEnum.PAUSED
             else:
-                self.timer.start()
+                self.status = StatusGameEnum.STARTED
 
             self.update()
             return
 
-        if self.current_piece and self.timer.isActive():
+        if key in [Qt.Key_Enter, Qt.Key_Return] and self.status in [
+            StatusGameEnum.INITED,
+            StatusGameEnum.FINISHED,
+        ]:
+            self.status = StatusGameEnum.INITED
+            self.status = StatusGameEnum.STARTED
+            self.update()
+            return
+
+        if self.current_piece and self.status == StatusGameEnum.STARTED:
             match key:
                 case Qt.Key_Left:
                     self.current_piece.move_left()
@@ -308,10 +362,8 @@ class MainWindow(QWidget):
         self.board_widget = BoardWidget()
         self.board_widget.board.on_next_piece.connect(self.next_piece_widget.set_piece)
         self.board_widget.board.on_update_score.connect(self._update_states)
-        self.board_widget.timer.timeout.connect(self._update_states)
-        self.board_widget.on_finish.connect(
-            lambda: QMessageBox.information(self, "Информация", "Проигрыш!")
-        )
+        self.board_widget.on_tick.connect(self._update_states)
+        self.board_widget.on_finish.connect(self._update_states)
 
         def _add_button(text: str, key: Qt.Key) -> QToolButton:
             button = QToolButton()
@@ -320,21 +372,36 @@ class MainWindow(QWidget):
             button.clicked.connect(lambda: self.board_widget.process_key(key))
             return button
 
+        self.up_button = _add_button("🢁", Qt.Key_Up)
+        self.left_button = _add_button("🢀", Qt.Key_Left)
+        self.right_button = _add_button("🢂", Qt.Key_Right)
+        self.down_button = _add_button("🢃", Qt.Key_Down)
+        self.pause_resume_button = _add_button("Pause/Resume", Qt.Key_Space)
+
         control_layout = QGridLayout()
-        control_layout.addWidget(_add_button("🢁", Qt.Key_Up), 0, 1)
-        control_layout.addWidget(_add_button("🢀", Qt.Key_Left), 1, 0)
-        control_layout.addWidget(_add_button("🢂", Qt.Key_Right), 1, 2)
-        control_layout.addWidget(_add_button("🢃", Qt.Key_Down), 2, 1)
-        control_layout.addWidget(_add_button("Pause/Resume", Qt.Key_Space), 3, 0, 1, 4)
+        control_layout.addWidget(self.up_button, 0, 1)
+        control_layout.addWidget(self.left_button, 1, 0)
+        control_layout.addWidget(self.right_button, 1, 2)
+        control_layout.addWidget(self.down_button, 2, 1)
+        control_layout.addWidget(self.pause_resume_button, 3, 0, 1, 4)
+
+        self.start_button = QPushButton("START")
+        self.start_button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.start_button.clicked.connect(
+            lambda: self.board_widget.process_key(Qt.Key_Return)
+        )
 
         right_layout = QVBoxLayout()
         right_layout.addWidget(self.next_piece_widget)
         right_layout.addWidget(self.score_label)
+        right_layout.addWidget(self.start_button)
         right_layout.addLayout(control_layout)
         right_layout.addWidget(
             QLabel(
                 """
                 <table>
+                    <tr><td colspan="2">ENTER - Start</td></tr>
+                    <tr><td colspan="2">SPACE - Pause/Resume</td></tr>
                     <tr><td>🢁 - Rotate</td><td>🢀 - Left</td></tr>
                     <tr><td>🢂 - Right</td><td>🢃 - Down</td></tr>
                 </table>
@@ -358,14 +425,30 @@ class MainWindow(QWidget):
 
     def _update_states(self):
         score: int = self.board_widget.board.score
+        if self.board_widget.status == StatusGameEnum.PAUSED:
+            status_title = ". Paused"
+        else:
+            status_title = ""
 
-        self.setWindowTitle(
-            f"{self.TITLE}. Score: {score}{'' if self.board_widget.timer.isActive() else '. Paused'}"
-        )
+        self.setWindowTitle(f"{self.TITLE}. Score: {score}{status_title}")
         self.score_label.setText(f"Score: {score}")
+
+        self.start_button.setEnabled(
+            self.board_widget.status in [StatusGameEnum.INITED, StatusGameEnum.FINISHED]
+        )
+
+        is_started = self.board_widget.status == StatusGameEnum.STARTED
+        self.up_button.setEnabled(is_started)
+        self.left_button.setEnabled(is_started)
+        self.right_button.setEnabled(is_started)
+        self.down_button.setEnabled(is_started)
+        self.pause_resume_button.setEnabled(
+            is_started or self.board_widget.status == StatusGameEnum.PAUSED
+        )
 
     def keyReleaseEvent(self, event: QKeyEvent):
         self.board_widget.process_key(event.key())
+        self._update_states()
 
 
 if __name__ == "__main__":
