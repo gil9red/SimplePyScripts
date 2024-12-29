@@ -331,17 +331,21 @@ class MainWindow(QWidget):
         right_layout.addWidget(self.next_piece_widget)
         right_layout.addWidget(self.score_label)
         right_layout.addLayout(control_layout)
-        right_layout.addWidget(QLabel("""
-        <table>
-            <tr><td>🢁 - Rotate</td><td>🢀 - Left</td></tr>
-            <tr><td>🢂 - Right</td><td>🢃 - Down</td></tr>
-        </table>
-        <p>Scores by rows:</p>
-        <table>
-            <tr><td><b>1</b>: 100</td><td><b>2</b>: 300</td></tr>
-            <tr><td><b>3</b>: 700</td><td><b>4</b>: 1500</td></tr>
-        </table>
-        """))
+        right_layout.addWidget(
+            QLabel(
+                """
+                <table>
+                    <tr><td>🢁 - Rotate</td><td>🢀 - Left</td></tr>
+                    <tr><td>🢂 - Right</td><td>🢃 - Down</td></tr>
+                </table>
+                <p>Scores by rows:</p>
+                <table>
+                    <tr><td><b>1</b>: 100</td><td><b>2</b>: 300</td></tr>
+                    <tr><td><b>3</b>: 700</td><td><b>4</b>: 1500</td></tr>
+                </table>
+                """
+            )
+        )
         right_layout.addStretch()
 
         main_layout = QHBoxLayout(self)
