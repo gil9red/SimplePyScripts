@@ -18,6 +18,8 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QLabel,
+    QGridLayout,
+    QToolButton,
 )
 
 from core.board import Board
@@ -311,14 +313,42 @@ class MainWindow(QWidget):
             lambda: QMessageBox.information(self, "Информация", "Проигрыш!")
         )
 
+        def _add_button(text: str, key: Qt.Key) -> QToolButton:
+            button = QToolButton()
+            button.setText(text)
+            button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+            button.clicked.connect(lambda: self.board_widget.process_key(key))
+            return button
+
+        control_layout = QGridLayout()
+        control_layout.addWidget(_add_button("🢁", Qt.Key_Up), 0, 1)
+        control_layout.addWidget(_add_button("🢀", Qt.Key_Left), 1, 0)
+        control_layout.addWidget(_add_button("🢂", Qt.Key_Right), 1, 2)
+        control_layout.addWidget(_add_button("🢃", Qt.Key_Down), 2, 1)
+        control_layout.addWidget(_add_button("Pause/Resume", Qt.Key_Space), 3, 0, 1, 4)
+
         right_layout = QVBoxLayout()
         right_layout.addWidget(self.next_piece_widget)
         right_layout.addWidget(self.score_label)
+        right_layout.addLayout(control_layout)
+        right_layout.addWidget(QLabel("""
+        <table>
+            <tr><td>🢁 - Rotate</td><td>🢀 - Left</td></tr>
+            <tr><td>🢂 - Right</td><td>🢃 - Down</td></tr>
+        </table>
+        <p>Scores by rows:</p>
+        <table>
+            <tr><td><b>1</b>: 100</td><td><b>2</b>: 300</td></tr>
+            <tr><td><b>3</b>: 700</td><td><b>4</b>: 1500</td></tr>
+        </table>
+        """))
         right_layout.addStretch()
 
         main_layout = QHBoxLayout(self)
         main_layout.addWidget(self.board_widget)
         main_layout.addLayout(right_layout)
+
+        self.setFocus()
 
         self._update_states()
 
