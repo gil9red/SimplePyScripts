@@ -84,6 +84,13 @@ def draw_cell_board(
     )
 
 
+# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/0360c558f85c0fe5e7320d88f90c0a4e23a7e342/seconds_to_str.py
+def seconds_to_str(seconds: int | float) -> str:
+    hh, mm = divmod(seconds, 3600)
+    mm, ss = divmod(mm, 60)
+    return "%02d:%02d:%02d" % (hh, mm, ss)
+
+
 class PieceWidget(QWidget):
     INDENT: int = 1
 
@@ -139,6 +146,7 @@ class BoardWidget(QWidget):
         self.__timer.timeout.connect(self._on_tick)
         self.__timer.setInterval(self.SPEED_MS)
 
+        self.playing_time_ms: int = 0
         self.__status = StatusGameEnum.INITED
 
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -172,6 +180,7 @@ class BoardWidget(QWidget):
             case StatusGameEnum.INITED:
                 self.__timer.stop()
                 self.board.clear()
+                self.playing_time_ms = 0
 
             case StatusGameEnum.STARTED:
                 self.__timer.start()
@@ -196,7 +205,10 @@ class BoardWidget(QWidget):
 
     def _on_tick(self):
         self._on_logic()
+
         self.update()
+
+        self.playing_time_ms += self.__timer.interval()
         self.on_tick.emit()
 
     @painter_context
@@ -296,13 +308,17 @@ class BoardWidget(QWidget):
             case StatusGameEnum.PAUSED:
                 text = "PAUSE"
             case StatusGameEnum.FINISHED:
-                text = f"FINISHED\nYour score: {self.board.score}"
+                playing_time = seconds_to_str(self.playing_time_ms // 1000)
+                text = f"FINISHED\nYour score: {self.board.score}\nTime: {playing_time}"
             case _:
                 return
 
         # Алгоритм изменения размера текста взят из http://stackoverflow.com/a/2204501
         # Для текущего пришлось немного адаптировать
-        factor = min(self.width(), self.height()) / painter.fontMetrics().width(text)
+        max_line_width = max(
+            painter.fontMetrics().width(line) for line in text.splitlines()
+        )
+        factor = min(self.width(), self.height()) / max_line_width
         if factor < 1 or factor > 1.25:
             f = painter.font()
             point_size = f.pointSizeF() * factor
@@ -388,6 +404,7 @@ class MainWindow(QWidget):
 
         self.next_piece_widget = PieceWidget()
         self.score_label = QLabel()
+        self.playing_time_label = QLabel()
 
         self.board_widget = BoardWidget()
         self.board_widget.board.on_next_piece.connect(self.next_piece_widget.set_piece)
@@ -424,6 +441,7 @@ class MainWindow(QWidget):
         right_layout = QVBoxLayout()
         right_layout.addWidget(self.next_piece_widget)
         right_layout.addWidget(self.score_label)
+        right_layout.addWidget(self.playing_time_label)
         right_layout.addWidget(self.start_button)
         right_layout.addLayout(control_layout)
         right_layout.addWidget(
@@ -455,13 +473,20 @@ class MainWindow(QWidget):
 
     def _update_states(self):
         score: int = self.board_widget.board.score
-        if self.board_widget.status == StatusGameEnum.PAUSED:
-            status_title = ". Paused"
-        else:
-            status_title = ""
+        playing_time = seconds_to_str(self.board_widget.playing_time_ms // 1000)
 
-        self.setWindowTitle(f"{self.TITLE}. Score: {score}{status_title}")
+        title_parts = [self.TITLE]
+
+        if self.board_widget.status != StatusGameEnum.INITED:
+            title_parts.append(f"Score: {score}")
+            title_parts.append(f"Time: {playing_time}")
+
+        if self.board_widget.status == StatusGameEnum.PAUSED:
+            title_parts.append("Paused")
+
+        self.setWindowTitle(". ".join(title_parts))
         self.score_label.setText(f"Score: {score}")
+        self.playing_time_label.setText(f"Time: {playing_time}")
 
         self.start_button.setEnabled(
             self.board_widget.status in [StatusGameEnum.INITED, StatusGameEnum.FINISHED]
