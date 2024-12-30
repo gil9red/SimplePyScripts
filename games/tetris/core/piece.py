@@ -238,7 +238,7 @@ class PieceI(Piece):
         return self._
 
     def get_color(self) -> QColor:
-        return QColor("#7F00FF")
+        return QColor("#7F00FF")  # Violet
 
 
 class PieceS(Piece):
