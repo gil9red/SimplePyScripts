@@ -520,7 +520,7 @@ if __name__ == "__main__":
     #     piece_widget = PieceWidget()
     #     piece_widget.set_piece(cls(0, 0))
     #     main_layout.addWidget(piece_widget)
-
-    mw.show()
+    #
+    # mw.show()
 
     app.exec()
