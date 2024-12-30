@@ -11,7 +11,7 @@ import traceback
 from typing import Callable
 
 from PyQt5.QtCore import Qt, QTimer, QSize, pyqtSignal
-from PyQt5.QtGui import QPainter, QPaintEvent, QKeyEvent, QColor
+from PyQt5.QtGui import QPainter, QPaintEvent, QKeyEvent, QColor, QResizeEvent
 from PyQt5.QtWidgets import (
     QWidget,
     QApplication,
@@ -22,6 +22,7 @@ from PyQt5.QtWidgets import (
     QGridLayout,
     QToolButton,
     QPushButton,
+    QSizePolicy,
 )
 
 from core.board import Board
@@ -129,6 +130,8 @@ class BoardWidget(QWidget):
 
         self.board = Board()
 
+        self.cell_size: int = CELL_SIZE
+
         self.current_piece: Piece | None = None
         self.next_piece: Piece | None = None
 
@@ -137,6 +140,22 @@ class BoardWidget(QWidget):
         self.__timer.setInterval(self.SPEED_MS)
 
         self.__status = StatusGameEnum.INITED
+
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
+    def minimumSizeHint(self) -> QSize:
+        columns = len(self.board.matrix[0])
+        width = (CELL_SIZE * columns) + (self.INDENT * 2)
+
+        rows = len(self.board.matrix)
+        height = (CELL_SIZE * rows) + (self.INDENT * 2)
+        return QSize(width, height)
+
+    def heightForWidth(self, w: int) -> int:
+        columns = len(self.board.matrix[0])
+        rows = len(self.board.matrix)
+
+        return w * columns // rows
 
     @property
     def status(self) -> StatusGameEnum:
@@ -164,15 +183,6 @@ class BoardWidget(QWidget):
                 self.__timer.stop()
                 self.on_finish.emit()
 
-    def minimumSizeHint(self) -> QSize:
-        columns = len(self.board.matrix[0])
-        width = CELL_SIZE * columns
-        width += self.INDENT * 2
-
-        rows = len(self.board.matrix)
-        height = (CELL_SIZE * rows) + (self.INDENT * 2)
-        return QSize(width, height)
-
     def abort_game(self):
         self.status = StatusGameEnum.FINISHED
 
@@ -197,27 +207,34 @@ class BoardWidget(QWidget):
                 if not cell_color:
                     continue
 
-                draw_cell_board(painter, x, y, cell_color, indent=self.INDENT)
+                draw_cell_board(
+                    painter,
+                    x,
+                    y,
+                    cell_color,
+                    cell_size=self.cell_size,
+                    indent=self.INDENT,
+                )
 
         painter.setPen(Qt.black)
 
         # Горизонтальные линии
         y1 = y2 = self.INDENT
         x1 = self.INDENT
-        x2 = CELL_SIZE * self.board.COLS + self.INDENT
+        x2 = self.cell_size * self.board.COLS + self.INDENT
         for i in range(self.board.ROWS + 1):
             painter.drawLine(x1, y1, x2, y2)
-            y1 += CELL_SIZE
-            y2 += CELL_SIZE
+            y1 += self.cell_size
+            y2 += self.cell_size
 
         # Вертикальные линии
         x1 = x2 = self.INDENT
         y1 = self.INDENT
-        y2 = CELL_SIZE * self.board.ROWS + self.INDENT
+        y2 = self.cell_size * self.board.ROWS + self.INDENT
         for i in range(self.board.COLS + 1):
             painter.drawLine(x1, y1, x2, y2)
-            x1 += CELL_SIZE
-            x2 += CELL_SIZE
+            x1 += self.cell_size
+            x2 += self.cell_size
 
     @painter_context
     def _draw_current_piece(self, painter: QPainter):
@@ -230,6 +247,7 @@ class BoardWidget(QWidget):
                 x,
                 y,
                 self.current_piece.get_color(),
+                cell_size=self.cell_size,
                 indent=self.INDENT,
             )
 
@@ -266,19 +284,21 @@ class BoardWidget(QWidget):
                 ):
                     continue
 
-                draw_cell_board(painter, x, y, color, indent=self.INDENT)
+                draw_cell_board(
+                    painter, x, y, color, cell_size=self.cell_size, indent=self.INDENT
+                )
 
     @painter_context
     def _draw_glass(self, painter: QPainter):
         match self.status:
             case StatusGameEnum.INITED:
                 text = "Press START"
-            case StatusGameEnum.STARTED:
-                return
             case StatusGameEnum.PAUSED:
                 text = "PAUSE"
             case StatusGameEnum.FINISHED:
                 text = f"FINISHED\nYour score: {self.board.score}"
+            case _:
+                return
 
         # Алгоритм изменения размера текста взят из http://stackoverflow.com/a/2204501
         # Для текущего пришлось немного адаптировать
@@ -339,6 +359,16 @@ class BoardWidget(QWidget):
 
             self.update()
             return
+
+    def resizeEvent(self, event: QResizeEvent):
+        super().resizeEvent(event)
+
+        w_aspect = event.size().width() // len(self.board.matrix[0])
+        h_aspect = event.size().height() // len(self.board.matrix)
+
+        self.cell_size = min(w_aspect, h_aspect)
+
+        self.update()
 
     def paintEvent(self, event: QPaintEvent):
         painter = QPainter(self)
