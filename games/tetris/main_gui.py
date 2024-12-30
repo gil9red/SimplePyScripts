@@ -309,7 +309,7 @@ class BoardWidget(QWidget):
                 text = "PAUSE"
             case StatusGameEnum.FINISHED:
                 playing_time = seconds_to_str(self.playing_time_ms // 1000)
-                text = f"FINISHED\nYour score: {self.board.score}\nTime: {playing_time}"
+                text = f"FINISHED\nScore: {self.board.score}\nTime: {playing_time}"
             case _:
                 return
 
