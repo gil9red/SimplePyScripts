@@ -513,4 +513,14 @@ if __name__ == "__main__":
     mw = MainWindow()
     mw.show()
 
+    # mw = QWidget()
+    # main_layout = QHBoxLayout(mw)
+    #
+    # for cls in Piece.__subclasses__():
+    #     piece_widget = PieceWidget()
+    #     piece_widget.set_piece(cls(0, 0))
+    #     main_layout.addWidget(piece_widget)
+
+    mw.show()
+
     app.exec()
