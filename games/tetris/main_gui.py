@@ -152,16 +152,16 @@ class BoardWidget(QWidget):
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
     def minimumSizeHint(self) -> QSize:
-        columns = len(self.board.matrix[0])
+        columns = self.board.COLS
         width = (CELL_SIZE * columns) + (self.INDENT * 2)
 
-        rows = len(self.board.matrix)
+        rows = self.board.ROWS
         height = (CELL_SIZE * rows) + (self.INDENT * 2)
         return QSize(width, height)
 
     def heightForWidth(self, w: int) -> int:
-        columns = len(self.board.matrix[0])
-        rows = len(self.board.matrix)
+        columns = self.board.COLS
+        rows = self.board.ROWS
 
         return w * columns // rows
 
@@ -379,8 +379,8 @@ class BoardWidget(QWidget):
     def resizeEvent(self, event: QResizeEvent):
         super().resizeEvent(event)
 
-        w_aspect = event.size().width() // len(self.board.matrix[0])
-        h_aspect = event.size().height() // len(self.board.matrix)
+        w_aspect = event.size().width() // self.board.COLS
+        h_aspect = event.size().height() // self.board.ROWS
 
         self.cell_size = min(w_aspect, h_aspect)
 
