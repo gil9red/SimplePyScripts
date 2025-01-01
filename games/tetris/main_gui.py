@@ -23,6 +23,7 @@ from PyQt5.QtWidgets import (
     QToolButton,
     QPushButton,
     QSizePolicy,
+    QScrollArea,
 )
 
 from core.board import Board
@@ -40,6 +41,15 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
 
 
 sys.excepthook = log_uncaught_exceptions
+
+
+def get_scroll_area(widget: QWidget) -> QScrollArea:
+    scroll_area = QScrollArea()
+    scroll_area.setFrameStyle(QScrollArea.NoFrame)
+    scroll_area.setWidgetResizable(True)
+    scroll_area.setWidget(widget)
+
+    return scroll_area
 
 
 def painter_context(func: Callable):
@@ -438,7 +448,9 @@ class MainWindow(QWidget):
             lambda: self.board_widget.process_key(Qt.Key_Return)
         )
 
-        right_layout = QVBoxLayout()
+        widget_right = QWidget()
+
+        right_layout = QVBoxLayout(widget_right)
         right_layout.addWidget(self.next_piece_widget)
         right_layout.addWidget(self.score_label)
         right_layout.addWidget(self.playing_time_label)
@@ -465,7 +477,7 @@ class MainWindow(QWidget):
 
         main_layout = QHBoxLayout(self)
         main_layout.addWidget(self.board_widget)
-        main_layout.addLayout(right_layout)
+        main_layout.addWidget(get_scroll_area(widget_right))
 
         self.setFocus()
 
