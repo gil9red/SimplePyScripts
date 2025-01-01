@@ -4,14 +4,12 @@
 __author__ = "ipetrash"
 
 
-import enum
-import functools
 import sys
 import traceback
 from typing import Callable
 
-from PyQt5.QtCore import Qt, QTimer, QSize, pyqtSignal
-from PyQt5.QtGui import QPainter, QPaintEvent, QKeyEvent, QColor, QResizeEvent
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtWidgets import (
     QWidget,
     QApplication,
@@ -22,13 +20,13 @@ from PyQt5.QtWidgets import (
     QGridLayout,
     QToolButton,
     QPushButton,
-    QSizePolicy,
     QScrollArea,
 )
 
-from core.board import Board
-from core.common import logger
-from core.piece import Piece
+from src.core.common import logger, seconds_to_str
+from src.gui.common import StatusGameEnum
+from src.gui.board_widget import BoardWidget
+from src.gui.piece_widget import PieceWidget
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
@@ -43,6 +41,7 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
 sys.excepthook = log_uncaught_exceptions
 
 
+# SOURCE: https://github.com/gil9red/parse_jira_logged_time/blob/9a842ed071f317b7323b7b7775aa9f5195dbaf47/widgets/__init__.py#L218
 def get_scroll_area(widget: QWidget) -> QScrollArea:
     scroll_area = QScrollArea()
     scroll_area.setFrameStyle(QScrollArea.NoFrame)
@@ -447,9 +446,7 @@ class MainWindow(QWidget):
             lambda: self.board_widget.process_key(Qt.Key_Return)
         )
 
-        widget_right = QWidget()
-
-        right_layout = QVBoxLayout(widget_right)
+        right_layout = QVBoxLayout()
         right_layout.addWidget(self.next_piece_widget)
         right_layout.addWidget(self.score_label)
         right_layout.addWidget(self.playing_time_label)
@@ -474,8 +471,11 @@ class MainWindow(QWidget):
         )
         right_layout.addStretch()
 
+        widget_right = QWidget()
+        widget_right.setLayout(right_layout)
+
         main_layout = QHBoxLayout(self)
-        main_layout.addWidget(self.board_widget)
+        main_layout.addWidget(self.board_widget, stretch=1)
         main_layout.addWidget(get_scroll_area(widget_right))
 
         for w in self.findChildren(QWidget):

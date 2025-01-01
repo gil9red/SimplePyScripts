@@ -17,8 +17,8 @@ from asciimatics.scene import Scene
 from asciimatics.widgets import Frame
 from asciimatics.exceptions import StopApplication, NextScene, ResizeScreenError
 
-from core.board import Board
-from core.piece import PieceO, PieceI, PieceS, PieceZ, PieceL, PieceJ, PieceT
+from src.core.board import Board
+from src.core.piece import PieceO, PieceI, PieceS, PieceZ, PieceL, PieceJ, PieceT
 
 
 # SOURCE: https://asciimatics.readthedocs.io/en/stable/io.html#colours
