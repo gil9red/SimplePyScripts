@@ -425,7 +425,6 @@ class MainWindow(QWidget):
         def _add_button(text: str, key: Qt.Key) -> QToolButton:
             button = QToolButton()
             button.setText(text)
-            button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
             button.clicked.connect(lambda: self.board_widget.process_key(key))
             return button
 
@@ -479,7 +478,11 @@ class MainWindow(QWidget):
         main_layout.addWidget(self.board_widget)
         main_layout.addWidget(get_scroll_area(widget_right))
 
-        self.setFocus()
+        for w in self.findChildren(QWidget):
+            if isinstance(w, BoardWidget):
+                continue
+
+            w.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
         self._update_states()
 
