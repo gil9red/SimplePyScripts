@@ -4,9 +4,13 @@
 __author__ = "ipetrash"
 
 
+import json
 import sys
 import traceback
-from typing import Callable
+from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QKeyEvent
@@ -23,7 +27,7 @@ from PyQt5.QtWidgets import (
     QScrollArea,
 )
 
-from src.core.common import logger, seconds_to_str
+from src.core.common import logger, ms_to_str
 from src.gui.common import StatusGameEnum
 from src.gui.board_widget import BoardWidget
 from src.gui.piece_widget import PieceWidget
@@ -51,358 +55,30 @@ def get_scroll_area(widget: QWidget) -> QScrollArea:
     return scroll_area
 
 
-def painter_context(func: Callable):
-    @functools.wraps(func)
-    def decorated(*args, **kwargs):
-        painter: QPainter | None = None
-        for arg in args + tuple(kwargs.values()):
-            if isinstance(arg, QPainter):
-                painter = arg
-                break
-
-        if painter:
-            painter.save()
-        try:
-            return func(*args, **kwargs)
-        finally:
-            if painter:
-                painter.restore()
-
-    return decorated
-
-
-CELL_SIZE: int = 20
-
-
-def draw_cell_board(
-    painter: QPainter,
-    x: int,
-    y: int,
-    color: QColor,
-    pen: Qt.GlobalColor = Qt.NoPen,
-    cell_size: int = CELL_SIZE,
-    indent: int = 0,
-):
-    painter.setPen(pen)
-    painter.setBrush(color)
-    painter.drawRect(
-        (x * cell_size) + indent,
-        (y * cell_size) + indent,
-        cell_size,
-        cell_size,
-    )
-
-
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/0360c558f85c0fe5e7320d88f90c0a4e23a7e342/seconds_to_str.py
-def seconds_to_str(seconds: int | float) -> str:
-    hh, mm = divmod(seconds, 3600)
-    mm, ss = divmod(mm, 60)
-    return "%02d:%02d:%02d" % (hh, mm, ss)
-
-
-class PieceWidget(QWidget):
-    INDENT: int = 1
-
-    def __init__(self, parent: QWidget | None = None):
-        super().__init__(parent)
-
-        self.piece: Piece | None = None
-
-    def set_piece(self, piece: Piece):
-        self.piece = piece
-        self.update()
-
-    def minimumSizeHint(self) -> QSize:
-        size = (CELL_SIZE * 4) + (self.INDENT * 2)
-        return QSize(size, size)
-
-    def paintEvent(self, event: QPaintEvent):
-        if not self.piece:
-            return
-
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-
-        for x, y in self.piece.get_points_for_state(x=2, y=1):
-            draw_cell_board(painter, x, y, self.piece.get_color(), pen=Qt.black)
-
-
-class StatusGameEnum(enum.IntEnum):
-    INITED = enum.auto()
-    STARTED = enum.auto()
-    PAUSED = enum.auto()
-    FINISHED = enum.auto()
-
-
-class BoardWidget(QWidget):
-    INDENT: int = 1
-    SPEED_MS: int = 400
-
-    on_tick = pyqtSignal()
-    on_finish = pyqtSignal()
-
-    def __init__(self):
-        super().__init__()
-
-        self.board = Board()
-
-        self.cell_size: int = CELL_SIZE
-
-        self.current_piece: Piece | None = None
-        self.next_piece: Piece | None = None
-
-        self.__timer = QTimer()
-        self.__timer.timeout.connect(self._on_tick)
-        self.__timer.setInterval(self.SPEED_MS)
-
-        self.playing_time_ms: int = 0
-        self.__status = StatusGameEnum.INITED
-
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-
-    def minimumSizeHint(self) -> QSize:
-        columns = self.board.COLS
-        width = (CELL_SIZE * columns) + (self.INDENT * 2)
-
-        rows = self.board.ROWS
-        height = (CELL_SIZE * rows) + (self.INDENT * 2)
-        return QSize(width, height)
-
-    def heightForWidth(self, w: int) -> int:
-        columns = self.board.COLS
-        rows = self.board.ROWS
-
-        return w * columns // rows
-
-    @property
-    def status(self) -> StatusGameEnum:
-        return self.__status
-
-    @status.setter
-    def status(self, value: StatusGameEnum):
-        if self.__status == value:
-            return
-
-        self.__status = value
-
-        match value:
-            case StatusGameEnum.INITED:
-                self.__timer.stop()
-                self.board.clear()
-                self.playing_time_ms = 0
-
-            case StatusGameEnum.STARTED:
-                self.__timer.start()
-
-            case StatusGameEnum.PAUSED:
-                self.__timer.stop()
-
-            case StatusGameEnum.FINISHED:
-                self.__timer.stop()
-                self.on_finish.emit()
-
-    def abort_game(self):
-        self.status = StatusGameEnum.FINISHED
-
-    def _on_logic(self):
-        if not self.board.do_step():
-            self.abort_game()
-            return
-
-        self.current_piece = self.board.current_piece
-        self.next_piece = self.board.next_piece
-
-    def _on_tick(self):
-        self._on_logic()
-
-        self.update()
-
-        self.playing_time_ms += self.__timer.interval()
-        self.on_tick.emit()
-
-    @painter_context
-    def _draw_board(self, painter: QPainter):
-        # Рисование заполненных ячеек
-        for y, row in enumerate(self.board.matrix):
-            for x, cell_color in enumerate(row):
-                if not cell_color:
-                    continue
-
-                draw_cell_board(
-                    painter,
-                    x,
-                    y,
-                    cell_color,
-                    cell_size=self.cell_size,
-                    indent=self.INDENT,
-                )
-
-        painter.setPen(Qt.black)
-
-        # Горизонтальные линии
-        y1 = y2 = self.INDENT
-        x1 = self.INDENT
-        x2 = self.cell_size * self.board.COLS + self.INDENT
-        for i in range(self.board.ROWS + 1):
-            painter.drawLine(x1, y1, x2, y2)
-            y1 += self.cell_size
-            y2 += self.cell_size
-
-        # Вертикальные линии
-        x1 = x2 = self.INDENT
-        y1 = self.INDENT
-        y2 = self.cell_size * self.board.ROWS + self.INDENT
-        for i in range(self.board.COLS + 1):
-            painter.drawLine(x1, y1, x2, y2)
-            x1 += self.cell_size
-            x2 += self.cell_size
-
-    @painter_context
-    def _draw_current_piece(self, painter: QPainter):
-        if not self.current_piece:
-            return
-
-        for x, y in self.current_piece.get_points():
-            draw_cell_board(
-                painter,
-                x,
-                y,
-                self.current_piece.get_color(),
-                cell_size=self.cell_size,
-                indent=self.INDENT,
-            )
-
-    @painter_context
-    def _draw_shadow_of_current_piece(self, painter: QPainter):
-        if not self.current_piece:
-            return
-
-        points: list[tuple[int, int]] = self.current_piece.get_points()
-
-        color: QColor = self.current_piece.get_color()
-        color.setAlphaF(0.2)
-
-        # Рисование тени
-        for y, row in enumerate(self.board.matrix):
-            for x, _ in enumerate(row):
-                max_piece_y = max((py for px, py in points if px == x), default=-1)
-
-                min_field_y = -1
-                for y_, row_ in enumerate(self.board.matrix):
-                    cell_color: QColor | None = row_[x]
-                    if not cell_color:
-                        continue
-
-                    min_field_y = y_
-                    break
-
-                if y <= max_piece_y or (min_field_y != -1 and y >= min_field_y):
-                    continue
-
-                if (
-                    x < self.current_piece.get_min_x()
-                    or x > self.current_piece.get_max_x()
-                ):
-                    continue
-
-                draw_cell_board(
-                    painter, x, y, color, cell_size=self.cell_size, indent=self.INDENT
-                )
-
-    @painter_context
-    def _draw_glass(self, painter: QPainter):
-        match self.status:
-            case StatusGameEnum.INITED:
-                text = "Press START"
-            case StatusGameEnum.PAUSED:
-                text = "PAUSE"
-            case StatusGameEnum.FINISHED:
-                playing_time = seconds_to_str(self.playing_time_ms // 1000)
-                text = f"FINISHED\nScore: {self.board.score}\nTime: {playing_time}"
-            case _:
-                return
-
-        # Алгоритм изменения размера текста взят из http://stackoverflow.com/a/2204501
-        # Для текущего пришлось немного адаптировать
-        max_line_width = max(
-            painter.fontMetrics().width(line) for line in text.splitlines()
+DIR: Path = Path(__file__).resolve().parent
+FILE_HIGH_SCORES: Path = DIR / "high_scores.json"
+
+
+@dataclass
+class HighScore:
+    date_added: datetime
+    time: str
+    score: int
+
+    @classmethod
+    def parse(cls, data: dict[str, Any]) -> "HighScore":
+        return cls(
+            date_added=datetime.fromisoformat(data["date_added"]),
+            time=data["time"],
+            score=data["score"],
         )
-        factor = min(self.width(), self.height()) / max_line_width
-        if factor < 1 or factor > 1.25:
-            f = painter.font()
-            point_size = f.pointSizeF() * factor
-            if point_size > 0:
-                f.setPointSizeF(point_size)
-                painter.setFont(f)
 
-        painter.setPen(Qt.black)
-
-        brush = QColor(Qt.lightGray)
-        brush.setAlphaF(0.6)
-
-        painter.setBrush(brush)
-
-        painter.drawRect(self.rect())
-        painter.drawText(self.rect(), Qt.AlignCenter, text)
-
-    def process_key(self, key: int):
-        if key == Qt.Key_Space and self.status in [
-            StatusGameEnum.STARTED,
-            StatusGameEnum.PAUSED,
-        ]:
-            if self.status == StatusGameEnum.STARTED:
-                self.status = StatusGameEnum.PAUSED
-            else:
-                self.status = StatusGameEnum.STARTED
-
-            self.update()
-            return
-
-        if key in [Qt.Key_Enter, Qt.Key_Return] and self.status in [
-            StatusGameEnum.INITED,
-            StatusGameEnum.FINISHED,
-        ]:
-            self.status = StatusGameEnum.INITED
-            self.status = StatusGameEnum.STARTED
-            self.update()
-            return
-
-        if self.current_piece and self.status == StatusGameEnum.STARTED:
-            match key:
-                case Qt.Key_Left:
-                    self.current_piece.move_left()
-
-                case Qt.Key_Right:
-                    self.current_piece.move_right()
-
-                case Qt.Key_Up:
-                    self.current_piece.turn()
-
-                case Qt.Key_Down:
-                    while self.current_piece.move_down():
-                        pass
-
-            self.update()
-            return
-
-    def resizeEvent(self, event: QResizeEvent):
-        super().resizeEvent(event)
-
-        w_aspect = event.size().width() // self.board.COLS
-        h_aspect = event.size().height() // self.board.ROWS
-
-        self.cell_size = min(w_aspect, h_aspect)
-
-        self.update()
-
-    def paintEvent(self, event: QPaintEvent):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-
-        self._draw_current_piece(painter)
-        self._draw_shadow_of_current_piece(painter)
-        self._draw_board(painter)
-        self._draw_glass(painter)
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "date_added": self.date_added.isoformat(),
+            "time": self.time,
+            "score": self.score,
+        }
 
 
 class MainWindow(QWidget):
@@ -410,6 +86,10 @@ class MainWindow(QWidget):
 
     def __init__(self):
         super().__init__()
+
+        self.high_scores: list[HighScore] = []
+
+        self.high_scores_view = QLabel()
 
         self.next_piece_widget = PieceWidget()
         self.score_label = QLabel()
@@ -419,7 +99,7 @@ class MainWindow(QWidget):
         self.board_widget.board.on_next_piece.connect(self.next_piece_widget.set_piece)
         self.board_widget.board.on_update_score.connect(self._update_states)
         self.board_widget.on_tick.connect(self._update_states)
-        self.board_widget.on_finish.connect(self._update_states)
+        self.board_widget.on_finish.connect(self._on_finish)
 
         def _add_button(text: str, key: Qt.Key) -> QToolButton:
             button = QToolButton()
@@ -469,6 +149,7 @@ class MainWindow(QWidget):
                 """
             )
         )
+        right_layout.addWidget(self.high_scores_view)
         right_layout.addStretch()
 
         widget_right = QWidget()
@@ -484,11 +165,37 @@ class MainWindow(QWidget):
 
             w.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
+        self.load_high_scores()
+
         self._update_states()
+
+    def _on_finish(self):
+        self.high_scores.append(
+            HighScore(
+                date_added=datetime.now(),
+                time=ms_to_str(self.board_widget.playing_time_ms),
+                score=self.board_widget.board.score,
+            )
+        )
+
+        self._fill_high_scores_view()
+        self.save_high_scores()
+
+        self._update_states()
+
+    def get_top_high_scores(self, number: int = 5) -> list[HighScore]:
+        # Сортировка по убыванию очков и возрастанию времени
+        self.high_scores.sort(
+            key=lambda obj: (obj.score, -(int(obj.time.replace(":", "")))),
+            reverse=True,
+        )
+        if len(self.high_scores) > number:
+            self.high_scores = self.high_scores[:number]
+        return self.high_scores
 
     def _update_states(self):
         score: int = self.board_widget.board.score
-        playing_time = seconds_to_str(self.board_widget.playing_time_ms // 1000)
+        playing_time = ms_to_str(self.board_widget.playing_time_ms)
 
         title_parts = [self.TITLE]
 
@@ -516,6 +223,37 @@ class MainWindow(QWidget):
         self.pause_resume_button.setEnabled(
             is_started or self.board_widget.status == StatusGameEnum.PAUSED
         )
+
+    def _fill_high_scores_view(self):
+        lines = ["High scores (top 5):"]
+
+        for i, high_score in enumerate(self.get_top_high_scores(), start=1):
+            lines.append(
+                f"<b>{i}.</b> {high_score.score} - {high_score.time}<br/>"
+                f"&nbsp;&nbsp;&nbsp;&nbsp;{high_score.date_added:%d.%m.%Y %H:%M:%S}"
+            )
+
+        self.high_scores_view.setText("<br/>".join(lines))
+
+    def save_high_scores(self):
+        FILE_HIGH_SCORES.write_text(
+            json.dumps(
+                [high_score.to_dict() for high_score in self.high_scores],
+                indent=4,
+            ),
+            encoding="utf-8",
+        )
+
+    def load_high_scores(self):
+        if not FILE_HIGH_SCORES.exists():
+            return
+
+        self.high_scores = [
+            HighScore.parse(data)
+            for data in json.loads(FILE_HIGH_SCORES.read_text(encoding="utf-8"))
+        ]
+
+        self._fill_high_scores_view()
 
     def keyReleaseEvent(self, event: QKeyEvent):
         self.board_widget.process_key(event.key())

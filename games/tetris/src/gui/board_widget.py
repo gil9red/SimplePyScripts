@@ -3,12 +3,13 @@
 
 __author__ = "ipetrash"
 
+
 from PyQt5.QtCore import pyqtSignal, QTimer, QSize, Qt
 from PyQt5.QtGui import QPainter, QColor, QResizeEvent, QPaintEvent
-from PyQt5.QtWidgets import QWidget, QSizePolicy
+from PyQt5.QtWidgets import QWidget
 
 from ..core.board import Board
-from ..core.common import seconds_to_str
+from ..core.common import ms_to_str
 from ..core.piece import Piece
 from .common import CELL_SIZE, StatusGameEnum, painter_context, draw_cell_board
 
@@ -188,7 +189,7 @@ class BoardWidget(QWidget):
             case StatusGameEnum.PAUSED:
                 text = "PAUSE"
             case StatusGameEnum.FINISHED:
-                playing_time = seconds_to_str(self.playing_time_ms // 1000)
+                playing_time = ms_to_str(self.playing_time_ms)
                 text = f"FINISHED\nScore: {self.board.score}\nTime: {playing_time}"
             case _:
                 return

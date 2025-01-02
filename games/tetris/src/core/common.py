@@ -17,6 +17,10 @@ def seconds_to_str(seconds: int | float) -> str:
     return "%02d:%02d:%02d" % (hh, mm, ss)
 
 
+def ms_to_str(ms: int | float) -> str:
+    return seconds_to_str(ms / 1000)
+
+
 default_handler = logging.StreamHandler(stream=sys.stdout)
 default_handler.setFormatter(
     logging.Formatter(
