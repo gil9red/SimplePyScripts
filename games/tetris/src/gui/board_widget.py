@@ -234,6 +234,7 @@ class BoardWidget(QWidget):
             StatusGameEnum.INITED,
             StatusGameEnum.FINISHED,
         ]:
+            # В два этапа
             self.status = StatusGameEnum.INITED
             self.status = StatusGameEnum.STARTED
             self.update()
