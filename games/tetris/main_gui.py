@@ -114,6 +114,7 @@ class MainWindow(QWidget):
         self.pause_resume_button = _add_button("Pause/Resume", Qt.Key_Space)
 
         control_layout = QGridLayout()
+        control_layout.setAlignment(Qt.AlignCenter)
         control_layout.addWidget(self.up_button, 0, 1)
         control_layout.addWidget(self.left_button, 1, 0)
         control_layout.addWidget(self.right_button, 1, 2)
