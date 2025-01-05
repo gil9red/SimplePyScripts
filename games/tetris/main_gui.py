@@ -230,7 +230,7 @@ class MainWindow(QWidget):
 
         for i, high_score in enumerate(self.get_top_high_scores(), start=1):
             lines.append(
-                f"<b>{i}.</b> {high_score.score} - {high_score.time}<br/>"
+                f"{i}. <b>{high_score.score}</b> - {high_score.time}<br/>"
                 f"&nbsp;&nbsp;&nbsp;&nbsp;{high_score.date_added:%d.%m.%Y %H:%M:%S}"
             )
 
