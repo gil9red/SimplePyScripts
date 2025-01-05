@@ -15,7 +15,7 @@ for x in items:
 
 print("\n")
 
-completed = [x for x in items if "переведено" in x.tags]
+completed = [x for x in items if "завершён" in x.tags]
 print(f"Total bookmarks completed ({len(completed)}):")
 for x in completed:
     print(f"    {x.title!r}: {x.url}")
