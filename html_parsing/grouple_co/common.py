@@ -10,7 +10,7 @@ import re
 import time
 
 from dataclasses import dataclass, field
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlsplit
 
 import requests
 from bs4 import BeautifulSoup, Tag
@@ -73,9 +73,16 @@ def do_auth() -> requests.Response:
     form_data = {
         "username": LOGIN,
         "password": PASSWORD,
+        "remember_me": "true",
+        "_remember_me_yes": "",
+        "remember_me_yes": "on",
     }
 
+    rs = do_get("/internal/auth/login")
+    rs.raise_for_status()
+
     rs = do_post("/login/authenticate", data=form_data)
+    rs.raise_for_status()
 
     # Example: https://grouple.co/internal/auth/login?login_error=1
     if "error" in rs.url:
@@ -84,12 +91,29 @@ def do_auth() -> requests.Response:
     return rs
 
 
-def load(uri: str, **kwargs) -> requests.Response:
-    # NOTE: Была замечена смена домена
-    global HOST
+# NOTE: Была замечена смена домена
+def update_host():
+    def _update(url: str) -> bool:
+        global HOST
+
+        if "grouple" in url and not url.startswith(HOST):
+            HOST = urlsplit(url)._replace(path="", query="", fragment="").geturl()
+            return True
+
+        return False
+
     rs = do_get("/")
-    if not rs.url.startswith(HOST):
-        HOST = rs.url
+
+    if not _update(rs.url):
+        rs = do_get("/internal/auth")
+        _update(rs.url)
+
+        rs = do_auth()
+        _update(rs.url)
+
+
+def load(uri: str, **kwargs) -> requests.Response:
+    update_host()
 
     while True:
         rs = do_get(uri, **kwargs)
@@ -166,9 +190,7 @@ def get_bookmarks_by_status(status: Status) -> list[Bookmark]:
                 for el in BeautifulSoup(tags_str, "html.parser").select("span")
             ]
 
-            items.append(
-                Bookmark(title=title, url=url, tags=tags)
-            )
+            items.append(Bookmark(title=title, url=url, tags=tags))
 
         if result["offset"] + result["limit"] >= result["total"]:
             break
@@ -183,27 +205,27 @@ def get_plain_all_bookmarks_from_user(user_id: int) -> list[Bookmark]:
     rs = load(f"/user/{user_id}/bookmarks")
     root = BeautifulSoup(rs.content, "html.parser")
 
-    return [
-        parse_bookmark(row)
-        for row in root.select("a.site-element")
-    ]
+    return [parse_bookmark(row) for row in root.select("a.site-element")]
 
 
 def get_all_bookmarks() -> dict[Status, list[Bookmark]]:
-    return {
-        status: get_bookmarks_by_status(status)
-        for status in Status
-    }
+    return {status: get_bookmarks_by_status(status) for status in Status}
 
 
 if __name__ == "__main__":
     assert Status.WATCHING.name == Status.WATCHING.value
     assert Status.WATCHING.name == "WATCHING"
 
+    print("HOST:", HOST)
+    # HOST: https://grouple.co
+
     print(session.cookies)
     print(load("/"))
     print(do_auth())
     print(session.cookies)
+
+    print("HOST:", HOST)
+    # HOST: https://1.grouple.co
 
     print("\n" + "-" * 50 + "\n")
 
@@ -216,12 +238,18 @@ if __name__ == "__main__":
     for i, bookmark in enumerate(bookmarks, 1):
         print(f"{i}. {bookmark}")
     """
-    Bookmarks (28):
-    1. Bookmark(title='Башня Бога', url='https://readmanga.io/bashnia_boga__A339d2', tags=[])
-    2. Bookmark(title='Берсерк', url='https://readmanga.io/berserk', tags=[])
-    3. Bookmark(title='Боруто', url='https://readmanga.io/boruto__A5327', tags=[])
-    ...
-    26. Bookmark(title='Священная  земля', url='https://readmanga.io/sviachennaia__zemlia__A533b', tags=['переведено'])
-    27. Bookmark(title='Терраформирование', url='https://mintmanga.live/terraformirovanie__A5327', tags=[])
-    28. Bookmark(title='Фейри Тейл. Начало', url='https://readmanga.io/feiri_teil__nachalo', tags=['переведено', 'Без глав'])
+    Bookmarks (13):
+    1. Bookmark(title='Башня Бога', url='https://web.usagi.one/tower_of_god', tags=[])
+    2. Bookmark(title='Боруто. Наруто: Новое поколение', url='https://web.usagi.one/boruto__naruto_next_generations', tags=['завершён'])
+    3. Bookmark(title='Ван Пис', url='https://web.usagi.one/van_pis', tags=[])
+    4. Bookmark(title='Ванпанчмен', url='https://1.seimanga.me/vanpanchmen', tags=[])
+    5. Bookmark(title='Ванпанчмен (ONE)', url='https://1.seimanga.me/vanpanchmen__one_', tags=[])
+    6. Bookmark(title='Выживание в игре за варвара', url='https://web.usagi.one/surviving_the_game_as_a_barbarian', tags=[])
+    7. Bookmark(title='Необъятный океан', url='https://1.seimanga.me/neobiatnyi_okean', tags=[])
+    8. Bookmark(title='Охотник × Охотник', url='https://web.usagi.one/hunter_x_hunter', tags=[])
+    9. Bookmark(title='Священная земля', url='https://web.usagi.one/holyland', tags=['завершён'])
+    10. Bookmark(title='Семь смертных грехов', url='https://web.usagi.one/the_seven_deadly_sins', tags=['завершён', 'без глав'])
+    11. Bookmark(title='Серафим конца', url='https://web.usagi.one/seraph_of_the_end', tags=[])
+    12. Bookmark(title='Терраформирование', url='https://1.seimanga.me/terraformirovanie', tags=[])
+    13. Bookmark(title='Чародейки', url='https://web.usagi.one/witch', tags=['завершён'])
     """
