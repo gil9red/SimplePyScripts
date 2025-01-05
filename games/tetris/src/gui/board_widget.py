@@ -28,9 +28,6 @@ class BoardWidget(QWidget):
 
         self.cell_size: int = CELL_SIZE
 
-        self.current_piece: Piece | None = None
-        self.next_piece: Piece | None = None
-
         self.__timer = QTimer()
         self.__timer.timeout.connect(self._on_tick)
         self.__timer.setInterval(self.SPEED_MS)
@@ -79,10 +76,6 @@ class BoardWidget(QWidget):
     def _on_logic(self):
         if not self.board.do_step():
             self.abort_game()
-            return
-
-        self.current_piece = self.board.current_piece
-        self.next_piece = self.board.next_piece
 
     def _on_tick(self):
         self._on_logic()
@@ -131,27 +124,27 @@ class BoardWidget(QWidget):
 
     @painter_context
     def _draw_current_piece(self, painter: QPainter):
-        if not self.current_piece:
+        if not self.board.current_piece:
             return
 
-        for x, y in self.current_piece.get_points():
+        for x, y in self.board.current_piece.get_points():
             draw_cell_board(
                 painter,
                 x,
                 y,
-                self.current_piece.get_color(),
+                self.board.current_piece.get_color(),
                 cell_size=self.cell_size,
                 indent=self.INDENT,
             )
 
     @painter_context
     def _draw_shadow_of_current_piece(self, painter: QPainter):
-        if not self.current_piece:
+        if not self.board.current_piece:
             return
 
-        points: list[tuple[int, int]] = self.current_piece.get_points()
+        points: list[tuple[int, int]] = self.board.current_piece.get_points()
 
-        color: QColor = self.current_piece.get_color()
+        color: QColor = self.board.current_piece.get_color()
         color.setAlphaF(0.2)
 
         # Рисование тени
@@ -172,8 +165,8 @@ class BoardWidget(QWidget):
                     continue
 
                 if (
-                    x < self.current_piece.get_min_x()
-                    or x > self.current_piece.get_max_x()
+                    x < self.board.current_piece.get_min_x()
+                    or x > self.board.current_piece.get_max_x()
                 ):
                     continue
 
@@ -240,19 +233,19 @@ class BoardWidget(QWidget):
             self.update()
             return
 
-        if self.current_piece and self.status == StatusGameEnum.STARTED:
+        if self.board.current_piece and self.status == StatusGameEnum.STARTED:
             match key:
                 case Qt.Key_Left:
-                    self.current_piece.move_left()
+                    self.board.current_piece.move_left()
 
                 case Qt.Key_Right:
-                    self.current_piece.move_right()
+                    self.board.current_piece.move_right()
 
                 case Qt.Key_Up:
-                    self.current_piece.turn()
+                    self.board.current_piece.turn()
 
                 case Qt.Key_Down:
-                    while self.current_piece.move_down():
+                    while self.board.current_piece.move_down():
                         pass
 
             self.update()
