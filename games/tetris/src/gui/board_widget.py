@@ -4,13 +4,14 @@
 __author__ = "ipetrash"
 
 
+import random
+
 from PyQt5.QtCore import pyqtSignal, QTimer, QSize, Qt
 from PyQt5.QtGui import QPainter, QColor, QResizeEvent, QPaintEvent
 from PyQt5.QtWidgets import QWidget
 
 from ..core.board import Board
 from ..core.common import ms_to_str
-from ..core.piece import Piece
 from .common import CELL_SIZE, StatusGameEnum, painter_context, draw_cell_board
 
 
@@ -19,12 +20,14 @@ class BoardWidget(QWidget):
     SPEED_MS: int = 400
 
     on_tick = pyqtSignal()
+    on_before_start = pyqtSignal()
     on_finish = pyqtSignal()
 
     def __init__(self):
         super().__init__()
 
         self.board = Board()
+        self.seed: str | None = None
 
         self.cell_size: int = CELL_SIZE
 
@@ -42,6 +45,59 @@ class BoardWidget(QWidget):
         rows = self.board.ROWS
         height = (CELL_SIZE * rows) + (self.INDENT * 2)
         return QSize(width, height)
+
+    def _fill_random(self):
+        while True:
+            try:
+                self.board.clear()
+                self.board.current_piece = self.board.get_random_piece()
+                self.board.next_piece = self.board.get_random_piece()
+
+                while True:
+                    filled_cells = sum(
+                        sum(1 for cell in row if cell is not None)
+                        for row in self.board.matrix
+                    )
+                    # Заполнили поле на нужное количество ячеек
+                    if filled_cells >= 40:
+                        return
+
+                    # С рандомом не повезло нужно заново заполнить
+                    if not self.board.do_step():
+                        break
+
+                    if not self.board.current_piece:
+                        continue
+
+                    for _ in range(random.randrange(0, self.board.COLS)):
+                        match random.randint(1, 4):
+                            case 1:
+                                self.board.current_piece.move_left()
+                            case 2:
+                                self.board.current_piece.move_right()
+                            case 3:
+                                self.board.current_piece.turn()
+                            case 4:
+                                while self.board.current_piece.move_down():
+                                    pass
+
+            finally:
+                self.board.score = 0
+
+    def start(self):
+        if self.status not in [StatusGameEnum.INITED, StatusGameEnum.FINISHED]:
+            return
+
+        self.status = StatusGameEnum.INITED
+
+        self.on_before_start.emit()
+
+        random.seed(self.seed)
+        if self.seed:
+            self._fill_random()
+
+        self.status = StatusGameEnum.STARTED
+        self.update()
 
     @property
     def status(self) -> StatusGameEnum:
@@ -223,14 +279,8 @@ class BoardWidget(QWidget):
             self.update()
             return
 
-        if key in [Qt.Key_Enter, Qt.Key_Return] and self.status in [
-            StatusGameEnum.INITED,
-            StatusGameEnum.FINISHED,
-        ]:
-            # В два этапа
-            self.status = StatusGameEnum.INITED
-            self.status = StatusGameEnum.STARTED
-            self.update()
+        if key in [Qt.Key_Enter, Qt.Key_Return]:
+            self.start()
             return
 
         if self.board.current_piece and self.status == StatusGameEnum.STARTED:

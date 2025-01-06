@@ -74,7 +74,7 @@ class Board(QObject):
         if to_delete:
             self.score += {1: 100, 2: 300, 3: 700, 4: 1500}[len(to_delete)]
 
-    def _get_random_piece(self) -> Piece:
+    def get_random_piece(self) -> Piece:
         return Piece.get_random(
             x=self.COLS // 2,  # По-умолчанию, по центру
             y=0,
@@ -86,9 +86,9 @@ class Board(QObject):
             if self.next_piece:
                 self.current_piece = self.next_piece
             else:
-                self.current_piece = self._get_random_piece()
+                self.current_piece = self.get_random_piece()
 
-            self.next_piece = self._get_random_piece()
+            self.next_piece = self.get_random_piece()
 
             # Если сразу после создания столкновение
             if self.current_piece.is_collapse():

@@ -5,8 +5,11 @@ __author__ = "ipetrash"
 
 
 import json
+import string
 import sys
+import random
 import traceback
+
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -25,6 +28,9 @@ from PyQt5.QtWidgets import (
     QToolButton,
     QPushButton,
     QScrollArea,
+    QCheckBox,
+    QStyle,
+    QLineEdit,
 )
 
 from src.core.common import logger, ms_to_str
@@ -53,6 +59,11 @@ def get_scroll_area(widget: QWidget) -> QScrollArea:
     scroll_area.setWidget(widget)
 
     return scroll_area
+
+
+# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/521cec6ee5915a23064617b17a8c9258f4592a46/games/life/board.py#L14
+def get_random_seed(length: int = 8) -> str:
+    return "".join(random.choices(string.ascii_letters + string.digits, k=length))
 
 
 DIR: Path = Path(__file__).resolve().parent
@@ -98,6 +109,7 @@ class MainWindow(QWidget):
         self.board_widget = BoardWidget()
         self.board_widget.board.on_next_piece.connect(self.next_piece_widget.set_piece)
         self.board_widget.board.on_update_score.connect(self._update_states)
+        self.board_widget.on_before_start.connect(self._on_before_start)
         self.board_widget.on_tick.connect(self._update_states)
         self.board_widget.on_finish.connect(self._on_finish)
 
@@ -122,16 +134,30 @@ class MainWindow(QWidget):
         control_layout.addWidget(self.pause_resume_button, 3, 0, 1, 4)
 
         self.start_button = QPushButton("START")
-        self.start_button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self.start_button.clicked.connect(
-            lambda: self.board_widget.process_key(Qt.Key_Return)
+        self.start_button.clicked.connect(self._do_start)
+
+        self.cb_random = QCheckBox("Random")
+
+        self.le_seed = QLineEdit(get_random_seed())
+        self.le_seed.setVisible(self.cb_random.isChecked())
+        self.le_seed.returnPressed.connect(self._do_start)
+        action_rand_seed = self.le_seed.addAction(
+            self.style().standardIcon(QStyle.SP_BrowserReload),
+            QLineEdit.TrailingPosition,
         )
+        action_rand_seed.triggered.connect(
+            lambda: self.le_seed.setText(get_random_seed())
+        )
+
+        self.cb_random.clicked.connect(self.le_seed.setVisible)
 
         right_layout = QVBoxLayout()
         right_layout.addWidget(self.next_piece_widget)
         right_layout.addWidget(self.score_label)
         right_layout.addWidget(self.playing_time_label)
         right_layout.addWidget(self.start_button)
+        right_layout.addWidget(self.cb_random)
+        right_layout.addWidget(self.le_seed)
         right_layout.addLayout(control_layout)
         right_layout.addWidget(
             QLabel(
@@ -161,7 +187,8 @@ class MainWindow(QWidget):
         main_layout.addWidget(get_scroll_area(widget_right))
 
         for w in self.findChildren(QWidget):
-            if isinstance(w, BoardWidget):
+            # У BoardWidget и поля ввода нужен фокус для взаимодействия
+            if w in [self.board_widget, self.le_seed]:
                 continue
 
             w.setFocusPolicy(Qt.FocusPolicy.NoFocus)
@@ -169,6 +196,14 @@ class MainWindow(QWidget):
         self.load_high_scores()
 
         self._update_states()
+
+    def _on_before_start(self):
+        self.board_widget.seed = None
+        if self.cb_random.isChecked():
+            self.board_widget.seed = self.le_seed.text()
+
+    def _do_start(self):
+        self.board_widget.start()
 
     def _on_finish(self):
         self.high_scores.append(
@@ -211,11 +246,15 @@ class MainWindow(QWidget):
         self.score_label.setText(f"Score: {score}")
         self.playing_time_label.setText(f"Time: {playing_time}")
 
-        self.start_button.setEnabled(
-            self.board_widget.status in [StatusGameEnum.INITED, StatusGameEnum.FINISHED]
-        )
+        is_inited_or_finished: bool = self.board_widget.status in [
+            StatusGameEnum.INITED,
+            StatusGameEnum.FINISHED,
+        ]
+        self.start_button.setEnabled(is_inited_or_finished)
+        self.cb_random.setEnabled(is_inited_or_finished)
+        self.le_seed.setEnabled(is_inited_or_finished)
 
-        is_started = self.board_widget.status == StatusGameEnum.STARTED
+        is_started: bool = self.board_widget.status == StatusGameEnum.STARTED
         self.up_button.setEnabled(is_started)
         self.left_button.setEnabled(is_started)
         self.right_button.setEnabled(is_started)
