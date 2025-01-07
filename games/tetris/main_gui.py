@@ -275,12 +275,16 @@ class MainWindow(QWidget):
 
         self.high_scores_view.setText("<br/>".join(lines))
 
+    def get_high_scores(self) -> list[dict[str, Any]]:
+        return [high_score.to_dict() for high_score in self.high_scores]
+
+    def set_high_scores(self, items: list[dict[str, Any]]):
+        self.high_scores = [HighScore.parse(data) for data in items]
+        self._fill_high_scores_view()
+
     def save_high_scores(self):
         FILE_HIGH_SCORES.write_text(
-            json.dumps(
-                [high_score.to_dict() for high_score in self.high_scores],
-                indent=4,
-            ),
+            json.dumps(self.get_high_scores(), indent=4),
             encoding="utf-8",
         )
 
@@ -288,12 +292,10 @@ class MainWindow(QWidget):
         if not FILE_HIGH_SCORES.exists():
             return
 
-        self.high_scores = [
-            HighScore.parse(data)
-            for data in json.loads(FILE_HIGH_SCORES.read_text(encoding="utf-8"))
-        ]
-
-        self._fill_high_scores_view()
+        items: list[dict[str, Any]] = json.loads(
+            FILE_HIGH_SCORES.read_text(encoding="utf-8")
+        )
+        self.set_high_scores(items)
 
     def keyReleaseEvent(self, event: QKeyEvent):
         self.board_widget.process_key(event.key())
