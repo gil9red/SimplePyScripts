@@ -251,10 +251,18 @@ class BoardWidget(QWidget):
         factor = min(self.width(), self.height()) / max_line_width
         if factor < 1 or factor > 1.25:
             f = painter.font()
-            point_size = f.pointSizeF() * factor
-            if point_size > 0:
-                f.setPointSizeF(point_size)
-                painter.setFont(f)
+
+            # NOTE: Замечено, что или pointSizeF, или pixelSize будет =1
+            if f.pointSizeF() > 0:
+                point_size = f.pointSizeF() * factor
+                if point_size > 0:
+                    f.setPointSizeF(point_size)
+            else:
+                pixel_size = int(f.pixelSize() * factor)
+                if pixel_size > 0:
+                    f.setPixelSize(pixel_size)
+
+            painter.setFont(f)
 
         painter.setPen(Qt.black)
 
