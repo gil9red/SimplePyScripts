@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, timezone
 
 
 def add_to_month(d: date, inc: bool = True, number: int = 1) -> date:
@@ -178,59 +178,55 @@ for release in releases:
 #     print(d)
 
 
-quit()
+print("\n" + "-" * 100 + "\n")
 
 
-def get_zero_time(dt: datetime) -> datetime:
-    return dt.replace(hour=0, minute=0, second=0, microsecond=0)
-
-
-# TODO: date
 def get_items(
-    start_dt: datetime,
-    end_dt: datetime,
+    start_date: date,
+    end_date: date,
     delta: timedelta,
-) -> list[tuple[datetime, datetime]]:
+) -> list[tuple[date, date]]:
     items = []
 
-    dt = end_dt
+    dt = end_date
     while True:
-        if dt <= start_dt:
+        if dt <= start_date:
             break
 
         dt1 = dt
         dt -= delta
 
-        if dt < start_dt:
-            dt = start_dt
+        if dt < start_date:
+            dt = start_date
 
         items.append((dt, dt1))
 
     return items
 
 
-# TODO: date
-def to_ms(dt: datetime) -> int:
-    return int(dt.timestamp() * 1000)
+def to_ms(d: date) -> int:
+    utc_timestamp = datetime.combine(
+        d, datetime.min.time(), tzinfo=timezone.utc
+    ).timestamp()
+    return int(utc_timestamp * 1000)
 
 
-# TODO: date
-dt = get_zero_time(datetime.utcnow())
-print(dt)
-# 2024-12-04 00:00:00
+d = datetime.utcnow().date()
+print(d)
+# 2025-01-10
 
-for dt1, dt2 in get_items(
-    start_dt=get_zero_time(dt - timedelta(weeks=6)),
-    end_dt=get_zero_time(dt + timedelta(days=1)),
+for d1, d2 in get_items(
+    start_date=d - timedelta(weeks=6),
+    end_date=d + timedelta(days=1),
     delta=timedelta(weeks=1),
 ):
-    print(f"{dt1} - {dt2}. {to_ms(dt1)}+{to_ms(dt2)}")
+    print(f"{d1} - {d2}. {to_ms(d1)}+{to_ms(d2)}")
 """
-2024-11-28 00:00:00 - 2024-12-05 00:00:00. 1732734000000+1733338800000
-2024-11-21 00:00:00 - 2024-11-28 00:00:00. 1732129200000+1732734000000
-2024-11-14 00:00:00 - 2024-11-21 00:00:00. 1731524400000+1732129200000
-2024-11-07 00:00:00 - 2024-11-14 00:00:00. 1730919600000+1731524400000
-2024-10-31 00:00:00 - 2024-11-07 00:00:00. 1730314800000+1730919600000
-2024-10-24 00:00:00 - 2024-10-31 00:00:00. 1729710000000+1730314800000
-2024-10-23 00:00:00 - 2024-10-24 00:00:00. 1729623600000+1729710000000
+2025-01-04 - 2025-01-11. 1735948800000+1736553600000
+2024-12-28 - 2025-01-04. 1735344000000+1735948800000
+2024-12-21 - 2024-12-28. 1734739200000+1735344000000
+2024-12-14 - 2024-12-21. 1734134400000+1734739200000
+2024-12-07 - 2024-12-14. 1733529600000+1734134400000
+2024-11-30 - 2024-12-07. 1732924800000+1733529600000
+2024-11-29 - 2024-11-30. 1732838400000+1732924800000
 """
