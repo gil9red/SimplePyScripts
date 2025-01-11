@@ -106,8 +106,6 @@ class Release:
                 else release.get_prev_release()
             )
 
-        return release
-
     @classmethod
     def get_by_date(cls, d: date) -> "Release":
         return cls.get_by(d=d)
