@@ -136,6 +136,8 @@ class Release:
 
 last_release: Release = Release.get_last_release()
 print("last_release:", last_release)
+print("trunk:", last_release.get_next_release())
+print()
 
 releases: list[Release] = [
     Release.get_by_version(version)
