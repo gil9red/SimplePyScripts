@@ -60,7 +60,7 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
 
     text_js: str = rs.text
 
-    m_uri_api_search = re.search("/api/(search|find|lookup)/", text_js)
+    m_uri_api_search = re.search("/api/(search|find|lookup|s)/", text_js)
     if m_uri_api_search:
         uri_api_search = m_uri_api_search.group()
     else:
