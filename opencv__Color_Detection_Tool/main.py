@@ -10,7 +10,21 @@ __author__ = "ipetrash"
 import sys
 import traceback
 
-from PyQt5 import Qt
+from PyQt5.QtCore import Qt, QFileInfo, QSettings
+from PyQt5.QtGui import QImage, qRgb, QColor, QPixmap, QPalette, QPainter, QPen
+from PyQt5.QtWidgets import (
+    QWidget,
+    QMessageBox,
+    QApplication,
+    QSlider,
+    QSpinBox,
+    QFileDialog,
+    QColorDialog,
+    QComboBox,
+    QRadioButton,
+    QDoubleSpinBox,
+    QCheckBox,
+)
 from PyQt5 import uic
 
 # pip install opencv-python
@@ -24,7 +38,7 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
     text += "".join(traceback.format_tb(tb))
 
     print(text)
-    Qt.QMessageBox.critical(None, "Error", text)
+    QMessageBox.critical(None, "Error", text)
     sys.exit(1)
 
 
@@ -33,49 +47,49 @@ sys.excepthook = log_uncaught_exceptions
 
 CONFIG_FILE_NAME = "config.ini"
 WINDOW_TITLE = "Color Detection Tool"
-GRAY_COLOR_TABLE = [Qt.qRgb(i, i, i) for i in range(256)]
+GRAY_COLOR_TABLE = [qRgb(i, i, i) for i in range(256)]
 
 
-def numpy_array_to_QImage(numpy_array):
+def numpy_array_to_QImage(numpy_array: np.ndarray) -> QImage | None:
     if numpy_array.dtype != np.uint8:
         return
 
     height, width = numpy_array.shape[:2]
 
     if len(numpy_array.shape) == 2:
-        img = Qt.QImage(
+        img = QImage(
             numpy_array.data,
             width,
             height,
             numpy_array.strides[0],
-            Qt.QImage.Format_Indexed8,
+            QImage.Format_Indexed8,
         )
         img.setColorTable(GRAY_COLOR_TABLE)
         return img
 
     elif len(numpy_array.shape) == 3:
         if numpy_array.shape[2] == 3:
-            img = Qt.QImage(
+            img = QImage(
                 numpy_array.data,
                 width,
                 height,
                 numpy_array.strides[0],
-                Qt.QImage.Format_RGB888,
+                QImage.Format_RGB888,
             )
             return img
 
         elif numpy_array.shape[2] == 4:
-            img = Qt.QImage(
+            img = QImage(
                 numpy_array.data,
                 width,
                 height,
                 numpy_array.strides[0],
-                Qt.QImage.Format_ARGB32,
+                QImage.Format_ARGB32,
             )
             return img
 
 
-class MainWindow(Qt.QWidget):
+class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
@@ -83,13 +97,13 @@ class MainWindow(Qt.QWidget):
 
         self.setWindowTitle(WINDOW_TITLE)
 
-        self.cbPenStyle.addItem("Solid", Qt.Qt.SolidLine)
-        self.cbPenStyle.addItem("Dash", Qt.Qt.DashLine)
-        self.cbPenStyle.addItem("Dot", Qt.Qt.DotLine)
-        self.cbPenStyle.addItem("Dash Dot", Qt.Qt.DashDotLine)
-        self.cbPenStyle.addItem("Dash Dot Dot", Qt.Qt.DashDotDotLine)
+        self.cbPenStyle.addItem("Solid", Qt.SolidLine)
+        self.cbPenStyle.addItem("Dash", Qt.DashLine)
+        self.cbPenStyle.addItem("Dot", Qt.DotLine)
+        self.cbPenStyle.addItem("Dash Dot", Qt.DashDotLine)
+        self.cbPenStyle.addItem("Dash Dot Dot", Qt.DashDotDotLine)
 
-        self.pen_color = Qt.QColor(Qt.Qt.green)
+        self.pen_color = QColor(Qt.green)
         self.last_load_path = "."
 
         self.image_source = None
@@ -97,11 +111,11 @@ class MainWindow(Qt.QWidget):
 
         self.load_settings()
 
-        for w in self.findChildren(Qt.QSlider):
+        for w in self.findChildren(QSlider):
             w.sliderMoved.connect(self.refresh_HSV)
 
             name = w.objectName()
-            sp = self.findChild(Qt.QSpinBox, "sp" + name[2:])
+            sp = self.findChild(QSpinBox, "sp" + name[2:])
             if not sp:
                 continue
 
@@ -128,13 +142,13 @@ class MainWindow(Qt.QWidget):
 
     def on_load(self):
         image_filters = "Images (*.jpg *.jpeg *.png *.bmp)"
-        file_name = Qt.QFileDialog.getOpenFileName(
+        file_name = QFileDialog.getOpenFileName(
             self, "Load image", self.last_load_path, image_filters
         )[0]
         if not file_name:
             return
 
-        self.last_load_path = Qt.QFileInfo(file_name).absolutePath()
+        self.last_load_path = QFileInfo(file_name).absolutePath()
 
         # Load image as bytes
         with open(file_name, "rb") as f:
@@ -151,10 +165,8 @@ class MainWindow(Qt.QWidget):
         # Трансформация BGR->RGB если 3 канала. У картинок с прозрачностью каналов 4 и для них почему
         if channels == 3:
             code = cv2.COLOR_BGR2RGB
-
         elif channels == 4:
             code = cv2.COLOR_BGRA2RGB
-
         else:
             raise Exception(f"Unexpected number of channels: {channels}")
 
@@ -167,18 +179,18 @@ class MainWindow(Qt.QWidget):
             return
 
         size = self.lbView.size()
-        pixmap = Qt.QPixmap.fromImage(self.result_img).scaled(
-            size, Qt.Qt.KeepAspectRatio, Qt.Qt.SmoothTransformation
+        pixmap = QPixmap.fromImage(self.result_img).scaled(
+            size, Qt.KeepAspectRatio, Qt.SmoothTransformation
         )
         self.lbView.setPixmap(pixmap)
 
     def _update_pen_color(self):
         palette = self.pbPenColor.palette()
-        palette.setColor(Qt.QPalette.Button, self.pen_color)
+        palette.setColor(QPalette.Button, self.pen_color)
         self.pbPenColor.setPalette(palette)
 
     def _choose_color(self):
-        color = Qt.QColorDialog.getColor(self.pen_color)
+        color = QColorDialog.getColor(self.pen_color)
         if not color.isValid():
             return
 
@@ -192,8 +204,8 @@ class MainWindow(Qt.QWidget):
         line_type = self.cbPenStyle.currentData()
         line_color = self.pen_color
 
-        p = Qt.QPainter(result_img)
-        p.setPen(Qt.QPen(line_color, line_size, line_type))
+        p = QPainter(result_img)
+        p.setPen(QPen(line_color, line_size, line_type))
 
         for c in contours:
             x, y, width, height = cv2.boundingRect(c)
@@ -214,17 +226,17 @@ class MainWindow(Qt.QWidget):
         hsv_min = hue_from, saturation_from, value_from
         hsv_max = hue_to, saturation_to, value_to
 
-        color_hsv_min = Qt.QColor.fromHsv(*hsv_min)
-        color_hsv_max = Qt.QColor.fromHsv(*hsv_max)
+        color_hsv_min = QColor.fromHsv(*hsv_min)
+        color_hsv_max = QColor.fromHsv(*hsv_max)
 
         self.label_hsv_from_text.setText(", ".join(map(str, hsv_min)))
         self.label_hsv_to_text.setText(", ".join(map(str, hsv_max)))
 
-        pixmap = Qt.QPixmap(1, 1)
+        pixmap = QPixmap(1, 1)
         pixmap.fill(color_hsv_min)
         self.lbHsvMin.setPixmap(pixmap)
 
-        pixmap = Qt.QPixmap(1, 1)
+        pixmap = QPixmap(1, 1)
         pixmap.fill(color_hsv_max)
         self.lbHsvMax.setPixmap(pixmap)
 
@@ -291,33 +303,33 @@ class MainWindow(Qt.QWidget):
         self.show_result()
 
     def save_settings(self):
-        settings = Qt.QSettings(CONFIG_FILE_NAME, Qt.QSettings.IniFormat)
+        settings = QSettings(CONFIG_FILE_NAME, QSettings.IniFormat)
 
         settings.setValue(self.objectName(), self.saveGeometry())
 
         # TODO: рефакторинг циклов
 
-        for w in self.findChildren(Qt.QComboBox):
+        for w in self.findChildren(QComboBox):
             name = w.objectName()
             settings.setValue(name, w.currentIndex())
 
-        for w in self.findChildren(Qt.QRadioButton):
+        for w in self.findChildren(QRadioButton):
             name = w.objectName()
             settings.setValue(name, int(w.isChecked()))
 
-        for w in self.findChildren(Qt.QSlider):
+        for w in self.findChildren(QSlider):
             name = w.objectName()
             settings.setValue(name, w.value())
 
-        for w in self.findChildren(Qt.QDoubleSpinBox):
+        for w in self.findChildren(QDoubleSpinBox):
             name = w.objectName()
             settings.setValue(name, w.value())
 
-        for w in self.findChildren(Qt.QSpinBox):
+        for w in self.findChildren(QSpinBox):
             name = w.objectName()
             settings.setValue(name, w.value())
 
-        for w in self.findChildren(Qt.QCheckBox):
+        for w in self.findChildren(QCheckBox):
             name = w.objectName()
             settings.setValue(name, int(w.isChecked()))
 
@@ -326,7 +338,7 @@ class MainWindow(Qt.QWidget):
         settings.setValue("lastLoadPath", self.last_load_path)
 
     def load_settings(self):
-        settings = Qt.QSettings(CONFIG_FILE_NAME, Qt.QSettings.IniFormat)
+        settings = QSettings(CONFIG_FILE_NAME, QSettings.IniFormat)
 
         geometry = settings.value(self.objectName())
         if geometry:
@@ -334,41 +346,41 @@ class MainWindow(Qt.QWidget):
 
         self.last_load_path = settings.value("lastLoadPath", ".")
 
-        self.pen_color = Qt.QColor(settings.value("PenColor", Qt.Qt.green))
+        self.pen_color = QColor(settings.value("PenColor", Qt.green))
 
         # TODO: рефакторинг циклов
 
-        for w in self.findChildren(Qt.QComboBox):
+        for w in self.findChildren(QComboBox):
             name = w.objectName()
             value = int(settings.value(name, w.currentIndex()))
             w.setCurrentIndex(value)
 
-        for w in self.findChildren(Qt.QRadioButton):
+        for w in self.findChildren(QRadioButton):
             name = w.objectName()
             value = bool(int(settings.value(name, w.isChecked())))
             w.setChecked(value)
 
-        for w in self.findChildren(Qt.QSpinBox):
+        for w in self.findChildren(QSpinBox):
             name = w.objectName()
             value = int(settings.value(name, w.value()))
             w.setValue(value)
 
-        for w in self.findChildren(Qt.QDoubleSpinBox):
+        for w in self.findChildren(QDoubleSpinBox):
             name = w.objectName()
             value = float(settings.value(name, w.value()))
             w.setValue(value)
 
-        for w in self.findChildren(Qt.QCheckBox):
+        for w in self.findChildren(QCheckBox):
             name = w.objectName()
             value = bool(int(settings.value(name, w.isChecked())))
             w.setChecked(value)
 
-        for w in self.findChildren(Qt.QSlider):
+        for w in self.findChildren(QSlider):
             name = w.objectName()
             value = int(settings.value(name, w.value()))
             w.setValue(value)
 
-            sp = self.findChild(Qt.QSpinBox, "sp" + name[2:])
+            sp = self.findChild(QSpinBox, "sp" + name[2:])
             if sp:
                 sp.setMinimum(w.minimum())
                 sp.setMaximum(w.maximum())
@@ -386,7 +398,7 @@ class MainWindow(Qt.QWidget):
 
 
 if __name__ == "__main__":
-    app = Qt.QApplication([])
+    app = QApplication([])
 
     mw = MainWindow()
     mw.show()
