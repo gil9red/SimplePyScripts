@@ -6,7 +6,6 @@ __author__ = "ipetrash"
 
 import sys
 import traceback
-from queue import Queue
 
 import cydoomgeneric as cdg
 import numpy as np
@@ -51,7 +50,7 @@ def numpy_array_to_QImage(numpy_array: np.ndarray) -> QImage:
     )
 
 
-def get_key(event: QKeyEvent):
+def get_key(event: QKeyEvent) -> int | None:
     if event.modifiers() & Qt.ControlModifier:
         return cdg.Keys.RCTRL
 
@@ -80,6 +79,11 @@ def get_key(event: QKeyEvent):
             return cdg.Keys.FIRE
         case Qt.Key_Return:
             return cdg.Keys.ENTER
+        case Qt.Key_Escape:
+            return cdg.Keys.ESCAPE
+
+
+KEY_PRESSED: dict[int, bool] = dict()
 
 
 class CyDoomGenericThread(QThread):
@@ -91,24 +95,19 @@ class CyDoomGenericThread(QThread):
         path_wad: str,
         width: int,
         height: int,
-        queue: Queue[tuple[int, int]],
     ):
         super().__init__()
 
         self.path_wad = path_wad
         self.width = width
         self.height = height
-        self.queue = queue
 
     def get_key(self) -> tuple[int, int] | None:
-        try:
-            state, key = self.queue.get_nowait()
-            if key:
-                return state, key
-        except:
-            pass
+        if not KEY_PRESSED:
+            return
 
-        return None
+        key, is_pressed = KEY_PRESSED.popitem()
+        return int(is_pressed), key
 
     def run(self):
         cdg.init(
@@ -127,16 +126,16 @@ class WidgetDoom(QWidget):
 
         self._resx = 640
         self._resy = 400
-        self.queue: Queue[tuple[int, int]] = Queue()
 
         self.thread_engine = CyDoomGenericThread(
             path_wad=path_wad,
             width=self._resx,
             height=self._resy,
-            queue=self.queue,
         )
         self.thread_engine.about_draw_frame.connect(self.draw_frame)
         self.thread_engine.about_set_window_title.connect(self.setWindowTitle)
+        # TODO:
+        # self.thread_engine.finished.connect(self.close)
         self.thread_engine.start()
 
         self.img: QImage | None = None
@@ -148,13 +147,14 @@ class WidgetDoom(QWidget):
         self.update()
 
     def keyPressEvent(self, event: QKeyEvent):
-        if event.key() == Qt.Key_Escape:
-            self.close()
-
-        self.queue.put((1, get_key(event)))
+        key = get_key(event)
+        if key is not None:
+            KEY_PRESSED[key] = True
 
     def keyReleaseEvent(self, event: QKeyEvent):
-        self.queue.put((0, get_key(event)))
+        key = get_key(event)
+        if key is not None:
+            KEY_PRESSED[key] = False
 
     def paintEvent(self, event: QPaintEvent):
         if not self.img:
