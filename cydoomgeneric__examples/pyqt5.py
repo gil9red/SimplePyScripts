@@ -12,7 +12,7 @@ import cydoomgeneric as cdg
 import numpy as np
 
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from PyQt5.QtGui import QImage, qRgb, QPainter, QKeyEvent, QPaintEvent
+from PyQt5.QtGui import QImage, QPainter, QKeyEvent, QPaintEvent
 from PyQt5.QtWidgets import QApplication, QWidget, QMessageBox
 
 
@@ -39,45 +39,47 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
 sys.excepthook = log_uncaught_exceptions
 
 
-# SOURCE: https://github.com/gil9red/SimplePyScripts/blob/01558c1d6e01c88e93c0f1f82e3da0cd3a654a71/opencv__Color_Detection_Tool/main.py#L50-L89
-GRAY_COLOR_TABLE: list[int] = [qRgb(i, i, i) for i in range(256)]
-
-
-def numpy_array_to_QImage(numpy_array: np.ndarray) -> QImage | None:
-    if numpy_array.dtype != np.uint8:
-        return
-
+def numpy_array_to_QImage(numpy_array: np.ndarray) -> QImage:
     height, width = numpy_array.shape[:2]
     data: bytes = numpy_array.data.tobytes()
 
-    if len(numpy_array.shape) == 2:
-        img = QImage(
-            data,
-            width,
-            height,
-            QImage.Format_Indexed8,
-        )
-        img.setColorTable(GRAY_COLOR_TABLE)
-        return img
+    return QImage(
+        data,
+        width,
+        height,
+        QImage.Format_RGB32,
+    )
 
-    elif len(numpy_array.shape) == 3:
-        if numpy_array.shape[2] == 3:
-            img = QImage(
-                data,
-                width,
-                height,
-                QImage.Format_RGB888,
-            )
-            return img
 
-        elif numpy_array.shape[2] == 4:
-            img = QImage(
-                data,
-                width,
-                height,
-                QImage.Format_ARGB32,
-            )
-            return img
+def get_key(event: QKeyEvent):
+    if event.modifiers() & Qt.ControlModifier:
+        return cdg.Keys.RCTRL
+
+    if event.modifiers() & Qt.ShiftModifier:
+        return cdg.Keys.RSHIFT
+
+    if event.modifiers() & Qt.AltModifier:
+        return cdg.Keys.LALT
+
+    match event.key():
+        case Qt.Key_W | Qt.Key_Up:
+            return cdg.Keys.UPARROW
+        case Qt.Key_A | Qt.Key_Left:
+            return cdg.Keys.LEFTARROW
+        case Qt.Key_D | Qt.Key_Right:
+            return cdg.Keys.RIGHTARROW
+        case Qt.Key_S | Qt.Key_Down:
+            return cdg.Keys.DOWNARROW
+        case Qt.Key_Q:
+            return cdg.Keys.STRAFE_L
+        case Qt.Key_E:
+            return cdg.Keys.STRAFE_R
+        case Qt.Key_F:
+            return cdg.Keys.USE
+        case Qt.Key_Space:
+            return cdg.Keys.FIRE
+        case Qt.Key_Return:
+            return cdg.Keys.ENTER
 
 
 class CyDoomGenericThread(QThread):
@@ -125,10 +127,13 @@ class WidgetDoom(QWidget):
 
         self._resx = 640
         self._resy = 400
-        self.q = Queue()
+        self.queue: Queue[tuple[int, int]] = Queue()
 
         self.thread_engine = CyDoomGenericThread(
-            path_wad, self._resx, self._resy, self.q
+            path_wad=path_wad,
+            width=self._resx,
+            height=self._resy,
+            queue=self.queue,
         )
         self.thread_engine.about_draw_frame.connect(self.draw_frame)
         self.thread_engine.about_set_window_title.connect(self.setWindowTitle)
@@ -140,50 +145,16 @@ class WidgetDoom(QWidget):
 
     def draw_frame(self, pixels: np.ndarray):
         self.img = numpy_array_to_QImage(pixels)
-
-        self.img.save("frame.jpg")
-        self.img = QImage("frame.jpg")
-
         self.update()
-
-    def _get_key(self, event: QKeyEvent):
-        if event.modifiers() & Qt.ControlModifier:
-            return cdg.Keys.RCTRL
-
-        if event.modifiers() & Qt.ShiftModifier:
-            return cdg.Keys.RSHIFT
-
-        if event.modifiers() & Qt.AltModifier:
-            return cdg.Keys.LALT
-
-        match event.key():
-            case Qt.Key_W | Qt.Key_Up:
-                return cdg.Keys.UPARROW
-            case Qt.Key_A | Qt.Key_Left:
-                return cdg.Keys.LEFTARROW
-            case Qt.Key_D | Qt.Key_Right:
-                return cdg.Keys.RIGHTARROW
-            case Qt.Key_S | Qt.Key_Down:
-                return cdg.Keys.DOWNARROW
-            case Qt.Key_Q:
-                return cdg.Keys.STRAFE_L
-            case Qt.Key_E:
-                return cdg.Keys.STRAFE_R
-            case Qt.Key_F:
-                return cdg.Keys.USE
-            case Qt.Key_Space:
-                return cdg.Keys.FIRE
-            case Qt.Key_Return:
-                return cdg.Keys.ENTER
 
     def keyPressEvent(self, event: QKeyEvent):
         if event.key() == Qt.Key_Escape:
             self.close()
 
-        self.q.put((1, self._get_key(event)))
+        self.queue.put((1, get_key(event)))
 
     def keyReleaseEvent(self, event: QKeyEvent):
-        self.q.put((0, self._get_key(event)))
+        self.queue.put((0, get_key(event)))
 
     def paintEvent(self, event: QPaintEvent):
         if not self.img:
