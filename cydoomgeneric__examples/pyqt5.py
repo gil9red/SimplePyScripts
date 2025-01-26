@@ -63,17 +63,17 @@ def get_key(event: QKeyEvent) -> int | None:
     match event.key():
         case Qt.Key_W | Qt.Key_Up:
             return cdg.Keys.UPARROW
-        case Qt.Key_A | Qt.Key_Left:
-            return cdg.Keys.LEFTARROW
-        case Qt.Key_D | Qt.Key_Right:
-            return cdg.Keys.RIGHTARROW
+        case Qt.Key_A:
+            return cdg.Keys.STRAFE_L
+        case Qt.Key_D:
+            return cdg.Keys.STRAFE_R
         case Qt.Key_S | Qt.Key_Down:
             return cdg.Keys.DOWNARROW
-        case Qt.Key_Q:
-            return cdg.Keys.STRAFE_L
+        case Qt.Key_Left:
+            return cdg.Keys.LEFTARROW
+        case Qt.Key_Right:
+            return cdg.Keys.RIGHTARROW
         case Qt.Key_E:
-            return cdg.Keys.STRAFE_R
-        case Qt.Key_F:
             return cdg.Keys.USE
         case Qt.Key_Space:
             return cdg.Keys.FIRE
