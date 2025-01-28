@@ -53,7 +53,7 @@ DIRS = [r"C:\DEV__TX", r"C:\DEV__OPTT", r"C:\DEV__RADIX"]
 
 
 def run(dirs: list[str | Path]):
-    print(f"\n{dt.datetime.today()}")
+    print(f"\nStarted {dt.datetime.today()}")
 
     for dir_path in dirs:
         print(dir_path)
@@ -69,6 +69,8 @@ def run(dirs: list[str | Path]):
             if dt.datetime.today() > ctime + dt.timedelta(hours=1):
                 log.info(text)
                 file_name.unlink(missing_ok=True)
+
+    print(f"\nFinished {dt.datetime.today()}")
 
 
 if __name__ == "__main__":

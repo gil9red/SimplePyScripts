@@ -55,7 +55,7 @@ log = get_logger(
 
 
 def run(dirs: list[str | Path]):
-    print(f"\n{dt.datetime.today()}")
+    print(f"\nStarted {dt.datetime.today()}")
 
     for dir_path in dirs:
         print(dir_path)
@@ -78,10 +78,13 @@ def run(dirs: list[str | Path]):
                 log.info(text)
                 f.unlink(missing_ok=True)
 
+    print(f"\nFinished {dt.datetime.today()}")
+
 
 if __name__ == "__main__":
     if "--one" in sys.argv:
         run(DIRS)
+
         sys.exit()
 
     while True:
