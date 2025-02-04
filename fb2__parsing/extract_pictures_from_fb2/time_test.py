@@ -10,6 +10,7 @@ from fb2_pictures__using_lxml import do as do_lxml
 from fb2_pictures__using_bs4 import do as do_bs4
 from fb2_pictures__using_xml_expat import do as do_xml_expat
 from fb2_pictures__using_xml_etree import do as do_xml_etree
+from fb2_pictures__using_xml_etree_xpath import do as do_xml_etree_xpath
 from fb2_pictures__using_xml_sax import do as do_xml_sax
 from fb2_pictures__using_re import do as do_using_re
 from fb2_pictures__using_str_find import do as do_using_str_find
@@ -22,6 +23,7 @@ runs = [
     ("LXML", "do_lxml"),
     ("XML EXPAT", "do_xml_expat"),
     ("XML.ETREE", "do_xml_etree"),
+    ("XML.ETREE xpath", "do_xml_etree_xpath"),
     ("XML SAX", "do_xml_sax"),
     ("REGEXP", "do_using_re"),
     ("STR FIND", "do_using_str_find"),
