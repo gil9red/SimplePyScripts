@@ -50,26 +50,26 @@ __author__ = "ipetrash"
 import base64
 import json
 
-# pip install pycryptodome
+# pip install pycryptodome==3.21.0
 # OR:
-# pip install pycryptodomex
+# pip install pycryptodomex==3.21.0
 from Crypto.Cipher import AES
 
-# pip install pkcs7
+# pip install pkcs7==0.1.2
 from pkcs7 import PKCS7Encoder
 
 
-def encrypt(to_encrypt: str, key: str) -> bytes:
+def encrypt(to_encrypt: str, key: bytes) -> bytes:
     encoder = PKCS7Encoder()
     encryptor = AES.new(key, AES.MODE_ECB)
 
-    pad_text = encoder.encode(to_encrypt)
+    pad_text = encoder.encode(to_encrypt).encode("utf-8")
     cipher = encryptor.encrypt(pad_text)
 
     return base64.b64encode(cipher)
 
 
-def decrypt(to_decrypt: bytes, key: str) -> str:
+def decrypt(to_decrypt: bytes, key: bytes) -> str:
     encoder = PKCS7Encoder()
     encryptor = AES.new(key, AES.MODE_ECB)
 
@@ -80,7 +80,7 @@ def decrypt(to_decrypt: bytes, key: str) -> str:
 
 
 if __name__ == "__main__":
-    KEY = "32647863128053433215894456187813"
+    KEY = b"32647863128053433215894456187813"
 
     # C:\Users\<user_name>\AppData\LocalLow\Soaphog\Rezrog\Save
     # C:\Users\<user_name>\AppData\LocalLow\Soaphog\Rezrog\Save\game save.json
@@ -91,11 +91,11 @@ if __name__ == "__main__":
 
     print(array)  # b'o41r7i6/ekDVTWAmDvsmuEwhqMelq3bF3wukSbVpeeFaKIdyX ...
 
-    text = decrypt(array, KEY)
+    text: str = decrypt(array, KEY)
     print(text)
     # '{"goldEarnedTotal":23778,"timePlayedMage":3581.58911132813,"timePlayedArcher" ...'
 
-    data = json.loads(text)
+    data: dict = json.loads(text)
     print(data)
     # {'goldEarnedTotal': 23778, 'timePlayedMage': 3581.58911132813, ...
 
@@ -112,7 +112,7 @@ if __name__ == "__main__":
 
     print()
 
-    new_array = encrypt(text, KEY)
+    new_array: bytes = encrypt(text, KEY)
     print(new_array)  # b'o41r7i6/ekDVTWAmDvsmuEwhqMelq3bF3wukSbVpeeFaKIdyX ...
 
     with open("progress_encrypted.json", "wb") as f:
