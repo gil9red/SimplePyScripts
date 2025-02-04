@@ -34,7 +34,7 @@ def do(file_name, output_dir="output", debug=True):
     with open(file_name, "rb") as fb2:
         tree = etree.XML(fb2.read())
 
-        binaries = tree.xpath("//*[local-name()='binary']")
+        binaries = tree.xpath("./*[local-name()='binary']")
         for i, binary in enumerate(binaries, 1):
             try:
                 im_id = binary.attrib["id"]
