@@ -7,6 +7,7 @@ __author__ = "ipetrash"
 from timeit import timeit
 
 from fb2_pictures__using_lxml import do as do_lxml
+from fb2_pictures__using_lxml_iterwalk import do as do_lxml_iterwalk
 from fb2_pictures__using_bs4 import do as do_bs4
 from fb2_pictures__using_xml_expat import do as do_xml_expat
 from fb2_pictures__using_xml_etree import do as do_xml_etree
@@ -17,14 +18,15 @@ from fb2_pictures__using_str_find import do as do_using_str_find
 
 
 file_name = "../input/Непутевый ученик в школе магии 1. Зачисление в школу (Часть 1).fb2"
-count = 10
+count = 20
 
 runs = [
-    ("LXML", "do_lxml"),
-    ("XML EXPAT", "do_xml_expat"),
-    ("XML.ETREE", "do_xml_etree"),
-    ("XML.ETREE xpath", "do_xml_etree_xpath"),
-    ("XML SAX", "do_xml_sax"),
+    # ("LXML", "do_lxml"),
+    # ("LXML iterwalk", "do_lxml_iterwalk"),
+    # ("XML EXPAT", "do_xml_expat"),
+    # ("XML.ETREE", "do_xml_etree"),
+    # ("XML.ETREE xpath", "do_xml_etree_xpath"),
+    # ("XML SAX", "do_xml_sax"),
     ("REGEXP", "do_using_re"),
     ("STR FIND", "do_using_str_find"),
     ("BS4", "do_bs4"),
