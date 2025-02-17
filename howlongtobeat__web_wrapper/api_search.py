@@ -8,7 +8,7 @@ import re
 from typing import Any
 
 # NOTE: https://playwright.dev/python/docs/library#pip
-#   pip install playwright
+#   pip install playwright==1.50.0
 #   playwright install webkit
 from playwright.sync_api import sync_playwright, Response
 
