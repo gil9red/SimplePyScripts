@@ -24,7 +24,7 @@ def preprocess_expr_with_time(text: str) -> str:
 
 
 def eval_expr_with_time(text: str) -> str:
-    text: str = " ".join(text.splitlines()).strip()
+    text: str = re.sub(r"[^\d+-:]", "", text)
 
     if not PATTERN_EXPR_WITH_TIME.match(text):
         raise Exception(f"Expression {text!r} not valid!")
