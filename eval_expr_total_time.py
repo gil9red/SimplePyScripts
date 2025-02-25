@@ -39,9 +39,9 @@ if __name__ == "__main__":
     08:53:11 - 07:15:00
     + 08:56:12
     """
-
-    print(eval_expr_with_time(text))
-    # 10:34:23
+    result: str = eval_expr_with_time(text)
+    print(result)
+    assert result == "10:34:23"
 
     assert get_seconds("00:00:01") == 1
     assert get_seconds("00:01:01") == 61
