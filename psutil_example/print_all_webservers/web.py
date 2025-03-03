@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlsplit
 
-# pip install psutil
+# pip install psutil==6.1.0
 import psutil
 
 
