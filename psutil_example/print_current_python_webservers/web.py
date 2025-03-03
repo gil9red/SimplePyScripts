@@ -29,7 +29,7 @@ def _get_processes() -> list[dict[str, str | int]]:
             continue
 
         connections = [
-            c for c in proc.connections() if c.status == psutil.CONN_LISTEN and c.laddr
+            c for c in proc.net_connections() if c.status == psutil.CONN_LISTEN and c.laddr
         ]
         if not connections:
             continue
