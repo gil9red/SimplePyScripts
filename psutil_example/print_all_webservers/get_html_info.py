@@ -55,26 +55,12 @@ def _get_processes() -> list[Process]:
 
 
 def get_html_info() -> str:
-    table_rows: list[str] = [
-        f"""
-        <tr {'class="grayscale"' if p.pid == os.getpid() else ''}>
-            <td>{i}</td>
-            <td>{p.pid}</td>
-            <td>{p.name}</td>
-            <td class="ports"><div>{p.ports}</div></td>
-            <td class="path"><div>{p.path}</div></td>
-            <td class="cwd"><div>{p.cwd}</div></td>
-        </tr>
-        """
-        for i, p in enumerate(_get_processes(), 1)
-    ]
-
-    text = """
+    template = """
     <!DOCTYPE html>
     <html lang="ru">
     <head>
         <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
-        <title>{{ title }}</title>
+        <title>%(title)s</title>
 
         <style type="text/css">
             table {
@@ -119,7 +105,7 @@ def get_html_info() -> str:
     </head>
     <body>   
         <table>
-            <caption>{{ title }}</caption>
+            <caption>%(title)s</caption>
             <thead>
                 <tr>
                     <th>#</th>
@@ -131,15 +117,25 @@ def get_html_info() -> str:
                 </tr>
             </thead>
             <tbody>
-                {{ table_rows }}
+                %(table_rows)s
             </tbody>
         </table>
     </body>
     </html>
-    """.replace(
-        "{{ title }}", TITLE
-    ).replace(
-        "{{ table_rows }}", "\n".join(table_rows)
-    )
+    """
 
-    return text
+    table_rows: list[str] = [
+        f"""
+        <tr {'class="grayscale"' if p.pid == os.getpid() else ''}>
+            <td>{i}</td>
+            <td>{p.pid}</td>
+            <td>{p.name}</td>
+            <td class="ports"><div>{p.ports}</div></td>
+            <td class="path"><div>{p.path}</div></td>
+            <td class="cwd"><div>{p.cwd}</div></td>
+        </tr>
+        """
+        for i, p in enumerate(_get_processes(), 1)
+    ]
+
+    return template % {"title": TITLE, "table_rows": "\n".join(table_rows)}
