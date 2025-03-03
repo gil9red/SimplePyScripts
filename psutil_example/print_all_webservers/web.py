@@ -9,7 +9,7 @@ import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlsplit
 
-from get_html_info import get_html_info
+from get_info_html import get_info_html
 
 
 class HttpProcessor(BaseHTTPRequestHandler):
@@ -21,7 +21,7 @@ class HttpProcessor(BaseHTTPRequestHandler):
             self.send_error(404)
             return
 
-        text = get_html_info()
+        text = get_info_html()
 
         self.send_response(200)
         self.send_header("Content-Type", "text/html; charset=utf-8")

@@ -5,6 +5,8 @@ __author__ = "ipetrash"
 
 
 import os
+import tempfile
+
 from dataclasses import dataclass
 
 # pip install psutil==6.1.0
@@ -29,7 +31,7 @@ def _get_processes() -> list[Process]:
         try:
             connections = [
                 c
-                for c in proc.connections()
+                for c in proc.net_connections()
                 if c.status == psutil.CONN_LISTEN and c.laddr
             ]
             if not connections:
@@ -54,13 +56,13 @@ def _get_processes() -> list[Process]:
     return processes
 
 
-def get_html_info() -> str:
+def get_info_html() -> str:
     template = """
     <!DOCTYPE html>
     <html lang="ru">
     <head>
         <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
-        <title>%(title)s</title>
+        <title>{{ title }}</title>
 
         <style type="text/css">
             table {
@@ -105,7 +107,7 @@ def get_html_info() -> str:
     </head>
     <body>   
         <table>
-            <caption>%(title)s</caption>
+            <caption>{{ title }}</caption>
             <thead>
                 <tr>
                     <th>#</th>
@@ -117,7 +119,7 @@ def get_html_info() -> str:
                 </tr>
             </thead>
             <tbody>
-                %(table_rows)s
+                {{ table_rows }}
             </tbody>
         </table>
     </body>
@@ -138,4 +140,26 @@ def get_html_info() -> str:
         for i, p in enumerate(_get_processes(), 1)
     ]
 
-    return template % {"title": TITLE, "table_rows": "\n".join(table_rows)}
+    return template.replace(
+        "{{ title }}", TITLE
+    ).replace(
+        "{{ table_rows }}", "\n".join(table_rows)
+    )
+
+
+def open_html_file():
+    with tempfile.NamedTemporaryFile(
+        mode="w",
+        encoding="utf-8",
+        prefix="webservers-",
+        suffix=".html",
+        delete=False,
+    ) as fp:
+        fp.write(get_info_html())
+        path: str = fp.name
+
+    os.startfile(path)
+
+
+if __name__ == "__main__":
+    open_html_file()
