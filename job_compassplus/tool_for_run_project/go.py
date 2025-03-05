@@ -24,7 +24,15 @@ import psutil
 sys.path.append("../..")
 from from_ghbdtn import from_ghbdtn
 
-from kill import kill_servers, kill_explorers, kill_designers, get_processes, is_server, is_explorer, is_designer
+from kill import (
+    kill_servers,
+    kill_explorers,
+    kill_designers,
+    get_processes,
+    is_server,
+    is_explorer,
+    is_designer,
+)
 
 sys.path.append("../svn")
 from get_last_release_version import get_last_release_version
@@ -113,17 +121,17 @@ def do_check_jenkins_job(url: str, version: str):
 
     data = rs.json()
 
+    # "0:39:56.476184" -> "0:39:56"
+    duration = datetime.now() - datetime.fromtimestamp(data["timestamp"] / 1000)
+    duration_str = str(duration).split(".")[0]
+
     result = data["result"]
     if not result:
-        duration = datetime.now() - datetime.fromtimestamp(data["timestamp"] / 1000)
-
-        # "0:39:56.476184" -> "0:39:56"
-        duration_str = str(duration).split(".")[0]
-
         raise JenkinsJobCheckException(f"Сборка еще в процессе, прошло {duration_str}.")
-
-    if result != "SUCCESS":
-        raise JenkinsJobCheckException(f"Сборка поломанная, обновление прервано.")
+    elif result != "SUCCESS":
+        raise JenkinsJobCheckException(
+            f"Сборка поломанная, обновление прервано. С последнего запуска прошло {duration_str}."
+        )
 
 
 @dataclass
@@ -283,7 +291,9 @@ def _run_path(path: str, args: list[str] | None = None, context: RunContext = No
         return
 
     if len(files) > 1:
-        print(f"Маска файла должна соответствовать одному файлу.\nНайдено ({len(files)}):")
+        print(
+            f"Маска файла должна соответствовать одному файлу.\nНайдено ({len(files)}):"
+        )
         for name in files:
             print(f"    {name}")
         return
@@ -367,7 +377,11 @@ def _processes(path: str, args: list[str] | None = None, context: RunContext = N
         print("Не удалось найти процессы!")
 
 
-def _get_last_release_version(path: str, args: list[str] | None = None, context: RunContext = None):
+def _get_last_release_version(
+    path: str,
+    args: list[str] | None = None,
+    context: RunContext = None,
+):
     command = context.command
     version = command.version
 
@@ -390,7 +404,11 @@ def _get_last_release_version(path: str, args: list[str] | None = None, context:
     print(f"Последняя версия релиза для {version}: {result}\n")
 
 
-def _find_release_versions(path: str, args: list[str] | None = None, context: RunContext = None):
+def _find_release_versions(
+    path: str,
+    args: list[str] | None = None,
+    context: RunContext = None,
+):
     if context.command.version == "trunk":
         raise GoException("Команду нужно вызывать в релизных версиях!")
 
@@ -423,7 +441,11 @@ def _find_release_versions(path: str, args: list[str] | None = None, context: Ru
     print(f"Коммит с {text!r} в {version} попал в версию: {result}\n")
 
 
-def _find_versions(path: str, args: list[str] | None = None, context: RunContext = None):
+def _find_versions(
+    path: str,
+    args: list[str] | None = None,
+    context: RunContext = None,
+):
     command = context.command
 
     if not args:
@@ -594,7 +616,9 @@ __SETTINGS = {
         "base": "__radix_base",
         "path": "C:/DEV__TX",
         "base_version": "3.2.",
-        "jenkins_url": "{URL_JENKINS}/job/TX_{version}_build/lastBuild/api/json?tree=result,timestamp",
+        "jenkins_url": (
+            "{URL_JENKINS}/job/assemble_tx/branch={version},label=lightweight/lastBuild/api/json?tree=result,timestamp"
+        ),
         "svn_dev_url": "svn+cplus://svn2.compassplus.ru/twrbs/trunk/dev",
     },
     "optt": {
