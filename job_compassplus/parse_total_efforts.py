@@ -38,16 +38,45 @@ def get_args(template: str) -> list[str]:
 
 
 def process(template: str, arg_by_value: dict[str, str]) -> str:
-    text: str = PATTERN_ARG.sub(lambda m: arg_by_value.get(m.group(1)), template)
+    def _get_value_from_arg(arg: str, default_value: str) -> str:
+        value = arg_by_value.get(arg)
+        if value:
+            value = value.strip()
+
+        # Проверка валидности значения
+        try:
+            float(value)
+        except Exception:
+            value = None
+
+        if not value:
+            value = default_value
+
+        return value
+
+    text: str = PATTERN_ARG.sub(
+        lambda m: _get_value_from_arg(
+            arg=m.group(1),
+            default_value="NaN",
+        ),
+        template,
+    )
 
     def _process_result(m: re.Match) -> str:
-        value: str = m.group(1)
+        template_expr: str = m.group(1)
+
         expr: str = re.sub(
             r"\w+",
-            lambda m: arg_by_value.get(m.group()),
-            value,
+            lambda m: _get_value_from_arg(
+                arg=m.group(),
+                default_value='float("NaN")',
+            ),
+            template_expr
         )
         result: str = f"{eval(expr):.1f}"
+        if result == "nan":
+            return "NaN"
+
         return result.removesuffix(".0")
 
     return re.sub(r"<=([\w +]+)>", _process_result, text)
@@ -104,4 +133,29 @@ if __name__ == "__main__":
 |Code and solution review|0.5 m/d|
 |Testing (only by the developer)|12 m/d|
 |Reserve for potential gaps and risks|1.3 m/d|
+    """.strip()
+
+    print("\n" + "-" * 10 + "\n")
+
+    arg_by_value: dict[str, str] = dict(
+        a="",
+        b="b",
+        c="  3  ",
+    )
+    text = process(SAMPLE_TEMPLATE, arg_by_value)
+    print(text)
+    assert text == """
+*Итоговая трудоемкость в человеко-днях:* NaN ч/д, в том числе:
+|Аналитика (проектирование/техническая спецификация)|NaN ч/д|
+|Разработка (программирование)|NaN ч/д|
+|Рецензирование решения и кода|3 ч/д|
+|Тестирование (только силами разработчика)|NaN ч/д|
+|Резерв на непредвиденные работы и риски|NaN ч/д|
+
+*Total efforts in man-days:* NaN m/d, including:
+|Analysis (design and tech specs)|NaN m/d|
+|Implementation (including coding)|NaN m/d|
+|Code and solution review|3 m/d|
+|Testing (only by the developer)|NaN m/d|
+|Reserve for potential gaps and risks|NaN m/d|
     """.strip()
