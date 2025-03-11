@@ -38,7 +38,7 @@ def get_args(template: str) -> list[str]:
 
 
 def process(template: str, arg_by_value: dict[str, str]) -> str:
-    def _get_value_from_arg(arg: str, default_value: str) -> str:
+    def _get_value_from_arg(arg: str, default_value: str = "NaN", get_float: bool = True) -> str:
         value = arg_by_value.get(arg)
         if value:
             value = value.strip()
@@ -52,12 +52,15 @@ def process(template: str, arg_by_value: dict[str, str]) -> str:
         if not value:
             value = default_value
 
+        if get_float:
+            value = f"float({value!r})"
+
         return value
 
     text: str = PATTERN_ARG.sub(
         lambda m: _get_value_from_arg(
             arg=m.group(1),
-            default_value="NaN",
+            get_float=False,
         ),
         template,
     )
@@ -67,10 +70,7 @@ def process(template: str, arg_by_value: dict[str, str]) -> str:
 
         expr: str = re.sub(
             r"\w+",
-            lambda m: _get_value_from_arg(
-                arg=m.group(),
-                default_value='float("NaN")',
-            ),
+            lambda m: _get_value_from_arg(arg=m.group()),
             template_expr,
         )
         result: str = f"{eval(expr):.1f}"
