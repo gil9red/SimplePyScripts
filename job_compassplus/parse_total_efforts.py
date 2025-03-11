@@ -71,7 +71,7 @@ def process(template: str, arg_by_value: dict[str, str]) -> str:
                 arg=m.group(),
                 default_value='float("NaN")',
             ),
-            template_expr
+            template_expr,
         )
         result: str = f"{eval(expr):.1f}"
         if result == "nan":
