@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     plain_text_edit = QPlainTextEdit()
     plain_text_edit.setWindowTitle("QPlainTextEdit")
-    plain_text_edit.setPlainText("x = sin(1)\nb = cos(sin(PI));")
+    plain_text_edit.setPlainText(text_edit.toPlainText())
     highlighter_plain_text_edit = MyHighlighter(plain_text_edit.document())
     plain_text_edit.show()
 
