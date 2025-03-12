@@ -8,6 +8,7 @@ import re
 
 
 PATTERN_ARG: re.Pattern = re.compile(r"<(\w+)>")
+PATTERN_RESULT: re.Pattern = re.compile(r"<=([\w +]+)>")
 
 
 SAMPLE_TEMPLATE = """
@@ -80,7 +81,7 @@ def process(template: str, arg_by_value: dict[str, str]) -> str:
         result: str = f"{eval(expr):.1f}"
         return _get_norm_str_float(result)
 
-    return re.sub(r"<=([\w +]+)>", _process_result, text)
+    return PATTERN_RESULT.sub(_process_result, text)
 
 
 if __name__ == "__main__":
