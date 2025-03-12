@@ -38,10 +38,14 @@ def get_args(template: str) -> list[str]:
 
 
 def process(template: str, arg_by_value: dict[str, str]) -> str:
+    def _get_norm_str_float(value: str) -> str:
+        return "NaN" if value == "nan" else value.removesuffix(".0")
+
     def _get_value_from_arg(arg: str, default_value: str = "NaN", get_float: bool = True) -> str:
         value = arg_by_value.get(arg)
         if value:
             value = value.strip()
+            value = _get_norm_str_float(value)
 
         # Проверка валидности значения
         try:
@@ -74,10 +78,7 @@ def process(template: str, arg_by_value: dict[str, str]) -> str:
             template_expr,
         )
         result: str = f"{eval(expr):.1f}"
-        if result == "nan":
-            return "NaN"
-
-        return result.removesuffix(".0")
+        return _get_norm_str_float(result)
 
     return re.sub(r"<=([\w +]+)>", _process_result, text)
 
@@ -94,7 +95,7 @@ if __name__ == "__main__":
         b="0.1",
         c="0.5",
         d="12",
-        e="1",
+        e="1.0",
     )
     text = process(SAMPLE_TEMPLATE, arg_by_value)
     print(text)
