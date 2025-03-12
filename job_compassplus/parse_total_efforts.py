@@ -10,6 +10,7 @@ import re
 PATTERN_ARG: re.Pattern = re.compile(r"<(\w+)>")
 PATTERN_RESULT: re.Pattern = re.compile(r"<=([\w +]+)>")
 
+DEFAULT_ARG_VALUE: str = "NaN"
 
 SAMPLE_TEMPLATE = """
 *Итоговая трудоемкость в человеко-днях:* <=a+b+c+d+e> ч/д, в том числе:
@@ -40,9 +41,13 @@ def get_args(template: str) -> list[str]:
 
 def process(template: str, arg_by_value: dict[str, str]) -> str:
     def _get_norm_str_float(value: str) -> str:
-        return "NaN" if value == "nan" else value.removesuffix(".0")
+        return DEFAULT_ARG_VALUE if value == "nan" else value.removesuffix(".0")
 
-    def _get_value_from_arg(arg: str, default_value: str = "NaN", get_float: bool = True) -> str:
+    def _get_value_from_arg(
+        arg: str,
+        default_value: str = DEFAULT_ARG_VALUE,
+        get_float: bool = True,
+    ) -> str:
         value = arg_by_value.get(arg)
         if value:
             value = value.strip()
@@ -78,7 +83,13 @@ def process(template: str, arg_by_value: dict[str, str]) -> str:
             lambda m: _get_value_from_arg(arg=m.group()),
             template_expr,
         )
-        result: str = f"{eval(expr):.1f}"
+
+        try:
+            value = eval(expr)
+        except SyntaxError:
+            value = float(DEFAULT_ARG_VALUE)
+
+        result: str = f"{value:.1f}"
         return _get_norm_str_float(result)
 
     return PATTERN_RESULT.sub(_process_result, text)
