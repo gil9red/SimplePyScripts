@@ -4,7 +4,9 @@
 __author__ = "ipetrash"
 
 
-from PyQt5.Qt import *
+from PyQt5.QtCore import Qt, QRegularExpression
+from PyQt5.QtGui import QSyntaxHighlighter, QTextCharFormat, QFont
+from PyQt5.QtWidgets import QApplication, QPlainTextEdit, QTextEdit
 
 
 class MyHighlighter(QSyntaxHighlighter):
@@ -23,11 +25,20 @@ class MyHighlighter(QSyntaxHighlighter):
 if __name__ == "__main__":
     app = QApplication([])
 
-    mw = QTextEdit()
-    mw.setText("x = sin(1)\nb = cos(sin(PI));")
+    text_edit = QTextEdit()
+    text_edit.setWindowTitle("QTextEdit")
+    text_edit.setText("x = sin(1)\nb = cos(sin(PI));")
+    highlighter_text_edit = MyHighlighter(text_edit.document())
+    text_edit.show()
 
-    highlighter = MyHighlighter(mw.document())
+    plain_text_edit = QPlainTextEdit()
+    plain_text_edit.setWindowTitle("QPlainTextEdit")
+    plain_text_edit.setPlainText("x = sin(1)\nb = cos(sin(PI));")
+    highlighter_plain_text_edit = MyHighlighter(plain_text_edit.document())
+    plain_text_edit.show()
 
-    mw.show()
+    pos = text_edit.pos()
+    pos.setX(pos.x() + text_edit.width() + 5)
+    plain_text_edit.move(pos)
 
     app.exec()
