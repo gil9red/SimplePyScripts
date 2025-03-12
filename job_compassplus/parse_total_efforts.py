@@ -143,6 +143,7 @@ if __name__ == "__main__":
         a="",
         b="b",
         c="  3  ",
+        d="0",
     )
     text = process(SAMPLE_TEMPLATE, arg_by_value)
     print(text)
@@ -151,13 +152,13 @@ if __name__ == "__main__":
 |Аналитика (проектирование/техническая спецификация)|NaN ч/д|
 |Разработка (программирование)|NaN ч/д|
 |Рецензирование решения и кода|3 ч/д|
-|Тестирование (только силами разработчика)|NaN ч/д|
+|Тестирование (только силами разработчика)|0 ч/д|
 |Резерв на непредвиденные работы и риски|NaN ч/д|
 
 *Total efforts in man-days:* NaN m/d, including:
 |Analysis (design and tech specs)|NaN m/d|
 |Implementation (including coding)|NaN m/d|
 |Code and solution review|3 m/d|
-|Testing (only by the developer)|NaN m/d|
+|Testing (only by the developer)|0 m/d|
 |Reserve for potential gaps and risks|NaN m/d|
     """.strip()
