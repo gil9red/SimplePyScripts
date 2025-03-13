@@ -16,6 +16,7 @@ from PyQt5.QtWidgets import (
     QWidget,
     QToolTip,
 )
+from PyQt5.QtGui import QCursor
 from PyQt5.QtCore import QRect
 
 
@@ -53,7 +54,7 @@ if __name__ == "__main__":
             lambda checked, w=button: (
                 app.clipboard().setText(w.text()),
                 QToolTip.showText(
-                    mw.mapToGlobal(w.pos() + w.rect().topRight()),
+                    QCursor.pos(),
                     "Saved to clipboard",
                     w,
                     QRect(),
