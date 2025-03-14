@@ -10,7 +10,7 @@ __author__ = "ipetrash"
 import socket
 
 
-def internet(host: str = "8.8.8.8", port: int = 53, timeout: float = 3):
+def internet(host: str = "8.8.8.8", port: int = 53, timeout: float = 3) -> bool:
     """
     Host: 8.8.8.8 (google-public-dns-a.google.com)
     OpenPort: 53/tcp
