@@ -9,7 +9,7 @@ from PIL import Image
 from PIL.Image import Resampling
 
 
-def _resize(
+def _resize_img(
     img: Image,
     width: int,
     height: int,
@@ -20,22 +20,22 @@ def _resize(
     return img_resized
 
 
-def resize_height(
+def resize_height_img(
     img: Image,
     height: int,
     resample: Resampling | None = None,
 ) -> Image:
     """Resize by height, keep ratio."""
-    return _resize(img, img.width * height // img.height, height, resample)
+    return _resize_img(img, img.width * height // img.height, height, resample)
 
 
-def resize_width(
+def resize_width_img(
     img: Image,
     width: int,
     resample: Resampling | None = None,
 ) -> Image:
     """Resize by width, keep ratio."""
-    return _resize(img, width, img.height * width // img.width, resample)
+    return _resize_img(img, width, img.height * width // img.width, resample)
 
 
 if __name__ == "__main__":
@@ -46,12 +46,12 @@ if __name__ == "__main__":
 
     resample = Resampling.LANCZOS
 
-    img_height_300 = resize_height(img, height=300, resample=resample)
+    img_height_300 = resize_height_img(img, height=300, resample=resample)
     img_height_300.save("output_height=300.jpg")
     print(img_height_300.size)
     # (452, 300)
 
-    img_width_300 = resize_width(img, width=300, resample=resample)
+    img_width_300 = resize_width_img(img, width=300, resample=resample)
     img_width_300.save("output_width=300.jpg")
     print(img_width_300.size)
     # (300, 199)
