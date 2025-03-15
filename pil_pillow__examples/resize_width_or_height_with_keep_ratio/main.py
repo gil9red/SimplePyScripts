@@ -9,7 +9,7 @@ from PIL import Image
 from PIL.Image import Resampling
 
 
-def _resize_img(
+def _resize(
     img: Image,
     width: int,
     height: int,
@@ -26,7 +26,7 @@ def resize_height(
     resample: Resampling | None = None,
 ) -> Image:
     """Resize by height, keep ratio."""
-    return _resize_img(img, img.width * height // img.height, height, resample)
+    return _resize(img, img.width * height // img.height, height, resample)
 
 
 def resize_width(
@@ -35,7 +35,7 @@ def resize_width(
     resample: Resampling | None = None,
 ) -> Image:
     """Resize by width, keep ratio."""
-    return _resize_img(img, width, img.height * width // img.width, resample)
+    return _resize(img, width, img.height * width // img.width, resample)
 
 
 if __name__ == "__main__":
