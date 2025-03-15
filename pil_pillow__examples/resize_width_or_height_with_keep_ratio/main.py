@@ -9,17 +9,33 @@ from PIL import Image
 from PIL.Image import Resampling
 
 
-# SOURCE: https://stackoverflow.com/a/77470620/5909792
+def _resize_img(
+    img: Image,
+    width: int,
+    height: int,
+    resample: Resampling | None = None,
+) -> Image:
+    img_resized = img.resize(size=(width, height), resample=resample)
+    img_resized.format = img.format  # NOTE: resize reset format
+    return img_resized
 
 
-def resize_height(img: Image, height: int, resample: int | None = None) -> Image:
+def resize_height(
+    img: Image,
+    height: int,
+    resample: Resampling | None = None,
+) -> Image:
     """Resize by height, keep ratio."""
-    return img.resize((img.width * height // img.height, height), resample=resample)
+    return _resize_img(img, img.width * height // img.height, height, resample)
 
 
-def resize_width(img: Image, width: int, resample: int | None = None) -> Image:
+def resize_width(
+    img: Image,
+    width: int,
+    resample: Resampling | None = None,
+) -> Image:
     """Resize by width, keep ratio."""
-    return img.resize((width, img.height * width // img.width), resample=resample)
+    return _resize_img(img, width, img.height * width // img.width, resample)
 
 
 if __name__ == "__main__":
