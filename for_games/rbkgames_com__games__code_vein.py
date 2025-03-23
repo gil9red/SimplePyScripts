@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 
 
 url = "https://rbkgames.com/games/code-vein/articles/kody-krovi-v-code-vein-kak-poluchit/"
-rs = requests.get()
+rs = requests.get(url)
 root = BeautifulSoup(rs.content, "html.parser")
 
 items = []
