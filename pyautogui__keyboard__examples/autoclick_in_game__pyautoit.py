@@ -6,6 +6,8 @@ __author__ = "ipetrash"
 
 import time
 import os
+import winsound
+
 from threading import Thread
 
 # pip install PyAutoIt==0.6.5
@@ -25,6 +27,8 @@ HOTKEY: str = os.environ.get("HOTKEY", "Ctrl+Alt+Space")
 def change_start():
     DATA["START"] = not DATA["START"]
     print("START:", DATA["START"])
+
+    winsound.Beep(1000, duration=50)
 
 
 def process_auto_click():
