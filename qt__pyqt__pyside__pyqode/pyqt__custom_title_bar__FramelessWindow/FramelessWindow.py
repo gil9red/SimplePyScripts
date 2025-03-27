@@ -39,6 +39,7 @@ from PyQt5.QtWidgets import (
     QWidget,
     QVBoxLayout,
     QHBoxLayout,
+    QAbstractButton,
     QLabel,
     QToolButton,
     QStyle,
@@ -63,29 +64,42 @@ class ElidedLabel(QLabel):
 
 # Стиль
 STYLE_SHEET = """
-/* Панель заголовка */
 TitleBar {
     background-color: rgb(54, 157, 180);
 }
-/* Минимизировать кнопку `Максимальное выключение` Общий фон по умолчанию */
-#buttonMinimum, #buttonMaximum, #buttonClose {
+
+TitleBar #buttonMinimum,
+TitleBar #buttonMaximum,
+TitleBar #buttonClose,
+TitleBar #buttonPin
+{
     color: black;
     border: none;
     background-color: rgb(54, 157, 180);
 }
-/* Подсветка кнопок при наведении на них */
-#buttonMinimum:hover, #buttonMaximum:hover {
+TitleBar #buttonPin:checked {
+    /* TODO: жирным и рамку добавить */ 
     background-color: rgb(48, 141, 162);
 }
-#buttonClose:hover {
+
+TitleBar #buttonMinimum:hover,
+TitleBar #buttonMaximum:hover,
+TitleBar #buttonPin:hover
+{
+    background-color: rgb(48, 141, 162);
+}
+TitleBar #buttonClose:hover {
     color: white;
     background-color: red;
 }
-/* Мышь удерживать */
-#buttonMinimum:pressed, #buttonMaximum:pressed {
+
+TitleBar #buttonMinimum:pressed,
+TitleBar #buttonMaximum:pressed,
+TitleBar #buttonPin:pressed
+{
     background-color: rgb(44, 125, 144);
 }
-#buttonClose:pressed {
+TitleBar #buttonClose:pressed {
     background-color: rgb(161, 73, 92);
 }
 """
@@ -94,15 +108,16 @@ TitleBar {
 class Default:
     ICON_SIZE: int = 20
     PALETTE_WINDOW_COLOR: QColor = QColor(240, 240, 240)
-    TITLE_HEIGHT: int = 38
+    TITLE_HEIGHT: int = 35
     WINDOW_MARGINS: int = 7
 
 
 class TitleBarButtonEnum(Enum):
-    MINIMUM = "0"
-    MAXIMUM = "1"
-    NORMAL = "2"
-    CLOSE = "r"
+    MINIMUM = "🗕"
+    MAXIMUM = "🗖"
+    NORMAL = "🗗"
+    CLOSE = "🗙"
+    PIN = "🖈"
 
 
 class TitleBar(QWidget):
@@ -117,6 +132,9 @@ class TitleBar(QWidget):
 
     # Сигнал закрытия окна
     aboutWindowClosed = pyqtSignal()
+
+    # Сигнал изменения флага поверх всех окон
+    aboutWindowPinned = pyqtSignal(bool)
 
     # Сигнал перемещения окна
     aboutWindowMovedDelta = pyqtSignal(QPoint)
@@ -135,32 +153,41 @@ class TitleBar(QWidget):
         # Установите цвет фона по умолчанию, иначе он будет прозрачным из-за влияния родительского окна
         self.setAutoFillBackground(True)
 
+        # TODO: Зачем оно нужно?
         palette = self.palette()
         palette.setColor(palette.Window, Default.PALETTE_WINDOW_COLOR)
         self.setPalette(palette)
 
-        # Значок окна
+        # Иконка окна
         self.iconLabel = QLabel()
 
         # Название окна
         self.titleLabel = ElidedLabel()
         self.titleLabel.setAlignment(Qt.AlignCenter)
 
-        self.buttonMinimum = self._create_button(
+        self.button_minimum = self.create_button(
             TitleBarButtonEnum.MINIMUM,
-            clicked=self.aboutWindowMinimized.emit,
+            on_clicked=self.aboutWindowMinimized.emit,
             object_name="buttonMinimum",
         )
-        self.buttonMaximum = self._create_button(
+        self.button_maximum = self.create_button(
             TitleBarButtonEnum.MAXIMUM,
-            clicked=self.showMaximized,
+            on_clicked=self.showMaximized,
             object_name="buttonMaximum",
         )
-        self.buttonClose = self._create_button(
+        self.button_close = self.create_button(
             TitleBarButtonEnum.CLOSE,
-            clicked=self.aboutWindowClosed.emit,
+            on_clicked=self.aboutWindowClosed.emit,
             object_name="buttonClose",
         )
+
+        self.button_pin = self.create_button(
+            TitleBarButtonEnum.PIN,
+            on_clicked=self.aboutWindowPinned.emit,
+            object_name="buttonPin",
+        )
+        self.button_pin.setCheckable(True)
+        self.button_pin.setChecked(False)
 
         self.layout_custom_widget = QHBoxLayout()
         self.layout_custom_widget.setContentsMargins(0, 0, 0, 0)
@@ -178,30 +205,30 @@ class TitleBar(QWidget):
         main_layout.addStretch()
 
         main_layout.addLayout(self.layout_custom_widget)
-        main_layout.addWidget(self.buttonMinimum)
-        main_layout.addWidget(self.buttonMaximum)
-        main_layout.addWidget(self.buttonClose)
+
+        main_layout.addSpacing(1)
+        main_layout.addWidget(self.button_pin)
+        main_layout.addSpacing(1)
+
+        main_layout.addWidget(self.button_minimum)
+        main_layout.addWidget(self.button_maximum)
+        main_layout.addWidget(self.button_close)
 
         self.setHeight()
 
         self.setIcon(self.style().standardIcon(QStyle.SP_TitleBarMenuButton))
 
-    def _create_button(
+    def create_button(
         self,
         button_enum: TitleBarButtonEnum,
-        clicked: callable,
+        on_clicked: callable,
         object_name: str,
     ) -> QToolButton:
-        # Использовать шрифты Webdings для отображения значков
-        font = self.font()
-        font.setFamily("Webdings")
-
         button = QToolButton()
         button.setObjectName(object_name)
         button.setText(button_enum.value)
         button.setAutoRaise(True)
-        button.setFont(font)
-        button.clicked.connect(clicked)
+        button.clicked.connect(on_clicked)
 
         return button
 
@@ -216,12 +243,12 @@ class TitleBar(QWidget):
         widget.setFixedSize(width, height)
 
     def showMaximized(self):
-        if self.buttonMaximum.text() == TitleBarButtonEnum.MAXIMUM:
+        if self.button_maximum.text() == TitleBarButtonEnum.MAXIMUM.value:
             # Максимизировать
-            self.buttonMaximum.setText(TitleBarButtonEnum.NORMAL)
+            self.button_maximum.setText(TitleBarButtonEnum.NORMAL.value)
             self.aboutWindowMaximized.emit()
         else:  # Восстановить
-            self.buttonMaximum.setText(TitleBarButtonEnum.MAXIMUM)
+            self.button_maximum.setText(TitleBarButtonEnum.MAXIMUM.value)
             self.aboutWindowNormalized.emit()
 
     def setHeight(self, height: int = Default.TITLE_HEIGHT):
@@ -229,9 +256,8 @@ class TitleBar(QWidget):
 
         self.setFixedHeight(height)
 
-        self.buttonMinimum.setFixedSize(height, height)
-        self.buttonMaximum.setFixedSize(height, height)
-        self.buttonClose.setFixedSize(height, height)
+        for button in self.findChildren(QAbstractButton):
+            button.setFixedSize(height, height)
 
     def setTitle(self, title: str):
         """Установить заголовок"""
@@ -301,7 +327,7 @@ class FramelessWindow(QWidget):
         self.setAttribute(Qt.WA_TranslucentBackground, True)
 
         # Нет границы
-        self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint)
+        self.setWindowFlag(Qt.FramelessWindowHint, True)
 
         # Отслеживание мыши
         self.setMouseTracking(True)
@@ -325,8 +351,12 @@ class FramelessWindow(QWidget):
         self.titleBar.aboutWindowMaximized.connect(self.showMaximized)
         self.titleBar.aboutWindowNormalized.connect(self.showNormal)
         self.titleBar.aboutWindowClosed.connect(self.close)
+        self.titleBar.aboutWindowPinned.connect(self.set_pinned)
         self.titleBar.aboutWindowMovedDelta.connect(self.delta_move)
 
+        # TODO: Нужна синхронизация некоторых кнопок self.titleBar с состоянием окна, например
+        #       поверх всех окон, во весь экран
+        #       Например, сигнал для отправки флага окна? Или булевое значение?
         self.windowTitleChanged.connect(self.titleBar.setTitle)
         self.windowIconChanged.connect(self.titleBar.setIcon)
 
@@ -352,6 +382,10 @@ class FramelessWindow(QWidget):
         self._widget.setPalette(palette)
         self._widget.installEventFilter(self)
         self.layout().addWidget(self._widget)
+
+    def set_pinned(self, flag: bool):
+        self.setWindowFlag(Qt.WindowStaysOnTopHint, flag)
+        self.show()
 
     def delta_move(self, delta_pos: QPoint):
         if (
@@ -579,7 +613,20 @@ class FramelessWindow(QWidget):
 
 if __name__ == "__main__":
     import sys
-    from PyQt5.QtWidgets import QApplication, QTextEdit
+    import traceback
+
+    from PyQt5.QtWidgets import QApplication, QTextEdit, QMessageBox
+
+    def log_uncaught_exceptions(ex_cls, ex, tb):
+        text = f"{ex_cls.__name__}: {ex}:\n"
+        text += "".join(traceback.format_tb(tb))
+
+        print(text)
+        QMessageBox.critical(None, "Error", text)
+        sys.exit(1)
+
+    sys.excepthook = log_uncaught_exceptions
+
 
     app = QApplication(sys.argv)
 
