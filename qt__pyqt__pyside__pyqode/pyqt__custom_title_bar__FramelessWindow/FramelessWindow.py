@@ -413,7 +413,7 @@ class FramelessWindow(QWidget):
         painter.setPen(
             QPen(
                 QColor(255, 255, 255, 1),
-                2 * Default.WINDOW_MARGINS
+                2 * Default.WINDOW_MARGINS,
             )
         )
         painter.drawRect(self.rect())
@@ -462,9 +462,7 @@ class FramelessWindow(QWidget):
 
         elif wm <= x_pos <= self.width() and hm <= y_pos <= self.height():
             # Нижний правый угол
-            self._direction = (
-                DirectionEnum.RIGHT_BOTTOM
-            )  # TODO: Углы как-то плохо определяются
+            self._direction = DirectionEnum.RIGHT_BOTTOM
             self.setCursor(Qt.SizeFDiagCursor)
 
         elif wm <= x_pos and y_pos <= Default.WINDOW_MARGINS:
