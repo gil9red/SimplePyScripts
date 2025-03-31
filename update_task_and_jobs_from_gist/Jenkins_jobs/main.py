@@ -11,7 +11,8 @@ from common import get_jobs_for_run, get_jobs_for_delete, client
 
 def is_equals_config(config_1: str, config_2: str) -> bool:
     def _to_plain_text(xml: str) -> str:
-        xml = BeautifulSoup(xml, "html.parser").get_text(strip=True)
+        soup = BeautifulSoup(xml, "html.parser")
+        xml = soup.get_text(strip=True)
         return re.sub(r"\s", "", xml)
 
     return _to_plain_text(config_1) == _to_plain_text(config_2)
@@ -82,24 +83,24 @@ XML_JOB_TEMPLATE = r"""
 </project>
 """.strip()
 
-jobs = get_jobs_for_run()
+jobs: dict[str, dict] = get_jobs_for_run()
 
-total = len(jobs)
-updated = 0
-created = 0
-deleted = 0
-nothing = 0
+total: int = len(jobs)
+updated: int = 0
+created: int = 0
+deleted: int = 0
+nothing: int = 0
 
 for job_name, job_data in jobs.items():
-    description = job_data["description"]
-    cron = job_data["cron"]
-    command = job_data["command"].format(
+    description: str = job_data["description"]
+    cron: str = job_data["cron"]
+    command: str = job_data["command"].format(
         root_dir=job_data["root_dir"],
         name=job_name,
     )
     print(f"Обработка задачи {job_name!r}")
 
-    xml = XML_JOB_TEMPLATE.format(
+    xml: str = XML_JOB_TEMPLATE.format(
         description=description,
         cron=cron,
         command=command,
@@ -122,7 +123,7 @@ for job_name, job_data in jobs.items():
 
     print()
 
-jobs_deprecated = get_jobs_for_delete()
+jobs_deprecated: dict[str, dict] = get_jobs_for_delete()
 for job_name in jobs_deprecated.keys():
     job = client.get_job(job_name)
     if job:
