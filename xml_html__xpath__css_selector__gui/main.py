@@ -85,6 +85,7 @@ class MainWindow(QWidget):
 
         self.rb_parser_html = QRadioButton("HTML")
         self.rb_parser_html.setChecked(True)
+
         self.rb_parser_xml = QRadioButton("XML")
 
         self.button_parser_group = QButtonGroup()
@@ -160,9 +161,6 @@ class MainWindow(QWidget):
             self.text_edit_output.setPlainText(output)
 
         except Exception as e:
-            # # Выводим ошибку в консоль
-            # traceback.print_exc()
-
             # Сохраняем в переменную
             tb = traceback.format_exc()
 
