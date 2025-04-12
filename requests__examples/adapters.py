@@ -47,7 +47,14 @@ class DuckDuckGoAdapter(HTTPAdapter):
         query = urlparse(request.path_url).path
 
         url = f"https://api.duckduckgo.com/?q={query}&format=json"
-        return requests.get(url)  # TODO:
+        return requests.get(
+            url,
+            stream=stream,
+            timeout=timeout,
+            verify=verify,
+            cert=cert,
+            proxies=proxies,
+        )
 
 
 class RandomColorAdapter(BaseAdapter):
