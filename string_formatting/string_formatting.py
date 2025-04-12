@@ -4,8 +4,24 @@
 __author__ = "ipetrash"
 
 
-# TODO: побольше примеров форматирования строк.
-# https://docs.python.org/3/library/string.html#string-formatting
-# http://pythonworld.ru/osnovy/formatirovanie-strok-metod-format.html
-# http://pythonworld.ru/osnovy/formatirovanie-strok-operator.html
+class Foo:
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
+
+
 print("{one} * {one} {two}".format(one="45", two="Bugaga"))
+# 45 * 45 Bugaga
+
+print("{foo.a}, {foo.b}".format(foo=Foo("a", "b")))
+# a, b
+
+print(
+    "{foo_list[0].a}, {foo_list[1].b}".format(
+        foo_list=[
+            Foo("a1", "b1"),
+            Foo("a2", "b2"),
+        ]
+    )
+)
+# a1, b2
