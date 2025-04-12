@@ -4,6 +4,7 @@
 __author__ = "ipetrash"
 
 
+# TODO:
 """Задание:
 Нужно создать приложение слайд-шоу, которое должно иметь следующие основные
 особенность: показывать изображения, сдвигая их по истечении определенного периода времени.
@@ -36,11 +37,10 @@ __author__ = "ipetrash"
 
 
 import sys
-import glob
 
-
-from PySide.QtGui import *
-from PySide.QtCore import *
+from PyQt5.QtWidgets import QWidget
+from PyQt5.QtGui import QPixmap, QPainter
+from PyQt5.QtCore import QTimer, Qt
 
 
 # TODO: использовать машину состоний для упрощения алгоритма
@@ -48,7 +48,7 @@ from PySide.QtCore import *
 
 
 class SlideShowWidget(QWidget):
-    def __init__(self):
+    def __init__(self, image_list: list[str]):
         super().__init__()
 
         self.setWindowTitle("SlideShowWidget")
@@ -61,7 +61,7 @@ class SlideShowWidget(QWidget):
         self.timer.setInterval(60 * 1000)
         self.timer.timeout.connect(self.next)
 
-        self.image_list = glob.glob(r"C:\Users\ipetrash\Pictures\*.png")
+        self.image_list = image_list
         self.next()
 
         self.resize(200, 200)
@@ -71,6 +71,9 @@ class SlideShowWidget(QWidget):
         self.timer.start()
 
     def next(self):
+        if not self.image_list:
+            return
+
         self.source_image = QPixmap(self.image_list[self.current_index])
         self.resize_image = self.source_image.scaled(self.size(), Qt.KeepAspectRatio)
         self.update()
@@ -82,7 +85,11 @@ class SlideShowWidget(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
 
-        self.resize_image = self.source_image.scaled(self.size(), Qt.KeepAspectRatio)
+        if self.source_image:
+            self.resize_image = self.source_image.scaled(
+                self.size(),
+                Qt.KeepAspectRatio,
+            )
 
     def paintEvent(self, event):
         if self.source_image is None:
@@ -98,9 +105,15 @@ class SlideShowWidget(QWidget):
 
 
 if __name__ == "__main__":
+    import glob
+    from PyQt5.QtWidgets import QApplication
+
     app = QApplication(sys.argv)
 
-    w = SlideShowWidget()
+    # TODO:
+    image_list = glob.glob(r"C:\Users\ipetrash\Pictures\*.png")
+
+    w = SlideShowWidget(image_list)
     w.set_timeout(1)
     w.show()
 
