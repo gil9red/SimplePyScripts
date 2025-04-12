@@ -32,11 +32,11 @@ class ReportPerson:
         self.deviation_of_time = self.get_work_time(tags[7])
 
     @property
-    def full_name(self):
-        return self.second_name + " " + self.first_name + " " + self.middle_name
+    def full_name(self) -> str:
+        return f"{self.second_name} {self.first_name} {self.middle_name}"
 
     @staticmethod
-    def get_work_day(day_str):
+    def get_work_day(day_str) -> int:
         return (
             int(day_str) if "=" not in day_str else int(day_str.split("=")[0].strip())
         )
@@ -46,7 +46,6 @@ class ReportPerson:
         """Простой класс для хранения даты работы."""
 
         def __init__(self, time_str: str):
-            # TODO: supports self._seconds
             self._hours, self._minutes, self._seconds = map(int, time_str.split(":"))
 
         @property
@@ -55,27 +54,29 @@ class ReportPerson:
 
             return self._hours * 60 + self._minutes
 
-        def __repr__(self):
+        def __repr__(self) -> str:
             return f"{self._hours:0>2}:{self._minutes:0>2}"
 
-        def __eq__(self, other):
+        def __eq__(self, other: "Time") -> bool:
             return self.total == other.total
 
-        def __lt__(self, other):
+        def __lt__(self, other: "Time") -> bool:
             return self.total < other.total
 
     @staticmethod
-    def get_work_time(time_str):
+    def get_work_time(time_str: str) -> Time:
         return ReportPerson.Time(time_str)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.full_name)
 
-    def __eq__(self, other):
+    def __eq__(self, other: "ReportPerson") -> bool:
         return self.full_name == other.full_name
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
-            f"{self.full_name}. Невыходов на работу: {self.absence_from_work}. По календарю ({self.need_to_work_days} смен / {self.need_to_work_on_time} ч:мин). "
-            f"Фактически ({self.worked_days} смен / {self.worked_time} ч:мин) Отклонение ({self.deviation_of_day} смен / {self.deviation_of_time} ч:мин)"
+            f"{self.full_name}. Невыходов на работу: {self.absence_from_work}. "
+            f"По календарю ({self.need_to_work_days} смен / {self.need_to_work_on_time} ч:мин). "
+            f"Фактически ({self.worked_days} смен / {self.worked_time} ч:мин). "
+            f"Отклонение ({self.deviation_of_day} смен / {self.deviation_of_time} ч:мин)"
         )

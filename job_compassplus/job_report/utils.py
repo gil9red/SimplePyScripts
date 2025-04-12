@@ -28,6 +28,7 @@ LOGGING_DEBUG = False
 
 if LOGGING_DEBUG:
     import logging
+
     logging.basicConfig(level=logging.DEBUG)
 
 
