@@ -75,8 +75,9 @@ def timeout(seconds=None, raise_timeout=False):
 
 if __name__ == "__main__":
     import random
-    import time
     import sorts
+
+    from timeit import default_timer
 
     items = list(range(10**3))
     random.shuffle(items)
@@ -91,7 +92,7 @@ if __name__ == "__main__":
             new_items = list(items)
             algo(new_items)
 
-        t = time.clock()
+        t = default_timer()
         try:
             run()
 
@@ -101,7 +102,7 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"    Error: {e}: sort: {name}")
 
-        t = time.clock() - t
+        t = default_timer() - t
         time_by_algo_name[t] = name
         # print('    duration: {:.3f} secs'.format(t))
 
