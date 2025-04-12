@@ -7,9 +7,6 @@ __author__ = "ipetrash"
 # SOURCE: https://github.com/szabgab/slides/blob/914d15bb55cb0e335afcb72b6af0fa2aa9ed356f/python/examples/pil/draw_rectangle_with_rounded_corners.py
 
 
-# TODO: append alpha
-
-
 from PIL import Image, ImageDraw
 
 
@@ -21,16 +18,15 @@ def round_corner(radius: int, fill: Color) -> Image:
     corner = Image.new("RGBA", (radius, radius), (0, 0, 0, 0))
 
     draw = ImageDraw.Draw(corner)
-    draw.pieslice((0, 0, radius * 2, radius * 2), 180, 270, fill=fill)
+    draw.pieslice((0, 0, radius * 2, radius * 2), start=180, end=270, fill=fill)
 
     return corner
 
 
-def round_rectangle(size: tuple[int, int], radius: int, fill: Color) -> Image:
+def round_rectangle(width: int, height: int, radius: int, fill: Color) -> Image:
     """Draw a rounded rectangle"""
-    width, height = size
 
-    rectangle = Image.new("RGBA", size, fill)
+    rectangle = Image.new("RGBA", (width, height), fill)
     corner = round_corner(radius, fill)
 
     rectangle.paste(corner, (0, 0))
@@ -45,6 +41,6 @@ def round_rectangle(size: tuple[int, int], radius: int, fill: Color) -> Image:
 
 
 if __name__ == "__main__":
-    img = round_rectangle((500, 500), 50, "yellow")
+    img = round_rectangle(width=500, height=500, radius=50, fill="yellow")
     img.show()
     img.save("img.png")
