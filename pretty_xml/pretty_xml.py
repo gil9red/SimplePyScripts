@@ -23,7 +23,8 @@ def process_xml_string(xml_string: str) -> str:
 def pretty_xml_minidom(xml_string: str, indent: int = 4) -> str:
     """Функция принимает строку xml и выводит xml с отступами."""
 
-    xml_string = process_xml_string(xml_string)
+    xml_string: str = process_xml_string(xml_string)
+
     xml_utf8 = parseString(xml_string).toprettyxml(
         indent=" " * indent,
         encoding="utf-8",
@@ -34,8 +35,17 @@ def pretty_xml_minidom(xml_string: str, indent: int = 4) -> str:
 def pretty_xml_lxml(xml_string: str) -> str:
     """Функция принимает строку xml и выводит xml с отступами."""
 
-    xml_string = process_xml_string(xml_string)
-    root = etree.fromstring(xml_string)
+    xml_string: str = process_xml_string(xml_string)
+
+    root = etree.fromstring(
+        text=xml_string,
+        parser=etree.XMLParser(
+            remove_blank_text=True,
+            # NOTE: Для обработки больших XML
+            huge_tree=True,
+        ),
+    )
+
     return etree.tostring(
         root,
         pretty_print=True,
@@ -44,6 +54,14 @@ def pretty_xml_lxml(xml_string: str) -> str:
 
 
 if __name__ == "__main__":
-    xml = "<a><b/><c><z/><h/></c></a>"
+    xml = """
+        <Recipe name="хлеб" preptime="5min" cooktime="180min"><Title>Простой хлеб</Title>
+        <Composition><Ingredient amount="3" unit="стакан">Мука</Ingredient><Ingredient amount="0.25" 
+        unit="грамм">Дрожжи</Ingredient><Ingredient amount="1.5" unit="стакан">Тёплая вода</Ingredient>
+        </Composition></Recipe>
+    """
+
+    # TODO: Плохо работает
     print(pretty_xml_minidom(xml))
+
     print(pretty_xml_lxml(xml))
