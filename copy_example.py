@@ -6,22 +6,40 @@ __author__ = "ipetrash"
 
 """RU: Пример использования модуля copy."""
 
-# TODO: https://docs.python.org/3.4/library/copy.html
-# TODO: больше примеров
-
 
 import copy
 
 
-if __name__ == "__main__":
-    a = [2, 3, [3.5, 3.6, [3.61, 3.62]], 4, 5]
-    print(a, type(a), hex(id(a)), sep=", ")
+complex_data = [
+    2,
+    3,
+    [
+        3.5,
+        3.6,
+        [3.61, 3.62],
+    ],
+    dict(
+        a=1,
+        b="2",
+        c=[True, None],
+    ),
+    4,
+    5,
+]
 
-    b = copy.deepcopy(a)
-    print(b, type(b), hex(id(b)), sep=", ")
 
-    c = [2, 3, 4, 5]
-    print(c, type(c), hex(id(c)), sep=", ")
+def _print_complex_data(data):
+    print(data, id(data))
+    print(data[2], id(data[2]))
+    print(data[2][2], id(data[2][2]))
+    print(data[3], id(data[3]))
+    print(data[3]["c"], id(data[3]["c"]))
 
-    d = copy.copy(c)
-    print(d, type(d), hex(id(d)), sep=", ")
+
+_print_complex_data(complex_data)
+print()
+
+_print_complex_data(copy.copy(complex_data))
+print()
+
+_print_complex_data(copy.deepcopy(complex_data))
