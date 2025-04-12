@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 import sys
 import traceback
 
-from os.path import split as path_split
+from pathlib import Path
 
 
 # TODO: избавиться от `import *`
@@ -25,11 +25,11 @@ except:
         from PySide.QtGui import *
         from PySide.QtCore import Qt
 
-from pretty_xml import pretty_xml_minidom as to_pretty_xml
+from pretty_xml import pretty_xml_lxml as to_pretty_xml
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = "{ex_cls.__name__}: {ex}:\n"
+    text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
     print(text)
@@ -44,9 +44,9 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle(path_split(__file__)[1])
+        self.setWindowTitle(Path(__file__).name)
 
-        layout = QVBoxLayout()
+        layout = QVBoxLayout(self)
 
         self.text_edit_input = QPlainTextEdit()
         self.text_edit_output = QPlainTextEdit()
@@ -61,8 +61,8 @@ class MainWindow(QWidget):
         self.button_detail_error.setToolTip("Detail error")
         self.button_detail_error.hide()
 
-        self.last_error_message = None
-        self.last_detail_error_message = None
+        self.last_error_message = ""
+        self.last_detail_error_message = ""
 
         self.button_detail_error.clicked.connect(self.show_detail_error_message)
         self.text_edit_input.textChanged.connect(self.input_text_changed)
@@ -80,14 +80,12 @@ class MainWindow(QWidget):
 
         layout.addLayout(layout_error)
 
-        self.setLayout(layout)
-
     def input_text_changed(self):
         self.label_error.clear()
         self.button_detail_error.hide()
 
-        self.last_error_message = None
-        self.last_detail_error_message = None
+        self.last_error_message = ""
+        self.last_detail_error_message = ""
 
         try:
             text = self.text_edit_input.toPlainText()
@@ -126,5 +124,14 @@ if __name__ == "__main__":
     mw = MainWindow()
     mw.resize(650, 500)
     mw.show()
+
+    mw.text_edit_input.setPlainText(
+        """
+        <Recipe name="хлеб" preptime="5min" cooktime="180min"><Title>Простой хлеб</Title>
+        <Composition><Ingredient amount="3" unit="стакан">Мука</Ingredient><Ingredient amount="0.25" 
+        unit="грамм">Дрожжи</Ingredient><Ingredient amount="1.5" unit="стакан">Тёплая вода</Ingredient>
+        </Composition></Recipe>
+        """
+    )
 
     app.exec_()
