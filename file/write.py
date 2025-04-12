@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 __author__ = "ipetrash"
 
 
@@ -6,7 +9,7 @@ __author__ = "ipetrash"
 
 
 # Открыть файл в режиме записи
-with open("foo.txt", mode="w") as f:
+with open("foo.txt", mode="w", encoding="utf-8") as f:
     f.write("123\n")
     f.write("one two\n")
     f.write("one two\n")
