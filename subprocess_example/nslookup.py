@@ -8,7 +8,7 @@ import re
 from subprocess import Popen, PIPE
 
 
-def pc_name(ip):
+def pc_name(ip: str) -> str | None:
     """Функция для получения имени компьютера по ip."""
 
     with Popen(
@@ -16,34 +16,18 @@ def pc_name(ip):
     ) as p:
         if not p.stderr.read():
             text = p.stdout.read()
-            match = re.search(r"Name:(.+)", text)
-            if match:
-                return match.group(1).strip()
+            if m := re.search(r"Name:(.+)", text):
+                return m.group(1).strip()
 
 
 if __name__ == "__main__":
-    # with open('ip_pc_name', mode='a') as f:
-    #     for j in range(9):
-    #         for m in range(256):
-    #             ping = '{}.{}.{}.{}'.format(10, 7, j, m)
-    #             name = pc_name(ping)
-    #
-    #             if name is not None:
-    #                 found = True
-    #
-    #                 print(ping, name, file=f)
-    #                 print(ping, name)
+    from itertools import product
 
-    # TODO: четыре цикла хотелось бы заменить одним -- должны быть инструменты в коробке
-    # для генерации подобного
-    with open("ip_pc_name", mode="w") as f:
-        for i in range(256):
-            for j in range(256):
-                for k in range(256):
-                    for m in range(256):
-                        ping = f"{i}.{j}.{k}.{m}"
-                        name = pc_name(ping)
+    with open("ip_pc_name", mode="w", encoding="utf-8") as f:
+        for i, j, k, m in product(range(256), repeat=4):
+            ping = f"{i}.{j}.{k}.{m}"
+            name = pc_name(ping)
 
-                        if name is not None:
-                            print(ping, name)
-                            print(ping, name, file=f)
+            if name is not None:
+                print(ping, name)
+                print(ping, name, file=f)
