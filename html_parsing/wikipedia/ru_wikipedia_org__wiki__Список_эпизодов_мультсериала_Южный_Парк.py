@@ -14,11 +14,11 @@ def get_seasons() -> dict[str, list[str]]:
     rs = session.get(url)
     rs.raise_for_status()
 
-    root = BeautifulSoup(rs.content, "html.parser")
+    soup = BeautifulSoup(rs.content, "html.parser")
 
     season_by_series: dict[str, list[str]] = dict()
 
-    items = root.select('h3[id ^= "Сезон"]') + root.select('span[id ^= "Сезон"]')
+    items = soup.select('h3[id ^= "Сезон"]') + soup.select('span[id ^= "Сезон"]')
     for season_title_el in items:
         season_title = season_title_el.get_text(strip=True)
 
@@ -33,8 +33,9 @@ def get_seasons() -> dict[str, list[str]]:
             series_title = title_el.get_text(strip=True)
             series_list.append(series_title)
 
-        assert series_list, f"Не найдена ни одна серия! Сезон: {season_title}"
         season_by_series[season_title] = series_list
+
+    assert season_by_series, "Не найден ни один сезон!"
 
     return season_by_series
 
