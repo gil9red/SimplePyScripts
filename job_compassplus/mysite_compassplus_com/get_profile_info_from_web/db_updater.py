@@ -79,7 +79,7 @@ def add_or_get_db(name: str) -> db.Person | None:
                 # Создание новой записи с актуальными полями
                 person = create_person_from_info(info)
 
-        else:  # Если пользователь был в БД, а потом его удалил
+        else:  # Если пользователь был в БД, а потом его удалили из mysite
             # Создание новой записи
             return db.Person.create(
                 name=person.name,
