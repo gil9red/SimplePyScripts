@@ -9,8 +9,6 @@ import time
 import traceback
 from datetime import date, timedelta
 
-from requests.exceptions import RequestException
-
 import db
 
 from config import DIR, MAX_LAST_CHECK_DATE_DAYS
@@ -53,6 +51,10 @@ def is_person_eq_info(person: db.Person, info: Person) -> bool:
     return True
 
 
+def is_need_to_check(person: db.Person, d: date) -> bool:
+    return d > person.last_check_date + timedelta(days=MAX_LAST_CHECK_DATE_DAYS)
+
+
 def add_or_get_db(name: str) -> db.Person | None:
     person = db.Person.get_last_by_name(name)
 
@@ -67,14 +69,27 @@ def add_or_get_db(name: str) -> db.Person | None:
     # Если с даты последней проверки прошло больше MAX_LAST_CHECK_DATE_DAYS дней, то
     # нужно проверить изменения полей
     today = date.today()
-    if today > person.last_check_date + timedelta(days=MAX_LAST_CHECK_DATE_DAYS):
+    if is_need_to_check(person, d=today):
         info = get_person_info(name)
-        if is_person_eq_info(person, info):
-            person.last_check_date = today
-            person.save()
-        else:
-            # Создание новой записи с актуальными полями
-            person = create_person_from_info(info)
+        if info:
+            if is_person_eq_info(person, info):
+                person.last_check_date = today
+                person.save()
+            else:
+                # Создание новой записи с актуальными полями
+                person = create_person_from_info(info)
+
+        else:  # Если пользователь был в БД, а потом его удалил
+            # Создание новой записи
+            return db.Person.create(
+                name=person.name,
+                position=person.position,
+                department=person.department,
+                img=person.img,
+                location=person.location,
+                birthday=person.birthday,
+                is_active=False,
+            )
 
     return person
 
@@ -85,17 +100,25 @@ def do_update_db():
     print(f"{prefix} Start")
 
     while True:
-        print(f"{prefix} Check")
+        print(f"{prefix} Check all")
         try:
             # Запрос для получения ников
             query = db.Person.select(db.Person.name).distinct()
             names: list[str] = [x.name for x in query]
-            for name in names:
+            for i, name in enumerate(names, 1):
+                print(f"{prefix} Check {name} ({i}/{len(names)})")
+
+                person: db.Person | None = None
                 try:
-                    add_or_get_db(name)
-                except RequestException as e:
-                    print(f"{prefix} Request error: {e}")
+                    person = add_or_get_db(name)
+                except Exception as e:
+                    print(f"{prefix} Error: {e}")
                 finally:
+                    # Оптимизация, чтобы не делать лишней задержку, если не было запроса по сети в add_or_get_db
+                    # (это косвенно можно понять по last_check_date)
+                    if person and not is_need_to_check(person, d=date.today()):
+                        continue
+
                     time.sleep(10)
 
         except Exception:
@@ -109,3 +132,5 @@ def do_update_db():
 
 if __name__ == "__main__":
     print(add_or_get_db("ipetrash"))
+
+    # do_update_db()
