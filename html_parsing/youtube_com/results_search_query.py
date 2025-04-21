@@ -60,9 +60,15 @@ print("\n" + "-" * 100 + "\n")
 print(len(get_video_list("https://www.youtube.com/")))  # TODO: Под вопросом
 print(len(get_video_list("https://www.youtube.com/c/TheBadComedian")))
 print(len(get_video_list("https://www.youtube.com/c/TheBadComedian/videos")))
-# 247
+# 0
 # 45
 # 190
+
+print("\n" + "-" * 100 + "\n")
+
+# Streams
+print(len(get_video_list("https://www.youtube.com/@kuplinovplay/streams")))
+# 253
 
 print("\n" + "-" * 100 + "\n")
 
