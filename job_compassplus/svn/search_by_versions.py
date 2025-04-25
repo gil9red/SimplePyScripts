@@ -8,7 +8,6 @@ import re
 import subprocess
 import xml.etree.ElementTree as ET
 
-from collections import defaultdict
 from datetime import date, timedelta
 
 
