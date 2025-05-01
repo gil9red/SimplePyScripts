@@ -11,7 +11,7 @@ import shutil
 import sys
 
 
-def get_logger(name):
+def get_logger(name: str):
     log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
 
@@ -24,7 +24,7 @@ def get_logger(name):
     return log
 
 
-def backup(path_file_name: str, now_timestamp=None) -> str:
+def backup(path_file_name: str, now_timestamp: float | None = None) -> str:
     if now_timestamp is None:
         now_timestamp = time.time()
 

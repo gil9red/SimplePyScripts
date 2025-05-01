@@ -48,7 +48,7 @@ def backup_saves(path_ds_save: str):
         time.sleep(5 * 60)
 
 
-def run(path_ds_save: str, hotkey=HOTKEY):
+def run(path_ds_save: str, hotkey: str = HOTKEY):
     # Example: r'~\Documents\NBGI\DarkSouls\*\DRAKS0005.sl2'
     path_ds_save = os.path.expanduser(path_ds_save)
 
