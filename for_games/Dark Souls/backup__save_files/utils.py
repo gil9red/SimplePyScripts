@@ -11,7 +11,7 @@ import shutil
 import sys
 
 
-def get_logger(name: str):
+def get_logger(name: str) -> logging.Logger:
     log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
 
