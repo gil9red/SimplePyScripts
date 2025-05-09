@@ -18,6 +18,7 @@ import requests
 
 @dataclass
 class Video:
+    id: str
     title: str
     url: str
 

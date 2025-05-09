@@ -67,6 +67,7 @@ def _get_video_list(channel_videos_data: dict[str, Any]) -> list[Video]:
 
     return [
         Video(
+            id=obj["id"],
             title=obj["title"],
             url=obj["video_url"],
         )

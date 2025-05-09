@@ -67,6 +67,7 @@ def _get_video_list(
 
     return [
         Video(
+            id=obj["id"],
             title=obj["title"],
             url=merge_url_params(
                 obj["video_url"],
