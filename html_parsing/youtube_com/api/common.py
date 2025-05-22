@@ -270,9 +270,12 @@ def get_context_with_continuation(
     if not innertube_context:
         raise Exception("Значение INNERTUBE_CONTEXT должно быть задано в yt_cfg_data!")
 
-    continuation_endpoint = continuation_item["continuationEndpoint"]
-    click_tracking_params = continuation_endpoint["clickTrackingParams"]
-    continuation_token = continuation_endpoint["continuationCommand"]["token"]
+    continuation_endpoint: dict = continuation_item["continuationEndpoint"]
+    click_tracking_params: str = continuation_endpoint["clickTrackingParams"]
+    continuation_token: str = dpath.util.get(
+        continuation_endpoint,
+        glob="**/continuationCommand/token",
+    )
 
     pattern_next_page_data = get_context_data(url, innertube_context)
     pattern_next_page_data["continuation"] = continuation_token
