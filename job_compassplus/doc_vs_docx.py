@@ -6,7 +6,7 @@ __author__ = "ipetrash"
 
 from pathlib import Path
 
-# pip install python-docx
+# pip install python-docx==1.1.0
 from docx import Document
 
 
