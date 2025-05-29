@@ -7,6 +7,8 @@ __author__ = "ipetrash"
 import re
 from dataclasses import dataclass
 
+from bs4 import BeautifulSoup
+
 from utils import session, HOST, NotFoundReport
 
 
@@ -24,19 +26,22 @@ def get_time_spent_in_office() -> TimeSpent:
     if not rs.ok:
         raise NotFoundReport(f"HTTP status is {rs.status_code}")
 
+    soup = BeautifulSoup(rs.content, "html.parser")
+    text = soup.get_text(strip=True)
+
     def _find(pattern: str, about: str) -> str:
-        if m := re.search(pattern, rs.text, flags=re.IGNORECASE):
+        if m := re.search(pattern, text, flags=re.IGNORECASE):
             return m.group(1)
-        raise Exception(f'Not found {about!r}')
+        raise Exception(f"Not found {about!r}")
 
     return TimeSpent(
         first_enter=_find(
-            pattern=r"First enter: ([\d+:]+)",
-            about="First enter"
+            pattern=r"First enter:\s*([\d+:]+)",
+            about="First enter",
         ),
         today=_find(
-            pattern=r"Today\s*\(Possible\): ([\d+:]+)",
-            about="Today(Possible)"
+            pattern=r"Today\s*\(Possible\):\s*([\d+:]+)",
+            about="Today(Possible)",
         ),
     )
 
