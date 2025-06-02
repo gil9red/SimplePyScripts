@@ -15,32 +15,40 @@ URL_PORTAL: str = os.getenv("URL_PORTAL")
 URL_NOTIFY: str = os.getenv("URL_NOTIFY")
 
 if not URL_PORTAL:
-    raise Exception("Переменная окружения URL_PORTAL не задана!")
+    raise Exception("URL_PORTAL environment is not set!")
 
 if not URL_NOTIFY:
-    raise Exception("Переменная окружения URL_NOTIFY не задана!")
+    raise Exception("URL_NOTIFY environment variable is not set!")
 
 with sync_playwright() as p:
+    print("Launching a browser")
     browser = p.firefox.launch()
     page = browser.new_page()
 
+    print(f"Opening page: {URL_PORTAL}")
     rs = page.goto(URL_PORTAL)
 
     css_selector = "a#NameFieldLink[href]"
 
-    for user_el in page.locator(css_selector).all():
+    items = page.locator(css_selector).all()
+    print("Users:", len(items))
+
+    for user_el in items:
         url_mysite: str = user_el.get_attribute("href")
         username: str = url_mysite.rsplit("\\")[-1]
 
         full_name: str = user_el.text_content().strip()
 
-        print(f"Проверка {full_name!r} ({username})")
+        print(f"Check {full_name!r} ({username})")
 
         url_check: str = urljoin(URL_NOTIFY, username)
-        print(f"Отправка уведомления: {url_check}")
-        print()
+        print(f"Sending a notification: {url_check}")
 
         rs = requests.get(url_check)
         rs.raise_for_status()
+
+        # 201 вернется, если в ходе запроса был добавлен пользователь
+        print(f"[{'+' if rs.status_code == 201 else '='}] {full_name!r} ({username})")
+        print()
 
     browser.close()
