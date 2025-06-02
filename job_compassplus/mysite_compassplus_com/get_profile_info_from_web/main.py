@@ -56,7 +56,9 @@ def handle_requests_error(e: RequestException) -> Response:
 
 
 @app.route("/api/get_all_person_info/<username>")
-def api_get_all_person_info(username: str):
+def api_get_all_person_info(username: str) -> tuple[Response, int]:
+    has_person: bool = db.Person.get_last_by_name(username) is not None
+
     # Проверка наличия и попытка добавить в базу для первого раза
     person: db.Person = add_or_get_db(username)
     if not person:
@@ -82,7 +84,7 @@ def api_get_all_person_info(username: str):
 
         items.append(data)
 
-    return jsonify(items)
+    return jsonify(items), 200 if has_person else 201
 
 
 if __name__ == "__main__":
