@@ -43,6 +43,11 @@ class Status(AutoName):
 
 
 HOST: str = "https://grouple.co"
+ADDITIONAL_HOSTS: list[str] = [
+    "https://1.grouple.co",
+    "https://2.grouple.co",
+    "https://3.grouple.co",
+]
 
 
 session = requests.Session()
@@ -93,6 +98,8 @@ def do_auth() -> requests.Response:
 
 # NOTE: Была замечена смена домена
 def update_host():
+    global HOST
+
     def _update(url: str) -> bool:
         global HOST
 
@@ -102,7 +109,22 @@ def update_host():
 
         return False
 
-    rs = do_get("/")
+    try:
+        rs = do_get("/")
+    except Exception as e:
+        # Перебор дополнительных хостов при ошибках
+        if HOST == ADDITIONAL_HOSTS[-1]:
+            raise e
+
+        try:
+            idx = ADDITIONAL_HOSTS.index(HOST) + 1
+        except ValueError:
+            idx = 0
+
+        HOST = ADDITIONAL_HOSTS[idx]
+
+        update_host()
+        return
 
     if not _update(rs.url):
         rs = do_get("/internal/auth")
