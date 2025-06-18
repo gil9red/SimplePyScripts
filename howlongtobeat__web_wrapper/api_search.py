@@ -33,7 +33,7 @@ def get_api_search_raw(game: str) -> dict[str, Any]:
 
 
 def search_game(game: str) -> dict[str, Any] | None:
-    game = re.sub("[©®–]", "", game)
+    game = re.sub("[©®™–]", "", game)
 
     def _is_found_game(game1: str, game2: str):
         def _process_name(name: str):
