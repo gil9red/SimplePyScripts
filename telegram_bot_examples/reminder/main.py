@@ -125,7 +125,7 @@ def on_get_reminders(update: Update, _: CallbackContext):
 def main():
     handlers = [
         CommandHandler("start", on_start),
-        MessageHandler(Filters.regex("(?i)^список$"), on_get_reminders),
+        MessageHandler(Filters.regex("(?i)^Список$"), on_get_reminders),
         MessageHandler(Filters.text, on_request),
     ]
 

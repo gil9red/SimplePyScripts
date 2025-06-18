@@ -4,15 +4,16 @@
 __author__ = "ipetrash"
 
 
-import datetime as dt
 import shutil
 import sys
+import time
 
-from typing import Optional
+from datetime import datetime
+from typing import Optional, Type
 from pathlib import Path
 
 # pip install peewee
-from peewee import *
+from peewee import TextField, DateTimeField, ForeignKeyField, IntegerField, BooleanField, Model
 from playhouse.sqliteq import SqliteQueueDatabase
 
 # pip install python-telegram-bot
@@ -33,7 +34,7 @@ def db_create_backup(backup_dir="backup", date_fmt="%Y-%m-%d"):
     backup_path = Path(backup_dir)
     backup_path.mkdir(parents=True, exist_ok=True)
 
-    zip_name = dt.datetime.today().strftime(date_fmt)
+    zip_name = datetime.today().strftime(date_fmt)
     zip_name = backup_path / zip_name
 
     shutil.make_archive(zip_name, "zip", DB_DIR_NAME)
@@ -58,6 +59,20 @@ db = SqliteQueueDatabase(
 class BaseModel(Model):
     class Meta:
         database = db
+
+    @classmethod
+    def get_inherited_models(cls) -> list[Type["BaseModel"]]:
+        return sorted(cls.__subclasses__(), key=lambda x: x.__name__)
+
+    @classmethod
+    def print_count_of_tables(cls):
+        items = []
+        for sub_cls in cls.get_inherited_models():
+            name = sub_cls.__name__
+            count = sub_cls.select().count()
+            items.append(f"{name}: {count}")
+
+        print(", ".join(items))
 
     def __str__(self):
         fields = []
@@ -84,10 +99,10 @@ class User(BaseModel):
     last_name = TextField(null=True)
     username = TextField(null=True)
     language_code = TextField(null=True)
-    last_activity = DateTimeField(default=dt.datetime.now)
+    last_activity = DateTimeField(default=datetime.now)
 
     def update_last_activity(self):
-        self.last_activity = dt.datetime.now()
+        self.last_activity = datetime.now()
         self.save()
 
     @classmethod
@@ -115,10 +130,10 @@ class Chat(BaseModel):
     first_name = TextField(null=True)
     last_name = TextField(null=True)
     description = TextField(null=True)
-    last_activity = DateTimeField(default=dt.datetime.now)
+    last_activity = DateTimeField(default=datetime.now)
 
     def update_last_activity(self):
-        self.last_activity = dt.datetime.now()
+        self.last_activity = datetime.now()
         self.save()
 
     @classmethod
@@ -141,20 +156,27 @@ class Chat(BaseModel):
 
 
 class Reminder(BaseModel):
-    date_time = DateTimeField(default=dt.datetime.now)
+    date_time = DateTimeField(default=datetime.now)
     message_id = IntegerField()
     command = TextField()
-    finish_time = DateTimeField(default=dt.datetime.now)
+    finish_time = DateTimeField(default=datetime.now)
     is_sent = BooleanField(default=False)
     user = ForeignKeyField(User, backref="reminders")
     chat = ForeignKeyField(Chat, backref="reminders")
 
 
 db.connect()
-db.create_tables([User, Chat, Reminder])
+db.create_tables(BaseModel.get_inherited_models())
+
+# Задержка в 50мс, чтобы дать время на запуск SqliteQueueDatabase и создание таблиц
+# Т.к. в SqliteQueueDatabase запросы на чтение выполняются сразу, а на запись попадают в очередь
+time.sleep(0.050)
 
 
 if __name__ == "__main__":
+    BaseModel.print_count_of_tables()
+    print()
+
     print("Total users:", User.select().count())
     print("Total chats:", Chat.select().count())
 
