@@ -4,17 +4,17 @@
 __author__ = "ipetrash"
 
 
-import datetime as dt
 import re
+from datetime import datetime, timedelta
 
 
 PATTERN = re.compile(
-    r"напомни через (\d+) (секунд|минут|час|день|дня|дней|неделю|недели|недель|)",
+    r"Напомни через (\d+) (секунд|минут|час|день|дня|дней|неделю|недели|недель)",
     flags=re.IGNORECASE,
 )
 
 
-def parse_command(command: str) -> dt.datetime | None:
+def parse_command(command: str) -> datetime | None:
     m = PATTERN.search(command)
     if not m:
         return
@@ -36,15 +36,15 @@ def parse_command(command: str) -> dt.datetime | None:
     else:
         return
 
-    return dt.datetime.now() + dt.timedelta(**data)
+    return datetime.now() + timedelta(**data)
 
 
-def get_pretty_datetime(finish_time: dt.datetime) -> str:
+def get_pretty_datetime(finish_time: datetime) -> str:
     return finish_time.strftime("%d.%m.%Y %H:%M:%S")
 
 
 if __name__ == "__main__":
-    date_time = dt.datetime.now()
+    date_time = datetime.now()
     print("Current datetime:", get_pretty_datetime(date_time))
     print()
 
