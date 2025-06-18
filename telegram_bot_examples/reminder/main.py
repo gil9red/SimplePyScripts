@@ -11,7 +11,7 @@ import sys
 from logging import Logger
 from threading import Thread
 
-# pip install python-telegram-bot
+# pip install python-telegram-bot==13.9
 from telegram import Update, Bot
 from telegram.ext import (
     Updater,
