@@ -5,10 +5,13 @@ __author__ = "ipetrash"
 
 
 import os
+import traceback
+import time
+
 from urllib.parse import urljoin
 
 import requests
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, Page
 
 
 URL_PORTAL: str = os.getenv("URL_PORTAL")
@@ -20,13 +23,10 @@ if not URL_PORTAL:
 if not URL_NOTIFY:
     raise Exception("URL_NOTIFY environment variable is not set!")
 
-with sync_playwright() as p:
-    print("Launching a browser")
-    browser = p.firefox.launch()
-    page = browser.new_page()
 
-    print(f"Opening page: {URL_PORTAL}")
-    rs = page.goto(URL_PORTAL)
+def parse(page: Page, url_portal: str = URL_PORTAL, url_notify: str = URL_NOTIFY):
+    print(f"Opening page: {url_portal}")
+    page.goto(url_portal)
 
     css_selector = "a#NameFieldLink[href]"
 
@@ -41,7 +41,7 @@ with sync_playwright() as p:
 
         print(f"Check {full_name!r} ({username})")
 
-        url_check: str = urljoin(URL_NOTIFY, username)
+        url_check: str = urljoin(url_notify, username)
         print(f"Sending a notification: {url_check}")
 
         rs = requests.get(url_check)
@@ -51,4 +51,28 @@ with sync_playwright() as p:
         print(f"[{'+' if rs.status_code == 201 else '='}] {full_name!r} ({username})")
         print()
 
-    browser.close()
+
+with sync_playwright() as p:
+    print("Launching a browser")
+    browser = p.firefox.launch()
+
+    try:
+        page = browser.new_page()
+
+        max_attempts = 3
+        attempt = 0
+        while True:
+            try:
+                attempt += 1
+                parse(page)
+                break
+            except Exception as e:
+                print(f"#{attempt}.\n{traceback.format_exc()}")
+
+                if attempt >= max_attempts:
+                    raise e
+
+                time.sleep(30)
+
+    finally:
+        browser.close()
