@@ -11,12 +11,12 @@ from peewee import CharField, TextField, ForeignKeyField, Model
 from playhouse.shortcuts import model_to_dict
 
 
-def shorten(text: str, length: int = 30, post_fix: str = "...") -> str:
+def shorten(text: str, length: int = 30, placeholder: str = "...") -> str:
     if not text:
         return text
 
     if len(text) > length:
-        text = text[: length - len(post_fix)] + post_fix
+        text = text[: length - len(placeholder)] + placeholder
     return text
 
 
