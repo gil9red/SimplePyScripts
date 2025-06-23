@@ -15,6 +15,7 @@ ROOT_DIR = DIR.parent
 
 sys.path.append(str(ROOT_DIR))
 from site_common import do_get, do_post
+from root_config import JIRA_HOST
 
 
 URL_BASE = "https://mysite.compassplus.com"
@@ -32,6 +33,11 @@ def is_active_profile(full_username: str) -> bool:
     data = organization["d"][0]
     # Если хотя бы один из них имеет значение, отличное от [] или None
     return bool(data["Parent"] or data["Siblings"] or data["Children"])
+
+
+def get_jira_user_active(username: str) -> bool:
+    url = f"{JIRA_HOST}/rest/api/latest/user?username={username}"
+    return do_get(url).json()["active"]
 
 
 def get_text(el: Tag) -> str:
@@ -53,4 +59,5 @@ if __name__ == "__main__":
     print("Children:", data["Children"])
     print()
 
-    print("Is active:", is_active_profile(full_username))
+    print("Is active (mysite):", is_active_profile(full_username))
+    print("Is active (jira):", get_jira_user_active(full_username.rsplit("\\")[-1]))

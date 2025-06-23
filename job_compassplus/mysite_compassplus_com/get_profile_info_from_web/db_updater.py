@@ -14,7 +14,7 @@ import db
 from config import DIR, MAX_LAST_CHECK_DATE_DAYS
 
 sys.path.append(str(DIR.parent))
-from get_person_info import Person, get_person_info
+from get_person_info import Person, get_person_info, get_jira_user_active
 
 
 def create_person_from_info(info: Person) -> db.Person:
@@ -55,7 +55,7 @@ def is_need_to_check(person: db.Person, d: date) -> bool:
     return d > person.last_check_date + timedelta(days=MAX_LAST_CHECK_DATE_DAYS)
 
 
-def add_or_get_db(name: str) -> db.Person | None:
+def add_or_get_db(name: str, forced: bool = False) -> db.Person | None:
     person = db.Person.get_last_by_name(name)
 
     # Если нет, то создать
@@ -69,7 +69,7 @@ def add_or_get_db(name: str) -> db.Person | None:
     # Если с даты последней проверки прошло больше MAX_LAST_CHECK_DATE_DAYS дней, то
     # нужно проверить изменения полей
     today = date.today()
-    if is_need_to_check(person, d=today):
+    if is_need_to_check(person, d=today) or forced:
         info = get_person_info(name)
         if info:
             if is_person_eq_info(person, info):
@@ -94,7 +94,7 @@ def add_or_get_db(name: str) -> db.Person | None:
     return person
 
 
-def do_update_db():
+def do_update_db(forced: bool = False):
     prefix: str = "[do_update_db]"
 
     print(f"{prefix} Start")
@@ -110,13 +110,13 @@ def do_update_db():
 
                 person: db.Person | None = None
                 try:
-                    person = add_or_get_db(name)
+                    person = add_or_get_db(name, forced=forced)
                 except Exception as e:
                     print(f"{prefix} Error: {e}")
                 finally:
                     # Оптимизация, чтобы не делать лишней задержку, если не было запроса по сети в add_or_get_db
                     # (это косвенно можно понять по last_check_date)
-                    if person and not is_need_to_check(person, d=date.today()):
+                    if not forced and person and not is_need_to_check(person, d=date.today()):
                         continue
 
                     time.sleep(10)
@@ -133,4 +133,4 @@ def do_update_db():
 if __name__ == "__main__":
     print(add_or_get_db("ipetrash"))
 
-    # do_update_db()
+    # do_update_db(forced=True)

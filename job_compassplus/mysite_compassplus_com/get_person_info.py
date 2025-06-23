@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
-from common import URL, do_get, get_text, is_active_profile
+from common import URL, do_get, get_text, is_active_profile, get_jira_user_active
 
 
 @dataclass
@@ -69,9 +69,14 @@ def get_person_info(name: str, domain: str = "CP") -> Person | None:
         birthday = default_value
 
     try:
-        is_active = is_active_profile(full_username)
+        # NOTE: is_active_profile для mysite не подходит - не всегда оттуда убирают информацию
+        #       В джире эта информация, похоже, всегда актуальная
+        is_active = get_jira_user_active(name)
     except Exception:
-        is_active = None
+        try:
+            is_active = is_active_profile(full_username)
+        except Exception:
+            is_active = None
 
     return Person(
         name=name,
