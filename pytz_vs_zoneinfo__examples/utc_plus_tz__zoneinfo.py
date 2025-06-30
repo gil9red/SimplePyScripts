@@ -18,6 +18,7 @@ print(dt_utc)
 # 2025-01-01 12:00:00+00:00
 
 assert dt_utc == datetime.fromisoformat("2025-01-01 12:00:00").replace(tzinfo=dt_utc.tzinfo)
+assert dt_utc == datetime.fromisoformat("2025-01-01 12:00:00").replace(tzinfo=timezone.utc)
 
 print()
 
