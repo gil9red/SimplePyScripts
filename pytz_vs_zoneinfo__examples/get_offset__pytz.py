@@ -28,16 +28,13 @@ print(tz_utc)
 
 print()
 
-now = datetime(year=2025, month=1, day=1, hour=12, minute=0, second=0)
+dt = datetime(year=2025, month=1, day=1, hour=12, minute=0, second=0)
 
-print(now.astimezone(tz_moscow).strftime("%z"))
+print(dt.astimezone(tz_moscow).strftime("%z"))
+print(dt.astimezone(tz_etc_0300).strftime("%z"))
+print(dt.astimezone(tz_offset_0300).strftime("%z"))
+print(dt.astimezone(tz_utc).strftime("%z"))
 # +0300
-
-print(now.astimezone(tz_etc_0300).strftime("%z"))
 # +0300
-
-print(now.astimezone(tz_offset_0300).strftime("%z"))
 # +0300
-
-print(now.astimezone(tz_utc).strftime("%z"))
 # +0000
