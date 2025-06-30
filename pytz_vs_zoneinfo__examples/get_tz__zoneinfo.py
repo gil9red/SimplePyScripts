@@ -22,3 +22,10 @@ try:
 except zoneinfo.ZoneInfoNotFoundError as e:
     print(e)
 # 'No time zone found with key INVALID'
+
+try:
+    tz = zoneinfo.ZoneInfo(None)
+    raise Exception()
+except TypeError as e:
+    print(e)
+# expected str, bytes or os.PathLike object, not NoneType

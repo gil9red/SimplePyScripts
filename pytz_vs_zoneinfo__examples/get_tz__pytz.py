@@ -22,3 +22,10 @@ try:
 except pytz.UnknownTimeZoneError as e:
     print(e)
 # 'INVALID'
+
+try:
+    tz = pytz.timezone(None)
+    raise Exception()
+except pytz.UnknownTimeZoneError as e:
+    print(e)
+# None
