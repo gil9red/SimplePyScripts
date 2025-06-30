@@ -27,3 +27,22 @@ print(tz_utc.fromutc(dt.replace(tzinfo=tz_utc)))
 # 2025-01-01 15:00:00+03:00
 # 2025-01-01 15:00:00+03:00
 # 2025-01-01 12:00:00+00:00
+
+print("\n" + "-" * 10 + "\n")
+
+dt_utc = datetime(year=2025, month=1, day=1, hour=12, minute=0, second=0, tzinfo=tz_utc)
+print(dt_utc)
+# 2025-01-01 12:00:00+00:00
+
+assert dt_utc == datetime.fromisoformat("2025-01-01 12:00:00").replace(tzinfo=dt_utc.tzinfo)
+
+print()
+
+print(dt_utc.astimezone(tz_moscow))
+print(dt_utc.astimezone(tz_etc_0300))
+print(dt_utc.astimezone(tz_offset_0300))
+print(dt_utc.astimezone(tz_utc))
+# 2025-01-01 15:00:00+03:00
+# 2025-01-01 15:00:00+03:00
+# 2025-01-01 15:00:00+03:00
+# 2025-01-01 12:00:00+00:00
