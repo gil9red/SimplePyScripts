@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from enum import Enum
 from typing import Type, Any, Iterable
 
-from peewee import CharField, TextField, ForeignKeyField, Model
+from peewee import CharField, TextField, ForeignKeyField, Model, Field
 from playhouse.shortcuts import model_to_dict
 
 
@@ -31,6 +31,25 @@ class MetaModel(Model):
     @classmethod
     def get_last(cls) -> "MetaModel":
         return cls.select().order_by(cls.id.desc()).first()
+
+    @classmethod
+    def paginating(
+        cls,
+        page: int = 1,
+        items_per_page: int = 1,
+        filters: Iterable | None = None,
+        order_by: Field | None = None,
+    ) -> list["MetaModel"]:
+        query = cls.select()
+
+        if filters:
+            query = query.filter(*filters)
+
+        if order_by:
+            query = query.order_by(order_by)
+
+        query = query.paginate(page, items_per_page)
+        return list(query)
 
     @classmethod
     def get_inherited_models(cls) -> list[Type["MetaModel"]]:
@@ -119,3 +138,13 @@ if __name__ == "__main__":
 
     print(Data.get_last().to_dict())
     # {'id': 3, 'name': 'bar', 'value': '!!!'}
+
+    print()
+    filters = [
+        Data.name.in_(["a", "b"])
+    ]
+    order_by = Data.name.desc()
+    print(Data.paginating(page=1, filters=filters, order_by=order_by))
+    print(Data.paginating(page=2, filters=filters, order_by=order_by))
+    # [<Data: Data(id=2, name='b', value='Foo')>]
+    # [<Data: Data(id=1, name='a', value='aAA')>]
