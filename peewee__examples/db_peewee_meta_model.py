@@ -146,5 +146,7 @@ if __name__ == "__main__":
     order_by = Data.name.desc()
     print(Data.paginating(page=1, filters=filters, order_by=order_by))
     print(Data.paginating(page=2, filters=filters, order_by=order_by))
+    print(Data.paginating(page=3, filters=filters, order_by=order_by))
     # [<Data: Data(id=2, name='b', value='Foo')>]
     # [<Data: Data(id=1, name='a', value='aAA')>]
+    # []
