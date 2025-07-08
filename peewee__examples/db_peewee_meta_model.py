@@ -141,7 +141,7 @@ if __name__ == "__main__":
 
     print()
     filters = [
-        Data.name.in_(["a", "b"])
+        Data.name.in_(["a", "b"]),
     ]
     order_by = Data.name.desc()
     print(Data.paginating(page=1, filters=filters, order_by=order_by))
