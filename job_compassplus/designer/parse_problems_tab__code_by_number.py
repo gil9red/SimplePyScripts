@@ -15,7 +15,7 @@ for line in text.strip().splitlines():
     if not line.startswith("*"):
         continue
 
-    m = re.search(r"\* (\d+) - ", line)
+    m = re.search(r"\* \[\w+\] (\d+) - ", line)
     code: str = m.group(1) if m else "<unknown>"
 
     if code not in code_by_number:

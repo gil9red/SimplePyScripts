@@ -1,19 +1,19 @@
 Cursor Class 'ABC::Interfacing.Foo::Bar'
-* 137 - XXX [foo@example.com] [Fix available]
+* [NOTE] 137 - XXX [foo@example.com] [Fix available]
 
 Statement Class 'ABC::Common::Foo::Bar'
-* 137 - XXX [bar@example.com] [Fix available]
+* [NOTE] 137 - XXX [bar@example.com] [Fix available]
 
 User Method 'ABC::Common::Foo:Model:Bar'
-* 51 - The definition 'ABC::Common::Foo:Bar:ownerPid' is XXX (See RADIX-24309, RADIX-17843. Ignore werror.) [Link] [bar@example.com]
-* 51 - The definition 'ABC::Common::Foo:Bar:ownerPid' is XXX (See RADIX-24309, RADIX-17843. Ignore werror.) [Link] [bar@example.com]
-* 51 - The definition 'ABC::Common::Foo:Bar:ownerPid' is XXX (See RADIX-24309, RADIX-17843. Ignore werror.) [Link] [bar@example.com]
-* 51 - The definition 'ABC::Common::Foo:Bar:ownerPid' is XXX (See RADIX-24309, RADIX-17843. Ignore werror.) [Link] [bar@example.com]
+* [WARNING] 51 - The definition 'ABC::Common::Foo:Bar:ownerPid' is XXX (See RADIX-24309, RADIX-17843. Ignore werror.) [Link] [bar@example.com]
+* [WARNING] 51 - The definition 'ABC::Common::Foo:Bar:ownerPid' is XXX (See RADIX-24309, RADIX-17843. Ignore werror.) [Link] [bar@example.com]
+* [WARNING] 51 - The definition 'ABC::Common::Foo:Bar:ownerPid' is XXX (See RADIX-24309, RADIX-17843. Ignore werror.) [Link] [bar@example.com]
+* [WARNING] 51 - The definition 'ABC::Common::Foo:Bar:ownerPid' is XXX (See RADIX-24309, RADIX-17843. Ignore werror.) [Link] [bar@example.com]
 
 Editor Page 'ABC::FOO::BAR:General'
-* 132 - Editor page does not contain property `XXX` from `overridden` base page (See RADIX-23441) [Link]
-* 132 - Editor page does not contain property `XXX` from `overridden` base page (See RADIX-23441) [Link]
+* [NOTE] 132 - Editor page does not contain property `XXX` from `overridden` base page (See RADIX-23441) [Link]
+* [NOTE] 132 - Editor page does not contain property `XXX` from `overridden` base page (See RADIX-23441) [Link]
 
 Statement Class 'ABC::Common::Foo::Bar'
-* 137 - XXX [foo@example.com, bar@example.com] [Fix available]
-* 999 - XXX [foo@example.com, bar@example.com]
+* [NOTE] 137 - XXX [foo@example.com, bar@example.com] [Fix available]
+* [ERROR] 999 - XXX [foo@example.com, bar@example.com]
