@@ -1,19 +1,29 @@
 Cursor Class 'ABC::Interfacing.Foo::Bar'
 * [NOTE] 137 - XXX [foo@example.com] [Fix available]
+    at ABC::Interfacing.Foo::Bar
 
 Statement Class 'ABC::Common::Foo::Bar'
 * [NOTE] 137 - XXX [bar@example.com] [Fix available]
+    at ABC::Common::Foo::Bar
 
 User Method 'ABC::Common::Foo:Model:Bar'
 * [WARNING] 51 - The definition 'ABC::Common::Foo:Bar:ownerPid' is XXX (See RADIX-24309, RADIX-17843. Ignore werror.) [Link] [bar@example.com]
+    at ABC::Common::Foo:Model:Bar
 * [WARNING] 51 - The definition 'ABC::Common::Foo:Bar:ownerPid' is XXX (See RADIX-24309, RADIX-17843. Ignore werror.) [Link] [bar@example.com]
+    at ABC::Common::Foo:Model:Bar
 * [WARNING] 51 - The definition 'ABC::Common::Foo:Bar:ownerPid' is XXX (See RADIX-24309, RADIX-17843. Ignore werror.) [Link] [bar@example.com]
+    at ABC::Common::Foo:Model:Bar
 * [WARNING] 51 - The definition 'ABC::Common::Foo:Bar:ownerPid' is XXX (See RADIX-24309, RADIX-17843. Ignore werror.) [Link] [bar@example.com]
+    at ABC::Common::Foo:Model:Bar
 
 Editor Page 'ABC::FOO::BAR:General'
 * [NOTE] 132 - Editor page does not contain property `XXX` from `overridden` base page (See RADIX-23441) [Link]
+    at ABC::FOO::BAR:General
 * [NOTE] 132 - Editor page does not contain property `XXX` from `overridden` base page (See RADIX-23441) [Link]
+    at ABC::FOO::BAR:General
 
 Statement Class 'ABC::Common::Foo::Bar'
 * [NOTE] 137 - XXX [foo@example.com, bar@example.com] [Fix available]
+    at ABC::Common::Foo::Bar
 * [ERROR] 999 - XXX [foo@example.com, bar@example.com]
+    at ABC::Common::Foo::Bar

@@ -4,23 +4,23 @@
 __author__ = "ipetrash"
 
 
-import re
-from pathlib import Path
+from common import PATH_PROBLEMS_TAB, parse_text
 
 
-text = (Path(__file__).parent / "problems_tab.txt").read_text("utf-8")
+text = PATH_PROBLEMS_TAB.read_text("utf-8")
+
+# TODO:
+filter_by_codes: list[int] = [
+    # 127, 137
+]
 
 user_by_number: dict[str, int] = dict()
-for line in text.strip().splitlines():
-    if not line.startswith("*"):
+
+for p in parse_text(text):
+    if filter_by_codes and p.code not in filter_by_codes:
         continue
 
-    users = []
-    for brackets in re.findall(r"\[(.*?)]", line):
-        if "@" in brackets:
-            emails = brackets.split(", ")
-            users += [email.split("@")[0] for email in emails]
-
+    users = p.maintainers.copy()
     if not users:
         users.append("<unknown>")
 

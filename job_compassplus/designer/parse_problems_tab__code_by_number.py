@@ -4,24 +4,18 @@
 __author__ = "ipetrash"
 
 
-import re
-from pathlib import Path
+from common import PATH_PROBLEMS_TAB, parse_text
 
 
-text = (Path(__file__).parent / "problems_tab.txt").read_text("utf-8")
+text = PATH_PROBLEMS_TAB.read_text("utf-8")
 
-total = 0
-code_by_number: dict[str, int] = dict()
-for line in text.strip().splitlines():
-    if not line.startswith("*"):
-        continue
+total: int = 0
+code_by_number: dict[int, int] = dict()
 
-    m = re.search(r"\* \[\w+\] (\d+) - ", line)
-    code: str = m.group(1) if m else "<unknown>"
-
-    if code not in code_by_number:
-        code_by_number[code] = 0
-    code_by_number[code] += 1
+for p in parse_text(text):
+    if p.code not in code_by_number:
+        code_by_number[p.code] = 0
+    code_by_number[p.code] += 1
 
     total += 1
 
