@@ -76,7 +76,7 @@ def get_owner_by_modules(project_dir: str | Path) -> dict[str, list[str]]:
 
 
 if __name__ == "__main__":
-    project_dir = "C:/DEV__TX/trunk_tx"
+    project_dir = "C:/DEV__TX/trunk"
     owner_by_modules = get_owner_by_modules(project_dir)
 
     for email in sorted(owner_by_modules):
