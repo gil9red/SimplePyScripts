@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-from collections import defaultdict, Counter
+from collections import defaultdict
 from common import PATH_PROBLEMS_TAB, Problem, parse_text
 
 
