@@ -27,8 +27,7 @@ for p in parse_text(text):
     if not users:
         users.append("<unknown>")
 
-    for user in users:
-        user_by_number_details[user].append(p)
+    user_by_number_details["+".join(users)].append(p)
 
 print(f"Total users: {len(user_by_number_details)}")
 
