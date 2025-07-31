@@ -46,7 +46,8 @@ def search_game(game: str) -> dict[str, Any] | None:
         if (
             _is_found_game(game, obj["game_name"])
             # Поиск среди псевдонимов
-            or any(_is_found_game(game, name) for name in obj["game_alias"].split(","))
+            or obj["game_alias"] == game
+            or any(_is_found_game(game, name) for name in obj["game_alias"].split(", "))
         ):
             return obj
 
@@ -54,16 +55,23 @@ def search_game(game: str) -> dict[str, Any] | None:
 
 
 if __name__ == "__main__":
+    game = "Warhammer 40,000: Space Marine 2"
+    result = search_game(game)
+    print(game, result)
+    assert "Warhammer 40,000: Space Marine II" == result["game_name"]
+
     game = "Half-Life 2"
     result = search_game(game)
     print(game, result)
     assert game == result["game_name"]
 
-    # print(search_game("Half-Life 2"))
-    # print(search_game("Half-Life"))
-    # print(search_game("Final Fantasy IX"))
-    # print(search_game("Final Fantasy 9"))
-    # print(search_game("Final Fantasy VII"))
+    print()
+
+    print(search_game("Half-Life 2"))
+    print(search_game("Half-Life"))
+    print(search_game("Final Fantasy IX"))
+    print(search_game("Final Fantasy 9"))
+    print(search_game("Final Fantasy VII"))
 
     # from multiprocessing.dummy import Pool as ThreadPool
     #
