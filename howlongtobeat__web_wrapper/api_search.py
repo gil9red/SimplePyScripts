@@ -67,11 +67,21 @@ if __name__ == "__main__":
 
     print()
 
-    print(search_game("Half-Life 2"))
-    print(search_game("Half-Life"))
-    print(search_game("Final Fantasy IX"))
-    print(search_game("Final Fantasy 9"))
-    print(search_game("Final Fantasy VII"))
+    game = search_game("Half-Life")
+    print(game)
+    assert game
+
+    game = search_game("Final Fantasy IX")
+    print(game)
+    assert game
+
+    game = search_game("Final Fantasy 9")
+    print(game)
+    assert game
+
+    game = search_game("Final Fantasy VII")
+    print(game)
+    assert game
 
     # from multiprocessing.dummy import Pool as ThreadPool
     #
