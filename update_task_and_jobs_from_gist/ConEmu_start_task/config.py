@@ -4,8 +4,10 @@
 __author__ = "ipetrash"
 
 
-import winshell
 from pathlib import Path
+
+# pip install winshell==0.6
+import winshell
 
 
 DIR = Path(__file__).resolve().parent
