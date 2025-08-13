@@ -45,7 +45,7 @@ def _get_channel_videos(data: dict[str, Any]) -> dict[str, Any]:
             items: list[dict[str, Any]] = [
                 v
                 for k, v in data["api"]["queries"].items()
-                if k.startswith("videos")
+                if k.startswith(("videos", "allVideos"))
             ]
         except KeyError:
             raise KeyError("Не удалось найти api/queries!")
