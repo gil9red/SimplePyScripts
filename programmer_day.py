@@ -4,19 +4,19 @@
 __author__ = "ipetrash"
 
 
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 
 
-day_of_year = int(datetime.today().strftime("%j"))
-print("day_of_year:", day_of_year)
+day_of_year: int = int(date.today().strftime("%j"))
+print(f"Current day of year: {day_of_year}")
 
-last_programmer_day = 256 - day_of_year
-print("last_programmer_day:", last_programmer_day)
+last_programmer_day: int = 256 - day_of_year
+print(f"Until Programmer's day: {last_programmer_day}")
 
 if last_programmer_day >= 0:
-    programmer_day = datetime.today() + timedelta(days=last_programmer_day)
-    print("\nday of programmer_day:", programmer_day.strftime("%j"))
-    print("programmer_day:", programmer_day)
-
+    programmer_day = date.today() + timedelta(days=last_programmer_day)
+    print()
+    print(f"Day of programmer day: {programmer_day:%j}")
+    print(f"Programmer day: {programmer_day}")
 else:
     print("Has already passed")
