@@ -63,6 +63,10 @@ def add_or_get_db(name: str, forced: bool = False) -> db.Person | None:
         info = get_person_info(name)
         if not info:
             return
+
+        # Пусть первые пользователи всегда будут активными
+        info.is_active = True
+
         return create_person_from_info(info)
 
     # Проверить дату проверку
