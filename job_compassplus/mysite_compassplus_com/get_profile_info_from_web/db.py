@@ -135,6 +135,10 @@ class Person(BaseModel):
             cls.select().where(cls.name == name).order_by(cls.id.desc())
         )
 
+    @classmethod
+    def get_all_name(cls) -> list[str]:
+        return [p.name for p in cls.select(cls.name).distinct()]
+
 
 db.connect()
 db.create_tables(BaseModel.get_inherited_models())

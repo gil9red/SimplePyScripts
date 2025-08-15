@@ -107,8 +107,7 @@ def do_update_db(forced: bool = False):
         print(f"{prefix} Check all")
         try:
             # Запрос для получения ников
-            query = db.Person.select(db.Person.name).distinct()
-            names: list[str] = [x.name for x in query]
+            names: list[str] = db.Person.get_all_name()
             for i, name in enumerate(names, 1):
                 print(f"{prefix} Check {name} ({i}/{len(names)})")
 
