@@ -112,16 +112,28 @@ platform_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable)
 
 ball_item = scene.addEllipse(
     QRectF(
-        # TODO: Нельзя задавать - будет сдвиг по X
-        scene.width() / 2 - (ball_radius / 2),
-        # TODO: Нельзя задавать - будет сдвиг по Y
-        scene.height() - ball_radius - platform_height,
+        0,
+        0,
+        # # TODO: Нельзя задавать - будет сдвиг по X
+        # scene.width() / 2 - (ball_radius / 2),
+        # # TODO: Нельзя задавать - будет сдвиг по Y
+        # scene.height() - ball_radius - platform_height,
         ball_radius,
         ball_radius,
     ),
     brush=Qt.GlobalColor.green,
 )
 ball_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable)
+
+# print(platform_item.rect(), platform_item.rect().center())
+# print(platform_item.sceneBoundingRect(), platform_item.sceneBoundingRect().center())
+# print(platform_item.boundingRect(), platform_item.boundingRect().center())
+ball_item.setPos(
+    # (scene.width() / 2) - (platform_width / 2),
+    platform_item.sceneBoundingRect().center().x() - (ball_item.sceneBoundingRect().width() / 2),
+    # scene.height() - platform_height
+    platform_item.sceneBoundingRect().top() - ball_item.sceneBoundingRect().height(),
+)
 
 
 def on_scene_changed(region: list[QRectF]):
@@ -189,6 +201,8 @@ def on_scene_changed(region: list[QRectF]):
         # scene_left_line_item.sceneBoundingRect(),
         # platform_item.mapRectToScene(scene_left_line_item.sceneBoundingRect())
     )
+    # TODO: Мб проверять что по X оно меньше чем scene_left_line_item
+    # TODO: Для правой стороны
     if platform_item.collidesWithItem(scene_left_line_item):  # TODO:
         platform_item.setX(scene_left_line_item.boundingRect().right())  # TODO:
 
