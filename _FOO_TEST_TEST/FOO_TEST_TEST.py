@@ -4,6 +4,76 @@
 __author__ = "ipetrash"
 
 
+from PyQt6.QtWidgets import QApplication, QGraphicsScene, QGraphicsView, QGraphicsItem, QGraphicsRectItem
+from PyQt6.QtCore import QRectF, Qt
+
+
+# TODO: Пусть будет 13 x 3
+board = """\
+  x x x x x  
+xxx  xxx  xxx
+xxx  x x  xxx
+""".rstrip()
+# TODO:
+brick_width: int = 40
+brick_height: int = 20
+
+app = QApplication([])
+
+width_desktop, height_desktop = 800, 600
+scene_rect = QRectF(0, 0, width_desktop, height_desktop)
+
+scene = QGraphicsScene()
+# scene.addRect(scene_rect)  # TODO: ?
+scene.setSceneRect(scene_rect)
+
+bricks: list[QGraphicsRectItem] = []
+top: int = 0
+for line in board.splitlines():
+    print(repr(line))
+    left: int = 0
+    for x in line:
+        if x == 'x':
+            bricks.append(
+                scene.addRect(
+                    QRectF(left, top, brick_width, brick_height),
+                    brush=Qt.GlobalColor.red,
+                )
+            )
+        left += brick_width
+
+    top += brick_height
+
+ball_radius: int = 40
+ball_item = scene.addEllipse(
+    QRectF(scene.width() / 2, scene.height() - ball_radius, ball_radius, ball_radius),
+    brush=Qt.GlobalColor.green,
+)
+ball_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable)
+
+def on_scene_changed(region: list[QRectF]):
+    print("on_scene_changed", region)
+
+    view.setWindowTitle(f"collidingItems: {len(ball_item.collidingItems())}")
+    for brick in bricks:
+        brick.setBrush(Qt.GlobalColor.darkMagenta if brick.collidesWithItem(ball_item) else Qt.GlobalColor.red)
+
+scene.changed.connect(on_scene_changed)
+
+view = QGraphicsView()
+view.setWindowTitle("TODO")
+view.setScene(scene)
+
+# n = 3
+# view.scale(1.0 / n, 1.0 / n)
+
+view.show()
+
+app.exec()
+
+
+
+quit()
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, date, timezone
 
