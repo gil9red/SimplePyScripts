@@ -4,8 +4,8 @@
 __author__ = "ipetrash"
 
 
-from PyQt6.QtWidgets import QApplication, QGraphicsScene, QGraphicsView, QGraphicsItem, QGraphicsRectItem
-from PyQt6.QtCore import QRectF, Qt
+from PyQt6.QtWidgets import QApplication, QGraphicsScene, QGraphicsView, QGraphicsItem, QGraphicsRectItem, QGraphicsLineItem
+from PyQt6.QtCore import QRectF, QLineF, Qt
 
 
 # TODO: Пусть будет 13 x 3
@@ -20,11 +20,15 @@ brick_height: int = 20
 
 app = QApplication([])
 
-width_desktop, height_desktop = 800, 600
-scene_rect = QRectF(0, 0, width_desktop, height_desktop)
+scene_width, scene_height = 800, 600
+scene_rect = QRectF(0, 0, scene_width, scene_height)
 
 scene = QGraphicsScene()
-# scene.addRect(scene_rect)  # TODO: ?
+scene_top_line = scene.addLine(QLineF(scene_rect.topLeft(), scene_rect.topRight()))  # TODO: ?
+scene_left_line = scene.addLine(QLineF(scene_rect.topLeft(), scene_rect.bottomLeft()))  # TODO: ?
+scene_bottom_line = scene.addLine(QLineF(scene_rect.bottomRight(), scene_rect.bottomLeft()))  # TODO: ?
+scene_right_line = scene.addLine(QLineF(scene_rect.topRight(), scene_rect.bottomRight()))  # TODO: ?
+# scene_rect_item = scene.addRect(scene_rect)  # TODO: ?
 scene.setSceneRect(scene_rect)
 
 bricks: list[QGraphicsRectItem] = []
@@ -45,8 +49,9 @@ for line in board.splitlines():
     top += brick_height
 
 ball_radius: int = 40
+platform_height: int = 20
 ball_item = scene.addEllipse(
-    QRectF(scene.width() / 2, scene.height() - ball_radius, ball_radius, ball_radius),
+    QRectF(scene.width() / 2, scene.height() - ball_radius - platform_height, ball_radius, ball_radius),
     brush=Qt.GlobalColor.green,
 )
 ball_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable)
@@ -54,9 +59,40 @@ ball_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable)
 def on_scene_changed(region: list[QRectF]):
     print("on_scene_changed", region)
 
-    view.setWindowTitle(f"collidingItems: {len(ball_item.collidingItems())}")
+    # TODO: Проверка выхода за сцену ball_item
+    collidingItems = [item for item in ball_item.collidingItems()] # TODO:
+    print(collidingItems)
+
+    # for item in collidingItems:
+    #     color = Qt.GlobalColor.darkMagenta if item.collidesWithItem(ball_item) else Qt.GlobalColor.red
+    #
+    #     if isinstance(item, QGraphicsRectItem):
+    #         item.setBrush(color)
+    #     elif isinstance(item, QGraphicsLineItem):
+    #         item.setPen(color)
+
+    collisions: list[str] = []
     for brick in bricks:
         brick.setBrush(Qt.GlobalColor.darkMagenta if brick.collidesWithItem(ball_item) else Qt.GlobalColor.red)
+        if brick.collidesWithItem(ball_item): # TODO:
+            collisions.append("brick")
+
+    if scene_top_line.collidesWithItem(ball_item): # TODO:
+        collisions.append("top")
+
+    if scene_right_line.collidesWithItem(ball_item): # TODO:
+        collisions.append("right")
+
+    if scene_bottom_line.collidesWithItem(ball_item): # TODO:
+        collisions.append("bottom")
+
+    if scene_left_line.collidesWithItem(ball_item): # TODO:
+        collisions.append("left")
+
+    view.setWindowTitle(f"collidingItems: {len(collidingItems)}. Collisions: {', '.join(collisions)}")
+
+    #
+    # scene_top_line, scene_right_line, scene_bottom_line, scene_left_line
 
 scene.changed.connect(on_scene_changed)
 
@@ -67,6 +103,8 @@ view.setScene(scene)
 # n = 3
 # view.scale(1.0 / n, 1.0 / n)
 
+view.resize(scene_width + 20, scene_height + 20)
+
 view.show()
 
 app.exec()
@@ -74,6 +112,103 @@ app.exec()
 
 
 quit()
+
+from datetime import date, timedelta
+
+start = date(year=1992, month=8, day=18)
+year = 1
+while True:
+    print(year, start)
+    start += timedelta(days=365)
+    year += 1
+    if start.year > 2025:
+        break
+
+# print((date.today() - ).days / 366)
+
+quit()
+
+from pathlib import Path
+
+from typing import Any, Generator, Sized
+
+
+def chunks(l: Sized, n: int) -> Generator[Any, None, None]:
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i : i + n]
+
+
+p = Path("C:/Users/ipetrash/Downloads/0000_0039_Trnv_P_20250201_01_CIB0983543.ebc")
+data = p.read_bytes()
+for line in chunks(data, 170):
+    print(line.hex().upper())
+
+quit()
+
+import copy2clipboard__via_pyperclip as copy2clipboard
+
+while n := input():
+    value = n.title()
+    copy2clipboard.to(value)
+    print(value + "\n")
+
+
+quit()
+
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QDockWidget, QMainWindow, QTextEdit, QPushButton
+
+import sys
+import traceback
+
+from PyQt5.QtWidgets import QApplication, QTextEdit, QMessageBox
+
+
+def log_uncaught_exceptions(ex_cls, ex, tb):
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
+
+    print(text)
+    QMessageBox.critical(None, "Error", text)
+    sys.exit(1)
+
+
+sys.excepthook = log_uncaught_exceptions
+
+
+app = QApplication([])
+
+dock_widget_2 = QDockWidget("Right2")
+pb = QPushButton("!!!", clicked=dock_widget_2.setFloating)
+pb.setCheckable(True)
+dock_widget_2.setTitleBarWidget(pb)
+
+dock_widget_left = QDockWidget("Left")
+# TODO: Добавить кнопку PIN, которая вытаскивает доквиджет, отвязывает от родителя, делает поверх всех окон
+#       Показывать кнопку возврата обратно
+dock_widget_left.topLevelChanged.connect(
+    lambda flag: (
+        dock_widget_left.setWindowFlag(Qt.WindowStaysOnTopHint, flag),
+        dock_widget_left.setParent(None) if flag else None,
+        dock_widget_left.show()
+    )
+)
+# dock_widget_left.setWindowFlags(Qt.WindowType.Window)
+# dock_widget_left.show()
+
+mw = QMainWindow()
+mw.setCentralWidget(QTextEdit())
+mw.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, QDockWidget("Right"))
+mw.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, dock_widget_2)
+mw.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, dock_widget_left)
+mw.show()
+
+app.exec()
+
+
+quit()
+
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, date, timezone
 
