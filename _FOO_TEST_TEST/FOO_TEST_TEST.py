@@ -4,7 +4,14 @@
 __author__ = "ipetrash"
 
 
-from PyQt6.QtWidgets import QApplication, QGraphicsScene, QGraphicsView, QGraphicsItem, QGraphicsRectItem, QGraphicsLineItem
+from PyQt6.QtWidgets import (
+    QApplication,
+    QGraphicsScene,
+    QGraphicsView,
+    QGraphicsItem,
+    QGraphicsRectItem,
+    QGraphicsLineItem,
+)
 from PyQt6.QtCore import QRectF, QLineF, Qt
 
 
@@ -20,14 +27,22 @@ brick_height: int = 20
 
 app = QApplication([])
 
-scene_width, scene_height = 800, 600
+scene_width, scene_height = 600, 300
 scene_rect = QRectF(0, 0, scene_width, scene_height)
 
 scene = QGraphicsScene()
-scene_top_line = scene.addLine(QLineF(scene_rect.topLeft(), scene_rect.topRight()))  # TODO: ?
-scene_left_line = scene.addLine(QLineF(scene_rect.topLeft(), scene_rect.bottomLeft()))  # TODO: ?
-scene_bottom_line = scene.addLine(QLineF(scene_rect.bottomRight(), scene_rect.bottomLeft()))  # TODO: ?
-scene_right_line = scene.addLine(QLineF(scene_rect.topRight(), scene_rect.bottomRight()))  # TODO: ?
+scene_top_line_item = scene.addLine(
+    QLineF(scene_rect.topLeft(), scene_rect.topRight())
+)  # TODO: ?
+scene_left_line_item = scene.addLine(
+    QLineF(scene_rect.topLeft(), scene_rect.bottomLeft())
+)  # TODO: ?
+scene_bottom_line_item = scene.addLine(
+    QLineF(scene_rect.bottomRight(), scene_rect.bottomLeft())
+)  # TODO: ?
+scene_right_line_item = scene.addLine(
+    QLineF(scene_rect.topRight(), scene_rect.bottomRight())
+)  # TODO: ?
 # scene_rect_item = scene.addRect(scene_rect)  # TODO: ?
 scene.setSceneRect(scene_rect)
 
@@ -37,7 +52,7 @@ for line in board.splitlines():
     print(repr(line))
     left: int = 0
     for x in line:
-        if x == 'x':
+        if x == "x":
             bricks.append(
                 scene.addRect(
                     QRectF(left, top, brick_width, brick_height),
@@ -49,21 +64,43 @@ for line in board.splitlines():
     top += brick_height
 
 ball_radius: int = 40
+
+platform_width: int = 100
 platform_height: int = 20
+
+# TODO:
+platform_item = scene.addRect(
+    QRectF(
+        (scene.width() / 2) - (platform_width / 2),
+        scene.height() - platform_height,
+        platform_width,
+        platform_height,
+    ),
+    brush=Qt.GlobalColor.red,
+)
+
 ball_item = scene.addEllipse(
-    QRectF(scene.width() / 2, scene.height() - ball_radius - platform_height, ball_radius, ball_radius),
+    QRectF(
+        scene.width() / 2 - (ball_radius / 2),
+        scene.height() - ball_radius - platform_height,
+        ball_radius,
+        ball_radius,
+    ),
     brush=Qt.GlobalColor.green,
 )
 ball_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable)
 
+
 def on_scene_changed(region: list[QRectF]):
     print("on_scene_changed", region)
 
-    # TODO: Проверка выхода за сцену ball_item
-    collidingItems = [item for item in ball_item.collidingItems()] # TODO:
-    print(collidingItems)
+    # TODO: технически, ball_item может быть много
 
-    # for item in collidingItems:
+    # TODO: Проверка выхода за сцену ball_item
+    colliding_items = ball_item.collidingItems()
+    print(colliding_items)
+
+    # for item in colliding_items:
     #     color = Qt.GlobalColor.darkMagenta if item.collidesWithItem(ball_item) else Qt.GlobalColor.red
     #
     #     if isinstance(item, QGraphicsRectItem):
@@ -73,26 +110,33 @@ def on_scene_changed(region: list[QRectF]):
 
     collisions: list[str] = []
     for brick in bricks:
-        brick.setBrush(Qt.GlobalColor.darkMagenta if brick.collidesWithItem(ball_item) else Qt.GlobalColor.red)
-        if brick.collidesWithItem(ball_item): # TODO:
+        brick.setBrush(
+            Qt.GlobalColor.darkMagenta
+            if brick.collidesWithItem(ball_item)
+            else Qt.GlobalColor.red
+        )
+        if brick.collidesWithItem(ball_item):  # TODO:
             collisions.append("brick")
 
-    if scene_top_line.collidesWithItem(ball_item): # TODO:
+    if platform_item.collidesWithItem(ball_item):  # TODO:
+        collisions.append("platform")
+
+    if scene_top_line_item.collidesWithItem(ball_item):  # TODO:
         collisions.append("top")
 
-    if scene_right_line.collidesWithItem(ball_item): # TODO:
+    if scene_right_line_item.collidesWithItem(ball_item):  # TODO:
         collisions.append("right")
 
-    if scene_bottom_line.collidesWithItem(ball_item): # TODO:
+    if scene_bottom_line_item.collidesWithItem(ball_item):  # TODO:
         collisions.append("bottom")
 
-    if scene_left_line.collidesWithItem(ball_item): # TODO:
+    if scene_left_line_item.collidesWithItem(ball_item):  # TODO:
         collisions.append("left")
 
-    view.setWindowTitle(f"collidingItems: {len(collidingItems)}. Collisions: {', '.join(collisions)}")
+    view.setWindowTitle(
+        f"collidingItems: {len(colliding_items)}. Collisions: {', '.join(collisions)}"
+    )
 
-    #
-    # scene_top_line, scene_right_line, scene_bottom_line, scene_left_line
 
 scene.changed.connect(on_scene_changed)
 
@@ -108,7 +152,6 @@ view.resize(scene_width + 20, scene_height + 20)
 view.show()
 
 app.exec()
-
 
 
 quit()
@@ -157,7 +200,13 @@ while n := input():
 quit()
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QDockWidget, QMainWindow, QTextEdit, QPushButton
+from PyQt5.QtWidgets import (
+    QApplication,
+    QDockWidget,
+    QMainWindow,
+    QTextEdit,
+    QPushButton,
+)
 
 import sys
 import traceback
@@ -191,7 +240,7 @@ dock_widget_left.topLevelChanged.connect(
     lambda flag: (
         dock_widget_left.setWindowFlag(Qt.WindowStaysOnTopHint, flag),
         dock_widget_left.setParent(None) if flag else None,
-        dock_widget_left.show()
+        dock_widget_left.show(),
     )
 )
 # dock_widget_left.setWindowFlags(Qt.WindowType.Window)
