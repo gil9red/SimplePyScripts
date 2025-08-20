@@ -4,6 +4,9 @@
 __author__ = "ipetrash"
 
 
+import sys
+import traceback
+
 from PyQt6.QtWidgets import (
     QApplication,
     QGraphicsScene,
@@ -11,8 +14,21 @@ from PyQt6.QtWidgets import (
     QGraphicsItem,
     QGraphicsRectItem,
     QGraphicsLineItem,
+    QMessageBox,
 )
 from PyQt6.QtCore import QRectF, QLineF, Qt
+
+
+def log_uncaught_exceptions(ex_cls, ex, tb):
+    text = f"{ex_cls.__name__}: {ex}:\n"
+    text += "".join(traceback.format_tb(tb))
+
+    print(text)
+    QMessageBox.critical(None, "Error", text)
+    sys.exit(1)
+
+
+sys.excepthook = log_uncaught_exceptions
 
 
 # TODO: Пусть будет 13 x 3
@@ -31,6 +47,8 @@ scene_width, scene_height = 600, 300
 scene_rect = QRectF(0, 0, scene_width, scene_height)
 
 scene = QGraphicsScene()
+scene.setSceneRect(scene_rect)
+
 scene_top_line_item = scene.addLine(
     QLineF(scene_rect.topLeft(), scene_rect.topRight())
 )  # TODO: ?
@@ -44,7 +62,6 @@ scene_right_line_item = scene.addLine(
     QLineF(scene_rect.topRight(), scene_rect.bottomRight())
 )  # TODO: ?
 # scene_rect_item = scene.addRect(scene_rect)  # TODO: ?
-scene.setSceneRect(scene_rect)
 
 bricks: list[QGraphicsRectItem] = []
 top: int = 0
@@ -71,17 +88,33 @@ platform_height: int = 20
 # TODO:
 platform_item = scene.addRect(
     QRectF(
-        (scene.width() / 2) - (platform_width / 2),
-        scene.height() - platform_height,
+        0,# TODO: Нельзя задавать - будет сдвиг по X
+        0,# TODO: Нельзя задавать - будет сдвиг по X
         platform_width,
         platform_height,
-    ),
+        ),
     brush=Qt.GlobalColor.red,
 )
+platform_item.setPos(
+    (scene.width() / 2) - (platform_width / 2),
+    scene.height() - platform_height
+)
+# platform_item = scene.addRect(
+#     QRectF(
+#         (scene.width() / 2) - (platform_width / 2),
+#         scene.height() - platform_height,
+#         platform_width,
+#         platform_height,
+#     ),
+#     brush=Qt.GlobalColor.red,
+# )
+platform_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable)
 
 ball_item = scene.addEllipse(
     QRectF(
+        # TODO: Нельзя задавать - будет сдвиг по X
         scene.width() / 2 - (ball_radius / 2),
+        # TODO: Нельзя задавать - будет сдвиг по Y
         scene.height() - ball_radius - platform_height,
         ball_radius,
         ball_radius,
@@ -117,6 +150,56 @@ def on_scene_changed(region: list[QRectF]):
         )
         if brick.collidesWithItem(ball_item):  # TODO:
             collisions.append("brick")
+
+
+    # TODO: platform_item.setX - для проверки касания стен
+    # print(platform_item.pos(), platform_item.scenePos())
+    # if platform_item.x() <= scene_left_line_item.rect().right():
+    #     platform_item.setX(0)
+    # elif platform_item.x() + platform_width > scene.width():
+    #     platform_item.setX(scene.width() - platform_width)
+
+    # platform_item_pos = platform_item.boundingRect().topLeft()
+    # platform_item_pos_v2 = platform_item.mapToParent(platform_item_pos)
+    print(
+        # platform_item.transformOriginPoint(),
+        # # platform_item.rect().topLeft(),# TODO: Не меняется
+        # platform_item_pos,# TODO: Не меняется
+        # platform_item_pos_v2,
+        # # "|",
+        platform_item.pos(), # TODO: От центра считается
+        # platform_item.scenePos(),
+        ball_item.pos(),
+        # platform_item.mapToScene(platform_item_pos_v2),
+        # platform_item.boundingRect().left(),
+        # platform_item.boundingRect().x(),
+        # f"{platform_item.x()}x{platform_item.y()}",
+        # platform_item.x(),
+        # f"{platform_item.mapToParent(platform_item.boundingRect().topLeft()).x()}",
+        # f"{platform_item.mapToParent(platform_item.sceneBoundingRect().topLeft()).x()}",
+        # f"{platform_item.mapToParent(platform_item.rect().topLeft()).x()}",
+        # f"{scene_left_line_item.x()}x{scene_left_line_item.y()}",  # TODO: Не совпадает с platform_item
+
+        # platform_item.pos(),
+        # platform_item.scenePos(),
+        # platform_item.boundingRect(),
+        # scene_left_line_item.pos(),
+        # scene_left_line_item.scenePos(),
+        # scene_left_line_item.boundingRect(),
+        # scene_left_line_item.sceneBoundingRect(),
+        # platform_item.mapRectToScene(scene_left_line_item.sceneBoundingRect())
+    )
+    if platform_item.collidesWithItem(scene_left_line_item):  # TODO:
+        platform_item.setX(scene_left_line_item.boundingRect().right())  # TODO:
+
+    # NOTE: Фиксация по Y
+    platform_item.setY(scene.height() - platform_height) # TODO: Почему 0?
+    # p = platform_item.pos()
+    # print(p)
+    # # r = platform_item.boundingRect()
+    # p.setY(0)  # TODO:
+    # # r.setY(scene.height() - platform_height)
+    # platform_item.setPos(p)
 
     if platform_item.collidesWithItem(ball_item):  # TODO:
         collisions.append("platform")
