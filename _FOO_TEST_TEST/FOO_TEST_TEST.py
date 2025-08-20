@@ -49,6 +49,7 @@ scene_rect = QRectF(0, 0, scene_width, scene_height)
 scene = QGraphicsScene()
 scene.setSceneRect(scene_rect)
 
+# TODO: У линий есть проблема с координатами как у QRectF?
 scene_top_line_item = scene.addLine(
     QLineF(scene_rect.topLeft(), scene_rect.topRight())
 )  # TODO: ?
@@ -70,12 +71,13 @@ for line in board.splitlines():
     left: int = 0
     for x in line:
         if x == "x":
-            bricks.append(
-                scene.addRect(
-                    QRectF(left, top, brick_width, brick_height),
-                    brush=Qt.GlobalColor.red,
-                )
+            ball_item = scene.addRect(
+                QRectF(0, 0, brick_width, brick_height),
+                # QRectF(left, top, brick_width, brick_height),
+                brush=Qt.GlobalColor.red,
             )
+            ball_item.setPos(left, top)
+            bricks.append(ball_item)
         left += brick_width
 
     top += brick_height
