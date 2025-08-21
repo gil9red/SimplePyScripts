@@ -6,6 +6,8 @@ __author__ = "ipetrash"
 
 import sys
 import traceback
+from random import randint
+from timeit import default_timer
 
 from PyQt6.QtWidgets import (
     QApplication,
@@ -13,19 +15,28 @@ from PyQt6.QtWidgets import (
     QGraphicsView,
     QGraphicsItem,
     QGraphicsRectItem,
-    QGraphicsLineItem,
+    QGraphicsEllipseItem,
     QMessageBox,
+    QMainWindow,
 )
-from PyQt6.QtCore import QRectF, QLineF, Qt
+from PyQt6.QtCore import QRectF, QLineF, Qt, QTimer
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-    text = f"{ex_cls.__name__}: {ex}:\n"
+    text = f"{ex_cls.__name__}: {ex}\n"
     text += "".join(traceback.format_tb(tb))
-
     print(text)
-    QMessageBox.critical(None, "Error", text)
-    sys.exit(1)
+
+    if QApplication.instance():
+        msg_box = QMessageBox(
+            QMessageBox.Critical,
+            "Error",
+            f"Error: {ex}",
+            parent=None,
+        )
+        msg_box.setDetailedText(text)
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        msg_box.exec()
 
 
 sys.excepthook = log_uncaught_exceptions
@@ -137,95 +148,305 @@ ball_item.setPos(
 )
 
 
-def on_scene_changed(region: list[QRectF]):
-    print("on_scene_changed", region)
+class Ball:
+    def __init__(self, ball_item: QGraphicsEllipseItem, v_x, v_y):
+    # def __init__(self, x, y, r, v_x, v_y, color):
+        # TODO:
+        self.x = ball_item.x()
+        self.y = ball_item.y()
+        self.r = ball_item.sceneBoundingRect().width()
 
-    # TODO: технически, ball_item может быть много
+        self.ball_item = ball_item
+        self.v_x = v_x
+        self.v_y = v_y
+        # self.color = color
 
-    # TODO: Проверка выхода за сцену ball_item
-    colliding_items = ball_item.collidingItems()
-    print(colliding_items)
+    def update(self):
+        self.x += self.v_x
+        self.y += self.v_y
 
-    # for item in colliding_items:
-    #     color = Qt.GlobalColor.darkMagenta if item.collidesWithItem(ball_item) else Qt.GlobalColor.red
+        self.ball_item.setPos(self.x, self.y)
+
+    # def draw(self):
+    # # def draw(self, screen):
+    #     self.ball_item.setPos(self.center)
+    #     # pygame.draw.circle(screen, self.color, self.center, self.r)
+    #     #
+    #     # # Нарисуем поверх первого, прозрачный второй с границей (параметр width)
+    #     # pygame.draw.circle(screen, (0, 0, 0), self.center, self.r, 1)
+
+    # @property
+    # def center(self):
+    #     return self.x, self.y
     #
-    #     if isinstance(item, QGraphicsRectItem):
-    #         item.setBrush(color)
-    #     elif isinstance(item, QGraphicsLineItem):
-    #         item.setPen(color)
+    # @property
+    # def top(self):
+    #     return self.y - self.r
+    #
+    # @property
+    # def bottom(self):
+    #     return self.y + self.r
+    #
+    # @property
+    # def left(self):
+    #     return self.x - self.r
+    #
+    # @property
+    # def right(self):
+    #     return self.x + self.r
 
-    collisions: list[str] = []
-    for brick in bricks:
-        brick.setBrush(
-            Qt.GlobalColor.darkMagenta
-            if brick.collidesWithItem(ball_item)
-            else Qt.GlobalColor.red
+# class Ball:
+#     r = 50  # Радиус шарика
+#     x = 0  # Координата по х центра шарика
+#     y = 0  # Координата по y центра шарика
+#     speed = 0  # Скорость движения
+#     dir_x = 0  # Компонент x вектора движения шарика
+#     dir_y = 0  # Компонент y вектора движения шарика
+#     # TODO: Не нужно
+#     damp = 10  # Скорость уменьшения скорости движения (сопротивление)
+#     collision = False  # Признак коллизии с внешним кругом
+#     # TODO: Не нужно
+#     speed_after_collision = 300  # Скорость движения шарика после столкновения
+#
+#     # # Функция, которая проверяет наличие коллизии шарика с внешним кругом
+#     # def hit_outer_circle_check(self, outer_circle: int):
+#     #     dr = outer_circle - self.r  # Разница радиусов
+#     #
+#     #     # По теореме пифагора проверяем выход за пределы круга (коллизию)
+#     #     if self.x * self.x + self.y * self.y > dr * dr:
+#     #         # Если коллизия уже была обсчитана, но шарик еще не вернулся в круг,
+#     #         # чтобы он не застревал больше не надо обсчитывать коллизии, поэтому выходим
+#     #         if self.collision:
+#     #             return
+#     #
+#     #         # Устанавливаем для шарика признак коллизии
+#     #         self.collision = True
+#     #
+#     #         # Далее идет код расчета нового вектора движения
+#     #
+#     #         # Найдем вектор нормали. тут он берется приближенно,
+#     #         # в точке центра шарика в момент обсчета коллизии,
+#     #         # при том что шарик уже проскочил границу. по идее тут
+#     #         # необходимо посчитать точку соударения геометрически.
+#     #         max_value = max(abs(self.x), abs(self.y))
+#     #         nx = -self.x / max_value
+#     #         ny = -self.y / max_value
+#     #
+#     #         # Найдем новый вектор движения по формуле
+#     #         # r = i−2(i⋅n)n , где
+#     #         # i - исходный вектор
+#     #         # n - нормаль
+#     #         # ⋅ знак скалярного произведения
+#     #
+#     #         dot2 = self.dir_x * nx * 2 + self.dir_y * ny * 2
+#     #         self.dir_x = self.dir_x - dot2 * nx
+#     #         self.dir_y = self.dir_y - dot2 * ny
+#     #
+#     #         # Нормализуем вектор движения
+#     #         max_value = max(abs(self.dir_x), abs(self.dir_y))
+#     #         self.dir_x /= max_value
+#     #         self.dir_y /= max_value
+#     #
+#     #     else:
+#     #         # Сбрасываем признак коллизии когда шарик вернулся в круг.
+#     #         self.collision = False
+#     #
+#     # # Функция проверки коллизии шарика и мышки
+#     # def hit_mouse_check(self, x, y):
+#     #     # Если есть коллизия с внешним кругом игнорируем мышку
+#     #     if self.collision:
+#     #         return
+#     #
+#     #     # Разница координат мышки и шарика
+#     #     dx = self.x - x
+#     #     dy = self.y - y
+#     #
+#     #     # Проверяем по теореме Пифагора столкновение с мышкой
+#     #     if dx * dx + dy * dy < self.r * self.r:
+#     #         # Задаем вектор движения и нормализуем его
+#     #         max_value = max(abs(dx), abs(dy))
+#     #         if not max_value:
+#     #             return
+#     #
+#     #         self.dir_x = dx / max_value
+#     #         self.dir_y = dy / max_value
+#     #
+#     #         # Задаем скорость
+#     #         self.speed = self.speed_after_collision
+#
+#     # Тут осуществляется передвижение
+#     # dt - кол-во секунд с прошлого обсчета
+#     def do_move(self, dt):
+#         # К текущей координате прибавляем вектор скорости помноженный
+#         # на значение скорости помноженные на прошедшее время
+#         self.x += self.dir_x * self.speed * dt
+#         self.y += self.dir_y * self.speed * dt
+#
+#         # Тормозим объект, так же на значение зависящее от времени
+#         self.speed = max(0, self.speed - self.damp * dt)
+
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("TODO")
+
+        self.view = QGraphicsView()
+        self.view.setScene(scene)
+
+        scene.changed.connect(self.on_scene_changed)
+
+        timeout = 1000 // 60
+
+        # Используется, чтобы в независимости от количества вызовов
+        # tick скорость шарика была одинаковая
+        self.t = 0
+
+        # Таймер обновления движения и обработки столкновения шариков
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.tick)
+        self.timer.start(timeout)
+
+        # TODO: Вектор вниз не нужно генерировать
+        def get_random_vector() -> tuple[int, int]:
+            pos = 0, 0
+            # Если pos равен (0, 0), пересчитываем значения, т.к. шарик должен двигаться
+            while pos == (0, 0):
+                pos = randint(-3, 3), randint(-3, 3)
+
+            return pos
+        v_x, v_y = get_random_vector()
+        self.ball = Ball(ball_item=ball_item, v_x=v_x, v_y=v_y)
+        # self.ball.dir_x
+        # self.ball.r = ball_item.sceneBoundingRect().width() # TODO:
+        # self.ball.x = ball_item.sceneBoundingRect().center().x() # TODO: просто ball_item.x()?
+        # self.ball.y = ball_item.sceneBoundingRect().center().y()
+
+        self.setCentralWidget(self.view)
+
+    # TODO:
+    def tick(self):
+        # TODO: Использовать
+        # Считаем сколько времени прошло с прошлого обсчета
+        dt = default_timer() - self.t
+
+        # self.ball.hit_mouse_check(self.mouse_center_x, self.mouse_center_y)
+        # self.ball.do_move(dt)
+        # self.ball.hit_outer_circle_check(self.outer_circle)
+
+        ball = self.ball  # TODO:
+        # ball.draw()
+        ball.update()
+
+        # TODO: определять глубину проникновения шарика за границы и выталкивать его перед сменой вектора движения
+
+        # # Условия отскакивания шарика от левого и правого края
+        # if ball.left <= 0 or ball.right >= self.width:
+        #     ball.v_x = -ball.v_x
+        #
+        # # Условия отскакивания шарика верхнего и нижнего края
+        # if ball.top <= 0 or ball.bottom >= self.height:
+        #     ball.v_y = -ball.v_y
+
+        self.t = default_timer()
+        #
+        # self.update()
+
+    def on_scene_changed(self, region: list[QRectF]):
+        print("on_scene_changed", region)
+
+        # TODO: технически, ball_item может быть много
+
+        # TODO: Проверка выхода за сцену ball_item
+        colliding_items = ball_item.collidingItems()
+        print(colliding_items)
+
+        # for item in colliding_items:
+        #     color = Qt.GlobalColor.darkMagenta if item.collidesWithItem(ball_item) else Qt.GlobalColor.red
+        #
+        #     if isinstance(item, QGraphicsRectItem):
+        #         item.setBrush(color)
+        #     elif isinstance(item, QGraphicsLineItem):
+        #         item.setPen(color)
+
+        collisions: list[str] = []
+        for brick in bricks:
+            brick.setBrush(
+                Qt.GlobalColor.darkMagenta
+                if brick.collidesWithItem(ball_item)
+                else Qt.GlobalColor.red
+            )
+            if brick.collidesWithItem(ball_item):  # TODO:
+                collisions.append("brick")
+
+        # NOTE: Фиксация по Y
+        platform_item.setY(scene.sceneRect().bottom() - platform_height)
+
+        if (
+                platform_item.sceneBoundingRect().left()
+                <= scene_left_line_item.sceneBoundingRect().right()
+        ):
+            platform_item.setX(scene_left_line_item.sceneBoundingRect().right())
+        elif (
+                platform_item.sceneBoundingRect().right()
+                >= scene_right_line_item.sceneBoundingRect().left()
+        ):
+            # TODO: Немного не доходит до границ
+            platform_item.setX(
+                scene_right_line_item.sceneBoundingRect().left()
+                - platform_item.sceneBoundingRect().width()
+            )
+
+        if platform_item.collidesWithItem(ball_item):  # TODO:
+            collisions.append("platform")
+
+        if scene_top_line_item.collidesWithItem(ball_item):  # TODO:
+            collisions.append("top")
+            scene_top_line_item.setPen(Qt.GlobalColor.red)
+        else:
+            scene_top_line_item.setPen(Qt.GlobalColor.black)
+
+        if scene_right_line_item.collidesWithItem(ball_item):  # TODO:
+            collisions.append("right")
+            scene_right_line_item.setPen(Qt.GlobalColor.red)
+        else:
+            scene_right_line_item.setPen(Qt.GlobalColor.black)
+
+        if scene_bottom_line_item.collidesWithItem(ball_item):  # TODO:
+            collisions.append("bottom")
+            scene_bottom_line_item.setPen(Qt.GlobalColor.red)
+        else:
+            scene_bottom_line_item.setPen(Qt.GlobalColor.black)
+
+        if scene_left_line_item.collidesWithItem(ball_item):  # TODO:
+            collisions.append("left")
+            scene_left_line_item.setPen(Qt.GlobalColor.red)
+        else:
+            scene_left_line_item.setPen(Qt.GlobalColor.black)
+
+        # Условия отскакивания шарика от левого и правого края
+        ball = self.ball  # TODO:
+        if "left" in collisions or "right" in collisions:
+            ball.v_x = -ball.v_x
+
+        # Условия отскакивания шарика верхнего и нижнего края
+        if "top" in collisions or "bottom" in collisions:
+            ball.v_y = -ball.v_y
+
+        self.setWindowTitle(
+            f"collidingItems: {len(colliding_items)}. Collisions: {', '.join(collisions)}"
         )
-        if brick.collidesWithItem(ball_item):  # TODO:
-            collisions.append("brick")
-
-    # NOTE: Фиксация по Y
-    platform_item.setY(scene.sceneRect().bottom() - platform_height)
-
-    if (
-        platform_item.sceneBoundingRect().left()
-        <= scene_left_line_item.sceneBoundingRect().right()
-    ):
-        platform_item.setX(scene_left_line_item.sceneBoundingRect().right())
-    elif (
-        platform_item.sceneBoundingRect().right()
-        >= scene_right_line_item.sceneBoundingRect().left()
-    ):
-        # TODO: Немного не доходит до границ
-        platform_item.setX(
-            scene_right_line_item.sceneBoundingRect().left()
-            - platform_item.sceneBoundingRect().width()
-        )
-
-    if platform_item.collidesWithItem(ball_item):  # TODO:
-        collisions.append("platform")
-
-    if scene_top_line_item.collidesWithItem(ball_item):  # TODO:
-        collisions.append("top")
-        scene_top_line_item.setPen(Qt.GlobalColor.red)
-    else:
-        scene_top_line_item.setPen(Qt.GlobalColor.black)
-
-    if scene_right_line_item.collidesWithItem(ball_item):  # TODO:
-        collisions.append("right")
-        scene_right_line_item.setPen(Qt.GlobalColor.red)
-    else:
-        scene_right_line_item.setPen(Qt.GlobalColor.black)
-
-    if scene_bottom_line_item.collidesWithItem(ball_item):  # TODO:
-        collisions.append("bottom")
-        scene_bottom_line_item.setPen(Qt.GlobalColor.red)
-    else:
-        scene_bottom_line_item.setPen(Qt.GlobalColor.black)
-
-    if scene_left_line_item.collidesWithItem(ball_item):  # TODO:
-        collisions.append("left")
-        scene_left_line_item.setPen(Qt.GlobalColor.red)
-    else:
-        scene_left_line_item.setPen(Qt.GlobalColor.black)
-
-    view.setWindowTitle(
-        f"collidingItems: {len(colliding_items)}. Collisions: {', '.join(collisions)}"
-    )
 
 
-scene.changed.connect(on_scene_changed)
+mw = MainWindow()
 
-view = QGraphicsView()
-view.setWindowTitle("TODO")
-view.setScene(scene)
-
+# TODO:
 # n = 3
 # view.scale(1.0 / n, 1.0 / n)
 
-view.resize(scene_width + 20, scene_height + 20)
-
-view.show()
+mw.resize(scene_width + 20, scene_height + 20)
+mw.show()
 
 app.exec()
 
