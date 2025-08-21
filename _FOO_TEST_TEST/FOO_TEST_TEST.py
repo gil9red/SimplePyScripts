@@ -159,6 +159,8 @@ class Ball:
         self.ball_item = ball_item
         self.v_x = v_x
         self.v_y = v_y
+
+        self.is_collision: bool = False
         # self.color = color
 
     def update(self):
@@ -306,7 +308,8 @@ class MainWindow(QMainWindow):
         # Таймер обновления движения и обработки столкновения шариков
         self.timer = QTimer()
         self.timer.timeout.connect(self.tick)
-        self.timer.start(timeout)
+        # TODO:
+        # self.timer.start(timeout)
 
         # TODO: Вектор вниз не нужно генерировать
         def get_random_vector() -> tuple[int, int]:
@@ -356,6 +359,9 @@ class MainWindow(QMainWindow):
     def on_scene_changed(self, region: list[QRectF]):
         print("on_scene_changed", region)
 
+        # if self.ball.is_collision:
+        #     return
+
         # TODO: технически, ball_item может быть много
 
         # TODO: Проверка выхода за сцену ball_item
@@ -377,7 +383,8 @@ class MainWindow(QMainWindow):
                 if brick.collidesWithItem(ball_item)
                 else Qt.GlobalColor.red
             )
-            if brick.collidesWithItem(ball_item):  # TODO:
+            if brick in colliding_items:
+            # if brick.collidesWithItem(ball_item):  # TODO:
                 collisions.append("brick")
 
         # NOTE: Фиксация по Y
@@ -398,45 +405,61 @@ class MainWindow(QMainWindow):
                 - platform_item.sceneBoundingRect().width()
             )
 
-        if platform_item.collidesWithItem(ball_item):  # TODO:
+        # if platform_item.collidesWithItem(ball_item):  # TODO:
+        if platform_item in colliding_items:
+            platform_item.setBrush(Qt.GlobalColor.darkMagenta)
             collisions.append("platform")
+        else:
+            platform_item.setBrush(Qt.GlobalColor.red)
 
-        if scene_top_line_item.collidesWithItem(ball_item):  # TODO:
+        # if scene_top_line_item.collidesWithItem(ball_item):  # TODO:
+        if scene_top_line_item in colliding_items:
             collisions.append("top")
             scene_top_line_item.setPen(Qt.GlobalColor.red)
         else:
             scene_top_line_item.setPen(Qt.GlobalColor.black)
 
-        if scene_right_line_item.collidesWithItem(ball_item):  # TODO:
+        # if scene_right_line_item.collidesWithItem(ball_item):  # TODO:
+        if scene_right_line_item in colliding_items:
             collisions.append("right")
             scene_right_line_item.setPen(Qt.GlobalColor.red)
         else:
             scene_right_line_item.setPen(Qt.GlobalColor.black)
 
-        if scene_bottom_line_item.collidesWithItem(ball_item):  # TODO:
+        # if scene_bottom_line_item.collidesWithItem(ball_item):  # TODO:
+        if scene_bottom_line_item in colliding_items:
             collisions.append("bottom")
             scene_bottom_line_item.setPen(Qt.GlobalColor.red)
         else:
             scene_bottom_line_item.setPen(Qt.GlobalColor.black)
 
-        if scene_left_line_item.collidesWithItem(ball_item):  # TODO:
+        # if scene_left_line_item.collidesWithItem(ball_item):  # TODO:
+        if scene_left_line_item in colliding_items:
             collisions.append("left")
             scene_left_line_item.setPen(Qt.GlobalColor.red)
         else:
             scene_left_line_item.setPen(Qt.GlobalColor.black)
 
+        self.setWindowTitle(
+            f"collidingItems: {len(colliding_items)}. Collisions: {', '.join(collisions)}"
+        )
+
         # Условия отскакивания шарика от левого и правого края
         ball = self.ball  # TODO:
+        # ball.is_collision = bool(collisions)
+
         if "left" in collisions or "right" in collisions:
             ball.v_x = -ball.v_x
+            ball.is_collision = True
+        else:
+            ball.is_collision = False
 
         # Условия отскакивания шарика верхнего и нижнего края
         if "top" in collisions or "bottom" in collisions:
             ball.v_y = -ball.v_y
-
-        self.setWindowTitle(
-            f"collidingItems: {len(colliding_items)}. Collisions: {', '.join(collisions)}"
-        )
+            ball.is_collision = True
+        else:
+            ball.is_collision = False
 
 
 mw = MainWindow()
