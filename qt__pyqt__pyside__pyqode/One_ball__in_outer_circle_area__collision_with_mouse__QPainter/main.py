@@ -118,7 +118,7 @@ class Ball:
 
     # Тут осуществляется передвижение
     # dt - кол-во секунд с прошлого обсчета
-    def do_move(self, dt):
+    def do_move(self, dt: float):
         # К текущей координате прибавляем вектор скорости помноженный
         # на значение скорости помноженные на прошедшее время
         self.x += self.dir_x * self.speed * dt
@@ -132,14 +132,12 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        title = Path(__file__).parent.name
-        self.setWindowTitle(title)
-
-        timeout = 1000 // 60
+        timeout: int = 1000 // 60
 
         # Таймер обновления движения и обработки столкновения шариков
         self.timer = QTimer()
         self.timer.timeout.connect(self.tick)
+        self.timer.timeout.connect(self.update_window_title)
         self.timer.start(timeout)
 
         # NOTE: Перерисовку помести в tick, но этот вариант с отдельным таймером тоже
@@ -149,17 +147,24 @@ class MainWindow(QWidget):
         # self.timer_render.timeout.connect(self.update)
         # self.timer_render.start(timeout)
 
-        self.outer_circle = 195
+        self.outer_circle: int = 195
         self.ball = Ball()
 
-        self.mouse_center_x = 0
-        self.mouse_center_y = 0
+        self.mouse_center_x: int = 0
+        self.mouse_center_y: int = 0
 
         # Используется, чтобы в независимости от количества вызовов
         # tick скорость шарика была одинаковая
-        self.t = 0
+        self.t: float = 0
 
         self.setMouseTracking(True)
+
+        self.update_window_title()
+
+    def update_window_title(self):
+        name = Path(__file__).parent.name
+        title = f"{name}. Speed: {self.ball.speed}"
+        self.setWindowTitle(title)
 
     def tick(self):
         # Считаем сколько времени прошло с прошлого обсчета
