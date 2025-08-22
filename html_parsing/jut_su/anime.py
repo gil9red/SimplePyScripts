@@ -11,8 +11,8 @@ from dataclasses import dataclass
 from urllib.parse import urljoin
 from typing import Iterator
 
-import requests
 from bs4 import BeautifulSoup
+from requests import Response
 
 from common import session
 
@@ -28,7 +28,7 @@ class Anime:
     title: str
 
 
-def parse_anime_list(rs: requests.Response) -> list[Anime]:
+def parse_anime_list(rs: Response) -> list[Anime]:
     items = []
     root = BeautifulSoup(rs.text, "html.parser")
     for anime_el in root.select(".all_anime_global"):
@@ -40,7 +40,7 @@ def parse_anime_list(rs: requests.Response) -> list[Anime]:
     return items
 
 
-def send_get() -> requests.Response:
+def send_get() -> Response:
     rs = session.get(URL)
     rs.raise_for_status()
 
@@ -51,7 +51,7 @@ def send_post(
     page: int = 1,
     show_search: str = "",
     anime_of_user: str = "",
-) -> requests.Response:
+) -> Response:
     headers = {
         "X-Requested-With": "XMLHttpRequest",
     }
