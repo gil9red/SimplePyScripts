@@ -12,6 +12,10 @@ import requests
 from requests.exceptions import RequestException
 
 
+URL_BASE: str = "https://ru.yummyani.me"
+URL_API_ANIME_FORMAT: str = f"{URL_BASE}/api/anime/{{name}}"
+URL_ANIME_FORMAT: str = f"{URL_BASE}/catalog/item/{{name}}"
+
 session = requests.session()
 session.headers[
     "User-Agent"
@@ -84,12 +88,15 @@ class Anime:
             other_titles=data["other_titles"],
         )
 
+    def get_anime_url_full(self) -> str:
+        return URL_ANIME_FORMAT.format(name=self.anime_url)
+
 
 def get_anime_by_url(url_or_name: str) -> Anime:
     # Учитываем, что url_or_name может быть ссылкой
     name: str = url_or_name.split("/")[-1]
 
-    url: str = f"https://ru.yummyani.me/api/anime/{name}"
+    url: str = URL_API_ANIME_FORMAT.format(name=name)
 
     rs = do_get(url)
     rs.raise_for_status()
@@ -104,3 +111,19 @@ if __name__ == "__main__":
 
     assert anime == get_anime_by_url("https://ru.yummyani.me/catalog/item/doktor-stoun-nauchnoe-buduschee-chast-2")
     assert anime == get_anime_by_url("doktor-stoun-nauchnoe-buduschee-chast-2")
+    assert anime.get_anime_url_full() == f"{URL_BASE}/catalog/item/doktor-stoun-nauchnoe-buduschee-chast-2"
+    assert anime.get_anime_url_full() == URL_ANIME_FORMAT.format(name="doktor-stoun-nauchnoe-buduschee-chast-2")
+    assert anime.get_anime_url_full() == URL_ANIME_FORMAT.format(name=anime.anime_url)
+
+    # TODO:
+    # print(get_anime_by_url("https://site.yummyani.me/catalog/item/doktor-stoun-nauchnoe-buduschee-chast-2").episodes)
+    # # Episodes(count=12, aired=7, next_date_secs=1756386000, next_date=datetime.datetime(2025, 8, 28, 18, 0))
+    #
+    # print(get_anime_by_url("dvoryanstvo").episodes)
+    # # Episodes(count=13, aired=13, next_date_secs=0, next_date=datetime.datetime(1970, 1, 1, 5, 0))
+    #
+    # print(get_anime_by_url("castlevania").episodes)
+    # # Episodes(count=4, aired=4, next_date_secs=0, next_date=datetime.datetime(1970, 1, 1, 5, 0))
+    #
+    # print(get_anime_by_url("https://site.yummyani.me/catalog/item/istorii-ran-chast-zheleznaya-krov").episodes)
+    # # Episodes(count=1, aired=1, next_date_secs=0, next_date=datetime.datetime(1970, 1, 1, 5, 0))
