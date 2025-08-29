@@ -5,46 +5,18 @@ __author__ = "ipetrash"
 
 
 from dataclasses import dataclass
-from urllib.parse import urljoin
+from datetime import datetime, date
+from typing import Any
 
 import requests
-from bs4 import BeautifulSoup, Tag
 
 
 @dataclass
 class Game:
-    name: str
+    title_eng: str
+    title_rus: str | None
     url: str
-    date_str: str
-
-
-def _get_text(el: Tag) -> str:
-    if not el:
-        return ""
-    return (
-        el.get_text()
-        .replace("\u200b", " ")
-        .replace("\xa0", " ")
-        .replace("\u0000", "")
-        .strip()
-    )
-
-
-def _check_result(items: list[Game]):
-    assert items, "Empty list"
-    for game in [
-        Game(
-            name="A Plague Tale: Innocence",
-            url="https://www.gamesvoice.ru/innocence",
-            date_str="11 марта 2024",
-        ),
-        Game(
-            name="Defenders of Ardania",
-            url="https://www.gamesvoice.ru/doa",
-            date_str="26 мая 2012",
-        ),
-    ]:
-        assert game in items, f"Game not found: {game}"
+    published_at: date
 
 
 session = requests.session()
@@ -54,44 +26,41 @@ session.headers[
 
 
 def get_games() -> list[Game]:
-    url = "https://www.gamesvoice.ru/"
-
-    rs = session.get(url)
+    rs = session.get(
+        "https://api.gamesvoice.ru/api/products/all",
+        params=dict(
+            is_develop=0,
+            not_by_published=1,  # По дате выхода (новые-старые)
+        ),
+    )
     rs.raise_for_status()
 
-    items: list[Game] = []
+    result: dict[str, Any] = rs.json()
+    assert result.get("success"), "Получен неуспешный ответ"
 
-    soup = BeautifulSoup(rs.content, "html.parser")
-    for section in soup.select("section[data-block-level-container='ClassicSection']"):
-        if "Локализации и озвучки GamesVoice" not in section.text:
-            continue
-
-        for item in section.select(".wixui-repeater__item > div > div"):
-            divs = item.find_all("div")
-
-            # Поиск по структуре
-            if len(divs) != 3:
-                continue
-
-            div_url, div_name, div_date = divs
-
-            a_el = div_url.select_one("a[href]")
-            name = _get_text(div_name.select_one("h4"))
-            date_str = _get_text(div_date.select_one("h1"))
-
-            if not a_el or not name or not date_str:
-                continue
-
-            items.append(
-                Game(
-                    name=name,
-                    url=urljoin(rs.url, a_el["href"]),
-                    date_str=date_str,
-                )
-            )
-
-    _check_result(items)
-    return items
+    # NOTE Пример obj:
+    """
+    {
+        "id": 7,
+        "title_eng": "Alan Wake II",
+        "title_rus": null,
+        "preview": "https://api.gamesvoice.ru/storage/uploads/products/previews/37c4e26ba5c1b074367b6a8d2c53ad3e.png",
+        "search_preview": "https://api.gamesvoice.ru/storage/uploads/products/search_previews/0f590f1f3951cdd1c6271c8af62ef431.png",
+        "search_description": "\u003Cp\u003EAlan Wake II &mdash; это игра в жанре survival-horror от третьего лица. Игрокам предсто",
+        "alias": "alanwake2",
+        "published_at": "2025-04-17 00:00:00",
+        "renewal_at": "2025-05-05 00:00:00"
+    }
+    """
+    return [
+        Game(
+            title_eng=obj["title_eng"],
+            title_rus=obj["title_rus"],
+            url=f"https://www.gamesvoice.ru/product/{obj['alias']}",
+            published_at=datetime.fromisoformat(obj["published_at"]).date(),
+        )
+        for obj in result["data"]
+    ]
 
 
 if __name__ == "__main__":
@@ -100,12 +69,12 @@ if __name__ == "__main__":
     for i, game in enumerate(items, 1):
         print(f"  {i}. {game}")
     """
-    Games (55):
-      1. Game(name='A Plague Tale: Innocence', url='https://www.gamesvoice.ru/innocence', date_str='11 марта 2024')
-      2. Game(name='Close to the Sun', url='https://www.gamesvoice.ru/closetothesun', date_str='27 февраля 2024')
-      3. Game(name='Tomb Raider I-III Remastered', url='https://www.gamesvoice.ru/tomb-raider-remastered', date_str='14 февраля 2024')
+    Games (71):
+      1. Game(title_eng='Volkolak: The Will of Gods', title_rus='Волколак: Воля Богов', url='https://www.gamesvoice.ru/product/volkolak', published_at=datetime.date(2025, 8, 22))
+      2. Game(title_eng='One-Eyed Likho', title_rus='ЛИХО ОДНОГЛАЗОЕ', url='https://www.gamesvoice.ru/product/likho', published_at=datetime.date(2025, 7, 28))
+      3. Game(title_eng='Silent Hill 2', title_rus='Сайлент Хилл 2', url='https://www.gamesvoice.ru/product/silenthill2', published_at=datetime.date(2025, 6, 28))
       ...
-      53. Game(name='Panzer Corps', url='https://www.gamesvoice.ru/panzercorps', date_str='8 июля 2012')
-      54. Game(name='Mad Riders', url='https://www.gamesvoice.ru/madriders', date_str='3 июля 2012')
-      55. Game(name='Defenders of Ardania', url='https://www.gamesvoice.ru/doa', date_str='26 мая 2012')
+      69. Game(title_eng='Panzer Corps', title_rus=None, url='https://www.gamesvoice.ru/product/panzercorps', published_at=datetime.date(2012, 7, 8))
+      70. Game(title_eng='Mad Riders', title_rus=None, url='https://www.gamesvoice.ru/product/madriders', published_at=datetime.date(2012, 7, 3))
+      71. Game(title_eng='Defenders of Ardania', title_rus=None, url='https://www.gamesvoice.ru/product/doa', published_at=datetime.date(2012, 5, 26))
     """
