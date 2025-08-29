@@ -4,6 +4,43 @@
 __author__ = "ipetrash"
 
 
+# TODO: Игра Nim
+
+import random
+
+# TODO: Возможность выбрать кто первый ходит
+number = 21
+while number > 0:
+    print(f"Камней: {number}")
+
+    while True:
+        try:
+            x = int(input("Камни от 1 до 3: "))
+            assert 1 <= x <= 3
+            break
+        except:
+            print("Неправильное значение!")
+            continue
+
+    number -= x
+    if number <= 0:
+        print("Компьютер выиграл")
+        break
+
+    # TODO: Когда остается минимум камней нужно вручную выбрать правильное, а не рандомно
+    #       А то ИИ выглядит как искусственный идиот
+    x = min(number, random.randint(1, 3))
+    print(f"Компьютер выбрал: {x}")
+    number -= x
+    if number <= 0:
+        print("Ты выиграл")
+        break
+
+    print()
+
+
+quit()
+
 import sys
 import traceback
 from random import randint
