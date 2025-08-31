@@ -36,6 +36,10 @@ BASE_URL = "https://www.youtube.com"
 session = requests.Session()
 session.headers["User-Agent"] = USER_AGENT
 
+# NOTE: Accept all (required for mixes)
+# SOURCE: https://github.com/yt-dlp/yt-dlp/blob/ed24640943872c4cf30d7cc4601bec87b50ba03c/yt_dlp/extractor/youtube/_base.py#L614
+session.cookies["SOCS"] = "CAI"
+
 
 def process_text(text: str) -> str:
     return text.strip().replace("\xa0", " ").replace("\u202f", " ")
