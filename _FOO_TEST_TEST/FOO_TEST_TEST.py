@@ -9,14 +9,19 @@ __author__ = "ipetrash"
 import random
 
 # TODO: Возможность выбрать кто первый ходит
-number = 21
+
+MIN_STONES: int = 1
+MAX_STONES: int = 3
+MAX_NUMBER: int = 21
+
+number: int = MAX_NUMBER
 while number > 0:
     print(f"Камней: {number}")
 
     while True:
         try:
-            x = int(input("Камни от 1 до 3: "))
-            assert 1 <= x <= 3
+            x = int(input(f"Камни от {MIN_STONES} до {MAX_STONES}: "))
+            assert MIN_STONES <= x <= MAX_STONES
             break
         except:
             print("Неправильное значение!")
@@ -29,7 +34,7 @@ while number > 0:
 
     # TODO: Когда остается минимум камней нужно вручную выбрать правильное, а не рандомно
     #       А то ИИ выглядит как искусственный идиот
-    x = min(number, random.randint(1, 3))
+    x = min(number, random.randint(MIN_STONES, MAX_STONES))
     print(f"Компьютер выбрал: {x}")
     number -= x
     if number <= 0:
