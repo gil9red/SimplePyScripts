@@ -4,48 +4,6 @@
 __author__ = "ipetrash"
 
 
-# TODO: Игра Nim
-
-import random
-
-# TODO: Возможность выбрать кто первый ходит
-
-MIN_STONES: int = 1
-MAX_STONES: int = 3
-MAX_NUMBER: int = 21
-
-number: int = MAX_NUMBER
-while number > 0:
-    print(f"Камней: {number}")
-
-    while True:
-        try:
-            x = int(input(f"Камни от {MIN_STONES} до {MAX_STONES}: "))
-            assert MIN_STONES <= x <= MAX_STONES
-            break
-        except:
-            print("Неправильное значение!")
-            continue
-
-    number -= x
-    if number <= 0:
-        print("Компьютер выиграл")
-        break
-
-    # TODO: Когда остается минимум камней нужно вручную выбрать правильное, а не рандомно
-    #       А то ИИ выглядит как искусственный идиот
-    x = min(number, random.randint(MIN_STONES, MAX_STONES))
-    print(f"Компьютер выбрал: {x}")
-    number -= x
-    if number <= 0:
-        print("Ты выиграл")
-        break
-
-    print()
-
-
-quit()
-
 import sys
 import traceback
 from random import randint
@@ -192,7 +150,7 @@ ball_item.setPos(
 
 class Ball:
     def __init__(self, ball_item: QGraphicsEllipseItem, v_x, v_y):
-    # def __init__(self, x, y, r, v_x, v_y, color):
+        # def __init__(self, x, y, r, v_x, v_y, color):
         # TODO:
         self.x = ball_item.x()
         self.y = ball_item.y()
@@ -238,6 +196,7 @@ class Ball:
     # @property
     # def right(self):
     #     return self.x + self.r
+
 
 # class Ball:
 #     r = 50  # Радиус шарика
@@ -361,6 +320,7 @@ class MainWindow(QMainWindow):
                 pos = randint(-3, 3), randint(-3, 3)
 
             return pos
+
         v_x, v_y = get_random_vector()
         self.ball = Ball(ball_item=ball_item, v_x=v_x, v_y=v_y)
         # self.ball.dir_x
@@ -426,20 +386,20 @@ class MainWindow(QMainWindow):
                 else Qt.GlobalColor.red
             )
             if brick in colliding_items:
-            # if brick.collidesWithItem(ball_item):  # TODO:
+                # if brick.collidesWithItem(ball_item):  # TODO:
                 collisions.append("brick")
 
         # NOTE: Фиксация по Y
         platform_item.setY(scene.sceneRect().bottom() - platform_height)
 
         if (
-                platform_item.sceneBoundingRect().left()
-                <= scene_left_line_item.sceneBoundingRect().right()
+            platform_item.sceneBoundingRect().left()
+            <= scene_left_line_item.sceneBoundingRect().right()
         ):
             platform_item.setX(scene_left_line_item.sceneBoundingRect().right())
         elif (
-                platform_item.sceneBoundingRect().right()
-                >= scene_right_line_item.sceneBoundingRect().left()
+            platform_item.sceneBoundingRect().right()
+            >= scene_right_line_item.sceneBoundingRect().left()
         ):
             # TODO: Немного не доходит до границ
             platform_item.setX(
