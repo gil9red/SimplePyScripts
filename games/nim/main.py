@@ -6,15 +6,21 @@ __author__ = "ipetrash"
 
 import random
 
-# TODO: Возможность выбрать кто первый ходит
+
+class FinishGameException(Exception):
+    pass
+
 
 MIN_STONES: int = 1
 MAX_STONES: int = 3
 MAX_NUMBER: int = 21
 
+gamer_is_first: bool = (input("Ты первый? (y/n): ").lower() or "y") == "y"
 number: int = MAX_NUMBER
-while number > 0:
-    print(f"Камней: {number}")
+
+
+def player_move():
+    global number
 
     while True:
         try:
@@ -27,8 +33,11 @@ while number > 0:
 
     number -= stones
     if number <= 0:
-        print("Компьютер выиграл")
-        break
+        raise FinishGameException("Компьютер выиграл")
+
+
+def computer_move():
+    global number
 
     # TODO: Когда остается минимум камней нужно вручную выбрать правильное, а не рандомно
     #       А то ИИ выглядит как искусственный идиот
@@ -36,7 +45,21 @@ while number > 0:
     print(f"Компьютер выбрал: {stones}")
     number -= stones
     if number <= 0:
-        print("Ты выиграл")
-        break
+        raise FinishGameException("Ты выиграл")
+
+
+while number > 0:
+    print(f"Камней: {number}")
+
+    try:
+        if gamer_is_first:
+            player_move()
+            computer_move()
+        else:
+            computer_move()
+            player_move()
+
+    except FinishGameException as e:
+        print(e)
 
     print()
