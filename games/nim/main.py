@@ -24,7 +24,9 @@ def player_move():
 
     while True:
         try:
-            stones = int(input(f"Камни от {MIN_STONES} до {MAX_STONES}: "))
+            stones = int(
+                input(f"Камни от {MIN_STONES} до {MAX_STONES} (камней {number}): ")
+            )
             assert MIN_STONES <= stones <= MAX_STONES
             break
         except:
