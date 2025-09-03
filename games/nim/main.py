@@ -26,22 +26,15 @@ class Player(ABC):
         pass
 
     @abstractmethod
-    def make_move(self):
+    def make_choice(self) -> int:
         pass
-
-    def do_choice(self, stones: int):
-        if not self.game:
-            return
-
-        print(f"Игрок {self.name!r} выбрал: {stones}")
-        self.game.do_choice(self, stones)
 
 
 class UserPlayer(Player):
     def is_bot(self) -> bool:
         return False
 
-    def make_move(self):
+    def make_choice(self) -> int:
         while True:
             try:
                 stones = int(
@@ -50,25 +43,23 @@ class UserPlayer(Player):
                     )
                 )
                 assert self.game.MIN_STONES <= stones <= self.game.MAX_STONES
-                break
+                return stones
             except (ValueError, AssertionError):
                 print("Неправильное значение!")
                 continue
-
-        self.do_choice(stones)
 
 
 class BotPlayer(Player):
     def is_bot(self) -> bool:
         return True
 
-    def make_move(self):
+    def make_choice(self) -> int:
         # TODO: Когда остается минимум камней нужно вручную выбрать правильное, а не рандомно
         #       А то ИИ выглядит как искусственный идиот
-        stones = min(
-            self.game.stones, random.randint(self.game.MIN_STONES, self.game.MAX_STONES)
+        return min(
+            self.game.stones,
+            random.randint(self.game.MIN_STONES, self.game.MAX_STONES),
         )
-        self.do_choice(stones)
 
 
 @dataclass
@@ -97,7 +88,10 @@ class Game:
         # TODO:
         self.player1_is_first = (input("Ты первый? (y/n): ").lower() or "y") == "y"
 
-    def do_choice(self, player: Player, stones: int):
+    def do_choice(self, player: Player):
+        stones: int = player.make_choice()
+        print(f"Игрок {player.name!r} выбрал: {stones}")
+
         self.stones -= stones
         if self.stones <= 0:
             # TODO:
@@ -111,11 +105,11 @@ class Game:
 
         try:
             if self.player1_is_first:
-                self.player1.make_move()
-                self.player2.make_move()
+                self.do_choice(self.player1)
+                self.do_choice(self.player2)
             else:
-                self.player2.make_move()
-                self.player1.make_move()
+                self.do_choice(self.player2)
+                self.do_choice(self.player1)
 
         except FinishGameException as e:
             print(e)
