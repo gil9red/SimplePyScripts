@@ -46,7 +46,7 @@ class UserPlayer(Player):
             try:
                 stones = int(
                     input(
-                        f"Камни от {self.game.MIN_STONES} до {self.game.MAX_STONES} (камней {self.game.number}): "
+                        f"Камни от {self.game.MIN_STONES} до {self.game.MAX_STONES}: "
                     )
                 )
                 assert self.game.MIN_STONES <= stones <= self.game.MAX_STONES
@@ -66,7 +66,7 @@ class BotPlayer(Player):
         # TODO: Когда остается минимум камней нужно вручную выбрать правильное, а не рандомно
         #       А то ИИ выглядит как искусственный идиот
         stones = min(
-            self.game.number, random.randint(self.game.MIN_STONES, self.game.MAX_STONES)
+            self.game.stones, random.randint(self.game.MIN_STONES, self.game.MAX_STONES)
         )
         self.do_choice(stones)
 
@@ -76,7 +76,8 @@ class Game:
     player1: Player
     player2: Player
 
-    number: int = 0
+    round: int = 0
+    stones: int = 0
     is_finished: bool = False
     player1_is_first: bool = True
 
@@ -88,22 +89,25 @@ class Game:
         self.player1.game = self
         self.player2.game = self
 
-        self.number = self.MAX_NUMBER
+        self.round = 0
+        self.stones = self.MAX_NUMBER
+
         self.is_finished = False
 
         # TODO:
         self.player1_is_first = (input("Ты первый? (y/n): ").lower() or "y") == "y"
 
     def do_choice(self, player: Player, stones: int):
-        self.number -= stones
-        if self.number <= 0:
+        self.stones -= stones
+        if self.stones <= 0:
             # TODO:
             raise FinishGameException(f"Игрок {player.name!r} проиграл!")
 
-    # TODO: Мб счетчик раундов вести и явно писать?
     # TODO: Немного ASCII для удобного просмотра
     def move(self) -> bool:
-        print(f"Камней: {self.number}")
+        self.round += 1
+
+        print(f"Раунд #{self.round}. Камней: {self.stones}")
 
         try:
             if self.player1_is_first:
