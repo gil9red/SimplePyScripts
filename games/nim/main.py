@@ -39,10 +39,16 @@ class UserPlayer(Player):
             try:
                 stones = int(
                     input(
-                        f"Камни от {self.game.MIN_STONES} до {self.game.MAX_STONES}: "
+                        f"Игрок {self.name!r} выбирает камни от {self.game.MIN_STONES} до {self.game.MAX_STONES} "
+                        f"(всего камней: {self.game.stones}): "
                     )
                 )
                 assert self.game.MIN_STONES <= stones <= self.game.MAX_STONES
+
+                if stones > self.game.stones:
+                    print("Нельзя камней выбрать больше, чем осталось!")
+                    continue
+
                 return stones
             except (ValueError, AssertionError):
                 print("Неправильное значение!")
@@ -54,8 +60,18 @@ class BotPlayer(Player):
         return True
 
     def make_choice(self) -> int:
-        # TODO: Когда остается минимум камней нужно вручную выбрать правильное, а не рандомно
-        #       А то ИИ выглядит как искусственный идиот
+        # Чтобы бот не выбирал очевидно проигрышное количество камней, когда можно победить
+        # Если осталось от 2 до 4 камней, то выбирать от 1 до 3 камней - чтобы остался только 1 камень
+        match self.game.stones:
+            case 1:
+                return 1  # Без вариантов, остается только проиграть
+            case 2:
+                return 1
+            case 3:
+                return 2
+            case 4:
+                return 3
+
         return min(
             self.game.stones,
             random.randint(self.game.MIN_STONES, self.game.MAX_STONES),
@@ -70,7 +86,6 @@ class Game:
     round: int = 0
     stones: int = 0
     is_finished: bool = False
-    player1_is_first: bool = True
 
     MIN_STONES: int = 1
     MAX_STONES: int = 3
@@ -85,8 +100,31 @@ class Game:
 
         self.is_finished = False
 
-        # TODO:
-        self.player1_is_first = (input("Ты первый? (y/n): ").lower() or "y") == "y"
+        player1_is_first: bool = False
+        variants: list[str] = ["y", "n"]
+
+        if self.player1.is_bot():
+            print(f"Игрок {self.player1.name!r} подкидывает монетку")
+            player1_is_first = random.choice(variants) == variants[0]
+        else:
+            while True:
+                try:
+                    value: str = input(f"Ты первый? ({'/'.join(variants)}): ").lower()
+                    if not value:
+                        value = variants[0]
+                    assert value in variants
+                    player1_is_first = value == variants[0]
+                    break
+
+                except AssertionError:
+                    print("Неправильное значение!")
+                    continue
+
+        # Меняем местами первого и второго игроков
+        if not player1_is_first:
+            self.player1, self.player2 = self.player2, self.player1
+
+        print(f"Первым ходит игрок {self.player1.name!r}")
 
     def do_choice(self, player: Player):
         stones: int = player.make_choice()
@@ -101,21 +139,16 @@ class Game:
     def move(self) -> bool:
         self.round += 1
 
-        print(f"Раунд #{self.round}. Камней: {self.stones}")
+        print(f"\nРаунд #{self.round}. Камней: {self.stones}")
 
         try:
-            if self.player1_is_first:
-                self.do_choice(self.player1)
-                self.do_choice(self.player2)
-            else:
-                self.do_choice(self.player2)
-                self.do_choice(self.player1)
+            self.do_choice(self.player1)
+            self.do_choice(self.player2)
 
         except FinishGameException as e:
+            print()
             print(e)
             self.is_finished = True
-
-        print()
 
         return not self.is_finished
 
