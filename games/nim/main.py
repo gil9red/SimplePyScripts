@@ -154,10 +154,21 @@ class Game:
 
 
 if __name__ == "__main__":
+    # game = Game(
+    #     player1=BotPlayer("Бот1"),
+    #     player2=BotPlayer("Бот2"),
+    # )
+
+    # game = Game(
+    #     player1=UserPlayer("Человек1"),
+    #     player2=UserPlayer("Человек2"),
+    # )
+
     game = Game(
         player1=UserPlayer("Человек"),
         player2=BotPlayer("Бот"),
     )
+
     game.start()
 
     while game.move():
