@@ -4,48 +4,22 @@
 __author__ = "ipetrash"
 
 
-import requests
-from common import User
+from common import User, get_users
 
 
 def get_followers(owner: str) -> list[User]:
-    url = f"https://api.github.com/users/{owner}/followers"
-
-    per_page = 100
-    page = 1
-
-    items = []
-
-    while True:
-        params = dict(per_page=per_page, page=page)
-        rs = requests.get(url, params=params)
-        rs.raise_for_status()
-
-        result: list[dict] = rs.json()
-        if not result:
-            break
-
-        items += [
-            User(
-                login=item["login"],
-                url=item["html_url"],
-            )
-            for item in result
-        ]
-
-        page += 1
-
-    return items
+    url: str = f"https://api.github.com/users/{owner}/followers"
+    return get_users(url)
 
 
 if __name__ == "__main__":
-    users = get_followers("gil9red")
+    users: list[User] = get_followers("gil9red")
     print(f"Followers ({len(users)}):")
     print(*users[:5], sep="\n")
     print("...")
     print(*users[-5:], sep="\n")
     """
-    Followers (92):
+    Followers (98):
     User(login='shakshin', url='https://github.com/shakshin')
     User(login='AgelxNash', url='https://github.com/AgelxNash')
     User(login='insolor', url='https://github.com/insolor')
