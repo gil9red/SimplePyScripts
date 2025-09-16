@@ -10,7 +10,16 @@ __author__ = "ipetrash"
 import socket
 
 
-def internet(host: str = "8.8.8.8", port: int = 53, timeout: float = 3) -> bool:
+DEFAULT_HOST: str = "8.8.8.8"
+DEFAULT_PORT: int = 53
+DEFAULT_TIMEOUT: int = 3
+
+
+def check_internet(
+    host: str = DEFAULT_HOST,
+    port: int = DEFAULT_PORT,
+    timeout: int = DEFAULT_TIMEOUT,
+) -> bool:
     """
     Host: 8.8.8.8 (google-public-dns-a.google.com)
     OpenPort: 53/tcp
@@ -27,4 +36,59 @@ def internet(host: str = "8.8.8.8", port: int = 53, timeout: float = 3) -> bool:
 
 
 if __name__ == "__main__":
-    print(internet())
+    import argparse
+    import time
+
+    parser = argparse.ArgumentParser(
+        description="Check internet",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "--host",
+        default=DEFAULT_HOST,
+        help="Host",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=DEFAULT_PORT,
+        help="Port",
+    )
+    parser.add_argument(
+        "--network_timeout_secs",
+        type=int,
+        default=DEFAULT_TIMEOUT,
+        help="Network timeout in seconds",
+    )
+    parser.add_argument(
+        "--attempts",
+        type=int,
+        default=3,
+        help="Attempts to check",
+    )
+    parser.add_argument(
+        "--delay_between_attempts_secs",
+        type=int,
+        default=30,
+        help="Delay between attempts in seconds",
+    )
+
+    args = parser.parse_args()
+
+    for attempt in range(args.attempts):
+        prefix: str = f"[{attempt + 1}] "
+
+        print(f"{prefix}Check internet")
+        result: bool = check_internet(
+            host=args.host,
+            port=args.port,
+            timeout=args.network_timeout_secs,
+        )
+        print(f"{prefix}Result: {result}")
+        if result:
+            break
+
+        delay: int = args.delay_between_attempts_secs
+
+        print(f"{prefix}The next attempt through {delay} seconds\n")
+        time.sleep(delay)
