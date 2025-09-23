@@ -4,7 +4,6 @@
 __author__ = "ipetrash"
 
 
-# TODO: Проверить прерывание скрипта - нужно чтобы он завершился, если его будут закрывать
 import os
 import subprocess
 
@@ -35,18 +34,6 @@ def console_print_header(title: str):
         seconds = int(default_timer() - start_time)
         print(f'Finish "{title}". Elapsed time: {timedelta(seconds=seconds)}')
         print("-" * 100)
-
-
-# TODO:
-path = r"C:\DEV__TX\3.2.41.10"
-path = r"C:\DEV__TX\3.2.43.10"
-path = r"C:\DEV__TX\3.2.44.10"
-path = r"C:\DEV__OPTT"
-path = r"C:\DEV__OPTT\2.1.14.1"
-path = r"C:\DEV__OPTT\2.1.16.1"
-path = r"C:\DEV__OPTT\2.1.15.1"
-path = Path(path)
-print(path)
 
 
 def execute(
@@ -92,6 +79,17 @@ def execute_svn_up(
     return result
 
 
+# TODO:
+path = r"C:\DEV__TX\3.2.41.10"
+path = r"C:\DEV__TX\3.2.43.10"
+path = r"C:\DEV__TX\3.2.44.10"
+path = r"C:\DEV__OPTT"
+path = r"C:\DEV__OPTT\2.1.14.1"
+path = r"C:\DEV__OPTT\2.1.16.1"
+path = r"C:\DEV__OPTT\2.1.15.1"
+path = Path(path)
+print(path)
+
 start_time_ms: float = default_timer()
 
 with console_print_header("SVN UP"):
@@ -99,7 +97,6 @@ with console_print_header("SVN UP"):
         path=path,
         on_out_line_func=lambda line: print("[1]", line, end=""),
     )
-    print("result_svn_up:", result_svn_up)  # TODO:
 
     if not result_svn_up.is_success and result_svn_up.is_about_cleanup:
         execute(
@@ -118,7 +115,6 @@ with console_print_header("SVN UP"):
             path=path,
             on_out_line_func=_on_out_line_func,
         )
-        print("result_svn_up:", result_svn_up)  # TODO:
 
         if not result_svn_up.is_success:
             raise Exception("".join(lines))
