@@ -4,6 +4,123 @@
 __author__ = "ipetrash"
 
 
+# TODO: Проверить прерывание скрипта - нужно чтобы он завершился, если его будут закрывать
+import os
+import subprocess
+
+from contextlib import contextmanager
+from dataclasses import dataclass
+from datetime import timedelta
+from typing import Callable
+from timeit import default_timer
+
+
+@dataclass
+class SvnUpResult:
+    is_success: bool = False
+    is_about_cleanup: bool = False
+
+
+@contextmanager
+def console_print_header(title: str):
+    start_time: float = default_timer()
+
+    print()
+    print("-" * 100)
+    print(f'Start "{title}"')
+    try:
+        yield
+    finally:
+        print(f'Finish "{title}". Elapsed time: {timedelta(seconds=int(default_timer() - start_time))}')
+        print("-" * 100)
+
+
+path = r"C:\DEV__TX\3.2.41.10"
+path = r"C:\DEV__TX\3.2.43.10"
+path = r"C:\DEV__TX\3.2.44.10"
+path = r"C:\DEV__OPTT"
+path = r"C:\DEV__OPTT\2.1.14.1"
+path = r"C:\DEV__OPTT\2.1.16.1"
+path = r"C:\DEV__OPTT\2.1.15.1"
+
+print(path)
+
+# TODO: Вместо возврата, обернуть обработку внутри, передавая туда функцию
+# TODO: Аннотации
+def execute(cmd, encoding: str = "utf-8", cwd: str | None = None, on_out_line_func: Callable = print):
+    popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding=encoding, cwd=cwd, shell=True)
+    for stdout_line in iter(popen.stdout.readline, ""):
+        # TODO: Возможность прервать обработку?
+        on_out_line_func(stdout_line)
+    popen.stdout.close()
+    return_code = popen.wait()
+    if return_code:
+        raise subprocess.CalledProcessError(return_code, cmd)
+
+
+# TODO:
+def execute_svn_up(path, on_out_line_func) -> SvnUpResult:
+    result: SvnUpResult = SvnUpResult()
+
+    def _fill_result_on_out_line_func(line: str):
+        on_out_line_func(line)
+
+        line_lower: str = line.lower()
+        if "at revision" in line_lower or "updated to revision" in line_lower:
+            result.is_success = True
+
+        if "cleanup" in line_lower:
+            result.is_about_cleanup = True
+
+    execute("svn up .", cwd=path, on_out_line_func=_fill_result_on_out_line_func)
+
+    return result
+
+start_time_ms: float = default_timer()
+
+with console_print_header("SVN UP"):
+    result_svn_up: SvnUpResult = execute_svn_up(path=path, on_out_line_func=lambda line: print("[1]", line, end=""))
+    print("result_svn_up:", result_svn_up)
+
+    if not result_svn_up.is_success and result_svn_up.is_about_cleanup:
+        execute("svn cleanup .", cwd=path, on_out_line_func=lambda line: print("[1.1]", line, end=""))
+
+        lines: list[str] = []
+        result_svn_up: SvnUpResult = execute_svn_up(
+            path=path,
+            on_out_line_func=lambda line: (
+                print("[1.2]", line, end=""),
+                lines.append(line),
+            ),
+        )
+        print("result_svn_up:", result_svn_up)
+        print("lines:", lines)
+
+        if not result_svn_up.is_success:
+            raise Exception("".join(lines))
+
+with console_print_header("BUILD-KERNEL"):
+    # TODO: Для теста вывода в несколько строк:
+    # TODO: Проверить наличие ошибок при сборке и прервать работу
+    # TODO: Проверка строки BUILD SUCCESSFUL?
+    #       BUILD FAILED
+    # NOTE: Сборка кернела
+    execute("call ant clean -f build-kernel.xml & call ant distributive -f build-kernel.xml", cwd=path, on_out_line_func=lambda line: print("[2]", line, end=""))
+
+with console_print_header("BUILD-ADS"):
+    # TODO: Проверить наличие ошибок при сборке и прервать работу
+    # TODO: Проверка строки BUILD SUCCESSFUL?
+    #       BUILD FAILED
+    # NOTE: Компиляция
+    execute("call ant -f build-ads.xml", cwd=path, on_out_line_func=lambda line: print("[3]", line, end=""))
+
+with console_print_header("DESIGNER"):
+    os.startfile("!!designer.cmd", cwd=path)
+
+print(f"\nTotal elapsed: {timedelta(seconds=int(default_timer() - start_time_ms))}")
+
+quit()
+
 import sys
 import traceback
 from random import randint
