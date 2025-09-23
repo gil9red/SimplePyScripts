@@ -11,6 +11,7 @@ import subprocess
 from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import timedelta
+from pathlib import Path
 from typing import Callable
 from timeit import default_timer
 
@@ -31,10 +32,12 @@ def console_print_header(title: str):
     try:
         yield
     finally:
-        print(f'Finish "{title}". Elapsed time: {timedelta(seconds=int(default_timer() - start_time))}')
+        seconds = int(default_timer() - start_time)
+        print(f'Finish "{title}". Elapsed time: {timedelta(seconds=seconds)}')
         print("-" * 100)
 
 
+# TODO:
 path = r"C:\DEV__TX\3.2.41.10"
 path = r"C:\DEV__TX\3.2.43.10"
 path = r"C:\DEV__TX\3.2.44.10"
@@ -42,15 +45,25 @@ path = r"C:\DEV__OPTT"
 path = r"C:\DEV__OPTT\2.1.14.1"
 path = r"C:\DEV__OPTT\2.1.16.1"
 path = r"C:\DEV__OPTT\2.1.15.1"
-
+path = Path(path)
 print(path)
 
-# TODO: Вместо возврата, обернуть обработку внутри, передавая туда функцию
-# TODO: Аннотации
-def execute(cmd, encoding: str = "utf-8", cwd: str | None = None, on_out_line_func: Callable = print):
-    popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding=encoding, cwd=cwd, shell=True)
+
+def execute(
+    cmd: str | list[str],
+    encoding: str = "utf-8",
+    cwd: Path | str | None = None,
+    on_out_line_func: Callable[[str], None] = print,
+):
+    popen = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        encoding=encoding,
+        cwd=cwd,
+        shell=True,
+    )
     for stdout_line in iter(popen.stdout.readline, ""):
-        # TODO: Возможность прервать обработку?
         on_out_line_func(stdout_line)
     popen.stdout.close()
     return_code = popen.wait()
@@ -58,8 +71,10 @@ def execute(cmd, encoding: str = "utf-8", cwd: str | None = None, on_out_line_fu
         raise subprocess.CalledProcessError(return_code, cmd)
 
 
-# TODO:
-def execute_svn_up(path, on_out_line_func) -> SvnUpResult:
+def execute_svn_up(
+    path: Path | str,
+    on_out_line_func: Callable[[str], None] = print,
+) -> SvnUpResult:
     result: SvnUpResult = SvnUpResult()
 
     def _fill_result_on_out_line_func(line: str):
@@ -76,46 +91,56 @@ def execute_svn_up(path, on_out_line_func) -> SvnUpResult:
 
     return result
 
+
 start_time_ms: float = default_timer()
 
 with console_print_header("SVN UP"):
-    result_svn_up: SvnUpResult = execute_svn_up(path=path, on_out_line_func=lambda line: print("[1]", line, end=""))
-    print("result_svn_up:", result_svn_up)
+    result_svn_up: SvnUpResult = execute_svn_up(
+        path=path,
+        on_out_line_func=lambda line: print("[1]", line, end=""),
+    )
+    print("result_svn_up:", result_svn_up)  # TODO:
 
     if not result_svn_up.is_success and result_svn_up.is_about_cleanup:
-        execute("svn cleanup .", cwd=path, on_out_line_func=lambda line: print("[1.1]", line, end=""))
+        execute(
+            "svn cleanup .",
+            cwd=path,
+            on_out_line_func=lambda line: print("[1.1]", line, end=""),
+        )
 
         lines: list[str] = []
+
+        def _on_out_line_func(line: str):
+            print("[1.2]", line, end="")
+            lines.append(line)
+
         result_svn_up: SvnUpResult = execute_svn_up(
             path=path,
-            on_out_line_func=lambda line: (
-                print("[1.2]", line, end=""),
-                lines.append(line),
-            ),
+            on_out_line_func=_on_out_line_func,
         )
-        print("result_svn_up:", result_svn_up)
-        print("lines:", lines)
+        print("result_svn_up:", result_svn_up)  # TODO:
 
         if not result_svn_up.is_success:
             raise Exception("".join(lines))
 
 with console_print_header("BUILD-KERNEL"):
-    # TODO: Для теста вывода в несколько строк:
-    # TODO: Проверить наличие ошибок при сборке и прервать работу
-    # TODO: Проверка строки BUILD SUCCESSFUL?
-    #       BUILD FAILED
-    # NOTE: Сборка кернела
-    execute("call ant clean -f build-kernel.xml & call ant distributive -f build-kernel.xml", cwd=path, on_out_line_func=lambda line: print("[2]", line, end=""))
+    execute(
+        "call ant clean -f build-kernel.xml & call ant distributive -f build-kernel.xml",
+        cwd=path,
+        on_out_line_func=lambda line: print("[2]", line, end=""),
+    )
 
 with console_print_header("BUILD-ADS"):
-    # TODO: Проверить наличие ошибок при сборке и прервать работу
-    # TODO: Проверка строки BUILD SUCCESSFUL?
-    #       BUILD FAILED
-    # NOTE: Компиляция
-    execute("call ant -f build-ads.xml", cwd=path, on_out_line_func=lambda line: print("[3]", line, end=""))
+    execute(
+        "call ant -f build-ads.xml",
+        cwd=path,
+        on_out_line_func=lambda line: print("[3]", line, end=""),
+    )
 
 with console_print_header("DESIGNER"):
-    os.startfile("!!designer.cmd", cwd=path)
+    file_name = path / "!!designer.cmd"
+    print(f"Open file {str(file_name)!r}")
+    os.startfile(file_name)
 
 print(f"\nTotal elapsed: {timedelta(seconds=int(default_timer() - start_time_ms))}")
 
