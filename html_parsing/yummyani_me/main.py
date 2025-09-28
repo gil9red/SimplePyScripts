@@ -66,6 +66,9 @@ class AnimeBase:
     year: int
     description: str
 
+    def get_anime_url_full(self) -> str:
+        return URL_ANIME_FORMAT.format(name=self.anime_url)
+
     @classmethod
     def parse(cls, data: dict[str, Any]) -> Self:
         return cls(
@@ -104,9 +107,6 @@ class Anime(AnimeBase):
             other_titles=data["other_titles"],
             viewing_order=[AnimeBase.parse(obj) for obj in data["viewing_order"]],
         )
-
-    def get_anime_url_full(self) -> str:
-        return URL_ANIME_FORMAT.format(name=self.anime_url)
 
 
 def get_anime_by_url(url_or_name: str) -> Anime:
@@ -238,6 +238,10 @@ if __name__ == "__main__":
     }
     """
 
+    assert (
+        anime.viewing_order[0].get_anime_url_full()
+        == get_anime_by_url("doktor-stoun").get_anime_url_full()
+    )
     assert anime == get_anime_by_url(
         "https://ru.yummyani.me/catalog/item/doktor-stoun-nauchnoe-buduschee-chast-2"
     )
