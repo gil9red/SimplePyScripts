@@ -30,7 +30,7 @@ def process(path: str):
         if not layer_dir.is_dir():
             continue
 
-        layer_ads_dir = layer_dir / "ads"
+        layer_ads_dir: Path = layer_dir / "ads"
         if not layer_ads_dir.is_dir():
             continue
 
@@ -42,13 +42,13 @@ def process(path: str):
                 continue
 
             for task_el in model.findall(".//xsc:Task", namespaces=NS):
-                assignee = task_el.attrib["Assignee"].strip()
+                assignee: str = task_el.attrib["Assignee"].strip()
                 if not assignee:
                     assignee = "<unknown>"
 
                 assignee_by_number[assignee] += 1
 
-                task_type = task_el.attrib["Type"]
+                task_type: str = task_el.attrib["Type"]
                 type_by_number[task_type] += 1
 
     indent1 = "    "
