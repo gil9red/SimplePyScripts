@@ -25,6 +25,7 @@ def process(path: str):
 
     assignee_by_number: dict[str, int] = defaultdict(int)
     type_by_number: dict[str, int] = defaultdict(int)
+    behavior_by_number: dict[str, int] = defaultdict(int)
 
     for layer_dir in path.glob("*"):
         if not layer_dir.is_dir():
@@ -38,7 +39,7 @@ def process(path: str):
             try:
                 model = ET.fromstring(class_path.read_bytes())
             except ParseError as e:
-                print(f"Invalid XML by path {str(class_path)!r}\nError: {e}\n")
+                print(f"[#] Invalid XML by path {str(class_path)!r}\nError: {e}\n")
                 continue
 
             for task_el in model.findall(".//xsc:Task", namespaces=NS):
@@ -51,7 +52,10 @@ def process(path: str):
                 task_type: str = task_el.attrib["Type"]
                 type_by_number[task_type] += 1
 
-    indent1 = "    "
+                behavior: str = task_el.attrib["Behavior"]
+                behavior_by_number[behavior] += 1
+
+    indent1: str = "    "
 
     print("Total:", sum(assignee_by_number.values()))
     print()
@@ -68,6 +72,13 @@ def process(path: str):
         type_by_number.items(), key=lambda x: x[1], reverse=True
     ):
         print(f"{indent1}{task_type}: {number}")
+    print()
+
+    print(f"behavior_by_number ({len(behavior_by_number)}):")
+    for behavior, number in sorted(
+        behavior_by_number.items(), key=lambda x: x[1], reverse=True
+    ):
+        print(f"{indent1}{behavior}: {number}")
 
 
 if __name__ == "__main__":
