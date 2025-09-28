@@ -8,6 +8,7 @@ import xml.etree.ElementTree as ET
 
 from collections import defaultdict
 from pathlib import Path
+from xml.etree.ElementTree import ParseError
 
 
 NS = dict(
@@ -34,7 +35,12 @@ def process(path: str):
             continue
 
         for class_path in layer_ads_dir.glob("*/src/*.xml"):
-            model = ET.fromstring(class_path.read_bytes())
+            try:
+                model = ET.fromstring(class_path.read_bytes())
+            except ParseError as e:
+                print(f"Invalid XML by path {str(class_path)!r}\nError: {e}\n")
+                continue
+
             for task_el in model.findall(".//xsc:Task", namespaces=NS):
                 assignee = task_el.attrib["Assignee"].strip()
                 if not assignee:
