@@ -85,7 +85,7 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="Count TODO, NOTE, FIXME of ADS classes.py"
+        description="Count TODO, NOTE, FIXME of ADS classes"
     )
     parser.add_argument(
         "path_trunk",
