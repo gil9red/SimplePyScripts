@@ -52,12 +52,12 @@ def parse(start_url: str, download_path: Path = DIR):
             dir_ranobe: Path = download_path / ranobe_title
             dir_ranobe.mkdir(parents=True, exist_ok=True)
 
-        for i, url in enumerate(img_urls, 1):
-            rs = session.get(url)
-            time.sleep(0.1)
+            for i, url in enumerate(img_urls, 1):
+                rs = session.get(url)
+                time.sleep(0.1)
 
-            img_path: Path = dir_ranobe / f"{chapter_title}. {i}.png"
-            img_path.write_bytes(rs.content)
+                img_path: Path = dir_ranobe / f"{chapter_title}. {i}.png"
+                img_path.write_bytes(rs.content)
 
         next_chapter_link_el = soup.select_one("a[data-next-chapter-link]")
         if not next_chapter_link_el.get("href"):
