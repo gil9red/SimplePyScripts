@@ -30,10 +30,10 @@ def parse(start_url: str, download_path: Path = DIR):
         rs = session.get(url)
         soup = BeautifulSoup(rs.content, "html.parser")
 
-        title = soup.select_one("title").get_text(strip=True)
+        title: str = soup.select_one("title").get_text(strip=True)
         print(title)
 
-        img_urls = []
+        img_urls: list[str] = []
         for img_el in soup.select("img[data-media-id]"):
             media_id = img_el["data-media-id"]
             url = urljoin(rs.url, f"/api/media/{media_id}")
@@ -49,21 +49,21 @@ def parse(start_url: str, download_path: Path = DIR):
             ranobe_title: str = parts[0]
             chapter_title: str = ". ".join(parts[1:])
 
-            dir_ranobe = download_path / ranobe_title
+            dir_ranobe: Path = download_path / ranobe_title
             dir_ranobe.mkdir(parents=True, exist_ok=True)
 
-            for i, url in enumerate(img_urls, 1):
-                rs = session.get(url)
-                time.sleep(0.1)
+        for i, url in enumerate(img_urls, 1):
+            rs = session.get(url)
+            time.sleep(0.1)
 
-                img_path = dir_ranobe / f"{chapter_title}. {i}.png"
-                img_path.write_bytes(rs.content)
+            img_path: Path = dir_ranobe / f"{chapter_title}. {i}.png"
+            img_path.write_bytes(rs.content)
 
         next_chapter_link_el = soup.select_one("a[data-next-chapter-link]")
         if not next_chapter_link_el.get("href"):
             break
 
-        url = urljoin(rs.url, next_chapter_link_el["href"])
+        url: str = urljoin(rs.url, next_chapter_link_el["href"])
 
         time.sleep(1)
 
