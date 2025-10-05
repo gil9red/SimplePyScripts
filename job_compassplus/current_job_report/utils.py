@@ -4,11 +4,14 @@
 __author__ = "ipetrash"
 
 
+import enum
 import re
 import sys
 
 from datetime import datetime
 from pathlib import Path
+
+from bs4 import BeautifulSoup
 
 DIR = Path(__file__).resolve().parent
 sys.path.append(str(DIR.parent))
@@ -22,22 +25,42 @@ from get_quarter import (
 )
 
 
+@enum.unique
+class PeriodTypeEnum(enum.IntEnum):
+    MONTH = 0
+    QUARTER = 1
+    PERIOD = 2
+
+
+@enum.unique
+class ReportTypeEnum(enum.IntEnum):
+    WORKLOG = 5  # Отчет по зафиксированным трудозатратам
+    SUMMARY = 6  # Сводный отчет
+
+
 class NotFoundReport(Exception):
     pass
 
 
-URL = f"{HOST}/pa-reports/"
+URL: str = f"{HOST}/pa-reports-new/report/"
 
 
 def clear_hours(hours: str) -> str:
     return re.sub(r"[^\d:-]", "", hours)
 
 
-def _send_data(data: dict) -> str:
+def _send_data(data: dict[str, str | int]) -> str:
     # В какой-то момент адрес временно поменялся, тогда предварительный GET поможет получить актуальный адрес
     rs = session.get(URL)
     if not rs.ok:
         raise NotFoundReport(f"HTTP status is {rs.status_code}")
+
+    # Добавление полей, типа токенов, если явно не были заданы
+    soup = BeautifulSoup(rs.content, "html.parser")
+    for el in soup.select('input[name][value][type="hidden"]'):
+        name: str = el["name"]
+        if name not in data:
+            data[name] = el["value"]
 
     rs = session.post(rs.url, data=data)
     if not rs.ok:
@@ -46,47 +69,25 @@ def _send_data(data: dict) -> str:
     return rs.text
 
 
-def get_report_context(dep: str = "all", rep: str = "rep1", period: str | None = None) -> str:
+def get_report(report_type: ReportTypeEnum, period_type: PeriodTypeEnum) -> str:
     today = datetime.today()
 
-    if not period:
-        period = today.strftime("%Y-%m")
-
     data = {
-        "dep": dep,
-        "rep": rep,
-        "period": period,
-        "v": int(today.timestamp() * 1000),
-        "type": "normal",
+        "reporttype": report_type.value,
+        "PeriodType": period_type.value,
+        "Month": today.month,
+        "Year": today.year,
+        "QuarterNum": get_quarter_num(today) - 1,  # NOTE: I квартал в отчете это 0
+        "FromMonth": 1,
+        "ToMonth": 12,
     }
-    return _send_data(data)
 
+    match report_type:
+        case PeriodTypeEnum.QUARTER:
+            data["quarter"] = "quarter"
+        case PeriodTypeEnum.PERIOD:
+            data["total"] = "total"
 
-def get_quarter_report_context() -> str:
-    today = datetime.today()
-    data = {
-        "dep": "all",
-        "rep": "rep1",
-        "quarter": "quarter",
-        "period": f"{today.year}-q{get_quarter_num(today)}",
-        "v": int(today.timestamp() * 1000),
-        "type": "normal",
-    }
-    return _send_data(data)
-
-
-def get_year_report_context() -> str:
-    today = datetime.today()
-    data = {
-        "dep": "all",
-        "rep": "rep1",
-        "toMonth": "12",
-        "total": "total",
-        "quarter": "quarter",
-        "period": f"{today.year}-p01-12",
-        "v": int(today.timestamp() * 1000),
-        "type": "normal",
-    }
     return _send_data(data)
 
 
