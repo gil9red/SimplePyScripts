@@ -94,3 +94,13 @@ def get_report(report_type: ReportTypeEnum, period_type: PeriodTypeEnum) -> str:
 if __name__ == "__main__":
     dt = datetime.now()
     print(dt, get_quarter_num(dt), get_quarter_roman(dt))
+
+    print()
+
+    report: str = get_report(
+        report_type=ReportTypeEnum.SUMMARY,
+        period_type=PeriodTypeEnum.MONTH,
+    )
+    soup = BeautifulSoup(report, "html.parser")
+    for tr in soup.select("table.report tr:has(> td)"):
+        print([td.get_text(strip=True) for td in tr.select("td")])
