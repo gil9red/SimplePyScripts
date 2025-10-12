@@ -25,7 +25,7 @@ def is_user_admin() -> bool:
 
     elif os.name == "posix":
         # Check for root on Posix
-        return os.getuid() == 0
+        return os.geteuid() == 0
 
     else:
         raise RuntimeError(f"Unsupported operating system for this module: {os.name}")
