@@ -7,24 +7,18 @@ __author__ = "ipetrash"
 import ctypes
 import sys
 
-
-def is_admin():
-    """Проверяем права"""
-    try:
-        # Если админ вернет True
-        return ctypes.windll.shell32.IsUserAnAdmin()
-    except:
-        return False
+from is_user_admin import is_user_admin
 
 
-if not is_admin():
+if not is_user_admin():
+    # TODO: Поддержка не в Windows
     # Перезапускаем скрипт с правами админа
     ctypes.windll.shell32.ShellExecuteW(
         None, "runas", sys.executable, __file__, None, 1
     )
     sys.exit()
 
-print("your code...")
+print("Your code...")
 
 # Если админ продолжаем скрипт дальше
 print("admin!!!")
