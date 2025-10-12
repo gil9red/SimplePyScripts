@@ -7,14 +7,13 @@ __author__ = "ipetrash"
 # SOURCE: https://stackoverflow.com/a/19719292/5909792
 
 
+import ctypes
 import os
 import traceback
 
 
-def is_user_admin():
+def is_user_admin() -> bool:
     if os.name == "nt":
-        import ctypes
-
         try:
             # WARNING: requires Windows XP SP2 or higher!
             return bool(ctypes.windll.shell32.IsUserAnAdmin())
