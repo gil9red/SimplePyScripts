@@ -16,7 +16,7 @@ if not is_user_admin():
     ctypes.windll.shell32.ShellExecuteW(
         None, "runas", sys.executable, __file__, None, 1
     )
-    sys.exit()
+    sys.exit("This script must be run as root.")
 
 print("Your code...")
 
