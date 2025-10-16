@@ -32,4 +32,4 @@ def is_user_admin() -> bool:
 
 
 if __name__ == "__main__":
-    print(is_user_admin())
+    print("is_user_admin:", is_user_admin())
