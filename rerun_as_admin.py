@@ -14,7 +14,12 @@ if not is_user_admin():
     # TODO: Поддержка не в Windows
     # Перезапускаем скрипт с правами админа
     ctypes.windll.shell32.ShellExecuteW(
-        None, "runas", sys.executable, __file__, None, 1
+        None,  # hwnd
+        "runas",  # lpOperation
+        sys.executable,
+        __file__,
+        None,  # lpDirectory
+        1,  # nShow - 1=SW_SHOWNORMAL
     )
     sys.exit("This script must be run as root.")
 
