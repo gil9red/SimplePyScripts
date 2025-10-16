@@ -18,9 +18,5 @@ if not is_user_admin():
     )
     sys.exit("This script must be run as root.")
 
-print("Your code...")
-
-# Если админ продолжаем скрипт дальше
-print("admin!!!")
-
+print("You are now an administrator...")
 input()
