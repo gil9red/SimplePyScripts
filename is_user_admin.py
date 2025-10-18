@@ -12,10 +12,19 @@ import os
 import traceback
 
 
+def is_windows() -> bool:
+    return os.name == "nt"
+
+
+# Linux or mac
+def is_posix() -> bool:
+    return os.name == "posix"
+
+
 def is_user_admin() -> bool:
-    if os.name == "nt":
+    if is_windows():
         try:
-            # WARNING: requires Windows XP SP2 or higher!
+            # WARNING: Requires Windows XP SP2 or higher!
             return bool(ctypes.windll.shell32.IsUserAnAdmin())
 
         except:
@@ -23,7 +32,7 @@ def is_user_admin() -> bool:
             print("Admin check failed, assuming not an admin.")
             return False
 
-    elif os.name == "posix":
+    elif is_posix():
         # Check for root on Posix
         return os.geteuid() == 0
 
