@@ -78,6 +78,7 @@ def _get_video_list(
             ),
         )
         for obj in results
+        if obj["id"]
     ]
 
 
