@@ -10,7 +10,7 @@ from random import randint
 import time
 import os
 
-# pip install pynput
+# pip install pynput-1.8.1
 from pynput import keyboard
 
 

@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-# pip install pynput
+# pip install pynput-1.8.1
 from pynput.keyboard import Key, Listener
 
 # pip install pyscreenshot
