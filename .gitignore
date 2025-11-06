@@ -110,3 +110,4 @@ target/
 # Current project
 TOKEN.txt
 LOGIN_PASSWORD.txt
+backup/
