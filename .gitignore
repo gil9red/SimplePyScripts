@@ -108,6 +108,7 @@ docs/_build/
 target/
 
 # Current project
+.gigaide/
 TOKEN.txt
 LOGIN_PASSWORD.txt
 backup/
