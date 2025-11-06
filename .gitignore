@@ -111,3 +111,4 @@ target/
 TOKEN.txt
 LOGIN_PASSWORD.txt
 backup/
+geckodriver.log
