@@ -17,6 +17,16 @@ PATTERN_FIELD_VERSION: re.Pattern = re.compile(r'(?P<left>"Left Text"\s*:\s*)".+
 def process(path_dir: Path):
     path_js_plugins: Path = path_dir / "js" / "plugins.js"
 
+    # If the last commit was in path_js_plugins, then skipping the file change
+    result: bytes = subprocess.check_output(
+        args=["git", "diff", "HEAD~1", "HEAD", path_js_plugins],
+    )
+    if result:
+        print(
+            f"Skipping change {path_js_plugins} because the file is in the last commit"
+        )
+        return
+
     result: str = subprocess.check_output(
         args=[
             "git",
