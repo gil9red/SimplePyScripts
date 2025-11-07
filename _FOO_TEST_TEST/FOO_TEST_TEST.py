@@ -4,21 +4,6 @@
 __author__ = "ipetrash"
 
 
-import subprocess
-from pathlib import Path
-
-
-print(
-    repr(
-        subprocess.check_output(
-            args=["git", "diff", "HEAD~1", "HEAD", str(Path(__file__).resolve())],
-        )
-    )
-)
-
-
-quit()
-
 import sys
 import traceback
 from random import randint
