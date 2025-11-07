@@ -109,7 +109,10 @@ target/
 
 # Current project
 .gigaide/
+backup/
+database/
 TOKEN.txt
 LOGIN_PASSWORD.txt
-backup/
 geckodriver.log
+*.sqlite*
+*.db
