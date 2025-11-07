@@ -116,3 +116,4 @@ LOGIN_PASSWORD.txt
 geckodriver.log
 *.sqlite*
 *.db
+log.txt
