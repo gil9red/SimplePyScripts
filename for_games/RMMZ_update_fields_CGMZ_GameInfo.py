@@ -20,6 +20,7 @@ def process(path_dir: Path):
     # If the last commit was in path_js_plugins, then skipping the file change
     result: bytes = subprocess.check_output(
         args=["git", "diff", "HEAD~1", "HEAD", path_js_plugins],
+        cwd=path_dir,
     )
     if result:
         print(
