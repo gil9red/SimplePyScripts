@@ -5,12 +5,11 @@ __author__ = "ipetrash"
 
 
 import sys
-import re
-import xml.etree.ElementTree as ET
 
 from dataclasses import dataclass
-from datetime import datetime, date
+from datetime import datetime, date, timezone
 from pathlib import Path
+from typing import Any
 
 DIR = Path(__file__).resolve().parent
 ROOT_DIR = DIR.parent
@@ -21,62 +20,53 @@ from site_common import do_get, do_post
 
 @dataclass
 class Vacation:
+    id: int
     subject: str
+    subject_email: str
     start_date: date
     end_date: date
-    deputy: str | None
+    deputy: str
 
+    @classmethod
+    def parse_from_dict(cls, data: dict[str, Any]) -> "Vacation":
+        def utc2local(dt_utc: datetime) -> datetime:
+            epoch = dt_utc.timestamp()
+            dt_local = datetime.fromtimestamp(epoch).replace(tzinfo=None)
 
-def parse_datetime(date_time_str: str) -> datetime:
-    # NOTE: "2024-08-18T19:00:00Z" -> "2024-08-18 19:00:00+00:00"
-    return datetime.strptime(date_time_str, "%Y-%m-%dT%H:%M:%S%z")
+            offset = dt_local - dt_utc.replace(tzinfo=None)
+            return (dt_utc + offset).replace(tzinfo=None)
 
+        def parse_datetime(date_time_str: str) -> datetime:
+            # NOTE: Разбор даты из UTC "2024-08-18T19:00:00Z" в локальную дату
+            return utc2local(datetime.strptime(date_time_str, "%Y-%m-%dT%H:%M:%S%z"))
 
-def parse_name(name: str | None) -> str | None:
-    if not name:
-        return
-
-    m = re.search(r"[a-z]+ [a-z]\.", name, flags=re.IGNORECASE)
-    if not m:
-        raise Exception(f"Не удалось найти имя из {name!r}")
-
-    return m.group()
+        return cls(
+            id=data["Id"],
+            subject=data["Subject"],
+            subject_email=data["EmailEmployee"],
+            start_date=parse_datetime(data["StartDate"]),
+            end_date=parse_datetime(data["EndDate"]),
+            deputy=data["Location"],
+        )
 
 
 def get_vacations() -> list[Vacation]:
-    url = (
-        f"https://portal.compassplus.com/_api/web/lists/GetByTitle('empvacation')/items?"
-        f"$top=5000&$orderby=Subject asc&$filter=EndDate ge '{datetime.utcnow().date()}T00:00:00Z'"
+    url = "https://portal.compassplus.com/_api/web/lists/GetByTitle('Employee%20Vacations')/items"
+    rs = do_get(
+        url,
+        headers={
+            # NOTE: С такими заголовками сервер вернет JSON, а не XML
+            "Accept": "application/json;odata.metadata=minimal",
+            "odata-version": "4.0",
+        },
+        params={
+            "$select": "Id,EndDate,Subject,Location,StartDate,EmailEmployee",
+            "$top": "5000",
+            "$orderby": "Subject asc",
+            "$filter": f"(EndDate ge '{datetime.now(timezone.utc).date()}T00:00:00')",
+        },
     )
-    rs = do_get(url)
-
-    ns = {
-        "": "http://www.w3.org/2005/Atom",
-        "d": "http://schemas.microsoft.com/ado/2007/08/dataservices",
-        "m": "http://schemas.microsoft.com/ado/2007/08/dataservices/metadata",
-    }
-
-    items: list[Vacation] = []
-
-    root = ET.fromstring(rs.content)
-    for props_el in root.findall("./entry/content/m:properties", namespaces=ns):
-        subject_el = props_el.find("./d:Subject", namespaces=ns)
-        start_date_el = props_el.find("./d:StartDate", namespaces=ns)
-        end_date_el = props_el.find("./d:EndDate", namespaces=ns)
-
-        # TODO: Странное название для тега того, кто замещает
-        location_el = props_el.find("./d:Location", namespaces=ns)
-
-        items.append(
-            Vacation(
-                subject=parse_name(subject_el.text),
-                start_date=parse_datetime(start_date_el.text).date(),
-                end_date=parse_datetime(end_date_el.text).date(),
-                deputy=parse_name(location_el.text),
-            )
-        )
-
-    return items
+    return [Vacation.parse_from_dict(value) for value in rs.json()["value"]]
 
 
 if __name__ == "__main__":
