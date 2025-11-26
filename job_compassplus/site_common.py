@@ -6,8 +6,8 @@ __author__ = "ipetrash"
 
 import time
 
-# pip install requests_ntlm2
-from requests_ntlm2 import HttpNtlmAuth
+# pip install requests_ntlm==1.3.0
+from requests_ntlm import HttpNtlmAuth
 
 from requests import Response
 from requests.exceptions import RequestException
