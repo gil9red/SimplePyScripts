@@ -6,6 +6,7 @@ __author__ = "ipetrash"
 
 import re
 
+from datetime import datetime
 from urllib.parse import urljoin
 from typing import Any
 
@@ -18,13 +19,16 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
     rs = session.get(url_first)
     rs.raise_for_status()
 
+    headers = {"Referer": url_first}
+
+    # NOTE: Получение url из js. Старая защита. Возможно, будет комбинироваться с новой
     m = re.search(r'<script src="([\w/]+_app-[\w/]+\.js)"', rs.text)
     if not m:
         raise Exception("<script> не найдено!")
 
     url_js: str = urljoin(URL_BASE, m.group(1))
 
-    rs = session.get(url_js)
+    rs = session.get(url_js, headers=headers)
     rs.raise_for_status()
 
     data = {
@@ -60,7 +64,9 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
 
     text_js: str = rs.text
 
-    m_uri_api_search = re.search("/api/(search|find|lookup|s|ouch|seek|locate)/", text_js)
+    m_uri_api_search = re.search(
+        "/api/(search|find|lookup|s|ouch|seek|locate)/", text_js
+    )
     if m_uri_api_search:
         uri_api_search = m_uri_api_search.group()
     else:
@@ -91,9 +97,25 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
         if m_k:
             data["searchOptions"]["games"]["gameplay"][k] = m_k.group(1)
 
+    # NOTE: Получение token. Новая защита
+    rs_token = session.get(
+        f"{URL_BASE}/api/search/init",
+        params={"t": int(datetime.now().timestamp()) * 1000},
+        headers=headers,
+    )
+    try:
+        rs_token.raise_for_status()
+        token: str = rs_token.json()["token"]
+    except Exception:
+        token = ""
+    if not token:
+        raise Exception("Не получен token!")
+
+    headers["x-auth-token"] = token
+
     rs = session.post(
         url_api_search,
-        headers={"Referer": url_first},
+        headers=headers,
         json=data,
     )
     rs.raise_for_status()
