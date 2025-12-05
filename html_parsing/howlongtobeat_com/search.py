@@ -4,10 +4,10 @@
 __author__ = "ipetrash"
 
 
-import re
+# import re  # TODO: Удалить
 
 from datetime import datetime
-from urllib.parse import urljoin
+# from urllib.parse import urljoin  # TODO: Удалить
 from typing import Any
 
 from common import URL_BASE, session, Game
@@ -21,15 +21,69 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
 
     headers = {"Referer": url_first}
 
-    # NOTE: Получение url из js. Старая защита. Возможно, будет комбинироваться с новой
-    m = re.search(r'<script src="([\w/]+_app-[\w/]+\.js)"', rs.text)
-    if not m:
-        raise Exception("<script> не найдено!")
+    # TODO: Перестала быть рабочей. Работа API теперь в файлах вида "/_next/static/chunks/\w+.js"
+    # # NOTE: Получение url из js. Старая защита. Возможно, будет комбинироваться с новой
+    # m = re.search(r'<script src="([\w/]+_app-[\w/]+\.js)"', rs.text)
+    # if not m:
+    #     raise Exception("<script> не найдено!")
+    #
+    # url_js: str = urljoin(URL_BASE, m.group(1))
+    #
+    # rs = session.get(url_js, headers=headers)
+    # rs.raise_for_status()
+    #
+    # text_js: str = rs.text
+    #
+    # m_uri_api_search = re.search(
+    #     "/api/(search|find|lookup|s|ouch|seek|locate)/", text_js
+    # )
+    # if m_uri_api_search:
+    #     uri_api_search = m_uri_api_search.group()
+    # else:
+    #     raise Exception("Не найден URI api search!")
+    #
+    # url_api_search = f"{URL_BASE}{uri_api_search}"
+    #
+    # # NOTE: fetch("/api/search/".concat("foo").concat("bar"),
+    # #       fetch("/api/search/".concat("foobar"),
+    # m_concat_search_key = re.search(rf'"{uri_api_search}"(.+?),', text_js)
+    # if m_concat_search_key:
+    #     concat_search_key = m_concat_search_key.group(1)
+    #
+    #     # NOTE: .concat("foo").concat("bar") -> "foobar"
+    #     #       .concat("foobar") -> "foobar"
+    #     search_key = "".join(
+    #         m.group(1) for m in re.finditer(r""""(\w+)"|'(\w+)'""", concat_search_key)
+    #     )
+    #     url_api_search = f"{url_api_search}/{search_key}"
+    #
+    # m_search_user_id = re.search(r',users:\{id:"([a-zA-Z0-9]+)",', text_js)
+    # if m_search_user_id:
+    #     search_user_id = m_search_user_id.group(1)
+    #     data["searchOptions"]["users"]["id"] = search_user_id
+    #
+    # for k in ["subGenre", "difficulty"]:
+    #     m_k = re.search(r"""{f}:['"](.*?)['"]""", text_js)
+    #     if m_k:
+    #         data["searchOptions"]["games"]["gameplay"][k] = m_k.group(1)
 
-    url_js: str = urljoin(URL_BASE, m.group(1))
+    # NOTE: Получение token. Новая защита
+    rs_token = session.get(
+        f"{URL_BASE}/api/search/init",
+        params={"t": int(datetime.now().timestamp()) * 1000},
+        headers=headers,
+    )
+    try:
+        rs_token.raise_for_status()
+        token: str = rs_token.json()["token"]
+    except Exception:
+        token = ""
+    if not token:
+        raise Exception("Не получен token!")
 
-    rs = session.get(url_js, headers=headers)
-    rs.raise_for_status()
+    headers["x-auth-token"] = token
+
+    url_api_search = f"{URL_BASE}/api/search"
 
     data = {
         "searchType": "games",
@@ -61,57 +115,6 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
         },
         "useCache": True,
     }
-
-    text_js: str = rs.text
-
-    m_uri_api_search = re.search(
-        "/api/(search|find|lookup|s|ouch|seek|locate)/", text_js
-    )
-    if m_uri_api_search:
-        uri_api_search = m_uri_api_search.group()
-    else:
-        raise Exception("Не найден URI api search!")
-
-    url_api_search = f"{URL_BASE}{uri_api_search}"
-
-    # NOTE: fetch("/api/search/".concat("foo").concat("bar"),
-    #       fetch("/api/search/".concat("foobar"),
-    m_concat_search_key = re.search(rf'"{uri_api_search}"(.+?),', text_js)
-    if m_concat_search_key:
-        concat_search_key = m_concat_search_key.group(1)
-
-        # NOTE: .concat("foo").concat("bar") -> "foobar"
-        #       .concat("foobar") -> "foobar"
-        search_key = "".join(
-            m.group(1) for m in re.finditer(r""""(\w+)"|'(\w+)'""", concat_search_key)
-        )
-        url_api_search = f"{url_api_search}/{search_key}"
-
-    m_search_user_id = re.search(r',users:\{id:"([a-zA-Z0-9]+)",', text_js)
-    if m_search_user_id:
-        search_user_id = m_search_user_id.group(1)
-        data["searchOptions"]["users"]["id"] = search_user_id
-
-    for k in ["subGenre", "difficulty"]:
-        m_k = re.search(r"""{f}:['"](.*?)['"]""", text_js)
-        if m_k:
-            data["searchOptions"]["games"]["gameplay"][k] = m_k.group(1)
-
-    # NOTE: Получение token. Новая защита
-    rs_token = session.get(
-        f"{URL_BASE}/api/search/init",
-        params={"t": int(datetime.now().timestamp()) * 1000},
-        headers=headers,
-    )
-    try:
-        rs_token.raise_for_status()
-        token: str = rs_token.json()["token"]
-    except Exception:
-        token = ""
-    if not token:
-        raise Exception("Не получен token!")
-
-    headers["x-auth-token"] = token
 
     rs = session.post(
         url_api_search,
