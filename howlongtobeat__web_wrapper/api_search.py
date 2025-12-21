@@ -5,6 +5,8 @@ __author__ = "ipetrash"
 
 
 import re
+import unicodedata
+
 from typing import Any
 
 # NOTE: https://playwright.dev/python/docs/library#pip
@@ -36,7 +38,16 @@ def search_game(game: str) -> dict[str, Any] | None:
     game = re.sub("[©®™–]", "", game)
 
     def _is_found_game(game1: str, game2: str):
+        # SOURCE: https://github.com/gil9red/price_of_games/blob/805f19528c3bcc0999669452c3652698fed22bcd/app_parser/utils.py#L219-L224
+        def strip_accents(s: str) -> str:
+            return "".join(
+                c
+                for c in unicodedata.normalize("NFD", s)
+                if unicodedata.category(c) != "Mn"
+            )
+
         def _process_name(name: str):
+            name = strip_accents(name)
             return re.sub(r"\W", "", name).lower()
 
         return _process_name(game1) == _process_name(game2)
@@ -64,6 +75,11 @@ if __name__ == "__main__":
     result = search_game(game)
     print(game, result)
     assert game == result["game_name"]
+
+    game = "Marc Eckō's Getting Up: Contents Under Pressure"
+    result = search_game(game)
+    print(game, result)
+    assert "Marc Ecko's Getting Up: Contents Under Pressure" == result["game_name"]
 
     print()
 
