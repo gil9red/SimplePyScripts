@@ -15,6 +15,22 @@ from typing import Any
 from playwright.sync_api import sync_playwright, Response
 
 
+def _is_found_game(game1: str, game2: str) -> bool:
+    # SOURCE: https://github.com/gil9red/price_of_games/blob/805f19528c3bcc0999669452c3652698fed22bcd/app_parser/utils.py#L219-L224
+    def strip_accents(s: str) -> str:
+        return "".join(
+            c
+            for c in unicodedata.normalize("NFD", s)
+            if unicodedata.category(c) != "Mn"
+        )
+
+    def _process_name(name: str) -> str:
+        name = strip_accents(name)
+        return re.sub(r"\W", "", name).lower()
+
+    return _process_name(game1) == _process_name(game2)
+
+
 def get_api_search_raw(game: str) -> dict[str, Any]:
     with sync_playwright() as p:
         browser = p.webkit.launch()
@@ -35,22 +51,7 @@ def get_api_search_raw(game: str) -> dict[str, Any]:
 
 
 def search_game(game: str) -> dict[str, Any] | None:
-    game = re.sub("[©®™–]", "", game)
-
-    def _is_found_game(game1: str, game2: str):
-        # SOURCE: https://github.com/gil9red/price_of_games/blob/805f19528c3bcc0999669452c3652698fed22bcd/app_parser/utils.py#L219-L224
-        def strip_accents(s: str) -> str:
-            return "".join(
-                c
-                for c in unicodedata.normalize("NFD", s)
-                if unicodedata.category(c) != "Mn"
-            )
-
-        def _process_name(name: str):
-            name = strip_accents(name)
-            return re.sub(r"\W", "", name).lower()
-
-        return _process_name(game1) == _process_name(game2)
+    game: str = re.sub("[©®™–]", "", game)
 
     result: dict[str, Any] = get_api_search_raw(game)
     for obj in result["data"]:
