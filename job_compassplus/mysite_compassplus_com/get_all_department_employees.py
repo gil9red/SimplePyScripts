@@ -18,7 +18,9 @@ class Employee:
 
 
 def get_employees(boss_username: str) -> list[Employee]:
-    url = URL.format(boss_username)
+    url: str = URL.format(boss_username)
+    print("Load", url)
+
     rs = do_get(url)
 
     root = BeautifulSoup(rs.content, "html.parser")
@@ -48,6 +50,7 @@ if __name__ == "__main__":
     for boss_username in [
         b64decode("Q1BcbnZheW5lcg==").decode("utf-8"),
         b64decode("Q1BcYXZvc3RyaWtvdg==").decode("utf-8"),
+        b64decode("Q1BceXJlbWl6b3Y=").decode("utf-8"),
     ]:
         print(f"Boss: {boss_username!r}")
 
@@ -66,4 +69,4 @@ if __name__ == "__main__":
         print(usernames)
         print(", ".join(usernames))
 
-        print("\n" + "-" * 10 + "\n")
+        print("\n" + "-" * 100 + "\n")
