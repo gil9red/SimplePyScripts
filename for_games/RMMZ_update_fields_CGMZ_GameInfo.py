@@ -6,6 +6,7 @@ __author__ = "ipetrash"
 
 import json
 import subprocess
+
 import re
 
 from pathlib import Path
@@ -14,7 +15,7 @@ from pathlib import Path
 PATTERN_FIELD_VERSION: re.Pattern = re.compile(r'(?P<left>"Left Text"\s*:\s*)".+?"')
 
 
-def process(path_dir: Path):
+def process(path_dir: Path, forced: bool = False):
     path_js_plugins: Path = path_dir / "js" / "plugins.js"
 
     # If the last commit was in path_js_plugins, then skipping the file change
@@ -22,7 +23,7 @@ def process(path_dir: Path):
         args=["git", "diff", "HEAD~1", "HEAD", path_js_plugins],
         cwd=path_dir,
     )
-    if result:
+    if result and not forced:
         print(
             f"Skipping change {path_js_plugins} because the file is in the last commit"
         )
@@ -83,6 +84,15 @@ if __name__ == "__main__":
         help="Path to project (the directory containing game.rmmzproject)",
         type=Path,
     )
+    parser.add_argument(
+        "--forced",
+        help="Force update",
+        action="store_true",
+        default=False,
+    )
     args = parser.parse_args()
 
-    process(args.path_project)
+    process(
+        path_dir=args.path_project,
+        forced=args.forced,
+    )
