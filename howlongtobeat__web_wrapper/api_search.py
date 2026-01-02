@@ -34,7 +34,9 @@ def _is_found_game(game1: str, game2: str) -> bool:
 def get_api_search_raw(game: str) -> dict[str, Any]:
     with sync_playwright() as p:
         browser = p.webkit.launch()
+
         page = browser.new_page()
+        page.set_default_timeout(90_000)
 
         page.goto(f"https://howlongtobeat.com/?q={game}", wait_until="commit")
 
