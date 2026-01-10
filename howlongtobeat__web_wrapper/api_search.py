@@ -53,7 +53,7 @@ def get_api_search_raw(game: str) -> dict[str, Any]:
 
 
 def search_game(game: str) -> dict[str, Any] | None:
-    game: str = re.sub("[©®™–]", "", game)
+    game: str = re.sub("[©®™–]", "", game).replace("`", "'")
 
     result: dict[str, Any] = get_api_search_raw(game)
     for obj in result["data"]:
@@ -83,6 +83,11 @@ if __name__ == "__main__":
     result = search_game(game)
     print(game, result)
     assert "Marc Ecko's Getting Up: Contents Under Pressure" == result["game_name"]
+
+    game = "Nightmares from the Deep 2: The Siren`s Call"
+    result = search_game(game)
+    print(game, result)
+    assert "Nightmares from the Deep 2: The Siren's Call" == result["game_name"]
 
     print()
 
