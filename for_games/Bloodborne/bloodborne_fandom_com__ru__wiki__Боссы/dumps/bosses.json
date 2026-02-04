@@ -1,0 +1,192 @@
+{
+    "ОСНОВНАЯ ИГРА. ОБЯЗАТЕЛЬНЫЕ БОССЫ": [
+        {
+            "name": "Отец Гаскойн",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%9E%D1%82%D0%B5%D1%86_%D0%93%D0%B0%D1%81%D0%BA%D0%BE%D0%B9%D0%BD"
+        },
+        {
+            "name": "Викарий Амелия",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%92%D0%B8%D0%BA%D0%B0%D1%80%D0%B8%D0%B9_%D0%90%D0%BC%D0%B5%D0%BB%D0%B8%D1%8F"
+        },
+        {
+            "name": "Тень Ярнама",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%A2%D0%B5%D0%BD%D1%8C_%D0%AF%D1%80%D0%BD%D0%B0%D0%BC%D0%B0"
+        },
+        {
+            "name": "Ром, праздный паук",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%A0%D0%BE%D0%BC,_%D0%BF%D1%80%D0%B0%D0%B7%D0%B4%D0%BD%D1%8B%D0%B9_%D0%BF%D0%B0%D1%83%D0%BA"
+        },
+        {
+            "name": "Возродившийся",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%92%D0%BE%D0%B7%D1%80%D0%BE%D0%B4%D0%B8%D0%B2%D1%88%D0%B8%D0%B9%D1%81%D1%8F"
+        },
+        {
+            "name": "Миколаш, Хозяин кошмара",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%9C%D0%B8%D0%BA%D0%BE%D0%BB%D0%B0%D1%88,_%D0%A5%D0%BE%D0%B7%D1%8F%D0%B8%D0%BD_%D0%BA%D0%BE%D1%88%D0%BC%D0%B0%D1%80%D0%B0"
+        },
+        {
+            "name": "Кормилица Мерго",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%9A%D0%BE%D1%80%D0%BC%D0%B8%D0%BB%D0%B8%D1%86%D0%B0_%D0%9C%D0%B5%D1%80%D0%B3%D0%BE"
+        }
+    ],
+    "ОСНОВНАЯ ИГРА. ОПЦИОНАЛЬНЫЕ БОССЫ": [
+        {
+            "name": "Церковное Чудовище",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%A6%D0%B5%D1%80%D0%BA%D0%BE%D0%B2%D0%BD%D0%BE%D0%B5_%D0%A7%D1%83%D0%B4%D0%BE%D0%B2%D0%B8%D1%89%D0%B5"
+        },
+        {
+            "name": "Посланник Небес",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%9F%D0%BE%D1%81%D0%BB%D0%B0%D0%BD%D0%BD%D0%B8%D0%BA_%D0%9D%D0%B5%D0%B1%D0%B5%D1%81"
+        },
+        {
+            "name": "Ибраитас, дочь Космоса",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%98%D0%B1%D1%80%D0%B0%D0%B8%D1%82%D0%B0%D1%81,_%D0%B4%D0%BE%D1%87%D1%8C_%D0%9A%D0%BE%D1%81%D0%BC%D0%BE%D1%81%D0%B0"
+        },
+        {
+            "name": "Чудовище-кровоглот",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%A7%D1%83%D0%B4%D0%BE%D0%B2%D0%B8%D1%89%D0%B5-%D0%BA%D1%80%D0%BE%D0%B2%D0%BE%D0%B3%D0%BB%D0%BE%D1%82"
+        },
+        {
+            "name": "Черное чудовище Паарл",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%A7%D0%B5%D1%80%D0%BD%D0%BE%D0%B5_%D1%87%D1%83%D0%B4%D0%BE%D0%B2%D0%B8%D1%89%D0%B5_%D0%9F%D0%B0%D0%B0%D1%80%D0%BB"
+        },
+        {
+            "name": "Ведьма Хемвика",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%92%D0%B5%D0%B4%D1%8C%D0%BC%D0%B0_%D0%A5%D0%B5%D0%BC%D0%B2%D0%B8%D0%BA%D0%B0"
+        },
+        {
+            "name": "Мученик Логариус",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%9C%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%BA_%D0%9B%D0%BE%D0%B3%D0%B0%D1%80%D0%B8%D1%83%D1%81"
+        },
+        {
+            "name": "Амигдала",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%90%D0%BC%D0%B8%D0%B3%D0%B4%D0%B0%D0%BB%D0%B0"
+        },
+        {
+            "name": "Герман, первый охотник",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%93%D0%B5%D1%80%D0%BC%D0%B0%D0%BD,_%D0%BF%D0%B5%D1%80%D0%B2%D1%8B%D0%B9_%D0%BE%D1%85%D0%BE%D1%82%D0%BD%D0%B8%D0%BA"
+        },
+        {
+            "name": "Присутствие луны",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%9F%D1%80%D0%B8%D1%81%D1%83%D1%82%D1%81%D1%82%D0%B2%D0%B8%D0%B5_%D0%BB%D1%83%D0%BD%D1%8B"
+        }
+    ],
+    "ДОПОЛНЕНИЕ THE OLD HUNTERS": [
+        {
+            "name": "Людвиг",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%9B%D1%8E%D0%B4%D0%B2%D0%B8%D0%B3"
+        },
+        {
+            "name": "Лоуренс, первый викарий",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%9B%D0%BE%D1%83%D1%80%D0%B5%D0%BD%D1%81,_%D0%BF%D0%B5%D1%80%D0%B2%D1%8B%D0%B9_%D0%B2%D0%B8%D0%BA%D0%B0%D1%80%D0%B8%D0%B9"
+        },
+        {
+            "name": "Живые неудачи",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%96%D0%B8%D0%B2%D1%8B%D0%B5_%D0%BD%D0%B5%D1%83%D0%B4%D0%B0%D1%87%D0%B8"
+        },
+        {
+            "name": "Леди Мария из Астральной часовой башни",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%9B%D0%B5%D0%B4%D0%B8_%D0%9C%D0%B0%D1%80%D0%B8%D1%8F_%D0%B8%D0%B7_%D0%90%D1%81%D1%82%D1%80%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9_%D1%87%D0%B0%D1%81%D0%BE%D0%B2%D0%BE%D0%B9_%D0%B1%D0%B0%D1%88%D0%BD%D0%B8"
+        },
+        {
+            "name": "Сирота Кос",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%A1%D0%B8%D1%80%D0%BE%D1%82%D0%B0_%D0%9A%D0%BE%D1%81"
+        }
+    ],
+    "ОБЛАСТЬ ПТУМЕРУ": [
+        {
+            "name": "Мертвый гигант",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%9C%D0%B5%D1%80%D1%82%D0%B2%D1%8B%D0%B9_%D0%B3%D0%B8%D0%B3%D0%B0%D0%BD%D1%82"
+        },
+        {
+            "name": "Беспощадные Хранители",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%91%D0%B5%D1%81%D0%BF%D0%BE%D1%89%D0%B0%D0%B4%D0%BD%D1%8B%D0%B5_%D0%A5%D1%80%D0%B0%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D0%B8"
+        },
+        {
+            "name": "Сторожевой пес Древних Богов",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%A1%D1%82%D0%BE%D1%80%D0%BE%D0%B6%D0%B5%D0%B2%D0%BE%D0%B9_%D0%BF%D0%B5%D1%81_%D0%94%D1%80%D0%B5%D0%B2%D0%BD%D0%B8%D1%85_%D0%91%D0%BE%D0%B3%D0%BE%D0%B2"
+        },
+        {
+            "name": "Душа, одержимая чудовищем",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%94%D1%83%D1%88%D0%B0,_%D0%BE%D0%B4%D0%B5%D1%80%D0%B6%D0%B8%D0%BC%D0%B0%D1%8F_%D1%87%D1%83%D0%B4%D0%BE%D0%B2%D0%B8%D1%89%D0%B5%D0%BC"
+        },
+        {
+            "name": "Хранитель Древних Богов",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%A5%D1%80%D0%B0%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C_%D0%94%D1%80%D0%B5%D0%B2%D0%BD%D0%B8%D1%85_%D0%91%D0%BE%D0%B3%D0%BE%D0%B2"
+        },
+        {
+            "name": "Потомок птумериан",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%9F%D0%BE%D1%82%D0%BE%D0%BC%D0%BE%D0%BA_%D0%BF%D1%82%D1%83%D0%BC%D0%B5%D1%80%D0%B8%D0%B0%D0%BD"
+        },
+        {
+            "name": "Ром, праздный паук",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%A0%D0%BE%D0%BC,_%D0%BF%D1%80%D0%B0%D0%B7%D0%B4%D0%BD%D1%8B%D0%B9_%D0%BF%D0%B0%D1%83%D0%BA"
+        },
+        {
+            "name": "Чудовище-кровопуск",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%A7%D1%83%D0%B4%D0%BE%D0%B2%D0%B8%D1%89%D0%B5-%D0%BA%D1%80%D0%BE%D0%B2%D0%BE%D0%BF%D1%83%D1%81%D0%BA"
+        },
+        {
+            "name": "Амигдала",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%90%D0%BC%D0%B8%D0%B3%D0%B4%D0%B0%D0%BB%D0%B0"
+        },
+        {
+            "name": "Ярнам, Птумерианская королева",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%AF%D1%80%D0%BD%D0%B0%D0%BC,_%D0%9F%D1%82%D1%83%D0%BC%D0%B5%D1%80%D0%B8%D0%B0%D0%BD%D1%81%D0%BA%D0%B0%D1%8F_%D0%BA%D0%BE%D1%80%D0%BE%D0%BB%D0%B5%D0%B2%D0%B0"
+        }
+    ],
+    "ОБЛАСТЬ ДАЛЬНИХ ГРОБНИЦ": [
+        {
+            "name": "Вепрь-людоед",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%92%D0%B5%D0%BF%D1%80%D1%8C-%D0%BB%D1%8E%D0%B4%D0%BE%D0%B5%D0%B4"
+        },
+        {
+            "name": "Чудовище-кровоглот",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%A7%D1%83%D0%B4%D0%BE%D0%B2%D0%B8%D1%89%D0%B5-%D0%BA%D1%80%D0%BE%D0%B2%D0%BE%D0%B3%D0%BB%D0%BE%D1%82"
+        },
+        {
+            "name": "Мозгосос",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%9C%D0%BE%D0%B7%D0%B3%D0%BE%D1%81%D0%BE%D1%81"
+        },
+        {
+            "name": "Забытый безумец",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%97%D0%B0%D0%B1%D1%8B%D1%82%D1%8B%D0%B9_%D0%B1%D0%B5%D0%B7%D1%83%D0%BC%D0%B5%D1%86"
+        },
+        {
+            "name": "Птумерианский Старейшина",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%9F%D1%82%D1%83%D0%BC%D0%B5%D1%80%D0%B8%D0%B0%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D0%A1%D1%82%D0%B0%D1%80%D0%B5%D0%B9%D1%88%D0%B8%D0%BD%D0%B0"
+        }
+    ],
+    "ОБЛАСТЬ ЛОРАНА": [
+        {
+            "name": "Чудовище-кровоглот",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%A7%D1%83%D0%B4%D0%BE%D0%B2%D0%B8%D1%89%D0%B5-%D0%BA%D1%80%D0%BE%D0%B2%D0%BE%D0%B3%D0%BB%D0%BE%D1%82"
+        },
+        {
+            "name": "Отвратительное чудовище",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%9E%D1%82%D0%B2%D1%80%D0%B0%D1%82%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D0%B5_%D1%87%D1%83%D0%B4%D0%BE%D0%B2%D0%B8%D1%89%D0%B5"
+        },
+        {
+            "name": "Серебряное чудовище Лорана",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%A1%D0%B5%D1%80%D0%B5%D0%B1%D1%80%D1%8F%D0%BD%D0%BE%D0%B5_%D1%87%D1%83%D0%B4%D0%BE%D0%B2%D0%B8%D1%89%D0%B5_%D0%9B%D0%BE%D1%80%D0%B0%D0%BD%D0%B0"
+        },
+        {
+            "name": "Черное чудовище Паарл",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%A7%D0%B5%D1%80%D0%BD%D0%BE%D0%B5_%D1%87%D1%83%D0%B4%D0%BE%D0%B2%D0%B8%D1%89%D0%B5_%D0%9F%D0%B0%D0%B0%D1%80%D0%BB"
+        }
+    ],
+    "ОБЛАСТЬ ИСЗА": [
+        {
+            "name": "Мозгосос",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%9C%D0%BE%D0%B7%D0%B3%D0%BE%D1%81%D0%BE%D1%81"
+        },
+        {
+            "name": "Посланник Небес",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%9F%D0%BE%D1%81%D0%BB%D0%B0%D0%BD%D0%BD%D0%B8%D0%BA_%D0%9D%D0%B5%D0%B1%D0%B5%D1%81"
+        },
+        {
+            "name": "Ибраитас, дочь Космоса",
+            "url": "https://bloodborne.fandom.com/ru/wiki/%D0%98%D0%B1%D1%80%D0%B0%D0%B8%D1%82%D0%B0%D1%81,_%D0%B4%D0%BE%D1%87%D1%8C_%D0%9A%D0%BE%D1%81%D0%BC%D0%BE%D1%81%D0%B0"
+        }
+    ]
+}
