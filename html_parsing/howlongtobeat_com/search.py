@@ -69,7 +69,8 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
 
     # NOTE: Получение token. Новая защита
     rs_token = session.get(
-        f"{URL_BASE}/api/search/init",
+        # f"{URL_BASE}/api/search/init",  # TODO: Прошлый вариант
+        f"{URL_BASE}/api/finder/init",
         params={"t": int(datetime.now().timestamp()) * 1000},
         headers=headers,
     )
@@ -83,7 +84,8 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
 
     headers["x-auth-token"] = token
 
-    url_api_search = f"{URL_BASE}/api/search"
+    # url_api_search = f"{URL_BASE}/api/search"  # TODO: Прошлый вариант
+    url_api_search = f"{URL_BASE}/api/finder"
 
     data = {
         "searchType": "games",
