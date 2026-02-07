@@ -4,6 +4,12 @@
 __author__ = "ipetrash"
 
 
+from pathlib import Path
+
+
+DIR: Path = Path(__file__).resolve().parent
+
+
 def get_dataset_text(links: list[tuple[str, str]]) -> str:
     # Список всех узлов графа
     nodes = set()
@@ -54,16 +60,17 @@ def get_dataset_text(links: list[tuple[str, str]]) -> str:
 
 
 def generate(
-    file_name_to: str,
+    file_name_to: str | Path,
     links: list[tuple[str, str]],
     title: str = "Graph",
+    file_name_template: str | Path = DIR / "template_graph.html",
 ):
     template_title = "{{title}}"
     template_dataset = "{{dataset}}"
 
     dataset_text = get_dataset_text(links)
 
-    with open("template_graph.html", "r", encoding="utf-8") as f:
+    with open(file_name_template, "r", encoding="utf-8") as f:
         text = f.read()
         text = text.replace(template_title, title)
         text = text.replace(template_dataset, dataset_text)
