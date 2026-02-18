@@ -117,6 +117,7 @@ class Person(BaseModel):
     create_date = DateField(default=date.today)
     last_check_date = DateField(default=date.today)
     is_active = BooleanField(default=None, null=True)
+    prev_name = TextField(default=None, null=True)
 
     class Meta:
         indexes = (
@@ -131,9 +132,23 @@ class Person(BaseModel):
 
     @classmethod
     def get_all(cls, name: str) -> list["Person"]:
-        return list(
-            cls.select().where(cls.name == name).order_by(cls.id.desc())
-        )
+        prev_names: set[str] = set()
+
+        persons: set[Person] = set()
+        for p in cls.select().where(cls.name == name):
+            persons.add(p)
+
+            if p.prev_name:
+                prev_names.add(p.prev_name)
+
+        for prev_name in prev_names:
+            if prev_name in persons:
+                continue
+
+            for p in Person.get_all(prev_name):
+                persons.add(p)
+
+        return sorted(persons, key=lambda p: p.id, reverse=True)
 
     @classmethod
     def get_all_name(cls) -> list[str]:
@@ -161,3 +176,15 @@ if __name__ == "__main__":
     print(f"Total: {len(persons)}")
     print(f"Active: {len([p for p in persons if p.is_active])}")
     print(f"Non active: {len([p for p in persons if not p.is_active])}")
+
+    # Поиск людей с одинаковой картинкой в профиле
+    # from collections import defaultdict
+    # img_by_persons: defaultdict[bytes, set[str]] = defaultdict(set)
+    #
+    # for p in Person:
+    #     img_by_persons[p.img].add(p.name)
+    #
+    # for img, persons in sorted(img_by_persons.items(), key=lambda x: len(x[1]), reverse=True):
+    #     if len(persons) > 1:
+    #         print(len(persons), persons)
+    #
