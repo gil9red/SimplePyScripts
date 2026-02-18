@@ -151,3 +151,13 @@ time.sleep(0.050)
 
 if __name__ == "__main__":
     BaseModel.print_count_of_tables()
+    print()
+
+    names: list[str] = Person.get_all_name()
+    persons: list[Person] = [
+        Person.get_last_by_name(name)
+        for name in names
+    ]
+    print(f"Total: {len(persons)}")
+    print(f"Active: {len([p for p in persons if p.is_active])}")
+    print(f"Non active: {len([p for p in persons if not p.is_active])}")

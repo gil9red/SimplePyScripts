@@ -83,7 +83,7 @@ def add_or_get_db(name: str, forced: bool = False) -> db.Person | None:
                 # Создание новой записи с актуальными полями
                 person = create_person_from_info(info)
 
-        else:  # Если пользователь был в БД, а потом его удалили из mysite
+        elif person.is_active:  # Если пользователь был в БД и активным, а потом его удалили из mysite
             # Создание новой записи
             return db.Person.create(
                 name=person.name,
@@ -134,6 +134,8 @@ def do_update_db(forced: bool = False):
 
 
 if __name__ == "__main__":
-    print(add_or_get_db("ipetrash"))
+    user_name = "akrylov"
+    print(get_person_info(user_name))
+    print(add_or_get_db(user_name, forced=True))
 
     # do_update_db(forced=True)
