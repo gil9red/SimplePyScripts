@@ -14,7 +14,7 @@ from typing import Optional
 
 
 class ProcessNotFound(Exception):
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         super().__init__(f"Process {name!r} not found")
 
 

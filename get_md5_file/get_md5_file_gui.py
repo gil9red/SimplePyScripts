@@ -45,7 +45,7 @@ except:
 from get_md5_file import md5sum
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -61,7 +61,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("get_md5_file_gui")
@@ -97,7 +97,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(central_widget)
 
-    def dragEnterEvent(self, event):
+    def dragEnterEvent(self, event) -> None:
         mime = event.mimeData()
         if mime.hasUrls() and len(mime.urls()) == 1:
             event.acceptProposedAction()

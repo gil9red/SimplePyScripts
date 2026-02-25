@@ -24,7 +24,7 @@ def create_connect():
     return sqlite3.connect(DB_FILE_NAME)
 
 
-def init_db():
+def init_db() -> None:
     # Создание базы и таблицы
     connect = create_connect()
     try:
@@ -71,10 +71,10 @@ def init_db():
         connect.close()
 
 
-def append_list_news(list_news: [str, str], interest: str):
+def append_list_news(list_news: [str, str], interest: str) -> None:
     connect = create_connect()
 
-    def insert_news(title, url, interest):
+    def insert_news(title, url, interest) -> None:
         # Для отсеивания дубликатов
         has = connect.execute("SELECT 1 FROM News WHERE url = ?", (url,)).fetchone()
         if has:
@@ -161,7 +161,7 @@ def get_news_list_and_mark_as_read(
         connect.close()
 
 
-def reset_all_is_read():
+def reset_all_is_read() -> None:
     connect = create_connect()
 
     try:

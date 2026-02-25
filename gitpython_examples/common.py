@@ -31,7 +31,6 @@ URL_GIT = f"https://{LOGIN}:{PASSWORD}@github.com/{LOGIN}/{NEW_REPO}.git"
 def get_repo():
     try:
         return git.Repo(REPO_PATH)
-
     except:
         return git.Repo.clone_from(URL_GIT, REPO_PATH)
 
@@ -46,7 +45,7 @@ def return_log(reverse=False):
     return logs
 
 
-def print_log(reverse=False):
+def print_log(reverse=False) -> None:
     logs = return_log(reverse)
     print(f"Logs[{len(logs)}]:")
 

@@ -8,12 +8,12 @@ def my_sum(*args):
     return s
 
 
-def my_print(**kwargs):
+def my_print(**kwargs) -> None:
     for name, value in kwargs.items():
         print("%s=%s(%s)" % (name, value, type(value)))
 
 
-def sql_insert(table, **kwargs):
+def sql_insert(table, **kwargs) -> str:
     # Example: INSERT INTO users (login, pass) values('TestUser', '123456')
     columns = kwargs.keys()
     values = ["'%s'" % x for x in kwargs.values()]
@@ -24,7 +24,7 @@ def sql_insert(table, **kwargs):
     )
 
 
-def say_hello(word="World", spl="!"):
+def say_hello(word="World", spl="!") -> None:
     print("Hello, " + word + spl)
 
 

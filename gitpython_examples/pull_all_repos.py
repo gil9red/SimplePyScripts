@@ -12,7 +12,7 @@ import git
 from common import get_total_commits
 
 
-def process_repository(repo_path: Path):
+def process_repository(repo_path: Path) -> None:
     print(repo_path)
 
     repo = git.Repo(repo_path)
@@ -31,7 +31,7 @@ def process_repository(repo_path: Path):
         print(f"Repository is actual")
 
 
-def process_all(path: Path, pattern: str = '.git'):
+def process_all(path: Path, pattern: str = '.git') -> None:
     paths: list[Path] = [
         p.parent
         for p in path.rglob(pattern)
