@@ -22,7 +22,7 @@ DIR_DB.mkdir(parents=True, exist_ok=True)
 class DB:
     db_name: str = str(DB_FILE_NAME)
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.db: shelve.Shelf | None = None
 
     def session(*decorator_args, **decorator_kwargs):
@@ -53,7 +53,7 @@ class DB:
         return self.db.get(name)
 
     @session()
-    def set_value(self, name: str, value: Any):
+    def set_value(self, name: str, value: Any) -> None:
         self.db[name] = value
 
     def inc_value(self, name: str) -> int:

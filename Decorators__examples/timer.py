@@ -19,7 +19,7 @@ def timer(f):
 
 if __name__ == "__main__":
     @timer
-    def my_sleep():
+    def my_sleep() -> None:
         print(123)
         time.sleep(0.3)
         print(456)

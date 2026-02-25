@@ -63,7 +63,7 @@ def fix_command(text):
 
 if __name__ == "__main__":
     # SHOW RESULT
-    def check(text):
+    def check(text) -> None:
         format_text = "{:<%s} -> {}" % (len(max(ALL_COMMANDS, key=len)) + 2)
 
         command = fix_command(text)
@@ -95,8 +95,8 @@ if __name__ == "__main__":
 
     #
     # Run test
-    def run_tests():
-        def test(text, expected):
+    def run_tests() -> None:
+        def test(text, expected) -> None:
             command = fix_command(text)
             assert expected == command, f'Expected: "{expected}", get: "{command}"'
 

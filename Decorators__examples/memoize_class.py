@@ -6,7 +6,7 @@ __author__ = "ipetrash"
 
 # Using memoization as decorator (decorator-class)
 class MemoizeClass:
-    def __init__(self, func):
+    def __init__(self, func) -> None:
         self.func = func
         self.memo = dict()
 

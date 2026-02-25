@@ -18,7 +18,7 @@ def get_attrs_str(kwargs: dict) -> str:
 def makebold(**decorator_kwargs):
     def actual_decorator(func):
         @functools.wraps(func)
-        def wrapped(*args, **kwargs):
+        def wrapped(*args, **kwargs) -> str:
             attrs = get_attrs_str(decorator_kwargs)
             return f"<b{attrs}>{func(*args, **kwargs)}</b>"
 
@@ -30,7 +30,7 @@ def makebold(**decorator_kwargs):
 def makeitalic(**decorator_kwargs):
     def actual_decorator(func):
         @functools.wraps(func)
-        def wrapped(*args, **kwargs):
+        def wrapped(*args, **kwargs) -> str:
             attrs = get_attrs_str(decorator_kwargs)
             return f"<i{attrs}>{func(*args, **kwargs)}</i>"
 
@@ -53,7 +53,7 @@ def custom_tag(
 ):
     def actual_decorator(func):
         @functools.wraps(func)
-        def wrapped(*args, **kwargs):
+        def wrapped(*args, **kwargs) -> str:
             attrs = get_attrs_str(arguments)
             return f"<{name}{attrs}>{func(*args, **kwargs)}</{name}>"
 

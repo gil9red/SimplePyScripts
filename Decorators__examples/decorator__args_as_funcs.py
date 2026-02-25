@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 class TextBuilder:
-    def __init__(self):
+    def __init__(self) -> None:
         self.result = []
 
     # Функция, принимающая аргументы и возвращающая декоратор

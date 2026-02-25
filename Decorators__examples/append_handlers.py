@@ -8,7 +8,7 @@ from collections import defaultdict
 
 
 class Collector:
-    def __init__(self):
+    def __init__(self) -> None:
         self.handlers = []
         self.handlers_by_name = defaultdict(list)
 
@@ -26,7 +26,7 @@ collector = Collector()
 
 
 @collector.add(name="test")
-def hello_world(end="!"):
+def hello_world(end="!") -> None:
     print("hello world" + end)
 
 
@@ -41,7 +41,7 @@ collector.handlers[0]()  # hello world!
 
 
 @collector.add(name="this it say_hello!")
-def say_hello():
+def say_hello() -> None:
     print("hello!")
 
 

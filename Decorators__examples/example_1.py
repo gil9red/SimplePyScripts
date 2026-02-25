@@ -1,7 +1,7 @@
 __author__ = "ipetrash"
 
 
-def getprint(str="hello world!"):
+def getprint(str="hello world!") -> None:
     print(str)
 
 
@@ -16,7 +16,7 @@ def decor(func):
     return wrapper
 
 
-def predecor(w="W"):
+def predecor(w="W") -> None:
     print(w, end=": ")
 
 
@@ -29,7 +29,7 @@ f("Py!")
 
 
 def rgb2hex(get_rgb_func):
-    def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs) -> str:
         r, g, b = get_rgb_func(*args, **kwargs)
         return f"#{r:02x}{g:02x}{b:02x}"
 
@@ -37,7 +37,7 @@ def rgb2hex(get_rgb_func):
 
 
 class RGB:
-    def __init__(self):
+    def __init__(self) -> None:
         self._r = 0xFF
         self._g = 0xFF
         self._b = 0xFF
@@ -45,7 +45,7 @@ class RGB:
     def getr(self):
         return self._r
 
-    def setr(self, r):
+    def setr(self, r) -> None:
         self._r = r
 
     r = property(getr, setr)
@@ -53,7 +53,7 @@ class RGB:
     def getg(self):
         return self._g
 
-    def setg(self, g):
+    def setg(self, g) -> None:
         self._g = g
 
     g = property(getg, setg)
@@ -61,12 +61,12 @@ class RGB:
     def getb(self):
         return self._b
 
-    def setb(self, b):
+    def setb(self, b) -> None:
         self._b = b
 
     b = property(getb, setb)
 
-    def setrgb(self, r, g, b):
+    def setrgb(self, r, g, b) -> None:
         self.r, self.g, self.b = r, g, b
 
     @rgb2hex
@@ -82,7 +82,7 @@ print()
 
 
 @decor
-def foo(a, b):
+def foo(a, b) -> None:
     print(f"{a} ^ {b} = {(a ** b)}")
 
 

@@ -9,7 +9,7 @@ from threading import Thread
 
 
 def thread(my_func):
-    def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs) -> None:
         my_thread = Thread(target=my_func, args=args, kwargs=kwargs)
         my_thread.start()
 
@@ -18,14 +18,14 @@ def thread(my_func):
 
 if __name__ == "__main__":
     @thread
-    def _print_and_sleep(timeout=2):
+    def _print_and_sleep(timeout=2) -> None:
         print("start. print_and_sleep")
 
         time.sleep(timeout)
         print("finish. print_and_sleep")
 
     @thread
-    def _print_loop(name, max_num=10):
+    def _print_loop(name, max_num=10) -> None:
         print("start. _print_loop")
 
         i = 0

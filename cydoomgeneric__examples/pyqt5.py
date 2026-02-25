@@ -15,7 +15,7 @@ from PyQt5.QtGui import QImage, QPainter, QKeyEvent, QPaintEvent
 from PyQt5.QtWidgets import QApplication, QWidget, QMessageBox
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}\n"
     text += "".join(traceback.format_tb(tb))
     print(text)
@@ -95,7 +95,7 @@ class CyDoomGenericThread(QThread):
         path_wad: str,
         width: int,
         height: int,
-    ):
+    ) -> None:
         super().__init__()
 
         self.path_wad = path_wad
@@ -109,7 +109,7 @@ class CyDoomGenericThread(QThread):
         key, is_pressed = KEY_PRESSED.popitem()
         return int(is_pressed), key
 
-    def run(self):
+    def run(self) -> None:
         cdg.init(
             self.width,
             self.height,
@@ -121,7 +121,7 @@ class CyDoomGenericThread(QThread):
 
 
 class WidgetDoom(QWidget):
-    def __init__(self, path_wad: str):
+    def __init__(self, path_wad: str) -> None:
         super().__init__()
 
         self._resx = 640
@@ -142,21 +142,21 @@ class WidgetDoom(QWidget):
 
         self.setFixedSize(self._resx, self._resy)
 
-    def draw_frame(self, pixels: np.ndarray):
+    def draw_frame(self, pixels: np.ndarray) -> None:
         self.img = numpy_array_to_QImage(pixels)
         self.update()
 
-    def keyPressEvent(self, event: QKeyEvent):
+    def keyPressEvent(self, event: QKeyEvent) -> None:
         key = get_key(event)
         if key is not None:
             KEY_PRESSED[key] = True
 
-    def keyReleaseEvent(self, event: QKeyEvent):
+    def keyReleaseEvent(self, event: QKeyEvent) -> None:
         key = get_key(event)
         if key is not None:
             KEY_PRESSED[key] = False
 
-    def paintEvent(self, event: QPaintEvent):
+    def paintEvent(self, event: QPaintEvent) -> None:
         if not self.img:
             return
 
