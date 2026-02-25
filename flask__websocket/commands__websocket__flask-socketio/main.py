@@ -27,7 +27,7 @@ def index():
 
 
 @socketio.on("my_event", namespace="/test")
-def test_message(message):
+def test_message(message) -> None:
     session["receive_count"] = session.get("receive_count", 0) + 1
 
     print(message)
@@ -54,17 +54,17 @@ def test_message(message):
 
 
 @socketio.on("my_ping", namespace="/test")
-def ping_pong():
+def ping_pong() -> None:
     emit("my_pong")
 
 
 @socketio.on("connect", namespace="/test")
-def test_connect():
+def test_connect() -> None:
     emit("my_response", {"data": "Connected"})
 
 
 @socketio.on("disconnect", namespace="/test")
-def test_disconnect():
+def test_disconnect() -> None:
     print("Client disconnected", request.sid)
 
 

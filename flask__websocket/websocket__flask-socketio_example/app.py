@@ -27,7 +27,7 @@ thread = None
 thread_lock = Lock()
 
 
-def background_thread():
+def background_thread() -> None:
     """Example of how to send server generated events to clients."""
     count = 0
     while True:
@@ -46,7 +46,7 @@ def index():
 
 
 @socketio.on("my_event", namespace="/test")
-def test_message(message):
+def test_message(message) -> None:
     session["receive_count"] = session.get("receive_count", 0) + 1
     emit(
         "my_response",
@@ -55,7 +55,7 @@ def test_message(message):
 
 
 @socketio.on("my_broadcast_event", namespace="/test")
-def test_broadcast_message(message):
+def test_broadcast_message(message) -> None:
     session["receive_count"] = session.get("receive_count", 0) + 1
     emit(
         "my_response",
@@ -65,7 +65,7 @@ def test_broadcast_message(message):
 
 
 @socketio.on("join", namespace="/test")
-def join(message):
+def join(message) -> None:
     join_room(message["room"])
     session["receive_count"] = session.get("receive_count", 0) + 1
     emit(
@@ -75,7 +75,7 @@ def join(message):
 
 
 @socketio.on("leave", namespace="/test")
-def leave(message):
+def leave(message) -> None:
     leave_room(message["room"])
     session["receive_count"] = session.get("receive_count", 0) + 1
     emit(
@@ -85,7 +85,7 @@ def leave(message):
 
 
 @socketio.on("close_room", namespace="/test")
-def close(message):
+def close(message) -> None:
     session["receive_count"] = session.get("receive_count", 0) + 1
     emit(
         "my_response",
@@ -99,7 +99,7 @@ def close(message):
 
 
 @socketio.on("my_room_event", namespace="/test")
-def send_room_message(message):
+def send_room_message(message) -> None:
     session["receive_count"] = session.get("receive_count", 0) + 1
     emit(
         "my_response",
@@ -109,9 +109,9 @@ def send_room_message(message):
 
 
 @socketio.on("disconnect_request", namespace="/test")
-def disconnect_request():
+def disconnect_request() -> None:
     @copy_current_request_context
-    def can_disconnect():
+    def can_disconnect() -> None:
         disconnect()
 
     session["receive_count"] = session.get("receive_count", 0) + 1
@@ -126,12 +126,12 @@ def disconnect_request():
 
 
 @socketio.on("my_ping", namespace="/test")
-def ping_pong():
+def ping_pong() -> None:
     emit("my_pong")
 
 
 @socketio.on("connect", namespace="/test")
-def test_connect():
+def test_connect() -> None:
     global thread
     with thread_lock:
         if thread is None:
@@ -140,7 +140,7 @@ def test_connect():
 
 
 @socketio.on("disconnect", namespace="/test")
-def test_disconnect():
+def test_disconnect() -> None:
     print("Client disconnected", request.sid)
 
 

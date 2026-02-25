@@ -27,7 +27,7 @@ thread = None
 thread_lock = Lock()
 
 
-def background_thread():
+def background_thread() -> None:
     """Example of how to send server generated events to clients."""
     count = 0
     while True:
@@ -46,14 +46,14 @@ def index():
 
 
 class MyNamespace(Namespace):
-    def on_my_event(self, message):
+    def on_my_event(self, message) -> None:
         session["receive_count"] = session.get("receive_count", 0) + 1
         emit(
             "my_response",
             {"data": message["data"], "count": session["receive_count"]},
         )
 
-    def on_my_broadcast_event(self, message):
+    def on_my_broadcast_event(self, message) -> None:
         session["receive_count"] = session.get("receive_count", 0) + 1
         emit(
             "my_response",
@@ -61,7 +61,7 @@ class MyNamespace(Namespace):
             broadcast=True,
         )
 
-    def on_join(self, message):
+    def on_join(self, message) -> None:
         join_room(message["room"])
         session["receive_count"] = session.get("receive_count", 0) + 1
         emit(
@@ -72,7 +72,7 @@ class MyNamespace(Namespace):
             },
         )
 
-    def on_leave(self, message):
+    def on_leave(self, message) -> None:
         leave_room(message["room"])
         session["receive_count"] = session.get("receive_count", 0) + 1
         emit(
@@ -83,7 +83,7 @@ class MyNamespace(Namespace):
             },
         )
 
-    def on_close_room(self, message):
+    def on_close_room(self, message) -> None:
         session["receive_count"] = session.get("receive_count", 0) + 1
         emit(
             "my_response",
@@ -95,7 +95,7 @@ class MyNamespace(Namespace):
         )
         close_room(message["room"])
 
-    def on_my_room_event(self, message):
+    def on_my_room_event(self, message) -> None:
         session["receive_count"] = session.get("receive_count", 0) + 1
         emit(
             "my_response",
@@ -103,7 +103,7 @@ class MyNamespace(Namespace):
             room=message["room"],
         )
 
-    def on_disconnect_request(self):
+    def on_disconnect_request(self) -> None:
         session["receive_count"] = session.get("receive_count", 0) + 1
         emit(
             "my_response",
@@ -111,17 +111,17 @@ class MyNamespace(Namespace):
         )
         disconnect()
 
-    def on_my_ping(self):
+    def on_my_ping(self) -> None:
         emit("my_pong")
 
-    def on_connect(self):
+    def on_connect(self) -> None:
         global thread
         with thread_lock:
             if thread is None:
                 thread = socketio.start_background_task(background_thread)
         emit("my_response", {"data": "Connected", "count": 0})
 
-    def on_disconnect(self):
+    def on_disconnect(self) -> None:
         print("Client disconnected", request.sid)
 
 

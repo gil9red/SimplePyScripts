@@ -25,7 +25,7 @@ app.config["SECRET_KEY"] = "secret!"
 socketio = SocketIO(app, async_mode=async_mode)
 
 
-def send_all_cycled():
+def send_all_cycled() -> None:
     with app.app_context():
         i = 0
         while True:
@@ -50,7 +50,7 @@ def index():
 
 
 @socketio.on("my_event")
-def test_message(message):
+def test_message(message) -> None:
     session["receive_count"] = session.get("receive_count", 0) + 1
     print(message)
 
@@ -63,18 +63,18 @@ def test_message(message):
 
 
 @socketio.on("my_ping")
-def ping_pong():
+def ping_pong() -> None:
     emit("my_pong")
 
 
 @socketio.on("connect")
-def test_connect():
+def test_connect() -> None:
     print("Client connected", request.sid)
     emit("my_response", {"data": f"Connected!", "count": 0, "sid": request.sid})
 
 
 @socketio.on("disconnect")
-def test_disconnect():
+def test_disconnect() -> None:
     print("Client disconnected", request.sid)
 
 

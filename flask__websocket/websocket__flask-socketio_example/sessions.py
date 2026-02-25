@@ -13,7 +13,7 @@ socketio = SocketIO(app, manage_session=False)
 
 
 class User(UserMixin, object):
-    def __init__(self, id=None):
+    def __init__(self, id=None) -> None:
         self.id = id
 
 
@@ -46,7 +46,7 @@ def session_access():
 
 
 @socketio.on("get-session")
-def get_session():
+def get_session() -> None:
     emit(
         "refresh-session",
         {
@@ -57,7 +57,7 @@ def get_session():
 
 
 @socketio.on("set-session")
-def set_session(data):
+def set_session(data) -> None:
     if "session" in data:
         session["value"] = data["session"]
     elif "user" in data:

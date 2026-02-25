@@ -40,7 +40,7 @@ def index():
 
 
 @socketio.on("post_method", namespace="/test")
-def post_method(message):
+def post_method(message) -> None:
     # print(message)
 
     with lock:
