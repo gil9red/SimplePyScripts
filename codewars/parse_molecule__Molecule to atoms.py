@@ -97,7 +97,7 @@ def parse_molecule(formula):
 
 
 if __name__ == "__main__":
-    def equals_atomically(obj1, obj2):
+    def equals_atomically(obj1, obj2) -> bool:
         if len(obj1) != len(obj2):
             return False
         for k in obj1:
