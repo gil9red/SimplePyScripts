@@ -60,7 +60,7 @@ __author__ = "ipetrash"
 from PIL import Image, ImageDraw
 
 
-def draw_koch(draw, xa, ya, xe, ye, n):
+def draw_koch(draw, xa, ya, xe, ye, n) -> None:
     """
     Draws koch curve between two points.
 

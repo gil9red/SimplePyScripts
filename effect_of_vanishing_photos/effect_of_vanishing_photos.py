@@ -31,7 +31,7 @@ except:
         from PySide.QtCore import *
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -45,14 +45,14 @@ sys.excepthook = log_uncaught_exceptions
 
 class Timer(QTimer):
     class Circle:
-        def __init__(self, pos_center):
+        def __init__(self, pos_center) -> None:
             self.pos_center = pos_center
             self.radii = 1
 
-        def next(self):
+        def next(self) -> None:
             self.radii += 1
 
-    def __init__(self, widget, image):
+    def __init__(self, widget, image) -> None:
         super().__init__()
 
         self.circle_list = list()
@@ -68,10 +68,10 @@ class Timer(QTimer):
         self.painter.setPen(Qt.NoPen)
         self.painter.setBrush(Qt.transparent)
 
-    def add(self, pos_center):
+    def add(self, pos_center) -> None:
         self.circle_list.append(Timer.Circle(pos_center))
 
-    def tick(self):
+    def tick(self) -> None:
         for circle in self.circle_list:
             self.painter.drawEllipse(circle.pos_center, circle.radii, circle.radii)
             circle.next()
@@ -80,7 +80,7 @@ class Timer(QTimer):
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("effect_of_vanishing_photos.py")
@@ -91,12 +91,12 @@ class Widget(QWidget):
         self.timer = Timer(self, self.im)
         self.timer.start()
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event) -> None:
         super().mouseReleaseEvent(event)
 
         self.timer.add(event.pos())
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         super().paintEvent(event)
 
         p = QPainter(self)

@@ -53,7 +53,7 @@ print(f"newline: {newline}")
 # Formatted string literals cannot be used as docstrings, even if they do not include expressions.
 
 
-def foo():
+def foo() -> None:
     f"Not a docstring"
 
 

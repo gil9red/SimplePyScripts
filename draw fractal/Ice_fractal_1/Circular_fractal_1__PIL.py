@@ -49,12 +49,12 @@ from math import *
 from PIL import Image, ImageDraw
 
 
-def draw_ice_fractal_1(draw_by_image, step):
+def draw_ice_fractal_1(draw_by_image, step) -> None:
     def draw2(x, y, l, u, t):
         draw(x, y, l, u, t)
         return x + l * cos(u), y - l * sin(u)
 
-    def draw(x, y, l, u, t):
+    def draw(x, y, l, u, t) -> None:
         if t > 0:
             l *= 0.5
             x, y = draw2(x, y, l, u, t - 1)

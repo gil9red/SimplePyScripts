@@ -40,8 +40,8 @@ __author__ = "ipetrash"
 from PIL import Image, ImageDraw
 
 
-def draw_cantor_dust(draw_by_image):
-    def draw(x, y, size):
+def draw_cantor_dust(draw_by_image) -> None:
+    def draw(x, y, size) -> None:
         if size > 1:
             s = size / 3
             draw(x, y + 20, s)

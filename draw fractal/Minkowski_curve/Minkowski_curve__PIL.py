@@ -79,7 +79,7 @@ __author__ = "ipetrash"
 from PIL import Image, ImageDraw
 
 
-def draw_minkowski(draw, xa, ya, xi, yi, n):
+def draw_minkowski(draw, xa, ya, xi, yi, n) -> None:
     """
     Draws minkowski curve between two points.
 

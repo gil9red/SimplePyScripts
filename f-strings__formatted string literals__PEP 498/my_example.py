@@ -41,17 +41,17 @@ print()
 
 # Use class
 class Foo:
-    def __init__(self, text=""):
+    def __init__(self, text="") -> None:
         self.text = text
 
     def strange_2(self, text):
         return re.sub(r"[aeo]", " ", text)
 
     @staticmethod
-    def strange_3(text):
+    def strange_3(text) -> str:
         return f'"{text}"'
 
-    def __format__(self, format_spec):
+    def __format__(self, format_spec) -> str:
         format_spec = format_spec.strip()
 
         if not format_spec:
@@ -65,10 +65,10 @@ class Foo:
 
         return self.__str__()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'<Foo(text="{self.text}")>'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<Foo(text="{self.text}, id={hex(id(self))}")>'
 
 

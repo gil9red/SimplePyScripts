@@ -52,15 +52,15 @@ __author__ = "ipetrash"
 from PIL import Image, ImageDraw
 
 
-def draw_sierpinski_triangle(draw_by_image, Z):
+def draw_sierpinski_triangle(draw_by_image, Z) -> None:
     color = "black"
 
-    def tr(x1, y1, x2, y2, x3, y3):
+    def tr(x1, y1, x2, y2, x3, y3) -> None:
         draw_by_image.line((x1, y1, x2, y2), color)
         draw_by_image.line((x2, y2, x3, y3), color)
         draw_by_image.line((x3, y3, x1, y1), color)
 
-    def draw(x1, y1, x2, y2, x3, y3, n):
+    def draw(x1, y1, x2, y2, x3, y3, n) -> None:
         if n > 0:
             x1n = (x1 + x2) / 2
             y1n = (y1 + y2) / 2

@@ -23,7 +23,7 @@ except:
         from PySide.QtCore import *
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -36,7 +36,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("EscapePyPromptLineString")
@@ -77,7 +77,7 @@ class MainWindow(QWidget):
 
         self.setLayout(layout)
 
-    def show_detail_error_massage(self):
+    def show_detail_error_massage(self) -> None:
         message = self.last_error_message + "\n\n" + self.last_detail_error_message
 
         mb = QErrorMessage()
@@ -89,7 +89,7 @@ class MainWindow(QWidget):
 
         mb.exec_()
 
-    def input_text_changed(self):
+    def input_text_changed(self) -> None:
         self.label_error.clear()
         self.button_detail_error.hide()
 

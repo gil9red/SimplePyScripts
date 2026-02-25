@@ -23,7 +23,7 @@ except:
         from PySide.QtCore import *
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -47,7 +47,7 @@ class MainWindow(QWidget):
     ]
     TITLE = "EscapeString"
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         self.setWindowTitle(self.TITLE)
@@ -129,7 +129,7 @@ class MainWindow(QWidget):
 
         self.setLayout(layout)
 
-    def show_detail_error_massage(self):
+    def show_detail_error_massage(self) -> None:
         if not self.last_error_message or not self.last_detail_error_message:
             return
 
@@ -161,7 +161,7 @@ class MainWindow(QWidget):
 
         return "".join(out_text)
 
-    def input_text_changed(self):
+    def input_text_changed(self) -> None:
         self.label_error.clear()
         self.button_detail_error.hide()
 

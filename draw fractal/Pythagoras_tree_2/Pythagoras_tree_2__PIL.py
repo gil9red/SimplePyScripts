@@ -45,11 +45,11 @@ from math import *
 from PIL import Image, ImageDraw
 
 
-def draw_pythagoras_tree_2(draw_by_image):
-    def line_to(x, y, l, u):
+def draw_pythagoras_tree_2(draw_by_image) -> None:
+    def line_to(x, y, l, u) -> None:
         draw_by_image.line((x, y, x + l * cos(u), y - l * sin(u)), "black")
 
-    def draw(x, y, l, u):
+    def draw(x, y, l, u) -> None:
         if l > 3:
             l *= 0.7
             line_to(x, y, l, u)

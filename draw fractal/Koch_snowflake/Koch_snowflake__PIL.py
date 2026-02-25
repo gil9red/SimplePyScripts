@@ -50,13 +50,13 @@ import math
 from PIL import Image, ImageDraw
 
 
-def draw_snowflake_koch(draw_by_image, step):
+def draw_snowflake_koch(draw_by_image, step) -> None:
     """
     Draws koch snowflake.
 
     """
 
-    def draw(x, y, l, u, t):
+    def draw(x, y, l, u, t) -> None:
         if t == 0:
             draw_by_image.line(
                 (x, y, x + math.cos(u) * l, y - math.sin(u) * l), fill="black"

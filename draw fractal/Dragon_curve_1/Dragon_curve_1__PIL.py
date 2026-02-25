@@ -40,7 +40,7 @@ __author__ = "ipetrash"
 from PIL import Image, ImageDraw
 
 
-def draw_dragon_curve_1(draw_by_image, x1, y1, x2, y2, k):
+def draw_dragon_curve_1(draw_by_image, x1, y1, x2, y2, k) -> None:
     if k > 0:
         xn = (x1 + x2) // 2 + (y2 - y1) // 2
         yn = (y1 + y2) // 2 - (x2 - x1) // 2

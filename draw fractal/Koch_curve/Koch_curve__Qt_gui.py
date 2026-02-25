@@ -57,7 +57,7 @@ __author__ = "ipetrash"
 # ?>
 
 
-def draw_koch(painter, xa, ya, xe, ye, n):
+def draw_koch(painter, xa, ya, xe, ye, n) -> None:
     """
     Draws koch curve between two points.
 
@@ -130,7 +130,7 @@ except ImportError:
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Koch_curve snowflake")
@@ -155,7 +155,7 @@ class Widget(QWidget):
 
         self.draw_by_step(self.step_spinbox.value())
 
-    def draw_by_step(self, step):
+    def draw_by_step(self, step) -> None:
         img = QImage(600, 200, QImage.Format_RGB16)
         img.fill(Qt.white)
 

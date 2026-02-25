@@ -39,7 +39,7 @@ from math import *
 from PIL import Image, ImageDraw
 
 
-def draw_circular_fractal(draw_by_image, x, y, size):
+def draw_circular_fractal(draw_by_image, x, y, size) -> None:
     m = 6
     n = 3
 

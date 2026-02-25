@@ -50,8 +50,8 @@ __author__ = "ipetrash"
 from PIL import Image, ImageDraw
 
 
-def draw_sierpinski_carpet(draw_by_image, Z):
-    def serp(x1, y1, x2, y2, n):
+def draw_sierpinski_carpet(draw_by_image, Z) -> None:
+    def serp(x1, y1, x2, y2, n) -> None:
         if n > 0:
             x1n = 2 * x1 / 3 + x2 / 3
             x2n = x1 / 3 + 2 * x2 / 3

@@ -61,8 +61,8 @@ import math
 from PIL import Image, ImageDraw
 
 
-def draw_gosper_curve(draw_by_image, step):
-    def draw(x, y, l, u, t, q):
+def draw_gosper_curve(draw_by_image, step) -> None:
+    def draw(x, y, l, u, t, q) -> None:
         if t > 0:
             if q == 1:
                 x += l * math.cos(u)

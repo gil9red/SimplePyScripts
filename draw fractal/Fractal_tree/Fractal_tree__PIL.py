@@ -64,7 +64,7 @@ from math import *
 from PIL import Image, ImageDraw
 
 
-def draw_fractal_tree(draw_by_image, x, y, a, l):
+def draw_fractal_tree(draw_by_image, x, y, a, l) -> None:
     if l < 8:
         return
 

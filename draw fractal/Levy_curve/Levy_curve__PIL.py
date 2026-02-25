@@ -56,7 +56,7 @@ import random
 from PIL import Image, ImageDraw
 
 
-def draw_levy(draw):
+def draw_levy(draw) -> None:
     iter = 50000
 
     mx = 200

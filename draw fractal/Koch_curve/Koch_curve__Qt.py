@@ -57,7 +57,7 @@ __author__ = "ipetrash"
 # ?>
 
 
-def draw_koch(painter, xa, ya, xe, ye, n):
+def draw_koch(painter, xa, ya, xe, ye, n) -> None:
     """
     Draws koch curve between two points.
 

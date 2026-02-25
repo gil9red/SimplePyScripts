@@ -69,7 +69,7 @@ from math import *
 from PIL import Image, ImageDraw
 
 
-def draw_apollon_set(draw_by_image, step):
+def draw_apollon_set(draw_by_image, step) -> None:
     x = 0.2
     y = 0.3
 

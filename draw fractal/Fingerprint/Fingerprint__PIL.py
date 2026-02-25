@@ -48,7 +48,7 @@ __author__ = "ipetrash"
 from PIL import Image, ImageDraw
 
 
-def draw_fingerprint(draw_by_image, width, height):
+def draw_fingerprint(draw_by_image, width, height) -> None:
     n = 255
     max = 10
 

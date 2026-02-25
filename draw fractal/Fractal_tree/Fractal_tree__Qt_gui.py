@@ -59,7 +59,7 @@ from Fractal_tree__PIL import draw_fractal_tree
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Fractal tree")
@@ -76,7 +76,7 @@ class Widget(QWidget):
 
         self.setLayout(main_layout)
 
-    def generate_tree(self):
+    def generate_tree(self) -> None:
         img = Image.new("RGB", (700, 600), "white")
 
         draw_fractal_tree(ImageDraw.Draw(img), 350, 580, 3 * math.pi / 2, 200)

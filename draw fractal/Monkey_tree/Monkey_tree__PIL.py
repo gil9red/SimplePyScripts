@@ -77,12 +77,12 @@ from math import *
 from PIL import Image, ImageDraw
 
 
-def draw_monkey_tree(draw_by_image):
+def draw_monkey_tree(draw_by_image) -> None:
     def draw2(x, y, l, u, t, q, s):
         draw(x, y, l, u, t, q, s)
         return x + l * cos(u), y - l * sin(u)
 
-    def draw(x, y, l, u, t, q, s):
+    def draw(x, y, l, u, t, q, s) -> None:
         if t > 0:
             if q == 1:
                 x += l * cos(u)

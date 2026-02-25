@@ -49,7 +49,7 @@ __author__ = "ipetrash"
 from PIL import Image, ImageDraw
 
 
-def draw_fern(draw_by_image, width, height):
+def draw_fern(draw_by_image, width, height) -> None:
     n = 255
 
     cx = 0.251

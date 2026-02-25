@@ -39,8 +39,8 @@ from math import *
 from PIL import Image, ImageDraw
 
 
-def draw_snowflake(draw_by_image, width, height, count):
-    def draw(x0, y0, r, n):
+def draw_snowflake(draw_by_image, width, height, count) -> None:
+    def draw(x0, y0, r, n) -> None:
         t = 2 * pi / count
 
         for i in range(count):
