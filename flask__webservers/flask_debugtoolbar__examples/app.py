@@ -28,7 +28,7 @@ class ExampleModel(db.Model):
 
 
 @app.before_first_request
-def setup():
+def setup() -> None:
     db.create_all()
 
 

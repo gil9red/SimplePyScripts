@@ -39,7 +39,7 @@ def index():
 
 
 @app.route("/500")
-def do_500():
+def do_500() -> None:
     1/0
 
 

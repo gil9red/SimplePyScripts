@@ -43,7 +43,7 @@ log_werkzeug.addHandler(stream_handler)
 
 
 @app.route("/")
-def index():
+def index() -> str:
     log.debug("call index")
     return "Hello World!"
 

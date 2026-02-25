@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 @app.route("/", methods=["POST"])
-def index():
+def index() -> str:
     data = request.data
     print(binascii.hexlify(data), data)
 

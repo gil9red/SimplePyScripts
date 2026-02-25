@@ -35,7 +35,7 @@ COMMANDS = {
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/master/img_to_base64_html/main.py
-def img_to_base64_html(file_name__or__bytes__or__file_object):
+def img_to_base64_html(file_name__or__bytes__or__file_object) -> str:
     arg = file_name__or__bytes__or__file_object
 
     if type(arg) == str:
@@ -72,12 +72,12 @@ logging.basicConfig(level=logging.DEBUG)
 LAST_IMAGE = "last_image.jpg"
 
 
-def save_last_image(file_data):
+def save_last_image(file_data) -> None:
     with open(LAST_IMAGE, "wb") as f:
         f.write(file_data)
 
 
-def load_last_image():
+def load_last_image() -> bytes:
     with open(LAST_IMAGE, "rb") as f:
         return f.read()
 

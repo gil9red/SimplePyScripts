@@ -67,7 +67,7 @@ def save_attachment(msg):
     return file_name
 
 
-def add_lunch_email_info(msg, file_name):
+def add_lunch_email_info(msg, file_name) -> None:
     """
     Функция для добавления в поле comments docx информации о письме.
 

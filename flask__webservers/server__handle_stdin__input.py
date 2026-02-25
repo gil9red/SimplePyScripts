@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.DEBUG)
 text = "Hello World!"
 
 
-def go():
+def go() -> None:
     time.sleep(2)
     print("\n")
 

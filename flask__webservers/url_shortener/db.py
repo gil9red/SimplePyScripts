@@ -23,7 +23,7 @@ def generate_link_id(length: int = LENGTH_URL_ID) -> str:
 
 
 class NotDefinedParameterException(Exception):
-    def __init__(self, parameter_name: str):
+    def __init__(self, parameter_name: str) -> None:
         self.parameter_name = parameter_name
         text = f'Parameter "{self.parameter_name}" must be defined!'
 
@@ -73,7 +73,7 @@ class BaseModel(Model):
         return sorted(cls.__subclasses__(), key=lambda x: x.__name__)
 
     @classmethod
-    def print_count_of_tables(cls):
+    def print_count_of_tables(cls) -> None:
         items = []
         for sub_cls in cls.get_inherited_models():
             name = sub_cls.__name__
@@ -89,7 +89,7 @@ class BaseModel(Model):
             query = query.filter(*filters)
         return query.count()
 
-    def __str__(self):
+    def __str__(self) -> str:
         fields = []
         for k, field in self._meta.fields.items():
             v = getattr(self, k)

@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 @app.route("/")
-def index():
+def index() -> str:
     return f"""Your IPv4 Address Is: {request.remote_addr}"""
 
 

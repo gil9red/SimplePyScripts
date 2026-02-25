@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 @app.route("/")
-def index():
+def index() -> str:
     return """
 <div id="result"></div>
 <br>

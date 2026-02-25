@@ -16,7 +16,7 @@ CORS(app)
 
 
 @app.route("/")
-def index():
+def index() -> str:
     return "Hello World!"
 
 

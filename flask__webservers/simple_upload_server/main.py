@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 
 @app.route("/", methods=["POST"])
-def index():
+def index() -> str:
     file = request.files["file"]
     # file.save(file.filename)
     # OR:

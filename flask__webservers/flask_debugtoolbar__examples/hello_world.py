@@ -17,7 +17,7 @@ app.config["SECRET_KEY"] = "<replace with a secret key>"
 
 
 @app.route("/")
-def index():
+def index() -> str:
     # NOTE: Need tab body: "Could not insert debug toolbar. </body> tag not found in response."
     return "<body>Hello World!</body>"
 

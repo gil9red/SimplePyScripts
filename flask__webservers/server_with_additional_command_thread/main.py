@@ -40,7 +40,7 @@ def img_search():
     return "text: " + text
 
 
-def loop_command_function():
+def loop_command_function() -> None:
     while True:
         global EXECUTE_COMMAND, COMMAND_TEXT
 

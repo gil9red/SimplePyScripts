@@ -10,7 +10,7 @@ import os
 from humanize import naturalsize as sizeof_fmt
 
 
-def progress(count, block_size, total_size):
+def progress(count, block_size, total_size) -> None:
     percent = count * block_size * 100.0 / total_size
     print(
         f"Download: {sizeof_fmt(count * block_size)}/{sizeof_fmt(total_size)}({percent:.1f}%)"
@@ -19,7 +19,7 @@ def progress(count, block_size, total_size):
     )
 
 
-def create_test_file():
+def create_test_file() -> None:
     file_name = "uploads/bigfile"
     if os.path.exists(file_name):
         return

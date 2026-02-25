@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 @app.route("/")
-def index():
+def index() -> str:
     return "Hello World!"
 
 

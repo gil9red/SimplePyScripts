@@ -41,7 +41,7 @@ app.logger = log
 
 
 @app.route("/")
-def index():
+def index() -> str:
     log.debug("call index")
     return "Hello World!"
 

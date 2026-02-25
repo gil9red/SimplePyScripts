@@ -207,7 +207,7 @@ def logout():
 
 @app.route("/protected")
 @flask_login.login_required
-def protected():
+def protected() -> str:
     return f"Logged in as: {flask_login.current_user.username}"
 
 

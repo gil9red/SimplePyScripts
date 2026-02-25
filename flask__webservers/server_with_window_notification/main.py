@@ -23,7 +23,7 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 
-def show(text):
+def show(text) -> None:
     title = str(threading.current_thread())
     run_in_thread(title, text, duration=20)
 
@@ -34,7 +34,7 @@ def index():
 
 
 @app.route("/show_notification")
-def show_notification():
+def show_notification() -> str:
     text = request.args.get("text")
     print("text:", text)
 

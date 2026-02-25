@@ -85,7 +85,7 @@ def get_exif_tags(file_object_or_file_name, as_category=True):
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/master/img_to_base64_html/main.py
-def img_to_base64_html(file_name__or__bytes__or__file_object):
+def img_to_base64_html(file_name__or__bytes__or__file_object) -> str:
     arg = file_name__or__bytes__or__file_object
 
     if type(arg) == str:
