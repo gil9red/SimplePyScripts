@@ -57,7 +57,7 @@ def get_site_text(url="https://test.api.unistream.com/help/index.html"):
     )
 
     class WebPage(QWebPage):
-        def userAgentForUrl(self, url):
+        def userAgentForUrl(self, url) -> str:
             return "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0"
 
     if QApplication.instance() is None:
@@ -149,7 +149,7 @@ class TextRevision(Base):
     # Содержимым является только разница
     diff = Column(String)
 
-    def __init__(self, new_text, old_text=""):
+    def __init__(self, new_text, old_text="") -> None:
         """
         Конструктор принимает контент и сравниваемый контент, запоминает хеш содержимого,
         текущую дату и время и результат сравнения
@@ -166,7 +166,7 @@ class TextRevision(Base):
         self.diff_full = get_diff(old_text, new_text)
         self.diff = get_diff(old_text, new_text, full=False)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<TextRevision(id: {self.id}, datetime: {self.datetime}, text_hash: {self.text_hash})>"
 
 

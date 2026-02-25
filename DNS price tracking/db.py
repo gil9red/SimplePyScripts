@@ -16,7 +16,7 @@ from peewee import *
 DB_FILE_NAME = str(pathlib.Path(__file__).resolve().parent / "tracked_products.sqlite")
 
 
-def db_create_backup(backup_dir="backup"):
+def db_create_backup(backup_dir="backup") -> None:
     os.makedirs(backup_dir, exist_ok=True)
 
     file_name = str(dt.datetime.today().date()) + ".sqlite"
@@ -67,12 +67,12 @@ class Product(BaseModel):
 
         return last_price.value_technopoint
 
-    def append_price(self, value_dns, value_technopoint):
+    def append_price(self, value_dns, value_technopoint) -> None:
         Price.create(
             product=self, value_dns=value_dns, value_technopoint=value_technopoint
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         # TODO: выводить последнюю цену и актуальную
         return (
             f"Product(title={self.title!r}, "
@@ -91,7 +91,7 @@ class Price(BaseModel):
     class Meta:
         indexes = ((("product_id", "date", "value_dns", "value_technopoint"), True),)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"Price(value_dns={self.value_dns}, "
             f"value_technopoint={self.value_technopoint}, "

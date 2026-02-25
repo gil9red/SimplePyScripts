@@ -22,7 +22,7 @@ from main import session, TextRevision
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("detection_of_site_changes_Unistream")
@@ -53,7 +53,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.revision_list_widget)
 
-    def _show_last_diff(self, item):
+    def _show_last_diff(self, item) -> None:
         row = self.revision_list_widget.row(item)
 
         file_name_a = "file_a"

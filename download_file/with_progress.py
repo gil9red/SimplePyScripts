@@ -9,7 +9,7 @@ from urllib.request import urlretrieve
 from threading import Thread
 
 
-def reporthook(blocknum, blocksize, totalsize):
+def reporthook(blocknum, blocksize, totalsize) -> None:
     readsofar = blocknum * blocksize
     if totalsize > 0:
         percent = readsofar * 100.0 / totalsize
@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
     print(download(URL, "SimplePyScripts.zip", as_thread=True))
 
-    def callback_func(file_name: str):
+    def callback_func(file_name: str) -> None:
         print("File name:", file_name)
 
     print(

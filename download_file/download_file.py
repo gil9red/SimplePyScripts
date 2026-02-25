@@ -28,26 +28,26 @@ def timer(f):
 
 
 @timer
-def way1(url: str, file_name: str):
+def way1(url: str, file_name: str) -> None:
     resource = urlopen(url)
     with open(file_name, "wb") as f:
         f.write(resource.read())
 
 
 @timer
-def way2(url: str, file_name: str):
+def way2(url: str, file_name: str) -> None:
     urlretrieve(url, file_name)
 
 
 @timer
-def way3(url: str, file_name: str):
+def way3(url: str, file_name: str) -> None:
     p = requests.get(url)
     with open(file_name, "wb") as f:
         f.write(p.content)
 
 
 @timer
-def way4(url: str, file_name: str):
+def way4(url: str, file_name: str) -> None:
     h = httplib2.Http(".cache")
     response, content = h.request(url)
     with open(file_name, "wb") as f:
@@ -55,7 +55,7 @@ def way4(url: str, file_name: str):
 
 
 @timer
-def way5(url: str, file_name: str):
+def way5(url: str, file_name: str) -> None:
     g = Grab()
     g.go(url)
     g.response.save(file_name)
