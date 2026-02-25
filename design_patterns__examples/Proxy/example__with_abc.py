@@ -49,7 +49,7 @@ class Math(IMath):
 class MathProxy(IMath):
     """Прокси"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.math = None
 
     # Быстрые операции - не требуют реального субъекта

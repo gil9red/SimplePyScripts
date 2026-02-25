@@ -18,17 +18,17 @@ class SourceAdapter(ABC):
 
 
 class GameConsole:
-    def create_game_picture(self):
+    def create_game_picture(self) -> str:
         return "picture from console"
 
 
 class Antenna:
-    def create_wave_picture(self):
+    def create_wave_picture(self) -> str:
         return "picture from wave"
 
 
 class SourceGameConsoleAdapter(SourceAdapter):
-    def __init__(self, game_console: GameConsole):
+    def __init__(self, game_console: GameConsole) -> None:
         self.game_console = game_console
 
     def get_picture(self):
@@ -36,7 +36,7 @@ class SourceGameConsoleAdapter(SourceAdapter):
 
 
 class SourceAntennaAdapter(SourceAdapter):
-    def __init__(self, antenna: Antenna):
+    def __init__(self, antenna: Antenna) -> None:
         self.antenna = antenna
 
     def get_picture(self):
@@ -44,7 +44,7 @@ class SourceAntennaAdapter(SourceAdapter):
 
 
 class TV:
-    def __init__(self, source: SourceAdapter):
+    def __init__(self, source: SourceAdapter) -> None:
         self.source = source
 
     def show_picture(self):

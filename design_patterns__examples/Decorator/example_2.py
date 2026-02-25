@@ -10,44 +10,44 @@ __author__ = "ipetrash"
 
 
 class Notifier:
-    def send(self, message: str):
+    def send(self, message: str) -> None:
         print(f'[Email] Send "{message}".')
 
 
 class BaseDecorator(Notifier):
-    def __init__(self, notifier: Notifier):
+    def __init__(self, notifier: Notifier) -> None:
         self._wrapped = notifier
 
 
 class SMSDecorator(BaseDecorator):
-    def send(self, message: str):
+    def send(self, message: str) -> None:
         self._wrapped.send(message)
 
         print(f'[SMS] send "{message}".')
 
 
 class FacebookDecorator(BaseDecorator):
-    def send(self, message: str):
+    def send(self, message: str) -> None:
         self._wrapped.send(message)
 
         print(f'[Facebook] send "{message}".')
 
 
 class SlackDecorator(BaseDecorator):
-    def send(self, message: str):
+    def send(self, message: str) -> None:
         self._wrapped.send(message)
 
         print(f'[Slack] send "{message}".')
 
 
 class Application:
-    def __init__(self):
+    def __init__(self) -> None:
         self._notifier: Notifier = None
 
-    def set_notifier(self, notifier: Notifier):
+    def set_notifier(self, notifier: Notifier) -> None:
         self._notifier = notifier
 
-    def about_alert(self):
+    def about_alert(self) -> None:
         if self._notifier:
             self._notifier.send("Alert!")
 

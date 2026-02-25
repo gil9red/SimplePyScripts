@@ -19,23 +19,23 @@ class Strategy(ABC):
 
 
 class DownloadWindowsStrategy(Strategy):
-    def download(self, file: str):
+    def download(self, file: str) -> None:
         print("Windows download: " + file)
 
 
 class DownloadLinuxStrategy(Strategy):
-    def download(self, file: str):
+    def download(self, file: str) -> None:
         print("Linux download: " + file)
 
 
 class Context:
-    def __init__(self, strategy: Strategy):
+    def __init__(self, strategy: Strategy) -> None:
         self._strategy = strategy
 
-    def set_strategy(self, strategy: Strategy):
+    def set_strategy(self, strategy: Strategy) -> None:
         self._strategy = strategy
 
-    def download(self, file: str):
+    def download(self, file: str) -> None:
         self._strategy.download(file)
 
 

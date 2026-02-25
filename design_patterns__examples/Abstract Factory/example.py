@@ -40,22 +40,22 @@ class IGUIFactory(ABC):
 
 
 class WinLabel(ILabel):
-    def paint(self):
+    def paint(self) -> None:
         print("WinLabel")
 
 
 class OSXLabel(ILabel):
-    def paint(self):
+    def paint(self) -> None:
         print("OSXLabel")
 
 
 class WinButton(IButton):
-    def paint(self):
+    def paint(self) -> None:
         print("WinButton")
 
 
 class OSXButton(IButton):
-    def paint(self):
+    def paint(self) -> None:
         print("OSXButton")
 
 

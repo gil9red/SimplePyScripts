@@ -14,7 +14,7 @@ from abc import ABC, abstractmethod
 
 # Вспомогательный класс, описывающий некоторое преступление
 class CriminalAction:
-    def __init__(self, complexity: int, description: str):
+    def __init__(self, complexity: int, description: str) -> None:
         # Сложность дела
         self.complexity = complexity
 
@@ -24,7 +24,7 @@ class CriminalAction:
 
 # Абстрактный полицейский, который может заниматься расследованием преступлений
 class Policeman(ABC):
-    def __init__(self, deduction: int):
+    def __init__(self, deduction: int) -> None:
         # Дедукция (умение распутывать сложные дела) у данного полицейского
         self.deduction = deduction
 
@@ -43,7 +43,7 @@ class Policeman(ABC):
         return self.next
 
     # Полицейский начинает расследование или, если дело слишком сложное, передает ее более опытному коллеге
-    def investigate(self, criminal_action: CriminalAction):
+    def investigate(self, criminal_action: CriminalAction) -> None:
         if self.deduction < criminal_action.complexity:
             if self.next:
                 self.next.investigate(criminal_action)
@@ -55,19 +55,19 @@ class Policeman(ABC):
 
 
 class MartinRiggs(Policeman):
-    def _investigate_сoncrete(self, description: str):
+    def _investigate_сoncrete(self, description: str) -> None:
         print('Расследование по делу "' + description + '" ведет сержант Мартин Риггс')
 
 
 class JohnMcClane(Policeman):
-    def _investigate_сoncrete(self, description: str):
+    def _investigate_сoncrete(self, description: str) -> None:
         print(
             'Расследование по делу "' + description + '" ведет детектив Джон Макклейн'
         )
 
 
 class VincentHanna(Policeman):
-    def _investigate_сoncrete(self, description: str):
+    def _investigate_сoncrete(self, description: str) -> None:
         print(
             'Расследование по делу "' + description + '" ведет лейтенант Винсент Ханна'
         )

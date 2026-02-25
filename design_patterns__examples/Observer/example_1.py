@@ -42,23 +42,23 @@ class Observable(ABC):
 
 
 class WeatherData(Observable):
-    def __init__(self):
+    def __init__(self) -> None:
         self.observers = []
         self.temperature: float = None
         self.humidity: float = None
         self.pressure: int = None
 
-    def register_observer(self, o: Observer):
+    def register_observer(self, o: Observer) -> None:
         self.observers.append(o)
 
-    def remove_observer(self, o: Observer):
+    def remove_observer(self, o: Observer) -> None:
         self.observers.remove(o)
 
-    def notify_observers(self):
+    def notify_observers(self) -> None:
         for observer in self.observers:
             observer.update(self.temperature, self.humidity, self.pressure)
 
-    def set_measurements(self, temperature: float, humidity: float, pressure: int):
+    def set_measurements(self, temperature: float, humidity: float, pressure: int) -> None:
         self.temperature = temperature
         self.humidity = humidity
         self.pressure = pressure
@@ -66,7 +66,7 @@ class WeatherData(Observable):
 
 
 class CurrentConditionsDisplay(Observer):
-    def __init__(self, weather_data: WeatherData):
+    def __init__(self, weather_data: WeatherData) -> None:
         self.weather_data = weather_data
         self.weather_data.register_observer(self)
 
@@ -74,14 +74,14 @@ class CurrentConditionsDisplay(Observer):
         self.humidity: float = None
         self.pressure: int = None
 
-    def update(self, temperature: float, humidity: float, pressure: int):
+    def update(self, temperature: float, humidity: float, pressure: int) -> None:
         self.temperature = temperature
         self.humidity = humidity
         self.pressure = pressure
 
         self.display()
 
-    def display(self):
+    def display(self) -> None:
         print(
             f"Сейчас значения: {self.temperature:.1f} градусов цельсия и {self.humidity:.1f}% влажности. "
             f"Давление {self.pressure} мм рт. ст."

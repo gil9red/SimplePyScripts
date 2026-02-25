@@ -5,6 +5,9 @@ __author__ = "ipetrash"
 
 
 from abc import ABC, abstractmethod
+from types import TracebackType
+from typing import Optional, Type
+
 import requests
 
 
@@ -33,7 +36,7 @@ class GoUrl(IGoUrl):
 class GoUrlCachedProxy(IGoUrl):
     """Прокси"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._url = GoUrl()
         self._cache = dict()
         self._cache_status_code = dict()
@@ -58,15 +61,20 @@ class GoUrlCachedProxy(IGoUrl):
 
 
 if __name__ == "__main__":
-    import time
+    from timeit import default_timer
 
     class TimeThis:
         def __enter__(self):
-            self.start_time = time.clock()
+            self.start_time = default_timer()
             return self
 
-        def __exit__(self, exc_type, exc_value, exc_traceback):
-            print(f"Elapsed time: {time.clock() - self.start_time:.6f} sec")
+        def __exit__(
+            self,
+            exc_type: Optional[Type[BaseException]],
+            exc_value: Optional[BaseException],
+            exc_traceback: Optional[TracebackType],
+        ) -> None:
+            print(f"Elapsed time: {default_timer() - self.start_time:.6f} sec")
 
     url = "https://github.com/gil9red"
 

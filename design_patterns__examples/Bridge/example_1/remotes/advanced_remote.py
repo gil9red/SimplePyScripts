@@ -10,6 +10,6 @@ from remotes.basic_remote import BasicRemote
 class AdvancedRemote(BasicRemote):
     """Улучшенный пульт"""
 
-    def mute(self):
+    def mute(self) -> None:
         print("Remote: mute")
         self._device.set_volume(0)

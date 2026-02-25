@@ -17,7 +17,7 @@ from remotes.basic_remote import BasicRemote
 from remotes.advanced_remote import AdvancedRemote
 
 
-def test_device(device):
+def test_device(device) -> None:
     print("Tests with basic remote.")
     basic_remote = BasicRemote(device)
     basic_remote.power()

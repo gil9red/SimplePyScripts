@@ -31,33 +31,33 @@ class EventListener(ABC):
 
 
 class EventManager:
-    def __init__(self, *operations):
+    def __init__(self, *operations) -> None:
         self.listeners: dict[str, list[EventListener]] = dict()
 
         for operation in operations:
             self.listeners[operation] = []
 
-    def subscribe(self, event_type: str, listener: EventListener):
+    def subscribe(self, event_type: str, listener: EventListener) -> None:
         items = self.listeners[event_type]
         items.append(listener)
 
-    def unsubscribe(self, event_type: str, listener: EventListener):
+    def unsubscribe(self, event_type: str, listener: EventListener) -> None:
         items = self.listeners[event_type]
         if listener in items:
             items.remove(listener)
 
-    def notify(self, event_type: str, file: IO):
+    def notify(self, event_type: str, file: IO) -> None:
         items = self.listeners[event_type]
         for listener in items:
             listener.update(event_type, file)
 
 
 class Editor:
-    def __init__(self):
+    def __init__(self) -> None:
         self.file: IO = None
         self.events = EventManager("open", "save")
 
-    def open_file(self, file_path: str):
+    def open_file(self, file_path: str) -> None:
         self.file = open(file_path, "w", encoding="utf-8")
         self.events.notify("open", self.file)
 
@@ -69,10 +69,10 @@ class Editor:
 
 
 class EmailNotificationListener(EventListener):
-    def __init__(self, email: str):
+    def __init__(self, email: str) -> None:
         self.email = email
 
-    def update(self, event_type: str, file: IO):
+    def update(self, event_type: str, file: IO) -> None:
         print(
             f"Email to {self.email}: Someone has performed {event_type} "
             f"operation with the following file: {file.name}"
@@ -80,11 +80,11 @@ class EmailNotificationListener(EventListener):
 
 
 class LogOpenListener(EventListener):
-    def __init__(self, file_name: str):
+    def __init__(self, file_name: str) -> None:
         # self.log: IO = open(file_name, encoding='utf-8')
         self.file_name = file_name
 
-    def update(self, event_type: str, file: IO):
+    def update(self, event_type: str, file: IO) -> None:
         # print(f"Save to log {self.log}: Someone has performed {event_type} "
         #       f"operation with the following file: {file.name}")
         print(

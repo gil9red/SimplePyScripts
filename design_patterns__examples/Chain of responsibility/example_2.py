@@ -10,39 +10,39 @@ __author__ = "ipetrash"
 
 
 class Car:
-    def __init__(self):
+    def __init__(self) -> None:
         self.name = None
         self.km = 11100
         self.fuel = 5
         self.oil = 5
 
 
-def handle_fuel(car):
+def handle_fuel(car) -> None:
     if car.fuel < 10:
         print("Added fuel")
         car.fuel = 100
 
 
-def handle_km(car):
+def handle_km(car) -> None:
     if car.km > 10000:
         print("Made a car test.")
         car.km = 0
 
 
-def handle_oil(car):
+def handle_oil(car) -> None:
     if car.oil < 10:
         print("Added oil")
         car.oil = 100
 
 
 class Garage:
-    def __init__(self):
+    def __init__(self) -> None:
         self.handlers = []
 
-    def add_handler(self, handler):
+    def add_handler(self, handler) -> None:
         self.handlers.append(handler)
 
-    def handle_car(self, car):
+    def handle_car(self, car) -> None:
         for handler in self.handlers:
             handler(car)
 

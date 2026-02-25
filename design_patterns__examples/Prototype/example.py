@@ -9,21 +9,22 @@ __author__ = "ipetrash"
 
 
 import copy
+from typing import Any
 
 
 class Prototype:
-    def __init__(self):
+    def __init__(self) -> None:
         self._objects = dict()
 
-    def register_object(self, name, obj):
+    def register_object(self, name, obj) -> None:
         """Register an object"""
         self._objects[name] = obj
 
-    def unregister_object(self, name):
+    def unregister_object(self, name) -> None:
         """Unregister an object"""
         self._objects.pop(name)
 
-    def clone(self, name, **attr):
+    def clone(self, name, **attr) -> Any:
         """Clone a registered object and update inner attributes dictionary"""
         obj = copy.deepcopy(self._objects.get(name))
         obj.__dict__.update(attr)
@@ -33,13 +34,13 @@ class Prototype:
 if __name__ == "__main__":
 
     class A:
-        def __init__(self):
+        def __init__(self) -> None:
             self.x = 3
             self.y = 8
             self.z = 15
             self.garbage = [38, 11, 19]
 
-        def __str__(self):
+        def __str__(self) -> str:
             return f"A({self.x}, {self.y}, {self.z}, {self.garbage})"
 
     a = A()

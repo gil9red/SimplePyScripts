@@ -30,7 +30,7 @@ except:
         from PySide.QtCore import *
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -44,14 +44,14 @@ sys.excepthook = log_uncaught_exceptions
 
 # Класс заметок
 class Note:
-    def __init__(self):
+    def __init__(self) -> None:
         self._name = "note"
         self._text = ""
 
-    def setName(self, name: str):
+    def setName(self, name: str) -> None:
         self._name = name
 
-    def setText(self, text: str):
+    def setText(self, text: str) -> None:
         self._text = text
 
     def getName(self) -> str:
@@ -62,12 +62,12 @@ class Note:
 
 
 class DefaultListModel(QAbstractListModel):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.items: list[Note] = []
 
-    def rowCount(self, parent: QModelIndex = None):
+    def rowCount(self, parent: QModelIndex = None) -> int:
         return len(self.items)
 
     def data(self, index: QModelIndex, role: int = Qt.DisplayRole) -> Any:
@@ -84,7 +84,7 @@ class DefaultListModel(QAbstractListModel):
     def get_element(self, index: int) -> Note:
         return self.items[index]
 
-    def addElement(self, element: Note):
+    def addElement(self, element: Note) -> None:
         length = self.rowCount()
 
         self.beginInsertRows(QModelIndex(), length, length)
@@ -94,7 +94,7 @@ class DefaultListModel(QAbstractListModel):
         # Говорим view, что данные изменились
         self.dataChanged.emit(self.createIndex(length, 0), self.createIndex(length, 0))
 
-    def removeElement(self, index: int):
+    def removeElement(self, index: int) -> None:
         self.beginRemoveRows(QModelIndex(), index, index)
         self.items.pop(index)
         self.endRemoveRows()
@@ -109,57 +109,57 @@ class DefaultListModel(QAbstractListModel):
 # Общий интерфейс посредников.
 class Mediator:
     @abstractmethod
-    def addNewNote(self, note: Note):
+    def addNewNote(self, note: Note) -> None:
         pass
 
     @abstractmethod
-    def deleteNote(self):
+    def deleteNote(self) -> None:
         pass
 
     @abstractmethod
-    def getInfoFromList(self, note: Note):
+    def getInfoFromList(self, note: Note) -> None:
         pass
 
     @abstractmethod
-    def saveChanges(self):
+    def saveChanges(self) -> None:
         pass
 
     @abstractmethod
-    def markNote(self):
+    def markNote(self) -> None:
         pass
 
     @abstractmethod
-    def clear(self):
+    def clear(self) -> None:
         pass
 
     @abstractmethod
-    def sendToFilter(self, listModel: DefaultListModel):
+    def sendToFilter(self, listModel: DefaultListModel) -> None:
         pass
 
     @abstractmethod
-    def setElementsList(self, listModel: DefaultListModel):
+    def setElementsList(self, listModel: DefaultListModel) -> None:
         pass
 
     @abstractmethod
-    def registerComponent(self, component: "Component"):
+    def registerComponent(self, component: "Component") -> None:
         pass
 
     @abstractmethod
-    def hideElements(self, flag: bool):
+    def hideElements(self, flag: bool) -> None:
         pass
 
     @abstractmethod
-    def createGUI(self):
+    def createGUI(self) -> None:
         pass
 
 
 class Component:
     """Общий класс компонентов."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._mediator: Mediator = None
 
-    def setMediator(self, mediator: Mediator):
+    def setMediator(self, mediator: Mediator) -> None:
         self._mediator = mediator
 
     @abstractmethod
@@ -170,7 +170,7 @@ class Component:
 # Конкретные компоненты никак не связаны между собой.  У них есть только один
 # канал общения – через отправку уведомлений посреднику.
 class AddButton(QPushButton, Component):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("Add")
 
         # При клике на кнопку вызываем метод посредника
@@ -183,7 +183,7 @@ class AddButton(QPushButton, Component):
 # Конкретные компоненты никак не связаны между собой.  У них есть только один
 # канал общения – через отправку уведомлений посреднику.
 class DeleteButton(QPushButton, Component):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("Del")
 
         # При клике на кнопку вызываем метод посредника
@@ -196,21 +196,21 @@ class DeleteButton(QPushButton, Component):
 # Конкретные компоненты никак не связаны между собой. У них есть только один
 # канал общения – через отправку уведомлений посреднику.
 class Filter(QLineEdit, Component):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self._listModel: DefaultListModel = None
 
-    def setList(self, listModel: DefaultListModel):
+    def setList(self, listModel: DefaultListModel) -> None:
         self._listModel = listModel
 
-    def keyPressEvent(self, event: "QKeyEvent"):
+    def keyPressEvent(self, event: "QKeyEvent") -> None:
         super().keyPressEvent(event)
 
         start = self.text()
         self._searchElements(start)
 
-    def _searchElements(self, text: str):
+    def _searchElements(self, text: str) -> None:
         if self._listModel is None:
             return
 
@@ -235,13 +235,13 @@ class Filter(QLineEdit, Component):
 # Конкретные компоненты никак не связаны между собой. У них есть только один
 # канал общения – через отправку уведомлений посреднику.
 class ListNote(QListView, Component):
-    def __init__(self, listModel: DefaultListModel):
+    def __init__(self, listModel: DefaultListModel) -> None:
         super().__init__()
 
         self._listModel = listModel
         self.setModel(self._listModel)
 
-    def addElement(self, note: Note):
+    def addElement(self, note: Note) -> None:
         self._listModel.addElement(note)
         index = self._listModel.rowCount() - 1
         index = self._listModel.index(index, 0)
@@ -250,7 +250,7 @@ class ListNote(QListView, Component):
 
         self._mediator.sendToFilter(self._listModel)
 
-    def deleteElement(self):
+    def deleteElement(self) -> None:
         if not self.currentIndex().isValid():
             return
 
@@ -273,7 +273,7 @@ class ListNote(QListView, Component):
 # Конкретные компоненты никак не связаны между собой. У них есть только один
 # канал общения – через отправку уведомлений посреднику.
 class SaveButton(QPushButton, Component):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("Save")
 
         # При клике на кнопку вызываем метод посредника
@@ -286,7 +286,7 @@ class SaveButton(QPushButton, Component):
 # Конкретные компоненты никак не связаны между собой. У них есть только один
 # канал общения – через отправку уведомлений посреднику.
 class TextBox(QTextEdit, Component):
-    def keyPressEvent(self, event: "QKeyEvent"):
+    def keyPressEvent(self, event: "QKeyEvent") -> None:
         super().keyPressEvent(event)
 
         self._mediator.markNote()
@@ -298,7 +298,7 @@ class TextBox(QTextEdit, Component):
 # Конкретные компоненты никак не связаны между собой. У них есть только один
 # канал общения – через отправку уведомлений посреднику.
 class Title(QLineEdit, Component):
-    def keyPressEvent(self, event: "QKeyEvent"):
+    def keyPressEvent(self, event: "QKeyEvent") -> None:
         super().keyPressEvent(event)
 
         self._mediator.markNote()
@@ -311,7 +311,7 @@ class Title(QLineEdit, Component):
 # код посредника. Он получает извещения от своих компонентов и знает как на них
 # реагировать.
 class Editor(Mediator):
-    def __init__(self):
+    def __init__(self) -> None:
         self._title: Title      = None
         self._textBox: TextBox  = None
         self._add: AddButton    = None
@@ -327,7 +327,7 @@ class Editor(Mediator):
         self._mainWindow = None
 
     # Здесь происходит регистрация компонентов посредником.
-    def registerComponent(self, component: Component):
+    def registerComponent(self, component: Component) -> None:
         component.setMediator(self)
 
         if component.getName() == "AddButton":
@@ -342,7 +342,7 @@ class Editor(Mediator):
         elif component.getName() == "List":
             self._list: ListNote = component
 
-            def foo(*args):
+            def foo(*args) -> None:
                 empty = len(self._list.selectedIndexes()) == 0
                 self.hideElements(empty)
 
@@ -366,7 +366,7 @@ class Editor(Mediator):
     # Разнообразные методы общения с компонентами.
     #
 
-    def addNewNote(self, note: Note):
+    def addNewNote(self, note: Note) -> None:
         # Инкрементальные названия
         text = note.getName() + str(self._list.model().rowCount() + 1)
         note.setName(text)
@@ -375,14 +375,14 @@ class Editor(Mediator):
         self._textBox.setText("")
         self._list.addElement(note)
 
-    def deleteNote(self):
+    def deleteNote(self) -> None:
         self._list.deleteElement()
 
-    def getInfoFromList(self, note: Note):
+    def getInfoFromList(self, note: Note) -> None:
         self._title.setText(note.getName().replace("*", " "))
         self._textBox.setText(note.getText())
 
-    def saveChanges(self):
+    def saveChanges(self) -> None:
         try:
             note = self._list.getCurrentElement()
             note.setName(self._title.text())
@@ -393,7 +393,7 @@ class Editor(Mediator):
         except Exception:
             traceback.print_exc()
 
-    def markNote(self):
+    def markNote(self) -> None:
         try:
             note = self._list.getCurrentElement()
             name = note.getName()
@@ -408,18 +408,18 @@ class Editor(Mediator):
         except Exception:
             traceback.print_exc()
 
-    def clear(self):
+    def clear(self) -> None:
         self._title.setText("")
         self._textBox.setText("")
 
-    def sendToFilter(self, listModel: DefaultListModel):
+    def sendToFilter(self, listModel: DefaultListModel) -> None:
         self._filter.setList(listModel)
 
-    def setElementsList(self, listModel: DefaultListModel):
+    def setElementsList(self, listModel: DefaultListModel) -> None:
         self._list.setModel(listModel)
         self._list.update()
 
-    def hideElements(self, flag: bool):
+    def hideElements(self, flag: bool) -> None:
         self._titleLabel.setVisible(not flag)
         self._textLabel.setVisible(not flag)
         self._title.setVisible(not flag)
@@ -427,7 +427,7 @@ class Editor(Mediator):
         self._save.setVisible(not flag)
         self._label.setVisible(flag)
 
-    def createGUI(self):
+    def createGUI(self) -> None:
         # notes_side
         notes_side_filter_layout = QHBoxLayout()
         notes_side_filter_layout.addWidget(QLabel("Filter:"))

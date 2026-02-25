@@ -20,7 +20,7 @@ def get_timestamp() -> int:
 
 # Базовый класс цепочки.
 class Middleware(ABC):
-    def __init__(self):
+    def __init__(self) -> None:
         self._next: "Middleware" = None
 
     # Помогает строить цепь из объектов-проверок.
@@ -44,7 +44,7 @@ class Middleware(ABC):
 
 # Конкретный элемент цепи обрабатывает запрос по-своему.
 class ThrottlingMiddleware(Middleware):
-    def __init__(self, request_per_minute: int):
+    def __init__(self, request_per_minute: int) -> None:
         super().__init__()
 
         self._request: int = 0
@@ -72,7 +72,7 @@ class ThrottlingMiddleware(Middleware):
 
 # Конкретный элемент цепи обрабатывает запрос по-своему.
 class UserExistsMiddleware(Middleware):
-    def __init__(self, server: "Server"):
+    def __init__(self, server: "Server") -> None:
         super().__init__()
 
         self._server: Server = server
@@ -102,13 +102,13 @@ class RoleCheckMiddleware(Middleware):
 
 # Класс сервера.
 class Server:
-    def __init__(self):
+    def __init__(self) -> None:
         self._users: Dict[str, str] = dict()
         self._middleware: Middleware = None
 
     # Клиент подаёт готовую цепочку в сервер. Это увеличивает гибкость и
     # упрощает тестирование класса сервера.
-    def set_middleware(self, middleware: Middleware):
+    def set_middleware(self, middleware: Middleware) -> None:
         self._middleware = middleware
 
     # Сервер получает email и пароль от клиента и запускает проверку
@@ -123,7 +123,7 @@ class Server:
 
         return False
 
-    def register(self, email: str, password: str):
+    def register(self, email: str, password: str) -> None:
         self._users[email] = password
 
     def has_email(self, email: str) -> bool:

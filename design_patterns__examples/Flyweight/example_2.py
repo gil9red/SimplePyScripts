@@ -20,14 +20,14 @@ class Character(ABC):
     descent: int
     point_size: int
 
-    def display(self, point_size: int):
+    def display(self, point_size: int) -> None:
         self.point_size = point_size
         print(f"{self.symbol} (point_size {self.point_size})")
 
 
 # "FlyweightFactory"
 class CharacterFactory:
-    def __init__(self):
+    def __init__(self) -> None:
         self._characters: dict[str, Character] = dict()
 
     def get_character(self, key: str) -> Character:
@@ -52,7 +52,7 @@ class CharacterFactory:
 
 # "ConcreteFlyweight"
 class CharacterA(Character):
-    def __init__(self):
+    def __init__(self) -> None:
         self.symbol = "A"
         self.height = 100
         self.width = 120
@@ -62,7 +62,7 @@ class CharacterA(Character):
 
 # "ConcreteFlyweight"
 class CharacterB(Character):
-    def __init__(self):
+    def __init__(self) -> None:
         self.symbol = "B"
         self.height = 100
         self.width = 140
@@ -75,7 +75,7 @@ class CharacterB(Character):
 
 # "ConcreteFlyweight"
 class CharacterZ(Character):
-    def __init__(self):
+    def __init__(self) -> None:
         self.symbol = "Z"
         self.height = 100
         self.width = 100

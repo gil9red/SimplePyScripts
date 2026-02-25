@@ -11,28 +11,28 @@ from devices.device import Device
 class BasicRemote(Remote):
     """Стандартный пульт"""
 
-    def __init__(self, device: Device):
+    def __init__(self, device: Device) -> None:
         self._device = device
 
-    def power(self):
+    def power(self) -> None:
         print("Remote: power toggle")
         if self._device.is_enabled():
             self._device.disable()
         else:
             self._device.enable()
 
-    def volume_down(self):
+    def volume_down(self) -> None:
         print("Remote: volume down")
         self._device.set_volume(self._device.get_volume() - 10)
 
-    def volume_up(self):
+    def volume_up(self) -> None:
         print("Remote: volume up")
         self._device.set_volume(self._device.get_volume() + 10)
 
-    def channel_down(self):
+    def channel_down(self) -> None:
         print("Remote: channel down")
         self._device.set_channel(self._device.get_channel() - 1)
 
-    def channel_up(self):
+    def channel_up(self) -> None:
         print("Remote: channel up")
         self._device.set_channel(self._device.get_channel() + 1)

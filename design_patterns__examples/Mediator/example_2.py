@@ -11,15 +11,15 @@ __author__ = "ipetrash"
 
 class Mediator:
     @staticmethod
-    def send_message(user: "User", msg: str):
+    def send_message(user: "User", msg: str) -> None:
         print(f"{user.name}: {msg}")
 
 
 class User:
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         self.name = name
 
-    def send_message(self, msg: str):
+    def send_message(self, msg: str) -> None:
         Mediator.send_message(self, msg)
 
 

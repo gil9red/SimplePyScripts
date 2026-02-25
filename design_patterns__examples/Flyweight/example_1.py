@@ -12,16 +12,16 @@ __author__ = "ipetrash"
 
 
 class Flyweight:
-    def __init__(self, row: int):
+    def __init__(self, row: int) -> None:
         self.row = row
         print("ctor:", self.row)
 
-    def report(self, col: int):
+    def report(self, col: int) -> None:
         print(f" {self.row}{col}", end="")
 
 
 class Factory:
-    def __init__(self, max_rows: int):
+    def __init__(self, max_rows: int) -> None:
         self._pool: list[Flyweight | None] = [None] * max_rows
 
     def get_flyweight(self, row: int) -> Flyweight:

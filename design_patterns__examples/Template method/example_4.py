@@ -19,7 +19,7 @@ class Map:
 
 
 class GameAI(ABC):
-    def __init__(self):
+    def __init__(self) -> None:
         self.scouts = []
         self.warriors = []
         self.map = Map()
@@ -27,14 +27,14 @@ class GameAI(ABC):
     # Шаблонный метод должен быть задан в базовом классе. Он
     # состоит из вызовов методов в определённом порядке. Чаще
     # всего эти методы являются шагами некоего алгоритма.
-    def turn(self):
+    def turn(self) -> None:
         self.collect_resources()
         self.build_structures()
         self.build_units()
         self.attack()
 
     # Некоторые из этих методов могут быть реализованы прямо в базовом классе.
-    def collect_resources(self):
+    def collect_resources(self) -> None:
         for s in self.build_structures():
             s.collect()
 
@@ -44,11 +44,11 @@ class GameAI(ABC):
         pass
 
     @abstractmethod
-    def build_units(self):
+    def build_units(self) -> None:
         pass
 
     # Кстати, шаблонных методов в классе может быть несколько.
-    def attack(self):
+    def attack(self) -> None:
         enemy = self.closest_enemy()
 
         if enemy is None:
@@ -60,11 +60,11 @@ class GameAI(ABC):
         ...
 
     @abstractmethod
-    def send_scouts(self, position):
+    def send_scouts(self, position) -> None:
         pass
 
     @abstractmethod
-    def send_warriors(self, position):
+    def send_warriors(self, position) -> None:
         pass
 
 
@@ -82,7 +82,7 @@ class OrcsAI(GameAI):
 
         return structures
 
-    def build_units(self):
+    def build_units(self) -> None:
         there_are_plenty_of_resources: bool = ...
         there_are_no_scouts: bool = ...
 
@@ -96,12 +96,12 @@ class OrcsAI(GameAI):
 
     # ...
 
-    def send_scouts(self, position):
+    def send_scouts(self, position) -> None:
         if self.scouts:
             # Отправить разведчиков на позицию.
             ...
 
-    def send_warriors(self, position):
+    def send_warriors(self, position) -> None:
         if len(self.warriors) > 5:
             # Отправить воинов на позицию.
             ...
@@ -110,24 +110,24 @@ class OrcsAI(GameAI):
 # Подклассы могут не только реализовывать абстрактные шаги, но
 # и переопределять шаги, уже реализованные в базовом классе.
 class MonstersAI(GameAI):
-    def collect_resources(self):
+    def collect_resources(self) -> None:
         # Ничего не делать.
         pass
 
-    def build_structures(self):
+    def build_structures(self) -> None:
         # Ничего не делать.
         pass
 
-    def build_units(self):
+    def build_units(self) -> None:
         # Ничего не делать.
         pass
 
-    def send_scouts(self, position):
+    def send_scouts(self, position) -> None:
         if self.scouts:
             # Отправить разведчиков на позицию.
             ...
 
-    def send_warriors(self, position):
+    def send_warriors(self, position) -> None:
         if len(self.warriors) > 5:
             # Отправить воинов на позицию.
             ...

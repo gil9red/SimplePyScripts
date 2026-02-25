@@ -23,7 +23,7 @@ class SimpleOperation(IOperation):
 
 
 class BaseDecorator(IOperation):
-    def __init__(self, operation: IOperation):
+    def __init__(self, operation: IOperation) -> None:
         self._wrapped = operation
 
 

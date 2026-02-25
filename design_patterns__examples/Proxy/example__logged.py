@@ -8,6 +8,8 @@ import logging
 import sys
 
 from logging.handlers import RotatingFileHandler
+from types import TracebackType
+from typing import Optional, Type
 
 from example__cached import IGoUrl, GoUrl, GoUrlCachedProxy, requests
 
@@ -23,7 +25,9 @@ def get_logger(name, file="log.txt", encoding="utf-8"):
     # Simple file handler
     # fh = logging.FileHandler(file, encoding=encoding)
     # or:
-    fh = RotatingFileHandler(file, maxBytes=10_000_000, backupCount=5, encoding=encoding)
+    fh = RotatingFileHandler(
+        file, maxBytes=10_000_000, backupCount=5, encoding=encoding
+    )
     fh.setFormatter(formatter)
     log.addHandler(fh)
 
@@ -39,7 +43,7 @@ class GoUrlLoggedProxy(IGoUrl):
 
     _LOGGER = get_logger("GoUrlLoggedProxy")
 
-    def __init__(self, go_url: IGoUrl = None):
+    def __init__(self, go_url: IGoUrl = None) -> None:
         if go_url is None:
             go_url = GoUrl()
 
@@ -61,20 +65,25 @@ class GoUrlLoggedProxy(IGoUrl):
 
         return code
 
-    def _log(self, text: str):
+    def _log(self, text: str) -> None:
         GoUrlLoggedProxy._LOGGER.debug(text)
 
 
 if __name__ == "__main__":
-    import time
+    from timeit import default_timer
 
     class TimeThis:
         def __enter__(self):
-            self.start_time = time.clock()
+            self.start_time = default_timer()
             return self
 
-        def __exit__(self, exc_type, exc_value, exc_traceback):
-            print(f"Elapsed time: {time.clock() - self.start_time:.6f} sec")
+        def __exit__(
+            self,
+            exc_type: Optional[Type[BaseException]],
+            exc_value: Optional[BaseException],
+            exc_traceback: Optional[TracebackType],
+        ) -> None:
+            print(f"Elapsed time: {default_timer() - self.start_time:.6f} sec")
 
     url = "https://github.com/gil9red"
 

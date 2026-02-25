@@ -41,13 +41,13 @@ class Network(ABC):
         pass
 
     @abstractmethod
-    def log_out(self):
+    def log_out(self) -> None:
         pass
 
 
 # Класс социальной сети.
 class Facebook(Network):
-    def __init__(self, user_name: str, password: str):
+    def __init__(self, user_name: str, password: str) -> None:
         self.user_name = user_name
         self.password = password
 
@@ -68,10 +68,10 @@ class Facebook(Network):
 
         return False
 
-    def log_out(self):
+    def log_out(self) -> None:
         print("User: '" + self.user_name + "' was logged out from Facebook")
 
-    def _simulate_network_latency(self):
+    def _simulate_network_latency(self) -> None:
         print()
 
         try:
@@ -87,7 +87,7 @@ class Facebook(Network):
 
 # Класс социальной сети.
 class Twitter(Network):
-    def __init__(self, user_name: str, password: str):
+    def __init__(self, user_name: str, password: str) -> None:
         self.user_name = user_name
         self.password = password
 
@@ -108,10 +108,10 @@ class Twitter(Network):
 
         return False
 
-    def log_out(self):
+    def log_out(self) -> None:
         print("User: '" + self.user_name + "' was logged out from Twitter")
 
-    def _simulate_network_latency(self):
+    def _simulate_network_latency(self) -> None:
         print()
 
         try:

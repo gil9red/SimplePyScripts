@@ -149,7 +149,7 @@ class Wok:
     sauce_additional: WokSauce = None
     topping: List[WokTopping] = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.topping = []
 
     def get_order_text(self) -> str:
@@ -187,7 +187,7 @@ class Wok:
         return sum(x.weight for x in self.get_order_items())
 
     class Builder:
-        def __init__(self):
+        def __init__(self) -> None:
             self.wok = Wok()
 
         def set_base(self, base: WokBase) -> "Builder":

@@ -21,17 +21,17 @@ class Animal(ABC):
         raise Exception(f'Unsupported animal "{animal}"')
 
     @abstractmethod
-    def voice(self):
+    def voice(self) -> None:
         pass
 
 
 class Lion(Animal):
-    def voice(self):
+    def voice(self) -> None:
         print("Rrrrrrrr i'm the lion")
 
 
 class Cat(Animal):
-    def voice(self):
+    def voice(self) -> None:
         print("Meow, meow i'm the kitty")
 
 

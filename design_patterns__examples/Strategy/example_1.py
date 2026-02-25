@@ -28,10 +28,10 @@ class SubtractionStrategy(Strategy):
 
 
 class Context:
-    def __init__(self, strategy: Strategy):
+    def __init__(self, strategy: Strategy) -> None:
         self._strategy = strategy
 
-    def set_strategy(self, strategy: Strategy):
+    def set_strategy(self, strategy: Strategy) -> None:
         self._strategy = strategy
 
     def action(self, a, b):

@@ -28,13 +28,13 @@ class IMediator(ABC):
 
 # Конкретные Посредники реализуют совместное поведение, координируя отдельные компоненты.
 class ConcreteMediator(IMediator):
-    def __init__(self, component1, component2):
+    def __init__(self, component1, component2) -> None:
         self._component1 = component1
         self._component1.set_mediator(self)
         self._component2 = component2
         self._component2.set_mediator(self)
 
-    def notify(self, sender: object, event: str):
+    def notify(self, sender: object, event: str) -> None:
         print(f'[+] Mediator notify(sender={sender}, event="{event}")')
 
         if event == "A":
@@ -57,31 +57,31 @@ class BaseComponent(ABC):
     посредника внутри объектов компонентов.
     """
 
-    def __init__(self, mediator: IMediator = None):
+    def __init__(self, mediator: IMediator = None) -> None:
         self._mediator = mediator
 
-    def set_mediator(self, mediator: IMediator):
+    def set_mediator(self, mediator: IMediator) -> None:
         self._mediator = mediator
 
 
 # Конкретные Компоненты реализуют различную функциональность.  Они не зависят от других
 # компонентов. Они также не зависят от каких-либо конкретных классов посредников.
 class Component1(BaseComponent):
-    def do_a(self):
+    def do_a(self) -> None:
         print("Component 1 does A.")
         self._mediator.notify(self, "A")
 
-    def do_b(self):
+    def do_b(self) -> None:
         print("Component 1 does B.")
         self._mediator.notify(self, "B")
 
 
 class Component2(BaseComponent):
-    def do_c(self):
+    def do_c(self) -> None:
         print("Component 2 does C.")
         self._mediator.notify(self, "C")
 
-    def do_d(self):
+    def do_d(self) -> None:
         print("Component 2 does D.")
         self._mediator.notify(self, "D")
 

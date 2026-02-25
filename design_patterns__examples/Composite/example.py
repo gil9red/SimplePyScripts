@@ -19,65 +19,65 @@ class Graphic(ABC):
 
 
 class CompositeGraphic(Graphic):
-    def __init__(self):
+    def __init__(self) -> None:
         self._child_graphics: List[Graphic] = []
 
-    def draw(self, *args, **kwargs):
+    def draw(self, *args, **kwargs) -> None:
         for graphic in self._child_graphics:
             graphic.draw(*args, **kwargs)
 
     # Adds the graphic to the composition
-    def add(self, graphic: Graphic):
+    def add(self, graphic: Graphic) -> None:
         if graphic in self._child_graphics:
             return
 
         self._child_graphics.append(graphic)
 
     # Removes the graphic from the composition
-    def remove(self, graphic: Graphic):
+    def remove(self, graphic: Graphic) -> None:
         self._child_graphics.remove(graphic)
 
 
 class Ellipse(Graphic):
-    def __init__(self, x, y, rx, ry):
+    def __init__(self, x, y, rx, ry) -> None:
         self.x = x
         self.y = y
         self.rx = rx
         self.ry = ry
 
-    def draw(self, *args, **kwargs):
+    def draw(self, *args, **kwargs) -> None:
         print(f"Ellipse: x={self.x}, y={self.y}, rx={self.rx}, ry={self.ry}")
 
 
 class Point(Graphic):
-    def __init__(self, x, y):
+    def __init__(self, x, y) -> None:
         self.x = x
         self.y = y
 
-    def draw(self, *args, **kwargs):
+    def draw(self, *args, **kwargs) -> None:
         print(f"Point: x={self.x}, y={self.y}")
 
 
 class Rect(Graphic):
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y, w, h) -> None:
         self.x = x
         self.y = y
         self.w = w
         self.h = h
 
-    def draw(self, *args, **kwargs):
+    def draw(self, *args, **kwargs) -> None:
         print(f"Rect: x={self.x}, y={self.y}, w={self.w}, h={self.h}")
 
 
 class Line(Graphic):
-    def __init__(self, x1, y1, x2, y2):
+    def __init__(self, x1, y1, x2, y2) -> None:
         self.x1 = x1
         self.y1 = y1
 
         self.x2 = x2
         self.y2 = y2
 
-    def draw(self, *args, **kwargs):
+    def draw(self, *args, **kwargs) -> None:
         print(f"Line: x1={self.x1}, y1={self.y1}, x2={self.x2}, y2={self.y2}")
 
 

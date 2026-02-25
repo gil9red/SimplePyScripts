@@ -19,34 +19,34 @@ class Command(ABC):
 
 
 class Car:
-    def start_engine(self):
+    def start_engine(self) -> None:
         print("Запустить двигатель")
 
-    def stop_engine(self):
+    def stop_engine(self) -> None:
         print("Остановить двигатель")
 
 
 class StartCar(Command):
-    def __init__(self, car: Car):
+    def __init__(self, car: Car) -> None:
         self.car: Car = car
 
-    def execute(self):
+    def execute(self) -> None:
         self.car.start_engine()
 
 
 class StopCar(Command):
-    def __init__(self, car: Car):
+    def __init__(self, car: Car) -> None:
         self.car: Car = car
 
-    def execute(self):
+    def execute(self) -> None:
         self.car.stop_engine()
 
 
 class CarInvoker:
-    def __init__(self, command: Command):
+    def __init__(self, command: Command) -> None:
         self.command: Command = command
 
-    def execute(self):
+    def execute(self) -> None:
         self.command.execute()
 
 

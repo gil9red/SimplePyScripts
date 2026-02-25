@@ -18,19 +18,19 @@ class GameObject(ABC):
         pass
 
     @abstractmethod
-    def initialize_game(self):
+    def initialize_game(self) -> None:
         pass
 
     @abstractmethod
-    def make_play(self, player: int):
+    def make_play(self, player: int) -> None:
         pass
 
     @abstractmethod
-    def print_winner(self):
+    def print_winner(self) -> None:
         pass
 
     # A template method :
-    def play_one_game(self, players_count: int):
+    def play_one_game(self, players_count: int) -> None:
         self.players_count = players_count
         self.initialize_game()
 
@@ -46,18 +46,18 @@ class GameObject(ABC):
 # Now we can extend this class in order to implement actual games:
 class Monopoly(GameObject):
     # Implementation of necessary concrete methods
-    def initialize_game(self):
+    def initialize_game(self) -> None:
         # Initialize money
         ...
 
-    def make_play(self, player: int):
+    def make_play(self, player: int) -> None:
         # Process one turn of player
         ...
 
     def end_of_game(self) -> bool:
         return True
 
-    def print_winner(self):
+    def print_winner(self) -> None:
         # Display who won
         ...
 
@@ -67,11 +67,11 @@ class Monopoly(GameObject):
 
 class Chess(GameObject):
     # Implementation of necessary concrete methods
-    def initialize_game(self):
+    def initialize_game(self) -> None:
         # Put the pieces on the board
         ...
 
-    def make_play(self, player: int):
+    def make_play(self, player: int) -> None:
         # Process a turn for the player
         ...
 
@@ -79,7 +79,7 @@ class Chess(GameObject):
         # Return true if in Checkmate or Stalemate has been reached
         return True
 
-    def print_winner(self):
+    def print_winner(self) -> None:
         # Display the winning player
         ...
 

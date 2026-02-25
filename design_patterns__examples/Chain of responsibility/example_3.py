@@ -38,7 +38,7 @@ class Logger(ABC):
     Abstract handler in chain of responsibility pattern.
     """
 
-    def __init__(self, levels: List[LogLevel]):
+    def __init__(self, levels: List[LogLevel]) -> None:
         """
         Initialize new logger
 
@@ -62,7 +62,7 @@ class Logger(ABC):
         self._next = next_logger
         return self._next
 
-    def message(self, msg: str, severity: LogLevel):
+    def message(self, msg: str, severity: LogLevel) -> None:
         """
         Message writer handler.
 
@@ -91,7 +91,7 @@ class Logger(ABC):
 
 
 class ConsoleLogger(Logger):
-    def write_message(self, msg: str):
+    def write_message(self, msg: str) -> None:
         """
         Overrides parent's abstract method to write to console.
 
@@ -109,7 +109,7 @@ class EmailLogger(Logger):
         msg (str): Message string.
     """
 
-    def write_message(self, msg: str):
+    def write_message(self, msg: str) -> None:
         print("Sending via email:", msg)
 
 
@@ -121,11 +121,11 @@ class FileLogger(Logger):
         msg (str): Message string.
     """
 
-    def write_message(self, msg: str):
+    def write_message(self, msg: str) -> None:
         print("Writing to log file:", msg)
 
 
-def main():
+def main() -> None:
     """
     Building the chain of responsibility.
     """

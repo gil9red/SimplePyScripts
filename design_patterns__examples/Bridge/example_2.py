@@ -20,7 +20,7 @@ class Drawer(ABC):
 class SmallCircleDrawer(Drawer):
     RADIUS_MULTIPLIER = 0.25
 
-    def draw_circle(self, x: int, y: int, radius: int):
+    def draw_circle(self, x: int, y: int, radius: int) -> None:
         print(
             f"Small circle center = {x},{y} radius = {radius * self.RADIUS_MULTIPLIER}"
         )
@@ -29,37 +29,37 @@ class SmallCircleDrawer(Drawer):
 class LargeCircleDrawer(Drawer):
     RADIUS_MULTIPLIER = 10
 
-    def draw_circle(self, x: int, y: int, radius: int):
+    def draw_circle(self, x: int, y: int, radius: int) -> None:
         print(
             f"Large circle center = {x},{y} radius = {radius * self.RADIUS_MULTIPLIER}"
         )
 
 
 class Shape(ABC):
-    def __init__(self, drawer: Drawer):
+    def __init__(self, drawer: Drawer) -> None:
         self._drawer = drawer
 
     @abstractmethod
-    def draw(self):
+    def draw(self) -> None:
         pass
 
     @abstractmethod
-    def enlarge_radius(self, multiplier: int):
+    def enlarge_radius(self, multiplier: int) -> None:
         pass
 
 
 class Circle(Shape):
-    def __init__(self, x: int, y: int, radius: int, drawer: Drawer):
+    def __init__(self, x: int, y: int, radius: int, drawer: Drawer) -> None:
         super().__init__(drawer)
 
         self._x = x
         self._y = y
         self._radius = radius
 
-    def draw(self):
+    def draw(self) -> None:
         self._drawer.draw_circle(self._x, self._y, self._radius)
 
-    def enlarge_radius(self, multiplier: int):
+    def enlarge_radius(self, multiplier: int) -> None:
         self._radius *= multiplier
 
     def get_x(self) -> int:
@@ -71,13 +71,13 @@ class Circle(Shape):
     def get_radius(self) -> int:
         return self._radius
 
-    def set_x(self, x: int):
+    def set_x(self, x: int) -> None:
         self._x = x
 
-    def set_y(self, y: int):
+    def set_y(self, y: int) -> None:
         self._y = y
 
-    def set_radius(self, radius: int):
+    def set_radius(self, radius: int) -> None:
         self._radius = radius
 
 

@@ -15,13 +15,13 @@ __author__ = "ipetrash"
 
 # Class CPU, отвечает за работу процессора
 class CPU:
-    def freeze(self):
+    def freeze(self) -> None:
         pass
 
-    def jump(self, position: int):
+    def jump(self, position: int) -> None:
         pass
 
-    def execute(self):
+    def execute(self) -> None:
         pass
 
 
@@ -29,7 +29,7 @@ class CPU:
 class Memory:
     BOOT_ADDRESS = 0x0005
 
-    def load(self, position: int, data: bytes):
+    def load(self, position: int, data: bytes) -> None:
         pass
 
 
@@ -46,13 +46,13 @@ class HardDrive:
 # В качестве унифицированного объекта выступает Компьютер.
 # За этим объектом будут скрыты, все детали работы его внутренних частей.
 class Computer:
-    def __init__(self):
+    def __init__(self) -> None:
         self._cpu = CPU()
         self._memory = Memory()
         self._hard_drive = HardDrive()
 
     # Упрощённая обработка поведения "запуск компьютера"
-    def start_computer(self):
+    def start_computer(self) -> None:
         self._cpu.freeze()
         self._memory.load(
             self._memory.BOOT_ADDRESS,
