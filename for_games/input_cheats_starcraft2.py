@@ -13,7 +13,7 @@ import os
 import keyboard
 
 
-def write(text: str):
+def write(text: str) -> None:
     print(text)
 
     os.system(f"echo {text}|clip")

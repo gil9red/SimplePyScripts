@@ -219,7 +219,7 @@ class Input(ctypes.Structure):
     ]
 
 
-def press_key(hex_key_code: int):
+def press_key(hex_key_code: int) -> None:
     extra = ctypes.c_ulong(0)
     ii_ = Input_I()
     ii_.ki = KeyBdInput(0, hex_key_code, KEYEVENTF_SCANCODE, 0, ctypes.pointer(extra))
@@ -227,7 +227,7 @@ def press_key(hex_key_code: int):
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
 
-def release_key(hex_key_code: int):
+def release_key(hex_key_code: int) -> None:
     extra = ctypes.c_ulong(0)
     ii_ = Input_I()
     ii_.ki = KeyBdInput(
@@ -237,7 +237,7 @@ def release_key(hex_key_code: int):
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
 
-def write_key(hex_key_code: int, interval=0.1, pause=None):
+def write_key(hex_key_code: int, interval=0.1, pause=None) -> None:
     press_key(hex_key_code)
     time.sleep(interval)
     release_key(hex_key_code)

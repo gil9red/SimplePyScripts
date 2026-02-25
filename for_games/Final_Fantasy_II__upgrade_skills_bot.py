@@ -44,7 +44,7 @@ def get_logger(name, file="log.txt", encoding="utf-8", log_stdout=True, log_file
     return log
 
 
-def change_start():
+def change_start() -> None:
     DATA["START"] = not DATA["START"]
     if DATA["START"]:
         DATA["COUNTER"] = 0
@@ -52,17 +52,17 @@ def change_start():
     log.debug("Change START: %s", DATA["START"])
 
 
-def set_min_counter():
+def set_min_counter() -> None:
     DATA["MAX_COUNTER"] = 1
     log.debug("Change MAX_COUNTER: %s", DATA["MAX_COUNTER"])
 
 
-def set_max_counter():
+def set_max_counter() -> None:
     DATA["MAX_COUNTER"] = MAX_COUNTER
     log.debug("Change MAX_COUNTER: %s", DATA["MAX_COUNTER"])
 
 
-def change_cancel_all_last():
+def change_cancel_all_last() -> None:
     DATA["CANCEL_ALL_LAST"] = not DATA["CANCEL_ALL_LAST"]
     log.debug("Change CANCEL_ALL_LAST: %s", DATA["CANCEL_ALL_LAST"])
 

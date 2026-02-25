@@ -55,7 +55,7 @@ def get_bosses(url: str) -> dict[str, list[Boss]]:
     return bosses_by_category
 
 
-def print_bosses(url: str, bosses: dict[str, list[Boss]]):
+def print_bosses(url: str, bosses: dict[str, list[Boss]]) -> None:
     total = sum(len(i) for i in bosses.values())
     print(f"{url} ({total}):")
 
@@ -78,7 +78,7 @@ def convert_bosses_to_only_name(bosses: dict[str, list[Boss]]) -> dict[str, list
     return bosses_only_name
 
 
-def export_to_json(file_name, bosses):
+def export_to_json(file_name, bosses) -> None:
     dir_name = os.path.dirname(file_name)
     os.makedirs(dir_name, exist_ok=True)
 
@@ -90,7 +90,7 @@ def export_to_json(file_name, bosses):
     )
 
 
-def export_to_simple_text(file_name, bosses):
+def export_to_simple_text(file_name, bosses) -> None:
     dir_name = os.path.dirname(file_name)
     os.makedirs(dir_name, exist_ok=True)
 

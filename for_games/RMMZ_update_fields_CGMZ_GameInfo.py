@@ -15,7 +15,7 @@ from pathlib import Path
 PATTERN_FIELD_VERSION: re.Pattern = re.compile(r'(?P<left>"Left Text"\s*:\s*)".+?"')
 
 
-def process(path_dir: Path, forced: bool = False):
+def process(path_dir: Path, forced: bool = False) -> None:
     path_js_plugins: Path = path_dir / "js" / "plugins.js"
 
     # If the last commit was in path_js_plugins, then skipping the file change

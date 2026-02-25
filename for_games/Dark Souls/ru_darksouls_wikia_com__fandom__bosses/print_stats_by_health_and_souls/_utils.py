@@ -228,7 +228,7 @@ def print_stats(
     rows: List[Tuple[str, int, int]],
     headers=("NAME", "HEALTH", "SOULS"),
     sort_column=1,
-):
+) -> None:
     rows.sort(key=lambda x: x[sort_column], reverse=True)
 
     rows.insert(0, headers)

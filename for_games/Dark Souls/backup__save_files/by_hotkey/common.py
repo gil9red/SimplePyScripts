@@ -21,7 +21,7 @@ from utils import get_logger, backup
 import keyboard
 
 
-def beep():
+def beep() -> None:
     try:
         winsound.Beep(1000, duration=50)
     except:
@@ -35,7 +35,7 @@ log = get_logger(__file__)
 HOTKEY = "CTRL + F1"
 
 
-def backup_saves(path_ds_save: str):
+def backup_saves(path_ds_save: str) -> None:
     try:
         for path_file_name in glob(path_ds_save):
             file_name_backup = backup(path_file_name)
@@ -48,7 +48,7 @@ def backup_saves(path_ds_save: str):
         time.sleep(5 * 60)
 
 
-def run(path_ds_save: str, hotkey: str = HOTKEY):
+def run(path_ds_save: str, hotkey: str = HOTKEY) -> None:
     # Example: r'~\Documents\NBGI\DarkSouls\*\DRAKS0005.sl2'
     path_ds_save = os.path.expanduser(path_ds_save)
 

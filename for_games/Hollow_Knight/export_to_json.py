@@ -14,7 +14,7 @@ def export_to_json_str(bosses: dict[str, list]) -> str:
     return json.dumps(bosses, ensure_ascii=False, indent=4)
 
 
-def export_to_json(file_name: str, bosses: dict[str, list]):
+def export_to_json(file_name: str, bosses: dict[str, list]) -> None:
     dir_name = os.path.dirname(file_name)
     os.makedirs(dir_name, exist_ok=True)
 

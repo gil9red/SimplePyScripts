@@ -17,7 +17,7 @@ URL_DS3 = "http://ru.darksouls.wikia.com/wiki/Категория:Локации_
 
 
 class Parser:
-    def __init__(self, url_locations: str, log=True):
+    def __init__(self, url_locations: str, log=True) -> None:
         self._url_locations = url_locations
         self._is_log = log
 
@@ -43,7 +43,7 @@ class Parser:
     def DS3(log=True) -> "Parser":
         return Parser(URL_DS3, log)
 
-    def _log(self, *args, **kwargs):
+    def _log(self, *args, **kwargs) -> None:
         self._is_log and print(*args, **kwargs)
 
     @staticmethod

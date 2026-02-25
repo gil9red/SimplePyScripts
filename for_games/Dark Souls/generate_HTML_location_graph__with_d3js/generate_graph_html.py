@@ -64,7 +64,7 @@ def generate(
     links: list[tuple[str, str]],
     title: str = "Graph",
     file_name_template: str | Path = DIR / "template_graph.html",
-):
+) -> None:
     template_title = "{{title}}"
     template_dataset = "{{dataset}}"
 

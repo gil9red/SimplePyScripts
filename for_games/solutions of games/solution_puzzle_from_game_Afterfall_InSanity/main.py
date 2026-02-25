@@ -14,7 +14,7 @@ class Button:
     is_clicked: bool = False
 
 
-def activate(buttons: list[Button], index: int):
+def activate(buttons: list[Button], index: int) -> None:
     button = buttons[index]
     if button.is_clicked:
         return
@@ -37,7 +37,7 @@ def is_win(buttons: list[Button]) -> bool:
     return all(x.value for x in buttons)
 
 
-def run(init_buttons: list[Button]):
+def run(init_buttons: list[Button]) -> None:
     for start_index in range(len(init_buttons)):
         seq = [start_index]
 

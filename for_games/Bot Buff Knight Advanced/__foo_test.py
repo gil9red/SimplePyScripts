@@ -20,7 +20,7 @@ from main import (
 from common import get_current_datetime_str
 
 
-def draw_rects(img, contours_rects, color=(0, 255, 0)):
+def draw_rects(img, contours_rects, color=(0, 255, 0)) -> None:
     for x, y, w, h in contours_rects:
         cv2.rectangle(img, (x, y), (x + w, y + h), color, thickness=5)
         # cv2.rectangle(img, (x, y), (x + w, y + h), color, thickness=-1)

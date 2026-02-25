@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 import copy
 
 
-def activate(cylinders: list[bool], index: int):
+def activate(cylinders: list[bool], index: int) -> None:
     left_index = (index - 1) % len(cylinders)
     right_index = (index + 1) % len(cylinders)
 
@@ -20,7 +20,7 @@ def is_win(cylinders: list[bool]) -> bool:
     return all(cylinders)
 
 
-def run(init_cylinders: list[bool]):
+def run(init_cylinders: list[bool]) -> None:
     for start_index in range(len(init_cylinders)):
         seq = [start_index]
 

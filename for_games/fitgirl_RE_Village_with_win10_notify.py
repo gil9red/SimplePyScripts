@@ -25,7 +25,7 @@ sys.path.append(
 from run_notify import run_in_thread
 
 
-def show_notify(name: str):
+def show_notify(name: str) -> None:
     title = f"Уведомление за {datetime.now():%Y/%m/%d %H:%M:%S}"
     print(f"{title}\n{name}\n")
 

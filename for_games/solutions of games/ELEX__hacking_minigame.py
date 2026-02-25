@@ -16,7 +16,7 @@ def run(
     keys: list[int],
     fixed_values: list[str | int],
     need_values: list[str | int],
-):
+) -> None:
     while True:
         items = keys.copy()
         fixed_items = fixed_values.copy()

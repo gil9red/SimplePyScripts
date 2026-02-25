@@ -11,7 +11,7 @@ __author__ = "ipetrash"
 import keyboard
 
 
-def write(text: str):
+def write(text: str) -> None:
     print(text)
 
     # Удаление символа, который мог попасть при вводе хоткея, например Z, X, C или V

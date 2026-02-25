@@ -54,7 +54,7 @@ def get_bosses() -> dict[str, list[Boss]]:
     return bosses_by_category
 
 
-def print_bosses(bosses: dict[str, list[Boss]]):
+def print_bosses(bosses: dict[str, list[Boss]]) -> None:
     total = sum(len(i) for i in bosses.values())
     print(f"Боссы ({total}):")
 
@@ -75,7 +75,7 @@ def convert_bosses_to_only_name(bosses: dict[str, list[Boss]]) -> dict[str, list
     return bosses_only_name
 
 
-def export_to_json(file_name: Path, bosses: dict[str, list[Boss | str]]):
+def export_to_json(file_name: Path, bosses: dict[str, list[Boss | str]]) -> None:
     file_name.parent.mkdir(parents=True, exist_ok=True)
 
     json.dump(
@@ -87,7 +87,7 @@ def export_to_json(file_name: Path, bosses: dict[str, list[Boss | str]]):
     )
 
 
-def export_to_simple_text(file_name, bosses: dict[str, list[Boss]]):
+def export_to_simple_text(file_name, bosses: dict[str, list[Boss]]) -> None:
     file_name.parent.mkdir(parents=True, exist_ok=True)
 
     with open(file_name, "w", encoding="utf-8") as f:

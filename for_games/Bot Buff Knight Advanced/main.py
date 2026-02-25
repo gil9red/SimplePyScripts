@@ -61,7 +61,7 @@ if not os.path.exists(DIR):
     os.mkdir(DIR)
 
 
-def save_screenshot(prefix, img_hsv):
+def save_screenshot(prefix, img_hsv) -> None:
     file_name = f"{DIR}/{prefix}__{get_current_datetime_str()}.png"
     log.debug(file_name)
     cv2.imwrite(file_name, cv2.cvtColor(np.array(img_hsv), cv2.COLOR_HSV2BGR))
@@ -90,12 +90,12 @@ BOT_DATA = {
 }
 
 
-def change_start():
+def change_start() -> None:
     BOT_DATA["START"] = not BOT_DATA["START"]
     log.debug("START: %s", BOT_DATA["START"])
 
 
-def change_auto_attack():
+def change_auto_attack() -> None:
     BOT_DATA["AUTO_ATTACK"] = not BOT_DATA["AUTO_ATTACK"]
     log.debug("AUTO_ATTACK: %s", BOT_DATA["AUTO_ATTACK"])
 
@@ -105,7 +105,7 @@ log.debug('Press "%s" for QUIT', QUIT_COMBINATION)
 log.debug('Press "%s" for AUTO_ATTACK', AUTO_ATTACK_COMBINATION)
 
 
-def process_auto_attack():
+def process_auto_attack() -> None:
     while True:
         if not BOT_DATA["START"]:
             time.sleep(0.01)
@@ -118,7 +118,7 @@ def process_auto_attack():
         time.sleep(0.01)
 
 
-def process_find_fairy(img_hsv):
+def process_find_fairy(img_hsv) -> None:
     rects_blue = find_rect_contours(img_hsv, BLUE_HSV_MIN, BLUE_HSV_MAX)
     rects_orange = find_rect_contours(img_hsv, ORANGE_HSV_MIN, ORANGE_HSV_MAX)
     rects_fairy = find_rect_contours(img_hsv, FAIRY_HSV_MIN, FAIRY_HSV_MAX)

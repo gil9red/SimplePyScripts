@@ -8,7 +8,7 @@ __author__ = "ipetrash"
 import keyboard
 
 
-def input_command(text: str):
+def input_command(text: str) -> None:
     keyboard.press_and_release("enter")
 
     keyboard.write(text)

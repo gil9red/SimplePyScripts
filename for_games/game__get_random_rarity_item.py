@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 import random
 
 
-def get_random_rarity_item():
+def get_random_rarity_item() -> str:
     a = random.randrange(1, 1000)
 
     if a <= 10:

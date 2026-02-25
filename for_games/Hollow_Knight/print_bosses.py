@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from utils import get_bosses, Boss
 
 
-def print_bosses(bosses: dict[str, list[Boss]], only_names=False):
+def print_bosses(bosses: dict[str, list[Boss]], only_names=False) -> None:
     total = sum(len(i) for i in bosses.values())
     print(f"Hollow Knight ({total}):")
 

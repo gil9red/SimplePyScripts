@@ -27,7 +27,7 @@ def is_fail(clock_data: dict) -> bool:
     return a == 0 and b == 0
 
 
-def click_clock_item(clock_data: dict, selected_index: int):
+def click_clock_item(clock_data: dict, selected_index: int) -> None:
     items = clock_data["items"]
     move_value = items[selected_index]
 
@@ -48,7 +48,7 @@ def click_clock_item(clock_data: dict, selected_index: int):
     clock_data["history"].append(deepcopy(clock_data["items"]))
 
 
-def solve_step(clock_data: dict, index: int, result_win: dict):
+def solve_step(clock_data: dict, index: int, result_win: dict) -> None:
     # Если текущий индекс указывает на уже активированную кнопку
     if clock_data["items"][index] == 0:
         return
@@ -95,7 +95,7 @@ def solver(clock_items: list) -> list:
     return list(wins.values())
 
 
-def print_extended(clock_data: dict):
+def print_extended(clock_data: dict) -> None:
     num_clock_items = len(clock_data["selected_indexes"])
 
     # Форматирование строки для красивого отображения двухзначных индексов
@@ -111,7 +111,7 @@ def print_extended(clock_data: dict):
         print(fmt_print.format(item, index, value))
 
 
-def print_simple(clock_data: dict):
+def print_simple(clock_data: dict) -> None:
     simple_result = zip(clock_data["selected_indexes"], clock_data["selected_values"])
     print(" -> ".join(f"{index}({value})" for index, value in simple_result))
 
