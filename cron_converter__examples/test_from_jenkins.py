@@ -13,7 +13,7 @@ from from_jenkins import do_convert
 
 
 class Test(TestCase):
-    def test_do_convert_every_15_minutes(self):
+    def test_do_convert_every_15_minutes(self) -> None:
         # Every fifteen minutes
         cron = "H/15 * * * *"
 
@@ -33,7 +33,7 @@ class Test(TestCase):
 
         self.assertEqual(actual, expected)
 
-    def test_do_convert_every_1_hours(self):
+    def test_do_convert_every_1_hours(self) -> None:
         cron = "H * * * *"
 
         cron = do_convert(cron)
@@ -52,7 +52,7 @@ class Test(TestCase):
 
         self.assertEqual(actual, expected)
 
-    def test_do_convert_every_8_hours(self):
+    def test_do_convert_every_8_hours(self) -> None:
         cron = "H */8 * * *"
 
         cron = do_convert(cron)
@@ -79,7 +79,7 @@ class Test(TestCase):
 
         self.assertEqual(actual, expected)
 
-    def test_do_convert_every_24_hours(self):
+    def test_do_convert_every_24_hours(self) -> None:
         cron = "H 0 * * *"
 
         cron = do_convert(cron)
@@ -98,7 +98,7 @@ class Test(TestCase):
 
         self.assertEqual(actual, expected)
 
-    def test_do_convert_hourly(self):
+    def test_do_convert_hourly(self) -> None:
         cron = "@hourly"
 
         cron = do_convert(cron)
@@ -117,7 +117,7 @@ class Test(TestCase):
 
         self.assertEqual(actual, expected)
 
-    def test_do_convert_daily(self):
+    def test_do_convert_daily(self) -> None:
         cron = "@daily"
 
         cron = do_convert(cron)
@@ -136,7 +136,7 @@ class Test(TestCase):
 
         self.assertEqual(actual, expected)
 
-    def test_do_convert_midnight(self):
+    def test_do_convert_midnight(self) -> None:
         cron = "@midnight"
 
         cron = do_convert(cron)
@@ -165,7 +165,7 @@ class Test(TestCase):
 
         self.assertEqual(actual, expected)
 
-    def test_do_convert_weekly(self):
+    def test_do_convert_weekly(self) -> None:
         cron = "@weekly"
 
         cron = do_convert(cron)
@@ -194,7 +194,7 @@ class Test(TestCase):
 
         self.assertEqual(actual, expected)
 
-    def test_do_convert_monthly(self):
+    def test_do_convert_monthly(self) -> None:
         cron = "@monthly"
 
         cron = do_convert(cron)
@@ -223,7 +223,7 @@ class Test(TestCase):
 
         self.assertEqual(actual, expected)
 
-    def test_do_convert_yearly(self):
+    def test_do_convert_yearly(self) -> None:
         cron = "@yearly"
 
         cron = do_convert(cron)
@@ -242,7 +242,7 @@ class Test(TestCase):
 
         self.assertEqual(actual, expected)
 
-    def test_do_convert_annually(self):
+    def test_do_convert_annually(self) -> None:
         cron = "@annually"
 
         cron = do_convert(cron)
@@ -261,7 +261,7 @@ class Test(TestCase):
 
         self.assertEqual(actual, expected)
 
-    def test_do_convert_complex_1(self):
+    def test_do_convert_complex_1(self) -> None:
         # Every ten minutes in the first half of every hour
         cron = "H(0-29)/10 * * * *"
 
@@ -297,7 +297,7 @@ class Test(TestCase):
 
         self.assertEqual(actual, expected)
 
-    def test_do_convert_complex_2(self):
+    def test_do_convert_complex_2(self) -> None:
         # Once every two hours at 45 minutes past the hour starting at 9:45 AM and finishing at 3:45 PM every weekday
         cron = "45 9-16/2 * * 1-5"
 
@@ -331,7 +331,7 @@ class Test(TestCase):
 
         self.assertEqual(actual, expected)
 
-    def test_do_convert_complex_3(self):
+    def test_do_convert_complex_3(self) -> None:
         # Once in every two hour slot between 8 AM and 4 PM every weekday
         cron = "H H(8-15)/2 * * 1-5"
 
@@ -365,7 +365,7 @@ class Test(TestCase):
 
         self.assertEqual(actual, expected)
 
-    def test_do_convert_complex_4(self):
+    def test_do_convert_complex_4(self) -> None:
         # Once a day on the 1st and 15th of every month except December
         cron = "H H 1,15 1-11 *"
 

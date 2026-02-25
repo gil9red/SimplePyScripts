@@ -7,7 +7,7 @@ import sys
 import os
 
 
-def main(namespace):
+def main(namespace) -> None:
     # @param namespace argparse.Namespace Содержит переданные в аргументах объекты.
     indent = " " * 8
 
@@ -22,7 +22,7 @@ def main(namespace):
         )
 
 
-def create_parser():
+def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="CreateNoteXml",
         description="Cкрипт генерирует xml-файл программы NotesManager.",
@@ -35,10 +35,11 @@ def create_parser():
 if __name__ == "__main__":
     parser = create_parser()
 
-    sys.argv = [
-        sys.argv[0],
-        r"-dir=C:\Users\ipetrash\Desktop\NotesManager.v0.0.3.Windows\notes",
-    ]
+    # TODO: Remove
+    # sys.argv = [
+    #     sys.argv[0],
+    #     r"-dir=C:\Users\ipetrash\Desktop\NotesManager.v0.0.3.Windows\notes",
+    # ]
 
     if len(sys.argv) == 1:
         parser.print_help()

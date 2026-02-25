@@ -6,8 +6,11 @@ __author__ = "ipetrash"
 
 import sqlite3
 
+from types import TracebackType
+from typing import Optional, Type
 
-def old_old_variant():
+
+def old_old_variant() -> None:
     connect = sqlite3.connect(":memory:")
 
     try:
@@ -33,7 +36,7 @@ def old_old_variant():
         connect.close()
 
 
-def old_variant():
+def old_variant() -> None:
     with sqlite3.connect(":memory:") as connect:
         print(connect.execute("SELECT sqlite_version();").fetchone())
 
@@ -55,17 +58,17 @@ def old_variant():
 
 
 class SQLite3Connect(object):
-    def __init__(self, database):
+    def __init__(self, database) -> None:
         self._connect = sqlite3.connect(database)
 
     def __enter__(self):
         return self._connect
 
-    def __exit__(self, exc_type, exc_value, exc_traceback):
+    def __exit__(self, exc_type: Optional[Type[BaseException]], exc_value: Optional[BaseException], exc_traceback: Optional[TracebackType]) -> None:
         self._connect.close()
 
 
-def new_variant():
+def new_variant() -> None:
     with SQLite3Connect(":memory:") as connect:
         print(connect.execute("SELECT sqlite_version();").fetchone())
 

@@ -120,7 +120,7 @@ def create_connect():
 
 def create_table(
     table_name: str, sql_table: str, sql_table_data_rows: str, drop_table=False
-):
+) -> None:
     # Создание таблицы
     connect = create_connect()
     try:

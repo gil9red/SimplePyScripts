@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from PIL import Image
 
 
-def convert_image_to_ico(file_name, file_name_ico, icon_sizes=None):
+def convert_image_to_ico(file_name, file_name_ico, icon_sizes=None) -> None:
     img = Image.open(file_name)
 
     if icon_sizes:

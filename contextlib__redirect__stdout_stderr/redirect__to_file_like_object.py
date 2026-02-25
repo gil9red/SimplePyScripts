@@ -11,7 +11,7 @@ from contextlib import redirect_stdout
 with StringIO() as f, redirect_stdout(f):
     print("Hello ", end="")
 
-    def foo():
+    def foo() -> None:
         print("World")
 
     foo()

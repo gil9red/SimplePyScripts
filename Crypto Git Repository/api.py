@@ -33,7 +33,7 @@ def get_repo():
 repo = get_repo()
 
 
-def print_log(reverse=False):
+def print_log(reverse=False) -> None:
     logs = repo.git.log("--pretty=format:%H%x09%an%x09%ad%x09%s").splitlines()
     print(f"Logs[{len(logs)}]:")
 
@@ -44,27 +44,27 @@ def print_log(reverse=False):
         print(log)
 
 
-def append(file_or_list):
+def append(file_or_list) -> None:
     if type(file_or_list) == str:
         file_or_list = [file_or_list]
 
     repo.index.add(file_or_list)
 
 
-def remove(file_or_list):
+def remove(file_or_list) -> None:
     if type(file_or_list) == str:
         file_or_list = [file_or_list]
 
     repo.index.remove(file_or_list)
 
 
-def commit(message):
+def commit(message) -> None:
     repo.index.commit(message)
 
 
-def pull():
+def pull() -> None:
     repo.remotes.origin.pull()
 
 
-def push():
+def push() -> None:
     repo.remotes.origin.push()

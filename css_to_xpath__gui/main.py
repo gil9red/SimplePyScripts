@@ -16,7 +16,7 @@ from cssselect import HTMLTranslator
 css_to_xpath = HTMLTranslator(xhtml=True).css_to_xpath
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -29,7 +29,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class MainWindow(Qt.QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("css_to_xpath__gui")
@@ -71,7 +71,7 @@ class MainWindow(Qt.QWidget):
 
         self.setLayout(layout)
 
-    def on_process(self):
+    def on_process(self) -> None:
         self.text_edit_output.clear()
         self.label_error.clear()
         self.button_detail_error.hide()
@@ -100,7 +100,7 @@ class MainWindow(Qt.QWidget):
 
             self.label_error.setText("Error: " + self.last_error_message)
 
-    def show_detail_error_message(self):
+    def show_detail_error_message(self) -> None:
         message = self.last_error_message + "\n\n" + self.last_detail_error_message
 
         mb = Qt.QErrorMessage()
