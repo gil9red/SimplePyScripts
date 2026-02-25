@@ -22,7 +22,7 @@ TODOS = {
 }
 
 
-def abort_if_todo_doesnt_exist(todo_id):
+def abort_if_todo_doesnt_exist(todo_id) -> None:
     if todo_id not in TODOS:
         abort(404, message=f"Todo {todo_id} doesn't exist")
 

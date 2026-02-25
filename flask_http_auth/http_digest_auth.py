@@ -34,7 +34,7 @@ def get_password(username: str) -> str | None:
 
 @app.route("/")
 @auth.login_required
-def index():
+def index() -> str:
     return f"Hello, {auth.username()}!"
 
 
