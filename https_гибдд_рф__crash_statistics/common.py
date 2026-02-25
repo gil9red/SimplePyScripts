@@ -80,7 +80,7 @@ def create_connect(fields_as_dict=False, trace_sql=False) -> sqlite3.Connection:
     return connect
 
 
-def init_db():
+def init_db() -> None:
     # Создание базы и таблицы
     with create_connect() as connect:
         connect.execute(
@@ -102,7 +102,7 @@ def init_db():
         connect.commit()
 
 
-def db_create_backup(backup_dir="backup"):
+def db_create_backup(backup_dir="backup") -> None:
     os.makedirs(backup_dir, exist_ok=True)
 
     file_name = str(dt.datetime.today().date()) + ".sqlite"
@@ -111,7 +111,7 @@ def db_create_backup(backup_dir="backup"):
     shutil.copy(DB_FILE_NAME, file_name)
 
 
-def append_crash_statistics_db(crash_statistics: CrashStatistics = None):
+def append_crash_statistics_db(crash_statistics: CrashStatistics = None) -> None:
     db_create_backup()
 
     if not crash_statistics:

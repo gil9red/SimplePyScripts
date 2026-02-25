@@ -5,7 +5,7 @@ import argparse
 from datetime import datetime, time
 
 
-def main(namespace):
+def main(namespace) -> None:
     args = namespace.parse_args()
     args.user = "Илья"
     if args.user:
@@ -29,7 +29,7 @@ def main(namespace):
         print("Привет, Python!")
 
 
-def create_parser():
+def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Hello World Example!")
     parser.add_argument("--user", type=str, help=" user name.")
     return parser

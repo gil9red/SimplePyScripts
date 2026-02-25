@@ -25,7 +25,7 @@ except:
 from hex2str import hex2str, str2hex
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -38,7 +38,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("hex2str")
@@ -124,7 +124,7 @@ class Widget(QWidget):
 
         self.setLayout(layout)
 
-    def _on_input_selection_changed(self):
+    def _on_input_selection_changed(self) -> None:
         try:
             # Нехорошо будет если второй будет вызывать сигналы, например о выделении текста
             self.text_edit_output.blockSignals(True)
@@ -155,7 +155,7 @@ class Widget(QWidget):
         finally:
             self.text_edit_output.blockSignals(False)
 
-    def _on_output_selection_changed(self):
+    def _on_output_selection_changed(self) -> None:
         try:
             # Нехорошо будет если второй будет вызывать сигналы, например о выделении текста
             self.text_edit_input.blockSignals(True)
@@ -186,7 +186,7 @@ class Widget(QWidget):
         finally:
             self.text_edit_input.blockSignals(False)
 
-    def show_detail_error_massage(self):
+    def show_detail_error_massage(self) -> None:
         message = self.last_error_message + "\n\n" + self.last_detail_error_message
 
         mb = QErrorMessage()
@@ -198,7 +198,7 @@ class Widget(QWidget):
 
         mb.exec_()
 
-    def _convert(self):
+    def _convert(self) -> None:
         self.label_error.clear()
         self.button_detail_error.hide()
 

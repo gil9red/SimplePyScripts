@@ -11,7 +11,7 @@ import io
 from PIL import Image
 
 
-def img_to_base64_html(file_name__or__bytes__or__file_object: str | bytes | io.IOBase):
+def img_to_base64_html(file_name__or__bytes__or__file_object: str | bytes | io.IOBase) -> str:
     arg = file_name__or__bytes__or__file_object
 
     if isinstance(arg, str):

@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -69,7 +69,7 @@ def run_js_code(page: QWebEnginePage, code: str) -> object:
 
     result_value = {"value": None}
 
-    def _on_callback(result: object):
+    def _on_callback(result: object) -> None:
         result_value["value"] = result
 
         loop.quit()
@@ -88,7 +88,7 @@ class MyWebEnginePage(QWebEnginePage):
         message: str,
         line_number: int,
         source_id: str,
-    ):
+    ) -> None:
         print(
             f"javascript_console_message: {level}, {message}, {line_number}, {source_id}",
             file=sys.stderr,
@@ -120,7 +120,7 @@ view.setPage(page)
 # page.urlChanged.connect(_on_url_changed)
 
 
-def _on_load_finished(ok: bool):
+def _on_load_finished(ok: bool) -> None:
     print(page.url().toString())
 
     page.runJavaScript(jquery_text)
