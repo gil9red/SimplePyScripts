@@ -54,7 +54,7 @@ def iter_blocks(text: str, start_str: str, end_str: str) -> Iterator[str]:
         yield block
 
 
-def do(file_name, output_dir="output", debug=True):
+def do(file_name, output_dir="output", debug=True) -> None:
     dir_fb2 = os.path.basename(file_name)
     dir_im = os.path.join(output_dir, dir_fb2)
     os.makedirs(dir_im, exist_ok=True)

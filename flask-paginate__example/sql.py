@@ -16,12 +16,12 @@ sql = """create table if not exists users(
 
 
 @click.group()
-def cli():
+def cli() -> None:
     pass
 
 
 @cli.command(short_help="initialize database and tables")
-def init_db():
+def init_db() -> None:
     conn = sqlite3.connect("test.db")
     cur = conn.cursor()
     cur.execute(sql)
@@ -31,7 +31,7 @@ def init_db():
 
 @cli.command(short_help="fill records to database")
 @click.option("--total", "-t", default=300, help="fill data for example")
-def fill_data(total):
+def fill_data(total) -> None:
     conn = sqlite3.connect("test.db")
     cur = conn.cursor()
     for i in range(total):

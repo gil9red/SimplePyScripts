@@ -38,7 +38,7 @@ def close_tabs(
     file_name_session: Path,
     urls: list[str],
     log: logging.Logger,
-):
+) -> None:
     modified = False
 
     json_data = get_sessionstore(file_name_session)
@@ -61,7 +61,7 @@ def close_tabs(
 def close_duplicate_tabs(
     file_name_session: Path,
     log: logging.Logger,
-):
+) -> None:
     json_data = get_sessionstore(file_name_session)
     urls = get_tab_urls_from_sessionstore(json_data)
 
@@ -99,7 +99,7 @@ def close_bookmarks(
     file_name_places: Path,
     urls: list[str],
     log: logging.Logger,
-):
+) -> None:
     with sqlite3.connect(file_name_places) as connect:
         for url in urls:
             sql = "SELECT id FROM moz_bookmarks WHERE fk = (SELECT id FROM moz_places WHERE url = ?)"

@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup, Tag
 
 def get_sections_as_dict(root) -> tuple[dict[str, dict], dict[str, Tag]]:
     # Рекурсивная функция поиска <section>
-    def _find_sections(root, root_dict: dict, title_by_section: dict):
+    def _find_sections(root, root_dict: dict, title_by_section: dict) -> None:
         for section in root.find_all("section", recursive=False):
             title = section.title.text.strip()
             children = dict()
@@ -33,7 +33,7 @@ def get_section_by_text(
     section_by_children: dict[str, dict],
     title_by_section: dict[str, Tag],
 ) -> dict[str, str]:
-    def _find_sections(section_by_text, section_by_children):
+    def _find_sections(section_by_text, section_by_children) -> None:
         for title, children in section_by_children.items():
             if children:
                 _find_sections(section_by_text, children)
@@ -64,8 +64,8 @@ if __name__ == "__main__":
         section_by_text: dict,
         number_length_book_text,
         level=1
-    ):
-        def _find_section_lines(root, level, lines: list):
+    ) -> None:
+        def _find_section_lines(root, level, lines: list) -> None:
             for title, children in root.items():
                 text = "{}{}".format("    " * (level - 1), title.replace("\n", ". "))
 

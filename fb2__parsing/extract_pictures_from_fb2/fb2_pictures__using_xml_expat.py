@@ -22,7 +22,7 @@ from PIL import Image
 from common import get_file_name_from_binary
 
 
-def do(file_name, output_dir="output", debug=True):
+def do(file_name, output_dir="output", debug=True) -> None:
     dir_fb2 = os.path.basename(file_name)
     dir_im = os.path.join(output_dir, dir_fb2)
     os.makedirs(dir_im, exist_ok=True)
@@ -36,18 +36,18 @@ def do(file_name, output_dir="output", debug=True):
         "number": 1,
     }
 
-    def on_start_element(name, attrs):
+    def on_start_element(name, attrs) -> None:
         PARSE_DATA["last_start_tag"] = name
         PARSE_DATA["last_tag_attrs"] = attrs
         PARSE_DATA["last_tag_data"] = ""
 
-    def on_char_data(data):
+    def on_char_data(data) -> None:
         if PARSE_DATA["last_start_tag"] != "binary":
             return
 
         PARSE_DATA["last_tag_data"] += data
 
-    def on_end_element(name):
+    def on_end_element(name) -> None:
         if name != "binary":
             return
 

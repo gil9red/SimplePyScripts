@@ -22,7 +22,7 @@ from PIL import Image
 from common import get_file_name_from_binary
 
 
-def do(file_name, output_dir="output", debug=True):
+def do(file_name, output_dir="output", debug=True) -> None:
     dir_fb2 = os.path.basename(file_name)
     dir_im = os.path.join(output_dir, dir_fb2)
     os.makedirs(dir_im, exist_ok=True)
@@ -39,18 +39,18 @@ def do(file_name, output_dir="output", debug=True):
     }
 
     class BinaryHandler(xml.sax.ContentHandler):
-        def startElement(self, name, attrs):
+        def startElement(self, name, attrs) -> None:
             PARSE_DATA["last_start_tag"] = name
             PARSE_DATA["last_tag_attrs"] = attrs
             PARSE_DATA["last_tag_data"] = ""
 
-        def characters(self, content):
+        def characters(self, content) -> None:
             if PARSE_DATA["last_start_tag"] != "binary":
                 return
 
             PARSE_DATA["last_tag_data"] += content
 
-        def endElement(self, name):
+        def endElement(self, name) -> None:
             if name != "binary":
                 return
 

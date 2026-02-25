@@ -79,7 +79,7 @@ def loads_json(file_obj: BinaryIO) -> dict:
     return json.loads(data)
 
 
-def dumps_json(file_obj: BinaryIO, json_data: dict):
+def dumps_json(file_obj: BinaryIO, json_data: dict) -> None:
     data = json.dumps(json_data).encode("utf-8")
     compressed = compress_data(data)
 

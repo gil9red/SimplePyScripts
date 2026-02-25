@@ -1,14 +1,14 @@
 __author__ = "ipetrash"
 
 
-def fibo_1(n):
+def fibo_1(n) -> None:
     f = [0, 1]
     for i in range(2, n + 1):
         f.append(f[i - 1] + f[i - 2])
     print(f)
 
 
-def fibo_2(n):
+def fibo_2(n) -> None:
     a, b = 0, 1
     print(a, b, end=" ")
     for i in range(2, n + 1):

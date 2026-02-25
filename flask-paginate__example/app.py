@@ -17,14 +17,14 @@ app.config.from_pyfile("app.cfg")
 
 
 @app.before_request
-def before_request():
+def before_request() -> None:
     g.conn = sqlite3.connect("test.db")
     g.conn.row_factory = sqlite3.Row
     g.cur = g.conn.cursor()
 
 
 @app.teardown_request
-def teardown(error):
+def teardown(error) -> None:
     if hasattr(g, "conn"):
         g.conn.close()
 
@@ -135,7 +135,7 @@ def get_pagination(**kwargs):
 
 @click.command()
 @click.option("--port", "-p", default=5000, help="listening port")
-def run(port):
+def run(port) -> None:
     app.run(debug=True, port=port)
 
 

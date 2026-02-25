@@ -22,11 +22,11 @@ FILE_TEST = DIR / "recovery.jsonlz4"
 
 
 class TestAll(unittest.TestCase):
-    def test_1_exists_file(self):
+    def test_1_exists_file(self) -> None:
         self.assertTrue(FILE_TEST.exists())
         self.assertTrue(FILE_TEST.read_bytes())
 
-    def test_decompress_compress(self):
+    def test_decompress_compress(self) -> None:
         with open(FILE_TEST, "rb") as f:
             expected_data = mozlz4a.decompress(f)
 
@@ -38,7 +38,7 @@ class TestAll(unittest.TestCase):
 
         self.assertEqual(expected_data, data)
 
-    def test_compress_decompress_data(self):
+    def test_compress_decompress_data(self) -> None:
         expected_data = str(uuid.uuid4()).encode("utf-8")
 
         compressed_data = mozlz4a.compress_data(expected_data)
@@ -46,7 +46,7 @@ class TestAll(unittest.TestCase):
 
         self.assertEqual(expected_data, data)
 
-    def test_json(self):
+    def test_json(self) -> None:
         with open(FILE_TEST, "rb") as f:
             expected_json_data = mozlz4a.loads_json(f)
 
