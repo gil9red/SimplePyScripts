@@ -20,7 +20,7 @@ async def fetch(session, url):
         return await response.content.read()
 
 
-async def main():
+async def main() -> None:
     async with aiohttp.ClientSession() as session:
         xml_str = await fetch(session, "https://sdvk-oboi.ru/sitemap.xml")
         root = etree.fromstring(xml_str)

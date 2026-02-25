@@ -10,7 +10,7 @@ import asyncio
 import aiohttp
 
 
-async def main():
+async def main() -> None:
     url = "https://python.org"
 
     async with aiohttp.ClientSession() as session:

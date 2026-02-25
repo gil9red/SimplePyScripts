@@ -17,7 +17,7 @@ async def fetch(session, url):
         return await response.text()
 
 
-async def main():
+async def main() -> None:
     async with aiohttp.ClientSession() as session:
         html = await fetch(session, "http://python.org")
         print(html)

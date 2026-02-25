@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 import asyncio
 
 
-async def main():
+async def main() -> None:
     print("Hello ", end="")
     await asyncio.sleep(1)
     print("World!")

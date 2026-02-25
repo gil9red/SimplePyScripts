@@ -12,7 +12,7 @@ import aiohttp
 from ignore_aiohttp_ssl_error import ignore_aiohttp_ssl_error
 
 
-async def fetch_page(url: str, idx: int):
+async def fetch_page(url: str, idx: int) -> None:
     async with aiohttp.request("GET", url) as rs:
         if rs.status == 200:
             print(f"[{idx}] Data fetched successfully")
@@ -21,7 +21,7 @@ async def fetch_page(url: str, idx: int):
             print(rs.content)
 
 
-async def main():
+async def main() -> None:
     url = "https://python.org"
     urls = [url] * 100
 

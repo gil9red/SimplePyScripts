@@ -19,7 +19,7 @@ else:
     SSL_PROTOCOLS = (*SSL_PROTOCOLS, uvloop.loop.SSLProtocol)
 
 
-def ignore_aiohttp_ssl_error(loop):
+def ignore_aiohttp_ssl_error(loop) -> None:
     """Ignore aiohttp #3535 / cpython #13548 issue with SSL data after close
 
     There is an issue in Python 3.7 up to 3.7.3 that over-reports a
@@ -41,7 +41,7 @@ def ignore_aiohttp_ssl_error(loop):
 
     orig_handler = loop.get_exception_handler()
 
-    def ignore_ssl_error(loop, context):
+    def ignore_ssl_error(loop, context) -> None:
         if context.get("message") in {
             "SSL error in data received",
             "Fatal error on transport",

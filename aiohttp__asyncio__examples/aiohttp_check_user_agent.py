@@ -10,7 +10,7 @@ import asyncio
 import aiohttp
 
 
-async def main():
+async def main() -> None:
     async with aiohttp.ClientSession() as session:
         async with session.get("https://httpbin.org/get") as rs:
             print("Status:", rs.status)
