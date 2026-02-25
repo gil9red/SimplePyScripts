@@ -19,7 +19,7 @@ import uuid
 
 class WindowsBalloonTip:
     @staticmethod
-    def balloon_tip(title, msg, duration=5, icon_path_name=None):
+    def balloon_tip(title, msg, duration=5, icon_path_name=None) -> None:
         message_map = {
             win32con.WM_DESTROY: WindowsBalloonTip.on_destroy,
         }
@@ -62,7 +62,7 @@ class WindowsBalloonTip:
         UnregisterClass(wc.lpszClassName, None)
 
     @staticmethod
-    def on_destroy(hwnd, msg, wparam, lparam):
+    def on_destroy(hwnd, msg, wparam, lparam) -> None:
         nid = (hwnd, 0)
         Shell_NotifyIcon(NIM_DELETE, nid)
         PostQuitMessage(0)  # Terminate the app.
