@@ -4,6 +4,86 @@
 __author__ = "ipetrash"
 
 
+# # pip install ollama==0.6.1
+# import ollama
+# from ollama import chat
+# from ollama import ChatResponse
+#
+#
+# response = ollama.generate(
+#     model='qwen2.5:7b',
+#     prompt="Выдели из фразы: 'Напомни купить молоко завтра в 9 утра' событие и время.",
+#     format='json',  # КЛЮЧЕВОЙ МОМЕНТ
+#     system="Отвечай строго в формате JSON с полями 'task' и 'time'.",
+# )
+# print(response['response'])
+# #
+# # rs = requests.get("http://localhost:11434")
+# # print(rs.text)
+
+
+from ollama import chat
+from pydantic import BaseModel
+
+# 1. Описываем структуру данных
+class CityInfo(BaseModel):
+    city: str
+    population: int
+    is_capital: bool
+    about: str
+    region: str
+    country: str
+
+class PersonInfo(BaseModel):
+    full_name: str
+    url_github: str
+    city: str
+    about: str
+    country: str
+
+# # 2. Делаем запрос
+# response = chat(
+#     # model='qwen2.5',
+#     model='qwen3:4b',
+#     messages=[
+#         {'role': 'system', 'content': 'Отвечай на вопросы на русском языке'},
+#         {'role': 'user', 'content': 'Расскажи про gil9red'},
+#     ],
+#     format=PersonInfo.model_json_schema(), # Передаем схему JSON
+#     options={'temperature': 0},
+# )
+#
+# # 3. Валидируем и превращаем в объект Python
+# print(response)
+# print(response.message.content)
+# person_data = PersonInfo.model_validate_json(response.message.content)
+# print(person_data)
+
+from datetime import datetime
+dt = datetime.now()
+
+# 2. Делаем запрос
+response = chat(
+    # model='qwen2.5',
+    model='qwen3:4b',
+    messages=[
+        {'role': 'system', 'content': 'Отвечай на вопросы на русском языке'},
+        {'role': 'user', 'content': 'Расскажи про Магнитогорск'},
+    ],
+    format=CityInfo.model_json_schema(), # Передаем схему JSON
+    options={'temperature': 0},
+)
+
+# 3. Валидируем и превращаем в объект Python
+print(response)
+print(response.message.content)
+city_data = CityInfo.model_validate_json(response.message.content)
+print(city_data)
+print(city_data.city, city_data.population)
+print(datetime.now() - dt)
+
+quit()
+
 import sys
 import traceback
 from random import randint
@@ -22,7 +102,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import QRectF, QLineF, Qt, QTimer
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}\n"
     text += "".join(traceback.format_tb(tb))
     print(text)
@@ -149,7 +229,7 @@ ball_item.setPos(
 
 
 class Ball:
-    def __init__(self, ball_item: QGraphicsEllipseItem, v_x, v_y):
+    def __init__(self, ball_item: QGraphicsEllipseItem, v_x, v_y) -> None:
         # def __init__(self, x, y, r, v_x, v_y, color):
         # TODO:
         self.x = ball_item.x()
@@ -163,7 +243,7 @@ class Ball:
         self.is_collision: bool = False
         # self.color = color
 
-    def update(self):
+    def update(self) -> None:
         self.x += self.v_x
         self.y += self.v_y
 
@@ -290,7 +370,7 @@ class Ball:
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("TODO")
@@ -331,7 +411,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.view)
 
     # TODO:
-    def tick(self):
+    def tick(self) -> None:
         # TODO: Использовать
         # Считаем сколько времени прошло с прошлого обсчета
         dt = default_timer() - self.t
@@ -358,7 +438,7 @@ class MainWindow(QMainWindow):
         #
         # self.update()
 
-    def on_scene_changed(self, region: list[QRectF]):
+    def on_scene_changed(self, region: list[QRectF]) -> None:
         print("on_scene_changed", region)
 
         # if self.ball.is_collision:
@@ -478,7 +558,7 @@ app.exec()
 
 quit()
 
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
 start = date(year=1992, month=8, day=18)
 year = 1
@@ -536,7 +616,7 @@ import traceback
 from PyQt5.QtWidgets import QApplication, QTextEdit, QMessageBox
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -642,7 +722,7 @@ class Release:
     testing_finish_date: date = field(init=False)
     support_end_date: date = field(init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.free_commit_date = add_to_month(self.date, number=1) - timedelta(days=1)
         self.testing_finish_date = add_to_month(self.date, number=2)
         self.support_end_date = add_to_month(

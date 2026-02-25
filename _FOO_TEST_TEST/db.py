@@ -82,7 +82,7 @@ class Logged(BaseModel):
     total_seconds_human: str
 
     @classmethod
-    def create_table(cls):
+    def create_table(cls) -> None:
         QSqlQuery(
             f"""
             CREATE TABLE IF NOT EXISTS {cls.get_table_name()}(
@@ -117,7 +117,7 @@ class Logged(BaseModel):
         id: int,
         total_seconds: int,
         total_seconds_human: str,
-    ):
+    ) -> None:
         query = QSqlQuery()
         query.prepare(
             f"""
@@ -145,7 +145,7 @@ class LoggedItem(BaseModel):
     jira_title: str
 
     @classmethod
-    def create_table(cls):
+    def create_table(cls) -> None:
         QSqlQuery(
             f"""
             CREATE TABLE IF NOT EXISTS {cls.get_table_name()}(
