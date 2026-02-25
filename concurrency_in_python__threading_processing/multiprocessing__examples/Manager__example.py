@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from multiprocessing import Process, Manager
 
 
-def f(users_data):
+def f(users_data) -> None:
     users_data["users"][0]["coins"] += 1
 
 

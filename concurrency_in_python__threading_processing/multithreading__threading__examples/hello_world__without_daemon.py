@@ -8,7 +8,7 @@ import threading
 import time
 
 
-def run():
+def run() -> None:
     print(threading.current_thread())
     for i in "Hello World!":
         print(i)

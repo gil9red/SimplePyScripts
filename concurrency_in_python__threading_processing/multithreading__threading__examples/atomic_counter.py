@@ -41,7 +41,7 @@ class AtomicCounter:
     400000
     """
 
-    def __init__(self, initial=0):
+    def __init__(self, initial=0) -> None:
         """Initialize a new atomic counter to given initial value (default 0)."""
         self.value = initial
         self._lock = threading.Lock()
@@ -66,7 +66,7 @@ if __name__ == "__main__":
 
     counter = AtomicCounter()
 
-    def incrementor():
+    def incrementor() -> None:
         for i in range(NUM):
             counter.increment()
 

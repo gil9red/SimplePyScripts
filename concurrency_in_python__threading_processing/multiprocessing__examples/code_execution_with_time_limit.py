@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 import multiprocessing
 
 
-def run():
+def run() -> None:
     import time
 
     i = 1

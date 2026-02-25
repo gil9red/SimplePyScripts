@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 
 @app.route("/")
-def index():
+def index() -> str:
     return f"Current thread: {threading.current_thread()}"
 
 

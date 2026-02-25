@@ -21,7 +21,7 @@ PRIMES = [
 ]
 
 
-def is_prime(n):
+def is_prime(n) -> bool:
     if n < 2:
         return False
     if n == 2:
@@ -36,7 +36,7 @@ def is_prime(n):
     return True
 
 
-def main():
+def main() -> None:
     # NOTE: max_workers must be defined
     # with concurrent.futures.ProcessPoolExecutor(max_workers=MAX_WORKERS) as executor:
 

@@ -37,7 +37,7 @@ print(f"Single thread: {time.clock() - t:.3f} seconds")
 # ------- VERSUS ------- #
 
 
-def go(count=1):
+def go(count=1) -> None:
     t = time.clock()
     pool = ThreadPool(count)
     results = pool.map(urlopen, urls)

@@ -8,13 +8,13 @@ import time
 from threading import Thread
 
 
-def go(callback_func):
+def go(callback_func) -> None:
     while True:
         time.sleep(2)
         callback_func(":)")
 
 
-def it_callback(s):
+def it_callback(s) -> None:
     global status
     status = s
 

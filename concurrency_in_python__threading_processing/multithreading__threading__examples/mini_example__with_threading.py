@@ -8,7 +8,7 @@ import threading
 import time
 
 
-def run(name="main", sleep_seconds=None):
+def run(name="main", sleep_seconds=None) -> None:
     if sleep_seconds:
         time.sleep(sleep_seconds)
 

@@ -43,13 +43,13 @@ logger = get_logger("collector_bash_im")
 
 
 class Quote:
-    def __init__(self, id, date, rating, text):
+    def __init__(self, id, date, rating, text) -> None:
         self.id = id
         self.date = date
         self.rating = rating
         self.text = text
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             "<Quote(id: {id}. Date: {date}. Rating: '{rating}'. "
             "Text len: {})>".format(len(self.text), **self.__dict__)

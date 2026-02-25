@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from PyQt5.Qt import QApplication, Qt, QLabel
 
 
-def go(name):
+def go(name) -> None:
     app = QApplication([])
 
     mw = QLabel()

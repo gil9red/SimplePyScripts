@@ -15,7 +15,7 @@ from random import randint
 MAX_WORKERS = 5
 
 
-def run(name):
+def run(name) -> str:
     time.sleep(randint(1, 4))
     return f"name: {name}"
 

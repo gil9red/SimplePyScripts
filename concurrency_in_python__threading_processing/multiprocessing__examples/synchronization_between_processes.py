@@ -11,7 +11,7 @@ from multiprocessing import Process, Lock
 import time
 
 
-def f(lock, i):
+def f(lock, i) -> None:
     with lock:
         print("hello world", i)
 

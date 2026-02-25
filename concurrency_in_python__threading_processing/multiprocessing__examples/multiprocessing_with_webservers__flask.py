@@ -12,19 +12,19 @@ import requests
 from flask import Flask
 
 
-def go(port: int):
+def go(port: int) -> None:
     app = Flask(__name__)
 
     logging.basicConfig(level=logging.DEBUG)
 
     @app.route("/")
-    def index():
+    def index() -> str:
         return f"Hello World! (port={port})"
 
     app.run(port=port)
 
 
-def go_parser(urls):
+def go_parser(urls) -> None:
     while True:
         for url in urls:
             try:

@@ -16,14 +16,14 @@ N = 500
 
 
 # A CPU heavy calculation, just as an example. This can be anything you like
-def heavy(n, myid):
+def heavy(n, myid) -> None:
     for x in range(1, n):
         for y in range(1, n):
             x**y
     print(myid, "is done")
 
 
-def sequential(n):
+def sequential(n) -> None:
     for i in range(n):
         heavy(N, i)
 

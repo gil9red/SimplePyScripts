@@ -9,12 +9,12 @@ from multiprocessing__QApplication__in_other_process import go as go_qt
 from multiprocessing__Tkinter__in_other_process import go as go_tk
 
 
-def create_qt():
+def create_qt() -> None:
     p = Process(target=go_qt, args=("Qt",))
     p.start()
 
 
-def create_tk():
+def create_tk() -> None:
     p = Process(target=go_tk, args=("Tk",))
     p.start()
 

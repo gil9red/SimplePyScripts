@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from multiprocessing import Process, Queue
 
 
-def f(q, name):
+def f(q, name) -> None:
     q.put("Hello, " + name)
 
 

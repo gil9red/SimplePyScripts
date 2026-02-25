@@ -45,12 +45,12 @@ DIRECTION_DICT = {
 DEBUG = False
 
 
-def log(*args, **kwargs):
+def log(*args, **kwargs) -> None:
     DEBUG and print(*args, **kwargs)
 
 
 class Bender:
-    def __init__(self, city_map):
+    def __init__(self, city_map) -> None:
         self.objects_map = dict()
 
         # Соберем все объекты на карте в словарь, исключаются пустые места и стенки
@@ -81,7 +81,7 @@ class Bender:
         self.steps = list()
         # self.steps_log_list = list()
 
-    def _set_pos_i(self, value):
+    def _set_pos_i(self, value) -> None:
         # Устанавливаем i, и старое j
         self.pos = value, self.pos[1]
 
@@ -90,7 +90,7 @@ class Bender:
 
     pos_i = property(_get_pos_i, _set_pos_i)
 
-    def _set_pos_j(self, value):
+    def _set_pos_j(self, value) -> None:
         # Устанавливаем старое i и j
         self.pos = self.pos[0], value
 
@@ -99,7 +99,7 @@ class Bender:
 
     pos_j = property(_get_pos_j, _set_pos_j)
 
-    def _set_pos(self, value):
+    def _set_pos(self, value) -> None:
         self.objects_map["@"] = value
 
     def _get_pos(self):
@@ -120,13 +120,13 @@ class Bender:
 
         return map
 
-    def print_city_map(self):
+    def print_city_map(self) -> None:
         log()
         for row in self.city_map():
             log(*row, sep="")
         log()
 
-    def _set_direction_name(self, name):
+    def _set_direction_name(self, name) -> None:
         self._direction_name = name
 
     def _get_direction_name(self):

@@ -9,10 +9,10 @@ from threading import Thread, current_thread
 
 
 class User:
-    def __init__(self, name):
+    def __init__(self, name) -> None:
         self.name = name
 
-    def post_msg(self):
+    def post_msg(self) -> None:
         time.sleep(3)
 
         # Написать пользователю
@@ -26,7 +26,7 @@ user_2 = User("Petya")
 Thread(target=user_2.post_msg).start()
 
 
-def foo(name):
+def foo(name) -> None:
     time.sleep(5)
 
     # Написать пользователю

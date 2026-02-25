@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from multiprocessing import Process, Pipe
 
 
-def f(con, name):
+def f(con, name) -> None:
     con.send("Hello, " + name)
     con.close()
 

@@ -14,7 +14,7 @@ import time
 from about_1__single_thread import heavy, WORKERS, N
 
 
-def threaded(n):
+def threaded(n) -> None:
     threads = []
 
     for i in range(n):

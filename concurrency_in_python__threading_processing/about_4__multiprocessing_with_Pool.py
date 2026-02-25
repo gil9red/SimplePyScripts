@@ -14,11 +14,11 @@ import time
 from about_1__single_thread import heavy, WORKERS, N
 
 
-def doit(n):
+def doit(n) -> None:
     heavy(N, n)
 
 
-def pooled(n):
+def pooled(n) -> None:
     # By default, our pool will have processes slots
     with multiprocessing.Pool() as pool:
         pool.map(doit, range(n))

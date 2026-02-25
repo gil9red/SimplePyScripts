@@ -14,7 +14,7 @@ import time
 from about_1__single_thread import heavy, WORKERS, N
 
 
-def multiproc(n):
+def multiproc(n) -> None:
     processes = []
 
     for i in range(n):

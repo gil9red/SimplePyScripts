@@ -8,7 +8,7 @@ import threading
 import time
 
 
-def run():
+def run() -> None:
     i = 1
 
     # Бесконечный цикл

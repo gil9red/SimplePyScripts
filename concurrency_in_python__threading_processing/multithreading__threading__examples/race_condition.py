@@ -13,14 +13,14 @@ DATA = {"number": 0}
 lock = threading.Lock()
 
 
-def inc(*args):
+def inc(*args) -> None:
     global number
 
     DATA["number"] += 1
     number += 1
 
 
-def inc_lock(*args):
+def inc_lock(*args) -> None:
     global number
 
     with lock:

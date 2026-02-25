@@ -8,7 +8,7 @@ from multiprocessing import Process, current_process
 import time
 
 
-def run():
+def run() -> None:
     print(current_process())
 
     for i in "Hello World!":

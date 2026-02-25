@@ -10,7 +10,7 @@ import threading
 from flask import Flask
 
 
-def run(port: int = 80):
+def run(port: int = 80) -> None:
     app = Flask(__name__)
     logging.basicConfig(level=logging.DEBUG)
 

@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 import tkinter as tk
 
 
-def go(name):
+def go(name) -> None:
     app = tk.Tk()
     app.minsize(150, 50)
 
