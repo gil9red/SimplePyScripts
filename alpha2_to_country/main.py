@@ -18,7 +18,7 @@ FILE_NAME_COUNTRY = Path(__file__).resolve().parent / "alpha2_to_country.json"
 ALPHA2_TO_COUNTRY = None
 
 
-def init():
+def init() -> None:
     global ALPHA2_TO_COUNTRY
 
     if FILE_NAME_COUNTRY.exists():

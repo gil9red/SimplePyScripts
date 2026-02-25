@@ -24,7 +24,7 @@ except:
 from bin2str import bin2str, str2bin
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -37,7 +37,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("bin2str")
@@ -65,13 +65,13 @@ class Widget(QWidget):
 
         self.setLayout(layout)
 
-    def _bin2str(self):
+    def _bin2str(self) -> None:
         text = self.plain_text_bin.toPlainText()
         text = bin2str(text)
 
         self.plain_text_str.setPlainText(text)
 
-    def _str2bin(self):
+    def _str2bin(self) -> None:
         text = self.plain_text_str.toPlainText()
         text = str2bin(text)
 

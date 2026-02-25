@@ -9,7 +9,7 @@ import sys
 
 # SOURCE: https://stackoverflow.com/a/1060872/5909792
 class mod_call(object):
-    def __call__(self, text):
+    def __call__(self, text) -> None:
         print(text)
 
 

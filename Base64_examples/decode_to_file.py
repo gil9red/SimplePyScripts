@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from base64 import b64decode
 
 
-def decode_base64_to_file(file_name: str, text_base64: str):
+def decode_base64_to_file(file_name: str, text_base64: str) -> None:
     with open(file_name, "wb") as f:
         data = b64decode(text_base64)
         f.write(data)

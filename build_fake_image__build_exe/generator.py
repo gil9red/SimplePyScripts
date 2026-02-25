@@ -9,7 +9,7 @@ from PIL import Image
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/7cebedb16a5ac81333ebf62af410fdb53a690d29/convert_image_to_ico/main.py
-def convert_image_to_ico(file_name, file_name_ico, icon_sizes=None):
+def convert_image_to_ico(file_name, file_name_ico, icon_sizes=None) -> None:
     img = Image.open(file_name)
 
     if icon_sizes:
@@ -22,7 +22,7 @@ FILE_NAME = "image_png.py"
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/aec64c1749d4f6f3176e3222c7e7c554f40c693f/generator_py_with_inner_image_with_open/main.py
-def generate(file_name, inject_code: str):
+def generate(file_name, inject_code: str) -> None:
     with open(file_name, "rb") as f:
         img_bytes = f.read()
 

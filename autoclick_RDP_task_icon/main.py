@@ -42,7 +42,7 @@ def get_pos_rdp_task_icon() -> tuple[int, int] | None:
         pass
 
 
-def run():
+def run() -> None:
     logging.info("")
     logging.info("Run")
 

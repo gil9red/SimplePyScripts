@@ -17,7 +17,7 @@ if __name__ == "__main__":
     button = QPushButton("Add")
     text_edit = QTextEdit()
 
-    def add_to_text():
+    def add_to_text() -> None:
         text = line_edit.text()
         text_edit.append(text)
 
