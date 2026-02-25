@@ -5,61 +5,72 @@ __author__ = "ipetrash"
 
 
 import fnmatch
+import argparse
+
 from pathlib import Path
 
 
-def process(path: Path, include: str, excludes: list[str], encoding: str = "utf-8"):
-    path_exclude: Path = path / "additional_layers_exclude.bat"
-    path_restore: Path = path / "additional_layers_restore_exclude.bat"
+def process(
+    root_path: Path,
+    include_glob: str,
+    exclude_patterns: list[str],
+    encoding: str = "utf-8",
+):
+    file_exclude: Path = root_path / "svn_layers_exclude.bat"
+    file_restore: Path = root_path / "svn_layers_restore.bat"
 
-    print(f"Writing to file {path_exclude}")
-    print(f"Writing to file {path_restore}")
+    print(f"Scanning directory: {root_path.absolute()}")
 
-    with (
-        open(path_exclude, "w", encoding=encoding) as f_exclude,
-        open(path_restore, "w", encoding=encoding) as f_restore,
-    ):
-        for p in path.glob(include):
-            if not p.is_dir():
-                continue
+    target_dirs: list[Path] = [p for p in root_path.glob(include_glob) if p.is_dir()]
+    if not target_dirs:
+        print("No matching directories found.")
+        return
 
-            dir_name: str = p.name
+    # Подготавливаем списки строк для записи
+    lines_exclude: list[str] = ["@echo off"]
+    lines_restore: list[str] = ["@echo off"]
 
-            is_exclude: bool = any(
-                True for pattern in excludes if fnmatch.fnmatch(dir_name, pattern)
-            )
-            if is_exclude:
-                f_exclude.write("REM ")  # NOTE: Комментарий для Windows
-            f_exclude.write(f"svn update --set-depth exclude {dir_name}\n")
+    for p in target_dirs:
+        dir_name: str = p.name
+        is_excluded: bool = any(
+            fnmatch.fnmatch(dir_name, pat) for pat in exclude_patterns
+        )
 
-            f_restore.write(f"svn update --set-depth infinity {dir_name}\n")
+        prefix: str = "REM " if is_excluded else ""
+        lines_exclude.append(f"{prefix}svn update --set-depth exclude {dir_name}")
+        lines_restore.append(f"{prefix}svn update --set-depth infinity {dir_name}")
+
+    file_exclude.write_text("\n".join(lines_exclude) + "\n", encoding=encoding)
+    file_restore.write_text("\n".join(lines_restore) + "\n", encoding=encoding)
+
+    print(f"Done! Created '{file_exclude.name}' and '{file_restore.name}'")
 
 
 if __name__ == "__main__":
-    import argparse
-
     parser = argparse.ArgumentParser(
-        description="Generating batch files to exclude additional layers folders",
+        description="Generates SVN batch scripts to manage folder depth (exclude/include).",
     )
     parser.add_argument(
         "path",
-        metavar="/PATH/TO/PROJECT",
+        metavar="PROJECT_PATH",
         type=Path,
-        help="Path to project (the directory containing branch.xml)",
+        help="Path to the project directory",
     )
     parser.add_argument(
         "--include",
-        type=str,
         default="com.tranzaxis.*",
-        help="Glob for include folders (default: %(default)s)",
+        help="Glob pattern for directories to process (default: %(default)s)",
     )
     parser.add_argument(
         "--excludes",
         nargs="+",
-        type=str,
         default=["com.tranzaxis.experimental", "com.tranzaxis.demo"],
-        help="Globs for exclude folders (default: %(default)s)",
+        help="Globs for directories to comment out in exclude script (default: %(default)s)",
     )
+
     args = parser.parse_args()
+
+    if not args.path.exists():
+        parser.error(f"The path {args.path} does not exist.")
 
     process(args.path, args.include, args.excludes)
