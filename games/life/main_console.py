@@ -20,7 +20,7 @@ from board import Board, StepResultEnum, get_random_seed
 
 
 class MyLateFigletText(StaticRenderer):
-    def __init__(self, rendered_text_func: Callable[[], str], **kwargs):
+    def __init__(self, rendered_text_func: Callable[[], str], **kwargs) -> None:
         super().__init__()
 
         self.rendered_text_func = rendered_text_func
@@ -45,7 +45,7 @@ class BoardWidget(Frame):
         height: int,
         width: int,
         next_scene: str,
-    ):
+    ) -> None:
         self.y = y
         self.x = x
         self.height = height
@@ -70,7 +70,7 @@ class BoardWidget(Frame):
 
         self.thread = Thread(target=self._run_timer, daemon=True)
 
-    def start(self, timer_ms: int, seed: str):
+    def start(self, timer_ms: int, seed: str) -> None:
         self.is_fail = False
         self.timer_secs = timer_ms / 1000
 
@@ -81,7 +81,7 @@ class BoardWidget(Frame):
         # TODO: RuntimeError: threads can only be started once
         self.thread.start()
 
-    def _run_timer(self):
+    def _run_timer(self) -> None:
         while self.board.do_step() == StepResultEnum.OK:
             time.sleep(self.timer_secs)
 
@@ -124,7 +124,7 @@ class MenuWidget(Frame):
             self,
             screen: Screen,
             y: int, x: int, height: int, width: int,
-    ):
+    ) -> None:
         self.y = y
         self.x = x
         self.height = height
@@ -167,7 +167,7 @@ class MenuWidget(Frame):
     def get_seed(self) -> str:
         return self.le_seed.value
 
-    def _start(self):
+    def _start(self) -> None:
         # TODO: validator не работает. Не помогает save и validate
         self.save(validate=True)
 
@@ -178,7 +178,7 @@ class MenuWidget(Frame):
             )
 
 
-def demo(screen: Screen, scene: Scene):
+def demo(screen: Screen, scene: Scene) -> None:
     menu_widget = MenuWidget(
         screen,
         y=0, x=0,

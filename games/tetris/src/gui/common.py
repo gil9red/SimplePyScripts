@@ -43,7 +43,7 @@ def draw_cell_board(
     pen: Qt.GlobalColor = Qt.NoPen,
     cell_size: int = CELL_SIZE,
     indent: int = 0,
-):
+) -> None:
     painter.setPen(pen)
     painter.setBrush(color)
     painter.drawRect(

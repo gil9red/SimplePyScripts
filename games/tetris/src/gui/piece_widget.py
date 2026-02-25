@@ -14,12 +14,12 @@ from .common import CELL_SIZE, draw_cell_board
 class PieceWidget(QWidget):
     INDENT: int = 1
 
-    def __init__(self, parent: QWidget | None = None):
+    def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
 
         self.piece: Piece | None = None
 
-    def set_piece(self, piece: Piece):
+    def set_piece(self, piece: Piece) -> None:
         self.piece = piece
         self.update()
 
@@ -27,7 +27,7 @@ class PieceWidget(QWidget):
         size = (CELL_SIZE * 4) + (self.INDENT * 2)
         return QSize(size, size)
 
-    def paintEvent(self, event: QPaintEvent):
+    def paintEvent(self, event: QPaintEvent) -> None:
         if not self.piece:
             return
 

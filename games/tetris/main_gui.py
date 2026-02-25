@@ -39,7 +39,7 @@ from src.gui.board_widget import BoardWidget
 from src.gui.piece_widget import PieceWidget
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -95,7 +95,7 @@ class HighScore:
 class MainWindow(QWidget):
     TITLE: str = "Tetris"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.high_scores: list[HighScore] = []
@@ -197,15 +197,15 @@ class MainWindow(QWidget):
 
         self._update_states()
 
-    def _on_before_start(self):
+    def _on_before_start(self) -> None:
         self.board_widget.seed = None
         if self.cb_random.isChecked():
             self.board_widget.seed = self.le_seed.text()
 
-    def _do_start(self):
+    def _do_start(self) -> None:
         self.board_widget.start()
 
-    def _on_finish(self):
+    def _on_finish(self) -> None:
         self.high_scores.append(
             HighScore(
                 date_added=datetime.now(),
@@ -229,7 +229,7 @@ class MainWindow(QWidget):
             self.high_scores = self.high_scores[:number]
         return self.high_scores
 
-    def _update_states(self):
+    def _update_states(self) -> None:
         score: int = self.board_widget.board.score
         playing_time = ms_to_str(self.board_widget.playing_time_ms)
 
@@ -264,7 +264,7 @@ class MainWindow(QWidget):
             is_started or self.board_widget.status == StatusGameEnum.PAUSED
         )
 
-    def _fill_high_scores_view(self):
+    def _fill_high_scores_view(self) -> None:
         lines = ["High scores (top 5):"]
 
         for i, high_score in enumerate(self.get_top_high_scores(), start=1):
@@ -278,17 +278,17 @@ class MainWindow(QWidget):
     def get_raw_high_scores(self) -> list[dict[str, Any]]:
         return [high_score.to_dict() for high_score in self.high_scores]
 
-    def set_raw_high_scores(self, items: list[dict[str, Any]]):
+    def set_raw_high_scores(self, items: list[dict[str, Any]]) -> None:
         self.high_scores = [HighScore.parse(data) for data in items]
         self._fill_high_scores_view()
 
-    def save_high_scores(self):
+    def save_high_scores(self) -> None:
         FILE_HIGH_SCORES.write_text(
             json.dumps(self.get_raw_high_scores(), indent=4),
             encoding="utf-8",
         )
 
-    def load_high_scores(self):
+    def load_high_scores(self) -> None:
         if not FILE_HIGH_SCORES.exists():
             return
 
@@ -297,7 +297,7 @@ class MainWindow(QWidget):
         )
         self.set_raw_high_scores(items)
 
-    def keyReleaseEvent(self, event: QKeyEvent):
+    def keyReleaseEvent(self, event: QKeyEvent) -> None:
         self.board_widget.process_key(event.key())
         self._update_states()
 

@@ -91,7 +91,7 @@ class Game:
     MAX_STONES: int = 3
     MAX_NUMBER: int = 21
 
-    def start(self):
+    def start(self) -> None:
         self.player1.game = self
         self.player2.game = self
 

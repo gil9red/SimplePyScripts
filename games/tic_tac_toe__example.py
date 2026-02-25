@@ -15,7 +15,7 @@ except:
 
 
 class Window(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         # Матрица 3 на 3
@@ -26,7 +26,7 @@ class Window(QWidget):
         # If True -- X else -- O
         self._current_figure_flag = True
 
-    def _check_win(self):
+    def _check_win(self) -> None:
         b = self._board_tic_tac_toe
         win_X = False
         win_O = False
@@ -80,7 +80,7 @@ class Window(QWidget):
             QMessageBox.information(self, "Winner", "Win O")
             return
 
-    def mouseReleaseEvent(self, e):
+    def mouseReleaseEvent(self, e) -> None:
         # Определяем позицию клика
         i = e.pos().y() // self._size_cell
         j = e.pos().x() // self._size_cell
@@ -97,7 +97,7 @@ class Window(QWidget):
 
         self._check_win()
 
-    def paintEvent(self, e):
+    def paintEvent(self, e) -> None:
         painter = QPainter(self)
 
         painter.setPen(Qt.black)

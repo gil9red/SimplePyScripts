@@ -23,7 +23,7 @@ class BoardWidget(QWidget):
     on_before_start = pyqtSignal()
     on_finish = pyqtSignal()
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.board = Board()
@@ -46,7 +46,7 @@ class BoardWidget(QWidget):
         height = (CELL_SIZE * rows) + (self.INDENT * 2)
         return QSize(width, height)
 
-    def _fill_random(self):
+    def _fill_random(self) -> None:
         while True:
             try:
                 self.board.clear()
@@ -84,7 +84,7 @@ class BoardWidget(QWidget):
             finally:
                 self.board.score = 0
 
-    def start(self):
+    def start(self) -> None:
         if self.status not in [StatusGameEnum.INITED, StatusGameEnum.FINISHED]:
             return
 
@@ -104,7 +104,7 @@ class BoardWidget(QWidget):
         return self.__status
 
     @status.setter
-    def status(self, value: StatusGameEnum):
+    def status(self, value: StatusGameEnum) -> None:
         if self.__status == value:
             return
 
@@ -126,14 +126,14 @@ class BoardWidget(QWidget):
                 self.__timer.stop()
                 self.on_finish.emit()
 
-    def abort_game(self):
+    def abort_game(self) -> None:
         self.status = StatusGameEnum.FINISHED
 
-    def _on_logic(self):
+    def _on_logic(self) -> None:
         if not self.board.do_step():
             self.abort_game()
 
-    def _on_tick(self):
+    def _on_tick(self) -> None:
         self._on_logic()
 
         self.update()
@@ -142,7 +142,7 @@ class BoardWidget(QWidget):
         self.on_tick.emit()
 
     @painter_context
-    def _draw_board(self, painter: QPainter):
+    def _draw_board(self, painter: QPainter) -> None:
         # Рисование заполненных ячеек
         for y, row in enumerate(self.board.matrix):
             for x, cell_color in enumerate(row):
@@ -179,7 +179,7 @@ class BoardWidget(QWidget):
             x2 += self.cell_size
 
     @painter_context
-    def _draw_current_piece(self, painter: QPainter):
+    def _draw_current_piece(self, painter: QPainter) -> None:
         if not self.board.current_piece:
             return
 
@@ -194,7 +194,7 @@ class BoardWidget(QWidget):
             )
 
     @painter_context
-    def _draw_shadow_of_current_piece(self, painter: QPainter):
+    def _draw_shadow_of_current_piece(self, painter: QPainter) -> None:
         if not self.board.current_piece:
             return
 
@@ -231,7 +231,7 @@ class BoardWidget(QWidget):
                 )
 
     @painter_context
-    def _draw_glass(self, painter: QPainter):
+    def _draw_glass(self, painter: QPainter) -> None:
         match self.status:
             case StatusGameEnum.INITED:
                 text = "Press START"
@@ -274,7 +274,7 @@ class BoardWidget(QWidget):
         painter.drawRect(self.rect())
         painter.drawText(self.rect(), Qt.AlignCenter, text)
 
-    def process_key(self, key: int):
+    def process_key(self, key: int) -> None:
         if key == Qt.Key_Space and self.status in [
             StatusGameEnum.STARTED,
             StatusGameEnum.PAUSED,
@@ -309,7 +309,7 @@ class BoardWidget(QWidget):
             self.update()
             return
 
-    def resizeEvent(self, event: QResizeEvent):
+    def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
 
         w_aspect = event.size().width() // self.board.COLS
@@ -319,7 +319,7 @@ class BoardWidget(QWidget):
 
         self.update()
 
-    def paintEvent(self, event: QPaintEvent):
+    def paintEvent(self, event: QPaintEvent) -> None:
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
 

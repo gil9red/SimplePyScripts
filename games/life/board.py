@@ -25,7 +25,7 @@ class StepResultEnum(enum.Enum):
 class Board(QObject):
     on_update_generation = pyqtSignal(int)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.rows = 100
@@ -38,7 +38,7 @@ class Board(QObject):
 
         self.last_step_result: StepResultEnum = None
 
-    def generate(self, seed: str = ""):
+    def generate(self, seed: str = "") -> None:
         self.seed = seed
         if not self.seed:
             self.seed = get_random_seed()
@@ -62,7 +62,7 @@ class Board(QObject):
         return self.__generation_number
 
     @generation_number.setter
-    def generation_number(self, value: int):
+    def generation_number(self, value: int) -> None:
         self.__generation_number = value
         self.on_update_generation.emit(self.generation_number)
 

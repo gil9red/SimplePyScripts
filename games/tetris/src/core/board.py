@@ -18,7 +18,7 @@ class Board(QObject):
     on_next_piece = pyqtSignal(Piece)
     on_update_score = pyqtSignal(int)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.matrix: list[list[QColor | None]] = [
@@ -35,7 +35,7 @@ class Board(QObject):
         return self.__next_piece
 
     @next_piece.setter
-    def next_piece(self, value: Piece | None):
+    def next_piece(self, value: Piece | None) -> None:
         self.__next_piece = value
         self.on_next_piece.emit(value)
 
@@ -44,23 +44,23 @@ class Board(QObject):
         return self.__score
 
     @score.setter
-    def score(self, value: int):
+    def score(self, value: int) -> None:
         self.__score = value
         self.on_update_score.emit(value)
 
-    def add_piece(self, piece: Piece):
+    def add_piece(self, piece: Piece) -> None:
         logger.debug("[add_piece]")
         for x, y in piece.get_points():
             self.matrix[y][x] = piece.get_color()
 
-    def clear(self):
+    def clear(self) -> None:
         self.score = 0
 
         for row in self.matrix:
             for i in range(len(row)):
                 row[i] = None
 
-    def _do_make_collapse_of_rows(self):
+    def _do_make_collapse_of_rows(self) -> None:
         to_delete: list[list[QColor | None]] = []
         for row in reversed(self.matrix):
             if all(color for color in row):

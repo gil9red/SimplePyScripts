@@ -11,7 +11,7 @@ import sys
 from PyQt5.Qt import *
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -25,14 +25,14 @@ sys.excepthook = log_uncaught_exceptions
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/907a596654aabb9948934b68b0f7b1fe392e23bd/qt__pyqt__pyside__pyqode/pyqt__QListWidget__Flow.py
 class WrapListWidget(QListWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setFlow(QListView.LeftToRight)
         self.setWrapping(True)
         self.setUniformItemSizes(True)
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
 
         self.setWrapping(self.isWrapping())
@@ -41,7 +41,7 @@ class WrapListWidget(QListWidget):
 class PageGuessWidget(QWidget):
     about_prev = pyqtSignal()
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.lives = 10
@@ -71,11 +71,11 @@ class PageGuessWidget(QWidget):
 
         self._update_states()
 
-    def _update_states(self):
+    def _update_states(self) -> None:
         self.lbl_lives.setText(f"Жизней: {self.lives}")
         self.lbl_level.setText(f"Уровень: {self.level}")
 
-    def start_game(self, level: int, lives=10):
+    def start_game(self, level: int, lives=10) -> None:
         self.lives = lives
         self.level = level
 
@@ -88,7 +88,7 @@ class PageGuessWidget(QWidget):
 
         self._update_states()
 
-    def _on_number_clicked(self, item: QListWidgetItem):
+    def _on_number_clicked(self, item: QListWidgetItem) -> None:
         num = int(item.text())
 
         if self.guess_number == num:
@@ -122,7 +122,7 @@ class PageGuessWidget(QWidget):
 class PageSelectLevelWidget(QWidget):
     about_select_level = pyqtSignal(int)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.grid_layout = QGridLayout()
@@ -140,7 +140,7 @@ class PageSelectLevelWidget(QWidget):
 
         self.setLayout(layout)
 
-    def _add_levels(self, levels):
+    def _add_levels(self, levels) -> None:
         start_row = self.grid_layout.rowCount()
 
         for row, rows in enumerate(levels, start=start_row):
@@ -154,7 +154,7 @@ class PageSelectLevelWidget(QWidget):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Guess the number")
@@ -174,7 +174,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.stack_widget)
 
-    def _on_select_level(self, level: int):
+    def _on_select_level(self, level: int) -> None:
         # Переключаемся на страницу с игрой
         self.stack_widget.setCurrentWidget(self.page_guess)
 

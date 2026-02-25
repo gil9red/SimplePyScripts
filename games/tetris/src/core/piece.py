@@ -21,7 +21,7 @@ class Piece(abc.ABC):
         4: 1,
     }
 
-    def __init__(self, x: int, y: int, parent: "Board" = None):
+    def __init__(self, x: int, y: int, parent: "Board" = None) -> None:
         self.x = x
         self.y = y
         self.parent = parent
@@ -124,10 +124,10 @@ class Piece(abc.ABC):
     def get_max_y(self) -> int:
         return max(y for _, y in self.get_points())
 
-    def go_to_next_state(self):
+    def go_to_next_state(self) -> None:
         self.current_state = self.STATES[self.current_state]
 
-    def set_points(self, points: list[tuple[int, int]]):
+    def set_points(self, points: list[tuple[int, int]]) -> None:
         self.points = points
 
     def get_points(self) -> list[tuple[int, int]]:

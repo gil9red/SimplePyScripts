@@ -25,7 +25,7 @@ from PyQt5.QtCore import Qt, QTimer
 from board import Board, StepResultEnum, get_random_seed
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -41,13 +41,13 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class BoardWidget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.board = Board()
         self.cell_size = 1
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
 
         self.cell_size = min(self.width(), self.height()) // min(
@@ -58,14 +58,14 @@ class BoardWidget(QWidget):
 
         self.update()
 
-    def _draw_cell_board(self, painter: QPainter, x: int, y: int, color: QColor):
+    def _draw_cell_board(self, painter: QPainter, x: int, y: int, color: QColor) -> None:
         painter.setPen(Qt.NoPen)
         painter.setBrush(color)
         painter.drawRect(
             x * self.cell_size, y * self.cell_size, self.cell_size, self.cell_size
         )
 
-    def _draw_board(self, painter: QPainter):
+    def _draw_board(self, painter: QPainter) -> None:
         painter.save()
 
         # Рисование заполненных ячеек
@@ -78,7 +78,7 @@ class BoardWidget(QWidget):
 
         painter.restore()
 
-    def paintEvent(self, event: QPaintEvent):
+    def paintEvent(self, event: QPaintEvent) -> None:
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
 
@@ -90,7 +90,7 @@ class MainWindow(QWidget):
 
     TITLE = "Life"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.board_widget = BoardWidget()
@@ -138,16 +138,16 @@ class MainWindow(QWidget):
         self.setLayout(main_layout)
         self._update_states()
 
-    def _do_rand_seed(self):
+    def _do_rand_seed(self) -> None:
         self.le_seed.setText(get_random_seed())
 
-    def start(self):
+    def start(self) -> None:
         self.board.generate(seed=self.le_seed.text())
 
         self.timer.stop()
         self.start_pause_timer()
 
-    def start_pause_timer(self):
+    def start_pause_timer(self) -> None:
         if self.timer.isActive():
             self.timer.stop()
         else:
@@ -155,7 +155,7 @@ class MainWindow(QWidget):
 
         self._update_states()
 
-    def _update_states(self):
+    def _update_states(self) -> None:
         is_paused = not self.timer.isActive()
         prefix = "[IS PAUSED] " if is_paused else ""
         self.setWindowTitle(
@@ -168,12 +168,12 @@ class MainWindow(QWidget):
 
         self.button_timer.setChecked(self.timer.isActive())
 
-    def abort_game(self, reason: str):
+    def abort_game(self, reason: str) -> None:
         self.timer.stop()
         self._update_states()
         QMessageBox.information(self, "Информация", f"Проигрыш! {reason}")
 
-    def _on_logic(self):
+    def _on_logic(self) -> None:
         result = self.board.do_step()
         if result == StepResultEnum.OK:
             return
@@ -190,7 +190,7 @@ class MainWindow(QWidget):
 
         self.abort_game(reason)
 
-    def _on_tick(self):
+    def _on_tick(self) -> None:
         self._on_logic()
         self._update_states()
         self.board_widget.update()

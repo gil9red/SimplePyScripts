@@ -35,7 +35,7 @@ PIECE_BY_COLOR = {
 
 
 class MyLateFigletText(StaticRenderer):
-    def __init__(self, rendered_text_func: Callable[[], str], **kwargs):
+    def __init__(self, rendered_text_func: Callable[[], str], **kwargs) -> None:
         super().__init__()
 
         self.rendered_text_func = rendered_text_func
@@ -60,7 +60,7 @@ class BoardWidget(Frame):
         height: int,
         width: int,
         next_scene: str,
-    ):
+    ) -> None:
         self.y = y
         self.x = x
         self.height = height
@@ -85,13 +85,13 @@ class BoardWidget(Frame):
         self.thread = Thread(target=self._run_timer, daemon=True)
         self.thread.start()
 
-    def _run_timer(self):
+    def _run_timer(self) -> None:
         while self.board.do_step():
             time.sleep(0.3)
 
         self.is_fail = True
 
-    def update(self, frame_no: int):
+    def update(self, frame_no: int) -> None:
         super().update(frame_no)
 
         if self.is_fail:
@@ -159,7 +159,7 @@ class NextPieceWidget(Frame):
         x: int,
         height: int,
         width: int,
-    ):
+    ) -> None:
         self.y = y
         self.x = x
         self.height = height
@@ -178,7 +178,7 @@ class NextPieceWidget(Frame):
         self.board = board
         self.next_piece = self.board.next_piece
 
-    def update(self, frame_no: int):
+    def update(self, frame_no: int) -> None:
         super().update(frame_no)
 
         self.next_piece = self.board.next_piece
@@ -208,7 +208,7 @@ class ScoreWidget(Frame):
         x: int,
         height: int,
         width: int,
-    ):
+    ) -> None:
         self.y = y
         self.x = x
         self.height = height
@@ -226,7 +226,7 @@ class ScoreWidget(Frame):
         self.set_theme("monochrome")
         self.board = board
 
-    def update(self, frame_no: int):
+    def update(self, frame_no: int) -> None:
         super().update(frame_no)
 
         self.screen.print_at(f"Score: {self.board.score}", self.x, self.y)
@@ -239,7 +239,7 @@ class ScoreWidget(Frame):
         return 5
 
 
-def demo(screen: Screen, scene: Scene):
+def demo(screen: Screen, scene: Scene) -> None:
     board = Board()
     scenes = [
         Scene(
