@@ -66,7 +66,7 @@ def update_product(
     name: str | None = None,
     price_minor: int | None = None,  # Копейки
     description: str | None = None,
-):
+) -> None:
     db.update_product(
         id=id,
         name=name,
@@ -85,15 +85,15 @@ def create_shopping_cart(product_ids: list[str] = None) -> models.IdBasedObj:
     return models.IdBasedObj(id=shopping_cart.id)
 
 
-def delete_shopping_cart(shopping_cart_id: str):
+def delete_shopping_cart(shopping_cart_id: str) -> None:
     db.delete_shopping_cart(shopping_cart_id)
 
 
 def add_product_in_shopping_cart(
     shopping_cart_id: str,
     product_id: str,
-):
-    return db.add_product_in_shopping_cart(
+) -> None:
+    db.add_product_in_shopping_cart(
         shopping_cart_id=shopping_cart_id,
         product_id=product_id,
     )
@@ -102,8 +102,8 @@ def add_product_in_shopping_cart(
 def remove_product_from_shopping_cart(
     shopping_cart_id: str,
     product_id: str,
-):
-    return db.remove_product_from_shopping_cart(
+) -> None:
+    db.remove_product_from_shopping_cart(
         shopping_cart_id=shopping_cart_id,
         product_id=product_id,
     )
@@ -143,7 +143,7 @@ def update_order(
     status: models.StatusOrderEnum | None = None,
     cancel_reason: str | None = None,
     context_user: models.User | None = None,
-):
+) -> None:
     # Клиент не может сам запускать выполнение заказа или завершать его
     if context_user is None and status in (models.StatusOrderEnum.IN_PROCESSED, models.StatusOrderEnum.FINISHED):
         raise fastapi.HTTPException(
@@ -177,7 +177,7 @@ def submit_order(
     id: str,
     status: models.StatusOrderEnum,
     context_user: models.User | None = None,
-):
+) -> None:
     update_order(
         id=id,
         status=status,

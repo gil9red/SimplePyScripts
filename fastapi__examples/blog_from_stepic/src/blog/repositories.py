@@ -27,7 +27,7 @@ class MemoryUsersRepository(UsersRepository):
     Реализация пользовательского хранилища в оперативной памяти.
     Пользователи инициализируются во время инициализации репозитория
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self.users = [
             Admin(
                 id="29ae7ebf-4445-42f2-9548-a3a54f095220",  # это uuid4 – уникальный идентификатор пользователя
@@ -70,13 +70,13 @@ class ArticlesRepository(ABC):
 
 
 class ShelveArticlesRepository(ArticlesRepository):
-    def __init__(self):
+    def __init__(self) -> None:
         self.db_name = "articles"
 
     def get_articles(self) -> list[Article]:
         with shelve.open(self.db_name) as db:
             return list(db.values())
 
-    def create_article(self, article: Article):
+    def create_article(self, article: Article) -> None:
         with shelve.open(self.db_name) as db:
             db[article.id] = article

@@ -31,7 +31,7 @@ class InvalidException(DbException):
 
 
 class InvalidOrderStatusException(InvalidException):
-    def __init__(self, prev_status: models.StatusOrderEnum, new_status: models.StatusOrderEnum):
+    def __init__(self, prev_status: models.StatusOrderEnum, new_status: models.StatusOrderEnum) -> None:
         super().__init__(f"Unable to change order status {prev_status.value!r} to {new_status.value!r}")
 
 
@@ -80,10 +80,10 @@ class DB:
         return self.db.get(name)
 
     @session()
-    def set_value(self, name: str, value: Any):
+    def set_value(self, name: str, value: Any) -> None:
         self.db[name] = value
 
-    def __init__(self, file_name: Path | str = DB_FILE_NAME):
+    def __init__(self, file_name: Path | str = DB_FILE_NAME) -> None:
         self.file_name: str = str(file_name)
         self.db: shelve.Shelf | None = None
 
@@ -93,7 +93,7 @@ class DB:
         return str(uuid4())
 
     @lock()
-    def rebuild_indexes(self, clear: bool = True):
+    def rebuild_indexes(self, clear: bool = True) -> None:
         indexes: dict[str, dict[str, str]] = self.get_value(self.KEY_INDEXES, default=dict())
 
         if self.KEY_USERS not in indexes:
@@ -111,14 +111,14 @@ class DB:
         self.set_value(self.KEY_INDEXES, indexes)
 
     @lock()
-    def add_index(self, table: str, key: str, id: str):
+    def add_index(self, table: str, key: str, id: str) -> None:
         indexes: dict[str, dict[str, str]] = self.get_value(self.KEY_INDEXES)
         indexes[table][key] = id
 
         self.set_value(self.KEY_INDEXES, indexes)
 
     @lock()
-    def remove_index(self, table: str, key: str):
+    def remove_index(self, table: str, key: str) -> None:
         indexes: dict[str, dict[str, str]] = self.get_value(self.KEY_INDEXES)
         indexes[table].pop(key)
 
@@ -130,7 +130,7 @@ class DB:
         return indexes[table].get(key)
 
     @lock()
-    def _do_init_db_objects(self):
+    def _do_init_db_objects(self) -> None:
         self.rebuild_indexes(clear=False)
 
         if self.KEY_USERS not in self.get_value(""):
@@ -271,7 +271,7 @@ class DB:
         name: str | None = None,
         price_minor: int | None = None,
         description: str | None = None,
-    ):
+    ) -> None:
         product = self.get_product(id, check_exists=True)
 
         if name is not None:
@@ -311,7 +311,7 @@ class DB:
         return obj
 
     @lock()
-    def delete_shopping_cart(self, shopping_cart_id: str):
+    def delete_shopping_cart(self, shopping_cart_id: str) -> None:
         # Проверка наличия
         self.get_shopping_cart(shopping_cart_id, check_exists=True)
 
@@ -325,7 +325,7 @@ class DB:
         self,
         shopping_cart_id: str,
         product_ids: list[str],
-    ):
+    ) -> None:
         shopping_cart: models.ShoppingCart = self.get_shopping_cart(
             shopping_cart_id, check_exists=True
         )
@@ -356,7 +356,7 @@ class DB:
         self,
         shopping_cart_id: str,
         product_id: str,
-    ):
+    ) -> None:
         shopping_cart: models.ShoppingCart = self.get_shopping_cart(
             shopping_cart_id, check_exists=True
         )
@@ -372,7 +372,7 @@ class DB:
         self,
         shopping_cart_id: str,
         product_id: str,
-    ):
+    ) -> None:
         shopping_cart: models.ShoppingCart = self.get_shopping_cart(
             shopping_cart_id, check_exists=True
         )

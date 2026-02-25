@@ -178,7 +178,7 @@ def create_shopping_cart(
 
 
 @router.delete("/shopping-cart/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_shopping_cart(id: str):
+def delete_shopping_cart(id: str) -> None:
     services.delete_shopping_cart(id)
 
 

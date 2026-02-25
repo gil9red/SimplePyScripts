@@ -23,7 +23,7 @@ router = APIRouter()  # это роутер, он нужен для FastAPI, ч�
 
 
 @router.get("/", response_class=HTMLResponse)
-def index():
+def index() -> str:
     return """
 <div><a href="https://stepik.org/lesson/1186984/step/7?unit=1222202">Урок</a></div>
 <br/>

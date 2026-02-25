@@ -28,7 +28,7 @@ async def unicorn_exception_handler(_: Request, exc: DbException):
 
 
 @app.get("/", response_class=HTMLResponse)
-def index():
+def index() -> str:
     return """\
 <!DOCTYPE html>
 <html>
