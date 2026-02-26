@@ -8,11 +8,11 @@ __author__ = "ipetrash"
 from pynput.keyboard import Key, Listener
 
 
-def on_press(key):
+def on_press(key) -> None:
     print(f"{key} pressed")
 
 
-def on_release(key):
+def on_release(key) -> bool | None:
     print(f"{key} release")
 
     if key == Key.esc:

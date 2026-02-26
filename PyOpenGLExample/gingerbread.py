@@ -18,7 +18,7 @@ x = 115
 y = 121
 
 
-def initFun():
+def initFun() -> None:
     glClearColor(1.0, 1.0, 1.0, 0.0)
     glColor3f(0.0, 0.0, 0.0)
     glPointSize(4.0)
@@ -27,7 +27,7 @@ def initFun():
     gluOrtho2D(0.0, 640.0, 0.0, 480.0)
 
 
-def mouseFun(button, state, xIn, yIn):
+def mouseFun(button, state, xIn, yIn) -> None:
     global x
     global y
     if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
@@ -37,7 +37,7 @@ def mouseFun(button, state, xIn, yIn):
     glutPostRedisplay()
 
 
-def displayFun():
+def displayFun() -> None:
     global x
     global y
     glClear(GL_COLOR_BUFFER_BIT)

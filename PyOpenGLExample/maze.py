@@ -38,7 +38,7 @@ MAZECOLS = 150
 
 
 class MazeCell:
-    def __init__(self, x, y):
+    def __init__(self, x, y) -> None:
         self.x = x
         self.y = y
         self.wall_north = True
@@ -49,7 +49,7 @@ class MazeCell:
 
 
 class Maze:
-    def __init__(self, dimx, dimy):
+    def __init__(self, dimx, dimy) -> None:
         self.numx = dimx
         self.numy = dimy
 
@@ -155,7 +155,7 @@ class Maze:
                 # Push it back on the list since this is our next node
                 cell_list.append(conn)
 
-    def draw(self):
+    def draw(self) -> None:
         """Draws the field"""
         glBegin(GL_LINES)
         for i in range(0, self.numx * self.numy):
@@ -184,7 +184,7 @@ class Maze:
 maze = Maze(MAZECOLS, MAZEROWS)
 
 
-def init_fun():
+def init_fun() -> None:
     glClearColor(1.0, 1.0, 1.0, 0.0)
     glColor3f(0.0, 0.0, 0.0)
     glMatrixMode(GL_PROJECTION)
@@ -193,7 +193,7 @@ def init_fun():
     gluOrtho2D(-1.0, WIDTH, -1.0, HEIGHT)
 
 
-def display_fun():
+def display_fun() -> None:
     glClear(GL_COLOR_BUFFER_BIT)
     maze.draw()
     glFlush()

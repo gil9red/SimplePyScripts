@@ -28,7 +28,7 @@ def add_vectors(angle1, length1, angle2, length2) -> tuple[float, float]:
     return angle, length
 
 
-def collide(p1, p2):
+def collide(p1, p2) -> None:
     dx = p1.x - p2.x
     dy = p1.y - p2.y
 
@@ -60,7 +60,7 @@ def collide(p1, p2):
 
 
 class Particle:
-    def __init__(self, x, y, size, mass=1):
+    def __init__(self, x, y, size, mass=1) -> None:
         self.x = x
         self.y = y
         self.size = size
@@ -71,17 +71,17 @@ class Particle:
         self.mass = mass
         self.drag = (self.mass / (self.mass + mass_of_air)) ** self.size
 
-    def display(self):
+    def display(self) -> None:
         pygame.draw.circle(
             screen, self.colour, (int(self.x), int(self.y)), self.size, self.thickness
         )
 
-    def move(self):
+    def move(self) -> None:
         self.x += math.sin(self.angle) * self.speed
         self.y -= math.cos(self.angle) * self.speed
         self.speed *= self.drag
 
-    def bounce(self):
+    def bounce(self) -> None:
         if self.x > width - self.size:
             self.x = 2 * (width - self.size) - self.x
             self.angle = -self.angle

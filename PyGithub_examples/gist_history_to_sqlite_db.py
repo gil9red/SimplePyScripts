@@ -12,7 +12,7 @@ def create_connect():
     return sqlite3.connect("gist_commits.sqlite")
 
 
-def init_db():
+def init_db() -> None:
     # Создание базы и таблицы
     with create_connect() as connect:
         connect.execute(

@@ -10,7 +10,7 @@ This code generates a checkerboard.
 """
 
 
-def initFun():
+def initFun() -> None:
     glClearColor(1.0, 1.0, 1.0, 0.0)
     glColor3f(0.0, 0.0, 0.0)
     glMatrixMode(GL_PROJECTION)
@@ -18,7 +18,7 @@ def initFun():
     gluOrtho2D(0.0, 640.0, 0.0, 480.0)
 
 
-def displayFun():
+def displayFun() -> None:
     CELL_SIZE = 40
 
     glClear(GL_COLOR_BUFFER_BIT)

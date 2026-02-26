@@ -11,7 +11,7 @@ from pynput.keyboard import Key, Listener
 import pyscreenshot as ImageGrab
 
 
-def on_release(key):
+def on_release(key) -> None:
     if key == Key.f7:
         print("screenshot")
 

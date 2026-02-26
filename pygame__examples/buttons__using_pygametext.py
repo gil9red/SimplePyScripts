@@ -30,7 +30,7 @@ pgt.button(
 pgt.text(10, 70, "Simple pygametext example.", (0, 120, 0), 20, 0)  # Add pgt Text
 
 
-def update():  # Update & Eventd
+def update() -> None:  # Update & Eventd
     global running
 
     events = pygame.event.get()
@@ -46,7 +46,7 @@ def update():  # Update & Eventd
             sys.exit()
 
 
-def draw():
+def draw() -> None:
     screen.fill((255, 255, 255))  # Clear screen
     pgt.draw()  # Draw all pgt elements from layer 0
 

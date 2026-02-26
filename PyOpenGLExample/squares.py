@@ -16,7 +16,7 @@ http://www.de-brauwer.be/wiki/wikka.php?wakka=PyOpenGLSquares
 """
 
 
-def initFun():
+def initFun() -> None:
     glClearColor(1.0, 1.0, 1.0, 0.0)
     glColor3f(0.0, 0.0, 0.0)
     glMatrixMode(GL_PROJECTION)
@@ -24,7 +24,7 @@ def initFun():
     gluOrtho2D(0.0, 640.0, 0.0, 480.0)
 
 
-def displayFun():
+def displayFun() -> None:
     glClear(GL_COLOR_BUFFER_BIT)
     for i in range(0, 25):
         gray = random.randint(0, 25) / 25.0

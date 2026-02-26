@@ -21,7 +21,7 @@ http://en.wikipedia.org/wiki/Chaos_game
 """
 
 
-def initFun():
+def initFun() -> None:
     glClearColor(1.0, 1.0, 1.0, 0.0)
     glColor3f(0.0, 0.0, 0.0)
     glPointSize(1.0)
@@ -30,7 +30,7 @@ def initFun():
     gluOrtho2D(0.0, 640.0, 0.0, 480.0)
 
 
-def displayFun():
+def displayFun() -> None:
     glClear(GL_COLOR_BUFFER_BIT)
     glBegin(GL_POINTS)
 

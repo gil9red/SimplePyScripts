@@ -15,7 +15,7 @@ WHITE = (255, 255, 255)
 
 
 class Ball(pygame.sprite.Sprite):
-    def __init__(self, size, pos=(0, 0), color=WHITE):
+    def __init__(self, size, pos=(0, 0), color=WHITE) -> None:
         super().__init__()
 
         self.image = pygame.Surface([size, size], pygame.SRCALPHA)

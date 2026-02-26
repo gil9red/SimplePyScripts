@@ -19,24 +19,24 @@ WHITE = (255, 255, 255)
 # It has nothing to do with the joysticks, just outputting the
 # information.
 class TextPrint:
-    def __init__(self):
+    def __init__(self) -> None:
         self.reset()
         self.font = pygame.font.Font(None, 20)
 
-    def print(self, screen, textString):
+    def print(self, screen, textString) -> None:
         textBitmap = self.font.render(textString, True, BLACK)
         screen.blit(textBitmap, [self.x, self.y])
         self.y += self.line_height
 
-    def reset(self):
+    def reset(self) -> None:
         self.x = 10
         self.y = 10
         self.line_height = 15
 
-    def indent(self):
+    def indent(self) -> None:
         self.x += 10
 
-    def unindent(self):
+    def unindent(self) -> None:
         self.x -= 10
 
 

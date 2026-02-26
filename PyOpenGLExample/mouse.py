@@ -18,7 +18,7 @@ http://www.de-brauwer.be/wiki/wikka.php?wakka=PyOpenGLMouse
 
 
 class Point:
-    def __init__(self, x, y):
+    def __init__(self, x, y) -> None:
         self.x = x
         self.y = y
 
@@ -26,7 +26,7 @@ class Point:
 points = []
 
 
-def initFun():
+def initFun() -> None:
     glClearColor(1.0, 1.0, 1.0, 0.0)
     glColor3f(0.0, 0.0, 0.0)
     glMatrixMode(GL_PROJECTION)
@@ -34,7 +34,7 @@ def initFun():
     gluOrtho2D(0.0, 640.0, 0.0, 480.0)
 
 
-def displayFun():
+def displayFun() -> None:
     global points
     glClear(GL_COLOR_BUFFER_BIT)
     glBegin(GL_LINE_STRIP)
@@ -45,7 +45,7 @@ def displayFun():
     glFlush()
 
 
-def mouseFun(button, state, x, y):
+def mouseFun(button, state, x, y) -> None:
     global points
     if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
         p = Point(x, 480 - y)

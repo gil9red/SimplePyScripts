@@ -12,7 +12,7 @@ http://www.de-brauwer.be/wiki/wikka.php?wakka=PyOpenGLWireframe
 """
 
 
-def axis(length):
+def axis(length) -> None:
     """Draws an axis (basicly a line with a cone on top)"""
     glPushMatrix()
     glBegin(GL_LINES)
@@ -24,7 +24,7 @@ def axis(length):
     glPopMatrix()
 
 
-def three_axis(length):
+def three_axis(length) -> None:
     """Draws an X, Y and Z-axis"""
 
     glPushMatrix()
@@ -42,7 +42,7 @@ def three_axis(length):
     glPopMatrix()
 
 
-def display_fun():
+def display_fun() -> None:
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
     glOrtho(-2.0 * 64 / 48.0, 2.0 * 64 / 48.0, -1.5, 1.5, 0.1, 100)

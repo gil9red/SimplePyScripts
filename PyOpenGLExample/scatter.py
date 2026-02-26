@@ -19,7 +19,7 @@ http://www.de-brauwer.be/wiki/wikka.php?wakka=PyOpenGLScatter
 """
 
 
-def initFun():
+def initFun() -> None:
     glClearColor(1.0, 1.0, 1.0, 0.0)
     glColor3f(0.0, 0.0, 0.0)
     glPointSize(1.0)
@@ -39,7 +39,7 @@ def getRandom(mode):
         return random.gauss(200, 40) % 400
 
 
-def displayFun():
+def displayFun() -> None:
     glClear(GL_COLOR_BUFFER_BIT)
     glBegin(GL_POINTS)
 

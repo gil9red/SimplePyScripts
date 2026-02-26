@@ -19,7 +19,7 @@ as arguments.
 """
 
 
-def init_fun():
+def init_fun() -> None:
     glClearColor(1.0, 1.0, 1.0, 0.0)
     glColor3f(0.0, 0.0, 0.0)
     glMatrixMode(GL_PROJECTION)
@@ -27,7 +27,7 @@ def init_fun():
     gluOrtho2D(-100, 100, -100, 100)
 
 
-def reshape_fun(w, h):
+def reshape_fun(w, h) -> None:
     glViewport(0, 0, w, h)
     # if w > h:
     # glViewport((w - h) / 2, 0, h, h)
@@ -35,7 +35,7 @@ def reshape_fun(w, h):
     #     glViewport(0, (h - w) / 2, w, w)
 
 
-def display_fun():
+def display_fun() -> None:
     glClear(GL_COLOR_BUFFER_BIT)
     glColor3f(0.0, 0.0, 1.0)
     glutWireTeapot(40)

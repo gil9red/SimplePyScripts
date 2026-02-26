@@ -9,7 +9,7 @@ width = 0
 height = 0
 
 
-def glSetup(w, h):
+def glSetup(w, h) -> None:
     global width, height
     width = w
     height = h
@@ -31,7 +31,7 @@ def glSetup(w, h):
     glMatrixMode(GL_MODELVIEW)
 
 
-def glResize(w, h):
+def glResize(w, h) -> None:
     global width, height
     width = w
     height = h
@@ -43,12 +43,12 @@ def glResize(w, h):
     glMatrixMode(GL_MODELVIEW)
 
 
-def glSetupCam():
+def glSetupCam() -> None:
     gluPerspective(45.0, float(width) / float(height), 0.1, 100.0)
     gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0)
 
 
-def glDraw():
+def glDraw() -> None:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
 
@@ -62,7 +62,7 @@ def glDraw():
 
 
 # glut_print adapted from http://stackoverflow.com/questions/12837747/print-text-with-glut-and-python
-def glut_print(x, y, font, text, r, g, b, a):
+def glut_print(x, y, font, text, r, g, b, a) -> None:
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
     gluOrtho2D(0.0, width, height, 0.0)
@@ -80,7 +80,7 @@ def glut_print(x, y, font, text, r, g, b, a):
         glDisable(GL_BLEND)
 
 
-def keyPressed(*args):
+def keyPressed(*args) -> None:
     ESCAPE = b"\x1b"
     if args[0] == ESCAPE:
         sys.exit()

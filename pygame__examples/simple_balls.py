@@ -11,7 +11,7 @@ import pygame
 
 
 class Ball:
-    def __init__(self, x, y, r, v_x, v_y, color):
+    def __init__(self, x, y, r, v_x, v_y, color) -> None:
         self.x = x
         self.y = y
         self.r = r
@@ -19,11 +19,11 @@ class Ball:
         self.v_y = v_y
         self.color = color
 
-    def update(self):
+    def update(self) -> None:
         self.x += self.v_x
         self.y += self.v_y
 
-    def draw(self, screen):
+    def draw(self, screen) -> None:
         pygame.draw.circle(screen, self.color, self.center, self.r)
 
         # Нарисуем поверх первого, прозрачный второй с границей (параметр width)
@@ -58,7 +58,7 @@ class Game:
         caption="Balls!",
         background_color=(255, 255, 255),
         frame_rate=60,
-    ):
+    ) -> None:
         self.width = width
         self.height = height
         self.frame_rate = frame_rate
@@ -77,12 +77,12 @@ class Game:
 
         self.update_caption()
 
-    def update_caption(self):
+    def update_caption(self) -> None:
         pygame.display.set_caption(
             f"{self.caption} [{int(self.clock.get_fps())} fps]"
         )
 
-    def handle_events(self):
+    def handle_events(self) -> None:
         # Получение всех событий
         for event in pygame.event.get():
             # Проверка события "Выход"
@@ -94,7 +94,7 @@ class Game:
         if is_pressed[pygame.K_ESCAPE]:
             self.game_active = False
 
-    def run(self):
+    def run(self) -> None:
         self.game_active = True
 
         while self.game_active:
@@ -121,7 +121,7 @@ class Game:
 
             self.clock.tick(self.frame_rate)
 
-    def append_random_ball(self):
+    def append_random_ball(self) -> None:
         def get_random_vector():
             pos = 0, 0
             # Если pos равен (0, 0), пересчитываем значения, т.к. шарик должен двигаться

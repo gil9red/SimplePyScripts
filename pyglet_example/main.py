@@ -14,7 +14,7 @@ key = pyglet.window.key
 
 
 class main(pyglet.window.Window):
-    def __init__(self):
+    def __init__(self) -> None:
         super(main, self).__init__(800, 800, fullscreen=False)
         self.x, self.y = 0, 0
 
@@ -23,13 +23,13 @@ class main(pyglet.window.Window):
         self.player = pyglet.media.Player()
         self.alive = 1
 
-    def on_draw(self):
+    def on_draw(self) -> None:
         self.render()
 
-    def on_close(self):
+    def on_close(self) -> None:
         self.alive = 0
 
-    def on_key_press(self, symbol, modifiers):
+    def on_key_press(self, symbol, modifiers) -> None:
         # Do something when a key is pressed?
         # Pause the audio for instance?
         # use `if symbol == key.SPACE: ...`
@@ -44,7 +44,7 @@ class main(pyglet.window.Window):
         if symbol == key.ESCAPE:  # [ESC]
             self.alive = 0
 
-    def render(self):
+    def render(self) -> None:
         self.clear()
         self.bg.draw()
 
@@ -55,7 +55,7 @@ class main(pyglet.window.Window):
 
         self.flip()
 
-    def run(self):
+    def run(self) -> None:
         while self.alive == 1:
             self.render()
 

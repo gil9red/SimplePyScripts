@@ -29,7 +29,7 @@ BOARD_TEMPLATE = """
 """.strip()
 
 
-def clear():
+def clear() -> None:
     os.system("clear" if os.name == "posix" else "cls")
 
 
@@ -59,14 +59,14 @@ class Hero(GameObject):
 
 
 class Game:
-    def __init__(self):
+    def __init__(self) -> None:
         self.hero: Hero = Hero()
         self.board: list[list[GameObject]] = []
         self.is_active: bool = False
 
         self.listener = keyboard.Listener(on_release=self._on_release)
 
-    def _on_release(self, key):
+    def _on_release(self, key) -> None:
         self.logic(key)
 
     def do_step(self) -> bool:
@@ -74,7 +74,7 @@ class Game:
 
         return self.is_active
 
-    def logic(self, key):
+    def logic(self, key) -> None:
         pos_x, pos_y = self.hero.pos_x, self.hero.pos_y
 
         if key == keyboard.Key.esc:
@@ -108,22 +108,22 @@ class Game:
                 pos_x, pos_y
             )  # Старое место стало пустым
 
-    def draw(self):
+    def draw(self) -> None:
         clear()
 
         self.draw_board()
         self.draw_game_info()
 
-    def draw_board(self):
+    def draw_board(self) -> None:
         for row in self.board:
             print("".join(game_object.icon for game_object in row))
 
-    def draw_game_info(self):
+    def draw_game_info(self) -> None:
         print(
             f"Hero: position: {self.hero.pos_x}x{self.hero.pos_y}, gold: {self.hero.gold}"
         )
 
-    def start(self, board_template: str):
+    def start(self, board_template: str) -> None:
         self.is_active = True
         self.board.clear()
         self.listener.start()
@@ -156,7 +156,7 @@ class Game:
 
                 self.board[-1].append(game_object)
 
-    def finish(self):
+    def finish(self) -> None:
         self.is_active = False
         self.listener.stop()
 

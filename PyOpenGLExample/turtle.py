@@ -23,7 +23,7 @@ curY = 0.0
 angle = 0.0
 
 
-def reset():
+def reset() -> None:
     """Reset the position to the origin"""
     global curX
     global curY
@@ -34,19 +34,19 @@ def reset():
     angle = 0.0
 
 
-def turnTo(deg):
+def turnTo(deg) -> None:
     """Turn to a certain angle"""
     global angle
     angle = deg
 
 
-def turn(deg):
+def turn(deg) -> None:
     """Turn a certain number of degrees"""
     global angle
     angle += deg
 
 
-def forw(len, visible):
+def forw(len, visible) -> None:
     """Move forward over a certain distance"""
     global curX
     global curY
@@ -61,7 +61,7 @@ def forw(len, visible):
         glEnd()
 
 
-def initFun():
+def initFun() -> None:
     glClearColor(1.0, 1.0, 1.0, 0.0)
     glColor3f(0.0, 0.0, 0.0)
     glMatrixMode(GL_PROJECTION)
@@ -69,7 +69,7 @@ def initFun():
     gluOrtho2D(-100, 100, -100, 100)
 
 
-def reshapeFun(w, h):
+def reshapeFun(w, h) -> None:
     glViewport(0, 0, w, h)
     # if w > h:
     # glViewport((w-h)/2,0,h,h)
@@ -77,7 +77,7 @@ def reshapeFun(w, h):
     # glViewport(0,(h-w)/2,w,w)
 
 
-def turtle_1():
+def turtle_1() -> None:
     glClear(GL_COLOR_BUFFER_BIT)
     reset()
     glColor3f(0.0, 0.0, 1.0)
@@ -93,7 +93,7 @@ def turtle_1():
     glFlush()
 
 
-def turtle_2():
+def turtle_2() -> None:
     glClear(GL_COLOR_BUFFER_BIT)
     glColor3f(0.0, 0.0, 1.0)
     reset()
@@ -106,7 +106,7 @@ def turtle_2():
     glFlush()
 
 
-def turtle_3():
+def turtle_3() -> None:
     glClear(GL_COLOR_BUFFER_BIT)
     glColor3f(0.0, 0.0, 1.0)
     reset()
@@ -119,7 +119,7 @@ def turtle_3():
     glFlush()
 
 
-def turtle_4():
+def turtle_4() -> None:
     glClear(GL_COLOR_BUFFER_BIT)
     glColor3f(0.0, 0.0, 1.0)
     reset()
@@ -132,7 +132,7 @@ def turtle_4():
     glFlush()
 
 
-def turtle_5():
+def turtle_5() -> None:
     glClear(GL_COLOR_BUFFER_BIT)
     glColor3f(0.0, 0.0, 1.0)
     reset()
@@ -145,7 +145,7 @@ def turtle_5():
     glFlush()
 
 
-def turtle_6():
+def turtle_6() -> None:
     glClear(GL_COLOR_BUFFER_BIT)
     glColor3f(0.0, 0.0, 1.0)
     reset()
@@ -159,7 +159,7 @@ def turtle_6():
     glFlush()
 
 
-def turtle_7():
+def turtle_7() -> None:
     glClear(GL_COLOR_BUFFER_BIT)
     glColor3f(0.0, 0.0, 1.0)
     reset()
@@ -172,7 +172,7 @@ def turtle_7():
     glFlush()
 
 
-def turtle_8():
+def turtle_8() -> None:
     glClear(GL_COLOR_BUFFER_BIT)
     glColor3f(0.0, 0.0, 1.0)
     reset()
@@ -192,7 +192,7 @@ def turtle_8():
     glFlush()
 
 
-def turtle_9():
+def turtle_9() -> None:
     glClear(GL_COLOR_BUFFER_BIT)
     glColor3f(0.0, 0.0, 1.0)
     reset()
@@ -208,7 +208,7 @@ def turtle_9():
     glFlush()
 
 
-def turtle_10():
+def turtle_10() -> None:
     glClear(GL_COLOR_BUFFER_BIT)
     glColor3f(0.0, 0.0, 1.0)
     reset()

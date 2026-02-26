@@ -10,7 +10,7 @@ from threading import Thread
 import pyglet
 
 
-def play_song():
+def play_song() -> None:
     song = pyglet.media.load("speak.mp3")
     song.play()
     pyglet.app.run()
