@@ -145,7 +145,7 @@ def paste(
     return rs.text
 
 
-def delete_paste(dev_key, user_key, paste_key):
+def delete_paste(dev_key, user_key, paste_key) -> bool:
     """Deleting A Paste Created By A User
 
     :param dev_key:

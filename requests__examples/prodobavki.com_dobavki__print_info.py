@@ -10,7 +10,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def print_info(url):
+def print_info(url) -> None:
     rs = requests.get(url)
     root = BeautifulSoup(rs.content, "lxml")
 

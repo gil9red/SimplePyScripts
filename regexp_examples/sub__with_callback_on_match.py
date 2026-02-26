@@ -37,7 +37,7 @@ text = """\
 counter = 3000 - 1
 
 
-def on_sub(_):
+def on_sub(_) -> str:
     global counter
     counter += 1
 

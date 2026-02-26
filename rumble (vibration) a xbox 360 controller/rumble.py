@@ -28,7 +28,7 @@ XInputSetState.argtypes = [ctypes.c_uint, ctypes.POINTER(XINPUT_VIBRATION)]
 XInputSetState.restype = ctypes.c_uint
 
 
-def set_vibration(left_motor, right_motor, controller=0):
+def set_vibration(left_motor, right_motor, controller=0) -> None:
     if type(left_motor) == float:
         left_motor_value = int(left_motor * 65535)
     else:
@@ -43,7 +43,7 @@ def set_vibration(left_motor, right_motor, controller=0):
     XInputSetState(controller, ctypes.byref(vibration))
 
 
-def set_vibration_with_duration(left_motor, right_motor, controller=0, duration=1.0):
+def set_vibration_with_duration(left_motor, right_motor, controller=0, duration=1.0) -> None:
     t = time.time()
 
     while True:

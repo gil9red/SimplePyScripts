@@ -37,14 +37,14 @@ class Task:
     process_return_code: int = None
     __need_stop: bool = field(init=False, repr=False, default=False)
 
-    def run(self, threaded: bool = False):
+    def run(self, threaded: bool = False) -> None:
         self.status = TaskStatusEnum.Running
 
-        def process_callback(process: Popen):
+        def process_callback(process: Popen) -> None:
             self.process = process
             self.process_id = self.process.pid
 
-        def on_exit():
+        def on_exit() -> None:
             self.status = TaskStatusEnum.Stopped if self.__need_stop else TaskStatusEnum.Finished
             self.process_return_code = self.process.returncode
 
@@ -64,16 +64,16 @@ class Task:
             stop_on=stop_on,
         )
 
-    def stop(self):
+    def stop(self) -> None:
         self.__need_stop = True
 
 
 if __name__ == "__main__":
 
-    def process_stdout(text):
+    def process_stdout(text) -> None:
         print("process_stdout:", repr(text))
 
-    def process_stderr(text):
+    def process_stderr(text) -> None:
         print("process_stderr:", repr(text))
 
     task = Task(

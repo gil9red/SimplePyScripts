@@ -11,7 +11,7 @@ from rumble import set_vibration
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Rumble (vibration) a xbox 360 controller")
@@ -68,14 +68,14 @@ class MainWindow(QMainWindow):
         central_widget.setLayout(layout)
         self.setCentralWidget(central_widget)
 
-    def _enable_vibration(self, enable):
+    def _enable_vibration(self, enable) -> None:
         if enable:
             self.timer.start()
         else:
             self.timer.stop()
             set_vibration(0, 0)
 
-    def _timeout(self):
+    def _timeout(self) -> None:
         set_vibration(self.left_motor.value(), self.right_motor.value())
 
 

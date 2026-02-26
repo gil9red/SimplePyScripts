@@ -10,7 +10,7 @@ import os
 from datetime import date
 
 
-def job():
+def job() -> None:
     print(date.today())
 
     try:

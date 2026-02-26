@@ -47,7 +47,7 @@ def clear_code(
     return astunparse.unparse(tree)
 
 
-def clear_file(file_name: str, new_file_name: str = None, encoding="utf-8"):
+def clear_file(file_name: str, new_file_name: str = None, encoding="utf-8") -> None:
     if new_file_name is None:
         new_file_name = file_name
 
@@ -58,7 +58,7 @@ def clear_file(file_name: str, new_file_name: str = None, encoding="utf-8"):
         f.write(text)
 
 
-def clear_directory(dir_path: str):
+def clear_directory(dir_path: str) -> None:
     new_dir_path = Path(dir_path + "_copy_clear")
 
     shutil.rmtree(new_dir_path, ignore_errors=True)

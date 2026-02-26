@@ -9,7 +9,7 @@ __author__ = "ipetrash"
 from scapy.all import sniff
 
 
-def _packethandler(pkt):
+def _packethandler(pkt) -> None:
     data = pkt.summary()
     print(data)
 

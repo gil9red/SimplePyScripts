@@ -15,7 +15,7 @@ from PyQt5 import Qt
 from scapy.all import sniff
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -30,18 +30,18 @@ sys.excepthook = log_uncaught_exceptions
 class SniffThread(Qt.QThread):
     about_new_data = Qt.pyqtSignal(str)
 
-    def _packethandler(self, pkt):
+    def _packethandler(self, pkt) -> None:
         data = pkt.summary()
         print(data)
 
         self.about_new_data.emit(data)
 
-    def run(self):
+    def run(self) -> None:
         sniff(filter="tcp", prn=self._packethandler)
 
 
 class MainWindow(Qt.QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Sniff with scapy")
@@ -74,7 +74,7 @@ class MainWindow(Qt.QMainWindow):
         self.thread.about_new_data.connect(self._append_new_item)
         self.thread.start()
 
-    def _append_new_item(self, data):
+    def _append_new_item(self, data) -> None:
         # Если флаг не стоит
         if not self.cb_log.isChecked():
             return

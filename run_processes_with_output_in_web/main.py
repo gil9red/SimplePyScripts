@@ -47,8 +47,8 @@ def index():
 
 
 @socketio.on("run")
-def run(message):
-    def send_update_task(stdout: str = None, stderr: str = None):
+def run(message) -> None:
+    def send_update_task(stdout: str = None, stderr: str = None) -> None:
         data = dict(
             id=task.id,
             command=task.command,
@@ -61,10 +61,10 @@ def run(message):
         print("send_update_task", data)
         emit("update_task", data)
 
-    def process_stdout(text: str):
+    def process_stdout(text: str) -> None:
         send_update_task(stdout=text)
 
-    def process_stderr(text: str):
+    def process_stderr(text: str) -> None:
         send_update_task(stderr=text)
 
     task = Task(

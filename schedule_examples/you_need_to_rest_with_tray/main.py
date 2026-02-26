@@ -19,7 +19,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -42,7 +42,7 @@ class RunSchedulerThread(QThread):
     about_show_message = pyqtSignal(str)
     about_description = pyqtSignal(str)
 
-    def run(self):
+    def run(self) -> None:
         schedule.every().day.at("11:00").do(self.about_show_message.emit, "Пора в столовку")
         schedule.every().day.at("13:00").do(self.about_show_message.emit, "Иди прогуляйся")
         schedule.every().day.at("15:00").do(self.about_show_message.emit, "Иди прогуляйся")

@@ -15,7 +15,7 @@ from PyQt5.QtCore import *
 
 
 # 60 * 1000 * 10 -- 10 minutes
-def show_message(text, timeout=60 * 1000 * 10):
+def show_message(text, timeout=60 * 1000 * 10) -> None:
     print(f"show_message: {text!r}")
 
     msg = QMessageBox()

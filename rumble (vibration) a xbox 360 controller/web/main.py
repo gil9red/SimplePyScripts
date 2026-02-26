@@ -210,7 +210,7 @@ def get_status():
     return jsonify(data)
 
 
-def vibration_tick():
+def vibration_tick() -> None:
     while True:
         if DEBUG:
             print(

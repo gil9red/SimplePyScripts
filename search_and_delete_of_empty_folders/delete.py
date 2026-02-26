@@ -9,7 +9,7 @@ import os
 from search import search_of_empty_folders
 
 
-def delete_of_empty_folders(dir, empty_folders=None):
+def delete_of_empty_folders(dir, empty_folders=None) -> None:
     if empty_folders is None:
         empty_folders = search_of_empty_folders(dir)
 
