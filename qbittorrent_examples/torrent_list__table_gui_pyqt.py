@@ -13,7 +13,7 @@ from common import get_client
 
 
 class TorrentInfoWidget(QTableWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setEditTriggers(QTableWidget.NoEditTriggers)
@@ -27,7 +27,7 @@ class TorrentInfoWidget(QTableWidget):
         self.horizontalHeader().setStretchLastSection(True)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
-    def fill(self, torrent_details: dict):
+    def fill(self, torrent_details: dict) -> None:
         while self.rowCount():
             self.removeRow(0)
 
@@ -40,7 +40,7 @@ class TorrentInfoWidget(QTableWidget):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.table_torrent = QTableWidget()
@@ -57,7 +57,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(splitter)
 
-    def fill_table(self):
+    def fill_table(self) -> None:
         qb = get_client()
         torrents = qb.torrents()
         if not torrents:
@@ -80,7 +80,7 @@ class MainWindow(QMainWindow):
 
                 self.table_torrent.setItem(row, column, item)
 
-    def fill_torrent_info(self):
+    def fill_torrent_info(self) -> None:
         items = self.table_torrent.selectedItems()
         if not items:
             return

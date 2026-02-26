@@ -16,7 +16,7 @@ from qbittorrent import Client
 from config import IP_HOST, USER, PASSWORD
 
 
-def print_table(rows: list[list[str]], headers: list[str], show_index=True):
+def print_table(rows: list[list[str]], headers: list[str], show_index=True) -> None:
     if show_index:
         show_index = range(1, len(rows) + 1)
 
@@ -24,7 +24,7 @@ def print_table(rows: list[list[str]], headers: list[str], show_index=True):
     print(text)
 
 
-def print_files_table(files: list[dict]):
+def print_files_table(files: list[dict]) -> None:
     rows = [
         (file["name"], sizeof_fmt(file["size"]))
         for file in sorted(files, key=lambda x: x["name"])
@@ -33,7 +33,7 @@ def print_files_table(files: list[dict]):
     print_table(rows, headers)
 
 
-def print_torrents(torrents: list[dict]):
+def print_torrents(torrents: list[dict]) -> None:
     total_size = 0
 
     for i, torrent in enumerate(torrents, 1):

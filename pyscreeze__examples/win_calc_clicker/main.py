@@ -19,7 +19,7 @@ DIR = Path(__file__).parent.resolve()
 DIR_BUTTONS = DIR / "buttons"
 
 
-def click(x, y, sleep_secs: float = 0.01):
+def click(x, y, sleep_secs: float = 0.01) -> None:
     win32api.SetCursorPos((x, y))
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, x, y, 0, 0)
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, x, y, 0, 0)
@@ -30,7 +30,7 @@ def click(x, y, sleep_secs: float = 0.01):
 BUTTON_BY_POSITION = dict()
 
 
-def init_button_positions(grayscale: bool = True):
+def init_button_positions(grayscale: bool = True) -> None:
     BUTTON_BY_POSITION.clear()
 
     for path in DIR_BUTTONS.glob("*.png"):
@@ -44,7 +44,7 @@ def init_button_positions(grayscale: bool = True):
         BUTTON_BY_POSITION[button] = position
 
 
-def go(expression: str):
+def go(expression: str) -> None:
     init_button_positions()
 
     for button in expression:
@@ -61,7 +61,7 @@ def go(expression: str):
         click(x, y)
 
 
-def show_test_calc():
+def show_test_calc() -> None:
     os.startfile("calc.exe")
     time.sleep(1)
 

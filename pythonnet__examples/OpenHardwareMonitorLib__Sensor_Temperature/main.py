@@ -57,7 +57,7 @@ def initialize_openhardwaremonitor():
     return handle
 
 
-def fetch_stats(handle):
+def fetch_stats(handle) -> None:
     for i in handle.Hardware:
         i.Update()
 
@@ -70,7 +70,7 @@ def fetch_stats(handle):
                 parse_sensor(subsensor)
 
 
-def parse_sensor(sensor):
+def parse_sensor(sensor) -> None:
     if sensor.Value is None:
         return
 

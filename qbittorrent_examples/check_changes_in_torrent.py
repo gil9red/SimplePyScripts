@@ -45,7 +45,7 @@ def get_rutor_torrent_download_info(torrent_url):
     return torrent_url.replace("/torrent/", "/download/"), magnet_url, info_hash
 
 
-def remove_previous_torrent_from_qbittorrent(qb, new_info_hash):
+def remove_previous_torrent_from_qbittorrent(qb, new_info_hash) -> None:
     info_hash_by_name_dict = {
         torrent["hash"]: torrent["name"] for torrent in qb.torrents()
     }
