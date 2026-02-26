@@ -17,7 +17,7 @@ def crc32_from_bytes(data: bytes) -> int:
     return zlib.crc32(data) & 0xFFFFFFFF
 
 
-def print_info(file_name: str):
+def print_info(file_name: str) -> None:
     print(file_name)
 
     def read_chunk(f) -> (int, bytes, bytes, int):

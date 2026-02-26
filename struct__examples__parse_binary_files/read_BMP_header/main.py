@@ -25,7 +25,7 @@ SIZE_BY_HEADER_TYPE = {
 }
 
 
-def print_info(file_name: str):
+def print_info(file_name: str) -> None:
     with open(file_name, "rb") as f:
         # Bitmap file header
         # BITMAPFILEHEADER

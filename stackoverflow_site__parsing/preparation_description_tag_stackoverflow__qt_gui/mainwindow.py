@@ -24,7 +24,7 @@ os.makedirs(DIR, exist_ok=True)
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         self.ui = Ui_MainWindow()
@@ -75,7 +75,7 @@ class MainWindow(QMainWindow):
 
         self.update_states()
 
-    def update_states(self):
+    def update_states(self) -> None:
         self.ui.action_save.setEnabled(False)
         self.ui.action_save_all.setEnabled(len(self.modified_tags) > 0)
 
@@ -87,7 +87,7 @@ class MainWindow(QMainWindow):
         if tag_id is not None:
             self.ui.action_save.setEnabled(tag_id in self.modified_tags)
 
-    def filter_list_tag_only_empty(self, has_filter=None):
+    def filter_list_tag_only_empty(self, has_filter=None) -> None:
         if has_filter is None:
             has_filter = self.ui.check_box_only_empty.isChecked()
 
@@ -105,7 +105,7 @@ class MainWindow(QMainWindow):
 
         self._fill_tag_list(tags)
 
-    def list_view_tag_list_clicked(self, index):
+    def list_view_tag_list_clicked(self, index) -> None:
         item = self.tag_list_model.itemFromIndex(index)
         if item is not None:
             tag_id = item.data()
@@ -113,7 +113,7 @@ class MainWindow(QMainWindow):
         else:
             logger.warn('Item from index; "%s" not found.', index)
 
-    def list_view_modified_tags_clicked(self, index):
+    def list_view_modified_tags_clicked(self, index) -> None:
         item = self.modified_tags_model.itemFromIndex(index)
         if item is not None:
             tag_id = item.data()
@@ -125,10 +125,10 @@ class MainWindow(QMainWindow):
             logger.warn('Item from index; "%s" not found.', index)
 
     @staticmethod
-    def tag_title(tag):
+    def tag_title(tag) -> str:
         return f'#{tag["id"]}: {", ".join(tag["name"])}'
 
-    def fill_tag_list(self):
+    def fill_tag_list(self) -> None:
         self.tags_dict.clear()
 
         tag_file_list = [
@@ -153,7 +153,7 @@ class MainWindow(QMainWindow):
 
         self.update_states()
 
-    def _fill_tag_list(self, tags_dict):
+    def _fill_tag_list(self, tags_dict) -> None:
         self.tag_list_model.clear()
 
         self.ui.list_view_tag_list.blockSignals(True)
@@ -192,7 +192,7 @@ class MainWindow(QMainWindow):
         md5.update(text.encode())
         return md5.hexdigest()
 
-    def check_modified_tag(self, tag_id):
+    def check_modified_tag(self, tag_id) -> None:
         tag = self.tags_dict[tag_id]
 
         new_hash = self.hash_tag(tag)
@@ -214,7 +214,7 @@ class MainWindow(QMainWindow):
         font.setBold(tag_id in self.modified_tags)
         item.setFont(font)
 
-    def fill_list_modified_tags(self):
+    def fill_list_modified_tags(self) -> None:
         # Обновление списка измененных тегов
         self.modified_tags_model.clear()
 
@@ -235,7 +235,7 @@ class MainWindow(QMainWindow):
         else:
             logger.warn('Index: "%s" is not valid.', index)
 
-    def ref_guide_text_changed(self):
+    def ref_guide_text_changed(self) -> None:
         index = self.ui.list_view_tag_list.currentIndex()
         if not index.isValid():
             logger.warn('Index "%s" is not valid!', index)
@@ -248,7 +248,7 @@ class MainWindow(QMainWindow):
         self.check_modified_tag(tag_id)
         self.update_states()
 
-    def description_text_changed(self):
+    def description_text_changed(self) -> None:
         index = self.ui.list_view_tag_list.currentIndex()
         tag_id = self.tag_id_from_index(index)
         tag = self.tags_dict[tag_id]
@@ -257,7 +257,7 @@ class MainWindow(QMainWindow):
         self.check_modified_tag(tag_id)
         self.update_states()
 
-    def fill_tag_info_from_id(self, tag_id):
+    def fill_tag_info_from_id(self, tag_id) -> None:
         if tag_id not in self.tags_dict:
             logger.warn('Tag id: "%s" not found!', tag_id)
             return
@@ -292,11 +292,11 @@ class MainWindow(QMainWindow):
 
         self.update_states()
 
-    def fill_tag_info_from_index(self, index):
+    def fill_tag_info_from_index(self, index) -> None:
         tag_id = self.tag_id_from_index(index)
         self.fill_tag_info_from_id(tag_id)
 
-    def save_tag(self, tag_id):
+    def save_tag(self, tag_id) -> None:
         if tag_id not in self.tags_dict:
             logger.warn('Tag with id "%s" not found.', tag_id)
             return
@@ -343,16 +343,16 @@ class MainWindow(QMainWindow):
 
         self.update_states()
 
-    def save(self):
+    def save(self) -> None:
         index = self.ui.list_view_tag_list.currentIndex()
         tag_id = self.tag_id_from_index(index)
         self.save_tag(tag_id)
 
-    def save_all(self):
+    def save_all(self) -> None:
         while self.modified_tags:
             self.save_tag(self.modified_tags[0])
 
-    def read_settings(self):
+    def read_settings(self) -> None:
         # NOTE: при сложных настройках, лучше перейти на json или yaml
         config = QSettings(CONFIG_FILE, QSettings.IniFormat)
         self.restoreState(config.value("MainWindow_State"))
@@ -362,7 +362,7 @@ class MainWindow(QMainWindow):
             bool(config.value("Check_box_only_empty", False))
         )
 
-    def write_settings(self):
+    def write_settings(self) -> None:
         config = QSettings(CONFIG_FILE, QSettings.IniFormat)
         config.setValue("MainWindow_State", self.saveState())
         config.setValue("MainWindow_Geometry", self.saveGeometry())
@@ -371,6 +371,6 @@ class MainWindow(QMainWindow):
             "Check_box_only_empty", self.ui.check_box_only_empty.isChecked()
         )
 
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
         self.write_settings()
         sys.exit()

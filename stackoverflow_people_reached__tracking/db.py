@@ -17,7 +17,7 @@ from peewee import *
 DB_FILE_NAME = str(pathlib.Path(__file__).resolve().parent / "db.sqlite")
 
 
-def db_create_backup(backup_dir="backup"):
+def db_create_backup(backup_dir="backup") -> None:
     os.makedirs(backup_dir, exist_ok=True)
 
     file_name = str(dt.datetime.today().date()) + ".sqlite"
@@ -68,7 +68,7 @@ class PeopleReached(BaseModel):
             url=url, value_human=value_human, value=value
         )[0]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"PeopleReached(id={self.id}, url={repr(self.url)}, date={self.date}, "
             f"value_human={repr(self.value_human)}, value={self.value})"

@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import *
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Stack and Queue")
@@ -64,7 +64,7 @@ class Widget(QWidget):
 
         self.setLayout(main_layout)
 
-    def _on_push(self):
+    def _on_push(self) -> None:
         number = str(self.spinbox_number.value())
 
         if self.radio_button_stack.isChecked():
@@ -74,7 +74,7 @@ class Widget(QWidget):
 
         self.spinbox_number.setValue(self.spinbox_number.value() + 1)
 
-    def _on_pop(self):
+    def _on_pop(self) -> None:
         if self.radio_button_stack.isChecked():
             self.list_widget_stack.takeItem(0)
         else:

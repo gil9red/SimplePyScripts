@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 class Foo:
-    def __init__(self, a, b):
+    def __init__(self, a, b) -> None:
         self.a = a
         self.b = b
 

@@ -90,7 +90,7 @@ class HttpProcessor(BaseHTTPRequestHandler):
 
         return postvars
 
-    def do_GET(self):
+    def do_GET(self) -> None:
         o = urlsplit(self.path)
 
         # Only index and ALLOW_LIST
@@ -135,7 +135,7 @@ class HttpProcessor(BaseHTTPRequestHandler):
 
         self.wfile.write(text.encode("utf-8"))
 
-    def do_POST(self):
+    def do_POST(self) -> None:
         o = urlsplit(self.path)
 
         # Only index
@@ -199,7 +199,7 @@ class HttpProcessor(BaseHTTPRequestHandler):
 
 def run(
     server_class=HTTPServer, handler_class=HttpProcessor, host="127.0.0.1", port=8080
-):
+) -> None:
     log.info(
         f"HTTP server running on http://{'127.0.0.1' if host == '0.0.0.0' else host}:{port}"
     )

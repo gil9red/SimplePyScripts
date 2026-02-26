@@ -12,7 +12,7 @@ import glob
 import struct
 
 
-def print_info(file_name: str):
+def print_info(file_name: str) -> None:
     print(file_name)
 
     with open(file_name, "rb") as f:

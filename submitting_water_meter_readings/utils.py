@@ -93,10 +93,10 @@ def open_web_page_water_meter(value_cold: int, value_hot: int) -> tuple[bool, st
     return True, ""
 
 
-def run_auto_ping_logon():
+def run_auto_ping_logon() -> None:
     prefix = run_auto_ping_logon.__name__
 
-    def run():
+    def run() -> None:
         while True:
             try:
                 driver = get_driver(headless=True)

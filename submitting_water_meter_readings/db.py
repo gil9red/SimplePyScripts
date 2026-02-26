@@ -22,7 +22,7 @@ def create_connect() -> sqlite3.Connection:
     return sqlite3.connect(DB_FILE_NAME)
 
 
-def init_db():
+def init_db() -> None:
     # Создание базы и таблицы
     with create_connect() as connect:
         connect.execute(
@@ -37,7 +37,7 @@ def init_db():
         )
 
 
-def db_create_backup(backup_dir="backup"):
+def db_create_backup(backup_dir="backup") -> None:
     file_name = str(dt.datetime.today().date()) + ".sqlite"
 
     if not os.path.exists(backup_dir):
@@ -61,7 +61,7 @@ def get_last(date: dt.date = None) -> int:
     return -1 if result is None else result[0]
 
 
-def delete_last():
+def delete_last() -> None:
     with create_connect() as connect:
         last_id = get_last()
         connect.execute("DELETE FROM Water WHERE id = ?", [last_id])
