@@ -13,13 +13,13 @@ from telegram.ext import Updater, MessageHandler, Filters, CallbackContext, Defa
 import config
 
 
-def on_request(update: Update, _: CallbackContext):
+def on_request(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     message.reply_text(f"Thread: {threading.current_thread()}")
 
 
-def main():
+def main() -> None:
     updater = Updater(
         config.TOKEN,
         defaults=Defaults(run_async=True),

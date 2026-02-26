@@ -21,21 +21,21 @@ log = get_logger(__file__)
 
 
 @log_func(log)
-def on_start(update: Update, _: CallbackContext):
+def on_start(update: Update, _: CallbackContext) -> None:
     update.effective_message.reply_text(
         "Write something", reply_markup=REPLY_KEYBOARD_MARKUP
     )
 
 
 @log_func(log)
-def on_request(update: Update, _: CallbackContext):
+def on_request(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     message.reply_text("Echo: " + message.text, reply_markup=REPLY_KEYBOARD_MARKUP)
 
 
 @log_func(log)
-def on_contact_or_location(update: Update, _: CallbackContext):
+def on_contact_or_location(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     text = ""
@@ -48,7 +48,7 @@ def on_contact_or_location(update: Update, _: CallbackContext):
     message.reply_text(text, reply_markup=REPLY_KEYBOARD_MARKUP)
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_start),
         MessageHandler(Filters.text, on_request),

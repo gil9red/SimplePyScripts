@@ -24,12 +24,12 @@ REPLY_MARKUP = InlineKeyboardMarkup.from_row(
 
 
 @log_func(log)
-def on_start(update: Update, _: CallbackContext):
+def on_start(update: Update, _: CallbackContext) -> None:
     update.effective_message.reply_text("Select dice:", reply_markup=REPLY_MARKUP)
 
 
 @log_func(log)
-def on_callback_query_dice(update: Update, _: CallbackContext):
+def on_callback_query_dice(update: Update, _: CallbackContext) -> None:
     query = update.callback_query
     query.answer()
 
@@ -39,7 +39,7 @@ def on_callback_query_dice(update: Update, _: CallbackContext):
     query.message.reply_text(f"dice={rs_message.dice.value}")
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_start),
         CallbackQueryHandler(on_callback_query_dice, pattern=PATTERN_DICE),

@@ -19,7 +19,7 @@ log = get_logger(__file__)
 
 
 @log_func(log)
-def on_start(update: Update, context: CallbackContext):
+def on_start(update: Update, context: CallbackContext) -> None:
     start_argument = ""
     if context.args:
         # https://t.me/<bot>?start=<start_argument>
@@ -29,13 +29,13 @@ def on_start(update: Update, context: CallbackContext):
 
 
 @log_func(log)
-def on_request(update: Update, _: CallbackContext):
+def on_request(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     message.reply_text(message.text)
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_start),
         MessageHandler(Filters.text, on_request),

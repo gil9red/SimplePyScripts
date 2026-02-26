@@ -30,7 +30,7 @@ DB_FILE_NAME = str(DB_DIR_NAME / "database.sqlite")
 DB_DIR_NAME.mkdir(parents=True, exist_ok=True)
 
 
-def db_create_backup(backup_dir="backup", date_fmt="%Y-%m-%d"):
+def db_create_backup(backup_dir="backup", date_fmt="%Y-%m-%d") -> None:
     backup_path = Path(backup_dir)
     backup_path.mkdir(parents=True, exist_ok=True)
 
@@ -65,7 +65,7 @@ class BaseModel(Model):
         return sorted(cls.__subclasses__(), key=lambda x: x.__name__)
 
     @classmethod
-    def print_count_of_tables(cls):
+    def print_count_of_tables(cls) -> None:
         items = []
         for sub_cls in cls.get_inherited_models():
             name = sub_cls.__name__
@@ -74,7 +74,7 @@ class BaseModel(Model):
 
         print(", ".join(items))
 
-    def __str__(self):
+    def __str__(self) -> str:
         fields = []
         for k, field in self._meta.fields.items():
             v = getattr(self, k)
@@ -101,7 +101,7 @@ class User(BaseModel):
     language_code = TextField(null=True)
     last_activity = DateTimeField(default=datetime.now)
 
-    def update_last_activity(self):
+    def update_last_activity(self) -> None:
         self.last_activity = datetime.now()
         self.save()
 
@@ -132,7 +132,7 @@ class Chat(BaseModel):
     description = TextField(null=True)
     last_activity = DateTimeField(default=datetime.now)
 
-    def update_last_activity(self):
+    def update_last_activity(self) -> None:
         self.last_activity = datetime.now()
         self.save()
 

@@ -30,7 +30,7 @@ log = get_logger(__file__)
 
 
 @log_func(log)
-def on_request(update: Update, _: CallbackContext):
+def on_request(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     paginator = InlineKeyboardPaginator(
@@ -48,7 +48,7 @@ def on_request(update: Update, _: CallbackContext):
 
 
 @log_func(log)
-def on_callback_query(update: Update, _: CallbackContext):
+def on_callback_query(update: Update, _: CallbackContext) -> None:
     query = update.callback_query
     query.answer()
 
@@ -77,7 +77,7 @@ def on_callback_query(update: Update, _: CallbackContext):
     )
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_request),
         MessageHandler(Filters.text, on_request),

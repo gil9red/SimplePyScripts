@@ -39,14 +39,14 @@ log = get_logger(__file__)
 
 
 @log_func(log)
-def on_start(update: Update, _: CallbackContext):
+def on_start(update: Update, _: CallbackContext) -> None:
     update.effective_message.reply_text(
         "Введите что-нибудь", reply_markup=REPLY_KEYBOARD_MARKUP
     )
 
 
 @log_func(log)
-def on_request(update: Update, context: CallbackContext):
+def on_request(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
 
     state = context.user_data.get("state")
@@ -103,7 +103,7 @@ def on_request(update: Update, context: CallbackContext):
         message.reply_text("Спасибо!", reply_markup=REPLY_KEYBOARD_MARKUP)
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_start),
         MessageHandler(Filters.text, on_request),

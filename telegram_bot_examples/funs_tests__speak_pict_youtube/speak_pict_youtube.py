@@ -36,21 +36,21 @@ log = get_logger(__file__)
 
 # Define a few command handlers. These usually take the two arguments bot and
 # update. Error handlers also receive the raised TelegramError object in error.
-def start(update: Update, context: CallbackContext):
+def start(update: Update, context: CallbackContext) -> None:
     update.effective_message.reply_text(text="Hi!")
 
 
-def help(update: Update, context: CallbackContext):
+def help(update: Update, context: CallbackContext) -> None:
     text = "Commands:\n" + "\n".join(f"    /{x}" for x in ALL_COMMANDS)
     update.effective_message.reply_text(text)
 
 
-def echo(update: Update, context: CallbackContext):
+def echo(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     message.reply_text(text=f"Echo: {message.text}")
 
 
-def on_exchange_rates(update: Update, _: CallbackContext):
+def on_exchange_rates(update: Update, _: CallbackContext) -> None:
     text = "Курс:"
     for code in ["USD", "EUR"]:
         text += f"\n    {code}: {exchange_rate(code)[0]}"
@@ -59,20 +59,20 @@ def on_exchange_rates(update: Update, _: CallbackContext):
     update.effective_message.reply_text(text=text)
 
 
-def pict(update: Update, _: CallbackContext):
+def pict(update: Update, _: CallbackContext) -> None:
     update.effective_message.reply_photo(
         "https://t8.mangas.rocks/auto/07/48/88/Onepunchman_t1_gl1_18.png"
     )
 
 
-def pict2(update: Update, _: CallbackContext):
+def pict2(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     with open("files/Onepunchman_t1_gl1_18.png", "rb") as f:
         message.reply_photo(f)
 
 
-def pict3(update: Update, _: CallbackContext):
+def pict3(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     max_parts = 10
@@ -91,7 +91,7 @@ def pict3(update: Update, _: CallbackContext):
 
 
 # Поиск на YouTube
-def on_video(update: Update, context: CallbackContext):
+def on_video(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
 
     args = context.args
@@ -203,11 +203,11 @@ def on_video(update: Update, context: CallbackContext):
 #     message.reply_text(text='Speak gender изменена: {} -> {}.'.format(last_gender, gender))
 
 
-def on_error(update: Update, context: CallbackContext):
+def on_error(update: Update, context: CallbackContext) -> None:
     reply_error(log, update, context)
 
 
-def main():
+def main() -> None:
     cpu_count = os.cpu_count()
     workers = cpu_count
     log.debug("System: CPU_COUNT=%s, WORKERS=%s", cpu_count, workers)

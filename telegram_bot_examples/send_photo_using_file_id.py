@@ -20,7 +20,7 @@ log = get_logger(__file__)
 
 
 @log_func(log)
-def on_start(update: Update, _: CallbackContext):
+def on_start(update: Update, _: CallbackContext) -> None:
     update.effective_message.reply_text(
         "Отправка картинки боту вернет её с file_id\n"
         "Отправка текстом file_id вернет картинку"
@@ -40,7 +40,7 @@ def on_request(update: Update, _: CallbackContext):
 
 
 @log_func(log)
-def on_photo(update: Update, _: CallbackContext):
+def on_photo(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     photo_large = max(message.photo, key=lambda x: (x.width, x.height))
@@ -49,7 +49,7 @@ def on_photo(update: Update, _: CallbackContext):
     message.reply_photo(file_id, caption=f"file_id: {file_id}", quote=True)
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_start),
         MessageHandler(Filters.text, on_request),

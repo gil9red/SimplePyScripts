@@ -43,7 +43,7 @@ log = get_logger(__file__)
 
 
 @log_func(log)
-def on_start(update: Update, _: CallbackContext):
+def on_start(update: Update, _: CallbackContext) -> None:
     update.effective_message.reply_text(
         "Введите что-нибудь", reply_markup=REPLY_KEYBOARD_MARKUP
     )
@@ -121,7 +121,7 @@ def on_anketa_exit_comment(update: Update, context: CallbackContext):
 
 
 @log_func(log)
-def on_anketa_invalid_set_rating(update: Update, _: CallbackContext):
+def on_anketa_invalid_set_rating(update: Update, _: CallbackContext) -> None:
     update.effective_message.reply_text(
         "Я вас не понимаю, выберите оценку на клавиатуре!",
         reply_markup=REPLY_KEYBOARD_MARKUP_SET_RATING,
@@ -129,13 +129,13 @@ def on_anketa_invalid_set_rating(update: Update, _: CallbackContext):
 
 
 @log_func(log)
-def on_request(update: Update, _: CallbackContext):
+def on_request(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     message.reply_text("Echo: " + message.text, reply_markup=REPLY_KEYBOARD_MARKUP)
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_start),
         ConversationHandler(

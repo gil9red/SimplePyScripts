@@ -69,7 +69,7 @@ INLINE_KEYBOARD_BUTTON_BACK = InlineKeyboardButton(
 )
 
 
-def _on_reply_debug(update: Update, context: CallbackContext):
+def _on_reply_debug(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
 
     settings = SettingState.DEBUG
@@ -103,7 +103,7 @@ def _on_reply_debug(update: Update, context: CallbackContext):
     query.edit_message_text(text, reply_markup=reply_markup)
 
 
-def _on_reply_year(update: Update, context: CallbackContext):
+def _on_reply_year(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
 
     settings = SettingState.YEAR
@@ -153,7 +153,7 @@ def _on_reply_year(update: Update, context: CallbackContext):
     query.edit_message_text(text, reply_markup=reply_markup)
 
 
-def _on_reply_sex(update: Update, context: CallbackContext):
+def _on_reply_sex(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
 
     settings = SettingState.SEX
@@ -191,12 +191,12 @@ log = get_logger(__file__)
 
 
 @log_func(log)
-def on_start(update: Update, context: CallbackContext):
+def on_start(update: Update, context: CallbackContext) -> None:
     update.effective_message.reply_text("Enter /settings")
 
 
 @log_func(log)
-def on_settings(update: Update, context: CallbackContext):
+def on_settings(update: Update, context: CallbackContext) -> None:
     # Если функция вызвана из CallbackQueryHandler
     query = update.callback_query
     if query:
@@ -221,7 +221,7 @@ def on_settings(update: Update, context: CallbackContext):
 
 
 @log_func(log)
-def on_debug(update: Update, context: CallbackContext):
+def on_debug(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     query.answer()
 
@@ -229,7 +229,7 @@ def on_debug(update: Update, context: CallbackContext):
 
 
 @log_func(log)
-def on_year(update: Update, context: CallbackContext):
+def on_year(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     query.answer()
 
@@ -237,14 +237,14 @@ def on_year(update: Update, context: CallbackContext):
 
 
 @log_func(log)
-def on_sex(update: Update, context: CallbackContext):
+def on_sex(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     query.answer()
 
     _on_reply_sex(update, context)
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_start),
 

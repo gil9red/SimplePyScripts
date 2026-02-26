@@ -47,7 +47,7 @@ DATA = {"MODE": ErrorHandlingMode.SILENCE}
 log = get_logger(__file__)
 
 
-def reply_error(log: logging.Logger, update: Update, context: CallbackContext):
+def reply_error(log: logging.Logger, update: Update, context: CallbackContext) -> None:
     log.error("Error: %s\nUpdate: %s", context.error, update, exc_info=context.error)
 
     # traceback.format_exception returns the usual python message about an exception, but as a
@@ -92,7 +92,7 @@ def reply_error(log: logging.Logger, update: Update, context: CallbackContext):
 
 
 @log_func(log)
-def on_request(update: Update, _: CallbackContext):
+def on_request(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     user = update.effective_user
     chat = update.effective_chat
@@ -107,7 +107,7 @@ def on_request(update: Update, _: CallbackContext):
 
 
 @log_func(log)
-def on_reply_command(update: Update, _: CallbackContext):
+def on_reply_command(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     DATA["MODE"] = ErrorHandlingMode[message.text]
@@ -120,7 +120,7 @@ def on_reply_command(update: Update, _: CallbackContext):
     1 / 0
 
 
-def main():
+def main() -> None:
     updater = Updater(
         config.TOKEN,
         defaults=Defaults(run_async=True),

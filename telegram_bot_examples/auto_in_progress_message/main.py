@@ -39,18 +39,18 @@ log = get_logger(__file__)
 ALL_COMMANDS = []
 
 
-def run_command(message: Message, sleep_seconds: int = 10):
+def run_command(message: Message, sleep_seconds: int = 10) -> None:
     time.sleep(sleep_seconds)
     message.reply_text("Hello World!")
 
 
 @log_func(log)
-def on_start(update: Update, _: CallbackContext):
+def on_start(update: Update, _: CallbackContext) -> None:
     update.effective_message.reply_text("Write something")
 
 
 @log_func(log)
-def on_request(update: Update, _: CallbackContext):
+def on_request(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     text = "Commands:\n" + "\n".join(f"    /{x}" for x in ALL_COMMANDS)
@@ -58,21 +58,21 @@ def on_request(update: Update, _: CallbackContext):
 
 
 @log_func(log)
-def on_simple(update: Update, _: CallbackContext):
+def on_simple(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message)
 
 
 @log_func(log)
 @show_temp_message_decorator()
-def on_in_progress(update: Update, _: CallbackContext):
+def on_in_progress(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message)
 
 
 @log_func(log)
 @show_temp_message_decorator(text="Пожалуйста, подождите...")
-def on_custom_in_progress(update: Update, _: CallbackContext):
+def on_custom_in_progress(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message)
 
@@ -89,7 +89,7 @@ def on_custom_in_progress(update: Update, _: CallbackContext):
         )
     ),
 )
-def on_custom_all_in_progress(update: Update, _: CallbackContext):
+def on_custom_all_in_progress(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message)
 
@@ -99,7 +99,7 @@ def on_custom_all_in_progress(update: Update, _: CallbackContext):
     text="Выполняется работа {value}",
     progress_value=ProgressValue.LINES,
 )
-def on_animation_lines(update: Update, _: CallbackContext):
+def on_animation_lines(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message)
 
@@ -109,7 +109,7 @@ def on_animation_lines(update: Update, _: CallbackContext):
     text="Выполняется работа {value}",
     progress_value=ProgressValue.SPINNER,
 )
-def on_animation_spinner(update: Update, _: CallbackContext):
+def on_animation_spinner(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message)
 
@@ -119,7 +119,7 @@ def on_animation_spinner(update: Update, _: CallbackContext):
     text="Please, wait {value}",
     progress_value=ProgressValue.POINTS,
 )
-def on_animation_points(update: Update, _: CallbackContext):
+def on_animation_points(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message)
 
@@ -130,7 +130,7 @@ def on_animation_points(update: Update, _: CallbackContext):
     parse_mode=ParseMode.HTML,
     progress_value=ProgressValue.MOON_PHASES_1,
 )
-def on_animation_moon_phases1(update: Update, _: CallbackContext):
+def on_animation_moon_phases1(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message)
 
@@ -141,7 +141,7 @@ def on_animation_moon_phases1(update: Update, _: CallbackContext):
     parse_mode=ParseMode.HTML,
     progress_value=ProgressValue.MOON_PHASES_2,
 )
-def on_animation_moon_phases2(update: Update, _: CallbackContext):
+def on_animation_moon_phases2(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message)
 
@@ -151,7 +151,7 @@ def on_animation_moon_phases2(update: Update, _: CallbackContext):
     text="Loading {value}",
     progress_value=ProgressValue.BLOCKS,
 )
-def on_animation_blocks(update: Update, _: CallbackContext):
+def on_animation_blocks(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message)
 
@@ -161,7 +161,7 @@ def on_animation_blocks(update: Update, _: CallbackContext):
     text="Loading {value}",
     progress_value=ProgressValue.RECTS_LARGE,
 )
-def on_animation_rects_large(update: Update, _: CallbackContext):
+def on_animation_rects_large(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message)
 
@@ -171,7 +171,7 @@ def on_animation_rects_large(update: Update, _: CallbackContext):
     text="Loading {value}",
     progress_value=ProgressValue.RECTS_SMALL,
 )
-def on_animation_rects_small(update: Update, _: CallbackContext):
+def on_animation_rects_small(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message)
 
@@ -181,7 +181,7 @@ def on_animation_rects_small(update: Update, _: CallbackContext):
     text="Loading {value}",
     progress_value=ProgressValue.PARALLELOGRAMS,
 )
-def on_animation_parallelograms(update: Update, _: CallbackContext):
+def on_animation_parallelograms(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message)
 
@@ -191,7 +191,7 @@ def on_animation_parallelograms(update: Update, _: CallbackContext):
     text="Loading {value}",
     progress_value=ProgressValue.CIRCLES,
 )
-def on_animation_circles(update: Update, _: CallbackContext):
+def on_animation_circles(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message)
 
@@ -212,7 +212,7 @@ def on_animation_circles(update: Update, _: CallbackContext):
         )
     ),
 )
-def on_custom_all_animation(update: Update, _: CallbackContext):
+def on_custom_all_animation(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message)
 
@@ -222,7 +222,7 @@ def on_custom_all_animation(update: Update, _: CallbackContext):
     text="{value} x {value}",
     progress_value=ProgressValue.RECTS_SMALL,
 )
-def on_custom_no_text_animation(update: Update, _: CallbackContext):
+def on_custom_no_text_animation(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message)
 
@@ -232,7 +232,7 @@ def on_custom_no_text_animation(update: Update, _: CallbackContext):
     text="KFC {value}",
     progress_value=ProgressValue.CHICKENS,
 )
-def on_sub_animation_chickens(update: Update, _: CallbackContext):
+def on_sub_animation_chickens(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message, sleep_seconds=30)
 
@@ -242,12 +242,12 @@ def on_sub_animation_chickens(update: Update, _: CallbackContext):
     text="Faces {value}",
     progress_value=ProgressValue.FACES,
 )
-def on_sub_animation_faces(update: Update, _: CallbackContext):
+def on_sub_animation_faces(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     run_command(message, sleep_seconds=30)
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_start),
         CommandHandler("simple", on_simple),
@@ -271,7 +271,7 @@ def main():
         MessageHandler(Filters.text, on_request),
     ]
 
-    def before_start_func(updater: Updater):
+    def before_start_func(updater: Updater) -> None:
         for commands in updater.dispatcher.handlers.values():
             for command in commands:
                 if isinstance(command, CommandHandler):

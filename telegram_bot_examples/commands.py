@@ -23,12 +23,12 @@ ALL_COMMANDS = []
 
 
 @log_func(log)
-def on_start(update: Update, _: CallbackContext):
+def on_start(update: Update, _: CallbackContext) -> None:
     update.effective_message.reply_text("Write something")
 
 
 @log_func(log)
-def on_request(update: Update, _: CallbackContext):
+def on_request(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     text = "Commands:\n" + "\n".join(f"    /{x}" for x in ALL_COMMANDS)
@@ -36,7 +36,7 @@ def on_request(update: Update, _: CallbackContext):
 
 
 @log_func(log)
-def on_say_hello(update: Update, context: CallbackContext):
+def on_say_hello(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     args = context.args
 
@@ -49,18 +49,18 @@ def on_say_hello(update: Update, context: CallbackContext):
 
 
 @log_func(log)
-def on_say_hello_world(update: Update, _: CallbackContext):
+def on_say_hello_world(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     message.reply_text("Hello World!")
 
 
 @log_func(log)
-def on_cmd(update: Update, context: CallbackContext):
+def on_cmd(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     message.reply_text(f"Args: {context.args}")
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_start),
         CommandHandler("say_hello", on_say_hello),
@@ -69,7 +69,7 @@ def main():
         MessageHandler(Filters.text, on_request),
     ]
 
-    def before_start_func(updater: Updater):
+    def before_start_func(updater: Updater) -> None:
         for commands in updater.dispatcher.handlers.values():
             for command in commands:
                 if isinstance(command, CommandHandler):

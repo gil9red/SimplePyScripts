@@ -19,12 +19,12 @@ log = get_logger(__file__)
 
 
 @log_func(log)
-def on_start(update: Update, _: CallbackContext):
+def on_start(update: Update, _: CallbackContext) -> None:
     update.effective_message.reply_text("Write something")
 
 
 @log_func(log)
-def on_request(update: Update, context: CallbackContext):
+def on_request(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     user_id = update.effective_user.id
 
@@ -41,7 +41,7 @@ def on_request(update: Update, context: CallbackContext):
         message.reply_photo(file_id, caption=file_id)
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_start),
         MessageHandler(Filters.text, on_request),

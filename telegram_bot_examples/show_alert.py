@@ -21,7 +21,7 @@ log = get_logger(__file__)
 
 
 @log_func(log)
-def on_start(update: Update, _: CallbackContext):
+def on_start(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     reply_markup = InlineKeyboardMarkup(
@@ -38,7 +38,7 @@ def on_start(update: Update, _: CallbackContext):
 
 
 @log_func(log)
-def on_select(update: Update, _: CallbackContext):
+def on_select(update: Update, _: CallbackContext) -> None:
     query = update.callback_query
 
     if query.data == "cat":
@@ -49,7 +49,7 @@ def on_select(update: Update, _: CallbackContext):
         query.answer("Nothing")
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_start),
         MessageHandler(Filters.text, on_start),

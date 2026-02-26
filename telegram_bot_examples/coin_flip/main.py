@@ -41,7 +41,7 @@ log = get_logger(__file__)
 
 
 @log_func(log)
-def on_start(update: Update, _: CallbackContext):
+def on_start(update: Update, _: CallbackContext) -> None:
     reply_markup = ReplyKeyboardMarkup.from_button(
         "Подкинуть монетку", resize_keyboard=True
     )
@@ -53,7 +53,7 @@ def on_start(update: Update, _: CallbackContext):
 
 
 @log_func(log)
-def on_request(update: Update, _: CallbackContext):
+def on_request(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     reply_markup = InlineKeyboardMarkup.from_button(
@@ -69,7 +69,7 @@ def on_request(update: Update, _: CallbackContext):
 
 
 @log_func(log)
-def on_callback_coin_flip(update: Update, _: CallbackContext):
+def on_callback_coin_flip(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     query = update.callback_query
@@ -101,14 +101,14 @@ def on_callback_coin_flip(update: Update, _: CallbackContext):
 
 
 @log_func(log)
-def on_callback_hide_coin_flip(update: Update, _: CallbackContext):
+def on_callback_hide_coin_flip(update: Update, _: CallbackContext) -> None:
     query = update.callback_query
     query.answer()
 
     query.message.delete()
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_start),
         MessageHandler(Filters.text, on_request),

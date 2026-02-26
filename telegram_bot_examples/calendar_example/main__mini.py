@@ -17,13 +17,13 @@ sys.path.append("..")
 import config
 
 
-def on_calendar(update: Update, _: CallbackContext):
+def on_calendar(update: Update, _: CallbackContext) -> None:
     update.effective_message.reply_text(
         "Please select a date: ", reply_markup=telegramcalendar.create_calendar()
     )
 
 
-def on_callback_query(update: Update, context: CallbackContext):
+def on_callback_query(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     query.answer()
 
@@ -37,7 +37,7 @@ def on_callback_query(update: Update, context: CallbackContext):
         )
 
 
-def main():
+def main() -> None:
     # Create the EventHandler and pass it your bot's token.
     updater = Updater(config.TOKEN, use_context=True)
 

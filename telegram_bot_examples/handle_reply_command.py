@@ -18,19 +18,19 @@ log = get_logger(__file__)
 
 
 @log_func(log)
-def on_start(update: Update, _: CallbackContext):
+def on_start(update: Update, _: CallbackContext) -> None:
     update.effective_message.reply_text("Write something")
 
 
 @log_func(log)
-def on_request(update: Update, _: CallbackContext):
+def on_request(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     message.reply_text("Echo: " + message.text, reply_markup=REPLY_KEYBOARD_MARKUP)
 
 
 @log_func(log)
-def on_reply_command(update: Update, _: CallbackContext):
+def on_reply_command(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     message.reply_text(
@@ -38,7 +38,7 @@ def on_reply_command(update: Update, _: CallbackContext):
     )
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_start),
         MessageHandler(Filters.text(COMMANDS), on_reply_command),

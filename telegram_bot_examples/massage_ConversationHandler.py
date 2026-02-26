@@ -55,7 +55,7 @@ def facts_to_str(user_data: dict) -> str:
 
 
 @log_func(log)
-def on_main_menu(update: Update, _: CallbackContext):
+def on_main_menu(update: Update, _: CallbackContext) -> None:
     # Если функция вызвана из CallbackQueryHandler
     query = update.callback_query
     if query:
@@ -349,12 +349,12 @@ def on_recording(update: Update, context: CallbackContext):
     return on_sing_up(update, context)
 
 
-def on_error(update, context):
+def on_error(update, context) -> None:
     """Log Errors caused by Updates."""
     log.warning('Update "%s" caused error "%s"', update, context.error)
 
 
-def main():
+def main() -> None:
     updater = Updater(
         token=TOKEN,
         defaults=Defaults(run_async=True),

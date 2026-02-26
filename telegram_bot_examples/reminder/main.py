@@ -28,7 +28,7 @@ from db import Reminder, User, Chat
 from utils import parse_command, get_pretty_datetime
 
 
-def do_checking_reminders(log: Logger, bot: Bot):
+def do_checking_reminders(log: Logger, bot: Bot) -> None:
     while True:
         try:
             expected_time = dt.datetime.now() - dt.timedelta(seconds=1)
@@ -64,7 +64,7 @@ log = get_logger(__file__)
 
 
 @log_func(log)
-def on_start(update: Update, _: CallbackContext):
+def on_start(update: Update, _: CallbackContext) -> None:
     update.effective_message.reply_text(
         'Введите что-нибудь, например: "напомни через 1 час".\n'
         'Для получения списка напоминаний, напишите: "список"'
@@ -72,7 +72,7 @@ def on_start(update: Update, _: CallbackContext):
 
 
 @log_func(log)
-def on_request(update: Update, _: CallbackContext):
+def on_request(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     command = message.text
@@ -95,7 +95,7 @@ def on_request(update: Update, _: CallbackContext):
 
 
 @log_func(log)
-def on_get_reminders(update: Update, _: CallbackContext):
+def on_get_reminders(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
@@ -122,14 +122,14 @@ def on_get_reminders(update: Update, _: CallbackContext):
     message.reply_text(text)
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_start),
         MessageHandler(Filters.regex("(?i)^Список$"), on_get_reminders),
         MessageHandler(Filters.text, on_request),
     ]
 
-    def before_start_func(updater: Updater):
+    def before_start_func(updater: Updater) -> None:
         # TODO: When the bot crashes, it is possible to create duplicate thread
         #       Need using global variable for getting bot
         thread = Thread(target=do_checking_reminders, args=[log, updater.bot])

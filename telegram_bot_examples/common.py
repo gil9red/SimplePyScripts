@@ -92,7 +92,7 @@ def log_func(log: logging.Logger):
     return actual_decorator
 
 
-def reply_error(log: logging.Logger, update: Update, context: CallbackContext):
+def reply_error(log: logging.Logger, update: Update, context: CallbackContext) -> None:
     log.error("Error: %s\nUpdate: %s", context.error, update, exc_info=context.error)
     if update:
         update.effective_message.reply_text(config.ERROR_TEXT)
@@ -109,7 +109,7 @@ def start_bot(
     handlers: list[Handler],
     before_start_func: Callable[[Updater], None] = None,
     **updater_kwargs,
-):
+) -> None:
     log.debug("Start")
 
     cpu_count = os.cpu_count()
@@ -149,7 +149,7 @@ def start_bot(
     log.debug("Finish")
 
 
-def run_main(main_func: Callable, log: logging.Logger, timeout=15):
+def run_main(main_func: Callable, log: logging.Logger, timeout=15) -> None:
     while True:
         try:
             main_func()

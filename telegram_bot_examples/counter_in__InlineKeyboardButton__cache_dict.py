@@ -44,12 +44,12 @@ def get_reply_markup(data: dict[str, int]) -> InlineKeyboardMarkup:
 
 
 @log_func(log)
-def on_start(update: Update, _: CallbackContext):
+def on_start(update: Update, _: CallbackContext) -> None:
     update.effective_message.reply_text("Write something")
 
 
 @log_func(log)
-def on_request(update: Update, _: CallbackContext):
+def on_request(update: Update, _: CallbackContext) -> None:
     chat_id = update.effective_chat.id
     message_id = update.effective_message.message_id
 
@@ -64,7 +64,7 @@ def on_request(update: Update, _: CallbackContext):
 
 
 @log_func(log)
-def on_callback_query(update: Update, _: CallbackContext):
+def on_callback_query(update: Update, _: CallbackContext) -> None:
     query = update.callback_query
     query.answer()
 
@@ -91,7 +91,7 @@ def on_callback_query(update: Update, _: CallbackContext):
     query.message.edit_reply_markup(reply_markup=get_reply_markup(data))
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_start),
         MessageHandler(Filters.text, on_request),

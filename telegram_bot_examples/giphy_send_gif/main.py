@@ -50,18 +50,18 @@ log = get_logger(__file__)
 
 
 @log_func(log)
-def on_start(update: Update, _: CallbackContext):
+def on_start(update: Update, _: CallbackContext) -> None:
     update.effective_message.reply_text("Write something or /get_local_file_gif")
 
 
 @log_func(log)
-def on_get_local_file_gif(update: Update, _: CallbackContext):
+def on_get_local_file_gif(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
     message.reply_document(document=open(SAMPLE_GIF_FILE_NAME, "rb"), quote=True)
 
 
 @log_func(log)
-def on_request(update: Update, _: CallbackContext):
+def on_request(update: Update, _: CallbackContext) -> None:
     message = update.effective_message
 
     url = get_random_gif_url(message.text)
@@ -74,7 +74,7 @@ def on_request(update: Update, _: CallbackContext):
         message.reply_text(text="Not found!", quote=True)
 
 
-def main():
+def main() -> None:
     handlers = [
         CommandHandler("start", on_start),
         CommandHandler("get_local_file_gif", on_get_local_file_gif),

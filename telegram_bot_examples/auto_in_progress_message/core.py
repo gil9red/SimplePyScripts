@@ -10,7 +10,8 @@ import threading
 import time
 
 from itertools import cycle
-from typing import Sequence
+from typing import Sequence, Optional, Type
+from types import TracebackType
 
 # pip install python-telegram-bot
 from telegram import Update, ReplyMarkup, Message, ParseMode
@@ -46,9 +47,7 @@ class ProgressValue(enum.Enum):
     RECTS_SMALL = "□□□□□", "■□□□□", "■■□□□", "■■■□□", "■■■■□", "■■■■■"
     PARALLELOGRAMS = "▱▱▱▱▱", "▰▱▱▱▱", "▰▰▱▱▱", "▰▰▰▱▱", "▰▰▰▰▱", "▰▰▰▰▰"
     CIRCLES = "⚪⚪⚪⚪⚪", "⚫⚪⚪⚪⚪", "⚫⚫⚪⚪⚪", "⚫⚫⚫⚪⚪", "⚫⚫⚫⚫⚪", "⚫⚫⚫⚫⚫"
-    CHICKENS = get_seqs_with_sub_animation(
-        items=["🥚", "🐣", "🐥", "🐔", "🍗"]
-    )
+    CHICKENS = get_seqs_with_sub_animation(items=["🥚", "🐣", "🐥", "🐔", "🍗"])
     FACES = get_seqs_with_sub_animation(
         items=["😶", "☹️", "🙁", "😕", "😐", "🙂", "😊", "😀", "😄", "😁"]
     )
@@ -82,7 +81,7 @@ class InfinityProgressIndicatorThread(threading.Thread):
         init_seconds: int = 0,
         *args,
         **kwargs,
-    ):
+    ) -> None:
         super().__init__(*args, **kwargs)
 
         self.daemon = True
@@ -101,7 +100,7 @@ class InfinityProgressIndicatorThread(threading.Thread):
         self._seconds: int = init_seconds
         self.init_seconds: int = init_seconds
 
-    def run(self):
+    def run(self) -> None:
         self._seconds = self.init_seconds
 
         while True:
@@ -126,7 +125,7 @@ class InfinityProgressIndicatorThread(threading.Thread):
             except BadRequest:
                 pass
 
-    def stop(self):
+    def stop(self) -> None:
         self._stop.set()
 
     def is_stopped(self) -> bool:
@@ -144,7 +143,7 @@ class show_temp_message:
         quote: bool = True,
         progress_value: ProgressValue = None,
         **kwargs,
-    ):
+    ) -> None:
         self.text = text
         self.update = update
         self.context = context
@@ -182,7 +181,12 @@ class show_temp_message:
 
         return self
 
-    def __exit__(self, exc_type, exc_value, traceback):
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_value: Optional[BaseException],
+        traceback: Optional[TracebackType],
+    ) -> None:
         if self.thread_progress:
             self.thread_progress.stop()
 
@@ -237,7 +241,7 @@ if __name__ == "__main__":
         progress_value: ProgressValue,
         text_fmt: str = "Please, wait {value} (elapsed {seconds} seconds)",
         number: int = 10,
-    ):
+    ) -> None:
         _progress_bar = cycle(progress_value.value)
         _seconds = 0
         for _ in range(number):
