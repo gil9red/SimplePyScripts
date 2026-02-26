@@ -8,12 +8,12 @@ import inspect
 
 
 
-def foo():
+def foo() -> int:
     return 1
 
 
 class Foo:
-    def __call__(self):
+    def __call__(self) -> int:
         return 1
 
 

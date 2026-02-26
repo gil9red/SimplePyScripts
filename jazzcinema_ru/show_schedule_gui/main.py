@@ -21,7 +21,7 @@ from qtpy.QtGui import *
 from qtpy.QtCore import *
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -37,7 +37,7 @@ URL = "http://www.jazzcinema.ru/schedule/"
 
 
 class Movie:
-    def __init__(self, border):
+    def __init__(self, border) -> None:
         a = border.select_one(".movie .title > a")
         self.movie_url = urljoin(URL, a["href"])
 
@@ -90,7 +90,7 @@ class Movie:
 
 
 class MovieInfoWidget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         # TODO: можно и видео добавить
@@ -103,7 +103,7 @@ class MovieInfoWidget(QWidget):
 
         self.setLayout(layout)
 
-    def set_movie(self, movie):
+    def set_movie(self, movie) -> None:
         data = dict()
 
         # Скачивание обложки и получени base64
@@ -167,7 +167,7 @@ class MovieInfoWidget(QWidget):
 
 
 class SchedulerMoviePage(QWidget):
-    def __init__(self, schedule):
+    def __init__(self, schedule) -> None:
         super().__init__()
 
         self.schedule_date_str = datetime.strptime(
@@ -203,7 +203,7 @@ class SchedulerMoviePage(QWidget):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("show_schedule_gui.py")
@@ -219,7 +219,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(widget)
 
-    def load(self):
+    def load(self) -> None:
         with urlopen(URL) as f:
             root = BeautifulSoup(f.read(), "lxml")
 

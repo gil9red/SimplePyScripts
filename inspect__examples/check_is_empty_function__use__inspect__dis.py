@@ -8,11 +8,11 @@ from dis__bytecode__is_empty_function import check_is_empty_function as check_is
 from inspect__get_source__function import check_is_empty_function as check_is_empty_function__use_inspect
 
 
-def foo():
+def foo() -> None:
     pass
 
 
-def foo2():
+def foo2() -> int:
     return 1
 
 
