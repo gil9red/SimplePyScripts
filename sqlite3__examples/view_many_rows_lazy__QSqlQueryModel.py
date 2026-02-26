@@ -23,7 +23,7 @@ from PyQt5.QtSql import QSqlDatabase, QSqlQueryModel
 class ListViewDelegate(QStyledItemDelegate):
     def paint(
         self, painter: QPainter, option: QStyleOptionViewItem, index: QModelIndex
-    ):
+    ) -> None:
         opt = option
         self.initStyleOption(opt, index)
 

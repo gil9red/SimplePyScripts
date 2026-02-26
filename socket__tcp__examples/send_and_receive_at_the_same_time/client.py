@@ -21,7 +21,7 @@ sock = socket.socket()
 sock.connect((HOST, PORT))
 
 
-def read_from():
+def read_from() -> None:
     while True:
         response_data = recv_msg(sock)
         if response_data:

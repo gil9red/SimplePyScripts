@@ -26,7 +26,7 @@ class SqlQueryModel(QSqlQueryModel):
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         query = QSqlQuery("SELECT COUNT(*) FROM File")
@@ -69,7 +69,7 @@ class MainWindow(QWidget):
 
         self.setLayout(layout)
 
-    def _on_added_new_items(self):
+    def _on_added_new_items(self) -> None:
         self.setWindowTitle(
             f"Items. "
             f"SQL: {self.model_sql.rowCount()} / {self.total_rows_sql} ({self.model_sql.rowCount() / self.total_rows_sql:.1%}) | "

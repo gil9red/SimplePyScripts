@@ -24,11 +24,11 @@ print("Reversed Sorted list: %s" % sorted(m, reverse=True))
 
 
 class Student:
-    def __init__(self, name, age):
+    def __init__(self, name, age) -> None:
         self.name = name
         self.age = age
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "%s (%d)" % (self.name, self.age)
 
 

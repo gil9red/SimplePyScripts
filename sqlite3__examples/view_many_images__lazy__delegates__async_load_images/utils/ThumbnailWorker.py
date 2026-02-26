@@ -13,7 +13,7 @@ class Signals(QObject):
 
 
 class ThumbnailWorker(QRunnable):
-    def __init__(self, file_name: str, width, height):
+    def __init__(self, file_name: str, width, height) -> None:
         super().__init__()
 
         self.file_name = file_name
@@ -21,7 +21,7 @@ class ThumbnailWorker(QRunnable):
         self.height = height
         self.signals = Signals()
 
-    def run(self):
+    def run(self) -> None:
         img = QImage(self.file_name)
         if img.isNull():
             return

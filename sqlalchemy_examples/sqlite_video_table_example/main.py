@@ -45,7 +45,7 @@ class Serial(Base):
     # TODO: для удаления связанных сериалов: http://docs.sqlalchemy.org/en/latest/orm/cascades.html#unitofwork-cascades
     Videos = relationship("SerialVideo", backref="Serial", order_by="SerialVideo.Id")
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<Serial(EnglishName: "{self.EnglishName}", Count: {len(self.Videos)})>'
 
 
@@ -65,7 +65,7 @@ class SerialVideo(Base):
     Title = Column(String)
     Duration = Column(Integer)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<Serial(Number: "{self.Number}", Serial: {self.Serial.EnglishName})>'
 
 

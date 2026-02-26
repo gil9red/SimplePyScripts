@@ -50,7 +50,7 @@ with sqlite3.connect(":memory:") as c:
 
     print()
 
-    def run_test():
+    def run_test() -> None:
         sql = "SELECT COUNT(*) FROM stocks WHERE UPPER(trans) LIKE UPPER('%SELL%')"
         elapsed = timeit(
             stmt="c.execute(sql).fetchone()",

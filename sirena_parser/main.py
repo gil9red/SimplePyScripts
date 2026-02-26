@@ -8,7 +8,7 @@ import re
 
 
 class SirenaRecord:
-    def __init__(self, line: str):
+    def __init__(self, line: str) -> None:
         self.values: list[str] = []
         self.type = line[0]
 
@@ -48,7 +48,7 @@ class SirenaRecord:
 
 
 class SirenaMessage:
-    def __init__(self, queue_lines: list[str]):
+    def __init__(self, queue_lines: list[str]) -> None:
         self.lines: list[str] = []
         self.records: list[SirenaRecord] = []
 
@@ -71,7 +71,7 @@ class SirenaMessage:
 
 
 class SirenaFile:
-    def __init__(self, file_name: str):
+    def __init__(self, file_name: str) -> None:
         self.lines: list[str] = []
         self.queue_lines: list[str] = []
         self.messages: list[SirenaMessage] = []

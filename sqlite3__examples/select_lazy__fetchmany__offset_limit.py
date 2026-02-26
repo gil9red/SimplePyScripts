@@ -10,7 +10,7 @@ __author__ = "ipetrash"
 import sqlite3
 
 
-def _print_1(c: sqlite3.Cursor):
+def _print_1(c: sqlite3.Cursor) -> None:
     i = 1
     while True:
         batch = c.fetchmany(BATCH_SIZE)
@@ -21,12 +21,12 @@ def _print_1(c: sqlite3.Cursor):
         i += 1
 
 
-def _print_2(c: sqlite3.Cursor):
+def _print_2(c: sqlite3.Cursor) -> None:
     for i, batch in enumerate(iter(lambda: c.fetchmany(BATCH_SIZE), []), 1):
         print(f"{i:3}. {len(batch):3}: {batch}")
 
 
-def _print_3(c: sqlite3.Cursor, sql: str):
+def _print_3(c: sqlite3.Cursor, sql: str) -> None:
     i = 1
     offset = 0
     while True:

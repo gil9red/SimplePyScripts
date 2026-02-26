@@ -64,7 +64,7 @@ def process_command(data: bytes, conn, addr) -> bytes:
     return json.dumps(rq, ensure_ascii=False).encode("utf-8")
 
 
-def process_connect(conn, addr):
+def process_connect(conn, addr) -> None:
     print(f"[+] New connection from {addr}")
 
     try:

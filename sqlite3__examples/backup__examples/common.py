@@ -16,7 +16,7 @@ def create_zip_for_file(
     file_name_zip: str | Path,
     file_name: Path,
     delete_file_name: bool = True,
-):
+) -> None:
     with zipfile.ZipFile(
         file_name_zip, mode="w", compression=zipfile.ZIP_DEFLATED
     ) as f:
@@ -26,7 +26,7 @@ def create_zip_for_file(
         file_name.unlink()
 
 
-def _process_test(connect: sqlite3.Connection):
+def _process_test(connect: sqlite3.Connection) -> None:
     connect.executescript(
         """
         create table if not exists stocks (
@@ -52,7 +52,7 @@ def run_test(
     dir_db_backup: Path,
     use_zip: bool = True,
     delete_file_name_after_zip: bool = True,
-):
+) -> None:
     with sqlite3.connect(":memory:") as connect:
         print("MEMORY")
         _process_test(connect)

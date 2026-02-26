@@ -36,7 +36,7 @@ class ThumbnailDelegate(QStyledItemDelegate):
         height,
         image_cache: dict,
         file_name_index=0,
-    ):
+    ) -> None:
         super().__init__()
 
         self.width = width
@@ -47,11 +47,11 @@ class ThumbnailDelegate(QStyledItemDelegate):
         self.image_cache = image_cache
         self.file_name_index = file_name_index
 
-    def _on_about_image(self, file_name: str, image: QImage, index: QModelIndex):
+    def _on_about_image(self, file_name: str, image: QImage, index: QModelIndex) -> None:
         self.image_cache[file_name] = image
         self.view.update(index)
 
-    def paint(self, painter: QPainter, opt: QStyleOptionViewItem, index: QModelIndex):
+    def paint(self, painter: QPainter, opt: QStyleOptionViewItem, index: QModelIndex) -> None:
         rect = opt.rect
         self.initStyleOption(opt, index)
 

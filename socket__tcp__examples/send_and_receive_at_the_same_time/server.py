@@ -20,7 +20,7 @@ PORT = 9090
 rqs: list[bytes] = []
 
 
-def write_to():
+def write_to() -> None:
     while True:
         if rqs:
             idx = random.randrange(len(rqs))

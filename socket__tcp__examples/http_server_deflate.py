@@ -11,7 +11,7 @@ import zlib
 PORT = 8080
 
 
-def send_answer(conn, status="200 OK", typ="text/plain; charset=utf-8", data=b""):
+def send_answer(conn, status="200 OK", typ="text/plain; charset=utf-8", data=b"") -> None:
     conn.send(b"GET HTTP/1.1 " + status.encode("utf-8") + b"\r\n")
     conn.send(b"Server: simplehttp\r\n")
     conn.send(b"Connection: close\r\n")

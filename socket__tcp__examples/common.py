@@ -15,7 +15,7 @@ def crc32_from_bytes(data: bytes) -> int:
     return zlib.crc32(data) & 0xFFFFFFFF
 
 
-def send_msg__with_crc32(sock, msg):
+def send_msg__with_crc32(sock, msg) -> None:
     # Prefix each message with a 12-byte (network byte order) length: 8-byte data length and 4-byte crc32 data
     crc32 = crc32_from_bytes(msg)
     msg = struct.pack(">QI", len(msg), crc32) + msg
@@ -47,7 +47,7 @@ def recv_msg__with_crc32(sock) -> bytes | None:
     return msg
 
 
-def send_msg(sock, msg, msg_len_format: str = ">Q"):
+def send_msg(sock, msg, msg_len_format: str = ">Q") -> None:
     # Prefix each message with a 8-byte (>Q) length (network byte order)
     msg = struct.pack(msg_len_format, len(msg)) + msg
     sock.sendall(msg)

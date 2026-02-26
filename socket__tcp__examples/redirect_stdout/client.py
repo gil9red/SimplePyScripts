@@ -16,10 +16,10 @@ HOST, PORT = "localhost", 9090
 
 
 class SocketIO:
-    def __init__(self, socket: socket.socket):
+    def __init__(self, socket: socket.socket) -> None:
         self.socket = socket
 
-    def write(self, text: str):
+    def write(self, text: str) -> None:
         data = text.encode("utf-8")
         print(f"Sending ({len(data)}): {data!r}", file=sys.stderr)
 

@@ -26,7 +26,7 @@ sock.connect((HOST, PORT))
 MSG_LEN_FORMAT = ">H"
 
 
-def read_from():
+def read_from() -> None:
     while True:
         response_data: bytes = recv_msg(sock, MSG_LEN_FORMAT)
         if response_data:

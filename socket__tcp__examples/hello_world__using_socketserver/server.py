@@ -26,7 +26,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
     client.
     """
 
-    def handle(self):
+    def handle(self) -> None:
         print("Connected:", self.client_address)
 
         data = recv_msg(self.request)

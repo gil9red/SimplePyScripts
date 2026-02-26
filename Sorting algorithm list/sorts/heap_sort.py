@@ -13,7 +13,7 @@ python heap_sort.py
 from __future__ import print_function
 
 
-def heapify(unsorted, index, heap_size):
+def heapify(unsorted, index, heap_size) -> None:
     largest = index
     left_index = 2 * index + 1
     right_index = 2 * index + 2

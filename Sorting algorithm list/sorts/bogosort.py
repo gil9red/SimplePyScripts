@@ -26,7 +26,7 @@ def bogosort(collection):
     [-45, -5, -2]
     """
 
-    def isSorted(collection):
+    def isSorted(collection) -> bool:
         if len(collection) < 2:
             return True
         for i in range(len(collection) - 1):

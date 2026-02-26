@@ -13,7 +13,7 @@ import time
 from threading import Thread
 
 
-def send_answer(conn, status="200 OK", typ="text/plain; charset=utf-8", data=""):
+def send_answer(conn, status="200 OK", typ="text/plain; charset=utf-8", data="") -> None:
     data = data.encode("utf-8")
 
     conn.send(b"GET HTTP/1.1 " + status.encode("utf-8") + b"\r\n")
@@ -25,7 +25,7 @@ def send_answer(conn, status="200 OK", typ="text/plain; charset=utf-8", data="")
     conn.send(data)
 
 
-def parse(conn):  # Обработка соединения в отдельной функции
+def parse(conn) -> None:  # Обработка соединения в отдельной функции
     try:
         data = b""
 
