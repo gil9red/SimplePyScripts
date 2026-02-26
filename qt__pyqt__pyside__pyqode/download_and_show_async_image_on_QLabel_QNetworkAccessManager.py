@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.lbl = QLabel("loading...")
@@ -28,7 +28,7 @@ class Widget(QWidget):
 
         self.setLayout(layout)
 
-    def finish_request(self, reply):
+    def finish_request(self, reply) -> None:
         img = QPixmap()
         img.loadFromData(reply.readAll())
 

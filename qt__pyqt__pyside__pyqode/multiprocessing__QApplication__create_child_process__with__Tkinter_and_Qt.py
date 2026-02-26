@@ -10,7 +10,7 @@ import tkinter as tk
 from PyQt5.Qt import QApplication, Qt, QLabel
 
 
-def go_qt(name):
+def go_qt(name) -> None:
     app = QApplication([])
 
     mw = QLabel()
@@ -22,7 +22,7 @@ def go_qt(name):
     app.exec()
 
 
-def go_tk(name):
+def go_tk(name) -> None:
     app = tk.Tk()
     app.minsize(150, 50)
 
@@ -32,12 +32,12 @@ def go_tk(name):
     app.mainloop()
 
 
-def create_qt():
+def create_qt() -> None:
     p = Process(target=go_qt, args=("Qt",))
     p.start()
 
 
-def create_tk():
+def create_tk() -> None:
     p = Process(target=go_tk, args=("Tk",))
     p.start()
 

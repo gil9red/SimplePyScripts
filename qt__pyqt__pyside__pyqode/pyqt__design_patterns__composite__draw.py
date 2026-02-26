@@ -16,7 +16,7 @@ from abc import ABCMeta, abstractmethod
 from PyQt5.Qt import *
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -35,77 +35,77 @@ class Graphic(metaclass=ABCMeta):
 
 
 class CompositeGraphic(Graphic):
-    def __init__(self):
+    def __init__(self) -> None:
         self.__child_graphics: list[Graphic] = []
 
-    def draw(self, painter: QPainter):
+    def draw(self, painter: QPainter) -> None:
         for graphic in self.__child_graphics:
             graphic.draw(painter)
 
     # Adds the graphic to the composition
-    def add(self, graphic: Graphic):
+    def add(self, graphic: Graphic) -> None:
         if graphic in self.__child_graphics:
             return
 
         self.__child_graphics.append(graphic)
 
     # Removes the graphic from the composition
-    def remove(self, graphic: Graphic):
+    def remove(self, graphic: Graphic) -> None:
         self.__child_graphics.remove(graphic)
 
 
 class Ellipse(Graphic):
-    def __init__(self, x, y, rx, ry):
+    def __init__(self, x, y, rx, ry) -> None:
         self.x = x
         self.y = y
         self.rx = rx
         self.ry = ry
 
-    def draw(self, painter: QPainter):
+    def draw(self, painter: QPainter) -> None:
         painter.drawEllipse(self.x, self.y, self.rx, self.ry)
 
 
 class Point(Graphic):
-    def __init__(self, x, y):
+    def __init__(self, x, y) -> None:
         self.x = x
         self.y = y
 
-    def draw(self, painter: QPainter):
+    def draw(self, painter: QPainter) -> None:
         painter.drawPoint(self.x, self.y)
 
 
 class Rect(Graphic):
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y, w, h) -> None:
         self.x = x
         self.y = y
         self.w = w
         self.h = h
 
-    def draw(self, painter: QPainter):
+    def draw(self, painter: QPainter) -> None:
         painter.drawRect(self.x, self.y, self.w, self.h)
 
 
 class Line(Graphic):
-    def __init__(self, x1, y1, x2, y2):
+    def __init__(self, x1, y1, x2, y2) -> None:
         self.x1 = x1
         self.y1 = y1
 
         self.x2 = x2
         self.y2 = y2
 
-    def draw(self, painter: QPainter):
+    def draw(self, painter: QPainter) -> None:
         painter.drawLine(self.x1, self.y1, self.x2, self.y2)
 
 
 class CanvasWidget(QWidget):
-    def __init__(self, graphic: Graphic):
+    def __init__(self, graphic: Graphic) -> None:
         super().__init__()
 
         self.setWindowTitle("Canvas")
 
         self.graphic = graphic
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
         painter.setBrush(Qt.green)
 

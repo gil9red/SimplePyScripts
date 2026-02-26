@@ -9,7 +9,7 @@ from switch_button import ToggleButton
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         switch_btn1 = ToggleButton()

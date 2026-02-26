@@ -8,7 +8,7 @@ from PyQt5.Qt import *
 
 
 class MyHighlighter(QSyntaxHighlighter):
-    def __init__(self, parent):
+    def __init__(self, parent) -> None:
         super().__init__(parent)
 
         self.regexp_by_format = dict()
@@ -24,7 +24,7 @@ class MyHighlighter(QSyntaxHighlighter):
         char_format.setForeground(Qt.darkCyan)
         self.regexp_by_format[r"\bcos\b"] = char_format
 
-    def highlightBlock(self, text):
+    def highlightBlock(self, text) -> None:
         for regexp, char_format in self.regexp_by_format.items():
             expression = QRegularExpression(regexp)
             it = expression.globalMatch(text)

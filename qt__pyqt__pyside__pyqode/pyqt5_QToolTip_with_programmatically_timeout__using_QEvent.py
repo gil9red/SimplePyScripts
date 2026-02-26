@@ -9,7 +9,7 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QHelpEvent
 
 
-def show_tooltip(parent, widget):
+def show_tooltip(parent, widget) -> None:
     app.notify(
         widget,
         QHelpEvent(QHelpEvent.ToolTip, widget.pos(), parent.mapToGlobal(widget.pos())),

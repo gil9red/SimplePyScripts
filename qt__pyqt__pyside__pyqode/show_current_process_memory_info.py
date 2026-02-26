@@ -13,7 +13,7 @@ from PyQt5.Qt import QApplication, QWidget, QLabel, QTimer, QVBoxLayout
 
 
 class MainWidget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self._label_info = QLabel()
@@ -31,7 +31,7 @@ class MainWidget(QWidget):
 
         self.update_memory_info()
 
-    def update_memory_info(self):
+    def update_memory_info(self) -> None:
         memory_bytes = self._process.memory_info().rss
 
         self._label_info.setText(

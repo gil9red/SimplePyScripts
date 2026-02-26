@@ -20,7 +20,7 @@ with open("js/jquery-3.1.1.min.js") as f:
 view = QWebEngineView()
 
 
-def _on_load_finished(ok: bool):
+def _on_load_finished(ok: bool) -> None:
     view.page().runJavaScript(jquery_text)
 
     # Test jQuery

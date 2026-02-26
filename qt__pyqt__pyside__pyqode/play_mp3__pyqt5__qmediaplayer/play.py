@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from PyQt5 import Qt
 
 
-def _on_media_status_changed(status):
+def _on_media_status_changed(status) -> None:
     if status == Qt.QMediaPlayer.EndOfMedia:
         Qt.QCoreApplication.instance().quit()
 

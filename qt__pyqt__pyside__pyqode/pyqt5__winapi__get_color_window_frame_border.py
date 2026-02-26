@@ -39,7 +39,7 @@ def getWindowFrameColor():
 if __name__ == "__main__":
     app = Qt.QApplication([])
 
-    def get_color():
+    def get_color() -> None:
         color = getWindowFrameColor()
         button.setStyleSheet("background-color: " + color.name())
 

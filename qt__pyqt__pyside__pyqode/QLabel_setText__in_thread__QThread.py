@@ -9,14 +9,14 @@ from PyQt5.Qt import QMainWindow, QLabel, QFont, QApplication, Qt, QThread
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.label = QLabel()
         self.label.setAlignment(Qt.AlignCenter)
         self.label.setFont(QFont("Courier", 25))
 
-        def loop():
+        def loop() -> None:
             i = 0
 
             while True:
@@ -26,7 +26,7 @@ class MainWindow(QMainWindow):
                 time.sleep(1)
 
         class Thread(QThread):
-            def run(self):
+            def run(self) -> None:
                 loop()
 
         self.thread = Thread()

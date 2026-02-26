@@ -24,14 +24,14 @@ class ThreadDownload(QThread):
     about_file_name = pyqtSignal(str)
     about_error = pyqtSignal(str)
 
-    def __init__(self, url: str = None, file_name: str = None):
+    def __init__(self, url: str = None, file_name: str = None) -> None:
         super().__init__()
 
         self.url = url
         self.file_name = file_name
 
     # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/4692cbb36b5addb0f2bd5e93e69eb8c7c257bdf8/download_file/with_progress.py#L12
-    def reporthook(self, blocknum, blocksize, totalsize):
+    def reporthook(self, blocknum, blocksize, totalsize) -> None:
         readsofar = blocknum * blocksize
         if totalsize > 0:
             percent = readsofar * 100.0 / totalsize
@@ -51,7 +51,7 @@ class ThreadDownload(QThread):
         else:
             self.about_progress.emit(f"read {readsofar}")
 
-    def run(self):
+    def run(self) -> None:
         try:
             file_name, _ = urlretrieve(
                 self.url, self.file_name, reporthook=self.reporthook
@@ -64,7 +64,7 @@ class ThreadDownload(QThread):
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.line_edit_url = QLineEdit(
@@ -92,20 +92,20 @@ class MainWindow(QWidget):
 
         self.setLayout(layout)
 
-    def download(self):
+    def download(self) -> None:
         self.thread.url = self.line_edit_url.text()
         self.thread.file_name = self.line_edit_file_name.text()
         self.thread.start()
 
-    def _handle_about_progress(self, text: str):
+    def _handle_about_progress(self, text: str) -> None:
         self.setWindowTitle(text)
 
-    def _handle_about_file_name(self, text: str):
+    def _handle_about_file_name(self, text: str) -> None:
         self.text_edit_log.append(
             f"""<b><p style="color:green">File name: {text}</p></b>"""
         )
 
-    def _handle_about_error(self, text: str):
+    def _handle_about_error(self, text: str) -> None:
         self.text_edit_log.append(f"""<pre style="color:red">{text}</pre>""")
 
 

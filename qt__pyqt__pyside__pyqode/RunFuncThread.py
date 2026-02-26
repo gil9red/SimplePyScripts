@@ -10,12 +10,12 @@ from PyQt5.QtCore import QThread, pyqtSignal
 class RunFuncThread(QThread):
     run_finished = pyqtSignal(object)
 
-    def __init__(self, func):
+    def __init__(self, func) -> None:
         super().__init__()
 
         self.func = func
 
-    def run(self):
+    def run(self) -> None:
         self.run_finished.emit(self.func())
 
 

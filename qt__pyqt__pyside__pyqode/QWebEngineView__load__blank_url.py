@@ -18,14 +18,14 @@ class WebEnginePage(QWebEnginePage):
         page.urlChanged.connect(self.on_url_changed)
         return page
 
-    def on_url_changed(self, url: QUrl):
+    def on_url_changed(self, url: QUrl) -> None:
         page = self.sender()
         self.setUrl(url)
         page.deleteLater()
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.browser = QWebEngineView()

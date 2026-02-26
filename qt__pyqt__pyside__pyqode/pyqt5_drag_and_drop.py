@@ -15,7 +15,7 @@ from PyQt5.QtWidgets import (
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Drag & Drop")
@@ -38,10 +38,10 @@ class MainWindow(QMainWindow):
 
         self._update_states()
 
-    def _update_states(self):
+    def _update_states(self) -> None:
         self.label_total_files.setText(f"Files: {self.list_files.count()}")
 
-    def dragEnterEvent(self, event):
+    def dragEnterEvent(self, event) -> None:
         # Тут выполняются проверки и дается (или нет) разрешение на Drop
 
         mime = event.mimeData()

@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QListWidgetItem, QListWidget, QWidget, QVBoxLayout, 
 
 
 class AdvancedListWidget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.list_widget = QListWidget()
@@ -29,7 +29,7 @@ class AdvancedListWidget(QWidget):
 
         self._update_states()
 
-    def _update_states(self):
+    def _update_states(self) -> None:
         current_row: int = self.list_widget.currentRow()
 
         is_selected: bool = current_row != -1
@@ -38,39 +38,39 @@ class AdvancedListWidget(QWidget):
         self.action_move_up.setVisible(is_selected and current_row > 0)
         self.action_move_down.setVisible(is_selected and current_row < self.count() - 1)
 
-    def _append(self):
+    def _append(self) -> None:
         item = self.append("New item")
 
         self.list_widget.setCurrentItem(item)
         self.list_widget.editItem(item)
 
-    def _remove(self):
+    def _remove(self) -> None:
         current_row: int = self.list_widget.currentRow()
         if current_row == -1:
             return
 
         self.list_widget.takeItem(current_row)
 
-    def _move_item(self, from_row: int, to_row: int):
+    def _move_item(self, from_row: int, to_row: int) -> None:
         item = self.list_widget.takeItem(from_row)
         self.list_widget.insertItem(to_row, item)
         self.list_widget.setCurrentItem(item)
 
-    def _move_up(self):
+    def _move_up(self) -> None:
         current_row: int = self.list_widget.currentRow()
         if current_row < 1:
             return
 
         self._move_item(current_row, current_row - 1)
 
-    def _move_down(self):
+    def _move_down(self) -> None:
         current_row: int = self.list_widget.currentRow()
         if current_row != -1 and current_row >= self.count() - 1:
             return
 
         self._move_item(current_row, current_row + 1)
 
-    def set_items(self, items: list[str]):
+    def set_items(self, items: list[str]) -> None:
         self.clear()
         self.append_all(items)
 
@@ -82,12 +82,12 @@ class AdvancedListWidget(QWidget):
 
         return item
 
-    def append_all(self, items: list[str]):
+    def append_all(self, items: list[str]) -> None:
         for text in items:
             self.append(text)
 
-    def clear(self):
-        return self.list_widget.clear()
+    def clear(self) -> None:
+        self.list_widget.clear()
 
     def count(self) -> int:
         return self.list_widget.count()

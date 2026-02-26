@@ -9,7 +9,7 @@ from PyQt5.QtCore import Qt
 
 
 class Window(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.button = QPushButton("Test")
@@ -20,13 +20,13 @@ class Window(QWidget):
 
         self.setLayout(main_layout)
 
-    def foo(self):
+    def foo(self) -> None:
         print("foo")
 
-    def bar(self):
+    def bar(self) -> None:
         print("bar")
 
-    def on_clicked(self):
+    def on_clicked(self) -> None:
         modifiers = QApplication.keyboardModifiers()
 
         if modifiers == Qt.AltModifier:

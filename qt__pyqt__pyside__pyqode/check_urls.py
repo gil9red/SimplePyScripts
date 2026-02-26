@@ -24,7 +24,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import QThread, pyqtSignal, Qt
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -45,12 +45,12 @@ session.headers[
 class CheckUrlThread(QThread):
     about_check_url = pyqtSignal(str, str)
 
-    def __init__(self, urls: list[str] = None):
+    def __init__(self, urls: list[str] = None) -> None:
         super().__init__()
 
         self.urls = urls if urls else []
 
-    def run(self):
+    def run(self) -> None:
         for url in self.urls:
             try:
                 rs = session.get(url)
@@ -66,7 +66,7 @@ class CheckUrlThread(QThread):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.urls = QPlainTextEdit()
@@ -100,7 +100,7 @@ class MainWindow(QMainWindow):
         self.thread.started.connect(lambda: self.pb_check.setEnabled(False))
         self.thread.finished.connect(lambda: self.pb_check.setEnabled(True))
 
-    def _on_click_check(self):
+    def _on_click_check(self) -> None:
         urls = self.urls.toPlainText().strip().splitlines()
 
         self.result_table.clearContents()
@@ -116,7 +116,7 @@ class MainWindow(QMainWindow):
         self.thread.urls = urls
         self.thread.start()
 
-    def _on_about_check_url(self, url: str, code: str):
+    def _on_about_check_url(self, url: str, code: str) -> None:
         for item in self.result_table.findItems(url, Qt.MatchCaseSensitive):
             row = item.row()
             self.result_table.item(row, 1).setText(code)

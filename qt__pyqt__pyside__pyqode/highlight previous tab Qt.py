@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import *
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.prev_tab_index = -1
@@ -32,7 +32,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.tab_widget)
 
-    def current_tab_changed(self, i):
+    def current_tab_changed(self, i) -> None:
         # Запоминание индексов предыдущей и текущей вкладки.
         # При переключении вкладок:
         #   У предыдущей убирается выделение

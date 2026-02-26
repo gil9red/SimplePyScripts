@@ -12,7 +12,7 @@ from PyQt5.QtChart import QChart, QChartView, QLineSeries
 
 # SOURCE: https://doc-snapshots.qt.io/qt5-5.12/qtcharts-callout-callout-h.html
 class Callout(QGraphicsItem):
-    def __init__(self, chart: QChart, parent=None):
+    def __init__(self, chart: QChart, parent=None) -> None:
         super().__init__(parent)
 
         self.hide()
@@ -26,7 +26,7 @@ class Callout(QGraphicsItem):
         self._anchor = QPointF()
         self._font = QFont()
 
-    def setText(self, text: str):
+    def setText(self, text: str) -> None:
         self._text = text
         metrics = QFontMetrics(self._font)
         self._textRect = QRectF(
@@ -36,10 +36,10 @@ class Callout(QGraphicsItem):
         self.prepareGeometryChange()
         self._rect = QRectF(self._textRect.adjusted(-5, -5, 5, 5))
 
-    def setAnchor(self, point: QPointF):
+    def setAnchor(self, point: QPointF) -> None:
         self._anchor = point
 
-    def updateGeometry(self):
+    def updateGeometry(self) -> None:
         self.prepareGeometryChange()
         self.setPos(self._chart.mapToPosition(self._anchor) + QPoint(10, -50))
 
@@ -70,7 +70,7 @@ class Callout(QGraphicsItem):
         rect.setBottom(max(self._rect.bottom(), anchor.y()))
         return rect
 
-    def paint(self, painter: QPainter, option, widget=None):
+    def paint(self, painter: QPainter, option, widget=None) -> None:
         path = QPainterPath()
         path.addRoundedRect(self._rect, 5, 5)
 
@@ -151,10 +151,10 @@ class Callout(QGraphicsItem):
         painter.drawPath(path)
         painter.drawText(self._textRect, self._text)
 
-    def mousePressEvent(self, event: QGraphicsSceneMouseEvent):
+    def mousePressEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         event.setAccepted(True)
 
-    def mouseMoveEvent(self, event: QGraphicsSceneMouseEvent):
+    def mouseMoveEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         if event.buttons() & Qt.LeftButton:
             self.setPos(
                 self.mapToParent(event.pos() - event.buttonDownPos(Qt.LeftButton))
@@ -165,7 +165,7 @@ class Callout(QGraphicsItem):
 
 
 class ChartViewToolTips(QChartView):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setRenderHint(QPainter.Antialiasing)
@@ -174,7 +174,7 @@ class ChartViewToolTips(QChartView):
         self._callout_font_family = None
         self._callouts = []
 
-    def clear_all_tooltips(self):
+    def clear_all_tooltips(self) -> None:
         if self._tooltip:
             self.scene().removeItem(self._tooltip)
 
@@ -189,7 +189,7 @@ class ChartViewToolTips(QChartView):
 
         return callout
 
-    def show_series_tooltip(self, point, state: bool):
+    def show_series_tooltip(self, point, state: bool) -> None:
         if not self.chart():
             return
 
@@ -205,7 +205,7 @@ class ChartViewToolTips(QChartView):
         else:
             self._tooltip.hide()
 
-    def keepCallout(self, point):
+    def keepCallout(self, point) -> None:
         if not self.chart() or not self._tooltip:
             return
 
@@ -214,7 +214,7 @@ class ChartViewToolTips(QChartView):
 
         self._tooltip = self._add_Callout()
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event) -> None:
         if self.chart():
             pos = event.pos()
             point = self.chart().mapToValue(pos)
@@ -222,7 +222,7 @@ class ChartViewToolTips(QChartView):
 
         super().mouseReleaseEvent(event)
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event) -> None:
         if self.scene():
             size = QSizeF(event.size())
 
@@ -236,7 +236,7 @@ class ChartViewToolTips(QChartView):
 
 
 class MainWindow(ChartViewToolTips):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         series = QLineSeries()

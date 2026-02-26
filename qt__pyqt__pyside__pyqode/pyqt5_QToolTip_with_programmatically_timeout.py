@@ -8,7 +8,7 @@ from PyQt5 import QtWidgets as qtw
 from PyQt5.QtCore import QRect, QTimer
 
 
-def show_tooltip(parent, widget):
+def show_tooltip(parent, widget) -> None:
     qtw.QToolTip.showText(
         parent.mapToGlobal(widget.pos()), widget.toolTip(), widget, QRect()
     )

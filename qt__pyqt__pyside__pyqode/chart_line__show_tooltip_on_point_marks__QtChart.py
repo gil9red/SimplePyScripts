@@ -13,7 +13,7 @@ from chart_line__show_tooltip_on_series__QtChart import Callout, ChartViewToolTi
 
 
 class MainWindow(ChartViewToolTips):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         series = QLineSeries()
@@ -38,7 +38,7 @@ class MainWindow(ChartViewToolTips):
 
         self.setChart(self._chart)
 
-    def show_series_tooltip(self, point, state: bool):
+    def show_series_tooltip(self, point, state: bool) -> None:
         if not self._tooltip:
             self._tooltip = Callout(self._chart)
 

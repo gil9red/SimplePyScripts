@@ -37,7 +37,7 @@ def get_optimal_font(family_font: str, w, h, text: str) -> QFont:
     return font
 
 
-def draw_hex(painter: QPainter, size: int, color: QColor):
+def draw_hex(painter: QPainter, size: int, color: QColor) -> None:
     r, g, b, _ = color.getRgb()
     value = "".join(f"{x:02X}" for x in [r, g, b])
 
@@ -56,7 +56,7 @@ def draw_hex(painter: QPainter, size: int, color: QColor):
     painter.restore()
 
 
-def draw_rgb(painter: QPainter, size: int, color: QColor):
+def draw_rgb(painter: QPainter, size: int, color: QColor) -> None:
     r, g, b, _ = color.getRgb()
     rgb = list(map(str, [r, g, b]))
 

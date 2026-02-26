@@ -11,7 +11,7 @@ from PyQt5 import Qt
 class LoadImageThread(Qt.QThread):
     about_new_image = Qt.pyqtSignal(Qt.QPixmap)
 
-    def run(self):
+    def run(self) -> None:
         data = request.urlopen(self.url).read()
         pixmap = Qt.QPixmap()
         pixmap.loadFromData(data)
@@ -21,7 +21,7 @@ class LoadImageThread(Qt.QThread):
 
 
 class URLView(Qt.QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         layout = Qt.QVBoxLayout(self)
@@ -47,7 +47,7 @@ class URLView(Qt.QWidget):
         self.thread.started.connect(lambda: self.loadButton.setEnabled(False))
         self.thread.finished.connect(lambda: self.loadButton.setEnabled(True))
 
-    def on_load(self):
+    def on_load(self) -> None:
         print("Load image")
 
         # Запускаем поток

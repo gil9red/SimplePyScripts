@@ -48,7 +48,7 @@ from PyQt5.QtCore import QTimer, Qt
 
 
 class SlideShowWidget(QWidget):
-    def __init__(self, image_list: list[str]):
+    def __init__(self, image_list: list[str]) -> None:
         super().__init__()
 
         self.setWindowTitle("SlideShowWidget")
@@ -66,11 +66,11 @@ class SlideShowWidget(QWidget):
 
         self.resize(200, 200)
 
-    def set_timeout(self, timeout):
+    def set_timeout(self, timeout) -> None:
         self.timer.setInterval(timeout * 1000)
         self.timer.start()
 
-    def next(self):
+    def next(self) -> None:
         if not self.image_list:
             return
 
@@ -82,7 +82,7 @@ class SlideShowWidget(QWidget):
         if self.current_index >= len(self.image_list):
             self.current_index = 0
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
 
         if self.source_image:
@@ -91,7 +91,7 @@ class SlideShowWidget(QWidget):
                 Qt.KeepAspectRatio,
             )
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         if self.source_image is None:
             super().paintEvent(event)
             return

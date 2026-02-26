@@ -10,7 +10,7 @@ from PyQt5.QtGui import QPainter, QPen
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowFlags(Qt.FramelessWindowHint)
@@ -27,32 +27,32 @@ class Widget(QWidget):
 
         self.setLayout(layout)
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event) -> None:
         if event.button() == Qt.LeftButton:
             self._old_pos = event.pos()
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event) -> None:
         if event.button() == Qt.LeftButton:
             self._old_pos = None
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event) -> None:
         if not self._old_pos:
             return
 
         delta = event.pos() - self._old_pos
         self.move(self.pos() + delta)
 
-    def enterEvent(self, event):
+    def enterEvent(self, event) -> None:
         self.frame_color = Qt.darkCyan
 
         self.update()
 
-    def leaveEvent(self, event):
+    def leaveEvent(self, event) -> None:
         self.frame_color = Qt.darkGreen
 
         self.update()
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
 
         painter.setBrush(Qt.white)

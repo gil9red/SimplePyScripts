@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QFrame
 
 
 class HorizontalLineWidget(QFrame):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setFrameShape(QFrame.HLine)
@@ -17,7 +17,7 @@ class HorizontalLineWidget(QFrame):
 
 
 class VerticalLineWidget(QFrame):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setFrameShape(QFrame.VLine)

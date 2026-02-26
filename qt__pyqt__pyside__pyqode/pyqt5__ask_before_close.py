@@ -8,7 +8,7 @@ from PyQt5.Qt import QWidget, QApplication, QPushButton, QVBoxLayout, QMessageBo
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         button = QPushButton("Close")
@@ -19,7 +19,7 @@ class MainWindow(QWidget):
 
         self.setLayout(layout)
 
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
         reply = QMessageBox.question(
             self,
             "Quit",

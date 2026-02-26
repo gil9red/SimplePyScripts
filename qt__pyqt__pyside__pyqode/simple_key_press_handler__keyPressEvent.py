@@ -10,7 +10,7 @@ from PyQt5.QtCore import Qt
 
 
 class MainWindow(QLabel):
-    def keyPressEvent(self, event: QKeyEvent):
+    def keyPressEvent(self, event: QKeyEvent) -> None:
         super().keyPressEvent(event)
 
         text = f"{event.key()} : {event.text()!r}"

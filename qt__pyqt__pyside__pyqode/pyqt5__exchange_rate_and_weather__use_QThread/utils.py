@@ -86,7 +86,7 @@ CODE_WEATHER_BY_DESCRIPTION = {
 }
 
 
-def get_weather(city):
+def get_weather(city) -> str:
     """
     Функция возвращает описание погоды указанного населенный пункт.
 

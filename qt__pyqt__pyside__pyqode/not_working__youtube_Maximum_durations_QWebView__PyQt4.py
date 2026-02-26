@@ -48,7 +48,7 @@ def get_total_seconds(time_str):
     return total_seconds
 
 
-def load_finished_handler(ok):
+def load_finished_handler(ok) -> None:
     if not ok:
         return
 
@@ -78,7 +78,7 @@ def load_finished_handler(ok):
     timer = QTimer()
     timer.setInterval(5000)
 
-    def timeout_handler():
+    def timeout_handler() -> None:
         doc = view.page().mainFrame().documentElement()
         button = doc.findFirst(".load-more-button")
 

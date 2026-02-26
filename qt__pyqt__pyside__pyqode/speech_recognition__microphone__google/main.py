@@ -19,7 +19,7 @@ import speech_recognition as sr
 from PyQt5 import Qt
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -36,7 +36,7 @@ class SpeechRecognitionThread(Qt.QThread):
 
     language = "en-US"
 
-    def run(self):
+    def run(self) -> None:
         try:
             r = sr.Recognizer()
 
@@ -65,7 +65,7 @@ class SpeechRecognitionThread(Qt.QThread):
 
 
 class Window(Qt.QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("speech_recognition__microphone__google")
@@ -102,14 +102,14 @@ class Window(Qt.QWidget):
         # Start speech recognition
         self.pb_microphone.clicked.connect(self._speech_recognition_start)
 
-    def _speech_recognition_start(self):
+    def _speech_recognition_start(self) -> None:
         self.pb_microphone.setEnabled(False)
         self.pte_result.clear()
 
         self.thread.language = self.cb_lang.currentText()
         self.thread.start()
 
-    def _speech_recognition_finish(self):
+    def _speech_recognition_finish(self) -> None:
         self.pb_microphone.setEnabled(True)
         self.progress_bar.hide()
 

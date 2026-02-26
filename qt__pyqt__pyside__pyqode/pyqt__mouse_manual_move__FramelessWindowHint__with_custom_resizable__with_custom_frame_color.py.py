@@ -14,7 +14,7 @@ from pyqt__mouse_manual_move__FramelessWindowHint__with_custom_resizable import 
 
 
 class Widget(ResizableFramelessWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -29,7 +29,7 @@ class Widget(ResizableFramelessWidget):
 
         self.setLayout(layout)
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
 
         painter.setBrush(Qt.white)

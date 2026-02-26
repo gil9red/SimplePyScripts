@@ -103,7 +103,7 @@ if __name__ == "__main__":
     from PyQt5.QtWidgets import QWidget, QPushButton, QApplication
 
     class Window(QWidget):
-        def __init__(self):
+        def __init__(self) -> None:
             super().__init__()
 
             flowLayout = FlowLayout()

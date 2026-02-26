@@ -10,12 +10,12 @@ from PyQt5.QtCore import Qt
 
 
 class ElidedLabel(QLabel):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
         self.setMinimumWidth(50)
     
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
 
         metrics = QFontMetrics(self.font())

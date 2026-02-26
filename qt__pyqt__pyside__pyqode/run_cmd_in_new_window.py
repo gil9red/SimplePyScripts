@@ -12,7 +12,7 @@ import traceback
 from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QVBoxLayout, QMessageBox
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -25,7 +25,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.cmd_command = "start cmd.exe @cmd /k ipconfig"
@@ -42,10 +42,10 @@ class MainWindow(QWidget):
 
         self.setLayout(layout)
 
-    def btn_clicked_subprocess(self):
+    def btn_clicked_subprocess(self) -> None:
         subprocess.run(self.cmd_command.split(), shell=True)
 
-    def btn_clicked_os_system(self):
+    def btn_clicked_os_system(self) -> None:
         os.system(self.cmd_command)
 
 

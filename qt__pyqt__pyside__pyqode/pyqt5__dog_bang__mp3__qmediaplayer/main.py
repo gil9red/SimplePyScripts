@@ -11,7 +11,7 @@ import sys
 from PyQt5 import Qt
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -27,7 +27,7 @@ class Widget(Qt.QLabel):
     dog_sound_1 = "dog_sound_1.mp3"
     dog_sound_2 = "dog_sound_2.mp3"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Dog Bang!")
@@ -35,7 +35,7 @@ class Widget(Qt.QLabel):
         self.setPixmap(Qt.QPixmap("dog.png"))
         self.player = Qt.QMediaPlayer()
 
-    def mouseReleaseEvent(self, event: Qt.QMouseEvent):
+    def mouseReleaseEvent(self, event: Qt.QMouseEvent) -> None:
         super().mouseReleaseEvent(event)
 
         file_name = self.dog_sound_1 if event.button() == Qt.Qt.LeftButton else self.dog_sound_2

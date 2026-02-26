@@ -30,7 +30,7 @@ PROGRAM_NAME: str = DIR.name
 
 
 class About(QDialog):
-    def __init__(self, title: str, use_column_resizer: bool):
+    def __init__(self, title: str, use_column_resizer: bool) -> None:
         super().__init__()
 
         self.setWindowTitle(title)

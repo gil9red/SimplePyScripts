@@ -11,11 +11,11 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QApplication
 
 
-def authorize(token):
+def authorize(token) -> None:
     print(f"token: {token}")
 
 
-def url_changed(url):
+def url_changed(url) -> None:
     url = url.toString()
     print(f"url_changed: {url}")
 

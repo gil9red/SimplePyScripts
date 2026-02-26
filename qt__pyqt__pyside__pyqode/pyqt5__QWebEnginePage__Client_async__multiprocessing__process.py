@@ -10,7 +10,7 @@ from PyQt5.QtWebEngineWidgets import QWebEnginePage
 
 
 class Client(QWebEnginePage):
-    def __init__(self, urls):
+    def __init__(self, urls) -> None:
         self.app = QApplication([])
 
         super().__init__()
@@ -22,10 +22,10 @@ class Client(QWebEnginePage):
             self.load(QUrl(url))
             self.app.exec_()
 
-    def _on_load_finished(self):
+    def _on_load_finished(self) -> None:
         self.toHtml(self.callable)
 
-    def callable(self, html_str):
+    def callable(self, html_str) -> None:
         self.response_list.append(html_str)
         self.app.quit()
 

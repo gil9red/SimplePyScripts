@@ -10,7 +10,7 @@ from PyQt5.QtCore import Qt
 
 
 class Example(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Example")
@@ -21,22 +21,22 @@ class Example(QWidget):
         self._press = False
         self._old_pos = None
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event) -> None:
         if event.button() == Qt.LeftButton:
             self._old_pos = event.pos()
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event) -> None:
         if event.button() == Qt.LeftButton:
             self._old_pos = None
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event) -> None:
         if not self._old_pos:
             return
 
         delta = event.pos() - self._old_pos
         self.move(self.pos() + delta)
 
-    def paintEvent(self, event: QtGui.QPaintEvent):
+    def paintEvent(self, event: QtGui.QPaintEvent) -> None:
         painter = QtGui.QPainter(self)
         painter.setPen(QtGui.QPen(Qt.black, 50))
         painter.drawRect(self.rect())

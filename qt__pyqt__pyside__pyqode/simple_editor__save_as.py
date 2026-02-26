@@ -8,7 +8,7 @@ from PyQt5 import Qt
 
 
 class Example(Qt.QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Hi")
@@ -20,7 +20,7 @@ class Example(Qt.QMainWindow):
         save_file_action = menu.addAction("Save As ...")
         save_file_action.triggered.connect(self.save_as)
 
-    def save_as(self):
+    def save_as(self) -> None:
         file_name, ok = Qt.QFileDialog.getSaveFileName(self)
         if not ok:
             return

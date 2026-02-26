@@ -13,7 +13,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 class SwitchButton(QtWidgets.QWidget):
     clicked = QtCore.pyqtSignal(bool)
 
-    def __init__(self, parent=None, w1="Yes", l1=12, w2="No", l2=33, width=60):
+    def __init__(self, parent=None, w1="Yes", l1=12, w2="No", l2=33, width=60) -> None:
         super(SwitchButton, self).__init__(parent)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -48,10 +48,10 @@ class SwitchButton(QtWidgets.QWidget):
     def valueText(self) -> str:
         return self.__labelon.text() if self.isChecked() else self.__labeloff.text()
 
-    def setDuration(self, time):
+    def setDuration(self, time) -> None:
         self.__duration = time
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event) -> None:
         if not self.__enabled:
             return
 
@@ -85,7 +85,7 @@ class SwitchButton(QtWidgets.QWidget):
 
         self.clicked.emit(self.isChecked())
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         s = self.size()
         qp = QtGui.QPainter()
         qp.begin(self)
@@ -125,12 +125,12 @@ class SwitchButton(QtWidgets.QWidget):
 
 
 class Circle(QtWidgets.QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super(Circle, self).__init__(parent)
         self.__enabled = True
         self.setFixedSize(20, 20)
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         s = self.size()
         qp = QtGui.QPainter()
         qp.begin(self)
@@ -168,12 +168,12 @@ class Circle(QtWidgets.QWidget):
 
 
 class Background(QtWidgets.QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super(Background, self).__init__(parent)
         self.__enabled = True
         self.setFixedHeight(20)
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         s = self.size()
         qp = QtGui.QPainter()
         qp.begin(self)

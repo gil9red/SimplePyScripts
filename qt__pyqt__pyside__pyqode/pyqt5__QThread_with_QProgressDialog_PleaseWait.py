@@ -11,17 +11,17 @@ from PyQt5.Qt import *
 class RunFuncThread(QThread):
     run_finished = pyqtSignal(object)
 
-    def __init__(self, func):
+    def __init__(self, func) -> None:
         super().__init__()
 
         self.func = func
 
-    def run(self):
+    def run(self) -> None:
         self.run_finished.emit(self.func())
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.pb_go = QPushButton("Go")
@@ -35,10 +35,10 @@ class MainWindow(QWidget):
 
         self.setLayout(layout)
 
-    def _on_run_finished(self, value):
+    def _on_run_finished(self, value) -> None:
         self.te_log.setPlainText(str(value))
 
-    def go(self):
+    def go(self) -> None:
         progress_dialog = QProgressDialog(self)
 
         def foo():

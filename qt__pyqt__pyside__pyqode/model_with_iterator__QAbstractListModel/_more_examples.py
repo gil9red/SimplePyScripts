@@ -20,7 +20,7 @@ def get_infinity_generator():
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         main_layout = QHBoxLayout(self)

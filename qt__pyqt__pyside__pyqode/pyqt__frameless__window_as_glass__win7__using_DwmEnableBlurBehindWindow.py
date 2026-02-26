@@ -55,7 +55,7 @@ def DWM_enable_blur_behind_window(widget):
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowFlags(Qt.FramelessWindowHint)
@@ -71,15 +71,15 @@ class Widget(QWidget):
 
         self.setLayout(layout)
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event) -> None:
         if event.button() == Qt.LeftButton:
             self._old_pos = event.pos()
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event) -> None:
         if event.button() == Qt.LeftButton:
             self._old_pos = None
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event) -> None:
         if not self._old_pos:
             return
 

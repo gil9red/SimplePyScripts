@@ -41,7 +41,7 @@ logger = get_logger("web_tag_editor")
 
 
 class WebPage(QWebPage):
-    def userAgentForUrl(self, url):
+    def userAgentForUrl(self, url) -> str:
         return (
             "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0"
         )
@@ -54,7 +54,7 @@ QWebSettings.globalSettings().setAttribute(QWebSettings.DeveloperExtrasEnabled, 
 
 
 class WebTagEditor(QWebView):
-    def __init__(self, login, password, question_url):
+    def __init__(self, login, password, question_url) -> None:
         super().__init__()
 
         self.login = login
@@ -74,7 +74,7 @@ class WebTagEditor(QWebView):
 
         self.setPage(WebPage())
 
-    def go(self):
+    def go(self) -> None:
         self.load("https://ru.stackoverflow.com/users/login")
         self.doc.findFirst("#email").setAttribute("value", self.login)
         self.doc.findFirst("#password").setAttribute("value", self.password)
@@ -159,7 +159,7 @@ class WebTagEditor(QWebView):
         self.loadFinished.connect(loop.quit)
         loop.exec_()
 
-    def load(self, url):
+    def load(self, url) -> None:
         logger.debug("Начата загрузка url: %s.", url)
         super().load(url)
 
@@ -174,13 +174,13 @@ class WebTagEditor(QWebView):
     def doc(self):
         return self.page().mainFrame().documentElement()
 
-    def evaluate_java_script(self, js):
+    def evaluate_java_script(self, js) -> None:
         logger.debug('Исполнение js-кода:\n"%s".', js)
         self.doc.evaluateJavaScript(js)
         # result = self.doc.evaluateJavaScript(js)
         # logger.debug('Результат:\n"%s".', str(result).encode())
 
-    def add_tag(self, name):
+    def add_tag(self, name) -> None:
         logger.debug('Добавление тэга: "%s".', name)
 
         js = f"""

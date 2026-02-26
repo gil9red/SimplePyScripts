@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import QApplication, QLineEdit, QWidget, QFormLayout
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.mask_qt = QLineEdit("+7([000])[000]-[0000]")
@@ -25,7 +25,7 @@ class MainWindow(QWidget):
 
         self.setLayout(layout)
 
-    def _on_changed_mask(self, mask):
+    def _on_changed_mask(self, mask) -> None:
         text = self.test_input.text()
 
         self.test_input.setInputMask(mask)

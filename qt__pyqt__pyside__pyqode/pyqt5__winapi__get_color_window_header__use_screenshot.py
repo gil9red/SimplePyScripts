@@ -13,7 +13,7 @@ if __name__ == "__main__":
     # NOTE: для отладки
     # label = Qt.QLabel()
 
-    def get_color():
+    def get_color() -> None:
         rect = button.rect()
         indent = 5
 

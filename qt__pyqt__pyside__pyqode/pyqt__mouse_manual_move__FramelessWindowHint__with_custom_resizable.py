@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton, QMe
 from PyQt5.QtCore import Qt
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -43,7 +43,7 @@ class ResizableFramelessWidget(QWidget):
     # Четыре периметра
     MARGINS = 10
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowFlags(Qt.FramelessWindowHint)
@@ -94,7 +94,7 @@ class ResizableFramelessWidget(QWidget):
         wm, hm = self.width() - self.MARGINS, self.height() - self.MARGINS
         return self.MARGINS <= x_pos <= wm and hm <= y_pos <= self.height()
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event) -> None:
         """Событие клика мыши"""
         super().mousePressEvent(event)
 
@@ -116,7 +116,7 @@ class ResizableFramelessWidget(QWidget):
                     self._is_margin_press = True
                     break
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event) -> None:
         """Событие отказов мыши"""
         super().mouseReleaseEvent(event)
 
@@ -124,7 +124,7 @@ class ResizableFramelessWidget(QWidget):
         self._is_margin_press = False
         self._direction = None
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event) -> None:
         """Событие перемещения мыши"""
         super().mouseMoveEvent(event)
 
@@ -190,7 +190,7 @@ class ResizableFramelessWidget(QWidget):
             # Курсор по умолчанию
             self.setCursor(Qt.ArrowCursor)
 
-    def _resizeWidget(self, pos):
+    def _resizeWidget(self, pos) -> None:
         """Отрегулируйте размер окна"""
         if self._direction is None:
             return

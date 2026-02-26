@@ -17,7 +17,7 @@ from PyQt5.Qt import (
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("...")
@@ -41,10 +41,10 @@ class MainWindow(QWidget):
 
         self.setLayout(main_layout)
 
-    def _on_load_url(self):
+    def _on_load_url(self) -> None:
         self.view.load(QUrl(self.url_le.text()))
 
-    def _on_url_changed(self, url: QUrl):
+    def _on_url_changed(self, url: QUrl) -> None:
         self.url_le.setText(url.toString())
 
 

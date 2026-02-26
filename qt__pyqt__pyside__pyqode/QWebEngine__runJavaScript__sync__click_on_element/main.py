@@ -14,7 +14,7 @@ def run_js_code(page: QWebEnginePage, code: str) -> object:
 
     result_value = {"value": None}
 
-    def _on_callback(result: object):
+    def _on_callback(result: object) -> None:
         result_value["value"] = result
 
         loop.quit()
@@ -38,7 +38,7 @@ view = QWebEngineView()
 view.load(QUrl("https://гибдд.рф/request_main"))
 
 
-def _on_load_finished(ok: bool):
+def _on_load_finished(ok: bool) -> None:
     page = view.page()
     print(page.url().toString())
 

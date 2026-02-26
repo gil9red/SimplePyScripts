@@ -15,22 +15,22 @@ from PyQt5.QtCore import Qt
 
 
 class ImageLabel(QGraphicsView):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
         self.setScene(QGraphicsScene())
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
-    def setImage(self, filename: str):
+    def setImage(self, filename: str) -> None:
         self.setPixmap(QPixmap(filename))
 
-    def setPixmap(self, pixmap: QPixmap):
+    def setPixmap(self, pixmap: QPixmap) -> None:
         item = QGraphicsPixmapItem(pixmap)
         item.setTransformationMode(Qt.SmoothTransformation)
         self.scene().addItem(item)
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
 
         rect = self.scene().itemsBoundingRect()

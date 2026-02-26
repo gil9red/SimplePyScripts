@@ -10,7 +10,7 @@ from PyQt5.QtCore import Qt, QTimer
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setMouseTracking(True)
@@ -18,22 +18,22 @@ class MainWindow(QWidget):
         self._enabledClose = False
         QTimer.singleShot(5000, self._setEnabledClose)
 
-    def _setEnabledClose(self):
+    def _setEnabledClose(self) -> None:
         self._enabledClose = True
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event) -> None:
         if self._enabledClose:
             self.close()
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event) -> None:
         if self._enabledClose:
             self.close()
 
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event) -> None:
         if self._enabledClose:
             self.close()
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         color = Qt.black
 
         painter = QPainter(self)

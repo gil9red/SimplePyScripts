@@ -24,7 +24,7 @@ class CameraEvent(object):
     available.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.events = {}
 
     def wait(self):
@@ -37,7 +37,7 @@ class CameraEvent(object):
             self.events[ident] = [threading.Event(), time.time()]
         return self.events[ident][0].wait()
 
-    def set(self):
+    def set(self) -> None:
         """Invoked by the camera thread when a new frame is available."""
         now = time.time()
         remove = None
@@ -57,7 +57,7 @@ class CameraEvent(object):
         if remove:
             del self.events[remove]
 
-    def clear(self):
+    def clear(self) -> None:
         """Invoked from each client's thread after a frame was processed."""
         self.events[get_ident()][0].clear()
 
@@ -70,7 +70,7 @@ class BaseCamera(object):
 
     STOPPING_IF_IDLE = True
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Start the background camera thread if it isn't running yet."""
         if BaseCamera.thread is None:
             BaseCamera.last_access = time.time()
@@ -99,7 +99,7 @@ class BaseCamera(object):
         raise RuntimeError("Must be implemented by subclasses.")
 
     @classmethod
-    def _thread(cls):
+    def _thread(cls) -> None:
         """Camera background thread."""
         print("Starting camera thread.")
 

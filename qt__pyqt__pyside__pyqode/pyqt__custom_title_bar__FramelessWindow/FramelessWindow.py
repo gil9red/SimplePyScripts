@@ -48,12 +48,12 @@ from PyQt5.QtWidgets import (
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/29b1f87e4381c398d906261b98c2ecf8c9933646/qt__pyqt__pyside__pyqode/ElidedLabel.py
 class ElidedLabel(QLabel):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
         self.setMinimumWidth(50)
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
 
         metrics = QFontMetrics(self.font())
@@ -139,7 +139,7 @@ class TitleBar(QWidget):
     # Сигнал перемещения окна
     aboutWindowMovedDelta = pyqtSignal(QPoint)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
         # Поддержка настройки фона qss
@@ -237,12 +237,12 @@ class TitleBar(QWidget):
         widget: QWidget,
         width: int = Default.TITLE_HEIGHT,
         height: int = Default.TITLE_HEIGHT,
-    ):
+    ) -> None:
         self.layout_custom_widget.addWidget(widget)
 
         widget.setFixedSize(width, height)
 
-    def showMaximized(self):
+    def showMaximized(self) -> None:
         if self.button_maximum.text() == TitleBarButtonEnum.MAXIMUM.value:
             # Максимизировать
             self.button_maximum.setText(TitleBarButtonEnum.NORMAL.value)
@@ -251,7 +251,7 @@ class TitleBar(QWidget):
             self.button_maximum.setText(TitleBarButtonEnum.MAXIMUM.value)
             self.aboutWindowNormalized.emit()
 
-    def setHeight(self, height: int = Default.TITLE_HEIGHT):
+    def setHeight(self, height: int = Default.TITLE_HEIGHT) -> None:
         """Установка высоты строки заголовка"""
 
         self.setFixedHeight(height)
@@ -259,40 +259,40 @@ class TitleBar(QWidget):
         for button in self.findChildren(QAbstractButton):
             button.setFixedSize(height, height)
 
-    def setTitle(self, title: str):
+    def setTitle(self, title: str) -> None:
         """Установить заголовок"""
 
         self.titleLabel.setText(title)
 
-    def setIcon(self, icon: QIcon):
+    def setIcon(self, icon: QIcon) -> None:
         """Настройки значкa"""
 
         self.iconLabel.setPixmap(icon.pixmap(self.iconSize, self.iconSize))
 
-    def setIconSize(self, size: int):
+    def setIconSize(self, size: int) -> None:
         """Установить размер значка"""
 
         self.iconSize = size
 
-    def enterEvent(self, _):
+    def enterEvent(self, _) -> None:
         self.setCursor(Qt.ArrowCursor)
 
-    def mouseDoubleClickEvent(self, _):
+    def mouseDoubleClickEvent(self, _) -> None:
         self.showMaximized()
 
-    def mousePressEvent(self, event: QMouseEvent):
+    def mousePressEvent(self, event: QMouseEvent) -> None:
         """Событие клика мыши"""
         if event.button() == Qt.LeftButton:
             self._old_pos = event.pos()
 
         event.accept()
 
-    def mouseReleaseEvent(self, event: QMouseEvent):
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
         """Событие отказов мыши"""
         self._old_pos = None
         event.accept()
 
-    def mouseMoveEvent(self, event: QMouseEvent):
+    def mouseMoveEvent(self, event: QMouseEvent) -> None:
         if event.buttons() == Qt.LeftButton and self._old_pos:
             self.aboutWindowMovedDelta.emit(event.pos() - self._old_pos)
 
@@ -313,7 +313,7 @@ class DirectionEnum(Enum):
 
 
 class FramelessWindow(QWidget):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
         self.setStyleSheet(STYLE_SHEET)
@@ -360,17 +360,17 @@ class FramelessWindow(QWidget):
         self.windowTitleChanged.connect(self.titleBar.setTitle)
         self.windowIconChanged.connect(self.titleBar.setIcon)
 
-    def setTitleBarHeight(self, height: int = Default.TITLE_HEIGHT):
+    def setTitleBarHeight(self, height: int = Default.TITLE_HEIGHT) -> None:
         """Установка высоты строки заголовка"""
 
         self.titleBar.setHeight(height)
 
-    def setIconSize(self, size: int):
+    def setIconSize(self, size: int) -> None:
         """Установка размера значка"""
 
         self.titleBar.setIconSize(size)
 
-    def setWidget(self, widget: QWidget):
+    def setWidget(self, widget: QWidget) -> None:
         """Настройте свои собственные элементы управления"""
 
         self._widget = widget
@@ -383,11 +383,11 @@ class FramelessWindow(QWidget):
         self._widget.installEventFilter(self)
         self.layout().addWidget(self._widget)
 
-    def set_pinned(self, flag: bool):
+    def set_pinned(self, flag: bool) -> None:
         self.setWindowFlag(Qt.WindowStaysOnTopHint, flag)
         self.show()
 
-    def delta_move(self, delta_pos: QPoint):
+    def delta_move(self, delta_pos: QPoint) -> None:
         if (
             self.windowState() == Qt.WindowMaximized
             or self.windowState() == Qt.WindowFullScreen
@@ -398,7 +398,7 @@ class FramelessWindow(QWidget):
         # Для перемещения окна
         self.move(self.pos() + delta_pos)
 
-    def showMaximized(self):
+    def showMaximized(self) -> None:
         """
         Чтобы максимизировать, удалите верхнюю, нижнюю, левую и правую границы.
         Если вы не удалите его, в пограничной области будут пробелы.
@@ -408,7 +408,7 @@ class FramelessWindow(QWidget):
 
         self.layout().setContentsMargins(0, 0, 0, 0)
 
-    def showNormal(self):
+    def showNormal(self) -> None:
         """
         Восстановить, сохранить верхнюю и нижнюю левую и правую границы,
         иначе нет границы, которую нельзя отрегулировать
@@ -434,7 +434,7 @@ class FramelessWindow(QWidget):
 
         return super().eventFilter(obj, event)
 
-    def paintEvent(self, event: QPaintEvent):
+    def paintEvent(self, event: QPaintEvent) -> None:
         """
         Поскольку это полностью прозрачное фоновое окно, жесткая для поиска
         граница с прозрачностью 1 рисуется в событии перерисовывания, чтобы отрегулировать размер окна.
@@ -452,7 +452,7 @@ class FramelessWindow(QWidget):
         )
         painter.drawRect(self.rect())
 
-    def mousePressEvent(self, event: QMouseEvent):
+    def mousePressEvent(self, event: QMouseEvent) -> None:
         """Событие клика мыши"""
 
         super().mousePressEvent(event)
@@ -460,7 +460,7 @@ class FramelessWindow(QWidget):
         if event.button() == Qt.LeftButton:
             self._old_pos = event.pos()
 
-    def mouseReleaseEvent(self, event: QMouseEvent):
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
         """Событие отказов мыши"""
 
         super().mouseReleaseEvent(event)
@@ -468,7 +468,7 @@ class FramelessWindow(QWidget):
         self._old_pos = None
         self._direction = None
 
-    def mouseMoveEvent(self, event: QMouseEvent):
+    def mouseMoveEvent(self, event: QMouseEvent) -> None:
         """Событие перемещения мыши"""
 
         super().mouseMoveEvent(event)
@@ -533,7 +533,7 @@ class FramelessWindow(QWidget):
             # Курсор по умолчанию
             self.setCursor(Qt.ArrowCursor)
 
-    def _resizeWidget(self, pos: QPoint):
+    def _resizeWidget(self, pos: QPoint) -> None:
         """Отрегулируйте размер окна"""
 
         if self._direction is None:
@@ -617,7 +617,7 @@ if __name__ == "__main__":
 
     from PyQt5.QtWidgets import QApplication, QTextEdit, QMessageBox
 
-    def log_uncaught_exceptions(ex_cls, ex, tb):
+    def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
         text = f"{ex_cls.__name__}: {ex}:\n"
         text += "".join(traceback.format_tb(tb))
 

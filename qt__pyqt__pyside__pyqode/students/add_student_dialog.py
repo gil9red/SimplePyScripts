@@ -25,7 +25,7 @@ DEFAULT_GROUPS = [
 
 
 class AddStudentDialog(QDialog):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Add student dialog")
@@ -49,7 +49,7 @@ class AddStudentDialog(QDialog):
 
         self.student = None
 
-    def accept(self):
+    def accept(self) -> None:
         super().accept()
 
         self.student = Student(self.name.text(), self.group.text())

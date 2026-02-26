@@ -22,10 +22,10 @@ from PyQt5.QtCore import QSize, Qt
 
 
 class ImageDelegate(QStyledItemDelegate):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
-    def paint(self, painter, option, index):
+    def paint(self, painter, option, index) -> None:
         pixmap = index.data(Qt.DecorationRole)
         if pixmap:
             # pixmap = pixmap.scaled(

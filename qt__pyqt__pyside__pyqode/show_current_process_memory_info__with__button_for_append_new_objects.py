@@ -22,7 +22,7 @@ from PyQt5.Qt import (
 
 
 class MainWidget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self._label_info = QLabel()
@@ -55,11 +55,11 @@ class MainWidget(QWidget):
 
         self.update_memory_info()
 
-    def _on_append_clicked(self):
+    def _on_append_clicked(self) -> None:
         row = [0 for _ in range(self._spin_box_numbers.value())]
         self._items.append(row)
 
-    def update_memory_info(self):
+    def update_memory_info(self) -> None:
         memory_bytes = self._process.memory_info().rss
 
         self._label_info.setText(

@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import QApplication, QPlainTextEdit, QTextEdit
 
 
 class MyHighlighter(QSyntaxHighlighter):
-    def highlightBlock(self, text):
+    def highlightBlock(self, text) -> None:
         char_format = QTextCharFormat()
         char_format.setFontWeight(QFont.Bold)
         char_format.setForeground(Qt.darkMagenta)

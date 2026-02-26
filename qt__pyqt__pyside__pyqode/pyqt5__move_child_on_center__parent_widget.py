@@ -8,7 +8,7 @@ from PyQt5 import Qt
 
 
 class MainWindow(Qt.QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.widget = Qt.QWidget()
@@ -18,7 +18,7 @@ class MainWindow(Qt.QMainWindow):
 
         self.setCentralWidget(button)
 
-    def show_and_move(self):
+    def show_and_move(self) -> None:
         self.widget.hide()
 
         self.widget.move(self.geometry().center() - self.widget.rect().center())

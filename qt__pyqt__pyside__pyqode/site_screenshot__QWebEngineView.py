@@ -15,12 +15,12 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineSettings
 
 
 class Screenshot(QWebEngineView):
-    def __init__(self, app: QApplication):
+    def __init__(self, app: QApplication) -> None:
         super().__init__()
 
         self.app = app
 
-    def capture(self, url: str, output_file: str):
+    def capture(self, url: str, output_file: str) -> None:
         self.output_file = output_file
         self.load(QUrl(url))
         self.loadFinished.connect(self.on_loaded)
@@ -31,13 +31,13 @@ class Screenshot(QWebEngineView):
 
         self.show()
 
-    def on_loaded(self):
+    def on_loaded(self) -> None:
         size = self.page().contentsSize().toSize()
         self.resize(size)
         # Wait for resize
         QTimer.singleShot(1000, self.take_screenshot)
 
-    def take_screenshot(self):
+    def take_screenshot(self) -> None:
         self.grab().save(self.output_file, "PNG")
         self.app.quit()
 

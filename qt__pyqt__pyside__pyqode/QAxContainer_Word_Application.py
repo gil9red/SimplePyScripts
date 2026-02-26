@@ -18,7 +18,7 @@ from PyQt5.QtWidgets import (
 
 
 class Window(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Document Word.Application")

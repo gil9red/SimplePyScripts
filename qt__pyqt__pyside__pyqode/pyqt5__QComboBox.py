@@ -8,7 +8,7 @@ from PyQt5.Qt import *
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.tb_result = QTextBrowser()
@@ -24,7 +24,7 @@ class MainWindow(QWidget):
 
         self.setLayout(layout)
 
-    def _on_pet_changed(self, index):
+    def _on_pet_changed(self, index) -> None:
         # print(index)                          # 0
         # print(self.cb_pets.itemText(index))   # Собаки
         # print(self.cb_pets.itemData(index))   # dogs

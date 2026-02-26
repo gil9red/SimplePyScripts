@@ -12,7 +12,7 @@ from PyQt5.QtCore import Qt
 
 
 class MainWindow(QWidget):
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
 

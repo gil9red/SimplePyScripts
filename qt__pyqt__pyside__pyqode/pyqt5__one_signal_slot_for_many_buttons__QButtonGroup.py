@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from PyQt5.Qt import QApplication, QGroupBox, QCheckBox, QButtonGroup, QGridLayout
 
 
-def _on_button_clicked(button: QCheckBox):
+def _on_button_clicked(button: QCheckBox) -> None:
     print(button, button.text(), button.isChecked())
 
 

@@ -8,12 +8,12 @@ from PyQt5 import Qt
 
 
 class CellWidget(Qt.QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.ball_size = 100
 
-    def paintEvent(self, event: Qt.QPaintEvent):
+    def paintEvent(self, event: Qt.QPaintEvent) -> None:
         painter = Qt.QPainter(self)
         painter.setRenderHint(Qt.QPainter.Antialiasing)
         painter.setPen(Qt.Qt.NoPen)
@@ -30,7 +30,7 @@ class CellWidget(Qt.QWidget):
 
 
 class Window(Qt.QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("draw__ellipse_board")
@@ -60,7 +60,7 @@ class Window(Qt.QWidget):
 
         self.setLayout(layout)
 
-    def _set_ball_size(self, value):
+    def _set_ball_size(self, value) -> None:
         self.sl_ball_size.setValue(value)
         self.pb_ball_size.setValue(value)
 

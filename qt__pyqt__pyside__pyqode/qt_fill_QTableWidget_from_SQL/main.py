@@ -17,7 +17,7 @@ except:
 
 
 class Widget(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Table")
@@ -25,7 +25,7 @@ class Widget(QMainWindow):
         self.table_widget = QTableWidget()
         self.setCentralWidget(self.table_widget)
 
-    def fill(self):
+    def fill(self) -> None:
         self.table_widget.clear()
 
         labels = ["ID", "NAME", "PRICE"]

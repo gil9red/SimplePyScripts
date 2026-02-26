@@ -20,7 +20,7 @@ def run_js(code: str) -> Any:
     result: Any = None
     callback_finished = False
 
-    def _callback(v):
+    def _callback(v) -> None:
         nonlocal result, callback_finished
         result = v
         callback_finished = True

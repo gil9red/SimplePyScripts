@@ -9,7 +9,7 @@ from PyQt5.QtCore import Qt, QEventLoop, QTimer
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Main Form")
@@ -24,10 +24,10 @@ class MainWindow(QMainWindow):
 
         self._my_sleep(1500)
 
-    def do_load(self):
+    def do_load(self) -> None:
         self._my_sleep(3000)
 
-    def _my_sleep(self, ms: int):
+    def _my_sleep(self, ms: int) -> None:
         # NOTE: Для симуляции ожидания прогрузок
         loop = QEventLoop()
         QTimer.singleShot(ms, loop.quit)

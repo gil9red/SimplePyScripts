@@ -17,7 +17,7 @@ URL_QML_FILE = QUrl.fromLocalFile(str(QML_FILE))
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Hello World! (QML + Qt)")
@@ -32,7 +32,7 @@ class MainWindow(QWidget):
         main_layout.addWidget(QWidget.createWindowContainer(self.view))
         main_layout.addWidget(pb_click)
 
-    def _on_clicked(self):
+    def _on_clicked(self) -> None:
         qml_hello_text = self.view.rootObject().findChild(QQuickItem, "helloText")
         qml_hello_text.setProperty("text", f"Now: {datetime.now().time():%H:%M:%S}")
 

@@ -13,7 +13,7 @@ from urllib.request import urlretrieve
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QFormLayout
 
 
-def download_file(url: str, file_name: str):
+def download_file(url: str, file_name: str) -> None:
     try:
         local_file_name, _ = urlretrieve(url, file_name)
         print(os.path.abspath(local_file_name))
@@ -22,7 +22,7 @@ def download_file(url: str, file_name: str):
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.line_edit_url = QLineEdit(
@@ -40,7 +40,7 @@ class MainWindow(QWidget):
 
         self.setLayout(layout)
 
-    def download(self):
+    def download(self) -> None:
         url = self.line_edit_url.text()
         file_name = self.line_edit_file_name.text()
 

@@ -9,7 +9,7 @@ from PyQt5.Qt import QWidget, QPainter, QApplication, Qt
 
 
 class MatrixWidget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle("Widget")
 
@@ -30,7 +30,7 @@ class MatrixWidget(QWidget):
 
         self.setMouseTracking(True)
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
 
         w, h = event.size().width(), event.size().height()
@@ -38,7 +38,7 @@ class MatrixWidget(QWidget):
 
         self.cell_size = min_size // self.matrix_size
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event) -> None:
         super().mouseMoveEvent(event)
 
         pos = event.pos()
@@ -48,7 +48,7 @@ class MatrixWidget(QWidget):
 
         self.update()
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
 
         # Если индекс ячейки под курсором валидный

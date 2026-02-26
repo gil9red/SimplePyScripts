@@ -15,12 +15,12 @@ lock = threading.Lock()
 
 
 class HelloWorldTask(QRunnable):
-    def __init__(self, idx: int):
+    def __init__(self, idx: int) -> None:
         super().__init__()
 
         self.idx = idx
 
-    def run(self):
+    def run(self) -> None:
         with lock:
             print(f"[{self.idx}] Hello world from thread: {threading.current_thread()}")
 

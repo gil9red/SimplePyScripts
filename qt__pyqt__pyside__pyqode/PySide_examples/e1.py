@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
 
-    def says():
+    def says() -> None:
         print("Hello, Python!")
 
     label = QLabel("Hello, <b>PySize</b>!")

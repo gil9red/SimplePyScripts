@@ -15,7 +15,7 @@ from PyQt5.Qt import (
 
 
 class MainWindow(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         self.button = QPushButton("Color")
@@ -26,7 +26,7 @@ class MainWindow(QWidget):
         main_layout.addWidget(self.button)
         self.setLayout(main_layout)
 
-    def choose_color(self):
+    def choose_color(self) -> None:
         dialog = QColorDialog()
         if not dialog.exec():
             return

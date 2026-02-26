@@ -9,7 +9,7 @@ from switch_button import SwitchButton
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         switch_btn1 = SwitchButton(self, "On", 15, "Off", 31, width=60)

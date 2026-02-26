@@ -17,17 +17,17 @@ class OutputLogger(QObject):
         DEBUG = 0
         ERROR = 1
 
-    def __init__(self, io_stream, severity):
+    def __init__(self, io_stream, severity) -> None:
         super().__init__()
 
         self.io_stream = io_stream
         self.severity = severity
 
-    def write(self, text):
+    def write(self, text) -> None:
         self.io_stream.write(text)
         self.emit_write.emit(text, self.severity)
 
-    def flush(self):
+    def flush(self) -> None:
         self.io_stream.flush()
 
 
@@ -39,7 +39,7 @@ sys.stderr = OUTPUT_LOGGER_STDERR
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.text_edit = QTextEdit()
@@ -55,7 +55,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.text_edit)
 
-    def append_log(self, text: str, severity: OutputLogger.Severity):
+    def append_log(self, text: str, severity: OutputLogger.Severity) -> None:
         text = repr(text)
 
         if severity == OutputLogger.Severity.ERROR:

@@ -19,7 +19,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
+    def setupUi(self, MainWindow) -> None:
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(449, 208)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -48,7 +48,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, MainWindow) -> None:
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "Когда вывести сообщение:"))
@@ -58,17 +58,17 @@ class Ui_MainWindow(object):
 class ScheduleThread(QThread):
     about_time = pyqtSignal(str)
 
-    def add_time(self, time: str):
+    def add_time(self, time: str) -> None:
         schedule.every().day.at(time).do(self.about_time.emit, time)
 
-    def run(self):
+    def run(self) -> None:
         while True:
             schedule.run_pending()
             time.sleep(1)
 
 
 class Example(QMainWindow, Ui_MainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setupUi(self)
@@ -81,10 +81,10 @@ class Example(QMainWindow, Ui_MainWindow):
         self.thread.about_time.connect(self.write)
         self.thread.start()
 
-    def write(self, time: str):
+    def write(self, time: str) -> None:
         print("красафчик", time)
 
-    def go(self):
+    def go(self) -> None:
         try:
             t = self.lineEdit.text()
             datetime_object = datetime.strptime(t, "%H:%M")

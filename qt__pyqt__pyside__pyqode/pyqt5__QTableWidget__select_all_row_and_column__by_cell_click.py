@@ -9,7 +9,7 @@ from PyQt5.QtCore import QItemSelectionModel
 
 
 class Widget(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Table")
@@ -19,7 +19,7 @@ class Widget(QMainWindow):
 
         self.setCentralWidget(self.table_widget)
 
-    def _on_cell_clicked(self, row, col):
+    def _on_cell_clicked(self, row, col) -> None:
         selection_model = self.table_widget.selectionModel()
         selection_model.clear()
 
@@ -31,7 +31,7 @@ class Widget(QMainWindow):
 
                     selection_model.select(index, QItemSelectionModel.Select)
 
-    def fill(self):
+    def fill(self) -> None:
         self.table_widget.clear()
 
         labels = ["ID", "NAME", "PRICE"]

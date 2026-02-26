@@ -9,22 +9,22 @@ from PyQt5.QtGui import QMovie, QMouseEvent
 
 
 class GifSplashScreen(QSplashScreen):
-    def __init__(self, file_name: str, *args, **kwargs):
+    def __init__(self, file_name: str, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
         self.movie = QMovie(file_name, parent=self)
         self.movie.frameChanged.connect(self._on_frame_changed)
         self.movie.start()
 
-    def _on_frame_changed(self, _):
+    def _on_frame_changed(self, _) -> None:
         self.setPixmap(self.movie.currentPixmap())
 
-    def finish(self, widget):
+    def finish(self, widget) -> None:
         super().finish(widget)
 
         self.movie.stop()
 
-    def mousePressEvent(self, event: QMouseEvent):
+    def mousePressEvent(self, event: QMouseEvent) -> None:
         # Ignoring "hide" on click
         # https://code.woboq.org/qt5/qtbase/src/widgets/widgets/qsplashscreen.cpp.html#_ZN13QSplashScreen15mousePressEventEP11QMouseEvent
         pass

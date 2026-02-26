@@ -11,7 +11,7 @@ from PyQt5.QtCore import Qt
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setAttribute(Qt.WA_TranslucentBackground)

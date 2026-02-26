@@ -24,7 +24,7 @@ from PyQt5.QtCore import Qt
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self._current_index_image = 0
@@ -79,21 +79,21 @@ class MainWindow(QMainWindow):
     def get_current_image_file_name(self):
         return self._images[self._current_index_image]
 
-    def load_prev_image(self):
+    def load_prev_image(self) -> None:
         self._current_index_image -= 1
         if self._current_index_image < 0:
             self._current_index_image = 0
 
         self.load_current_image()
 
-    def load_next_image(self):
+    def load_next_image(self) -> None:
         self._current_index_image += 1
         if self._current_index_image >= len(self._images):
             self._current_index_image = len(self._images) - 1
 
         self.load_current_image()
 
-    def load_current_image(self):
+    def load_current_image(self) -> None:
         self.update_states()
 
         file_name = self.get_current_image_file_name()
@@ -102,7 +102,7 @@ class MainWindow(QMainWindow):
         pixmap.load(file_name)
         self.label_image.setPixmap(pixmap)
 
-    def _on_add_file_name(self):
+    def _on_add_file_name(self) -> None:
         key = self.line_edit_key.text()
         file_name = self.get_current_image_file_name()
 
@@ -116,7 +116,7 @@ class MainWindow(QMainWindow):
             json.dumps(self._data, indent=4, ensure_ascii=False)
         )
 
-    def update_states(self):
+    def update_states(self) -> None:
         file_name = self.get_current_image_file_name()
         self.setWindowTitle(
             f"{self._current_index_image + 1} / {len(self._images)} : {file_name}"

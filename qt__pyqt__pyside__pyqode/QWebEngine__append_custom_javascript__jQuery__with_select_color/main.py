@@ -10,7 +10,7 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.view = QWebEngineView()
@@ -27,10 +27,10 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.view)
 
-    def _on_load_finished(self, ok: bool):
+    def _on_load_finished(self, ok: bool) -> None:
         self.view.page().runJavaScript(self.jquery_text)
 
-    def _change_background_color(self):
+    def _change_background_color(self) -> None:
         color = QColorDialog.getColor(Qt.yellow)
         if not color.isValid():
             return

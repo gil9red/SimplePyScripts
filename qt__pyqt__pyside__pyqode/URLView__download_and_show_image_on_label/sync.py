@@ -9,7 +9,7 @@ from PyQt5 import Qt
 
 
 class URLView(Qt.QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         layout = Qt.QVBoxLayout(self)
@@ -27,7 +27,7 @@ class URLView(Qt.QWidget):
 
         self.loadButton.clicked.connect(self.on_load)
 
-    def on_load(self):
+    def on_load(self) -> None:
         print("Load image")
 
         url = self.urlEdit.text()

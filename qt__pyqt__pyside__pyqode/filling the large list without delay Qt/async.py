@@ -18,7 +18,7 @@ from PyQt5.QtWidgets import QWidget, QListWidget, QApplication, QVBoxLayout
 from PyQt5.QtCore import QThread, pyqtSignal
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -31,12 +31,12 @@ sys.excepthook = log_uncaught_exceptions
 class MyThread(QThread):
     about_new_value = pyqtSignal(int)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.executed = False
 
-    def run(self):
+    def run(self) -> None:
         print("start thread")
 
         try:
@@ -65,7 +65,7 @@ class MyThread(QThread):
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.lw = QListWidget()
@@ -79,14 +79,14 @@ class Widget(QWidget):
         self.thread = MyThread()
         self.thread.about_new_value.connect(lambda x: self.append_item(str(x)))
 
-    def append_item(self, item):
+    def append_item(self, item) -> None:
         self.lw.addItem(item)
         self.lw.scrollToBottom()
 
-    def fill(self):
+    def fill(self) -> None:
         self.thread.start()
 
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
         # После закрытия окна приложение не завершится пока список работает
         sys.exit()
 

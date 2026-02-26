@@ -8,7 +8,7 @@ from PyQt5 import Qt
 
 
 class MainWindow(Qt.QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         menu_bar = Qt.QMenuBar()

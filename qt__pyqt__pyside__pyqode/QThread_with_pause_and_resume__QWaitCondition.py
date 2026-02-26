@@ -19,7 +19,7 @@ from PyQt5.QtCore import QThread, QTimer, QWaitCondition, QMutex
 
 
 class Thread(QThread):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         self._is_pause = False
@@ -30,14 +30,14 @@ class Thread(QThread):
     def is_pause(self) -> bool:
         return self._is_pause
 
-    def pause(self):
+    def pause(self) -> None:
         self._is_pause = True
 
-    def resume(self):
+    def resume(self) -> None:
         self._is_pause = False
         self.condition.wakeAll()
 
-    def run(self):
+    def run(self) -> None:
         while True:
             self.mutex.lock()
             if self._is_pause:
@@ -48,7 +48,7 @@ class Thread(QThread):
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.combobox_thread = QComboBox()
@@ -87,7 +87,7 @@ class MainWindow(QWidget):
 
         self._update_states()
 
-    def _update_states(self):
+    def _update_states(self) -> None:
         threads_num = self.combobox_thread.count()
         self.setWindowTitle(f"Threads: {threads_num}")
 
@@ -111,11 +111,11 @@ class MainWindow(QWidget):
     def get_all_thread(self) -> list[Thread]:
         return [self.get_thread(i) for i in range(self.combobox_thread.count())]
 
-    def update_info(self):
+    def update_info(self) -> None:
         total = sum(thread.sum for thread in self.get_all_thread())
         self.label_result.setText(f"SUM: <b>{total}</b>")
 
-    def add(self):
+    def add(self) -> None:
         thread = Thread(self)
         thread.start()
 
@@ -124,27 +124,27 @@ class MainWindow(QWidget):
         )
         self._update_states()
 
-    def pause(self):
+    def pause(self) -> None:
         thread = self.combobox_thread.currentData()
         if thread:
             thread.pause()
 
         self._update_states()
 
-    def pause_all(self):
+    def pause_all(self) -> None:
         for thread in self.get_all_thread():
             thread.pause()
 
         self._update_states()
 
-    def resume(self):
+    def resume(self) -> None:
         thread = self.combobox_thread.currentData()
         if thread:
             thread.resume()
 
         self._update_states()
 
-    def resume_all(self):
+    def resume_all(self) -> None:
         for thread in self.get_all_thread():
             thread.resume()
 

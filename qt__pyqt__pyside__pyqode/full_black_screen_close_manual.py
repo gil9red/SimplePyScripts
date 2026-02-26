@@ -17,7 +17,7 @@ from PyQt5.QtCore import QPropertyAnimation, QSequentialAnimationGroup, Qt
 
 
 class MainWindow(QWidget):
-    def __init__(self, background_color: str = "black", text_color: str = "white"):
+    def __init__(self, background_color: str = "black", text_color: str = "white") -> None:
         super().__init__()
 
         self.setStyleSheet(
@@ -46,7 +46,7 @@ class MainWindow(QWidget):
         main_layout.addStretch()
         main_layout.addWidget(self.button_close)
 
-    def _add_animations(self):
+    def _add_animations(self) -> None:
         self.button_close.setGraphicsEffect(QGraphicsOpacityEffect())
 
         animation_object = self.button_close.graphicsEffect()
@@ -71,7 +71,7 @@ class MainWindow(QWidget):
         self.animation_group.addAnimation(animation2)
         self.animation_group.start()
 
-    def keyPressEvent(self, event: QKeyEvent):
+    def keyPressEvent(self, event: QKeyEvent) -> None:
         if event.key() in [Qt.Key_Escape, Qt.Key_Return, Qt.Key_Enter, Qt.Key_Space]:
             self.close()
 

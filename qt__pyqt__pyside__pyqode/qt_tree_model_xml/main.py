@@ -15,7 +15,7 @@ TREE_CONFIG = "tree.xml"
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("tree_model")
@@ -76,11 +76,11 @@ class MainWindow(QMainWindow):
 
         self.view.expandAll()
 
-    def add(self):
+    def add(self) -> None:
         item = QStandardItem("animals")
         self.model.appendRow(item)
 
-    def add_child(self):
+    def add_child(self) -> None:
         child = QStandardItem("dog")
 
         index = self.view.currentIndex()
@@ -90,12 +90,12 @@ class MainWindow(QMainWindow):
 
             self.view.setExpanded(item.index(), True)
 
-    def remove(self):
+    def remove(self) -> None:
         index = self.view.currentIndex()
         if index is not None and index.isValid():
             self.model.removeRow(index.row(), index.parent())
 
-    def create_xml(self, root_item, root_xml, doc):
+    def create_xml(self, root_item, root_xml, doc) -> None:
         # Перебор детей элемента
         for row in range(root_item.rowCount()):
             child = root_item.child(row)
@@ -106,7 +106,7 @@ class MainWindow(QMainWindow):
 
             self.create_xml(child, tag, doc)
 
-    def save_tree(self):
+    def save_tree(self) -> None:
         # Рекурсивный перебор дерева
         root = self.model.invisibleRootItem()
 
@@ -124,7 +124,7 @@ class MainWindow(QMainWindow):
 
         file.close()
 
-    def create_item_model(self, item_root, xml_root):
+    def create_item_model(self, item_root, xml_root) -> None:
         children = xml_root.childNodes()
         for i in range(children.count()):
             xml_child = children.item(i)
@@ -136,7 +136,7 @@ class MainWindow(QMainWindow):
             if xml_child.hasChildNodes():
                 self.create_item_model(item_child, xml_child)
 
-    def restore_tree(self):
+    def restore_tree(self) -> None:
         self.model.clear()
         self.model.setHorizontalHeaderLabels(["Animals"])
 

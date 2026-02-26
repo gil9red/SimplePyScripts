@@ -16,22 +16,22 @@ ListenerFunc = Callable[[list], None]
 
 
 class OnNewProcessHandler(Thread):
-    def __init__(self, timeout_secs=1.0, daemon=None):
+    def __init__(self, timeout_secs=1.0, daemon=None) -> None:
         super().__init__(daemon=daemon)
 
         self._process = dict()
         self._listeners: list[ListenerFunc] = []
         self._timeout_secs = timeout_secs
 
-    def add_listener(self, listener: ListenerFunc):
+    def add_listener(self, listener: ListenerFunc) -> None:
         if listener not in self._listeners:
             self._listeners.append(listener)
 
-    def remove_listener(self, listener: ListenerFunc):
+    def remove_listener(self, listener: ListenerFunc) -> None:
         if listener in self._listeners:
             self._listeners.remove(listener)
 
-    def remove_all_listener(self):
+    def remove_all_listener(self) -> None:
         self._listeners.clear()
 
     @staticmethod
@@ -48,7 +48,7 @@ class OnNewProcessHandler(Thread):
 
         return items
 
-    def run(self):
+    def run(self) -> None:
         while True:
             current_process = self.get_process()
 
@@ -71,7 +71,7 @@ class OnNewProcessHandler(Thread):
 
 if __name__ == "__main__":
 
-    def print_listener(process_list):
+    def print_listener(process_list) -> None:
         result = []
         for p in process_list:
             result.append(f"{p['name']} (pid={p['pid']})")
@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
     mw = QPlainTextEdit()
 
-    def print_listener2(process_list):
+    def print_listener2(process_list) -> None:
         result = []
         for p in process_list:
             result.append(f"{p['name']} (pid={p['pid']})")

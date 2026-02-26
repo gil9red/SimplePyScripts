@@ -136,7 +136,7 @@ def percent_number(number: float, percent: int) -> float:
     return number if percent < 0 else (number / 100) * percent
 
 
-def set_top_of_all_windows(widget: QWidget, top: bool):
+def set_top_of_all_windows(widget: QWidget, top: bool) -> None:
     old_pos: QPoint = widget.pos()
 
     if top:

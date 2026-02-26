@@ -37,7 +37,7 @@ action_quit.triggered.connect(app.quit)
 tray.setContextMenu(menu)
 
 
-def on_tray_activated(reason: QSystemTrayIcon.ActivationReason):
+def on_tray_activated(reason: QSystemTrayIcon.ActivationReason) -> None:
     if reason == QSystemTrayIcon.ActivationReason.Context:
         return
 

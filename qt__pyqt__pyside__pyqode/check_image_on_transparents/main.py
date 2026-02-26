@@ -13,13 +13,13 @@ FILE_NAME = "emoji-video-game-512x512.png"
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.img = QPixmap()
         self.img.load(FILE_NAME)
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
 
         painter.setBrush(Qt.darkGreen)

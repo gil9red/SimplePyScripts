@@ -17,7 +17,7 @@ from PyQt5.Qt import (
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         self.setWindowTitle("Direct tree")
@@ -43,7 +43,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(splitter)
 
-    def _on_double_clicked(self, index):
+    def _on_double_clicked(self, index) -> None:
         file_name = self.model.filePath(index)
 
         with open(file_name, encoding="utf-8") as f:

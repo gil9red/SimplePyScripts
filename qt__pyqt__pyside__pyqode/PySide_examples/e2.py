@@ -11,7 +11,7 @@ from PySide import QtGui
 class SimpleWindow(QtGui.QWidget):
     """Просто окно"""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.setWindowTitle("Простое окно")
 
@@ -30,7 +30,7 @@ class SimpleWindow(QtGui.QWidget):
 
         self.setLayout(layout_main)
 
-    def slot_add_log(self):
+    def slot_add_log(self) -> None:
         text = self.le_mess.text()
         if text:
             self.lw_log.addItem(text)

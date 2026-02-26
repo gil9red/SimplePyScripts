@@ -33,7 +33,7 @@ from PyQt5.QtCore import (
 class FileListModel(QAbstractListModel):
     numberPopulated = pyqtSignal(int)
 
-    def __init__(self, batch_size=50, parent=None):
+    def __init__(self, batch_size=50, parent=None) -> None:
         super().__init__(parent)
 
         self.fileList = []
@@ -65,7 +65,7 @@ class FileListModel(QAbstractListModel):
     def canFetchMore(self, parent: QModelIndex = None) -> bool:
         return self.fileCount < len(self.fileList)
 
-    def fetchMore(self, parent: QModelIndex = None):
+    def fetchMore(self, parent: QModelIndex = None) -> None:
         remainder = len(self.fileList) - self.fileCount
         itemsToFetch = min(self.batch_size, remainder)
         if itemsToFetch <= 0:
@@ -81,7 +81,7 @@ class FileListModel(QAbstractListModel):
 
         self.numberPopulated.emit(itemsToFetch)
 
-    def setDirPath(self, path: str):
+    def setDirPath(self, path: str) -> None:
         self.beginResetModel()
 
         # Recursive
@@ -92,7 +92,7 @@ class FileListModel(QAbstractListModel):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Fetch More Example")
@@ -126,7 +126,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(QWidget())
         self.centralWidget().setLayout(layout)
 
-    def updateLog(self, number: int):
+    def updateLog(self, number: int) -> None:
         self.logViewer.append(f"{number} items added.")
 
 

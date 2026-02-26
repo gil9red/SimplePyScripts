@@ -24,7 +24,7 @@ class ListItem(QFrame):
         port: int,
         status: str = "Not checked!",
         last_check_time: dt.datetime = None,
-    ):
+    ) -> None:
         super().__init__()
 
         if not last_check_time:
@@ -47,7 +47,7 @@ class ListItem(QFrame):
         self.setFixedHeight(self.sizeHint().height())
 
 
-def add_item(list_widget: QListWidget, host: str, port: int):
+def add_item(list_widget: QListWidget, host: str, port: int) -> None:
     widget = ListItem(host, port)
 
     item = QListWidgetItem()

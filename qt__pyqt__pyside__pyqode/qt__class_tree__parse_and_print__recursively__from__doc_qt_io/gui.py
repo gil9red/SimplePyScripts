@@ -19,7 +19,7 @@ from console import get_inherited_children, ROOT_URL
 
 
 class MainWindow(qtw.QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle(
@@ -36,7 +36,7 @@ class MainWindow(qtw.QMainWindow):
 
     def _fill_root(
         self, node: qtw.QTreeWidgetItem, url: str, global_number: int, indent_level=0
-    ):
+    ) -> None:
         if global_number > 0 and self.number_total_class >= global_number:
             return
 
@@ -70,7 +70,7 @@ class MainWindow(qtw.QMainWindow):
         for name, url in inherited_children:
             self._fill_root(item, url, global_number, indent_level + 1)
 
-    def fill_tree(self, global_number=-1):
+    def fill_tree(self, global_number=-1) -> None:
         self.number_total_class = 0
         self.tree.clear()
 
@@ -84,7 +84,7 @@ class MainWindow(qtw.QMainWindow):
             f"Items: {self.number_total_class}.\nElapsed: {time.perf_counter() - t:.3f} sec",
         )
 
-    def closeEvent(self, e):
+    def closeEvent(self, e) -> None:
         sys.exit()
 
 

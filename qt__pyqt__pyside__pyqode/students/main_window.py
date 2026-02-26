@@ -11,7 +11,7 @@ from add_student_dialog import AddStudentDialog
 
 
 class MyWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Students")
@@ -48,7 +48,7 @@ class MyWindow(QMainWindow):
             self.table.setItem(row, 0, QTableWidgetItem(student.name))
             self.table.setItem(row, 1, QTableWidgetItem(student.group))
 
-    def remove(self):
+    def remove(self) -> None:
         row = self.table.currentRow()
         if row != -1:
             self.table.removeRow(row)

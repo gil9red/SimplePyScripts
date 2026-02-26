@@ -13,7 +13,7 @@ from PyQt5 import Qt
 from utils import exchange_rate, get_weather
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -28,12 +28,12 @@ sys.excepthook = log_uncaught_exceptions
 class ThreadExchangeRate(Qt.QThread):
     about_exchange_rate = Qt.pyqtSignal(str)
 
-    def __init__(self, parent, currency):
+    def __init__(self, parent, currency) -> None:
         super().__init__(parent)
 
         self.currency = currency
 
-    def run(self):
+    def run(self) -> None:
         while True:
             print("Start ThreadExchangeRate.currency: " + self.currency)
 
@@ -48,12 +48,12 @@ class ThreadExchangeRate(Qt.QThread):
 class ThreadGetWeather(Qt.QThread):
     about_weather = Qt.pyqtSignal(str)
 
-    def __init__(self, parent, city):
+    def __init__(self, parent, city) -> None:
         super().__init__(parent)
 
         self.city = city
 
-    def run(self):
+    def run(self) -> None:
         while True:
             print("Start ThreadGetWeather.city: " + self.city)
 
@@ -66,7 +66,7 @@ class ThreadGetWeather(Qt.QThread):
 
 
 class Window(Qt.QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Widget-Info: exchange rate and weather")

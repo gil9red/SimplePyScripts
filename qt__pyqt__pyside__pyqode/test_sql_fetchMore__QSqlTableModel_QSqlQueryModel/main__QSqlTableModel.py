@@ -20,7 +20,7 @@ query.next()
 TABLE_ROW_COUNT = query.value(0)
 
 
-def update_window_title():
+def update_window_title() -> None:
     mw.setWindowTitle(f"{model.rowCount()} / {TABLE_ROW_COUNT}")
 
 

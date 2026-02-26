@@ -26,7 +26,7 @@ class FormLayoutWidgetItem(QWidgetItem):
         widget: QWidget,
         formLayout: QFormLayout,
         itemRole: QFormLayout.ItemRole,
-    ):
+    ) -> None:
         super().__init__(widget)
 
         self.m_width: int = -1
@@ -54,12 +54,12 @@ class FormLayoutWidgetItem(QWidgetItem):
 
         return size
 
-    def setWidth(self, width: int):
+    def setWidth(self, width: int) -> None:
         if width != self.m_width:
             self.m_width = width
             self.invalidate()
 
-    def setGeometry(self, _rect: QRect):
+    def setGeometry(self, _rect: QRect) -> None:
         rect: QRect = _rect
         width = self.widget().sizeHint().width()
         if (
@@ -81,7 +81,7 @@ class GridColumnInfo:
 
 
 class ColumnResizerPrivate:
-    def __init__(self, q_ptr: "ColumnResizer"):
+    def __init__(self, q_ptr: "ColumnResizer") -> None:
         self.q: ColumnResizer = q_ptr
 
         self.m_widgets: list[QWidget] = []
@@ -93,23 +93,23 @@ class ColumnResizerPrivate:
         self.m_updateTimer.setInterval(0)
         self.m_updateTimer.timeout.connect(self.q.updateWidth)
 
-    def scheduleWidthUpdate(self):
+    def scheduleWidthUpdate(self) -> None:
         self.m_updateTimer.start()
 
 
 class ColumnResizer(QObject):
-    def __init__(self, parent: QObject):
+    def __init__(self, parent: QObject) -> None:
         super().__init__(parent)
 
         self.d = ColumnResizerPrivate(self)
 
-    def addWidget(self, widget: QWidget):
+    def addWidget(self, widget: QWidget) -> None:
         self.d.m_widgets.append(widget)
         widget.installEventFilter(self)
         self.d.scheduleWidthUpdate()
 
     # NOTE: Here the logic is changed relative to the original
-    def updateWidth(self):
+    def updateWidth(self) -> None:
         width: int = 0
         x: int = 0
         for widget in self.d.m_widgets:
@@ -131,7 +131,7 @@ class ColumnResizer(QObject):
 
         return False
 
-    def addWidgetsFromLayout(self, layout: QLayout, column: int):
+    def addWidgetsFromLayout(self, layout: QLayout, column: int) -> None:
         assert column >= 0
 
         if isinstance(layout, QGridLayout):
@@ -148,7 +148,7 @@ class ColumnResizer(QObject):
         else:
             qCritical(f"Don't know how to handle layout {layout}")
 
-    def addWidgetsFromGridLayout(self, layout: QGridLayout, column: int):
+    def addWidgetsFromGridLayout(self, layout: QGridLayout, column: int) -> None:
         for row in range(layout.rowCount()):
             item: QLayoutItem = layout.itemAtPosition(row, column)
             if not item:
@@ -162,7 +162,7 @@ class ColumnResizer(QObject):
 
         self.d.m_gridColumnInfoList.append(GridColumnInfo(layout, column))
 
-    def addWidgetsFromFormLayout(self, layout: QFormLayout, role: QFormLayout.ItemRole):
+    def addWidgetsFromFormLayout(self, layout: QFormLayout, role: QFormLayout.ItemRole) -> None:
         for row in range(layout.rowCount()):
             item: QLayoutItem = layout.itemAt(row, role)
             if not item:

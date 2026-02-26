@@ -28,12 +28,12 @@ from main import get_logger
 
 
 class Question:
-    def __init__(self, id):
+    def __init__(self, id) -> None:
         self.id = id
         self.editable = False
         self.editable_date = None
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Question(#{self.id}. Editable: {self.editable}. Editable_date: {self.editable_date})>"
 
     @property

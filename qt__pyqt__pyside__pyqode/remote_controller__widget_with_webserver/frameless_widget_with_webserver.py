@@ -36,7 +36,7 @@ from PyQt5.QtGui import (
 from config import PORT, PATH_DEFAULT_MOUSE
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     # Если было запрошено прерывание
     if isinstance(ex, KeyboardInterrupt):
         sys.exit()
@@ -55,7 +55,7 @@ sys.excepthook = log_uncaught_exceptions
 class CommandServerThread(QThread):
     about_command = pyqtSignal(str)
 
-    def __init__(self, parent=None, port=PORT):
+    def __init__(self, parent=None, port=PORT) -> None:
         super().__init__(parent)
 
         self.port = port
@@ -72,15 +72,15 @@ class CommandServerThread(QThread):
 
             return jsonify({"status": True})
 
-    def set_pixmap(self, pixmap_data: bytes):
+    def set_pixmap(self, pixmap_data: bytes) -> None:
         self.pixmap_data = pixmap_data
 
-    def run(self):
+    def run(self) -> None:
         self.app.run(port=self.port)
 
 
 class MainWindow(QWidget):
-    def __init__(self, port=PORT, mouse_permeability=True):
+    def __init__(self, port=PORT, mouse_permeability=True) -> None:
         super().__init__()
 
         self.setWindowTitle(Path(__file__).name)
@@ -119,10 +119,10 @@ class MainWindow(QWidget):
         self.timer.timeout.connect(self._on_tick)
         self.timer.start(30)
 
-    def _on_stats_query(self):
+    def _on_stats_query(self) -> None:
         self.thread_screenshot.set_stats(self.geometry(), self.isVisible())
 
-    def _on_tick(self):
+    def _on_tick(self) -> None:
         if self.isHidden():
             return
 
@@ -158,34 +158,34 @@ class MainWindow(QWidget):
 
         self.thread_command.set_pixmap(bytes(data))
 
-    def mousePressEvent(self, event: QMouseEvent):
+    def mousePressEvent(self, event: QMouseEvent) -> None:
         if event.button() == Qt.LeftButton:
             self._old_pos = event.pos()
 
-    def mouseReleaseEvent(self, event: QMouseEvent):
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
         if event.button() == Qt.LeftButton:
             self._old_pos = None
 
-    def mouseMoveEvent(self, event: QMouseEvent):
+    def mouseMoveEvent(self, event: QMouseEvent) -> None:
         if not self._old_pos:
             return
 
         delta = event.pos() - self._old_pos
         self.move(self.pos() + delta)
 
-    def move_left(self):
+    def move_left(self) -> None:
         self.move(self.pos() + QPoint(-10, 0))
 
-    def move_right(self):
+    def move_right(self) -> None:
         self.move(self.pos() + QPoint(10, 0))
 
-    def move_up(self):
+    def move_up(self) -> None:
         self.move(self.pos() + QPoint(0, -10))
 
-    def move_down(self):
+    def move_down(self) -> None:
         self.move(self.pos() + QPoint(0, 10))
 
-    def process_command(self, command: str):
+    def process_command(self, command: str) -> None:
         command = command.upper()
 
         if command == "LEFT":
@@ -205,7 +205,7 @@ class MainWindow(QWidget):
             rect.moveCenter(QCursor.pos())
             self.setGeometry(rect)
 
-    def keyReleaseEvent(self, event: QKeyEvent):
+    def keyReleaseEvent(self, event: QKeyEvent) -> None:
         if event.key() == Qt.Key_Left:
             self.move_left()
         elif event.key() == Qt.Key_Right:
@@ -215,7 +215,7 @@ class MainWindow(QWidget):
         elif event.key() == Qt.Key_Down:
             self.move_down()
 
-    def paintEvent(self, event: QPaintEvent):
+    def paintEvent(self, event: QPaintEvent) -> None:
         painter = QPainter(self)
 
         painter.setBrush(QColor(0, 0, 0, 0 if self.mouse_permeability else 1))
@@ -224,7 +224,7 @@ class MainWindow(QWidget):
         painter.drawRect(self.rect())
 
 
-def main(port=PORT, is_visible=True, width=800, height=600, mouse_permeability=True):
+def main(port=PORT, is_visible=True, width=800, height=600, mouse_permeability=True) -> None:
     app = QApplication([])
 
     w = MainWindow(port, mouse_permeability)

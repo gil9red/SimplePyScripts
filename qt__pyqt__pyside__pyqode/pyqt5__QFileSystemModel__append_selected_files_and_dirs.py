@@ -18,7 +18,7 @@ from PyQt5.QtCore import QDir, Qt
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         path = QDir.rootPath()
@@ -47,11 +47,11 @@ class Widget(QWidget):
         main_layout.addWidget(splitter)
         main_layout.addWidget(self.button_add)
 
-    def _on_selection_changed(self, selected, deselected):
+    def _on_selection_changed(self, selected, deselected) -> None:
         has = self.tree_view.selectionModel().hasSelection()
         self.button_add.setEnabled(has)
 
-    def _on_add(self):
+    def _on_add(self) -> None:
         for row in self.tree_view.selectionModel().selectedRows():
             path = self.model.filePath(row)
             self.list_files.addItem(path)

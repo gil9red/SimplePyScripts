@@ -13,7 +13,7 @@ def crypto_xor_1(message, secret):
 
 
 class Window(Qt.QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("crypto / decrypto")
@@ -39,7 +39,7 @@ class Window(Qt.QWidget):
 
         self.setLayout(layout)
 
-    def _on_convert(self):
+    def _on_convert(self) -> None:
         text = self.pte_text.toPlainText()
         key = self.sb_key.value()
 

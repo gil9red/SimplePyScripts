@@ -9,7 +9,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 
 
 class MessagesWindow(QtWidgets.QTableView):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         self.setModel(ModelMessages())
@@ -18,7 +18,7 @@ class MessagesWindow(QtWidgets.QTableView):
 
 
 class ModelMessages(QtGui.QStandardItemModel):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         self.appendRow(
@@ -42,7 +42,7 @@ class ModelMessages(QtGui.QStandardItemModel):
 
 
 class ItemDateFormat(QtWidgets.QItemDelegate):
-    def paint(self, painter, opt: QtWidgets.QStyleOptionViewItem, index):
+    def paint(self, painter, opt: QtWidgets.QStyleOptionViewItem, index) -> None:
         self.drawBackground(painter, opt, index)
         self.drawFocus(painter, opt, opt.rect)
         try:

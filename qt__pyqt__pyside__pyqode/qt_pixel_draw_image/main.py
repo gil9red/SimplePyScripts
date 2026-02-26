@@ -13,7 +13,7 @@ from PyQt5.QtGui import QPainter, QImage
 from PyQt5.QtCore import Qt, QTimer
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -29,7 +29,7 @@ IMG_FILE_NAME = "img.png"
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("qt_pixel_draw_image")
@@ -58,7 +58,7 @@ class Widget(QWidget):
         self.timer.timeout.connect(self._draw_pixel)
         self.timer.start(1)  # 1 ms
 
-    def _draw_pixel(self):
+    def _draw_pixel(self) -> None:
         # Если список пустой
         if not self.pixel_list:
             self.timer.stop()
@@ -73,7 +73,7 @@ class Widget(QWidget):
         # Перерисование виджета
         self.update()
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
 
         # Рисуем старую картинку

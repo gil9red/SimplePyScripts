@@ -11,7 +11,7 @@ from PyQt5 import Qt
 
 
 class MainWindow(Qt.QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.label = Qt.QLabel("Animated label", parent=self)
@@ -24,7 +24,7 @@ class MainWindow(Qt.QMainWindow):
         self.animation.setStartValue(Qt.QRect(0, 0, 100, 30))
         self.animation.setEndValue(Qt.QRect(250, 250, 100, 30))
 
-    def _on_click(self):
+    def _on_click(self) -> None:
         self.animation.start()
 
 

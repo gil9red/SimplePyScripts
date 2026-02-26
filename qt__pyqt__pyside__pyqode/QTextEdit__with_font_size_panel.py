@@ -8,7 +8,7 @@ from PyQt5 import Qt
 
 
 class MainWindow(Qt.QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.sb_font_size = Qt.QSpinBox()
@@ -26,13 +26,13 @@ class MainWindow(Qt.QMainWindow):
 
         self.setCentralWidget(central_widget)
 
-    def _on_font_size_changed(self, value):
+    def _on_font_size_changed(self, value) -> None:
         text_char_format = Qt.QTextCharFormat()
         text_char_format.setFontPointSize(value)
 
         self.merge_format_on_word_or_selection(text_char_format)
 
-    def merge_format_on_word_or_selection(self, text_char_format):
+    def merge_format_on_word_or_selection(self, text_char_format) -> None:
         cursor = self.text_edit.textCursor()
         if not cursor.hasSelection():
             cursor.select(Qt.QTextCursor.WordUnderCursor)

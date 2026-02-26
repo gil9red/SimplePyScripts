@@ -22,7 +22,7 @@ from PyQt5.Qt import (
 
 
 # Для отлова исключений
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -35,7 +35,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         self.data = json.load(open("data.json", encoding="utf-8"))
@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(central_widget)
 
-    def _check(self):
+    def _check(self) -> None:
         word_user = self.input_word.text()
         output = self._retrive_definition(word_user)
 

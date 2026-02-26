@@ -30,7 +30,7 @@ class ToggleButton(QCheckBox):
         circle_color="#DDD",
         active_color="#00BCff",
         animation_curve=QEasingCurve.OutBounce,
-    ):
+    ) -> None:
         super().__init__()
 
         self.setFixedSize(width, height)
@@ -54,11 +54,11 @@ class ToggleButton(QCheckBox):
         return self._circle_position
 
     @circle_position.setter
-    def circle_position(self, pos: int):
+    def circle_position(self, pos: int) -> None:
         self._circle_position = pos
         self.update()
 
-    def start_transition(self, value):
+    def start_transition(self, value) -> None:
         self.animation.setStartValue(self.circle_position)
         if value:
             self.animation.setEndValue(self.width() - self._circle_size)
@@ -69,7 +69,7 @@ class ToggleButton(QCheckBox):
     def hitButton(self, pos: QPoint) -> bool:
         return self.contentsRect().contains(pos)
 
-    def paintEvent(self, e):
+    def paintEvent(self, e) -> None:
         p = QPainter(self)
         p.setRenderHint(QPainter.Antialiasing)
 
@@ -97,7 +97,7 @@ if __name__ == "__main__":
     from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout
 
     class MainWindow(QWidget):
-        def __init__(self):
+        def __init__(self) -> None:
             super().__init__()
 
             self.setWindowTitle("Анимация кнопки переключения")

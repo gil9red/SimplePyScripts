@@ -27,7 +27,7 @@ def get_themes() -> list[tuple[str, QChart.ChartTheme]]:
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         tab_widget = QTabWidget()

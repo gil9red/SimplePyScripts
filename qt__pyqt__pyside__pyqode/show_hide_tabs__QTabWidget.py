@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QTabWidget, QPus
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.tab_widget = QTabWidget()

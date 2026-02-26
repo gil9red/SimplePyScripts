@@ -31,7 +31,7 @@ class Thread(QThread):
     about_pause = pyqtSignal(bool)
     about_sum = pyqtSignal(int)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         self._is_pause = False
@@ -44,14 +44,14 @@ class Thread(QThread):
         return self._sum
 
     @sum.setter
-    def sum(self, value: int):
+    def sum(self, value: int) -> None:
         self._sum = value
         self.about_sum.emit(value)
 
     def get_state(self) -> str:
         return "PAUSED" if self._is_pause else "WORKING"
 
-    def set_pause(self, pause: bool):
+    def set_pause(self, pause: bool) -> None:
         self._is_pause = pause
         self.about_pause.emit(pause)
 
@@ -61,13 +61,13 @@ class Thread(QThread):
     def is_pause(self) -> bool:
         return self._is_pause
 
-    def pause(self):
+    def pause(self) -> None:
         self.set_pause(True)
 
-    def resume(self):
+    def resume(self) -> None:
         self.set_pause(False)
 
-    def run(self):
+    def run(self) -> None:
         while True:
             self.mutex.lock()
             if self._is_pause:
@@ -80,7 +80,7 @@ class Thread(QThread):
 class MainWindow(QWidget):
     headers = ["NAME", "STATE", "SUM"]
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.started: dt.datetime = None
@@ -141,7 +141,7 @@ class MainWindow(QWidget):
 
         self._update_states()
 
-    def _update_window_title(self):
+    def _update_window_title(self) -> None:
         threads_num = self.table_thread.rowCount()
         if self.started:
             elapsed = str(dt.datetime.now() - self.started).split(".")[0]
@@ -149,7 +149,7 @@ class MainWindow(QWidget):
         else:
             self.setWindowTitle(f"Threads: {threads_num}")
 
-    def _update_states(self):
+    def _update_states(self) -> None:
         self._update_window_title()
 
         row = self.table_thread.currentRow()
@@ -173,7 +173,7 @@ class MainWindow(QWidget):
     def get_all_thread(self) -> list[Thread]:
         return [self.get_thread(row) for row in range(self.table_thread.rowCount())]
 
-    def update_info(self):
+    def update_info(self) -> None:
         self._update_window_title()
 
         if self.cb_reset_sum.isChecked():
@@ -182,13 +182,13 @@ class MainWindow(QWidget):
         self._sum += sum(thread.sum for thread in self.get_all_thread())
         self.label_result.setText(f"TOTAL SUM: <b>{get_pretty_int(self._sum)}</b>")
 
-    def _on_thread_changed(self, thread: Thread):
+    def _on_thread_changed(self, thread: Thread) -> None:
         for row in range(self.table_thread.rowCount()):
             if thread == self.get_thread(row):
                 self.table_thread.item(row, 1).setText(thread.get_state())
                 self.table_thread.item(row, 2).setText(get_pretty_int(thread.sum))
 
-    def add(self):
+    def add(self) -> None:
         if not self.started:
             self.started = dt.datetime.now()
 
@@ -218,7 +218,7 @@ class MainWindow(QWidget):
 
         self._update_states()
 
-    def pause(self):
+    def pause(self) -> None:
         item = self.table_thread.currentItem()
         if item:
             thread = self.get_thread(item.row())
@@ -226,13 +226,13 @@ class MainWindow(QWidget):
 
         self._update_states()
 
-    def pause_all(self):
+    def pause_all(self) -> None:
         for thread in self.get_all_thread():
             thread.pause()
 
         self._update_states()
 
-    def resume(self):
+    def resume(self) -> None:
         item = self.table_thread.currentItem()
         if item:
             thread = self.get_thread(item.row())
@@ -240,7 +240,7 @@ class MainWindow(QWidget):
 
         self._update_states()
 
-    def resume_all(self):
+    def resume_all(self) -> None:
         for thread in self.get_all_thread():
             thread.resume()
 

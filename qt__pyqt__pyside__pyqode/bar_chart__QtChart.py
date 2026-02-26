@@ -12,7 +12,7 @@ from PyQt5.QtChart import *
 
 
 class MainWidow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         series = self.append_series()

@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication, QMessageBox
 from PyQt5.QtCore import QTranslator, QLibraryInfo
 
 
-def question():
+def question() -> None:
     QMessageBox.question(
         None,
         "TITLE",

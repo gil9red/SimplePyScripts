@@ -8,7 +8,7 @@ from PyQt5 import Qt
 
 
 class Window(Qt.QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.table = Qt.QTableWidget()

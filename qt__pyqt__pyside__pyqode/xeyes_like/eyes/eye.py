@@ -48,19 +48,19 @@ class Eye(EllipseObject):
     visible_iris: bool = True
     visible_pupil: bool = True
 
-    def draw(self, painter: QPainter):
+    def draw(self, painter: QPainter) -> None:
         self.draw_eye(painter)
         self.draw_iris(painter)
         self.draw_pupil(painter)
 
-    def draw_eye(self, painter: QPainter):
+    def draw_eye(self, painter: QPainter) -> None:
         painter.save()
         painter.setBrush(self.brush)
         painter.setPen(self.pen)
         painter.drawEllipse(self.center, self.radiusX, self.radiusY)
         painter.restore()
 
-    def draw_iris(self, painter: QPainter):
+    def draw_iris(self, painter: QPainter) -> None:
         if not self.visible_iris:
             return
 
@@ -126,7 +126,7 @@ class Eye(EllipseObject):
 
         painter.restore()
 
-    def draw_pupil(self, painter: QPainter):
+    def draw_pupil(self, painter: QPainter) -> None:
         if not self.visible_pupil:
             return
 

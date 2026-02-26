@@ -12,7 +12,7 @@ from PyQt5.QtCore import QPointF, Qt, QTimer
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.angle = 0
@@ -23,7 +23,7 @@ class MainWindow(QWidget):
         self.timer.timeout.connect(self._do_tick)
         self.timer.start()
 
-    def _do_tick(self):
+    def _do_tick(self) -> None:
         self.angle += 5
 
         self.x += 5
@@ -33,7 +33,7 @@ class MainWindow(QWidget):
         # Перерисование окна
         self.update()
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
 

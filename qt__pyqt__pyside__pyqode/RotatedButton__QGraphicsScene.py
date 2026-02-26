@@ -22,7 +22,7 @@ from PyQt5.QtCore import Qt
 
 
 class Window(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.scene = QGraphicsScene()

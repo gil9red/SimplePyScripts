@@ -33,7 +33,7 @@ from PyQt5.QtGui import QMovie
 from config import GIPHY_API_KEY, TEMP_DIR
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -50,7 +50,7 @@ class SearchGifThread(QThread):
 
     about_add_gif = pyqtSignal(dict, int, int)
 
-    def __init__(self, name_gif=None):
+    def __init__(self, name_gif=None) -> None:
         super().__init__()
 
         self.name_gif = name_gif
@@ -90,7 +90,7 @@ class SearchGifThread(QThread):
         }
         return data
 
-    def run(self):
+    def run(self) -> None:
         data = self.get_gif()
         if "error" in data:
             # TODO: emit error to MainWindow
@@ -104,7 +104,7 @@ class SearchGifThread(QThread):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.title = "Gif Manager"
@@ -117,7 +117,7 @@ class MainWindow(QMainWindow):
 
         self.init_ui()
 
-    def init_ui(self):
+    def init_ui(self) -> None:
         self.gif_edit = QLineEdit()
         self.gif_edit.returnPressed.connect(self.search_gif)
         self.gif_edit.setPlaceholderText("Enter name gif")
@@ -155,15 +155,15 @@ class MainWindow(QMainWindow):
         root_layout.addWidget(self.info_label)
         root_layout.addWidget(self.scroll)
 
-    def on_finish(self):
+    def on_finish(self) -> None:
         self.gif_data_frame.setEnabled(True)
 
-    def on_start(self):
+    def on_start(self) -> None:
         self.info_label.hide()
         self.scroll.show()
         self.gif_data_frame.setEnabled(False)
 
-    def search_gif(self):
+    def search_gif(self) -> None:
         # TODO: replace on QListWidget
         for i in range(self.gifs_layout.count()):
             self.gifs_layout.itemAt(i).widget().deleteLater()
@@ -171,7 +171,7 @@ class MainWindow(QMainWindow):
         self.search_gif_thread.name_gif = self.gif_edit.text()
         self.search_gif_thread.start()
 
-    def add_gif(self, data: dict, num: int, total: int):
+    def add_gif(self, data: dict, num: int, total: int) -> None:
         self.setWindowTitle(f"{self.title}. {num} / {total}")
 
         if data["error"]:

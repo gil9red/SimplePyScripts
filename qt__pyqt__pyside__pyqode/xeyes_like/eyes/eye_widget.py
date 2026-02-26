@@ -37,21 +37,21 @@ class EyeWidget(QWidget):
 
     position_look: QPoint = QPoint(0, 0)
 
-    def __init__(self, parent: QWidget = None):
+    def __init__(self, parent: QWidget = None) -> None:
         super().__init__(parent)
 
         self.set_diameter(MINIMAL_SIZE_EYE)
 
-    def set_diameter(self, diameter: int):
+    def set_diameter(self, diameter: int) -> None:
         diameter = max(diameter, MINIMAL_SIZE_EYE)
 
         self.setFixedSize(diameter, diameter)
 
-    def look_there(self, position: QPoint):
+    def look_there(self, position: QPoint) -> None:
         self.position_look = self.mapFromGlobal(position)
         self.update()
 
-    def paintEvent(self, event: QPaintEvent):
+    def paintEvent(self, event: QPaintEvent) -> None:
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
 

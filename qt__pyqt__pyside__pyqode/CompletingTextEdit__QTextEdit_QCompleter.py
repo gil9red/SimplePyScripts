@@ -18,7 +18,7 @@ from PyQt5.QtWidgets import (
 )
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -31,7 +31,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class CompletingTextEdit(QTextEdit):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         self.completerSequence = QKeySequence("Ctrl+Space")
@@ -40,7 +40,7 @@ class CompletingTextEdit(QTextEdit):
         self._completer.setWidget(self)
         self._completer.activated.connect(self.insertCompletion)
 
-    def insertCompletion(self, completion):
+    def insertCompletion(self, completion) -> None:
         if self._completer.widget() is not self:
             return
 
@@ -57,7 +57,7 @@ class CompletingTextEdit(QTextEdit):
 
         return tc.selectedText()
 
-    def loadFromFile(self, fileName):
+    def loadFromFile(self, fileName) -> None:
         f = QFile(fileName)
         if not f.open(QFile.ReadOnly):
             model = QStringListModel()
@@ -81,11 +81,11 @@ class CompletingTextEdit(QTextEdit):
         model = QStringListModel(words)
         self._completer.setModel(model)
 
-    def loadFromList(self, words):
+    def loadFromList(self, words) -> None:
         model = QStringListModel(words)
         self._completer.setModel(model)
 
-    def keyPressEvent(self, e):
+    def keyPressEvent(self, e) -> None:
         if self._completer.popup().isVisible():
             # The following keys are forwarded by the completer to the widget.
             if e.key() in (
@@ -139,7 +139,7 @@ class CompletingTextEdit(QTextEdit):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         self.setWindowTitle("Completer")

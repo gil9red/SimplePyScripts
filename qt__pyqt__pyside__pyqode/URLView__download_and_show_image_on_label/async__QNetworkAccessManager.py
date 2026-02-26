@@ -8,7 +8,7 @@ from PyQt5 import Qt
 
 
 class URLView(Qt.QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         layout = Qt.QVBoxLayout(self)
@@ -29,13 +29,13 @@ class URLView(Qt.QWidget):
         self.nam = Qt.QNetworkAccessManager()
         self.nam.finished.connect(self.finish_request)
 
-    def on_load(self):
+    def on_load(self) -> None:
         print("Load image")
 
         url = self.urlEdit.text()
         self.nam.get(Qt.QNetworkRequest(Qt.QUrl(url)))
 
-    def finish_request(self, reply):
+    def finish_request(self, reply) -> None:
         img = Qt.QPixmap()
         img.loadFromData(reply.readAll())
 

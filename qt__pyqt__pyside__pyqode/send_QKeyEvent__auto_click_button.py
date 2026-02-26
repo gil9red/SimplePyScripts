@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from PyQt5.Qt import Qt, QKeyEvent, QApplication, QPushButton, QTimer
 
 
-def key_press_release(widget, key, modifier=Qt.NoModifier):
+def key_press_release(widget, key, modifier=Qt.NoModifier) -> None:
     """
     Функция для отправления события нажатия кнопки.
     # Имитация нажатия на пробел:

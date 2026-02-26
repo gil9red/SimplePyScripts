@@ -27,7 +27,7 @@ URL = "http://127.0.0.1:%s/command/{}" % PORT
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle(Path(__file__).name)
@@ -70,7 +70,7 @@ class MainWindow(QWidget):
 
         return button
 
-    def _send_command(self, data: str):
+    def _send_command(self, data: str) -> None:
         try:
             rs = requests.post(URL.format(data))
             rs.raise_for_status()
@@ -85,10 +85,10 @@ class MainWindow(QWidget):
         except:
             pass
 
-    def _on_click(self, data: str):
+    def _on_click(self, data: str) -> None:
         Thread(target=self._send_command, args=[data]).start()
 
-    def _on_tick(self):
+    def _on_tick(self) -> None:
         Thread(target=self._send_command, args=["SCREENSHOT"]).start()
 
 

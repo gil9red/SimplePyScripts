@@ -9,7 +9,7 @@ from PyQt5.QtGui import QPixmap
 
 
 class Label(QLabel):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.pixmap = QPixmap("52rQ3.png")
@@ -18,10 +18,10 @@ class Label(QLabel):
 
         self.setPixmap(self.pixmap_leave)
 
-    def enterEvent(self, event):
+    def enterEvent(self, event) -> None:
         self.setPixmap(self.pixmap_enter)
 
-    def leaveEvent(self, event):
+    def leaveEvent(self, event) -> None:
         self.setPixmap(self.pixmap_leave)
 
 

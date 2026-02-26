@@ -8,7 +8,7 @@ from PyQt5.Qt import *
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Animation check password")
@@ -32,7 +32,7 @@ class MainWindow(QWidget):
         self.animation.setStartValue(0.0)
         self.animation.setEndValue(1.0)
 
-    def set_border_color_password(self, value):
+    def set_border_color_password(self, value) -> None:
         color = "0, 100, 0" if self.is_correct_password() else "255, 0, 0"
         self.le_current_password.setStyleSheet(
             f"border: 3px solid rgba({color}, {value});"
@@ -43,7 +43,7 @@ class MainWindow(QWidget):
     def is_correct_password(self):
         return self.le_target_password.text() == self.le_current_password.text()
 
-    def _on_check_password(self):
+    def _on_check_password(self) -> None:
         text = '<font color="{}">{}</font>'
 
         if self.is_correct_password():

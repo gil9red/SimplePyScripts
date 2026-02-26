@@ -15,7 +15,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -39,7 +39,7 @@ def get_feeds_by_manga_chapters(url_rss: str) -> list:
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("show_user_grouple_rss__qt")
@@ -85,17 +85,17 @@ class MainWindow(QMainWindow):
         # Set default url
         self.line_edit_url_user.setText("https://grouple.co/user/315828")
 
-    def _on_line_edit_url_user_text_changed(self, text):
+    def _on_line_edit_url_user_text_changed(self, text) -> None:
         id_user = text.replace(" ", "").split("/")[-1]
         self.line_edit_id_user.setText(id_user)
 
-    def _on_line_edit_id_user_text_changed(self, text):
+    def _on_line_edit_id_user_text_changed(self, text) -> None:
         id_user = text.strip()
         self.line_edit_rss_user.setText(
             f"https://grouple.co/user/rss/{id_user}?filter="
         )
 
-    def _start(self):
+    def _start(self) -> None:
         self.list_widget_feeds.clear()
 
         url_rss = self.line_edit_rss_user.text()
@@ -108,7 +108,7 @@ class MainWindow(QMainWindow):
             self.list_widget_feeds.addItem(item)
 
     @staticmethod
-    def _on_item_double_clicked(item):
+    def _on_item_double_clicked(item) -> None:
         url = item.data(Qt.UserRole)
         webbrowser.open_new_tab(url)
 

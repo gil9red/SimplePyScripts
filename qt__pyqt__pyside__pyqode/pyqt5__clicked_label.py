@@ -10,7 +10,7 @@ from PyQt5.Qt import QLabel, pyqtSignal, QApplication, QVBoxLayout, QWidget
 class ClickedLabel(QLabel):
     clicked = pyqtSignal()
 
-    def mouseReleaseEvent(self, e):
+    def mouseReleaseEvent(self, e) -> None:
         super().mouseReleaseEvent(e)
 
         self.clicked.emit()

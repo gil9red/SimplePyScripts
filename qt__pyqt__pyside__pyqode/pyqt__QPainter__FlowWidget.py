@@ -10,7 +10,7 @@ import traceback
 from PyQt5.Qt import *
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -23,7 +23,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class FlowWidget(QWidget):
-    def __init__(self, length=25, cell_size=50, cell_font=QFont("Arial", 10)):
+    def __init__(self, length=25, cell_size=50, cell_font=QFont("Arial", 10)) -> None:
         super().__init__()
 
         self.cell_size = cell_size
@@ -44,17 +44,17 @@ class FlowWidget(QWidget):
     def minimumSize(self):
         return self.minimumSizeHint()
 
-    def showEvent(self, event):
+    def showEvent(self, event) -> None:
         super().showEvent(event)
 
         self.updateGeometry()
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
 
         self.column_count = self.width() // self.cell_size
 
-    def paintEvent(self, event: QPaintEvent):
+    def paintEvent(self, event: QPaintEvent) -> None:
         painter = QPainter(self)
         painter.setPen(Qt.black)
         painter.setBrush(Qt.white)

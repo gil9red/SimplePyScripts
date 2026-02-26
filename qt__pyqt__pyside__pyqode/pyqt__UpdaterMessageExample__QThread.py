@@ -19,7 +19,7 @@ from PyQt5.Qt import (
 class AboutUpdateThread(QThread):
     about_update = pyqtSignal(str)
 
-    def run(self):
+    def run(self) -> None:
         while True:
             # Делаем какие-то действия и проверки, и вызываем сигнал about_update,
             # чтобы сообщить о новой версии
@@ -33,7 +33,7 @@ class AboutUpdateThread(QThread):
 
 
 class Window(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.log = QPlainTextEdit()
@@ -48,10 +48,10 @@ class Window(QWidget):
         self.thread.about_update.connect(self.on_about_update)
         self.thread.start()
 
-    def add_log(self, text):
+    def add_log(self, text) -> None:
         self.log.appendPlainText(text)
 
-    def on_about_update(self, text):
+    def on_about_update(self, text) -> None:
         self.add_log(f"Пришло обновление '{text}'")
 
         mb = QMessageBox()

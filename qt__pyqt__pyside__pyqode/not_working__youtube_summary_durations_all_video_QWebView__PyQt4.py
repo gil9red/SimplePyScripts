@@ -47,13 +47,13 @@ def get_total_seconds(time_str):
     return total_seconds
 
 
-def load_finished_handler(ok):
+def load_finished_handler(ok) -> None:
     if not ok:
         return
 
     doc = view.page().mainFrame().documentElement()
 
-    def update_url_video_by_time_dict():
+    def update_url_video_by_time_dict() -> None:
         global url_video_by_time_dict
 
         html = doc.toOuterXml()
@@ -72,7 +72,7 @@ def load_finished_handler(ok):
     timer = QTimer()
     timer.setInterval(5000)
 
-    def timeout_handler():
+    def timeout_handler() -> None:
         doc = view.page().mainFrame().documentElement()
         button = doc.findFirst(".load-more-button")
 

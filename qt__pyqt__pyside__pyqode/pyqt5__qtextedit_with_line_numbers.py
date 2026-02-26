@@ -8,7 +8,7 @@ from PyQt5 import Qt
 
 
 class LineNumberArea(Qt.QWidget):
-    def __init__(self, editor):
+    def __init__(self, editor) -> None:
         super().__init__(editor)
 
         self.editor = editor
@@ -16,12 +16,12 @@ class LineNumberArea(Qt.QWidget):
     def sizeHint(self):
         return Qt.QSize(self.editor.line_number_area_width(), 0)
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         self.editor.line_number_area_paint_event(event)
 
 
 class CodeEditor(Qt.QPlainTextEdit):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setStyleSheet(
@@ -52,10 +52,10 @@ class CodeEditor(Qt.QPlainTextEdit):
         space = 3 + self.fontMetrics().width("9") * digits
         return space
 
-    def update_line_number_area_width(self):
+    def update_line_number_area_width(self) -> None:
         self.setViewportMargins(self.line_number_area_width(), 0, 0, 0)
 
-    def update_line_number_area(self, rect, dy):
+    def update_line_number_area(self, rect, dy) -> None:
         if dy:
             self.line_number_area.scroll(0, dy)
         else:
@@ -66,7 +66,7 @@ class CodeEditor(Qt.QPlainTextEdit):
         if rect.contains(self.viewport().rect()):
             self.update_line_number_area_width()
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
 
         cr = self.contentsRect()
@@ -74,7 +74,7 @@ class CodeEditor(Qt.QPlainTextEdit):
             Qt.QRect(cr.left(), cr.top(), self.line_number_area_width(), cr.height())
         )
 
-    def line_number_area_paint_event(self, event):
+    def line_number_area_paint_event(self, event) -> None:
         painter = Qt.QPainter(self.line_number_area)
 
         painter.fillRect(event.rect(), Qt.Qt.lightGray)
@@ -103,7 +103,7 @@ class CodeEditor(Qt.QPlainTextEdit):
             bottom = top + self.blockBoundingRect(block).height()
             block_number += 1
 
-    def highlight_current_line(self):
+    def highlight_current_line(self) -> None:
         extra_selections = []
 
         if not self.isReadOnly():

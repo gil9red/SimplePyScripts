@@ -25,7 +25,7 @@ from PyQt5.QtCore import QSize, Qt, QThread, pyqtSignal as Signal
 class CheckNewData(QThread):
     about_new_data = Signal(dict)
 
-    def run(self):
+    def run(self) -> None:
         while True:
             # API - start
             rs = requests.get(
@@ -41,7 +41,7 @@ class CheckNewData(QThread):
 
 
 class Sheet(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setMinimumSize(QSize(600, 300))
@@ -70,7 +70,7 @@ class Sheet(QMainWindow):
         central_widget.setLayout(grid_layout)
         self.setCentralWidget(central_widget)
 
-    def update_table(self, data):
+    def update_table(self, data) -> None:
         print("update_table:", data)
 
         k = data["result"][0]["Last"]

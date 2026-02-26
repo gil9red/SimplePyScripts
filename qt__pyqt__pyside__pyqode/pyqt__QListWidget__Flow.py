@@ -8,14 +8,14 @@ from PyQt5.Qt import *
 
 
 class WrapListWidget(QListWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setFlow(QListView.LeftToRight)
         self.setWrapping(True)
         self.setUniformItemSizes(True)
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
 
         self.setWrapping(self.isWrapping())

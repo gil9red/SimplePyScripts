@@ -5,6 +5,6 @@ __author__ = "ipetrash"
 
 
 class Student:
-    def __init__(self, name, group):
+    def __init__(self, name, group) -> None:
         self.name = name
         self.group = group

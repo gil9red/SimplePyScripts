@@ -8,7 +8,7 @@ from PySide.QtGui import QApplication, QKeyEvent
 from PySide.QtCore import Qt
 
 
-def key_press_release(widget, key, modifier=Qt.NoModifier):
+def key_press_release(widget, key, modifier=Qt.NoModifier) -> None:
     """
     Функция для отправления события нажатия кнопки.
 
@@ -53,7 +53,7 @@ if __name__ == "__main__":
     view.loadFinished.connect(loop.quit)
     loop.exec_()
 
-    def random_click():
+    def random_click() -> None:
         """Функция для случайного клика на WASD."""
 
         key = random.choice([Qt.Key_W, Qt.Key_S, Qt.Key_A, Qt.Key_D])

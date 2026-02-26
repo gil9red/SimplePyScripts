@@ -5,7 +5,7 @@ from PySide.QtGui import *
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.editor = QTextEdit()
         self.setCentralWidget(self.editor)
@@ -19,12 +19,12 @@ class MainWindow(QMainWindow):
         self.edit_menu = self.menuBar().addMenu("Правка")
         self.edit_menu.aboutToShow.connect(self.update_edit_menu)
 
-    def update_edit_menu(self):
+    def update_edit_menu(self) -> None:
         self.edit_menu.clear()
         actions = self.editor.createStandardContextMenu().actions()
         self.edit_menu.addActions(actions)
 
-    def slot_save_as(self):
+    def slot_save_as(self) -> None:
         file_name = QFileDialog.getSaveFileName()[0]
         if file_name:
             with open(file_name, "w") as f:

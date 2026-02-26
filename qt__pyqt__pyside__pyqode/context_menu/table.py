@@ -20,7 +20,7 @@ from PyQt5.QtWidgets import (
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         header_labels = ["NAME", "URL"]
@@ -55,7 +55,7 @@ class MainWindow(QWidget):
 
         self.fill_tables()
 
-    def fill_tables(self):
+    def fill_tables(self) -> None:
         self.model.appendRow(
             [QStandardItem("rutube"), QStandardItem("https://rutube.ru/")]
         )
@@ -75,7 +75,7 @@ class MainWindow(QWidget):
                 text = self.model.item(row, column).text()
                 self.table_widget.setItem(row, column, QTableWidgetItem(text))
 
-    def _custom_menu_requested(self, p: QPoint):
+    def _custom_menu_requested(self, p: QPoint) -> None:
         table = self.sender()
 
         index: QModelIndex = table.indexAt(p)

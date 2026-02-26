@@ -14,7 +14,7 @@ from PyQt5.uic import loadUi
 
 
 class MainWindow(Qt.QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         loadUi("main.ui", self)
@@ -24,7 +24,7 @@ class MainWindow(Qt.QWidget):
 
         self.textEdit_text.setPlainText("СВЕТА РОЕТ РОВ, ВОВКА СЕЕТ ОВЁС")
 
-    def solve(self):
+    def solve(self) -> None:
         # Исходный текст
         text = self.textEdit_text.toPlainText()
 

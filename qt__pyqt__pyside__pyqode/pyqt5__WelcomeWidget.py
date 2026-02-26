@@ -11,7 +11,7 @@ from PyQt5.QtCore import Qt, QPropertyAnimation, QTimer
 
 # SOURCE: https://ru.stackoverflow.com/a/860257/201445
 class WelcomeWidget(QDialog):
-    def __init__(self, text="Welcome my app", duration=3000):
+    def __init__(self, text="Welcome my app", duration=3000) -> None:
         super().__init__()
 
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.Tool | Qt.WindowStaysOnTopHint)
@@ -41,13 +41,13 @@ class WelcomeWidget(QDialog):
         self.timer.setInterval(duration)
         self.timer.timeout.connect(self.close)
 
-    def exec(self):
+    def exec(self) -> None:
         self.timer.start()
         self.animation.start()
 
         super().exec()
 
-    def paintEvent(self, event: QPaintEvent):
+    def paintEvent(self, event: QPaintEvent) -> None:
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
         painter.setBrush(QColor(0, 0, 0, 180))
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     WelcomeWidget("Еще, раз! Привет!", duration=1500).exec()
 
     class MainWindow(QMainWindow):
-        def __init__(self):
+        def __init__(self) -> None:
             super().__init__()
 
             self.setWindowTitle("MAIN WINDOW")

@@ -9,7 +9,7 @@ from PySide.QtCore import *
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.layout = QVBoxLayout()
@@ -19,14 +19,14 @@ class Widget(QWidget):
 
         self._add_line_edit()
 
-    def _add_line_edit(self):
+    def _add_line_edit(self) -> None:
         line_edit = QLineEdit()
         line_edit.textEdited.connect(self._text_edited)
 
         self.layout.addWidget(line_edit)
         self.line_edit_list.append(line_edit)
 
-    def _text_edited(self, text):
+    def _text_edited(self, text) -> None:
         if not self.line_edit_list:
             return
 

@@ -14,7 +14,7 @@ from eyes.eyes_widget import EyesWidget
 # from support import set_top_of_all_windows
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 

@@ -27,7 +27,7 @@ from FlowLayout import FlowLayout
 
 
 # Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -48,12 +48,12 @@ def seconds_to_str(seconds: int) -> str:
 class ImgThread(QThread):
     new_img = pyqtSignal(QImage)
 
-    def __init__(self, life_time_seconds=60):
+    def __init__(self, life_time_seconds=60) -> None:
         super().__init__()
 
         self.life_time_seconds = life_time_seconds
 
-    def run(self):
+    def run(self) -> None:
         painter = QPainter()
         painter.setRenderHint(QPainter.Antialiasing)
 
@@ -100,7 +100,7 @@ class ImgThread(QThread):
 class ImgWidget(QWidget):
     closed = pyqtSignal()
 
-    def __init__(self, life_time_seconds=60):
+    def __init__(self, life_time_seconds=60) -> None:
         super().__init__()
 
         self._thread = ImgThread(life_time_seconds)
@@ -116,21 +116,21 @@ class ImgWidget(QWidget):
 
         self.setLayout(layout)
 
-    def _on_new_img(self, img: QImage):
+    def _on_new_img(self, img: QImage) -> None:
         if not img:
             return
 
         self.setFixedSize(img.size())
         self._label.setPixmap(QPixmap.fromImage(img))
 
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
         self.closed.emit()
 
         super().closeEvent(event)
 
 
 class Window(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle(__file__.split("/")[-1])
@@ -152,7 +152,7 @@ class Window(QWidget):
 
         self.setLayout(main_layout)
 
-    def _on_push_add(self):
+    def _on_push_add(self) -> None:
         w = ImgWidget(life_time_seconds=random.randint(10, 100))
         w.closed.connect(lambda w=w: self.items_layout.removeWidget(w))
 

@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from PyQt5.Qt import QApplication, QGroupBox, QCheckBox, QGridLayout, QObject
 
 
-def _on_button_clicked(checked: bool):
+def _on_button_clicked(checked: bool) -> None:
     # Небольшой костыль для получения объекта, который отправил сигнал
     # Костыль не нужен будет если метод будет внутри виджета -- button = self.sender()
     button = QObject().sender()

@@ -12,7 +12,7 @@ import qdarkstyle
 
 
 class MainWindow(Qt.QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         uic.loadUi("mainwidget.ui", self)
@@ -30,7 +30,7 @@ class MainWindow(Qt.QWidget):
 
         self._update_pen_color()
 
-    def _choose_color(self):
+    def _choose_color(self) -> None:
         color = Qt.QColorDialog.getColor(self.pen_color)
         if not color.isValid():
             return
@@ -38,7 +38,7 @@ class MainWindow(Qt.QWidget):
         self.pen_color = color
         self._update_pen_color()
 
-    def _update_pen_color(self):
+    def _update_pen_color(self) -> None:
         pixmap = Qt.QPixmap(self.pbPenColor.size())
         pixmap.fill(self.pen_color)
         self.pbPenColor.setIcon(Qt.QIcon(pixmap))

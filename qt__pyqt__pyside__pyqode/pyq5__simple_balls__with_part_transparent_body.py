@@ -81,7 +81,7 @@ def get_random_color() -> tuple[int, int, int]:
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowFlags(Qt.FramelessWindowHint)
@@ -105,22 +105,22 @@ class Widget(QWidget):
 
         self.setLayout(layout)
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event) -> None:
         if event.button() == Qt.LeftButton:
             self._old_pos = event.pos()
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event) -> None:
         if event.button() == Qt.LeftButton:
             self._old_pos = None
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event) -> None:
         if not self._old_pos:
             return
 
         delta = event.pos() - self._old_pos
         self.move(self.pos() + delta)
 
-    def tick(self):
+    def tick(self) -> None:
         for ball in self.balls:
             ball.update()
 
@@ -135,7 +135,7 @@ class Widget(QWidget):
         # Вызов перерисовки
         self.update()
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
 
         painter.setBrush(QColor(0, 0, 0, 1))
@@ -145,7 +145,7 @@ class Widget(QWidget):
         for ball in self.balls:
             ball.draw(painter)
 
-    def append_random_ball(self):
+    def append_random_ball(self) -> None:
         x = self.width() // 2 + randint(-self.width() // 4, self.width() // 4)
         y = self.height() // 2 + randint(-self.height() // 4, self.height() // 4)
         r = randint(10, 20)

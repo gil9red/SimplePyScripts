@@ -29,7 +29,7 @@ from PyQt5.QtCore import Qt
 DIR = Path(__file__).parent
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -42,7 +42,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle(DIR.name)
@@ -76,7 +76,7 @@ class MainWindow(QWidget):
 
         self.setLayout(form_layout)
 
-    def _on_save_as(self):
+    def _on_save_as(self) -> None:
         # Список строк с поддерживаемыми форматами изображений
         formats = [str(x, encoding="utf-8") for x in QImageWriter.supportedImageFormats()]
 
@@ -89,7 +89,7 @@ class MainWindow(QWidget):
         if file_name:
             self.result_label.pixmap().save(file_name)
 
-    def render_image(self):
+    def render_image(self) -> None:
         font = self.cb_font.currentFont()
         need_width = self.sb_width.value()
         text = self.text_edit.text()

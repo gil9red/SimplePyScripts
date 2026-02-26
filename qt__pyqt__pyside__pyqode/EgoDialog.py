@@ -10,7 +10,7 @@ from PyQt5.Qt import Qt
 
 
 class EgoDialog(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowFlag(Qt.FramelessWindowHint)
@@ -29,7 +29,7 @@ class EgoDialog(QWidget):
 
         return ok == QMessageBox.Yes
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
         painter.setBrush(QColor(0, 0, 0, 127))
         painter.drawRect(self.rect())

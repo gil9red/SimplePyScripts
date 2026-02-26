@@ -19,7 +19,7 @@ from PyQt5.QtGui import QPainter, QColor, QPixmap, QPalette
 from PyQt5.QtCore import Qt, QEvent
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -32,7 +32,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class Example(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.flag = False
@@ -77,7 +77,7 @@ class Example(QWidget):
         # Стандартная обработка событий
         return super().eventFilter(obj, e)
 
-    def draw_ellipse(self, e):
+    def draw_ellipse(self, e) -> None:
         self.painter.drawEllipse(e.pos(), 20, 20)
         self.label.setPixmap(self.image)
 

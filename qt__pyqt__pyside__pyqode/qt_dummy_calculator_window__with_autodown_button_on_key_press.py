@@ -10,7 +10,7 @@ import traceback
 from PyQt5.QtWidgets import *
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -23,7 +23,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("dummy_calculator_window")
@@ -47,7 +47,7 @@ class Widget(QWidget):
 
         self.setLayout(layout)
 
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event) -> None:
         try:
             key = chr(event.key())
 
@@ -59,7 +59,7 @@ class Widget(QWidget):
 
         super().keyPressEvent(event)
 
-    def keyReleaseEvent(self, event):
+    def keyReleaseEvent(self, event) -> None:
         try:
             key = chr(event.key())
 

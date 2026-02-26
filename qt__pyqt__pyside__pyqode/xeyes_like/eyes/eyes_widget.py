@@ -19,7 +19,7 @@ D_INDENT_BETWEEN_EYES = 1
 
 
 class EyesWidget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.eyes: list[EyeWidget] = [EyeWidget(self) for _ in range(2)]
@@ -28,14 +28,14 @@ class EyesWidget(QWidget):
         self.timer_cursor_pos.timeout.connect(self.refresh_look_there)
         self.timer_cursor_pos.start(30)
 
-    def refresh_look_there(self):
+    def refresh_look_there(self) -> None:
         self.update()
 
         position: QPoint = QCursor.pos()
         for eye in self.eyes:
             eye.look_there(position)
 
-    def update_minimum_size(self):
+    def update_minimum_size(self) -> None:
         if not self.eyes:
             return
 
@@ -54,11 +54,11 @@ class EyesWidget(QWidget):
             min_height + D_INDENT_TOP + D_INDENT_BOTTOM,
         )
 
-    def update_size(self):
+    def update_size(self) -> None:
         self.update_minimum_size()
         QApplication.instance().postEvent(self, QResizeEvent(self.size(), self.size()))
 
-    def resizeEvent(self, event: QResizeEvent):
+    def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
 
         if not self.eyes:

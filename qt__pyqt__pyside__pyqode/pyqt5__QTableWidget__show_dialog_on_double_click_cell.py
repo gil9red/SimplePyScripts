@@ -8,7 +8,7 @@ from PyQt5 import Qt
 
 
 class MainWindow(Qt.QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.table = Qt.QTableWidget()
@@ -29,7 +29,7 @@ class MainWindow(Qt.QMainWindow):
 
         self.setCentralWidget(main_widget)
 
-    def on_cell_item_clicked(self, item):
+    def on_cell_item_clicked(self, item) -> None:
         print(item)
 
         new_text, ok = Qt.QInputDialog.getText(

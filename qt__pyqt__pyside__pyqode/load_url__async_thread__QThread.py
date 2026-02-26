@@ -11,18 +11,18 @@ from PyQt5 import Qt
 class LoadUrlThread(Qt.QThread):
     load_finished = Qt.pyqtSignal(object)
 
-    def __init__(self, url):
+    def __init__(self, url) -> None:
         super().__init__()
 
         self.url = url
 
-    def run(self):
+    def run(self) -> None:
         rs = requests.get(self.url)
         self.load_finished.emit(rs)
 
 
 class MainWindow(Qt.QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.button = Qt.QPushButton("Load url!")
@@ -30,10 +30,10 @@ class MainWindow(Qt.QMainWindow):
 
         self.setCentralWidget(self.button)
 
-    def on_finished_load_url(self, rs):
+    def on_finished_load_url(self, rs) -> None:
         self.setWindowTitle(f"After load: {rs}")
 
-    def on_clicked(self):
+    def on_clicked(self) -> None:
         url = "https://github.com/gil9red/SimplePyScripts"
 
         self.setWindowTitle("Before load")

@@ -8,7 +8,7 @@ from PyQt5 import Qt
 
 
 class Widget(Qt.QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.line_edit = Qt.QLineEdit()
@@ -19,7 +19,7 @@ class Widget(Qt.QWidget):
 
         self.setLayout(layout)
 
-    def on_text_changed(self, text):
+    def on_text_changed(self, text) -> None:
         # Рассчитываем ширину текст по шрифту
         width = self.line_edit.fontMetrics().width(text)
         self.line_edit.setMinimumWidth(width)

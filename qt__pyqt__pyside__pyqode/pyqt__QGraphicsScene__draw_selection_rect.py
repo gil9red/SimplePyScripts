@@ -16,7 +16,7 @@ from PyQt5.QtGui import QColor, QPainter
 
 
 class GraphicsScene(QGraphicsScene):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self._pos = QPointF()
@@ -25,7 +25,7 @@ class GraphicsScene(QGraphicsScene):
         # Полупрозрачный цвет
         self._item_color = QColor(0, 0, 255, 128)
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event) -> None:
         super().mousePressEvent(event)
 
         self._pos = event.scenePos()
@@ -36,14 +36,14 @@ class GraphicsScene(QGraphicsScene):
         self.addItem(self._current_item)
         self._current_item.setRect(QRectF(self._pos, self._pos))
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event) -> None:
         super().mouseMoveEvent(event)
 
         if self._current_item:
             rect = QRectF(self._pos, event.scenePos()).normalized()
             self._current_item.setRect(rect)
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event) -> None:
         super().mouseReleaseEvent(event)
 
         # Убираем после отпускания кнопки мыши
@@ -52,7 +52,7 @@ class GraphicsScene(QGraphicsScene):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         scene_rect = QRectF(0, 0, 500, 500)

@@ -25,7 +25,7 @@ from PyQt5.QtCore import Qt, QRectF
 
 
 # Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -41,7 +41,7 @@ DIR: Path = Path(__file__).parent.resolve()
 FILE_NAME_IMAGE: str = str(DIR / "favicon.png")
 
 
-def draw_text_to_bottom_right(img: QPixmap, text: str, scale_text_from_img: float = 0.5):
+def draw_text_to_bottom_right(img: QPixmap, text: str, scale_text_from_img: float = 0.5) -> None:
     p = QPainter(img)
 
     factor = (img.width() * scale_text_from_img) / p.fontMetrics().width(text)
@@ -67,7 +67,7 @@ def draw_text_to_bottom_right(img: QPixmap, text: str, scale_text_from_img: floa
 
 
 class Window(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.img_view = QLabel()
@@ -89,11 +89,11 @@ class Window(QWidget):
         main_layout.addWidget(self.img_view)
         main_layout.addLayout(buttons_layout)
 
-    def _update_img_view(self, img: QPixmap):
+    def _update_img_view(self, img: QPixmap) -> None:
         self.img_view.setPixmap(img)
         self.img_view.setMinimumSize(img.size() * 1.1)
 
-    def _on_button_clicked(self, button: QAbstractButton):
+    def _on_button_clicked(self, button: QAbstractButton) -> None:
         text = button.text()
         img = QPixmap(FILE_NAME_IMAGE)
         draw_text_to_bottom_right(img, text)

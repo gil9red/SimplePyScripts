@@ -9,7 +9,7 @@ from PyQt5.QtCore import Qt, QPoint
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         pb_1 = QPushButton("Create [1]")
@@ -33,12 +33,12 @@ class MainWindow(QWidget):
 
         self.setLayout(layout)
 
-    def _create_new_window_1(self):
+    def _create_new_window_1(self) -> None:
         widget = QWidget(self, flags=Qt.Window)
         widget.resize(200, 100)
         widget.show()
 
-    def _create_new_window_2(self):
+    def _create_new_window_2(self) -> None:
         widget = QWidget(self, flags=Qt.Window)
         widget.resize(200, 100)
 
@@ -47,7 +47,7 @@ class MainWindow(QWidget):
 
         widget.show()
 
-    def _create_new_window_3(self):
+    def _create_new_window_3(self) -> None:
         widget = QWidget(self, flags=Qt.Window)
         widget.resize(200, 100)
 
@@ -58,7 +58,7 @@ class MainWindow(QWidget):
 
         widget.show()
 
-    def _create_new_window_4(self):
+    def _create_new_window_4(self) -> None:
         widget = QWidget(self, flags=Qt.Window)
         widget.resize(200, 100)
 

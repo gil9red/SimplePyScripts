@@ -20,19 +20,19 @@ from pyq5__simple_balls__with_part_transparent_body import (
 
 
 class Animation:
-    def __init__(self, owner: QWidget = None):
+    def __init__(self, owner: QWidget = None) -> None:
         self.owner = owner
 
-    def set_owner(self, owner: QWidget):
+    def set_owner(self, owner: QWidget) -> None:
         self.owner = owner
 
-    def prepare(self):
+    def prepare(self) -> None:
         pass
 
-    def tick(self):
+    def tick(self) -> None:
         pass
 
-    def draw(self, painter: QPainter):
+    def draw(self, painter: QPainter) -> None:
         pass
 
 
@@ -42,7 +42,7 @@ class DirectionEnum(enum.IntEnum):
 
 
 class Ball(BaseBall):
-    def __init__(self, x, y, r, v_x, v_y, color):
+    def __init__(self, x, y, r, v_x, v_y, color) -> None:
         super().__init__(x, y, r, v_x, v_y, color)
 
         self.animation_alpha_direction = choice(list(DirectionEnum))
@@ -56,7 +56,7 @@ class AnimationBalls(Animation):
         min_ball_alpha_color: int = 35,  # Минимальное значение может быть 0
         max_ball_alpha_color: int = 160,  # Максимальное значение может быть 255
         animation_ball_alpha_color: bool = True,
-    ):
+    ) -> None:
         super().__init__(owner)
 
         self.balls: list[Ball] = []
@@ -65,11 +65,11 @@ class AnimationBalls(Animation):
         self.max_ball_alpha_color = max_ball_alpha_color
         self.animation_ball_alpha_color = animation_ball_alpha_color
 
-    def prepare(self):
+    def prepare(self) -> None:
         for _ in range(self.number_balls):
             self.append_random_ball()
 
-    def append_random_ball(self):
+    def append_random_ball(self) -> None:
         x = self.owner.width() // 2 + randint(
             -self.owner.width() // 3, self.owner.width() // 3
         )
@@ -90,7 +90,7 @@ class AnimationBalls(Animation):
         )
         self.balls.append(ball)
 
-    def tick(self):
+    def tick(self) -> None:
         for ball in self.balls:
             ball.update()
 
@@ -113,13 +113,13 @@ class AnimationBalls(Animation):
 
                 ball.color = ball.color[:3] + (alpha,)
 
-    def draw(self, painter: QPainter):
+    def draw(self, painter: QPainter) -> None:
         for ball in self.balls:
             ball.draw(painter)
 
 
 class MainWindow(BaseMainWindow):
-    def __init__(self, animations: list[Animation] = None):
+    def __init__(self, animations: list[Animation] = None) -> None:
         super().__init__()
 
         self.animations: list[Animation] = animations
@@ -129,7 +129,7 @@ class MainWindow(BaseMainWindow):
         self.timer.setInterval(1000 // 20)
         self.timer.timeout.connect(self.tick)
 
-    def tick(self):
+    def tick(self) -> None:
         if not self.animations:
             return
 
@@ -138,7 +138,7 @@ class MainWindow(BaseMainWindow):
 
         self.update()
 
-    def start_animations(self):
+    def start_animations(self) -> None:
         if not self.animations:
             return
 
@@ -148,7 +148,7 @@ class MainWindow(BaseMainWindow):
 
         self.timer.start()
 
-    def paintEvent(self, event: QPaintEvent):
+    def paintEvent(self, event: QPaintEvent) -> None:
         super().paintEvent(event)
 
         painter = QPainter(self)

@@ -27,7 +27,7 @@ def get_inherited_children(url, root):
     return [(a.text.strip(), urljoin(url, a["href"])) for a in td_list]
 
 
-def print_children(url, total_class_list, global_number=-1, indent_level=0):
+def print_children(url, total_class_list, global_number=-1, indent_level=0) -> None:
     if global_number > 0 and len(total_class_list) >= global_number:
         # print('GLOBAL_NUMBER!')
         return

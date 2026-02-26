@@ -40,11 +40,11 @@ except ImportError:
 class _QPythonConsoleInterpreter(_InteractiveConsole):
     """InteractiveConsole subclass that sends all output to the GUI."""
 
-    def __init__(self, ui, locals=None):
+    def __init__(self, ui, locals=None) -> None:
         _InteractiveConsole.__init__(self, locals)
         self.ui = ui
 
-    def write(self, data):
+    def write(self, data) -> None:
         if data:
             if data[-1] == "\n":
                 data = data[:-1]
@@ -68,7 +68,7 @@ class _QPythonConsoleInterpreter(_InteractiveConsole):
 class _QPythonConsoleUI(object):
     """UI layout container for QPythonConsole."""
 
-    def __init__(self, parent):
+    def __init__(self, parent) -> None:
         if parent.layout() is None:
             parent.setLayout(QHBoxLayout())
         layout = QVBoxLayout()
@@ -105,7 +105,7 @@ class QPythonConsole(QWidget):
     passing a dict as the "locals" argument.
     """
 
-    def __init__(self, parent=None, locals=None):
+    def __init__(self, parent=None, locals=None) -> None:
         super(QPythonConsole, self).__init__(parent)
         self.ui = _QPythonConsoleUI(self)
         self.interpreter = _QPythonConsoleInterpreter(self.ui, locals)
@@ -114,7 +114,7 @@ class QPythonConsole(QWidget):
         self.history = []
         self.history_pos = 0
 
-    def _on_enter_line(self):
+    def _on_enter_line(self) -> None:
         line = self.ui.input.text()
         self.ui.input.setText("")
         self.interpreter.write(self.ui.prompt.text() + line)
@@ -130,7 +130,7 @@ class QPythonConsole(QWidget):
         else:
             self.ui.prompt.setText(">>> ")
 
-    def eventFilter(self, obj, event):
+    def eventFilter(self, obj, event) -> bool:
         if event.type() == QEvent.KeyPress:
             if event.key() == Qt.Key_Up:
                 self.go_history(-1)
@@ -138,7 +138,7 @@ class QPythonConsole(QWidget):
                 self.go_history(1)
         return False
 
-    def go_history(self, offset):
+    def go_history(self, offset) -> None:
         if offset < 0:
             self.history_pos = max(0, self.history_pos + offset)
         elif offset > 0:

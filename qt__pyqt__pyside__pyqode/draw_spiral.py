@@ -21,7 +21,7 @@ from PyQt5.QtCore import Qt, QPointF, QRectF, QTimer
 
 
 class Helper:
-    def __init__(self, is_reverse_rotation: bool, is_draw_all_spiral=False):
+    def __init__(self, is_reverse_rotation: bool, is_draw_all_spiral=False) -> None:
         super().__init__()
 
         self.is_reverse_rotation = is_reverse_rotation
@@ -43,7 +43,7 @@ class Helper:
 
         self.textPen: QPen = QPen(Qt.white)
 
-    def _draw_spiral(self, painter: QPainter, elapsed: int, is_reverse_rotation=False):
+    def _draw_spiral(self, painter: QPainter, elapsed: int, is_reverse_rotation=False) -> None:
         r = elapsed / 1000.0
         n = 30
 
@@ -63,7 +63,7 @@ class Helper:
 
         painter.restore()
 
-    def paint(self, painter: QPainter, event: QPaintEvent, elapsed: int):
+    def paint(self, painter: QPainter, event: QPaintEvent, elapsed: int) -> None:
         painter.fillRect(event.rect(), self.background)
         painter.translate(100, 100)
 
@@ -73,7 +73,7 @@ class Helper:
 
 
 class Widget(QWidget):
-    def __init__(self, is_reverse_rotation: bool, is_draw_all_spiral=False):
+    def __init__(self, is_reverse_rotation: bool, is_draw_all_spiral=False) -> None:
         super().__init__()
 
         self.setFixedSize(200, 200)
@@ -85,11 +85,11 @@ class Widget(QWidget):
         self.timer.timeout.connect(self.animate)
         self.timer.start(50)
 
-    def animate(self):
+    def animate(self) -> None:
         self.elapsed = (self.elapsed + self.timer.interval()) % 1000
         self.update()
 
-    def paintEvent(self, event: QPaintEvent):
+    def paintEvent(self, event: QPaintEvent) -> None:
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
         self.helper.paint(painter, event, self.elapsed)

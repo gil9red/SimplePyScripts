@@ -61,7 +61,7 @@ def DWM_enable_blur_behind_window(widget):
 
 
 class Widget(ResizableFramelessWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         DWM_enable_blur_behind_window(self)
@@ -74,7 +74,7 @@ class Widget(ResizableFramelessWidget):
 
         self.setLayout(layout)
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
 
         painter.setBrush(Qt.transparent)

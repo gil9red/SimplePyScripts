@@ -24,24 +24,24 @@ def get_confucius_quotes():
 
 
 class MyThread(Thread):
-    def __init__(self, log):
+    def __init__(self, log) -> None:
         super().__init__()
         self.log = log
 
-    def run(self):
+    def run(self) -> None:
         for i, quote in enumerate(get_confucius_quotes(), 1):
             self.log.append(f'{i}. "{quote}"\n')
             time.sleep(0.1)  # задержка каждые 100 миллисекунд
 
 
 class Window(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.te_quotes = QTextEdit()
         self.te_quotes.setReadOnly(True)
         self.setCentralWidget(self.te_quotes)
 
-    def slot_refresh(self):
+    def slot_refresh(self) -> None:
         self.te_quotes.clear()
         thread = MyThread(self.te_quotes)
         thread.start()

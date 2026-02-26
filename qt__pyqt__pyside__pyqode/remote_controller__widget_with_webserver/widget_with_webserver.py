@@ -15,7 +15,7 @@ from config import PORT
 class CommandServerThread(QThread):
     about_command = pyqtSignal(str)
 
-    def __init__(self, parent=None, port=20000):
+    def __init__(self, parent=None, port=20000) -> None:
         super().__init__(parent)
 
         self.port = port
@@ -28,12 +28,12 @@ class CommandServerThread(QThread):
 
             return jsonify({"status": True})
 
-    def run(self):
+    def run(self) -> None:
         self.app.run(port=self.port)
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("MainWindow + CommandServerThread")

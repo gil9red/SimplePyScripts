@@ -14,7 +14,7 @@ from PyQt5.QtWinExtras import QtWin
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.DEFAULT_MOUSE_PIXMAP = QPixmap("default_mouse.png").scaledToWidth(16)
@@ -29,7 +29,7 @@ class MainWindow(QWidget):
         self.timer.setInterval(100)
         self.timer.start()
 
-    def _on_tick(self):
+    def _on_tick(self) -> None:
         # flags, hcursor, (x, y) =
         _, hcursor, _ = win32gui.GetCursorInfo()
 

@@ -11,14 +11,14 @@ from PyQt5.Qt import QMainWindow, QLabel, QFont, QApplication, Qt
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.label = QLabel()
         self.label.setAlignment(Qt.AlignCenter)
         self.label.setFont(QFont("Courier", 25))
 
-        def loop():
+        def loop() -> None:
             i = 0
 
             while True:

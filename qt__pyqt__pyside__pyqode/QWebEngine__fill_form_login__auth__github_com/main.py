@@ -25,7 +25,7 @@ view = QWebEngineView()
 view.load(QUrl("https://github.com/login"))
 
 
-def _on_load_finished(ok: bool):
+def _on_load_finished(ok: bool) -> None:
     page = view.page()
 
     url = page.url().toString()

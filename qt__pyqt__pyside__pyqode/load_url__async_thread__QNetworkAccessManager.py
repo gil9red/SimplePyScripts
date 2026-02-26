@@ -8,7 +8,7 @@ from PyQt5 import Qt
 
 
 class MainWindow(Qt.QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.button = Qt.QPushButton("Load url!")
@@ -19,10 +19,10 @@ class MainWindow(Qt.QMainWindow):
 
         self.setCentralWidget(self.button)
 
-    def on_reply_finished(self, reply):
+    def on_reply_finished(self, reply) -> None:
         self.setWindowTitle(f"After load: {reply}")
 
-    def on_clicked(self):
+    def on_clicked(self) -> None:
         url = "https://github.com/gil9red/SimplePyScripts"
 
         self.setWindowTitle("Before load")

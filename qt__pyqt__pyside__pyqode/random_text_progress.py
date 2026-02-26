@@ -28,7 +28,7 @@ def get_random_text_progress(text: str) -> list[str]:
 
 
 class RandomTextProgress(QLabel):
-    def __init__(self, text: str, msec: int = 300):
+    def __init__(self, text: str, msec: int = 300) -> None:
         super().__init__()
 
         self._text = text
@@ -40,7 +40,7 @@ class RandomTextProgress(QLabel):
 
         self._on_tick()
 
-    def _on_tick(self):
+    def _on_tick(self) -> None:
         if not self._seq_text:
             self._seq_text = get_random_text_progress(self._text)
 
@@ -48,7 +48,7 @@ class RandomTextProgress(QLabel):
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         font = self.font()

@@ -8,12 +8,12 @@ from PyQt5 import Qt
 
 
 class Window(Qt.QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("draw__ellipse_board__decrease")
 
-    def paintEvent(self, event: Qt.QPaintEvent):
+    def paintEvent(self, event: Qt.QPaintEvent) -> None:
         painter = Qt.QPainter(self)
         painter.setRenderHint(Qt.QPainter.Antialiasing)
         painter.setPen(Qt.Qt.NoPen)

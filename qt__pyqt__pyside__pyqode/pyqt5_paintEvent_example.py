@@ -12,7 +12,7 @@ from PyQt5.QtGui import QMouseEvent, QPaintEvent, QPainter, QColor
 from PyQt5.QtCore import Qt
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -25,29 +25,29 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.pos = None
         self.pos_list = []
 
-    def mousePressEvent(self, event: QMouseEvent):
+    def mousePressEvent(self, event: QMouseEvent) -> None:
         self.pos = event.pos()
 
         self.update()
 
-    def mouseMoveEvent(self, event: QMouseEvent):
+    def mouseMoveEvent(self, event: QMouseEvent) -> None:
         self.pos = event.pos()
 
         self.update()
 
-    def mouseReleaseEvent(self, event: QMouseEvent):
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
         self.pos_list.append(self.pos)
         self.pos = None
 
         self.update()
 
-    def paintEvent(self, event: QPaintEvent):
+    def paintEvent(self, event: QPaintEvent) -> None:
         if not self.pos and not self.pos_list:
             return
 

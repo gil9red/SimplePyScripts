@@ -17,7 +17,7 @@ except:
 
 
 # Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -37,7 +37,7 @@ def create_item(img):
 
 
 class MyDelegate_1(QStyledItemDelegate):
-    def paint(self, painter, option, index):
+    def paint(self, painter, option, index) -> None:
         img = index.model().data(index, Qt.DecorationRole)
         if img is None:
             super().paint(painter, option, index)
@@ -69,7 +69,7 @@ class MyDelegate_1(QStyledItemDelegate):
 
 
 class MyDelegate_2(QStyledItemDelegate):
-    def paint(self, painter, option, index):
+    def paint(self, painter, option, index) -> None:
         img = index.model().data(index, Qt.DecorationRole)
         if img is None:
             super().paint(painter, option, index)

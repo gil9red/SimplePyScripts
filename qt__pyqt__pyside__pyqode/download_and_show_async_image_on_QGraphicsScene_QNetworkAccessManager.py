@@ -19,7 +19,7 @@ from PyQt5.QtWidgets import (
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.scene = QGraphicsScene()
@@ -39,7 +39,7 @@ class Widget(QWidget):
 
         self.setLayout(layout)
 
-    def finish_request(self, reply):
+    def finish_request(self, reply) -> None:
         self.scene.clear()
 
         img = QPixmap()

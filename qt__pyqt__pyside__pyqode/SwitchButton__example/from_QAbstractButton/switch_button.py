@@ -19,7 +19,7 @@ from PyQt5.QtGui import QPainter
 
 
 class Switch(QAbstractButton):
-    def __init__(self, parent=None, track_radius=10, thumb_radius=8):
+    def __init__(self, parent=None, track_radius=10, thumb_radius=8) -> None:
         super().__init__(parent=parent)
         self.setCheckable(True)
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -78,7 +78,7 @@ class Switch(QAbstractButton):
         return self._offset
 
     @offset.setter
-    def offset(self, value):
+    def offset(self, value) -> None:
         self._offset = value
         self.update()
 
@@ -88,15 +88,15 @@ class Switch(QAbstractButton):
             2 * self._track_radius + 2 * self._margin,
         )
 
-    def setChecked(self, checked):
+    def setChecked(self, checked) -> None:
         super().setChecked(checked)
         self.offset = self._end_offset[checked]()
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.offset = self._end_offset[self.isChecked()]()
 
-    def paintEvent(self, event):  # pylint: disable=invalid-name, unused-argument
+    def paintEvent(self, event) -> None:  # pylint: disable=invalid-name, unused-argument
         p = QPainter(self)
         p.setRenderHint(QPainter.Antialiasing, True)
         p.setPen(Qt.NoPen)
@@ -147,7 +147,7 @@ class Switch(QAbstractButton):
             self._thumb_text[self.isChecked()],
         )
 
-    def mouseReleaseEvent(self, event):  # pylint: disable=invalid-name
+    def mouseReleaseEvent(self, event) -> None:  # pylint: disable=invalid-name
         super().mouseReleaseEvent(event)
         if event.button() == Qt.LeftButton:
             anim = QPropertyAnimation(self, b"offset", self)
@@ -156,12 +156,12 @@ class Switch(QAbstractButton):
             anim.setEndValue(self._end_offset[self.isChecked()]())
             anim.start()
 
-    def enterEvent(self, event):  # pylint: disable=invalid-name
+    def enterEvent(self, event) -> None:  # pylint: disable=invalid-name
         self.setCursor(Qt.PointingHandCursor)
         super().enterEvent(event)
 
 
-def main():
+def main() -> None:
     app = QApplication([])
 
     # Thumb size < track size (Gitlab style)

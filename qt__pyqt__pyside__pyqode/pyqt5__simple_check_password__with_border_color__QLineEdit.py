@@ -8,7 +8,7 @@ from PyQt5.Qt import *
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Check password")
@@ -26,7 +26,7 @@ class MainWindow(QWidget):
 
         self.setLayout(main_layout)
 
-    def _on_check_password(self):
+    def _on_check_password(self) -> None:
         text = '<font color="{}">{}</font>'
 
         if self.le_target_password.text() == self.le_current_password.text():

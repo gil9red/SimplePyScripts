@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import QApplication, QTreeView, QMessageBox
 from PyQt5.QtCore import Qt, QAbstractItemModel, QModelIndex
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -26,7 +26,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class TreeItem:
-    def __init__(self, *args):
+    def __init__(self, *args) -> None:
         self._childItems: list[TreeItem] = []
         self._itemData = args
         self._parentItem: TreeItem = None
@@ -50,11 +50,11 @@ class TreeItem:
 
         return child
 
-    def appendChilds(self, childs: list["TreeItem"]):
+    def appendChilds(self, childs: list["TreeItem"]) -> None:
         for x in childs:
             self.appendChild(x)
 
-    def clearChilren(self):
+    def clearChilren(self) -> None:
         if self._model:
             self._model.beginRemoveRows(self.index(), 0, self.childCount())
 
@@ -86,7 +86,7 @@ class TreeItem:
     def parentItem(self) -> Optional["TreeItem"]:
         return self._parentItem
 
-    def setModel(self, model: QAbstractItemModel):
+    def setModel(self, model: QAbstractItemModel) -> None:
         self._model = model
 
     def model(self) -> QAbstractItemModel:
@@ -102,7 +102,7 @@ class TreeItem:
 class TreeModel(QAbstractItemModel):
     column_names = ["File name"]
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self._root_item = TreeItem("<ROOT>")
@@ -111,7 +111,7 @@ class TreeModel(QAbstractItemModel):
     def rootItem(self) -> TreeItem:
         return self._root_item
 
-    def setModelData(self, items: list[TreeItem]):
+    def setModelData(self, items: list[TreeItem]) -> None:
         self.beginResetModel()
 
         self._root_item.clearChilren()

@@ -18,7 +18,7 @@ class MyWebEnginePage(QWebEnginePage):
         message: str,
         line_number: int,
         source_id: str,
-    ):
+    ) -> None:
         print(
             f"javascript_console_message: {level}, {message}, {line_number}, {source_id}",
             file=sys.stderr,
@@ -34,7 +34,7 @@ view = QWebEngineView()
 view.setPage(page)
 
 
-def _on_load_finished(ok: bool):
+def _on_load_finished(ok: bool) -> None:
     page = view.page()
     print(page.url().toString())
 

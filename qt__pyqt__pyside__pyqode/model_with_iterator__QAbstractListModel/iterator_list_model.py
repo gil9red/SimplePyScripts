@@ -11,7 +11,7 @@ from PyQt5.QtCore import QAbstractListModel, QModelIndex, Qt, QVariant
 
 
 class IteratorListModel(QAbstractListModel):
-    def __init__(self, it: Iterator, prefetch=100, parent=None):
+    def __init__(self, it: Iterator, prefetch=100, parent=None) -> None:
         super().__init__(parent)
 
         self._at_end = False
@@ -22,7 +22,7 @@ class IteratorListModel(QAbstractListModel):
     def canFetchMore(self, parent: QModelIndex = None) -> bool:
         return not self._at_end
 
-    def fetchMore(self, parent: QModelIndex = None):
+    def fetchMore(self, parent: QModelIndex = None) -> None:
         if self._at_end:
             return
 

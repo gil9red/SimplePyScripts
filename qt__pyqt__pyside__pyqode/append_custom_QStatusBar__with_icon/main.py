@@ -8,7 +8,7 @@ from PyQt5 import Qt
 
 
 class Widget(Qt.QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.indicator = Qt.QLabel()
@@ -35,7 +35,7 @@ class Widget(Qt.QWidget):
 
         self.setLayout(main_layout)
 
-    def _on_text_edited(self, text):
+    def _on_text_edited(self, text) -> None:
         # Показываем сообщение на 2 секунды
         self.status_bar.showMessage(text, msecs=2000)
 

@@ -18,7 +18,7 @@ from PyQt5.QtGui import QPainter, QColor, QImage
 from PyQt5.QtCore import Qt, QRectF
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -55,7 +55,7 @@ class UndoCommand(QUndoCommand):
 
 
 class Widget(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.resize(600, 400)
@@ -82,16 +82,16 @@ class Widget(QMainWindow):
         self.end_pos = None
         self.is_pressed = False
 
-    def can_undo_changed(self, enabled):
+    def can_undo_changed(self, enabled) -> None:
         self.actionUndo.setEnabled(enabled)
 
-    def can_redo_changed(self, enabled):
+    def can_redo_changed(self, enabled) -> None:
         self.actionRedo.setEnabled(enabled)
 
-    def make_undo_command(self):
+    def make_undo_command(self) -> None:
         self.mUndoStack.push(UndoCommand(self))
 
-    def draw(self, canvas):
+    def draw(self, canvas) -> None:
         painter = QPainter(canvas)
         painter.setRenderHint(QPainter.HighQualityAntialiasing)
         painter.setPen(Qt.NoPen)
@@ -99,23 +99,23 @@ class Widget(QMainWindow):
 
         painter.drawEllipse(QRectF(self.start_pos, self.end_pos))
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
         painter.drawImage(self.image.rect(), self.image)
 
         if self.is_pressed:
             self.draw(self)
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event) -> None:
         self.is_pressed = True
         self.start_pos = event.pos()
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event) -> None:
         if event.buttons() & Qt.LeftButton:
             self.end_pos = event.pos()
             self.update()
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event) -> None:
         self.is_pressed = False
         self.end_pos = event.pos()
 

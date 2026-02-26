@@ -14,7 +14,7 @@ from PyQt5.Qt import QApplication, QWidget, QPixmap, QLabel, QTimer, QCursor, Qt
 FILE_NAME = str(Path(__file__).resolve().parent / "target.png")
 
 
-def move_window_to_cursor(widget: QWidget):
+def move_window_to_cursor(widget: QWidget) -> None:
     width, height = widget.width(), widget.height()
     pos = QCursor.pos()
     pos.setX(int(pos.x() - width / 2))

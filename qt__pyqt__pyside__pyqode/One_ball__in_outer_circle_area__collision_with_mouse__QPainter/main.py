@@ -19,7 +19,7 @@ from PyQt5.QtGui import QPainter, QPen
 from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}\n"
     text += "".join(traceback.format_tb(tb))
     print(text)
@@ -51,7 +51,7 @@ class Ball:
     speed_after_collision = 300  # Скорость движения шарика после столкновения
 
     # Функция, которая проверяет наличие коллизии шарика с внешним кругом
-    def hit_outer_circle_check(self, outer_circle: int):
+    def hit_outer_circle_check(self, outer_circle: int) -> None:
         dr = outer_circle - self.r  # Разница радиусов
 
         # По теореме пифагора проверяем выход за пределы круга (коллизию)
@@ -94,7 +94,7 @@ class Ball:
             self.collision = False
 
     # Функция проверки коллизии шарика и мышки
-    def hit_mouse_check(self, x, y):
+    def hit_mouse_check(self, x, y) -> None:
         # Если есть коллизия с внешним кругом игнорируем мышку
         if self.collision:
             return
@@ -118,7 +118,7 @@ class Ball:
 
     # Тут осуществляется передвижение
     # dt - кол-во секунд с прошлого обсчета
-    def do_move(self, dt: float):
+    def do_move(self, dt: float) -> None:
         # К текущей координате прибавляем вектор скорости помноженный
         # на значение скорости помноженные на прошедшее время
         self.x += self.dir_x * self.speed * dt
@@ -129,7 +129,7 @@ class Ball:
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         timeout: int = 1000 // 60
@@ -161,12 +161,12 @@ class MainWindow(QWidget):
 
         self.update_window_title()
 
-    def update_window_title(self):
+    def update_window_title(self) -> None:
         name = Path(__file__).parent.name
         title = f"{name}. Speed: {self.ball.speed}"
         self.setWindowTitle(title)
 
-    def tick(self):
+    def tick(self) -> None:
         # Считаем сколько времени прошло с прошлого обсчета
         dt = default_timer() - self.t
 
@@ -178,11 +178,11 @@ class MainWindow(QWidget):
 
         self.update()
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event) -> None:
         self.mouse_center_x = event.pos().x() - (self.width() / 2)
         self.mouse_center_y = event.pos().y() - (self.height() / 2)
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
         painter.setRenderHint(QPainter.HighQualityAntialiasing)
 
