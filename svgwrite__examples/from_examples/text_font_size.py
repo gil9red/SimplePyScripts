@@ -14,7 +14,7 @@ import svgwrite
 # http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#font-size-props
 
 
-def create_svg(name):
+def create_svg(name) -> None:
     svg_size = 900
     font_size = 20
     title = name + ": Example of text font_sizes"

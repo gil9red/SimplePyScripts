@@ -14,7 +14,7 @@ import svgwrite
 from svgwrite import rgb
 
 
-def create_svg(name):
+def create_svg(name) -> None:
     width = 900
     height = 900
     font_size = 20
@@ -31,7 +31,7 @@ def create_svg(name):
     tri_color = ((20, 128, 30), (10, 0, 50), (0, 0, 128))
     dwg = svgwrite.Drawing(name, (width, height), debug=True)
 
-    def draw_triangle(insert, size, fill, rotate=None):
+    def draw_triangle(insert, size, fill, rotate=None) -> None:
         x, y = insert
         points = [insert, (x + size, y), ((x + size / 2.0), (y + size * tri_height))]
         triangle = dwg.add(dwg.polygon(points, fill=fill, stroke="none"))

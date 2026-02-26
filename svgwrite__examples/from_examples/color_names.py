@@ -17,7 +17,7 @@ import svgwrite
 #
 
 
-def create_svg(name):
+def create_svg(name) -> None:
     svg_size_width = 900
     svg_size_height = 4500
     font_size = 20

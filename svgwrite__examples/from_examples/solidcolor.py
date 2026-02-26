@@ -11,7 +11,7 @@ __author__ = "ipetrash"
 import svgwrite
 
 
-def solid_color(name):
+def solid_color(name) -> None:
     dwg = svgwrite.Drawing(name, size=("20cm", "15cm"), profile="tiny", debug=True)
 
     # set user coordinate space

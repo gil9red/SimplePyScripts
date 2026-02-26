@@ -11,7 +11,7 @@ __author__ = "ipetrash"
 import svgwrite
 
 
-def create_svg(name):
+def create_svg(name) -> None:
     # Shows how to use the <marker> element.
     # W3C reference: http://www.w3.org/TR/SVG11/painting.html#MarkerElement
     #

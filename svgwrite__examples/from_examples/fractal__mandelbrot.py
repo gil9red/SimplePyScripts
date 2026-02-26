@@ -13,11 +13,11 @@ from svgwrite import rgb
 
 
 # SOURCE: http://code.activestate.com/recipes/577111/
-def create_svg(name):
+def create_svg(name) -> None:
     # Mandelbrot fractal
     # FB - 201003254
 
-    def put_pixel(pos, color):
+    def put_pixel(pos, color) -> None:
         mandelbrot_group.add(dwg.circle(center=pos, r=0.5, fill=color))
 
     # Image size

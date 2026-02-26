@@ -8,7 +8,7 @@ __author__ = "ipetrash"
 import svgwrite
 
 
-def create_svg(name):
+def create_svg(name) -> None:
     svg_size_width = 200
     svg_size_height = 200
 

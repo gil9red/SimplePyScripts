@@ -11,7 +11,7 @@ __author__ = "ipetrash"
 import svgwrite
 
 
-def simple_text(name):
+def simple_text(name) -> None:
     dwg = svgwrite.Drawing(name, (200, 200), debug=True)
 
     paragraph = dwg.add(dwg.g(font_size=14))

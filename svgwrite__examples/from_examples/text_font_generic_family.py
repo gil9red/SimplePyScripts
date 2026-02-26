@@ -14,7 +14,7 @@ import svgwrite
 # 'serif', 'sans-serif', 'cursive', 'fantasy', and 'monospace' from the CSS specification
 
 
-def create_svg(name):
+def create_svg(name) -> None:
     font_size = 20
     title = name + ": Example of text using generic family fonts"
 

@@ -28,7 +28,7 @@ CSS_STYLES = """
 """
 
 
-def draw_board(dwg):
+def draw_board(dwg) -> None:
     def group(classname):
         return dwg.add(dwg.g(class_=classname))
 

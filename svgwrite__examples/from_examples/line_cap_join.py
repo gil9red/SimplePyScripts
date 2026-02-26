@@ -11,7 +11,7 @@ __author__ = "ipetrash"
 import svgwrite
 
 
-def create_svg(name):
+def create_svg(name) -> None:
     svg_size = 900
     font_size = 20
     title = "Example of stroke_linecap, stroke_linejoin"

@@ -19,7 +19,7 @@ STYLES = """.red { fill: red; stroke=none; }
 """
 
 
-def create_svg(name):
+def create_svg(name) -> None:
     svg_size_width = 900
     svg_size_height = 900
     font_size = 20

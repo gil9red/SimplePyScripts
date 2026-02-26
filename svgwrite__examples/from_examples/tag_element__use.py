@@ -12,7 +12,7 @@ import svgwrite
 from svgwrite import rgb
 
 
-def create_svg(name):
+def create_svg(name) -> None:
     """Shows how to use the 'use' element."""
 
     w, h = "100%", "100%"

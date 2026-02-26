@@ -61,7 +61,7 @@ class Tendrile:
         p_ecolour,
         p_can_branch,
         dwg,
-    ):
+    ) -> None:
         """tendrile class instance for each arm"""
         self.x = p_x
         self.y = p_y
@@ -95,12 +95,12 @@ class Tendrile:
         # of the old tendrile.
         self.group = self.dwg.g(id="branch" + str(next(UNIQUE_NUM)))
 
-    def angle_set(self, p_val):
+    def angle_set(self, p_val) -> None:
         # limit the angle to range -2*math.pi to 2*math.pi  which is +- full circle.
         # Use math.fmod because % returns with the sign of the second number.
         self.angle = math.fmod(p_val, (2 * math.pi))
 
-    def create(self):
+    def create(self) -> None:
         for i in range(self.n):
             if i != 0:
                 if random.randint(1, 100) == 1 and self.can_branch:
@@ -181,11 +181,11 @@ class Tendrile:
                 )
             )
 
-    def draw(self):
+    def draw(self) -> None:
         self.dwg.add(self.group)
 
 
-def create_svg(name):
+def create_svg(name) -> None:
     """
     Create many circles in a curling tentril fashion.
     """

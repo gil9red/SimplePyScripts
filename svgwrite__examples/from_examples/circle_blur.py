@@ -11,7 +11,7 @@ __author__ = "ipetrash"
 import svgwrite
 
 
-def create_svg(name):
+def create_svg(name) -> None:
     SVG_SIZE = 900
     FONT_SIZE = 20
 

@@ -12,7 +12,7 @@ import svgwrite
 from svgwrite import cm, mm
 
 
-def basic_shapes(name):
+def basic_shapes(name) -> None:
     dwg = svgwrite.Drawing(filename=name, debug=True)
 
     hlines = dwg.add(dwg.g(id="hlines", stroke="green"))

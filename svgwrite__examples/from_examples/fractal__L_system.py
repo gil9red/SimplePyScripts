@@ -109,7 +109,7 @@ KochCurve = {
 
 
 # SOURCE: http://code.activestate.com/recipes/577159/
-def LSystem(name, formula=LevyCurve):
+def LSystem(name, formula=LevyCurve) -> None:
     # L-System Fractals
 
     print("Creating: " + name)

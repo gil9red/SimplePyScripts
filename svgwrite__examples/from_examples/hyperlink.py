@@ -11,7 +11,7 @@ __author__ = "ipetrash"
 import svgwrite
 
 
-def hyperlink(name):
+def hyperlink(name) -> None:
     dwg = svgwrite.Drawing(name, (200, 200), debug=True)
 
     # use the hyperlink element

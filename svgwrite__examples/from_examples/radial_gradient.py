@@ -11,7 +11,7 @@ __author__ = "ipetrash"
 import svgwrite
 
 
-def create_svg(name):
+def create_svg(name) -> None:
     dwg = svgwrite.Drawing(name, size=("20cm", "15cm"), profile="full", debug=True)
 
     # Ыet user coordinate space

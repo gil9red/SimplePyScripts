@@ -13,13 +13,13 @@ import svgwrite
 import math
 
 
-def create_svg(name):
+def create_svg(name) -> None:
     # Koch Snowflake and Sierpinski Triangle combination fractal using recursion
     # ActiveState Recipe 577156
     # Created by FB36 on Sat, 27 Mar 2010 (MIT)
     # http://code.activestate.com/recipes/577156-koch-snowflake-and-sierpinski-triangle-combination/
 
-    def tf(x0, y0, x1, y1, x2, y2):
+    def tf(x0, y0, x1, y1, x2, y2) -> None:
         a = math.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2)
         b = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
         c = math.sqrt((x0 - x2) ** 2 + (y0 - y2) ** 2)
@@ -42,7 +42,7 @@ def create_svg(name):
         tf(x3, y3, x1, y1, x4, y4)
         tf(x5, y5, x4, y4, x2, y2)
 
-    def sf(ax, ay, bx, by):
+    def sf(ax, ay, bx, by) -> None:
         f = math.sqrt((bx - ax) ** 2 + (by - ay) ** 2)
 
         if f < 1.0:

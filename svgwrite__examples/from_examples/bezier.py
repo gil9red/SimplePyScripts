@@ -19,7 +19,7 @@ def nfrange(fstart, fstop, n):
     return [fstart + delta * i for i in range(n)]
 
 
-def create_svg(name):
+def create_svg(name) -> None:
     svg_size = 900
     font_size = 20
     title = "Example of Bezier curves"
