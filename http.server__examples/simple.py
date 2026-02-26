@@ -8,21 +8,21 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 
 class BaseServer(BaseHTTPRequestHandler):
-    def _set_headers(self):
+    def _set_headers(self) -> None:
         self.send_response(200)
         self.send_header("Content-type", "text/html; charset=utf-8")
         self.end_headers()
 
-    def do_GET(self):
+    def do_GET(self) -> None:
         self._set_headers()
         self.wfile.write(
             "<html><body><p>hello, world!</p></body></html>".encode("utf-8")
         )
 
-    def do_HEAD(self):
+    def do_HEAD(self) -> None:
         self._set_headers()
 
-    def do_POST(self):
+    def do_POST(self) -> None:
         content_length = int(self.headers["Content-Length"])
         post_data = self.rfile.read(content_length)
         self._set_headers()
@@ -32,7 +32,7 @@ class BaseServer(BaseHTTPRequestHandler):
         )
 
 
-def run(server_class=HTTPServer, handler_class=BaseServer, port=8080):
+def run(server_class=HTTPServer, handler_class=BaseServer, port=8080) -> None:
     print(f"HTTP server running on http://127.0.0.1:{port}")
 
     server_address = ("", port)

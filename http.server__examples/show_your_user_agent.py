@@ -8,7 +8,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 
 class HttpProcessor(BaseHTTPRequestHandler):
-    def do_GET(self):
+    def do_GET(self) -> None:
         user_agent = self.headers["User-Agent"]
         print(user_agent)
 

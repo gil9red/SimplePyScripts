@@ -9,7 +9,7 @@ import requests
 
 
 class ProxyHandler(SimpleHTTPRequestHandler):
-    def do_GET(self):
+    def do_GET(self) -> None:
         if self.path.startswith("/"):
             super().do_GET()
             return
@@ -32,7 +32,7 @@ class ProxyHandler(SimpleHTTPRequestHandler):
         self.wfile.write(rs.content)
 
 
-def http_proxy(host: str, port: int):
+def http_proxy(host: str, port: int) -> None:
     print(f"Server listening at http://{host}:{port}")
 
     server_http = HTTPServer((host, port), ProxyHandler)

@@ -11,12 +11,12 @@ from urllib.parse import urlparse, parse_qs
 
 
 class BaseServer(BaseHTTPRequestHandler):
-    def _set_headers(self):
+    def _set_headers(self) -> None:
         self.send_response(200)
         self.send_header("Content-type", "text/json; charset=utf-8")
         self.end_headers()
 
-    def do_GET(self):
+    def do_GET(self) -> None:
         self._set_headers()
 
         paths = urlparse(self.path)
@@ -30,7 +30,7 @@ class BaseServer(BaseHTTPRequestHandler):
         )
 
 
-def run(server_class=HTTPServer, handler_class=BaseServer, port=8080):
+def run(server_class=HTTPServer, handler_class=BaseServer, port=8080) -> None:
     print(f"HTTP server running on http://127.0.0.1:{port}")
 
     server_address = ("", port)
