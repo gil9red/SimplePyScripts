@@ -18,7 +18,7 @@ class FieldsProgressDialog(QProgressDialog):
         window_title,
         label_text="Operation in progress...",
         parent=None,
-    ):
+    ) -> None:
         super().__init__(parent)
 
         self.setWindowModality(Qt.WindowModal)
@@ -30,7 +30,7 @@ class FieldsProgressDialog(QProgressDialog):
 
         self.setLabelText(label_text)
 
-    def setFields(self, fields: dict):
+    def setFields(self, fields: dict) -> None:
         self._label.setFields(fields)
 
         # NOTE: Для вызова внутреннего ensureSizeIsAtLeastSizeHint, без которого не будет

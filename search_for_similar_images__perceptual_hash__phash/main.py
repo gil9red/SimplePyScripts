@@ -57,7 +57,7 @@ from ui.ImageHashDetailsDialog import ImageHashDetailsDialog
 from ui.CrossSearchSimilarImagesDialog import CrossSearchSimilarImagesDialog
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -73,7 +73,7 @@ IMAGE_CACHE = dict()
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle(str(Path(__file__).parent.name))
@@ -84,7 +84,7 @@ class MainWindow(QMainWindow):
 
         self._update_states()
 
-    def _fill_menus(self):
+    def _fill_menus(self) -> None:
         self.menu_file = self.menuBar().addMenu("File")
         action_exit = self.menu_file.addAction("Exit")
         action_exit.triggered.connect(self.close)
@@ -99,7 +99,7 @@ class MainWindow(QMainWindow):
         action_about = self.menu_help.addAction("About")
         action_about.triggered.connect(lambda: AboutDialog(self).exec())
 
-    def _fill_toolbars(self):
+    def _fill_toolbars(self) -> None:
         # tool_bar_general
         self.tool_bar_general = self.addToolBar("General")
 
@@ -203,7 +203,7 @@ class MainWindow(QMainWindow):
         )
         # tool_bar_similar_image_control
 
-    def _fill_dockwidgets(self):
+    def _fill_dockwidgets(self) -> None:
         self.indexing_settings = IndexingSettingsWidget()
         indexing_settings_widget_dock_widget = QDockWidget(
             self.indexing_settings.windowTitle()
@@ -222,7 +222,7 @@ class MainWindow(QMainWindow):
             Qt.RightDockWidgetArea, search_for_similar_settings_dock_widget
         )
 
-    def _fill_ui(self):
+    def _fill_ui(self) -> None:
         self._fill_menus()
         self._fill_toolbars()
         self._fill_dockwidgets()
@@ -312,7 +312,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(splitter)
 
-    def _update_states(self):
+    def _update_states(self) -> None:
         file_name_indexed = self.list_indexed_images_widget.currentFileName()
         has_index_list_images_widget = bool(file_name_indexed)
 
@@ -369,7 +369,7 @@ class MainWindow(QMainWindow):
                 self.model_similar_images.fileCount
             )
 
-    def fill_images_db(self):
+    def fill_images_db(self) -> None:
         self.image_by_hashes.clear()
 
         for row in db_get_all():
@@ -432,7 +432,7 @@ class MainWindow(QMainWindow):
 
         return file_names
 
-    def start_indexing(self):
+    def start_indexing(self) -> None:
         path_dir = self.indexing_settings.dir_box.getValue()
         path_dir = Path(path_dir).resolve()
         if not path_dir.is_dir():
@@ -515,7 +515,7 @@ class MainWindow(QMainWindow):
 
         print(f"\nTotal: {default_timer() - time_start:.2f} secs. Added: {number}")
 
-    def start_search_for_similar(self):
+    def start_search_for_similar(self) -> None:
         file_name = self.list_indexed_images_widget.currentFileName()
         if not file_name:
             return
@@ -603,7 +603,7 @@ class MainWindow(QMainWindow):
 
         self.model_similar_images.set_file_list(results)
 
-    def cross_search_similar_images(self):
+    def cross_search_similar_images(self) -> None:
         hash_algo = self.search_for_similar_settings.cb_algo.currentText()
         max_score = self.search_for_similar_settings.sb_max_score.value()
 
@@ -625,41 +625,41 @@ class MainWindow(QMainWindow):
     #     self.list_images_widget_similar.setCurrentIndex(index)
     #     self.list_images_widget_similar.scrollTo(index)
 
-    def select_indexed_image(self):
+    def select_indexed_image(self) -> None:
         file_name = self.list_indexed_images_widget.currentFileName()
         explore(file_name)
 
-    def open_indexed_image_directory(self):
+    def open_indexed_image_directory(self) -> None:
         file_name = self.list_indexed_images_widget.currentFileName()
         explore(Path(file_name).parent, select=False)
 
-    def run_indexed_image(self):
+    def run_indexed_image(self) -> None:
         file_name = self.list_indexed_images_widget.currentFileName()
         explore(file_name, select=False)
 
-    def view_details_indexed_image(self):
+    def view_details_indexed_image(self) -> None:
         file_name = self.list_indexed_images_widget.currentFileName()
         data = self.image_by_hashes[file_name]
         ImageHashDetailsDialog(file_name, data, parent=self).show()
 
-    def select_similar_image(self):
+    def select_similar_image(self) -> None:
         file_name = self.list_images_widget_similar.currentFileName()
         explore(file_name)
 
-    def open_similar_image_directory(self):
+    def open_similar_image_directory(self) -> None:
         file_name = self.list_images_widget_similar.currentFileName()
         explore(Path(file_name).parent, select=False)
 
-    def run_similar_image(self):
+    def run_similar_image(self) -> None:
         file_name = self.list_images_widget_similar.currentFileName()
         explore(file_name, select=False)
 
-    def view_details_similar_image(self):
+    def view_details_similar_image(self) -> None:
         file_name = self.list_images_widget_similar.currentFileName()
         data = self.image_by_hashes[file_name]
         ImageHashDetailsDialog(file_name, data, parent=self).show()
 
-    def read_settings(self):
+    def read_settings(self) -> None:
         ini = QSettings(SETTINGS_FILE_NAME, QSettings.IniFormat)
 
         state = ini.value("MainWindow_State")
@@ -673,7 +673,7 @@ class MainWindow(QMainWindow):
         self.indexing_settings.read_settings(ini)
         self.search_for_similar_settings.read_settings(ini)
 
-    def write_settings(self):
+    def write_settings(self) -> None:
         ini = QSettings(SETTINGS_FILE_NAME, QSettings.IniFormat)
         ini.setValue("MainWindow_State", self.saveState())
         ini.setValue("MainWindow_Geometry", self.saveGeometry())
@@ -681,7 +681,7 @@ class MainWindow(QMainWindow):
         self.indexing_settings.write_settings(ini)
         self.search_for_similar_settings.write_settings(ini)
 
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
         self.write_settings()
 
         QApplication.closeAllWindows()

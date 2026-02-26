@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     class Foo:
         @classmethod
-        def get(cls):
+        def get(cls) -> int:
             return 1
 
     my_eval = simpleeval.SimpleEval()

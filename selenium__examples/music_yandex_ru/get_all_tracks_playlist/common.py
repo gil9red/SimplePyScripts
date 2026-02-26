@@ -72,7 +72,7 @@ def get_track(track_el) -> Track:
     return Track(title, artists, length, available)
 
 
-def print_statistic(tracks: list[Track]):
+def print_statistic(tracks: list[Track]) -> None:
     print_fmt = "{:%s}. {}" % len(str(len(tracks)))
 
     unavailable_tracks = []
@@ -93,7 +93,7 @@ def print_statistic(tracks: list[Track]):
         print(print_fmt.format(i, track.get_full_title()))
 
 
-def dump(tracks: list[Track], file_name: str | Path):
+def dump(tracks: list[Track], file_name: str | Path) -> None:
     json.dump(
         tracks,
         open(file_name, "w", encoding="utf-8"),

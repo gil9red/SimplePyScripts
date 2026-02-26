@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QProgressBar
 
 
 class FlatProgressBar(QProgressBar):
-    def __init__(self, *args):
+    def __init__(self, *args) -> None:
         super().__init__(*args)
 
         self.setTextVisible(False)
@@ -28,7 +28,7 @@ class FlatProgressBar(QProgressBar):
             """
         )
 
-    def setValue(self, value: int):
+    def setValue(self, value: int) -> None:
         super().setValue(value)
 
         self.setToolTip(

@@ -18,7 +18,7 @@ print(my_eval.eval("100 * 10"))  # 1000
 
 
 # Append functions
-def boo():
+def boo() -> str:
     return "Boo!"
 
 

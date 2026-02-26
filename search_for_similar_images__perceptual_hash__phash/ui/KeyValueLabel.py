@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QLabel, QFormLayout
 
 
 class KeyValueLabel(QLabel):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         self._field_by_row = dict()
@@ -17,7 +17,7 @@ class KeyValueLabel(QLabel):
 
         self.setMinimumSize(200, 150)
 
-    def setFields(self, fields: dict):
+    def setFields(self, fields: dict) -> None:
         while not self._layout.isEmpty():
             self._layout.takeAt(0)
 

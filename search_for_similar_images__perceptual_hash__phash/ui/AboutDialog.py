@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QDialog, QTextBrowser, QDialogButtonBox, QVBoxLayout
 
 
 class AboutDialog(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         self.setWindowTitle("About")

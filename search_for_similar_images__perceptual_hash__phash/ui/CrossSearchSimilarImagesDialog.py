@@ -25,7 +25,7 @@ class CrossSearchSimilarImagesThread(QThread):
 
     def __init__(
         self, image_by_hashes: dict = None, hash_algo: str = None, max_score: int = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.image_by_hashes = image_by_hashes
@@ -73,7 +73,7 @@ class CrossSearchSimilarImagesDialog(QDialog):
 
     window_title = "Cross search similar images"
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
 
         self.setWindowTitle(self.window_title)
@@ -106,7 +106,7 @@ class CrossSearchSimilarImagesDialog(QDialog):
         layout.addWidget(self.tree_widget)
         self.setLayout(layout)
 
-    def _on_about_found_similars(self, file_name: str, similars: list[str]):
+    def _on_about_found_similars(self, file_name: str, similars: list[str]) -> None:
         item = QTreeWidgetItem([f"{file_name} ({len(similars)})"])
         item.setData(0, Qt.UserRole, file_name)
 
@@ -117,7 +117,7 @@ class CrossSearchSimilarImagesDialog(QDialog):
             child.setData(0, Qt.UserRole, x)
             item.addChild(child)
 
-    def start(self, image_by_hashes: dict, hash_algo: str, max_score: int):
+    def start(self, image_by_hashes: dict, hash_algo: str, max_score: int) -> None:
         self.setWindowTitle(
             f"{self.window_title}. hash_algo={hash_algo} max_score={max_score}"
         )

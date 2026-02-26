@@ -36,7 +36,7 @@ def run_with_lock(
 
 
 if __name__ == "__main__":
-    def main():
+    def main() -> None:
         print("Start")
         time.sleep(20)
         print("Finish")

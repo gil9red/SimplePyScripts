@@ -16,7 +16,7 @@ def hashlib_func(value, algo_name):
 
 
 class SimpleHashlibEval(SimpleEval):
-    def __init__(self):
+    def __init__(self) -> None:
         functions = dict()
 
         for algo_name in hashlib.algorithms_guaranteed:

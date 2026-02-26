@@ -19,7 +19,7 @@ def get_int(element) -> int:
     return int(value)
 
 
-def scroll_and_click(element, sleep: float = None):
+def scroll_and_click(element, sleep: float = None) -> None:
     driver.execute_script("arguments[0].scrollIntoView()", element)
     element.click()
 

@@ -67,7 +67,7 @@ def get_logger(name):
 log = get_logger("encrypt_with_zip_compress")
 
 
-def run_crypt_decrypt(message, password, use_zip=False, show_hex=False):
+def run_crypt_decrypt(message, password, use_zip=False, show_hex=False) -> None:
     start_time = time.time()
 
     text_hex = binascii.hexlify(message)

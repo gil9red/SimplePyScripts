@@ -13,7 +13,7 @@ from common import USER_PICTURES_DIR, DEFAULT_SUFFIXES
 
 
 class IndexingSettingsWidget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Indexing")
@@ -27,7 +27,7 @@ class IndexingSettingsWidget(QWidget):
 
         self.setLayout(layout)
 
-    def read_settings(self, ini: QSettings):
+    def read_settings(self, ini: QSettings) -> None:
         ini.beginGroup(self.__class__.__name__)
 
         self.dir_box.setValue(ini.value("dir_box", USER_PICTURES_DIR))
@@ -35,7 +35,7 @@ class IndexingSettingsWidget(QWidget):
 
         ini.endGroup()
 
-    def write_settings(self, ini: QSettings):
+    def write_settings(self, ini: QSettings) -> None:
         ini.beginGroup(self.__class__.__name__)
 
         ini.setValue("dir_box", self.dir_box.getValue())

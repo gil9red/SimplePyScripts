@@ -33,7 +33,7 @@ class StackOverFlowBotThread(QThread):
     about_search_result = pyqtSignal(str, str)
     about_change_title = pyqtSignal(str)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.is_running = False
@@ -46,10 +46,10 @@ class StackOverFlowBotThread(QThread):
 
         self._search = None
 
-    def search(self, text: str):
+    def search(self, text: str) -> None:
         self._search = text
 
-    def run(self):
+    def run(self) -> None:
         self.is_running = True
 
         self.driver.get(URL)
@@ -85,7 +85,7 @@ class StackOverFlowBotThread(QThread):
         finally:
             self.driver.quit()
 
-    def quit(self):
+    def quit(self) -> None:
         self.driver.quit()
         self.is_running = False
 
@@ -93,7 +93,7 @@ class StackOverFlowBotThread(QThread):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.search = QLineEdit("gil9red")
@@ -122,16 +122,16 @@ class MainWindow(QMainWindow):
         central_widget.setLayout(main_layout)
         self.setCentralWidget(central_widget)
 
-    def on_search(self):
+    def on_search(self) -> None:
         self.result.clear()
 
         text = self.search.text()
         self.bot_thread.search(text)
 
-    def on_search_result(self, title, url):
+    def on_search_result(self, title, url) -> None:
         self.result.append(f'<a href="{url}">{title}</a>')
 
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
         self.bot_thread.quit()
 
 

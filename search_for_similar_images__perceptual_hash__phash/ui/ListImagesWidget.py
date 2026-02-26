@@ -11,7 +11,7 @@ from .ThumbnailDelegate import ThumbnailDelegate
 
 
 class ListImagesWidget(QListView):
-    def __init__(self, icon_width, icon_height, image_cache, file_name_index):
+    def __init__(self, icon_width, icon_height, image_cache, file_name_index) -> None:
         super().__init__()
 
         self.setMovement(QListView.Static)

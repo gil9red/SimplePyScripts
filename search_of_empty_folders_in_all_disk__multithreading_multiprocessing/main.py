@@ -20,7 +20,7 @@ import psutil
 from humanize import naturalsize as sizeof_fmt
 
 
-def search_empty_folders(disk):
+def search_empty_folders(disk) -> None:
     disk_letter = disk[0]
     file_name = f"log of {disk_letter}.txt"
 

@@ -17,7 +17,7 @@ from common import (
 class SearchForSimilarSettingsWidget(QWidget):
     about_mark_matching = pyqtSignal(bool)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Search for similar")
@@ -37,7 +37,7 @@ class SearchForSimilarSettingsWidget(QWidget):
 
         self.setLayout(layout)
 
-    def read_settings(self, ini: QSettings):
+    def read_settings(self, ini: QSettings) -> None:
         ini.beginGroup(self.__class__.__name__)
 
         self.cb_algo.setCurrentText(ini.value("algo", DEFAULT_IMAGE_HASH_ALGO))
@@ -48,7 +48,7 @@ class SearchForSimilarSettingsWidget(QWidget):
 
         ini.endGroup()
 
-    def write_settings(self, ini: QSettings):
+    def write_settings(self, ini: QSettings) -> None:
         ini.beginGroup(self.__class__.__name__)
 
         ini.setValue("algo", self.cb_algo.currentText())

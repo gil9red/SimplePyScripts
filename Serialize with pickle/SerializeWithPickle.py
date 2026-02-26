@@ -48,20 +48,20 @@ with open("data_1.pkl", "rb") as f:
 class Monster:
     """Monster class!"""
 
-    def __init__(self, health, power, name, level):
+    def __init__(self, health, power, name, level) -> None:
         self.health = health
         self.power = power
         self.name = name
         self.level = level
         self.abilities = ["Eater"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"Name: '{self.name}' lv {self.level}, health: {self.health}, "
             f"power: {self.power}, abilities: {self.abilities}: {hex(id(self))}"
         )
 
-    def say(self):
+    def say(self) -> None:
         print("I'm %s" % self.name)
 
 zombi = Monster(name="Zombi", health=100, power=10, level=2)

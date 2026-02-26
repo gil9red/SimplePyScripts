@@ -19,7 +19,7 @@ def get_name_by_func(obj: object) -> dict:
 
 
 class SimpleMathEval(SimpleEval):
-    def __init__(self):
+    def __init__(self) -> None:
         names = {
             "e": math.e,
             "inf": math.inf,

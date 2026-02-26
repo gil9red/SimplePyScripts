@@ -25,7 +25,7 @@ class SelectDirBox(QWidget):
     valueChanged = pyqtSignal(str)
     valueEdited = pyqtSignal(str)
 
-    def __init__(self, value="", visible_label=True):
+    def __init__(self, value="", visible_label=True) -> None:
         super().__init__()
 
         self._label = QLabel("Directory:")
@@ -58,26 +58,26 @@ class SelectDirBox(QWidget):
 
         self.setLayout(layout)
 
-    def setValue(self, value: str):
+    def setValue(self, value: str) -> None:
         self._value.setText(value)
         self._value.setToolTip(value)
 
     def getValue(self) -> str:
         return self._value.text()
 
-    def _on_select_path(self):
+    def _on_select_path(self) -> None:
         path = QFileDialog.getExistingDirectory(self, None, self._value.text())
         if not path:
             return
 
         self.setValue(path)
 
-    def _on_open_dir(self):
+    def _on_open_dir(self) -> None:
         path = self._value.text()
         if os.path.isdir(path):
             os.startfile(path)
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
 
         self._button_select_path.setFixedHeight(self._value.height())

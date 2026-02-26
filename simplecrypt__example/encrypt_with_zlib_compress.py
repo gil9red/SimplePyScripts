@@ -55,7 +55,7 @@ def get_logger(name):
 log = get_logger("encrypt_with_zlib_compress")
 
 
-def crypt_decrypt_test(message, password, use_zlib=False, show_hex=False):
+def crypt_decrypt_test(message, password, use_zlib=False, show_hex=False) -> None:
     start_time = time.time()
 
     text_hex = binascii.hexlify(message)

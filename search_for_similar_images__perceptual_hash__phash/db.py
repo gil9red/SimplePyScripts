@@ -25,7 +25,7 @@ def create_connect() -> sqlite3.Connection:
     return sqlite3.connect(DB_FILE_NAME)
 
 
-def init_db():
+def init_db() -> None:
     # Создание базы и таблицы
     with create_connect() as connect:
         connect.execute(
@@ -118,7 +118,7 @@ def db_get_all() -> list[dict]:
         return connect.execute("SELECT * FROM ImageHash").fetchall()
 
 
-def db_create_backup(backup_dir="backup"):
+def db_create_backup(backup_dir="backup") -> None:
     file_name = str(datetime.today().date()) + ".sqlite"
     os.makedirs(backup_dir, exist_ok=True)
 

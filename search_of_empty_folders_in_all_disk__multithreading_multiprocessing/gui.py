@@ -30,7 +30,7 @@ except:
 from main import sizeof_fmt
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -46,7 +46,7 @@ sys.excepthook = log_uncaught_exceptions
 class SearchThread(QThread):
     about_new_text = pyqtSignal(str)
 
-    def run(self):
+    def run(self) -> None:
         # "-u : unbuffered binary stdout and stderr." Иначе, при запуске питона, пока н завершится скрипт
         # данные с stdout и stderr не будут получены
         command = [sys.executable, "-u", "main.py"]
@@ -62,7 +62,7 @@ class SearchThread(QThread):
 class EmptyFoldersTab(QWidget):
     about_new_text = pyqtSignal(str)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.line_list = None
@@ -99,7 +99,7 @@ class EmptyFoldersTab(QWidget):
         layout.addWidget(self.view)
         self.setLayout(layout)
 
-    def _on_show_in_explorer(self, index=None):
+    def _on_show_in_explorer(self, index=None) -> None:
         if not index:
             index = self.view.currentIndex()
             if index is None:
@@ -112,7 +112,7 @@ class EmptyFoldersTab(QWidget):
 
         os.system(cmd)
 
-    def _on_remove_folder(self):
+    def _on_remove_folder(self) -> None:
         index = self.view.currentIndex()
         if index is None:
             return
@@ -143,7 +143,7 @@ class EmptyFoldersTab(QWidget):
         except PermissionError as e:
             QMessageBox.critical(None, "PermissionError", str(e))
 
-    def _reread_list(self):
+    def _reread_list(self) -> None:
         if not self.line_list:
             return
 
@@ -161,7 +161,7 @@ class EmptyFoldersTab(QWidget):
         if new_line_list:
             self.view.setCurrentIndex(self.model.index(0))
 
-    def fill(self, file_name):
+    def fill(self, file_name) -> None:
         self.about_new_text.emit("Start fill: " + file_name)
 
         t = time.clock()
@@ -185,7 +185,7 @@ class EmptyFoldersTab(QWidget):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle(f"search_of_empty_folders [{sys.executable}]")
@@ -214,11 +214,11 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.tab_widget)
 
-    def append_log(self, text):
+    def append_log(self, text) -> None:
         time_str = datetime.today().strftime("%H:%M:%S")
         self.text_edit_log.append(time_str + ": " + text)
 
-    def _start_search(self):
+    def _start_search(self) -> None:
         t = time.clock()
 
         self.append_log("Start search")

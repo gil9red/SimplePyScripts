@@ -11,7 +11,7 @@ from common import DIR_IMAGES, explore
 
 
 class ImageHashDetailsDialog(QDialog):
-    def __init__(self, file_name: str, data: dict, parent=None):
+    def __init__(self, file_name: str, data: dict, parent=None) -> None:
         super().__init__(parent)
 
         self.setWindowTitle("ImageHash Details")
