@@ -54,7 +54,7 @@ if __name__ == "__main__":
     items = get_video_list("http://xcadr.com/collection/luchshie-sceny-v-bane/")
     print("Total:", len(items))
 
-    def print_items(items):
+    def print_items(items) -> None:
         for i, item in enumerate(items, 1):
             print(
                 '{0:2}. "{title}" ({duration} secs, rating: {rating}): {url} [{url_thumb}]'.format(

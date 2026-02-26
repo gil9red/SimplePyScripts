@@ -30,7 +30,7 @@ from tabulate import tabulate
 DEBUG_LOG = False
 
 
-def do_page_down(driver: RemoteWebDriver, footer: WebElement):
+def do_page_down(driver: RemoteWebDriver, footer: WebElement) -> None:
     y_position = 0
 
     while True:
@@ -45,7 +45,7 @@ def do_page_down(driver: RemoteWebDriver, footer: WebElement):
             time.sleep(0.5)
 
 
-def print_the_most_profitable_dish(url: str):
+def print_the_most_profitable_dish(url: str) -> None:
     print(url)
 
     options = Options()

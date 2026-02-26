@@ -15,7 +15,7 @@ def get_text(el: Tag) -> str:
     return text.replace("\xa0", " ")
 
 
-def parse_update_anime(update_el: Tag):
+def parse_update_anime(update_el: Tag) -> None:
     title = get_text(update_el.select_one(".update-title"))
     update_date = get_text(update_el.select_one(".update-date"))
     update_info = get_text(update_el.select_one(".update-info"))

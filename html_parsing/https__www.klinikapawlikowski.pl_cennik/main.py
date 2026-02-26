@@ -60,7 +60,7 @@ def parser(base_url, headers) -> dict:
     return data
 
 
-def files_writer(data: dict):
+def files_writer(data: dict) -> None:
     with open("parsed_cennik.csv", "a", encoding="utf-8", newline="") as file:
         a_pen = csv.writer(file)
         a_pen.writerow(["Title", "Title_proedure", "Opisanie_procedur", "Ceny"])

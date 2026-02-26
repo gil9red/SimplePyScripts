@@ -58,7 +58,7 @@ class TreeNode:
         names.reverse()
         return sep.join(names)
 
-    def print(self):
+    def print(self) -> None:
         # Проверка на корневой узел
         if self.name:
             print(self.get_full_name())
@@ -77,7 +77,7 @@ class Tree:
     def get_child(self, names: list[str]) -> TreeNode | None:
         return self.root_node.get_child(names=names)
 
-    def print(self):
+    def print(self) -> None:
         self.root_node.print()
 
 

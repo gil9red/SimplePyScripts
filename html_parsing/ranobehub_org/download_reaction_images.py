@@ -17,7 +17,7 @@ DIR_IMAGES = DIR / f"{PATH.name}_images"
 DIR_IMAGES.mkdir(exist_ok=True, parents=True)
 
 
-def download_reaction_images(url: str, dir_path: Path = DIR_IMAGES):
+def download_reaction_images(url: str, dir_path: Path = DIR_IMAGES) -> None:
     for x in get_reactions_raw(url)["reactions"]:
         img_url = x["reaction"]["image"]
 

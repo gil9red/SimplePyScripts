@@ -43,7 +43,7 @@ class Game:
 
     profile_genres: list[str] = field(default_factory=list)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.duration_main_title = seconds_to_str(self.duration_main_seconds)
         self.duration_plus_title = seconds_to_str(self.duration_plus_seconds)
         self.duration_100_title = seconds_to_str(self.duration_100_seconds)

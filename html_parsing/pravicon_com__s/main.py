@@ -186,7 +186,7 @@ def get_image_url(tag: Tag) -> str | None:
                 return url_join(a["href"])
 
 
-def dump_icon(dir_dump: Path, url: str, title: str = None):
+def dump_icon(dir_dump: Path, url: str, title: str = None) -> None:
     dir_name = url.split("/")[-1] + "__" + secure_filename(title)
     dir_icon = dir_dump / dir_name
     dir_icon.mkdir(parents=True, exist_ok=True)

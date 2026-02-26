@@ -39,7 +39,7 @@ def get_chapters(url: str) -> list[Chapter]:
 
 if __name__ == "__main__":
 
-    def print_chapter(items: list[Chapter]):
+    def print_chapter(items: list[Chapter]) -> None:
         print(f"Chapters ({len(items)}):")
         print(f"    {items[0]}")
         print("    ...")

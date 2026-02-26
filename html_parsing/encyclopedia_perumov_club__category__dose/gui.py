@@ -67,7 +67,7 @@ def get_table_widget(header_labels: list) -> QTableWidget:
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.filter_le = QLineEdit()
@@ -123,7 +123,7 @@ class MainWindow(QMainWindow):
         except:
             pass
 
-    def fill(self):
+    def fill(self) -> None:
         # Удаление строк таблицы
         while self.table_dossier.rowCount():
             self.table_dossier.removeRow(0)
@@ -155,7 +155,7 @@ class MainWindow(QMainWindow):
         self.table_dossier.setCurrentCell(0, 0)
         self._on_table_dossier_item_clicked()
 
-    def _on_table_dossier_item_clicked(self):
+    def _on_table_dossier_item_clicked(self) -> None:
         # Удаление строк таблицы
         while self.table_items.rowCount():
             self.table_items.removeRow(0)
@@ -199,7 +199,7 @@ class MainWindow(QMainWindow):
         self.table_items.setCurrentCell(0, 0)
         self._on_table_items_item_clicked()
 
-    def _on_table_items_item_clicked(self):
+    def _on_table_items_item_clicked(self) -> None:
         item = self.table_items.currentItem()
         if not item:
             return

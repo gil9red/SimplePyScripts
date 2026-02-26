@@ -16,7 +16,7 @@ from PyQt5.QtWebEngineWidgets import QWebEnginePage
 # Основа взята из http://stackoverflow.com/a/37755811/5909792
 def get_html(url):
     class ExtractorHtml:
-        def __init__(self, url):
+        def __init__(self, url) -> None:
             _app = QApplication([])
             self._page = QWebEnginePage()
             self._page.loadFinished.connect(self._load_finished_handler)
@@ -40,10 +40,10 @@ def get_html(url):
             # Чтобы избежать падений скрипта
             self._page = None
 
-        def _callable(self, data):
+        def _callable(self, data) -> None:
             self.html = data
 
-        def _load_finished_handler(self, _):
+        def _load_finished_handler(self, _) -> None:
             self._counter_finished += 1
 
             if self._counter_finished == 2:

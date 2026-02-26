@@ -79,7 +79,7 @@ def get_games() -> list[Game]:
     return items
 
 
-def save_as_html(file_name: str, items: list[Game], columns=4):
+def save_as_html(file_name: str, items: list[Game], columns=4) -> None:
     title = "Games with RTX"
 
     with open(file_name, "w", encoding="utf-8") as f:

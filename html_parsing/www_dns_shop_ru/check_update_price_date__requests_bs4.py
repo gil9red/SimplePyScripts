@@ -14,7 +14,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def go():
+def go() -> None:
     url = "http://www.dns-shop.ru/"
 
     rs = requests.get(url)

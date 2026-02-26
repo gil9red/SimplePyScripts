@@ -92,7 +92,7 @@ def dump_covers(
     out_dir="out",
     need_zip=False,
     remove_out_covers=False,
-):
+) -> None:
     covers = get_covers(year)
     out_dir = normpath(abspath(out_dir + f"/{year}"))
 

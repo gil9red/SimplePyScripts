@@ -15,7 +15,7 @@ def get_text(el: Tag) -> str:
     return text.replace("\xa0", " ")
 
 
-def parse_post_block(post_block: Tag):
+def parse_post_block(post_block: Tag) -> None:
     title_el = post_block.select_one(".post-title")
     url_post = urljoin(URL, title_el["href"])
     title = get_text(title_el)

@@ -17,7 +17,7 @@ url_playlist = (
 )
 
 
-def __print_video_list(items: list[Video]):
+def __print_video_list(items: list[Video]) -> None:
     print(f"Items ({len(items)}):")
     for i, video in enumerate(items, 1):
         print(f"  {i:3}. {video.title!r}: {video.url}")

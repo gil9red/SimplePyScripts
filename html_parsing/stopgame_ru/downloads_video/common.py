@@ -16,7 +16,7 @@ def secure_filename(text: str) -> str:
     return re.sub(r"[^\w .]", "", text).strip()
 
 
-def download(dir_video: Path, url: str):
+def download(dir_video: Path, url: str) -> None:
     session = requests.session()
     session.headers[
         "User-Agent"

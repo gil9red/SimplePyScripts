@@ -78,7 +78,7 @@ def save_goods(
     file_name: str | Path,
     items: list[tuple[str, str, str]],
     encoding="utf-8",
-):
+) -> None:
     df = pd.DataFrame(items, columns=["Name", "Price", "Nal"])
     df.to_csv(file_name, encoding=encoding)
 

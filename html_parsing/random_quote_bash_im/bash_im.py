@@ -71,7 +71,7 @@ class Quote:
     def date_str(self) -> str:
         return self._date_str
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self._id = int(self.url.rstrip().split("/")[-1])
         self._date_str = self.date.strftime(DATE_FORMAT_QUOTE)
 
@@ -174,7 +174,7 @@ class Quote:
 
         return Quote(url, quote_text, date, rating, comics_urls)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"{self.__class__.__name__}(id={self.id}, url={self.url}, "
             f"text({len(self.text)})={shorten(self.text)!r}, "
@@ -259,7 +259,7 @@ def parser_health_check(raise_error=False) -> Optional[str]:
     Если функция вернет None, значит проблем нет, иначе вернется строка с описанием проблемы.
     """
 
-    def _test_quote(quote: Quote, expected_id: int):
+    def _test_quote(quote: Quote, expected_id: int) -> None:
         assert quote, f"Цитата с #{expected_id} должна существовать!"
         assert (
             quote.id == expected_id

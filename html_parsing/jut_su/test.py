@@ -36,7 +36,7 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
         "hash": "dc3acd1d8af21525",
     }
 
-    def test_parse_raw_anime_achievement(self):
+    def test_parse_raw_anime_achievement(self) -> None:
         text = """
         category: "events",
         time_start: 704,
@@ -49,7 +49,7 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
         actual = get_possible_achievements_from_video.parse_raw_anime_achievement(text)
         self.assertEqual(actual, self.EXPECTED_704)
 
-    def test_parse_raw_anime_achievements(self):
+    def test_parse_raw_anime_achievements(self) -> None:
         text = """
         var this_anime_achievements = [];
         this_anime_achievements.push({
@@ -78,7 +78,7 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
         ]
         self.assertEqual(actual, expected)
 
-    def test_get_raw_achievements(self):
+    def test_get_raw_achievements(self) -> None:
         actual = get_possible_achievements_from_video.get_raw_achievements(
             "https://jut.su/bleeach/episode-193.html"
         )
@@ -96,14 +96,14 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
 
         self.assertEqual(actual, expected)
 
-    def test_get_anime_achievement(self):
+    def test_get_anime_achievement(self) -> None:
         expected = self.EXPECTED_704
         actual = get_possible_achievements_from_video.get_anime_achievement(expected)
         actual = dataclasses.asdict(actual)
 
         self.assertEqual(actual, expected)
 
-    def test_get_achievements(self):
+    def test_get_achievements(self) -> None:
         actual = get_possible_achievements_from_video.get_achievements(
             "https://jut.su/bleeach/episode-193.html"
         )
@@ -124,7 +124,7 @@ class GetPossibleAchievementsTestCase(unittest.TestCase):
 
 
 class GetUserAchievementsTestCase(unittest.TestCase):
-    def test_get_achievements(self):
+    def test_get_achievements(self) -> None:
         url = "https://jut.su/user/gil9red/achievements/"
 
         get_achievements = get_user_achievements.get_achievements
@@ -181,7 +181,7 @@ class GetUserAchievementsTestCase(unittest.TestCase):
 
 
 class SearchTestCase(unittest.TestCase):
-    def test_search(self):
+    def test_search(self) -> None:
         self.assertFalse(search(text="21331231ваываыва"))
 
         self.assertTrue(search(text="bleach"))

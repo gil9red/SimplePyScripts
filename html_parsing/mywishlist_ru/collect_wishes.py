@@ -72,7 +72,7 @@ class BaseModel(Model):
         return sorted(cls.__subclasses__(), key=lambda x: x.__name__)
 
     @classmethod
-    def print_count_of_tables(cls):
+    def print_count_of_tables(cls) -> None:
         items = []
         for sub_cls in cls.get_inherited_models():
             name = sub_cls.__name__
@@ -81,7 +81,7 @@ class BaseModel(Model):
 
         print(", ".join(items))
 
-    def __str__(self):
+    def __str__(self) -> str:
         fields = []
         for k, field in self._meta.fields.items():
             v = getattr(self, k)
@@ -107,7 +107,7 @@ db.connect()
 db.create_tables(BaseModel.get_inherited_models())
 
 
-def run():
+def run() -> None:
     wish_id = 1
     last_id_wish = get_mandatory_last_id_wish()
 

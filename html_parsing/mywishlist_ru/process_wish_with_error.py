@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from collect_wishes import Wish, WishInfo, get_wish_data
 
 
-def run():
+def run() -> None:
     for wish in Wish.select().where(Wish.error.is_null(False)):
         try:
             wish_info = WishInfo.parse_from(wish.id)

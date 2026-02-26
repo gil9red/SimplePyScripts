@@ -20,7 +20,7 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWebEngineWidgets import QWebEnginePage
 
 
-def _callable(html):
+def _callable(html) -> None:
     if "price-list-downloader" not in html:
         return
 

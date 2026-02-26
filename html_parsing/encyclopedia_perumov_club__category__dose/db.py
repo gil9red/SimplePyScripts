@@ -20,7 +20,7 @@ from shorten import shorten
 DB_FILE_NAME = str(pathlib.Path(__file__).resolve().parent / "database.sqlite")
 
 
-def db_create_backup(backup_dir="backup"):
+def db_create_backup(backup_dir="backup") -> None:
     os.makedirs(backup_dir, exist_ok=True)
 
     file_name = str(dt.datetime.today().date()) + ".sqlite"
@@ -43,7 +43,7 @@ class Dossier(BaseModel):
     url = TextField(unique=True)
     date = DateField(default=dt.date.today)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"{self.__class__.__name__}(id={self.id}, title={self.title!r}, date={self.date}, "
             f"url={self.url!r}, total_items={len(self.items)})"
@@ -55,7 +55,7 @@ class QuestionAnswer(BaseModel):
     question_text = TextField()
     answer_text = TextField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"{self.__class__.__name__}(id={self.id}, dossier_id={self.dossier.id}, "
             f"question_text={shorten(self.question_text)!r}), answer_text={shorten(self.answer_text)!r})"

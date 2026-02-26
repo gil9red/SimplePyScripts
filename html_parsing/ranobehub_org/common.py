@@ -9,7 +9,7 @@ from requests.adapters import HTTPAdapter
 
 
 class TimeoutHTTPAdapter(HTTPAdapter):
-    def __init__(self, timeout, *args, **kwargs):
+    def __init__(self, timeout, *args, **kwargs) -> None:
         self._timeout = timeout
         super().__init__(*args, **kwargs)
 

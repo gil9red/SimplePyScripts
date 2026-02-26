@@ -146,7 +146,7 @@ def raise_if_error(yt_initial_data: dict):
         pass
 
 
-def dict_merge(d1: dict, d2: dict):
+def dict_merge(d1: dict, d2: dict) -> None:
     for k, v in d2.items():
         if k in d1 and isinstance(d1[k], dict) and isinstance(v, dict):
             dict_merge(d1[k], v)

@@ -23,7 +23,7 @@ def get_valid_filename(s: str) -> str:
 DIR = Path(__file__).resolve().parent
 
 
-def parse(start_url: str, download_path: Path = DIR):
+def parse(start_url: str, download_path: Path = DIR) -> None:
     url = start_url
 
     while True:

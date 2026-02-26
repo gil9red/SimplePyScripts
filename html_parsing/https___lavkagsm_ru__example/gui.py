@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         headers = ["NAME", "PRICE", "ARTICLE", "URL", "PHOTO_URL"]
@@ -26,7 +26,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.table_widget)
 
-    def fill(self):
+    def fill(self) -> None:
         url = "https://lavkagsm.ru/catalog/mikroskhemy/?view=blocks&page_count=48&sort=name&by=asc"
         html_content = get_html_by_url__from_cache(url)
         root = BeautifulSoup(html_content, "html.parser")
@@ -44,7 +44,7 @@ class MainWindow(QMainWindow):
         self.table_widget.resizeColumnToContents(0)
         self.table_widget.resizeColumnToContents(1)
 
-    def _on_item_double_click(self, item):
+    def _on_item_double_click(self, item) -> None:
         row = item.row()
 
         item_url = self.table_widget.item(row, 3)

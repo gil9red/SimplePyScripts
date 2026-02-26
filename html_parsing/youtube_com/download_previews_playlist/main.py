@@ -16,7 +16,7 @@ sys.path.append(str(DIR.parent))
 from api.common import Playlist
 
 
-def download_playlist_video_previews(url_or_id: str, save_dir: Path = DIR):
+def download_playlist_video_previews(url_or_id: str, save_dir: Path = DIR) -> None:
     playlist = Playlist.get_from(url_or_id)
     safe_playlist_title = get_valid_filename(playlist.title)
 
