@@ -8,7 +8,7 @@ import time
 import threading
 
 
-def func():
+def func() -> None:
     i = 1
 
     while True:

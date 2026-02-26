@@ -14,7 +14,7 @@ Updates on every keyboard event.
 import keyboard
 
 
-def print_pressed_keys(e):
+def print_pressed_keys(e) -> None:
     line = ", ".join(str(code) for code in keyboard._pressed_events)
     # '\r' and end='' overwrites the previous line.
     # ' ' * 40 prints 40 spaces at the end to ensure the previous line is cleared.

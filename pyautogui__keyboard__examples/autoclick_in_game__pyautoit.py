@@ -24,14 +24,14 @@ DATA = {
 HOTKEY: str = os.environ.get("HOTKEY", "Ctrl+Alt+Space")
 
 
-def change_start():
+def change_start() -> None:
     DATA["START"] = not DATA["START"]
     print("START:", DATA["START"])
 
     winsound.Beep(1000, duration=50)
 
 
-def process_auto_click():
+def process_auto_click() -> None:
     while True:
         if not DATA["START"]:
             time.sleep(0.100)

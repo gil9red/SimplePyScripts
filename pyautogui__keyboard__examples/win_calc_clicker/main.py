@@ -27,7 +27,7 @@ for i in range(10):
 CACHE_POS_BUTTON = dict()
 
 
-def go(expression):
+def go(expression) -> None:
     for x in expression:
         if x not in BUTTONS:
             print(f'Not found: "{x}"')
@@ -47,7 +47,7 @@ def go(expression):
         pyautogui.click(pos)
 
 
-def show_test_calc():
+def show_test_calc() -> None:
     os.startfile("calc.exe")
     time.sleep(1)
 

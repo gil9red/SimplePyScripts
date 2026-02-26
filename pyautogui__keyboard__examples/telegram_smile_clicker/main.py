@@ -15,7 +15,7 @@ import time
 import pyautogui
 
 
-def go():
+def go() -> None:
     OPEN_SMILE_MENU = "elements/open_smile_menu.png"
     GROUP_SMILE = "elements/group_smile.png"
     CLICK_SMILE = "elements/click_smile.png"

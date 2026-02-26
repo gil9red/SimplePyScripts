@@ -27,7 +27,7 @@ SELECT_AI_MENU_SCOURGE = "images/select_ai_menu_scourge.png"
 AI_EASY = "images/ai_easy.png"
 
 
-def go_local_network():
+def go_local_network() -> bool:
     pos = pyautogui.locateCenterOnScreen(LOCAL_NETWORK_BUTTON)
     print("LOCAL_NETWORK_BUTTON:", pos)
 
@@ -41,7 +41,7 @@ def go_local_network():
     return False
 
 
-def go_new_game():
+def go_new_game() -> bool:
     pos = pyautogui.locateCenterOnScreen(NEW_GAME_BUTTON)
     print("NEW_GAME_BUTTON:", pos)
 
@@ -55,7 +55,7 @@ def go_new_game():
     return False
 
 
-def go_select_map():
+def go_select_map() -> bool:
     pos = pyautogui.locateCenterOnScreen(NEW_GAME_BUTTON_SELECT_MAP)
     print("NEW_GAME_BUTTON_SELECT_MAP:", pos)
 
@@ -69,7 +69,7 @@ def go_select_map():
     return False
 
 
-def bot_says():
+def bot_says() -> None:
     text = """\
 Bot say:
 -aremnpakulsc
@@ -81,7 +81,7 @@ Bot say:
         pyautogui.typewrite(["enter"])
 
 
-def select_sentinel_and_scourge(coords_sentinel, coords_scourge):
+def select_sentinel_and_scourge(coords_sentinel, coords_scourge) -> None:
     for rect in coords_sentinel + coords_scourge:
         pos = pyautogui.center(rect)
 

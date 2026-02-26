@@ -20,7 +20,7 @@ BOT_DATA = {
 }
 
 
-def change_auto_attack():
+def change_auto_attack() -> None:
     BOT_DATA["AUTO_ATTACK"] = not BOT_DATA["AUTO_ATTACK"]
     print("AUTO_ATTACK:", BOT_DATA["AUTO_ATTACK"])
 
@@ -37,7 +37,7 @@ keyboard.wait(RUN_COMBINATION)
 print("Start")
 
 
-def process_auto_attack():
+def process_auto_attack() -> None:
     i = 1
 
     while True:

@@ -147,7 +147,7 @@ def get_info_html() -> str:
     )
 
 
-def open_html_file():
+def open_html_file() -> None:
     with tempfile.NamedTemporaryFile(
         mode="w",
         encoding="utf-8",

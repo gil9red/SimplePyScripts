@@ -19,7 +19,7 @@ AES_key = "<my AES key>"
 
 # SOURCE: https://github.com/maldevel/gdog/blob/a3a47b17231d0ee3a2d0fa8ac986f7485f3f6b82/gdog.py#L68
 class InfoSecurity:
-    def __init__(self, key: str):
+    def __init__(self, key: str) -> None:
         self.bs = 32
         self.key = hashlib.sha256(key.encode()).digest()
 

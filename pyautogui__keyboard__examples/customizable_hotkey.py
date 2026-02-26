@@ -15,7 +15,7 @@ shortcut = keyboard.read_shortcut()
 print("Shortcut selected:", shortcut)
 
 
-def on_triggered():
+def on_triggered() -> None:
     print("Triggered!")
 
 

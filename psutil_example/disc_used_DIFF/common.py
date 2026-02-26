@@ -58,7 +58,7 @@ def get_disc_total_used(disc_list: List[str]) -> str:
     return sizeof_fmt(sum(psutil.disk_usage(disk).used for disk in disc_list))
 
 
-def write_snapshot_raw_disc_used(disc_list: List[str] = None):
+def write_snapshot_raw_disc_used(disc_list: List[str] = None) -> None:
     with open(FILE_NAME_SNAPSHOT, "w", encoding="utf-8") as f:
         items = get_disc_used(disc_list, only_raw=True)
         print("Write snapshot with:", items)

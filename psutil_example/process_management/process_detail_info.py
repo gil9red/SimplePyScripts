@@ -10,7 +10,7 @@ __author__ = "ipetrash"
 import psutil
 
 
-def print_info(pid):
+def print_info(pid) -> None:
     process = psutil.Process(pid)
     print("Process:", process)
 

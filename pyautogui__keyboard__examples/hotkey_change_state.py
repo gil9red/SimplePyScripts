@@ -19,7 +19,7 @@ BOT_DATA = {
 }
 
 
-def change_auto_attack():
+def change_auto_attack() -> None:
     BOT_DATA["AUTO_ATTACK"] = not BOT_DATA["AUTO_ATTACK"]
     print("AUTO_ATTACK:", BOT_DATA["AUTO_ATTACK"])
 

@@ -8,7 +8,7 @@ __author__ = "ipetrash"
 import keyboard
 
 
-def foo():
+def foo() -> None:
     print("World")
 
 

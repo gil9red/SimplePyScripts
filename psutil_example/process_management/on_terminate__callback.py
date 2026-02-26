@@ -10,7 +10,7 @@ import threading
 import time
 
 
-def func(time_life=4):
+def func(time_life=4) -> None:
     i = 1
 
     while i <= time_life:
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     print("process2 is_running:", process2.is_running())
     print()
 
-    def on_terminate(proc):
+    def on_terminate(proc) -> None:
         print(f'Process "{proc}" terminated')
 
     # waits for multiple processes to terminate

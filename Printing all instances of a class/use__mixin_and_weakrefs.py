@@ -14,7 +14,7 @@ import weakref
 class KeepRefs:
     __refs__ = defaultdict(list)
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.__refs__[self.__class__].append(weakref.ref(self))
 
     @classmethod
@@ -26,7 +26,7 @@ class KeepRefs:
 
 
 class X(KeepRefs):
-    def __init__(self, name):
+    def __init__(self, name) -> None:
         super().__init__()
         self.name = name
 

@@ -15,7 +15,7 @@ def get_instances(class_: type) -> [type]:
 
 
 class X:
-    def __init__(self, name):
+    def __init__(self, name) -> None:
         self.name = name
 
 

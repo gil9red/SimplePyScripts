@@ -8,7 +8,7 @@ __author__ = "ipetrash"
 import keyboard
 
 
-def print_pressed_keys(e):
+def print_pressed_keys(e) -> None:
     print(e, e.event_type, e.name)
 
 

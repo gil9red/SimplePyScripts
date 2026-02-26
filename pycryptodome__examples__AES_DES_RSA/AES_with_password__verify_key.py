@@ -18,7 +18,7 @@ class AuthenticationError(Exception):
 
 
 class CryptoAES:
-    def __init__(self, key: str):
+    def __init__(self, key: str) -> None:
         self.key = hashlib.sha256(key.encode("utf-8")).digest()
 
     def encrypt(self, plain_text: str) -> str:

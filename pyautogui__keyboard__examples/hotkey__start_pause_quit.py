@@ -20,12 +20,12 @@ BOT_DATA = {
 }
 
 
-def change_start():
+def change_start() -> None:
     BOT_DATA["START"] = not BOT_DATA["START"]
     print("START:", BOT_DATA["START"])
 
 
-def change_auto_attack():
+def change_auto_attack() -> None:
     BOT_DATA["AUTO_ATTACK"] = not BOT_DATA["AUTO_ATTACK"]
     print("AUTO_ATTACK:", BOT_DATA["AUTO_ATTACK"])
 

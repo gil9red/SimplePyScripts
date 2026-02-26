@@ -13,7 +13,7 @@ import keyboard
 import pyautogui
 
 
-def beep():
+def beep() -> None:
     winsound.Beep(1000, duration=50)
 
 

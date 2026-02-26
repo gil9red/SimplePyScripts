@@ -36,7 +36,7 @@ class AddHeadersPlugin(HttpProxyBasePlugin):
         pass
 
 
-def main(*args, **kwargs):
+def main(*args, **kwargs) -> None:
     proxy.main(
         *args,
         hostname=ipaddress.ip_address("127.0.0.1"),

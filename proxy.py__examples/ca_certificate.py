@@ -11,7 +11,7 @@ import os
 from config import CA_KEY_FILE_PATH, CA_CERT_FILE_PATH, CA_SIGNING_KEY_FILE_PATH
 
 
-def main():
+def main() -> None:
     # Generate CA key
     os.system(
         f"python -m proxy.common.pki gen_private_key --private-key-path {CA_KEY_FILE_PATH}"

@@ -50,7 +50,7 @@ def _get_processes() -> list[dict[str, str | int]]:
 
 
 class HttpProcessor(BaseHTTPRequestHandler):
-    def do_GET(self):
+    def do_GET(self) -> None:
         o = urlsplit(self.path)
 
         # Only index
@@ -131,7 +131,7 @@ class HttpProcessor(BaseHTTPRequestHandler):
         self.wfile.write(text.encode("utf-8"))
 
 
-def run(server_class=HTTPServer, handler_class=HttpProcessor, port=8080):
+def run(server_class=HTTPServer, handler_class=HttpProcessor, port=8080) -> None:
     print(f"HTTP server running on http://127.0.0.1:{port}")
 
     server_address = ("", port)
