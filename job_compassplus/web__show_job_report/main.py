@@ -24,7 +24,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 @app.route("/")
-def index():
+def index() -> str:
     report_dict = get_report_persons_info()
 
     try:

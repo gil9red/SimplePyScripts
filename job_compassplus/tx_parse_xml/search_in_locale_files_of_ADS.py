@@ -21,7 +21,7 @@ def get_text(el: ET.Element) -> str:
     return "".join(text for text in el.itertext())
 
 
-def process(path: str, regexp: str):
+def process(path: str, regexp: str) -> None:
     pattern = re.compile(regexp)
 
     for p in Path(path).glob("*/ads/*/locale/*/mlb*.xml"):

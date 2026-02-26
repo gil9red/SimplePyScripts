@@ -30,7 +30,7 @@ from shorten import shorten
 DB_FILE_NAME = str(DIR / "database.sqlite")
 
 
-def db_create_backup(backup_dir=DIR / "backup"):
+def db_create_backup(backup_dir=DIR / "backup") -> None:
     os.makedirs(backup_dir, exist_ok=True)
 
     file_name = str(dt.datetime.today().date()) + ".sqlite"
@@ -47,7 +47,7 @@ class BaseModel(Model):
     class Meta:
         database = db
 
-    def __str__(self):
+    def __str__(self) -> str:
         fields = []
         for k, field in self._meta.fields.items():
             v = getattr(self, k)
@@ -75,7 +75,7 @@ class Run(BaseModel):
     def get_project_by_issue_numbers(self) -> dict[str, int]:
         return {issue.project.name: issue.value for issue in self.issue_numbers}
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.__class__.__name__}(id={self.id}, date={self.date}, total_issues={self.get_total_issues()})"
 
 

@@ -9,7 +9,7 @@ from hashlib import sha1
 from pathlib import Path
 
 
-def process(path: Path):
+def process(path: Path) -> None:
     files: list[Path] = [
         p
         for p in path.glob("*/ads/*/img/*")

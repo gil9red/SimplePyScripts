@@ -43,7 +43,7 @@ sys.path.append(str(ROOT_DIR.parent / "qt__pyqt__pyside__pyqode"))
 from chart_line__show_tooltip_on_series__QtChart import ChartViewToolTips
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -95,7 +95,7 @@ class GetAssignedOpenIssuesPerProjectThread(QThread):
     about_items = pyqtSignal(dict)
     about_error = pyqtSignal(Exception)
 
-    def run(self):
+    def run(self) -> None:
         try:
             items: dict[str, int] = get_assigned_open_issues_per_project()
             self.about_items.emit(items)
@@ -108,7 +108,7 @@ class GetAssignedOpenIssuesPerProjectThread(QThread):
 
 
 class TableWidgetRun(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.table_run = get_table_widget(["DATE", "TOTAL ISSUES"])
@@ -129,7 +129,7 @@ class TableWidgetRun(QWidget):
 
         self.setLayout(main_layout)
 
-    def refresh(self, items: list[Run]):
+    def refresh(self, items: list[Run]) -> None:
         # Удаление строк таблицы
         while self.table_run.rowCount():
             self.table_run.removeRow(0)
@@ -148,7 +148,7 @@ class TableWidgetRun(QWidget):
         self.table_run.setFocus()
         self._on_table_run_item_clicked()
 
-    def _on_table_run_item_clicked(self):
+    def _on_table_run_item_clicked(self) -> None:
         # Удаление строк таблицы
         while self.table_issues.rowCount():
             self.table_issues.removeRow(0)
@@ -165,7 +165,7 @@ class TableWidgetRun(QWidget):
 
 
 class CurrentAssignedOpenIssues(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.table = get_table_widget(["PROJECT", "NUMBER"])
@@ -208,10 +208,10 @@ class CurrentAssignedOpenIssues(QWidget):
         self.current_items: dict[str, int] | None = None
         self._update_total_issues("-")
 
-    def _update_total_issues(self, value):
+    def _update_total_issues(self, value) -> None:
         self.label_total.setText(f"<b>Total issues:</b> {value}")
 
-    def _on_set_items(self, items: dict[str, int]):
+    def _on_set_items(self, items: dict[str, int]) -> None:
         self.current_items = items
 
         self._update_total_issues(sum(self.current_items.values()))
@@ -230,25 +230,25 @@ class CurrentAssignedOpenIssues(QWidget):
             f"Last refresh date: {get_human_datetime()}"
         )
 
-    def _on_error(self, e: Exception):
+    def _on_error(self, e: Exception) -> None:
         tb_str = "".join(traceback.format_tb(e.__traceback__))
         print(tb_str)
         QMessageBox.warning(self, "ERROR", str(e))
 
-    def refresh(self):
+    def refresh(self) -> None:
         self.current_items = None
 
         self.thread.start()
 
 
 class MyChartViewToolTips(ChartViewToolTips):
-    def __init__(self, timestamp_by_info: dict[int, dict[str, int]]):
+    def __init__(self, timestamp_by_info: dict[int, dict[str, int]]) -> None:
         super().__init__()
 
         self._callout_font_family = "Courier"
         self.timestamp_by_info: dict[int, dict[str, int]] = timestamp_by_info
 
-    def show_series_tooltip(self, point, state: bool):
+    def show_series_tooltip(self, point, state: bool) -> None:
         # value -> pos
         point = self.chart().mapToPosition(point)
 
@@ -290,7 +290,7 @@ class MyChartViewToolTips(ChartViewToolTips):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle(WINDOW_TITLE)
@@ -358,7 +358,7 @@ class MainWindow(QMainWindow):
             dt += delta
         return dt
 
-    def _fill_chart_filter(self, items: list[Run]):
+    def _fill_chart_filter(self, items: list[Run]) -> None:
         years: list[int] = sorted({run.date.year for run in items})
         filter_years: list[int] = [
             self.cb_chart_filter.itemData(i)
@@ -368,7 +368,7 @@ class MainWindow(QMainWindow):
             if year not in filter_years:
                 self.cb_chart_filter.addItem(f"{year}", userData=year)
 
-    def _fill_chart(self, items: list[Run]):
+    def _fill_chart(self, items: list[Run]) -> None:
         # Фильтрация данных из графика
         year: int = self.cb_chart_filter.currentData()
         if year:
@@ -433,7 +433,7 @@ class MainWindow(QMainWindow):
         self.chart_view.clear_all_tooltips()
         self.chart_view.setChart(chart)
 
-    def refresh(self):
+    def refresh(self) -> None:
         self.current_assigned_open_issues.refresh()
 
         items = list(Run.select())
@@ -449,7 +449,7 @@ class MainWindow(QMainWindow):
             f"{WINDOW_TITLE}. Last refresh date: {get_human_datetime()}"
         )
 
-    def _on_tray_activated(self, reason: QSystemTrayIcon.ActivationReason):
+    def _on_tray_activated(self, reason: QSystemTrayIcon.ActivationReason) -> None:
         # Если запрошено меню
         if reason == QSystemTrayIcon.Context:
             return
@@ -460,14 +460,14 @@ class MainWindow(QMainWindow):
             self.showNormal()
             self.activateWindow()
 
-    def changeEvent(self, event: QEvent):
+    def changeEvent(self, event: QEvent) -> None:
         if event.type() == QEvent.WindowStateChange:
             # Если окно свернули
             if self.isMinimized():
                 # Прячем окно с панели задач
                 QTimer.singleShot(0, self.hide)
 
-    def closeEvent(self, event: QCloseEvent):
+    def closeEvent(self, event: QCloseEvent) -> None:
         self.hide()
         event.ignore()
 

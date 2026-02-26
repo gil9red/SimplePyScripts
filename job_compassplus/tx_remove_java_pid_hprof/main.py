@@ -54,7 +54,7 @@ log = get_logger(
 )
 
 
-def run(dirs: list[str | Path]):
+def run(dirs: list[str | Path]) -> None:
     print(f"\nStarted {dt.datetime.today()}")
 
     for dir_path in dirs:

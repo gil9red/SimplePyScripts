@@ -226,7 +226,7 @@ def get_project_versions(path: Path) -> TotalProjectInfo:
     )
 
 
-def process(path: Path):
+def process(path: Path) -> None:
     print(f"Информация по версиям из {path}")
 
     total_project_info: TotalProjectInfo = get_project_versions(path)
@@ -301,7 +301,7 @@ def process(path: Path):
     print()
     print("Версии:")
 
-    def _print_project_info(project_info: ProjectInfo, is_local: bool):
+    def _print_project_info(project_info: ProjectInfo, is_local: bool) -> None:
         ind1: str = "    "
         print(ind1 + ("Local:" if is_local else "Remote:"))
         print(f"{ind1 * 2}Branch: {project_info.branch}")

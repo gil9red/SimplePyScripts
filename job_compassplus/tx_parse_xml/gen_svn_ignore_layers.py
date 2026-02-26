@@ -15,7 +15,7 @@ def process(
     include_glob: str,
     exclude_patterns: list[str],
     encoding: str = "utf-8",
-):
+) -> None:
     file_exclude: Path = root_path / "svn_layers_exclude.bat"
     file_restore: Path = root_path / "svn_layers_restore.bat"
 

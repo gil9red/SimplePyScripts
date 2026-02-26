@@ -23,7 +23,7 @@ from db import *
 
 
 # Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -54,7 +54,7 @@ def pixmap_from_base64(base64_text):
 
 
 class EmployeeInfo(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.photo = QLabel()
@@ -107,7 +107,7 @@ class EmployeeInfo(QWidget):
         for label in self.findChildren(QLabel):
             label.setTextInteractionFlags(Qt.TextBrowserInteraction)
 
-    def set_employee(self, employee):
+    def set_employee(self, employee) -> None:
         if not employee:
             self.photo.setPixmap(pixmap_from_base64(config.PERSON_PLACEHOLDER_PHOTO))
 
@@ -139,7 +139,7 @@ class EmployeeInfo(QWidget):
 
 # TODO: ввод с клавы при фокусе на таблицу меняет редактор фильтра
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Compass Plus Employees")
@@ -209,7 +209,7 @@ class MainWindow(QMainWindow):
 
         self.setStatusBar(QStatusBar())
 
-    def refill(self):
+    def refill(self) -> None:
         # TODO: можно в отдельный класс вынести
         dialog = QDialog()
         dialog.setWindowTitle("Auth and refill database")
@@ -267,7 +267,7 @@ start parsing for the collection of employees and populate the database."""
         self.fill_db(session)
         self.run_filter()
 
-    def fill_db(self, session):
+    def fill_db(self, session) -> None:
         page = 1
 
         rs = session.get(get_url(page))
@@ -324,7 +324,7 @@ start parsing for the collection of employees and populate the database."""
 
         progress.setValue(len(employee_list))
 
-    def _item_click(self, item):
+    def _item_click(self, item) -> None:
         employee = None
 
         if item and self.employees_table.rowCount() > 0:
@@ -333,7 +333,7 @@ start parsing for the collection of employees and populate the database."""
 
         self.employee_info.set_employee(employee)
 
-    def run_filter(self):
+    def run_filter(self) -> None:
         # TODO: лучше использовать модель
         # TODO: лучше использовать стандартный фильтр qt
         # TODO: поиграться с делегатами для красивого отображения описания + ссылки на гист
@@ -409,7 +409,7 @@ start parsing for the collection of employees and populate the database."""
             item = self.employees_table.item(0, 0)
             self.employees_table.setCurrentItem(item)
 
-    def read_settings(self):
+    def read_settings(self) -> None:
         ini = QSettings(config.SETTINGS_FILE_NAME, QSettings.IniFormat)
 
         state = ini.value("MainWindow_State")
@@ -420,7 +420,7 @@ start parsing for the collection of employees and populate the database."""
         if geometry:
             self.restoreGeometry(geometry)
 
-    def write_settings(self):
+    def write_settings(self) -> None:
         ini = QSettings(config.SETTINGS_FILE_NAME, QSettings.IniFormat)
         ini.setValue("MainWindow_State", self.saveState())
         ini.setValue("MainWindow_Geometry", self.saveGeometry())
@@ -434,7 +434,7 @@ start parsing for the collection of employees and populate the database."""
 
         return super().eventFilter(object, event)
 
-    def closeEvent(self, _):
+    def closeEvent(self, _) -> None:
         self.write_settings()
 
         QApplication.instance().quit()

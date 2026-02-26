@@ -315,7 +315,7 @@ def get_ads_list(branch_dir: Path | str) -> dict[str, list[ADS]]:
     return layer_module_by_ads_list
 
 
-def process(path: str):
+def process(path: str) -> None:
     indent1 = "    "
     indent2 = indent1 * 2
 

@@ -52,7 +52,7 @@ def backup(
     return file_name
 
 
-def do_backup_db():
+def do_backup_db() -> None:
     prefix: str = "[do_backup_db]"
 
     print(f"{prefix} Start")

@@ -98,7 +98,7 @@ def add_or_get_db(name: str, forced: bool = False) -> db.Person | None:
     return person
 
 
-def do_update_db(forced: bool = False):
+def do_update_db(forced: bool = False) -> None:
     prefix: str = "[do_update_db]"
 
     print(f"{prefix} Start")

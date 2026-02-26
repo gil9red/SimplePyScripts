@@ -25,7 +25,7 @@ def get_layer_version(path: Path) -> str:
     return m.group(1)
 
 
-def process(path: Path):
+def process(path: Path) -> None:
     print(get_layer_version(path))
 
 

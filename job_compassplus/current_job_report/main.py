@@ -64,7 +64,7 @@ def draw_text_to_bottom_right(
 
 
 # Для отлова всех исключений, которые в слотах Qt могут "затеряться" и привести к тихому падению
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -85,13 +85,13 @@ class CheckJobReportThread(QThread):
     about_ok = pyqtSignal(bool)
     about_log = pyqtSignal(str)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.last_text = None
         self.ok = None
 
-    def do_run(self):
+    def do_run(self) -> None:
         def _get_title(deviation_hours):
             ok = deviation_hours[0] != "-"
             return "Переработка" if ok else "Недоработка"
@@ -134,7 +134,7 @@ class CheckJobReportThread(QThread):
         self.ok = ok
         self.about_ok.emit(self.ok)
 
-    def run(self):
+    def run(self) -> None:
         while True:
             try:
                 # Между 08:00 и 20:00
@@ -150,7 +150,7 @@ class CheckJobReportThread(QThread):
 
 
 class JobReportWidget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.info = QLabel()
@@ -212,23 +212,23 @@ class JobReportWidget(QWidget):
 
         button_refresh.clicked.connect(self.refresh)
 
-    def set_text(self, text: str):
+    def set_text(self, text: str) -> None:
         print(text)
         self.info.setText(text)
 
-    def refresh(self):
+    def refresh(self) -> None:
         # Выполнение метода в отдельном потоке, а не в GUI
         Thread(target=self.thread.do_run, daemon=True).start()
 
-    def _set_ok(self, val: bool):
+    def _set_ok(self, val: bool) -> None:
         self.ok = val
         self.update()
 
-    def _add_log(self, val: str):
+    def _add_log(self, val: str) -> None:
         print(val)
         self.log.appendPlainText(val)
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         super().paintEvent(event)
 
         if self.ok is None:
@@ -248,7 +248,7 @@ if __name__ == "__main__":
 
     tray = QSystemTrayIcon(QIcon(TRAY_ICON))
 
-    def _on_about_log_or_ok(value: str | bool):
+    def _on_about_log_or_ok(value: str | bool) -> None:
         if isinstance(value, str):
             text = "🔄"
         else:

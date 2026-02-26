@@ -24,7 +24,7 @@ if not URL_NOTIFY:
     raise Exception("URL_NOTIFY environment variable is not set!")
 
 
-def parse(page: Page, url_portal: str = URL_PORTAL, url_notify: str = URL_NOTIFY):
+def parse(page: Page, url_portal: str = URL_PORTAL, url_notify: str = URL_NOTIFY) -> None:
     print(f"Opening page: {url_portal}")
     page.goto(url_portal)
 

@@ -52,7 +52,7 @@ log = get_logger(
 DIRS = [r"C:\DEV__TX", r"C:\DEV__OPTT", r"C:\DEV__RADIX"]
 
 
-def run(dirs: list[str | Path]):
+def run(dirs: list[str | Path]) -> None:
     print(f"\nStarted {dt.datetime.today()}")
 
     for dir_path in dirs:

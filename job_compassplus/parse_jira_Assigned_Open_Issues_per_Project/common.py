@@ -25,7 +25,7 @@ def get_table(assigned_open_issues_per_project: dict[str, int]) -> str:
     )
 
 
-def print_table(assigned_open_issues_per_project: dict[str, int]):
+def print_table(assigned_open_issues_per_project: dict[str, int]) -> None:
     print(get_table(assigned_open_issues_per_project))
     # PROJECT | Issues
     # --------+-------

@@ -134,10 +134,10 @@ class Employee(Base):
 
         return employee
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'<Employee("{self.name}" ({self.short_name}), job: {self.job}, department: {self.department})>'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__str__()
 
 
@@ -162,7 +162,7 @@ def get_session():
 db_session = get_session()
 
 
-def exists(employee_id):
+def exists(employee_id) -> bool:
     return (
         db_session.query(Employee).filter(Employee.id == employee_id).scalar()
         is not None
