@@ -18,7 +18,7 @@ from PIL import ImageGrab
 target_array = None
 
 
-def go():
+def go() -> None:
     global target_array
     while True:
         if target_array is not None:

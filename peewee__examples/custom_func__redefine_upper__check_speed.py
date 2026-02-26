@@ -85,7 +85,7 @@ print(f"Elapsed {default_timer() - t:.3f} secs")
 print()
 
 
-def run_test():
+def run_test() -> None:
     elapsed = timeit(
         stmt="Stocks.select().where(fn.UPPER(Stocks.trans).ilike(fn.UPPER('%SELL%'))).count()",
         globals=dict(Stocks=Stocks, fn=fn),

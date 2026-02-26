@@ -36,7 +36,7 @@ def pixelate(image, pixel_size=9, draw_margin=True):
     return image
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -52,7 +52,7 @@ WINDOW_TITLE = "Pixelate"
 
 
 class MainWindow(Qt.QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle(WINDOW_TITLE)
@@ -125,7 +125,7 @@ class MainWindow(Qt.QWidget):
 
         self._do_pixelate()
 
-    def load(self):
+    def load(self) -> None:
         image_filters = "Images (*.jpg *.jpeg *.png *.bmp)"
         self.file_name = Qt.QFileDialog.getOpenFileName(
             self, "Load image", self.last_load_path, image_filters
@@ -138,7 +138,7 @@ class MainWindow(Qt.QWidget):
 
         self._do_pixelate()
 
-    def save_as(self):
+    def save_as(self) -> None:
         image_filters = "Images (*.jpg *.jpeg *.png *.bmp)"
 
         # C:\Images\img.png -> C:\Images\img_pixelate.png
@@ -152,7 +152,7 @@ class MainWindow(Qt.QWidget):
 
         self.image_result.save(file_name)
 
-    def _do_pixelate(self):
+    def _do_pixelate(self) -> None:
         # Виджеты будут доступны только если стоит флаг на Result и картинка загружена
         ok = self.rb_result.isChecked() and self.image_source is not None
         self.pb_save_as.setEnabled(ok)
@@ -169,7 +169,7 @@ class MainWindow(Qt.QWidget):
 
         self.show_result()
 
-    def show_result(self):
+    def show_result(self) -> None:
         image_result = self.image_result if self.rb_result.isChecked() else self.image_source
         if not image_result:
             return
@@ -186,7 +186,7 @@ class MainWindow(Qt.QWidget):
         title = f"{WINDOW_TITLE}. {width}x{height} ({size.width()}x{size.height()}). {self.file_name}"
         self.setWindowTitle(title)
 
-    def resizeEvent(self, e):
+    def resizeEvent(self, e) -> None:
         super().resizeEvent(e)
 
         self.show_result()

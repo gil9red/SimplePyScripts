@@ -8,7 +8,7 @@ import os.path
 from OpenSSL import crypto
 
 
-def save_pem(p12_file_name, p12_password, pem_file_name=None):
+def save_pem(p12_file_name, p12_password, pem_file_name=None) -> None:
     """Функция из p12 вытаскивает pem. Если pem_file_name не указан,
     сохраняется в той же папке, что и p12_file_name."""
 

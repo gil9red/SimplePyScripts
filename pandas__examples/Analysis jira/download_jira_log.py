@@ -49,14 +49,14 @@ def clear_jira_xml(xml_content: bytes) -> bytes:
 
     root = BeautifulSoup(xml_content, "html.parser")
 
-    def mask_tag_content(css_selector, attr=None):
+    def mask_tag_content(css_selector, attr=None) -> None:
         for x in root.select(css_selector):
             x.string = "..."
 
             if attr:
                 x[attr] = "..."
 
-    def delete_tag(css_selector):
+    def delete_tag(css_selector) -> None:
         for x in root.select(css_selector):
             x.decompose()
 

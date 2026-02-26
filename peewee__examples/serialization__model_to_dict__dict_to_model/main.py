@@ -24,7 +24,7 @@ class Person(BaseModel):
     name = CharField()
     birthday = DateField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"Person(id={self.id} name={self.name!r} birthday={self.birthday} "
             f'pets={", ".join(p.name for p in self.pets)!r})'
@@ -36,7 +36,7 @@ class Pet(BaseModel):
     name = CharField()
     animal_type = CharField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Pet(id={self.id} name={self.name!r} owner={self.owner.name!r} self.animal_type={self.animal_type!r})"
 
 

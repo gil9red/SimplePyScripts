@@ -23,7 +23,7 @@ class Info(Model):
         database = db
 
     @classmethod
-    def fill(cls):
+    def fill(cls) -> None:
         count = cls.select().count()
         for i in range(5):
             cls.create(
@@ -32,12 +32,12 @@ class Info(Model):
             )
 
     @classmethod
-    def print(cls):
+    def print(cls) -> None:
         for info in cls.select():
             print(info)
 
     @classmethod
-    def print_from(cls, file_name: str | Path):
+    def print_from(cls, file_name: str | Path) -> None:
         connection = sqlite3.connect(file_name)
         try:
             for info in connection.execute(f"SELECT * FROM {cls._meta.table_name}"):
@@ -45,14 +45,14 @@ class Info(Model):
         except Exception as e:
             print(f"[#] {e}")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Info<#{self.id} first_name={self.first_name!r} second_name={self.second_name!r}>"
 
 
 def run_test(
     backup: Callable,
     file_name_backup: Path | str,
-):
+) -> None:
     print("[db backup] Print:")
     Info.print_from(file_name_backup)
     print()

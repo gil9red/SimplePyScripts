@@ -33,7 +33,7 @@ DB_FILE_NAME = str(DIR / "db.sqlite")
 DIR_BACKUP = DIR / "backup"
 
 
-def db_create_backup(backup_dir=DIR_BACKUP):
+def db_create_backup(backup_dir=DIR_BACKUP) -> None:
     backup_dir.mkdir(parents=True, exist_ok=True)
 
     file_name = str(dt.datetime.today().date()) + ".sqlite"
@@ -73,7 +73,7 @@ class BaseModel(Model):
         return sorted(cls.__subclasses__(), key=lambda x: x.__name__)
 
     @classmethod
-    def print_count_of_tables(cls):
+    def print_count_of_tables(cls) -> None:
         items = []
         for sub_cls in cls.get_inherited_models():
             name = sub_cls.__name__
@@ -89,7 +89,7 @@ class BaseModel(Model):
             query = query.filter(*filters)
         return query.count()
 
-    def __str__(self):
+    def __str__(self) -> str:
         fields = []
         for k, field in self._meta.fields.items():
             v = getattr(self, k)

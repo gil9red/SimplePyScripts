@@ -22,7 +22,7 @@ class Game(BaseModel):
     def get_genres(self) -> list["Genre"]:
         return [link.genre for link in self.links_to_genres]
 
-    def append_genres(self, *genres: list["Genre"]):
+    def append_genres(self, *genres: list["Genre"]) -> None:
         for genre in genres:
             GameToGenre.get_or_create(game=self, genre=genre)
 

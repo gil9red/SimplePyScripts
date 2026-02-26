@@ -8,7 +8,7 @@ from pathlib import Path
 from peewee import SqliteDatabase
 
 
-def backup(db: SqliteDatabase, file_name: Path | str):
+def backup(db: SqliteDatabase, file_name: Path | str) -> None:
     Path(file_name).unlink(missing_ok=True)
 
     db.connection().execute("VACUUM INTO ?", (str(file_name),))

@@ -27,7 +27,7 @@ def play(file_name: str):
     player.setPlaylist(playlist)
     player.play()
 
-    def tick():
+    def tick() -> None:
         if player.state() == QMediaPlayer.StoppedState:
             app.quit()
 
@@ -38,7 +38,7 @@ def play(file_name: str):
     app.exec()
 
 
-def play_async(file_name: str):
+def play_async(file_name: str) -> None:
     # from threading import Thread
     # thread = Thread(target=play, args=(file_name,))
     # thread.start()

@@ -15,7 +15,7 @@ import numpy
 
 def draw_overlay(
     img: numpy.ndarray, text: str, color_text=(255, 255, 255), max_text_height_percent=5
-):
+) -> None:
     h, w, _ = img.shape
 
     max_text_height = (h / 100) * max_text_height_percent
@@ -46,7 +46,7 @@ def draw_overlay_current_datetime(
     datetime_fmt="%d/%m/%y %H:%M:%S",
     color_text=(255, 255, 255),
     max_text_height_percent=5,
-):
+) -> None:
     text = dt.datetime.now().strftime(datetime_fmt)
     draw_overlay(img, text, color_text, max_text_height_percent)
 

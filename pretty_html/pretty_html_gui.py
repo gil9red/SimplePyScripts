@@ -64,7 +64,7 @@ except:
 from pretty_html import pretty_html
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -77,7 +77,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle(path_split(__file__)[1])
@@ -118,7 +118,7 @@ class MainWindow(QWidget):
 
         self.setLayout(layout)
 
-    def input_text_changed(self):
+    def input_text_changed(self) -> None:
         self.label_error.clear()
         self.button_detail_error.hide()
 
@@ -143,7 +143,7 @@ class MainWindow(QWidget):
 
             self.label_error.setText("Error: " + self.last_error_message)
 
-    def show_detail_error_message(self):
+    def show_detail_error_message(self) -> None:
         message = self.last_error_message + "\n\n" + self.last_detail_error_message
 
         mb = QErrorMessage()

@@ -21,7 +21,7 @@ output = Phonon.AudioOutput(Phonon.MusicCategory)
 Phonon.createPath(audio, output)
 
 
-def play(file_name):
+def play(file_name) -> None:
     audio.setCurrentSource(Phonon.MediaSource(file_name))
     audio.play()
 

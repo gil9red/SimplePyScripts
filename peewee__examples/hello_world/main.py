@@ -19,7 +19,7 @@ class Info(Model):
     class Meta:
         database = db
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Info<#{self.id} first_name={self.first_name!r} second_name={self.second_name!r} state={self.state}>"
 
 

@@ -28,7 +28,7 @@ class Diary(BaseModel):
     created_date = DateTimeField(default=dt.datetime.now)
 
     @staticmethod
-    def print_table(search_text: str = None):
+    def print_table(search_text: str = None) -> None:
         """Print all diaries"""
 
         header_fmt = "{:<3}  | {:<50} | {:<19}"
@@ -51,7 +51,7 @@ class Diary(BaseModel):
 
         print()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"Diary<"
             f"#{self.id} "
@@ -71,7 +71,7 @@ if not Diary.select().count():
     Diary.create(content="The quick brown fox jumps over the lazy dog.")
 
 
-def add_diary():
+def add_diary() -> None:
     """Add diary"""
 
     data = input("Enter your diary: ").strip()
@@ -80,7 +80,7 @@ def add_diary():
         print("Saved successfully.")
 
 
-def view_diaries(search_query=None):
+def view_diaries(search_query=None) -> None:
     """View previous diaries"""
 
     query = Diary.select().order_by(Diary.created_date.desc())
@@ -105,7 +105,7 @@ def view_diaries(search_query=None):
             break
 
 
-def search_diaries():
+def search_diaries() -> None:
     """Search diaries"""
 
     view_diaries(input("Search query: "))
@@ -121,7 +121,7 @@ MENU = dict(
 )
 
 
-def menu_loop():
+def menu_loop() -> None:
     choice = None
     while choice != "q":
         for key, value in MENU.items():

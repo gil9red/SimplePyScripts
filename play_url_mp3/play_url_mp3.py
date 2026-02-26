@@ -30,7 +30,7 @@ if __name__ == "__main__":
         "https://www.dropbox.com/sh/a4bwzhn0s584u73/AACgDRii1rtCmoL3mXEwlXDga/CallYourName.mp3?dl=1"
     )
 
-    def play():
+    def play() -> None:
         url = line_edit_url.text()
 
         # Выдираем из url имя файла

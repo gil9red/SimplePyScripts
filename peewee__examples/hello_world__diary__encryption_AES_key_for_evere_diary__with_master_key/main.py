@@ -83,7 +83,7 @@ class Diary(BaseModel):
             return f"ERROR: {e}"
 
     @staticmethod
-    def print_table(master_key: str = ENCRYPT_MASTER_KEY):
+    def print_table(master_key: str = ENCRYPT_MASTER_KEY) -> None:
         """Print all diaries"""
 
         header_fmt = "{:<3}  | {:<50} | {:<50} | {:<50} | {:<50} | {:<19}"
@@ -130,7 +130,7 @@ if not Diary.select().count():
     )
 
 
-def add_diary(master_key: str = ENCRYPT_MASTER_KEY):
+def add_diary(master_key: str = ENCRYPT_MASTER_KEY) -> None:
     """Add diary"""
 
     data = input("Enter your diary: ").strip()
@@ -140,7 +140,7 @@ def add_diary(master_key: str = ENCRYPT_MASTER_KEY):
         print()
 
 
-def view_diaries(master_key: str = ENCRYPT_MASTER_KEY):
+def view_diaries(master_key: str = ENCRYPT_MASTER_KEY) -> None:
     """View previous diaries"""
 
     query = Diary.select().order_by(Diary.created_date.desc())
@@ -170,7 +170,7 @@ MENU = {
 }
 
 
-def menu_loop():
+def menu_loop() -> None:
     choice = None
     while choice != "q":
         for key, value in MENU.items():

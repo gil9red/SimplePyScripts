@@ -10,7 +10,7 @@ import time
 import mp3play
 
 
-def play(filename):
+def play(filename) -> None:
     clip = mp3play.load(filename)
     clip.play()
 

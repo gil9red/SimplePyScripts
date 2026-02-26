@@ -16,12 +16,12 @@ from PyQt5.QtGui import QImage, QPixmap
 class ThreadOpenCV(QThread):
     changePixmap = pyqtSignal(QImage)
 
-    def __init__(self, source):
+    def __init__(self, source) -> None:
         super().__init__()
 
         self.source = source
 
-    def run(self):
+    def run(self) -> None:
         # SOURCE: https://stackoverflow.com/a/44404713/5909792
         cap = cv2.VideoCapture(self.source)
         while True:
@@ -41,7 +41,7 @@ class ThreadOpenCV(QThread):
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.label_video = QLabel()
@@ -59,10 +59,10 @@ class Widget(QWidget):
 
         self.setLayout(main_layout)
 
-    def playVideo(self):
+    def playVideo(self) -> None:
         self.thread.start()
 
-    def setImage(self, image):
+    def setImage(self, image) -> None:
         self.label_video.setPixmap(QPixmap.fromImage(image))
 
 

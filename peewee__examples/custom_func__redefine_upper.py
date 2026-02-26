@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from peewee import SqliteDatabase
 
 
-def run_sql(connect):
+def run_sql(connect) -> None:
     print(connect.execute("""SELECT "ы", UPPER("ы") """).fetchone())
     print(connect.execute("""SELECT "s", UPPER("s") """).fetchone())
     print(connect.execute("""SELECT 1 WHERE UPPER("ы") LIKE UPPER("Ы") """).fetchone())
@@ -15,7 +15,7 @@ def run_sql(connect):
     print(connect.execute("""SELECT 1 WHERE "s" LIKE "S" """).fetchone())
 
 
-def db_func():
+def db_func() -> None:
     print("[db_func]")
 
     db = SqliteDatabase(":memory:")
@@ -50,7 +50,7 @@ def db_func():
         """
 
 
-def db_create_function():
+def db_create_function() -> None:
     print("[db_create_function]")
 
     db = SqliteDatabase(":memory:")

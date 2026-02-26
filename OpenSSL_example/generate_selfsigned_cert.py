@@ -22,7 +22,7 @@ def cert_gen(
     validity_end_in_seconds=10 * 365 * 24 * 60 * 60,
     key_file="key.pem",
     cert_file="cert.pem",
-):
+) -> None:
     # Create a key pair
     k = crypto.PKey()
     k.generate_key(crypto.TYPE_RSA, 4096)

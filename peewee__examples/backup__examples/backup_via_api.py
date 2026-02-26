@@ -10,7 +10,7 @@ from pathlib import Path
 from peewee import SqliteDatabase
 
 
-def backup(db: SqliteDatabase, file_name: Path | str):
+def backup(db: SqliteDatabase, file_name: Path | str) -> None:
     dst = sqlite3.connect(file_name)
     db.connection().backup(dst)
     dst.close()

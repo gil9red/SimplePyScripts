@@ -61,7 +61,7 @@ class BaseModel(Model):
         return sorted(cls.__subclasses__(), key=lambda x: x.__name__)
 
     @classmethod
-    def print_count_of_tables(cls):
+    def print_count_of_tables(cls) -> None:
         items = []
         for sub_cls in cls.get_inherited_models():
             name = sub_cls.__name__
@@ -80,7 +80,7 @@ class BaseModel(Model):
     def to_dict(self) -> dict[str, Any]:
         return model_to_dict(self, recurse=False)
 
-    def __str__(self):
+    def __str__(self) -> str:
         fields = []
         for k, field in self._meta.fields.items():
             v = getattr(self, k)

@@ -19,7 +19,7 @@ class AuthenticationError(Exception):
 
 
 class CryptoAES:
-    def __init__(self, key: (str, bytes)):
+    def __init__(self, key: (str, bytes)) -> None:
         if isinstance(key, str):
             key = key.encode("utf-8")
 

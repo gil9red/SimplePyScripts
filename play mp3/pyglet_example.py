@@ -15,7 +15,7 @@ import pyglet
 # pyglet.app.run()
 
 
-def play(file_name):
+def play(file_name) -> None:
     dll_file_name = os.path.join(os.path.dirname(__file__), "avbin")
     pyglet.lib.load_library(dll_file_name)
 
@@ -25,7 +25,7 @@ def play(file_name):
 
     player.play()
 
-    def update(dt):
+    def update(dt) -> None:
         if not player.playing:
             # Отпишем функцию, иначе при повторном вызове, иначе
             # будет двойной вызов при следующем воспроизведении

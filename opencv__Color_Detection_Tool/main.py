@@ -33,7 +33,7 @@ import cv2
 import numpy as np
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -90,7 +90,7 @@ def numpy_array_to_QImage(numpy_array: np.ndarray) -> QImage | None:
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         uic.loadUi("mainwidget.ui", self)
@@ -174,7 +174,7 @@ class MainWindow(QWidget):
 
         self.refresh_HSV()
 
-    def show_result(self):
+    def show_result(self) -> None:
         if not self.result_img:
             return
 
@@ -184,12 +184,12 @@ class MainWindow(QWidget):
         )
         self.lbView.setPixmap(pixmap)
 
-    def _update_pen_color(self):
+    def _update_pen_color(self) -> None:
         palette = self.pbPenColor.palette()
         palette.setColor(QPalette.Button, self.pen_color)
         self.pbPenColor.setPalette(palette)
 
-    def _choose_color(self):
+    def _choose_color(self) -> None:
         color = QColorDialog.getColor(self.pen_color)
         if not color.isValid():
             return
@@ -199,7 +199,7 @@ class MainWindow(QWidget):
         self._update_pen_color()
         self.refresh_HSV()
 
-    def _draw_contours(self, result_img, contours):
+    def _draw_contours(self, result_img, contours) -> None:
         line_size = self.sbPenWidth.value()
         line_type = self.cbPenStyle.currentData()
         line_color = self.pen_color
@@ -213,7 +213,7 @@ class MainWindow(QWidget):
 
         p.end()
 
-    def refresh_HSV(self):
+    def refresh_HSV(self) -> None:
         hue_from = self.slHueFrom.value()
         hue_to = max(hue_from, self.slHueTo.value())
 
@@ -302,7 +302,7 @@ class MainWindow(QWidget):
 
         self.show_result()
 
-    def save_settings(self):
+    def save_settings(self) -> None:
         settings = QSettings(CONFIG_FILE_NAME, QSettings.IniFormat)
 
         settings.setValue(self.objectName(), self.saveGeometry())
@@ -337,7 +337,7 @@ class MainWindow(QWidget):
 
         settings.setValue("lastLoadPath", self.last_load_path)
 
-    def load_settings(self):
+    def load_settings(self) -> None:
         settings = QSettings(CONFIG_FILE_NAME, QSettings.IniFormat)
 
         geometry = settings.value(self.objectName())
@@ -386,12 +386,12 @@ class MainWindow(QWidget):
                 sp.setMaximum(w.maximum())
                 sp.setValue(w.value())
 
-    def resizeEvent(self, e):
+    def resizeEvent(self, e) -> None:
         super().resizeEvent(e)
 
         self.show_result()
 
-    def closeEvent(self, e):
+    def closeEvent(self, e) -> None:
         self.save_settings()
 
         super().closeEvent(e)
