@@ -60,7 +60,7 @@ Impossible
 import time
 
 
-def work(s, a, b):
+def work(s, a, b) -> None:
     t = time.clock()
 
     count = 0

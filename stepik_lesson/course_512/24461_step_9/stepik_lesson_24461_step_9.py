@@ -48,11 +48,11 @@ buf.get_current_part() # вернуть [1]
 
 
 class Buffer:
-    def __init__(self, part_size=5):
+    def __init__(self, part_size=5) -> None:
         self._nums = list()
         self._part_size = part_size
 
-    def add(self, *a):
+    def add(self, *a) -> None:
         # добавить следующую часть последовательности
         self._nums += a
 

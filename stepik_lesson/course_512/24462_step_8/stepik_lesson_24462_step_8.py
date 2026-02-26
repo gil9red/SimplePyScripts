@@ -38,19 +38,19 @@ class ExtendedStack(list):
 
 
 class ExtendedStack(list):
-    def sum(self):
+    def sum(self) -> None:
         # операция сложения
         self.append(self.pop() + self.pop())
 
-    def sub(self):
+    def sub(self) -> None:
         # операция вычитания
         self.append(self.pop() - self.pop())
 
-    def mul(self):
+    def mul(self) -> None:
         # операция умножения
         self.append(self.pop() * self.pop())
 
-    def div(self):
+    def div(self) -> None:
         # операция целочисленного деления
         self.append(self.pop() // self.pop())
 

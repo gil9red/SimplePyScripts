@@ -112,11 +112,11 @@ if __name__ == "__main__":
     # поэтому можно этот класс заменить словарем вида { 'name': '...', 'parents': [...] }
     # И, соответственно, функцию has_parent вынести из класса и поменять, чтобы она работала с словарем.
     class Class:
-        def __init__(self, name):
+        def __init__(self, name) -> None:
             self.name = name
             self.list_parent_class = list()
 
-        def has_parent(self, name):
+        def has_parent(self, name) -> bool:
             # Поиск предка в текущем классе
             for parent in self.list_parent_class:
                 if parent.name == name:
@@ -129,12 +129,12 @@ if __name__ == "__main__":
 
             return False
 
-        def __str__(self):
+        def __str__(self) -> str:
             return (
                 f'Class <"{self.name}": {[cls.name for cls in self.list_parent_class]}>'
             )
 
-        def __repr__(self):
+        def __repr__(self) -> str:
             return self.__str__()
 
     from collections import OrderedDict, defaultdict

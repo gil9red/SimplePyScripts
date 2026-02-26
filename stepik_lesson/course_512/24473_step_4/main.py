@@ -47,7 +47,7 @@ if __name__ == "__main__":
     class_list = json.loads(class_list)
 
     class Class:
-        def __init__(self, name):
+        def __init__(self, name) -> None:
             self.name = name
             self.children = list()
 
@@ -61,10 +61,10 @@ if __name__ == "__main__":
 
             return children
 
-        def __str__(self):
+        def __str__(self) -> str:
             return f'<Class "{self.name}": {[cls.name for cls in self.children]}>'
 
-        def __repr__(self):
+        def __repr__(self) -> str:
             return self.__str__()
 
     dict_class_by_name_dict = {cls["name"]: cls for cls in class_list}

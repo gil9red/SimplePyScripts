@@ -31,12 +31,12 @@ import time
 
 
 class Loggable:
-    def log(self, msg):
+    def log(self, msg) -> None:
         print(str(time.ctime()) + ": " + str(msg))
 
 
 class LoggableList(list, Loggable):
-    def append(self, x):
+    def append(self, x) -> None:
         self.log(x)
         super().append(x)
 

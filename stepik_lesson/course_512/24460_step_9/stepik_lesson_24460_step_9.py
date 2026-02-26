@@ -107,7 +107,7 @@ foo
 
 
 class Namespace:
-    def __init__(self, name, parent=None):
+    def __init__(self, name, parent=None) -> None:
         self.name = name
         self.parent = parent
 
@@ -122,7 +122,7 @@ class Namespace:
 
         return None
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<Namespace "{self.name}", parent: "{self.parent.name if self.parent else "None"}">'
 
 

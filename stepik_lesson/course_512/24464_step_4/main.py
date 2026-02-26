@@ -104,7 +104,7 @@ class multifilter:
         # допускает элемент, если его допускают все функции (neg == 0)
         return neg == 0
 
-    def __init__(self, iterable, *funcs, judge=judge_any):
+    def __init__(self, iterable, *funcs, judge=judge_any) -> None:
         # iterable - исходная последовательность
         # funcs - допускающие функции
         # judge - решающая функция

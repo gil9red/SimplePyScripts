@@ -43,7 +43,7 @@ if __name__ == "__main__":
     # Ключом является цвет, значением -- сумма ценности
     color_by_price_dict = defaultdict(int)
 
-    def work(element, level=1):
+    def work(element, level=1) -> None:
         """Рекурсивная функция для перебора всех элементов и подсчета их ценности."""
 
         # Плюсуем ценность
