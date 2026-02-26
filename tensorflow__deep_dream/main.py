@@ -382,7 +382,7 @@ def render_deepdream_from_layer_by_unit(
     return name
 
 
-def main():
+def main() -> None:
     #
     # # PRINT: layer by units
     # t_obj_layers = [x.split('/')[1] for x in layers]

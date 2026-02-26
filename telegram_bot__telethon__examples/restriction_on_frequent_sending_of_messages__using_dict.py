@@ -19,12 +19,12 @@ CHAT_BY_DATETIME = dict()
 
 
 @bot.message_handler(commands=["help", "start"])
-def on_start(message: telebot.types.Message):
+def on_start(message: telebot.types.Message) -> None:
     bot.send_message(message.chat.id, "Write something")
 
 
 @bot.message_handler(func=lambda message: True)
-def on_request(message: telebot.types.Message):
+def on_request(message: telebot.types.Message) -> None:
     text = "Получено!"
     need_seconds = 50
     current_time = dt.datetime.now()

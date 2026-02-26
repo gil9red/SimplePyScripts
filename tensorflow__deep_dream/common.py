@@ -26,7 +26,7 @@ IMG_NOISE = np.random.uniform(size=(224, 224, 3)) + 100.0
 # TODO: перенести сюда вспомогательные методы из основного скрипта
 
 
-def download_tensorflow_model(data_dir="data/"):
+def download_tensorflow_model(data_dir="data/") -> None:
     if not os.path.exists(data_dir):
         os.mkdir(data_dir)
 
@@ -53,13 +53,13 @@ def download_tensorflow_model(data_dir="data/"):
         print("Finish extract")
 
 
-def showarray(a):
+def showarray(a) -> None:
     a = np.uint8(np.clip(a, 0, 1) * 255)
     plt.imshow(a)
     plt.show()
 
 
-def savearray(a, file_name: io.BytesIO | str):
+def savearray(a, file_name: io.BytesIO | str) -> None:
     print("Saving to:", file_name)
 
     a = np.uint8(np.clip(a, 0, 1) * 255)

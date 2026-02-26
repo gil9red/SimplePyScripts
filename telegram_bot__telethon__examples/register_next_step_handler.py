@@ -20,14 +20,14 @@ data_year = {
 
 
 # SOURCE: https://ru.stackoverflow.com/questions/1264757
-def func(message):
+def func(message) -> None:
     text = message.text
     result = data_year.get(text, "В этот день праздников нет. Иди работать!")
     bot.send_message(message.from_user.id, result)
 
 
 @bot.message_handler(content_types=["text"])
-def get_text_messages(message):
+def get_text_messages(message) -> None:
     data = bot.send_message(
         message.from_user.id, "Введите дату в формате Д.ММ и нажмите ENTER"
     )

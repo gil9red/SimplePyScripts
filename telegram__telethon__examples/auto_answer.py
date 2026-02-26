@@ -17,7 +17,7 @@ from config import API_ID, API_HASH
 with TelegramClient("my", API_ID, API_HASH) as client:
 
     @client.on(events.NewMessage(from_users=[321346650, 257199860]))
-    async def handler(event):
+    async def handler(event) -> None:
         print(event)
         await event.reply("Сейчас не могу ответить 😔")
 

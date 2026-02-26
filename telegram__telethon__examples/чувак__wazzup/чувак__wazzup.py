@@ -27,7 +27,7 @@ with TelegramClient("../my", API_ID, API_HASH) as client:
     me_id = client.get_me().id
 
     @client.on(events.NewMessage(pattern="(?i).*чу+ва+к|wa+zz+u+p"))
-    async def handler(event):
+    async def handler(event) -> None:
         print(event.stringify())
 
         if event.chat_id == me_id or event.message.from_id == me_id:

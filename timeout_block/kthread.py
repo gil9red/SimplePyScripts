@@ -14,17 +14,17 @@ class Kill(Exception):
 
 
 class KThread(Thread):
-    def __init__(self, *args, **keywords):
+    def __init__(self, *args, **keywords) -> None:
         Thread.__init__(self, *args, **keywords)
         self.killed = False
 
-    def start(self):
+    def start(self) -> None:
         """Start the thread."""
         self.__run_backup = self.run
         self.run = self.__run  # Force the Thread to install our trace.
         Thread.start(self)
 
-    def __run(self):
+    def __run(self) -> None:
         """Hacked run function, which installs the
         trace."""
         sys.settrace(self.globaltrace)
@@ -47,14 +47,14 @@ class KThread(Thread):
                 raise Kill()
         return self.localtrace
 
-    def kill(self):
+    def kill(self) -> None:
         self.killed = True
 
 
 if __name__ == "__main__":
     import time
 
-    def unlimited_wait():
+    def unlimited_wait() -> None:
         i = 0
 
         while True:

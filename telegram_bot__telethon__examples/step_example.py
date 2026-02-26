@@ -19,7 +19,7 @@ user_dict = dict()
 
 
 class User:
-    def __init__(self, name):
+    def __init__(self, name) -> None:
         self.name = name
         self.age = None
         self.sex = None
@@ -27,7 +27,7 @@ class User:
 
 # Handle '/start' and '/help'
 @bot.message_handler(commands=["help", "start"])
-def send_welcome(message):
+def send_welcome(message) -> None:
     msg = bot.reply_to(
         message,
         """\
@@ -38,7 +38,7 @@ What's your name?
     bot.register_next_step_handler(msg, process_name_step)
 
 
-def process_name_step(message):
+def process_name_step(message) -> None:
     try:
         chat_id = message.chat.id
         name = message.text
@@ -50,7 +50,7 @@ def process_name_step(message):
         bot.reply_to(message, "oooops")
 
 
-def process_age_step(message):
+def process_age_step(message) -> None:
     try:
         chat_id = message.chat.id
         age = message.text

@@ -27,7 +27,7 @@ def timeout(seconds=None, raise_timeout=False):
 
 
 @timeout(seconds=3)
-def unlimited_wait():
+def unlimited_wait() -> None:
     i = 0
 
     while True:
@@ -37,7 +37,7 @@ def unlimited_wait():
 
 
 @timeout(seconds=3, raise_timeout=True)
-def unlimited_wait2():
+def unlimited_wait2() -> None:
     i = 0
 
     while True:

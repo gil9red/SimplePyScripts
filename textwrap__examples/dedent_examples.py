@@ -17,7 +17,7 @@ print(repr(dedent(text)))
 print()
 
 
-def foo():
+def foo() -> None:
     """
     Съешь ещё этих мягких французских
     булок, да выпей же чаю
