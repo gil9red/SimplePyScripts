@@ -21,7 +21,7 @@ NEED_WINDOW_DESKTOP_NUMBER = 2
 
 
 def get_hwnd_for_pid(pid: int):
-    def callback(hwnd: int, hwnds: list):
+    def callback(hwnd: int, hwnds: list) -> bool:
         if win32gui.IsWindowVisible(hwnd) and win32gui.IsWindowEnabled(hwnd):
             _, found_pid = win32process.GetWindowThreadProcessId(hwnd)
             if found_pid == pid:

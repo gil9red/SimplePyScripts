@@ -26,14 +26,14 @@ class ProxyRequests:
     ]
     EMPTY_WARN = "Proxy Pool has been emptied"
 
-    def __init__(self, url: str, timeout=5):
+    def __init__(self, url: str, timeout=5) -> None:
         self.url = url
         self.proxies = []
         self.used_proxy = None
         self.timeout = timeout
         self._acquire_sockets()
 
-    def _acquire_sockets(self):
+    def _acquire_sockets(self) -> None:
         rs = requests.get("https://www.sslproxies.org/")
         matches = findall(r"<td>\d+\.\d+\.\d+\.\d+</td><td>\d+</td>", rs.text)
         revised = [m.replace("<td>", "") for m in matches]

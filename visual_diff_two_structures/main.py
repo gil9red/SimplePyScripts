@@ -16,7 +16,7 @@ from ui_main_window import Ui_MainWindow
 from utils import get_filling_in_missing, xml_to_flatten_dict, json_to_flatten_dict
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -106,7 +106,7 @@ JSON_STR = """
 # TODO: ... или еще и цветом?
 # TODO: Надо бы и поле заголовка выделить
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.ui = Ui_MainWindow()
@@ -117,7 +117,7 @@ class MainWindow(QMainWindow):
         self.ui.push_button_diff.clicked.connect(self._do_diff)
         self.ui.cb_only_diff.clicked.connect(self._show_only_diff)
 
-    def _add_row_to_table(self, *values):
+    def _add_row_to_table(self, *values) -> None:
         name1, value1, value2, name2 = values
         no_match = name1 != name2 or value1 != value2
 
@@ -144,7 +144,7 @@ class MainWindow(QMainWindow):
 
             self.ui.table_widget.setItem(row, i, item)
 
-    def _do_diff(self):
+    def _do_diff(self) -> None:
         source_1 = self.ui.edit_source_1.toPlainText()
         source_2 = self.ui.edit_source_2.toPlainText()
 
@@ -178,7 +178,7 @@ class MainWindow(QMainWindow):
 
         self._show_only_diff(self.ui.cb_only_diff.isChecked())
 
-    def _show_only_diff(self, checked: bool):
+    def _show_only_diff(self, checked: bool) -> None:
         for row in range(self.ui.table_widget.rowCount()):
             no_match = self.ui.table_widget.item(row, 0).data(Qt.ItemDataRole.UserRole)
 

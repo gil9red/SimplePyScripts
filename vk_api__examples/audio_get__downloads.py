@@ -37,7 +37,7 @@ from root_common import get_vk_session
 # TODO: возможность выбирать диапазоны индексов скачиваемых песен
 
 
-def make_pretty_id3(audio_file_name: str, performer: str, title: str):
+def make_pretty_id3(audio_file_name: str, performer: str, title: str) -> None:
     """
     Функция удаляет из тега фреймы (COMM, PRIV, ...), добавляет (а если есть переписывает)
     фреймы TPE1 (имя группы) и TIT2 (название песни)

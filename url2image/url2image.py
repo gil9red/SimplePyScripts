@@ -22,7 +22,7 @@ QNetworkProxyFactory.setUseSystemConfiguration(True)
 
 
 class WebPage(QWebPage):
-    def userAgentForUrl(self, url):
+    def userAgentForUrl(self, url) -> str:
         return (
             "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"
         )

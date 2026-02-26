@@ -7,12 +7,12 @@ __author__ = "ipetrash"
 from common import get_jobs_for_run, client
 
 
-def run_job(job):
+def run_job(job) -> None:
     print(f"Run {job.full_name!r}")
     job.build()
 
 
-def run_in_view(view_name: str):
+def run_in_view(view_name: str) -> None:
     for job in client.views.get(view_name):
         run_job(job)
 

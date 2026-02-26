@@ -18,25 +18,25 @@ from watchdog.events import FileSystemEventHandler
 # NOTE: It will probably be more functional to inherit
 #       from RegexMatchingEventHandler or PatternMatchingEventHandler
 class CustomEventHandler(FileSystemEventHandler):
-    def on_moved(self, event):
+    def on_moved(self, event) -> None:
         super().on_moved(event)
 
         what = "directory" if event.is_directory else "file"
         print(f"Moved {what}: from {event.src_path} to {event.dest_path}")
 
-    def on_created(self, event):
+    def on_created(self, event) -> None:
         super().on_created(event)
 
         what = "directory" if event.is_directory else "file"
         print(f"Created {what}: {event.src_path}")
 
-    def on_deleted(self, event):
+    def on_deleted(self, event) -> None:
         super().on_deleted(event)
 
         what = "directory" if event.is_directory else "file"
         print(f"Deleted {what}: {event.src_path}")
 
-    def on_modified(self, event):
+    def on_modified(self, event) -> None:
         super().on_modified(event)
 
         what = "directory" if event.is_directory else "file"

@@ -24,7 +24,7 @@ def get_current_datetime() -> str:
     return dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
-def update_tasks(tasks_el: ET.Element):
+def update_tasks(tasks_el: ET.Element) -> None:
     tasks_el.attrib["modified"] = get_current_datetime()
 
     tasks = tasks_el.findall("key")
@@ -38,7 +38,7 @@ def update_tasks(tasks_el: ET.Element):
         task_el.attrib["build"] = tasks_el.attrib["build"]
 
 
-def create_task(tasks_el: ET.Element, name: str, commands: list[str]):
+def create_task(tasks_el: ET.Element, name: str, commands: list[str]) -> None:
     task_el = ET.SubElement(tasks_el, "key")
 
     ET.SubElement(task_el, "value", name="Name", type="string", data="{%s}" % name)

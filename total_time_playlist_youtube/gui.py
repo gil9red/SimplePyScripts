@@ -48,7 +48,7 @@ from main import parse_playlist_time
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("total_time_playlist_youtube")
@@ -73,7 +73,7 @@ class MainWindow(QMainWindow):
         central_widget.setLayout(main_layout)
         self.setCentralWidget(central_widget)
 
-    def go(self):
+    def go(self) -> None:
         try:
             url = self.url_line_edit.text()
             title, total_seconds, total_seconds_text, items = parse_playlist_time(url)

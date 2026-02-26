@@ -21,12 +21,12 @@ from audio_get__downloads import (
 _BLACK_LIST_ARTIST = []
 
 
-def add_artist_to_black_list(artist):
+def add_artist_to_black_list(artist) -> None:
     """Функция добавляет исполнителя в черный список."""
     _BLACK_LIST_ARTIST.append(artist.lower())
 
 
-def artist_in_black_list(artist):
+def artist_in_black_list(artist) -> bool:
     """Функция вернет True, если исполнитель в черном списке."""
     return artist.lower() in _BLACK_LIST_ARTIST
 

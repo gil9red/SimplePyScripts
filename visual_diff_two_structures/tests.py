@@ -9,7 +9,7 @@ import utils
 
 
 class TestCaseUtils(unittest.TestCase):
-    def test_get_filling_in_missing(self):
+    def test_get_filling_in_missing(self) -> None:
         items_1 = ["F1", "F2", "F3/SF1", "F3/SF2", "F4", "F3", "F6", "F7"]
         items_2 = ["F3/SF1", "F5", "F3", "F6"]
 
@@ -115,13 +115,13 @@ class TestCaseUtils(unittest.TestCase):
             self.assertEqual(result_1, ["F1", "F2", "F3", "  ", "  ", "  "])
             self.assertEqual(result_2, ["  ", "  ", "  ", "F4", "F5", "F6"])
 
-    def test_flatten(self):
+    def test_flatten(self) -> None:
         dict_data = {"a": 1, "c": {"a": 2, "b": {"x": 5, "y": 10}}, "d": [1, 2, 3]}
         actual_dict = utils.flatten(dict_data, separator="/")
         expected_dict = {"a": 1, "c/a": 2, "c/b/x": 5, "d": [1, 2, 3], "c/b/y": 10}
         self.assertEqual(actual_dict, expected_dict)
 
-    def test_xml_to_flatten_dict(self):
+    def test_xml_to_flatten_dict(self) -> None:
         xml_str = """
         <mydocument has="an attribute">
           <and>
@@ -143,7 +143,7 @@ class TestCaseUtils(unittest.TestCase):
         actual_dict_flatten = utils.xml_to_flatten_dict(xml_str)
         self.assertEqual(actual_dict_flatten, expected_dict_flatten)
 
-    def test_json_to_flatten_dict(self):
+    def test_json_to_flatten_dict(self) -> None:
         json_str = """
         {
             "mydocument": {

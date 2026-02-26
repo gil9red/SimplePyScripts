@@ -39,7 +39,7 @@ def vk_auth(login: str, password: str) -> vk_api.VkApi:
     return vk
 
 
-def wall_post(logger, vk_session: vk_api.VkApi, owner_id: int, quote_href: str):
+def wall_post(logger, vk_session: vk_api.VkApi, owner_id: int, quote_href: str) -> None:
     logger.debug("Размещаю сообщение на стену.")
 
     # Добавление сообщения на стену пользователя (owner_id это id пользователя)
@@ -55,7 +55,7 @@ def wall_post(logger, vk_session: vk_api.VkApi, owner_id: int, quote_href: str):
     logger.debug("post_id: %s, quote href: %s.", rs["post_id"], quote_href)
 
 
-def run(logger, vk_session: vk_api.VkApi, owner_id: int, quote_count: int):
+def run(logger, vk_session: vk_api.VkApi, owner_id: int, quote_count: int) -> None:
     # Начинаем постить на стену
     for quote in get_random_quotes()[:quote_count]:
         wall_post(logger, vk_session, owner_id, quote.url)

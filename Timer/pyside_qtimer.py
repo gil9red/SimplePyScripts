@@ -8,7 +8,7 @@ import sys
 from PySide.QtCore import *
 
 
-def say():
+def say() -> None:
     print("say!")
 
 

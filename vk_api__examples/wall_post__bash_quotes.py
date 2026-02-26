@@ -31,7 +31,7 @@ def main(
     password: str = None,
     owner_id: int = None,
     timeout: int = 60 * 60,
-):
+) -> None:
     if not login and not password:
         vk_session = get_vk_session()
     else:

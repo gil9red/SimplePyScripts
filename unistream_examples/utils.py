@@ -26,7 +26,7 @@ def hmac_sha256(key, msg):
     return base64.b64encode(signature).decode()
 
 
-def get_authorization_header(application_id, secret, today_date, url, headers):
+def get_authorization_header(application_id, secret, today_date, url, headers) -> str:
     logging.debug("Url:\n%s", url)
 
     url_parts = urlsplit(url)

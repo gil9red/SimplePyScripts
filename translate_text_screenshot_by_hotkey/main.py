@@ -29,13 +29,13 @@ import pytesseract
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 
-def error_sound():
+def error_sound() -> None:
     duration = 300  # milliseconds
     freq = 1000  # Hz
     winsound.Beep(freq, duration)
 
 
-def run():
+def run() -> None:
     try:
         file_name = f"screenshot_{dt.datetime.now():%Y-%m-%d_%H%M%S}.html"
         print(file_name)

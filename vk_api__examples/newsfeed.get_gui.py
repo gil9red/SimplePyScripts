@@ -23,7 +23,7 @@ from root_common import vk_auth, LOGIN, PASSWORD
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.line_edit_login = QLineEdit(LOGIN)
@@ -50,7 +50,7 @@ class Widget(QWidget):
 
         self.setLayout(main_layout)
 
-    def get_newsfeed(self):
+    def get_newsfeed(self) -> None:
         try:
             vk_session = vk_auth(
                 self.line_edit_login.text(), self.line_edit_password.text()
