@@ -8,7 +8,7 @@ from tkinter import Tk, Label, Button
 
 
 class MainApp(Tk):
-    def __init__(self, *arg, **kwarg):
+    def __init__(self, *arg, **kwarg) -> None:
         super().__init__(*arg, **kwarg)
 
         label = Label(self, text="First Window")
@@ -17,12 +17,12 @@ class MainApp(Tk):
         label.pack()
         button.pack()
 
-    def new_window(self):
+    def new_window(self) -> None:
         Window().mainloop()
 
 
 class Window(Tk):
-    def __init__(self, *arg, **kwarg):
+    def __init__(self, *arg, **kwarg) -> None:
         super().__init__(*arg, **kwarg)
 
         label = Label(self, text="Second Window")

@@ -26,7 +26,7 @@ nick.pack(side="bottom", fill="x", expand="true")
 log.pack(side="top", fill="both", expand="true")
 
 
-def loopproc():
+def loopproc() -> None:
     print("Hello " + name.get() + "!")
     tk.after(1000, loopproc)
 

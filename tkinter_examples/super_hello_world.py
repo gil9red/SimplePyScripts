@@ -11,7 +11,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 
-def center_window(root, width=300, height=200):
+def center_window(root, width=300, height=200) -> None:
     # get screen width and height
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
@@ -22,11 +22,11 @@ def center_window(root, width=300, height=200):
     root.geometry("%dx%d+%d+%d" % (width, height, x, y))
 
 
-def on_btn_1():
+def on_btn_1() -> None:
     print("Hello World!")
 
 
-def on_btn_2():
+def on_btn_2() -> None:
     text = "Hello World!"
 
     messagebox.showerror("Error", text)

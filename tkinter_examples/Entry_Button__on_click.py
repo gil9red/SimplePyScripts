@@ -8,7 +8,7 @@ from tkinter import *
 from tkinter import messagebox
 
 
-def on_button_clicked():
+def on_button_clicked() -> None:
     try:
         w = int(weight.get())
         h = int(height.get())

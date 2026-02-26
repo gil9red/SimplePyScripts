@@ -22,7 +22,7 @@ r = 15
 t = 0.0
 
 
-def but(event):
+def but(event) -> None:
     global t
 
     for _ in range(100):

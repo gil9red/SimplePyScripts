@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 import tkinter as tk
 
 
-def _on_button_click(button):
+def _on_button_click(button) -> None:
     button.config(image=get_next_image())
 
 

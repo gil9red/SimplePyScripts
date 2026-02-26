@@ -12,7 +12,7 @@ from tab_c import Example as TabC
 
 
 class MainWindow(Frame):
-    def __init__(self, parent):
+    def __init__(self, parent) -> None:
         super().__init__(parent)
 
         self.parent = parent
@@ -20,7 +20,7 @@ class MainWindow(Frame):
 
         self.init_ui()
 
-    def init_ui(self):
+    def init_ui(self) -> None:
         self.parent["padx"] = 10
         self.parent["pady"] = 10
 

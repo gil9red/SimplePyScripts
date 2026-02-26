@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-def center_window(root, width=300, height=200):
+def center_window(root, width=300, height=200) -> None:
     # get screen width and height
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()

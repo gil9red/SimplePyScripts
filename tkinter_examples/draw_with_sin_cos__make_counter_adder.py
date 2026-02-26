@@ -36,7 +36,7 @@ r = 15
 inc = make_counter_adder(0.0)
 
 
-def but(event):
+def but(event) -> None:
     for _ in range(100):
         t = inc()
 

@@ -8,13 +8,13 @@ import tkinter as tk
 
 
 class Example(tk.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent) -> None:
         super().__init__(parent)
 
         self.parent = parent
         self.init_ui()
 
-    def init_ui(self):
+    def init_ui(self) -> None:
         self.pack(fill=tk.BOTH, expand=1)
 
         acts = ["Scarlett Johansson", "Rachel Weiss", "Natalie Portman", "Jessica Alba"]
@@ -31,7 +31,7 @@ class Example(tk.Frame):
 
         self.pack()
 
-    def on_select(self, val):
+    def on_select(self, val) -> None:
         sender = val.widget
         idx = sender.curselection()
         value = sender.get(idx)

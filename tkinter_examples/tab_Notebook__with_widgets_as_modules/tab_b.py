@@ -8,13 +8,13 @@ import tkinter as tk
 
 
 class Example(tk.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent) -> None:
         super().__init__(parent)
 
         self.parent = parent
         self.init_ui()
 
-    def init_ui(self):
+    def init_ui(self) -> None:
         self.text = tk.Text(self, width=20, height=10)
         self.text.pack()
         self.text.insert(1.0, "Hello World!\nFoo\nBar\n\n123\n")
@@ -24,7 +24,7 @@ class Example(tk.Frame):
 
         self.pack()
 
-    def on_append(self):
+    def on_append(self) -> None:
         self.text.insert(tk.END, "Go-go-go!\n")
 
 

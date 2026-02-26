@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 import tkinter as tk
 
 
-def create_window():
+def create_window() -> None:
     window = tk.Toplevel(root)
 
     button_new = tk.Button(window, text="Create new+ window", command=create_window)

@@ -25,7 +25,7 @@ def get_next_image() -> tk.PhotoImage:
     return next(CYCLED_IMAGES)
 
 
-def _on_button_click():
+def _on_button_click() -> None:
     panel.config(image=get_next_image())
 
 

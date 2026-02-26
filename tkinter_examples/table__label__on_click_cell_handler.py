@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from tkinter import Tk, Label
 
 
-def turn(event):
+def turn(event) -> None:
     value = event.widget["text"]
     value = 1 if value == "." else int(value) + 1
 

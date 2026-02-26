@@ -8,13 +8,13 @@ from tkinter import ttk, Frame
 
 
 class Example(Frame):
-    def __init__(self, parent):
+    def __init__(self, parent) -> None:
         super().__init__(parent)
 
         self.parent = parent
         self.init_ui()
 
-    def init_ui(self):
+    def init_ui(self) -> None:
         self.notebook = ttk.Notebook(self, width=1000, height=700)
 
         a_tab = ttk.Frame(self.notebook)

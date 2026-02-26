@@ -34,7 +34,7 @@ label.grid()
 label2.grid()
 
 
-def update_clock():
+def update_clock() -> None:
     temperature, status = get_weather_info(api_key=API_KEY, place="Donetsk")
     print(temperature, status)
 

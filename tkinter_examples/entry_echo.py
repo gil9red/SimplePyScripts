@@ -13,7 +13,7 @@ app.title("entry_echo")
 center_window(app)
 
 
-def _on_key_press(event):
+def _on_key_press(event) -> None:
     text = entry.get()
 
     label_1["text"] = text

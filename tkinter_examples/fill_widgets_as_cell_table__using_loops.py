@@ -13,15 +13,15 @@ import tkinter as tk
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 
-def on_selecting_file():
+def on_selecting_file() -> None:
     pass
 
 
-def on_change_symbols():
+def on_change_symbols() -> None:
     pass
 
 
-def on_window_deleted():
+def on_window_deleted() -> None:
     print("Window closed")
     root.quit()
 

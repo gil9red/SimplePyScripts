@@ -10,7 +10,7 @@ import traceback
 from tkinter import Tk, messagebox
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
     print(text)
@@ -29,7 +29,7 @@ root = Tk()
 root.report_callback_exception = log_uncaught_exceptions
 
 
-def m_geometry(win):
+def m_geometry(win) -> None:
     # NOTE: this error -> root.report_callback_exception
     # x = (win.winfo_screenwidth() / 2) - (295 / 2)
     y = (win.winfo_screenheight() / 2) - (395 / 2)

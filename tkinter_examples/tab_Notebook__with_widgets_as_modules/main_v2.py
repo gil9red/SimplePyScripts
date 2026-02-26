@@ -12,13 +12,13 @@ from tab_c import Example as TabC
 
 
 class MainInterface:
-    def __init__(self):
+    def __init__(self) -> None:
         self.window = Tk()
         self.window.title("version")
         self.window.geometry("300x250")
         self.create_widgets()
 
-    def create_widgets(self):
+    def create_widgets(self) -> None:
         self.window["padx"] = 10
         self.window["pady"] = 10
 

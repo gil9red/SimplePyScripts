@@ -14,7 +14,7 @@ canvas = Canvas(root, width=700, height=700)
 canvas.pack()
 
 
-def square():
+def square() -> None:
     y = 0
     while y < 700:
         x = 0
@@ -25,7 +25,7 @@ def square():
         y += 88
 
 
-def board():
+def board() -> None:
     fill = "#FECD72"
     outline = "#825100"
     for i in range(0, 8):
@@ -38,7 +38,7 @@ def board():
         fill, outline = outline, fill
 
 
-def checkers():
+def checkers() -> None:
     board = [
         [0, 2, 0, 2, 0, 2, 0, 2],
         [2, 0, 2, 0, 2, 0, 2, 0],

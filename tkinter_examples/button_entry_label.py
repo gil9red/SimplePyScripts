@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 import tkinter as tk
 
 
-def on_button_perevod_clicked():
+def on_button_perevod_clicked() -> None:
     your_text = text1.get()
     a = your_text.encode("cp1251")
     b = list(map(int, a))

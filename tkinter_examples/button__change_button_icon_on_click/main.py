@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 import tkinter as tk
 
 
-def _on_button_click(button):
+def _on_button_click(button) -> None:
     global PHOTO_COUNTER
     PHOTO_COUNTER += 1
     if len(photo_list) <= PHOTO_COUNTER:
