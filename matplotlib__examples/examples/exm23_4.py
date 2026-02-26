@@ -28,7 +28,7 @@ import pylab
 import matplotlib__examples.ticker
 
 
-def funcForFormatter(x, pos):
+def funcForFormatter(x, pos) -> str:
     if x < 0:
         return f"минус {abs(x)}"
 

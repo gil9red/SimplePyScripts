@@ -10,7 +10,7 @@ import datetime
 import _test_datetime
 
 
-def test():
+def test() -> None:
     print("local:", datetime.datetime.now(), datetime.datetime.utcnow())
     print("import:", *_test_datetime.get())
     print()

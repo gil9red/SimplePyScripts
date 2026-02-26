@@ -22,7 +22,7 @@ class Test(MDApp):
     def build(self):
         return Builder.load_string(KV)
 
-    def on_start(self):
+    def on_start(self) -> None:
         for i in os.listdir(path="."):
             self.root.ids.container.add_widget(
                 OneLineListItem(text=i, on_release=lambda item, i=i: print(i))

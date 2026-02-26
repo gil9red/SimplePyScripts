@@ -18,7 +18,7 @@ import pylab
 import matplotlib__examples
 
 
-def plotGraph():
+def plotGraph() -> None:
     # Будем рисовать график этой функции
     def func(x):
         """

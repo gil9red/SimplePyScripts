@@ -8,7 +8,7 @@ import openpyxl
 from openpyxl.worksheet.worksheet import Worksheet
 
 
-def set_column_size(ws: Worksheet):
+def set_column_size(ws: Worksheet) -> None:
     dims: dict[str, int] = dict()
 
     for row in ws.rows:
@@ -23,7 +23,7 @@ def set_column_size(ws: Worksheet):
         ws.column_dimensions[col].width = value * 1.15  # Append 15%
 
 
-def fill_sheet(ws: Worksheet):
+def fill_sheet(ws: Worksheet) -> None:
     columns = ["Language", "Text"]
     rows = [
         ["python", "-" * 10],

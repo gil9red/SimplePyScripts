@@ -18,7 +18,7 @@ a = QApplication([])
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.lw_dep = QListWidget()
@@ -36,7 +36,7 @@ class Widget(QWidget):
 
         self.setLayout(layout)
 
-    def fill(self):
+    def fill(self) -> None:
         self.lw_dep.clear()
         rs = requests.get(
             "http://magtu.ru/modules/mod_reiting/mobile.php?action=get_all_department"
@@ -51,7 +51,7 @@ class Widget(QWidget):
             item.setData(Qt.UserRole, id_dep)
             self.lw_dep.addItem(item)
 
-    def fill_kaf(self, item_dep):
+    def fill_kaf(self, item_dep) -> None:
         self.lw_kaf.clear()
 
         id_dep = item_dep.data(Qt.UserRole)
@@ -68,7 +68,7 @@ class Widget(QWidget):
             item.setData(Qt.UserRole, id_kaf)
             self.lw_kaf.addItem(item)
 
-    def fill_stu(self, item_kaf):
+    def fill_stu(self, item_kaf) -> None:
         self.lw_stu.clear()
 
         id_kaf = item_kaf.data(Qt.UserRole)

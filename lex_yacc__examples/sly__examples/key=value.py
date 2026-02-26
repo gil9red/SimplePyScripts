@@ -21,10 +21,10 @@ class MyLexer(Lexer):
     ignore_newline = r"\n+"
 
     # Extra action for newlines
-    def ignore_newline(self, t):
+    def ignore_newline(self, t) -> None:
         self.lineno += t.value.count("\n")
 
-    def error(self, t):
+    def error(self, t) -> None:
         print(f"Illegal character {t.value[0]!r}")
         self.index += 1
 
@@ -32,11 +32,11 @@ class MyLexer(Lexer):
 class MyParser(Parser):
     tokens = MyLexer.tokens
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.names = dict()
 
     @_("NAME ASSIGN VALUE")
-    def statement(self, p):
+    def statement(self, p) -> None:
         self.names[p.NAME] = p.VALUE
 
 

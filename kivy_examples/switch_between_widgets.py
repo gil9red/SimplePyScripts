@@ -11,7 +11,7 @@ from kivy.uix.boxlayout import BoxLayout
 
 
 class ScreenMain(Screen):
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
 
         box_layout = BoxLayout(orientation="vertical", spacing=5, padding=[10])
@@ -26,13 +26,13 @@ class ScreenMain(Screen):
         box_layout.add_widget(button_new_pasword)
         self.add_widget(box_layout)
 
-    def _on_press_button_new_pasword(self, *args):
+    def _on_press_button_new_pasword(self, *args) -> None:
         self.manager.transition.direction = "left"
         self.manager.current = "len_password"
 
 
 class ScreenLenPassword(Screen):
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
 
         box_layout = BoxLayout(orientation="vertical", spacing=5, padding=[10])
@@ -47,7 +47,7 @@ class ScreenLenPassword(Screen):
         box_layout.add_widget(button_new_pasword)
         self.add_widget(box_layout)
 
-    def _on_press_button_new_pasword(self, *args):
+    def _on_press_button_new_pasword(self, *args) -> None:
         self.manager.transition.direction = "right"
         self.manager.current = "main_screen"
 

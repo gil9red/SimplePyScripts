@@ -12,7 +12,7 @@ from PIL import Image
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/8b69f96d0bd87c10f3d0779ff46b02558c4cca84/excel__openpyxl__xlwt/xlsx__set_row_column_size.py
-def set_row_column_size(ws):
+def set_row_column_size(ws) -> None:
     # SOURCE: excel__openpyxl__xlwt\excel\xl\worksheets\sheet1.xml
     # <sheetFormatPr defaultColWidth="1.77734375" defaultRowHeight="6.6" customHeight="1" x14ac:dyDescent="0.3"/>
     ws.sheet_format.defaultColWidth = 1.77734375
@@ -42,7 +42,7 @@ def get_pixel_array(img, rgb_hex=False):
     return pixels
 
 
-def draw_image(ws, img):
+def draw_image(ws, img) -> None:
     img = img.convert("RGB")
 
     # Resize

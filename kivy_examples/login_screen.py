@@ -13,7 +13,7 @@ from kivy.uix.popup import Popup
 
 
 class LoginScreen(GridLayout):
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
 
         self.cols = 2
@@ -32,7 +32,7 @@ class LoginScreen(GridLayout):
 
         self.add_widget(Button(text="Ok", on_press=self.check))
 
-    def check(self, button):
+    def check(self, button) -> None:
         print("auth called")
 
         message = "Success!" if self.username.text == "admin" else "Need admin!"

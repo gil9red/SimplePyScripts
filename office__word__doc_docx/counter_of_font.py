@@ -70,7 +70,7 @@ def get_font_name_and_size(
     return font_name, _get_normal_size(font_size)
 
 
-def process(path: Path):
+def process(path: Path) -> None:
     for file_name in path.glob("*.docx"):
         print(file_name)
 

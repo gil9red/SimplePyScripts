@@ -10,7 +10,7 @@ from kivy.uix.label import Label
 
 
 class MyWidget(GridLayout):
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
 
         self.cols = 1

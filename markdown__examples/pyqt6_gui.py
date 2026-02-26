@@ -24,7 +24,7 @@ from common import EXAMPLE_MARKDOWN
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle(Path(__file__).stem)
@@ -58,7 +58,7 @@ class MainWindow(QWidget):
 
         self.setLayout(main_layout)
 
-    def _on_input_text_markdown(self):
+    def _on_input_text_markdown(self) -> None:
         self.edit_result_qt.setMarkdown(self.edit_markdown.toPlainText())
 
         html = markdown.markdown(self.edit_markdown.toPlainText())

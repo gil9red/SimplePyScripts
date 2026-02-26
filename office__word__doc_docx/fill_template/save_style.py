@@ -11,7 +11,7 @@ import docx
 
 
 # SOURCE: https://stackoverflow.com/a/55733040/5909792
-def docx_replace(doc, data):
+def docx_replace(doc, data) -> None:
     paragraphs = list(doc.paragraphs)
     for t in doc.tables:
         for row in t.rows:
