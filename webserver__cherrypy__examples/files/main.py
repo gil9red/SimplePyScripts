@@ -46,7 +46,7 @@ absDir = os.path.join(os.getcwd(), localDir)
 
 class FileDemo(object):
     @cherrypy.expose
-    def index(self):
+    def index(self) -> str:
         return """
         <html><body>
             <h2>Upload a file</h2>
@@ -60,7 +60,7 @@ class FileDemo(object):
         """
 
     @cherrypy.expose
-    def upload(self, myFile):
+    def upload(self, myFile) -> str:
         out = """<html>
         <body>
             myFile length: %s<br />

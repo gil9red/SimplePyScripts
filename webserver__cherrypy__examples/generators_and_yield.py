@@ -14,10 +14,10 @@ import cherrypy
 
 
 class GeneratorDemo:
-    def header(self):
+    def header(self) -> str:
         return "<html><body><h2>Generators rule!</h2>"
 
-    def footer(self):
+    def footer(self) -> str:
         return "</body></html>"
 
     @cherrypy.expose

@@ -15,15 +15,15 @@ class RootServer:
     port = None
     url = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         cherrypy.engine.subscribe("start", self.on_start)
 
     @cherrypy.expose
-    def index(self):
+    def index(self) -> str:
         return f"{self.host}:{self.port} / {self.url}"
 
-    def on_start(self):
-        def _wait_server_running():
+    def on_start(self) -> None:
+        def _wait_server_running() -> None:
             # Wait running
             while not cherrypy.server.running:
                 time.sleep(0.1)

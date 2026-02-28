@@ -32,7 +32,7 @@ class Root:
     # Expose the index method through the web. CherryPy will never
     # publish methods that don't have the exposed attribute set to True.
     @cherrypy.expose
-    def index(self):
+    def index(self) -> str:
         # CherryPy will call this method for the root URI ("/") and send
         # its return value to the client. Because this is tutorial
         # lesson number 01, we'll just send something really simple.
@@ -40,7 +40,7 @@ class Root:
         return 'Hello world!<br><a href="/error">Get error</a>'
 
     @cherrypy.expose
-    def error(self):
+    def error(self) -> str:
         _ = 1 / 0
 
         return "Bad!"

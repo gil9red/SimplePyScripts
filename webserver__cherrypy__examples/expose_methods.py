@@ -12,12 +12,12 @@ import cherrypy
 
 class HelloWorld:
     @cherrypy.expose
-    def index(self):
+    def index(self) -> str:
         # Let's link to another method here.
         return 'We have an <a href="show_msg">important message</a> for you!'
 
     @cherrypy.expose
-    def show_msg(self):
+    def show_msg(self) -> str:
         # Here's the important message!
         return "Hello world!"
 

@@ -12,7 +12,7 @@ import cherrypy
 
 class WelcomePage:
     @cherrypy.expose
-    def index(self):
+    def index(self) -> str:
         # Ask for the user's name.
         return """
             <p>GET:<p>
@@ -32,7 +32,7 @@ class WelcomePage:
         """
 
     @cherrypy.expose
-    def greet_user(self, name=None):
+    def greet_user(self, name=None) -> str:
         # CherryPy passes all GET and POST variables as method parameters.
         # It doesn't make a difference where the variables come from, how
         # large their contents are, and so on.

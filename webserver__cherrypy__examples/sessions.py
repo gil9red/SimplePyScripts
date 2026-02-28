@@ -18,7 +18,7 @@ class HitCounter:
     _cp_config = {"tools.sessions.on": True}
 
     @cherrypy.expose
-    def index(self):
+    def index(self) -> str:
         # Increase the silly hit counter
         count = cherrypy.session.get("count", 0) + 1
 

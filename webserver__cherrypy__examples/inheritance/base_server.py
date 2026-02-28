@@ -3,6 +3,7 @@
 
 
 import json
+from typing import Any
 
 # pip install cherrypy
 # https://github.com/cherrypy/cherrypy
@@ -14,7 +15,7 @@ class BaseServer:
     json_in = cherrypy.tools.json_in()
     json_out = cherrypy.tools.json_out()
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Set a custom response for errors.
         self._cp_config = {"error_page.default": self.all_exception_handler}
         # # OR:
@@ -23,24 +24,24 @@ class BaseServer:
         self.name = "BaseServer"
 
     @cherrypy.expose
-    def get_name(self):
+    def get_name(self) -> str:
         return self.name
 
     @cherrypy.expose
-    def execute(self):
+    def execute(self) -> Any:
         return "Not implement"
 
     @cherrypy.expose
-    def execute_func(self):
+    def execute_func(self) -> str:
         return self._execute_func()
 
-    def _execute_func(self):
+    def _execute_func(self) -> str:
         return "Not implement"
 
     # Expose the index method through the web. CherryPy will never
     # publish methods that don't have the exposed attribute set to True.
     @cherrypy.expose
-    def index(self):
+    def index(self) -> str:
         return f"""
             This is: <b>{self.name}</b><br>
             <a href="/error">Get error</a><br>
@@ -50,12 +51,12 @@ class BaseServer:
         """
 
     @cherrypy.expose
-    def error(self):
+    def error(self) -> str:
         _ = 1 / 0
 
         return "Bad!"
 
-    def all_exception_handler(self, status, message, traceback, version):
+    def all_exception_handler(self, status, message, traceback, version) -> str:
         response = cherrypy.response
         response.headers["Content-Type"] = "application/json"
 
@@ -70,7 +71,7 @@ class BaseServer:
             }
         )
 
-    def run(self, port=9090):
+    def run(self, port=9090) -> None:
         # Set port
         cherrypy.config.update({"server.socket_port": port})
 

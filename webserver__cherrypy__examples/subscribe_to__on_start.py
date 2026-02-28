@@ -8,25 +8,25 @@ import cherrypy
 
 
 class RootServer:
-    def __init__(self):
+    def __init__(self) -> None:
         self.running = False
 
         cherrypy.engine.subscribe("start", self.on_start)
         cherrypy.engine.subscribe("stop", self.on_stop)
         cherrypy.engine.subscribe("exit", self.on_exit)
 
-    def on_start(self):
+    def on_start(self) -> None:
         print("start")
         self.running = True
 
         # Exit!
         cherrypy.engine.exit()
 
-    def on_stop(self):
+    def on_stop(self) -> None:
         print("stop")
         self.running = False
 
-    def on_exit(self):
+    def on_exit(self) -> None:
         print("exit")
 
 

@@ -22,7 +22,7 @@ import cherrypy
 
 class UsersPage:
     @cherrypy.expose
-    def index(self):
+    def index(self) -> str:
         # Since this is just a stupid little example, we'll simply
         # display a list of links to random, made-up users. In a real
         # application, this could be generated from a database result set.
@@ -33,7 +33,7 @@ class UsersPage:
         """
 
     @cherrypy.expose
-    def default(self, user):
+    def default(self, user) -> str:
         # Here we react depending on the virtualPath -- the part of the
         # path that could not be mapped to an object method. In a real
         # application, we would probably do some database lookups here

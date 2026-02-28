@@ -13,7 +13,7 @@ import cherrypy
 class Root(object):
     @cherrypy.expose
     @cherrypy.tools.json_in()
-    def update(self):
+    def update(self) -> str:
         input_json = cherrypy.request.json
         print("input_json:", input_json)
         # do_something_with(input_json)
@@ -21,7 +21,7 @@ class Root(object):
         return "Updated %r." % (input_json,)
 
     @cherrypy.expose
-    def index(self):
+    def index(self) -> str:
         return """
 <html>
     <head>

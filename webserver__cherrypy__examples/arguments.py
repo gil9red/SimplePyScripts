@@ -15,7 +15,7 @@ class HelloWorld:
 
     # NOTE: try http://127.0.0.1:9090/?a=1&b=2&c=123
     @cherrypy.expose
-    def index(self, **kwargs):
+    def index(self, **kwargs) -> str:
         return f"Hello world!: {kwargs}"
 
 

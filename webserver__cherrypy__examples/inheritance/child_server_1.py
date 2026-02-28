@@ -8,16 +8,16 @@ from base_server import BaseServer
 
 
 class ChildServer(BaseServer):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.name = "ChildServer_1"
 
     @BaseServer.expose
-    def execute(self):
+    def execute(self) -> str:
         return "ChildServer_1.execute!"
 
-    def _execute_func(self):
+    def _execute_func(self) -> str:
         return "ChildServer_1 _execute_func"
 
     @BaseServer.expose

@@ -10,7 +10,7 @@ import cherrypy
 
 class RootServer:
     @cherrypy.expose
-    def index(self):
+    def index(self) -> str:
         return """
 <html>
     <head>

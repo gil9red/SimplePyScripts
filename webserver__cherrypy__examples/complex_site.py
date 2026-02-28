@@ -13,7 +13,7 @@ import cherrypy
 
 class HomePage:
     @cherrypy.expose
-    def index(self):
+    def index(self) -> str:
         return """
             <p>Hi, this is the home page! Check out the other
             fun stuff on this site:</p>
@@ -25,7 +25,7 @@ class HomePage:
 
 class JokePage:
     @cherrypy.expose
-    def index(self):
+    def index(self) -> str:
         return """
             <p>"In Python, how do you create a string of random
             characters?" -- "Read a Perl file!"</p>
@@ -33,14 +33,14 @@ class JokePage:
 
 
 class LinksPage:
-    def __init__(self):
+    def __init__(self) -> None:
         # Request handler objects can create their own nested request
         # handler objects. Simply create them inside their __init__
         # methods!
         self.extra = ExtraLinksPage()
 
     @cherrypy.expose
-    def index(self):
+    def index(self) -> str:
         # Note the way we link to the extra links page (and back).
         # As you can see, this object doesn't really care about its
         # absolute position in the site tree, since we use relative
@@ -63,7 +63,7 @@ class LinksPage:
 
 class ExtraLinksPage:
     @cherrypy.expose
-    def index(self):
+    def index(self) -> str:
         # Note the relative link back to the Links page!
         return """
             <p>Here are some extra useful links:</p>
