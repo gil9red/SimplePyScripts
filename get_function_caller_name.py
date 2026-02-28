@@ -14,17 +14,17 @@ def caller_name() -> str:
 
 if __name__ == "__main__":
 
-    def foo():
+    def foo() -> None:
         print(caller_name())
         assert caller_name() == "foo"
 
     foo()
 
-    def bar():
+    def bar() -> None:
         print(caller_name())
         assert caller_name() == "bar"
 
-        def zoo():
+        def zoo() -> None:
             print(caller_name())
             assert caller_name() == "zoo"
 

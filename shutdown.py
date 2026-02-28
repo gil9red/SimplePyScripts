@@ -9,7 +9,7 @@ import sys
 import os
 
 
-def shutdown(off_pc=19):
+def shutdown(off_pc=19) -> None:
     while time.localtime().tm_hour != off_pc:
         time.sleep(60)  # Ожидание 1 минута
 

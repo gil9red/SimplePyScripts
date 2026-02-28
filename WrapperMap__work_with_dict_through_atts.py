@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 class WrapperMap:
-    def __init__(self, d: dict):
+    def __init__(self, d: dict) -> None:
         self.d = d
 
     def get_value(self):
@@ -18,7 +18,7 @@ class WrapperMap:
 
         return value
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return repr(self.d)
 
 

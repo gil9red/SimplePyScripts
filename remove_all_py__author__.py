@@ -13,7 +13,7 @@ from pathlib import Path
 TEMPLATE_DIR = "No __author__ in {path}"
 
 
-def process_file(file_name: Path):
+def process_file(file_name: Path) -> None:
     text = file_name.read_text("utf-8")
     text = re.sub(r"__author__ = .+", "", text)
     text = re.sub(r"\n{4,}", "\n\n\n", text)

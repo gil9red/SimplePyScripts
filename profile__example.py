@@ -7,12 +7,12 @@ __author__ = "ipetrash"
 import profile
 
 
-def foo(number=100):
-    def _inc_i():
+def foo(number=100) -> None:
+    def _inc_i() -> None:
         nonlocal i
         i += 1
 
-    def _has(value, items):
+    def _has(value, items) -> bool:
         return value in items
 
     items = ["1234567890" for _ in range(number)]

@@ -5,10 +5,12 @@ __author__ = "ipetrash"
 
 
 from timeit import default_timer
+from types import TracebackType
+from typing import Optional, Type
 
 
 class TimeThis:
-    def __init__(self, title="TimeThis"):
+    def __init__(self, title="TimeThis") -> None:
         self.title = title
         self.start_time = None
 
@@ -16,10 +18,13 @@ class TimeThis:
         self.start_time = default_timer()
         return self
 
-    def __exit__(self, exc_type, exc_value, exc_traceback):
-        print(
-            f"[{self.title}] total time: {default_timer() - self.start_time} sec"
-        )
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_value: Optional[BaseException],
+        exc_traceback: Optional[TracebackType],
+    ) -> None:
+        print(f"[{self.title}] total time: {default_timer() - self.start_time} sec")
 
 
 if __name__ == "__main__":

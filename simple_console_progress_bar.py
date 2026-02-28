@@ -8,7 +8,7 @@ import itertools
 import time
 
 
-def loop():
+def loop() -> None:
     for c in itertools.cycle("|/-\\"):
         print(c + "\b", flush=True, end="")
 

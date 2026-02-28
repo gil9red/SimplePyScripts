@@ -24,11 +24,11 @@ def create_world(rows: int, cols: int) -> list[list[int]]:
     return [[0] * cols for _ in range(rows)]
 
 
-def print_world(world: list[list[int]]):
+def print_world(world: list[list[int]]) -> None:
     print("\n".join(" ".join(map(str, row)) for row in world))
 
 
-def fill_world(world: list[list[int]], seed: str):
+def fill_world(world: list[list[int]], seed: str) -> None:
     bits = get_bits_seed(seed)
     bits = cycle(bits)
 

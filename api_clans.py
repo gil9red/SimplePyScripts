@@ -14,7 +14,7 @@ class Api:
     # TODO: this
     API_URL = "<HOST>/api_clans/1/index.php?request="
 
-    def __init__(self, login: str, password: str):
+    def __init__(self, login: str, password: str) -> None:
         self.login = login
         self.password = password
 

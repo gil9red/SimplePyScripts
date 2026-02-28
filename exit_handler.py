@@ -11,7 +11,7 @@ from timeit import default_timer as timer
 start_time = timer()
 
 
-def exit_handler():
+def exit_handler() -> None:
     print(f"Execution time: {timer() - start_time:.3f} secs.")
 
 
@@ -20,7 +20,7 @@ atexit.register(exit_handler)
 
 # OR with decorator:
 @atexit.register
-def exit_handler():
+def exit_handler() -> None:
     print(f"Execution time: {timer() - start_time:.3f} secs.")
 
 

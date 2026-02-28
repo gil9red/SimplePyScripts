@@ -20,10 +20,10 @@ def check_is_empty_function(function):
 
 if __name__ == "__main__":
 
-    def foo():
+    def foo() -> None:
         pass
 
-    def foo2():
+    def foo2() -> int:
         return 1
 
     print("Empty:", check_is_empty_function(foo))

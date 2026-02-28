@@ -25,7 +25,7 @@ def find_sublist(l, m):
             pass
 
 
-def delete_sublist(l, m):
+def delete_sublist(l, m) -> None:
     for i, j in find_sublist(l, m):
         del l[i:j]
 

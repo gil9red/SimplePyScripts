@@ -33,7 +33,7 @@ except ImportError:
 
 
 class CurtainWidget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Curtain for sleeping")
@@ -60,10 +60,10 @@ class CurtainWidget(QWidget):
 
         self.setMouseTracking(True)
 
-    def _activate(self, _):
+    def _activate(self, _) -> None:
         self.showFullScreen()
 
-    def showNormal(self):
+    def showNormal(self) -> None:
         self._activate_button.show()
         self.unsetCursor()
 
@@ -73,7 +73,7 @@ class CurtainWidget(QWidget):
         self.setWindowFlags(self._flags)
         self.show()
 
-    def showFullScreen(self):
+    def showFullScreen(self) -> None:
         self._activate_button.hide()
         self.setCursor(Qt.BlankCursor)
         self._timer_block_normal.start()
@@ -83,13 +83,13 @@ class CurtainWidget(QWidget):
 
         super().showFullScreen()
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event) -> None:
         if not self._timer_block_normal.isActive() and self.isFullScreen():
             self.showNormal()
 
         super().mouseMoveEvent(event)
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
         painter.setBrush(Qt.black)
         painter.setPen(Qt.black)

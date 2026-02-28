@@ -8,7 +8,7 @@ import locale
 from datetime import datetime
 
 
-def check():
+def check() -> None:
     try:
         print(
             datetime.strptime(

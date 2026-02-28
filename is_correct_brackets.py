@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-def is_correct_brackets(text):
+def is_correct_brackets(text) -> bool:
     while "()" in text or "[]" in text or "{}" in text:
         text = text.replace("()", "")
         text = text.replace("[]", "")

@@ -22,7 +22,7 @@ class Interval:
     start: datetime
     end: datetime
 
-    def __init__(self, start_time: str, duration: int):
+    def __init__(self, start_time: str, duration: int) -> None:
         self.start = datetime.strptime(start_time, "%H:%M:%S")
         self.end = self.start + timedelta(seconds=duration)
 

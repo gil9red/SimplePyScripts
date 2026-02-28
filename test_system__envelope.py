@@ -29,7 +29,7 @@ items = [
 ]
 
 
-def check_1(x, y):
+def check_1(x, y) -> None:
     if envelop_x > x and envelop_y > y:
         print("ДА")
     elif envelop_y > x and envelop_x > y:
@@ -83,7 +83,7 @@ items = [
 ]
 
 
-def check_2(x, y, z):
+def check_2(x, y, z) -> None:
     if hole_x > x and hole_y > y:
         print("ДА")
     elif hole_x > y and hole_y > x:

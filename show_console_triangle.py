@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-def print_triangle(n):
+def print_triangle(n) -> None:
     """
         n = 5
 

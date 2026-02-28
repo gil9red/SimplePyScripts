@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 class CallBuilder:
-    def __init__(self, part=None, sep=""):
+    def __init__(self, part=None, sep="") -> None:
         self._part = part
         self._sep = sep
 

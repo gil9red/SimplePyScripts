@@ -8,7 +8,7 @@ import sys
 import time
 
 
-def f1(n):
+def f1(n) -> None:
     last_num_chars = 0
 
     write, flush = sys.stdout.write, sys.stdout.flush
@@ -23,7 +23,7 @@ def f1(n):
     print()
 
 
-def f2(n):
+def f2(n) -> None:
     last_num_chars = 0
 
     write, flush = sys.stdout.write, sys.stdout.flush

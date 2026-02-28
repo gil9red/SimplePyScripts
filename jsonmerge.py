@@ -40,7 +40,7 @@ print(json_2)
 
 
 # TODO: нужно тестить, возможно, алгоритм где-то дырявый
-def jsonmerge(j1, j2):
+def jsonmerge(j1, j2) -> None:
     for k, v in j2.items():
         if k in j1 and isinstance(j1[k], dict) and isinstance(v, dict):
             jsonmerge(j1[k], v)

@@ -20,7 +20,7 @@ if __name__ == "__main__":
     print(get_name_by_func(builtins))
 
     class Foo:
-        def a(self):
+        def a(self) -> int:
             return 1
 
     print(get_name_by_func(Foo))

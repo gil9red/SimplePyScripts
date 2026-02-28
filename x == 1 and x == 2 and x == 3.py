@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 class X:
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return True
 
 

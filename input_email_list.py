@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 # http://stackoverflow.com/questions/35332611/a-program-which-creates-emails
 
 
-def fill_list(l, promt):
+def fill_list(l, promt) -> None:
     while True:
         x = input(promt)
         if not x:

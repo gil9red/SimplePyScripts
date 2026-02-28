@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 def upper_print(f):
-    def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs) -> None:
         f(*[i.upper() if hasattr(i, "upper") else i for i in args], **kwargs)
 
     return wrapper

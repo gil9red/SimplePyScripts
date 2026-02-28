@@ -14,7 +14,7 @@ import gc
 # Recursively expand slist's objects
 # into olist, using seen to track
 # already processed objects.
-def _getr(slist, olist, seen):
+def _getr(slist, olist, seen) -> None:
     for e in slist:
         if id(e) in seen:
             continue
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     print(len(gc.get_objects()))
 
     class Foo:
-        def bar(self):
+        def bar(self) -> str:
             return f"Foo(id={hex(id(self))})"
 
     items = [Foo() for _ in range(3)]

@@ -5,7 +5,7 @@ __author__ = "ipetrash"
 
 
 def dict_to_url_params(json_data, root):
-    def deep(node, root, items):
+    def deep(node, root, items) -> None:
         if isinstance(node, list):
             for i, value in enumerate(node):
                 node_root = root + f"[{i}]"

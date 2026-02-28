@@ -18,7 +18,7 @@ print()
 number = 0
 
 
-def counter():
+def counter() -> None:
     # If not exists global <number>
     # if 'number' not in globals():
     #     globals()['number'] = 0

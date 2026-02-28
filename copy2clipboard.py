@@ -15,7 +15,7 @@ except ImportError:
         from PySide.QtGui import QApplication
 
 
-def to(text: str):
+def to(text: str) -> None:
     app = QApplication([])
     app.clipboard().setText(text)
     app = None

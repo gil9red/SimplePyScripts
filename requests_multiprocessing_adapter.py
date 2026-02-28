@@ -64,12 +64,12 @@ class RunFuncThread(QThread):
     run_finished = pyqtSignal(object)
     about_error = pyqtSignal(Exception)
 
-    def __init__(self, func: Callable[[], Any]):
+    def __init__(self, func: Callable[[], Any]) -> None:
         super().__init__()
 
         self.func: Callable[[], Any] = func
 
-    def run(self):
+    def run(self) -> None:
         try:
             self.run_finished.emit(self.func())
         except Exception as e:
@@ -83,7 +83,7 @@ def do_get(url: str) -> str:
 
 
 class Addon(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.progress_bar = QProgressBar()
@@ -113,16 +113,16 @@ class Addon(QWidget):
     def get_data(self) -> Any:
         raise NotImplementedError()
 
-    def refresh(self):
+    def refresh(self) -> None:
         self.thread_run.start()
 
-    def _started(self):
+    def _started(self) -> None:
         self.progress_bar.show()
 
         self.n += 1
         self.log.appendPlainText(f"[{self.n}] Started")
 
-    def _finished(self):
+    def _finished(self) -> None:
         self.progress_bar.hide()
         self.log.appendPlainText("Finished\n")
 
@@ -149,7 +149,7 @@ class AddonGetUrl4(Addon):
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         main_layout = QGridLayout(self)
@@ -170,7 +170,7 @@ class MainWindow(QWidget):
         self.timer.timeout.connect(self.refresh)
         self.timer.start()
 
-    def refresh(self):
+    def refresh(self) -> None:
         print("\n[REFRESH]")
 
         for addon in self.addons:

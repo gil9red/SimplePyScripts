@@ -5,16 +5,16 @@ __author__ = "ipetrash"
 
 
 class ObjectWithArrayAccess:
-    def __init__(self):
+    def __init__(self) -> None:
         self._fields = dict()
 
     def __getitem__(self, item):
         return self._fields.get(item)
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key, value) -> None:
         self._fields[key] = value
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._fields)
 
 

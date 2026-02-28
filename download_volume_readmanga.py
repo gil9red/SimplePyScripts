@@ -39,7 +39,7 @@ def get_url_images(url):
     return [i[0] + i[2] for i in urls]
 
 
-def save_urls_to_zip(zip_file_name, urls):
+def save_urls_to_zip(zip_file_name, urls) -> None:
     if not urls:
         print("Cписок изображений пустой.")
         return

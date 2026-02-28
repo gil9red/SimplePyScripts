@@ -32,7 +32,7 @@ def pretty_table(data, cell_sep=" | ", header_separator=True, align=">") -> str:
     return "\n".join(lines)
 
 
-def print_pretty_table(data, cell_sep=" | ", header_separator=True, align=">"):
+def print_pretty_table(data, cell_sep=" | ", header_separator=True, align=">") -> None:
     print(pretty_table(data, cell_sep, header_separator, align))
 
 

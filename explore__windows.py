@@ -9,7 +9,7 @@ import subprocess
 from pathlib import Path
 
 
-def explore(path: str | Path, select=True):
+def explore(path: str | Path, select=True) -> None:
     path = Path(path).resolve()
 
     if path.is_dir() or path.is_file():

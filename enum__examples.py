@@ -60,7 +60,7 @@ class Planet(Enum):
     URANUS = (8.686e25, 2.5559e7)
     NEPTUNE = (1.024e26, 2.4746e7)
 
-    def __init__(self, mass, radius):
+    def __init__(self, mass, radius) -> None:
         self.mass = mass  # in kilograms
         self.radius = radius  # in meters
 

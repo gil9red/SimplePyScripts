@@ -47,7 +47,7 @@ def get_stop_route(stop_id):
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.stop_list_widget = QListWidget()
@@ -69,7 +69,7 @@ class MainWindow(QWidget):
 
         self.setLayout(main_layout)
 
-    def fill_list_stops(self):
+    def fill_list_stops(self) -> None:
         self.route_list_widget.clear()
         self.stop_list_widget.clear()
 
@@ -82,7 +82,7 @@ class MainWindow(QWidget):
 
             self.stop_list_widget.addItem(item)
 
-    def item_stop_click(self, item):
+    def item_stop_click(self, item) -> None:
         stop_id = item.data(Qt.UserRole)
 
         self.route_list_widget.clear()

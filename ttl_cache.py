@@ -41,7 +41,7 @@ def ttl_cache(ttl_seconds: int) -> Callable:
 if __name__ == "__main__":
     # Example usage:
     @ttl_cache(ttl_seconds=5)
-    def get_data(item_id):
+    def get_data(item_id) -> str:
         print(f"Fetching data for item_id: {item_id} (expensive operation)...")
         time.sleep(1)  # Simulate a slow operation
         return f"Data for {item_id} at {time.time()}"

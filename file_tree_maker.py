@@ -13,7 +13,7 @@ import os
 
 
 class FileTreeMaker:
-    def _recurse(self, parent_path, file_list, prefix, output_buf, level):
+    def _recurse(self, parent_path, file_list, prefix, output_buf, level) -> None:
         if len(file_list) == 0 or (self.max_level != -1 and self.max_level <= level):
             return
         else:

@@ -5,12 +5,12 @@ __author__ = "ipetrash"
 
 
 class SubField:
-    def __init__(self):
+    def __init__(self) -> None:
         self.flag = True
 
 
 class Field:
-    def __init__(self, tag1, tag2, sub_field_flag=True):
+    def __init__(self, tag1, tag2, sub_field_flag=True) -> None:
         self.tag1 = tag1
         self.tag2 = tag2
 
@@ -22,7 +22,7 @@ class Object:
     a = 0
     b = "123"
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.c = 3
         self.items = [1, 2, 3, 4]
         self.maps = {

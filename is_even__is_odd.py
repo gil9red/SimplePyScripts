@@ -4,15 +4,15 @@
 __author__ = "ipetrash"
 
 
-def is_even(num):
+def is_even(num) -> bool:
     return num % 2 == 0
 
 
-def is_odd(num):
+def is_odd(num) -> bool:
     return not is_even(num)
 
 
-def is_even_2(num):
+def is_even_2(num) -> bool:
     return num & 1 == 0
 
 

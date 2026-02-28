@@ -8,7 +8,7 @@ __author__ = "ipetrash"
 
 
 class Foo:
-    def __call__(self):
+    def __call__(self) -> int:
         return 1
 
 
@@ -23,14 +23,14 @@ class MyPow:
 
 
 class Bar:
-    def __init__(self, start_value=0):
+    def __init__(self, start_value=0) -> None:
         self.value = start_value
 
     def __call__(self, *args, **kwargs):
         self.value += 1
         return self
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"<Foo(value={self.value})>"
 
 

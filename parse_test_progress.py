@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 import re
 
 
-def parse(text, append_test_case_list=True):
+def parse(text, append_test_case_list=True) -> None:
     total_value = 0
     total_max_value = 0
 

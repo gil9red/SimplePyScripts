@@ -12,7 +12,7 @@ def natural_sorted(items: list) -> list:
     return sorted(items, key=get_num)
 
 
-def natural_sort(items: list):
+def natural_sort(items: list) -> None:
     items.sort(key=get_num)
 
 

@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 import pyperclip
 
 
-def to(text: str):
+def to(text: str) -> None:
     pyperclip.copy(text)
     pyperclip.paste()
 

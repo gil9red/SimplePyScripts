@@ -14,7 +14,7 @@ print(a.__class__.__name__)  # A
 
 
 class B:
-    def __init__(self):
+    def __init__(self) -> None:
         print(self.__class__.__name__)  # B
 
 

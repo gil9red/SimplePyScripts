@@ -28,7 +28,7 @@ complex_data = [
 ]
 
 
-def _print_complex_data(data):
+def _print_complex_data(data) -> None:
     print(data, id(data))
     print(data[2], id(data[2]))
     print(data[2][2], id(data[2][2]))

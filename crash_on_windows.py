@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 from ctypes import wintypes, windll, c_void_p, c_size_t, POINTER, c_ubyte, cast
 
 
-def main():
+def main() -> None:
     # Define constants
     FILE_MAP_ALL_ACCESS = 983071
     PAGE_READWRITE = 4

@@ -44,7 +44,7 @@ def format_db(x, pos=None):
     return int(db)
 
 
-def draw(file_name):
+def draw(file_name) -> None:
     wav = wave.open(file_name, mode="r")
     global nframes, k, peak, duration
     (nchannels, sampwidth, framerate, nframes, comptype, compname) = wav.getparams()

@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import *
 
 
 class Widget(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("No choice")
@@ -33,7 +33,7 @@ class Widget(QWidget):
 
         self.line_edit_no_choice.setFocus()
 
-    def on_text_edited_no_choice(self, text):
+    def on_text_edited_no_choice(self, text) -> None:
         text = self.line_edit_source.text()[: len(text)]
         self.line_edit_no_choice.setText(text)
 
