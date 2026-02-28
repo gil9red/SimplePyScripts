@@ -64,11 +64,11 @@ threadFlag = getattr(win32con, 'THREAD_QUERY_LIMITED_INFORMATION', win32con.THRE
 lastTime = 0
 
 
-def log(msg):
+def log(msg) -> None:
     print(msg)
 
 
-def logError(msg):
+def logError(msg) -> None:
     print(msg, file=sys.stderr)
 
 
@@ -129,7 +129,7 @@ def getProcessFilename(processID):
         kernel32.CloseHandle(hProcess)
 
 
-def callback(hWinEventHook, event, hwnd, idObject, idChild, dwEventThread, dwmsEventTime):
+def callback(hWinEventHook, event, hwnd, idObject, idChild, dwEventThread, dwmsEventTime) -> None:
     global lastTime
     length = user32.GetWindowTextLengthW(hwnd)
     title = ctypes.create_unicode_buffer(length + 1)
@@ -169,7 +169,7 @@ def setHook(WinEventProc, eventType):
     )
 
 
-def main():
+def main() -> None:
     ole32.CoInitialize(0)
 
     WinEventProc = WinEventProcType(callback)

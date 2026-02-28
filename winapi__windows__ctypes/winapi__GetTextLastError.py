@@ -13,7 +13,7 @@ from win32con import (
 )
 
 
-def GetTextLastError(error_code=None):
+def GetTextLastError(error_code=None) -> str:
     """
     Функция возвращает текстовое описание ошибки.
     Если не передавать код ошибки, будет возвращаться описание ошибки из GetLastError().

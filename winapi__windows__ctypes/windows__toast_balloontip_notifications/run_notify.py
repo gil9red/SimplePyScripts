@@ -8,7 +8,7 @@ from threading import Thread
 from notifications import WindowsBalloonTip
 
 
-def run(title: str, text: str, duration: int = 20):
+def run(title: str, text: str, duration: int = 20) -> None:
     WindowsBalloonTip.balloon_tip(title, text, duration)
 
 
@@ -16,7 +16,7 @@ def run(title: str, text: str, duration: int = 20):
 #     Process(target=run, args=(title, text, duration)).start()
 
 
-def run_in_thread(title: str, text: str, duration: int = 20):
+def run_in_thread(title: str, text: str, duration: int = 20) -> None:
     Thread(target=run, args=(title, text, duration)).start()
 
 

@@ -15,7 +15,7 @@ import win32gui
 import win32con
 
 
-def all_ok(hwnd, param):
+def all_ok(hwnd, param) -> bool:
     text = win32gui.GetWindowText(hwnd)
     class_name = win32gui.GetClassName(hwnd)
     print(f'#{hwnd:0>8x} "{text}": {class_name}')
@@ -27,7 +27,7 @@ def all_ok(hwnd, param):
     return True
 
 
-def close_toolbars():
+def close_toolbars() -> None:
     hwnd = win32gui.FindWindow("Notepad++", None)
     if not hwnd:
         print('Window "Notepad++" not found!')

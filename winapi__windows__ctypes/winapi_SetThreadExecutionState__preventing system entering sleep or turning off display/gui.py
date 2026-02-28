@@ -15,7 +15,7 @@ if __name__ == "__main__":
     w.setWindowTitle("Preventing entering sleep or turning off the display")
     w.setLayout(qtw.QVBoxLayout())
 
-    def button_clicked(checked):
+    def button_clicked(checked) -> None:
         if checked:
             button.setText("On")
             preventing_on()

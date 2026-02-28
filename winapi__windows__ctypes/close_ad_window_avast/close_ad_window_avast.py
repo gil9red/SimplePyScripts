@@ -41,7 +41,7 @@ log = get_logger()
 
 
 # TODO: не все окна являются рекламными, это может быть окно сканирования системы
-def close_ad():
+def close_ad() -> None:
     hwnd = win32gui.FindWindow("asw_av_popup_wndclass", None)
     if hwnd:
         log.debug("Found Avast advertising window, close it.")

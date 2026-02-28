@@ -13,7 +13,7 @@ import win32con
 import win32gui
 
 
-def set_wallpaper(file_name):
+def set_wallpaper(file_name) -> None:
     key = win32api.RegOpenKeyEx(
         win32con.HKEY_CURRENT_USER, "Control Panel\\Desktop", 0, win32con.KEY_SET_VALUE
     )

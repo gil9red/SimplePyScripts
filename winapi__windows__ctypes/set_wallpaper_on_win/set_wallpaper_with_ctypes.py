@@ -13,7 +13,7 @@ import ctypes
 SPI_SETDESKWALLPAPER = 20
 
 
-def set_wallpaper_with_ctypes(file_name):
+def set_wallpaper_with_ctypes(file_name) -> None:
     # This code is based on the following two links
     # http://mail.python.org/pipermail/python-win32/2005-January/002893.html
     # http://code.activestate.com/recipes/435877-change-the-wallpaper-under-windows/

@@ -32,7 +32,7 @@ class PROCESSENTRY32(ctypes.Structure):
         ("szExeFile", ctypes.c_char * 260),
     ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             "szExeFile={} "
             "th32ProcessID={} "
