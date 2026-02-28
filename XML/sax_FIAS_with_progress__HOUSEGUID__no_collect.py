@@ -13,11 +13,11 @@ f.write("[")
 
 
 class AttrHandler(xml.sax.handler.ContentHandler):
-    def startDocument(self):
+    def startDocument(self) -> None:
         self.it = iter(tqdm(iter(lambda: 0, 1)))
         self.number = 0
 
-    def startElement(self, name, attrs):
+    def startElement(self, name, attrs) -> None:
         if "HOUSEGUID" in attrs:
             guid = attrs["HOUSEGUID"]
             if self.number > 0:

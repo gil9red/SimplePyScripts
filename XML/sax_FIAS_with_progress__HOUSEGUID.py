@@ -13,10 +13,10 @@ all_house_guid = set()
 
 
 class AttrHandler(xml.sax.handler.ContentHandler):
-    def startDocument(self):
+    def startDocument(self) -> None:
         self.it = iter(tqdm(iter(lambda: 0, 1)))
 
-    def startElement(self, name, attrs):
+    def startElement(self, name, attrs) -> None:
         if "HOUSEGUID" in attrs:
             all_house_guid.add(attrs["HOUSEGUID"])
 

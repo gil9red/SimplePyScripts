@@ -11,7 +11,7 @@ __author__ = "ipetrash"
 import xmltodict
 
 
-def handle(path, item):
+def handle(path, item) -> bool:
     print(f"path: {path} item: {item!r}")
     return True
 

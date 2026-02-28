@@ -18,7 +18,7 @@ import xmltodict
 url = "http://discogs-data.s3-us-west-2.amazonaws.com/data/2018/discogs_20180201_artists.xml.gz"
 
 
-def handle_artist(_, artist):
+def handle_artist(_, artist) -> bool:
     print(artist["name"])
     return True
 

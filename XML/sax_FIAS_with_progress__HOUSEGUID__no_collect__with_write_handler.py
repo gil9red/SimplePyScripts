@@ -9,19 +9,19 @@ from tqdm import tqdm
 
 
 class WriteHouseGuidHandler(xml.sax.handler.ContentHandler):
-    def __init__(self, file_name: str):
+    def __init__(self, file_name: str) -> None:
         super().__init__()
 
         self.f = open(file_name, "w")
         self.it = None
         self.number = 0
 
-    def startDocument(self):
+    def startDocument(self) -> None:
         self.it = iter(tqdm(iter(lambda: 0, 1)))
         self.number = 0
         self.f.write("[")
 
-    def startElement(self, name, attrs):
+    def startElement(self, name, attrs) -> None:
         if "HOUSEGUID" in attrs:
             guid = attrs["HOUSEGUID"]
 
@@ -33,7 +33,7 @@ class WriteHouseGuidHandler(xml.sax.handler.ContentHandler):
 
         next(self.it)
 
-    def endDocument(self):
+    def endDocument(self) -> None:
         self.f.write("]")
         self.f.close()
 

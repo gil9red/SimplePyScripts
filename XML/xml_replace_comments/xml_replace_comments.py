@@ -9,7 +9,7 @@ import re
 from lxml import etree
 
 
-def replace(file_name, save_file_name):
+def replace(file_name, save_file_name) -> None:
     with open(file_name, encoding="utf8") as f:
         text = f.read()
 

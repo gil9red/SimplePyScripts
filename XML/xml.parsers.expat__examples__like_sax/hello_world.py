@@ -11,15 +11,15 @@ import xml.parsers.expat
 
 
 # 3 handler functions
-def on_start_element(name, attrs):
+def on_start_element(name, attrs) -> None:
     print("Start element:", name, attrs)
 
 
-def on_end_element(name):
+def on_end_element(name) -> None:
     print("End element:", name)
 
 
-def on_char_data(data):
+def on_char_data(data) -> None:
     print("Character data:", repr(data))
 
 

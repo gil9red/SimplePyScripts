@@ -12,13 +12,13 @@ import xmltodict
 
 
 class Dog:
-    def __init__(self, name):
+    def __init__(self, name) -> None:
         self.name = name
         self.type = "Animal"
         self.paws = 4
         self.has_tail = True
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<Dog name={self.name} type="{self.type}" paws="{self.paws}" has_tail="{self.has_tail}">'
 
 

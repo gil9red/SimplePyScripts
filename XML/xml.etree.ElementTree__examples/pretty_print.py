@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 
 
 # SOURCE: http://effbot.org/zone/element-lib.htm#prettyprint
-def indent(elem, level=0):
+def indent(elem, level=0) -> None:
     i = "\n" + level * "  "
     if len(elem):
         if not elem.text or not elem.text.strip():
