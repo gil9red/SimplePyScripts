@@ -9,14 +9,14 @@ class RegistryException(Exception):
 
 
 class RegistryKeyNotFoundException(RegistryException):
-    def __init__(self, path: str):
+    def __init__(self, path: str) -> None:
         self.path = path
 
         super().__init__(f"Registry key not found, path='{self.path}'")
 
 
 class RegistryValueNotFoundException(RegistryException):
-    def __init__(self, path: str, name: str):
+    def __init__(self, path: str, name: str) -> None:
         self.path = path
         self.name = name
 

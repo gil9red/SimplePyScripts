@@ -37,7 +37,7 @@ def to_str(el: "Element") -> str:
         return str(el)
 
 
-def log_uncaught_exceptions(ex_cls, ex, tb):
+def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
     text = f"{ex_cls.__name__}: {ex}:\n"
     text += "".join(traceback.format_tb(tb))
 
@@ -50,7 +50,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("xml_html__xpath__css_selector__gui")
@@ -123,7 +123,7 @@ class MainWindow(QWidget):
 
         self.setLayout(layout)
 
-    def on_process(self):
+    def on_process(self) -> None:
         self.text_edit_output.clear()
         self.label_error.clear()
         self.button_detail_error.hide()
@@ -170,7 +170,7 @@ class MainWindow(QWidget):
 
             self.label_error.setText("Error: " + self.last_error_message)
 
-    def show_detail_error_message(self):
+    def show_detail_error_message(self) -> None:
         message = self.last_error_message + "\n\n" + self.last_detail_error_message
 
         mb = QErrorMessage()

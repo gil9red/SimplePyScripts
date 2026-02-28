@@ -54,7 +54,7 @@ class BaseModel(Model):
     class Meta:
         database = db
 
-    def __str__(self):
+    def __str__(self) -> str:
         fields = []
         for k, field in self._meta.fields.items():
             v = getattr(self, k)
@@ -78,7 +78,7 @@ class Word2Emoji(BaseModel):
     emoji = TextField(null=True)
 
     @classmethod
-    def add(cls, word: str, emoji: str = None, convert_to_normal_form=True):
+    def add(cls, word: str, emoji: str = None, convert_to_normal_form=True) -> None:
         word = word.strip()
         if convert_to_normal_form:
             word = get_normal_form(word)

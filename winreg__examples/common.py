@@ -56,7 +56,7 @@ def get_key(path: str) -> Optional[HKEYType]:
 
 
 class RegistryValue:
-    def __init__(self, name: str, value_type: int, value: Any):
+    def __init__(self, name: str, value_type: int, value: Any) -> None:
         self.name: str = name
 
         self.value_type: int = value_type
@@ -72,7 +72,7 @@ class RegistryValue:
 
 
 class RegistryKey:
-    def __init__(self, path: str):
+    def __init__(self, path: str) -> None:
         path = expand_path(path)
 
         self.hkey: HKEYType = get_key(path)

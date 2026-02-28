@@ -8,7 +8,7 @@ import os
 import zipfile
 
 
-def make_zipfile(source_dir, output_filename):
+def make_zipfile(source_dir, output_filename) -> None:
     relroot = os.path.abspath(os.path.join(source_dir, os.pardir))
     with zipfile.ZipFile(output_filename, "w", zipfile.ZIP_DEFLATED) as zip:
         for root, dirs, files in os.walk(source_dir):

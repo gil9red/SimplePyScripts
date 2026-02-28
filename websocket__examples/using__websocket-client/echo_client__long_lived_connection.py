@@ -18,10 +18,10 @@ import time
 import websocket
 
 
-def on_open(ws: websocket.WebSocketApp):
+def on_open(ws: websocket.WebSocketApp) -> None:
     print(f"[on_open]")
 
-    def run(*args):
+    def run(*args) -> None:
         for i in range(3):
             time.sleep(1)
             ws.send(f"Hello {i}")
@@ -34,11 +34,11 @@ def on_open(ws: websocket.WebSocketApp):
     thread.start_new_thread(run, ())
 
 
-def on_message(ws: websocket.WebSocketApp, message: str):
+def on_message(ws: websocket.WebSocketApp, message: str) -> None:
     print(f"[on_message] {message}")
 
 
-def on_error(ws: websocket.WebSocketApp, error: Exception):
+def on_error(ws: websocket.WebSocketApp, error: Exception) -> None:
     print(f"[on_error] {error}")
 
 
@@ -46,7 +46,7 @@ def on_close(
     ws: websocket.WebSocketApp,
     close_status_code: int | None,
     close_msg: str | None,
-):
+) -> None:
     print(f"[on_close] close_status_code={close_status_code} close_msg={close_msg}")
 
 

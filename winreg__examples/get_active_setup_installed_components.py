@@ -73,7 +73,7 @@ def get_active_setup_components(exists_stub_path=True) -> dict[str, list[Compone
 
 if __name__ == "__main__":
 
-    def _print_this(path_by_components: dict[str, list[Component]]):
+    def _print_this(path_by_components: dict[str, list[Component]]) -> None:
         for path, components in path_by_components.items():
             print(f"{path} ({len(components)}):")
             for component in components:

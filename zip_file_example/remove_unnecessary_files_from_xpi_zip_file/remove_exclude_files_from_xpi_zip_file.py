@@ -31,7 +31,7 @@ def create_parser():
     return parser.parse_args()
 
 
-def do(zip_file_name, exclude):
+def do(zip_file_name, exclude) -> None:
     print("zip_file_name:", zip_file_name)
 
     print("Delete files:", EXCLUDE)

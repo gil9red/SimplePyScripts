@@ -13,7 +13,7 @@ import asyncio
 import websockets
 
 
-async def hello(url: str):
+async def hello(url: str) -> None:
     async with websockets.connect(url) as websocket:
         await websocket.send("Hello World!")
 

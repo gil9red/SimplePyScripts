@@ -40,7 +40,7 @@ def get_url_images(url):
     )
 
 
-def save_urls_to_zip(zip_file_name, urls):
+def save_urls_to_zip(zip_file_name, urls) -> None:
     if not urls:
         print("Cписок изображений пустой.")
         return
