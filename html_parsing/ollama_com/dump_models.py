@@ -16,8 +16,10 @@ import requests
 from bs4 import BeautifulSoup, Tag
 
 
-DIR: Path = Path(__file__).resolve().parent
-PATH_DUMP: Path = DIR / "dump_models.jsonl"
+FILE_NAME: Path = Path(__file__).resolve()
+DIR: Path = FILE_NAME.parent
+
+PATH_DUMP: Path = DIR / f"{FILE_NAME.name}.jsonl"
 
 
 @dataclass
