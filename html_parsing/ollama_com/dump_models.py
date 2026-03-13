@@ -16,8 +16,8 @@ from bs4 import BeautifulSoup, Tag
 
 from common import DIR_DUMPS, session
 
-FILE_NAME: Path = Path(__file__).resolve()
 
+FILE_NAME: Path = Path(__file__).resolve()
 PATH_DUMP: Path = DIR_DUMPS / f"{FILE_NAME.name}.jsonl"
 
 
