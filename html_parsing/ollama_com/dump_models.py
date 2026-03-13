@@ -53,26 +53,29 @@ class Model:
 
 
 url: str = "https://ollama.com/search"
+
+items: list[Model] = []
+while True:
+    print(f"Load: {url}")
+
+    rs = session.get(url)
+    rs.raise_for_status()
+
+    soup = BeautifulSoup(rs.content, "html.parser")
+
+    for item in soup.select("li[x-test-model] > a:has([x-test-search-response-title])"):
+        model = Model.parse_from(item, base_url=rs.url)
+        print(model)
+        items.append(model)
+
+    next_page_el: Tag | None = soup.select_one("[hx-trigger=revealed][hx-get]")
+    if not next_page_el:
+        break
+
+    url = urljoin(rs.url, next_page_el["hx-get"])
+    time.sleep(1)
+
+print(f"Writing to file: {FILE_NAME}")
 with open(PATH_DUMP, "w", encoding="UTF-8") as f:
-    while True:
-        print(f"Load: {url}")
-
-        rs = session.get(url)
-        rs.raise_for_status()
-
-        soup = BeautifulSoup(rs.content, "html.parser")
-
-        for item in soup.select("li[x-test-model] > a:has([x-test-search-response-title])"):
-            model = Model.parse_from(item, base_url=rs.url)
-            print(model)
-            f.write(json.dumps(asdict(model), ensure_ascii=False) + "\n")
-
-        f.flush()
-
-        next_page_el: Tag | None = soup.select_one("[hx-trigger=revealed][hx-get]")
-        if not next_page_el:
-            break
-
-        url = urljoin(rs.url, next_page_el["hx-get"])
-
-        time.sleep(1)
+    for model in sorted(items, key=lambda x: x.title):
+        f.write(json.dumps(asdict(model), ensure_ascii=False) + "\n")
