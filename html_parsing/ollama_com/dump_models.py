@@ -12,14 +12,13 @@ from pathlib import Path
 from typing import Self
 from urllib.parse import urljoin
 
-import requests
 from bs4 import BeautifulSoup, Tag
 
+from common import DIR_DUMPS, session
 
 FILE_NAME: Path = Path(__file__).resolve()
-DIR: Path = FILE_NAME.parent
 
-PATH_DUMP: Path = DIR / f"{FILE_NAME.name}.jsonl"
+PATH_DUMP: Path = DIR_DUMPS / f"{FILE_NAME.name}.jsonl"
 
 
 @dataclass
@@ -52,8 +51,6 @@ class Model:
             updated=item.select_one("[x-test-updated]").get_text(strip=True),
         )
 
-
-session = requests.Session()
 
 url: str = "https://ollama.com/search"
 with open(PATH_DUMP, "w", encoding="UTF-8") as f:
