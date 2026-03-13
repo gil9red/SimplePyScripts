@@ -1,0 +1,3 @@
+{"title": "bge-m3:567m", "url": "https://ollama.com/library/bge-m3:567m", "size": "1.2GB", "context": "8K", "input": "Text", "id_hash": "790764642607", "last_modified": "1 year ago"}
+{"title": "bge-m3:567m-fp16", "url": "https://ollama.com/library/bge-m3:567m-fp16", "size": "1.2GB", "context": "8K", "input": "Text", "id_hash": "790764642607", "last_modified": "1 year ago"}
+{"title": "bge-m3:latest", "url": "https://ollama.com/library/bge-m3:latest", "size": "1.2GB", "context": "8K", "input": "Text", "id_hash": "790764642607", "last_modified": "1 year ago"}

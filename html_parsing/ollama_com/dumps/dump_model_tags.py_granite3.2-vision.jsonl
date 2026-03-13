@@ -1,0 +1,5 @@
+{"title": "granite3.2-vision:2b", "url": "https://ollama.com/library/granite3.2-vision:2b", "size": "2.4GB", "context": "16K", "input": "Text, Image", "id_hash": "3be41a661804", "last_modified": "1 year ago"}
+{"title": "granite3.2-vision:2b-fp16", "url": "https://ollama.com/library/granite3.2-vision:2b-fp16", "size": "6.0GB", "context": "16K", "input": "Text, Image", "id_hash": "17ca6aa97bd9", "last_modified": "1 year ago"}
+{"title": "granite3.2-vision:2b-q4_K_M", "url": "https://ollama.com/library/granite3.2-vision:2b-q4_K_M", "size": "2.4GB", "context": "16K", "input": "Text, Image", "id_hash": "3be41a661804", "last_modified": "1 year ago"}
+{"title": "granite3.2-vision:2b-q8_0", "url": "https://ollama.com/library/granite3.2-vision:2b-q8_0", "size": "3.6GB", "context": "16K", "input": "Text, Image", "id_hash": "9b6204ce60f6", "last_modified": "1 year ago"}
+{"title": "granite3.2-vision:latest", "url": "https://ollama.com/library/granite3.2-vision:latest", "size": "2.4GB", "context": "16K", "input": "Text, Image", "id_hash": "3be41a661804", "last_modified": "1 year ago"}
