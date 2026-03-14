@@ -1,5 +1,5 @@
 fastapi==0.111.0
 uvicorn[standard]==0.30.1
-PyJWT==2.8.0
+PyJWT==2.12.0
 passlib==1.7.4
 bcrypt==4.0.1
