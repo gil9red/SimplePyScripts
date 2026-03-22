@@ -72,6 +72,7 @@ def click_all_on_screen(
 
     print(f"Протыкивание монитора #{monitor_number} в области:")
     print(f"X: от {start_x} до {end_x}, Y: от {start_y} до {end_y}")
+    print(f"Шаг равняется {step}px")
 
     sleep_time_between_clicks_secs: float = sleep_time_between_clicks_ms / 1000
 
