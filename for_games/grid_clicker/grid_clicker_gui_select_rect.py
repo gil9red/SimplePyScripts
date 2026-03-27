@@ -6,9 +6,18 @@ __author__ = "ipetrash"
 
 import sys
 
-from PyQt5.QtWidgets import QApplication, QDialog
+from PyQt5.QtWidgets import (
+    QApplication,
+    QDialog,
+    QFrame,
+    QPushButton,
+    QCheckBox,
+    QVBoxLayout,
+)
 from PyQt5.QtCore import Qt, QRect, QPoint
 from PyQt5.QtGui import QPainter, QColor, QPen
+
+from grid_clicker import click_all_on_screen
 
 
 class AreaSelectorDialog(QDialog):
@@ -30,6 +39,41 @@ class AreaSelectorDialog(QDialog):
         self.is_selecting = False
 
         self.selected_rect: QRect | None = None
+        self.do_click: bool = False
+        self.need_run_clicker: bool = False
+
+        self.checkbox_do_click = QCheckBox(
+            "Do Click?", checked=True, clicked=self.on_checkbox_do_click
+        )
+
+        self.button_run = QPushButton("Run click", clicked=self.on_run_clicked)
+        self.button_close = QPushButton("Close", clicked=self.close)
+
+        self.control_widget = QFrame(self)
+        self.control_widget.setCursor(Qt.ArrowCursor)
+        self.control_widget.setStyleSheet(
+            """
+            QFrame {
+                background-color: rgba(60, 60, 60, 200);
+                border-radius: 10px;
+            }
+            QCheckBox {
+                color: white;
+            }
+        """
+        )
+        self.control_widget.hide()
+        control_layout = QVBoxLayout(self.control_widget)
+        control_layout.addWidget(self.checkbox_do_click)
+        control_layout.addWidget(self.button_run)
+        control_layout.addWidget(self.button_close)
+
+    def on_run_clicked(self):
+        self.need_run_clicker = True
+        self.close()
+
+    def on_checkbox_do_click(self):
+        self.do_click = self.checkbox_do_click.isChecked()
 
     def mousePressEvent(self, event) -> None:
         if event.button() == Qt.LeftButton:
@@ -43,12 +87,15 @@ class AreaSelectorDialog(QDialog):
             self.end_global = event.globalPos()
             self.update()
 
+            local_begin = self.mapFromGlobal(self.begin_global)
+            self.control_widget.move(local_begin)
+            self.control_widget.show()
+
     def mouseReleaseEvent(self, event) -> None:
         if event.button() == Qt.LeftButton:
             self.is_selecting = False
 
             self.selected_rect = QRect(self.begin_global, self.end_global).normalized()
-            self.close()
 
     def keyPressEvent(self, event) -> None:
         if event.key() == Qt.Key_Escape:
@@ -97,6 +144,14 @@ if __name__ == "__main__":
         print(f"Args: --x1={x1} --y1={y1} --x2={x2} --y2={y2}")
         print(f"Размер: {w}x{h}")
         print("------------------------------")
+
+        if selector.need_run_clicker:
+            click_all_on_screen(
+                do_click=selector.do_click,
+                sleep_time_before_starting_secs=1,
+                coords=(x1, y1, x2, y2),
+            )
+
     else:
         print("Выбор отменен.")
 
