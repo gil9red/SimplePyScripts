@@ -39,11 +39,11 @@ class AreaSelectorDialog(QDialog):
         self.is_selecting = False
 
         self.selected_rect: QRect | None = None
-        self.do_click: bool = False
+        self.do_click: bool = True
         self.need_run_clicker: bool = False
 
         self.checkbox_do_click = QCheckBox(
-            "Do Click?", checked=True, clicked=self.on_checkbox_do_click
+            "Do Click?", checked=self.do_click, clicked=self.on_checkbox_do_click
         )
 
         self.button_run = QPushButton("Run click", clicked=self.on_run_clicked)
