@@ -43,6 +43,7 @@ def start_click_listener() -> None:
 def click_all_on_screen(
     step: int = 50,
     do_click: bool = False,
+    sleep_time_before_starting_secs: int = 3,
     # Режим 1: Прямые координаты
     coords: tuple[int, int, int, int] | None = None,  # (x1, y1, x2, y2)
     # Режим 2: По номеру монитора
@@ -87,7 +88,7 @@ def click_all_on_screen(
 
     sleep_time_between_clicks_secs: float = sleep_time_between_clicks_ms / 1000
 
-    time.sleep(3)
+    time.sleep(sleep_time_before_starting_secs)
 
     print("Работаю. Нажми ПРАВУЮ кнопку мыши для стопа.")
 
@@ -119,8 +120,17 @@ def main() -> None:
         action="store_true",
         help="РАЗРЕШИТЬ клики (без этого флага только перемещение курсора)",
     )
+
     base_group.add_argument(
         "-t",
+        "--sleep_time_before_starting_secs",
+        type=int,
+        default=3,
+        dest="sleep_time_before_starting_secs",
+        help="Задержка перед началом (сек)",
+    )
+    base_group.add_argument(
+        "-tc",
         "--sleep",
         type=int,
         default=10,
@@ -163,9 +173,10 @@ def main() -> None:
     click_all_on_screen(
         step=args.step,
         do_click=args.do_click,
+        sleep_time_before_starting_secs=args.sleep_time_before_starting_secs,
+        sleep_time_between_clicks_ms=args.sleep_time_between_clicks_ms,
         coords=coords,
         monitor_number=args.monitor_number,
-        sleep_time_between_clicks_ms=args.sleep_time_between_clicks_ms,
         offset_top=args.offset_top,
         offset_bottom=args.offset_bottom,
         offset_left=args.offset_left,
