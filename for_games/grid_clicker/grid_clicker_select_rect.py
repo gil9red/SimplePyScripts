@@ -94,6 +94,7 @@ if __name__ == "__main__":
         print("--- Координаты ---")
         print(f"x1={x1}, y1={y1}, x2={x2}, y2={y2}")
         print(f"Tuple: ({x1}, {y1}, {x2}, {y2})")
+        print(f"Args: --x1={x1} --y1={y1} --x2={x2} --y2={y2}")
         print(f"Размер: {w}x{h}")
         print("------------------------------")
     else:
