@@ -7,6 +7,7 @@ __author__ = "ipetrash"
 # import re  # TODO: Удалить
 
 from datetime import datetime
+
 # from urllib.parse import urljoin  # TODO: Удалить
 from typing import Any
 
@@ -67,27 +68,32 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
     #     if m_k:
     #         data["searchOptions"]["games"]["gameplay"][k] = m_k.group(1)
 
+    # url_api_search = f"{URL_BASE}/api/search"  # TODO: Прошлый вариант
+    # url_api_search = f"{URL_BASE}/api/finder"
+    url_api_search = f"{URL_BASE}/api/find"
+
     # NOTE: Получение token. Новая защита
     rs_token = session.get(
         # f"{URL_BASE}/api/search/init",  # TODO: Прошлый вариант
-        f"{URL_BASE}/api/finder/init",
+        # f"{URL_BASE}/api/finder/init",
+        f"{url_api_search}/init",
         params={"t": int(datetime.now().timestamp()) * 1000},
         headers=headers,
     )
     try:
         rs_token.raise_for_status()
-        token: str = rs_token.json()["token"]
+        token_data: dict[str, Any] = rs_token.json()
+        token: str = token_data["token"]
+        hp_key: str = token_data.get("hpKey")
+        hp_val: str = token_data.get("hpVal")
     except Exception:
         token = ""
+        hp_key = ""
+        hp_val = ""
     if not token:
         raise Exception("Не получен token!")
 
-    headers["x-auth-token"] = token
-
-    # url_api_search = f"{URL_BASE}/api/search"  # TODO: Прошлый вариант
-    url_api_search = f"{URL_BASE}/api/finder"
-
-    data = {
+    data: dict[str, Any] = {
         "searchType": "games",
         "searchTerms": text.split(),
         "searchPage": page,
@@ -117,6 +123,13 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
         },
         "useCache": True,
     }
+
+    headers["x-auth-token"] = token
+    if hp_key and hp_val:
+        headers["x-hp-key"] = hp_key
+        headers["x-hp-val"] = hp_val
+
+        data[hp_key] = hp_val
 
     rs = session.post(
         url_api_search,
