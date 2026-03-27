@@ -7,6 +7,7 @@ __author__ = "ipetrash"
 import argparse
 import threading
 import time
+import sys
 
 # pip install pyautogui==0.9.54
 import pyautogui
@@ -41,13 +42,16 @@ def start_click_listener() -> None:
 
 def click_all_on_screen(
     step: int = 50,
+    do_click: bool = False,
+    # Режим 1: Прямые координаты
+    coords: tuple[int, int, int, int] | None = None,  # (x1, y1, x2, y2)
+    # Режим 2: По номеру монитора
     monitor_number: int = 1,
     sleep_time_between_clicks_ms: int = 10,
     offset_top: int = 50,  # Защитный отступ сверху
     offset_bottom: int = 50,  # Защитный отступ снизу
     offset_left: int = 50,  # Защитный отступ слева
     offset_right: int = 50,  # Защитный отступ справа
-    do_click: bool | str = True,
 ) -> None:
     global is_running
 
@@ -57,22 +61,29 @@ def click_all_on_screen(
     # Запуск потока для-прерывателя
     threading.Thread(target=start_click_listener, daemon=True).start()
 
-    monitors = get_monitors()
-    try:
-        monitor: Monitor = monitors[monitor_number - 1]
-    except IndexError as e:
-        print(f"[#] Ошибка: {e}. Номер монитора должен быть от 1 до {len(monitors)}")
-        return
+    # Режим 1: Прямые координаты
+    if coords:
+        start_x, start_y, end_x, end_y = coords
+        print(f"Режим ручных координат: X({start_x}..{end_x}), Y({start_y}..{end_y})")
 
-    # Определяем границы с учетом отступов
-    start_x = monitor.x + offset_left
-    end_x = monitor.x + monitor.width - offset_right
-    start_y = monitor.y + offset_top
-    end_y = monitor.y + monitor.height - offset_bottom
+    # Режим 2: По номеру монитора
+    else:
+        monitors = get_monitors()
+        try:
+            monitor: Monitor = monitors[monitor_number - 1]
+        except IndexError:
+            print(f"[#] Ошибка: Номер монитора должен быть от 1 до {len(monitors)}")
+            return
 
-    print(f"Протыкивание монитора #{monitor_number} в области:")
-    print(f"X: от {start_x} до {end_x}, Y: от {start_y} до {end_y}")
-    print(f"Шаг равняется {step}px")
+        # Определяем границы с учетом отступов
+        start_x = monitor.x + offset_left
+        end_x = monitor.x + monitor.width - offset_right
+        start_y = monitor.y + offset_top
+        end_y = monitor.y + monitor.height - offset_bottom
+        print(f"Режим монитора #{monitor_number} с отступами.")
+
+    print(f"Область: X от {start_x} до {end_x}, Y от {start_y} до {end_y}")
+    print(f"Шаг: {step}px")
 
     sleep_time_between_clicks_secs: float = sleep_time_between_clicks_ms / 1000
 
@@ -80,10 +91,9 @@ def click_all_on_screen(
 
     print("Работаю. Нажми ПРАВУЮ кнопку мыши для стопа.")
 
-    # Проходим по координатам с учетом новых границ
     for y in range(start_y, end_y, step):
         for x in range(start_x, end_x, step):
-            if not is_running:  # Проверка флага перед каждым кликом
+            if not is_running:
                 print("Программа экстренно завершена.")
                 return
 
@@ -102,18 +112,12 @@ def main() -> None:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
-    # Основные настройки
     base_group = parser.add_argument_group("Основные настройки")
+    base_group.add_argument("-s", "--step", type=int, default=50, help="Шаг сетки")
     base_group.add_argument(
-        "-s", "--step", type=int, default=50, help="Шаг сетки в пикселях"
-    )
-    base_group.add_argument(
-        "-m",
-        "--monitor",
-        type=int,
-        default=1,
-        dest="monitor_number",
-        help="Порядковый номер монитора",
+        "--do-click",
+        action="store_true",
+        help="РАЗРЕШИТЬ клики (без этого флага только перемещение курсора)",
     )
     base_group.add_argument(
         "-t",
@@ -121,57 +125,69 @@ def main() -> None:
         type=int,
         default=10,
         dest="sleep_time_between_clicks_ms",
-        help="Задержка между кликами (миллисекунд)",
+        help="Задержка (мс)",
     )
 
-    # Настройки отступов
-    offset_group = parser.add_argument_group("Настройки отступов (безопасные зоны)")
-    offset_group.add_argument(
-        "--top", type=int, default=50, dest="offset_top", help="Отступ сверху"
+    # Новая группа для координат
+    coord_group = parser.add_argument_group(
+        "Режим конкретных координат (игнорирует настройки монитора)"
     )
-    offset_group.add_argument(
-        "--bottom", type=int, default=50, dest="offset_bottom", help="Отступ снизу"
-    )
-    offset_group.add_argument(
-        "--left", type=int, default=50, dest="offset_left", help="Отступ слева"
-    )
-    offset_group.add_argument(
-        "--right", type=int, default=50, dest="offset_right", help="Отступ справа"
-    )
+    coord_group.add_argument("--x1", type=int, help="Левая граница")
+    coord_group.add_argument("--y1", type=int, help="Верхняя граница")
+    coord_group.add_argument("--x2", type=int, help="Правая граница")
+    coord_group.add_argument("--y2", type=int, help="Нижняя граница")
 
-    # Режим работы
-    mode_group = parser.add_argument_group("Режим работы")
-    mode_group.add_argument(
-        "--no-click",
-        action="store_false",
-        dest="do_click",
-        help="Только перемещать курсор (тестовый режим)",
+    monitor_group = parser.add_argument_group(
+        "Настройки монитора (используются, если не заданы x1,y1,x2,y2)"
     )
-    parser.set_defaults(do_click=True)
+    monitor_group.add_argument(
+        "-m", "--monitor", type=int, default=1, dest="monitor_number"
+    )
+    monitor_group.add_argument("--top", type=int, default=50, dest="offset_top")
+    monitor_group.add_argument("--bottom", type=int, default=50, dest="offset_bottom")
+    monitor_group.add_argument("--left", type=int, default=50, dest="offset_left")
+    monitor_group.add_argument("--right", type=int, default=50, dest="offset_right")
 
     args = parser.parse_args()
 
-    # Передача словаря аргументов в функцию
+    # Если скрипт запущен без аргументов — показываем help и выходим
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit(0)
+
+    # Собираем координаты в кортеж, если они все указаны
+    coords: tuple[int, int, int, int] | None = None
+    if all(v is not None for v in [args.x1, args.y1, args.x2, args.y2]):
+        coords = args.x1, args.y1, args.x2, args.y2
+
     click_all_on_screen(
         step=args.step,
+        do_click=args.do_click,
+        coords=coords,
         monitor_number=args.monitor_number,
         sleep_time_between_clicks_ms=args.sleep_time_between_clicks_ms,
         offset_top=args.offset_top,
         offset_bottom=args.offset_bottom,
         offset_left=args.offset_left,
         offset_right=args.offset_right,
-        do_click=args.do_click,
     )
 
 
 if __name__ == "__main__":
-    # NOTE: Пример использования
+    # NOTE: Пример использования, режим прямых координат
+    # NOTE: grid_clicker.py --x1=-545 --y1=322 --x2=-42 --y2=1073
+    # NOTE: grid_clicker.py --do-click --x1=-545 --y1=322 --x2=-42 --y2=1073
+    # click_all_on_screen(
+    #     step=100,
+    #     coords=(-545, 322, -42, 1073),
+    # )
+
+    # NOTE: Пример использования, режим монитора
     # click_all_on_screen(
     #     step=100,
     #     monitor_number=2,
     #     # sleep_time_between_clicks_ms=0.005, # 5 мс
     #     offset_bottom=150,
-    #     do_click=True,
     # )
 
     main()
