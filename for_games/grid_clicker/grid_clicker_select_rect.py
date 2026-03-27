@@ -6,7 +6,7 @@ __author__ = "ipetrash"
 
 import sys
 
-from PyQt5.QtWidgets import QApplication, QWidget, QDialog
+from PyQt5.QtWidgets import QApplication, QDialog
 from PyQt5.QtCore import Qt, QRect, QPoint
 from PyQt5.QtGui import QPainter, QColor, QPen
 
