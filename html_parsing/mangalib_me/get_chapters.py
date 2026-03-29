@@ -5,6 +5,7 @@ __author__ = "ipetrash"
 
 
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Any, Self
 from urllib.parse import urlparse
 
@@ -73,14 +74,14 @@ class User:
 @dataclass
 class RestrictedView:
     is_open: bool
-    expired_at: str
+    expired_at: datetime
     price: int | None
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:
         return cls(
             is_open=data["is_open"],
-            expired_at=data["expired_at"],
+            expired_at=datetime.fromisoformat(data["expired_at"]),
             price=data["price"],
         )
 
@@ -89,7 +90,7 @@ class RestrictedView:
 class Branch:
     id: int
     branch_id: int
-    created_at: str
+    created_at: datetime
     teams: list[Team]
     expired_type: int
     user: User
@@ -101,7 +102,7 @@ class Branch:
         return cls(
             id=data["id"],
             branch_id=data["branch_id"],
-            created_at=data["created_at"],
+            created_at=datetime.fromisoformat(data["created_at"]),
             teams=[Team.from_dict(t) for t in data["teams"]],
             expired_type=data["expired_type"],
             user=User.from_dict(data["user"]),
@@ -188,6 +189,16 @@ def get_chapters(url: str) -> list[Chapter]:
 
 if __name__ == "__main__":
     import time
+
+    url = "https://mangalib.me/ru/manga/12123--mieru-ko-chan"
+    print(url)
+    chapters: list[Chapter] = get_chapters(url)
+    print("Last added 10 chapters:")
+    for c in sorted(chapters, key=lambda c: c.branches[0].created_at, reverse=True)[:10]:
+        print(f"    {c}")
+    print("\n" + "-"*10+"\n")
+
+    time.sleep(1)
 
     def _get_chapters(chapters: list[Chapter]) -> list[str]:
         return [f"    {c.title}: {c.url}" for c in chapters]
