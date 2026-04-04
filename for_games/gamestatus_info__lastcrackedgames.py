@@ -37,11 +37,15 @@ class Game:
         if protection.startswith("["):
             protection = ", ".join(json.loads(protection))
 
+        hacked_groups: str = data["hacked_groups"]
+        if hacked_groups.startswith("["):
+            hacked_groups = ", ".join(json.loads(hacked_groups))
+
         return cls(
             title=data["title"],
             url=f'{URL_BASE}/{data["slug"]}',
             protection=protection,
-            hacked_groups=data["hacked_groups"],
+            hacked_groups=hacked_groups,
             release_date=date.fromisoformat(data["release_date"]),
             crack_date=date.fromisoformat(data["crack_date"]),
         )
