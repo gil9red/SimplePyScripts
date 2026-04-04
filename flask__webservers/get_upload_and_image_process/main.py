@@ -312,7 +312,7 @@ def upload_url():
         return redirect("/")
 
     url = request.form["url"]
-    file_data = requests.get(url).content
+    file_data = requests.get(url, timeout=10.0).content
 
     save_last_image(file_data)
 

@@ -29,7 +29,7 @@ logging.basicConfig(level=logging.DEBUG)
 @app.route("/")
 def index():
     try:
-        rs = requests.get("http://bash.im")
+        rs = requests.get("http://bash.im", timeout=10.0)
         soup = BeautifulSoup(rs.text, "lxml")
 
         number = today_quotes(soup)

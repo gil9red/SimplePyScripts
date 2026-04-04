@@ -25,7 +25,7 @@ URL: str = "https://bloodborne.fandom.com/ru/wiki/Боссы"
 
 
 def get_bosses() -> dict[str, list[Boss]]:
-    rs = requests.get(URL)
+    rs = requests.get(URL, timeout=10.0)
     rs.raise_for_status()
 
     soup = BeautifulSoup(rs.content, "html.parser")

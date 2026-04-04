@@ -14,7 +14,7 @@ def get_token(username, password):
         "service": "moodle_mobile_app",
     }
 
-    rs = requests.get("http://newlms.magtu.ru/login/token.php", params=params)
+    rs = requests.get("http://newlms.magtu.ru/login/token.php", params=params, timeout=10.0)
     print(rs)
 
     json_data = rs.json()

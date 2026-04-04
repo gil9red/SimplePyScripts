@@ -72,7 +72,7 @@ class Parser:
 
         """
 
-        rs = requests.get(url_location)
+        rs = requests.get(url_location, timeout=10.0)
         root = BeautifulSoup(rs.content, "html.parser")
 
         table_locations = None
@@ -103,7 +103,7 @@ class Parser:
 
         """
 
-        rs = requests.get(url_location)
+        rs = requests.get(url_location, timeout=10.0)
         root = BeautifulSoup(rs.content, "html.parser")
 
         table_bosses = None
@@ -132,7 +132,7 @@ class Parser:
         links = set()
         link_boss = set()
 
-        rs = requests.get(self._url_locations)
+        rs = requests.get(self._url_locations, timeout=10.0)
         root = BeautifulSoup(rs.content, "html.parser")
 
         for a in root.select(".category-page__member-link"):

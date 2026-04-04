@@ -49,7 +49,7 @@ def loop_command_function() -> None:
 
             url = "http://yandex.ru/images/search?text=" + COMMAND_TEXT
 
-            rs = requests.get(url)
+            rs = requests.get(url, timeout=10.0)
             print(rs)
 
             root = BeautifulSoup(rs.content, "lxml")

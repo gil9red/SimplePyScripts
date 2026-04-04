@@ -28,7 +28,7 @@ def go_parser(urls) -> None:
     while True:
         for url in urls:
             try:
-                rs = requests.get(url)
+                rs = requests.get(url, timeout=10.0)
                 print(f'Parser: {rs}. "{rs.text}"')
 
             except:

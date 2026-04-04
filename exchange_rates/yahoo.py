@@ -12,7 +12,7 @@ import requests
 
 # TODO: непонятно за какую дату находит
 url = "https://query.yahooapis.com/v1/public/yql?q=select+*+from+yahoo.finance.xchange+where+pair+=+%22USDRUB,EURRUB%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="
-rs = requests.get(url)
+rs = requests.get(url, timeout=10.0)
 
 text = "Курс:"
 for rate in rs.json()["query"]["results"]["rate"]:

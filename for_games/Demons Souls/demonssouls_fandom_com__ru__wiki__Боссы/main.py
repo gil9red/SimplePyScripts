@@ -21,7 +21,7 @@ class Boss(NamedTuple):
 
 
 def get_bosses(url: str) -> dict[str, list[Boss]]:
-    rs = requests.get(url)
+    rs = requests.get(url, timeout=10.0)
     root = BeautifulSoup(rs.content, "html.parser")
 
     bosses_by_category = defaultdict(list)

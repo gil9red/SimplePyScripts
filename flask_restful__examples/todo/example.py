@@ -12,7 +12,7 @@ URL_BASE = "http://127.0.0.1:5000"
 
 url = URL_BASE
 print(f"GET: {url}")
-rs = requests.get(url)
+rs = requests.get(url, timeout=10.0)
 print(rs, rs.json())
 """
 GET: http://127.0.0.1:5000
@@ -23,7 +23,7 @@ print()
 
 url = f"{URL_BASE}/todos"
 print(f"GET: {url}")
-rs = requests.get(url)
+rs = requests.get(url, timeout=10.0)
 rs_json = rs.json()
 print(rs, rs_json)
 """
@@ -37,7 +37,7 @@ todo_id = list(rs_json)[0]
 
 url = f"{URL_BASE}/todos/{todo_id}"
 print(f"GET: {url}")
-rs = requests.get(url)
+rs = requests.get(url, timeout=10.0)
 print(rs, rs.json())
 """
 GET: http://127.0.0.1:5000/todos/todo1
@@ -48,7 +48,7 @@ print()
 
 url = f"{URL_BASE}/todos/{todo_id}"
 print(f"PUT: {url}")
-rs = requests.put(url, json=dict(task=f"Update task {todo_id}"))
+rs = requests.put(url, json=dict(task=f"Update task {todo_id}"), timeout=10.0)
 print(rs, rs.json())
 """
 PUT: http://127.0.0.1:5000/todos/todo1
@@ -59,7 +59,7 @@ print()
 
 url = f"{URL_BASE}/todos/{todo_id}_new"
 print(f"PUT: {url}")
-rs = requests.put(url, json=dict(task=f"New task!"))
+rs = requests.put(url, json=dict(task=f"New task!"), timeout=10.0)
 print(rs, rs.json())
 """
 PUT: http://127.0.0.1:5000/todos/todo1_new
@@ -70,7 +70,7 @@ print()
 
 url = f"{URL_BASE}/todos"
 print(f"POST: {url}")
-rs = requests.post(url, json=dict(task=f"New task!"))
+rs = requests.post(url, json=dict(task=f"New task!"), timeout=10.0)
 print(rs, rs.json())
 """
 POST: http://127.0.0.1:5000/todos
@@ -81,7 +81,7 @@ print()
 
 url = f"{URL_BASE}/todos"
 print(f"GET: {url}")
-rs = requests.get(url)
+rs = requests.get(url, timeout=10.0)
 print(rs, rs.json())
 """
 GET: http://127.0.0.1:5000/todos
@@ -92,7 +92,7 @@ print()
 
 url = f"{URL_BASE}/todos/{todo_id}"
 print(f"DELETE: {url}")
-rs = requests.delete(url)
+rs = requests.delete(url, timeout=10.0)
 print(rs, rs.json())
 """
 DELETE: http://127.0.0.1:5000/todos/todo1
@@ -103,7 +103,7 @@ print()
 
 url = f"{URL_BASE}/todos"
 print(f"GET: {url}")
-rs = requests.get(url)
+rs = requests.get(url, timeout=10.0)
 print(rs, rs.json())
 """
 GET: http://127.0.0.1:5000/todos
@@ -114,7 +114,7 @@ print()
 
 url = URL_BASE
 print(f"GET: {url}")
-rs = requests.get(url)
+rs = requests.get(url, timeout=10.0)
 print(rs, rs.json())
 """
 GET: http://127.0.0.1:5000

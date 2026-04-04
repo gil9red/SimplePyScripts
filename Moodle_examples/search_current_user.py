@@ -23,7 +23,7 @@ params = {
     "values[0]": USERNAME,
 }
 
-rs = requests.get("http://newlms.magtu.ru/webservice/rest/server.php", params=params)
+rs = requests.get("http://newlms.magtu.ru/webservice/rest/server.php", params=params, timeout=10.0)
 print(rs)
 
 json_data = rs.json()

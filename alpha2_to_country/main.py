@@ -27,7 +27,7 @@ def init() -> None:
         )
         return
 
-    rs = requests.get("https://ru.wikipedia.org/wiki/ISO_3166-1")
+    rs = requests.get("https://ru.wikipedia.org/wiki/ISO_3166-1", timeout=10.0)
     root = BeautifulSoup(rs.content, "html.parser")
 
     ALPHA2_TO_COUNTRY = dict()

@@ -29,7 +29,7 @@ def is_404(
 ) -> bool:
     while True:
         try:
-            rs = requests.get(url)
+            rs = requests.get(url, timeout=10.0)
             return rs.status_code == 404
         except Exception as e:
             log.error(f"Error {str(e)!r} on {url}")

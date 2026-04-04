@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-rs = requests.get("https://darksouls.fandom.com/ru/wiki/Костер")
+rs = requests.get("https://darksouls.fandom.com/ru/wiki/Костер", timeout=10.0)
 root = BeautifulSoup(rs.content, "html.parser")
 
 for h2 in root.select("h2"):

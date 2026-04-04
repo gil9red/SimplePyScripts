@@ -45,7 +45,7 @@ def attempts(
     ignored_exceptions=(RequestException,),
 )
 def do_get(url: str, *args, **kwargs) -> requests.Response:
-    rs = requests.get(url, *args, **kwargs)
+    rs = requests.get(url, *args, **kwargs, timeout=10.0)
     rs.raise_for_status()
 
     return rs

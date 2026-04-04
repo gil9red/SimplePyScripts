@@ -32,7 +32,7 @@ img.save("input_with_chart_v1.png")
 
 # Variant 2
 url = qc.get_url()
-raw = requests.get(url, stream=True).raw
+raw = requests.get(url, stream=True, timeout=10.0).raw
 img_chart = Image.open(raw)
 
 img = Image.open("input.jpg")

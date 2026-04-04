@@ -12,7 +12,7 @@ import requests
 
 
 def go(url):
-    rs = requests.get(url)
+    rs = requests.get(url, timeout=10.0)
     root = BeautifulSoup(rs.content, "html.parser")
     return root.select_one(".user-details > a").text.strip()
 

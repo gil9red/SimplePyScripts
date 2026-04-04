@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 
 
 def get_parsed_two_column_table_stats(url: str) -> list[tuple[str, str]]:
-    rs = requests.get(url)
+    rs = requests.get(url, timeout=10.0)
     root = BeautifulSoup(rs.content, "html.parser")
 
     table = root.select_one("table")

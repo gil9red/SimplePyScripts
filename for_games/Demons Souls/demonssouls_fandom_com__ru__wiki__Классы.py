@@ -11,7 +11,7 @@ import requests
 def get_class_by_stats() -> dict[str, dict[str, int]]:
     url = "https://demonssouls.fandom.com/ru/wiki/Классы"
 
-    rs = requests.get(url)
+    rs = requests.get(url, timeout=10.0)
     root = BeautifulSoup(rs.content, "html.parser")
 
     class_by_stats = dict()

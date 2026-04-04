@@ -27,6 +27,7 @@ def exchange_rate(currency_id, timestamp=None):
         "http://www.banki.ru/products/currency/ajax/quotations/value/cbr/",
         json=data,
         headers=headers,
+        timeout=10.0,
     )
     return rs.json()["value"]
 

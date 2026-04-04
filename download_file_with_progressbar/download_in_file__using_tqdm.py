@@ -19,7 +19,7 @@ from humanize import naturalsize as sizeof_fmt
 
 url = "https://github.com/gil9red/NotesManager/raw/master/bin.rar"
 # Streaming, so we can iterate over the response.
-rs = requests.get(url, stream=True)
+rs = requests.get(url, stream=True, timeout=10.0)
 
 # Total size in bytes.
 total_size = int(rs.headers.get("content-length", 0))

@@ -41,7 +41,7 @@ def way2(url: str, file_name: str) -> None:
 
 @timer
 def way3(url: str, file_name: str) -> None:
-    p = requests.get(url)
+    p = requests.get(url, timeout=10.0)
     with open(file_name, "wb") as f:
         f.write(p.content)
 

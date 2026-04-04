@@ -27,10 +27,10 @@ class GoUrl(IGoUrl):
     """Реальный субъект"""
 
     def get(self, url: str) -> requests.Response:
-        return requests.get(url)
+        return requests.get(url, timeout=10.0)
 
     def get_status_code(self, url: str) -> int:
-        return requests.head(url).status_code
+        return requests.head(url, timeout=10.0).status_code
 
 
 class GoUrlCachedProxy(IGoUrl):

@@ -93,7 +93,7 @@ query = session.query(Quote)
 
 
 if __name__ == "__main__":
-    rs = requests.get("http://bash.im")
+    rs = requests.get("http://bash.im", timeout=10.0)
     soup = BeautifulSoup(rs.content, "lxml")
     # print(soup)
     i = 0

@@ -62,7 +62,7 @@ if __name__ == "__main__":
         url = f"http://www.cbr.ru/scripts/xml_metall.asp?date_req1={date_req1}&date_req2={date_req2}"
 
         with open(file_name, "w") as f:
-            rs = requests.get(url)
+            rs = requests.get(url, timeout=10.0)
             f.write(rs.text)
 
     with open(file_name, "rb") as f:

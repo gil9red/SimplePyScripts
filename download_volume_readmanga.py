@@ -20,7 +20,7 @@ PATTERN = re.compile(r"\.init\(.*(\[\[.+\]\]).*\)")
 def get_url_images(url):
     print("Start get_url_images with url:", url)
 
-    rs = requests.get(url)
+    rs = requests.get(url, timeout=10.0)
 
     match = PATTERN.search(rs.text)
     if not match:

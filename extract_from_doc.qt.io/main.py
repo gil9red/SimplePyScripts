@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 
 
 def get_path_and_content(url: str) -> tuple[str, str]:
-    rs = requests.get(url)
+    rs = requests.get(url, timeout=10.0)
     root = BeautifulSoup(rs.content, "lxml")
 
     path = root.select_one(".subtitle").text.strip()
@@ -28,7 +28,7 @@ def get_content(url: str) -> str:
 
 
 def get_list_urls_files(url: str) -> list[tuple[str, str]]:
-    rs = requests.get(url)
+    rs = requests.get(url, timeout=10.0)
     root = BeautifulSoup(rs.content, "lxml")
 
     urls_files_list = []

@@ -46,7 +46,7 @@ class Location:
 links: set[tuple[str, str]] = set()
 location_by_url: dict[str, str] = dict()
 
-rs = requests.get(URL)
+rs = requests.get(URL, timeout=10.0)
 rs.raise_for_status()
 
 soup = BeautifulSoup(rs.content, "html.parser")
@@ -60,7 +60,7 @@ for location in locations:
     for _ in range(3):
         try:
             # TODO: Оптимизации не хватает
-            rs = requests.get(location.url)
+            rs = requests.get(location.url, timeout=10.0)
             rs.raise_for_status()
         except Exception as e:
             print(f"Error: {e}, url: {location.url}")

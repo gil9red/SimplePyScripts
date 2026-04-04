@@ -8,5 +8,5 @@ __author__ = "ipetrash"
 import requests
 
 
-rs = requests.post("http://localhost:6000", files={"file": open("disk_info.txt", "rb")})
+rs = requests.post("http://localhost:6000", files={"file": open("disk_info.txt", "rb")}, timeout=10.0)
 print(rs)

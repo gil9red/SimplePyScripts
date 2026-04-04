@@ -23,7 +23,7 @@ def get_html_by_url__from_cache(url, cache_dir="cache"):
             return f.read()
 
     with open(file_name, "wb") as f:
-        rs = requests.get(url)
+        rs = requests.get(url, timeout=10.0)
         f.write(rs.content)
 
         return rs.content

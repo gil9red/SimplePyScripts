@@ -47,7 +47,7 @@ class Boss(NamedTuple):
 
 
 def parse(url: str) -> Tuple[requests.Response, BeautifulSoup]:
-    rs = session.get(url)
+    rs = session.get(url, timeout=10.0)
     return rs, BeautifulSoup(rs.content, "html.parser")
 
 

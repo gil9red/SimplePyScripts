@@ -29,7 +29,7 @@ if __name__ == "__main__":
     />
     """
 
-    rs = requests.post(URL_NG_SERVER, data=post_data)
+    rs = requests.post(URL_NG_SERVER, data=post_data, timeout=10.0)
     print(rs)
     print(len(rs.text))
 

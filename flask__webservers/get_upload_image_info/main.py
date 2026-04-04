@@ -393,7 +393,7 @@ def get_info_from_url():
         return redirect("/")
 
     url = request.form["url"]
-    file_data = requests.get(url).content
+    file_data = requests.get(url, timeout=10.0).content
 
     info = get_image_info(file_data)
     info["img_base64"] = img_to_base64_html(file_data)
