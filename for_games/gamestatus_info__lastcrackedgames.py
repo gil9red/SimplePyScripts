@@ -33,19 +33,17 @@ class Game:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Game":
-        protection: str = data["protections"]
-        if protection.startswith("["):
-            protection = ", ".join(json.loads(protection))
-
-        hacked_groups: str = data["hacked_groups"]
-        if hacked_groups.startswith("["):
-            hacked_groups = ", ".join(json.loads(hacked_groups))
+        def _get_title(key: str) -> str:
+            title: str = data[key]
+            if title.startswith("["):
+                title = ", ".join(json.loads(title))
+            return title
 
         return cls(
             title=data["title"],
             url=f'{URL_BASE}/{data["slug"]}',
-            protection=protection,
-            hacked_groups=hacked_groups,
+            protection=_get_title("protections"),
+            hacked_groups=_get_title("hacked_groups"),
             release_date=date.fromisoformat(data["release_date"]),
             crack_date=date.fromisoformat(data["crack_date"]),
         )
