@@ -24,19 +24,19 @@ class AreaSelectorDialog(QDialog):
     def __init__(self) -> None:
         super().__init__()
 
-        self.setWindowFlag(Qt.FramelessWindowHint)
-        self.setWindowFlag(Qt.WindowStaysOnTopHint)
+        self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
+        self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint)
 
-        self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
-        self.setCursor(Qt.CrossCursor)
+        self.setCursor(Qt.CursorShape.CrossCursor)
 
-        self.full_geometry = QApplication.desktop().geometry()
+        self.full_geometry: QRect = QApplication.desktop().geometry()
         self.setGeometry(self.full_geometry)
 
-        self.begin_global = QPoint()  # Глобальная точка начала
-        self.end_global = QPoint()  # Глобальная точка конца
-        self.is_selecting = False
+        self.begin_global: QPoint = QPoint()  # Глобальная точка начала
+        self.end_global: QPoint = QPoint()  # Глобальная точка конца
+        self.is_selecting: bool = False
 
         self.selected_rect: QRect | None = None
         self.do_click: bool = True
@@ -51,8 +51,7 @@ class AreaSelectorDialog(QDialog):
 
         self.control_widget = QFrame(self)
         self.control_widget.setCursor(Qt.ArrowCursor)
-        self.control_widget.setStyleSheet(
-            """
+        self.control_widget.setStyleSheet("""
             QFrame {
                 background-color: rgba(60, 60, 60, 200);
                 border-radius: 10px;
@@ -60,8 +59,7 @@ class AreaSelectorDialog(QDialog):
             QCheckBox {
                 color: white;
             }
-        """
-        )
+        """)
         self.control_widget.hide()
         control_layout = QVBoxLayout(self.control_widget)
         control_layout.addWidget(self.checkbox_do_click)
@@ -121,7 +119,7 @@ class AreaSelectorDialog(QDialog):
 
 if __name__ == "__main__":
     # Поддержка высокого DPI (важно для правильных координат на 4K мониторах)
-    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+    QApplication.setAttribute(Qt.ApplicationAttribute.AA_EnableHighDpiScaling)
 
     app = QApplication(sys.argv)
 
