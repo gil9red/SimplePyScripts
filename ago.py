@@ -18,7 +18,7 @@ class UnitSeconds(IntEnum):
     YEAR = 12 * MONTH
 
 
-class L10N:
+class L10n:
     def get_template(self) -> str:
         return "{value} {unit} ago"
 
@@ -33,7 +33,7 @@ class L10N:
         return self.get_template().format(value=value, unit=unit)
 
 
-class L10N_RU(L10N):
+class L10nRu(L10n):
     def get_template(self) -> str:
         return "{value} {unit} назад"
 
@@ -50,6 +50,7 @@ class L10N_RU(L10N):
             return form_1
         if units in [2, 3, 4]:
             return form_2
+        return ""
 
     def get_unit(self, value: int, unit: UnitSeconds) -> str:
         match unit:
@@ -78,7 +79,7 @@ class L10N_RU(L10N):
                 raise NotImplemented()
 
 
-def ago(seconds: timedelta, l10n: L10N = L10N()) -> str:
+def ago(seconds: timedelta, l10n: L10n = L10n()) -> str:
     seconds = int(seconds.total_seconds())
     if seconds < 0:
         seconds = -seconds
@@ -157,9 +158,9 @@ if __name__ == "__main__":
         (timedelta(weeks=5 * 12 * 4), "5 лет назад"),
     ]
     for value, expected in items:
-        actual = ago(dt - (dt - value), l10n=L10N_RU())
+        actual = ago(dt - (dt - value), l10n=L10nRu())
         print(f"{value!r} -> {actual!r}")
         assert expected == actual, f"{expected!r} != {actual!r}"
 
     dt2 = datetime(year=2024, month=12, day=10)
-    assert ago(dt2 - dt, l10n=L10N_RU()) == "2 дня назад"
+    assert ago(dt2 - dt, l10n=L10nRu()) == "2 дня назад"
