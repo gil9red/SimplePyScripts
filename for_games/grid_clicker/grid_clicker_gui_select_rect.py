@@ -108,19 +108,15 @@ class AreaSelectorDialog(QDialog):
 
     def paintEvent(self, event: QPaintEvent) -> None:
         painter = QPainter(self)
-
-        painter.fillRect(self.rect(), QColor(0, 0, 0, 80))
+        painter.fillRect(self.rect(), QColor(0, 0, 0, 100))
 
         if self._is_selecting:
             local_begin = self.mapFromGlobal(self._begin_global)
             local_end = self.mapFromGlobal(self._end_global)
             rect = QRect(local_begin, local_end).normalized()
 
-            painter.setCompositionMode(QPainter.CompositionMode_Clear)
-            painter.fillRect(rect, Qt.transparent)
-            painter.setCompositionMode(QPainter.CompositionMode_SourceOver)
-
             painter.setPen(QPen(Qt.red, 2, Qt.SolidLine))
+            painter.fillRect(rect, QColor(255, 255, 255, 1))
             painter.drawRect(rect)
 
 
