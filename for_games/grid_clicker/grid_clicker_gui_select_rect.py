@@ -16,11 +16,12 @@ from PyQt5.QtWidgets import (
     QSpinBox,
 )
 from PyQt5.QtCore import Qt, QRect, QPoint
-from PyQt5.QtGui import QPainter, QColor, QPen
+from PyQt5.QtGui import QPainter, QColor, QPen, QMouseEvent, QKeyEvent, QPaintEvent
 
 from grid_clicker import click_all_on_screen
 
 
+# TODO: Поддержка сохранения и восстановления области
 class AreaSelectorDialog(QDialog):
     def __init__(self) -> None:
         super().__init__()
@@ -74,18 +75,18 @@ class AreaSelectorDialog(QDialog):
     def do_click(self) -> bool:
         return self.checkbox_do_click.isChecked()
 
-    def on_run_clicked(self):
+    def on_run_clicked(self) -> None:
         self.need_run_clicker = True
         self.close()
 
-    def mousePressEvent(self, event) -> None:
+    def mousePressEvent(self, event: QMouseEvent) -> None:
         if event.button() == Qt.LeftButton:
             self._begin_global = event.globalPos()
             self._end_global = self._begin_global
             self._is_selecting = True
             self.update()
 
-    def mouseMoveEvent(self, event) -> None:
+    def mouseMoveEvent(self, event: QMouseEvent) -> None:
         if self._is_selecting:
             self._end_global = event.globalPos()
             self.update()
@@ -94,17 +95,18 @@ class AreaSelectorDialog(QDialog):
             self.control_widget.move(local_begin)
             self.control_widget.show()
 
-    def mouseReleaseEvent(self, event) -> None:
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
         if event.button() == Qt.LeftButton:
             self._is_selecting = False
+            self.selected_rect = QRect(
+                self._begin_global, self._end_global
+            ).normalized()
 
-            self.selected_rect = QRect(self._begin_global, self._end_global).normalized()
-
-    def keyPressEvent(self, event) -> None:
+    def keyPressEvent(self, event: QKeyEvent) -> None:
         if event.key() == Qt.Key_Escape:
             self.close()
 
-    def paintEvent(self, event) -> None:
+    def paintEvent(self, event: QPaintEvent) -> None:
         painter = QPainter(self)
 
         painter.fillRect(self.rect(), QColor(0, 0, 0, 80))
