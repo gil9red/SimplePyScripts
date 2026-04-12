@@ -26,8 +26,7 @@ def is_user_admin() -> bool:
         try:
             # WARNING: Requires Windows XP SP2 or higher!
             return bool(ctypes.windll.shell32.IsUserAnAdmin())
-
-        except:
+        except (AttributeError, OSError):
             traceback.print_exc()
             print("Admin check failed, assuming not an admin.")
             return False
