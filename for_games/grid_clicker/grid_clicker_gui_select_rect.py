@@ -12,7 +12,8 @@ from PyQt5.QtWidgets import (
     QFrame,
     QPushButton,
     QCheckBox,
-    QVBoxLayout,
+    QFormLayout,
+    QSpinBox,
 )
 from PyQt5.QtCore import Qt, QRect, QPoint
 from PyQt5.QtGui import QPainter, QColor, QPen
@@ -31,21 +32,18 @@ class AreaSelectorDialog(QDialog):
 
         self.setCursor(Qt.CursorShape.CrossCursor)
 
-        self.full_geometry: QRect = QApplication.desktop().geometry()
-        self.setGeometry(self.full_geometry)
+        full_geometry: QRect = QApplication.desktop().geometry()
+        self.setGeometry(full_geometry)
 
-        self.begin_global: QPoint = QPoint()  # Глобальная точка начала
-        self.end_global: QPoint = QPoint()  # Глобальная точка конца
-        self.is_selecting: bool = False
+        self._begin_global: QPoint = QPoint()  # Глобальная точка начала
+        self._end_global: QPoint = QPoint()  # Глобальная точка конца
+        self._is_selecting: bool = False
 
         self.selected_rect: QRect | None = None
-        self.do_click: bool = True
         self.need_run_clicker: bool = False
 
-        self.checkbox_do_click = QCheckBox(
-            "Do Click?", checked=self.do_click, clicked=self.on_checkbox_do_click
-        )
-
+        self.checkbox_do_click = QCheckBox(checked=True)
+        self.spin_box_step = QSpinBox(value=50)
         self.button_run = QPushButton("Run click", clicked=self.on_run_clicked)
         self.button_close = QPushButton("Close", clicked=self.close)
 
@@ -56,44 +54,51 @@ class AreaSelectorDialog(QDialog):
                 background-color: rgba(60, 60, 60, 200);
                 border-radius: 10px;
             }
-            QCheckBox {
+            QCheckBox,
+            QLabel {
                 color: white;
             }
         """)
         self.control_widget.hide()
-        control_layout = QVBoxLayout(self.control_widget)
-        control_layout.addWidget(self.checkbox_do_click)
-        control_layout.addWidget(self.button_run)
-        control_layout.addWidget(self.button_close)
+        control_layout = QFormLayout(self.control_widget)
+        control_layout.addRow("Do &Click?:", self.checkbox_do_click)
+        control_layout.addRow("&Step:", self.spin_box_step)
+        control_layout.addRow(self.button_run)
+        control_layout.addRow(self.button_close)
+
+    @property
+    def step(self) -> int:
+        return self.spin_box_step.value()
+
+    @property
+    def do_click(self) -> bool:
+        return self.checkbox_do_click.isChecked()
 
     def on_run_clicked(self):
         self.need_run_clicker = True
         self.close()
 
-    def on_checkbox_do_click(self):
-        self.do_click = self.checkbox_do_click.isChecked()
-
     def mousePressEvent(self, event) -> None:
         if event.button() == Qt.LeftButton:
-            self.begin_global = event.globalPos()
-            self.end_global = self.begin_global
-            self.is_selecting = True
+            self._begin_global = event.globalPos()
+            self._end_global = self._begin_global
+            self._is_selecting = True
             self.update()
 
     def mouseMoveEvent(self, event) -> None:
-        if self.is_selecting:
-            self.end_global = event.globalPos()
+        if self._is_selecting:
+            self._end_global = event.globalPos()
             self.update()
 
-            local_begin = self.mapFromGlobal(self.begin_global)
+            local_begin = self.mapFromGlobal(self._begin_global)
             self.control_widget.move(local_begin)
             self.control_widget.show()
 
     def mouseReleaseEvent(self, event) -> None:
         if event.button() == Qt.LeftButton:
-            self.is_selecting = False
+            self._is_selecting = False
 
-            self.selected_rect = QRect(self.begin_global, self.end_global).normalized()
+            self.selected_rect = QRect(self._begin_global, self._end_global).normalized()
 
     def keyPressEvent(self, event) -> None:
         if event.key() == Qt.Key_Escape:
@@ -104,9 +109,9 @@ class AreaSelectorDialog(QDialog):
 
         painter.fillRect(self.rect(), QColor(0, 0, 0, 80))
 
-        if self.is_selecting:
-            local_begin = self.mapFromGlobal(self.begin_global)
-            local_end = self.mapFromGlobal(self.end_global)
+        if self._is_selecting:
+            local_begin = self.mapFromGlobal(self._begin_global)
+            local_end = self.mapFromGlobal(self._end_global)
             rect = QRect(local_begin, local_end).normalized()
 
             painter.setCompositionMode(QPainter.CompositionMode_Clear)
@@ -146,6 +151,7 @@ if __name__ == "__main__":
         if selector.need_run_clicker:
             click_all_on_screen(
                 do_click=selector.do_click,
+                step=selector.step,
                 sleep_time_before_starting_secs=1,
                 coords=(x1, y1, x2, y2),
             )
