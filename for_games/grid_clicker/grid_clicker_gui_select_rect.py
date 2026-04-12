@@ -129,14 +129,15 @@ if __name__ == "__main__":
     selector = AreaSelectorDialog()
     selector.exec()
 
-    selected_rect = selector.selected_rect
+    selected_rect: QRect = selector.selected_rect
     if selector.selected_rect:
-        _, _, w, h = selected_rect.getRect()
+        w = selected_rect.width()
+        h = selected_rect.height()
 
         # Извлекаем границы
         x1 = selected_rect.left()
-        x2 = selected_rect.right()
         y1 = selected_rect.top()
+        x2 = selected_rect.right()
         y2 = selected_rect.bottom()
 
         print("--- Координаты ---")
