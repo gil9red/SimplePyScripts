@@ -4,7 +4,7 @@
 __author__ = "ipetrash"
 
 
-from datetime import timedelta, datetime
+from datetime import timedelta
 
 
 def get_human_delta(delta: timedelta) -> str:
