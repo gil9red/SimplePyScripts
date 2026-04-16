@@ -6,8 +6,9 @@ __author__ = "ipetrash"
 
 import sys
 
-sys.path.append("../html_parsing")
-from youtube_com__results_search_query import Playlist
+sys.path.append("../")
+sys.path.append("../../")
+from youtube.results_search_query import Playlist
 
 
 def parse_playlist_time(url_or_id: str) -> tuple[str, int, list[tuple[str, str]]]:
