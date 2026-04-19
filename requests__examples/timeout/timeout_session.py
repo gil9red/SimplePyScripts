@@ -9,13 +9,13 @@ import requests
 TIMEOUT: float = 60
 
 
-class TimeoutRequestsSession(requests.Session):
+class TimeoutSession(requests.Session):
     def request(self, *args, **kwargs):
         kwargs.setdefault("timeout", TIMEOUT)
         return super().request(*args, **kwargs)
 
 
-session = TimeoutRequestsSession()
+session = TimeoutSession()
 
 rs = session.get("https://httpbin.org/delay/1")
 print(rs)
