@@ -14,6 +14,11 @@ from typing import NamedTuple
 from bs4 import BeautifulSoup
 import requests
 
+session = requests.session()
+session.headers["User-Agent"] = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/99.0"
+)
+
 
 class CrashStatistics(NamedTuple):
     date: str
@@ -33,7 +38,7 @@ def get_crash_statistics() -> CrashStatistics:
     :return: Dict
     """
 
-    rs = requests.get("https://гибдд.рф/")
+    rs = session.get("https://гибдд.рф/")
 
     root = BeautifulSoup(rs.content, "html.parser")
     table = root.select_one("table.b-crash-stat")
@@ -83,8 +88,7 @@ def create_connect(fields_as_dict=False, trace_sql=False) -> sqlite3.Connection:
 def init_db() -> None:
     # Создание базы и таблицы
     with create_connect() as connect:
-        connect.execute(
-            """
+        connect.execute("""
             CREATE TABLE IF NOT EXISTS CrashStatistics (
                 id                INTEGER  PRIMARY KEY,
                 date              TEXT     NOT NULL,
@@ -96,8 +100,7 @@ def init_db() -> None:
                 
                 CONSTRAINT date_unique UNIQUE (date)
             );
-        """
-        )
+        """)
 
         connect.commit()
 
