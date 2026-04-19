@@ -7,6 +7,8 @@ __author__ = "ipetrash"
 import requests
 from requests.adapters import HTTPAdapter
 
+TIMEOUT: float = 60
+
 
 class TimeoutHttpAdapter(HTTPAdapter):
     def __init__(self, timeout, *args, **kwargs) -> None:
@@ -19,7 +21,7 @@ class TimeoutHttpAdapter(HTTPAdapter):
         return super().send(request, timeout=timeout, **kwargs)
 
 
-adapter = TimeoutHttpAdapter(timeout=60)
+adapter = TimeoutHttpAdapter(timeout=TIMEOUT)
 
 session = requests.session()
 session.mount("http://", adapter)
