@@ -19,9 +19,10 @@ class VideoInfo:
     id: int
     owner_id: int
     title: str
-    url: str
+    direct_url: str | None
+    share_url: str | None
     date: datetime
-    description: str
+    description: str | None
     duration: int
 
     @classmethod
@@ -30,9 +31,10 @@ class VideoInfo:
             id=data["id"],
             owner_id=data["owner_id"],
             title=data["title"],
-            url=data["direct_url"],
+            direct_url=data.get("direct_url"),
+            share_url=data.get("share_url"),
             date=datetime.fromtimestamp(data["date"]),
-            description=data["description"],
+            description=data.get("description"),
             duration=data["duration"],
         )
 
