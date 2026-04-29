@@ -32,10 +32,16 @@ def get_raw_video_list(url: str, maximum_items: int = 1000) -> list[dict]:
 
 
 def get_video_list(url: str, *args, **kwargs) -> list[Video]:
+    def _is_video(data: dict[str, Any]) -> bool:
+        try:
+            return Video.get_video_id(data) is not None
+        except KeyError:
+            return False
+
     return [
         Video.parse_from(video)
         for video in get_raw_video_list(url, *args, **kwargs)
-        if "videoId" in video  # NOTE: У плейлистов будет playlistId
+        if _is_video(video)
     ]
 
 

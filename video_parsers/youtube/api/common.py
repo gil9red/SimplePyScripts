@@ -10,8 +10,8 @@ import time
 
 from dataclasses import dataclass, field
 from datetime import datetime, date
-from typing import Generator
-from urllib.parse import urljoin, urlparse, parse_qs
+from typing import Any, Generator
+from urllib.parse import urljoin, urlparse, parse_qs, urlencode, urlunparse
 
 # pip install dpath==2.0.5
 import dpath.util
@@ -41,6 +41,17 @@ session.headers["User-Agent"] = USER_AGENT
 session.cookies["SOCS"] = "CAI"
 
 
+def clean_youtube_url(url: str) -> str:
+    parsed_url = urlparse(url)
+
+    query_params: dict[str, list[str]] = parse_qs(parsed_url.query)
+    query_params.pop("pp", None)
+
+    new_query = urlencode(query_params, doseq=True)
+
+    return urlunparse(parsed_url._replace(query=new_query))
+
+
 def process_text(text: str) -> str:
     return text.strip().replace("\xa0", " ").replace("\u202f", " ")
 
@@ -49,11 +60,37 @@ def parse_date(value: str) -> date | None:
     for regex_pattern, months in [
         (
             r"(?P<month>%s) (?P<day>\d{,2}), (?P<year>\d{4})",
-            ['jan', 'feb', 'mar', 'apr', 'may', 'june', 'july', 'aug', 'sep', 'oct', 'nov', 'dec'],
+            [
+                "jan",
+                "feb",
+                "mar",
+                "apr",
+                "may",
+                "june",
+                "july",
+                "aug",
+                "sep",
+                "oct",
+                "nov",
+                "dec",
+            ],
         ),
         (
             r"(?P<day>\d{,2}) (?P<month>%s)\.? (?P<year>\d{4})",
-            ['янв', 'февр', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сент', 'окт', 'нояб', 'дек'],
+            [
+                "янв",
+                "февр",
+                "мар",
+                "апр",
+                "мая",
+                "июн",
+                "июл",
+                "авг",
+                "сент",
+                "окт",
+                "нояб",
+                "дек",
+            ],
         ),
     ]:
         regex = regex_pattern % "|".join(months)
@@ -303,6 +340,7 @@ def get_raw_video_renderer_items(yt_initial_data: dict) -> list[dict]:
         "**/playlistVideoRenderer",
         "**/playlistPanelVideoRenderer",
         "**/playlistRenderer",
+        "**/lockupViewModel",
     ]:
         items += dpath.util.values(yt_initial_data, render)
 
@@ -327,7 +365,8 @@ def get_generator_raw_video_list_from_data(
 
         try:
             # Может вернуться несколько continuationItemRenderer, берем первый
-            continuation_item = dpath.util.values(data, "**/continuationItemRenderer")[0]
+            glob_continuation: str = "**/continuationItemRenderer"
+            continuation_item: str = dpath.util.values(data, glob_continuation)[0]
         except (KeyError, IndexError):
             break
 
@@ -401,43 +440,71 @@ class Video:
     is_live_now: bool = False
     thumbnails: list[Thumbnail] = field(default_factory=list, repr=False, compare=False)
     view_count: int | None = None
+    view_count_raw: str | None = None
     create_date: date | None = None
     create_date_raw: str | None = None
     is_lasy: bool = True
     context: Context = field(default=None, repr=False, compare=False)
 
     @classmethod
-    def parse_url(cls, data_video: dict) -> str:
-        url_video = dpath.util.get(
-            data_video, "navigationEndpoint/commandMetadata/webCommandMetadata/url"
-        )
-        return urljoin(BASE_URL, url_video)
+    def get_video_id(cls, data_video: dict[str, Any]) -> str:
+        try:
+            return data_video["videoId"]
+        except KeyError:
+            return data_video["contentId"]
 
     @classmethod
-    def parse_title(cls, data_video: dict) -> str:
+    def parse_url(cls, data_video: dict[str, Any]) -> str:
+        try:
+            glob_url = "navigationEndpoint/commandMetadata/webCommandMetadata/url"
+            uri_video = dpath.util.get(data_video, glob_url)
+        except KeyError:
+            glob_url: str = (
+                "rendererContext/commandContext/onTap/innertubeCommand/"
+                "commandMetadata/webCommandMetadata/url"
+            )
+            uri_video = dpath.util.get(data_video, glob_url)
+
+        uri_video = clean_youtube_url(uri_video)
+
+        return urljoin(BASE_URL, uri_video)
+
+    @classmethod
+    def parse_title(cls, data_video: dict[str, Any]) -> str:
         if title := data_video.get("title"):
             if title and isinstance(title, str):
                 return title
 
-        try:
-            return dpath.util.get(data_video, "title/runs/0/text")
-        except KeyError:
-            return dpath.util.get(data_video, "title/simpleText")
+        for glob_title in [
+            "title/runs/0/text",
+            "title/simpleText",
+            "metadata/lockupMetadataViewModel/title/content",
+        ]:
+            try:
+                return dpath.util.get(data_video, glob_title)
+            except KeyError:
+                pass
+
+        raise ValueError("Not found any titles.")
 
     @classmethod
-    def parse_duration_seconds(cls, data_video: dict) -> int:
+    def parse_duration_seconds(cls, data_video: dict[str, Any]) -> int:
         # Если есть продолжительность в секундах
         try:
-            duration_seconds = int(data_video["lengthSeconds"])
+            return int(data_video["lengthSeconds"])
         except KeyError:
             # Если есть продолжительность в секундах в виде текста, пробуем распарсить
             try:
                 text = dpath.util.get(data_video, "lengthText/simpleText")
-                duration_seconds = time_to_seconds(text)
             except KeyError:
-                duration_seconds = None
+                glob_duration: str = (
+                    "contentImage/thumbnailViewModel/overlays/*/"
+                    "thumbnailBottomOverlayViewModel/badges/*/"
+                    "thumbnailBadgeViewModel/text"
+                )
+                text = dpath.util.get(data_video, glob_duration)
 
-        return duration_seconds
+            return time_to_seconds(text)
 
     def get_url_thumbnail_by_max_size(self) -> str:
         return max(self.thumbnails, key=lambda x: (x.width, x.height)).url
@@ -476,7 +543,7 @@ class Video:
     @classmethod
     def parse_from(
         cls,
-        data_video: dict,
+        data_video: dict[str, Any],
         parent_context: Context | None = None,
         url_video: str = "",
     ) -> "Video":
@@ -511,15 +578,28 @@ class Video:
         except:
             create_date = None
 
-        thumbnails = [
+        thumbnails: list[Thumbnail] = [
             Thumbnail.get_from(thumbnail)
-            for thumbnail in dpath.util.values(data_video, "thumbnail/thumbnails/*")
+            for thumbnail in (
+                dpath.util.values(data_video, "thumbnail/thumbnails/*")
+                + dpath.util.values(
+                    data_video, "contentImage/thumbnailViewModel/image/sources/*"
+                )
+            )
         ]
 
+        view_count: int | None = None
+        view_count_raw: str | None = None
         try:
-            view_count = int(data_video["viewCount"])
+            view_count_raw = data_video["viewCount"]
+            view_count = int(view_count_raw)
         except:
-            view_count = None
+            try:
+                # "61 724 просмотра" -> 61724
+                view_count_raw: str = data_video["viewCountText"]["simpleText"]
+                view_count = int(re.sub(r"\D+", "", view_count_raw))
+            except:
+                pass
 
         context = Context(data_video=data_video)
         if parent_context:
@@ -528,7 +608,7 @@ class Video:
             context.rs = parent_context.rs
 
         return cls(
-            id=data_video["videoId"],
+            id=cls.get_video_id(data_video),
             url=url_video,
             title=title,
             duration_seconds=duration_seconds,
@@ -537,6 +617,7 @@ class Video:
             is_live_now=cls.get_is_live_now(data_video),
             thumbnails=thumbnails,
             view_count=view_count,
+            view_count_raw=view_count_raw,
             create_date=create_date,
             create_date_raw=create_date_raw,
             context=context,
