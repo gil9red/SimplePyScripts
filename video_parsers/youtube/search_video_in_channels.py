@@ -10,7 +10,7 @@ import time
 from collections import defaultdict
 
 from api.common import Video, Playlist
-from api.search import get_raw_video_list
+from api.search import get_raw_items
 
 
 def smart_comparing(game_name: str, playlist_title: str) -> bool:
@@ -33,7 +33,7 @@ def search_video_and_playlist(
     items = []
 
     url = f"{channel_url}/search?query={game_name}"
-    for obj in get_raw_video_list(url, maximum_items=100):
+    for obj in get_raw_items(url, maximum_items=100):
         if playlist_id := obj.get("playlistId"):
             title = Playlist.get_title(obj)
             if smart_comparing(game_name, title):

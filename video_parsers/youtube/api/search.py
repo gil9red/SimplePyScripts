@@ -11,18 +11,18 @@ from .common import (
     BASE_URL,
     Video,
     load,
-    get_generator_raw_video_list_from_data,
+    get_generator_raw_items_from_data,
 )
 
 
-def get_generator_raw_video_list(url: str) -> Generator[dict, None, None]:
+def get_generator_raw_items(url: str) -> Generator[dict[str, Any], None, None]:
     rs, data = load(url)
-    yield from get_generator_raw_video_list_from_data(data, rs)
+    yield from get_generator_raw_items_from_data(data, rs)
 
 
-def get_raw_video_list(url: str, maximum_items: int = 1000) -> list[dict]:
+def get_raw_items(url: str, maximum_items: int = 1000) -> list[dict[str, Any]]:
     items = []
-    for i, video in enumerate(get_generator_raw_video_list(url)):
+    for i, video in enumerate(get_generator_raw_items(url)):
         if i >= maximum_items:
             break
 
@@ -40,7 +40,7 @@ def get_video_list(url: str, *args, **kwargs) -> list[Video]:
 
     return [
         Video.parse_from(video)
-        for video in get_raw_video_list(url, *args, **kwargs)
+        for video in get_raw_items(url, *args, **kwargs)
         if _is_video(video)
     ]
 

@@ -27,10 +27,10 @@ class AlertError(Exception):
     pass
 
 
-USER_AGENT = (
+USER_AGENT: str = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0"
 )
-BASE_URL = "https://www.youtube.com"
+BASE_URL: str = "https://www.youtube.com"
 
 
 session = requests.Session()
@@ -135,7 +135,7 @@ def download_url_as_bytes(url: str) -> bytes:
     return rs.content
 
 
-def get_yt_cfg_data(html: str) -> dict:
+def get_yt_cfg_data(html: str) -> dict[str, Any]:
     m = re.search(r"ytcfg\.set\((\{.+?\})\);", html)
     if not m:
         raise Exception("Не удалось найти на странице ytcfg.set!")
@@ -143,7 +143,7 @@ def get_yt_cfg_data(html: str) -> dict:
     return json.loads(m.group(1))
 
 
-def raise_if_error(yt_initial_data: dict):
+def raise_if_error(yt_initial_data: dict[str, Any]):
     # NOTE: Example:
     """
     ...
@@ -183,7 +183,7 @@ def raise_if_error(yt_initial_data: dict):
         pass
 
 
-def dict_merge(d1: dict, d2: dict) -> None:
+def dict_merge(d1: dict[str, Any], d2: dict[str, Any]) -> None:
     for k, v in d2.items():
         if k in d1 and isinstance(d1[k], dict) and isinstance(v, dict):
             dict_merge(d1[k], v)
@@ -191,7 +191,7 @@ def dict_merge(d1: dict, d2: dict) -> None:
             d1[k] = v
 
 
-def get_yt_initial_data(html: str) -> dict | None:
+def get_yt_initial_data(html: str) -> dict[str, Any] | None:
     patterns = [
         re.compile(r'window\["ytInitialData"\] = (\{.+?\});'),
         re.compile(r"var ytInitialData = (\{.+?\});"),
@@ -204,7 +204,7 @@ def get_yt_initial_data(html: str) -> dict | None:
             return json.loads(data_str)
 
 
-def load(url: str) -> tuple[requests.Response, dict]:
+def load(url: str) -> tuple[requests.Response, dict[str, Any]]:
     rs = session.get(url)
     rs.raise_for_status()
 
@@ -217,7 +217,7 @@ def load(url: str) -> tuple[requests.Response, dict]:
     return rs, data
 
 
-def get_yt_initial_player_response(html: str) -> dict:
+def get_yt_initial_player_response(html: str) -> dict[str, Any]:
     m = re.search(r"ytInitialPlayerResponse = (\{.+?\});", html)
     if not m:
         raise Exception("Не удалось найти на странице ytInitialPlayerResponse!")
@@ -225,7 +225,7 @@ def get_yt_initial_player_response(html: str) -> dict:
     return json.loads(m.group(1))
 
 
-def get_context_data(url: str, innertube_context: dict) -> dict:
+def get_context_data(url: str, innertube_context: dict[str, Any]) -> dict[str, Any]:
     local_zone = tzlocal.get_localzone()
     utc_offset_minutes = local_zone.utcoffset(datetime.now()).total_seconds() // 60
 
@@ -304,14 +304,14 @@ def get_context_data(url: str, innertube_context: dict) -> dict:
 
 def get_context_with_continuation(
     url: str,
-    yt_cfg_data: dict,
-    continuation_item: dict,
-) -> dict:
+    yt_cfg_data: dict[str, Any],
+    continuation_item: dict[str, Any],
+) -> dict[str, Any]:
     innertube_context = yt_cfg_data.get("INNERTUBE_CONTEXT")
     if not innertube_context:
         raise Exception("Значение INNERTUBE_CONTEXT должно быть задано в yt_cfg_data!")
 
-    continuation_endpoint: dict = continuation_item["continuationEndpoint"]
+    continuation_endpoint: dict[str, Any] = continuation_item["continuationEndpoint"]
     click_tracking_params: str = continuation_endpoint["clickTrackingParams"]
     continuation_token: str = dpath.util.get(
         continuation_endpoint,
@@ -327,12 +327,17 @@ def get_context_with_continuation(
     return pattern_next_page_data
 
 
-def get_api_url_from_continuation_item(url: str, continuation_item: dict) -> str:
+def get_api_url_from_continuation_item(
+    url: str,
+    continuation_item: dict[str, Any],
+) -> str:
     api_url = dpath.util.get(continuation_item, "**/webCommandMetadata/apiUrl")
     return urljoin(url, api_url)
 
 
-def get_raw_video_renderer_items(yt_initial_data: dict) -> list[dict]:
+def get_raw_video_renderer_items(
+    yt_initial_data: dict[str, Any],
+) -> list[dict[str, Any]]:
     items = []
     for render in [
         "**/gridVideoRenderer",
@@ -347,10 +352,10 @@ def get_raw_video_renderer_items(yt_initial_data: dict) -> list[dict]:
     return items
 
 
-def get_generator_raw_video_list_from_data(
-    yt_initial_data: dict,
+def get_generator_raw_items_from_data(
+    yt_initial_data: dict[str, Any],
     rs: requests.Response,
-) -> Generator[dict, None, None]:
+) -> Generator[dict[str, Any], None, None]:
     yt_cfg_data = get_yt_cfg_data(rs.text)
     innertube_api_key = yt_cfg_data["INNERTUBE_API_KEY"]
 
@@ -389,9 +394,9 @@ def get_generator_raw_video_list_from_data(
 
 @dataclass
 class Context:
-    data_video: dict | None = None
-    yt_initial_data: dict | None = None
-    yt_cfg_data: dict | None = None
+    data_video: dict[str, Any] | None = None
+    yt_initial_data: dict[str, Any] | None = None
+    yt_cfg_data: dict[str, Any] | None = None
     rs: requests.Response | None = None
 
 
@@ -402,7 +407,7 @@ class Thumbnail:
     height: str
 
     @classmethod
-    def get_from(cls, thumbnail: dict) -> "Thumbnail":
+    def get_from(cls, thumbnail: dict[str, Any]) -> "Thumbnail":
         return cls(
             url=thumbnail["url"],
             width=thumbnail["width"],
@@ -418,7 +423,7 @@ class TranscriptItem:
     text: str
 
     @classmethod
-    def get_from(cls, transcript_segment_renderer: dict) -> "TranscriptItem":
+    def get_from(cls, transcript_segment_renderer: dict[str, Any]) -> "TranscriptItem":
         return cls(
             start_ms=int(transcript_segment_renderer["startMs"]),
             end_ms=int(transcript_segment_renderer["endMs"]),
@@ -530,7 +535,7 @@ class Video:
         return download_url_as_bytes(self.get_url_thumbnail_for_maxresdefault())
 
     @classmethod
-    def get_is_live_now(cls, video: dict) -> bool:
+    def get_is_live_now(cls, video: dict[str, Any]) -> bool:
         # Стримы имеют значок BADGE_STYLE_TYPE_LIVE_NOW
         try:
             badges = dpath.util.values(video, "**/metadataBadgeRenderer/style")
@@ -561,10 +566,16 @@ class Video:
         else:
             duration_text = None
 
+        seq: int | None = None
         try:
             seq = int(data_video["index"]["simpleText"])
-        except:
-            seq = None
+        except (ValueError, KeyError, TypeError):
+            # NOTE: "/watch?v=feWq4hDEZ2U&list=PLfCe0Mzdeup2haesPLO5tGwgVVLpI_hWu&index=55&pp=iAQB" -> 55
+            parsed_url = urlparse(url_video)
+            query_params: dict[str, list[str]] = parse_qs(parsed_url.query)
+            values: list[str] = query_params.get("index", [])
+            if values:
+                seq = int(values[0])
 
         try:
             create_date_raw: str | None = process_text(
@@ -714,7 +725,7 @@ class Playlist:
         return urljoin(BASE_URL, f"playlist?list={playlist_id}")
 
     @classmethod
-    def get_title(cls, yt_initial_data: dict) -> str:
+    def get_title(cls, yt_initial_data: dict[str, Any]) -> str:
         try:
             # Playlist
             return dpath.util.get(
@@ -755,7 +766,7 @@ class Playlist:
 
         total_seconds = 0
         video_list = []
-        for data_video in get_generator_raw_video_list_from_data(yt_initial_data, rs):
+        for data_video in get_generator_raw_items_from_data(yt_initial_data, rs):
             video = Video.parse_from(data_video, context)
             video_list.append(video)
 
