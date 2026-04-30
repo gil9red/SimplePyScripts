@@ -30,21 +30,17 @@ def get_tz(value: str) -> tzinfo:
 if __name__ == "__main__":
     import zoneinfo
 
-    now_utc = datetime.utcnow()
+    now_utc = datetime.now(timezone.utc)
 
-    tz_etc_0300 = zoneinfo.ZoneInfo("Etc/GMT-3")
-    print(now_utc.astimezone(tz_etc_0300).strftime("%z"))
-    # +0300
+    test_cases = [
+        (zoneinfo.ZoneInfo("Etc/GMT-3"), "+0300"),
+        (timezone(offset=timedelta(minutes=3 * 60)), "+0300"),
+        (get_tz("+0300"), "+0300"),
+        (get_tz("+03:00"), "+0300"),
+        (get_tz("-0300"), "-0300")
+    ]
 
-    tz_offset_0300 = timezone(offset=timedelta(minutes=3 * 60))
-    print(now_utc.astimezone(tz_offset_0300).strftime("%z"))
-    # +0300
-
-    print(now_utc.astimezone(get_tz("+0300")).strftime("%z"))
-    # +0300
-
-    print(now_utc.astimezone(get_tz("+03:00")).strftime("%z"))
-    # +0300
-
-    print(now_utc.astimezone(get_tz("-0300")).strftime("%z"))
-    # -0300
+    for tz, expected in test_cases:
+        result = now_utc.astimezone(tz).strftime("%z")
+        print(result)
+        assert result == expected

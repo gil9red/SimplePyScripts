@@ -9,14 +9,14 @@ import hmac
 import hashlib
 import logging
 
-from datetime import datetime
+from datetime import datetime, timezone
 from urllib.parse import urlsplit
 
 from babel.dates import format_datetime
 
 
 def get_today_RFC1123_date():
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     format = "EEE, dd LLL yyyy hh:mm:ss"
     return format_datetime(now, format, locale="en") + " GMT"
 

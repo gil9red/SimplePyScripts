@@ -4,8 +4,13 @@
 __author__ = "ipetrash"
 
 
-from datetime import datetime
+from datetime import datetime, timezone
 
+utc_datetime_old = datetime.utcnow().replace(microsecond=0)
+print(utc_datetime_old)
 
-utc_datetime = datetime.utcnow()
-print(utc_datetime.strftime("%d/%m/%Y %H:%M:%S"))
+utc_datetime = datetime.now(timezone.utc).replace(microsecond=0)
+print(utc_datetime)
+
+assert utc_datetime_old != utc_datetime
+assert utc_datetime_old == utc_datetime.replace(tzinfo=None)

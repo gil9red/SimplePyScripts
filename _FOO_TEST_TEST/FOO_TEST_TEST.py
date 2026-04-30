@@ -867,7 +867,7 @@ def to_ms(d: date) -> int:
     return int(utc_timestamp * 1000)
 
 
-d = datetime.utcnow().date()
+d = datetime.now(timezone.utc).date()
 print(d)
 # 2025-01-10
 

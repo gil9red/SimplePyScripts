@@ -4,10 +4,10 @@
 __author__ = "ipetrash"
 
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
-utc_datetime = datetime.utcnow()
+utc_datetime = datetime.now(timezone.utc)
 
 for i in range(365 + 1):
     date = utc_datetime - timedelta(days=i)
