@@ -70,7 +70,8 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
 
     # url_api_search = f"{URL_BASE}/api/search"  # TODO: Прошлый вариант
     # url_api_search = f"{URL_BASE}/api/finder"
-    url_api_search = f"{URL_BASE}/api/find"
+    # url_api_search = f"{URL_BASE}/api/find"
+    url_api_search = f"{URL_BASE}/api/bleed"
 
     # NOTE: Получение token. Новая защита
     rs_token = session.get(
