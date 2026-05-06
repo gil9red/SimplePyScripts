@@ -311,7 +311,15 @@ def get_context_with_continuation(
     if not innertube_context:
         raise Exception("Значение INNERTUBE_CONTEXT должно быть задано в yt_cfg_data!")
 
-    continuation_endpoint: dict[str, Any] = continuation_item["continuationEndpoint"]
+    continuation_endpoint: dict[str, Any]
+    try:
+        continuation_endpoint = continuation_item["continuationEndpoint"]
+    except KeyError:
+        continuation_endpoint = dpath.util.get(
+            continuation_item,
+            "continuationCommand/innertubeCommand",
+        )
+
     click_tracking_params: str = continuation_endpoint["clickTrackingParams"]
     continuation_token: str = dpath.util.get(
         continuation_endpoint,
@@ -368,12 +376,17 @@ def get_generator_raw_items_from_data(
     while True:
         time.sleep(0.5)
 
+        continuation_item: dict[str, Any]
         try:
             # Может вернуться несколько continuationItemRenderer, берем первый
             glob_continuation: str = "**/continuationItemRenderer"
-            continuation_item: str = dpath.util.values(data, glob_continuation)[0]
-        except (KeyError, IndexError):
-            break
+            continuation_item = dpath.util.values(data, glob_continuation)[0]
+        except (KeyError, IndexError) as e:
+            try:
+                glob_continuation: str = "**/continuationItemViewModel"
+                continuation_item = dpath.util.values(data, glob_continuation)[0]
+            except (KeyError, IndexError) as e:
+                break
 
         url_next_page_data = get_api_url_from_continuation_item(
             rs.url, continuation_item
