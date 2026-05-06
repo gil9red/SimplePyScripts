@@ -14,13 +14,17 @@ from .common import (
     get_generator_raw_items_from_data,
 )
 
+DEFAULT_MAXIMUM_ITEMS: int = 1_000
+
 
 def get_generator_raw_items(url: str) -> Generator[dict[str, Any], None, None]:
     rs, data = load(url)
     yield from get_generator_raw_items_from_data(data, rs)
 
 
-def get_raw_items(url: str, maximum_items: int = 1000) -> list[dict[str, Any]]:
+def get_raw_items(
+    url: str, maximum_items: int = DEFAULT_MAXIMUM_ITEMS
+) -> list[dict[str, Any]]:
     items = []
     for i, video in enumerate(get_generator_raw_items(url)):
         if i >= maximum_items:
@@ -31,7 +35,7 @@ def get_raw_items(url: str, maximum_items: int = 1000) -> list[dict[str, Any]]:
     return items
 
 
-def get_video_list(url: str, *args, **kwargs) -> list[Video]:
+def get_video_list(url: str, maximum_items: int = DEFAULT_MAXIMUM_ITEMS) -> list[Video]:
     def _is_video(data: dict[str, Any]) -> bool:
         try:
             return Video.get_video_id(data) is not None
@@ -40,19 +44,21 @@ def get_video_list(url: str, *args, **kwargs) -> list[Video]:
 
     return [
         Video.parse_from(video)
-        for video in get_raw_items(url, *args, **kwargs)
+        for video in get_raw_items(url, maximum_items=maximum_items)
         if _is_video(video)
     ]
 
 
-def search_youtube(text_or_url: str, *args, **kwargs) -> list[Video]:
+def search_youtube(
+    text_or_url: str, maximum_items: int = DEFAULT_MAXIMUM_ITEMS
+) -> list[Video]:
     if text_or_url.startswith("http"):
         url = text_or_url
     else:
         text = text_or_url
         url = urljoin(BASE_URL, f"results?search_query={text}")
 
-    return get_video_list(url, *args, **kwargs)
+    return get_video_list(url, maximum_items=maximum_items)
 
 
 def search_youtube_with_filter(
