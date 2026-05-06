@@ -381,11 +381,11 @@ def get_generator_raw_items_from_data(
             # Может вернуться несколько continuationItemRenderer, берем первый
             glob_continuation: str = "**/continuationItemRenderer"
             continuation_item = dpath.util.values(data, glob_continuation)[0]
-        except (KeyError, IndexError) as e:
+        except (KeyError, IndexError):
             try:
                 glob_continuation: str = "**/continuationItemViewModel"
                 continuation_item = dpath.util.values(data, glob_continuation)[0]
-            except (KeyError, IndexError) as e:
+            except (KeyError, IndexError):
                 break
 
         url_next_page_data = get_api_url_from_continuation_item(
