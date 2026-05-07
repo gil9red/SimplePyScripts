@@ -376,6 +376,9 @@ def get_generator_raw_items_from_data(
     while True:
         time.sleep(0.5)
 
+        if error := data.get("error"):
+            raise Exception(f"[#] Error code {error['code']}: {error['message']}")
+
         continuation_item: dict[str, Any]
         try:
             # Может вернуться несколько continuationItemRenderer, берем первый
