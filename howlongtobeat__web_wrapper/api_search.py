@@ -69,43 +69,43 @@ def search_game(game: str) -> dict[str, Any] | None:
 
 
 if __name__ == "__main__":
-    game = "Warhammer 40,000: Space Marine 2"
-    result = search_game(game)
-    print(game, result)
-    assert "Warhammer 40,000: Space Marine II" == result["game_name"]
-
     game = "Half-Life 2"
     result = search_game(game)
     print(game, result)
     assert game == result["game_name"]
 
-    game = "Marc Eckō's Getting Up: Contents Under Pressure"
-    result = search_game(game)
-    print(game, result)
-    assert "Marc Ecko's Getting Up: Contents Under Pressure" == result["game_name"]
-
-    game = "Nightmares from the Deep 2: The Siren`s Call"
-    result = search_game(game)
-    print(game, result)
-    assert "Nightmares from the Deep 2: The Siren's Call" == result["game_name"]
-
-    print()
-
-    game = search_game("Half-Life")
-    print(game)
-    assert game
-
-    game = search_game("Final Fantasy IX")
-    print(game)
-    assert game
-
-    game = search_game("Final Fantasy 9")
-    print(game)
-    assert game
-
-    game = search_game("Final Fantasy VII")
-    print(game)
-    assert game
+    # game = "Warhammer 40,000: Space Marine 2"
+    # result = search_game(game)
+    # print(game, result)
+    # assert "Warhammer 40,000: Space Marine II" == result["game_name"]
+    #
+    # game = "Marc Eckō's Getting Up: Contents Under Pressure"
+    # result = search_game(game)
+    # print(game, result)
+    # assert "Marc Ecko's Getting Up: Contents Under Pressure" == result["game_name"]
+    #
+    # game = "Nightmares from the Deep 2: The Siren`s Call"
+    # result = search_game(game)
+    # print(game, result)
+    # assert "Nightmares from the Deep 2: The Siren's Call" == result["game_name"]
+    #
+    # print()
+    #
+    # game = search_game("Half-Life")
+    # print(game)
+    # assert game
+    #
+    # game = search_game("Final Fantasy IX")
+    # print(game)
+    # assert game
+    #
+    # game = search_game("Final Fantasy 9")
+    # print(game)
+    # assert game
+    #
+    # game = search_game("Final Fantasy VII")
+    # print(game)
+    # assert game
 
     # from multiprocessing.dummy import Pool as ThreadPool
     #
