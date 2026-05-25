@@ -46,9 +46,9 @@ def get_worklog() -> Worklog:
             # Отработано фактически (чч:мм:сс)
             td_list[1].get_text(strip=True),
             # Зафиксировано трудозатрат (чч:мм)
-            td_list[2].get_text(strip=True),
+            td_list[-2].get_text(strip=True),
             # Процент зафиксированного времени
-            td_list[3].get_text(strip=True),
+            td_list[-1].get_text(strip=True),
         )
     )
 
