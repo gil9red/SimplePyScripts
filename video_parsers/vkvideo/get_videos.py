@@ -4,6 +4,8 @@
 __author__ = "ipetrash"
 
 
+import time
+
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Self
@@ -13,8 +15,12 @@ from typing import Any, Self
 #   playwright install firefox
 from playwright.sync_api import sync_playwright, Response
 
+import requests
 
-@dataclass
+MAX_VIDEOS_SAFETY_LIMIT: int = 100
+
+
+@dataclass(frozen=True)
 class VideoInfo:
     id: int
     owner_id: int
@@ -39,7 +45,15 @@ class VideoInfo:
         )
 
 
-def get_first_videos_raw(url: str) -> dict[str, Any]:
+@dataclass
+class ApiInfo:
+    url: str
+    headers: dict[str, str]
+    rq_data: dict[str, str]
+    rs_data: dict[str, Any]
+
+
+def get_api_info(url: str) -> ApiInfo:
     with sync_playwright() as p:
         browser = p.firefox.launch()
 
@@ -52,17 +66,24 @@ def get_first_videos_raw(url: str) -> dict[str, Any]:
             url: str = rs.url
             return (
                 "api" in url
-                and ("/video.getFromAlbum?" in url or "/catalog.getVideo?" in url)
+                and rs.request.method == "POST"
                 and rs.status == 200
+                # NOTE: Уточнение с "?" в конце для исключения ссылки вида catalog.getVideoShowcase
+                and ("/video.getFromAlbum?" in url or "/catalog.getVideo?" in url)
+                and "json" in str(rs.headers)
             )
 
         with page.expect_response(is_api) as response_info:
-            return response_info.value.json()
+            rs = response_info.value
+            return ApiInfo(
+                url=rs.url,
+                headers=rs.request.headers,
+                rq_data=rs.request.post_data_json,
+                rs_data=rs.json(),
+            )
 
 
-def get_first_videos(url: str) -> list[VideoInfo]:
-    rs: dict[str, Any] = get_first_videos_raw(url)["response"]
-
+def parse_videos(rs: dict[str, Any]) -> list[VideoInfo]:
     videos: list[dict[str, Any]]
     if "videos" in rs:  # На странице канала
         videos = rs["videos"]
@@ -72,72 +93,161 @@ def get_first_videos(url: str) -> list[VideoInfo]:
     return [VideoInfo.from_dict(video) for video in videos]
 
 
+def get_videos(url: str, max_items: int | None = MAX_VIDEOS_SAFETY_LIMIT) -> list[VideoInfo]:
+    # Вернется первая порция запросов
+    api_info: ApiInfo = get_api_info(url)
+
+    url: str = api_info.url
+
+    rs_data: dict[str, Any] = api_info.rs_data["response"]
+
+    all_videos: list[VideoInfo] = parse_videos(rs_data)
+
+    rq_data: dict[str, Any] = api_info.rq_data
+
+    if "/video.getFromAlbum" in url:
+        if len(all_videos) >= rs_data["count"]:
+            return all_videos
+
+        rq_data["offset"] = int(rq_data["offset"])
+        rq_data["count"] = int(rq_data["count"])
+
+    elif "/catalog.getVideo" in url:
+        section_id: int | None = None
+        next_from: str | None = None
+
+        for section in rs_data["catalog"]["sections"]:
+            if "next_from" not in section:
+                continue
+
+            section_id = section["id"]
+            next_from = section["next_from"]
+            break
+
+        if not next_from:
+            return all_videos
+
+        url = url.replace("/catalog.getVideo", "/catalog.getSection")
+        rq_data = {
+            "section_id": section_id,
+            "start_from": next_from,
+            "access_token": rq_data["access_token"],
+        }
+
+    else:
+        raise Exception("Неизвестный тип API")
+
+    session = requests.Session()
+    session.headers.update(api_info.headers)
+
+    while True:
+        if "offset" in rq_data:
+            rq_data["offset"] += rq_data["count"]
+
+        rs = session.post(url, data=rq_data)
+        rs.raise_for_status()
+
+        rs_data: dict[str, Any] = rs.json()["response"]
+
+        videos: list[VideoInfo] = parse_videos(rs_data)
+        if not videos:
+            break
+
+        all_videos += videos
+        if max_items and len(all_videos) >= max_items:
+            all_videos = all_videos[:max_items]
+            break
+
+        if "section" in rs_data:
+            section: dict[str, Any] = rs_data["section"]
+            if "next_from" not in section:
+                break
+
+            rq_data["section_id"] = section["id"]
+            rq_data["start_from"] = section["next_from"]
+
+        time.sleep(1)
+
+    return all_videos
+
+
 if __name__ == "__main__":
 
     def _print_videos(videos: list[VideoInfo]):
         print(f"Video ({len(videos)}):")
-        for i, video in enumerate(videos, 1):
-            print(f"    {i}. {video}")
 
-    videos: list[VideoInfo] = get_first_videos(
-        "https://vkvideo.ru/playlist/-1719791_48513772"
-    )
+        width: int = len(str(len(videos)))
+
+        for i, video in enumerate(videos, 1):
+            print(f"    {i:>{width}}. {video}")
+
+        assert videos != list(set(videos))
+
+    # Пример из плейлиста (один запрос вернет 25 шт.)
+    url: str = "https://vkvideo.ru/playlist/-1719791_48513772"
+
+    print(url)
+    videos: list[VideoInfo] = get_videos(url, max_items=50)
     _print_videos(videos)
     """
-    Video (25):
-        1. VideoInfo(id=456265161, owner_id=-1719791, title='Пора ЗАВЯЗЫВАТЬ \U0001fae9 / +100500', url='https://vkvideo.ru/video-1719791_456265161?pl=-1719791_48513772', date=datetime.datetime(2026, 4, 18, 16, 47, 4), description='Эпизод # 555 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/2d5df23d-9454-4679-8c12-a27955fddbc9?share=post_link \nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18884\n\n00:00 ПРИВЕТЛИВЫЙ ПАССАЖИР\n02:03 ИНТРО\n02:22 ЧЕЛОВЕК-РУЧНИК\n04:51 НЕВОЗМОЖНЫЙ УЗЕЛ\n07:43 МГНОВЕННАЯ ОБИДА\n09:59 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: maks100500@didenokteam.com', duration=623)
-        2. VideoInfo(id=456264517, owner_id=-1719791, title='ДАНИЛ КОЛБАСЕНКО / +100500', url='https://vkvideo.ru/video-1719791_456264517?pl=-1719791_48513772', date=datetime.datetime(2026, 3, 3, 21, 7, 41), description='Эпизод # 554 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/ad53a66d-54d3-43f9-80a2-41242cb7da8d?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18769\n\n00:00 ДАНИЛ КОЛБАСЕНКО\n02:55 ИНТРО\n03:13 ГОЛУБЯТНЯ В ДЕСЯТКЕ\n05:02 ПАРУСА ИЗ КАНАЛИЗАЦИИ\n07:03 АРОМАТНЫЕ ПАЛЬЧИКИ\n09:22 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: maks100500@didenokteam.com', duration=599)
-        3. VideoInfo(id=456264454, owner_id=-1719791, title='Чилловый козёл, который НА ЧИЛЛЕ 💤🐐 / +100500', url='https://vkvideo.ru/video-1719791_456264454?pl=-1719791_48513772', date=datetime.datetime(2026, 2, 2, 20, 48, 34), description='Эпизод # 553 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/2ae907c7-1183-475e-824c-7959a0de3030?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18693\n\n00:00 ДРУГ В ОТРАЖЕНИИ\n01:46 ИНТРО\n02:04 ХЛОПУШКА ОТ МУХ\n03:41 ЧИЛЛОВЫЙ КОЗЁЛ\n05:19 ОСВЕЖИТЕЛЬ С ДУШКОМ\n07:22 МУЗЫКАЛЬНЫЙ КОНЕЦ', duration=473)
-        4. VideoInfo(id=456264437, owner_id=-1719791, title='ОБЛЕЗЛЫЙ НОВЫЙ ГОД 🎄 Ёлка-Ёршик и Розетки На Ковре', url='https://vkvideo.ru/video-1719791_456264437?pl=-1719791_48513772', date=datetime.datetime(2025, 12, 31, 20, 22, 31), description='Эпизод # 552 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/f81d5f16-a3ea-4aac-8fc2-aacff72fb645?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18571\n\n00:00 НОВОГОДНИЙ ЁРШИК\n02:04 ИНТРО\n02:23 ДЕД МОРОЗ ПОЛОЖИЛ\n03:48 ОЛИВЬЕШНЫЙ ГРИНЧ\n05:23 КРЕАТИВНЫЙ ЭЛЕКТРИК\n07:48 ПОЗДРАВЛЕНИЕ\n08:49 МУЗЫКАЛЬНЫЙ КОНЕЦ', duration=554)
-        5. VideoInfo(id=456264423, owner_id=-1719791, title='ПАРКУР В КАБЛУКАХ 👠 / +100500', url='https://vkvideo.ru/video-1719791_456264423?pl=-1719791_48513772', date=datetime.datetime(2025, 12, 19, 21, 14, 31), description='Эпизод # 551 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/cd2315b4-e05d-431d-96f1-52d126df8a34?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18516\n\n00:00 99 ПРОБЛЕМ\n02:19 ИНТРО\n02:38 АЛЬПИНИСТКА НА ШПИЛЬКАХ\n05:31 Я ВОТ СЮДА ЛЕЧУ\n07:09 ПЕРДОКОНЬ\n09:04 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: 100500@hypeagency.ru', duration=574)
-        6. VideoInfo(id=456264404, owner_id=-1719791, title='ПИТЕРСКИЙ ПРОГНОЗ ПОГОДЫ 🌧️ / +100500', url='https://vkvideo.ru/video-1719791_456264404?pl=-1719791_48513772', date=datetime.datetime(2025, 12, 6, 18, 58, 53), description='Эпизод # 550 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/8443440f-42d0-4617-9218-d2a35c4e7441?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18470\n\n00:00 ОПОХМЕЛ ДЛЯ НЕЗНАКОМЦА\n02:17 ИНТРО\n02:36 ПИТЕРСКИЙ ПРОГНОЗ\n06:02 ПОДУШКА ЧЕШЕТСЯ\n07:35 РЮКЗАЧОК С СЮРПРИЗОМ\n09:51 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: 100500@hypeagency.ru', duration=628)
-        7. VideoInfo(id=456264399, owner_id=-1719791, title='Тут СТРАДАЮТ ВСЕ 😈 / +100500', url='https://vkvideo.ru/video-1719791_456264399?pl=-1719791_48513772', date=datetime.datetime(2025, 11, 29, 21, 6, 54), description='Эпизод # 549 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/867c77b1-3713-4b8d-acc5-62889249bc23?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18446\n\n00:00 ВЫТОПИЛИ ПЕЧКУ\n01:50 ИНТРО\n02:09 СНИМАЙ ЕЁ\n03:36 ОСЕННЯЯ ПОГОДА\n05:05 ЛЮБОЙ ХОТЕЛ ТАК СДЕЛАТЬ\n07:41 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: 100500@hypeagency.ru', duration=491)
-        8. VideoInfo(id=456264368, owner_id=-1719791, title='Улыбнулся – ПОТЕРЯЛ ЖЕНУ / +100500', url='https://vkvideo.ru/video-1719791_456264368?pl=-1719791_48513772', date=datetime.datetime(2025, 10, 15, 6, 23, 48), description='Эпизод # 548 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/0f6617d4-2d0d-43aa-88d1-201f5abe25ff?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: \n\n00:00 ПОСТИРАЛ 25 ПАР НОСКОВ\n02:02 ИНТРО\n02:20 ПОДРАЛСЯ\n03:24 УЛЫБНИСЬ, ЕСЛИ ХОЧЕШЬ ДРУГУЮ ЖЕНУ\n04:43 ИЗ ПЕРМИ\n06:21 ЗАШЛИ КОРОВЫ В ПАЛАТКУ\n07:58 ДЯТЛОПЁС\n09:12 ЧИЛЛОВЫЙ СКРИПАЧ\n10:57 ТОП ОПЕРАТОР ЗА СВОИ ДЕНЬГИ\n12:25 МУЗЫКАЛЬНЫЙ КОНЕЦ', duration=771)
-        9. VideoInfo(id=456264324, owner_id=-1719791, title='ДВА МЕДВЕДЯ, ОДИН ЧЕЛОВЕК 🐻👨🏼\u200d🦲🐻 / +100500', url='https://vkvideo.ru/video-1719791_456264324?pl=-1719791_48513772', date=datetime.datetime(2025, 9, 5, 16, 25), description='Эпизод # 547 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/36c470f3-884b-43e7-bd0a-355918c77e2f?share=post_link\nЭксклюзивный выпуск +100500 на BOOSTY: https://boosty.to/max100500/posts/45b0150a-40d1-4651-9583-3a569724755d?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18185\n\n00:00 ДАЛ ПРИКУРИТЬ\n01:38 ИНТРО\n01:56 ВОДОЧНОЕ ПРОМЫВАНИЕ\n03:05 ЧЕСТНЫЙ САНТЕХНИК\n04:07 ГЕЛИК И БУХАНКА\n05:32 ДЫРЯВАЯ КЛАДКА\n06:37 ЕСЛИ НЕТ КОНДЁРА\n07:45 НЕ ГОВОРИ "ДА"\n08:50 МЕДВЕЖЬЯ АРИФМЕТИКА\n10:25 МУЗЫКАЛЬНЫЙ КОНЕЦ', duration=652)
-        10. VideoInfo(id=456264272, owner_id=-1719791, title='Я СТРАДАЛ, смотря эти ВИДОСЫ 🫠 / +100500', url='https://vkvideo.ru/video-1719791_456264272?pl=-1719791_48513772', date=datetime.datetime(2025, 7, 8, 20, 47, 19), description='Эпизод #546 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/3d7c9879-6ae8-42ad-b001-a16fdad2be81?share=post_link\nНовый MORAN DAY: https://youtu.be/_xxW8KZducg\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18035\n\n00:00 БАССЕЙН ДЛЯ ВНУЧКИ\n02:44 ИНТРО\n03:02 ОГУРЕЧНЫЙ БУФЕТ\n05:34 УНИЧТОЖИТЕЛЬ ЕДЫ\n07:32 НЕ ОТВЛЕКАЙТЕ ЕГО\n09:47 РЭП И ПЧЁЛЫ\n11:31 МУЗЫКАЛЬНЫЙ КОНЕЦ', duration=729)
-        11. VideoInfo(id=456264213, owner_id=-1719791, title='НЕ ДАВАЙТЕ БАБУШКАМ ДЕЛАТЬ ЭТО / +100500', url='https://vkvideo.ru/video-1719791_456264213?pl=-1719791_48513772', date=datetime.datetime(2025, 5, 23, 16, 41, 28), description='Эпизод # 545 :D\nBOOSTY (ВЫПУСК БЕЗ ЦЕНЗУРЫ + ДОПОЛНИТЕЛЬНЫЙ ОБЗОР): https://boosty.to/max100500/posts/40dac0a6-7bec-401e-b1f0-fb082e457604?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nMORAN DAYS (трэвел влог): https://www.youtube.com/@MoranDays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/17934\n\n00:00 УКУС С ОТКАТОМ\n01:31 ИНТРО\n01:48 ЗЛОБНЫЙ КОНСПИРОЛОГ\n04:02 ПОДЛЁДНЫЙ ТЕЛЕФОННЫЙ УЛОВИТЕЛЬ\n07:07 ОТЗЫВ СОМНЕНИЯ\n09:15 ТУФЛЯ В ТУФЛЕ\n10:59 БАБУШКИНА СТИРКА\n12:57 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: 100500@hypeagency.ru', duration=823)
-        12. VideoInfo(id=456264105, owner_id=-1719791, title='ТЕЛЕПАТКА В БАНКЕ / +100500', url='https://vkvideo.ru/video-1719791_456264105?pl=-1719791_48513772', date=datetime.datetime(2025, 3, 30, 19, 49, 51), description='Эпизод # 544 :D\nTWITCH: https://www.twitch.tv/moran_plays\nMORAN DAYS (трэвел влог): https://www.youtube.com/@MoranDays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/17795\n\n0:00 БОЛЬШАЯ КРАСНАЯ ЖЕНЩИНА\n1:37 ИНТРО\n1:55 МНОГОСЛОЙНОЕ ИНТЕРВЬЮ\n4:18 ТАТАРО-МОНГОЛЬСКОЕ ПРОЩЕНИЕ\n6:15 ПАЛОЧНОЕ УКЛОНЕНИЕ\n9:36 МОБИЛЬНАЯ ТЕЛЕПАТИЯ\n12:38 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: 100500@hypeagency.ru', duration=806)
-        13. VideoInfo(id=456264050, owner_id=-1719791, title='ЯРОСТЬ В ПУНКТЕ ВЫДАЧИ 🤬 / +100500', url='https://vkvideo.ru/video-1719791_456264050?pl=-1719791_48513772', date=datetime.datetime(2025, 2, 18, 21, 8, 59), description='Эпизод # 543 :D\nMORAN DAYS (новые видео): \nhttps://vk.com/video-1719791_456263908\nhttps://vk.com/video-1719791_456264021\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/17680\n\n0:00 КАК ВСТРЕТИШЬ НОВЫЙ ГОД…\n2:19 ИНТРО\n2:36 ЦЕНИТЕЛЬ ПРАДЫ\n4:41 ЯРОСТЬ В ПУНКТЕ ВЫДАЧИ\n6:42 ГОЛОВНОЙ ПЁС\n8:27 БОЕВАЯ ПОЭЗИЯ\n11:32 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: 100500@hypeagency.ru', duration=718)
-        14. VideoInfo(id=456263985, owner_id=-1719791, title='ЗАМЕДЛЕННЫЙ НОВЫЙ ГОД 🎄 / +100500', url='https://vkvideo.ru/video-1719791_456263985?pl=-1719791_48513772', date=datetime.datetime(2024, 12, 31, 20, 55, 23), description='Эпизод # 542 :D\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTELEGRAM: https://t.me/vidowsov100500\nTWITCH: https://www.twitch.tv/moran_plays\nMoran Days (Второй Канал) : http://www.youtube.com/user/MoranDays\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/17558\n\n0:00 ЛЮБИМЫЕ 5000 РУБЛЕЙ\n1:51 ИНТРО\n2:07 ТИКТОК ВЕСТИ\n3:46 МЫ ИХ ВЫЯВИМ\n5:32 МЫШИНЫЙ СТЕКЛОПОДЪЁМНИК\n7:18 РЕЗИНОВЫЙ ТРОН ДЕДА МОРОЗА\n10:05 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: 100500@hypeagency.ru', duration=633)
-        15. VideoInfo(id=456263958, owner_id=-1719791, title='ИНФОЦЫГАНСКИЙ ОБРЯД НА БОГАТСТВО 🤑 / +100500', url='https://vkvideo.ru/video-1719791_456263958?pl=-1719791_48513772', date=datetime.datetime(2024, 12, 8, 18, 7, 53), description='Эпизод # 541 :D\nMORAN PLAYS (стримы)\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/MORANPLAYS\nYOUTUBE: https://www.youtube.com/@MoranPlaysGames\n\nTikTok: https://www.tiktok.com/@maxim_golopolosov\nTelegram канал: https://t.me/vidowsov100500\nПаблик +100500 ВКонтакте: https://vk.com/maximplus100500\nMoran Days (Второй Канал) : http://www.youtube.com/user/MoranDays\n\nВидео из эпизода: https://t.me/vidowsov100500/17504\n\n0:00 ПРОДВИНЬТЕ БАБКУ\n1:41 ИНТРО\n1:57 ИНФОЦЫГАНОВНА\n4:32 НЕПОНЯТНЫЙ ПОВОРОТНИК\n6:00 ЖЁСТКИЙ АТТРАКЦИОН\n7:52 ОГНЕННЫЙ КАЗАН\n9:28 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: 100500@hypeagency.ru', duration=591)
-        16. VideoInfo(id=456263904, owner_id=-1719791, title='БОЕВАЯ ПОСУДА 🍽️ / +100500', url='https://vkvideo.ru/video-1719791_456263904?pl=-1719791_48513772', date=datetime.datetime(2024, 10, 13, 17, 43, 6), description='Эпизод # 540 :D\nЗаказать свой компьютер мечты: https://hyperpc.ru/\nВидео про мой новый комп (интервью, сборка): https://youtu.be/sljp3iUkBm0?si=J_uc-IQMIH3hczmL\nСтраничка моего нового компа (конфигурация, фото): https://hyperpc.ru/project/hyperboost/max-100500-2\n\nMORAN PLAYS (стримы)\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/MORANPLAYS\nYOUTUBE: https://www.youtube.com/@MoranPlaysGames\n\nTikTok: https://www.tiktok.com/@maxim_golopolosov\nTelegram канал: https://t.me/vidowsov100500\nПаблик +100500 ВКонтакте: https://vk.com/maximplus100500\nMoran Days (Второй Канал) : http://www.youtube.com/user/MoranDays\n\nВидео из эпизода: https://t.me/vidowsov100500/17352\n\n0:00 ЛАМПОВАЯ ХАТА\n3:00  ИНТРО\n3:17 ТАРЕЛОЧНАЯ ОБОРОНА\n5:44 ХЕРОК НЕ НАКАЧАЕШЬ\n7:29 ЖЕВАТЕЛЬНОЕ МЯСО\n9:34 ЯЗЫКОВЕДНАЯ\n13:00 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: 100500@hypeagency.ru', duration=814)
-        17. VideoInfo(id=456263870, owner_id=-1719791, title='ИГРОВОЙ ПАУК 🕷️ / +100500', url='https://vkvideo.ru/video-1719791_456263870?pl=-1719791_48513772', date=datetime.datetime(2024, 9, 9, 18, 34, 55), description='Эпизод # 539 :D\nMORAN PLAYS (стримы)\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/MORANPLAYS\nYOUTUBE: https://www.youtube.com/@MoranPlaysGames\n\nTikTok: https://www.tiktok.com/@maxim_golopolosov\nTelegram канал: https://t.me/vidowsov100500\nПаблик +100500 ВКонтакте: https://vk.com/maximplus100500\nMoran Days (Второй Канал) : http://www.youtube.com/user/MoranDays\n\nВидео из эпизода: https://t.me/vidowsov100500/17247\n\n0:00 БУДКА БУДЕТ НАБИТА\n1:31  ИНТРО\n1:48 ТУПЛИПОЛ И ПИЛТА\n5:04 НАСТОЯЩИЙ ДЖЕНТЛЬМЕН\n6:44 ДРЕЛЬНЫЙ ФАРШ\n9:01 ИГРОВОЙ ПАУК\n12:08 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: 100500@hypeagency.ru', duration=757)
-        18. VideoInfo(id=456263769, owner_id=-1719791, title='ФРУКТЫ, ШОКОЛАД И ДРЕЛЬ / +100500', url='https://vkvideo.ru/video-1719791_456263769?pl=-1719791_48513772', date=datetime.datetime(2024, 7, 4, 0, 29, 28), description='Эпизод # 538 :D\nMORAN PLAYS (стримы)\nYOUTUBE: https://www.youtube.com/@MoranPlaysGames\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/MORANPLAYS\n\nTikTok: https://www.tiktok.com/@maxim_golopolosov\nTelegram канал: https://t.me/vidowsov100500\nПаблик +100500 ВКонтакте: https://vk.com/maximplus100500\nMoran Days (Второй Канал) : http://www.youtube.com/user/MoranDays\n\nВидео из эпизода: \n\n0:00 ОЖИДАНИЯ ОТ ФЕСТИВАЛЯ\n1:09  ИНТРО\n1:26 ХОРОШЕЙ ВАМ ПЯТНИЦЫ\n3:31 ВЛАСТЕЛИН ВСЕХ КОЛЕЦ\n6:16 БУМАГА ИЗ ЗАВОДСКОГО ТОЛЧКА\n8:22 ФРУКТЫ В ШОКОЛАДЕ И ДРЕЛЬ\n11:17 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: 100500@hypeagency.ru', duration=714)
-        19. VideoInfo(id=456263700, owner_id=-1719791, title='ЖЁСТКАЯ ДИЧЬ ОТ НЕЙРОСЕТЕЙ / +100500 СПЕШЛ', url='https://vkvideo.ru/video-1719791_456263700?pl=-1719791_48513772', date=datetime.datetime(2024, 6, 3, 1, 53, 22), description='Представляю вашему вниманию альтернативный формат +100500 СПЕШЛ.\nЧуть более информативный, но не менее развлекательный!\nТема этого спецвыпуска: ВИДЕО, СГЕНЕРИРОВАННЫЕ НЕЙРОСЕТЯМИ.\n\nMORAN PLAYS (стримы)\nYOUTUBE: https://www.youtube.com/@MoranPlaysGames\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/MORANPLAYS\n\nTikTok: https://www.tiktok.com/@maxim_golopolosov\nTelegram канал: https://t.me/vidowsov100500\nПаблик +100500 ВКонтакте: https://vk.com/maximplus100500\nMoran Days (Второй Канал) : http://www.youtube.com/user/MoranDays\n\nВидео из эпизода:\n\n0:00 SORA, Уилл Смит и Дуэйн "СКАЛА" Джонсон\n1:23 ИНТРО\n1:39 НЕЙРО ЗНАМЕНИТОСТИ\n1:46 Арнольд Шварценеггер ест КРОКОДИЛОВ\n2:36 Илон Маск ест УНИТАЗЫ\n3:20 НЕЙРО РЕКЛАМА\n3:25 Реклама ПИВА\n5:21 Почему у ИИ плохо получаются руки?\n6:11 Реклама ПИЦЦА-НАГГЕТСОВ\n8:20 РАЗНОЕ\n8:32 Нейро СОБАКИ\n10:15 Нейро РОМАНТИКА\n12:20 ФИНАЛ\n12:41 Нейро МУЗКОНЕЦ', duration=792)
-        20. VideoInfo(id=456263545, owner_id=-1719791, title='ВЯЛАЯ ХЛОПУШКА 🎉 / +100500', url='https://vkvideo.ru/video-1719791_456263545?pl=-1719791_48513772', date=datetime.datetime(2024, 4, 4, 3, 23, 18), description='Эпизод # 537 :D\nMORAN PLAYS (стримы)\nYOUTUBE: https://www.youtube.com/@MoranPlaysGames\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/MORANPLAYS\n\nTikTok: https://www.tiktok.com/@maxim_golopolosov\nTelegram канал: https://t.me/vidowsov100500\nПаблик +100500 ВКонтакте: https://vk.com/maximplus100500\nMoran Days (Второй Канал) : http://www.youtube.com/user/MoranDays\n\nВидео из эпизода: https://vk.com/wall-1719791_1918523\n\n0:00 ВЯЛАЯ ХЛОПУШКА\n1:18  ИНТРО\n1:35 БАБКИН ФУТБОЛИСТ\n3:18 СБРОСИЛ СОПЛЮ\n5:02 БЫТОВОЙ РАССИНХРОН\n7:35 ГНОМИК И ПАЛКА ВЫРУЧАЛКА\n9:11 МУЗЫКАЛЬНЫЙ КОНЕЦ', duration=578)
-        21. VideoInfo(id=456263366, owner_id=-1719791, title='ПРАЗДНИК ПРОИСХОДИТ 🎄 / +100500', url='https://vkvideo.ru/video-1719791_456263366?pl=-1719791_48513772', date=datetime.datetime(2023, 12, 31, 22, 18, 11), description='Эпизод # 536 :D\nMORAN PLAYS (стримы)\nYOUTUBE: https://www.youtube.com/@MoranPlaysGames\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/MORANPLAYS\n\nTikTok: https://www.tiktok.com/@maxim_golopolosov\nTelegram канал: https://t.me/vidowsov100500\nПаблик +100500 ВКонтакте: https://vk.com/maximplus100500\nMoran Days (Второй Канал) : http://www.youtube.com/user/MoranDays\n\nВидео из эпизода: \n\n0:00 ОЛЕНЬЕ УГОЩЕНЬЕ\n1:32 ИНТРО \n1:49 ПРОБЛЕМЫ С ОТЧЕСТВОМ\n4:15 СОЛЁНАЯ КАПУСТА\n6:30 ТОЛЧОК НА РЕЛЬСАХ\n8:45 ОН ПРОСТО ЕХАЛ ПРЯМО\n12:28 МУЗЫКАЛЬНЫЙ КОНЕЦ', duration=761)
-        22. VideoInfo(id=456263435, owner_id=-1719791, title='РЫБА 🐟 КОТЛЕТЫ 🥩 КОНФЕТЫ 🍬 / +100500', url='https://vkvideo.ru/video-1719791_456263435?pl=-1719791_48513772', date=datetime.datetime(2024, 2, 6, 1, 56, 30), description='Эпизод # 535 :D\nMORAN PLAYS (стримы)\nYOUTUBE: https://www.youtube.com/@MoranPlaysGames\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/MORANPLAYS\n\nTikTok: https://www.tiktok.com/@maxim_golopolosov\nTelegram канал: https://t.me/vidowsov100500\nПаблик +100500 ВКонтакте: https://vk.com/maximplus100500\nMoran Days (Второй Канал) : http://www.youtube.com/user/MoranDays\nTwitter: http://twitter.com/maxplus100500\n\nВидео из эпизода: https://vk.com/wall-1719791_1911322\n\n0:00 ПОДЗЕМНЫЙ СПОРТСМЕН\n1:10 ИНТРО \n1:27 РАЗРЕЗ ПРАВ\n3:06 БОЕВОЕ РАЗВЁРТЫВАНИЕ\n5:10 ПРОТИВОУГОННАЯ ЛАМПОЧКА\n6:59 РЫБА, КОТЛЕТЫ, КОНФЕТЫ\n9:00 МУЗЫКАЛЬНЫЙ КОНЕЦ', duration=570)
-        23. VideoInfo(id=456263121, owner_id=-1719791, title='ИГРУШКИ ДЬЯВОЛА 😈 / +100500', url='https://vkvideo.ru/video-1719791_456263121?pl=-1719791_48513772', date=datetime.datetime(2023, 9, 30, 3, 36, 39), description='Эпизод # 534 :D\nMORAN PLAYS (стримы)\nYOUTUBE: https://www.youtube.com/@MoranPlaysGames\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/MORANPLAYS\n\nTikTok: https://www.tiktok.com/@maxim_golopolosov\nTelegram канал: https://t.me/vidowsov100500\nПаблик +100500 ВКонтакте: https://vk.com/maximplus100500\nMoran Days (Второй Канал) : http://www.youtube.com/user/MoranDays\nTwitter: http://twitter.com/maxplus100500\n\nВидео из эпизода: https://vk.com/wall-1719791_1909121\n\n0:00 БАНАНОВАЯ ХИТРОСТЬ\n1:11 ИНТРО \n1:28 ИГРУШКИ ДЬЯВОЛА\n4:29 ВНЕЗАПНЫЙ ЛЕОПАРД\n6:13 ХЛЕБНЫЙ ГОЛУБЬ\n7:27 ЛЫСЫЕ ДЕНЬГИ\n9:04 МУЗЫКАЛЬНЫЙ КОНЕЦ', duration=568)
-        24. VideoInfo(id=456262820, owner_id=-1719791, title='ЛЮБОВЬ И КЕТЧУП ❤️🥫 / +100500', url='https://vkvideo.ru/video-1719791_456262820?pl=-1719791_48513772', date=datetime.datetime(2023, 7, 11, 19, 39, 50), description='Эпизод # 531 :D\nTWITCH: https://www.twitch.tv/moran_plays\nTelegram канал MORAN PLAYS: https://t.me/MORANPLAYS\n\nTelegram канал: https://t.me/vidowsov100500\nПаблик +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\nMoran Days (Второй Канал) : http://www.youtube.com/user/MoranDays\nTwitter: http://twitter.com/maxplus100500\n\nВидео из эпизода: https://vk.com/wall-1719791_1903217\n\n0:00 НУЛЕВОЙ ВИДОС\n0:21 ИНТРО\n0:48 МАМА ЗЕВАЕТ\n2:28 VIP МУЖИК\n4:44 САМОПЛЮЙ\n6:44 ЛЮБОВЬ И КЕТЧУП\n8:19 ПРОЩАЛОЧКА\n8:58 МУЗЫКАЛЬНЫЙ КОНЕЦ\n9:30 СЦЕНА ПОСЛЕ ТИТРОВ', duration=593)
-        25. VideoInfo(id=456262637, owner_id=-1719791, title='УАЗИК ПРОТИВ БАШНИ 🚛🗼 / +100500', url='https://vkvideo.ru/video-1719791_456262637?pl=-1719791_48513772', date=datetime.datetime(2023, 5, 16, 18, 11, 35), description='Эпизод # 530 :D\nTelegram канал: https://t.me/vidowsov100500\nПаблик +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\nMoran Days (Второй Канал) : http://www.youtube.com/user/MoranDays\nTwitter: http://twitter.com/maxplus100500\n\nВидео из эпизода: https://vk.com/wall-1719791_1899721\n\n0:00 ИНТРО\n0:27 ВИСЯЧИЙ ПЕВЕЦ\n2:49 ЛАМПОЧКА И СЕМЁРКА\n5:33 УБЕРИ УАЗИК\n7:37 ДОМАШНИЙ ПИВОВАР\n11:01 ПРОЩАЛОЧКА\n11:19 МУЗЫКАЛЬНЫЙ КОНЕЦ\n11:43 СЦЕНА ПОСЛЕ ТИТРОВ', duration=744)
+    Video (50):
+         1. VideoInfo(id=456265497, owner_id=-1719791, title='Этих видео НЕ БЫЛО в +100500 🤐', direct_url='https://vkvideo.ru/video-1719791_456265497?pl=-1719791_48513772', share_url='https://vkvideo.ru/video-1719791_456265497?pl=-1719791_48513772', date=datetime.datetime(2026, 5, 30, 17, 24, 7), description='Эпизод # 556 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/6b52091c-d9a7-4395-a9c1-1390baf39f7b?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18972\n\n00:00 ПРЕДИСЛОВИЕ\n00:29 КЛАССИЧЕСКОЕ ИНТРО\n00:40 ЯЗЬ!\n04:05 НИКИТА ЛИТВИНКОВ\n08:13 НОРМАЛЬНО\n11:22 НАТАЛЬЯ МОРСКАЯ ПЕХОТА\n14:15 КЛАССИЧЕСКОЕ АУТРО\n\nПо вопросам рекламы: maks100500@didenokteam.com', duration=880)
+         2. VideoInfo(id=456265161, owner_id=-1719791, title='Пора ЗАВЯЗЫВАТЬ \U0001fae9 / +100500', direct_url='https://vkvideo.ru/video-1719791_456265161?pl=-1719791_48513772', share_url='https://vkvideo.ru/video-1719791_456265161?pl=-1719791_48513772', date=datetime.datetime(2026, 4, 18, 16, 47, 4), description='Эпизод # 555 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/2d5df23d-9454-4679-8c12-a27955fddbc9?share=post_link \nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18884\n\n00:00 ПРИВЕТЛИВЫЙ ПАССАЖИР\n02:03 ИНТРО\n02:22 ЧЕЛОВЕК-РУЧНИК\n04:51 НЕВОЗМОЖНЫЙ УЗЕЛ\n07:43 МГНОВЕННАЯ ОБИДА\n09:59 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: maks100500@didenokteam.com', duration=623)
+         3. VideoInfo(id=456264517, owner_id=-1719791, title='ДАНИЛ КОЛБАСЕНКО / +100500', direct_url='https://vkvideo.ru/video-1719791_456264517?pl=-1719791_48513772', share_url='https://vkvideo.ru/video-1719791_456264517?pl=-1719791_48513772', date=datetime.datetime(2026, 3, 3, 21, 7, 41), description='Эпизод # 554 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/ad53a66d-54d3-43f9-80a2-41242cb7da8d?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18769\n\n00:00 ДАНИЛ КОЛБАСЕНКО\n02:55 ИНТРО\n03:13 ГОЛУБЯТНЯ В ДЕСЯТКЕ\n05:02 ПАРУСА ИЗ КАНАЛИЗАЦИИ\n07:03 АРОМАТНЫЕ ПАЛЬЧИКИ\n09:22 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: maks100500@didenokteam.com', duration=599)
+        ...
+        48. VideoInfo(id=456258671, owner_id=-1719791, title='+100500 - ТОП КОНТЕНТ ИЗ TikTok', direct_url='https://vkvideo.ru/video-1719791_456258671?pl=-1719791_48513772', share_url='https://vkvideo.ru/video-1719791_456258671?pl=-1719791_48513772', date=datetime.datetime(2021, 8, 5, 15, 25, 38), description='Эпизод # 506 :D\nСЛУШАТЬ ПЕСНЮ 2ND SEASON - ДАБЛ ОРАНЖ 👉🏼 https://ffm.to/2ndxseason_doubleorange\nTelegram канал: https://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nInstagram +100500 с видосами и мемами: https://www.instagram.com/100500_vidowsov/\n100500_Play (Telegram канал с новостями из мира видеоигр): https://t.me/joinchat/AAAAAFgiJqyAY4vl5UiIaQ\nПаблик +100500 ВКонтакте: https://vk.com/maximplus100500\nMoran Days (Второй Канал) : http://www.youtube.com/user/MoranDays\nInstagram: http://instagram.com/adam_moran\nTwitter: http://twitter.com/maxplus100500\n\nВидео из эпизода: https://vk.com/wall-1719791_1809374\n\n0:00 ПРЕДИСЛОВИЕ\n0:54 ИНТРО\n1:20 СПАСИТЕЛЬНОЕ ПИВО\n3:52 АНГЛИЧАНИН ВЫРАСТИЛ БАНАНЫ\n4:54 ЗДРАВЫЙ ПАЦАН\n6:43 ОЛИМПИЙСКОЕ ПРЕДЛОЖЕНИЕ\n7:50 Я ПРЫГНУ\n9:58 ПЛАТНОЕ СПАСЕНИЕ НА ВОДЕ\n11:40 КОМПЬЮТЕРНАЯ БУХТА\n14:39 ПРОЩАЛОЧКА\n15:11 МУЗЫКАЛЬНЫЙ КОНЕЦ\n15:58 СЦЕНА ПОСЛЕ ТИТРОВ\n\nВидео для обзора: https://docs.google.com/forms/d/1gx6iUl5Z', duration=994)
+        49. VideoInfo(id=456258038, owner_id=-1719791, title='+100500 - ПИВО С ПРОДОЛЖЕНИЕМ 😏', direct_url='https://vkvideo.ru/video-1719791_456258038?pl=-1719791_48513772', share_url='https://vkvideo.ru/video-1719791_456258038?pl=-1719791_48513772', date=datetime.datetime(2021, 6, 23, 19, 27, 37), description='Эпизод # 505 :D\nСЛУШАТЬ ПЕСНЮ 2ND SEASON - ДАБЛ ОРАНЖ 👉🏼 https://ffm.to/2ndxseason_doubleorange\nTelegram канал: https://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nInstagram +100500 с видосами и мемами: https://www.instagram.com/100500_vidowsov/\n100500_Play (Telegram канал с новостями из мира видеоигр): https://t.me/joinchat/AAAAAFgiJqyAY4vl5UiIaQ\nПаблик +100500 ВКонтакте: https://vk.com/maximplus100500\nMoran Days (Второй Канал) : http://www.youtube.com/user/MoranDays\nInstagram: http://instagram.com/adam_moran\nTwitter: http://twitter.com/maxplus100500\n\nВидео из эпизода: https://vk.com/wall-1719791_1789398\n\n0:00 ИНТРО\n0:27 ЧЕСНОК ХОЧЕШЬ\n2:41 ПОТЕРЯЛ ПОДОШВУ\n4:01 ФУТБОЛЬНЫЙ ПАРАШЮТИСТ\n5:27 ПИВО С ПРОДОЛЖЕНИЕМ\n7:15 ПРОЩАЛОЧКА\n7:51 МУЗЫКАЛЬНЫЙ КОНЕЦ\n8:10 СЦЕНА ПОСЛЕ ТИТРОВ\n\nВидео для обзора: https://docs.google.com/forms/d/1gx6iUl5ZvEyI_01TvGZT97qAMx-4Uum6zOGM02nIvrE/viewform?usp=send_form\n\n#ПИВОСПРОДОЛЖЕНИЕМ', duration=577)
+        50. VideoInfo(id=456257788, owner_id=-1719791, title='+100500 - ЖЁСТКАЯ РЫБАЛКА С МОТЕЙ', direct_url='https://vkvideo.ru/video-1719791_456257788?pl=-1719791_48513772', share_url='https://vkvideo.ru/video-1719791_456257788?pl=-1719791_48513772', date=datetime.datetime(2021, 6, 10, 22, 3, 19), description='Эпизод # 504 :D\nСЛУШАТЬ ПЕСНЮ 2ND SEASON - ДАБЛ ОРАНЖ 👉🏼 https://ffm.to/2ndxseason_doubleorange\nTelegram канал: https://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nInstagram +100500 с видосами и мемами: https://www.instagram.com/100500_vidowsov/\n100500_Play (Telegram канал с новостями из мира видеоигр): https://t.me/joinchat/AAAAAFgiJqyAY4vl5UiIaQ\nПаблик +100500 ВКонтакте: https://vk.com/maximplus100500\nMoran Days (Второй Канал) : http://www.youtube.com/user/MoranDays\nInstagram: http://instagram.com/adam_moran\nTwitter: http://twitter.com/maxplus100500\n\nВидео из эпизода: \n\n0:00 ИНТРО\n0:27 ЗА ВИАГРОЙ В ЛОМБАРД\n2:42 ЧАЙКА-ПАССАЖИР\n4:12 МОТЯ\n6:27 КАРТОФЕЛЬНЫЙ ЛАЙФХАК\n8:27 ПРОЩАЛОЧКА\n9:53 МУЗЫКАЛЬНЫЙ КОНЕЦ\n9:19 СЦЕНА ПОСЛЕ ТИТРОВ\n\nВидео для обзора: https://docs.google.com/forms/d/1gx6iUl5ZvEyI_01TvGZT97qAMx-4Uum6zOGM02nIvrE/viewform?usp=send_form\n\n#МОТЯ #РЫБАЛКА', duration=605)
     """
 
     print()
 
-    videos: list[VideoInfo] = get_first_videos(
-        "https://vkvideo.ru/@maximplus100500/all"
-    )
+    print(url)
+    videos: list[VideoInfo] = get_videos(url, max_items=9999)
     _print_videos(videos)
     """
-    Video (20):
-        1. VideoInfo(id=456265161, owner_id=-1719791, title='Пора ЗАВЯЗЫВАТЬ \U0001fae9 / +100500', url='https://vkvideo.ru/video-1719791_456265161', date=datetime.datetime(2026, 4, 18, 16, 47, 4), description='Эпизод # 555 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/2d5df23d-9454-4679-8c12-a27955fddbc9?share=post_link \nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18884\n\n00:00 ПРИВЕТЛИВЫЙ ПАССАЖИР\n02:03 ИНТРО\n02:22 ЧЕЛОВЕК-РУЧНИК\n04:51 НЕВОЗМОЖНЫЙ УЗЕЛ\n07:43 МГНОВЕННАЯ ОБИДА\n09:59 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: maks100500@didenokteam.com', duration=623)
-        2. VideoInfo(id=456264517, owner_id=-1719791, title='ДАНИЛ КОЛБАСЕНКО / +100500', url='https://vkvideo.ru/video-1719791_456264517', date=datetime.datetime(2026, 3, 3, 21, 7, 41), description='Эпизод # 554 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/ad53a66d-54d3-43f9-80a2-41242cb7da8d?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18769\n\n00:00 ДАНИЛ КОЛБАСЕНКО\n02:55 ИНТРО\n03:13 ГОЛУБЯТНЯ В ДЕСЯТКЕ\n05:02 ПАРУСА ИЗ КАНАЛИЗАЦИИ\n07:03 АРОМАТНЫЕ ПАЛЬЧИКИ\n09:22 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: maks100500@didenokteam.com', duration=599)
-        3. VideoInfo(id=456264471, owner_id=-1719791, title='Винегретная', url='https://vkvideo.ru/video-1719791_456264471', date=datetime.datetime(2026, 2, 27, 19, 5, 5), description='♦ Наш Telegram канал:\nhttps://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nhttps://t.me/vidowsov100500\n\n00:02 - Командир вселенной \n00:49 - Беспилотный дрифт\n01:08 - Внезапное приветствие \n01:17 - Актёрище\n01:45 - Конь взбрыкнул\n01:58 - Сонное царство\n02:21 - Не трожь десерт\n02:33 - Трюк тиски\n02:45 - Моя тачка\n03:04 - Чудо дрифт\n03:13 - Это молоко\n03:27 - Комфортная темница\n04:34 - Нежнятина\n04:51 - Красотища\n05:07 - Кошка Соня\n05:36 - Музыкальный конец', duration=350)
-        4. VideoInfo(id=456264467, owner_id=-1719791, title='КОТОНАРЕЗКА ПРИСУТСТВУЕТ', url='https://vkvideo.ru/video-1719791_456264467', date=datetime.datetime(2026, 2, 22, 14, 9, 52), description='♦ Наш Telegram канал:\nhttps://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nhttps://t.me/vidowsov100500\n\n00:02 - КОТЫ\n01:07 - КОЗА (жадная)\n01:23 - КОТ (сычуаньский муд)\n01:34 - КОТ (жваловый)\n01:50 - ТОРЖЕСТВЕННЫЙ ПТИЦ\n02:23 - КОТОСЕМЕЙКА (рыбачит)\n03:08 - СОЛНЕЧНЫЕ ВАННЫ (?бибизян)\n03:26 - КОТЫ (у кормушки)', duration=258)
-        5. VideoInfo(id=456264466, owner_id=-1719791, title='Романтичная Нарезка', url='https://vkvideo.ru/video-1719791_456264466', date=datetime.datetime(2026, 2, 17, 19, 2, 31), description='♦ Наш Telegram канал:\nhttps://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nhttps://t.me/vidowsov100500\n\n00:02 - Призрачный гонщик\n00:18 - Припечатало буднично \n00:26 - Только показывает\n01:01 - Смятие кабины\n01:28 - Романтичная рыбалка\n01:53 - Мясной букет\n02:02 - Собачья левитация\n02:26 - Змея на горке\n02:47 - Кошачьи нежности\n03:55 - Котик спускается', duration=257)
-        6. VideoInfo(id=456264461, owner_id=-1719791, title='Нарезка Заморезка', url='https://vkvideo.ru/video-1719791_456264461', date=datetime.datetime(2026, 2, 11, 18, 20, 49), description='♦ Наш Telegram канал:\nhttps://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nhttps://t.me/vidowsov100500\n\n00:02 - Прохладная погода\n00:10 - Двадцатка за трюк\n00:24 - Вайбовая варежка\n00:36 - Микроволновка с радио\n01:00 - Выпуклый дом\n01:23 - Такси 2 авария\n02:17 - Балдёжный вид\n02:35 - Обмен на рыбов\n02:46 - Комфортик такси\n03:03 - Сервер засыпало\n03:16 - Николаич позорит\n04:13 - Музыкальный конец', duration=274)
-        7. VideoInfo(id=456264457, owner_id=-1719791, title='Нарезки Хлеборезки Таймкоды', url='https://vkvideo.ru/video-1719791_456264457', date=datetime.datetime(2026, 2, 5, 22, 56, 11), description='♦ Наш Telegram канал:\nhttps://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nhttps://t.me/vidowsov100500\n\n00:02 - Собака "типо" помогает \n00:19 - Просьба разблокировать экран, если притворяешься работой\n00:28 - Подними шум на востоке, нападай на западе\n00:40 - Замняя Котопоходка\n00:48 - Проезд в замочную скважину\n01:20 - Кормить сюда\n01:32 - Судьба ворона\n02:28 - Внезапный конь\n02:39 - Кошки спасают хозяйку\n03:05 - Спорт Пёс\n03:26 - Безумная белка кидает снаряды\n03:46 - Чел на морозе стругает суп', duration=318)
-        8. VideoInfo(id=456264454, owner_id=-1719791, title='Чилловый козёл, который НА ЧИЛЛЕ 💤🐐 / +100500', url='https://vkvideo.ru/video-1719791_456264454', date=datetime.datetime(2026, 2, 2, 20, 48, 34), description='Эпизод # 553 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/2ae907c7-1183-475e-824c-7959a0de3030?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18693\n\n00:00 ДРУГ В ОТРАЖЕНИИ\n01:46 ИНТРО\n02:04 ХЛОПУШКА ОТ МУХ\n03:41 ЧИЛЛОВЫЙ КОЗЁЛ\n05:19 ОСВЕЖИТЕЛЬ С ДУШКОМ\n07:22 МУЗЫКАЛЬНЫЙ КОНЕЦ', duration=473)
-        9. VideoInfo(id=456264453, owner_id=-1719791, title='Лошадиная Иммерсионизация', url='https://vkvideo.ru/video-1719791_456264453', date=datetime.datetime(2026, 2, 1, 15, 52, 4), description='♦ Наш Telegram канал:\nhttps://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nhttps://t.me/vidowsov100500', duration=341)
-        10. VideoInfo(id=456264452, owner_id=-1719791, title='Остров ПРИНЦА ЭДУАРДА. В поисках китов и лобстеров 🇨🇦 Moran Day 200', url='https://vkvideo.ru/video-1719791_456264452', date=datetime.datetime(2026, 1, 29, 22, 55, 7), description='Двухсотый моран день :D \nПодписка MORAN DAYS+ на BOOSTY: https://boosty.to/max100500/purchase/3451048?ssource=DIRECT&share=subscription_link\nBOOSTY: https://boosty.to/max100500\n\nЭто четвёртая и заключительная часть нашей поездки в Канаду в июле 2023-го года.\nТут мы посетим провинцию, которая ещё и Остров Принца Эдуарда. Отправимся на поиски китов, увидим, как ловят лобстеров и половим рыбу. Плюс посмотрим живописные природные места этого острова с красной почвой.\nПриятного просмаппетита!', duration=3058)
-        11. VideoInfo(id=456264451, owner_id=-1719791, title='Иностранные Переводы Коты', url='https://vkvideo.ru/video-1719791_456264451', date=datetime.datetime(2026, 1, 27, 17, 2, 8), description='♦ Наш Telegram канал:\nhttps://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nhttps://t.me/vidowsov100500', duration=314)
-        12. VideoInfo(id=456264448, owner_id=-1719791, title='Батоны Офигительные', url='https://vkvideo.ru/video-1719791_456264448', date=datetime.datetime(2026, 1, 25, 16, 20, 56), description='♦ Наш Telegram канал:\nhttps://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nhttps://t.me/vidowsov100500', duration=263)
-        13. VideoInfo(id=456264444, owner_id=-1719791, title='Будничная Нарезка', url='https://vkvideo.ru/video-1719791_456264444', date=datetime.datetime(2026, 1, 19, 17, 7, 1), description='♦ Наш Telegram канал:\nhttps://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nhttps://t.me/vidowsov100500', duration=266)
-        14. VideoInfo(id=456264442, owner_id=-1719791, title='Пенсионная Нарезка', url='https://vkvideo.ru/video-1719791_456264442', date=datetime.datetime(2026, 1, 14, 17, 13, 40), description='♦ Наш Telegram канал:\nhttps://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nhttps://t.me/vidowsov100500', duration=275)
-        15. VideoInfo(id=456264439, owner_id=-1719791, title='Послепраздничная Нарезка', url='https://vkvideo.ru/video-1719791_456264439', date=datetime.datetime(2026, 1, 9, 16, 24, 37), description='♦ Наш Telegram канал:\nhttps://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nhttps://t.me/vidowsov100500', duration=282)
-        16. VideoInfo(id=456264438, owner_id=-1719791, title='ПЕРВАЯ Нарезка Хлеборезка', url='https://vkvideo.ru/video-1719791_456264438', date=datetime.datetime(2026, 1, 4, 17, 59, 58), description='♦ Наш Telegram канал:\nhttps://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nhttps://t.me/vidowsov100500', duration=286)
-        17. VideoInfo(id=456264437, owner_id=-1719791, title='ОБЛЕЗЛЫЙ НОВЫЙ ГОД 🎄 Ёлка-Ёршик и Розетки На Ковре', url='https://vkvideo.ru/video-1719791_456264437', date=datetime.datetime(2025, 12, 31, 20, 22, 31), description='Эпизод # 552 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/f81d5f16-a3ea-4aac-8fc2-aacff72fb645?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18571\n\n00:00 НОВОГОДНИЙ ЁРШИК\n02:04 ИНТРО\n02:23 ДЕД МОРОЗ ПОЛОЖИЛ\n03:48 ОЛИВЬЕШНЫЙ ГРИНЧ\n05:23 КРЕАТИВНЫЙ ЭЛЕКТРИК\n07:48 ПОЗДРАВЛЕНИЕ\n08:49 МУЗЫКАЛЬНЫЙ КОНЕЦ', duration=554)
-        18. VideoInfo(id=456264436, owner_id=-1719791, title='ПОСЛЕДНЯЯ Нарезка Хлеборезка', url='https://vkvideo.ru/video-1719791_456264436', date=datetime.datetime(2025, 12, 30, 23, 26), description='♦ Наш Telegram канал:\nhttps://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nhttps://t.me/vidowsov100500', duration=476)
-        19. VideoInfo(id=456264434, owner_id=-1719791, title='НГ Нарезки Хлеборезки', url='https://vkvideo.ru/video-1719791_456264434', date=datetime.datetime(2025, 12, 29, 18, 21, 54), description='♦ Наш Telegram канал:\nhttps://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nhttps://t.me/vidowsov100500', duration=240)
-        20. VideoInfo(id=456264431, owner_id=-1719791, title='Нарезной Батон', url='https://vkvideo.ru/video-1719791_456264431', date=datetime.datetime(2025, 12, 25, 15, 28, 32), description='♦ Наш Telegram канал:\nhttps://t.me/joinchat/AAAAAFN0AdiHBwyVZ2GWTw\nhttps://t.me/vidowsov100500', duration=251)
+    Video (122):
+          1. VideoInfo(id=456265497, owner_id=-1719791, title='Этих видео НЕ БЫЛО в +100500 🤐', direct_url='https://vkvideo.ru/video-1719791_456265497?pl=-1719791_48513772', share_url='https://vkvideo.ru/video-1719791_456265497?pl=-1719791_48513772', date=datetime.datetime(2026, 5, 30, 17, 24, 7), description='Эпизод # 556 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/6b52091c-d9a7-4395-a9c1-1390baf39f7b?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18972\n\n00:00 ПРЕДИСЛОВИЕ\n00:29 КЛАССИЧЕСКОЕ ИНТРО\n00:40 ЯЗЬ!\n04:05 НИКИТА ЛИТВИНКОВ\n08:13 НОРМАЛЬНО\n11:22 НАТАЛЬЯ МОРСКАЯ ПЕХОТА\n14:15 КЛАССИЧЕСКОЕ АУТРО\n\nПо вопросам рекламы: maks100500@didenokteam.com', duration=880)
+          2. VideoInfo(id=456265161, owner_id=-1719791, title='Пора ЗАВЯЗЫВАТЬ \U0001fae9 / +100500', direct_url='https://vkvideo.ru/video-1719791_456265161?pl=-1719791_48513772', share_url='https://vkvideo.ru/video-1719791_456265161?pl=-1719791_48513772', date=datetime.datetime(2026, 4, 18, 16, 47, 4), description='Эпизод # 555 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/2d5df23d-9454-4679-8c12-a27955fddbc9?share=post_link \nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18884\n\n00:00 ПРИВЕТЛИВЫЙ ПАССАЖИР\n02:03 ИНТРО\n02:22 ЧЕЛОВЕК-РУЧНИК\n04:51 НЕВОЗМОЖНЫЙ УЗЕЛ\n07:43 МГНОВЕННАЯ ОБИДА\n09:59 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: maks100500@didenokteam.com', duration=623)
+          3. VideoInfo(id=456264517, owner_id=-1719791, title='ДАНИЛ КОЛБАСЕНКО / +100500', direct_url='https://vkvideo.ru/video-1719791_456264517?pl=-1719791_48513772', share_url='https://vkvideo.ru/video-1719791_456264517?pl=-1719791_48513772', date=datetime.datetime(2026, 3, 3, 21, 7, 41), description='Эпизод # 554 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/ad53a66d-54d3-43f9-80a2-41242cb7da8d?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18769\n\n00:00 ДАНИЛ КОЛБАСЕНКО\n02:55 ИНТРО\n03:13 ГОЛУБЯТНЯ В ДЕСЯТКЕ\n05:02 ПАРУСА ИЗ КАНАЛИЗАЦИИ\n07:03 АРОМАТНЫЕ ПАЛЬЧИКИ\n09:22 МУЗЫКАЛЬНЫЙ КОНЕЦ\n\nПо вопросам рекламы: maks100500@didenokteam.com', duration=599)
+        ...
+        120. VideoInfo(id=456240348, owner_id=-1719791, title='+100500 - Порнография На Переезде', direct_url='https://vkvideo.ru/video-1719791_456240348?pl=-1719791_48513772', share_url='https://vkvideo.ru/video-1719791_456240348?pl=-1719791_48513772', date=datetime.datetime(2019, 9, 9, 21, 31, 39), description='Эпизод #435 :D\nПаблик +100500 ВКонтакте: https://vk.com/maximplus100500\nTelegram канал: https://tg.telepult.pro/vidowsov_100500\n\nMoran Days (Второй...', duration=750)
+        121. VideoInfo(id=456240213, owner_id=-1719791, title='+100500 - Поцеловал Верблюда Сзади', direct_url='https://vkvideo.ru/video-1719791_456240213?pl=-1719791_48513772', share_url='https://vkvideo.ru/video-1719791_456240213?pl=-1719791_48513772', date=datetime.datetime(2019, 8, 30, 20, 49, 58), description='Эпизод #434 :D\nHONOR 20 PRO с подарками при покупке на официальном сайте: https://clck.ru/HpYMA\n\nMoran Days (Второй Канал) : http://www.youtube.com...', duration=732)
+        122. VideoInfo(id=456239908, owner_id=-1719791, title='+100500 - НАШЕСТВИЕ 2019', direct_url='https://vkvideo.ru/video-1719791_456239908?pl=-1719791_48513772', share_url='https://vkvideo.ru/video-1719791_456239908?pl=-1719791_48513772', date=datetime.datetime(2019, 8, 5, 18, 22, 42), description='Эпизод #433 :D\nMoran Days (Второй Канал) : http://www.youtube.com/user/MoranDays\n\nInstagram: http://instagram.com/adam_moran\n\nTwitter: http://twitt...', duration=599)
+    """
+
+    print()
+
+    # Пример из канала (один запрос вернет 20 шт.)
+    url = "https://vkvideo.ru/@public_redcynic/all"
+
+    print(url)
+    videos: list[VideoInfo] = get_videos(url, max_items=50)
+    _print_videos(videos)
+    """
+    Video (50):
+         1. VideoInfo(id=456243328, owner_id=-58569409, title='«Хищник: Дикие земли». Обзор «Красного Циника» UNCUT', direct_url=None, share_url='https://vkvideo.ru/video-58569409_456243328', date=datetime.datetime(2026, 3, 25, 17, 26, 14), description=None, duration=0)
+         2. VideoInfo(id=456243326, owner_id=-58569409, title='«Хищник: Дикие земли». Обзор «Красного Циника»', direct_url='https://vkvideo.ru/video-58569409_456243326', share_url='https://vkvideo.ru/video-58569409_456243326', date=datetime.datetime(2026, 3, 24, 17, 0, 38), description='https://boosty.to/redcynic – аккаунт на Бусти\nhttps://vk.com/public_redcynic – группа «В контакте»\nКошелёк Ю.Money: 410011854513048\nhttps://t.me/redcynic – канал в Телеграме\n\nhttp://www.donationalerts.ru/r/redcynic – взнос на Донейшн Алертс\nhttps://www.patreon.com/bePatron?u=5206451 – страница на Патреоне\nhttps://www.youtube.com/RedCynicRus/join – стать Спонсором канала\nhttp://redcynic.com – мой сайт\n\nДэн Трахтенберг, конечно, разошёлся по полной, за четыре года наваяв больше киношек про Хищнегов, чем было заснято за предыдущие восемнадцать лет. И в этот раз он замахнулся на сложнейшее, пообещав показать внутренний быт и культуру самих инопланетных охотников от их же лица... То есть уже на самом старте извратив саму суть изначальных картин. Когда же ещё и заявили про комедийные буга-гашечки в основе сюжета, стало ясно, что нас ожидает привычное от Трахтенберга. Очередная смесь бреда, идиотии и издевательств над культовой франшизой. Как в воду глядели… Но давайте-таки подробно разберём, что для него Хищники есть...', duration=3760)
+         3. VideoInfo(id=456243317, owner_id=-58569409, title='«Одни из нас». Второй сезон. Обзор «Красного Циника» UNCUT', direct_url=None, share_url='https://vkvideo.ru/video-58569409_456243317', date=datetime.datetime(2026, 1, 4, 23, 19, 5), description=None, duration=0)
+       
+        ...
+        48. VideoInfo(id=456242283, owner_id=-58569409, title='Вступление к  Red Alert 2', direct_url='https://vkvideo.ru/video-58569409_456242283', share_url='https://vkvideo.ru/video-58569409_456242283', date=datetime.datetime(2021, 10, 27, 17, 51, 17), description='Red Alert 2 Intro — Озвучка City — AI Upscale 60 FPS by RC', duration=238)
+        49. VideoInfo(id=456242254, owner_id=-58569409, title='«Власть огня». Обзор «Красного Циника»', direct_url='https://vkvideo.ru/video-58569409_456242254', share_url='https://vkvideo.ru/video-58569409_456242254', date=datetime.datetime(2021, 10, 11, 22, 6, 49), description='', duration=1564)
+        50. VideoInfo(id=456242209, owner_id=-58569409, title='«Армия мертвецов». Обзор «Красного Циника»', direct_url='https://vkvideo.ru/video-58569409_456242209', share_url='https://vkvideo.ru/video-58569409_456242209', date=datetime.datetime(2021, 9, 4, 22, 59, 55), description='https://www.patreon.com/bePatron?u=5206451 – страница на Патреоне\nhttps://boosty.to/redcynic – аккаунт на Бусти\nhttps://www.youtube.com/RedCynicRus/join – стать Спонсором канала\nhttp://www.donationalerts.ru/r/redcynic – взнос на Донейшн Алертс\nhttp://redcynic.com – мой сайт\nhttps://vk.com/public_redcynic – группа «В контакте»\nhttps://twitter.com/RedCynicRus – мой Твиттер\nhttps://www.facebook.com/red.cynic – Фэйсбук\nhttps://www.instagram.com/red_cynic_rc – мой Инстаграм\n\nНе откладывая дело в долгий ящик, давайте взглянем на следующее, после «Лиги Справедливости», кино Зака Снайдера, дабы оценить все грани таланта сумрачного гения. И тем интереснее будет этот процесс, если знать, что в своё время именно с фильма про зомби мэтр начал свою карьеру. Фильм, в общем-то знаковый для всего жанра. Такого же уровня ждали сейчас. Тем более учитывая шумиху, которая поднялась вокруг создания картины. И тот факт, что Зак Снайдер лелеял замысел её снять начиная аж с 2007 года, а может быть и ран', duration=3562)
+    """
+
+    print()
+
+    print(url)
+    videos: list[VideoInfo] = get_videos(url, max_items=9999)
+    _print_videos(videos)
+    """
+    Video (157):
+          1. VideoInfo(id=456243328, owner_id=-58569409, title='«Хищник: Дикие земли». Обзор «Красного Циника» UNCUT', direct_url=None, share_url='https://vkvideo.ru/video-58569409_456243328', date=datetime.datetime(2026, 3, 25, 17, 26, 14), description=None, duration=0)
+          2. VideoInfo(id=456243326, owner_id=-58569409, title='«Хищник: Дикие земли». Обзор «Красного Циника»', direct_url='https://vkvideo.ru/video-58569409_456243326', share_url='https://vkvideo.ru/video-58569409_456243326', date=datetime.datetime(2026, 3, 24, 17, 0, 38), description='https://boosty.to/redcynic – аккаунт на Бусти\nhttps://vk.com/public_redcynic – группа «В контакте»\nКошелёк Ю.Money: 410011854513048\nhttps://t.me/redcynic – канал в Телеграме\n\nhttp://www.donationalerts.ru/r/redcynic – взнос на Донейшн Алертс\nhttps://www.patreon.com/bePatron?u=5206451 – страница на Патреоне\nhttps://www.youtube.com/RedCynicRus/join – стать Спонсором канала\nhttp://redcynic.com – мой сайт\n\nДэн Трахтенберг, конечно, разошёлся по полной, за четыре года наваяв больше киношек про Хищнегов, чем было заснято за предыдущие восемнадцать лет. И в этот раз он замахнулся на сложнейшее, пообещав показать внутренний быт и культуру самих инопланетных охотников от их же лица... То есть уже на самом старте извратив саму суть изначальных картин. Когда же ещё и заявили про комедийные буга-гашечки в основе сюжета, стало ясно, что нас ожидает привычное от Трахтенберга. Очередная смесь бреда, идиотии и издевательств над культовой франшизой. Как в воду глядели… Но давайте-таки подробно разберём, что для него Хищники есть...', duration=3760)
+          3. VideoInfo(id=456243317, owner_id=-58569409, title='«Одни из нас». Второй сезон. Обзор «Красного Циника» UNCUT', direct_url=None, share_url='https://vkvideo.ru/video-58569409_456243317', date=datetime.datetime(2026, 1, 4, 23, 19, 5), description=None, duration=0)
+        ...
+        155. VideoInfo(id=166665571, owner_id=-58569409, title='«Игра престолов» - Сезон 1. Рецензия «Красного Циника»', direct_url='https://vkvideo.ru/video-58569409_166665571', share_url='https://vkvideo.ru/video-58569409_166665571', date=datetime.datetime(2013, 11, 1, 2, 42, 58), description='www.redcynic.com http://vk.com/redcynic\n\nВ 2011 году на телевизионные экраны вышел сериал, который произвел огромный фурор. Шоу заслуженно получило признание как зрителей, так и критиков. В принципе, такой же теплый прием получил в своё время и первоисточник - роман под одноименным названием, чьим автором является Джордж Мартин.\n\nНо так ли на самом деле хорош роман? Так ли безупречен сериал? Данная рецензия - это сравнение сериала, романа и... здравого смысла.<br/><br/>', duration=1608)
+        156. VideoInfo(id=166305114, owner_id=-58569409, title='«Красный рассвет». Обзор «Красного Циника»', direct_url='https://vkvideo.ru/video-58569409_166305114', share_url='https://vkvideo.ru/video-58569409_166305114', date=datetime.datetime(2013, 9, 19, 0, 11, 25), description='группа в ВК - http://vk.com/redcynic\nпаблик в ВК - http://vk.com/public_redcynic \nсайт - www.redcynic.com \n\nКто такие красные орки? Откуда они берутся? Об этом вам расскажет Джон Милиус! Уж кто-кто, а он так точно разбирается во всех оттенках красно-буро-малинового! Давайте же рассмотрим один из самых примечательных продуктов холодной войны. А потом поставим диагноз и Милиусу, и его оркам.', duration=2041)
+        157. VideoInfo(id=166305092, owner_id=-58569409, title='«Война Богов: Бессмертные». Обзор «Красного Циника»', direct_url='https://vkvideo.ru/video-58569409_166305092', share_url='https://vkvideo.ru/video-58569409_166305092', date=datetime.datetime(2013, 9, 19, 0, 9, 9), description='группа в ВК - http://vk.com/redcynic\nпаблик в ВК - http://vk.com/public_redcynic \nсайт - www.redcynic.com \n\nЧто получится, если режиссёру индийского происхождения поручить экранизацию древнегреческих легенд? Как Тарсем Синх подошёл к созданию своих «Бессмертных»? Какая муза куса... посещала его во время творческого процесса? А давайте это прямо сейчас и узнаем ...', duration=2166)
     """
