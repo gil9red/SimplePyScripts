@@ -48,7 +48,7 @@ class VideoInfo:
 @dataclass
 class ApiInfo:
     url: str
-    headers: dict[str, str]
+    rq_headers: dict[str, str]
     rq_data: dict[str, str]
     rs_data: dict[str, Any]
 
@@ -77,7 +77,7 @@ def get_api_info(url: str) -> ApiInfo:
             rs = response_info.value
             return ApiInfo(
                 url=rs.url,
-                headers=rs.request.headers,
+                rq_headers=rs.request.headers,
                 rq_data=rs.request.post_data_json,
                 rs_data=rs.json(),
             )
@@ -180,7 +180,7 @@ def get_videos(
     all_videos: list[VideoInfo] = parse_videos(rs_data)
 
     session = requests.Session()
-    session.headers.update(api_info.headers)
+    session.headers.update(api_info.rq_headers)
 
     for chunk in pagination_provider(session, url, api_info.rq_data, rs_data):
         all_videos += chunk
