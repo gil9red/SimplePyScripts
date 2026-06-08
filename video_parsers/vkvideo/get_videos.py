@@ -240,7 +240,7 @@ if __name__ == "__main__":
     print()
 
     print(url)
-    videos: list[VideoInfo] = get_videos(url, max_items=9999)
+    videos: list[VideoInfo] = get_videos(url, max_items=None)
     _print_videos(videos)
     assert len(videos) > 100
     """
@@ -278,7 +278,7 @@ if __name__ == "__main__":
     print()
 
     print(url)
-    videos: list[VideoInfo] = get_videos(url, max_items=9999)
+    videos: list[VideoInfo] = get_videos(url, max_items=None)
     _print_videos(videos)
     assert len(videos) > 100
     """
