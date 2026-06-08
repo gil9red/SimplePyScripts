@@ -179,6 +179,9 @@ def get_videos(
     rs_data: dict[str, Any] = api_info.rs_data["response"]
     all_videos: list[VideoInfo] = parse_videos(rs_data)
 
+    # NOTE: Был там zstd, но его наличие ломает парсер, т.к. не поддерживается
+    api_info.rq_headers["Accept-Encoding"] = "gzip, deflate, br"
+
     session = requests.Session()
     session.headers.update(api_info.rq_headers)
 
