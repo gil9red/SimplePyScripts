@@ -8,7 +8,7 @@ import time
 
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Self
+from typing import Any, Self, Generator
 
 # NOTE: https://playwright.dev/python/docs/library#pip
 #   pip install playwright==1.50.0
@@ -93,82 +93,103 @@ def parse_videos(rs: dict[str, Any]) -> list[VideoInfo]:
     return [VideoInfo.from_dict(video) for video in videos]
 
 
-def get_videos(url: str, max_items: int | None = MAX_VIDEOS_SAFETY_LIMIT) -> list[VideoInfo]:
+def paginate_by_offset(
+    session: requests.Session,
+    url: str,
+    init_rq_data: dict[str, Any],
+    _: dict[str, Any],
+) -> Generator[list[VideoInfo], None, None]:
+    """Генератор для постраничной пагинации (Альбомы)."""
+
+    rq_data: dict[str, Any] = init_rq_data
+    rq_data["offset"] = int(rq_data["offset"])
+    rq_data["count"] = int(rq_data["count"])
+
+    while True:
+        rq_data["offset"] += rq_data["count"]
+
+        rs = session.post(url, data=rq_data)
+        rs.raise_for_status()
+
+        rs_data = rs.json()["response"]
+
+        videos = parse_videos(rs_data)
+        if not videos:
+            break
+
+        yield videos
+
+
+def paginate_by_token(
+    session: requests.Session,
+    url: str,
+    init_rq_data: dict[str, Any],
+    init_rs_data: dict[str, Any],
+) -> Generator[list[VideoInfo], None, None]:
+    """Генератор для курсорной пагинации (Каталог)."""
+
+    section_id, next_from = None, None
+    for section in init_rs_data["catalog"]["sections"]:
+        if "next_from" in section:
+            section_id, next_from = section["id"], section["next_from"]
+            break
+
+    # Первый запрос к catalog.getVideo, а последующие через catalog.getSection
+    url = url.replace("/catalog.getVideo", "/catalog.getSection")
+    rq_data: dict[str, Any] = {
+        "section_id": section_id,
+        "start_from": next_from,
+        "access_token": init_rq_data["access_token"],
+    }
+
+    while True:
+        if not rq_data.get("start_from"):
+            break
+
+        rs = session.post(url, data=rq_data)
+        rs.raise_for_status()
+
+        rs_data = rs.json()["response"]
+
+        videos = parse_videos(rs_data)
+        if not videos:
+            break
+
+        yield videos
+
+        rq_data["start_from"] = rs_data.get("section", {}).get("next_from")
+
+
+def get_videos(
+    url: str,
+    max_items: int | None = MAX_VIDEOS_SAFETY_LIMIT,
+) -> list[VideoInfo]:
     # Вернется первая порция запросов
     api_info: ApiInfo = get_api_info(url)
 
     url: str = api_info.url
 
-    rs_data: dict[str, Any] = api_info.rs_data["response"]
-
-    all_videos: list[VideoInfo] = parse_videos(rs_data)
-
-    rq_data: dict[str, Any] = api_info.rq_data
-
     if "/video.getFromAlbum" in url:
-        if len(all_videos) >= rs_data["count"]:
-            return all_videos
-
-        rq_data["offset"] = int(rq_data["offset"])
-        rq_data["count"] = int(rq_data["count"])
-
+        pagination_provider = paginate_by_offset
     elif "/catalog.getVideo" in url:
-        section_id: int | None = None
-        next_from: str | None = None
-
-        for section in rs_data["catalog"]["sections"]:
-            if "next_from" not in section:
-                continue
-
-            section_id = section["id"]
-            next_from = section["next_from"]
-            break
-
-        if not next_from:
-            return all_videos
-
-        url = url.replace("/catalog.getVideo", "/catalog.getSection")
-        rq_data = {
-            "section_id": section_id,
-            "start_from": next_from,
-            "access_token": rq_data["access_token"],
-        }
-
+        pagination_provider = paginate_by_token
     else:
         raise Exception("Неизвестный тип API")
+
+    rs_data: dict[str, Any] = api_info.rs_data["response"]
+    all_videos: list[VideoInfo] = parse_videos(rs_data)
 
     session = requests.Session()
     session.headers.update(api_info.headers)
 
-    while True:
-        if "offset" in rq_data:
-            rq_data["offset"] += rq_data["count"]
-
-        rs = session.post(url, data=rq_data)
-        rs.raise_for_status()
-
-        rs_data: dict[str, Any] = rs.json()["response"]
-
-        videos: list[VideoInfo] = parse_videos(rs_data)
-        if not videos:
-            break
-
-        all_videos += videos
+    for chunk in pagination_provider(session, url, api_info.rq_data, rs_data):
+        all_videos += chunk
         if max_items and len(all_videos) >= max_items:
-            all_videos = all_videos[:max_items]
             break
-
-        if "section" in rs_data:
-            section: dict[str, Any] = rs_data["section"]
-            if "next_from" not in section:
-                break
-
-            rq_data["section_id"] = section["id"]
-            rq_data["start_from"] = section["next_from"]
 
         time.sleep(1)
 
-    return all_videos
+    return all_videos[:max_items] if max_items else all_videos
 
 
 if __name__ == "__main__":
@@ -189,6 +210,7 @@ if __name__ == "__main__":
     print(url)
     videos: list[VideoInfo] = get_videos(url, max_items=50)
     _print_videos(videos)
+    assert len(videos) == 50
     """
     Video (50):
          1. VideoInfo(id=456265497, owner_id=-1719791, title='Этих видео НЕ БЫЛО в +100500 🤐', direct_url='https://vkvideo.ru/video-1719791_456265497?pl=-1719791_48513772', share_url='https://vkvideo.ru/video-1719791_456265497?pl=-1719791_48513772', date=datetime.datetime(2026, 5, 30, 17, 24, 7), description='Эпизод # 556 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/6b52091c-d9a7-4395-a9c1-1390baf39f7b?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18972\n\n00:00 ПРЕДИСЛОВИЕ\n00:29 КЛАССИЧЕСКОЕ ИНТРО\n00:40 ЯЗЬ!\n04:05 НИКИТА ЛИТВИНКОВ\n08:13 НОРМАЛЬНО\n11:22 НАТАЛЬЯ МОРСКАЯ ПЕХОТА\n14:15 КЛАССИЧЕСКОЕ АУТРО\n\nПо вопросам рекламы: maks100500@didenokteam.com', duration=880)
@@ -205,6 +227,7 @@ if __name__ == "__main__":
     print(url)
     videos: list[VideoInfo] = get_videos(url, max_items=9999)
     _print_videos(videos)
+    assert len(videos) > 100
     """
     Video (122):
           1. VideoInfo(id=456265497, owner_id=-1719791, title='Этих видео НЕ БЫЛО в +100500 🤐', direct_url='https://vkvideo.ru/video-1719791_456265497?pl=-1719791_48513772', share_url='https://vkvideo.ru/video-1719791_456265497?pl=-1719791_48513772', date=datetime.datetime(2026, 5, 30, 17, 24, 7), description='Эпизод # 556 :D\nBOOSTY (этот выпуск с дополнительным обзором на ещё одно видео): https://boosty.to/max100500/posts/6b52091c-d9a7-4395-a9c1-1390baf39f7b?share=post_link\nTWITCH: https://www.twitch.tv/moran_plays\nTELEGRAM: https://t.me/vidowsov100500\nСООБЩЕСТВО +100500 ВКонтакте: https://vk.com/maximplus100500\nTikTok: https://www.tiktok.com/@maxim_golopolosov\n\nВидео из эпизода: https://t.me/vidowsov100500/18972\n\n00:00 ПРЕДИСЛОВИЕ\n00:29 КЛАССИЧЕСКОЕ ИНТРО\n00:40 ЯЗЬ!\n04:05 НИКИТА ЛИТВИНКОВ\n08:13 НОРМАЛЬНО\n11:22 НАТАЛЬЯ МОРСКАЯ ПЕХОТА\n14:15 КЛАССИЧЕСКОЕ АУТРО\n\nПо вопросам рекламы: maks100500@didenokteam.com', duration=880)
@@ -224,6 +247,7 @@ if __name__ == "__main__":
     print(url)
     videos: list[VideoInfo] = get_videos(url, max_items=50)
     _print_videos(videos)
+    assert len(videos) == 50
     """
     Video (50):
          1. VideoInfo(id=456243328, owner_id=-58569409, title='«Хищник: Дикие земли». Обзор «Красного Циника» UNCUT', direct_url=None, share_url='https://vkvideo.ru/video-58569409_456243328', date=datetime.datetime(2026, 3, 25, 17, 26, 14), description=None, duration=0)
@@ -241,6 +265,7 @@ if __name__ == "__main__":
     print(url)
     videos: list[VideoInfo] = get_videos(url, max_items=9999)
     _print_videos(videos)
+    assert len(videos) > 100
     """
     Video (157):
           1. VideoInfo(id=456243328, owner_id=-58569409, title='«Хищник: Дикие земли». Обзор «Красного Циника» UNCUT', direct_url=None, share_url='https://vkvideo.ru/video-58569409_456243328', date=datetime.datetime(2026, 3, 25, 17, 26, 14), description=None, duration=0)
