@@ -24,11 +24,11 @@ def get_generator_raw_items(url: str) -> Generator[dict[str, Any], None, None]:
 
 def get_raw_items(
     url: str,
-    max_items: int = DEFAULT_MAX_ITEMS,
+    max_items: int | None = DEFAULT_MAX_ITEMS,
 ) -> list[dict[str, Any]]:
     items = []
     for i, video in enumerate(get_generator_raw_items(url)):
-        if i >= max_items:
+        if max_items and i >= max_items:
             break
 
         items.append(video)
@@ -38,7 +38,7 @@ def get_raw_items(
 
 def get_video_list(
     url: str,
-    max_items: int = DEFAULT_MAX_ITEMS,
+    max_items: int | None = DEFAULT_MAX_ITEMS,
 ) -> list[Video]:
     def _is_video(data: dict[str, Any]) -> bool:
         try:
@@ -55,7 +55,7 @@ def get_video_list(
 
 def search_youtube(
     text_or_url: str,
-    max_items: int = DEFAULT_MAX_ITEMS,
+    max_items: int | None = DEFAULT_MAX_ITEMS,
 ) -> list[Video]:
     if text_or_url.startswith("http"):
         url = text_or_url

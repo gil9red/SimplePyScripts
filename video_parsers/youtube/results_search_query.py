@@ -55,6 +55,11 @@ Items (7):
 
 print("\n" + "-" * 100 + "\n")
 
+items = search_youtube(url_playlist, max_items=None)
+__print_video_list(items)
+
+print("\n" + "-" * 100 + "\n")
+
 # Testing for: youtube, channel, channel videos
 print(len(get_video_list("https://www.youtube.com/")))  # TODO: Под вопросом
 print(len(get_video_list("https://www.youtube.com/c/TheBadComedian")))
