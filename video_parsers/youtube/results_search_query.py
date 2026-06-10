@@ -11,7 +11,6 @@ from api.search import (
     search_youtube_with_filter,
 )
 
-
 url_playlist = (
     "https://www.youtube.com/playlist?list=PLWKjhJtqVAbknyJ7hSrf1WKh_Xnv9RL1r"
 )
@@ -81,7 +80,7 @@ for i, video in enumerate(is_live_now_video_list, 1):
 
 print("\n" + "-" * 100 + "\n")
 
-items = search_youtube("щенки", maximum_items=25)
+items = search_youtube("щенки", max_items=25)
 __print_video_list(items)
 """
 Items (25):
@@ -98,7 +97,7 @@ print("\n" + "-" * 100 + "\n")
 
 items = search_youtube(
     "https://www.youtube.com/results?search_query=slipknot official",
-    maximum_items=50,
+    max_items=50,
 )
 __print_video_list(items)
 """
