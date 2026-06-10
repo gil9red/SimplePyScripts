@@ -11,7 +11,7 @@ from api.search import (
     search_youtube_with_filter,
 )
 
-url_playlist = (
+url_playlist: str = (
     "https://www.youtube.com/playlist?list=PLWKjhJtqVAbknyJ7hSrf1WKh_Xnv9RL1r"
 )
 
@@ -37,7 +37,7 @@ Items (226):
 
 print("\n" + "-" * 100 + "\n")
 
-url_playlist = (
+url_playlist: str = (
     "https://www.youtube.com/playlist?list=PLWKjhJtqVAbnRT_hue-3zyiuIYj0OlpyG"
 )
 items = search_youtube(url_playlist)
