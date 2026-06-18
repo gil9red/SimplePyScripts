@@ -13,10 +13,11 @@ from typing import Any, Self, Generator
 # NOTE: https://playwright.dev/python/docs/library#pip
 #   pip install playwright==1.50.0
 #   playwright install firefox
-from playwright.sync_api import sync_playwright, Response
+from playwright.sync_api import Response, TimeoutError, sync_playwright
 
 import requests
 
+DEFAULT_TIMEOUT_MS: int = 30_000
 MAX_VIDEOS_SAFETY_LIMIT: int = 100
 
 
@@ -58,7 +59,7 @@ def get_api_info(url: str) -> ApiInfo:
         browser = p.firefox.launch()
 
         page = browser.new_page()
-        page.set_default_timeout(90_000)
+        page.set_default_timeout(DEFAULT_TIMEOUT_MS)
 
         page.goto(url, wait_until="commit")
 
@@ -163,9 +164,20 @@ def paginate_by_token(
 def get_videos(
     url: str,
     max_items: int | None = MAX_VIDEOS_SAFETY_LIMIT,
+    max_attempts: int = 5,
 ) -> list[VideoInfo]:
     # Вернется первая порция запросов
-    api_info: ApiInfo = get_api_info(url)
+    api_info: ApiInfo | None = None
+    for attempt in range(1, max_attempts + 1):
+        try:
+            api_info = get_api_info(url)
+            break
+        except TimeoutError as e:
+            if attempt >= max_attempts:
+                raise e
+
+    if not api_info:
+        raise Exception("Not found API")
 
     url: str = api_info.url
 
