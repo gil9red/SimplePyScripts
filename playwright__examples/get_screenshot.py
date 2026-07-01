@@ -14,12 +14,12 @@ DIR_SCREENSHOTS.mkdir(parents=True, exist_ok=True)
 
 with sync_playwright() as p:
     for browser_type in [p.chromium, p.firefox, p.webkit]:
+        print(browser_type.name)
+
         browser = browser_type.launch()
         page = browser.new_page()
 
         page.goto("https://github.com/gil9red")
-
-        print(browser_type.name)
 
         path_page: Path = DIR_SCREENSHOTS / f"{browser_type.name}_page.png"
         page.screenshot(path=path_page)
