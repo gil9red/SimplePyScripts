@@ -21,8 +21,15 @@ with sync_playwright() as p:
 
         page.goto("https://github.com/gil9red")
 
+        img_date: bytes = page.screenshot()
+        print(f"img_date: {img_date[:50]}...")
+
         path_page: Path = DIR_SCREENSHOTS / f"{browser_type.name}_page.png"
         page.screenshot(path=path_page)
+        print(f"path_page: {path_page}")
 
         path_full_page: Path = DIR_SCREENSHOTS / f"{browser_type.name}_full_page.png"
         page.screenshot(path=path_full_page, full_page=True)
+        print(f"path_full_page: {path_full_page}")
+
+        print()
