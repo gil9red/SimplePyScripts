@@ -4,6 +4,9 @@
 __author__ = "ipetrash"
 
 
+import os
+
+from pathlib import Path
 from dataclasses import dataclass
 
 import requests
@@ -15,6 +18,21 @@ class User:
     url: str
 
 
+DIR: Path = Path(__file__).resolve().parent
+
+TOKEN_FILE_NAME: Path = DIR / "TOKEN.txt"
+try:
+    TOKEN: str = os.environ.get("TOKEN") or TOKEN_FILE_NAME.read_text("utf-8").strip()
+except:
+    TOKEN: str = ""
+
+
+session = requests.Session()
+
+if TOKEN:
+    session.headers["Authorization"] = f"Bearer {TOKEN}"
+
+
 def get_users(url: str) -> list[User]:
     per_page: int = 100
     page: int = 1
@@ -23,7 +41,7 @@ def get_users(url: str) -> list[User]:
 
     while True:
         params = dict(per_page=per_page, page=page)
-        rs = requests.get(url, params=params)
+        rs = session.get(url, params=params)
         rs.raise_for_status()
 
         result: list[dict] = rs.json()

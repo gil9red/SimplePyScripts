@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any
 
-import requests
+from common import session
 
 
 @dataclass
@@ -47,14 +47,14 @@ class Commit:
 def get_last_commit(owner: str, repository: str) -> Commit:
     url: str = f"https://api.github.com/repos/{owner}/{repository}/commits?per_page=1"
 
-    rs = requests.get(url)
+    rs = session.get(url)
     rs.raise_for_status()
 
     result: dict[str, Any] = rs.json()[0]
     return Commit.parse_from_dict(result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     commit = get_last_commit(owner="gil9red", repository="RPG-Maker-MZ-Foo")
     print(commit)
     # Commit(sha='816a821788e113fdc80d17190fa1ed743c4b1524', message='Обновление. Улучшение алгоритма шагающей леди', author=CommitUser(name='gil9red', email='ilya.petrash@inbox.ru', date=datetime.datetime(2025, 10, 25, 18, 53, 41, tzinfo=datetime.timezone.utc)), committer=CommitUser(name='gil9red', email='ilya.petrash@inbox.ru', date=datetime.datetime(2025, 10, 25, 18, 53, 41, tzinfo=datetime.timezone.utc)))
