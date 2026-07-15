@@ -6,6 +6,7 @@ __author__ = "ipetrash"
 
 import logging
 import random
+import re
 import string
 
 from typing import Callable, TypedDict
@@ -231,6 +232,7 @@ class HumanAutomation:
         text: str,
         typo_chance: float = 0.07,
         max_attempts: int = 3,
+        strict_validation: bool = False,
     ) -> bool:
         """
         Types text like a human: with unique pauses, random typos,
@@ -268,8 +270,19 @@ class HumanAutomation:
                 self.page.wait_for_timeout(random_delay)
 
             # Validate the actually typed text in the field
-            actual_text: str = locator.input_value()
-            if actual_text == text:
+            actual_text: str = locator.input_value() or ""
+
+            is_valid: bool
+            if strict_validation:
+                is_valid = actual_text == text
+            else:
+
+                def _remove_all_spaces(text: str) -> str:
+                    return re.sub(r"\s+", "", text)
+
+                is_valid = _remove_all_spaces(actual_text) == _remove_all_spaces(text)
+
+            if is_valid:
                 return True
 
             log.warning(f"Expected text {text!r}, but got {actual_text!r}.")
