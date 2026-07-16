@@ -12,7 +12,7 @@ import string
 from typing import Callable, TypedDict
 
 # playwright>=1.61.0
-from playwright.sync_api import Page, Locator
+from playwright.sync_api import Page, Locator, TimeoutError
 
 # playwright-stealth>=2.0.3
 from playwright_stealth import Stealth
@@ -157,7 +157,12 @@ class HumanAutomation:
         log.info(f"Scrolling to: {locator}")
 
         while True:
-            box = locator.bounding_box()
+            box: dict[str, float] | None
+            try:
+                box = locator.bounding_box(timeout=100)
+            except TimeoutError:
+                box = None
+
             if not box:
                 # If the element is not in the DOM at all, scroll down randomly
                 self.page.mouse.wheel(0, random.randint(250, 450))
