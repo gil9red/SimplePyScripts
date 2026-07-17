@@ -7,7 +7,7 @@ __author__ = "ipetrash"
 # playwright>=1.61.0
 from playwright.sync_api import sync_playwright
 
-from human_automation import HumanAutomation
+from human_automation.human_automation import HumanAutomation
 
 URL: str = "https://github.com/gil9red"
 
