@@ -7,9 +7,19 @@ __author__ = "ipetrash"
 from textwrap import dedent
 
 # playwright>=1.61.0
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import Page, sync_playwright
 
 from human_automation.human_automation import HumanAutomation
+
+
+def get_text(page: Page, lang: str) -> str:
+    return "\n".join(
+        span.text_content().strip()
+        for span in page.locator(f'span[lang="{lang}"] > span > span').all()
+    )
+
+
+URL: str = "https://translate.google.ru/?sl=ru&tl=en&op=translate"
 
 
 with sync_playwright() as p:
@@ -18,8 +28,7 @@ with sync_playwright() as p:
 
     human_automation = HumanAutomation(page)
 
-    url: str = "https://translate.google.ru/?sl=ru&tl=en&op=translate"
-    page.goto(url, wait_until="domcontentloaded")
+    page.goto(URL, wait_until="domcontentloaded")
 
     input_locator = page.locator('textarea[aria-label="Исходный текст"]')
 
@@ -34,6 +43,11 @@ with sync_playwright() as p:
 
     page.wait_for_timeout(2_000)
 
+    text: str = get_text(page, lang="en")
+    print(f"Text ({len(text)}):\n{text}")
+
+    page.wait_for_timeout(2_000)
+
     human_automation.click('button[aria-label *= "Обратный перевод"]:visible')
 
     page.wait_for_timeout(2_000)
@@ -45,5 +59,10 @@ with sync_playwright() as p:
             over the lazy dog
         """).strip(),
     )
+
+    page.wait_for_timeout(2_000)
+
+    text: str = get_text(page, lang="ru")
+    print(f"Text ({len(text)}):\n{text}")
 
     page.wait_for_timeout(5_000)
