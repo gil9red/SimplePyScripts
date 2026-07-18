@@ -9,7 +9,7 @@ from textwrap import dedent
 # playwright>=1.61.0
 from playwright.sync_api import sync_playwright
 
-from human_automation import HumanAutomation
+from human_automation.human_automation import HumanAutomation
 
 
 with sync_playwright() as p:
