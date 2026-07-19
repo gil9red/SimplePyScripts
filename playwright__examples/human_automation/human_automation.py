@@ -21,13 +21,13 @@ from playwright_stealth import Stealth
 from python_ghost_cursor.playwright_sync import create_cursor
 from python_ghost_cursor.playwright_sync._spoof import GhostCursor
 
+type Point = TypedDict("Point", {"x": int, "y": int})
+
+
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 stealth = Stealth()
-
-
-type Point = TypedDict("Point", {"x": int, "y": int})
 
 
 def get_center_page(page: Page) -> Point:
@@ -144,7 +144,7 @@ class HumanAutomation:
         self.cursor.click(locator)
         self.wait(100, 250)
 
-    def scroll_to_element(self, locator: Locator | str) -> None:
+    def scroll_to_element(self, locator: Locator | str, margin: int = 100) -> None:
         """
         Simulates human scrolling.
         If the element is fully visible on the screen, no scrolling occurs.
@@ -173,16 +173,18 @@ class HumanAutomation:
 
             # Find the boundaries of the element relative to the screen
             element_top = box["y"]
-            element_bottom = box["y"] + box["height"]
+            element_height = box["height"]
+            element_bottom = element_top + element_height
 
-            # Check for visibility: Is the element fully visible on the screen?
-            # Give a margin of 50 pixels at the top and bottom (to avoid hitting the edge or header)
-            if element_top >= 50 and element_bottom <= (viewport_height - 50):
-                # The element is perfectly visible (e.g., at the beginning or end of the page) — no scrolling needed!
+            is_top_visible = element_top >= margin
+            is_bottom_within_viewport = element_bottom <= (viewport_height - margin)
+            is_too_large = element_height > (viewport_height - (margin * 2))
+            is_bottom_visible = is_bottom_within_viewport or is_too_large
+            if is_top_visible and is_bottom_visible:  # The element is perfectly visible
                 break
 
             # If the element is not on the screen, calculate the distance to center for scrolling
-            element_center_y = box["y"] + (box["height"] / 2)
+            element_center_y = element_top + (element_height / 2)
             screen_center_y = viewport_height / 2
             distance_to_center = element_center_y - screen_center_y
 
