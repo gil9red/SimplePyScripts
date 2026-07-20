@@ -11,6 +11,7 @@ __author__ = "ipetrash"
 import traceback
 import sys
 
+from dataclasses import dataclass
 from pathlib import Path
 from timeit import default_timer
 
@@ -39,16 +40,17 @@ def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
 sys.excepthook = log_uncaught_exceptions
 
 
+@dataclass
 class Ball:
-    r = 50  # Радиус шарика
-    x = 0  # Координата по х центра шарика
-    y = 0  # Координата по y центра шарика
-    speed = 0  # Скорость движения
-    dir_x = 0  # Компонент x вектора движения шарика
-    dir_y = 0  # Компонент y вектора движения шарика
-    damp = 10  # Скорость уменьшения скорости движения (сопротивление)
-    collision = False  # Признак коллизии с внешним кругом
-    speed_after_collision = 300  # Скорость движения шарика после столкновения
+    r: float = 50  # Радиус шарика
+    x: float = 0  # Координата по х центра шарика
+    y: float = 0  # Координата по y центра шарика
+    speed: float = 0  # Скорость движения
+    dir_x: float = 0  # Компонент x вектора движения шарика
+    dir_y: float = 0  # Компонент y вектора движения шарика
+    damp: float = 10  # Скорость уменьшения скорости движения (сопротивление)
+    collision: bool = False  # Признак коллизии с внешним кругом
+    speed_after_collision: float = 300  # Скорость движения шарика после столкновения
 
     # Функция, которая проверяет наличие коллизии шарика с внешним кругом
     def hit_outer_circle_check(self, outer_circle: int) -> None:
