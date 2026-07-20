@@ -27,7 +27,13 @@ def check_mixed_layout(text: str) -> list[tuple[str, list[str]]]:
     return corrupted_words
 
 
-def process(path: Path, extensions: set[str], ignore_words: set[str]) -> None:
+def process(
+    path: Path,
+    extensions: set[str],
+    ignore_words: set[str],
+    ignore_files: set[str],
+    ignore_dirs: set[str],
+) -> None:
     path = path.resolve()
 
     if not path.is_dir():
@@ -47,7 +53,13 @@ def process(path: Path, extensions: set[str], ignore_words: set[str]) -> None:
     start_dt: datetime = datetime.now()
 
     for f in path.rglob("*.*"):
-        if not f.is_file():
+        if not f.is_file() or f.name.lower() in ignore_files:
+            continue
+
+        has_any: bool = any(
+            parent_dir.name.lower() in ignore_dirs for parent_dir in f.parents
+        )
+        if has_any:
             continue
 
         total_files_count += 1
@@ -75,7 +87,9 @@ def process(path: Path, extensions: set[str], ignore_words: set[str]) -> None:
 
                 if valid_corrupted_words:
                     corrupted_words_count += len(valid_corrupted_words)
-                    suffix_corrupted_words_counter[f.suffix] += len(valid_corrupted_words)
+                    suffix_corrupted_words_counter[f.suffix] += len(
+                        valid_corrupted_words
+                    )
 
                     print(f"File: {str(f)!r}")
                     for word, cyr_letters in valid_corrupted_words:
@@ -93,7 +107,7 @@ def process(path: Path, extensions: set[str], ignore_words: set[str]) -> None:
     print(f"Total checked files:       {checked_files_count}")
     print(f"Files with mixed layout:   {corrupted_files_count}")
     print(f"Words with mixed layout:   {corrupted_words_count}")
-    print(f'Ignored words count:       {ignored_words_count}')
+    print(f"Ignored words:             {ignored_words_count}")
     print()
     print(f"All extensions in path:    {dict(suffix_total_counter)}")
     print(f"Checked extensions:        {dict(suffix_checked_counter)}")
@@ -120,11 +134,25 @@ if __name__ == "__main__":
         help="File extensions to check",
     )
     parser.add_argument(
-        '-i',
-        '--ignore-words',
-        nargs='+',
+        "-iw",
+        "--ignore-words",
+        nargs="+",
         default=[],
-        help='Words to ignore (case-insensitive)',
+        help="Words to ignore (case-insensitive)",
+    )
+    parser.add_argument(
+        "-if",
+        "--ignore-files",
+        nargs="+",
+        default=[],
+        help="Files to ignore (case-insensitive)",
+    )
+    parser.add_argument(
+        "-id",
+        "--ignore-dirs",
+        nargs="+",
+        default=["build"],
+        help="Directories to ignore (case-insensitive)",
     )
     args = parser.parse_args()
 
@@ -132,9 +160,13 @@ if __name__ == "__main__":
         ex if ex.startswith(".") else f".{ex}" for ex in args.ext
     }
     target_ignore_words: set[str] = {word.lower() for word in args.ignore_words}
+    target_ignore_files: set[str] = {word.lower() for word in args.ignore_files}
+    target_ignore_dirs: set[str] = {word.lower() for word in args.ignore_dirs}
 
     process(
         path=args.path,
         extensions=target_extensions,
         ignore_words=target_ignore_words,
+        ignore_files=target_ignore_files,
+        ignore_dirs=target_ignore_dirs,
     )
