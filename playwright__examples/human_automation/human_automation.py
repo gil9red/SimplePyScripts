@@ -95,6 +95,8 @@ TYPO_CHAR_SETS: dict[str, str] = {
     "punctuation": string.punctuation,
 }
 
+WAIT_MS: tuple[int, int] = 100, 250
+
 
 class HumanAutomation:
     page: Page
@@ -119,7 +121,11 @@ class HumanAutomation:
     def wait(self, min_time_ms: int, max_time_ms: int) -> None:
         self.page.wait_for_timeout(random.randint(min_time_ms, max_time_ms))
 
-    def move_to(self, locator: Locator | str) -> None:
+    def move_to(
+        self,
+        locator: Locator | str,
+        wait_ms: tuple[int, int] = WAIT_MS,
+    ) -> None:
         if isinstance(locator, str):
             locator = self.page.locator(locator)
 
@@ -128,23 +134,35 @@ class HumanAutomation:
         self.scroll_to_element(locator)
 
         self.cursor.move(locator)
-        self.wait(100, 250)
+        self.wait(*wait_ms)
 
-    def click(self, locator: Locator | str) -> None:
+    def click(
+        self,
+        locator: Locator | str,
+        wait_ms: tuple[int, int] = WAIT_MS,
+    ) -> None:
         if isinstance(locator, str):
             locator = self.page.locator(locator)
 
         log.info(f"Clicking to: {locator}")
 
+        # NOTE: move_to is not suitable here - the cursor moves twice
+        #       It internally calls cursor.move, which moves the cursor
+        #       click internally calls cursor.click, which also calls cursor.move
         self.scroll_to_element(locator)
 
         # NOTE: If this is a link, removing the 'target' attribute will prevent opening in a new tab
         locator.evaluate("el => el.removeAttribute('target')")
 
         self.cursor.click(locator)
-        self.wait(100, 250)
+        self.wait(*wait_ms)
 
-    def scroll_to_element(self, locator: Locator | str, margin: int = 100) -> None:
+    def scroll_to_element(
+        self,
+        locator: Locator | str,
+        margin: int = 100,
+        wait_ms: tuple[int, int] = WAIT_MS,
+    ) -> None:
         """
         Simulates human scrolling.
         If the element is fully visible on the screen, no scrolling occurs.
@@ -166,7 +184,7 @@ class HumanAutomation:
             if not box:
                 # If the element is not in the DOM at all, scroll down randomly
                 self.page.mouse.wheel(0, random.randint(250, 450))
-                self.wait(200, 400)
+                self.wait(*wait_ms)
                 continue
 
             viewport_height = self.page.viewport_size["height"]
@@ -201,11 +219,17 @@ class HumanAutomation:
                 scroll_step = random.randint(-350, -150)
 
             self.page.mouse.wheel(0, scroll_step)
-            self.wait(100, 250)
+            self.wait(*wait_ms)
 
         self.wait(300, 600)
+        self.wait(*wait_ms)
 
-    def _typo_effect(self, char: str, typo_chance: float) -> None:
+    def _typo_effect(
+        self,
+        char: str,
+        typo_chance: float,
+        wait_ms: tuple[int, int] = WAIT_MS,
+    ) -> None:
         # Logic for random typo (don't break spaces)
         if char == " " or random.random() >= typo_chance:
             return
@@ -231,7 +255,7 @@ class HumanAutomation:
         self.wait(60, 140)
         self.wait(180, 350)  # Pause for recognizing the error
         self.page.keyboard.press("Backspace")
-        self.wait(100, 250)
+        self.wait(*wait_ms)
 
     def type_text(
         self,
@@ -240,6 +264,7 @@ class HumanAutomation:
         typo_chance: float = 0.07,
         max_attempts: int = 3,
         strict_validation: bool = False,
+        wait_ms: tuple[int, int] = WAIT_MS,
     ) -> bool:
         """
         Types text like a human: with unique pauses, random typos,
@@ -260,11 +285,11 @@ class HumanAutomation:
             self.page.keyboard.press("a")
             self.page.keyboard.up("Control")
             self.page.keyboard.press("Backspace")
-            self.wait(200, 400)
+            self.wait(*wait_ms)
 
             # Typing character by character
             for char in text:
-                self._typo_effect(char, typo_chance)
+                self._typo_effect(char, typo_chance=typo_chance, wait_ms=wait_ms)
 
                 # Type correct character
                 self.page.keyboard.type(char)
