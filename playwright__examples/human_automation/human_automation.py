@@ -119,7 +119,8 @@ class HumanAutomation:
         inject_cursor(page)
 
     def wait(self, min_time_ms: int, max_time_ms: int) -> None:
-        self.page.wait_for_timeout(random.randint(min_time_ms, max_time_ms))
+        time_ms: float = random.randint(min_time_ms, max_time_ms)
+        self.page.wait_for_timeout(time_ms)
 
     def move_to(
         self,
@@ -188,6 +189,7 @@ class HumanAutomation:
                 continue
 
             viewport_height = self.page.viewport_size["height"]
+            viewport_height: int = self.page.viewport_size["height"]
 
             # Find the boundaries of the element relative to the screen
             element_top = box["y"]
@@ -221,7 +223,7 @@ class HumanAutomation:
             self.page.mouse.wheel(0, scroll_step)
             self.wait(*wait_ms)
 
-        self.wait(300, 600)
+        print("return")
         self.wait(*wait_ms)
 
     def _typo_effect(
@@ -295,11 +297,13 @@ class HumanAutomation:
                 self.page.keyboard.type(char)
 
                 # Typing rhythm (delay between keys)
-                random_delay: int = random.randint(50, 160)
+                min_time_ms: int = 50
+                max_time_ms: int = 160
                 # 4% chance that the person thought about a word in the middle of it
                 if random.random() < 0.04:
-                    random_delay += random.randint(350, 700)
-                self.page.wait_for_timeout(random_delay)
+                    min_time_ms += 350
+                    max_time_ms += 700
+                self.wait(min_time_ms, max_time_ms)
 
             # Validate the actually typed text in the field
             actual_text: str = locator.input_value() or ""
