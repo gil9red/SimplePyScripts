@@ -4,12 +4,14 @@
 __author__ = "ipetrash"
 
 
+import functools
 import logging
+import time
 import random
 import re
 import string
 
-from typing import Callable, TypedDict
+from typing import Any, Callable, TypedDict
 
 # playwright>=1.61.0
 from playwright.sync_api import Page, Locator, TimeoutError
@@ -26,6 +28,39 @@ type Point = TypedDict("Point", {"x": int, "y": int})
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
+
+def log_action[**P, R](func: Callable[P, R]) -> Callable[P, R]:
+    @functools.wraps(func)
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+        func_name: str = func.__name__
+
+        locator: Any | None = kwargs.get("locator")
+        if not locator and len(args) > 1:
+            locator = args[1]
+            if not isinstance(locator, str | Locator):
+                locator = None
+        locator_str: str = f" to: {locator}" if locator else ""
+
+        log.debug(f"Started {func_name}{locator_str}")
+
+        start_time: float = time.perf_counter()
+        try:
+            result: R = func(*args, **kwargs)
+
+            execution_time_ms: int = int((time.perf_counter() - start_time) * 1000)
+            log.debug(f"Finished {func_name}{locator_str} ({execution_time_ms}ms)")
+            return result
+
+        except Exception as e:
+            execution_time_ms: int = int((time.perf_counter() - start_time) * 1000)
+            log.error(
+                f"Failed {func_name}{locator_str} after {execution_time_ms}ms. Error: {e}"
+            )
+            raise e
+
+    return wrapper
+
 
 stealth = Stealth()
 
@@ -118,10 +153,12 @@ class HumanAutomation:
         stealth.apply_stealth_sync(page)
         inject_cursor(page)
 
+    @log_action
     def wait(self, min_time_ms: int, max_time_ms: int) -> None:
         time_ms: float = random.randint(min_time_ms, max_time_ms)
         self.page.wait_for_timeout(time_ms)
 
+    @log_action
     def move_to(
         self,
         locator: Locator | str,
@@ -130,13 +167,12 @@ class HumanAutomation:
         if isinstance(locator, str):
             locator = self.page.locator(locator)
 
-        log.info(f"Moving to: {locator}")
-
         self.scroll_to_element(locator)
 
         self.cursor.move(locator)
         self.wait(*wait_ms)
 
+    @log_action
     def click(
         self,
         locator: Locator | str,
@@ -144,8 +180,6 @@ class HumanAutomation:
     ) -> None:
         if isinstance(locator, str):
             locator = self.page.locator(locator)
-
-        log.info(f"Clicking to: {locator}")
 
         # NOTE: move_to is not suitable here - the cursor moves twice
         #       It internally calls cursor.move, which moves the cursor
@@ -158,6 +192,7 @@ class HumanAutomation:
         self.cursor.click(locator)
         self.wait(*wait_ms)
 
+    @log_action
     def scroll_to_element(
         self,
         locator: Locator | str,
@@ -173,8 +208,6 @@ class HumanAutomation:
         if isinstance(locator, str):
             locator = self.page.locator(locator)
 
-        log.info(f"Scrolling to: {locator}")
-
         while True:
             box: dict[str, float] | None
             try:
@@ -182,14 +215,15 @@ class HumanAutomation:
             except TimeoutError:
                 box = None
 
+            log.debug(f"Box: {box}")
             if not box:
                 # If the element is not in the DOM at all, scroll down randomly
                 self.page.mouse.wheel(0, random.randint(250, 450))
                 self.wait(*wait_ms)
                 continue
 
-            viewport_height = self.page.viewport_size["height"]
             viewport_height: int = self.page.viewport_size["height"]
+            log.debug(f"Viewport height: {viewport_height}")
 
             # Find the boundaries of the element relative to the screen
             element_top = box["y"]
@@ -223,7 +257,6 @@ class HumanAutomation:
             self.page.mouse.wheel(0, scroll_step)
             self.wait(*wait_ms)
 
-        print("return")
         self.wait(*wait_ms)
 
     def _typo_effect(
@@ -259,6 +292,7 @@ class HumanAutomation:
         self.page.keyboard.press("Backspace")
         self.wait(*wait_ms)
 
+    @log_action
     def type_text(
         self,
         locator: Locator | str,
@@ -276,7 +310,7 @@ class HumanAutomation:
         if isinstance(locator, str):
             locator = self.page.locator(locator)
 
-        log.info(f"Typing text ({len(text)}): {text!r}, locator: {locator}")
+        log.info(f"Typing text ({len(text)}): {text!r}")
 
         for attempt in range(1, max_attempts + 1):
             # Click on the field to bring focus
@@ -329,6 +363,7 @@ class HumanAutomation:
             f"Failed to correctly type {text!r} after {max_attempts} attempts."
         )
 
+    @log_action
     def move_mouse_to_center(self) -> None:
         """
         Smoothly moves the mouse cursor to a random area around the center of the screen.
@@ -342,6 +377,7 @@ class HumanAutomation:
         # Simulate a small pause after movement (200-600 ms)
         self.wait(200, 600)
 
+    @log_action
     def ensure_change_url(
         self,
         action: Callable[[], None],
