@@ -16,6 +16,9 @@ from common import session
 
 
 def get_text(el: Tag) -> str:
+    for hidden in el.select('[aria-hidden="true"]'):
+        hidden.decompose()
+
     text = el.get_text(strip=True)
     return text.replace("\xa0", " ")
 
@@ -108,12 +111,20 @@ def parse_book_v2(soup: BeautifulSoup) -> Ranobe:
     genres: list[str]
     tags: list[str]
 
-    year_href: str = soup.select_one(".book-meta-sidebar a[href*=year]")["href"]
-    year_str: str = re.search(r"/year/(\d+)", year_href).group(1)
+    year_tag: Tag | None = soup.select_one(".book-kicker-year[href*=year]")
+    if not year_tag:
+        raise ValueError("Year tag not found")
+
+    year_href: str = year_tag["href"]
+
+    m = re.search(r"/year/(\d+)", year_href)
+    if not m:
+        raise ValueError(f"Year not found in {year_href!r}")
+    year_str: str = m.group(1)
     release_year: int = int(year_str)
 
-    country: str = get_text(soup.select_one(".book-meta-sidebar a[href*=country]"))
-    status: str = get_text(soup.select_one(".book-meta-sidebar a[href*=status]"))
+    country: str = get_text(soup.select_one(".book-kicker-country[href*=country]"))
+    status: str = get_text(soup.select_one(".book-kicker-status[href*=status]"))
 
     # NOTE: Не нашел в верстке
     characters_text: str = "-"
@@ -122,14 +133,17 @@ def parse_book_v2(soup: BeautifulSoup) -> Ranobe:
     # NOTE: Example <script>self.__next_f.push([1, "5:[...]"])</script>
     #                                                   ^
     #                                ["$","section",null,{"className": ...}]
-    m = re.search(
-        r"""<script>self.__next_f.push\((\[\d+,\s*"\d+:\[\\"\$\\",\\"\w+\\",\w+,{\\"className\\":\\"book-hero-taxonomy\\".+?"\])\).*?</script>""",
-        str(soup),
-    )
-    assert m, "Переменная self.__next_f не найдена"
+    slice_genres_tags: str = ""
+    for slice in re.findall(
+        r"""<script>self.__next_f.push\((\[.+?\])\).*?</script>""", str(soup)
+    ):
+        if "book-hero-taxonomy" in slice:
+            slice_genres_tags = slice
+            break
+    if not slice_genres_tags:
+        raise ValueError("Не найден book-hero-taxonomy в self.__next_f")
 
-    slice_data: str
-    _, slice_data = json.loads(m.group(1))
+    _, slice_data = json.loads(slice_genres_tags)
 
     _, data_str = slice_data.split(":", maxsplit=1)
 
@@ -138,10 +152,39 @@ def parse_book_v2(soup: BeautifulSoup) -> Ranobe:
     _, _, _, data = json.loads(data_str)
 
     assert isinstance(data, dict), f"В data не словарь, а {type(data)}: {data!r}"
-    assert (
-        data.get("className") == "book-hero-taxonomy"
-    ), "Не найден класс book-hero-taxonomy в data"
-    assert isinstance(data.get("children"), list), "Не найден список children в data"
+
+    def deep_find(
+        data: dict[str, Any],
+        has_key: str,
+        has_value: str,
+        target_key: str,
+    ) -> Any:
+        if isinstance(data, dict):
+            if data.get(has_key) == has_value and target_key in data:
+                return data[target_key]
+            for value in data.values():
+                result = deep_find(
+                    value, has_key=has_key, has_value=has_value, target_key=target_key
+                )
+                if result is not None:
+                    return result
+        elif isinstance(data, list):
+            for item in data:
+                result = deep_find(
+                    item, has_key=has_key, has_value=has_value, target_key=target_key
+                )
+                if result is not None:
+                    return result
+        return None
+
+    data_children: list[tuple[str, str, Any, dict]] | None = deep_find(
+        data,
+        has_key="className",
+        has_value="book-hero-taxonomy",
+        target_key="children",
+    )
+    assert data_children, "Не найден класс book-hero-taxonomy в data"
+    assert isinstance(data_children, list), "Не найден список children в data"
 
     all_genres: list[str] = []
     all_tags: list[str] = []
@@ -197,7 +240,7 @@ def parse_book_v2(soup: BeautifulSoup) -> Ranobe:
         }
     ]
     """
-    for _, _, _, item in data["children"]:
+    for _, _, _, item in data_children:
         assert isinstance(item, dict), f"data/children[]/item[3] is not dict: {item!r}"
 
         aria_label: str | None = item.get("aria-label")
