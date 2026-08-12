@@ -61,7 +61,18 @@ def get_api_info(url: str) -> ApiInfo:
         page = browser.new_page()
         page.set_default_timeout(DEFAULT_TIMEOUT_MS)
 
-        page.goto(url, wait_until="commit")
+        attempts: int = 3
+        for _ in range(attempts):
+            page.goto(url, wait_until="commit")
+            if page.url == url:
+                break
+
+            print(
+                f"[#] Failed to load {url!r}, redirecting to {page.url!r}. Retrying..."
+            )
+            time.sleep(5)
+        else:
+            raise Exception(f"Failed to load page {url!r} after {attempts} attempts")
 
         def is_api(rs: Response) -> bool:
             url: str = rs.url
