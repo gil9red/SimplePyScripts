@@ -526,9 +526,12 @@ class Video:
                 try:
                     text = dpath.util.get(data_video, glob_duration)
                 except KeyError:
-                    return
+                    return None
 
-            return time_to_seconds(text)
+            try:
+                return time_to_seconds(text)
+            except ValueError:
+                return None
 
     def get_url_thumbnail_by_max_size(self) -> str:
         return max(self.thumbnails, key=lambda x: (x.width, x.height)).url
