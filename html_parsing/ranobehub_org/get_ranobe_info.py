@@ -12,15 +12,7 @@ from typing import Any
 
 from bs4 import BeautifulSoup, Tag
 
-from common import session
-
-
-def get_text(el: Tag) -> str:
-    for hidden in el.select('[aria-hidden="true"]'):
-        hidden.decompose()
-
-    text = el.get_text(strip=True)
-    return text.replace("\xa0", " ")
+from common import session, get_text
 
 
 def parse_characters(text: str) -> tuple[str, int]:

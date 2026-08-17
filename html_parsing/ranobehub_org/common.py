@@ -5,6 +5,7 @@ __author__ = "ipetrash"
 
 
 import requests
+from bs4 import Tag
 from requests.adapters import HTTPAdapter
 
 
@@ -22,9 +23,17 @@ class TimeoutHTTPAdapter(HTTPAdapter):
 adapter = TimeoutHTTPAdapter(timeout=60)
 
 session = requests.session()
-session.mount('http://', adapter)
-session.mount('https://', adapter)
+session.mount("http://", adapter)
+session.mount("https://", adapter)
 session.headers["User-Agent"] = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) "
     "Gecko/20100101 Firefox/113.0"
 )
+
+
+def get_text(el: Tag) -> str:
+    for hidden in el.select('[aria-hidden="true"]'):
+        hidden.decompose()
+
+    text = el.get_text(strip=True)
+    return text.replace("\xa0", " ")
