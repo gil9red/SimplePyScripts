@@ -4,9 +4,14 @@
 __author__ = "ipetrash"
 
 
-from dataclasses import dataclass
+import time
 
-from common import session
+from dataclasses import dataclass
+from urllib.parse import urljoin
+
+from bs4 import BeautifulSoup
+
+from common import session, get_text
 
 
 @dataclass
@@ -16,7 +21,7 @@ class Bookmark:
     status: str
 
 
-def get_bookmarks(user_id: int) -> list[Bookmark]:
+def get_bookmarks_v1(user_id: int) -> list[Bookmark]:
     rs = session.get(f"https://ranobehub.org/user/{user_id}/library")
     rs.raise_for_status()
 
@@ -29,7 +34,6 @@ def get_bookmarks(user_id: int) -> list[Bookmark]:
         title = ranobe["names"]["rus"]
         url = ranobe["url"]
 
-        # TODO: StatusEnum: value and title
         status = relation["status"]["title"]
 
         items.append(
@@ -41,6 +45,58 @@ def get_bookmarks(user_id: int) -> list[Bookmark]:
         )
 
     return items
+
+
+def get_bookmarks_v2(user_id: int) -> list[Bookmark]:
+    items: list[Bookmark] = []
+
+    url: str = f"https://ranobehub.org/user/{user_id}?tab=library"
+
+    while True:
+        print(f"Загрузка страницы {url!r}")
+
+        rs = session.get(url)
+        rs.raise_for_status()
+
+        soup = BeautifulSoup(rs.content, "html.parser")
+
+        for item in soup.select(".profile-library-card"):
+            title: str = get_text(item.select_one("h3[data-book-transition-title]"))
+            rel_url: str = item.select_one("a[href]")["href"]
+            status: str = get_text(
+                item.select_one('[data-slot="badge"][data-variant="secondary"]')
+            )
+
+            if status not in ("Запланировано", "Прочитано"):
+                raise Exception(f"Не поддерживаемый статус {status!r}")
+
+            items.append(
+                Bookmark(
+                    title=title,
+                    url=urljoin(rs.url, rel_url),
+                    status=status,
+                )
+            )
+
+        nav_buttons = soup.select('nav.pagination > [data-slot="button"]')
+        if nav_buttons and len(nav_buttons) == 2 and nav_buttons[1].attrs.get("href"):
+            rel_url: str = nav_buttons[1].attrs.get("href")
+            next_url: str = urljoin(rs.url, rel_url)
+
+            time.sleep(1)
+            url = next_url
+            continue
+
+        break
+
+    return items
+
+
+def get_bookmarks(user_id: int) -> list[Bookmark]:
+    try:
+        return get_bookmarks_v2(user_id)
+    except Exception:
+        return get_bookmarks_v1(user_id)
 
 
 if __name__ == "__main__":
