@@ -62,18 +62,20 @@ def get_bookmarks_v2(user_id: int) -> list[Bookmark]:
 
         for item in soup.select(".profile-library-card"):
             title: str = get_text(item.select_one("h3[data-book-transition-title]"))
+
             rel_url: str = item.select_one("a[href]")["href"]
+            abs_url: str = urljoin(rs.url, rel_url)
+
             status: str = get_text(
                 item.select_one('[data-slot="badge"][data-variant="secondary"]')
             )
-
             if status not in ("Запланировано", "Прочитано"):
                 raise Exception(f"Не поддерживаемый статус {status!r}")
 
             items.append(
                 Bookmark(
                     title=title,
-                    url=urljoin(rs.url, rel_url),
+                    url=abs_url,
                     status=status,
                 )
             )
