@@ -71,7 +71,8 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
     # url_api_search = f"{URL_BASE}/api/search"  # TODO: Прошлый вариант
     # url_api_search = f"{URL_BASE}/api/finder"
     # url_api_search = f"{URL_BASE}/api/find"
-    url_api_search = f"{URL_BASE}/api/bleed"
+    # url_api_search = f"{URL_BASE}/api/bleed"
+    url_api_search = f"{URL_BASE}/api/search/site"
 
     # NOTE: Получение token. Новая защита
     rs_token = session.get(
@@ -81,18 +82,17 @@ def api_search(text: str, page: int = 1) -> dict[str, Any]:
         params={"t": int(datetime.now().timestamp()) * 1000},
         headers=headers,
     )
+    token: str
+    hp_key: str | None
+    hp_val: str | None
     try:
         rs_token.raise_for_status()
         token_data: dict[str, Any] = rs_token.json()
-        token: str = token_data["token"]
-        hp_key: str = token_data.get("hpKey")
-        hp_val: str = token_data.get("hpVal")
-    except Exception:
-        token = ""
-        hp_key = ""
-        hp_val = ""
-    if not token:
-        raise Exception("Не получен token!")
+        token = token_data["token"]
+        hp_key = token_data.get("hpKey")
+        hp_val = token_data.get("hpVal")
+    except Exception as e:
+        raise Exception(f"Не получен token: {e}")
 
     data: dict[str, Any] = {
         "searchType": "games",
