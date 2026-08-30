@@ -92,10 +92,6 @@ channels = [
     ("Rishin & TimeToPlay", "https://www.youtube.com/c/Rishin69"),
     ("Никитун", "https://www.youtube.com/c/NikitunRus"),
     ("Записи Стримов HellYeahPlay", "https://www.youtube.com/c/HellyeahNetStream"),
-    (
-        "Айвори",
-        "https://www.youtube.com/c/%D0%90%D0%B9%D0%B2%D0%BE%D1%80%D0%B8%D1%82%D0%BE%D0%BF",
-    ),
     ("Marmok", "https://www.youtube.com/c/MrMarmok"),
     ("EugeneSagaz", "https://www.youtube.com/user/eugenesagaz"),
     ("SAH4R SHOW", "https://www.youtube.com/c/sah4rshow"),
