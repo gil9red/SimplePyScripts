@@ -57,6 +57,9 @@ def process_text(text: str) -> str:
 
 
 def parse_date(value: str) -> date | None:
+    if not value:
+        return None
+
     for regex_pattern, months in [
         (
             r"(?P<month>%s) (?P<day>\d{,2}), (?P<year>\d{4})",
@@ -104,7 +107,7 @@ def parse_date(value: str) -> date | None:
             day=int(m["day"]),
         )
 
-    return
+    return None
 
 
 # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/f0403620f7948306ad9e34a373f2aabc0237fb2a/seconds_to_str.py
@@ -202,6 +205,8 @@ def get_yt_initial_data(html: str) -> dict[str, Any] | None:
         if m:
             data_str = m.group(1)
             return json.loads(data_str)
+
+    return None
 
 
 def load(url: str) -> tuple[requests.Response, dict[str, Any]]:
@@ -307,7 +312,7 @@ def get_context_with_continuation(
     yt_cfg_data: dict[str, Any],
     continuation_item: dict[str, Any],
 ) -> dict[str, Any]:
-    innertube_context = yt_cfg_data.get("INNERTUBE_CONTEXT")
+    innertube_context: dict[str, Any] | None = yt_cfg_data.get("INNERTUBE_CONTEXT")
     if not innertube_context:
         raise Exception("Значение INNERTUBE_CONTEXT должно быть задано в yt_cfg_data!")
 
@@ -543,7 +548,7 @@ class Video:
         # https://i.ytimg.com/vi/4ewTMva83tQ/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLA8lXazyahcoE7chGgA-ZjYZQ6wcw
         #   -> https://i.ytimg.com/vi/4ewTMva83tQ/maxresdefault.jpg
         parsed_url = urlparse(url)
-        path_parts = parsed_url.path.split("/")
+        path_parts: list[str] = parsed_url.path.split("/")
         path_parts[-1] = "maxresdefault.jpg"
         new_path = "/".join(path_parts)
         parsed_url = parsed_url._replace(query="", path=new_path)
@@ -599,17 +604,16 @@ class Video:
             if values:
                 seq = int(values[0])
 
+        create_date_raw: str | None = None
+        create_date: date | None = None
         try:
             create_date_raw: str | None = process_text(
                 data_video["dateText"]["simpleText"]
             )
+            if create_date_raw:
+                create_date: date | None = parse_date(create_date_raw)
         except:
-            create_date_raw = None
-
-        try:
-            create_date: date | None = parse_date(create_date_raw)
-        except:
-            create_date = None
+            pass
 
         thumbnails: list[Thumbnail] = [
             Thumbnail.get_from(thumbnail)
