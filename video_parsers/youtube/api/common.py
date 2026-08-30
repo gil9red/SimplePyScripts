@@ -195,9 +195,10 @@ def dict_merge(d1: dict[str, Any], d2: dict[str, Any]) -> None:
 
 
 def get_yt_initial_data(html: str) -> dict[str, Any] | None:
-    patterns = [
-        re.compile(r'window\["ytInitialData"\] = (\{.+?\});'),
+    patterns: list[re.Pattern] = [
+        re.compile(r'<script id="yt-initial-data" type="application/json".+?>(\{.+?\})</script'),
         re.compile(r"var ytInitialData = (\{.+?\});"),
+        re.compile(r'window\["ytInitialData"\] = (\{.+?\});'),
     ]
 
     for pattern in patterns:
@@ -215,6 +216,7 @@ def load(url: str) -> tuple[requests.Response, dict[str, Any]]:
 
     data = get_yt_initial_data(rs.text)
     if not data:
+        print(f"Could not find ytInitialData!\nResponse:\n{rs.text}")
         raise Exception("Could not find ytInitialData!")
 
     raise_if_error(data)
