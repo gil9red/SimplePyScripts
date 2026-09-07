@@ -12,9 +12,10 @@ import traceback
 from pathlib import Path
 from timeit import default_timer
 
-# pip install imagehash
+# pip install imagehash==4.3.2
 import imagehash
 
+# pip install pillow==12.1.1
 from PIL import Image
 
 from PyQt5.QtWidgets import (
@@ -43,9 +44,7 @@ from common import (
 )
 from db import db_get_all, db_add_image, db_exists, db_create_backup
 
-sys.path.append(r"C:\Users\ipetrash\Projects\SimplePyScripts\qt__pyqt__pyside__pyqode")
-from layout_append_line__horizontal_vertical import VerticalLineWidget
-
+from ui.layout_append_line__horizontal_vertical import VerticalLineWidget
 from ui.FileListModel import FileListModel
 from ui.ListImagesWidget import ListImagesWidget
 from ui.FieldsProgressDialog import FieldsProgressDialog
@@ -70,6 +69,18 @@ sys.excepthook = log_uncaught_exceptions
 
 
 IMAGE_CACHE = dict()
+
+
+def parse_hash(algo_name, hex_value):
+    if not hex_value:
+        return None
+
+    # colorhash требует особого метода восстановления
+    if algo_name == "colorhash":
+        return imagehash.hex_to_flathash(hex_value, hashsize=3)
+
+    # Все остальные стандартные перцептивные хеши
+    return imagehash.hex_to_hash(hex_value)
 
 
 class MainWindow(QMainWindow):
@@ -308,7 +319,7 @@ class MainWindow(QMainWindow):
         splitter = QSplitter(Qt.Vertical)
         splitter.addWidget(_top_widget)
         splitter.addWidget(_bottom_widget)
-        splitter.setSizes([part_splitter_height * 2, part_splitter_height / 2])
+        splitter.setSizes([part_splitter_height * 2, part_splitter_height // 2])
 
         self.setCentralWidget(splitter)
 
@@ -375,7 +386,8 @@ class MainWindow(QMainWindow):
         for row in db_get_all():
             file_name = row["file_name"]
             self.image_by_hashes[file_name] = {
-                x: imagehash.hex_to_hash(row[x]) for x in IMAGE_HASH_ALGO
+                hash_name: parse_hash(hash_name, row[hash_name])
+                for hash_name in IMAGE_HASH_ALGO
             }
 
         self.model_files.set_file_list(list(self.image_by_hashes.keys()))
