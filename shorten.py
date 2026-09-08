@@ -4,13 +4,23 @@
 __author__ = "ipetrash"
 
 
-def shorten(text: str, length: int = 30, placeholder: str = "...") -> str:
-    if not text:
+def shorten(
+    text: str,
+    length: int = 30,
+    middle: bool = False,
+    placeholder: str = "...",
+) -> str:
+    if not text or len(text) <= length:
         return text
 
-    if len(text) > length:
-        text = text[: length - len(placeholder)] + placeholder
-    return text
+    if middle:
+        available_len: int = length - len(placeholder)
+        start_len: int = available_len // 2
+        end_len: int = available_len - start_len
+
+        return text[:start_len] + placeholder + text[-end_len:]
+
+    return text[: length - len(placeholder)] + placeholder
 
 
 if __name__ == "__main__":
@@ -33,3 +43,13 @@ if __name__ == "__main__":
     text = "12356"
     new_text = shorten(text, length=3)
     assert new_text == "..."
+
+    file_name: str = r"C:\Users\ipetrash\PycharmProjects\SimplePyScripts\_FOO_TEST_TEST\FOO_TEST_TEST.py"
+
+    short_file_name: str = shorten(file_name)
+    assert len(short_file_name) == 30
+    assert short_file_name == r"C:\Users\ipetrash\PycharmPr..."
+
+    short_file_name: str = shorten(file_name, middle=True)
+    assert len(short_file_name) == 30
+    assert short_file_name == r"C:\Users\ipet...O_TEST_TEST.py"
