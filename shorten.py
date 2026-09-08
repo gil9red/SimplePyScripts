@@ -13,14 +13,15 @@ def shorten(
     if not text or len(text) <= length:
         return text
 
+    available_len: int = length - len(placeholder)
+
     if middle:
-        available_len: int = length - len(placeholder)
         start_len: int = available_len // 2
         end_len: int = available_len - start_len
 
         return text[:start_len] + placeholder + text[-end_len:]
 
-    return text[: length - len(placeholder)] + placeholder
+    return text[:available_len] + placeholder
 
 
 if __name__ == "__main__":
@@ -44,7 +45,9 @@ if __name__ == "__main__":
     new_text = shorten(text, length=3)
     assert new_text == "..."
 
-    file_name: str = r"C:\Users\ipetrash\PycharmProjects\SimplePyScripts\_FOO_TEST_TEST\FOO_TEST_TEST.py"
+    file_name: str = (
+        r"C:\Users\ipetrash\PycharmProjects\SimplePyScripts\_FOO_TEST_TEST\FOO_TEST_TEST.py"
+    )
 
     short_file_name: str = shorten(file_name)
     assert len(short_file_name) == 30
