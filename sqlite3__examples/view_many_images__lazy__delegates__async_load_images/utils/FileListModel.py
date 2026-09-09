@@ -59,7 +59,7 @@ class FileListModel(QAbstractListModel):
 
         self.numberPopulated.emit(itemsToFetch)
 
-    def setFileList(self, fileList: list):
+    def set_file_list(self, fileList: list):
         self.beginResetModel()
 
         self.fileList = fileList
