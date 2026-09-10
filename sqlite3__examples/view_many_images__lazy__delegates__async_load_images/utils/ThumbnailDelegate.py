@@ -100,7 +100,7 @@ class ThumbnailDelegate(QStyledItemDelegate):
 
         painter.setPen(opt.palette.color(cg, QPalette.Text))
         elided_text = font_metrics.elidedText(
-            base_file_name, Qt.ElideRight, rect.width() - self.title_margin * 2
+            base_file_name, Qt.ElideMiddle, rect.width() - self.title_margin * 2
         )
         painter.drawText(rect_title, Qt.AlignVCenter | Qt.AlignLeft, elided_text)
 

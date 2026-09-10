@@ -144,7 +144,7 @@ class ThumbnailDelegate(QStyledItemDelegate):
         painter.setPen(option.palette.color(cg, QPalette.ColorRole.Text))
         elided_text = font_metrics.elidedText(
             base_file_name,
-            Qt.TextElideMode.ElideRight,
+            Qt.TextElideMode.ElideMiddle,
             rect.width() - self.title_margin * 2,
         )
         painter.drawText(
