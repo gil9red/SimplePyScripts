@@ -18,19 +18,9 @@ try:
     QSizePolicy.Preferred = QSizePolicy.Policy.Preferred
     Qt.TextSelectableByMouse = Qt.TextInteractionFlag.TextSelectableByMouse
 
-except:
-    try:
-        from PyQt5.QtWidgets import *
-        from PyQt5.QtCore import *
-
-    except:
-        try:
-            from PyQt4.QtGui import *
-            from PyQt4.QtCore import *
-
-        except:
-            from PySide.QtGui import *
-            from PySide.QtCore import *
+except ImportError:
+    from PyQt5.QtWidgets import *
+    from PyQt5.QtCore import *
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
