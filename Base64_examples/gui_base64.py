@@ -11,17 +11,26 @@ import sys
 from os.path import split as path_split
 
 try:
-    from PyQt5.QtWidgets import *
-    from PyQt5.QtCore import *
+    from PyQt6.QtWidgets import *
+    from PyQt6.QtCore import *
+
+    QSizePolicy.Expanding = QSizePolicy.Policy.Expanding
+    QSizePolicy.Preferred = QSizePolicy.Policy.Preferred
+    Qt.TextSelectableByMouse = Qt.TextInteractionFlag.TextSelectableByMouse
 
 except:
     try:
-        from PyQt4.QtGui import *
-        from PyQt4.QtCore import *
+        from PyQt5.QtWidgets import *
+        from PyQt5.QtCore import *
 
     except:
-        from PySide.QtGui import *
-        from PySide.QtCore import *
+        try:
+            from PyQt4.QtGui import *
+            from PyQt4.QtCore import *
+
+        except:
+            from PySide.QtGui import *
+            from PySide.QtCore import *
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
@@ -266,10 +275,10 @@ class MainWindow(QWidget):
 
 
 if __name__ == "__main__":
-    app = QApplication([])
+    app = QApplication(sys.argv)
 
     mw = MainWindow()
     mw.resize(650, 500)
     mw.show()
 
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
