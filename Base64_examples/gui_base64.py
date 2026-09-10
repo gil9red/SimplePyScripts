@@ -8,19 +8,49 @@ import base64
 import traceback
 import sys
 
-from os.path import split as path_split
+from pathlib import Path
 
 try:
-    from PyQt6.QtWidgets import *
-    from PyQt6.QtCore import *
+    from PyQt6.QtWidgets import (
+        QMessageBox,
+        QWidget,
+        QApplication,
+        QPushButton,
+        QComboBox,
+        QSizePolicy,
+        QCheckBox,
+        QHBoxLayout,
+        QVBoxLayout,
+        QPlainTextEdit,
+        QLabel,
+        QSplitter,
+        QErrorMessage,
+        QTextEdit,
+    )
+    from PyQt6.QtCore import Qt, qVersion
 
     QSizePolicy.Expanding = QSizePolicy.Policy.Expanding
     QSizePolicy.Preferred = QSizePolicy.Policy.Preferred
     Qt.TextSelectableByMouse = Qt.TextInteractionFlag.TextSelectableByMouse
 
 except ImportError:
-    from PyQt5.QtWidgets import *
-    from PyQt5.QtCore import *
+    from PyQt5.QtWidgets import (
+        QMessageBox,
+        QWidget,
+        QApplication,
+        QPushButton,
+        QComboBox,
+        QSizePolicy,
+        QCheckBox,
+        QHBoxLayout,
+        QVBoxLayout,
+        QPlainTextEdit,
+        QLabel,
+        QSplitter,
+        QErrorMessage,
+        QTextEdit,
+    )
+    from PyQt5.QtCore import Qt, qVersion
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
@@ -35,10 +65,11 @@ def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
 sys.excepthook = log_uncaught_exceptions
 
 
+# TODO:
 # from encodings.aliases import aliases
 # print(aliases)
 # OR:
-STANDART_ENCODINGS = [
+STANDART_ENCODINGS: list[str] = [
     "ascii",
     "big5",
     "big5hkscs",
@@ -138,7 +169,7 @@ class MainWindow(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
-        self.setWindowTitle(path_split(__file__)[1])
+        self.setWindowTitle(f"{Path(__file__).stem}. Qt v{qVersion()}")
 
         self.button_direct = QPushButton()
         self.button_direct.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
@@ -175,11 +206,11 @@ class MainWindow(QWidget):
         self.button_detail_error.setToolTip("Detail error")
         self.button_detail_error.clicked.connect(self.show_detail_error_massage)
 
-        self.last_error_message = None
-        self.last_detail_error_message = None
+        self.last_error_message: str | None = None
+        self.last_detail_error_message: str | None = None
 
-        # True -- кодирование текста, False -- раскодирование
-        self.direct_encode_text = True
+        # True - кодирование текста, False - раскодирование
+        self.is_direct_encode_text: bool = True
 
         # Первый вызов, чтобы у кнопки появился текст (заодно это сменит режим кодирования)
         self.change_convert_direct()
@@ -214,7 +245,7 @@ class MainWindow(QWidget):
         # выбрать тип текста, то делаем такой хак.
         mb.findChild(QTextEdit).setPlainText(message)
 
-        mb.exec_()
+        mb.exec()
 
     def input_text_changed(self) -> None:
         self.label_error.clear()
@@ -227,7 +258,7 @@ class MainWindow(QWidget):
             codec_name = self.cb_encoding.currentText()
             in_text = self.text_edit_input.toPlainText().encode(encoding=codec_name)
 
-            if self.direct_encode_text:
+            if self.is_direct_encode_text:
                 text = base64.b64encode(in_text)
             else:
                 text = base64.b64decode(in_text)
@@ -256,15 +287,15 @@ class MainWindow(QWidget):
             self.label_error.setText("Error: " + self.last_error_message)
 
     def change_convert_direct(self) -> None:
-        self.direct_encode_text = not self.direct_encode_text
+        self.is_direct_encode_text = not self.is_direct_encode_text
         self.button_direct.setText(
-            "text -> base64" if self.direct_encode_text else "base64 -> text"
+            "text -> base64" if self.is_direct_encode_text else "base64 -> text"
         )
 
         self.input_text_changed()
 
 
-if __name__ == "__main__":
+def main() -> None:
     app = QApplication(sys.argv)
 
     mw = MainWindow()
@@ -272,3 +303,7 @@ if __name__ == "__main__":
     mw.show()
 
     sys.exit(app.exec())
+
+
+if __name__ == "__main__":
+    main()
