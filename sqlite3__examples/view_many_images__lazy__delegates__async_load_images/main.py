@@ -9,18 +9,9 @@ try:
     from PyQt6.QtCore import Qt, QModelIndex
     from PyQt6.QtSql import QSqlDatabase, QSqlQueryModel, QSqlQuery
 
-    Qt_Horizontal = Qt.Orientation.Horizontal
-
-    class SqlQueryModel(QSqlQueryModel):
-        def data(
-            self,
-            item: QModelIndex,
-            role: Qt.ItemDataRole = Qt.ItemDataRole.DisplayRole,
-        ) -> object:
-            if role == Qt.ItemDataRole.ToolTipRole:
-                return item.model().data(item.model().index(item.row(), column=1))
-
-            return super().data(item, role)
+    Qt.Horizontal = Qt.Orientation.Horizontal
+    Qt.DisplayRole = Qt.ItemDataRole.DisplayRole
+    Qt.ToolTipRole = Qt.ItemDataRole.ToolTipRole
 
     from utils_PyQt6.FileListModel import FileListModel
     from utils_PyQt6.ListImagesWidget import ListImagesWidget
@@ -34,17 +25,17 @@ except ImportError as e:
     from utils.FileListModel import FileListModel
     from utils.ListImagesWidget import ListImagesWidget
 
-    class SqlQueryModel(QSqlQueryModel):
-        def data(self, index: QModelIndex, role: int = Qt.DisplayRole) -> object:
-            if role == Qt.ToolTipRole:
-                return index.model().data(index.model().index(index.row(), 1))
-
-            return super().data(index, role)
-
-    Qt_Horizontal = Qt.Horizontal
-
 
 from db import DB_FILE_NAME
+
+
+class SqlQueryModel(QSqlQueryModel):
+    def data(self, index: QModelIndex, role: int = Qt.DisplayRole) -> object:
+        if role == Qt.ToolTipRole:
+            return index.model().data(index.model().index(index.row(), column=1))
+
+        return super().data(index, role)
+
 
 ICON_WIDTH, ICON_HEIGHT = 128, 128
 IMAGE_CACHE = dict()
@@ -61,8 +52,8 @@ class MainWindow(QWidget):
         self.model_sql = SqlQueryModel()
         self.model_sql.rowsInserted.connect(self._on_added_new_items)
         self.model_sql.modelReset.connect(self._on_added_new_items)
-        self.model_sql.setHeaderData(0, Qt_Horizontal, "ID")
-        self.model_sql.setHeaderData(1, Qt_Horizontal, "FILE_NAME")
+        self.model_sql.setHeaderData(0, Qt.Horizontal, "ID")
+        self.model_sql.setHeaderData(1, Qt.Horizontal, "FILE_NAME")
 
         self.list_view_sql = ListImagesWidget(
             ICON_WIDTH, ICON_HEIGHT, IMAGE_CACHE, file_name_index=1
