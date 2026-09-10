@@ -165,11 +165,14 @@ STANDART_ENCODINGS: list[str] = [
 ]
 
 
+WINDOW_TITLE: str = f"{Path(__file__).stem}. Qt v{qVersion()}"
+
+
 class MainWindow(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
-        self.setWindowTitle(f"{Path(__file__).stem}. Qt v{qVersion()}")
+        self.setWindowTitle(WINDOW_TITLE)
 
         self.button_direct = QPushButton()
         self.button_direct.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
@@ -178,7 +181,7 @@ class MainWindow(QWidget):
         self.cb_encoding.addItems(STANDART_ENCODINGS)
         self.cb_encoding.setFixedWidth(100)
 
-        index = self.cb_encoding.findText("utf_8")
+        index: int = self.cb_encoding.findText("utf_8")
         self.cb_encoding.setCurrentIndex(index)
 
         self.cb_raw = QCheckBox("raw")
@@ -206,8 +209,8 @@ class MainWindow(QWidget):
         self.button_detail_error.setToolTip("Detail error")
         self.button_detail_error.clicked.connect(self.show_detail_error_massage)
 
-        self.last_error_message: str | None = None
-        self.last_detail_error_message: str | None = None
+        self.last_error_message: str = ""
+        self.last_detail_error_message: str = ""
 
         # True - кодирование текста, False - раскодирование
         self.is_direct_encode_text: bool = True
@@ -251,8 +254,8 @@ class MainWindow(QWidget):
         self.label_error.clear()
         self.button_detail_error.hide()
 
-        self.last_error_message = None
-        self.last_detail_error_message = None
+        self.last_error_message = ""
+        self.last_detail_error_message = ""
 
         try:
             codec_name = self.cb_encoding.currentText()
@@ -284,7 +287,13 @@ class MainWindow(QWidget):
             self.last_detail_error_message = str(tb)
             self.button_detail_error.show()
 
-            self.label_error.setText("Error: " + self.last_error_message)
+            self.label_error.setText(f"Error: {self.last_error_message}")
+
+        input_chars: int = len(self.text_edit_input.toPlainText())
+        output_chars: int = len(self.text_edit_output.toPlainText())
+        self.setWindowTitle(
+            f"{WINDOW_TITLE}. Input {input_chars} chars, output {output_chars} chars"
+        )
 
     def change_convert_direct(self) -> None:
         self.is_direct_encode_text = not self.is_direct_encode_text
