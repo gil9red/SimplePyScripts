@@ -8,18 +8,58 @@ import traceback
 import sys
 
 try:
-    from PyQt5.QtWidgets import *
-    from PyQt5.QtCore import *
-    from PyQt5.QtGui import *
+    from PyQt6.QtWidgets import (
+        QApplication,
+        QSizePolicy,
+        QMessageBox,
+        QRadioButton,
+        QPlainTextEdit,
+        QWidget,
+        QLabel,
+        QPushButton,
+        QVBoxLayout,
+        QHBoxLayout,
+        QButtonGroup,
+        QSplitter,
+        QErrorMessage,
+        QTextEdit,
+    )
+    from PyQt6.QtCore import Qt, qVersion
+    from PyQt6.QtGui import QPalette, QTextCursor
+
+    QPalette.Active = QPalette.ColorGroup.Active
+    QPalette.Inactive = QPalette.ColorGroup.Inactive
+
+    QPalette.Highlight = QPalette.ColorRole.Highlight
+    QPalette.HighlightedText = QPalette.ColorRole.HighlightedText
+
+    Qt.TextSelectableByMouse = Qt.TextInteractionFlag.TextSelectableByMouse
+
+    QSizePolicy.Preferred = QSizePolicy.Policy.Preferred
+    QSizePolicy.Expanding = QSizePolicy.Policy.Expanding
+
+    QTextCursor.MoveAnchor = QTextCursor.MoveMode.MoveAnchor
+    QTextCursor.KeepAnchor = QTextCursor.MoveMode.KeepAnchor
 
 except:
-    try:
-        from PyQt4.QtGui import *
-        from PyQt4.QtCore import *
-
-    except:
-        from PySide.QtGui import *
-        from PySide.QtCore import *
+    from PyQt5.QtWidgets import (
+        QApplication,
+        QSizePolicy,
+        QMessageBox,
+        QRadioButton,
+        QPlainTextEdit,
+        QWidget,
+        QLabel,
+        QPushButton,
+        QVBoxLayout,
+        QHBoxLayout,
+        QButtonGroup,
+        QSplitter,
+        QErrorMessage,
+        QTextEdit,
+    )
+    from PyQt5.QtCore import Qt, qVersion
+    from PyQt5.QtGui import QPalette, QTextCursor
 
 # Выбор функции конвертации в зависимости от значения радио-кнопки
 from hex2str import hex2str, str2hex
@@ -85,8 +125,8 @@ class Widget(QWidget):
         self.button_detail_error.setToolTip("Detail error")
         self.button_detail_error.clicked.connect(self.show_detail_error_massage)
 
-        self.last_error_message = None
-        self.last_detail_error_message = None
+        self.last_error_message: str = ""
+        self.last_detail_error_message: str = ""
 
         layout_left_side = QVBoxLayout()
         layout_left_side.setContentsMargins(0, 0, 0, 0)
@@ -205,8 +245,8 @@ class Widget(QWidget):
         self.label_error.clear()
         self.button_detail_error.hide()
 
-        self.last_error_message = None
-        self.last_detail_error_message = None
+        self.last_error_message: str = ""
+        self.last_detail_error_message: str = ""
 
         try:
             func = hex2str if self.radio_button_hex2str.isChecked() else str2hex
@@ -227,7 +267,7 @@ class Widget(QWidget):
             self.last_detail_error_message = str(tb)
             self.button_detail_error.show()
 
-            self.label_error.setText("Error: " + self.last_error_message)
+            self.label_error.setText(f"Error: {self.last_error_message}")
 
         input_chars: int = len(self.text_edit_input.toPlainText())
         output_chars: int = len(self.text_edit_output.toPlainText())
@@ -244,4 +284,4 @@ if __name__ == "__main__":
     mw.text_edit_input.setPlainText("504F53542068747470733A")
     mw.show()
 
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
