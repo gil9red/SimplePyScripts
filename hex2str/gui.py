@@ -37,11 +37,14 @@ def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
 sys.excepthook = log_uncaught_exceptions
 
 
+WINDOW_TITLE: str = f"hex2str. Qt v{qVersion()}"
+
+
 class Widget(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
-        self.setWindowTitle("hex2str")
+        self.setWindowTitle(WINDOW_TITLE)
 
         self.radio_button_hex2str = QRadioButton("hex2str")
         self.radio_button_hex2str.setChecked(True)
@@ -225,6 +228,12 @@ class Widget(QWidget):
             self.button_detail_error.show()
 
             self.label_error.setText("Error: " + self.last_error_message)
+
+        input_chars: int = len(self.text_edit_input.toPlainText())
+        output_chars: int = len(self.text_edit_output.toPlainText())
+        self.setWindowTitle(
+            f"{WINDOW_TITLE}. Input {input_chars} chars, output {output_chars} chars"
+        )
 
 
 if __name__ == "__main__":
