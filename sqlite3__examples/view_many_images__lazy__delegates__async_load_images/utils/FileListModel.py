@@ -64,5 +64,6 @@ class FileListModel(QAbstractListModel):
 
         self.fileList = fileList
         self.fileCount = 0
+        self.numberPopulated.emit(0)
 
         self.endResetModel()
