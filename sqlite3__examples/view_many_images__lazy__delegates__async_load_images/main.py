@@ -6,7 +6,8 @@ __author__ = "ipetrash"
 
 try:
     from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel
-    from PyQt6.QtCore import Qt, QModelIndex
+    from PyQt6.QtCore import Qt, QModelIndex, qVersion
+    from PyQt6.QtGui import QImage
     from PyQt6.QtSql import QSqlDatabase, QSqlQueryModel, QSqlQuery
 
     Qt.Horizontal = Qt.Orientation.Horizontal
@@ -19,7 +20,8 @@ try:
 except ImportError as e:
 
     from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel
-    from PyQt5.QtCore import Qt, QModelIndex
+    from PyQt5.QtCore import Qt, QModelIndex, qVersion
+    from PyQt6.QtGui import QImage
     from PyQt5.QtSql import QSqlDatabase, QSqlQueryModel, QSqlQuery
 
     from utils.FileListModel import FileListModel
@@ -37,8 +39,13 @@ class SqlQueryModel(QSqlQueryModel):
         return super().data(index, role)
 
 
-ICON_WIDTH, ICON_HEIGHT = 128, 128
-IMAGE_CACHE = dict()
+WINDOW_TITLE: str = f"lazy-images. Qt v{qVersion()}"
+
+ICON_WIDTH: int = 128
+ICON_HEIGHT: int = 128
+
+IMAGE_CACHE: dict[str, QImage | None] = dict()
+
 
 
 class MainWindow(QWidget):
@@ -87,6 +94,7 @@ class MainWindow(QWidget):
 
     def _on_added_new_items(self) -> None:
         self.setWindowTitle(
+            f"{WINDOW_TITLE}. "
             f"Items. "
             f"SQL: {self.model_sql.rowCount()} / {self.total_rows_sql} ({self.model_sql.rowCount() / self.total_rows_sql:.1%}) | "
             f"FILES: {self.model_files.rowCount()} / {self.total_rows_sql} ({self.model_files.rowCount() / self.total_rows_sql:.1%})"
