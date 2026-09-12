@@ -32,7 +32,7 @@ from db import DB_FILE_NAME
 class SqlQueryModel(QSqlQueryModel):
     def data(self, index: QModelIndex, role: int = Qt.DisplayRole) -> object:
         if role == Qt.ToolTipRole:
-            return index.model().data(index.model().index(index.row(), column=1))
+            return index.model().data(index.model().index(index.row(), 1))
 
         return super().data(index, role)
 
