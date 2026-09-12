@@ -89,7 +89,7 @@ class FileListModel(QAbstractListModel):
 
         self.numberPopulated.emit(itemsToFetch)
 
-    def set_file_list(self, file_list: list[str]) -> None:
+    def set_total_file_list(self, file_list: list[str]) -> None:
         self.beginResetModel()
 
         self.total_file_list = file_list

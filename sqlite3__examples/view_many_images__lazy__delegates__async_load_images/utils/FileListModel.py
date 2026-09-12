@@ -14,22 +14,22 @@ class FileListModel(QAbstractListModel):
     def __init__(self, batch_size=50, parent=None):
         super().__init__(parent)
 
-        self.fileList = []
-        self.fileCount = 0
+        self.total_file_list = []
+        self.current_file_count = 0
         self.batch_size = batch_size
 
     def rowCount(self, parent: QModelIndex = None) -> int:
-        return self.fileCount
+        return self.current_file_count
 
     def data(self, index: QModelIndex, role=Qt.DisplayRole) -> QVariant:
         if not index.isValid():
             return QVariant()
 
-        if index.row() >= len(self.fileList) or index.row() < 0:
+        if index.row() >= len(self.total_file_list) or index.row() < 0:
             return QVariant()
 
         if role == Qt.DisplayRole or role == Qt.ToolTipRole:
-            return self.fileList[index.row()]
+            return self.total_file_list[index.row()]
 
         # elif role == Qt.BackgroundRole:
         #     batch = (index.row() // self.batch_size) % 2
@@ -41,29 +41,29 @@ class FileListModel(QAbstractListModel):
         return QVariant()
 
     def canFetchMore(self, parent: QModelIndex = None) -> bool:
-        return self.fileCount < len(self.fileList)
+        return self.current_file_count < len(self.total_file_list)
 
     def fetchMore(self, parent: QModelIndex = None):
-        remainder = len(self.fileList) - self.fileCount
+        remainder = len(self.total_file_list) - self.current_file_count
         itemsToFetch = min(self.batch_size, remainder)
         if itemsToFetch <= 0:
             return
 
         self.beginInsertRows(
-            QModelIndex(), self.fileCount, self.fileCount + itemsToFetch - 1
+            QModelIndex(), self.current_file_count, self.current_file_count + itemsToFetch - 1
         )
 
-        self.fileCount += itemsToFetch
+        self.current_file_count += itemsToFetch
 
         self.endInsertRows()
 
         self.numberPopulated.emit(itemsToFetch)
 
-    def set_file_list(self, fileList: list):
+    def set_total_file_list(self, fileList: list):
         self.beginResetModel()
 
-        self.fileList = fileList
-        self.fileCount = 0
+        self.total_file_list = fileList
+        self.current_file_count = 0
         self.numberPopulated.emit(0)
 
         self.endResetModel()

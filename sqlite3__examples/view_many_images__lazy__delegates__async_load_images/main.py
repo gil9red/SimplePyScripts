@@ -75,7 +75,7 @@ class MainWindow(QWidget):
         self.list_view_files.setModel(self.model_files)
 
         self.model_sql.setQuery("SELECT id, file_name FROM File")
-        self.model_files.set_file_list(list_files)
+        self.model_files.set_total_file_list(list_files)
 
         layout = QVBoxLayout()
         layout.addWidget(QLabel("SQL:"))
