@@ -25,15 +25,15 @@ class FileListModel(QAbstractListModel):
 
         self.batch_size: int = batch_size
 
-        self.fileList: list[str] = []
-        self.fileCount: int = 0
+        self.total_file_list: list[str] = []
+        self.current_file_count: int = 0
 
         self.main_file: str | None = None
         self.matched_files: list[str] = []
         self.mark_matching: bool = True
 
     def rowCount(self, parent: QModelIndex | None = None) -> int:
-        return self.fileCount
+        return self.current_file_count
 
     def data(
         self,
@@ -43,10 +43,10 @@ class FileListModel(QAbstractListModel):
         if not index.isValid():
             return QVariant()
 
-        if index.row() >= len(self.fileList) or index.row() < 0:
+        if index.row() >= len(self.total_file_list) or index.row() < 0:
             return QVariant()
 
-        file_name = self.fileList[index.row()]
+        file_name = self.total_file_list[index.row()]
 
         if role == Qt.ItemDataRole.DisplayRole or role == Qt.ItemDataRole.ToolTipRole:
             return file_name
@@ -71,19 +71,19 @@ class FileListModel(QAbstractListModel):
         return QVariant()
 
     def canFetchMore(self, parent: QModelIndex | None = None) -> bool:
-        return self.fileCount < len(self.fileList)
+        return self.current_file_count < len(self.total_file_list)
 
     def fetchMore(self, parent: QModelIndex | None = None) -> None:
-        remainder = len(self.fileList) - self.fileCount
+        remainder = len(self.total_file_list) - self.current_file_count
         itemsToFetch = min(self.batch_size, remainder)
         if itemsToFetch <= 0:
             return
 
         self.beginInsertRows(
-            QModelIndex(), self.fileCount, self.fileCount + itemsToFetch - 1
+            QModelIndex(), self.current_file_count, self.current_file_count + itemsToFetch - 1
         )
 
-        self.fileCount += itemsToFetch
+        self.current_file_count += itemsToFetch
 
         self.endInsertRows()
 
@@ -92,8 +92,8 @@ class FileListModel(QAbstractListModel):
     def set_file_list(self, file_list: list[str]) -> None:
         self.beginResetModel()
 
-        self.fileList = file_list
-        self.fileCount = 0
+        self.total_file_list = file_list
+        self.current_file_count = 0
 
         self.endResetModel()
 
@@ -108,7 +108,7 @@ class FileListModel(QAbstractListModel):
 
     def get_index_by_file_name(self, file_name: str, column: int = 0) -> QModelIndex:
         try:
-            row = self.fileList.index(file_name)
+            row = self.total_file_list.index(file_name)
             return self.index(row, column)
         except ValueError:
             pass
