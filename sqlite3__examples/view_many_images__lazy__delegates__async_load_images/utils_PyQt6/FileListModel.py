@@ -97,6 +97,23 @@ class FileListModel(QAbstractListModel):
             items_to_fetch, self.current_file_count, self.total_file_count
         )
 
+    def removeRows(self, row: int, count: int, parent :QModelIndex | None=None) -> bool:
+        self.beginRemoveRows(parent, row, row + count - 1)
+
+        del self.total_file_list[row: row + count]
+        self.current_file_count -= count
+
+        self.endRemoveRows()
+
+        # TODO: Зачем вообще нужен items_to_fetch?
+        remainder: int = self.total_file_count - self.current_file_count
+        items_to_fetch: int = min(self.batch_size, remainder)
+        self.numberPopulated.emit(
+            items_to_fetch, self.current_file_count, self.total_file_count
+        )
+
+        return True
+
     def set_total_file_list(self, file_list: list[str]) -> None:
         self.beginResetModel()
 

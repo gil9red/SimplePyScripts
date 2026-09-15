@@ -6,7 +6,7 @@ __author__ = "ipetrash"
 
 from PyQt6.QtGui import QImage
 from PyQt6.QtWidgets import QListView
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QModelIndex
 
 from .ThumbnailDelegate import ThumbnailDelegate
 
@@ -21,6 +21,8 @@ class ListImagesWidget(QListView):
     ) -> None:
         super().__init__()
 
+        self.image_cache: dict[str, QImage | None] = image_cache
+
         self.setMovement(QListView.Movement.Static)
         self.setDragEnabled(False)
         self.setDragDropMode(QListView.DragDropMode.NoDragDrop)
@@ -31,7 +33,7 @@ class ListImagesWidget(QListView):
         self.setUniformItemSizes(True)
         self.setItemDelegate(
             ThumbnailDelegate(
-                self, icon_width, icon_height, image_cache, file_name_index
+                self, icon_width, icon_height, self.image_cache, file_name_index
             )
         )
 
@@ -41,3 +43,21 @@ class ListImagesWidget(QListView):
             return None
 
         return index.data(Qt.ItemDataRole.DisplayRole)
+
+    def removeFromList(self, file_name: str) -> None:
+        model = self.model()
+
+        found_indexes: list[QModelIndex] = model.match(
+            model.index(0, 0),
+            Qt.ItemDataRole.DisplayRole,
+            file_name,
+            1,  # hits
+            Qt.MatchFlag.MatchExactly,
+        )
+        if found_indexes:
+            target_index: QModelIndex = found_indexes[0]
+            model.removeRow(target_index.row())
+
+            file_name = target_index.data(Qt.ItemDataRole.DisplayRole)
+            if file_name in self.image_cache:
+                self.image_cache.pop(file_name)
