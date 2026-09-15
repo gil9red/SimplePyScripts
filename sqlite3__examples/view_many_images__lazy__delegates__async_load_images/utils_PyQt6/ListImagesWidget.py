@@ -16,12 +16,12 @@ class ListImagesWidget(QListView):
         self,
         icon_width: int,
         icon_height: int,
-        image_cache: dict[str, QImage | None],
+        image_cache: dict[str, QImage],
         file_name_index: int,
     ) -> None:
         super().__init__()
 
-        self.image_cache: dict[str, QImage | None] = image_cache
+        self.image_cache: dict[str, QImage] = image_cache
 
         self.setMovement(QListView.Movement.Static)
         self.setDragEnabled(False)

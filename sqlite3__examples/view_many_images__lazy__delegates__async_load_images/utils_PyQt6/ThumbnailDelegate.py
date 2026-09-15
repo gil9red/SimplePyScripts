@@ -43,7 +43,7 @@ class ThumbnailDelegate(QStyledItemDelegate):
         view: QAbstractItemView,
         width: int,
         height: int,
-        image_cache: dict[str, QImage | None],
+        image_cache: dict[str, QImage],
         file_name_index: int = 0,
     ) -> None:
         super().__init__()
@@ -53,7 +53,7 @@ class ThumbnailDelegate(QStyledItemDelegate):
         self.title_height: int = 20
         self.title_margin: int = 5
         self.view: QAbstractItemView = view
-        self.image_cache: dict[str, QImage | None] = image_cache
+        self.image_cache: dict[str, QImage] = image_cache
         self.file_name_index: int = file_name_index
 
     def _on_about_image(
@@ -121,13 +121,9 @@ class ThumbnailDelegate(QStyledItemDelegate):
         if file_name in self.image_cache:
             img = self.image_cache[file_name]
             if img and not img.isNull():
-                painter.drawImage(
-                    rect.topLeft(),
-                    # QRect(rect.left(), rect.top(), rect.width(), rect.height() - self.title_height),
-                    img,
-                )
+                painter.drawImage(rect.topLeft(), img)
         else:
-            self.image_cache[file_name] = None
+            self.image_cache[file_name] = QImage()
 
             worker = ThumbnailWorker(file_name, self.width, self.height)
             worker.signals.about_image.connect(
