@@ -45,10 +45,10 @@ def process(
     corrupted_words_count: int = 0
     ignored_words_count: int = 0
 
-    suffix_total_counter: dict[str, int] = Counter()
-    suffix_checked_counter: dict[str, int] = Counter()
-    suffix_corrupted_files_counter: dict[str, int] = Counter()
-    suffix_corrupted_words_counter: dict[str, int] = Counter()
+    suffix_total_counter: Counter[str] = Counter()
+    suffix_checked_counter: Counter[str] = Counter()
+    suffix_corrupted_files_counter: Counter[str] = Counter()
+    suffix_corrupted_words_counter: Counter[str] = Counter()
 
     start_dt: datetime = datetime.now()
 

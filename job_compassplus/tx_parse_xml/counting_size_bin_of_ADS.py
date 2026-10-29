@@ -19,7 +19,7 @@ def process(path_layer: str):
         raise Exception(f"Not exists: {path_layer}")
 
     total_files: int = 0
-    module_by_size = Counter()
+    module_by_size: Counter[str] = Counter()
 
     for path_bin in Path(path_layer).glob("ads/*/bin"):
         module: str = path_bin.parent.name

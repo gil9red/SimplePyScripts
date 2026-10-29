@@ -124,8 +124,8 @@ for f in DIR.rglob("*"):
         import sys
         print("[#] TODO: REPORT not supported", file=sys.stderr)
     else:
-        tc_by_counter = Counter()
-        tc_tcr_by_counter = Counter()
+        tc_by_counter: Counter[str] = Counter()
+        tc_tcr_by_counter: Counter[str] = Counter()
 
         for line in lines:
             tc: str = line[:2]

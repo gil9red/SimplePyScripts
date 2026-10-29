@@ -17,8 +17,8 @@ for path in DIR.rglob("*"):
 
     print(path)
 
-    tc_by_counter = Counter()
-    tc_tcr_by_counter = Counter()
+    tc_by_counter: Counter[str] = Counter()
+    tc_tcr_by_counter: Counter[str] = Counter()
 
     with open(path, "rb") as f:
         for line in f:
