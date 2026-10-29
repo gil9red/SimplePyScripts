@@ -12,7 +12,8 @@ DIR = Path(__file__).parent.resolve()
 path_output = DIR / "tc33a-all-files.txt"
 
 with open(path_output, "w", encoding="ascii") as f_out:
-    path_dir = Path(r"C:\DOC\Visa спецификации\Base II TC33A\TC33_Capture_Transaction")
+    # TODO:
+    path_dir = Path(r"C:\DOC\Visa\Base II TC33A\TC33_Capture_Transaction")
     for f in path_dir.rglob("*.*"):
         if not f.is_file():
             print(f"[#] Не файл: {str(f)!r}")

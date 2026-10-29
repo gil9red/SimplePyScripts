@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 # TODO: argparser
-DIR = Path(r"C:\Users\ipetrash\Desktop\Visa Base 2")
+DIR = Path(r"C:\Users\ipetrash\Desktop\IMPORT_EXPORT\Visa Base 2")
 
 for path in DIR.rglob("*"):
     if not path.is_file() or "errors" in str(path):
@@ -22,10 +22,11 @@ for path in DIR.rglob("*"):
 
     with open(path, "rb") as f:
         for line in f:
-            is_ctf: bool = len(line.rstrip(b"\n\r")) == 168
+            is_ctf: bool = len(line.rstrip(b"\n\r")) == 168  # TODO: Возможно просто "\n"
             tc_raw: bytes = line[:2]
             tcr_raw: bytes = line[3:4] if is_ctf else line[5:6]
             # TODO: Support EBCDIC, example b'\xf9\xf0' -> 90
+            #       Нужно проверить и использовать кодировку cp500
             try:
                 tc: str = tc_raw.decode("ascii")
             except UnicodeDecodeError as e:
@@ -41,8 +42,8 @@ for path in DIR.rglob("*"):
             if not tc.strip() or tc in ["90", "91", "92", "00"]:
                 continue
 
-            tc_by_counter.update([tc])
-            tc_tcr_by_counter.update([f"{tc}-{tcr}"])
+            tc_by_counter[tc] += 1
+            tc_tcr_by_counter[f"{tc}-{tcr}"] += 1
 
     print("    TC:     " + ", ".join(f"{k}: {v}" for k, v in tc_by_counter.items()))
     print("    TC-TCR: " + ", ".join(f"{k}: {v}" for k, v in tc_tcr_by_counter.items()))

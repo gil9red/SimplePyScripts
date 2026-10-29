@@ -137,8 +137,8 @@ for f in DIR.rglob("*"):
             # TODO: для tc == 33 особенная логика разбора - есть те, что P17 имеют особенный идентификатор
             # TODO: для tc == 33 A особенная логика разбора - чтобы идентифицировать конкретные CPdd + TCR
 
-            tc_by_counter.update([tc])
-            tc_tcr_by_counter.update([f"{tc}-{tcr}"])
+            tc_by_counter[tc] += 1
+            tc_tcr_by_counter[f"{tc}-{tcr}"] += 1
 
         # TODO: Отдельно, нужно группировать TC33 - там всякие дополнительные записи есть
 
