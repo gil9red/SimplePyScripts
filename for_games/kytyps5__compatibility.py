@@ -21,6 +21,23 @@ class LatestReport:
 
 
 @dataclass
+class Screenshot:
+    title: str
+    screenshot: str
+    os: str
+    tested_date: str
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> Self:
+        return cls(
+            title=data["title"],
+            screenshot=data["screenshot"],
+            os=data["os"],
+            tested_date=data["testedDate"],
+        )
+
+
+@dataclass
 class Game:
     key: str
     title: str
@@ -31,7 +48,7 @@ class Game:
     latest_tested: str
     report_revision: str
     latest_report: LatestReport
-    screenshots: list[str] = field(default_factory=list)
+    screenshots: list[Screenshot] = field(default_factory=list)
     all_title_ids: list[str] = field(default_factory=list)
     aliases: list[str] = field(default_factory=list)
 
@@ -47,7 +64,9 @@ class Game:
             latest_tested=data["latestTested"],
             report_revision=data["reportRevision"],
             latest_report=LatestReport.from_dict(data["latestReport"]),
-            screenshots=data["screenshots"],
+            screenshots=[
+                Screenshot.from_dict(screenshot) for screenshot in data["screenshots"]
+            ],
             all_title_ids=data["allTitleIds"],
             aliases=data["aliases"],
         )
