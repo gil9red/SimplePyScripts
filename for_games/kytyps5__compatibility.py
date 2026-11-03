@@ -5,6 +5,7 @@ __author__ = "ipetrash"
 
 
 from dataclasses import dataclass, field
+from datetime import date
 from typing import Any, Self
 
 import requests
@@ -13,11 +14,14 @@ import requests
 @dataclass
 class LatestReport:
     os: str
-    tested_date: str
+    tested_date: date
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:
-        return cls(os=data["os"], tested_date=data["testedDate"])
+        return cls(
+            os=data["os"],
+            tested_date=date.fromisoformat(data["testedDate"]),
+        )
 
 
 @dataclass
@@ -25,7 +29,7 @@ class Screenshot:
     title: str
     screenshot: str
     os: str
-    tested_date: str
+    tested_date: date
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:
@@ -33,7 +37,7 @@ class Screenshot:
             title=data["title"],
             screenshot=data["screenshot"],
             os=data["os"],
-            tested_date=data["testedDate"],
+            tested_date=date.fromisoformat(data["testedDate"]),
         )
 
 
@@ -45,7 +49,7 @@ class Game:
     overall: str
     os: dict[str, str]
     report_counts: dict[str, int]
-    latest_tested: str
+    latest_tested: date
     report_revision: str
     latest_report: LatestReport
     screenshots: list[Screenshot] = field(default_factory=list)
@@ -61,7 +65,7 @@ class Game:
             overall=data["overall"],
             os=data["os"],
             report_counts=data["reportCounts"],
-            latest_tested=data["latestTested"],
+            latest_tested=date.fromisoformat(data["latestTested"]),
             report_revision=data["reportRevision"],
             latest_report=LatestReport.from_dict(data["latestReport"]),
             screenshots=[
