@@ -26,7 +26,7 @@ sys.excepthook = log_uncaught_exceptions
 
 
 class MainWindow(QWidget):
-    ESCAPE_RULES = [
+    ESCAPE_RULES: list[tuple[str, str, str, bool]] = [
         ('"', '"', r"\"", True),
         ("'", "'", r"\'", False),
         (r"\n", "\n", r"\n", True),
@@ -35,15 +35,15 @@ class MainWindow(QWidget):
         (r"\f", "\f", r"\f", False),
         ("\\", "\\", "\\\\", False),
     ]
-    TITLE = f"EscapeString. Qt v{qVersion()}"
+    TITLE: str = f"EscapeString. Qt v{qVersion()}"
 
-    def __init__(self, parent=None) -> None:
+    def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
 
         self.setWindowTitle(self.TITLE)
 
-        self.escape_char_by_checkbox = {}
-        self.char_by_escape = {}
+        self.escape_char_by_checkbox: dict[str, QCheckBox] = dict()
+        self.char_by_escape: dict[str, str] = dict()
 
         button_layout = QHBoxLayout()
         for title, char, escape, checked in self.ESCAPE_RULES:
@@ -96,8 +96,8 @@ class MainWindow(QWidget):
         self.button_detail_error.clicked.connect(self.show_detail_error_massage)
         self.button_detail_error.hide()
 
-        self.last_error_message = None
-        self.last_detail_error_message = None
+        self.last_error_message: str = ""
+        self.last_detail_error_message: str = ""
 
         self.text_edit_input.textChanged.connect(self.input_text_changed)
 
@@ -123,7 +123,7 @@ class MainWindow(QWidget):
         if not self.last_error_message or not self.last_detail_error_message:
             return
 
-        message = self.last_error_message + "\n\n" + self.last_detail_error_message
+        message: str = self.last_error_message + "\n\n" + self.last_detail_error_message
 
         mb = QErrorMessage()
         mb.setWindowTitle("Error")
@@ -134,8 +134,8 @@ class MainWindow(QWidget):
 
         mb.exec_()
 
-    def _escape(self, in_text: str, ignored="") -> str:
-        out_text = []
+    def _escape(self, in_text: str, ignored: str = "") -> str:
+        out_text: list[str] = []
         for char in in_text:
             # Если char нет в словаре экранирования, или флаг экранирования для char выключен,
             # или char среди игнорируемых
@@ -155,22 +155,21 @@ class MainWindow(QWidget):
         self.label_error.clear()
         self.button_detail_error.hide()
 
-        self.last_error_message = None
-        self.last_detail_error_message = None
+        self.last_error_message = ""
+        self.last_detail_error_message = ""
 
         try:
-            t = time.perf_counter()
+            t: float = time.perf_counter()
+            in_text: str = self.text_edit_input.toPlainText()
 
-            in_text = self.text_edit_input.toPlainText()
-
+            out_text: str
             if self.cb_save_multiline.isChecked():
-                lines = []
+                lines: list[str] = []
                 for line in in_text.splitlines(keepends=True):
                     line = self._escape(line)
                     lines.append(f'"{line}"')
 
                 out_text = " +\n".join(lines)
-
             else:
                 out_text = self._escape(in_text)
 
@@ -214,10 +213,7 @@ if __name__ == "__main__":
     mw.show()
 
     mw.text_edit_input.setPlainText(
-        "<xml>\n"
-        "    <tag>foo</tag>\n"
-        "    <tag>bar</tag>\n"
-        "</xml>"
+        "<xml>\n    <tag>foo</tag>\n    <tag>bar</tag>\n</xml>"
     )
 
     sys.exit(app.exec_())
