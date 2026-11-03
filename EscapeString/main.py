@@ -73,7 +73,7 @@ class MainWindow(QWidget):
         button_layout.addStretch()
 
         self.cb_save_multiline = QCheckBox("Save multiline")
-        self.cb_save_multiline.setChecked(False)
+        self.cb_save_multiline.setChecked(True)
         self.cb_save_multiline.clicked.connect(self.input_text_changed)
         button_layout.addWidget(self.cb_save_multiline)
 
