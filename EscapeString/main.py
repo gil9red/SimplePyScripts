@@ -223,4 +223,11 @@ if __name__ == "__main__":
     mw.resize(650, 500)
     mw.show()
 
+    mw.text_edit_input.setPlainText(
+        "<xml>\n"
+        "    <tag>foo</tag>\n"
+        "    <tag>bar</tag>\n"
+        "</xml>"
+    )
+
     sys.exit(app.exec_())
