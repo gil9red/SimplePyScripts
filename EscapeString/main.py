@@ -45,7 +45,7 @@ class MainWindow(QWidget):
         (r"\f", "\f", r"\f", False),
         ("\\", "\\", "\\\\", False),
     ]
-    TITLE = "EscapeString"
+    TITLE = f"EscapeString. Qt v{qVersion()}"
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
