@@ -4,6 +4,8 @@
 __author__ = "ipetrash"
 
 
+import re
+
 from dataclasses import dataclass, field
 from datetime import date
 from typing import Any, Self
@@ -79,7 +81,21 @@ class Game:
 URL: str = "https://kytyps5.github.io/data/compat-index.json"
 
 
-def get_compatibility() -> list[Game]:
+# NOTE: https://github.com/gil9red/SimplePyScripts/blob/3eca1c95e5fb15684a75d20c8d1142a1c3e1698e/video_parsers/youtube/search_video_in_channels.py#L16-L26
+def smart_comparing(game_name: str, playlist_title: str) -> bool:
+    # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/55b3256c9cfaf338ef0e055c08d8d60720c66c79/html_parsing/get_game_genres/common.py#L31
+    def clear_name(name: str) -> str:
+        return re.sub(r"\W", "", name)
+
+    clear_game_name = clear_name(game_name).lower()
+    clear_playlist_title = clear_name(playlist_title).lower()
+    return (
+        clear_game_name in clear_playlist_title
+        or clear_playlist_title in clear_game_name
+    )
+
+
+def get_compatibility(filters: list[str] | None = None) -> list[Game]:
     rs = requests.get(URL)
     rs.raise_for_status()
 
@@ -87,7 +103,15 @@ def get_compatibility() -> list[Game]:
     if not data.get("games"):
         raise Exception("No games found")
 
-    return [Game.from_dict(game_data) for game_data in data["games"]]
+    games = [Game.from_dict(game_data) for game_data in data["games"]]
+    if filters:
+        games = [
+            game
+            for game in games
+            if any(smart_comparing(game.title, name) for name in filters)
+        ]
+
+    return games
 
 
 if __name__ == "__main__":
@@ -143,27 +167,37 @@ if __name__ == "__main__":
         "Astro Bot",
         "Gran Turismo 7",
     ]
+    for game in get_compatibility(filters=TARGET_GAMES):
+        print(game)
 
-    import re
-
-    # NOTE: https://github.com/gil9red/SimplePyScripts/blob/3eca1c95e5fb15684a75d20c8d1142a1c3e1698e/video_parsers/youtube/search_video_in_channels.py#L16-L26
-    def smart_comparing(game_name: str, playlist_title: str) -> bool:
-        # SOURCE: https://github.com/gil9red/SimplePyScripts/blob/55b3256c9cfaf338ef0e055c08d8d60720c66c79/html_parsing/get_game_genres/common.py#L31
-        def clear_name(name: str) -> str:
-            return re.sub(r"\W", "", name)
-
-        clear_game_name = clear_name(game_name).lower()
-        clear_playlist_title = clear_name(playlist_title).lower()
-        return (
-            clear_game_name in clear_playlist_title
-            or clear_playlist_title in clear_game_name
-        )
-
-    for game in games:
-        if any(smart_comparing(game.title, name) for name in TARGET_GAMES):
-            print(game)
+        lines: list[str] = [
+            game.title,
+            "OS:",
+            "\n".join(f"    {os.title()}: {stat}" for os, stat in game.os.items()),
+            f"Latest Tested: {game.latest_tested}",
+        ]
+        print("\n".join(lines))
+        print()
     """
-    Game(key='PPSA21564', title='ASTRO BOT', title_id='PPSA21564', overall='in-game', os={'windows': 'in-game', 'linux': 'in-game', 'macos': 'doesnt-boot'}, report_counts={'windows': 1, 'linux': 1, 'macos': 1}, latest_tested='2026-10-28', report_revision='f53045348098276f', latest_report=LatestReport(os='windows', tested_date='2026-10-28'), screenshots=[{'title': 'ASTRO BOT', 'screenshot': 'https://github.com/user-attachments/assets/054b8fd0-49f6-44f3-bb69-a4a4f250a0ad', 'testedDate': '2026-10-02', 'os': 'linux'}, {'title': 'ASTRO BOT', 'screenshot': 'https://github.com/user-attachments/assets/30f7eb21-9913-4b91-a9f7-0ddc8eacc0b1', 'testedDate': '2026-10-02', 'os': 'linux'}, {'title': 'ASTRO BOT', 'screenshot': 'https://github.com/user-attachments/assets/c8abca24-6fe3-41d4-a383-cc8363580c6b', 'testedDate': '2026-10-02', 'os': 'linux'}, {'title': 'ASTRO BOT', 'screenshot': 'https://github.com/user-attachments/assets/0a11bd6e-1c17-47fb-9737-62ae3514a628', 'testedDate': '2026-10-02', 'os': 'linux'}], all_title_ids=['PPSA21559', 'PPSA21564', 'PPSA21567', 'PPSA21568', 'PPSA23060', 'PPSA23687'], aliases=['astro-bot-windows', 'astro-bot-macos', 'astro-bot-linux'])
-    Game(key='PPSA01342', title="Demon's Souls", title_id='PPSA01342', overall='main-menu', os={'windows': 'main-menu', 'linux': 'logo'}, report_counts={'windows': 1, 'linux': 1}, latest_tested='2026-10-26', report_revision='dfea0b4373d04eec', latest_report=LatestReport(os='linux', tested_date='2026-10-26'), screenshots=[], all_title_ids=['PPSA01339', 'PPSA01340', 'PPSA01341', 'PPSA01342', 'PPSA01678', 'PPSA01689', 'PPSA01690', 'PPSA01691'], aliases=['demon-souls-linux', 'demon-s-souls-windows'])
-    Game(key='PPSA01317', title='Gran Turismo™ 7', title_id='PPSA01317', overall='in-game', os={'windows': 'in-game', 'linux': 'logo'}, report_counts={'windows': 1, 'linux': 1}, latest_tested='2026-10-27', report_revision='523f997e15cfc7fe', latest_report=LatestReport(os='linux', tested_date='2026-10-27'), screenshots=[], all_title_ids=['PPSA01315', 'PPSA01316', 'PPSA01317', 'PPSA01318', 'PPSA05483', 'PPSA05484', 'PPSA05485', 'PPSA05486'], aliases=['gran-turismo-7-linux', 'gran-turismo-7-windows'])    
+    Game(key='PPSA21564', title='ASTRO BOT', title_id='PPSA21564', overall='in-game', os={'windows': 'in-game', 'linux': 'in-game', 'macos': 'doesnt-boot'}, report_counts={'windows': 1, 'linux': 1, 'macos': 1}, latest_tested=datetime.date(2026, 10, 28), report_revision='f53045348098276f', latest_report=LatestReport(os='windows', tested_date=datetime.date(2026, 10, 28)), screenshots=[Screenshot(title='ASTRO BOT', screenshot='https://github.com/user-attachments/assets/054b8fd0-49f6-44f3-bb69-a4a4f250a0ad', os='linux', tested_date=datetime.date(2026, 10, 2)), Screenshot(title='ASTRO BOT', screenshot='https://github.com/user-attachments/assets/30f7eb21-9913-4b91-a9f7-0ddc8eacc0b1', os='linux', tested_date=datetime.date(2026, 10, 2)), Screenshot(title='ASTRO BOT', screenshot='https://github.com/user-attachments/assets/c8abca24-6fe3-41d4-a383-cc8363580c6b', os='linux', tested_date=datetime.date(2026, 10, 2)), Screenshot(title='ASTRO BOT', screenshot='https://github.com/user-attachments/assets/0a11bd6e-1c17-47fb-9737-62ae3514a628', os='linux', tested_date=datetime.date(2026, 10, 2))], all_title_ids=['PPSA21559', 'PPSA21564', 'PPSA21567', 'PPSA21568', 'PPSA23060', 'PPSA23687'], aliases=['astro-bot-windows', 'astro-bot-macos', 'astro-bot-linux'])
+    ASTRO BOT
+    OS:
+        Windows: in-game
+        Linux: in-game
+        Macos: doesnt-boot
+    Latest Tested: 2026-10-28
+    
+    Game(key='PPSA01342', title="Demon's Souls", title_id='PPSA01342', overall='main-menu', os={'windows': 'main-menu', 'linux': 'logo'}, report_counts={'windows': 1, 'linux': 1}, latest_tested=datetime.date(2026, 10, 26), report_revision='dfea0b4373d04eec', latest_report=LatestReport(os='linux', tested_date=datetime.date(2026, 10, 26)), screenshots=[], all_title_ids=['PPSA01339', 'PPSA01340', 'PPSA01341', 'PPSA01342', 'PPSA01678', 'PPSA01689', 'PPSA01690', 'PPSA01691'], aliases=['demon-souls-linux', 'demon-s-souls-windows'])
+    Demon's Souls
+    OS:
+        Windows: main-menu
+        Linux: logo
+    Latest Tested: 2026-10-26
+    
+    Game(key='PPSA01317', title='Gran Turismo™ 7', title_id='PPSA01317', overall='in-game', os={'windows': 'in-game', 'linux': 'logo'}, report_counts={'windows': 1, 'linux': 1}, latest_tested=datetime.date(2026, 10, 27), report_revision='523f997e15cfc7fe', latest_report=LatestReport(os='linux', tested_date=datetime.date(2026, 10, 27)), screenshots=[], all_title_ids=['PPSA01315', 'PPSA01316', 'PPSA01317', 'PPSA01318', 'PPSA05483', 'PPSA05484', 'PPSA05485', 'PPSA05486'], aliases=['gran-turismo-7-linux', 'gran-turismo-7-windows'])
+    Gran Turismo™ 7
+    OS:
+        Windows: in-game
+        Linux: logo
+    Latest Tested: 2026-10-27
     """
