@@ -12,6 +12,9 @@ from typing import Any, Self
 
 import requests
 
+HOST: str = "https://kytyps5.github.io"
+URL: str = f"{HOST}/data/compat-index.json"
+
 
 @dataclass
 class LatestReport:
@@ -58,6 +61,10 @@ class Game:
     all_title_ids: list[str] = field(default_factory=list)
     aliases: list[str] = field(default_factory=list)
 
+    @property
+    def url(self) -> str:
+        return f"{HOST}/game/{self.key}"
+
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:
         return cls(
@@ -76,9 +83,6 @@ class Game:
             all_title_ids=data["allTitleIds"],
             aliases=data["aliases"],
         )
-
-
-URL: str = "https://kytyps5.github.io/data/compat-index.json"
 
 
 # NOTE: https://github.com/gil9red/SimplePyScripts/blob/3eca1c95e5fb15684a75d20c8d1142a1c3e1698e/video_parsers/youtube/search_video_in_channels.py#L16-L26
@@ -175,6 +179,7 @@ if __name__ == "__main__":
             "OS:",
             "\n".join(f"    {os.title()}: {stat}" for os, stat in game.os.items()),
             f"Latest Tested: {game.latest_tested}",
+            f"Url: {game.url}",
         ]
         print("\n".join(lines))
         print()
@@ -186,6 +191,7 @@ if __name__ == "__main__":
         Linux: in-game
         Macos: doesnt-boot
     Latest Tested: 2026-10-28
+    Url: https://kytyps5.github.io/game/PPSA21564
     
     Game(key='PPSA01342', title="Demon's Souls", title_id='PPSA01342', overall='main-menu', os={'windows': 'main-menu', 'linux': 'logo'}, report_counts={'windows': 1, 'linux': 1}, latest_tested=datetime.date(2026, 10, 26), report_revision='dfea0b4373d04eec', latest_report=LatestReport(os='linux', tested_date=datetime.date(2026, 10, 26)), screenshots=[], all_title_ids=['PPSA01339', 'PPSA01340', 'PPSA01341', 'PPSA01342', 'PPSA01678', 'PPSA01689', 'PPSA01690', 'PPSA01691'], aliases=['demon-souls-linux', 'demon-s-souls-windows'])
     Demon's Souls
@@ -193,6 +199,7 @@ if __name__ == "__main__":
         Windows: main-menu
         Linux: logo
     Latest Tested: 2026-10-26
+    Url: https://kytyps5.github.io/game/PPSA01342
     
     Game(key='PPSA01317', title='Gran Turismo™ 7', title_id='PPSA01317', overall='in-game', os={'windows': 'in-game', 'linux': 'logo'}, report_counts={'windows': 1, 'linux': 1}, latest_tested=datetime.date(2026, 10, 27), report_revision='523f997e15cfc7fe', latest_report=LatestReport(os='linux', tested_date=datetime.date(2026, 10, 27)), screenshots=[], all_title_ids=['PPSA01315', 'PPSA01316', 'PPSA01317', 'PPSA01318', 'PPSA05483', 'PPSA05484', 'PPSA05485', 'PPSA05486'], aliases=['gran-turismo-7-linux', 'gran-turismo-7-windows'])
     Gran Turismo™ 7
@@ -200,4 +207,5 @@ if __name__ == "__main__":
         Windows: in-game
         Linux: logo
     Latest Tested: 2026-10-27
+    Url: https://kytyps5.github.io/game/PPSA01317
     """
