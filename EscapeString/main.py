@@ -9,22 +9,46 @@ import time
 import traceback
 import sys
 
-from PyQt5.QtWidgets import (
-    QMessageBox,
-    QWidget,
-    QApplication,
-    QPushButton,
-    QSizePolicy,
-    QCheckBox,
-    QHBoxLayout,
-    QVBoxLayout,
-    QPlainTextEdit,
-    QLabel,
-    QSplitter,
-    QErrorMessage,
-    QTextEdit,
-)
-from PyQt5.QtCore import Qt, qVersion
+try:
+    from PyQt6.QtWidgets import (
+        QMessageBox,
+        QWidget,
+        QApplication,
+        QPushButton,
+        QComboBox,
+        QSizePolicy,
+        QCheckBox,
+        QHBoxLayout,
+        QVBoxLayout,
+        QPlainTextEdit,
+        QLabel,
+        QSplitter,
+        QErrorMessage,
+        QTextEdit,
+    )
+    from PyQt6.QtCore import Qt, qVersion
+
+    QSizePolicy.Expanding = QSizePolicy.Policy.Expanding
+    QSizePolicy.Preferred = QSizePolicy.Policy.Preferred
+    Qt.TextSelectableByMouse = Qt.TextInteractionFlag.TextSelectableByMouse
+
+except ImportError:
+    from PyQt5.QtWidgets import (
+        QMessageBox,
+        QWidget,
+        QApplication,
+        QPushButton,
+        QSizePolicy,
+        QCheckBox,
+        QHBoxLayout,
+        QVBoxLayout,
+        QPlainTextEdit,
+        QLabel,
+        QSplitter,
+        QErrorMessage,
+        QTextEdit,
+    )
+    from PyQt5.QtCore import Qt, qVersion
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
@@ -230,4 +254,4 @@ if __name__ == "__main__":
         "<xml>\n    <tag>foo</tag>\n    <tag>bar</tag>\n</xml>"
     )
 
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
