@@ -9,8 +9,22 @@ import time
 import traceback
 import sys
 
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt5.QtWidgets import (
+    QMessageBox,
+    QWidget,
+    QApplication,
+    QPushButton,
+    QSizePolicy,
+    QCheckBox,
+    QHBoxLayout,
+    QVBoxLayout,
+    QPlainTextEdit,
+    QLabel,
+    QSplitter,
+    QErrorMessage,
+    QTextEdit,
+)
+from PyQt5.QtCore import Qt, qVersion
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
