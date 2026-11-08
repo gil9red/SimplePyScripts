@@ -4,12 +4,12 @@
 __author__ = "ipetrash"
 
 
-def hex2str(hex_string: str, encoding="utf-8") -> str:
+def hex2str(hex_string: str, encoding: str = "utf-8") -> str:
     data = bytes.fromhex(hex_string)
     return str(data, encoding)
 
 
-def str2hex(text: str, encoding="utf-8", upper=True) -> str:
+def str2hex(text: str, encoding: str = "utf-8", upper: bool = True) -> str:
     hex_text = bytes(text, encoding).hex()
     if upper:
         hex_text = hex_text.upper()
