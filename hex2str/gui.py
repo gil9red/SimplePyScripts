@@ -62,7 +62,10 @@ except:
     from PyQt5.QtGui import QPalette, QTextCursor
 
 # Выбор функции конвертации в зависимости от значения радио-кнопки
-from hex2str import hex2str, str2hex
+try:
+    from .hex2str import hex2str, str2hex
+except ImportError:
+    from hex2str import hex2str, str2hex
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb) -> None:
