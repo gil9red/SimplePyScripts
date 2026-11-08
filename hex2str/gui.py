@@ -81,8 +81,8 @@ WINDOW_TITLE: str = f"hex2str. Qt v{qVersion()}"
 
 
 class Widget(QWidget):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
 
         self.setWindowTitle(WINDOW_TITLE)
 
