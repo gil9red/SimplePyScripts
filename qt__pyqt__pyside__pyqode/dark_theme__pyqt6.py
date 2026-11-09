@@ -5,8 +5,9 @@ __author__ = "ipetrash"
 
 
 import sys
+from pathlib import Path
 
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, qVersion
 from PyQt6.QtWidgets import (
     QApplication,
     QLabel,
@@ -32,9 +33,14 @@ from PyQt6.QtWidgets import (
 # sys.argv += ["-platform", "windows:darkmode=0"]
 
 
+WINDOW_TITLE: str = f"{Path(__file__).stem}"
+
+
 class MainWindow(QWidget):
     def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
+
+        self.setWindowTitle(WINDOW_TITLE)
 
         layout_buttons = QHBoxLayout()
         layout_buttons.addWidget(
@@ -75,7 +81,7 @@ class MainWindow(QWidget):
         self.update_states()
 
     def update_states(self) -> None:
-        self.label.setText(f"Theme: {QApplication.styleHints().colorScheme().name}")
+        self.label.setText(f"Qt v{qVersion()}.\nTheme: {QApplication.styleHints().colorScheme().name}")
 
 
 if __name__ == "__main__":
