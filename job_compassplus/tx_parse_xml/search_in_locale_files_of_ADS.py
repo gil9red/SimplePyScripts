@@ -9,7 +9,6 @@ import xml.etree.ElementTree as ET
 
 from pathlib import Path
 
-
 NS = dict(
     ads="http://schemas.radixware.org/adsdef.xsd",
 )
@@ -21,10 +20,13 @@ def get_text(el: ET.Element) -> str:
     return "".join(text for text in el.itertext())
 
 
-def process(path: str, regexp: str) -> None:
+def process(path: Path, regexp: str) -> None:
+    if not path.exists():
+        raise FileNotFoundError(f'"{path}" does not exist')
+
     pattern = re.compile(regexp)
 
-    for p in Path(path).glob("*/ads/*/locale/*/mlb*.xml"):
+    for p in path.glob("*/ads/*/locale/*/mlb*.xml"):
         try:
             mlb = ET.fromstring(p.read_bytes())
         except Exception:
@@ -40,7 +42,9 @@ def process(path: str, regexp: str) -> None:
                 string_id = string_el.attrib["Id"]
                 string_lang = string_value_el.attrib["Language"]
 
-                items.append(f"Found with id={string_id} language={string_lang}: {string_value!r}")
+                items.append(
+                    f"Found with id={string_id} language={string_lang}: {string_value!r}"
+                )
 
         if items:
             items.sort()
@@ -50,12 +54,11 @@ def process(path: str, regexp: str) -> None:
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Search in locale"
-    )
+    parser = argparse.ArgumentParser(description="Search in locale")
     parser.add_argument(
         "path_trunk",
         metavar="/PATH/TO/TRUNK",
+        type=Path,
         help="Path to TX source tree (the directory containing branch.xml)",
     )
     parser.add_argument(
