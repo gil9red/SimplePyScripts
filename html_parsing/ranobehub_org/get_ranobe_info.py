@@ -38,8 +38,9 @@ class Ranobe:
     release_year: int
     country: str
     status: str
-    characters: str
-    characters_number: int = field(repr=False)
+    chapters: int
+    characters: int
+    characters_str: str = field(repr=False)
     genres: list[str] = field(default_factory=list, repr=False)
     tags: list[str] = field(default_factory=list, repr=False)
     parser_version: str = "v1"
@@ -54,8 +55,9 @@ def parse_book_v1(soup: BeautifulSoup) -> Ranobe:
     release_year: int = 0
     country: str = ""
     status: str = ""
-    characters_text: str = "-"
-    characters_number: int = -1
+    chapters: int = -1
+    characters: int = -1
+    characters_str: str = "-"
     genres: list[str]
     tags: list[str]
 
@@ -75,7 +77,7 @@ def parse_book_v1(soup: BeautifulSoup) -> Ranobe:
             case "Главы":
                 value_content_el = value_el.select_one("i[data-tippy-content]")
                 chapters_info = value_content_el["data-tippy-content"]
-                characters_text, characters_number = parse_characters(chapters_info)
+                characters_str, characters = parse_characters(chapters_info)
 
     genres = [
         get_text(el) for el in soup.select(".book-meta-value.book-tags > .book-tag")
@@ -90,8 +92,9 @@ def parse_book_v1(soup: BeautifulSoup) -> Ranobe:
         release_year=release_year,
         country=country,
         status=status,
-        characters=characters_text,
-        characters_number=characters_number,
+        chapters=chapters,
+        characters=characters,
+        characters_str=characters_str,
         genres=genres,
         tags=tags,
         parser_version="v1",
@@ -118,35 +121,44 @@ def parse_book_v2(soup: BeautifulSoup) -> Ranobe:
     country: str = get_text(soup.select_one(".book-kicker-country[href*=country]"))
     status: str = get_text(soup.select_one(".book-kicker-status[href*=status]"))
 
-    # NOTE: Не нашел в верстке
-    characters_text: str = "-"
-    characters_number: int = -1
-
     # NOTE: Example <script>self.__next_f.push([1, "5:[...]"])</script>
     #                                                   ^
     #                                ["$","section",null,{"className": ...}]
     slice_genres_tags: str = ""
+    slice_book_facts: str = ""
     for slice in re.findall(
         r"""<script>self.__next_f.push\((\[.+?\])\).*?</script>""", str(soup)
     ):
         if "book-hero-taxonomy" in slice:
             slice_genres_tags = slice
+        elif "book-facts" in slice:
+            slice_book_facts = slice
+
+        if slice_genres_tags and slice_book_facts:
             break
+
     if not slice_genres_tags:
         raise ValueError("Не найден book-hero-taxonomy в self.__next_f")
-
-    _, slice_data = json.loads(slice_genres_tags)
-
-    _, data_str = slice_data.split(":", maxsplit=1)
+    if not slice_book_facts:
+        raise ValueError("Не найден book-facts в self.__next_f")
 
     # NOTE: Example ["$","section",null,{"className": ...}]
+    _, slice_data = json.loads(slice_genres_tags)
+    _, data_str = slice_data.split(":", maxsplit=1)
     data: dict[str, Any]
     _, _, _, data = json.loads(data_str)
-
     assert isinstance(data, dict), f"В data не словарь, а {type(data)}: {data!r}"
 
+    _, slice_data = json.loads(slice_book_facts)
+    _, data_str = slice_data.split(":", maxsplit=1)
+    data_book_facts: dict[str, Any]
+    _, _, _, data_book_facts = json.loads(data_str)
+    assert isinstance(
+        data_book_facts, dict
+    ), f"В data_book_facts не словарь, а {type(data_book_facts)}: {data_book_facts!r}"
+
     def deep_find(
-        data: dict[str, Any],
+        data: dict[str, Any] | list[Any],
         has_key: str,
         has_value: str,
         target_key: str,
@@ -281,13 +293,58 @@ def parse_book_v2(soup: BeautifulSoup) -> Ranobe:
             all_genres += extract_titles("genres")
             all_tags += extract_titles("labels")
 
+    chapters: int = -1
+    characters: int = -1
+    characters_str: str = "-"
+    # NOTE: Example:
+    """
+    ...
+        [
+            "$",
+            "div",
+            null,
+            {
+                "className": "book-facts",
+                "children": [
+                    [
+                        "$",
+                        "$L33",
+                        null,
+                        {
+                            "chapters": 1215,
+                            "symbols": 11756790
+                        }
+                    ],
+    """
+    data_book_facts_children: list[tuple[str, str, Any, dict]] | None = deep_find(
+        data_book_facts,
+        has_key="className",
+        has_value="book-facts",
+        target_key="children",
+    )
+    assert data_book_facts_children, "Не найден класс book-facts в data_book_facts"
+    assert isinstance(
+        data_book_facts_children, list
+    ), "Не найден список children в data_book_facts"
+    for _, _, _, item in data_book_facts_children:
+        assert isinstance(
+            item, dict
+        ), f"data_book_facts_children/children[]/item[3] is not dict: {item!r}"
+
+        if "chapters" in item and "symbols" in item:
+            chapters: int = item["chapters"]
+            characters: int = item["symbols"]
+            characters_str: str = str(characters)
+            break
+
     return Ranobe(
         title=title,
         release_year=release_year,
         country=country,
         status=status,
-        characters=characters_text,
-        characters_number=characters_number,
+        chapters=chapters,
+        characters=characters,
+        characters_str=characters_str,
         genres=all_genres,
         tags=all_tags,
         parser_version="v2",
@@ -310,14 +367,12 @@ if __name__ == "__main__":
     url = "https://ranobehub.org/ranobe/72-god-and-devil-world"
     ranobe = get_ranobe_info(url)
     print(ranobe)
-    print(f"Characters: {ranobe.characters}, number: {ranobe.characters_number}")
     print(f"Genres: ({len(ranobe.genres)}): {ranobe.genres}")
     print(f"Tags: ({len(ranobe.tags)}): {ranobe.tags}")
     """
-    Ranobe(title='Мир Бога и Дьявола', release_year=2013, country='Китай', status='Завершено', characters='11M', parser_version='v1')
-    Characters: 11M, number: 11000000
-    Genres: (13): ['Боевые искусства', 'Гарем', 'Для взрослых', ..., 'Фэнтези', 'Экшн', 'Эччи']
-    Tags: (57): ['Антигерой', 'Апокалипсис', 'Армия', ..., 'Фарминг', 'Эволюция', 'Эгоистичный главный герой']
+    Ranobe(title='Мир Бога и Дьявола', release_year=2013, country='Китай', status='Завершено', chapters=1215, characters=11756790, parser_version='v2')
+    Genres: (13): ['Боевые искусства', 'Гарем', 'Драма', 'Зрелая тематика', 'Милитари', 'Научная фантастика', 'Приключение', 'Сэйнэн', 'Сюаньхуа', 'Трагедия', 'Фэнтези', 'Экшн', 'Эччи']
+    Tags: (57): ['Антигерой', 'Апокалипсис', 'Армия', 'Артефакты', 'Безжалостный главный герой', 'Боги', 'Вампиры', 'Войны', 'Выживание', 'Гарем рабов', 'Генералы', 'Главный герой — мужчина', 'Горничные', 'Домашние дела', 'Драконы', 'Жертва изнасилования влюбляется в насильника', 'Звери', 'Звери-компаньоны', 'Злой протагонист', 'Зомби', 'Игра на выживание', 'Игровые элементы', 'Из слабого в сильного', 'Изнасилование', 'Искусственный интеллект', 'Каннибализм', 'Книги', 'Книги навыков', 'Контроль разума/сознания', 'Коррупция', 'Лидерство', 'Лоли', 'Магия', 'Множество реальностей', 'Монстры', 'Мутированные существа', 'Национализм', 'Не блещущий внешне главный герой', 'Недоразумения', 'Огнестрельное оружие', 'Питомцы', 'Полигамия', 'Прекрасная героиня', 'Проститутки', 'Рабы', 'Расизм', 'Решительный главный герой', 'Родословная', 'Секс рабы', 'Система уровней', 'Современность', 'Создание армии', 'Создание королевства', 'Трудолюбивый главный герой', 'Фарминг', 'Эволюция', 'Эгоистичный главный герой']
     """
 
     print("\n" + "-" * 100 + "\n")
@@ -325,12 +380,10 @@ if __name__ == "__main__":
     url = "https://ranobehub.org/ranobe/345-overgeared"
     ranobe = get_ranobe_info(url)
     print(ranobe)
-    print(f"Characters: {ranobe.characters}, number: {ranobe.characters_number}")
     print(f"Genres: ({len(ranobe.genres)}): {ranobe.genres}")
     print(f"Tags: ({len(ranobe.tags)}): {ranobe.tags}")
     """
-    Ranobe(title='Во всеоружии', release_year=2014, country='Корея', status='Завершено', characters='-', parser_version='v2')
-    Characters: -, number: -1
+    Ranobe(title='Во всеоружии', release_year=2014, country='Корея', status='Завершено', chapters=2908, characters=27279603, parser_version='v2')
     Genres: (6): ['Гарем', 'Комедия', 'Приключение', 'Сэйнэн', 'Фэнтези', 'Экшн']
-    Tags: (104): ['Ад', 'Алхимия', 'Ангелы', ..., 'Хозяин подземелий', 'Элементальная магия', 'Эльфы']
+    Tags: (104): ['Ад', 'Алхимия', 'Ангелы', 'Армия', 'Артефакты', 'Артисты', 'Бедный главный герой', 'Беременность', 'Бессмертные', 'Бесстыдный главный герой', 'Боги', 'Богини', 'Божественные силы', 'Брак', 'Вампиры', 'Верные подчиненные', 'Виртуальная реальность', 'Воскрешение', 'Гильдии', 'Главный герой — мужчина', 'Глуповатый главный герой', 'Гриндинг', 'Дварфы', 'Дворяне', 'Демоны', 'Денежный долг', 'Дискриминация', 'Добыча денег одно из основных стремлений главного героя', 'Драконы', 'Души', 'Есть манхва-адаптация', 'Злые боги', 'Знаменитый главный герой', 'Игровая система рейтинга', 'Игровые элементы', 'Из грязи в князи', 'Из слабого в сильного', 'Изменения внешнего вида', 'Империи', 'Интриги и заговоры', 'Искусственный интеллект', 'Книги', 'Книги навыков', 'Копейщик', 'Королевства', 'Крафт', 'Кругосветное путешествие', 'Кузнец', 'Легенды', 'ММОРПГ (ЛитРПГ)', 'Магия', 'Метаморфы', 'Меч и магия', 'Мечник', 'Мифические звери', 'Младшие сестры', 'Монстры', 'Наивный главный герой', 'Наследование', 'Не блещущий внешне главный герой', 'Недооцененный главный герой', 'Недоразумения', 'Орки', 'Освоение навыков', 'Отношения учитель-ученик', 'Отношения хозяин-слуга', 'Отсутствие здравого смысла', 'Первая любовь', 'Первый раз', 'Питомцы', 'Повествование от нескольких лиц/Несколько точек зрения', 'Подземелья', 'Прекрасная героиня', 'Пропуск времени', 'Расизм', 'Романтический подсюжет ', 'Рост персонажа', 'Рыцари', 'Святые', 'Семь смертных грехов', 'Система уровней', 'Системный администратор', 'Скульпторы', 'Слабый главный герой', 'Смерть', 'Смерть близких', 'Современность', 'Создание артефактов', 'Создание королевства', 'Создание навыков', 'Соперники в любви', 'Стрелки', 'Стрельба из лука', 'Танцоры', 'Трудолюбивый главный герой', 'Убийцы', 'Убийцы драконов', 'Укротитель монстров', 'Уродливый главный герой', 'Фарминг', 'Футуристический сеттинг', 'Хозяин подземелий', 'Элементальная магия', 'Эльфы']
     """
