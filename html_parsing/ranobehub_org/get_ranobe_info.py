@@ -244,7 +244,12 @@ def parse_book_v2(soup: BeautifulSoup) -> Ranobe:
         }
     ]
     """
-    for _, _, _, item in data_children:
+    row: tuple[str, str, str | None, dict] | bool
+    for row in data_children:
+        if not row:
+            continue
+
+        item = row[3]
         assert isinstance(item, dict), f"data/children[]/item[3] is not dict: {item!r}"
 
         aria_label: str | None = item.get("aria-label")
@@ -326,7 +331,13 @@ def parse_book_v2(soup: BeautifulSoup) -> Ranobe:
     assert isinstance(
         data_book_facts_children, list
     ), "Не найден список children в data_book_facts"
-    for _, _, _, item in data_book_facts_children:
+    row: tuple[str, str, str | None, dict] | bool
+    for row in data_book_facts_children:
+        if not row:
+            continue
+
+        item = row[3]
+
         assert isinstance(
             item, dict
         ), f"data_book_facts_children/children[]/item[3] is not dict: {item!r}"
@@ -352,6 +363,8 @@ def parse_book_v2(soup: BeautifulSoup) -> Ranobe:
 
 
 def get_ranobe_info(url: str) -> Ranobe:
+    print(f"Load url: {url}")
+
     rs = session.get(url)
     rs.raise_for_status()
 
